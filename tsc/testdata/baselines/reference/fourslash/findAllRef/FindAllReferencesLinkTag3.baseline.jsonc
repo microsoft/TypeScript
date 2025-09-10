@@ -10,10 +10,11 @@
 //     }
 //     /**
 //      * {@linkcode Consider.prototype.[|m|]}
-//      * {@linkplain Consider#m}
+//      * {@linkplain Consider#[|m|]}
 //      * {@linkcode Consider#This#show}
 //      * {@linkplain Consider.This.show}
-// // --- (line: 13) skipped ---
+//      * {@linkcode NPR.Consider#This#show}
+// // --- (line: 14) skipped ---
 
 
 
@@ -28,7 +29,25 @@
 //         }
 //         m() { }
 //     }
-// // --- (line: 8) skipped ---
+//     /**
+//      * {@linkcode Consider.prototype.m}
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#This#[|show|]}
+//      * {@linkplain Consider.This.[|show|]}
+//      * {@linkcode NPR.Consider#This#[|show|]}
+//      * {@linkplain NPR.Consider.This#[|show|]}
+//      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+//      * {@linkcode NPR.Consider.This.[|show|]}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.Consider#This#[|show|] hello hello}
+//  * {@linkplain NPR.Consider.This#[|show|]}
+//  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+//  * {@linkcode NPR.Consider.This.[|show|]}
+//  */
+// export function outerref() { }
 
 
 
@@ -42,7 +61,26 @@
 //             show() { }
 //         }
 //         m() { }
-// // --- (line: 7) skipped ---
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.m}
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#[|This|]#show}
+//      * {@linkplain Consider.[|This|].show}
+//      * {@linkcode NPR.Consider#[|This|]#show}
+//      * {@linkplain NPR.Consider.[|This|]#show}
+//      * {@linkcode NPR.Consider#[|This|].show} # doesn't parse trailing .
+//      * {@linkcode NPR.Consider.[|This|].show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.Consider#[|This|]#show hello hello}
+//  * {@linkplain NPR.Consider.[|This|]#show}
+//  * {@linkcode NPR.Consider#[|This|].show} # doesn't parse trailing .
+//  * {@linkcode NPR.Consider.[|This|].show}
+//  */
+// export function outerref() { }
 
 
 

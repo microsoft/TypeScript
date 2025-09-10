@@ -2,7 +2,7 @@
 // === /a.js ===
 
 // /**
-//  * @typedef {Object} T
+//  * @typedef {Object} [|T|]
 //  * @property {number} a
 //  */
 // 

@@ -26,9 +26,11 @@ func (l *LanguageService) ProvideDocumentSymbols(ctx context.Context, documentUR
 func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, node *ast.Node) []*lsproto.DocumentSymbol {
 	var symbols []*lsproto.DocumentSymbol
 	addSymbolForNode := func(node *ast.Node, children []*lsproto.DocumentSymbol) {
-		symbol := l.newDocumentSymbol(node, children)
-		if symbol != nil {
-			symbols = append(symbols, symbol)
+		if node.Flags&ast.NodeFlagsReparsed == 0 {
+			symbol := l.newDocumentSymbol(node, children)
+			if symbol != nil {
+				symbols = append(symbols, symbol)
+			}
 		}
 	}
 	var visit func(*ast.Node) bool

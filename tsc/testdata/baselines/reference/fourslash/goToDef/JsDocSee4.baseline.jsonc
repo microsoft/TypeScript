@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /jsDocSee4.ts ===
 
-// class A {
+// class [|A|] {
 //     foo () { }
 // }
 // declare const a: A;
@@ -18,7 +18,12 @@
 // === goToDefinition ===
 // === /jsDocSee4.ts ===
 
-// --- (line: 6) skipped ---
+// class A {
+//     foo () { }
+// }
+// declare const [|a|]: A;
+// /**
+//  * @see {A#foo}
 //  */
 // const t1 = 1
 // /**

@@ -59,10 +59,11 @@
 // === goToDefinition ===
 // === /jsDocSee2.ts ===
 
-// --- (line: 5) skipped ---
+// --- (line: 4) skipped ---
+// /** @see foooo unknown reference without brace*/
 // const c = ""
 // /** @see @bar invalid tag without brace*/
-// const d = ""
+// const [|d|] = ""
 // /** @see {/*GO TO DEFINITION*/d@fff} partial reference */
 // const e = ""
 // /** @see @@@@@@ total invalid tag*/

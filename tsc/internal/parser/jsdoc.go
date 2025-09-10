@@ -918,7 +918,7 @@ func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent 
 			if childTypeTag != nil && childTypeTag.TypeExpression != nil && !isObjectOrObjectArrayTypeReference(childTypeTag.TypeExpression.Type()) {
 				typeExpression = childTypeTag.TypeExpression
 			} else {
-				typeExpression = p.finishNode(jsdocTypeLiteral, start)
+				typeExpression = p.finishNode(jsdocTypeLiteral, jsdocPropertyTags[0].Pos())
 			}
 		}
 	}
@@ -989,7 +989,7 @@ func (p *Parser) parseCallbackTag(start int, tagName *ast.IdentifierNode, indent
 	fullName := p.parseJSDocIdentifierName(nil)
 	p.skipWhitespace()
 	comment := p.parseTagComments(indent, nil)
-	typeExpression := p.parseJSDocSignature(start, indent)
+	typeExpression := p.parseJSDocSignature(p.nodePos(), indent)
 	if comment == nil {
 		comment = p.parseTrailingTagComments(start, p.nodePos(), indent, indentText)
 	}

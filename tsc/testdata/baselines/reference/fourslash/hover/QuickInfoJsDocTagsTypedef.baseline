@@ -5,7 +5,10 @@
 //  * @typedef {Object} Bar
 //                      ^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | type Bar = { baz: string; qux: string; }
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //  * @property {string} baz - baz comment
 //  * @property {string} qux - qux comment
@@ -37,7 +40,12 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\n"
+      }
+    }
   },
   {
     "marker": {

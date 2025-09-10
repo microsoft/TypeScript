@@ -1259,14 +1259,14 @@ func getAdjustedLocationForExportDeclaration(node *ast.ExportDeclaration, forRen
 
 func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 	// todo: check if this function needs to be changed for jsdoc updates
-
 	node = getAdjustedLocation(node, false /*forRename*/, nil)
 	parent := node.Parent
-	if node.Kind == ast.KindSourceFile {
+	switch {
+	case ast.IsSourceFile(node):
 		return ast.SemanticMeaningValue
-	} else if ast.NodeKindIs(node, ast.KindExportAssignment, ast.KindExportSpecifier, ast.KindExternalModuleReference, ast.KindImportSpecifier, ast.KindImportClause) || parent.Kind == ast.KindImportEqualsDeclaration && node == parent.Name() {
+	case ast.NodeKindIs(node, ast.KindExportAssignment, ast.KindExportSpecifier, ast.KindExternalModuleReference, ast.KindImportSpecifier, ast.KindImportClause) || parent.Kind == ast.KindImportEqualsDeclaration && node == parent.Name():
 		return ast.SemanticMeaningAll
-	} else if isInRightSideOfInternalImportEqualsDeclaration(node) {
+	case isInRightSideOfInternalImportEqualsDeclaration(node):
 		//     import a = |b|; // Namespace
 		//     import a = |b.c|; // Value, type, namespace
 		//     import a = |b.c|.d; // Namespace
@@ -1278,22 +1278,20 @@ func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 			return ast.SemanticMeaningNamespace
 		}
 		return ast.SemanticMeaningAll
-	} else if ast.IsDeclarationName(node) {
+	case ast.IsDeclarationName(node):
 		return getMeaningFromDeclaration(parent)
-	} else if ast.IsEntityName(node) && ast.FindAncestor(node, func(*ast.Node) bool {
-		return node.Kind == ast.KindJSDocNameReference || ast.IsJSDocLinkLike(node) || node.Kind == ast.KindJSDocMemberName
-	}) != nil {
+	case ast.IsEntityName(node) && ast.IsJSDocNameReferenceContext(node):
 		return ast.SemanticMeaningAll
-	} else if isTypeReference(node) {
+	case isTypeReference(node):
 		return ast.SemanticMeaningType
-	} else if isNamespaceReference(node) {
+	case isNamespaceReference(node):
 		return ast.SemanticMeaningNamespace
-	} else if parent.Kind == ast.KindTypeParameter {
+	case ast.IsTypeParameterDeclaration(parent):
 		return ast.SemanticMeaningType
-	} else if parent.Kind == ast.KindLiteralType {
+	case ast.IsLiteralTypeNode(parent):
 		// This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
 		return ast.SemanticMeaningType | ast.SemanticMeaningValue
-	} else {
+	default:
 		return ast.SemanticMeaningValue
 	}
 }

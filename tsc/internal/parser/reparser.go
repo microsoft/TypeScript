@@ -191,7 +191,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 	if jsSignature.Type() != nil && jsSignature.Type().AsJSDocReturnTag().TypeExpression != nil {
 		signature.FunctionLikeData().Type = p.factory.DeepCloneReparse(jsSignature.Type().AsJSDocReturnTag().TypeExpression.Type())
 	}
-	loc := tag
+	loc := jsSignature
 	if tag.Kind == ast.KindJSDocOverloadTag {
 		loc = tag.AsJSDocOverloadTag().TagName
 	}
@@ -213,7 +213,7 @@ func (p *Parser) reparseJSDocTypeLiteral(t *ast.TypeNode) *ast.Node {
 			if name.Kind == ast.KindQualifiedName {
 				name = name.AsQualifiedName().Right
 			}
-			property := p.factory.NewPropertySignatureDeclaration(nil, name, p.makeQuestionIfOptional(jsprop), nil, nil)
+			property := p.factory.NewPropertySignatureDeclaration(nil, p.factory.DeepCloneReparse(name), p.makeQuestionIfOptional(jsprop), nil, nil)
 			if jsprop.TypeExpression != nil {
 				property.AsPropertySignatureDeclaration().Type = p.reparseJSDocTypeLiteral(jsprop.TypeExpression.Type())
 			}

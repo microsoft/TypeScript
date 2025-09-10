@@ -2,10 +2,15 @@
 // === /a.js ===
 
 // /**
-//  * @import { A } from "./b";
+//  * @import { [|A|] } from "./b";
 //  */
 // 
 // /**
 //  * @param { [|A|]/*FIND ALL REFS*/ } a
 //  */
 // function f(a) {}
+
+
+// === /b.ts ===
+
+// export interface [|A|] { }

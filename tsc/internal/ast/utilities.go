@@ -552,6 +552,10 @@ func IsClassLike(node *Node) bool {
 	return node.Kind == KindClassDeclaration || node.Kind == KindClassExpression
 }
 
+func IsClassOrInterfaceLike(node *Node) bool {
+	return node.Kind == KindClassDeclaration || node.Kind == KindClassExpression || node.Kind == KindInterfaceDeclaration
+}
+
 func IsClassElement(node *Node) bool {
 	switch node.Kind {
 	case KindConstructor,
@@ -1899,13 +1903,11 @@ func IsExpressionNode(node *Node) bool {
 		for node.Parent.Kind == KindQualifiedName {
 			node = node.Parent
 		}
-		return IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || isJSXTagName(node)
-	case KindJSDocMemberName:
-		return IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || isJSXTagName(node)
+		return IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || IsJSDocNameReference(node.Parent) || isJSXTagName(node)
 	case KindPrivateIdentifier:
 		return IsBinaryExpression(node.Parent) && node.Parent.AsBinaryExpression().Left == node && node.Parent.AsBinaryExpression().OperatorToken.Kind == KindInKeyword
 	case KindIdentifier:
-		if IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || isJSXTagName(node) {
+		if IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || IsJSDocNameReference(node.Parent) || isJSXTagName(node) {
 			return true
 		}
 		fallthrough
@@ -2045,7 +2047,9 @@ func isPartOfTypeNodeInParent(node *Node) bool {
 
 func isPartOfTypeExpressionWithTypeArguments(node *Node) bool {
 	parent := node.Parent
-	return IsHeritageClause(parent) && (!IsClassLike(parent.Parent) || parent.AsHeritageClause().Token == KindImplementsKeyword)
+	return IsHeritageClause(parent) && (!IsClassLike(parent.Parent) || parent.AsHeritageClause().Token == KindImplementsKeyword) ||
+		IsJSDocImplementsTag(parent) ||
+		IsJSDocAugmentsTag(parent)
 }
 
 func IsJSDocLinkLike(node *Node) bool {
@@ -2620,12 +2624,12 @@ func IsParseTreeNode(node *Node) bool {
 	return node.Flags&NodeFlagsSynthesized == 0
 }
 
-// Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files
-func GetNodeAtPosition(file *SourceFile, position int, isJavaScriptFile bool) *Node {
+// Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only if requested
+func GetNodeAtPosition(file *SourceFile, position int, includeJSDoc bool) *Node {
 	current := file.AsNode()
 	for {
 		var child *Node
-		if isJavaScriptFile {
+		if includeJSDoc {
 			for _, jsdoc := range current.JSDoc(file) {
 				if nodeContainsPosition(jsdoc, position) {
 					child = jsdoc
@@ -3866,4 +3870,10 @@ func GetRestIndicatorOfBindingOrAssignmentElement(bindingElement *Node) *Node {
 		return bindingElement
 	}
 	return nil
+}
+
+func IsJSDocNameReferenceContext(node *Node) bool {
+	return node.Flags&NodeFlagsJSDoc != 0 && FindAncestor(node, func(node *Node) bool {
+		return IsJSDocNameReference(node) || IsJSDocLinkLike(node)
+	}) != nil
 }

@@ -9657,6 +9657,10 @@ func IsJSDocParameterTag(node *Node) bool {
 	return node.Kind == KindJSDocParameterTag
 }
 
+func IsJSDocPropertyTag(node *Node) bool {
+	return node.Kind == KindJSDocPropertyTag
+}
+
 // JSDocReturnTag
 type JSDocReturnTag struct {
 	JSDocTagBase
@@ -10133,6 +10137,8 @@ func (node *JSDocCallbackTag) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocCallbackTag(node.TagName, node.TypeExpression, node.FullName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func (node *JSDocCallbackTag) Name() *DeclarationName { return node.FullName }
+
 func IsJSDocCallbackTag(node *Node) bool {
 	return node.Kind == KindJSDocCallbackTag
 }
@@ -10282,6 +10288,10 @@ func (node *JSDocSignature) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocSignature(node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func IsJSDocSignature(node *Node) bool {
+	return node.Kind == KindJSDocSignature
+}
+
 // JSDocNameReference
 type JSDocNameReference struct {
 	TypeNodeBase
@@ -10314,6 +10324,10 @@ func (node *JSDocNameReference) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *JSDocNameReference) Name() *EntityName { return node.name }
+
+func IsJSDocNameReference(node *Node) bool {
+	return node.Kind == KindJSDocNameReference
+}
 
 // PatternAmbientModule
 

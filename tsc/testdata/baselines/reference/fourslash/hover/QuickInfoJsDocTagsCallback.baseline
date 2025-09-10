@@ -4,7 +4,10 @@
 //  * @callback cb
 //                ^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | type cb = (x: string) => any
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //  * @param {string} x - x comment
 //  */
@@ -33,7 +36,12 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype cb = (x: string) => any\n```\n"
+      }
+    }
   },
   {
     "marker": {
