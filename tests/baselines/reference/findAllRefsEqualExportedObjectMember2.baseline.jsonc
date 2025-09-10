@@ -1,26 +1,35 @@
 // === findAllReferences ===
-// === /mod.d.ts ===
+// === /mod.ts ===
 // const obj = {
 //   nested: {
-//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}foo|]: () => ""|>,
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|]: () => ""|>,
 //   },
 // };
 // 
 // export = obj.nested;
 
+// === /index.ts ===
+// <|import { [|{| defId: 1, isWriteAccess: true |}foo|] } from "./mod"|>
+// [|{| defId: 1 |}foo|]();
+
   // === Definitions ===
-  // === /mod.d.ts ===
+  // === /mod.ts ===
   // const obj = {
   //   nested: {
-  //     /*FIND ALL REFS*/<|[|foo|]: () => ""|>,
+  //     /*FIND ALL REFS*/<|[|{| defId: 0 |}foo|]: () => ""|>,
   //   },
   // };
   // 
   // export = obj.nested;
 
+  // === /index.ts ===
+  // <|import { [|{| defId: 1 |}foo|] } from "./mod"|>
+  // foo();
+
   // === Details ===
   [
    {
+    "defId": 0,
     "containerKind": "",
     "containerName": "",
     "kind": "property",
@@ -77,6 +86,99 @@
      {
       "text": "string",
       "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (property) foo: () => string\nimport foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
      }
     ]
    }

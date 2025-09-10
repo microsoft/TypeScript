@@ -3,11 +3,11 @@
 // @module: commonjs
 
 // @Filename: /mod.ts
-//// const obj = {
-////   /*1*/foo: () => "",
+//// class Cls {
+////   /*1*/foo() {}
 //// };
 ////
-//// export = obj;
+//// export = new Cls();
 
 // @Filename: /index.ts
 //// import { /*2*/foo } from "./mod"

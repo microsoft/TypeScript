@@ -1,0 +1,161 @@
+// === findAllReferences ===
+// === /mod.ts ===
+// class Cls {
+//   /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}foo|]() {}|>
+// };
+// 
+// export default new Cls();
+
+// === /index.ts ===
+// import def from "./mod"
+// def.[|foo|]();
+
+  // === Definitions ===
+  // === /mod.ts ===
+  // class Cls {
+  //   /*FIND ALL REFS*/<|[|foo|]() {}|>
+  // };
+  // 
+  // export default new Cls();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Cls.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Cls",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /mod.ts ===
+// class Cls {
+//   <|[|{| isWriteAccess: true |}foo|]() {}|>
+// };
+// 
+// export default new Cls();
+
+// === /index.ts ===
+// import def from "./mod"
+// def.[|foo|]/*FIND ALL REFS*/();
+
+  // === Definitions ===
+  // === /mod.ts ===
+  // class Cls {
+  //   <|[|foo|]() {}|>
+  // };
+  // 
+  // export default new Cls();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Cls.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Cls",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

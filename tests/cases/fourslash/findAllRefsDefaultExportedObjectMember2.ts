@@ -9,10 +9,10 @@
 ////   },
 //// };
 ////
-//// export = obj.nested;
+//// export default obj.nested;
 
 // @Filename: /index.ts
-//// import { /*2*/foo } from "./mod"
-//// /*3*/foo();
+//// import def from "./mod"
+//// def.foo/*2*/();
 
-verify.baselineFindAllReferences("1", "2", "3");
+verify.baselineFindAllReferences("1", "2");

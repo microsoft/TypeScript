@@ -1,10 +1,10 @@
 // === findAllReferences ===
 // === /mod.ts ===
-// const obj = {
-//   /*FIND ALL REFS*/<|[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|]: () => ""|>,
+// class Cls {
+//   /*FIND ALL REFS*/<|[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|]() {}|>
 // };
 // 
-// export = obj;
+// export = new Cls();
 
 // === /index.ts ===
 // <|import { [|{| defId: 1, isWriteAccess: true |}foo|] } from "./mod"|>
@@ -12,11 +12,11 @@
 
   // === Definitions ===
   // === /mod.ts ===
-  // const obj = {
-  //   /*FIND ALL REFS*/<|[|{| defId: 0 |}foo|]: () => ""|>,
+  // class Cls {
+  //   /*FIND ALL REFS*/<|[|{| defId: 0 |}foo|]() {}|>
   // };
   // 
-  // export = obj;
+  // export = new Cls();
 
   // === /index.ts ===
   // <|import { [|{| defId: 1 |}foo|] } from "./mod"|>
@@ -28,15 +28,15 @@
     "defId": 0,
     "containerKind": "",
     "containerName": "",
-    "kind": "property",
-    "name": "(property) foo: () => string",
+    "kind": "method",
+    "name": "(method) Cls.foo(): void",
     "displayParts": [
      {
       "text": "(",
       "kind": "punctuation"
      },
      {
-      "text": "property",
+      "text": "method",
       "kind": "text"
      },
      {
@@ -48,16 +48,16 @@
       "kind": "space"
      },
      {
-      "text": "foo",
-      "kind": "propertyName"
+      "text": "Cls",
+      "kind": "className"
      },
      {
-      "text": ":",
+      "text": ".",
       "kind": "punctuation"
      },
      {
-      "text": " ",
-      "kind": "space"
+      "text": "foo",
+      "kind": "methodName"
      },
      {
       "text": "(",
@@ -68,11 +68,7 @@
       "kind": "punctuation"
      },
      {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
+      "text": ":",
       "kind": "punctuation"
      },
      {
@@ -80,7 +76,7 @@
       "kind": "space"
      },
      {
-      "text": "string",
+      "text": "void",
       "kind": "keyword"
      }
     ]
@@ -90,7 +86,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "alias",
-    "name": "(alias) (property) foo: () => string\nimport foo",
+    "name": "(alias) (method) foo(): void\nimport foo",
     "displayParts": [
      {
       "text": "(",
@@ -113,7 +109,7 @@
       "kind": "punctuation"
      },
      {
-      "text": "property",
+      "text": "method",
       "kind": "text"
      },
      {
@@ -129,14 +125,6 @@
       "kind": "aliasName"
      },
      {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
       "text": "(",
       "kind": "punctuation"
      },
@@ -145,11 +133,7 @@
       "kind": "punctuation"
      },
      {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
+      "text": ":",
       "kind": "punctuation"
      },
      {
@@ -157,7 +141,7 @@
       "kind": "space"
      },
      {
-      "text": "string",
+      "text": "void",
       "kind": "keyword"
      },
      {
@@ -198,7 +182,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "alias",
-    "name": "(alias) (property) foo: () => string\nimport foo",
+    "name": "(alias) (method) foo(): void\nimport foo",
     "displayParts": [
      {
       "text": "(",
@@ -221,7 +205,7 @@
       "kind": "punctuation"
      },
      {
-      "text": "property",
+      "text": "method",
       "kind": "text"
      },
      {
@@ -237,14 +221,6 @@
       "kind": "aliasName"
      },
      {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
       "text": "(",
       "kind": "punctuation"
      },
@@ -253,11 +229,7 @@
       "kind": "punctuation"
      },
      {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
+      "text": ":",
       "kind": "punctuation"
      },
      {
@@ -265,7 +237,7 @@
       "kind": "space"
      },
      {
-      "text": "string",
+      "text": "void",
       "kind": "keyword"
      },
      {
@@ -306,7 +278,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "alias",
-    "name": "(alias) (property) foo: () => string\nimport foo",
+    "name": "(alias) (method) foo(): void\nimport foo",
     "displayParts": [
      {
       "text": "(",
@@ -329,7 +301,7 @@
       "kind": "punctuation"
      },
      {
-      "text": "property",
+      "text": "method",
       "kind": "text"
      },
      {
@@ -345,14 +317,6 @@
       "kind": "aliasName"
      },
      {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
       "text": "(",
       "kind": "punctuation"
      },
@@ -361,11 +325,7 @@
       "kind": "punctuation"
      },
      {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
+      "text": ":",
       "kind": "punctuation"
      },
      {
@@ -373,7 +333,7 @@
       "kind": "space"
      },
      {
-      "text": "string",
+      "text": "void",
       "kind": "keyword"
      },
      {

@@ -1,0 +1,169 @@
+// === findAllReferences ===
+// === /mod.ts ===
+// const obj = {
+//   /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}foo|]: () => ""|>,
+// };
+// 
+// export default obj;
+
+// === /index.ts ===
+// import def from "./mod"
+// def.[|foo|]();
+
+  // === Definitions ===
+  // === /mod.ts ===
+  // const obj = {
+  //   /*FIND ALL REFS*/<|[|foo|]: () => ""|>,
+  // };
+  // 
+  // export default obj;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) foo: () => string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /mod.ts ===
+// const obj = {
+//   <|[|{| isWriteAccess: true |}foo|]: () => ""|>,
+// };
+// 
+// export default obj;
+
+// === /index.ts ===
+// import def from "./mod"
+// def.[|foo|]/*FIND ALL REFS*/();
+
+  // === Definitions ===
+  // === /mod.ts ===
+  // const obj = {
+  //   <|[|foo|]: () => ""|>,
+  // };
+  // 
+  // export default obj;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) foo: () => string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
