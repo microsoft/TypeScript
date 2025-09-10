@@ -635,6 +635,13 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
             }
+            else {
+                const sourceFile = getSourceFileOfNode(node);
+                if (sourceFile.symbol.exports?.has(InternalSymbolName.ExportEquals) && checker.resolveExternalModuleSymbol(sourceFile.symbol) === symbol.parent) {
+                    const exportInfo = { exportingModuleSymbol: sourceFile.symbol, exportKind: ExportKind.Named };
+                    return { kind: ImportExport.Export, symbol, exportInfo };
+                }
+            }
         }
 
         function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol | undefined {
