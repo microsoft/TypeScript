@@ -44,11 +44,11 @@ f.pubProp; // should work
 >f : Symbol(f, Decl(privateVisibility.ts, 7, 3))
 >pubProp : Symbol(Foo.pubProp, Decl(privateVisibility.ts, 2, 22))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(privateVisibility.ts, 12, 10))
 
     export class C { public pub = 0; private priv = 1; }
->C : Symbol(C, Decl(privateVisibility.ts, 14, 10))
+>C : Symbol(C, Decl(privateVisibility.ts, 14, 13))
 >pub : Symbol(C.pub, Decl(privateVisibility.ts, 15, 20))
 >priv : Symbol(C.priv, Decl(privateVisibility.ts, 15, 36))
 
@@ -59,9 +59,9 @@ module M {
 
 var c = new M.C();
 >c : Symbol(c, Decl(privateVisibility.ts, 20, 3))
->M.C : Symbol(M.C, Decl(privateVisibility.ts, 14, 10))
+>M.C : Symbol(M.C, Decl(privateVisibility.ts, 14, 13))
 >M : Symbol(M, Decl(privateVisibility.ts, 12, 10))
->C : Symbol(M.C, Decl(privateVisibility.ts, 14, 10))
+>C : Symbol(M.C, Decl(privateVisibility.ts, 14, 13))
 
 c.pub; // should work
 >c.pub : Symbol(M.C.pub, Decl(privateVisibility.ts, 15, 20))

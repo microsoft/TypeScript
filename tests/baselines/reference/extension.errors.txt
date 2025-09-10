@@ -15,7 +15,7 @@ extension.ts(22,3): error TS2339: Property 'pe' does not exist on type 'C'.
         y;
     }
     
-    declare module M {
+    declare namespace M {
         export class C {
                      ~
 !!! error TS2300: Duplicate identifier 'C'.
@@ -23,7 +23,7 @@ extension.ts(22,3): error TS2339: Property 'pe' does not exist on type 'C'.
         }
     }
     
-    declare module M {
+    declare namespace M {
         export extension class C {
         ~~~~~~
 !!! error TS1128: Declaration or statement expected.

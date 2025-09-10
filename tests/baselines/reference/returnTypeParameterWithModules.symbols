@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/returnTypeParameterWithModules.ts] ////
 
 === returnTypeParameterWithModules.ts ===
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(returnTypeParameterWithModules.ts, 0, 0))
 
     export function reduce<A>(ar, f, e?): Array<A> {
->reduce : Symbol(reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+>reduce : Symbol(reduce, Decl(returnTypeParameterWithModules.ts, 0, 14))
 >A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 1, 27))
 >ar : Symbol(ar, Decl(returnTypeParameterWithModules.ts, 1, 30))
 >f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 1, 33))
@@ -29,20 +29,20 @@ module M1 {
 
     };
 };
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(returnTypeParameterWithModules.ts, 4, 2))
 
   import A = M1
->A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
+>A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 14))
 >M1 : Symbol(A, Decl(returnTypeParameterWithModules.ts, 0, 0))
 
   export function compose() {
 >compose : Symbol(compose, Decl(returnTypeParameterWithModules.ts, 6, 15))
 
         A.reduce(arguments, compose2);
->A.reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
->A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
->reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+>A.reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 14))
+>A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 14))
+>reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 14))
 >arguments : Symbol(arguments)
 >compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 6))
 

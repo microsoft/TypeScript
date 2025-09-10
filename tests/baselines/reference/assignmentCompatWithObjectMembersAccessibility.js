@@ -3,7 +3,7 @@
 //// [assignmentCompatWithObjectMembersAccessibility.ts]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 
-module TargetIsPublic {
+namespace TargetIsPublic {
     // targets
     class Base {
         public foo: string;
@@ -56,7 +56,7 @@ module TargetIsPublic {
 
 }
 
-module TargetIsPublic {
+namespace TargetIsPublic {
     // targets
     class Base {
         private foo: string;

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/noImplicitAnyParametersInModule.ts] ////
 
 === noImplicitAnyParametersInModule.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

@@ -13,7 +13,7 @@ lib.decorators.legacy.d.ts-Text
 
 //// [/tests/cases/fourslash/server/navto01.ts]
 /// Module
-module MyShapes {
+namespace MyShapes {
 
     // Class
     export class MyPoint {
@@ -60,7 +60,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/navto01.ts SVC-1-0 "/// Module\nmodule MyShapes {\n\n    // Class\n    export class MyPoint {\n        // Instance member\n        private MyoriginAttheHorizon = 0.0;\n\n        // Getter\n        get MydistanceFromOrigin(): number { return 0; }\n    }\n}\n\n// Local variables\nvar myXyz = new Shapes.Point();"
+	/tests/cases/fourslash/server/navto01.ts SVC-1-0 "/// Module\nnamespace MyShapes {\n\n    // Class\n    export class MyPoint {\n        // Instance member\n        private MyoriginAttheHorizon = 0.0;\n\n        // Getter\n        get MydistanceFromOrigin(): number { return 0; }\n    }\n}\n\n// Local variables\nvar myXyz = new Shapes.Point();"
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.d.ts

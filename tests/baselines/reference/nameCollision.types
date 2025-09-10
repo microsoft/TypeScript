@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts] ////
 
 === nameCollision.ts ===
-module A {
+namespace A {
 >A : typeof globalThis.A
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -20,7 +20,7 @@ module A {
 >   : ^^
 }
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -31,7 +31,7 @@ module B {
 >   : ^^
 }
 
-module B {
+namespace B {
 >B : typeof globalThis.B
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -47,7 +47,7 @@ module B {
     }
 }
 
-module X {
+namespace X {
 >X : typeof globalThis.X
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -57,7 +57,7 @@ module X {
 >13 : 13
 >   : ^^
 
-    export module Y {
+    export namespace Y {
 >Y : typeof globalThis.X.Y
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ module X {
 >13 : 13
 >   : ^^
 
-        export module Z {
+        export namespace Z {
 >Z : typeof globalThis.X.Y.Z
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -92,7 +92,7 @@ module X {
     }
 }
 
-module Y.Y {
+namespace Y.Y {
 >Y : typeof globalThis.Y
 >  : ^^^^^^^^^^^^^^^^^^^
 >Y : typeof globalThis.Y.Y
@@ -112,7 +112,7 @@ module Y.Y {
 
 // no collision, since interface doesn't
 // generate code.
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 

@@ -4,7 +4,7 @@ alwaysStrictNoImplicitUseStrict.ts(3,13): error TS1100: Invalid use of 'argument
 
 !!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
 ==== alwaysStrictNoImplicitUseStrict.ts (1 errors) ====
-    module M {
+    namespace M {
         export function f() {
             var arguments = [];
                 ~~~~~~~~~

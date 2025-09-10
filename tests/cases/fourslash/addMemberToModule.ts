@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////module A {
+////namespace A {
 ////    /*var*/
 ////}
 ////module /*check*/A {

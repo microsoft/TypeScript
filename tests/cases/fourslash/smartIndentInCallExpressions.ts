@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module My.App {
+////namespace My.App {
 ////    export var appModule = angular.module("app", [
 ////    ]).config([() => {
 ////        configureStates/*1*/($stateProvider);

@@ -2,7 +2,7 @@ checkForObjectTooStrict.ts(3,18): error TS2725: Class name cannot be 'Object' wh
 
 
 ==== checkForObjectTooStrict.ts (1 errors) ====
-    module Foo {
+    namespace Foo {
     
         export class Object {
                      ~~~~~~

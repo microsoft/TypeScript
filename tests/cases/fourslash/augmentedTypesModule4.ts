@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module m3d { export var y = 2; }
+////namespace m3d { export var y = 2; }
 ////declare class m3d { foo(): void }
 ////var /*1*/r = new m3d();
 ////r./*2*/

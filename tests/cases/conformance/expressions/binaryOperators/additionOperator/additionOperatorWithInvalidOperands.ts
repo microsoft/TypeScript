@@ -4,7 +4,7 @@ class C {
     static foo() { }
 }
 enum E { a, b, c }
-module M { export var a }
+namespace M { export var a }
 
 var a: boolean;
 var b: number;
