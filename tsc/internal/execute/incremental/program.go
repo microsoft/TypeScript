@@ -320,7 +320,6 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 		len(program.GetConfigFileParsingDiagnostics()) > 0 ||
 		len(program.GetSyntacticDiagnostics(ctx, nil)) > 0 ||
 		len(program.GetProgramDiagnostics()) > 0 ||
-		len(program.GetBindDiagnostics(ctx, nil)) > 0 ||
 		len(program.GetOptionsDiagnostics(ctx)) > 0 ||
 		len(program.GetGlobalDiagnostics(ctx)) > 0 {
 		p.snapshot.hasErrors = core.TSTrue

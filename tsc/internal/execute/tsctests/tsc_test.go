@@ -1602,6 +1602,34 @@ func TestTscIncremental(t *testing.T) {
 				},
 			},
 		},
+		{
+			subScenario: "when there is bind diagnostics thats ignored",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"skipLibCheck": true,
+						"incremental": true,
+					}
+				}`),
+				"/home/src/workspaces/project/a.ts": `export const a = 10;`,
+				"/home/src/workspaces/project/b.d.ts": stringtestutil.Dedent(`
+					interface NoName {
+						Profiler: new ({ sampleInterval: number, maxBufferSize: number }) => {
+							stop: () => Promise<any>;
+						};
+					}
+				`),
+			},
+			commandLineArgs: []string{""},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption:         "no change and tsc -b",
+					commandLineArgs: []string{"-b", "-v"},
+				},
+			},
+		},
 	}
 
 	for _, test := range testCases {
