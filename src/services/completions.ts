@@ -3517,6 +3517,11 @@ function getCompletionData(
             }
 
             switch (parent.kind) {
+                case SyntaxKind.TypeReference:
+                    if (contextToken.kind === SyntaxKind.LessThanToken || contextToken.kind === SyntaxKind.CommaToken) {
+                        location = contextToken;
+                    }
+                    break;
                 case SyntaxKind.JsxClosingElement:
                     if (contextToken.kind === SyntaxKind.LessThanSlashToken) {
                         isStartingCloseTag = true;
