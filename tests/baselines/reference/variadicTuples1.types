@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000
+Type Count: 1,000 -> 2,500
 Instantiation count: 2,500
 
 === variadicTuples1.ts ===
@@ -2303,4 +2303,24 @@ type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 type AnyArr = [...any];
 >AnyArr : any[]
 >       : ^^^^^
+
+type NeverSpread1 = [...never];
+>NeverSpread1 : never
+>             : ^^^^^
+
+type IdentitySpread<T extends readonly unknown[]> = [...T];
+>IdentitySpread : [...T]
+>               : ^^^^^^
+
+type NeverSpread2 = IdentitySpread<never>;
+>NeverSpread2 : never
+>             : ^^^^^
+
+type ReducedNeverSpread1 = IdentitySpread<[] & [string]>;
+>ReducedNeverSpread1 : never
+>                    : ^^^^^
+
+type ReducedNeverSpread2 = IdentitySpread<[string | boolean, boolean, ...number[]] & ['foo', string, 44]>;
+>ReducedNeverSpread2 : never
+>                    : ^^^^^
 
