@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/privateNamesUnique-6.ts] ////
+
+=== privateNamesUnique-6.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesUnique-6.ts, 0, 0))
+
+  #foo: number;
+>#foo : Symbol(A.#foo, Decl(privateNamesUnique-6.ts, 0, 9))
+}
+
+// error
+const test: A = new (class {
+>test : Symbol(test, Decl(privateNamesUnique-6.ts, 5, 5))
+>A : Symbol(A, Decl(privateNamesUnique-6.ts, 0, 0))
+
+  #foo: number;
+>#foo : Symbol((Anonymous class).#foo, Decl(privateNamesUnique-6.ts, 5, 28))
+
+})();
+
