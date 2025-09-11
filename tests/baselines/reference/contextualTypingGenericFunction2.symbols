@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/contextualTypingGenericFunction2.ts] ////
+
+=== contextualTypingGenericFunction2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61979
+
+declare function fn<P>(config: {
+>fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 2, 20))
+>config : Symbol(config, Decl(contextualTypingGenericFunction2.ts, 2, 23))
+
+  callback: (params: P) => (context: number, params: P) => number;
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 2, 32))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 3, 13))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 2, 20))
+>context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 3, 28))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 3, 44))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 2, 20))
+
+  unrelated?: (arg: string) => void;
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 3, 66))
+>arg : Symbol(arg, Decl(contextualTypingGenericFunction2.ts, 4, 15))
+
+}): (params: P) => number;
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 5, 5))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 2, 20))
+
+// should error
+export const result1 = fn({
+>result1 : Symbol(result1, Decl(contextualTypingGenericFunction2.ts, 8, 12))
+>fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+
+  callback: <T,>(params: T) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 8, 27))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 9, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 9, 17))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 9, 13))
+
+    return (a: boolean, b) => (a ? 1 : 0);
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 10, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 10, 23))
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 10, 12))
+
+  },
+  unrelated: (_) => {},
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 11, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 12, 14))
+
+});
+
+// should error
+export const result2 = fn({
+>result2 : Symbol(result2, Decl(contextualTypingGenericFunction2.ts, 16, 12))
+>fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+
+  callback: <T,>(params: T) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 16, 27))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 17, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 17, 17))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 17, 13))
+
+    return (a, b): boolean => true;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 18, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 18, 14))
+
+  },
+  unrelated: (_) => {},
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 19, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 20, 14))
+
+});
+
+// should error
+export const result3 = fn({
+>result3 : Symbol(result3, Decl(contextualTypingGenericFunction2.ts, 24, 12))
+>fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+
+  callback: <T,>(params: T) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 24, 27))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 25, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 25, 17))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 25, 13))
+
+    return (a, b) => true;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 26, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 26, 14))
+
+  },
+  unrelated: (_) => {},
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 27, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 28, 14))
+
+});
+
+declare function fn2<P>(config: {
+>fn2 : Symbol(fn2, Decl(contextualTypingGenericFunction2.ts, 29, 3))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 31, 21))
+>config : Symbol(config, Decl(contextualTypingGenericFunction2.ts, 31, 24))
+
+  callback: (params: P) => (context: number, params: P) => number;
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 31, 33))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 32, 13))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 31, 21))
+>context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 32, 28))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 32, 44))
+>P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 31, 21))
+
+  unrelated?: (arg: string) => void;
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 32, 66))
+>arg : Symbol(arg, Decl(contextualTypingGenericFunction2.ts, 33, 15))
+
+}): any;
+
+// should error
+export const result4 = fn2({
+>result4 : Symbol(result4, Decl(contextualTypingGenericFunction2.ts, 37, 12))
+>fn2 : Symbol(fn2, Decl(contextualTypingGenericFunction2.ts, 29, 3))
+
+  callback: <T,>(params: T) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 37, 28))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 38, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 38, 17))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 38, 13))
+
+    return (a: boolean, b) => (a ? 1 : 0);
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 39, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 39, 23))
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 39, 12))
+
+  },
+  unrelated: (_) => {},
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 40, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 41, 14))
+
+});
+
+// should error
+export const result5 = fn({
+>result5 : Symbol(result5, Decl(contextualTypingGenericFunction2.ts, 45, 12))
+>fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+
+  callback: <T,>(params: T) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 45, 27))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 46, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 46, 17))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 46, 13))
+
+    return (a, b): boolean => true;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 47, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 47, 14))
+
+  },
+  unrelated: (_) => {},
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 48, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 49, 14))
+
+});
+
+// should error
+export const result6 = fn({
+>result6 : Symbol(result6, Decl(contextualTypingGenericFunction2.ts, 53, 12))
+>fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+
+  callback: <T,>(params: T) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 53, 27))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 54, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 54, 17))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 54, 13))
+
+    return (a, b) => true;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 55, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 55, 14))
+
+  },
+  unrelated: (_) => {},
+>unrelated : Symbol(unrelated, Decl(contextualTypingGenericFunction2.ts, 56, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 57, 14))
+
+});
+
