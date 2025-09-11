@@ -221,7 +221,7 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
                 var undef = undefined;
     
                 var  _\uD4A5\u7204\uC316\uE59F  = local;
-                                        
+                                        ~
 !!! error TS1127: Invalid character.
                 var мир = local;
     
