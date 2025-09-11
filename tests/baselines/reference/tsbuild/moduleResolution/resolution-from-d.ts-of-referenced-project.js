@@ -176,31 +176,9 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@common' from '/home/src/workspaces/project/producer/in-js.d.ts'. ========
-Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in CJS mode with conditions 'require', 'types', 'node'.
-'paths' option is specified, looking for a pattern to match module name '@common'.
-File '/home/src/workspaces/project/producer/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module '@common' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspaces/project/producer/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
-Directory '/home/src/workspaces/project/producer/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@common' was not resolved. ========
+Using compiler options of project reference redirect '/home/src/workspaces/project/producer/tsconfig.json'.
+Resolution for module '@common' was found in cache from location '/home/src/workspaces/project/producer'.
+======== Module name '@common' was successfully resolved to '/home/src/workspaces/project/common.d.ts'. ========
 File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
@@ -212,19 +190,6 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mconsumer/index.ts[0m:[93m4[0m:[93m14[0m - [91merror[0m[90m TS7006: [0mParameter 'n' implicitly has an 'any' type.
-
-[7m4[0m v.onValue = (n) => {
-[7m [0m [91m             ~[0m
-
-[96mproducer/in-js.d.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2307: [0mCannot find module '@common' or its corresponding type declarations.
-
-[7m1[0m import { OnValue } from "@common"
-[7m [0m [91m                        ~~~~~~~~~[0m
-
-
-Found 2 errors.
-
 
 
 //// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
@@ -343,17 +308,16 @@ v2.onValue = (n) => {
 
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo]
-{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["./index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./index.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 63
+  "size": 49
 }
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
