@@ -1,19 +1,19 @@
 subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
 subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
-    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    'T' is constrained to be a subtype of 'U'.
 subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
 subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
-    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    'T' is constrained to be a subtype of 'U'.
 subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
 subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'V' is not assignable to type 'T'.
-    'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+    'T' is constrained to be a subtype of 'V'.
 subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
 subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
   Type 'V' is not assignable to type 'U'.
-    'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+    'U' is constrained to be a subtype of 'V'.
 subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
 subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2416: Property 'foo' in type 'D19<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
@@ -65,7 +65,7 @@ subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2416: Property 'foo' i
         ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! error TS2416:     'T' is constrained to be a subtype of 'U'.
 !!! related TS2208 subtypesOfTypeParameterWithConstraints.ts:17:23: This type parameter might need an `extends T` constraint.
     }
     
@@ -103,7 +103,7 @@ subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2416: Property 'foo' i
         ~~~
 !!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! error TS2416:     'T' is constrained to be a subtype of 'U'.
     }
     
     class D9<T extends U, U extends V, V> extends C3<U> {
@@ -126,7 +126,7 @@ subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2416: Property 'foo' i
         ~~~
 !!! error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'T'.
-!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! error TS2416:     'T' is constrained to be a subtype of 'V'.
 !!! related TS2208 subtypesOfTypeParameterWithConstraints.ts:65:37: This type parameter might need an `extends T` constraint.
     }
     
@@ -138,7 +138,7 @@ subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2416: Property 'foo' i
         ~~~
 !!! error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'U'.
-!!! error TS2416:     'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! error TS2416:     'U' is constrained to be a subtype of 'V'.
 !!! related TS2208 subtypesOfTypeParameterWithConstraints.ts:70:37: This type parameter might need an `extends U` constraint.
     }
     

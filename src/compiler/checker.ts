@@ -22573,6 +22573,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         typeToString(constraint),
                     );
                 }
+                else if ((source.flags & TypeFlags.TypeParameter) && (isTypeAssignableTo(target, getBaseConstraintOrType(generalizedSource)) || (needsOriginalSource = isTypeAssignableTo(target, getBaseConstraintOrType(source))))) {
+                    reportError(
+                        Diagnostics._1_is_constrained_to_be_a_subtype_of_0,
+                        needsOriginalSource ? sourceType : generalizedSourceType,
+                        targetType,
+                    );
+                }
                 else {
                     errorInfo = undefined;
                     reportError(
