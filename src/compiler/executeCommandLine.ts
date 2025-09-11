@@ -1266,10 +1266,29 @@ function statisticValue(s: Statistic) {
         case StatisticType.time:
             return (s.value / 1000).toFixed(2) + "s";
         case StatisticType.memory:
-            return Math.round(s.value / 1000) + "K";
+            return formatMemory(s.value);
         default:
             Debug.assertNever(s.type);
     }
+}
+
+function formatMemory(bytes: number) {
+    // bytes -> choose KB/MB/GB with a human friendly format
+    const KB = 1024;
+    const MB = KB * 1024;
+    const GB = MB * 1024;
+    const numberOfDecimalPlaces = 1;
+
+    if (bytes >= GB) {
+        return (bytes / GB).toFixed(numberOfDecimalPlaces) + " GB";
+    }
+
+    if (bytes >= MB) {
+        return (bytes / MB).toFixed(numberOfDecimalPlaces) + " MB";
+    }
+
+    const kilobytesUsed = Math.round(bytes / KB);
+    return kilobytesUsed + " KB";
 }
 
 function writeConfigFile(
