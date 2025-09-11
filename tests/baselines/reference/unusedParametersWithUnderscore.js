@@ -4,8 +4,12 @@
 function f(a, _b, c, ___, d,e___, _f) {
 }
 
-
+// ok because of underscore prefix
 function f2({_a, __b}) {
+}
+
+// error
+function f2b({ a, b }) {
 }
 
 function f3([_a, ,__b]) {
@@ -27,8 +31,13 @@ var f8 = function (_) { };
 //// [unusedParametersWithUnderscore.js]
 function f(a, _b, c, ___, d, e___, _f) {
 }
+// ok because of underscore prefix
 function f2(_c) {
     var _a = _c._a, __b = _c.__b;
+}
+// error
+function f2b(_c) {
+    var a = _c.a, b = _c.b;
 }
 function f3(_c) {
     var _a = _c[0], __b = _c[2];

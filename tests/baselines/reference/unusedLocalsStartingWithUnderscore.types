@@ -1,40 +1,293 @@
 //// [tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts] ////
 
-=== /a.ts ===
-import * as _ from "./a";
->_ : typeof _
->  : ^^^^^^^^
+=== unusedLocalsStartingWithUnderscore.ts ===
+// Variables
+const unusedVar = 1; // error
+>unusedVar : 1
+>          : ^
+>1 : 1
+>  : ^
 
-for (const _ of []) { }
->_ : any
+const _unusedVar = 2; // ok
+>_unusedVar : 2
+>           : ^
+>2 : 2
+>  : ^
+
+let unusedLet = 3; // error  
+>unusedLet : number
+>          : ^^^^^^
+>3 : 3
+>  : ^
+
+let _unusedLet = 4; // ok
+>_unusedLet : number
+>           : ^^^^^^
+>4 : 4
+>  : ^
+
+var unusedVar2 = 5; // error
+>unusedVar2 : number
+>           : ^^^^^^
+>5 : 5
+>  : ^
+
+var _unusedVar2 = 6; // ok
+>_unusedVar2 : number
+>            : ^^^^^^
+>6 : 6
+>  : ^
+
+const { a1, _b1 } = { a1: 1, _b1: 2 }; // error on a1
+>a1 : number
+>   : ^^^^^^
+>_b1 : number
+>    : ^^^^^^
+>{ a1: 1, _b1: 2 } : { a1: number; _b1: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a1 : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+>_b1 : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+const { _a2, _b2 } = { _a2: 1, _b2: 2 }; // ok
+>_a2 : number
+>    : ^^^^^^
+>_b2 : number
+>    : ^^^^^^
+>{ _a2: 1, _b2: 2 } : { _a2: number; _b2: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_a2 : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>_b2 : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+// Functions
+function unusedFunc() { } // error
+>unusedFunc : () => void
+>           : ^^^^^^^^^^
+
+function _unusedFunc() { } // ok
+>_unusedFunc : () => void
+>            : ^^^^^^^^^^
+
+const unusedArrow = () => { }; // error
+>unusedArrow : () => void
+>            : ^^^^^^^^^^
+>() => { } : () => void
+>          : ^^^^^^^^^^
+
+const _unusedArrow = () => { }; // ok
+>_unusedArrow : () => void
+>             : ^^^^^^^^^^
+>() => { } : () => void
+>          : ^^^^^^^^^^
+
+// Classes
+class UnusedClass { } // error
+>UnusedClass : UnusedClass
+>            : ^^^^^^^^^^^
+
+class _UnusedClass { } // ok
+>_UnusedClass : _UnusedClass
+>             : ^^^^^^^^^^^^
+
+// Interfaces
+interface UnusedInterface { } // error
+interface _UnusedInterface { } // ok
+
+// Type aliases
+type UnusedType = string; // error
+>UnusedType : string
+>           : ^^^^^^
+
+type _UnusedType = string; // ok
+>_UnusedType : string
+>            : ^^^^^^
+
+// Enums
+enum UnusedEnum { A } // error
+>UnusedEnum : UnusedEnum
+>           : ^^^^^^^^^^
+>A : UnusedEnum.A
+>  : ^^^^^^^^^^^^
+
+enum _UnusedEnum { A } // ok
+>_UnusedEnum : _UnusedEnum
+>            : ^^^^^^^^^^^
+>A : _UnusedEnum.A
+>  : ^^^^^^^^^^^^^
+
+// Declarations in for loops
+for (const _x of []) { } // ok
+>_x : any
+>   : ^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+for (const x of []) { } // error
+>x : any
 >  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
-for (const _ in []) { }
->_ : string
+for (const _x in []) { } // ok
+>_x : string
+>   : ^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+for (const x in []) { } // error
+>x : string
 >  : ^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
-namespace _ns {
->_ns : typeof _ns
->    : ^^^^^^^^^^
+// Namespaces
+namespace UnusedNamespace { // error
+>UnusedNamespace : typeof UnusedNamespace
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
-    let _;
->_ : any
->  : ^^^
+    export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+namespace _UnusedNamespace { // ok
+>_UnusedNamespace : typeof _UnusedNamespace
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
-    for (const _ of []) { }
->_ : any
->  : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
-
-    for (const _ in []) { }
->_ : string
->  : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+    export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
 }
 
+// Destructuring
+const { a: unusedA } = { a: 1 }; // error
+>a : any
+>  : ^^^
+>unusedA : number
+>        : ^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+const { b: _unusedB } = { b: 2 }; // ok
+>b : any
+>  : ^^^
+>_unusedB : number
+>         : ^^^^^^
+>{ b: 2 } : { b: number; }
+>         : ^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const [unusedC] = [3]; // error
+>unusedC : number
+>        : ^^^^^^
+>[3] : [number]
+>    : ^^^^^^^^
+>3 : 3
+>  : ^
+
+const [_unusedD] = [4]; // ok
+>_unusedD : number
+>         : ^^^^^^
+>[4] : [number]
+>    : ^^^^^^^^
+>4 : 4
+>  : ^
+
+//
+// The following declarations may _not_ use an underscore to bypass @noUnusedLocals
+//
+
+class TestClass {
+>TestClass : TestClass
+>          : ^^^^^^^^^
+
+    private unusedMember = 1; // error
+>unusedMember : number
+>             : ^^^^^^
+>1 : 1
+>  : ^
+
+    private _unusedMember = 2; // still error
+>_unusedMember : number
+>              : ^^^^^^
+>2 : 2
+>  : ^
+
+    private unusedMethod() { } // error
+>unusedMethod : () => void
+>             : ^^^^^^^^^^
+
+    private _unusedMethod() { } // still error
+>_unusedMethod : () => void
+>              : ^^^^^^^^^^
+}
+
+enum TestEnum {
+>TestEnum : TestEnum
+>         : ^^^^^^^^
+
+    UnusedMember = 1, // error
+>UnusedMember : TestEnum.UnusedMember
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+    _UnusedMember = 2, // still error
+>_UnusedMember : TestEnum._UnusedMember
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+}
+
+interface TestInterface {
+    unusedProp: number; // error
+>unusedProp : number
+>           : ^^^^^^
+
+    _unusedProp: number; // still error
+>_unusedProp : number
+>            : ^^^^^^
+}
+
+const obj = {
+>obj : { unusedProp: number; _unusedProp: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    unusedProp: 1, // error    _unusedProp: 2, // still error} : { unusedProp: number; _unusedProp: number; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    unusedProp: 1, // error
+>unusedProp : number
+>           : ^^^^^^
+>1 : 1
+>  : ^
+
+    _unusedProp: 2, // still error
+>_unusedProp : number
+>            : ^^^^^^
+>2 : 2
+>  : ^
+
+};
+
+export { };
