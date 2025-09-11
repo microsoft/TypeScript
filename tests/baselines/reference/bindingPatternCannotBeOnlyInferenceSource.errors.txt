@@ -1,11 +1,13 @@
 bindingPatternCannotBeOnlyInferenceSource.ts(2,7): error TS2571: Object is of type 'unknown'.
 bindingPatternCannotBeOnlyInferenceSource.ts(3,9): error TS2339: Property 'p1' does not exist on type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(3,16): error TS2571: Object is of type 'unknown'.
 bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2461: Type 'unknown' is not an array type.
 bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2571: Object is of type 'unknown'.
 bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2461: Type 'unknown' is not an array type.
+bindingPatternCannotBeOnlyInferenceSource.ts(5,18): error TS2571: Object is of type 'unknown'.
 
 
-==== bindingPatternCannotBeOnlyInferenceSource.ts (5 errors) ====
+==== bindingPatternCannotBeOnlyInferenceSource.ts (7 errors) ====
     declare function f<T>(): T;
     const {} = f();       // error (only in strictNullChecks)
           ~~
@@ -13,6 +15,8 @@ bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2461: Type 'unknown' 
     const { p1 } = f();   // error
             ~~
 !!! error TS2339: Property 'p1' does not exist on type 'unknown'.
+                   ~~~
+!!! error TS2571: Object is of type 'unknown'.
     const [] = f();       // error
           ~~
 !!! error TS2461: Type 'unknown' is not an array type.
@@ -21,6 +25,8 @@ bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2461: Type 'unknown' 
     const [e1, e2] = f(); // error
           ~~~~~~~~
 !!! error TS2461: Type 'unknown' is not an array type.
+                     ~~~
+!!! error TS2571: Object is of type 'unknown'.
     
     // Repro from #43605
     type Dispatch<A = { type: any; [extraProps: string]: any }> = { <T extends A>(action: T): T };
