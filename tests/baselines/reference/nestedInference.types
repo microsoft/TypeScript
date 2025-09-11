@@ -1,0 +1,320 @@
+//// [tests/cases/compiler/nestedInference.ts] ////
+
+=== nestedInference.ts ===
+// repro from #52864
+
+const matcher = Symbol("@ts-pattern/matcher");
+>matcher : unique symbol
+>        : ^^^^^^^^^^^^^
+>Symbol("@ts-pattern/matcher") : unique symbol
+>                              : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>"@ts-pattern/matcher" : "@ts-pattern/matcher"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+type MatcherProtocol<input> = {
+>MatcherProtocol : MatcherProtocol<input>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+
+  match: <I>(value: I | input) => void;
+>match : <I>(value: I | input) => void
+>      : ^ ^^^^^^^^^         ^^^^^    
+>value : input | I
+>      : ^^^^^^^^^
+
+};
+
+interface Matcher<input> {
+  [matcher](): MatcherProtocol<input>;
+>[matcher] : () => MatcherProtocol<input>
+>          : ^^^^^^                      
+>matcher : unique symbol
+>        : ^^^^^^^^^^^^^
+}
+
+type Pattern<a> =
+>Pattern : Pattern<a>
+>        : ^^^^^^^^^^
+
+  | Matcher<a>
+  | (a extends readonly [any, ...any]
+      ? { readonly [index in keyof a]: Pattern<a[index]> }
+      : a extends object
+      ? { readonly [k in keyof a]: Pattern<a[k]> }
+      : a);
+
+type Match<i> = {
+>Match : Match<i>
+>      : ^^^^^^^^
+
+  with<p extends Pattern<i>>(pattern: p): void;
+>with : <p extends Pattern<i>>(pattern: p) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^    
+>pattern : p
+>        : ^
+
+};
+
+declare function match<input>(value: input): Match<input>;
+>match : <input>(value: input) => Match<input>
+>      : ^     ^^^^^^^^^     ^^^^^            
+>value : input
+>      : ^^^^^
+
+declare function union<input, ps extends [Pattern<input>, ...Pattern<input>[]]>(
+>union : <input, ps extends [Pattern<input>, ...Pattern<input>[]]>(...patterns: ps) => Matcher<input>
+>      : ^     ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^              
+
+  ...patterns: ps
+>patterns : ps
+>         : ^^
+
+): Matcher<input>;
+declare function when<input, p extends (value: input) => unknown>(
+>when : <input, p extends (value: input) => unknown>(predicate: p) => Matcher<input>
+>     : ^     ^^ ^^^^^^^^^^^^^^^^^     ^^^^^       ^^^^^^^^^^^^^ ^^^^^              
+>value : input
+>      : ^^^^^
+
+  predicate: p
+>predicate : p
+>          : ^
+
+): Matcher<input>;
+
+match<"a" | "b">("a").with(union("a"));
+>match<"a" | "b">("a").with(union("a")) : void
+>                                       : ^^^^
+>match<"a" | "b">("a").with : <p extends Pattern<"a" | "b">>(pattern: p) => void
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match<"a" | "b">("a") : Match<"a" | "b">
+>                      : ^^^^^^^^^^^^^^^^
+>match : <input>(value: input) => Match<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>with : <p extends Pattern<"a" | "b">>(pattern: p) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>union("a") : Matcher<"a" | "b">
+>           : ^^^^^^^^^^^^^^^^^^
+>union : <input, ps extends [Pattern<input>, ...Pattern<input>[]]>(...patterns: ps) => Matcher<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+match<"a" | "b">("a")
+>match<"a" | "b">("a")  .with(union("this is wrong")) : void
+>                                                     : ^^^^
+>match<"a" | "b">("a")  .with : <p extends Pattern<"a" | "b">>(pattern: p) => void
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match<"a" | "b">("a") : Match<"a" | "b">
+>                      : ^^^^^^^^^^^^^^^^
+>match : <input>(value: input) => Match<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+  .with(union("this is wrong")); // error
+>with : <p extends Pattern<"a" | "b">>(pattern: p) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>union("this is wrong") : Matcher<"a" | "b">
+>                       : ^^^^^^^^^^^^^^^^^^
+>union : <input, ps extends [Pattern<input>, ...Pattern<input>[]]>(...patterns: ps) => Matcher<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"this is wrong" : "this is wrong"
+>                : ^^^^^^^^^^^^^^^
+
+match<"a" | "b">("a").with(
+>match<"a" | "b">("a").with(  when((x) => {    let a: "a" | "b" = x; // OK    return a;  })) : void
+>                                                                                            : ^^^^
+>match<"a" | "b">("a").with : <p extends Pattern<"a" | "b">>(pattern: p) => void
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match<"a" | "b">("a") : Match<"a" | "b">
+>                      : ^^^^^^^^^^^^^^^^
+>match : <input>(value: input) => Match<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>with : <p extends Pattern<"a" | "b">>(pattern: p) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  when((x) => {
+>when((x) => {    let a: "a" | "b" = x; // OK    return a;  }) : Matcher<"a" | "b">
+>                                                              : ^^^^^^^^^^^^^^^^^^
+>when : <input, p extends (value: input) => unknown>(predicate: p) => Matcher<input>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => {    let a: "a" | "b" = x; // OK    return a;  } : (x: "a" | "b") => "a" | "b"
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    let a: "a" | "b" = x; // OK
+>a : "a" | "b"
+>  : ^^^^^^^^^
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    return a;
+>a : "a" | "b"
+>  : ^^^^^^^^^
+
+  })
+);
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+>match<{ type: "a" | "b" }>({ type: "a" }).with({  type: union("a"),}) : void
+>                                                                      : ^^^^
+>match<{ type: "a" | "b" }>({ type: "a" }).with : <p extends Pattern<{ type: "a" | "b"; }>>(pattern: p) => void
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>match<{ type: "a" | "b" }>({ type: "a" }) : Match<{ type: "a" | "b"; }>
+>                                          : ^^^^^^^^^^^^^^         ^^^^
+>match : <input>(value: input) => Match<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "a" | "b"
+>     : ^^^^^^^^^
+>{ type: "a" } : { type: "a"; }
+>              : ^^^^^^^^^^^^^^
+>type : "a"
+>     : ^^^
+>"a" : "a"
+>    : ^^^
+>with : <p extends Pattern<{ type: "a" | "b"; }>>(pattern: p) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  type: union("a"),} : { type: Matcher<"a" | "b">; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: union("a"),
+>type : Matcher<"a" | "b">
+>     : ^^^^^^^^^^^^^^^^^^
+>union("a") : Matcher<"a" | "b">
+>           : ^^^^^^^^^^^^^^^^^^
+>union : <input, ps extends [Pattern<input>, ...Pattern<input>[]]>(...patterns: ps) => Matcher<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+});
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+>match<{ type: "a" | "b" }>({ type: "a" }).with({  type: union("this is wrong"), // error}) : void
+>                                                                                           : ^^^^
+>match<{ type: "a" | "b" }>({ type: "a" }).with : <p extends Pattern<{ type: "a" | "b"; }>>(pattern: p) => void
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>match<{ type: "a" | "b" }>({ type: "a" }) : Match<{ type: "a" | "b"; }>
+>                                          : ^^^^^^^^^^^^^^         ^^^^
+>match : <input>(value: input) => Match<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "a" | "b"
+>     : ^^^^^^^^^
+>{ type: "a" } : { type: "a"; }
+>              : ^^^^^^^^^^^^^^
+>type : "a"
+>     : ^^^
+>"a" : "a"
+>    : ^^^
+>with : <p extends Pattern<{ type: "a" | "b"; }>>(pattern: p) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  type: union("this is wrong"), // error} : { type: Matcher<"a" | "b">; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: union("this is wrong"), // error
+>type : Matcher<"a" | "b">
+>     : ^^^^^^^^^^^^^^^^^^
+>union("this is wrong") : Matcher<"a" | "b">
+>                       : ^^^^^^^^^^^^^^^^^^
+>union : <input, ps extends [Pattern<input>, ...Pattern<input>[]]>(...patterns: ps) => Matcher<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"this is wrong" : "this is wrong"
+>                : ^^^^^^^^^^^^^^^
+
+});
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+>match<{ type: "a" | "b" }>({ type: "a" }).with({  type: when((x) => {    let a: "a" | "b" = x; // OK    return a;  }),}) : void
+>                                                                                                                         : ^^^^
+>match<{ type: "a" | "b" }>({ type: "a" }).with : <p extends Pattern<{ type: "a" | "b"; }>>(pattern: p) => void
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>match<{ type: "a" | "b" }>({ type: "a" }) : Match<{ type: "a" | "b"; }>
+>                                          : ^^^^^^^^^^^^^^         ^^^^
+>match : <input>(value: input) => Match<input>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "a" | "b"
+>     : ^^^^^^^^^
+>{ type: "a" } : { type: "a"; }
+>              : ^^^^^^^^^^^^^^
+>type : "a"
+>     : ^^^
+>"a" : "a"
+>    : ^^^
+>with : <p extends Pattern<{ type: "a" | "b"; }>>(pattern: p) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  type: when((x) => {    let a: "a" | "b" = x; // OK    return a;  }),} : { type: Matcher<"a" | "b">; }
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: when((x) => {
+>type : Matcher<"a" | "b">
+>     : ^^^^^^^^^^^^^^^^^^
+>when((x) => {    let a: "a" | "b" = x; // OK    return a;  }) : Matcher<"a" | "b">
+>                                                              : ^^^^^^^^^^^^^^^^^^
+>when : <input, p extends (value: input) => unknown>(predicate: p) => Matcher<input>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => {    let a: "a" | "b" = x; // OK    return a;  } : (x: "a" | "b") => "a" | "b"
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    let a: "a" | "b" = x; // OK
+>a : "a" | "b"
+>  : ^^^^^^^^^
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    return a;
+>a : "a" | "b"
+>  : ^^^^^^^^^
+
+  }),
+});
+
+// https://github.com/microsoft/TypeScript/issues/57978
+interface Action<Value> {
+  _run(input: Value): Value;
+>_run : (input: Value) => Value
+>     : ^^^^^^^^     ^^^^^     
+>input : Value
+>      : ^^^^^
+}
+
+declare function minLength<Value extends string | any[]>(min: number): Action<Value>
+>minLength : <Value extends string | any[]>(min: number) => Action<Value>
+>          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^             
+>min : number
+>    : ^^^^^^
+
+declare function pipe1<TAction1 extends Action<string>>(
+>pipe1 : <TAction1 extends Action<string>>(action1: TAction1) => (input: string) => string
+>      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^                         
+
+  action1: TAction1,
+>action1 : TAction1
+>        : ^^^^^^^^
+
+): (input: string) => string;
+>input : string
+>      : ^^^^^^
+
+const Schema1 = pipe1(minLength(1));
+>Schema1 : (input: string) => string
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>pipe1(minLength(1)) : (input: string) => string
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>pipe1 : <TAction1 extends Action<string>>(action1: TAction1) => (input: string) => string
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>minLength(1) : Action<string>
+>             : ^^^^^^^^^^^^^^
+>minLength : <Value extends string | any[]>(min: number) => Action<Value>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
