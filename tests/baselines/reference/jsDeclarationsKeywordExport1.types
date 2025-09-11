@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsKeywordExport1.ts] ////
+
+=== source.js ===
+// https://github.com/microsoft/TypeScript/issues/62081
+
+const _null = {}
+>_null : {}
+>      : ^^
+>{} : {}
+>   : ^^
+
+const $void = {}
+>$void : {}
+>      : ^^
+>{} : {}
+>   : ^^
+
+export { _null as null, $void as void }
+>_null : {}
+>      : ^^
+>null : {}
+>     : ^^
+>$void : {}
+>      : ^^
+>void : {}
+>     : ^^
+
