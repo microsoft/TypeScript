@@ -1,0 +1,58 @@
+noExcessPropertyCheckWithGenericMappedType1.ts(9,9): error TS2322: Type '{}' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(10,9): error TS2322: Type '{ abc: string; }' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(13,9): error TS2322: Type '{ other: number; }' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(20,9): error TS2322: Type '{ abc: number; }' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(21,9): error TS2322: Type '{}' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(22,9): error TS2322: Type '{ abc: string; }' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(24,9): error TS2322: Type '{ abc: number; other: number; }' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(25,9): error TS2322: Type '{ other: number; }' is not assignable to type 'Target'.
+noExcessPropertyCheckWithGenericMappedType1.ts(26,9): error TS2322: Type '{ abc: number; other: string; }' is not assignable to type 'Target'.
+
+
+==== noExcessPropertyCheckWithGenericMappedType1.ts (9 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/56391
+    
+    type S = { x: "abc" };
+    
+    function f<T extends S>() {
+      type Target = { [k in T["x"]]: number };
+    
+      const x: Target = { abc: 1 };
+      const y: Target = {};
+            ~
+!!! error TS2322: Type '{}' is not assignable to type 'Target'.
+      const z: Target = { abc: "" };
+            ~
+!!! error TS2322: Type '{ abc: string; }' is not assignable to type 'Target'.
+    
+      const a: Target = { abc: 1, other: 2 };
+      const b: Target = { other: 2 };
+            ~
+!!! error TS2322: Type '{ other: number; }' is not assignable to type 'Target'.
+      const c: Target = { abc: 1, other: "" };
+    }
+    
+    function f2<T extends S, T2 extends string>() {
+      type Target = { [k in T["x"] | T2]: number };
+    
+      const x: Target = { abc: 1 };
+            ~
+!!! error TS2322: Type '{ abc: number; }' is not assignable to type 'Target'.
+      const y: Target = {};
+            ~
+!!! error TS2322: Type '{}' is not assignable to type 'Target'.
+      const z: Target = { abc: "" };
+            ~
+!!! error TS2322: Type '{ abc: string; }' is not assignable to type 'Target'.
+    
+      const a: Target = { abc: 1, other: 2 };
+            ~
+!!! error TS2322: Type '{ abc: number; other: number; }' is not assignable to type 'Target'.
+      const b: Target = { other: 2 };
+            ~
+!!! error TS2322: Type '{ other: number; }' is not assignable to type 'Target'.
+      const c: Target = { abc: 1, other: "" };
+            ~
+!!! error TS2322: Type '{ abc: number; other: string; }' is not assignable to type 'Target'.
+    }
+    
