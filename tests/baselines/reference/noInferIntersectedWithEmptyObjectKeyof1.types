@@ -1,0 +1,181 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferIntersectedWithEmptyObjectKeyof1.ts] ////
+
+=== noInferIntersectedWithEmptyObjectKeyof1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61091
+
+type Keys = keyof (NoInfer<{ foo: string }> & {}); // "foo"
+>Keys : "foo"
+>     : ^^^^^
+>foo : string
+>    : ^^^^^^
+
+type LowInfer<T> = T & {};
+>LowInfer : LowInfer<T>
+>         : ^^^^^^^^^^^
+
+type PropertyAssigner<TContext> = {
+>PropertyAssigner : PropertyAssigner<TContext>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof TContext]?: (context: TContext) => TContext[K];
+>context : TContext
+>        : ^^^^^^^^
+
+};
+type Source = {
+>Source : Source
+>       : ^^^^^^
+
+  count: () => number;
+>count : () => number
+>      : ^^^^^^      
+
+};
+type Target = PropertyAssigner<LowInfer<NoInfer<{ count: number }>>>;
+>Target : PropertyAssigner<LowInfer<NoInfer<{ count: number; }>>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>count : number
+>      : ^^^^^^
+
+declare const source: Source;
+>source : Source
+>       : ^^^^^^
+
+const target: Target = source; // ok
+>target : PropertyAssigner<LowInfer<NoInfer<{ count: number; }>>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>source : Source
+>       : ^^^^^^
+
+type ActionFunction<TContext> = {
+>ActionFunction : ActionFunction<TContext>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  (args: { context: TContext }): void;
+>args : { context: TContext; }
+>     : ^^^^^^^^^^^        ^^^
+>context : TContext
+>        : ^^^^^^^^
+
+  _out_TContext?: TContext;
+>_out_TContext : TContext | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+};
+
+type TransitionsConfig<TContext> = Record<
+>TransitionsConfig : TransitionsConfig<TContext>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  string,
+  {
+    actions?: ActionFunction<TContext>;
+>actions : ActionFunction<TContext> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  }
+>;
+
+declare function assign<TContext>(
+>assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => ActionFunction<TContext>
+>       : ^        ^^          ^^                                    ^^^^^                        
+
+  assignment: PropertyAssigner<LowInfer<TContext>>,
+>assignment : PropertyAssigner<LowInfer<TContext>>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): ActionFunction<TContext>;
+
+declare function createMachine<TContext>(config: {
+>createMachine : <TContext>(config: { types?: { context?: TContext; }; on?: TransitionsConfig<NoInfer<TContext>>; }) => void
+>              : ^        ^^      ^^                                                                               ^^^^^    
+>config : { types?: { context?: TContext; }; on?: TransitionsConfig<NoInfer<TContext>>; }
+>       : ^^^^^^^^^^                       ^^^^^^^                                    ^^^
+
+  types?: {
+>types : { context?: TContext; } | undefined
+>      : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^
+
+    context?: TContext;
+>context : TContext | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+  };
+  on?: TransitionsConfig<NoInfer<TContext>>;
+>on : TransitionsConfig<NoInfer<TContext>> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}): void;
+
+createMachine({
+>createMachine({  types: {    context: {      count: 0,    },  },  on: {    FOO: {      actions: assign({        count: (context) => context.count + 1,      }),    },  },}) : void
+>                                                                                                                                                                            : ^^^^
+>createMachine : <TContext>(config: { types?: { context?: TContext; }; on?: TransitionsConfig<NoInfer<TContext>>; }) => void
+>              : ^        ^^      ^^                                                                               ^^^^^    
+>{  types: {    context: {      count: 0,    },  },  on: {    FOO: {      actions: assign({        count: (context) => context.count + 1,      }),    },  },} : { types: { context: { count: number; }; }; on: { FOO: { actions: ActionFunction<NoInfer<{ count: number; }>>; }; }; }
+>                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  types: {
+>types : { context: { count: number; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    context: {      count: 0,    },  } : { context: { count: number; }; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    context: {
+>context : { count: number; }
+>        : ^^^^^^^^^^^^^^^^^^
+>{      count: 0,    } : { count: number; }
+>                      : ^^^^^^^^^^^^^^^^^^
+
+      count: 0,
+>count : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+    },
+  },
+  on: {
+>on : { FOO: { actions: ActionFunction<NoInfer<{ count: number; }>>; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    FOO: {      actions: assign({        count: (context) => context.count + 1,      }),    },  } : { FOO: { actions: ActionFunction<NoInfer<{ count: number; }>>; }; }
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    FOO: {
+>FOO : { actions: ActionFunction<NoInfer<{ count: number; }>>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      actions: assign({        count: (context) => context.count + 1,      }),    } : { actions: ActionFunction<NoInfer<{ count: number; }>>; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      actions: assign({
+>actions : ActionFunction<NoInfer<{ count: number; }>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assign({        count: (context) => context.count + 1,      }) : ActionFunction<NoInfer<{ count: number; }>>
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => ActionFunction<TContext>
+>       : ^        ^^          ^^                                    ^^^^^                        
+>{        count: (context) => context.count + 1,      } : { count: (context: LowInfer<NoInfer<{ count: number; }>>) => number; }
+>                                                       : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        count: (context) => context.count + 1,
+>count : (context: LowInfer<NoInfer<{ count: number; }>>) => number
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(context) => context.count + 1 : (context: LowInfer<NoInfer<{ count: number; }>>) => number
+>                               : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>context : LowInfer<NoInfer<{ count: number; }>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>context.count + 1 : number
+>                  : ^^^^^^
+>context.count : number
+>              : ^^^^^^
+>context : LowInfer<NoInfer<{ count: number; }>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+
+      }),
+    },
+  },
+});
+
