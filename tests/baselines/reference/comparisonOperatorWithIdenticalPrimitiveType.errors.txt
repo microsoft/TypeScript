@@ -14,9 +14,13 @@ comparisonOperatorWithIdenticalPrimitiveType.ts(42,11): error TS18050: The value
 comparisonOperatorWithIdenticalPrimitiveType.ts(42,19): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithIdenticalPrimitiveType.ts(43,11): error TS18050: The value 'undefined' cannot be used here.
 comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(52,24): error TS2870: This binary expression is never nullish. Are you missing parentheses?
+comparisonOperatorWithIdenticalPrimitiveType.ts(61,24): error TS2870: This binary expression is never nullish. Are you missing parentheses?
+comparisonOperatorWithIdenticalPrimitiveType.ts(70,25): error TS2870: This binary expression is never nullish. Are you missing parentheses?
+comparisonOperatorWithIdenticalPrimitiveType.ts(79,25): error TS2870: This binary expression is never nullish. Are you missing parentheses?
 
 
-==== comparisonOperatorWithIdenticalPrimitiveType.ts (16 errors) ====
+==== comparisonOperatorWithIdenticalPrimitiveType.ts (20 errors) ====
     enum E { a, b, c }
     
     var a: number;
@@ -101,6 +105,8 @@ comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS18050: The value
     var re5 = e == e;
     var re6 = null == null;
     var re7 = undefined == undefined;
+                           ~~~~~~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
     
     // operator !=
     var rf1 = a != a;
@@ -110,6 +116,8 @@ comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS18050: The value
     var rf5 = e != e;
     var rf6 = null != null;
     var rf7 = undefined != undefined;
+                           ~~~~~~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
     
     // operator ===
     var rg1 = a === a;
@@ -119,6 +127,8 @@ comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS18050: The value
     var rg5 = e === e;
     var rg6 = null === null;
     var rg7 = undefined === undefined;
+                            ~~~~~~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
     
     // operator !==
     var rh1 = a !== a;
@@ -128,3 +138,5 @@ comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS18050: The value
     var rh5 = e !== e;
     var rh6 = null !== null;
     var rh7 = undefined !== undefined;
+                            ~~~~~~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
