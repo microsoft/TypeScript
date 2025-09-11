@@ -1,0 +1,314 @@
+//// [tests/cases/compiler/narrowingUnionToUnion2.ts] ////
+
+=== narrowingUnionToUnion2.ts ===
+interface NodeMap {
+>NodeMap : Symbol(NodeMap, Decl(narrowingUnionToUnion2.ts, 0, 0))
+
+  ClassBody: ClassBody;
+>ClassBody : Symbol(NodeMap.ClassBody, Decl(narrowingUnionToUnion2.ts, 0, 19))
+>ClassBody : Symbol(ClassBody, Decl(narrowingUnionToUnion2.ts, 88, 1))
+
+  Expression: Expression;
+>Expression : Symbol(NodeMap.Expression, Decl(narrowingUnionToUnion2.ts, 1, 23))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion2.ts, 39, 1))
+
+  Function: Function;
+>Function : Symbol(NodeMap.Function, Decl(narrowingUnionToUnion2.ts, 2, 25))
+>Function : Symbol(Function, Decl(narrowingUnionToUnion2.ts, 8, 35))
+
+  PropertyDefinition: PropertyDefinition;
+>PropertyDefinition : Symbol(NodeMap.PropertyDefinition, Decl(narrowingUnionToUnion2.ts, 3, 21))
+>PropertyDefinition : Symbol(PropertyDefinition, Decl(narrowingUnionToUnion2.ts, 45, 1))
+
+  Statement: Statement;
+>Statement : Symbol(NodeMap.Statement, Decl(narrowingUnionToUnion2.ts, 4, 41))
+>Statement : Symbol(Statement, Decl(narrowingUnionToUnion2.ts, 13, 28))
+}
+
+type Node = NodeMap[keyof NodeMap];
+>Node : Symbol(Node, Decl(narrowingUnionToUnion2.ts, 6, 1))
+>NodeMap : Symbol(NodeMap, Decl(narrowingUnionToUnion2.ts, 0, 0))
+>NodeMap : Symbol(NodeMap, Decl(narrowingUnionToUnion2.ts, 0, 0))
+
+type Function =
+>Function : Symbol(Function, Decl(narrowingUnionToUnion2.ts, 8, 35))
+
+  | FunctionDeclaration
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(narrowingUnionToUnion2.ts, 24, 1))
+
+  | FunctionExpression
+>FunctionExpression : Symbol(FunctionExpression, Decl(narrowingUnionToUnion2.ts, 50, 1))
+
+  | ArrowFunctionExpression;
+>ArrowFunctionExpression : Symbol(ArrowFunctionExpression, Decl(narrowingUnionToUnion2.ts, 83, 1))
+
+type Statement = BlockStatement | ReturnStatement;
+>Statement : Symbol(Statement, Decl(narrowingUnionToUnion2.ts, 13, 28))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion2.ts, 15, 50))
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion2.ts, 20, 1))
+
+interface BlockStatement {
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion2.ts, 15, 50))
+
+  type: "BlockStatement";
+>type : Symbol(BlockStatement.type, Decl(narrowingUnionToUnion2.ts, 17, 26))
+
+  body: Statement[];
+>body : Symbol(BlockStatement.body, Decl(narrowingUnionToUnion2.ts, 18, 25))
+>Statement : Symbol(Statement, Decl(narrowingUnionToUnion2.ts, 13, 28))
+}
+
+interface ReturnStatement {
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion2.ts, 20, 1))
+
+  type: "ReturnStatement";
+>type : Symbol(ReturnStatement.type, Decl(narrowingUnionToUnion2.ts, 22, 27))
+}
+
+interface FunctionDeclaration {
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(narrowingUnionToUnion2.ts, 24, 1))
+
+  type: "FunctionDeclaration";
+>type : Symbol(FunctionDeclaration.type, Decl(narrowingUnionToUnion2.ts, 26, 31))
+
+  body: BlockStatement;
+>body : Symbol(FunctionDeclaration.body, Decl(narrowingUnionToUnion2.ts, 27, 30))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion2.ts, 15, 50))
+}
+
+interface ExpressionMap {
+>ExpressionMap : Symbol(ExpressionMap, Decl(narrowingUnionToUnion2.ts, 29, 1))
+
+  ArrowFunctionExpression: ArrowFunctionExpression;
+>ArrowFunctionExpression : Symbol(ExpressionMap.ArrowFunctionExpression, Decl(narrowingUnionToUnion2.ts, 31, 25))
+>ArrowFunctionExpression : Symbol(ArrowFunctionExpression, Decl(narrowingUnionToUnion2.ts, 83, 1))
+
+  ClassExpression: ClassExpression;
+>ClassExpression : Symbol(ExpressionMap.ClassExpression, Decl(narrowingUnionToUnion2.ts, 32, 51))
+>ClassExpression : Symbol(ClassExpression, Decl(narrowingUnionToUnion2.ts, 93, 1))
+
+  FunctionExpression: FunctionExpression;
+>FunctionExpression : Symbol(ExpressionMap.FunctionExpression, Decl(narrowingUnionToUnion2.ts, 33, 35))
+>FunctionExpression : Symbol(FunctionExpression, Decl(narrowingUnionToUnion2.ts, 50, 1))
+
+  Identifier: Identifier;
+>Identifier : Symbol(ExpressionMap.Identifier, Decl(narrowingUnionToUnion2.ts, 34, 41))
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion2.ts, 61, 1))
+
+  Literal: Literal;
+>Literal : Symbol(ExpressionMap.Literal, Decl(narrowingUnionToUnion2.ts, 35, 25))
+>Literal : Symbol(Literal, Decl(narrowingUnionToUnion2.ts, 66, 1))
+
+  NewExpression: NewExpression;
+>NewExpression : Symbol(ExpressionMap.NewExpression, Decl(narrowingUnionToUnion2.ts, 36, 19))
+>NewExpression : Symbol(NewExpression, Decl(narrowingUnionToUnion2.ts, 55, 1))
+
+  ObjectExpression: ObjectExpression;
+>ObjectExpression : Symbol(ExpressionMap.ObjectExpression, Decl(narrowingUnionToUnion2.ts, 37, 31))
+>ObjectExpression : Symbol(ObjectExpression, Decl(narrowingUnionToUnion2.ts, 41, 53))
+}
+
+type Expression = ExpressionMap[keyof ExpressionMap];
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion2.ts, 39, 1))
+>ExpressionMap : Symbol(ExpressionMap, Decl(narrowingUnionToUnion2.ts, 29, 1))
+>ExpressionMap : Symbol(ExpressionMap, Decl(narrowingUnionToUnion2.ts, 29, 1))
+
+interface ObjectExpression {
+>ObjectExpression : Symbol(ObjectExpression, Decl(narrowingUnionToUnion2.ts, 41, 53))
+
+  type: "ObjectExpression";
+>type : Symbol(ObjectExpression.type, Decl(narrowingUnionToUnion2.ts, 43, 28))
+}
+
+interface PropertyDefinition {
+>PropertyDefinition : Symbol(PropertyDefinition, Decl(narrowingUnionToUnion2.ts, 45, 1))
+
+  type: "PropertyDefinition";
+>type : Symbol(PropertyDefinition.type, Decl(narrowingUnionToUnion2.ts, 47, 30))
+
+  key: Expression;
+>key : Symbol(PropertyDefinition.key, Decl(narrowingUnionToUnion2.ts, 48, 29))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion2.ts, 39, 1))
+}
+
+interface FunctionExpression {
+>FunctionExpression : Symbol(FunctionExpression, Decl(narrowingUnionToUnion2.ts, 50, 1))
+
+  type: "FunctionExpression";
+>type : Symbol(FunctionExpression.type, Decl(narrowingUnionToUnion2.ts, 52, 30))
+
+  body: BlockStatement;
+>body : Symbol(FunctionExpression.body, Decl(narrowingUnionToUnion2.ts, 53, 29))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion2.ts, 15, 50))
+}
+
+interface NewExpression {
+>NewExpression : Symbol(NewExpression, Decl(narrowingUnionToUnion2.ts, 55, 1))
+
+  type: "NewExpression";
+>type : Symbol(NewExpression.type, Decl(narrowingUnionToUnion2.ts, 57, 25))
+
+  callee: Expression;
+>callee : Symbol(NewExpression.callee, Decl(narrowingUnionToUnion2.ts, 58, 24))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion2.ts, 39, 1))
+
+  arguments: Array<Expression>;
+>arguments : Symbol(NewExpression.arguments, Decl(narrowingUnionToUnion2.ts, 59, 21))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion2.ts, 39, 1))
+}
+
+interface Identifier {
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion2.ts, 61, 1))
+
+  type: "Identifier";
+>type : Symbol(Identifier.type, Decl(narrowingUnionToUnion2.ts, 63, 22))
+
+  name: string;
+>name : Symbol(Identifier.name, Decl(narrowingUnionToUnion2.ts, 64, 21))
+}
+
+type Literal = SimpleLiteral | RegExpLiteral | BigIntLiteral;
+>Literal : Symbol(Literal, Decl(narrowingUnionToUnion2.ts, 66, 1))
+>SimpleLiteral : Symbol(SimpleLiteral, Decl(narrowingUnionToUnion2.ts, 68, 61))
+>RegExpLiteral : Symbol(RegExpLiteral, Decl(narrowingUnionToUnion2.ts, 73, 1))
+>BigIntLiteral : Symbol(BigIntLiteral, Decl(narrowingUnionToUnion2.ts, 78, 1))
+
+interface SimpleLiteral {
+>SimpleLiteral : Symbol(SimpleLiteral, Decl(narrowingUnionToUnion2.ts, 68, 61))
+
+  type: "Literal";
+>type : Symbol(SimpleLiteral.type, Decl(narrowingUnionToUnion2.ts, 70, 25))
+
+  value: string | boolean | number | null;
+>value : Symbol(SimpleLiteral.value, Decl(narrowingUnionToUnion2.ts, 71, 18))
+}
+
+interface RegExpLiteral {
+>RegExpLiteral : Symbol(RegExpLiteral, Decl(narrowingUnionToUnion2.ts, 73, 1))
+
+  type: "Literal";
+>type : Symbol(RegExpLiteral.type, Decl(narrowingUnionToUnion2.ts, 75, 25))
+
+  value: RegExp;
+>value : Symbol(RegExpLiteral.value, Decl(narrowingUnionToUnion2.ts, 76, 18))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+interface BigIntLiteral {
+>BigIntLiteral : Symbol(BigIntLiteral, Decl(narrowingUnionToUnion2.ts, 78, 1))
+
+  type: "Literal";
+>type : Symbol(BigIntLiteral.type, Decl(narrowingUnionToUnion2.ts, 80, 25))
+
+  value: bigint;
+>value : Symbol(BigIntLiteral.value, Decl(narrowingUnionToUnion2.ts, 81, 18))
+}
+
+interface ArrowFunctionExpression {
+>ArrowFunctionExpression : Symbol(ArrowFunctionExpression, Decl(narrowingUnionToUnion2.ts, 83, 1))
+
+  type: "ArrowFunctionExpression";
+>type : Symbol(ArrowFunctionExpression.type, Decl(narrowingUnionToUnion2.ts, 85, 35))
+
+  body: BlockStatement | Expression;
+>body : Symbol(ArrowFunctionExpression.body, Decl(narrowingUnionToUnion2.ts, 86, 34))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion2.ts, 15, 50))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion2.ts, 39, 1))
+}
+
+interface ClassBody {
+>ClassBody : Symbol(ClassBody, Decl(narrowingUnionToUnion2.ts, 88, 1))
+
+  type: "ClassBody";
+>type : Symbol(ClassBody.type, Decl(narrowingUnionToUnion2.ts, 90, 21))
+
+  body: Array<PropertyDefinition>;
+>body : Symbol(ClassBody.body, Decl(narrowingUnionToUnion2.ts, 91, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PropertyDefinition : Symbol(PropertyDefinition, Decl(narrowingUnionToUnion2.ts, 45, 1))
+}
+
+interface ClassExpression {
+>ClassExpression : Symbol(ClassExpression, Decl(narrowingUnionToUnion2.ts, 93, 1))
+
+  type: "ClassExpression";
+>type : Symbol(ClassExpression.type, Decl(narrowingUnionToUnion2.ts, 95, 27))
+
+  body: ClassBody;
+>body : Symbol(ClassExpression.body, Decl(narrowingUnionToUnion2.ts, 96, 26))
+>ClassBody : Symbol(ClassBody, Decl(narrowingUnionToUnion2.ts, 88, 1))
+}
+
+export function getNestedReturnStatements(node: Node): Array<ReturnStatement> {
+>getNestedReturnStatements : Symbol(getNestedReturnStatements, Decl(narrowingUnionToUnion2.ts, 98, 1))
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>Node : Symbol(Node, Decl(narrowingUnionToUnion2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion2.ts, 20, 1))
+
+  const returnStatements: Array<ReturnStatement> = [];
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion2.ts, 101, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion2.ts, 20, 1))
+
+  if (node.type === "ReturnStatement") {
+>node.type : Symbol(type, Decl(narrowingUnionToUnion2.ts, 90, 21), Decl(narrowingUnionToUnion2.ts, 85, 35), Decl(narrowingUnionToUnion2.ts, 95, 27), Decl(narrowingUnionToUnion2.ts, 52, 30), Decl(narrowingUnionToUnion2.ts, 63, 22) ... and 9 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>type : Symbol(type, Decl(narrowingUnionToUnion2.ts, 90, 21), Decl(narrowingUnionToUnion2.ts, 85, 35), Decl(narrowingUnionToUnion2.ts, 95, 27), Decl(narrowingUnionToUnion2.ts, 52, 30), Decl(narrowingUnionToUnion2.ts, 63, 22) ... and 9 more)
+
+    returnStatements.push(node);
+>returnStatements.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion2.ts, 101, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+  }
+
+  if ("body" in node && node.body !== undefined && node.body !== null) {
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>undefined : Symbol(undefined)
+>node.body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+
+    Array.isArray(node.body)
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+
+      ? node.body.forEach((x) => {
+>node.body.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingUnionToUnion2.ts, 109, 27))
+
+          returnStatements.push(...getNestedReturnStatements(x));
+>returnStatements.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion2.ts, 101, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>getNestedReturnStatements : Symbol(getNestedReturnStatements, Decl(narrowingUnionToUnion2.ts, 98, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion2.ts, 109, 27))
+
+        })
+      : returnStatements.push(...getNestedReturnStatements(node.body));
+>returnStatements.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion2.ts, 101, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>getNestedReturnStatements : Symbol(getNestedReturnStatements, Decl(narrowingUnionToUnion2.ts, 98, 1))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion2.ts, 100, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion2.ts, 91, 20), Decl(narrowingUnionToUnion2.ts, 86, 34), Decl(narrowingUnionToUnion2.ts, 96, 26), Decl(narrowingUnionToUnion2.ts, 53, 29), Decl(narrowingUnionToUnion2.ts, 27, 30) ... and 1 more)
+  }
+
+  return returnStatements;
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion2.ts, 101, 7))
+}
+
