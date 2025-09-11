@@ -7,6 +7,7 @@
 ////     "compilerOptions": {
 ////         "resolveJsonModule": false,
 ////         "baseUrl": "./",
+        "ignoreDeprecations": "6.0",
 ////         "paths": {
 ////             "module1/path1": ["some/path/whatever.ts"],
 ////         }

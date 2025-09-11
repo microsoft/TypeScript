@@ -18,6 +18,7 @@ export function b(text: string) {
         "outDir": "dist",
         "declaration": true,
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "@ts-bug/a": ["../a"]
         }

@@ -10,6 +10,7 @@
 		"traceResolution": true,
 		"moduleSuffixes": [".ios"],
 		"baseUrl": "/",
+        "ignoreDeprecations": "6.0",
 		"paths": {
 			"some-library": ["node_modules/some-library/lib"],
 			"some-library/*": ["node_modules/some-library/lib/*"]
