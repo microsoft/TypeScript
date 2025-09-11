@@ -223,7 +223,7 @@ interface BigInt64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> 
     includes(searchElement: bigint, fromIndex?: number): boolean;
 
     /**
-     * Returns the index of the first occurrence of a value in an array.
+     * Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
@@ -241,7 +241,7 @@ interface BigInt64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> 
     keys(): ArrayIterator<number>;
 
     /**
-     * Returns the index of the last occurrence of a value in an array.
+     * Returns the index of the last occurrence of a value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
@@ -514,7 +514,7 @@ interface BigUint64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike>
     includes(searchElement: bigint, fromIndex?: number): boolean;
 
     /**
-     * Returns the index of the first occurrence of a value in an array.
+     * Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
@@ -532,7 +532,7 @@ interface BigUint64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike>
     keys(): ArrayIterator<number>;
 
     /**
-     * Returns the index of the last occurrence of a value in an array.
+     * Returns the index of the last occurrence of a value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
