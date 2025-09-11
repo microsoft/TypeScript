@@ -356,7 +356,7 @@ func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
 					})
 				}
 			} else {
-				for outputDts := range resolved.GetOutputDeclarationFileNames() {
+				for outputDts := range resolved.GetOutputDeclarationAndSourceFileNames() {
 					if outputDts != "" {
 						p.rootTasks = append(p.rootTasks, &parseTask{
 							normalizedFilePath: outputDts,

@@ -13,11 +13,11 @@ func Dedent(text string) string {
 	startLine := -1
 	lastLine := 0
 	for i, line := range lines {
-		firstNonTab := strings.IndexFunc(line, func(r rune) bool {
-			return r != '\t'
+		firstNonWhite := strings.IndexFunc(line, func(r rune) bool {
+			return !stringutil.IsWhiteSpaceLike(r)
 		})
-		if firstNonTab > 0 {
-			line = strings.Repeat("    ", firstNonTab) + line[firstNonTab:]
+		if firstNonWhite > 0 {
+			line = strings.ReplaceAll(line[0:firstNonWhite], "\t", "    ") + line[firstNonWhite:]
 			lines[i] = line
 		}
 		line = strings.TrimSpace(line)
