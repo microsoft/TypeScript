@@ -116,7 +116,7 @@ var p: Number = a;
 
 var q: String = a;
 >q : Symbol(q, Decl(anyAssignableToEveryType.ts, 32, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {

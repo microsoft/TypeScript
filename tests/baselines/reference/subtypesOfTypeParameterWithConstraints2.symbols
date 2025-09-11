@@ -205,7 +205,7 @@ function f5<T extends Number>(x: T) {
 function f6<T extends String>(x: T) {
 >f6 : Symbol(f6, Decl(subtypesOfTypeParameterWithConstraints2.ts, 61, 1))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 12))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 30))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 12))
 
