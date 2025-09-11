@@ -1,0 +1,46 @@
+spreadsAndContextualArrayLikeTypes1.ts(40,32): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== spreadsAndContextualArrayLikeTypes1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/58286
+    
+    type MyType<T extends unknown> = {
+      myKey: T;
+      myFunction: (arg1: T) => void;
+    };
+    
+    declare const generate: () => Array<MyType<string>>;
+    
+    declare const arrayLikeInferenceFunction: <T extends unknown>(
+      arr: ArrayLike<T>,
+    ) => T[];
+    
+    arrayLikeInferenceFunction([
+      { myKey: "123", myFunction: (value1) => {} },
+      ...generate(),
+      { myKey: "456", myFunction: (value2) => {} },
+    ]);
+    
+    arrayLikeInferenceFunction([
+      { myKey: "123", myFunction: (value1) => {} },
+      { myKey: "456", myFunction: (value2) => {} },
+      ...generate(),
+    ]);
+    
+    arrayLikeInferenceFunction([
+      ...generate(),
+      { myKey: "123", myFunction: (value1) => {} },
+      { myKey: "456", myFunction: (value2) => {} },
+    ]);
+    
+    declare function numericProperties(weirdo: {
+      "0": (a: 0) => void;
+      "1": (a: 1) => void;
+      "2": (a: 2) => void;
+    }): void;
+    
+    const tuple1 = [() => {}, () => {}] as const;
+    
+    numericProperties([...tuple1, (a) => {}]);
+                                   ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
