@@ -1,0 +1,266 @@
+//// [tests/cases/compiler/exhaustiveChecksForNonUnionTypes.ts] ////
+
+=== exhaustiveChecksForNonUnionTypes.ts ===
+// Basic case: narrowing non-union types to never
+function testBasicNarrowing(obj: { name: "bob" }) {
+>testBasicNarrowing : (obj: { name: "bob"; }) => void
+>                   : ^   ^^                ^^^^^^^^^
+>obj : { name: "bob"; }
+>    : ^^^^^^^^     ^^^
+>name : "bob"
+>     : ^^^^^
+
+  if (obj.name === "bob") {
+>obj.name === "bob" : boolean
+>                   : ^^^^^^^
+>obj.name : "bob"
+>         : ^^^^^
+>obj : { name: "bob"; }
+>    : ^^^^^^^^     ^^^
+>name : "bob"
+>     : ^^^^^
+>"bob" : "bob"
+>      : ^^^^^
+
+    // obj.name is "bob"
+  } else {
+    // obj should be narrowed to never since { name: "bob" } with name !== "bob" is impossible
+    const n: never = obj;
+>n : never
+>  : ^^^^^
+>obj : never
+>    : ^^^^^
+  }
+}
+
+// Single enum member case
+enum SingleAction { 
+>SingleAction : SingleAction
+>             : ^^^^^^^^^^^^
+
+  INCREMENT = 'INCREMENT'
+>INCREMENT : SingleAction.INCREMENT
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>'INCREMENT' : "INCREMENT"
+>            : ^^^^^^^^^^^
+}
+
+interface IIncrement {
+  payload: {};
+>payload : {}
+>        : ^^
+
+  type: SingleAction.INCREMENT;
+>type : SingleAction
+>     : ^^^^^^^^^^^^
+>SingleAction : any
+>             : ^^^
+}
+
+function testSingleEnumSwitch(action: IIncrement) {
+>testSingleEnumSwitch : (action: IIncrement) => number
+>                     : ^      ^^          ^^^^^^^^^^^
+>action : IIncrement
+>       : ^^^^^^^^^^
+
+  switch (action.type) {
+>action.type : SingleAction
+>            : ^^^^^^^^^^^^
+>action : IIncrement
+>       : ^^^^^^^^^^
+>type : SingleAction
+>     : ^^^^^^^^^^^^
+
+    case SingleAction.INCREMENT:
+>SingleAction.INCREMENT : SingleAction
+>                       : ^^^^^^^^^^^^
+>SingleAction : typeof SingleAction
+>             : ^^^^^^^^^^^^^^^^^^^
+>INCREMENT : SingleAction
+>          : ^^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+  }
+  
+  // action should be narrowed to never since all cases are handled
+  const n: never = action;
+>n : never
+>  : ^^^^^
+>action : never
+>       : ^^^^^
+}
+
+// Single literal type case (should already work)
+function testSingleLiteral(x: "a") {
+>testSingleLiteral : (x: "a") => void
+>                  : ^ ^^   ^^^^^^^^^
+>x : "a"
+>  : ^^^
+
+  if (x === "a") {
+>x === "a" : boolean
+>          : ^^^^^^^
+>x : "a"
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+
+    // x is "a"
+  } else {
+    // x should be never
+    const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+  }
+}
+
+// Single enum value case
+enum Single { A = "a" }
+>Single : Single
+>       : ^^^^^^
+>A : Single.A
+>  : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+function testSingleEnum(x: Single) {
+>testSingleEnum : (x: Single) => void
+>               : ^ ^^      ^^^^^^^^^
+>x : Single
+>  : ^^^^^^
+
+  if (x === Single.A) {
+>x === Single.A : boolean
+>               : ^^^^^^^
+>x : Single
+>  : ^^^^^^
+>Single.A : Single
+>         : ^^^^^^
+>Single : typeof Single
+>       : ^^^^^^^^^^^^^
+>A : Single
+>  : ^^^^^^
+
+    // x is Single.A
+  } else {
+    // x should be never
+    const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+  }
+}
+
+// More complex object with multiple literal properties
+function testComplexObject(obj: { type: "user", status: "active" }) {
+>testComplexObject : (obj: { type: "user"; status: "active"; }) => void
+>                  : ^   ^^                                   ^^^^^^^^^
+>obj : { type: "user"; status: "active"; }
+>    : ^^^^^^^^      ^^^^^^^^^^        ^^^
+>type : "user"
+>     : ^^^^^^
+>status : "active"
+>       : ^^^^^^^^
+
+  if (obj.type === "user") {
+>obj.type === "user" : boolean
+>                    : ^^^^^^^
+>obj.type : "user"
+>         : ^^^^^^
+>obj : { type: "user"; status: "active"; }
+>    : ^^^^^^^^      ^^^^^^^^^^        ^^^
+>type : "user"
+>     : ^^^^^^
+>"user" : "user"
+>       : ^^^^^^
+
+    if (obj.status === "active") {
+>obj.status === "active" : boolean
+>                        : ^^^^^^^
+>obj.status : "active"
+>           : ^^^^^^^^
+>obj : { type: "user"; status: "active"; }
+>    : ^^^^^^^^      ^^^^^^^^^^        ^^^
+>status : "active"
+>       : ^^^^^^^^
+>"active" : "active"
+>         : ^^^^^^^^
+
+      // Both properties match
+    } else {
+      // obj.status !== "active" but obj: { type: "user", status: "active" } - impossible
+      const n: never = obj;
+>n : never
+>  : ^^^^^
+>obj : never
+>    : ^^^^^
+    }
+  } else {
+    // obj.type !== "user" but obj: { type: "user", status: "active" } - impossible  
+    const n: never = obj;
+>n : never
+>  : ^^^^^
+>obj : never
+>    : ^^^^^
+  }
+}
+
+// Switch statement with single case (original issue)
+enum ActionTypes {
+>ActionTypes : ActionTypes
+>            : ^^^^^^^^^^^
+
+  INCREMENT = 'INCREMENT',
+>INCREMENT : ActionTypes.INCREMENT
+>          : ^^^^^^^^^^^^^^^^^^^^^
+>'INCREMENT' : "INCREMENT"
+>            : ^^^^^^^^^^^
+}
+
+interface IAction {
+  type: ActionTypes.INCREMENT;
+>type : ActionTypes
+>     : ^^^^^^^^^^^
+>ActionTypes : any
+>            : ^^^
+}
+
+function testOriginalIssue(action: IAction) {
+>testOriginalIssue : (action: IAction) => number
+>                  : ^      ^^       ^^^^^^^^^^^
+>action : IAction
+>       : ^^^^^^^
+
+  switch (action.type) {
+>action.type : ActionTypes
+>            : ^^^^^^^^^^^
+>action : IAction
+>       : ^^^^^^^
+>type : ActionTypes
+>     : ^^^^^^^^^^^
+
+    case ActionTypes.INCREMENT:
+>ActionTypes.INCREMENT : ActionTypes
+>                      : ^^^^^^^^^^^
+>ActionTypes : typeof ActionTypes
+>            : ^^^^^^^^^^^^^^^^^^
+>INCREMENT : ActionTypes
+>          : ^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+  }
+  
+  // This was the original issue - action should be never but wasn't
+  const n: never = action;
+>n : never
+>  : ^^^^^
+>action : never
+>       : ^^^^^
+}
