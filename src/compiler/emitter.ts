@@ -646,7 +646,7 @@ export function getCommonSourceDirectory(
         commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
         checkSourceFilesBelongToPath?.(options.rootDir);
     }
-    else if (options.composite && options.configFilePath) {
+    else if (options.configFilePath) {
         // Project compilations never infer their root from the input source paths
         commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
         checkSourceFilesBelongToPath?.(commonSourceDirectory);

@@ -207,7 +207,7 @@ Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 }
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -219,7 +219,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -231,17 +231,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -257,20 +257,20 @@ function someFunc(arguments) {
 
 
 //// [/home/src/workspaces/outFile.d.ts]
-declare module "class" {
+declare module "src/class" {
     export class classC {
         prop: number;
     }
 }
-declare module "indirectClass" {
-    import { classC } from "class";
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
     export class indirectClass {
         classC: classC;
     }
 }
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
     export function writeLog(s: string): void;
 }
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
@@ -432,7 +432,7 @@ Errors  Files
 }
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -444,7 +444,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -456,17 +456,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -482,20 +482,20 @@ function someFunc(arguments) {
 
 
 //// [/home/src/workspaces/outFile.d.ts]
-declare module "class" {
+declare module "src/class" {
     export class classC {
         prop1: number;
     }
 }
-declare module "indirectClass" {
-    import { classC } from "class";
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
     export class indirectClass {
         classC: classC;
     }
 }
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
     export function writeLog(s: string): void;
 }
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
@@ -667,7 +667,7 @@ Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 }
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -679,7 +679,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -691,17 +691,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -717,20 +717,20 @@ function someFunc(arguments) {
 
 
 //// [/home/src/workspaces/outFile.d.ts]
-declare module "class" {
+declare module "src/class" {
     export class classC {
         prop: number;
     }
 }
-declare module "indirectClass" {
-    import { classC } from "class";
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
     export class indirectClass {
         classC: classC;
     }
 }
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
     export function writeLog(s: string): void;
 }
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
