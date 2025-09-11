@@ -1,0 +1,128 @@
+//// [tests/cases/compiler/returnTypeTopLevelInferenceLiteralDontWiden1.ts] ////
+
+=== returnTypeTopLevelInferenceLiteralDontWiden1.ts ===
+declare function A<T>(value: T): T extends string ? T : never;
+>A : Symbol(A, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 0))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 19))
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 19))
+
+const ATest = A("foo");
+>ATest : Symbol(ATest, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 2, 5))
+>A : Symbol(A, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 0, 0))
+
+declare function B<T>(value: T): `test_${T & string}`;
+>B : Symbol(B, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 2, 23))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 4, 19))
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 4, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 4, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 4, 19))
+
+const BTest = B("foo");
+>BTest : Symbol(BTest, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 6, 5))
+>B : Symbol(B, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 2, 23))
+
+declare function C<T>(
+>C : Symbol(C, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 6, 23))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 19))
+
+  value: T,
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 19))
+
+): T extends string
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 19))
+
+  ? T
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 19))
+
+  : T extends number | bigint | boolean | null | undefined
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 19))
+
+  ? `test_${T}`
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 8, 19))
+
+  : never;
+
+const CTest = C("foo");
+>CTest : Symbol(CTest, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 16, 5))
+>C : Symbol(C, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 6, 23))
+
+declare function D<T>(value: T): T extends number ? `test_${T}` : T;
+>D : Symbol(D, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 16, 23))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 18, 19))
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 18, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 18, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 18, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 18, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 18, 19))
+
+const DTest = D("foo");
+>DTest : Symbol(DTest, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 20, 5))
+>D : Symbol(D, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 16, 23))
+
+declare function E<T>(value: T): T extends string ? `test_${T}` : T;
+>E : Symbol(E, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 20, 23))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 22, 19))
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 22, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 22, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 22, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 22, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 22, 19))
+
+const ETest = E("foo");
+>ETest : Symbol(ETest, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 24, 5))
+>E : Symbol(E, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 20, 23))
+
+declare function F<T>(value: T): T extends number ? `test_${T}` : [T];
+>F : Symbol(F, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 24, 23))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 26, 19))
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 26, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 26, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 26, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 26, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 26, 19))
+
+const FTest1 = F("foo");
+>FTest1 : Symbol(FTest1, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 28, 5))
+>F : Symbol(F, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 24, 23))
+
+const FTest2 = F(42);
+>FTest2 : Symbol(FTest2, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 29, 5))
+>F : Symbol(F, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 24, 23))
+
+declare function G<T>(value: T): T extends string ? `test_${T}` : [T];
+>G : Symbol(G, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 29, 21))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 31, 19))
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 31, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 31, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 31, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 31, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 31, 19))
+
+const GTest1 = G("foo");
+>GTest1 : Symbol(GTest1, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 33, 5))
+>G : Symbol(G, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 29, 21))
+
+const GTest2 = G(42);
+>GTest2 : Symbol(GTest2, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 34, 5))
+>G : Symbol(G, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 29, 21))
+
+declare function H<T>(
+>H : Symbol(H, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 34, 21))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 36, 19))
+
+  value: T,
+>value : Symbol(value, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 36, 22))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 36, 19))
+
+): T extends number ? never : `test_${T & string}`;
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 36, 19))
+>T : Symbol(T, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 36, 19))
+
+const HTest = H("foo");
+>HTest : Symbol(HTest, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 40, 5))
+>H : Symbol(H, Decl(returnTypeTopLevelInferenceLiteralDontWiden1.ts, 34, 21))
+
