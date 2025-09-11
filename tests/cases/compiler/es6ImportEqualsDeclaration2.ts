@@ -8,7 +8,7 @@ declare module "other" {
 declare module "server" {
     import events = require("other"); // Ambient declaration, no error expected.
 
-    module S {
+    namespace S {
         export var a: number;
     }
 

@@ -1,6 +1,6 @@
 // @jsx: react,react-jsx
 // @target: es2015,es5
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;

@@ -174,6 +174,14 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
+/user/username/projects: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/packages: *new*
+  {}
+/user/username/projects/myproject/packages/A: *new*
+  {}
 /user/username/projects/myproject/packages/A/src/index.ts: *new*
   {}
 /user/username/projects/myproject/packages/A/tsconfig.json: *new*
@@ -196,6 +204,9 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/B/src: *new*
   {}
+
+Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions *new*
 
 Program root files: [
   "/user/username/projects/myproject/packages/A/src/index.ts"

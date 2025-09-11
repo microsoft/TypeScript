@@ -27,7 +27,7 @@ export var f4 = m4.foo();
 >m4 : Symbol(m4, Decl(importDecl_1.ts, 0, 0))
 >foo : Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
 
-export module m1 {
+export namespace m1 {
 >m1 : Symbol(m1, Decl(importDecl_1.ts, 8, 25))
 
     export var x2 = m4.x;
@@ -97,7 +97,7 @@ export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 import private_m4 = require("./importDecl_require3");
 >private_m4 : Symbol(private_m4, Decl(importDecl_1.ts, 27, 47))
 
-export module usePrivate_m4_m1 {
+export namespace usePrivate_m4_m1 {
 >usePrivate_m4_m1 : Symbol(usePrivate_m4_m1, Decl(importDecl_1.ts, 30, 53))
 
     var x3 = private_m4.x;

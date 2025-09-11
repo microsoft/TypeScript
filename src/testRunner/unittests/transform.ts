@@ -342,7 +342,7 @@ describe("unittests:: TransformAPI", () => {
                 const importStar = ts.factory.createImportDeclaration(
                     /*modifiers*/ undefined,
                     /*importClause*/ ts.factory.createImportClause(
-                        /*isTypeOnly*/ false,
+                        /*phaseModifier*/ undefined,
                         /*name*/ undefined,
                         ts.factory.createNamespaceImport(ts.factory.createIdentifier("i0")),
                     ),

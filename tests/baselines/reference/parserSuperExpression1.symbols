@@ -11,12 +11,12 @@ class C {
     }
 }
 
-module M1.M2 {
+namespace M1.M2 {
 >M1 : Symbol(M1, Decl(parserSuperExpression1.ts, 4, 1))
->M2 : Symbol(M2, Decl(parserSuperExpression1.ts, 6, 10))
+>M2 : Symbol(M2, Decl(parserSuperExpression1.ts, 6, 13))
 
     class C {
->C : Symbol(C, Decl(parserSuperExpression1.ts, 6, 14))
+>C : Symbol(C, Decl(parserSuperExpression1.ts, 6, 17))
 
         private foo() {
 >foo : Symbol(C.foo, Decl(parserSuperExpression1.ts, 7, 13))

@@ -139,8 +139,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Creating AuxiliaryProject: /dev/null/auxiliaryProject1*, currentDirectory: /user/username/projects/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b.js 500 undefined WatchType: Closed Script info
@@ -189,8 +187,6 @@ After request
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/b: *new*
   {"pollingInterval":500}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
@@ -277,8 +273,6 @@ TI:: Creating typing installer
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/b:
   {"pollingInterval":500}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
@@ -481,8 +475,6 @@ After request
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/b:
   {"pollingInterval":500}
 /user/username/projects/project/bower_components: *new*
   {"pollingInterval":500}

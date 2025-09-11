@@ -4,9 +4,9 @@
 while (true) { }
 const enum E { X }
 
-module A4 {
+namespace A4 {
     while (true);
-    module A {
+    namespace A {
         const enum E { X }
     }
 }

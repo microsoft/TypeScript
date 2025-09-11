@@ -1,6 +1,6 @@
 // all errors imported modules conflict with local variables
 
-module A {
+namespace A {
     export var Point = { x: 0, y: 0 }
     export interface Point {
         x: number;
@@ -8,13 +8,13 @@ module A {
     }
 } 
 
-module B {
+namespace B {
     var A = { x: 0, y: 0 };
     import Point = A;
 }
 
-module X {
-    export module Y {
+namespace X {
+    export namespace Y {
         export interface Point{
             x: number;
             y: number
@@ -26,7 +26,7 @@ module X {
     }
 }
 
-module Z {
+namespace Z {
     import Y = X.Y;
 
     var Y = 12;
@@ -34,31 +34,31 @@ module Z {
 
 //
 
-module a {
+namespace a {
   export type A = number;
 }
 
-module b {
+namespace b {
   export import A = a.A;
-  export module A {}
+  export namespace A {}
 }
 
-module c {
+namespace c {
   import any = b.A;
 }
 
 //
 
-module q {
+namespace q {
   export const Q = {};
 }
 
-module r {
+namespace r {
   export import Q = q.Q;
   export type Q = number;
 }
 
-module s {
+namespace s {
   import Q = r.Q;
   const Q = 0;
 }

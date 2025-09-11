@@ -475,12 +475,18 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/workspace/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 0 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 0 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace 0 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace 0 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project 0 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project 0 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
@@ -644,6 +650,12 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/workspace: *new*
+  {}
+/user/username/workspace/projects: *new*
+  {}
+/user/username/workspace/projects/project: *new*
   {}
 /user/username/workspace/projects/project/file2.ts:
   {}
@@ -844,6 +856,12 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/workspace:
+  {}
+/user/username/workspace/projects:
+  {}
+/user/username/workspace/projects/project:
   {}
 /user/username/workspace/projects/project/file2.ts:
   {}

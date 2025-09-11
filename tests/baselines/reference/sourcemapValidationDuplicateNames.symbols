@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourcemapValidationDuplicateNames.ts] ////
 
 === sourcemapValidationDuplicateNames.ts ===
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(sourcemapValidationDuplicateNames.ts, 0, 0), Decl(sourcemapValidationDuplicateNames.ts, 4, 1))
 
     var x = 10;
@@ -11,7 +11,7 @@ module m1 {
 >c : Symbol(c, Decl(sourcemapValidationDuplicateNames.ts, 1, 15))
     }
 }
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(sourcemapValidationDuplicateNames.ts, 0, 0), Decl(sourcemapValidationDuplicateNames.ts, 4, 1))
 
     var b = new m1.c();

@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
         "module": "none",
-        "moduleResolution": "classic"
+        "moduleResolution": "classic",
+        "allowSyntheticDefaultImports": false,
+        "resolvePackageJsonExports": false,
+        "resolvePackageJsonImports": false,
+        "resolveJsonModule": false
     }
 }

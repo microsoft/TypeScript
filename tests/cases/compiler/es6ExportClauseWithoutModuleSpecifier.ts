@@ -6,11 +6,11 @@ export class c {
 }
 export interface i {
 }
-export module m {
+export namespace m {
     export var x = 10;
 }
 export var x = 10;
-export module uninstantiated {
+export namespace uninstantiated {
 }
 
 // @filename: client.ts

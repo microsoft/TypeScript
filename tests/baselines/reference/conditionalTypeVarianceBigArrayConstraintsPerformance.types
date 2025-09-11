@@ -3,7 +3,7 @@
 === Performance Stats ===
 Assignability cache: 1,000
 Type Count: 5,000
-Instantiation count: 100,000
+Instantiation count: 50,000
 Symbol count: 50,000
 
 === conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===

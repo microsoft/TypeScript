@@ -7,7 +7,7 @@
 ////        let /*4*/b1 = 10;
 ////    }
 ////}
-////module m {
+////namespace m {
 ////    let /*5*/c = 10;
 ////    export let /*6*/d = 10;
 ////    if (c) {

@@ -244,24 +244,26 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/b.ts' exists - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -580,24 +582,26 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/b.ts' exists - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './nrefs/*', candidate module location: './nrefs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/nrefs/a', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/nrefs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/nrefs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -746,24 +750,26 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/b.ts' exists - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -916,7 +922,7 @@ Reusing resolution of module './b' from '/user/username/projects/transitiveRefer
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -1067,7 +1073,7 @@ Reusing resolution of module './b' from '/user/username/projects/transitiveRefer
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -1187,12 +1193,13 @@ Output::
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
@@ -1344,7 +1351,7 @@ Reusing resolution of module './b' from '/user/username/projects/transitiveRefer
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'

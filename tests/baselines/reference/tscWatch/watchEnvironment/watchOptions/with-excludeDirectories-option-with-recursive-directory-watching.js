@@ -52,7 +52,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 118
+//// [/user/username/projects/myproject/src/main.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -77,6 +77,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":20}
+/user/username/projects: *new*
+  {"inode":3}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -140,7 +142,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 120
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 122
 export function temp(): string;
 
 

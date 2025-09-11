@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-/////*1*/module Default{}
+/////*1*/namespace Default{}
 /////*2*/function foo(){}
 /////*3*/if (true){}
 /////*4*/function boo() {
@@ -12,7 +12,7 @@ format.setOption("PlaceOpenBraceOnNewLineForControlBlocks", true);
 format.document();
 
 goTo.marker('1');
-verify.currentLineContentIs('module Default { }');
+verify.currentLineContentIs('namespace Default { }');
 goTo.marker('2');
 verify.currentLineContentIs('function foo() { }');
 goTo.marker('3');

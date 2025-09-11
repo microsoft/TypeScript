@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/moduleVisibilityTest4.ts] ////
 
 === moduleVisibilityTest4.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(moduleVisibilityTest4.ts, 0, 0))
 
     export type nums = number;
->nums : Symbol(nums, Decl(moduleVisibilityTest4.ts, 0, 10))
+>nums : Symbol(nums, Decl(moduleVisibilityTest4.ts, 0, 13))
 }
 
 namespace N {
@@ -23,7 +23,7 @@ let a1: M.num;
 let b1: M.nums;
 >b1 : Symbol(b1, Decl(moduleVisibilityTest4.ts, 9, 3))
 >M : Symbol(M, Decl(moduleVisibilityTest4.ts, 0, 0))
->nums : Symbol(M.nums, Decl(moduleVisibilityTest4.ts, 0, 10))
+>nums : Symbol(M.nums, Decl(moduleVisibilityTest4.ts, 0, 13))
 
 let c1: M.bar;
 >c1 : Symbol(c1, Decl(moduleVisibilityTest4.ts, 10, 3))

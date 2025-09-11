@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////
-/////*1*/   module        classes                {
+/////*1*/   namespace        classes                {
 /////*2*/              class              Bar                    {
 ////
 /////*3*/      constructor()                                                  {
@@ -21,7 +21,7 @@
 /////*14*/          }
 ////
 ////
-/////*15*/                                                                       module interfaces {
+/////*15*/                                                                       namespace interfaces {
 /////*16*/    interface                Foo                  {
 ////
 /////*17*/      x: number;
@@ -31,8 +31,8 @@
 /////*20*/                        }
 ////
 ////
-/////*21*/                              module nestedModules {
-/////*22*/   module Foo2 {
+/////*21*/                              namespace nestedModules {
+/////*22*/   namespace Foo2 {
 /////*23*/                                      function f() {
 /////*24*/       }
 /////*25*/                                            var x: number;
@@ -40,7 +40,7 @@
 /////*27*/  }
 ////
 ////
-/////*28*/                                                                                                    module Enums {
+/////*28*/                                                                                                    namespace Enums {
 /////*29*/    enum Foo3       {
 /////*30*/                                val1       ,
 /////*31*/   val2,
@@ -136,7 +136,7 @@ format.setFormatOptions(copy);
 format.document();
 
 verify.currentFileContentIs(`
-          module classes {
+          namespace classes {
               class Bar {
 
                   constructor() {
@@ -156,7 +156,7 @@ verify.currentFileContentIs(`
           }
 
 
-          module interfaces {
+          namespace interfaces {
               interface Foo {
 
                   x: number;
@@ -166,8 +166,8 @@ verify.currentFileContentIs(`
           }
 
 
-          module nestedModules {
-              module Foo2 {
+          namespace nestedModules {
+              namespace Foo2 {
                   function f() {
                   }
                   var x: number;
@@ -175,7 +175,7 @@ verify.currentFileContentIs(`
           }
 
 
-          module Enums {
+          namespace Enums {
               enum Foo3 {
                   val1,
                   val2,

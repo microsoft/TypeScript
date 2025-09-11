@@ -328,9 +328,9 @@ const enum Comments {
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-module A {
-    export module B {
-        export module C {
+namespace A {
+    export namespace B {
+        export namespace C {
             export const enum E {
 >E : E
 >  : ^
@@ -371,9 +371,9 @@ module A {
     }
 }
 
-module A {
-    export module B {
-        export module C {
+namespace A {
+    export namespace B {
+        export namespace C {
             export const enum E {
 >E : E
 >  : ^
@@ -434,9 +434,9 @@ module A {
     }
 }
 
-module A1 {
-    export module B {
-        export module C {
+namespace A1 {
+    export namespace B {
+        export namespace C {
             export const enum E {
 >E : E
 >  : ^
@@ -457,15 +457,15 @@ module A1 {
     }
 }
 
-module A2 {
+namespace A2 {
 >A2 : typeof A2
 >   : ^^^^^^^^^
 
-    export module B {
+    export namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
-        export module C {
+        export namespace C {
             export const enum E {
 >E : E
 >  : ^
@@ -484,7 +484,7 @@ module A2 {
             }
         }
         // module C will be classified as value
-        export module C {
+        export namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 

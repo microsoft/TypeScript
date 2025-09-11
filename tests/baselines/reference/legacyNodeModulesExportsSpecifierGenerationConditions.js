@@ -78,7 +78,3 @@ var a = function () { return __awaiter(void 0, void 0, void 0, function () { ret
     }
 }); }); };
 exports.a = a;
-
-
-//// [index.d.ts]
-export declare const a: () => Promise<import("inner/private").Thing>;
