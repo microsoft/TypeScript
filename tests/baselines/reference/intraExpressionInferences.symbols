@@ -1076,3 +1076,82 @@ const distantRes = distant({
 
 });
 
+type ErrorFn = (error: unknown) => void;
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 329, 3))
+>error : Symbol(error, Decl(intraExpressionInferences.ts, 331, 16))
+
+declare const genericFn: <T>(args: {
+>genericFn : Symbol(genericFn, Decl(intraExpressionInferences.ts, 333, 13))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 26))
+>args : Symbol(args, Decl(intraExpressionInferences.ts, 333, 29))
+
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+>parser : Symbol(parser, Decl(intraExpressionInferences.ts, 333, 36))
+>p : Symbol(p, Decl(intraExpressionInferences.ts, 334, 11))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 334, 22))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 329, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 26))
+
+  handler: (data: { body: T }) => unknown;
+>handler : Symbol(handler, Decl(intraExpressionInferences.ts, 334, 46))
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 335, 12))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 335, 19))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 26))
+
+}) => T;
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 26))
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+>createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 338, 13))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 338, 29))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 338, 32))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 338, 29))
+>p : Symbol(p, Decl(intraExpressionInferences.ts, 338, 44))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 338, 55))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 329, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 338, 29))
+
+genericFn({
+>genericFn : Symbol(genericFn, Decl(intraExpressionInferences.ts, 333, 13))
+
+  parser: createParser(1 as const),
+>parser : Symbol(parser, Decl(intraExpressionInferences.ts, 340, 11))
+>createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 338, 13))
+>const : Symbol(const)
+
+  handler: ({ body: _ }) => {},
+>handler : Symbol(handler, Decl(intraExpressionInferences.ts, 341, 35))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 335, 19))
+>_ : Symbol(_, Decl(intraExpressionInferences.ts, 342, 13))
+
+});
+
+declare const genericFnTuple: <T>(
+>genericFnTuple : Symbol(genericFnTuple, Decl(intraExpressionInferences.ts, 345, 13))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 345, 31))
+
+  args: [
+>args : Symbol(args, Decl(intraExpressionInferences.ts, 345, 34))
+
+    parser: (p: unknown, errorFn: ErrorFn) => T,
+>p : Symbol(p, Decl(intraExpressionInferences.ts, 347, 13))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 347, 24))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 329, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 345, 31))
+
+    handler: (data: { body: T }) => unknown
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 348, 14))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 348, 21))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 345, 31))
+
+  ]
+) => T;
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 345, 31))
+
+genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]);
+>genericFnTuple : Symbol(genericFnTuple, Decl(intraExpressionInferences.ts, 345, 13))
+>createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 338, 13))
+>const : Symbol(const)
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 348, 21))
+>_ : Symbol(_, Decl(intraExpressionInferences.ts, 352, 44))
+
