@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/prettyFormatLongTypes.ts] ////
+
+=== prettyFormatLongTypes.ts ===
+let a = { b: { c: { e: { f: 123 } } } };
+>a : { b: { c: { e: { f: number; }; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ b: { c: { e: { f: 123 } } } } : { b: { c: { e: { f: number; }; }; }; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: { e: { f: number; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: { e: { f: 123 } } } : { c: { e: { f: number; }; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : { e: { f: number; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>{ e: { f: 123 } } : { e: { f: number; }; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
+>e : { f: number; }
+>  : ^^^^^^^^^^^^^^
+>{ f: 123 } : { f: number; }
+>           : ^^^^^^^^^^^^^^
+>f : number
+>  : ^^^^^^
+>123 : 123
+>    : ^^^
+
+let b = { b: { c: { e: { f: "123" } } } };
+>b : { b: { c: { e: { f: string; }; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ b: { c: { e: { f: "123" } } } } : { b: { c: { e: { f: string; }; }; }; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: { e: { f: string; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: { e: { f: "123" } } } : { c: { e: { f: string; }; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : { e: { f: string; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>{ e: { f: "123" } } : { e: { f: string; }; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>e : { f: string; }
+>  : ^^^^^^^^^^^^^^
+>{ f: "123" } : { f: string; }
+>             : ^^^^^^^^^^^^^^
+>f : string
+>  : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+
+let c = "test";
+>c : string
+>  : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+// both the source and target types are wide enough enough trigger pretty printing
+a = b;
+>a = b : { b: { c: { e: { f: string; }; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: { e: { f: number; }; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { b: { c: { e: { f: string; }; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// only the source type is wide enough to trigger pretty printing
+a = c;
+>a = c : string
+>      : ^^^^^^
+>a : { b: { c: { e: { f: number; }; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+
+// only the target type is wide enough to trigger pretty printing
+c = a;
+>c = a : { b: { c: { e: { f: number; }; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+>a : { b: { c: { e: { f: number; }; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// neither the source nor the target type is wide enough to trigger pretty printing
+c = false;
+>c = false : false
+>          : ^^^^^
+>c : string
+>  : ^^^^^^
+>false : false
+>      : ^^^^^
+
