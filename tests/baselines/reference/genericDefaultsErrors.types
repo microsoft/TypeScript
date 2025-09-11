@@ -89,12 +89,12 @@ interface i08<T, U extends T = number> { } // error
 
 interface i09<T, U, V = number> { }
 type i09t00 = i09; // error
->i09t00 : any
->       : ^^^
+>i09t00 : i09<any, any, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
 type i09t01 = i09<1>; // error
->i09t01 : any
->       : ^^^
+>i09t01 : i09<1, any, number>
+>       : ^^^^^^^^^^^^^^^^^^^
 
 type i09t02 = i09<1, 2>; // ok
 >i09t02 : i09t02
@@ -105,8 +105,8 @@ type i09t03 = i09<1, 2, 3>; // ok
 >       : ^^^^^^
 
 type i09t04 = i09<1, 2, 3, 4>; // error
->i09t04 : any
->       : ^^^
+>i09t04 : i09<1, 2, 3, 4>
+>       : ^^^^^^^^^^^^^^^
 
 interface i10 { x: T; } // error
 >x : T

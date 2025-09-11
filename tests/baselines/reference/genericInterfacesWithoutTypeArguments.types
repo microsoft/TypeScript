@@ -7,10 +7,10 @@ class C<T> { }
 >  : ^^^^
 
 var i: I;
->i : any
->  : ^^^
+>i : I<any>
+>  : ^^^^^^
 
 var c: C<I>;
->c : C<any>
->  : ^^^^^^
+>c : C<I<any>>
+>  : ^^^^^^^^^
 

@@ -70,7 +70,7 @@ verify.quickInfos({
     "7a": "(parameter) x: number",
     "7b": "(parameter) y: A",
     "8a": "(parameter) x: number",
-    "8b": "(parameter) y: any", // Specialized to any because no type argument was specified
+    "8b": "(parameter) y: B<any>",
     9: "var r1a: Collection<number, string>",
     10: "var r1b: Collection<number, string>",
     11: "var r2a: Collection<Collection<number, number>, number>",

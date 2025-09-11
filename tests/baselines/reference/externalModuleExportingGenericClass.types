@@ -6,8 +6,8 @@ import a = require('./externalModuleExportingGenericClass_file0');
 >  : ^^^^^^^^
 
 var v: a; // this should report error
->v : any
->  : ^^^
+>v : C<any>
+>  : ^^^^^^
 
 var v2: any = (new a()).foo;
 >v2 : any

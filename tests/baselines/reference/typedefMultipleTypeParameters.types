@@ -21,8 +21,8 @@ var wrong;
 
 /** @type {Everything<{ a: number  }>} */
 var insufficient;
->insufficient : any
->             : ^^^
+>insufficient : Everything<{ a: number; }, any, any, any, any>
+>             : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 
 === test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
