@@ -407,9 +407,9 @@ function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyo
 >eventName : Symbol(eventName, Decl(controlFlowGenericTypes.ts, 135, 64))
 }
 
-// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-// a generic type without a nullable constraint and x is a generic type. This is because when both obj
-// and x are of generic types T and K, we want the resulting type to be T[K].
+// In an element access obj[key], we consider obj to be in a constraint position, except when
+// obj and key both have generic types. When obj and key are of generic types T and K, we want
+// the resulting type to be T[K].
 
 function fx1<T, K extends keyof T>(obj: T, key: K) {
 >fx1 : Symbol(fx1, Decl(controlFlowGenericTypes.ts, 138, 1))
@@ -431,226 +431,356 @@ function fx1<T, K extends keyof T>(obj: T, key: K) {
 >obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 144, 35))
 >obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 144, 35))
 >key : Symbol(key, Decl(controlFlowGenericTypes.ts, 144, 42))
+
+    const x3 = obj?.[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 147, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 144, 35))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 144, 42))
 }
 
 function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
->fx2 : Symbol(fx2, Decl(controlFlowGenericTypes.ts, 147, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
+>fx2 : Symbol(fx2, Decl(controlFlowGenericTypes.ts, 148, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 150, 13))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 149, 47))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 149, 67))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 149, 74))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 149, 47))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 150, 13))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 150, 47))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 150, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 150, 67))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 150, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 150, 74))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 150, 47))
 
     const x1 = obj[key];
->x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 150, 9))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 149, 67))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 149, 74))
+>x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 151, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 150, 67))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 150, 74))
 
     const x2 = obj && obj[key];
->x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 151, 9))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 149, 67))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 149, 67))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 149, 74))
+>x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 152, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 150, 67))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 150, 67))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 150, 74))
+
+    const x3 = obj?.[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 153, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 150, 67))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 150, 74))
 }
 
 function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
->fx3 : Symbol(fx3, Decl(controlFlowGenericTypes.ts, 152, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
+>fx3 : Symbol(fx3, Decl(controlFlowGenericTypes.ts, 154, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 156, 13))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 154, 59))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 154, 79))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 154, 86))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 154, 59))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 156, 13))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 156, 59))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 156, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 156, 79))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 156, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 156, 86))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 156, 59))
 
-    const x1 = obj[key];  // Error
->x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 155, 9))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 154, 79))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 154, 86))
+    const x1 = obj[key];
+>x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 157, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 156, 79))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 156, 86))
 
     const x2 = obj && obj[key];
->x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 156, 9))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 154, 79))
->obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 154, 79))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 154, 86))
+>x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 158, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 156, 79))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 156, 79))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 156, 86))
+
+    const x3 = obj?.[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 159, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 156, 79))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 156, 86))
+}
+
+function fx4<T extends unknown, K extends keyof T>(obj: T, key: K) {
+>fx4 : Symbol(fx4, Decl(controlFlowGenericTypes.ts, 160, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 162, 13))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 162, 31))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 162, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 162, 51))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 162, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 162, 58))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 162, 31))
+
+    const x1 = obj[key];
+>x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 163, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 162, 51))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 162, 58))
+
+    const x2 = obj && obj[key];
+>x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 164, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 162, 51))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 162, 51))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 162, 58))
+
+    const x3 = obj?.[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 165, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 162, 51))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 162, 58))
+}
+
+function fx5<T extends {} | null | undefined, K extends keyof T>(obj: T, key: K) {
+>fx5 : Symbol(fx5, Decl(controlFlowGenericTypes.ts, 166, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 168, 13))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 168, 45))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 168, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 168, 65))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 168, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 168, 72))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 168, 45))
+
+    const x1 = obj[key];
+>x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 169, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 168, 65))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 168, 72))
+
+    const x2 = obj && obj[key];
+>x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 170, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 168, 65))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 168, 65))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 168, 72))
+
+    const x3 = obj?.[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 171, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 168, 65))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 168, 72))
+}
+
+function fx6<T, K extends keyof T>(obj: T | null | undefined, key: K) {
+>fx6 : Symbol(fx6, Decl(controlFlowGenericTypes.ts, 172, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 174, 13))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 174, 15))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 174, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 174, 35))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 174, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 174, 61))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 174, 15))
+
+    const x1 = obj[key];  // Error
+>x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 175, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 174, 35))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 174, 61))
+
+    const x2 = obj && obj[key];
+>x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 176, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 174, 35))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 174, 35))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 174, 61))
+
+    const x3 = obj?.[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 177, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 174, 35))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 174, 61))
+}
+
+function fx7<T, K extends keyof T>(obj: { x: T } | null | undefined, key: K) {
+>fx7 : Symbol(fx7, Decl(controlFlowGenericTypes.ts, 178, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 180, 13))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 180, 15))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 180, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 180, 35))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 180, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 180, 68))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 180, 15))
+
+    const x1 = obj.x[key];  // Error
+>x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 181, 9))
+>obj.x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 180, 35))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 180, 68))
+
+    const x2 = obj && obj.x[key];
+>x2 : Symbol(x2, Decl(controlFlowGenericTypes.ts, 182, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 180, 35))
+>obj.x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 180, 35))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 180, 68))
+
+    const x3 = obj?.x[key];
+>x3 : Symbol(x3, Decl(controlFlowGenericTypes.ts, 183, 9))
+>obj?.x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 180, 35))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 180, 41))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 180, 68))
 }
 
 // Repro from #44166
 
 class TableBaseEnum<
->TableBaseEnum : Symbol(TableBaseEnum, Decl(controlFlowGenericTypes.ts, 157, 1))
+>TableBaseEnum : Symbol(TableBaseEnum, Decl(controlFlowGenericTypes.ts, 184, 1))
 
     PublicSpec extends Record<keyof InternalSpec, any>,
->PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
+>PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 188, 20))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
+>InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 189, 55))
 
     InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
->InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
+>InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 189, 55))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
+>PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 188, 20))
 
     m() {
->m : Symbol(TableBaseEnum.m, Decl(controlFlowGenericTypes.ts, 163, 82))
+>m : Symbol(TableBaseEnum.m, Decl(controlFlowGenericTypes.ts, 190, 82))
 
         let iSpec = null! as InternalSpec;
->iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
->InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
+>iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 192, 11))
+>InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 189, 55))
 
-        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
->iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
->InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
+        iSpec[null! as keyof InternalSpec];
+>iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 192, 11))
+>InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 189, 55))
 
-        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
->iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
->PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
+        iSpec[null! as keyof PublicSpec];    // Error
+>iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 192, 11))
+>PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 188, 20))
 
         if (iSpec === undefined) {
->iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
+>iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 192, 11))
 >undefined : Symbol(undefined)
 
             return;
         }
         iSpec[null! as keyof InternalSpec];
->iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
->InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
+>iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 192, 11))
+>InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 189, 55))
 
         iSpec[null! as keyof PublicSpec];
->iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
->PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
+>iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 192, 11))
+>PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 188, 20))
     }
 }
 
 // Repros from #45145
 
 function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
->f10 : Symbol(f10, Decl(controlFlowGenericTypes.ts, 174, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
->a : Symbol(a, Decl(controlFlowGenericTypes.ts, 178, 24))
->x : Symbol(x, Decl(controlFlowGenericTypes.ts, 178, 50))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
->y : Symbol(y, Decl(controlFlowGenericTypes.ts, 178, 55))
+>f10 : Symbol(f10, Decl(controlFlowGenericTypes.ts, 201, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 205, 13))
+>a : Symbol(a, Decl(controlFlowGenericTypes.ts, 205, 24))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 205, 50))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 205, 13))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 205, 55))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 205, 13))
 
     y = x;
->y : Symbol(y, Decl(controlFlowGenericTypes.ts, 178, 55))
->x : Symbol(x, Decl(controlFlowGenericTypes.ts, 178, 50))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 205, 55))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 205, 50))
 }
 
 type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
->SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 182, 18))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 182, 18))
->P : Symbol(P, Decl(controlFlowGenericTypes.ts, 182, 57))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 182, 18))
+>SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 207, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 209, 18))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 209, 18))
+>P : Symbol(P, Decl(controlFlowGenericTypes.ts, 209, 57))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 209, 18))
 
 class SqlTable<T> {
->SqlTable : Symbol(SqlTable, Decl(controlFlowGenericTypes.ts, 182, 82))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
+>SqlTable : Symbol(SqlTable, Decl(controlFlowGenericTypes.ts, 209, 82))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 211, 15))
 
     protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
->validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
->_row : Symbol(_row, Decl(controlFlowGenericTypes.ts, 185, 26))
+>validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 211, 19))
+>_row : Symbol(_row, Decl(controlFlowGenericTypes.ts, 212, 26))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
+>SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 207, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 211, 15))
     }
     public insertRow(row: SqlInsertSet<T>) {
->insertRow : Symbol(SqlTable.insertRow, Decl(controlFlowGenericTypes.ts, 186, 5))
->row : Symbol(row, Decl(controlFlowGenericTypes.ts, 187, 21))
->SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
+>insertRow : Symbol(SqlTable.insertRow, Decl(controlFlowGenericTypes.ts, 213, 5))
+>row : Symbol(row, Decl(controlFlowGenericTypes.ts, 214, 21))
+>SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 207, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 211, 15))
 
         this.validateRow(row);
->this.validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
->this : Symbol(SqlTable, Decl(controlFlowGenericTypes.ts, 182, 82))
->validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
->row : Symbol(row, Decl(controlFlowGenericTypes.ts, 187, 21))
+>this.validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 211, 19))
+>this : Symbol(SqlTable, Decl(controlFlowGenericTypes.ts, 209, 82))
+>validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 211, 19))
+>row : Symbol(row, Decl(controlFlowGenericTypes.ts, 214, 21))
     }
 }
 
 // Repro from #46495
 
 interface Button {
->Button : Symbol(Button, Decl(controlFlowGenericTypes.ts, 190, 1))
+>Button : Symbol(Button, Decl(controlFlowGenericTypes.ts, 217, 1))
 
     type: "button";
->type : Symbol(Button.type, Decl(controlFlowGenericTypes.ts, 194, 18))
+>type : Symbol(Button.type, Decl(controlFlowGenericTypes.ts, 221, 18))
 
     text: string;
->text : Symbol(Button.text, Decl(controlFlowGenericTypes.ts, 195, 19))
+>text : Symbol(Button.text, Decl(controlFlowGenericTypes.ts, 222, 19))
 }
 
 interface Checkbox {
->Checkbox : Symbol(Checkbox, Decl(controlFlowGenericTypes.ts, 197, 1))
+>Checkbox : Symbol(Checkbox, Decl(controlFlowGenericTypes.ts, 224, 1))
 
     type: "checkbox";
->type : Symbol(Checkbox.type, Decl(controlFlowGenericTypes.ts, 199, 20))
+>type : Symbol(Checkbox.type, Decl(controlFlowGenericTypes.ts, 226, 20))
 
     isChecked: boolean;
->isChecked : Symbol(Checkbox.isChecked, Decl(controlFlowGenericTypes.ts, 200, 21))
+>isChecked : Symbol(Checkbox.isChecked, Decl(controlFlowGenericTypes.ts, 227, 21))
 }
 
 type Control = Button | Checkbox;
->Control : Symbol(Control, Decl(controlFlowGenericTypes.ts, 202, 1))
->Button : Symbol(Button, Decl(controlFlowGenericTypes.ts, 190, 1))
->Checkbox : Symbol(Checkbox, Decl(controlFlowGenericTypes.ts, 197, 1))
+>Control : Symbol(Control, Decl(controlFlowGenericTypes.ts, 229, 1))
+>Button : Symbol(Button, Decl(controlFlowGenericTypes.ts, 217, 1))
+>Checkbox : Symbol(Checkbox, Decl(controlFlowGenericTypes.ts, 224, 1))
 
 function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
->update : Symbol(update, Decl(controlFlowGenericTypes.ts, 204, 33))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
->Control : Symbol(Control, Decl(controlFlowGenericTypes.ts, 202, 1))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 206, 34))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
->control : Symbol(control, Decl(controlFlowGenericTypes.ts, 206, 54))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 206, 78))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 206, 34))
->value : Symbol(value, Decl(controlFlowGenericTypes.ts, 206, 86))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
->K : Symbol(K, Decl(controlFlowGenericTypes.ts, 206, 34))
+>update : Symbol(update, Decl(controlFlowGenericTypes.ts, 231, 33))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 233, 16))
+>Control : Symbol(Control, Decl(controlFlowGenericTypes.ts, 229, 1))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 233, 34))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 233, 16))
+>control : Symbol(control, Decl(controlFlowGenericTypes.ts, 233, 54))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 233, 16))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 233, 78))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 233, 34))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 233, 86))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 233, 16))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 233, 34))
 
     if (control !== undefined) {
->control : Symbol(control, Decl(controlFlowGenericTypes.ts, 206, 54))
+>control : Symbol(control, Decl(controlFlowGenericTypes.ts, 233, 54))
 >undefined : Symbol(undefined)
 
         control[key] = value;
->control : Symbol(control, Decl(controlFlowGenericTypes.ts, 206, 54))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 206, 78))
->value : Symbol(value, Decl(controlFlowGenericTypes.ts, 206, 86))
+>control : Symbol(control, Decl(controlFlowGenericTypes.ts, 233, 54))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 233, 78))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 233, 86))
     }
 }
 
 // Repro from #50465
 
 type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
->Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 210, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 214, 12))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 214, 12))
->id : Symbol(id, Decl(controlFlowGenericTypes.ts, 214, 43))
->id : Symbol(id, Decl(controlFlowGenericTypes.ts, 214, 70))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 214, 12))
->title : Symbol(title, Decl(controlFlowGenericTypes.ts, 214, 83))
+>Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 237, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 241, 12))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 241, 12))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 241, 43))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 241, 70))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 241, 12))
+>title : Symbol(title, Decl(controlFlowGenericTypes.ts, 241, 83))
 
 function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
->getColumnProperty : Symbol(getColumnProperty, Decl(controlFlowGenericTypes.ts, 214, 101))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 216, 27))
->column : Symbol(column, Decl(controlFlowGenericTypes.ts, 216, 30))
->Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 210, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 216, 27))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 216, 48))
->Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 210, 1))
->T : Symbol(T, Decl(controlFlowGenericTypes.ts, 216, 27))
+>getColumnProperty : Symbol(getColumnProperty, Decl(controlFlowGenericTypes.ts, 241, 101))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 243, 27))
+>column : Symbol(column, Decl(controlFlowGenericTypes.ts, 243, 30))
+>Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 237, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 243, 27))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 243, 48))
+>Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 237, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 243, 27))
 
   return column[key];
->column : Symbol(column, Decl(controlFlowGenericTypes.ts, 216, 30))
->key : Symbol(key, Decl(controlFlowGenericTypes.ts, 216, 48))
+>column : Symbol(column, Decl(controlFlowGenericTypes.ts, 243, 30))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 243, 48))
 }
 
