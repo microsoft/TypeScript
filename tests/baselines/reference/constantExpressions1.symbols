@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/constantExpressions1.ts] ////
+
+=== constantExpressions1.ts ===
+const C00 = "a";
+>C00 : Symbol(C00, Decl(constantExpressions1.ts, 0, 5))
+
+const C01 = "b" as const;
+>C01 : Symbol(C01, Decl(constantExpressions1.ts, 1, 5))
+>const : Symbol(const)
+
+const C02: "c" = "c";
+>C02 : Symbol(C02, Decl(constantExpressions1.ts, 2, 5))
+
+declare const C03: "d";
+>C03 : Symbol(C03, Decl(constantExpressions1.ts, 3, 13))
+
+const enum E0 {
+>E0 : Symbol(E0, Decl(constantExpressions1.ts, 3, 23))
+
+    A = C00,
+>A : Symbol(E0.A, Decl(constantExpressions1.ts, 5, 15))
+>C00 : Symbol(C00, Decl(constantExpressions1.ts, 0, 5))
+
+    B = C01,
+>B : Symbol(E0.B, Decl(constantExpressions1.ts, 6, 12))
+>C01 : Symbol(C01, Decl(constantExpressions1.ts, 1, 5))
+
+    C = C02,
+>C : Symbol(E0.C, Decl(constantExpressions1.ts, 7, 12))
+>C02 : Symbol(C02, Decl(constantExpressions1.ts, 2, 5))
+
+    D = C03,
+>D : Symbol(E0.D, Decl(constantExpressions1.ts, 8, 12))
+>C03 : Symbol(C03, Decl(constantExpressions1.ts, 3, 13))
+}
+
+const C10 = 1;
+>C10 : Symbol(C10, Decl(constantExpressions1.ts, 12, 5))
+
+const C11 = 2 as const;
+>C11 : Symbol(C11, Decl(constantExpressions1.ts, 13, 5))
+>const : Symbol(const)
+
+const C12: 3 = 3;
+>C12 : Symbol(C12, Decl(constantExpressions1.ts, 14, 5))
+
+declare const C13: 4;
+>C13 : Symbol(C13, Decl(constantExpressions1.ts, 15, 13))
+
+const enum E1 {
+>E1 : Symbol(E1, Decl(constantExpressions1.ts, 15, 21))
+
+    A = C10,
+>A : Symbol(E1.A, Decl(constantExpressions1.ts, 17, 15))
+>C10 : Symbol(C10, Decl(constantExpressions1.ts, 12, 5))
+
+    B = C11,
+>B : Symbol(E1.B, Decl(constantExpressions1.ts, 18, 12))
+>C11 : Symbol(C11, Decl(constantExpressions1.ts, 13, 5))
+
+    C = C12,
+>C : Symbol(E1.C, Decl(constantExpressions1.ts, 19, 12))
+>C12 : Symbol(C12, Decl(constantExpressions1.ts, 14, 5))
+
+    D = C13,
+>D : Symbol(E1.D, Decl(constantExpressions1.ts, 20, 12))
+>C13 : Symbol(C13, Decl(constantExpressions1.ts, 15, 13))
+}
+
+const C1: string = "x";
+>C1 : Symbol(C1, Decl(constantExpressions1.ts, 24, 5))
+
+const C2: "x" | "y" = "x";
+>C2 : Symbol(C2, Decl(constantExpressions1.ts, 25, 5))
+
+const enum EE {
+>EE : Symbol(EE, Decl(constantExpressions1.ts, 25, 26))
+
+    A = C1,  // Error
+>A : Symbol(EE.A, Decl(constantExpressions1.ts, 27, 15))
+>C1 : Symbol(C1, Decl(constantExpressions1.ts, 24, 5))
+
+    B = C2,  // Error
+>B : Symbol(EE.B, Decl(constantExpressions1.ts, 28, 11))
+>C2 : Symbol(C2, Decl(constantExpressions1.ts, 25, 5))
+}
+
