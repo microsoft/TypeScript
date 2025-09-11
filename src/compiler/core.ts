@@ -2591,3 +2591,96 @@ export function isNodeLikeSystem(): boolean {
         && !(process as any).browser
         && typeof require !== "undefined";
 }
+
+/** @internal */
+export interface PrefixSuffixTrie<T extends {}> {
+    iterateAllMatches(input: string): Iterable<T>;
+    set(prefix: string, suffix: string, fn: (value: T | undefined) => T | undefined): void;
+    hasAnyMatch(input: string): boolean;
+}
+
+/** @internal */
+export function createPrefixSuffixTrie<T extends {}>(): PrefixSuffixTrie<T> {
+    interface Trie<T extends {}> {
+        children: Record<string, Trie<T>> | undefined;
+        value: T | undefined;
+    }
+
+    function createTrie<T extends {}>(): Trie<T> {
+        return {
+            children: undefined,
+            value: undefined,
+        };
+    }
+
+    const root = createTrie<Trie<T>>();
+
+    function* iterateAllMatches(input: string) {
+        let node = root;
+
+        if (node.value) {
+            yield* iterateSuffix(node.value, 0);
+        }
+
+        for (let i = 0; i < input.length; i++) {
+            const child = node.children?.[input[i]];
+            if (!child) break;
+            if (child.value) {
+                yield* iterateSuffix(child.value, i + 1);
+            }
+            node = child;
+        }
+
+        return;
+
+        function* iterateSuffix(node: Trie<T>, start: number) {
+            if (node.value) {
+                yield node.value;
+            }
+
+            for (let i = input.length - 1; i >= start; i--) {
+                const child = node.children?.[input[i]];
+                if (!child) break;
+                if (child.value) {
+                    yield child.value;
+                }
+                node = child;
+            }
+        }
+    }
+
+    function set(prefix: string, suffix: string, fn: (value: T | undefined) => T | undefined) {
+        let prefixNode = root;
+
+        for (let i = 0; i < prefix.length; i++) {
+            const char = prefix[i];
+            const children = prefixNode.children ??= {};
+            const child = children[char] ??= createTrie();
+            prefixNode = child;
+        }
+
+        let suffixNode = prefixNode.value ??= createTrie();
+
+        for (let i = suffix.length - 1; i >= 0; i--) {
+            const char = suffix[i];
+            const children = suffixNode.children ??= {};
+            const child = children[char] ??= createTrie();
+            suffixNode = child;
+        }
+
+        suffixNode.value = fn(suffixNode.value);
+    }
+
+    function hasAnyMatch(input: string) {
+        for (const _ of iterateAllMatches(input)) {
+            return true;
+        }
+        return false;
+    }
+
+    return {
+        iterateAllMatches,
+        set,
+        hasAnyMatch,
+    };
+}
