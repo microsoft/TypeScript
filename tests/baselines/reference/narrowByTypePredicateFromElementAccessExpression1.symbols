@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/narrowByTypePredicateFromElementAccessExpression1.ts] ////
+
+=== narrowByTypePredicateFromElementAccessExpression1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62247
+
+const isBar = Symbol("isBar");
+>isBar : Symbol(isBar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+abstract class Foo {
+>Foo : Symbol(Foo, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 30))
+
+  abstract [isBar](): this is Bar;
+>[isBar] : Symbol(Foo[isBar], Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 4, 20))
+>isBar : Symbol(isBar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 5))
+>Bar : Symbol(Bar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 12, 1))
+
+  method(): void {
+>method : Symbol(Foo.method, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 5, 34))
+
+    if (this[isBar]()) {
+>this : Symbol(Foo, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 30))
+>isBar : Symbol(isBar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 5))
+
+      this.barMethod(); // ok
+>this.barMethod : Symbol(Bar.barMethod, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 17, 3))
+>barMethod : Symbol(Bar.barMethod, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 17, 3))
+    }
+  }
+}
+
+class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 12, 1))
+>Foo : Symbol(Foo, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 30))
+
+  override [isBar](): this is Bar {
+>[isBar] : Symbol(Bar[isBar], Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 14, 23))
+>isBar : Symbol(isBar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 2, 5))
+>Bar : Symbol(Bar, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 12, 1))
+
+    return true;
+  }
+
+  barMethod(): void {}
+>barMethod : Symbol(Bar.barMethod, Decl(narrowByTypePredicateFromElementAccessExpression1.ts, 17, 3))
+}
+
