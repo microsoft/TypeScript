@@ -331,3 +331,24 @@ const distantRes = distant({
   },
   consumer: (val) => {},
 });
+
+// https://github.com/microsoft/TypeScript/issues/62220
+
+declare function testAsConst<T, D>(arg: {
+  input: D;
+  produce: (arg: D) => T;
+  consume: (arg: T) => number;
+}): D;
+
+const testAsConstResult1 = testAsConst({
+  input: 100,
+  produce: (arg) => arg.toString(),
+  consume: (arg) => arg.length,
+} as const);
+
+// included for comparison with the above
+const testAsConstResult2 = testAsConst({
+  input: 100,
+  produce: (arg) => arg.toString(),
+  consume: (arg) => arg.length,
+});
