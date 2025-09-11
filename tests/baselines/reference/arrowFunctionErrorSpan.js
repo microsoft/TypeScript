@@ -55,6 +55,10 @@ f(  // comment 1
 f(_ => 1 +
     2);
 
+f((): number => { });
+
+f((): number => '');
+
 
 //// [arrowFunctionErrorSpan.js]
 function f(a) { }
@@ -91,3 +95,5 @@ function () {
 // body is not a block
 f(function (_) { return 1 +
     2; });
+f(function () { });
+f(function () { return ''; });
