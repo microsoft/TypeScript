@@ -581,7 +581,7 @@ default: undefined
 [94m--libReplacement[39m
 Enable lib replacement.
 type: boolean
-default: true
+default: false
 
 [94m--moduleDetection[39m
 Control what method is used to detect module-format JS files.

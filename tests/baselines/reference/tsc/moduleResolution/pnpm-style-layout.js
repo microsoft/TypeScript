@@ -305,32 +305,6 @@ Resolving real path for '/home/src/projects/component-type-checker/node_modules/
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/package.json'.
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/component-type-checker/packages/app/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/component-type-checker/packages/app/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/projects/component-type-checker/packages/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/projects/component-type-checker/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/projects/component-type-checker/packages/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-es5' was not resolved. ========
 [96mtsconfig.json[0m:[93m8[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m8[0m     "moduleResolution": "node",
