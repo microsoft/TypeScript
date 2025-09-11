@@ -111,3 +111,26 @@ function beastFoo(beast: Object) {
         beast;  // Legged & Winged
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/58518
+
+interface A_58518 {
+  label?: string;
+  a?: string;
+}
+
+interface B_58518 {
+  label?: string;
+  b: boolean;
+}
+
+function isB_58518(thing: object): thing is B_58518 {
+  return "b" in thing;
+}
+
+function test_58518(thing: A_58518) {
+  thing.a;
+  if (isB_58518(thing)) {
+    thing.a;
+  }
+}
