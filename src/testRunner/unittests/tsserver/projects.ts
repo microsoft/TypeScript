@@ -1131,6 +1131,112 @@ describe("unittests:: tsserver:: projects::", () => {
         });
     });
 
+    describe("includes extra extensions file with explicit TS script kind in the project context", () => {
+        function verifyDeferredContext(lazyConfiguredProjectsFromExternalProject: boolean) {
+            const file1 = {
+                path: "/home/src/projects/project/a.extra",
+                content: "const a = 1;",
+            };
+            const tsconfig = {
+                path: "/home/src/projects/project/tsconfig.json",
+                content: "",
+            };
+
+            const host = TestServerHost.createServerHost([file1, tsconfig]);
+            const session = new TestSession(host);
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
+                arguments: { preferences: { lazyConfiguredProjectsFromExternalProject } },
+            });
+
+            // Configure the deferred extension.
+            const extraFileExtensions = [{ extension: ".extra", scriptKind: ts.ScriptKind.TS, isMixedContent: false }];
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
+                arguments: { extraFileExtensions },
+            });
+
+            // Open external project
+            const projectFileName = "/home/src/projects/project/proj1";
+            openExternalProjectForSession({
+                projectFileName,
+                rootFiles: toExternalFiles([file1.path, tsconfig.path]),
+                options: {},
+            }, session);
+
+            if (lazyConfiguredProjectsFromExternalProject) {
+                // configured project is just created and not yet loaded
+                session.logger.info("Calling ensureInferredProjectsUpToDate_TestOnly");
+                session.getProjectService().ensureInferredProjectsUpToDate_TestOnly();
+            }
+
+            // Allow allowNonTsExtensions will be set to true for deferred extensions.
+            session.logger.info(`Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`);
+
+            baselineTsserverLogs("projects", `extra file extensions with explicit TS script kind in the project context${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+        }
+
+        it("when lazyConfiguredProjectsFromExternalProject not set", () => {
+            verifyDeferredContext(/*lazyConfiguredProjectsFromExternalProject*/ false);
+        });
+        it("when lazyConfiguredProjectsFromExternalProject is set", () => {
+            verifyDeferredContext(/*lazyConfiguredProjectsFromExternalProject*/ true);
+        });
+    });
+
+    describe("includes extra extensions file with explicit TS script kind in the project context", () => {
+        function verifyDeferredContext(lazyConfiguredProjectsFromExternalProject: boolean) {
+            const file1 = {
+                path: "/home/src/projects/project/a.extra",
+                content: "const a = <div />;",
+            };
+            const tsconfig = {
+                path: "/home/src/projects/project/tsconfig.json",
+                content: "",
+            };
+
+            const host = TestServerHost.createServerHost([file1, tsconfig]);
+            const session = new TestSession(host);
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
+                arguments: { preferences: { lazyConfiguredProjectsFromExternalProject } },
+            });
+
+            // Configure the deferred extension.
+            const extraFileExtensions = [{ extension: ".extra", scriptKind: ts.ScriptKind.TSX, isMixedContent: false }];
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
+                arguments: { extraFileExtensions },
+            });
+
+            // Open external project
+            const projectFileName = "/home/src/projects/project/proj1";
+            openExternalProjectForSession({
+                projectFileName,
+                rootFiles: toExternalFiles([file1.path, tsconfig.path]),
+                options: {},
+            }, session);
+
+            if (lazyConfiguredProjectsFromExternalProject) {
+                // configured project is just created and not yet loaded
+                session.logger.info("Calling ensureInferredProjectsUpToDate_TestOnly");
+                session.getProjectService().ensureInferredProjectsUpToDate_TestOnly();
+            }
+
+            // Allow allowNonTsExtensions will be set to true for deferred extensions.
+            session.logger.info(`Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`);
+
+            baselineTsserverLogs("projects", `extra file extensions with explicit TSX script kind in the project context${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+        }
+
+        it("when lazyConfiguredProjectsFromExternalProject not set", () => {
+            verifyDeferredContext(/*lazyConfiguredProjectsFromExternalProject*/ false);
+        });
+        it("when lazyConfiguredProjectsFromExternalProject is set", () => {
+            verifyDeferredContext(/*lazyConfiguredProjectsFromExternalProject*/ true);
+        });
+    });
+
     it("Orphan source files are handled correctly on watch trigger", () => {
         const file1: File = {
             path: `/user/username/projects/myproject/src/file1.ts`,
