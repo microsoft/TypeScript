@@ -68,13 +68,11 @@ var C3 = /** @class */ (function (_super) {
 declare function getSomething(): {
     new (): {};
 };
-declare const C_base: {
+declare class C extends ({} as {
     new (): {};
-};
-declare class C extends C_base<number, string> {
+})<number, string> {
 }
-declare const C2_base: any;
-declare class C2 extends C2_base<number, string> {
+declare class C2 extends ({} as any)<number, string> {
 }
 declare class C3 extends SomeUndefinedFunction {
 }

@@ -144,13 +144,12 @@ declare function f(): {
         bar(v: string): void;
     };
 };
-declare const E_base: {
+declare class E extends ({} as {
     new (): {
         foo(): void;
         bar(): void;
     };
-};
-declare class E extends E_base {
+}) {
     foo(): void;
     bar(): void;
     baz(): void;
