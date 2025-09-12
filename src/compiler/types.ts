@@ -1260,7 +1260,8 @@ export type HasJSDoc =
     | VariableDeclaration
     | VariableStatement
     | WhileStatement
-    | WithStatement;
+    | WithStatement
+    | MappedTypeNode;
 
 export type HasType =
     | SignatureDeclaration
@@ -2341,7 +2342,7 @@ export interface IndexedAccessTypeNode extends TypeNode {
     readonly indexType: TypeNode;
 }
 
-export interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
+export interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer, JSDocContainer {
     readonly kind: SyntaxKind.MappedType;
     readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
     readonly typeParameter: TypeParameterDeclaration;
