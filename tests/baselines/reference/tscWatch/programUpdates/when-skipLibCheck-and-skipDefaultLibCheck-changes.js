@@ -14,7 +14,6 @@ interface Document {
 {}
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -37,9 +36,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
-[7m15[0m     readonly fullscreen: boolean;
+[7m14[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
@@ -256,9 +255,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
-[7m15[0m     readonly fullscreen: boolean;
+[7m14[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
@@ -447,9 +446,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
-[7m15[0m     readonly fullscreen: boolean;
+[7m14[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
