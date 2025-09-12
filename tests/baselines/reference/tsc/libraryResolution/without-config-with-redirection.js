@@ -108,7 +108,6 @@ interface ScriptHostInterface { }
 export const unrelated = 10;
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -123,7 +122,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -147,7 +145,6 @@ interface WebWorkerInterface { }
 interface ScriptHostInterface { }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
