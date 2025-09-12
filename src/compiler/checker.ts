@@ -1531,7 +1531,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
-    var noUncheckedSideEffectImports = !!compilerOptions.noUncheckedSideEffectImports;
+    var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports !== false;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();

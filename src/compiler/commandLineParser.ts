@@ -1243,7 +1243,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Check_side_effect_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
 
     // Source Maps
