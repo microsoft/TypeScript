@@ -240,8 +240,8 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 >     : ^^^^^^
 >tail : [string, string] | [number, number]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : [number, string, string] | [string, number, number]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : [number, string, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
