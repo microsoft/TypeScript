@@ -3715,7 +3715,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
             if (isDefaultLib) {
                 processingDefaultLibFiles!.push(file);
-                libFiles.add(file.path);
             }
             else {
                 processingOtherFiles!.push(file);
@@ -3848,6 +3847,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         if (existing) return existing.actual;
         const result = pathForLibFileWorker(libFileName);
         (resolvedLibReferences ??= new Map()).set(libFileName, result);
+        libFiles.add(toPath(result.actual));
         return result.actual;
     }
 
