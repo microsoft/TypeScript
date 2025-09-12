@@ -418,6 +418,10 @@ export namespace Compiler {
         // Files from tests\lib that are requested by "@libFiles"
         if (options.libFiles) {
             for (const fileName of options.libFiles.split(",")) {
+                if (fileName === "lib.d.ts" && !options.noLib) {
+                    // Hack from Corsa.
+                    continue;
+                }
                 programFileNames.push(vpath.combine(vfs.testLibFolder, fileName));
             }
         }
