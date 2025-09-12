@@ -1,0 +1,27 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfEnum.ts ===
+// /*FIND ALL REFS*/enum E {
+//     First,
+//     Second
+// }
+// let first = E.First;
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfEnum.ts ===
+// enum /*FIND ALL REFS*/[|E|] {
+//     First,
+//     Second
+// }
+// let first = [|E|].First;
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfEnum.ts ===
+// enum [|E|] {
+//     First,
+//     Second
+// }
+// let first = /*FIND ALL REFS*/[|E|].First;

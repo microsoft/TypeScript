@@ -16,20 +16,20 @@ func TestGetJavaScriptCompletions20(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: file.js
- /**
-  * A person
-  * @constructor
-  * @param {string} name - The name of the person.
-  * @param {number} age - The age of the person.
-  */
- function Person(name, age) {
-     this.name = name;
-     this.age = age;
- }
+/**
+ * A person
+ * @constructor
+ * @param {string} name - The name of the person.
+ * @param {number} age - The age of the person.
+ */
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
 
 
- Person.getName = 10;
- Person.getNa/**/ = 10;`
+Person.getName = 10;
+Person.getNa/**/ = 10;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

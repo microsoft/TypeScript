@@ -1,0 +1,17 @@
+// === findAllReferences ===
+// === /foo.js ===
+// /**
+//  * @overload
+//  * @param {number} [|x|]
+//  * @returns {number}
+//  *
+//  * @overload
+//  * @param {string} [|x|]
+//  * @returns {string} 
+//  *
+//  * @param {unknown} [|x|]
+//  * @returns {unknown} 
+//  */
+// function foo([|x|]/*FIND ALL REFS*/) {
+//   return [|x|];
+// }

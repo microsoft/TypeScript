@@ -12,21 +12,21 @@ func TestReferenceInParameterPropertyDeclaration(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: file1.ts
- class Foo {
-     constructor(private /*1*/privateParam: number,
-         public /*2*/publicParam: string,
-         protected /*3*/protectedParam: boolean) {
+class Foo {
+    constructor(private /*1*/privateParam: number,
+        public /*2*/publicParam: string,
+        protected /*3*/protectedParam: boolean) {
 
-         let localPrivate = privateParam;
-         this.privateParam += 10;
+        let localPrivate = privateParam;
+        this.privateParam += 10;
 
-         let localPublic = publicParam;
-         this.publicParam += " Hello!";
+        let localPublic = publicParam;
+        this.publicParam += " Hello!";
 
-         let localProtected = protectedParam;
-         this.protectedParam = false;
-     }
- }`
+        let localProtected = protectedParam;
+        this.protectedParam = false;
+    }
+}`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

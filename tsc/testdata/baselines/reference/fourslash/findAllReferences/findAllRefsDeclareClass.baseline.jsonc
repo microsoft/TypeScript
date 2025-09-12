@@ -1,0 +1,13 @@
+// === findAllReferences ===
+// === /findAllRefsDeclareClass.ts ===
+// /*FIND ALL REFS*/declare class C {
+//     static m(): void;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsDeclareClass.ts ===
+// declare class /*FIND ALL REFS*/[|C|] {
+//     static m(): void;
+// }

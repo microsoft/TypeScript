@@ -1,0 +1,57 @@
+// === goToDefinition ===
+// === /a.ts ===
+// [|export default function f() {}
+// export const x = 0;|]
+
+// === /b.ts ===
+// import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// f;
+// x;
+// /*GOTO DEF*/a;
+// b;
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export default function [|f|]() {}
+// export const x = 0;
+
+// === /b.ts ===
+// import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// /*GOTO DEF*/f;
+// x;
+// a;
+// b;
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export default function f() {}
+// export const [|x|] = 0;
+
+// === /b.ts ===
+// import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// f;
+// /*GOTO DEF*/x;
+// a;
+// b;
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// [|import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// f;
+// x;
+// a;
+// /*GOTO DEF*/b;|]

@@ -1,0 +1,47 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// import /*RENAME*/[|eRENAME|] = require("mod4");
+// [|eRENAME|];
+// a = { /*START PREFIX*/e: [|eRENAME|] };
+// export { e };
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// import [|eRENAME|] = require("mod4");
+// /*RENAME*/[|eRENAME|];
+// a = { /*START PREFIX*/e: [|eRENAME|] };
+// export { e };
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// import [|eRENAME|] = require("mod4");
+// [|eRENAME|];
+// a = { /*START PREFIX*/e: /*RENAME*/[|eRENAME|] };
+// export { e };
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// import [|eRENAME|] = require("mod4");
+// [|eRENAME|];
+// a = { /*START PREFIX*/e: [|eRENAME|] };
+// export { /*RENAME*/e };
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { /*START PREFIX*/e as /*RENAME*/[|eRENAME|] } from "./a";
+// export { e };
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { /*START PREFIX*/e as [|eRENAME|] } from "./a";
+// export { /*RENAME*/e };

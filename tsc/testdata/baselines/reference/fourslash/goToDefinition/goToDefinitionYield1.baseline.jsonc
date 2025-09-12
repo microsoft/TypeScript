@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /goToDefinitionYield1.ts ===
+// function* [|gen|]() {
+//     /*GOTO DEF*/yield 0;
+// }
+// 
+// const genFunction = function*() {
+//     yield 0;
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionYield1.ts ===
+// function* gen() {
+//     yield 0;
+// }
+// 
+// const [|genFunction|] = function*() {
+//     /*GOTO DEF*/yield 0;
+// }

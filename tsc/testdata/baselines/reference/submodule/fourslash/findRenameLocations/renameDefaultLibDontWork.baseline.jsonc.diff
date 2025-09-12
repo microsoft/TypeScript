@@ -1,0 +1,8 @@
+--- old.renameDefaultLibDontWork.baseline.jsonc
++++ new.renameDefaultLibDontWork.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /file1.ts ===
+ // var /*RENAME*/[|testRENAME|] = "foo";
+ // console.log([|testRENAME|]);

@@ -1,7 +1,0 @@
-// === goToDefinition ===
-// === /foo.js ===
-
-// const Bar;
-// const [|Foo|] = [|Bar|] = function () {}
-// Foo.prototype.bar = function() {}
-// new Foo/*GO TO DEFINITION*/();

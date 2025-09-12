@@ -1,0 +1,15 @@
+// === findRenameLocations ===
+// === /jsDocTypedef_form2.js ===
+// /** @typedef {(string | number)} /*RENAME*/[|NumberLikeRENAME|] */
+// 
+// /** @type {[|NumberLikeRENAME|]} */
+// var numberLike;
+
+
+
+// === findRenameLocations ===
+// === /jsDocTypedef_form2.js ===
+// /** @typedef {(string | number)} [|NumberLikeRENAME|] */
+// 
+// /** @type {/*RENAME*/[|NumberLikeRENAME|]} */
+// var numberLike;

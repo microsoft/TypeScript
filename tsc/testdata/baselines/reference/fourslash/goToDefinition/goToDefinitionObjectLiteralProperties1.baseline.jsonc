@@ -1,0 +1,29 @@
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties1.ts ===
+// interface PropsBag {
+//    [|propx|]: number
+// }
+// function foo(arg: PropsBag) {}
+// foo({
+//    pr/*GOTO DEF*/opx: 10
+// })
+// function bar(firstarg: boolean, secondarg: PropsBag) {}
+// bar(true, {
+//    propx: 10
+// })
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties1.ts ===
+// interface PropsBag {
+//    [|propx|]: number
+// }
+// function foo(arg: PropsBag) {}
+// foo({
+//    propx: 10
+// })
+// function bar(firstarg: boolean, secondarg: PropsBag) {}
+// bar(true, {
+//    pr/*GOTO DEF*/opx: 10
+// })

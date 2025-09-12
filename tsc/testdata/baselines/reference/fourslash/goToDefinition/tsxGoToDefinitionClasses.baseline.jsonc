@@ -1,0 +1,48 @@
+// === goToDefinition ===
+// === /file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements { }
+//     interface ElementAttributesProperty { props; }
+// }
+// class [|MyClass|] {
+//     props: {
+//         foo: string;
+//     }
+// }
+// var x = <My/*GOTO DEF*/Class />;
+// var y = <MyClass foo= 'hello' />;
+// var z = <MyClass wrong= 'hello' />;
+
+
+
+// === goToDefinition ===
+// === /file.tsx ===
+// --- (line: 4) skipped ---
+// }
+// class MyClass {
+//     props: {
+//         [|foo|]: string;
+//     }
+// }
+// var x = <MyClass />;
+// var y = <MyClass f/*GOTO DEF*/oo= 'hello' />;
+// var z = <MyClass wrong= 'hello' />;
+
+
+
+// === goToDefinition ===
+// === /file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements { }
+//     interface ElementAttributesProperty { props; }
+// }
+// class [|MyClass|] {
+//     props: {
+//         foo: string;
+//     }
+// }
+// var x = <MyClass />;
+// var y = <MyClass foo= 'hello' />;
+// var z = <MyCl/*GOTO DEF*/ass wrong= 'hello' />;

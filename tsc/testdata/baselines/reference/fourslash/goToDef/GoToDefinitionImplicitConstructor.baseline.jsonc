@@ -1,6 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinitionImplicitConstructor.ts ===
-
-// class [|ImplicitConstructor|] {
-// }
-// var implicitConstructor = new /*GO TO DEFINITION*/ImplicitConstructor();

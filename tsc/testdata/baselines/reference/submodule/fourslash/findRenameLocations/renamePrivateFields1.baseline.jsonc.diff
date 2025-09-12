@@ -1,0 +1,27 @@
+--- old.renamePrivateFields1.baseline.jsonc
++++ new.renamePrivateFields1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renamePrivateFields1.ts ===
+ // class Foo {
+-//    /*RENAME*/[|#fooRENAME|] = 1;
++//    /*RENAME*/#foo = 1;
+ // 
+ //    getFoo() {
+-//        return this.[|#fooRENAME|];
++//        return this.#foo;
+ //    }
+ // }
+
+@@= skipped -12, +12 lines =@@
+ // === findRenameLocations ===
+ // === /renamePrivateFields1.ts ===
+ // class Foo {
+-//    [|#fooRENAME|] = 1;
++//    #foo = 1;
+ // 
+ //    getFoo() {
+-//        return this./*RENAME*/[|#fooRENAME|];
++//        return this./*RENAME*/#foo;
+ //    }
+ // }

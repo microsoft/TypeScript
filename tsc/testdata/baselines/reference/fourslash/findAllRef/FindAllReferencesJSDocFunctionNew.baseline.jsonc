@@ -1,5 +1,0 @@
-// === findAllReferences ===
-// === /Foo.js ===
-
-// /** @type {function (/*FIND ALL REFS*/new: string, string): string} */
-// var f;

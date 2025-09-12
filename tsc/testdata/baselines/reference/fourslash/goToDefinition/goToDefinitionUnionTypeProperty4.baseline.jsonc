@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /goToDefinitionUnionTypeProperty4.ts ===
+// interface SnapCrackle {
+//     [|pop|](): string;
+// }
+// 
+// interface Magnitude {
+//     [|pop|](): number;
+// }
+// 
+// interface Art {
+//     [|pop|](): boolean;
+// }
+// 
+// var art: Art;
+// var magnitude: Magnitude;
+// var snapcrackle: SnapCrackle;
+// 
+// var x = (snapcrackle || magnitude || art)./*GOTO DEF*/pop;

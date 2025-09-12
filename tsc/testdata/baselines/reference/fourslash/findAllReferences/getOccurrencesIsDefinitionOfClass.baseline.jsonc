@@ -1,0 +1,31 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfClass.ts ===
+// /*FIND ALL REFS*/class C {
+//     n: number;
+//     constructor() {
+//         this.n = 12;
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfClass.ts ===
+// class /*FIND ALL REFS*/[|C|] {
+//     n: number;
+//     constructor() {
+//         this.n = 12;
+//     }
+// }
+// let c = new [|C|]();
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfClass.ts ===
+// class [|C|] {
+//     n: number;
+//     constructor() {
+//         this.n = 12;
+//     }
+// }
+// let c = new /*FIND ALL REFS*/[|C|]();

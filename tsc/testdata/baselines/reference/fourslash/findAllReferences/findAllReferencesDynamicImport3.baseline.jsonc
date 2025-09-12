@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /foo.ts ===
+// export function /*FIND ALL REFS*/[|bar|]() { return "bar"; }
+// import('./foo').then(({ [|bar|] }) => undefined);
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// export function [|bar|]() { return "bar"; }
+// import('./foo').then(({ /*FIND ALL REFS*/[|bar|] }) => undefined);

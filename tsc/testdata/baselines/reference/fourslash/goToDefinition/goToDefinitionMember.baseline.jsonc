@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /a.ts ===
+// class A {
+//     private [|z|]/*GOTO DEF*/: string;
+// }

@@ -1,0 +1,89 @@
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// /*FIND ALL REFS*/export default function DefaultExportedFunction() {
+//     return DefaultExportedFunction;
+// }
+// 
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// export default function /*FIND ALL REFS*/[|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
+// }
+// 
+// var x: typeof [|DefaultExportedFunction|];
+// 
+// var y = [|DefaultExportedFunction|]();
+// 
+// namespace DefaultExportedFunction {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// export default function [|DefaultExportedFunction|]() {
+//     return /*FIND ALL REFS*/[|DefaultExportedFunction|];
+// }
+// 
+// var x: typeof [|DefaultExportedFunction|];
+// 
+// var y = [|DefaultExportedFunction|]();
+// 
+// namespace DefaultExportedFunction {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// export default function [|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
+// }
+// 
+// var x: typeof /*FIND ALL REFS*/[|DefaultExportedFunction|];
+// 
+// var y = [|DefaultExportedFunction|]();
+// 
+// namespace DefaultExportedFunction {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// export default function [|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
+// }
+// 
+// var x: typeof [|DefaultExportedFunction|];
+// 
+// var y = /*FIND ALL REFS*/[|DefaultExportedFunction|]();
+// 
+// namespace DefaultExportedFunction {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// --- (line: 5) skipped ---
+// 
+// var y = DefaultExportedFunction();
+// 
+// /*FIND ALL REFS*/namespace DefaultExportedFunction {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport02.ts ===
+// --- (line: 5) skipped ---
+// 
+// var y = DefaultExportedFunction();
+// 
+// namespace /*FIND ALL REFS*/[|DefaultExportedFunction|] {
+// }

@@ -1,0 +1,7 @@
+// === findAllReferences ===
+// === /file.tsx ===
+// --- (line: 9) skipped ---
+//     optional?: boolean
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt /*FIND ALL REFS*/[|wrong|] />;

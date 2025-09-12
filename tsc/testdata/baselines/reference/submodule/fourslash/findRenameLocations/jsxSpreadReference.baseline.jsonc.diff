@@ -1,0 +1,8 @@
+--- old.jsxSpreadReference.baseline.jsonc
++++ new.jsxSpreadReference.baseline.jsonc
+@@= skipped -16, +16 lines =@@
+ // 
+ // var [|nnRENAME|]: {name?: string; size?: number};
+ // var x = <MyClass {.../*RENAME*/[|nnRENAME|]}></MyClass>;
+-
+-

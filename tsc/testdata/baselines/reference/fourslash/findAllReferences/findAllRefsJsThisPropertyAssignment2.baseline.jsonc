@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /a.js ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|x|] = 1;
+//             this./*FIND ALL REFS*/[|x|];
+//         },
+//     }
+// });
+
+// === /b.ts ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|x|] = 1;
+//             this.[|x|];
+//         },
+//     }
+// });
+
+// === /infer.d.ts ===
+// export declare function infer(o: { m: Record<string, Function> } & ThisType<{ [|x|]: number }>): void;
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|x|] = 1;
+//             this.[|x|];
+//         },
+//     }
+// });
+
+// === /b.ts ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|x|] = 1;
+//             this./*FIND ALL REFS*/[|x|];
+//         },
+//     }
+// });
+
+// === /infer.d.ts ===
+// export declare function infer(o: { m: Record<string, Function> } & ThisType<{ [|x|]: number }>): void;

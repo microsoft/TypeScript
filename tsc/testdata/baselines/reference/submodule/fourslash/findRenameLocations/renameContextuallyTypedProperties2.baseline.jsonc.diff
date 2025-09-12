@@ -1,0 +1,430 @@
+--- old.renameContextuallyTypedProperties2.baseline.jsonc
++++ new.renameContextuallyTypedProperties2.baseline.jsonc
+@@= skipped -294, +294 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameContextuallyTypedProperties2.ts ===
+-// interface I {
+-//     prop1: () => void;
+-//     [|prop2RENAME|](): void;
+-// }
+-// 
+-// var o1: I = {
+-//     prop1() { },
+-//     [|prop2RENAME|]() { }
+-// };
+-// 
+-// var o2: I = {
+-//     prop1: () => { },
+-//     [|prop2RENAME|]: () => { }
+-// };
+-// 
+-// var o3: I = {
+-//     get prop1() { return () => { }; },
+-//     get [|prop2RENAME|]() { return () => { }; }
+-// };
+-// 
+-// var o4: I = {
+-//     set prop1(v) { },
+-//     set [|prop2RENAME|](v) { }
+-// };
+-// 
+-// var o5: I = {
+-//     "prop1"() { },
+-//     "/*RENAME*/[|prop2RENAME|]"() { }
+-// };
+-// 
+-// var o6: I = {
+-//     "prop1": function () { },
+-//     "[|prop2RENAME|]": function () { }
+-// };
+-// 
+-// var o7: I = {
+-//     ["prop1"]: function () { },
+-//     ["[|prop2RENAME|]"]: function () { }
+-// };
+-// 
+-// var o8: I = {
+-//     ["prop1"]() { },
+-//     ["[|prop2RENAME|]"]() { }
+-// };
+-// 
+-// var o9: I = {
+-//     get ["prop1"]() { return () => { }; },
+-//     get ["[|prop2RENAME|]"]() { return () => { }; }
+-// };
+-// 
+-// var o10: I = {
+-//     set ["prop1"](v) { },
+-//     set ["[|prop2RENAME|]"](v) { }
+-// };
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameContextuallyTypedProperties2.ts ===
+-// interface I {
+-//     prop1: () => void;
+-//     [|prop2RENAME|](): void;
+-// }
+-// 
+-// var o1: I = {
+-//     prop1() { },
+-//     [|prop2RENAME|]() { }
+-// };
+-// 
+-// var o2: I = {
+-//     prop1: () => { },
+-//     [|prop2RENAME|]: () => { }
+-// };
+-// 
+-// var o3: I = {
+-//     get prop1() { return () => { }; },
+-//     get [|prop2RENAME|]() { return () => { }; }
+-// };
+-// 
+-// var o4: I = {
+-//     set prop1(v) { },
+-//     set [|prop2RENAME|](v) { }
+-// };
+-// 
+-// var o5: I = {
+-//     "prop1"() { },
+-//     "[|prop2RENAME|]"() { }
+-// };
+-// 
+-// var o6: I = {
+-//     "prop1": function () { },
+-//     "/*RENAME*/[|prop2RENAME|]": function () { }
+-// };
+-// 
+-// var o7: I = {
+-//     ["prop1"]: function () { },
+-//     ["[|prop2RENAME|]"]: function () { }
+-// };
+-// 
+-// var o8: I = {
+-//     ["prop1"]() { },
+-//     ["[|prop2RENAME|]"]() { }
+-// };
+-// 
+-// var o9: I = {
+-//     get ["prop1"]() { return () => { }; },
+-//     get ["[|prop2RENAME|]"]() { return () => { }; }
+-// };
+-// 
+-// var o10: I = {
+-//     set ["prop1"](v) { },
+-//     set ["[|prop2RENAME|]"](v) { }
+-// };
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameContextuallyTypedProperties2.ts ===
+-// interface I {
+-//     prop1: () => void;
+-//     [|prop2RENAME|](): void;
+-// }
+-// 
+-// var o1: I = {
+-//     prop1() { },
+-//     [|prop2RENAME|]() { }
+-// };
+-// 
+-// var o2: I = {
+-//     prop1: () => { },
+-//     [|prop2RENAME|]: () => { }
+-// };
+-// 
+-// var o3: I = {
+-//     get prop1() { return () => { }; },
+-//     get [|prop2RENAME|]() { return () => { }; }
+-// };
+-// 
+-// var o4: I = {
+-//     set prop1(v) { },
+-//     set [|prop2RENAME|](v) { }
+-// };
+-// 
+-// var o5: I = {
+-//     "prop1"() { },
+-//     "[|prop2RENAME|]"() { }
+-// };
+-// 
+-// var o6: I = {
+-//     "prop1": function () { },
+-//     "[|prop2RENAME|]": function () { }
+-// };
+-// 
+-// var o7: I = {
+-//     ["prop1"]: function () { },
+-//     ["/*RENAME*/[|prop2RENAME|]"]: function () { }
+-// };
+-// 
+-// var o8: I = {
+-//     ["prop1"]() { },
+-//     ["[|prop2RENAME|]"]() { }
+-// };
+-// 
+-// var o9: I = {
+-//     get ["prop1"]() { return () => { }; },
+-//     get ["[|prop2RENAME|]"]() { return () => { }; }
+-// };
+-// 
+-// var o10: I = {
+-//     set ["prop1"](v) { },
+-//     set ["[|prop2RENAME|]"](v) { }
+-// };
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameContextuallyTypedProperties2.ts ===
+-// interface I {
+-//     prop1: () => void;
+-//     [|prop2RENAME|](): void;
+-// }
+-// 
+-// var o1: I = {
+-//     prop1() { },
+-//     [|prop2RENAME|]() { }
+-// };
+-// 
+-// var o2: I = {
+-//     prop1: () => { },
+-//     [|prop2RENAME|]: () => { }
+-// };
+-// 
+-// var o3: I = {
+-//     get prop1() { return () => { }; },
+-//     get [|prop2RENAME|]() { return () => { }; }
+-// };
+-// 
+-// var o4: I = {
+-//     set prop1(v) { },
+-//     set [|prop2RENAME|](v) { }
+-// };
+-// 
+-// var o5: I = {
+-//     "prop1"() { },
+-//     "[|prop2RENAME|]"() { }
+-// };
+-// 
+-// var o6: I = {
+-//     "prop1": function () { },
+-//     "[|prop2RENAME|]": function () { }
+-// };
+-// 
+-// var o7: I = {
+-//     ["prop1"]: function () { },
+-//     ["[|prop2RENAME|]"]: function () { }
+-// };
+-// 
+-// var o8: I = {
+-//     ["prop1"]() { },
+-//     ["/*RENAME*/[|prop2RENAME|]"]() { }
+-// };
+-// 
+-// var o9: I = {
+-//     get ["prop1"]() { return () => { }; },
+-//     get ["[|prop2RENAME|]"]() { return () => { }; }
+-// };
+-// 
+-// var o10: I = {
+-//     set ["prop1"](v) { },
+-//     set ["[|prop2RENAME|]"](v) { }
+-// };
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameContextuallyTypedProperties2.ts ===
+-// interface I {
+-//     prop1: () => void;
+-//     [|prop2RENAME|](): void;
+-// }
+-// 
+-// var o1: I = {
+-//     prop1() { },
+-//     [|prop2RENAME|]() { }
+-// };
+-// 
+-// var o2: I = {
+-//     prop1: () => { },
+-//     [|prop2RENAME|]: () => { }
+-// };
+-// 
+-// var o3: I = {
+-//     get prop1() { return () => { }; },
+-//     get [|prop2RENAME|]() { return () => { }; }
+-// };
+-// 
+-// var o4: I = {
+-//     set prop1(v) { },
+-//     set [|prop2RENAME|](v) { }
+-// };
+-// 
+-// var o5: I = {
+-//     "prop1"() { },
+-//     "[|prop2RENAME|]"() { }
+-// };
+-// 
+-// var o6: I = {
+-//     "prop1": function () { },
+-//     "[|prop2RENAME|]": function () { }
+-// };
+-// 
+-// var o7: I = {
+-//     ["prop1"]: function () { },
+-//     ["[|prop2RENAME|]"]: function () { }
+-// };
+-// 
+-// var o8: I = {
+-//     ["prop1"]() { },
+-//     ["[|prop2RENAME|]"]() { }
+-// };
+-// 
+-// var o9: I = {
+-//     get ["prop1"]() { return () => { }; },
+-//     get ["/*RENAME*/[|prop2RENAME|]"]() { return () => { }; }
+-// };
+-// 
+-// var o10: I = {
+-//     set ["prop1"](v) { },
+-//     set ["[|prop2RENAME|]"](v) { }
+-// };
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameContextuallyTypedProperties2.ts ===
+-// interface I {
+-//     prop1: () => void;
+-//     [|prop2RENAME|](): void;
+-// }
+-// 
+-// var o1: I = {
+-//     prop1() { },
+-//     [|prop2RENAME|]() { }
+-// };
+-// 
+-// var o2: I = {
+-//     prop1: () => { },
+-//     [|prop2RENAME|]: () => { }
+-// };
+-// 
+-// var o3: I = {
+-//     get prop1() { return () => { }; },
+-//     get [|prop2RENAME|]() { return () => { }; }
+-// };
+-// 
+-// var o4: I = {
+-//     set prop1(v) { },
+-//     set [|prop2RENAME|](v) { }
+-// };
+-// 
+-// var o5: I = {
+-//     "prop1"() { },
+-//     "[|prop2RENAME|]"() { }
+-// };
+-// 
+-// var o6: I = {
+-//     "prop1": function () { },
+-//     "[|prop2RENAME|]": function () { }
+-// };
+-// 
+-// var o7: I = {
+-//     ["prop1"]: function () { },
+-//     ["[|prop2RENAME|]"]: function () { }
+-// };
+-// 
+-// var o8: I = {
+-//     ["prop1"]() { },
+-//     ["[|prop2RENAME|]"]() { }
+-// };
+-// 
+-// var o9: I = {
+-//     get ["prop1"]() { return () => { }; },
+-//     get ["[|prop2RENAME|]"]() { return () => { }; }
+-// };
+-// 
+-// var o10: I = {
+-//     set ["prop1"](v) { },
+-//     set ["/*RENAME*/[|prop2RENAME|]"](v) { }
++// --- (line: 24) skipped ---
++// 
++// var o5: I = {
++//     "prop1"() { },
++//     "/*RENAME*/prop2"() { }
++// };
++// 
++// var o6: I = {
++// // --- (line: 32) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameContextuallyTypedProperties2.ts ===
++// --- (line: 29) skipped ---
++// 
++// var o6: I = {
++//     "prop1": function () { },
++//     "/*RENAME*/prop2": function () { }
++// };
++// 
++// var o7: I = {
++// // --- (line: 37) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameContextuallyTypedProperties2.ts ===
++// --- (line: 34) skipped ---
++// 
++// var o7: I = {
++//     ["prop1"]: function () { },
++//     ["/*RENAME*/prop2"]: function () { }
++// };
++// 
++// var o8: I = {
++// // --- (line: 42) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameContextuallyTypedProperties2.ts ===
++// --- (line: 39) skipped ---
++// 
++// var o8: I = {
++//     ["prop1"]() { },
++//     ["/*RENAME*/prop2"]() { }
++// };
++// 
++// var o9: I = {
++// // --- (line: 47) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameContextuallyTypedProperties2.ts ===
++// --- (line: 44) skipped ---
++// 
++// var o9: I = {
++//     get ["prop1"]() { return () => { }; },
++//     get ["/*RENAME*/prop2"]() { return () => { }; }
++// };
++// 
++// var o10: I = {
++// // --- (line: 52) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameContextuallyTypedProperties2.ts ===
++// --- (line: 49) skipped ---
++// 
++// var o10: I = {
++//     set ["prop1"](v) { },
++//     set ["/*RENAME*/prop2"](v) { }
+ // };

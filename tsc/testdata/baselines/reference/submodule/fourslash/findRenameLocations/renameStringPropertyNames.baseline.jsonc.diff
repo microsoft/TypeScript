@@ -1,0 +1,83 @@
+--- old.renameStringPropertyNames.baseline.jsonc
++++ new.renameStringPropertyNames.baseline.jsonc
+@@= skipped -16, +16 lines =@@
+ // === findRenameLocations ===
+ // === /renameStringPropertyNames.ts ===
+ // var o = {
+-//     [|propRENAME|]: 0
+-// };
+-// 
+-// o = {
+-//     "/*RENAME*/[|propRENAME|]": 1
+-// };
+-// 
+-// o["[|propRENAME|]"];
+-// o['[|propRENAME|]'];
+-// o.[|propRENAME|];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameStringPropertyNames.ts ===
+-// var o = {
+-//     [|propRENAME|]: 0
+-// };
+-// 
+-// o = {
+-//     "[|propRENAME|]": 1
+-// };
+-// 
+-// o["/*RENAME*/[|propRENAME|]"];
+-// o['[|propRENAME|]'];
+-// o.[|propRENAME|];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameStringPropertyNames.ts ===
+-// var o = {
+-//     [|propRENAME|]: 0
+-// };
+-// 
+-// o = {
+-//     "[|propRENAME|]": 1
+-// };
+-// 
+-// o["[|propRENAME|]"];
+-// o['/*RENAME*/[|propRENAME|]'];
+-// o.[|propRENAME|];
++//     prop: 0
++// };
++// 
++// o = {
++//     "/*RENAME*/prop": 1
++// };
++// 
++// o["prop"];
++// o['prop'];
++// o.prop;
++
++
++
++// === findRenameLocations ===
++// === /renameStringPropertyNames.ts ===
++// --- (line: 5) skipped ---
++//     "prop": 1
++// };
++// 
++// o["/*RENAME*/prop"];
++// o['prop'];
++// o.prop;
++
++
++
++// === findRenameLocations ===
++// === /renameStringPropertyNames.ts ===
++// --- (line: 6) skipped ---
++// };
++// 
++// o["prop"];
++// o['/*RENAME*/prop'];
++// o.prop;
+
+

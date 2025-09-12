@@ -1,0 +1,13 @@
+--- old.renameThis.baseline.jsonc
++++ new.renameThis.baseline.jsonc
+@@= skipped -9, +9 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameThis.ts ===
+-// function f([|thisRENAME|]) {
+-//     return /*RENAME*/[|thisRENAME|];
++// function f(this) {
++//     return /*RENAME*/this;
+ // }
+ // this;
+ // const _ = { this: 0 }.this;

@@ -1,0 +1,33 @@
+// === findAllReferences ===
+// === /a.ts ===
+// export class /*FIND ALL REFS*/[|Class|] {
+// }
+
+// === /b.ts ===
+// import { [|Class|] } from "./a";
+// 
+// var c = new [|Class|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export class [|Class|] {
+// }
+
+// === /b.ts ===
+// import { /*FIND ALL REFS*/[|Class|] } from "./a";
+// 
+// var c = new [|Class|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export class [|Class|] {
+// }
+
+// === /b.ts ===
+// import { [|Class|] } from "./a";
+// 
+// var c = new /*FIND ALL REFS*/[|Class|]();

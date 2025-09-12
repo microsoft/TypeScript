@@ -1,6 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinition_filteringMappedType.ts ===
-
-// const obj = { [|a|]: 1, b: 2 };
-// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { a: 0 };
-// filtered./*GO TO DEFINITION*/a;

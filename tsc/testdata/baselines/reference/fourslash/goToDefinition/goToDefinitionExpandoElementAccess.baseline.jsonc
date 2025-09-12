@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /goToDefinitionExpandoElementAccess.ts ===
+// function f() {}
+// f[[|"x"|]] = 0;
+// f[/*GOTO DEF*/[|"x"|]] = 1;

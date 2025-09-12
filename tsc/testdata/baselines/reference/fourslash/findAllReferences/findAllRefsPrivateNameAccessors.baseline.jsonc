@@ -1,0 +1,136 @@
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// class C {
+//     /*FIND ALL REFS*/get #foo(){ return 1; }
+//     set #foo(value: number){  }
+//     constructor() {
+//         this.#foo();
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// class C {
+//     get /*FIND ALL REFS*/[|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+// class D extends C {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// class C {
+//     get #foo(){ return 1; }
+//     /*FIND ALL REFS*/set #foo(value: number){  }
+//     constructor() {
+//         this.#foo();
+//     }
+// // --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// class C {
+//     get [|#foo|](){ return 1; }
+//     set /*FIND ALL REFS*/[|#foo|](value: number){  }
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+// class D extends C {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// class C {
+//     get [|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|]();
+//     }
+// }
+// class D extends C {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// --- (line: 11) skipped ---
+//     }
+// }
+// class E {
+//     /*FIND ALL REFS*/get #foo(){ return 1; }
+//     set #foo(value: number){  }
+//     constructor() {
+//         this.#foo();
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// --- (line: 11) skipped ---
+//     }
+// }
+// class E {
+//     get /*FIND ALL REFS*/[|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// --- (line: 12) skipped ---
+// }
+// class E {
+//     get #foo(){ return 1; }
+//     /*FIND ALL REFS*/set #foo(value: number){  }
+//     constructor() {
+//         this.#foo();
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// --- (line: 11) skipped ---
+//     }
+// }
+// class E {
+//     get [|#foo|](){ return 1; }
+//     set /*FIND ALL REFS*/[|#foo|](value: number){  }
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameAccessors.ts ===
+// --- (line: 11) skipped ---
+//     }
+// }
+// class E {
+//     get [|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|]();
+//     }
+// }

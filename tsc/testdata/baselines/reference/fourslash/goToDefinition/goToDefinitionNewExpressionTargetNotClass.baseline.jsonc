@@ -1,0 +1,23 @@
+// === goToDefinition ===
+// === /goToDefinitionNewExpressionTargetNotClass.ts ===
+// class C2 {
+// }
+// let [|I|]: {
+//     [|new(): C2;|]
+// };
+// new /*GOTO DEF*/I();
+// let I2: {
+// };
+// new I2();
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionNewExpressionTargetNotClass.ts ===
+// --- (line: 3) skipped ---
+//     new(): C2;
+// };
+// new I();
+// let [|I2|]: {
+// };
+// new /*GOTO DEF*/I2();

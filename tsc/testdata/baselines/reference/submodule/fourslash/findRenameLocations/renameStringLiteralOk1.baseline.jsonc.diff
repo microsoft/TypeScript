@@ -1,0 +1,28 @@
+--- old.renameStringLiteralOk1.baseline.jsonc
++++ new.renameStringLiteralOk1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameStringLiteralOk1.ts ===
+-// declare function f(): '/*RENAME*/[|fooRENAME|]' | 'bar'
++// declare function f(): '/*RENAME*/foo' | 'bar'
+ // class Foo {
+ //     f = f()
+ // }
+-// const d: 'foo' = 'foo'
+-// declare const ff: Foo
+-// ff.f = '[|fooRENAME|]'
++// // --- (line: 5) skipped ---
+
+
+
+ // === findRenameLocations ===
+ // === /renameStringLiteralOk1.ts ===
+-// declare function f(): '[|fooRENAME|]' | 'bar'
+-// class Foo {
+-//     f = f()
++// --- (line: 3) skipped ---
+ // }
+ // const d: 'foo' = 'foo'
+ // declare const ff: Foo
+-// ff.f = '/*RENAME*/[|fooRENAME|]'
++// ff.f = '/*RENAME*/foo'

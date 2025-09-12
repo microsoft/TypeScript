@@ -1,0 +1,87 @@
+// === goToDefinition ===
+// === /goToDefinitionAmbiants.ts ===
+// declare var [|ambientVar|];
+// declare function ambientFunction();
+// declare class ambientClass {
+//     constructor();
+//     static method();
+//     public method();
+// }
+// 
+// /*GOTO DEF*/ambientVar = 1;
+// ambientFunction();
+// var ambientClassVariable = new ambientClass();
+// ambientClass.method();
+// ambientClassVariable.method();
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionAmbiants.ts ===
+// declare var ambientVar;
+// declare function [|ambientFunction|]();
+// declare class ambientClass {
+//     constructor();
+//     static method();
+//     public method();
+// }
+// 
+// ambientVar = 1;
+// /*GOTO DEF*/ambientFunction();
+// var ambientClassVariable = new ambientClass();
+// ambientClass.method();
+// ambientClassVariable.method();
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionAmbiants.ts ===
+// declare var ambientVar;
+// declare function ambientFunction();
+// declare class [|ambientClass|] {
+//     [|constructor();|]
+//     static method();
+//     public method();
+// }
+// 
+// ambientVar = 1;
+// ambientFunction();
+// var ambientClassVariable = new /*GOTO DEF*/ambientClass();
+// ambientClass.method();
+// ambientClassVariable.method();
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionAmbiants.ts ===
+// declare var ambientVar;
+// declare function ambientFunction();
+// declare class ambientClass {
+//     constructor();
+//     static [|method|]();
+//     public method();
+// }
+// 
+// ambientVar = 1;
+// ambientFunction();
+// var ambientClassVariable = new ambientClass();
+// ambientClass./*GOTO DEF*/method();
+// ambientClassVariable.method();
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionAmbiants.ts ===
+// declare var ambientVar;
+// declare function ambientFunction();
+// declare class ambientClass {
+//     constructor();
+//     static method();
+//     public [|method|]();
+// }
+// 
+// ambientVar = 1;
+// ambientFunction();
+// var ambientClassVariable = new ambientClass();
+// ambientClass.method();
+// ambientClassVariable./*GOTO DEF*/method();

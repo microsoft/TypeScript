@@ -12,7 +12,16 @@ const (
 	JsxAttributeCompletionStyleNone   JsxAttributeCompletionStyle = "none"
 )
 
+type QuotePreference string
+
+const (
+	QuotePreferenceAuto   QuotePreference = "auto"
+	QuotePreferenceDouble QuotePreference = "double"
+	QuotePreferenceSingle QuotePreference = "single"
+)
+
 type UserPreferences struct {
+	QuotePreference *QuotePreference
 	// If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
 	// This affects lone identifier completions but not completions on the right hand side of `obj.`.
 	IncludeCompletionsForModuleExports *bool
@@ -45,6 +54,8 @@ type UserPreferences struct {
 	PreferTypeOnlyAutoImports             *bool
 	AutoImportSpecifierExcludeRegexes     []string
 	AutoImportFileExcludePatterns         []string
+
+	UseAliasesForRename *bool
 }
 
 func (p *UserPreferences) ModuleSpecifierPreferences() modulespecifiers.UserPreferences {

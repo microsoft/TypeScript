@@ -1,0 +1,17 @@
+// === findRenameLocations ===
+// === /a.js ===
+// function bar() {
+//     this./*RENAME*/x = 10;
+// }
+// var t = new bar();
+// t.x = 11;
+
+
+
+// === findRenameLocations ===
+// === /a.js ===
+// function bar() {
+//     this.x = 10;
+// }
+// var t = new bar();
+// t./*RENAME*/x = 11;

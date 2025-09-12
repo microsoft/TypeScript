@@ -1,0 +1,58 @@
+// === findAllReferences ===
+// === /findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, /*FIND ALL REFS*/default: string) {}
+// 
+// const default = 1;
+// 
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, default: string) {}
+// 
+// const /*FIND ALL REFS*/default = 1;
+// 
+// function default() {}
+// 
+// // --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, default: string) {}
+// 
+// const default = 1;
+// 
+// function /*FIND ALL REFS*/default() {}
+// 
+// class default {}
+// 
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultKeyword.ts ===
+// --- (line: 3) skipped ---
+// 
+// function default() {}
+// 
+// class /*FIND ALL REFS*/default {}
+// 
+// const foo = {
+//     default: 1
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultKeyword.ts ===
+// --- (line: 6) skipped ---
+// class default {}
+// 
+// const foo = {
+//     /*FIND ALL REFS*/[|default|]: 1
+// }

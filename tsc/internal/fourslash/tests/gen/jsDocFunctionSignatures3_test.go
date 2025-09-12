@@ -15,23 +15,23 @@ func TestJsDocFunctionSignatures3(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: Foo.js
- var someObject = {
-     /**
-      * @param {string} param1 Some string param.
-      * @param {number} parm2  Some number param.
-      */
-     someMethod: function(param1, param2) {
-         console.log(param1/*1*/);
-         return false;
-     },
-     /**
-      * @param {number} p1  Some number param.
-      */
-     otherMethod(p1) {
-         p1/*2*/
-     }
+var someObject = {
+    /**
+     * @param {string} param1 Some string param.
+     * @param {number} parm2  Some number param.
+     */
+    someMethod: function(param1, param2) {
+        console.log(param1/*1*/);
+        return false;
+    },
+    /**
+     * @param {number} p1  Some number param.
+     */
+    otherMethod(p1) {
+        p1/*2*/
+    }
 
- };`
+};`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.GoToMarker(t, "1")
 	f.Insert(t, ".")

@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /types.ts ===
+// declare module [|"*.css"|] {
+//   const styles: any;
+//   export = styles;
+// }
+
+// === /index.ts ===
+// import styles from /*GOTO DEF*/"./index.css";

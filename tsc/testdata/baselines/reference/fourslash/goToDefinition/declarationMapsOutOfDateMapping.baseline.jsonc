@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /home/src/workspaces/project/node_modules/a/dist/index.d.ts ===
+// export declare class [|Foo|] {
+//     bar: any;
+// }
+// //# sourceMappingURL=index.d.ts.map
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Foo/*GOTO DEF*/ } from "a";

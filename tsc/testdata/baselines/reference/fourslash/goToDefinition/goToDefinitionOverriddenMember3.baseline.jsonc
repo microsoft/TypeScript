@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /goToDefinitionOverriddenMember3.ts ===
+// abstract class Foo {
+// 	abstract [|m|]() {}
+// }
+// 
+// export class Bar extends Foo {
+// 	/*GOTO DEF*/override m() {}
+// }

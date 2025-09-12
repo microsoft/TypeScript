@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /file.tsx ===
+// --- (line: 8) skipped ---
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     /*FIND ALL REFS*/[|onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// // --- (line: 16) skipped ---

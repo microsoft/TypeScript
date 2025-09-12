@@ -1,0 +1,82 @@
+// === goToDefinition ===
+// === /goToDefinitionDifferentFile_Definition.ts ===
+// var [|remoteVariable|];
+// function remoteFunction() { }
+// class remoteClass { }
+// interface remoteInterface{ }
+// module remoteModule{ export var foo = 1;}
+
+// === /goToDefinitionDifferentFile_Consumption.ts ===
+// /*GOTO DEF*/remoteVariable = 1;
+// remoteFunction();
+// var foo = new remoteClass();
+// class fooCls implements remoteInterface { }
+// var fooVar = remoteModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDifferentFile_Definition.ts ===
+// var remoteVariable;
+// function [|remoteFunction|]() { }
+// class remoteClass { }
+// interface remoteInterface{ }
+// module remoteModule{ export var foo = 1;}
+
+// === /goToDefinitionDifferentFile_Consumption.ts ===
+// remoteVariable = 1;
+// /*GOTO DEF*/remoteFunction();
+// var foo = new remoteClass();
+// class fooCls implements remoteInterface { }
+// var fooVar = remoteModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDifferentFile_Definition.ts ===
+// var remoteVariable;
+// function remoteFunction() { }
+// class [|remoteClass|] { }
+// interface remoteInterface{ }
+// module remoteModule{ export var foo = 1;}
+
+// === /goToDefinitionDifferentFile_Consumption.ts ===
+// remoteVariable = 1;
+// remoteFunction();
+// var foo = new /*GOTO DEF*/remoteClass();
+// class fooCls implements remoteInterface { }
+// var fooVar = remoteModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDifferentFile_Definition.ts ===
+// var remoteVariable;
+// function remoteFunction() { }
+// class remoteClass { }
+// interface [|remoteInterface|]{ }
+// module remoteModule{ export var foo = 1;}
+
+// === /goToDefinitionDifferentFile_Consumption.ts ===
+// remoteVariable = 1;
+// remoteFunction();
+// var foo = new remoteClass();
+// class fooCls implements /*GOTO DEF*/remoteInterface { }
+// var fooVar = remoteModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDifferentFile_Definition.ts ===
+// var remoteVariable;
+// function remoteFunction() { }
+// class remoteClass { }
+// interface remoteInterface{ }
+// module [|remoteModule|]{ export var foo = 1;}
+
+// === /goToDefinitionDifferentFile_Consumption.ts ===
+// remoteVariable = 1;
+// remoteFunction();
+// var foo = new remoteClass();
+// class fooCls implements remoteInterface { }
+// var fooVar = /*GOTO DEF*/remoteModule.foo;

@@ -13,14 +13,14 @@ func TestTsxCompletion2(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
- declare module JSX {
-     interface Element { }
-     interface IntrinsicElements {
-     }
-     interface ElementAttributesProperty { props; }
- }
- class MyComp { props: { ONE: string; TWO: number } }
- var x = <MyComp /**//>;`
+declare module JSX {
+    interface Element { }
+    interface IntrinsicElements {
+    }
+    interface ElementAttributesProperty { props; }
+}
+class MyComp { props: { ONE: string; TWO: number } }
+var x = <MyComp /**//>;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

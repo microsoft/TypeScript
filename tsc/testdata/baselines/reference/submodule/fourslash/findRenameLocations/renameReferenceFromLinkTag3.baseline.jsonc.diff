@@ -1,0 +1,17 @@
+--- old.renameReferenceFromLinkTag3.baseline.jsonc
++++ new.renameReferenceFromLinkTag3.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /a.ts ===
+-// interface [|FooRENAME|] {
+-//     foo: E.Foo;
++// interface Foo {
++//     foo: E.[|FooRENAME|];
+ // }
+
+ // === /b.ts ===
+ // enum E {
+ //     /** {@link /*RENAME*/[|FooRENAME|]} */
+-//     Foo
++//     [|FooRENAME|]
+ // }

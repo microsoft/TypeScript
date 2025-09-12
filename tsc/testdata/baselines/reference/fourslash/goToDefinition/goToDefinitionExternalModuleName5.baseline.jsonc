@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /a.ts ===
+// declare module [|"external/*GOTO DEF*/"|] {
+//     class Foo { }
+// }

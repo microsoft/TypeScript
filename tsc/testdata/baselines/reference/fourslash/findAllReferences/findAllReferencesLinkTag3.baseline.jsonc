@@ -1,0 +1,138 @@
+// === findAllReferences ===
+// === /findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class Consider {
+//         This = class {
+//             show() { }
+//         }
+//         [|m|]/*FIND ALL REFS*/() { }
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.[|m|]}
+//      * {@linkplain Consider#[|m|]}
+//      * {@linkcode Consider#This#show}
+//      * {@linkplain Consider.This.show}
+//      * {@linkcode NPR.Consider#This#show}
+// // --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class Consider {
+//         This = class {
+//             [|show|]/*FIND ALL REFS*/() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.m}
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#This#[|show|]}
+//      * {@linkplain Consider.This.[|show|]}
+//      * {@linkcode NPR.Consider#This#[|show|]}
+//      * {@linkplain NPR.Consider.This#[|show|]}
+//      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+//      * {@linkcode NPR.Consider.This.[|show|]}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.Consider#This#[|show|] hello hello}
+//  * {@linkplain NPR.Consider.This#[|show|]}
+//  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+//  * {@linkcode NPR.Consider.This.[|show|]}
+//  */
+// export function outerref() { }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class Consider {
+//         [|This|]/*FIND ALL REFS*/ = class {
+//             show() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.m}
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#[|This|]#show}
+//      * {@linkplain Consider.[|This|].show}
+//      * {@linkcode NPR.Consider#[|This|]#show}
+//      * {@linkplain NPR.Consider.[|This|]#show}
+//      * {@linkcode NPR.Consider#[|This|].show} # doesn't parse trailing .
+//      * {@linkcode NPR.Consider.[|This|].show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.Consider#[|This|]#show hello hello}
+//  * {@linkplain NPR.Consider.[|This|]#show}
+//  * {@linkcode NPR.Consider#[|This|].show} # doesn't parse trailing .
+//  * {@linkcode NPR.Consider.[|This|].show}
+//  */
+// export function outerref() { }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class [|Consider|]/*FIND ALL REFS*/ {
+//         This = class {
+//             show() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * {@linkcode [|Consider|].prototype.m}
+//      * {@linkplain [|Consider|]#m}
+//      * {@linkcode [|Consider|]#This#show}
+//      * {@linkplain [|Consider|].This.show}
+//      * {@linkcode NPR.[|Consider|]#This#show}
+//      * {@linkplain NPR.[|Consider|].This#show}
+//      * {@linkcode NPR.[|Consider|]#This.show} # doesn't parse trailing .
+//      * {@linkcode NPR.[|Consider|].This.show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.[|Consider|]#This#show hello hello}
+//  * {@linkplain NPR.[|Consider|].This#show}
+//  * {@linkcode NPR.[|Consider|]#This.show} # doesn't parse trailing .
+//  * {@linkcode NPR.[|Consider|].This.show}
+//  */
+// export function outerref() { }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag3.ts ===
+// namespace [|NPR|]/*FIND ALL REFS*/ {
+//     export class Consider {
+//         This = class {
+//             show() { }
+// // --- (line: 5) skipped ---
+
+// --- (line: 9) skipped ---
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#This#show}
+//      * {@linkplain Consider.This.show}
+//      * {@linkcode [|NPR|].Consider#This#show}
+//      * {@linkplain [|NPR|].Consider.This#show}
+//      * {@linkcode [|NPR|].Consider#This.show} # doesn't parse trailing .
+//      * {@linkcode [|NPR|].Consider.This.show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain [|NPR|].Consider#This#show hello hello}
+//  * {@linkplain [|NPR|].Consider.This#show}
+//  * {@linkcode [|NPR|].Consider#This.show} # doesn't parse trailing .
+//  * {@linkcode [|NPR|].Consider.This.show}
+//  */
+// export function outerref() { }

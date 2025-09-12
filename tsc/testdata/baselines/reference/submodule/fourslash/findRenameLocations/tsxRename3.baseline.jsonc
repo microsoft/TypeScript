@@ -1,0 +1,22 @@
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 5) skipped ---
+// }
+// class MyClass {
+//   props: {
+//     /*RENAME*/[|nameRENAME|]?: string;
+//     size?: number;
+// }
+// 
+// 
+// var x = <MyClass name='hello'/>;
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 10) skipped ---
+// }
+// 
+// 
+// var x = <MyClass /*RENAME*/[|nameRENAME|]='hello'/>;

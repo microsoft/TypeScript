@@ -1,0 +1,23 @@
+--- old.renameJsPrototypeProperty02.baseline.jsonc
++++ new.renameJsPrototypeProperty02.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.js ===
+ // function bar() {
+ // }
+-// bar.prototype./*RENAME*/[|xRENAME|] = 10;
++// bar.prototype./*RENAME*/x = 10;
+ // var t = new bar();
+-// t.[|xRENAME|] = 11;
++// t.x = 11;
+
+
+
+@@= skipped -10, +10 lines =@@
+ // === /a.js ===
+ // function bar() {
+ // }
+-// bar.prototype.[|xRENAME|] = 10;
++// bar.prototype.x = 10;
+ // var t = new bar();
+-// t./*RENAME*/[|xRENAME|] = 11;
++// t./*RENAME*/x = 11;

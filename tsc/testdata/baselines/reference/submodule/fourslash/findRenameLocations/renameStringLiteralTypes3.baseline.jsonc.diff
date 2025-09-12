@@ -1,0 +1,80 @@
+--- old.renameStringLiteralTypes3.baseline.jsonc
++++ new.renameStringLiteralTypes3.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameStringLiteralTypes3.ts ===
+-// type Foo = "/*RENAME*/[|aRENAME|]" | "b";
+-// 
+-// class C {
+-//     p: Foo = "[|aRENAME|]";
+-//     m() {
+-//         switch (this.p) {
+-//             case "[|aRENAME|]":
+-//                 return 1;
+-//             case "b":
+-//                 return 2;
+-// --- (line: 11) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameStringLiteralTypes3.ts ===
+-// type Foo = "[|aRENAME|]" | "b";
+-// 
+-// class C {
+-//     p: Foo = "/*RENAME*/[|aRENAME|]";
+-//     m() {
+-//         switch (this.p) {
+-//             case "[|aRENAME|]":
+-//                 return 1;
+-//             case "b":
+-//                 return 2;
+-// --- (line: 11) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameStringLiteralTypes3.ts ===
+-// type Foo = "[|aRENAME|]" | "b";
+-// 
+-// class C {
+-//     p: Foo = "[|aRENAME|]";
+-//     m() {
+-//         switch (this.p) {
+-//             case "/*RENAME*/[|aRENAME|]":
+-//                 return 1;
+-//             case "b":
+-//                 return 2;
+-// --- (line: 11) skipped ---
++// type Foo = "/*RENAME*/a" | "b";
++// 
++// class C {
++//     p: Foo = "a";
++// // --- (line: 5) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameStringLiteralTypes3.ts ===
++// type Foo = "a" | "b";
++// 
++// class C {
++//     p: Foo = "/*RENAME*/a";
++//     m() {
++//         switch (this.p) {
++//             case "a":
++// // --- (line: 8) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameStringLiteralTypes3.ts ===
++// --- (line: 3) skipped ---
++//     p: Foo = "a";
++//     m() {
++//         switch (this.p) {
++//             case "/*RENAME*/a":
++//                 return 1;
++//             case "b":
++//                 return 2;
++// // --- (line: 11) skipped ---

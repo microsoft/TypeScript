@@ -1,0 +1,75 @@
+// === findAllReferences ===
+// === /referencesForClassParameter.ts ===
+// var p = 2;
+// 
+// class p { }
+// 
+// class foo {
+//     constructor (/*FIND ALL REFS*/public p: any) {
+//     }
+// 
+//     public f(p) {
+// // --- (line: 10) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForClassParameter.ts ===
+// var p = 2;
+// 
+// class p { }
+// 
+// class foo {
+//     constructor (public /*FIND ALL REFS*/[|p|]: any) {
+//     }
+// 
+//     public f(p) {
+//         this.[|p|] = p;
+//     }
+// 
+// }
+// 
+// var n = new foo(undefined);
+// n.[|p|] = null;
+
+
+
+// === findAllReferences ===
+// === /referencesForClassParameter.ts ===
+// var p = 2;
+// 
+// class p { }
+// 
+// class foo {
+//     constructor (public [|p|]: any) {
+//     }
+// 
+//     public f(p) {
+//         this./*FIND ALL REFS*/[|p|] = p;
+//     }
+// 
+// }
+// 
+// var n = new foo(undefined);
+// n.[|p|] = null;
+
+
+
+// === findAllReferences ===
+// === /referencesForClassParameter.ts ===
+// var p = 2;
+// 
+// class p { }
+// 
+// class foo {
+//     constructor (public [|p|]: any) {
+//     }
+// 
+//     public f(p) {
+//         this.[|p|] = p;
+//     }
+// 
+// }
+// 
+// var n = new foo(undefined);
+// n./*FIND ALL REFS*/[|p|] = null;

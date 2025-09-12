@@ -1,0 +1,17 @@
+// === findAllReferences ===
+// === /import.ts ===
+// import "./script/*FIND ALL REFS*/";
+
+
+
+// === findAllReferences ===
+// === /require.js ===
+// require("./script/*FIND ALL REFS*/");
+// console.log("./script");
+
+
+
+// === findAllReferences ===
+// === /require.js ===
+// require("./script");
+// console.log("./script/*FIND ALL REFS*/");

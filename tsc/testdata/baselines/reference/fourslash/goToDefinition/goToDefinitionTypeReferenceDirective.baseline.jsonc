@@ -1,0 +1,4 @@
+// === goToDefinition ===
+// === /src/app.ts ===
+//  /// <reference types="lib/*GOTO DEF*/"/>
+//  $.x;

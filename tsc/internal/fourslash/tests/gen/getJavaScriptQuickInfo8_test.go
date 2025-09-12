@@ -15,22 +15,22 @@ func TestGetJavaScriptQuickInfo8(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: file.js
- let x = {
- 	/** @type {number} */
- 	get m() {
- 		return undefined;
- 	}
- }
- x.m/*1*/;
+let x = {
+	/** @type {number} */
+	get m() {
+		return undefined;
+	}
+}
+x.m/*1*/;
 
- class Foo {
- 	/** @type {string} */
- 	get b() {
- 		return undefined;
- 	}
- }
- var y = new Foo();
- y.b/*2*/;`
+class Foo {
+	/** @type {string} */
+	get b() {
+		return undefined;
+	}
+}
+var y = new Foo();
+y.b/*2*/;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.GoToMarker(t, "1")
 	f.Insert(t, ".")

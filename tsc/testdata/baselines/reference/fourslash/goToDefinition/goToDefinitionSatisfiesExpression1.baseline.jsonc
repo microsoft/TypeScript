@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /goToDefinitionSatisfiesExpression1.ts ===
+// const STRINGS = {
+//     /*GOTO DEF*/[|title|]: 'A Title',
+// } satisfies Record<string,string>;
+// 
+// //somewhere in app
+// STRINGS.title
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionSatisfiesExpression1.ts ===
+// const STRINGS = {
+//     [|title|]: 'A Title',
+// } satisfies Record<string,string>;
+// 
+// //somewhere in app
+// STRINGS./*GOTO DEF*/title

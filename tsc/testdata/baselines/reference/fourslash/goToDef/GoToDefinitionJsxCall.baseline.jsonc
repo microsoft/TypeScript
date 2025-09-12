@@ -1,9 +1,0 @@
-// === goToDefinition ===
-// === /test.tsx ===
-
-// interface FC<P = {}> {
-//     [|(props: P, context?: any): string;|]
-// }
-// 
-// const [|Thing|]: FC = (props) => <div></div>;
-// const HelloWorld = () => </*GO TO DEFINITION*/Thing />;

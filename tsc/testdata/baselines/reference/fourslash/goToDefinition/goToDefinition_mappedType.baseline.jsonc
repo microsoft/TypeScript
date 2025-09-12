@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /goToDefinition_mappedType.ts ===
+// interface I { [|m|](): void; };
+// declare const i: { [K in "m"]: I[K] };
+// i./*GOTO DEF*/m();

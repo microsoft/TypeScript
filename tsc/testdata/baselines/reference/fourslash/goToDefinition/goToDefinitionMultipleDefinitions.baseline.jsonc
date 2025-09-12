@@ -1,0 +1,32 @@
+// === goToDefinition ===
+// === /a.ts ===
+// interface [|IFoo|] {
+//     instance1: number;
+// }
+
+// === /b.ts ===
+// interface [|IFoo|] {
+//     instance2: number;
+// }
+// 
+// interface [|IFoo|] {
+//     instance3: number;
+// }
+// 
+// var ifoo: IFo/*GOTO DEF*/o;
+
+
+
+// === goToDefinition ===
+// === /c.ts ===
+// module [|Module|] {
+//     export class c1 { }
+// }
+
+// === /d.ts ===
+// module [|Module|] {
+//     export class c2 { }
+// }
+
+// === /e.ts ===
+// Modul/*GOTO DEF*/e;

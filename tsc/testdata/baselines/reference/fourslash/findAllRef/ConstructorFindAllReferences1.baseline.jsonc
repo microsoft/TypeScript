@@ -1,9 +1,0 @@
-// === findAllReferences ===
-// === /constructorFindAllReferences1.ts ===
-
-// export class C {
-//     /*FIND ALL REFS*/public constructor() { }
-//     public foo() { }
-// }
-// 
-// new C().foo();

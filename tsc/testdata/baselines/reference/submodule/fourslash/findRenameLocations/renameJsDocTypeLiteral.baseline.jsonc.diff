@@ -1,0 +1,12 @@
+--- old.renameJsDocTypeLiteral.baseline.jsonc
++++ new.renameJsDocTypeLiteral.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.js ===
+ // /**
+ //  * @param {Object} [|optionsRENAME|]
+-//  * @param {string} [|optionsRENAME|].foo
+-//  * @param {number} [|optionsRENAME|].bar
++//  * @param {string} options.foo
++//  * @param {number} options.bar
+ //  */
+ // function foo(/*RENAME*/[|optionsRENAME|]) {}

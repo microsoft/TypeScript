@@ -1,0 +1,15 @@
+// === findRenameLocations ===
+// @quotePreference: single
+
+// === /renameNumericalIndexSingleQuoted.ts ===
+// const foo = { /*RENAME*/0: true };
+// foo[0];
+
+
+
+// === findRenameLocations ===
+// @quotePreference: single
+
+// === /renameNumericalIndexSingleQuoted.ts ===
+// const foo = { 0: true };
+// foo[/*RENAME*/0];

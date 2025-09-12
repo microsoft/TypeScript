@@ -1,9 +1,0 @@
-// === goToDefinition ===
-// === /foo.js ===
-
-// [|module.exports = {};|]
-
-
-// === /bar.js ===
-
-// var x = require(/*GO TO DEFINITION*/"./foo");

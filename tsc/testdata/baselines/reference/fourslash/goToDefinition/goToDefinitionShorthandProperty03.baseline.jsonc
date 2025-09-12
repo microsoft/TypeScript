@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty03.ts ===
+// var [|x|] = {
+//     /*GOTO DEF*/x
+// }
+// let y = {
+//     y
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty03.ts ===
+// var x = {
+//     x
+// }
+// let [|y|] = {
+//     /*GOTO DEF*/y
+// }

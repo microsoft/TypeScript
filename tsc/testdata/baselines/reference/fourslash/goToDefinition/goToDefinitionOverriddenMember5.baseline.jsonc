@@ -1,0 +1,7 @@
+// === goToDefinition ===
+// === /goToDefinitionOverriddenMember5.ts ===
+// class Foo extends (class {
+//     [|m|]() {}
+// }) {
+//     /*GOTO DEF*/override m() {}
+// }

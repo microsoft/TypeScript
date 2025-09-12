@@ -1,0 +1,4 @@
+// === goToDefinition ===
+// === /b.ts ===
+//  import [|n|] = require('a');
+//  var x = new /*GOTO DEF*/n.Foo();

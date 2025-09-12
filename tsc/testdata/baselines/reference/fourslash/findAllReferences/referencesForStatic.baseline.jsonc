@@ -1,0 +1,258 @@
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     /*FIND ALL REFS*/static n = '';
+// 
+//     public bar() {
+//         foo.n = "'";
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static /*FIND ALL REFS*/[|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo./*FIND ALL REFS*/[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo./*FIND ALL REFS*/[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo./*FIND ALL REFS*/[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo./*FIND ALL REFS*/[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo./*FIND ALL REFS*/[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo./*FIND ALL REFS*/[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
+
+
+
+// === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+// var n = 43;
+// 
+// class foo {
+//     static [|n|] = '';
+// 
+//     public bar() {
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo./*FIND ALL REFS*/[|n|];

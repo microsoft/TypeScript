@@ -1,0 +1,32 @@
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates2.ts ===
+// /*FIND ALL REFS*/function f(...rest: any[]) { }
+// f `${ f } ${ f }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates2.ts ===
+// function /*FIND ALL REFS*/[|f|](...rest: any[]) { }
+// [|f|] `${ [|f|] } ${ [|f|] }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates2.ts ===
+// function [|f|](...rest: any[]) { }
+// /*FIND ALL REFS*/[|f|] `${ [|f|] } ${ [|f|] }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates2.ts ===
+// function [|f|](...rest: any[]) { }
+// [|f|] `${ /*FIND ALL REFS*/[|f|] } ${ [|f|] }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates2.ts ===
+// function [|f|](...rest: any[]) { }
+// [|f|] `${ [|f|] } ${ /*FIND ALL REFS*/[|f|] }`

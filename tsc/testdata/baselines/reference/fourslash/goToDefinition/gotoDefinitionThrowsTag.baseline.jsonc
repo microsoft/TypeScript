@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /gotoDefinitionThrowsTag.ts ===
+// class E extends Error {}
+// 
+// /**
+//  * @throws {/*GOTO DEF*/E}
+//  */
+// function f() {}

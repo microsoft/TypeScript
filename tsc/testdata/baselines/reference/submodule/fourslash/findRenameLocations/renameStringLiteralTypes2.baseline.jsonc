@@ -1,0 +1,131 @@
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "/*RENAME*/a" | "b";
+// 
+// class C {
+//     p: Foo = "a";
+// // --- (line: 5) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "a" | "b";
+// 
+// class C {
+//     p: Foo = "/*RENAME*/a";
+//     m() {
+//         if (this.p === "a") {}
+//         if ("a" === this.p) {}
+// // --- (line: 8) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// type Foo = "a" | "b";
+// 
+// class C {
+//     p: Foo = "a";
+//     m() {
+//         if (this.p === "/*RENAME*/a") {}
+//         if ("a" === this.p) {}
+// 
+//         if (this.p !== "a") {}
+// // --- (line: 10) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 3) skipped ---
+//     p: Foo = "a";
+//     m() {
+//         if (this.p === "a") {}
+//         if ("/*RENAME*/a" === this.p) {}
+// 
+//         if (this.p !== "a") {}
+//         if ("a" !== this.p) {}
+// // --- (line: 11) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 5) skipped ---
+//         if (this.p === "a") {}
+//         if ("a" === this.p) {}
+// 
+//         if (this.p !== "/*RENAME*/a") {}
+//         if ("a" !== this.p) {}
+// 
+//         if (this.p == "a") {}
+// // --- (line: 13) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 6) skipped ---
+//         if ("a" === this.p) {}
+// 
+//         if (this.p !== "a") {}
+//         if ("/*RENAME*/a" !== this.p) {}
+// 
+//         if (this.p == "a") {}
+//         if ("a" == this.p) {}
+// // --- (line: 14) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 8) skipped ---
+//         if (this.p !== "a") {}
+//         if ("a" !== this.p) {}
+// 
+//         if (this.p == "/*RENAME*/a") {}
+//         if ("a" == this.p) {}
+// 
+//         if (this.p != "a") {}
+// // --- (line: 16) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 9) skipped ---
+//         if ("a" !== this.p) {}
+// 
+//         if (this.p == "a") {}
+//         if ("/*RENAME*/a" == this.p) {}
+// 
+//         if (this.p != "a") {}
+//         if ("a" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 11) skipped ---
+//         if (this.p == "a") {}
+//         if ("a" == this.p) {}
+// 
+//         if (this.p != "/*RENAME*/a") {}
+//         if ("a" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes2.ts ===
+// --- (line: 12) skipped ---
+//         if ("a" == this.p) {}
+// 
+//         if (this.p != "a") {}
+//         if ("/*RENAME*/a" != this.p) {}
+//     }
+// }

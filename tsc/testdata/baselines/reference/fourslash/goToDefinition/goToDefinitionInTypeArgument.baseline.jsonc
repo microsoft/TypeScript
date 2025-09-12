@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /goToDefinitionInTypeArgument.ts ===
+// class Foo<T> { }
+// 
+// class [|Bar|] { }
+// 
+// var x = new Foo<Ba/*GOTO DEF*/r>();
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionInTypeArgument.ts ===
+// class [|Foo|]<T> { }
+// 
+// class Bar { }
+// 
+// var x = new Fo/*GOTO DEF*/o<Bar>();

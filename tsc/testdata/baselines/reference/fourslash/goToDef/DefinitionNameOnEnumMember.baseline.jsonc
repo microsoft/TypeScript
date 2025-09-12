@@ -1,9 +1,0 @@
-// === goToDefinition ===
-// === /definitionNameOnEnumMember.ts ===
-
-// enum e {
-//     firstMember,
-//     secondMember,
-//     [|thirdMember|]
-// }
-// var enumMember = e./*GO TO DEFINITION*/thirdMember;

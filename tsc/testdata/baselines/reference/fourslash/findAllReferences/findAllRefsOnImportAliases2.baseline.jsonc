@@ -1,0 +1,56 @@
+// === findAllReferences ===
+// === /a.ts ===
+// export class /*FIND ALL REFS*/[|Class|] {}
+
+// === /b.ts ===
+// import { [|Class|] as [|C2|] } from "./a";
+// var c = new [|C2|]();
+
+// === /c.ts ===
+// export { [|Class|] as C3 } from "./a";
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export class [|Class|] {}
+
+// === /b.ts ===
+// import { /*FIND ALL REFS*/[|Class|] as [|C2|] } from "./a";
+// var c = new [|C2|]();
+
+// === /c.ts ===
+// export { [|Class|] as C3 } from "./a";
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export class [|Class|] {}
+
+// === /b.ts ===
+// import { [|Class|] as [|C2|] } from "./a";
+// var c = new [|C2|]();
+
+// === /c.ts ===
+// export { /*FIND ALL REFS*/[|Class|] as C3 } from "./a";
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import { Class as /*FIND ALL REFS*/[|C2|] } from "./a";
+// var c = new [|C2|]();
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import { Class as [|C2|] } from "./a";
+// var c = new /*FIND ALL REFS*/[|C2|]();
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// export { Class as /*FIND ALL REFS*/C3 } from "./a";

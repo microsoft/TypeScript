@@ -1,0 +1,64 @@
+--- old.renamePrivateAccessor.baseline.jsonc
++++ new.renamePrivateAccessor.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renamePrivateAccessor.ts ===
+ // class Foo {
+-//    get /*RENAME*/[|#fooRENAME|]() { return 1 }
+-//    set [|#fooRENAME|](value: number) { }
+-//    retFoo() {
+-//        return this.[|#fooRENAME|];
+-//    }
+-// }
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renamePrivateAccessor.ts ===
+-// class Foo {
+-//    get [|#fooRENAME|]() { return 1 }
+-//    set /*RENAME*/[|#fooRENAME|](value: number) { }
+-//    retFoo() {
+-//        return this.[|#fooRENAME|];
+-//    }
+-// }
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renamePrivateAccessor.ts ===
+-// class Foo {
+-//    get [|#fooRENAME|]() { return 1 }
+-//    set [|#fooRENAME|](value: number) { }
+-//    retFoo() {
+-//        return this./*RENAME*/[|#fooRENAME|];
++//    get /*RENAME*/#foo() { return 1 }
++//    set #foo(value: number) { }
++//    retFoo() {
++//        return this.#foo;
++//    }
++// }
++
++
++
++// === findRenameLocations ===
++// === /renamePrivateAccessor.ts ===
++// class Foo {
++//    get #foo() { return 1 }
++//    set /*RENAME*/#foo(value: number) { }
++//    retFoo() {
++//        return this.#foo;
++//    }
++// }
++
++
++
++// === findRenameLocations ===
++// === /renamePrivateAccessor.ts ===
++// class Foo {
++//    get #foo() { return 1 }
++//    set #foo(value: number) { }
++//    retFoo() {
++//        return this./*RENAME*/#foo;
+ //    }
+ // }

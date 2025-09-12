@@ -1,0 +1,37 @@
+// === findAllReferences ===
+// === /referencesForMergedDeclarations5.ts ===
+// interface /*FIND ALL REFS*/[|Foo|] { }
+// module Foo { export interface Bar { } }
+// function Foo() { }
+// 
+// export = Foo;
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations5.ts ===
+// interface Foo { }
+// module /*FIND ALL REFS*/[|Foo|] { export interface Bar { } }
+// function Foo() { }
+// 
+// export = Foo;
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations5.ts ===
+// interface Foo { }
+// module Foo { export interface Bar { } }
+// function /*FIND ALL REFS*/[|Foo|]() { }
+// 
+// export = [|Foo|];
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations5.ts ===
+// interface Foo { }
+// module Foo { export interface Bar { } }
+// function [|Foo|]() { }
+// 
+// export = /*FIND ALL REFS*/[|Foo|];

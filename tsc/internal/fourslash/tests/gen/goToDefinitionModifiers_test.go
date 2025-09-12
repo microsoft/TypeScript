@@ -12,20 +12,20 @@ func TestGoToDefinitionModifiers(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.ts
- /*export*/export class A/*A*/ {
- 
-     /*private*/private z/*z*/: string;
+/*export*/export class A/*A*/ {
 
-     /*readonly*/readonly x/*x*/: string;
- 
-     /*async*/async a/*a*/() {  }
- 
-     /*override*/override b/*b*/() {}
- 
-     /*public1*/public/*public2*/ as/*multipleModifiers*/ync c/*c*/() { }
- }
+    /*private*/private z/*z*/: string;
 
- exp/*exportFunction*/ort function foo/*foo*/() { }`
+    /*readonly*/readonly x/*x*/: string;
+
+    /*async*/async a/*a*/() {  }
+
+    /*override*/override b/*b*/() {}
+
+    /*public1*/public/*public2*/ as/*multipleModifiers*/ync c/*c*/() { }
+}
+
+exp/*exportFunction*/ort function foo/*foo*/() { }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineGoToDefinition(t, "export", "A", "private", "z", "readonly", "x", "async", "a", "override", "b", "public1", "public2", "multipleModifiers", "c", "exportFunction", "foo")
 }

@@ -1,6 +1,0 @@
-// === findAllReferences ===
-// === /findAllRefsObjectBindingElementPropertyName07.ts ===
-
-// let p, b;
-// 
-// p, [{ /*FIND ALL REFS*/[|a|]: p, b }] = [{ [|a|]: 10, b: true }];

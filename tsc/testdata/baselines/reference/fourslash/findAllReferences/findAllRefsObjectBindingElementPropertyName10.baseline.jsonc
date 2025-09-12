@@ -1,0 +1,45 @@
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName10.ts ===
+// interface Recursive {
+//     /*FIND ALL REFS*/[|next|]?: Recursive;
+//     value: any;
+// }
+// 
+// function f ({ [|next|]: { [|next|]: x} }: Recursive) {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName10.ts ===
+// interface Recursive {
+//     next?: Recursive;
+//     value: any;
+// }
+// 
+// function f (/*FIND ALL REFS*/{ next: { next: x} }: Recursive) {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName10.ts ===
+// interface Recursive {
+//     [|next|]?: Recursive;
+//     value: any;
+// }
+// 
+// function f ({ /*FIND ALL REFS*/[|next|]: { [|next|]: x} }: Recursive) {
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName10.ts ===
+// interface Recursive {
+//     [|next|]?: Recursive;
+//     value: any;
+// }
+// 
+// function f ({ [|next|]: { /*FIND ALL REFS*/[|next|]: x} }: Recursive) {
+// }

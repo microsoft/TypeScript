@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /Definition.ts ===
+// class [|c|] { }
+
+// === /Consumption.ts ===
+//  var n = new /*GOTO DEF*/c();
+//  var n = new c();
+
+
+
+// === goToDefinition ===
+// === /Definition.ts ===
+// class [|c|] { }
+
+// === /Consumption.ts ===
+//  var n = new c();
+//  var n = new c/*GOTO DEF*/();

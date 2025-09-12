@@ -1,7 +1,0 @@
-// === findAllReferences ===
-// === /findAllReferencesFromLinkTagReference1.ts ===
-
-// enum E {
-//     /** {@link /*FIND ALL REFS*/[|A|]} */
-//     [|A|]
-// }

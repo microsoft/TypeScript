@@ -1,0 +1,63 @@
+// === goToDefinition ===
+// === /definitions.ts ===
+// export class Base {
+//     [|constructor(protected readonly cArg: string) {}|]
+// }
+// 
+// export class [|Derived|] extends Base {
+//     readonly email = this.cArg.getByLabel('Email')
+//     readonly password =  this.cArg.getByLabel('Password')
+// }
+
+// === /main.ts ===
+// import { Derived } from './definitions'
+// const derived = new /*GOTO DEF*/Derived(cArg)
+
+
+
+// === goToDefinition ===
+// === /defInSameFile.ts ===
+// import { Base } from './definitions'
+// class [|SameFile|] extends Base {
+//     readonly name: string = 'SameFile'
+// }
+// const SameFile = new /*GOTO DEF*/SameFile(cArg)
+// const wrapper = new Base(cArg)
+
+// === /definitions.ts ===
+// export class Base {
+//     [|constructor(protected readonly cArg: string) {}|]
+// }
+// 
+// export class Derived extends Base {
+// // --- (line: 6) skipped ---
+
+
+
+// === goToDefinition ===
+// === /hasConstructor.ts ===
+// import { Base } from './definitions'
+// class [|HasConstructor|] extends Base {
+//     [|constructor() {}|]
+//     readonly name: string = '';
+// }
+// const hasConstructor = new /*GOTO DEF*/HasConstructor(cArg)
+
+
+
+// === goToDefinition ===
+// === /definitions.ts ===
+// export class [|Base|] {
+//     [|constructor(protected readonly cArg: string) {}|]
+// }
+// 
+// export class Derived extends Base {
+// // --- (line: 6) skipped ---
+
+// === /defInSameFile.ts ===
+// import { Base } from './definitions'
+// class SameFile extends Base {
+//     readonly name: string = 'SameFile'
+// }
+// const SameFile = new SameFile(cArg)
+// const wrapper = new /*GOTO DEF*/Base(cArg)

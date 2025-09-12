@@ -1,0 +1,127 @@
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// /*FIND ALL REFS*/declare abstract class C1 {
+//     static a;
+//     readonly b;
+//     public c;
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// declare /*FIND ALL REFS*/abstract class C1 {
+//     static a;
+//     readonly b;
+//     public c;
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// declare abstract class C1 {
+//     /*FIND ALL REFS*/static a;
+//     readonly b;
+//     public c;
+//     protected d;
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// declare abstract class C1 {
+//     static a;
+//     /*FIND ALL REFS*/readonly b;
+//     public c;
+//     protected d;
+//     private e;
+// // --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// declare abstract class C1 {
+//     static a;
+//     readonly b;
+//     /*FIND ALL REFS*/public c;
+//     protected d;
+//     private e;
+// }
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// declare abstract class C1 {
+//     static a;
+//     readonly b;
+//     public c;
+//     /*FIND ALL REFS*/protected d;
+//     private e;
+// }
+// const enum E {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// declare abstract class C1 {
+//     static a;
+//     readonly b;
+//     public c;
+//     protected d;
+//     /*FIND ALL REFS*/private e;
+// }
+// const enum E {
+// }
+// async function fn() {}
+// export default class C2 {}
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// --- (line: 4) skipped ---
+//     protected d;
+//     private e;
+// }
+// /*FIND ALL REFS*/const enum E {
+// }
+// async function fn() {}
+// export default class C2 {}
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// --- (line: 6) skipped ---
+// }
+// const enum E {
+// }
+// /*FIND ALL REFS*/async function fn() {}
+// export default class C2 {}
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// --- (line: 7) skipped ---
+// const enum E {
+// }
+// async function fn() {}
+// /*FIND ALL REFS*/export default class C2 {}
+
+
+
+// === findAllReferences ===
+// === /referencesForModifiers.ts ===
+// --- (line: 7) skipped ---
+// const enum E {
+// }
+// async function fn() {}
+// export /*FIND ALL REFS*/default class C2 {}

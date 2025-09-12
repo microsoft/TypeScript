@@ -1,0 +1,9 @@
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/index.d.ts ===
+// declare class [|A|] {
+// }
+// //# sourceMappingURL=index.d.ts.map
+
+// === /home/src/workspaces/project/b/b.ts ===
+// /// <reference path="../a/index.d.ts" />
+// new [|A|]/*FIND ALL REFS*/();

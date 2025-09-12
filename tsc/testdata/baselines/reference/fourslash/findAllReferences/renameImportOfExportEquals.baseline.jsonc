@@ -1,0 +1,68 @@
+// === findAllReferences ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace /*FIND ALL REFS*/[|N|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = [|N|];
+// }
+// declare module "a" {
+//     import * as [|N|] from "mod";
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+// // --- (line: 12) skipped ---
+
+
+
+// === findAllReferences ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace [|N|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = [|N|];
+// }
+// declare module "a" {
+//     import * as /*FIND ALL REFS*/[|N|] from "mod";
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+// // --- (line: 12) skipped ---
+
+
+
+// === findAllReferences ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace [|N|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = [|N|];
+// }
+// declare module "a" {
+//     import * as [|N|] from "mod";
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { /*FIND ALL REFS*/[|N|] } from "a";
+//     export const y: typeof [|N|].x;
+// }
+
+
+
+// === findAllReferences ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace N {
+//     export var /*FIND ALL REFS*/[|x|]: number;
+// }
+// declare module "mod" {
+//     export = N;
+// // --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.[|x|];
+// }

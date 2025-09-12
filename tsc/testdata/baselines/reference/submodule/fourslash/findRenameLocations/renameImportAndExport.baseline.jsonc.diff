@@ -1,0 +1,17 @@
+--- old.renameImportAndExport.baseline.jsonc
++++ new.renameImportAndExport.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameImportAndExport.ts ===
+ // import /*RENAME*/[|aRENAME|] from "module";
+-// export { [|aRENAME|] as a/*END SUFFIX*/ };
++// export { a };
+
+
+
+ // === findRenameLocations ===
+ // === /renameImportAndExport.ts ===
+-// import a from "module";
+-// export { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] };
++// import [|aRENAME|] from "module";
++// export { /*RENAME*/a };

@@ -1,4 +1,0 @@
-// === findAllReferences ===
-// === /Y.js ===
-
-// const { /*FIND ALL REFS*/[|x|]: { y } } = require("./X");

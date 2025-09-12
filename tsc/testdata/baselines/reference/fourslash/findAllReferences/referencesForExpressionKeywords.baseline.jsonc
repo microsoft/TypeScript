@@ -1,0 +1,123 @@
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// class C {
+//     static x = 1;
+// }
+// /*FIND ALL REFS*/new C();
+// void C;
+// typeof C;
+// delete C.x;
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// class C {
+//     static x = 1;
+// }
+// new C();
+// /*FIND ALL REFS*/void C;
+// typeof C;
+// delete C.x;
+// async function* f() {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// class C {
+//     static x = 1;
+// }
+// new C();
+// void C;
+// /*FIND ALL REFS*/[|typeof|] C;
+// delete C.x;
+// async function* f() {
+//     yield C;
+// // --- (line: 10) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// --- (line: 5) skipped ---
+// typeof C;
+// delete C.x;
+// async function* f() {
+//     /*FIND ALL REFS*/yield C;
+//     await C;
+// }
+// "x" in C;
+// undefined instanceof C;
+// undefined as C;
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// --- (line: 6) skipped ---
+// delete C.x;
+// async function* f() {
+//     yield C;
+//     /*FIND ALL REFS*/await C;
+// }
+// "x" in C;
+// undefined instanceof C;
+// undefined as C;
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// --- (line: 8) skipped ---
+//     yield C;
+//     await C;
+// }
+// "x" /*FIND ALL REFS*/in C;
+// undefined instanceof C;
+// undefined as C;
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// class [|C|] {
+//     static x = 1;
+// }
+// new [|C|]();
+// void [|C|];
+// typeof [|C|];
+// delete [|C|].x;
+// async function* f() {
+//     yield [|C|];
+//     await [|C|];
+// }
+// "x" in [|C|];
+// undefined /*FIND ALL REFS*/instanceof [|C|];
+// undefined as [|C|];
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// --- (line: 10) skipped ---
+// }
+// "x" in C;
+// undefined instanceof C;
+// undefined /*FIND ALL REFS*/as C;
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+// --- (line: 3) skipped ---
+// new C();
+// void C;
+// typeof C;
+// /*FIND ALL REFS*/delete C.x;
+// async function* f() {
+//     yield C;
+//     await C;
+// // --- (line: 11) skipped ---

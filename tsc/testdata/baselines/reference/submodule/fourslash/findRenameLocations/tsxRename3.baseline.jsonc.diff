@@ -1,0 +1,23 @@
+--- old.tsxRename3.baseline.jsonc
++++ new.tsxRename3.baseline.jsonc
+@@= skipped -8, +8 lines =@@
+ // }
+ // 
+ // 
+-// var x = <MyClass [|nameRENAME|]='hello'/>;
++// var x = <MyClass name='hello'/>;
+
+
+
+ // === findRenameLocations ===
+ // === /file.tsx ===
+-// --- (line: 5) skipped ---
+-// }
+-// class MyClass {
+-//   props: {
+-//     [|nameRENAME|]?: string;
+-//     size?: number;
++// --- (line: 10) skipped ---
+ // }
+ // 
+ // 

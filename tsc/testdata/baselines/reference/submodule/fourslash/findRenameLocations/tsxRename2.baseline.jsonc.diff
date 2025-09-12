@@ -1,0 +1,26 @@
+--- old.tsxRename2.baseline.jsonc
++++ new.tsxRename2.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+ //             isOpen?: boolean;
+ //         };
+ //         span: { n: string; };
+-//     }
+-// }
+-// var x = <div [|nameRENAME|]="hello" />;
++// // --- (line: 9) skipped ---
+
+
+
+ // === findRenameLocations ===
+ // === /file.tsx ===
+-// declare module JSX {
+-//     interface Element { }
+-//     interface IntrinsicElements {
+-//         div: {
+-//             [|nameRENAME|]?: string;
+-//             isOpen?: boolean;
+-//         };
++// --- (line: 7) skipped ---
+ //         span: { n: string; };
+ //     }
+ // }

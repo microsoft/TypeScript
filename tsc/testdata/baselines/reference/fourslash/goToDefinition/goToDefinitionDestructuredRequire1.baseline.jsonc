@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /util.js ===
+// class Util {}
+// module.exports = { [|Util|] };
+
+// === /index.js ===
+// const { Util } = require('./util');
+// new Util/*GOTO DEF*/()

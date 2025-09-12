@@ -1,0 +1,18 @@
+// === goToDefinition ===
+// === /gotoDefinitionInObjectBindingPattern2.ts ===
+// var p0 = ({[|a/*GOTO DEF*/a|]}) => {console.log(aa)};
+// function f2({ a1, b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
+
+
+
+// === goToDefinition ===
+// === /gotoDefinitionInObjectBindingPattern2.ts ===
+// var p0 = ({aa}) => {console.log(aa)};
+// function f2({ [|a/*GOTO DEF*/1|], b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
+
+
+
+// === goToDefinition ===
+// === /gotoDefinitionInObjectBindingPattern2.ts ===
+// var p0 = ({aa}) => {console.log(aa)};
+// function f2({ a1, [|b/*GOTO DEF*/1|] }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}

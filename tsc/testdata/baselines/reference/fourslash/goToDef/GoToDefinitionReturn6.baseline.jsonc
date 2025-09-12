@@ -1,8 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinitionReturn6.ts ===
-
-// function foo() {
-//     return [|function () {
-//         /*GO TO DEFINITION*/return 10;
-//     }|]
-// }

@@ -5,6 +5,7 @@ const scriptsDir = import.meta.dirname;
 const manualTestsPath = path.join(scriptsDir, "manualTests.txt");
 const genDir = path.join(scriptsDir, "../", "tests", "gen");
 const manualDir = path.join(scriptsDir, "../", "tests", "manual");
+const submoduleDir = path.join(scriptsDir, "../../../", "_submodules", "TypeScript", "tests", "cases", "fourslash");
 
 function main() {
     const args = process.argv.slice(2);
@@ -17,8 +18,24 @@ function main() {
     const testName = args[0];
     const testFileName = testName;
     const genTestFile = path.join(genDir, testFileName + "_test.go");
-    if (!fs.existsSync(genTestFile)) {
-        console.error(`Test file not found: '${genTestFile}'. Make sure the test exists in the gen directory first.`);
+    const submoduleTestFile = path.join(submoduleDir, testFileName + ".ts");
+    const submoduleServerTestFile = path.join(submoduleDir, "server", testFileName + ".ts");
+    let testKind: "gen" | "submodule" | "submoduleServer" | undefined;
+    if (fs.existsSync(genTestFile)) {
+        testKind = "gen";
+    }
+    else if (fs.existsSync(submoduleTestFile)) {
+        testKind = "submodule";
+    }
+    else if (fs.existsSync(submoduleServerTestFile)) {
+        testKind = "submoduleServer";
+    }
+
+    if (!testKind) {
+        console.error(
+            `Could not find test neither as '${genTestFile}', nor as '${submoduleTestFile}' or '${submoduleServerTestFile}'.` +
+                `Make sure the test exists in the gen directory or in the submodule.`,
+        );
         process.exit(1);
     }
 
@@ -26,8 +43,10 @@ function main() {
         fs.mkdirSync(manualDir, { recursive: true });
     }
 
-    const manualTestFile = path.join(manualDir, path.basename(genTestFile));
-    renameAndRemoveSkip(genTestFile, manualTestFile);
+    if (testKind === "gen") {
+        const manualTestFile = path.join(manualDir, path.basename(genTestFile));
+        markAsManual(genTestFile, manualTestFile);
+    }
 
     let manualTests: string[] = [];
     if (fs.existsSync(manualTestsPath)) {
@@ -42,7 +61,7 @@ function main() {
     }
 }
 
-function renameAndRemoveSkip(genFilePath: string, manualFilePath: string) {
+function markAsManual(genFilePath: string, manualFilePath: string) {
     const content = fs.readFileSync(genFilePath, "utf-8");
     const updatedContent = content.replace(/^\s*t\.Skip\(\)\s*$/m, "");
     fs.writeFileSync(manualFilePath, updatedContent, "utf-8");

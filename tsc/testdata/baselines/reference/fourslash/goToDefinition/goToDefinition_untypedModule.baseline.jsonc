@@ -1,0 +1,4 @@
+// === goToDefinition ===
+// === /a.ts ===
+// import { [|f|] } from "foo";
+// /*GOTO DEF*/f();

@@ -1,4 +1,0 @@
-// === findAllReferences ===
-// === /referencesToNonPropertyNameStringLiteral.ts ===
-
-// const str: string = "hello/*FIND ALL REFS*/";

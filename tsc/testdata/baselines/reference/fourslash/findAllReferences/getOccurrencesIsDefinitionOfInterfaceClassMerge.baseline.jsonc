@@ -1,0 +1,124 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// /*FIND ALL REFS*/interface Numbers {
+//     p: number;
+// }
+// interface Numbers {
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// interface /*FIND ALL REFS*/[|Numbers|] {
+//     p: number;
+// }
+// interface [|Numbers|] {
+//     m: number;
+// }
+// class [|Numbers|] {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// }
+// let i: [|Numbers|] = new [|Numbers|]();
+// let x = i.f(i.p + i.m);
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// interface Numbers {
+//     p: number;
+// }
+// /*FIND ALL REFS*/interface Numbers {
+//     m: number;
+// }
+// class Numbers {
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// interface [|Numbers|] {
+//     p: number;
+// }
+// interface /*FIND ALL REFS*/[|Numbers|] {
+//     m: number;
+// }
+// class [|Numbers|] {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// }
+// let i: [|Numbers|] = new [|Numbers|]();
+// let x = i.f(i.p + i.m);
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// --- (line: 3) skipped ---
+// interface Numbers {
+//     m: number;
+// }
+// /*FIND ALL REFS*/class Numbers {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// interface [|Numbers|] {
+//     p: number;
+// }
+// interface [|Numbers|] {
+//     m: number;
+// }
+// class /*FIND ALL REFS*/[|Numbers|] {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// }
+// let i: [|Numbers|] = new [|Numbers|]();
+// let x = i.f(i.p + i.m);
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// interface [|Numbers|] {
+//     p: number;
+// }
+// interface [|Numbers|] {
+//     m: number;
+// }
+// class [|Numbers|] {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// }
+// let i: /*FIND ALL REFS*/[|Numbers|] = new [|Numbers|]();
+// let x = i.f(i.p + i.m);
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+// interface [|Numbers|] {
+//     p: number;
+// }
+// interface [|Numbers|] {
+//     m: number;
+// }
+// class [|Numbers|] {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// }
+// let i: [|Numbers|] = new /*FIND ALL REFS*/[|Numbers|]();
+// let x = i.f(i.p + i.m);

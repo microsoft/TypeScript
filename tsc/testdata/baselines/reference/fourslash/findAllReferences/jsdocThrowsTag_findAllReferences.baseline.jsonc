@@ -1,0 +1,7 @@
+// === findAllReferences ===
+// === /jsdocThrowsTag_findAllReferences.ts ===
+// class /*FIND ALL REFS*/[|E|] extends Error {}
+// /**
+//  * @throws {E}
+//  */
+// function f() {}

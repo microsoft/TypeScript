@@ -1,0 +1,82 @@
+// === goToDefinition ===
+// === /goToDefinitionSameFile.ts ===
+// var [|localVariable|];
+// function localFunction() { }
+// class localClass { }
+// interface localInterface{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// /*GOTO DEF*/localVariable = 1;
+// localFunction();
+// var foo = new localClass();
+// class fooCls implements localInterface { }
+// var fooVar = localModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionSameFile.ts ===
+// var localVariable;
+// function [|localFunction|]() { }
+// class localClass { }
+// interface localInterface{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// /*GOTO DEF*/localFunction();
+// var foo = new localClass();
+// class fooCls implements localInterface { }
+// var fooVar = localModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionSameFile.ts ===
+// var localVariable;
+// function localFunction() { }
+// class [|localClass|] { }
+// interface localInterface{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// localFunction();
+// var foo = new /*GOTO DEF*/localClass();
+// class fooCls implements localInterface { }
+// var fooVar = localModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionSameFile.ts ===
+// var localVariable;
+// function localFunction() { }
+// class localClass { }
+// interface [|localInterface|]{ }
+// module localModule{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// localFunction();
+// var foo = new localClass();
+// class fooCls implements /*GOTO DEF*/localInterface { }
+// var fooVar = localModule.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionSameFile.ts ===
+// var localVariable;
+// function localFunction() { }
+// class localClass { }
+// interface localInterface{ }
+// module [|localModule|]{ export var foo = 1;}
+// 
+// 
+// localVariable = 1;
+// localFunction();
+// var foo = new localClass();
+// class fooCls implements localInterface { }
+// var fooVar = /*GOTO DEF*/localModule.foo;

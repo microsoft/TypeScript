@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = /*FIND ALL REFS*/function foo(a = foo(), b = () => foo) {
+//     foo(foo, foo);
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = function /*FIND ALL REFS*/[|foo|](a = [|foo|](), b = () => [|foo|]) {
+//     [|foo|]([|foo|], [|foo|]);
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = function [|foo|](a = /*FIND ALL REFS*/[|foo|](), b = () => [|foo|]) {
+//     [|foo|]([|foo|], [|foo|]);
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = function [|foo|](a = [|foo|](), b = () => /*FIND ALL REFS*/[|foo|]) {
+//     [|foo|]([|foo|], [|foo|]);
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = function [|foo|](a = [|foo|](), b = () => [|foo|]) {
+//     /*FIND ALL REFS*/[|foo|]([|foo|], [|foo|]);
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = function [|foo|](a = [|foo|](), b = () => [|foo|]) {
+//     [|foo|](/*FIND ALL REFS*/[|foo|], [|foo|]);
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// var foo = function [|foo|](a = [|foo|](), b = () => [|foo|]) {
+//     [|foo|]([|foo|], /*FIND ALL REFS*/[|foo|]);
+// }

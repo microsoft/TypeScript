@@ -1,0 +1,16 @@
+// === goToDefinition ===
+// === /goToDefinitionUnionTypeProperty1.ts ===
+// interface One {
+//     [|commonProperty|]: number;
+//     commonFunction(): number;
+// }
+// 
+// interface Two {
+//     [|commonProperty|]: string
+//     commonFunction(): number;
+// }
+// 
+// var x : One | Two;
+// 
+// x./*GOTO DEF*/commonProperty;
+// x.commonFunction;

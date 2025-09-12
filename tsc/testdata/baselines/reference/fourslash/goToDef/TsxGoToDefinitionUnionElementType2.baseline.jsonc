@@ -1,9 +1,0 @@
-// === goToDefinition ===
-// === /file.tsx ===
-
-// --- (line: 8) skipped ---
-//      }
-//      private method() { }
-//  }
-//  var [|RCComp|] = RC1 || RC2;
-//  <RC/*GO TO DEFINITION*/Comp />

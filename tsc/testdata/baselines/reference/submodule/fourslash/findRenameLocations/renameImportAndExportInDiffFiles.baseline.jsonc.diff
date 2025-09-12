@@ -1,0 +1,25 @@
+--- old.renameImportAndExportInDiffFiles.baseline.jsonc
++++ new.renameImportAndExportInDiffFiles.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+
+ // === /b.ts ===
+ // import { [|aRENAME|] } from './a';
+-// export { [|aRENAME|] as a/*END SUFFIX*/ };
++// export { a };
+
+
+
+ // === findRenameLocations ===
+ // === /b.ts ===
+ // import { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] } from './a';
+-// export { [|aRENAME|] as a/*END SUFFIX*/ };
++// export { a };
+
+
+
+ // === findRenameLocations ===
+ // === /b.ts ===
+-// import { a } from './a';
+-// export { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] };
++// import { /*START PREFIX*/a as [|aRENAME|] } from './a';
++// export { /*RENAME*/a };

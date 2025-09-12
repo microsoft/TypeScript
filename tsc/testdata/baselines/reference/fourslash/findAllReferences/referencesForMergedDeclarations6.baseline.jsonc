@@ -1,0 +1,36 @@
+// === findAllReferences ===
+// === /referencesForMergedDeclarations6.ts ===
+// interface Foo { }
+// /*FIND ALL REFS*/module Foo {
+//     export interface Bar { }
+//     export module Bar { export interface Baz { } }
+//     export function Bar() { }
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations6.ts ===
+// interface Foo { }
+// module /*FIND ALL REFS*/[|Foo|] {
+//     export interface Bar { }
+//     export module Bar { export interface Baz { } }
+//     export function Bar() { }
+// }
+// 
+// // module
+// import a1 = [|Foo|];
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations6.ts ===
+// interface Foo { }
+// module [|Foo|] {
+//     export interface Bar { }
+//     export module Bar { export interface Baz { } }
+//     export function Bar() { }
+// }
+// 
+// // module
+// import a1 = /*FIND ALL REFS*/[|Foo|];

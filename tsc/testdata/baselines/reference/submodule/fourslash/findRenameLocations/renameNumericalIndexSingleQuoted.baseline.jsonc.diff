@@ -1,0 +1,21 @@
+--- old.renameNumericalIndexSingleQuoted.baseline.jsonc
++++ new.renameNumericalIndexSingleQuoted.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // @quotePreference: single
+
+ // === /renameNumericalIndexSingleQuoted.ts ===
+-// const foo = { /*RENAME*/[|0RENAME|]: true };
+-// foo[/*START PREFIX*/'[|0RENAME|]'/*END SUFFIX*/];
++// const foo = { /*RENAME*/0: true };
++// foo[0];
+
+
+
+@@= skipped -9, +9 lines =@@
+ // @quotePreference: single
+
+ // === /renameNumericalIndexSingleQuoted.ts ===
+-// const foo = { [|0RENAME|]: true };
+-// foo[/*START PREFIX*/'/*RENAME*/[|0RENAME|]'/*END SUFFIX*/];
++// const foo = { 0: true };
++// foo[/*RENAME*/0];

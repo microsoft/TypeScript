@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /goToDefinitionOverriddenMember14.ts ===
+// class A {
+//     [|m|]() {}
+// }
+// class B extends A {}
+// class C extends B {
+//     /*GOTO DEF*/override m() {}
+// }

@@ -1,0 +1,9 @@
+--- old.highlightsForExportFromUnfoundModule.baseline.jsonc
++++ new.highlightsForExportFromUnfoundModule.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /b.js ===
+ // export {
+-//    /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|]
++//    /*RENAME*/foo
+ // } from './a';

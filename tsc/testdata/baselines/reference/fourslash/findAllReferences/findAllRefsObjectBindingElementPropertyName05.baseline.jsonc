@@ -1,0 +1,10 @@
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName05.ts ===
+// interface I {
+//     property1: number;
+//     property2: string;
+// }
+// 
+// function f({ /*FIND ALL REFS*/property1: p }, { property1 }) {
+//     let x = property1;
+// }

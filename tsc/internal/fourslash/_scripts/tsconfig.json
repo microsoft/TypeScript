@@ -3,6 +3,7 @@
         "strict": true,
         "noEmit": true,
         "module": "nodenext",
-        "allowImportingTsExtensions": true
+        "allowImportingTsExtensions": true,
+        "noFallthroughCasesInSwitch": true
     }
 }

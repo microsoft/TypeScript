@@ -1,0 +1,10 @@
+--- old.renameDestructuringClassProperty.baseline.jsonc
++++ new.renameDestructuringClassProperty.baseline.jsonc
+@@= skipped -48, +48 lines =@@
+ //     }
+ //     syntax2(a: A): void {
+ //         let { foo: foo } = a;
+-// --- (line: 10) skipped ---
++// // --- (line: 10) skipped ---
+
+

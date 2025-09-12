@@ -13,7 +13,7 @@ func TestTsxCompletionOnClosingTagWithoutJSX1(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
- var x1 = <div><//**/`
+var x1 = <div><//**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

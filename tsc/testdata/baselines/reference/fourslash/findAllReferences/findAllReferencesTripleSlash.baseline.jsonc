@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /// <reference path="b.ts/*FIND ALL REFS*/" />
+// /// <reference types="globals" />
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// /// <reference path="b.ts" />
+// /// <reference types="globals/*FIND ALL REFS*/" />

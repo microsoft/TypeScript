@@ -1,0 +1,208 @@
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// class C {
+//     [|m|]/*FIND ALL REFS*/() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link [|m|]}
+//      * @see {[|m|]}
+//      * {@link C.[|m|]}
+//      * @see {C.[|m|]}
+//      * {@link C#[|m|]}
+//      * @see {C#[|m|]}
+//      * {@link C.prototype.[|m|]}
+//      * @see {C.prototype.[|m|]}
+//      */
+//     p() { }
+//     /**
+// // --- (line: 17) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// class C {
+//     m() { }
+//     [|n|]/*FIND ALL REFS*/ = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+// // --- (line: 7) skipped ---
+
+// --- (line: 13) skipped ---
+//      */
+//     p() { }
+//     /**
+//      * {@link [|n|]}
+//      * @see {[|n|]}
+//      * {@link C.[|n|]}
+//      * @see {C.[|n|]}
+//      * {@link C#[|n|]}
+//      * @see {C#[|n|]}
+//      * {@link C.prototype.[|n|]}
+//      * @see {C.prototype.[|n|]}
+//      */
+//     q() { }
+//     /**
+// // --- (line: 28) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// class C {
+//     m() { }
+//     n = 1
+//     static [|s|]/*FIND ALL REFS*/() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+// // --- (line: 8) skipped ---
+
+// --- (line: 24) skipped ---
+//      */
+//     q() { }
+//     /**
+//      * {@link [|s|]}
+//      * @see {[|s|]}
+//      * {@link C.[|s|]}
+//      * @see {C.[|s|]}
+//      */
+//     r() { }
+// }
+// // --- (line: 35) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// --- (line: 33) skipped ---
+// }
+// 
+// interface I {
+//     [|a|]/*FIND ALL REFS*/()
+//     b: 1
+//     /**
+//      * {@link [|a|]}
+//      * @see {[|a|]}
+//      * {@link I.[|a|]}
+//      * @see {I.[|a|]}
+//      * {@link I#[|a|]}
+//      * @see {I#[|a|]}
+//      */
+//     c()
+//     /**
+// // --- (line: 49) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// --- (line: 34) skipped ---
+// 
+// interface I {
+//     a()
+//     [|b|]/*FIND ALL REFS*/: 1
+//     /**
+//      * {@link a}
+//      * @see {a}
+// // --- (line: 42) skipped ---
+
+// --- (line: 45) skipped ---
+//      */
+//     c()
+//     /**
+//      * {@link [|b|]}
+//      * @see {[|b|]}
+//      * {@link I.[|b|]}
+//      * @see {I.[|b|]}
+//      */
+//     d()
+// }
+// // --- (line: 56) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// --- (line: 54) skipped ---
+// }
+// 
+// function nestor() {
+//     /** {@link [|r2|]} */
+//     function ref() { }
+//     /** @see {[|r2|]} */
+//     function d3() { }
+//     function [|r2|]/*FIND ALL REFS*/() { }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// class [|C|]/*FIND ALL REFS*/ {
+//     m() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+//      * {@link [|C|].m}
+//      * @see {[|C|].m}
+//      * {@link [|C|]#m}
+//      * @see {[|C|]#m}
+//      * {@link [|C|].prototype.m}
+//      * @see {[|C|].prototype.m}
+//      */
+//     p() { }
+//     /**
+//      * {@link n}
+//      * @see {n}
+//      * {@link [|C|].n}
+//      * @see {[|C|].n}
+//      * {@link [|C|]#n}
+//      * @see {[|C|]#n}
+//      * {@link [|C|].prototype.n}
+//      * @see {[|C|].prototype.n}
+//      */
+//     q() { }
+//     /**
+//      * {@link s}
+//      * @see {s}
+//      * {@link [|C|].s}
+//      * @see {[|C|].s}
+//      */
+//     r() { }
+// }
+// // --- (line: 35) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+// --- (line: 32) skipped ---
+//     r() { }
+// }
+// 
+// interface [|I|]/*FIND ALL REFS*/ {
+//     a()
+//     b: 1
+//     /**
+//      * {@link a}
+//      * @see {a}
+//      * {@link [|I|].a}
+//      * @see {[|I|].a}
+//      * {@link [|I|]#a}
+//      * @see {[|I|]#a}
+//      */
+//     c()
+//     /**
+//      * {@link b}
+//      * @see {b}
+//      * {@link [|I|].b}
+//      * @see {[|I|].b}
+//      */
+//     d()
+// }
+// // --- (line: 56) skipped ---

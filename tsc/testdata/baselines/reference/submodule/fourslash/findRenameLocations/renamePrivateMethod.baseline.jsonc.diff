@@ -1,0 +1,25 @@
+--- old.renamePrivateMethod.baseline.jsonc
++++ new.renamePrivateMethod.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renamePrivateMethod.ts ===
+ // class Foo {
+-//    /*RENAME*/[|#fooRENAME|]() { }
++//    /*RENAME*/#foo() { }
+ //    callFoo() {
+-//        return this.[|#fooRENAME|]();
++//        return this.#foo();
+ //    }
+ // }
+
+@@= skipped -11, +11 lines =@@
+ // === findRenameLocations ===
+ // === /renamePrivateMethod.ts ===
+ // class Foo {
+-//    [|#fooRENAME|]() { }
++//    #foo() { }
+ //    callFoo() {
+-//        return this./*RENAME*/[|#fooRENAME|]();
++//        return this./*RENAME*/#foo();
+ //    }
+ // }

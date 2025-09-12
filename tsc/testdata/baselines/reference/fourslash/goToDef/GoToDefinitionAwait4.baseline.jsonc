@@ -1,8 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinitionAwait4.ts ===
-
-// async function outerAsyncFun() {
-//     let [|af|] = async () => {
-//       /*GO TO DEFINITION*/await Promise.resolve(0);
-//     }
-// }

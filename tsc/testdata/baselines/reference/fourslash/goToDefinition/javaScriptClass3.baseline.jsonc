@@ -1,0 +1,27 @@
+// === goToDefinition ===
+// === /Foo.js ===
+// class Foo {
+//    constructor() {
+//        this.[|alpha|] = 10;
+//        this.beta = 'gamma';
+//    }
+//    method() { return this.alpha; }
+// }
+// var x = new Foo();
+// x.alpha/*GOTO DEF*/;
+// x.beta;
+
+
+
+// === goToDefinition ===
+// === /Foo.js ===
+// class Foo {
+//    constructor() {
+//        this.alpha = 10;
+//        this.[|beta|] = 'gamma';
+//    }
+//    method() { return this.alpha; }
+// }
+// var x = new Foo();
+// x.alpha;
+// x.beta/*GOTO DEF*/;

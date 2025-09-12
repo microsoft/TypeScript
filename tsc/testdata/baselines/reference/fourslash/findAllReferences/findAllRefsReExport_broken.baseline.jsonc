@@ -1,0 +1,9 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/export { x };
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export { /*FIND ALL REFS*/x };

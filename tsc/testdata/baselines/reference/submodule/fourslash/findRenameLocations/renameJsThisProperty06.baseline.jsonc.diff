@@ -1,0 +1,27 @@
+--- old.renameJsThisProperty06.baseline.jsonc
++++ new.renameJsThisProperty06.baseline.jsonc
+@@= skipped -4, +4 lines =@@
+ //     this.x = y;
+ //   }
+ // }
+-// C.prototype./*RENAME*/[|zRENAME|] = 1;
++// C.prototype./*RENAME*/z = 1;
+ // var t = new C(12);
+-// t.[|zRENAME|] = 11;
++// t.z = 11;
+
+
+
+ // === findRenameLocations ===
+ // === /a.js ===
+-// var C = class {
+-//   constructor(y) {
+-//     this.x = y;
+-//   }
++// --- (line: 4) skipped ---
+ // }
+-// C.prototype.[|zRENAME|] = 1;
++// C.prototype.z = 1;
+ // var t = new C(12);
+-// t./*RENAME*/[|zRENAME|] = 11;
++// t./*RENAME*/z = 11;

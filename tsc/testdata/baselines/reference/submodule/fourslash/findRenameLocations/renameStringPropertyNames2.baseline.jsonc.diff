@@ -1,0 +1,16 @@
+--- old.renameStringPropertyNames2.baseline.jsonc
++++ new.renameStringPropertyNames2.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameStringPropertyNames2.ts ===
+-// type Props = {
+-//   [|fooRENAME|]: boolean;
+-// }
+-// 
+-// let { [|fooRENAME|]: foo/*END SUFFIX*/ }: Props = null as any;
++// --- (line: 4) skipped ---
++// let { foo }: Props = null as any;
+ // foo;
+ // 
+-// let asd: Props = { "[|fooRENAME|]"/*RENAME*/: true }; // rename foo here
++// let asd: Props = { "foo"/*RENAME*/: true }; // rename foo here

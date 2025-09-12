@@ -1,0 +1,39 @@
+// === findAllReferences ===
+// === /findAllRefsClassWithStaticThisAccess.ts ===
+// class /*FIND ALL REFS*/[|C|] {
+//     static s() {
+//         this;
+//     }
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsClassWithStaticThisAccess.ts ===
+// class C {
+//     static s() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     static get f() {
+//         return [|this|];
+// 
+//         function inner() { this; }
+//         class Inner { x = this; }
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsClassWithStaticThisAccess.ts ===
+// class C {
+//     static s() {
+//         [|this|];
+//     }
+//     static get f() {
+//         return /*FIND ALL REFS*/[|this|];
+// 
+//         function inner() { this; }
+//         class Inner { x = this; }
+//     }
+// }

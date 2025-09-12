@@ -1,0 +1,34 @@
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 4) skipped ---
+//     interface ElementAttributesProperty { props; }
+// }
+// interface OptionPropBag {
+//     /*RENAME*/[|propxRENAME|]: number
+//     propString: string
+//     optional?: boolean
+// }
+// // --- (line: 12) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 10) skipped ---
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt /*RENAME*/[|propxRENAME|]={100} propString />;
+// let opt2 = <Opt propx={100} optional/>;
+// let opt3 = <Opt wrong />;
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 11) skipped ---
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt propx={100} propString />;
+// let opt2 = <Opt /*RENAME*/[|propxRENAME|]={100} optional/>;
+// let opt3 = <Opt wrong />;

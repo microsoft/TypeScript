@@ -1,0 +1,87 @@
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     [|value|]: 0,
+//     get getter() {return 0 },
+//     set setter(v: number) { },
+//     method: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o./*GOTO DEF*/value;
+// o.getter;
+// o.setter;
+// o.method;
+// o.es6StyleMethod;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get [|getter|]() {return 0 },
+//     set setter(v: number) { },
+//     method: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o.value;
+// o./*GOTO DEF*/getter;
+// o.setter;
+// o.method;
+// o.es6StyleMethod;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get getter() {return 0 },
+//     set [|setter|](v: number) { },
+//     method: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o.value;
+// o.getter;
+// o./*GOTO DEF*/setter;
+// o.method;
+// o.es6StyleMethod;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get getter() {return 0 },
+//     set setter(v: number) { },
+//     [|method|]: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o.value;
+// o.getter;
+// o.setter;
+// o./*GOTO DEF*/method;
+// o.es6StyleMethod;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get getter() {return 0 },
+//     set setter(v: number) { },
+//     method: () => { },
+//     [|es6StyleMethod|]() { }
+// };
+// 
+// o.value;
+// o.getter;
+// o.setter;
+// o.method;
+// o./*GOTO DEF*/es6StyleMethod;

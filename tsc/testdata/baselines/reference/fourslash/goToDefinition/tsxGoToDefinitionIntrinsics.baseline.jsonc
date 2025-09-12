@@ -1,0 +1,48 @@
+// === goToDefinition ===
+// === /file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         [|div|]: {
+//             name?: string;
+//             isOpen?: boolean;
+//         };
+//         span: { n: string; };
+//     }
+// }
+// var x = <di/*GOTO DEF*/v />;
+// var y = <span />;
+// var z = <div name='hello' />;
+
+
+
+// === goToDefinition ===
+// === /file.tsx ===
+// --- (line: 4) skipped ---
+//             name?: string;
+//             isOpen?: boolean;
+//         };
+//         [|span|]: { n: string; };
+//     }
+// }
+// var x = <div />;
+// var y = <s/*GOTO DEF*/pan />;
+// var z = <div name='hello' />;
+
+
+
+// === goToDefinition ===
+// === /file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         div: {
+//             [|name|]?: string;
+//             isOpen?: boolean;
+//         };
+//         span: { n: string; };
+//     }
+// }
+// var x = <div />;
+// var y = <span />;
+// var z = <div na/*GOTO DEF*/me='hello' />;

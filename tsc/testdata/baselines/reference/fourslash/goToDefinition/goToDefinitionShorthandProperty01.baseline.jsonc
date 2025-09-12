@@ -1,0 +1,41 @@
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// var id = 100000;
+// declare var id;
+// var obj = {/*GOTO DEF*/name, id};
+// obj.name;
+// obj.id;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// var [|id|] = 100000;
+// declare var [|id|];
+// var obj = {name, /*GOTO DEF*/id};
+// obj.name;
+// obj.id;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// var id = 100000;
+// declare var id;
+// var obj = {[|name|], id};
+// obj./*GOTO DEF*/name;
+// obj.id;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// var id = 100000;
+// declare var id;
+// var obj = {name, [|id|]};
+// obj.name;
+// obj./*GOTO DEF*/id;

@@ -1,0 +1,20 @@
+--- old.jsdocTypedefTagRename03.baseline.jsonc
++++ new.jsdocTypedefTagRename03.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form3.js ===
+-// 
+ // /**
+ //  * @typedef /*RENAME*/[|PersonRENAME|]
+ //  * @type {Object}
+@@= skipped -14, +12 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form3.js ===
+-// 
+ // /**
+ //  * @typedef [|PersonRENAME|]
+ //  * @type {Object}

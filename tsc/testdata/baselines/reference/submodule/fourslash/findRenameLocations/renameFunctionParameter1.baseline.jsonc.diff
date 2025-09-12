@@ -1,0 +1,11 @@
+--- old.renameFunctionParameter1.baseline.jsonc
++++ new.renameFunctionParameter1.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /renameFunctionParameter1.ts ===
+ // function Foo() {
+ //     /**
+-//      * @param {number} [|pRENAME|]
++//      * @param {number} p
+ //      */
+ //     this.foo = function foo([|pRENAME|]/*RENAME*/) {
+ //         return [|pRENAME|];

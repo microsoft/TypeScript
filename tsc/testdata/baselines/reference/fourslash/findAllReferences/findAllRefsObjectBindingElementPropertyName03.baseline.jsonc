@@ -1,0 +1,21 @@
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName03.ts ===
+// interface I {
+//     /*FIND ALL REFS*/[|property1|]: number;
+//     property2: string;
+// }
+// 
+// var foo: I;
+// var [ { [|property1|]: prop1 }, { [|property1|], property2 } ] = [foo, foo];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName03.ts ===
+// interface I {
+//     [|property1|]: number;
+//     property2: string;
+// }
+// 
+// var foo: I;
+// var [ { [|property1|]: prop1 }, { /*FIND ALL REFS*/[|property1|], property2 } ] = [foo, foo];

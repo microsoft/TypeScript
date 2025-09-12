@@ -1,0 +1,205 @@
+--- old.renameModifiers.baseline.jsonc
++++ new.renameModifiers.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameModifiers.ts ===
+-// /*RENAME*/declare abstract class [|C1RENAME|] {
+-//     static a;
+-//     readonly b;
+-//     public c;
+-//     protected d;
+-//     private e;
+-// }
+-// const enum E {
+-// }
+-// async function fn() {}
+-// export default class C2 {}
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameModifiers.ts ===
+-// declare /*RENAME*/abstract class [|C1RENAME|] {
+-//     static a;
+-//     readonly b;
+-//     public c;
+-//     protected d;
+-//     private e;
+-// }
+-// const enum E {
+-// }
+-// async function fn() {}
+-// export default class C2 {}
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameModifiers.ts ===
+-// declare abstract class C1 {
+-//     /*RENAME*/static [|aRENAME|];
+-//     readonly b;
+-//     public c;
+-//     protected d;
+-// --- (line: 6) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameModifiers.ts ===
+-// declare abstract class C1 {
+-//     static a;
+-//     /*RENAME*/readonly [|bRENAME|];
+-//     public c;
+-//     protected d;
+-//     private e;
+-// --- (line: 7) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameModifiers.ts ===
+-// declare abstract class C1 {
+-//     static a;
+-//     readonly b;
+-//     /*RENAME*/public [|cRENAME|];
+-//     protected d;
+-//     private e;
+-// }
+-// --- (line: 8) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameModifiers.ts ===
+-// declare abstract class C1 {
+-//     static a;
+-//     readonly b;
+-//     public c;
+-//     /*RENAME*/protected [|dRENAME|];
+-//     private e;
+-// }
+-// const enum E {
+-// --- (line: 9) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameModifiers.ts ===
+-// declare abstract class C1 {
+-//     static a;
+-//     readonly b;
+-//     public c;
+-//     protected d;
+-//     /*RENAME*/private [|eRENAME|];
++// /*RENAME*/declare abstract class C1 {
++//     static a;
++//     readonly b;
++//     public c;
++// // --- (line: 5) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameModifiers.ts ===
++// declare /*RENAME*/abstract class C1 {
++//     static a;
++//     readonly b;
++//     public c;
++// // --- (line: 5) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameModifiers.ts ===
++// declare abstract class C1 {
++//     /*RENAME*/static a;
++//     readonly b;
++//     public c;
++//     protected d;
++// // --- (line: 6) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameModifiers.ts ===
++// declare abstract class C1 {
++//     static a;
++//     /*RENAME*/readonly b;
++//     public c;
++//     protected d;
++//     private e;
++// // --- (line: 7) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameModifiers.ts ===
++// declare abstract class C1 {
++//     static a;
++//     readonly b;
++//     /*RENAME*/public c;
++//     protected d;
++//     private e;
++// }
++// // --- (line: 8) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameModifiers.ts ===
++// declare abstract class C1 {
++//     static a;
++//     readonly b;
++//     public c;
++//     /*RENAME*/protected d;
++//     private e;
++// }
++// const enum E {
++// // --- (line: 9) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameModifiers.ts ===
++// declare abstract class C1 {
++//     static a;
++//     readonly b;
++//     public c;
++//     protected d;
++//     /*RENAME*/private e;
+ // }
+ // const enum E {
+ // }
+@@= skipped -101, +89 lines =@@
+ //     protected d;
+ //     private e;
+ // }
+-// /*RENAME*/const enum [|ERENAME|] {
++// /*RENAME*/const enum E {
+ // }
+ // async function fn() {}
+ // export default class C2 {}
+@@= skipped -13, +13 lines =@@
+ // }
+ // const enum E {
+ // }
+-// /*RENAME*/async function [|fnRENAME|]() {}
++// /*RENAME*/async function fn() {}
+ // export default class C2 {}
+
+
+@@= skipped -11, +11 lines =@@
+ // const enum E {
+ // }
+ // async function fn() {}
+-// /*RENAME*/export default class [|C2RENAME|] {}
++// /*RENAME*/export default class C2 {}
+
+
+
+@@= skipped -10, +10 lines =@@
+ // const enum E {
+ // }
+ // async function fn() {}
+-// export /*RENAME*/default class [|C2RENAME|] {}
++// export /*RENAME*/default class C2 {}

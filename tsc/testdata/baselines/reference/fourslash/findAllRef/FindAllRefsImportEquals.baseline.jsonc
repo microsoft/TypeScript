@@ -1,5 +1,0 @@
-// === findAllReferences ===
-// === /findAllRefsImportEquals.ts ===
-
-// import j = N./*FIND ALL REFS*/[|q|];
-// namespace N { export const q = 0; }

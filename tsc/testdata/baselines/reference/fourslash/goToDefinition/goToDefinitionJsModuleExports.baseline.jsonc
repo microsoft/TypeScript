@@ -1,0 +1,15 @@
+// === goToDefinition ===
+// === /foo.js ===
+// x.test = () => { }
+// x./*GOTO DEF*/test();
+// x.test3 = function () { }
+// x.test3();
+
+
+
+// === goToDefinition ===
+// === /foo.js ===
+// x.test = () => { }
+// x.test();
+// x.test3 = function () { }
+// x./*GOTO DEF*/test3();

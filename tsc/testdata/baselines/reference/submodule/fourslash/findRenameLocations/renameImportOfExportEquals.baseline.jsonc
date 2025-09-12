@@ -1,0 +1,121 @@
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace /*RENAME*/[|NRENAME|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = [|NRENAME|];
+// }
+// declare module "a" {
+//     import * as [|NRENAME|] from "mod";
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+// // --- (line: 12) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace [|NRENAME|] {
+//     export var x: number;
+// }
+// declare module "mod" {
+//     export = /*RENAME*/[|NRENAME|];
+// }
+// declare module "a" {
+//     import * as [|NRENAME|] from "mod";
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+// // --- (line: 12) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// --- (line: 4) skipped ---
+//     export = N;
+// }
+// declare module "a" {
+//     import * as /*RENAME*/[|NRENAME|] from "mod";
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+// // --- (line: 12) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// --- (line: 4) skipped ---
+//     export = N;
+// }
+// declare module "a" {
+//     import * as [|NRENAME|] from "mod";
+//     export { /*RENAME*/N }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// --- (line: 8) skipped ---
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { /*START PREFIX*/N as /*RENAME*/[|NRENAME|] } from "a";
+//     export const y: typeof [|NRENAME|].x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// --- (line: 8) skipped ---
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { /*START PREFIX*/N as [|NRENAME|] } from "a";
+//     export const y: typeof /*RENAME*/[|NRENAME|].x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace N {
+//     export var /*RENAME*/[|xRENAME|]: number;
+// }
+// declare module "mod" {
+//     export = N;
+// // --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.[|xRENAME|];
+// }
+
+
+
+// === findRenameLocations ===
+// === /renameImportOfExportEquals.ts ===
+// declare namespace N {
+//     export var [|xRENAME|]: number;
+// }
+// declare module "mod" {
+//     export = N;
+// // --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N./*RENAME*/[|xRENAME|];
+// }

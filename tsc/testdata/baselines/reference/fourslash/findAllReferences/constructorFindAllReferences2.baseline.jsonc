@@ -1,0 +1,8 @@
+// === findAllReferences ===
+// === /constructorFindAllReferences2.ts ===
+// export class C {
+//     /*FIND ALL REFS*/private constructor() { }
+//     public foo() { }
+// }
+// 
+// new C().foo();

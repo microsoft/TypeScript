@@ -1,0 +1,266 @@
+--- old.renameDeclarationKeywords.baseline.jsonc
++++ new.renameDeclarationKeywords.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /renameDeclarationKeywords.ts ===
+ // class Base {}
+ // interface Implemented1 {}
+-// /*RENAME*/class [|C1RENAME|] extends Base implements Implemented1 {
+-//     get e() { return 1; }
+-//     set e(v) {}
+-// }
+-// interface I1 extends Base { }
+-// type T = { }
+-// enum E { }
+-// --- (line: 10) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameDeclarationKeywords.ts ===
+-// class [|BaseRENAME|] {}
+-// interface Implemented1 {}
+-// class C1 /*RENAME*/extends [|BaseRENAME|] implements Implemented1 {
+-//     get e() { return 1; }
+-//     set e(v) {}
+-// }
+-// interface I1 extends [|BaseRENAME|] { }
+-// type T = { }
+-// enum E { }
+-// namespace N { }
+-// --- (line: 11) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameDeclarationKeywords.ts ===
+-// class Base {}
+-// interface [|Implemented1RENAME|] {}
+-// class C1 extends Base /*RENAME*/implements [|Implemented1RENAME|] {
+-//     get e() { return 1; }
+-//     set e(v) {}
+-// }
+-// --- (line: 7) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameDeclarationKeywords.ts ===
+-// class Base {}
+-// interface Implemented1 {}
+-// class C1 extends Base implements Implemented1 {
+-//     /*RENAME*/get [|eRENAME|]() { return 1; }
+-//     set [|eRENAME|](v) {}
+-// }
+-// interface I1 extends Base { }
+-// type T = { }
+-// --- (line: 9) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameDeclarationKeywords.ts ===
+-// class Base {}
+-// interface Implemented1 {}
+-// class C1 extends Base implements Implemented1 {
+-//     get [|eRENAME|]() { return 1; }
+-//     /*RENAME*/set [|eRENAME|](v) {}
+-// }
+-// interface I1 extends Base { }
+-// type T = { }
+-// --- (line: 9) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameDeclarationKeywords.ts ===
+-// --- (line: 3) skipped ---
+-//     get e() { return 1; }
+-//     set e(v) {}
+-// }
+-// /*RENAME*/interface [|I1RENAME|] extends Base { }
+-// type T = { }
+-// enum E { }
+-// namespace N { }
+-// --- (line: 11) skipped ---
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameDeclarationKeywords.ts ===
+-// class [|BaseRENAME|] {}
+-// interface Implemented1 {}
+-// class C1 extends [|BaseRENAME|] implements Implemented1 {
+-//     get e() { return 1; }
+-//     set e(v) {}
+-// }
+-// interface I1 /*RENAME*/extends [|BaseRENAME|] { }
+-// type T = { }
+-// enum E { }
+-// namespace N { }
+-// --- (line: 11) skipped ---
++// /*RENAME*/class C1 extends Base implements Implemented1 {
++//     get e() { return 1; }
++//     set e(v) {}
++// }
++// // --- (line: 7) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameDeclarationKeywords.ts ===
++// class Base {}
++// interface Implemented1 {}
++// class C1 /*RENAME*/extends Base implements Implemented1 {
++//     get e() { return 1; }
++//     set e(v) {}
++// }
++// // --- (line: 7) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameDeclarationKeywords.ts ===
++// class Base {}
++// interface Implemented1 {}
++// class C1 extends Base /*RENAME*/implements Implemented1 {
++//     get e() { return 1; }
++//     set e(v) {}
++// }
++// // --- (line: 7) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameDeclarationKeywords.ts ===
++// class Base {}
++// interface Implemented1 {}
++// class C1 extends Base implements Implemented1 {
++//     /*RENAME*/get e() { return 1; }
++//     set e(v) {}
++// }
++// interface I1 extends Base { }
++// // --- (line: 8) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameDeclarationKeywords.ts ===
++// class Base {}
++// interface Implemented1 {}
++// class C1 extends Base implements Implemented1 {
++//     get e() { return 1; }
++//     /*RENAME*/set e(v) {}
++// }
++// interface I1 extends Base { }
++// type T = { }
++// // --- (line: 9) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameDeclarationKeywords.ts ===
++// --- (line: 3) skipped ---
++//     get e() { return 1; }
++//     set e(v) {}
++// }
++// /*RENAME*/interface I1 extends Base { }
++// type T = { }
++// enum E { }
++// namespace N { }
++// // --- (line: 11) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameDeclarationKeywords.ts ===
++// --- (line: 3) skipped ---
++//     get e() { return 1; }
++//     set e(v) {}
++// }
++// interface I1 /*RENAME*/extends Base { }
++// type T = { }
++// enum E { }
++// namespace N { }
++// // --- (line: 11) skipped ---
+
+
+
+@@= skipped -103, +93 lines =@@
+ //     set e(v) {}
+ // }
+ // interface I1 extends Base { }
+-// /*RENAME*/type [|TRENAME|] = { }
++// /*RENAME*/type T = { }
+ // enum E { }
+ // namespace N { }
+ // module M { }
+-// --- (line: 12) skipped ---
++// // --- (line: 12) skipped ---
+
+
+
+@@= skipped -14, +14 lines =@@
+ // }
+ // interface I1 extends Base { }
+ // type T = { }
+-// /*RENAME*/enum [|ERENAME|] { }
++// /*RENAME*/enum E { }
+ // namespace N { }
+ // module M { }
+ // function fn() {}
+-// --- (line: 13) skipped ---
++// // --- (line: 13) skipped ---
+
+
+
+@@= skipped -14, +14 lines =@@
+ // interface I1 extends Base { }
+ // type T = { }
+ // enum E { }
+-// /*RENAME*/namespace [|NRENAME|] { }
++// /*RENAME*/namespace N { }
+ // module M { }
+ // function fn() {}
+ // var x;
+@@= skipped -15, +15 lines =@@
+ // type T = { }
+ // enum E { }
+ // namespace N { }
+-// /*RENAME*/module [|MRENAME|] { }
++// /*RENAME*/module M { }
+ // function fn() {}
+ // var x;
+ // let y;
+@@= skipped -14, +14 lines =@@
+ // enum E { }
+ // namespace N { }
+ // module M { }
+-// /*RENAME*/function [|fnRENAME|]() {}
++// /*RENAME*/function fn() {}
+ // var x;
+ // let y;
+ // const z = 1;
+@@= skipped -13, +13 lines =@@
+ // namespace N { }
+ // module M { }
+ // function fn() {}
+-// /*RENAME*/var [|xRENAME|];
++// /*RENAME*/var x;
+ // let y;
+ // const z = 1;
+
+@@= skipped -12, +12 lines =@@
+ // module M { }
+ // function fn() {}
+ // var x;
+-// /*RENAME*/let [|yRENAME|];
++// /*RENAME*/let y;
+ // const z = 1;
+
+
+@@= skipped -11, +11 lines =@@
+ // function fn() {}
+ // var x;
+ // let y;
+-// /*RENAME*/const [|zRENAME|] = 1;
++// /*RENAME*/const z = 1;

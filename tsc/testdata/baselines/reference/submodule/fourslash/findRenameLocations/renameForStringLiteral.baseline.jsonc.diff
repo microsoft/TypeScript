@@ -1,0 +1,16 @@
+--- old.renameForStringLiteral.baseline.jsonc
++++ new.renameForStringLiteral.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /a.ts ===
+ // interface Foo {
+-//     property: /*RENAME*/"[|fooRENAME|]";
++//     property: /*RENAME*/"foo";
+ // }
+ // /**
+ //  * @type {{ property: "foo"}}
+-//  */
+-// const obj: Foo = {
+-//     property: "[|fooRENAME|]",
+-// }
++// // --- (line: 6) skipped ---

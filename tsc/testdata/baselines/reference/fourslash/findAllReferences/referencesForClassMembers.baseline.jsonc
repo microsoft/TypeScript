@@ -1,0 +1,99 @@
+// === findAllReferences ===
+// === /referencesForClassMembers.ts ===
+// class Base {
+//     /*FIND ALL REFS*/[|a|]: number;
+//     method(): void { }
+// }
+// class MyClass extends Base {
+//     [|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c.[|a|];
+// c.method();
+
+
+
+// === findAllReferences ===
+// === /referencesForClassMembers.ts ===
+// class Base {
+//     [|a|]: number;
+//     method(): void { }
+// }
+// class MyClass extends Base {
+//     /*FIND ALL REFS*/[|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c.[|a|];
+// c.method();
+
+
+
+// === findAllReferences ===
+// === /referencesForClassMembers.ts ===
+// class Base {
+//     [|a|]: number;
+//     method(): void { }
+// }
+// class MyClass extends Base {
+//     [|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c./*FIND ALL REFS*/[|a|];
+// c.method();
+
+
+
+// === findAllReferences ===
+// === /referencesForClassMembers.ts ===
+// class Base {
+//     a: number;
+//     /*FIND ALL REFS*/[|method|](): void { }
+// }
+// class MyClass extends Base {
+//     a;
+//     [|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c.[|method|]();
+
+
+
+// === findAllReferences ===
+// === /referencesForClassMembers.ts ===
+// class Base {
+//     a: number;
+//     [|method|](): void { }
+// }
+// class MyClass extends Base {
+//     a;
+//     /*FIND ALL REFS*/[|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c.[|method|]();
+
+
+
+// === findAllReferences ===
+// === /referencesForClassMembers.ts ===
+// class Base {
+//     a: number;
+//     [|method|](): void { }
+// }
+// class MyClass extends Base {
+//     a;
+//     [|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c./*FIND ALL REFS*/[|method|]();

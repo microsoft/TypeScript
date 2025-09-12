@@ -13476,3 +13476,7 @@ var CompletionTypeAssertionKeywords = CompletionGlobalTypesPlus([]fourslash.Comp
 		SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 	},
 })
+
+func ToAny[T any](items []T) []any {
+	return core.Map(items, func(item T) any { return item })
+}

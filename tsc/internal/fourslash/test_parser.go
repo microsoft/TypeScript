@@ -2,6 +2,7 @@ package fourslash
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 	"unicode/utf8"
@@ -22,9 +23,10 @@ import (
 //
 // is a range with `text in range` "selected".
 type RangeMarker struct {
-	*Marker
-	Range   core.TextRange
-	LSRange lsproto.Range
+	fileName string
+	Range    core.TextRange
+	LSRange  lsproto.Range
+	Marker   *Marker
 }
 
 func (r *RangeMarker) LSPos() lsproto.Position {
@@ -35,8 +37,11 @@ func (r *RangeMarker) FileName() string {
 	return r.fileName
 }
 
-func (r *RangeMarker) GetMarker() *Marker {
-	return r.Marker
+func (r *RangeMarker) GetName() *string {
+	if r.Marker == nil {
+		return nil
+	}
+	return r.Marker.Name
 }
 
 type Marker struct {
@@ -44,7 +49,7 @@ type Marker struct {
 	Position   int
 	LSPosition lsproto.Position
 	Name       *string // `nil` for anonymous markers such as `{| "foo": "bar" |}`
-	Data       map[string]interface{}
+	Data       map[string]any
 }
 
 func (m *Marker) LSPos() lsproto.Position {
@@ -55,14 +60,14 @@ func (m *Marker) FileName() string {
 	return m.fileName
 }
 
-func (m *Marker) GetMarker() *Marker {
-	return m
+func (m *Marker) GetName() *string {
+	return m.Name
 }
 
 type MarkerOrRange interface {
 	FileName() string
 	LSPos() lsproto.Position
-	GetMarker() *Marker
+	GetName() *string
 }
 
 type TestData struct {
@@ -244,14 +249,10 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				rangeStart := openRanges[len(openRanges)-1]
 				openRanges = openRanges[:len(openRanges)-1]
 
-				closedRange := &RangeMarker{Range: core.NewTextRange(rangeStart.position, (i-1)-difference)}
-				if rangeStart.marker != nil {
-					closedRange.Marker = rangeStart.marker
-				} else {
-					// A default RangeMarker is not added to list of markers. If the RangeMarker was created by parsing an actual marker within the range
-					//     in the test file, then the marker should have been added to the marker list when the marker was parsed.
-					// Similarly, if the RangeMarker has a name, this means that there was a named marker parsed within the range (and has been already included in the marker list)
-					closedRange.Marker = &Marker{fileName: fileName}
+				closedRange := &RangeMarker{
+					fileName: fileName,
+					Range:    core.NewTextRange(rangeStart.position, (i-1)-difference),
+					Marker:   rangeStart.marker,
 				}
 
 				rangeMarkers = append(rangeMarkers, closedRange)
@@ -379,6 +380,13 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 		Content:  outputString,
 		emit:     emit,
 	}
+
+	slices.SortStableFunc(rangeMarkers, func(a, b *RangeMarker) int {
+		if a.Range.Pos() != b.Range.Pos() {
+			return a.Range.Pos() - b.Range.Pos()
+		}
+		return b.Range.End() - a.Range.End()
+	})
 
 	for _, marker := range markers {
 		marker.LSPosition = converters.PositionToLineAndCharacter(testFileInfo, core.TextPos(marker.Position))

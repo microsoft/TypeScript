@@ -1,0 +1,11 @@
+--- old.renameFunctionParameter2.baseline.jsonc
++++ new.renameFunctionParameter2.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameFunctionParameter2.ts ===
+ // /**
+-//  * @param {number} [|pRENAME|]
++//  * @param {number} p
+ //  */
+ // const foo = function foo([|pRENAME|]/*RENAME*/) {
+ //     return [|pRENAME|];

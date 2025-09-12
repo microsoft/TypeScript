@@ -1,0 +1,35 @@
+// === goToDefinition ===
+// === /goToDefinitionFunctionType.ts ===
+// const [|c|]: () => void;
+// /*GOTO DEF*/c();
+// function test(cb: () => void) {
+//     cb();
+// }
+// // --- (line: 6) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionFunctionType.ts ===
+// const c: () => void;
+// c();
+// function test([|cb|]: () => void) {
+//     /*GOTO DEF*/cb();
+// }
+// class C {
+//     prop: () => void;
+// // --- (line: 8) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionFunctionType.ts ===
+// --- (line: 3) skipped ---
+//     cb();
+// }
+// class C {
+//     [|prop|]: () => void;
+//     m() {
+//         this./*GOTO DEF*/prop();
+//     }
+// }

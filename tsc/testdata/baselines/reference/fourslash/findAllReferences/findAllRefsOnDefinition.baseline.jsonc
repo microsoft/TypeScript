@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /findAllRefsOnDefinition-import.ts ===
+// --- (line: 3) skipped ---
+// 
+//     }
+// 
+//     /*FIND ALL REFS*/public start(){
+//         return this;
+//     }
+// 
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsOnDefinition-import.ts ===
+// --- (line: 3) skipped ---
+// 
+//     }
+// 
+//     public /*FIND ALL REFS*/[|start|](){
+//         return this;
+//     }
+// 
+// // --- (line: 11) skipped ---
+
+// === /findAllRefsOnDefinition.ts ===
+// import Second = require("./findAllRefsOnDefinition-import");
+// 
+// var second = new Second.Test()
+// second.[|start|]();
+// second.stop();
+
+
+
+// === findAllReferences ===
+// === /findAllRefsOnDefinition-import.ts ===
+// --- (line: 3) skipped ---
+// 
+//     }
+// 
+//     public [|start|](){
+//         return this;
+//     }
+// 
+// // --- (line: 11) skipped ---
+
+// === /findAllRefsOnDefinition.ts ===
+// import Second = require("./findAllRefsOnDefinition-import");
+// 
+// var second = new Second.Test()
+// second./*FIND ALL REFS*/[|start|]();
+// second.stop();

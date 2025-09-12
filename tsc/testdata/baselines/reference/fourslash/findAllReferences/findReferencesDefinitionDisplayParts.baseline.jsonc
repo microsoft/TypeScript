@@ -1,0 +1,43 @@
+// === findAllReferences ===
+// === /findReferencesDefinitionDisplayParts.ts ===
+// class [|Gre/*FIND ALL REFS*/eter|] {
+//     someFunction() { this;  }
+// }
+// 
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findReferencesDefinitionDisplayParts.ts ===
+// class Greeter {
+//     someFunction() { [|th/*FIND ALL REFS*/is|];  }
+// }
+// 
+// type Options = "option 1" | "option 2";
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findReferencesDefinitionDisplayParts.ts ===
+// class Greeter {
+//     someFunction() { this;  }
+// }
+// 
+// type Options = "opt/*FIND ALL REFS*/ion 1" | "option 2";
+// let myOption: Options = "option 1";
+// 
+// someLabel:
+// break someLabel;
+
+
+
+// === findAllReferences ===
+// === /findReferencesDefinitionDisplayParts.ts ===
+// --- (line: 4) skipped ---
+// type Options = "option 1" | "option 2";
+// let myOption: Options = "option 1";
+// 
+// [|some/*FIND ALL REFS*/Label|]:
+// break [|someLabel|];

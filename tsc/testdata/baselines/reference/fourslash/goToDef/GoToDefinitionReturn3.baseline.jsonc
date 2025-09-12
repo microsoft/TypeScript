@@ -1,8 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinitionReturn3.ts ===
-
-// class C {
-//     [|m|]() {
-//         /*GO TO DEFINITION*/return 1;
-//     }
-// }

@@ -12,28 +12,28 @@ func TestCompletionListPrivateNamesMethods(t *testing.T) {
 	t.Parallel()
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = ` class Foo {
-    #x() {};
-    y() {};
- }
- class Bar extends Foo {
-    #z() {};
-    t() {};
-    constructor() {
-        this./*1*/
-        class Baz {
-            #z() {};
-            #u() {};
-            v() {};
-            constructor() {
-                this./*2*/
-                new Bar()./*3*/
-            }
-        }
-    }
- }
+	const content = `class Foo {
+   #x() {};
+   y() {};
+}
+class Bar extends Foo {
+   #z() {};
+   t() {};
+   constructor() {
+       this./*1*/
+       class Baz {
+           #z() {};
+           #u() {};
+           v() {};
+           constructor() {
+               this./*2*/
+               new Bar()./*3*/
+           }
+       }
+   }
+}
 
- new Foo()./*4*/`
+new Foo()./*4*/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

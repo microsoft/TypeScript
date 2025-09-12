@@ -1,0 +1,7 @@
+// === goToDefinition ===
+// === /main.ts ===
+// class C {
+//   static [|[Symbol.hasInstance]|](value: unknown): boolean { return true; }
+// }
+// declare var obj: any;
+// obj /*GOTO DEF*/instanceof C;

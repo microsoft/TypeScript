@@ -1,6 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinitionSwitchCase7.ts ===
-
-// switch (null) {
-//   case null:
-//     export /*GO TO DEFINITION*/default 123;

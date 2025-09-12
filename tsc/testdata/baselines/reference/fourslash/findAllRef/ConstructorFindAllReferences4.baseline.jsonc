@@ -1,9 +1,0 @@
-// === findAllReferences ===
-// === /constructorFindAllReferences4.ts ===
-
-// export class C {
-//     /*FIND ALL REFS*/protected constructor() { }
-//     public foo() { }
-// }
-// 
-// new C().foo();

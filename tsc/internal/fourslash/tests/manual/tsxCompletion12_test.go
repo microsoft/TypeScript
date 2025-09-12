@@ -17,23 +17,23 @@ func TestTsxCompletion12(t *testing.T) {
 	const content = `//@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
- declare module JSX {
-     interface Element { }
-     interface IntrinsicElements {
-     }
-     interface ElementAttributesProperty { props; }
- }
- interface OptionPropBag {
-     propx: number
-     propString: "hell"
-     optional?: boolean
- }
- declare function Opt(attributes: OptionPropBag): JSX.Element;
- let opt = <Opt /*1*/ />;
- let opt1 = <Opt [|prop|]/*2*/ />;
- let opt2 = <Opt propx={100} /*3*/ />;
- let opt3 = <Opt propx={100} optional /*4*/ />;
- let opt4 = <Opt wrong /*5*/ />;`
+declare module JSX {
+    interface Element { }
+    interface IntrinsicElements {
+    }
+    interface ElementAttributesProperty { props; }
+}
+interface OptionPropBag {
+    propx: number
+    propString: "hell"
+    optional?: boolean
+}
+declare function Opt(attributes: OptionPropBag): JSX.Element;
+let opt = <Opt /*1*/ />;
+let opt1 = <Opt [|prop|]/*2*/ />;
+let opt2 = <Opt propx={100} /*3*/ />;
+let opt3 = <Opt propx={100} optional /*4*/ />;
+let opt4 = <Opt wrong /*5*/ />;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, []string{"1", "5"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

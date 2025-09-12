@@ -1,0 +1,163 @@
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     /*FIND ALL REFS*/[|doStuff|]() { }
+//     propName: string;
+// }
+// interface interface1 extends interface1 {
+//     doStuff(): void;
+//     propName: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     [|doStuff|]() { }
+//     propName: string;
+// }
+// 
+// var v: class2;
+// v.[|doStuff|]();
+// v.propName;
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     doStuff() { }
+//     /*FIND ALL REFS*/[|propName|]: string;
+// }
+// interface interface1 extends interface1 {
+//     doStuff(): void;
+//     propName: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     doStuff() { }
+//     [|propName|]: string;
+// }
+// 
+// var v: class2;
+// v.doStuff();
+// v.[|propName|];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     doStuff() { }
+//     propName: string;
+// }
+// interface interface1 extends interface1 {
+//     /*FIND ALL REFS*/[|doStuff|](): void;
+//     propName: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     [|doStuff|]() { }
+//     propName: string;
+// }
+// 
+// var v: class2;
+// v.[|doStuff|]();
+// v.propName;
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// --- (line: 3) skipped ---
+// }
+// interface interface1 extends interface1 {
+//     doStuff(): void;
+//     /*FIND ALL REFS*/[|propName|]: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     doStuff() { }
+//     [|propName|]: string;
+// }
+// 
+// var v: class2;
+// v.doStuff();
+// v.[|propName|];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     [|doStuff|]() { }
+//     propName: string;
+// }
+// interface interface1 extends interface1 {
+//     [|doStuff|](): void;
+//     propName: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     /*FIND ALL REFS*/[|doStuff|]() { }
+//     propName: string;
+// }
+// 
+// var v: class2;
+// v.[|doStuff|]();
+// v.propName;
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     [|doStuff|]() { }
+//     propName: string;
+// }
+// interface interface1 extends interface1 {
+//     [|doStuff|](): void;
+//     propName: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     [|doStuff|]() { }
+//     propName: string;
+// }
+// 
+// var v: class2;
+// v./*FIND ALL REFS*/[|doStuff|]();
+// v.propName;
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     doStuff() { }
+//     [|propName|]: string;
+// }
+// interface interface1 extends interface1 {
+//     doStuff(): void;
+//     [|propName|]: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     doStuff() { }
+//     /*FIND ALL REFS*/[|propName|]: string;
+// }
+// 
+// var v: class2;
+// v.doStuff();
+// v.[|propName|];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInheritedProperties3.ts ===
+// class class1 extends class1 {
+//     doStuff() { }
+//     [|propName|]: string;
+// }
+// interface interface1 extends interface1 {
+//     doStuff(): void;
+//     [|propName|]: string;
+// }
+// class class2 extends class1 implements interface1 {
+//     doStuff() { }
+//     [|propName|]: string;
+// }
+// 
+// var v: class2;
+// v.doStuff();
+// v./*FIND ALL REFS*/[|propName|];

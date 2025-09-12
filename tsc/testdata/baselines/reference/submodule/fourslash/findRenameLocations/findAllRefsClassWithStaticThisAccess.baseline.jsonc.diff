@@ -1,0 +1,14 @@
+--- old.findAllRefsClassWithStaticThisAccess.baseline.jsonc
++++ new.findAllRefsClassWithStaticThisAccess.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     static s() {
+ //         this;
+ //     }
+-//     static get f() {
+-//         return this;
+-// 
+-//         function inner() { this; }
+-//         class Inner { x = this; }
+-//     }
+-// }
++// // --- (line: 5) skipped ---

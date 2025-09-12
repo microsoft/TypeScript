@@ -1,8 +1,0 @@
-// === goToDefinition ===
-// === /foo.ts ===
-
-// export function [|bar|]() { return "bar"; }
-// var x = import("./foo");
-// x.then(foo => {
-//     foo.b/*GO TO DEFINITION*/ar(); 
-// })

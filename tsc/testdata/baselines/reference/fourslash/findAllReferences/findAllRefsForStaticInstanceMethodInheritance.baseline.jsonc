@@ -1,0 +1,91 @@
+// === findAllReferences ===
+// === /findAllRefsForStaticInstanceMethodInheritance.ts ===
+// class X{
+// 	/*FIND ALL REFS*/[|foo|](): void{}
+// }
+// 
+// class Y extends X{
+// 	static foo(): void{}
+// }
+// 
+// class Z extends Y{
+// 	static foo(): void{}
+// 	[|foo|](): void{}
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.[|foo|]();
+// y.[|foo|]();
+// z.[|foo|]();
+// Y.foo();
+// Z.foo();
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForStaticInstanceMethodInheritance.ts ===
+// class X{
+// 	foo(): void{}
+// }
+// 
+// class Y extends X{
+// 	static /*FIND ALL REFS*/[|foo|](): void{}
+// }
+// 
+// class Z extends Y{
+// // --- (line: 10) skipped ---
+
+// --- (line: 16) skipped ---
+// x.foo();
+// y.foo();
+// z.foo();
+// Y.[|foo|]();
+// Z.foo();
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForStaticInstanceMethodInheritance.ts ===
+// --- (line: 6) skipped ---
+// }
+// 
+// class Z extends Y{
+// 	static /*FIND ALL REFS*/[|foo|](): void{}
+// 	foo(): void{}
+// }
+// 
+// // --- (line: 14) skipped ---
+
+// --- (line: 17) skipped ---
+// y.foo();
+// z.foo();
+// Y.foo();
+// Z.[|foo|]();
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForStaticInstanceMethodInheritance.ts ===
+// class X{
+// 	[|foo|](): void{}
+// }
+// 
+// class Y extends X{
+// 	static foo(): void{}
+// }
+// 
+// class Z extends Y{
+// 	static foo(): void{}
+// 	/*FIND ALL REFS*/[|foo|](): void{}
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.[|foo|]();
+// y.[|foo|]();
+// z.[|foo|]();
+// Y.foo();
+// Z.foo();

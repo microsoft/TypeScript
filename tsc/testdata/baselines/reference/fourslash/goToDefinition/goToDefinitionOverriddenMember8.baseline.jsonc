@@ -1,0 +1,11 @@
+// === goToDefinition ===
+// === /a.ts ===
+// export class A {
+//     [|m|]() {}
+// }
+
+// === /b.ts ===
+// import { A } from "./a";
+// class B extends A {
+//     /*GOTO DEF*/override m() {}
+// }

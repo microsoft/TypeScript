@@ -1,0 +1,18 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfTypeAlias.ts ===
+// /*FIND ALL REFS*/type Alias= number;
+// let n: Alias = 12;
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfTypeAlias.ts ===
+// type /*FIND ALL REFS*/[|Alias|]= number;
+// let n: [|Alias|] = 12;
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfTypeAlias.ts ===
+// type [|Alias|]= number;
+// let n: /*FIND ALL REFS*/[|Alias|] = 12;

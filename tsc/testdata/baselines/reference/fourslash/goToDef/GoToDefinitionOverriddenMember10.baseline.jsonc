@@ -1,8 +1,0 @@
-// === goToDefinition ===
-// === /a.js ===
-
-// class Foo {}
-// class Bar extends Foo {
-//     /** @override/*GO TO DEFINITION*/ */
-//     m() {}
-// }

@@ -1,0 +1,95 @@
+// === goToDefinition ===
+// === /goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   [|kind|]: "a";
+//   prop: number;
+// };
+// 
+// interface B {
+//   kind: "b";
+//   prop: string;
+// }
+// 
+// const u: U = {
+//   /*GOTO DEF*/kind: "a",
+//   prop: 0,
+// };
+// const u2: U = {
+// // --- (line: 18) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   kind: "a";
+//   [|prop|]: number;
+// };
+// 
+// interface B {
+//   kind: "b";
+//   prop: string;
+// }
+// 
+// const u: U = {
+//   kind: "a",
+//   /*GOTO DEF*/prop: 0,
+// };
+// const u2: U = {
+//   kind: "bogus",
+//   prop: 0,
+// };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   [|kind|]: "a";
+//   prop: number;
+// };
+// 
+// interface B {
+//   [|kind|]: "b";
+//   prop: string;
+// }
+// 
+// const u: U = {
+//   kind: "a",
+//   prop: 0,
+// };
+// const u2: U = {
+//   /*GOTO DEF*/kind: "bogus",
+//   prop: 0,
+// };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   kind: "a";
+//   [|prop|]: number;
+// };
+// 
+// interface B {
+//   kind: "b";
+//   [|prop|]: string;
+// }
+// 
+// const u: U = {
+//   kind: "a",
+//   prop: 0,
+// };
+// const u2: U = {
+//   kind: "bogus",
+//   /*GOTO DEF*/prop: 0,
+// };

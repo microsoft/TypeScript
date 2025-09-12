@@ -1,0 +1,13 @@
+// === goToDefinition ===
+// === /a.ts ===
+// [|export module Module {
+// }
+// export class Class {
+//     private f;
+// }
+// export interface Interface {
+//     x;
+// }|]
+
+// === /b.ts ===
+// import /*GOTO DEF*/alias = require("./a");

@@ -1,0 +1,25 @@
+// === findRenameLocations ===
+// === /jsDocTypedef_form3.js ===
+// /**
+//  * @typedef /*RENAME*/[|PersonRENAME|]
+//  * @type {Object}
+//  * @property {number} age
+//  * @property {string} name
+//  */
+// 
+// /** @type {[|PersonRENAME|]} */
+// var person;
+
+
+
+// === findRenameLocations ===
+// === /jsDocTypedef_form3.js ===
+// /**
+//  * @typedef [|PersonRENAME|]
+//  * @type {Object}
+//  * @property {number} age
+//  * @property {string} name
+//  */
+// 
+// /** @type {/*RENAME*/[|PersonRENAME|]} */
+// var person;

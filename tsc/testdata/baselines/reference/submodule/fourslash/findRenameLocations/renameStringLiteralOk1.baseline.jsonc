@@ -1,0 +1,17 @@
+// === findRenameLocations ===
+// === /renameStringLiteralOk1.ts ===
+// declare function f(): '/*RENAME*/foo' | 'bar'
+// class Foo {
+//     f = f()
+// }
+// // --- (line: 5) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralOk1.ts ===
+// --- (line: 3) skipped ---
+// }
+// const d: 'foo' = 'foo'
+// declare const ff: Foo
+// ff.f = '/*RENAME*/foo'

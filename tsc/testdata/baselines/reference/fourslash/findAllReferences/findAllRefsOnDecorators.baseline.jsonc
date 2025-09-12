@@ -1,0 +1,86 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/function decorator(target) {
+//     return target;
+// }
+// decorator();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// function /*FIND ALL REFS*/[|decorator|](target) {
+//     return target;
+// }
+// [|decorator|]();
+
+// === /b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// function [|decorator|](target) {
+//     return target;
+// }
+// /*FIND ALL REFS*/[|decorator|]();
+
+// === /b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// function [|decorator|](target) {
+//     return target;
+// }
+// [|decorator|]();
+
+// === /b.ts ===
+// @/*FIND ALL REFS*/[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// function [|decorator|](target) {
+//     return target;
+// }
+// [|decorator|]();
+
+// === /b.ts ===
+// @[|decorator|] @/*FIND ALL REFS*/[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// function [|decorator|](target) {
+//     return target;
+// }
+// [|decorator|]();
+
+// === /b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @/*FIND ALL REFS*/[|decorator|]
+//     method() {}
+// }

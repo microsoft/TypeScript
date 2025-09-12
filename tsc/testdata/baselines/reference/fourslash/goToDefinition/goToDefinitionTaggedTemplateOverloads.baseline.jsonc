@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /goToDefinitionTaggedTemplateOverloads.ts ===
+// function [|f|](strs: TemplateStringsArray, x: number): void;
+// function f(strs: TemplateStringsArray, x: boolean): void;
+// function f(strs: TemplateStringsArray, x: number | boolean) {}
+// 
+// /*GOTO DEF*/f`${0}`;
+// f`${false}`;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionTaggedTemplateOverloads.ts ===
+// function f(strs: TemplateStringsArray, x: number): void;
+// function [|f|](strs: TemplateStringsArray, x: boolean): void;
+// function f(strs: TemplateStringsArray, x: number | boolean) {}
+// 
+// f`${0}`;
+// /*GOTO DEF*/f`${false}`;

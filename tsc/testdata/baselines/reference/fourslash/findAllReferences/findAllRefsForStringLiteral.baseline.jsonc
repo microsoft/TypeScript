@@ -1,0 +1,8 @@
+// === findAllReferences ===
+// === /a.ts ===
+// interface Foo {
+//     property: /*FIND ALL REFS*/"foo";
+// }
+// /**
+//  * @type {{ property: "foo"}}
+// // --- (line: 6) skipped ---

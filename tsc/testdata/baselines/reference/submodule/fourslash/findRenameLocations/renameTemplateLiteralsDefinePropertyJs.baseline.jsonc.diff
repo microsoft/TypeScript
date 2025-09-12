@@ -1,0 +1,167 @@
+--- old.renameTemplateLiteralsDefinePropertyJs.baseline.jsonc
++++ new.renameTemplateLiteralsDefinePropertyJs.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.js ===
+ // let obj = {};
+ // 
+-// Object.defineProperty(obj, `/*RENAME*/[|propRENAME|]`, { value: 0 });
+-// 
+-// obj = {
+-//     [`[|propRENAME|]`]: 1
+-// };
+-// 
+-// obj.[|propRENAME|];
+-// obj['[|propRENAME|]'];
+-// obj["[|propRENAME|]"];
+-// obj[`[|propRENAME|]`];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /a.js ===
+-// let obj = {};
+-// 
+-// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+-// 
+-// obj = {
+-//     [`/*RENAME*/[|propRENAME|]`]: 1
+-// };
+-// 
+-// obj.[|propRENAME|];
+-// obj['[|propRENAME|]'];
+-// obj["[|propRENAME|]"];
+-// obj[`[|propRENAME|]`];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /a.js ===
+-// let obj = {};
+-// 
+-// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+-// 
+-// obj = {
+-//     [`[|propRENAME|]`]: 1
+-// };
+-// 
+-// obj./*RENAME*/[|propRENAME|];
+-// obj['[|propRENAME|]'];
+-// obj["[|propRENAME|]"];
+-// obj[`[|propRENAME|]`];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /a.js ===
+-// let obj = {};
+-// 
+-// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+-// 
+-// obj = {
+-//     [`[|propRENAME|]`]: 1
+-// };
+-// 
+-// obj.[|propRENAME|];
+-// obj['/*RENAME*/[|propRENAME|]'];
+-// obj["[|propRENAME|]"];
+-// obj[`[|propRENAME|]`];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /a.js ===
+-// let obj = {};
+-// 
+-// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+-// 
+-// obj = {
+-//     [`[|propRENAME|]`]: 1
+-// };
+-// 
+-// obj.[|propRENAME|];
+-// obj['[|propRENAME|]'];
+-// obj["/*RENAME*/[|propRENAME|]"];
+-// obj[`[|propRENAME|]`];
+-
+-
+-
+-// === findRenameLocations ===
+-// === /a.js ===
+-// let obj = {};
+-// 
+-// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+-// 
+-// obj = {
+-//     [`[|propRENAME|]`]: 1
+-// };
+-// 
+-// obj.[|propRENAME|];
+-// obj['[|propRENAME|]'];
+-// obj["[|propRENAME|]"];
+-// obj[`/*RENAME*/[|propRENAME|]`];
++// Object.defineProperty(obj, `/*RENAME*/prop`, { value: 0 });
++// 
++// obj = {
++//     [`prop`]: 1
++// // --- (line: 7) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /a.js ===
++// let obj = {};
++// 
++// Object.defineProperty(obj, `prop`, { value: 0 });
++// 
++// obj = {
++//     [`/*RENAME*/prop`]: 1
++// };
++// 
++// obj.prop;
++// // --- (line: 10) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /a.js ===
++// --- (line: 5) skipped ---
++//     [`prop`]: 1
++// };
++// 
++// obj./*RENAME*/prop;
++// obj['prop'];
++// obj["prop"];
++// obj[`prop`];
++
++
++
++// === findRenameLocations ===
++// === /a.js ===
++// --- (line: 6) skipped ---
++// };
++// 
++// obj.prop;
++// obj['/*RENAME*/prop'];
++// obj["prop"];
++// obj[`prop`];
++
++
++
++// === findRenameLocations ===
++// === /a.js ===
++// --- (line: 7) skipped ---
++// 
++// obj.prop;
++// obj['prop'];
++// obj["/*RENAME*/prop"];
++// obj[`prop`];
++
++
++
++// === findRenameLocations ===
++// === /a.js ===
++// --- (line: 8) skipped ---
++// obj.prop;
++// obj['prop'];
++// obj["prop"];
++// obj[`/*RENAME*/prop`];

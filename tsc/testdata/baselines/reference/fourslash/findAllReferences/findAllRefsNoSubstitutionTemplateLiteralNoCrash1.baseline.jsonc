@@ -1,0 +1,3 @@
+// === findAllReferences ===
+// === /findAllRefsNoSubstitutionTemplateLiteralNoCrash1.ts ===
+// type Test = `T/*FIND ALL REFS*/`;

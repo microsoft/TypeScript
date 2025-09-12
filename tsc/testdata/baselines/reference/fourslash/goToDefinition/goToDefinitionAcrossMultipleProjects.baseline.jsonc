@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /a.ts ===
+// var [|x|]: number;
+
+// === /b.ts ===
+// var [|x|]: number;
+
+// === /c.ts ===
+// var [|x|]: number;
+
+// === /d.ts ===
+// var [|x|]: number;
+
+// === /e.ts ===
+// /// <reference path="a.ts" />
+// /// <reference path="b.ts" />
+// /// <reference path="c.ts" />
+// /// <reference path="d.ts" />
+// /*GOTO DEF*/x++;

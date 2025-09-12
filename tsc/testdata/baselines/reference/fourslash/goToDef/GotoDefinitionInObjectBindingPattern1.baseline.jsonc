@@ -1,8 +1,0 @@
-// === goToDefinition ===
-// === /gotoDefinitionInObjectBindingPattern1.ts ===
-
-// --- (line: 3) skipped ---
-// interface Test {
-//   prop2: number
-// }
-// bar<Test>(({[|pr/*GO TO DEFINITION*/op2|]})=>{});

@@ -1,0 +1,55 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/export type T = 0;
+// export const T = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export type /*FIND ALL REFS*/[|T|] = 0;
+// export const T = 0;
+
+// === /b.ts ===
+// const x: import("./a").[|T|] = 0;
+// const x: typeof import("./a").T = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export type T = 0;
+// /*FIND ALL REFS*/export const T = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export type T = 0;
+// export const /*FIND ALL REFS*/[|T|] = 0;
+
+// === /b.ts ===
+// const x: import("./a").T = 0;
+// const x: typeof import("./a").[|T|] = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export type [|T|] = 0;
+// export const T = 0;
+
+// === /b.ts ===
+// const x: import("./a")./*FIND ALL REFS*/[|T|] = 0;
+// const x: typeof import("./a").T = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export type T = 0;
+// export const [|T|] = 0;
+
+// === /b.ts ===
+// const x: import("./a").T = 0;
+// const x: typeof import("./a")./*FIND ALL REFS*/[|T|] = 0;

@@ -1,0 +1,67 @@
+// === findAllReferences ===
+// === /findAllRefsPrivateNameProperties.ts ===
+// class C {
+//     /*FIND ALL REFS*/[|#foo|] = 10;
+//     constructor() {
+//         this.[|#foo|] = 20;
+//         [|#foo|] in this;
+//     }
+// }
+// class D extends C {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameProperties.ts ===
+// class C {
+//     [|#foo|] = 10;
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|] = 20;
+//         [|#foo|] in this;
+//     }
+// }
+// class D extends C {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameProperties.ts ===
+// class C {
+//     [|#foo|] = 10;
+//     constructor() {
+//         this.[|#foo|] = 20;
+//         /*FIND ALL REFS*/[|#foo|] in this;
+//     }
+// }
+// class D extends C {
+// // --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameProperties.ts ===
+// --- (line: 11) skipped ---
+//     }
+// }
+// class E {
+//     /*FIND ALL REFS*/[|#foo|]: number;
+//     constructor() {
+//         this.[|#foo|] = 20;
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameProperties.ts ===
+// --- (line: 11) skipped ---
+//     }
+// }
+// class E {
+//     [|#foo|]: number;
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|] = 20;
+//     }
+// }

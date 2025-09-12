@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingElementPropertyName01.ts ===
+// interface I {
+//     [|property1|]: number;
+//     property2: string;
+// }
+// 
+// var foo: I;
+// var { /*GOTO DEF*/property1: prop1 } = foo;

@@ -1,0 +1,45 @@
+// === goToDefinition ===
+// === /goToDefinitionPrivateName.ts ===
+// class A {
+//     #method() { }
+//     [|#foo|] = 3;
+//     get #prop() { return ""; }
+//     set #prop(value: string) {  }
+//     constructor() {
+//         this./*GOTO DEF*/#foo
+//         this.#method
+//         this.#prop
+//     }
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionPrivateName.ts ===
+// class A {
+//     [|#method|]() { }
+//     #foo = 3;
+//     get #prop() { return ""; }
+//     set #prop(value: string) {  }
+//     constructor() {
+//         this.#foo
+//         this./*GOTO DEF*/#method
+//         this.#prop
+//     }
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionPrivateName.ts ===
+// class A {
+//     #method() { }
+//     #foo = 3;
+//     get [|#prop|]() { return ""; }
+//     set [|#prop|](value: string) {  }
+//     constructor() {
+//         this.#foo
+//         this.#method
+//         this./*GOTO DEF*/#prop
+//     }
+// }

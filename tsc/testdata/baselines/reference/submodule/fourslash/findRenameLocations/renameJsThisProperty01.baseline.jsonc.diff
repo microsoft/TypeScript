@@ -1,0 +1,24 @@
+--- old.renameJsThisProperty01.baseline.jsonc
++++ new.renameJsThisProperty01.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /a.js ===
+ // function bar() {
+-//     this./*RENAME*/[|xRENAME|] = 10;
++//     this./*RENAME*/x = 10;
+ // }
+ // var t = new bar();
+-// t.[|xRENAME|] = 11;
++// t.x = 11;
+
+
+
+ // === findRenameLocations ===
+ // === /a.js ===
+ // function bar() {
+-//     this.[|xRENAME|] = 10;
++//     this.x = 10;
+ // }
+ // var t = new bar();
+-// t./*RENAME*/[|xRENAME|] = 11;
++// t./*RENAME*/x = 11;

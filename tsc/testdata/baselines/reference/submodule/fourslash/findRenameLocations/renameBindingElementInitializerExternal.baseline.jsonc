@@ -1,0 +1,115 @@
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const /*RENAME*/[|externalRENAME|] = true;
+// 
+// function f({
+//     lvl1 = external,
+// // --- (line: 5) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const external = true;
+// 
+// function f({
+//     lvl1 = /*RENAME*/[|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// } = obj;
+
+
+
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const external = true;
+// 
+// function f({
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = /*RENAME*/[|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// } = obj;
+
+
+
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const external = true;
+// 
+// function f({
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = /*RENAME*/[|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// } = obj;
+
+
+
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const external = true;
+// 
+// function f({
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = /*RENAME*/[|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// } = obj;
+
+
+
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const external = true;
+// 
+// function f({
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = /*RENAME*/[|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// } = obj;
+
+
+
+// === findRenameLocations ===
+// === /renameBindingElementInitializerExternal.ts ===
+// const external = true;
+// 
+// function f({
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = /*RENAME*/[|externalRENAME|]
+// } = obj;

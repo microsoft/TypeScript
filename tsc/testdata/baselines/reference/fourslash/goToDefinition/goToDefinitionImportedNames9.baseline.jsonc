@@ -1,0 +1,10 @@
+// === goToDefinition ===
+// === /a.js ===
+// class [|Class|] {
+//     f;
+// }
+//  export { Class };
+
+// === /b.js ===
+// const { Class } = require("./a");
+//  /*GOTO DEF*/Class;

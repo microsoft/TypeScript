@@ -1,0 +1,49 @@
+// === findAllReferences ===
+// === /referencesForInheritedProperties4.ts ===
+// class class1 extends class1 {
+//    /*FIND ALL REFS*/[|doStuff|]() { }
+//    propName: string;
+// }
+// 
+// var c: class1;
+// c.[|doStuff|]();
+// c.propName;
+
+
+
+// === findAllReferences ===
+// === /referencesForInheritedProperties4.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    /*FIND ALL REFS*/[|propName|]: string;
+// }
+// 
+// var c: class1;
+// c.doStuff();
+// c.[|propName|];
+
+
+
+// === findAllReferences ===
+// === /referencesForInheritedProperties4.ts ===
+// class class1 extends class1 {
+//    [|doStuff|]() { }
+//    propName: string;
+// }
+// 
+// var c: class1;
+// c./*FIND ALL REFS*/[|doStuff|]();
+// c.propName;
+
+
+
+// === findAllReferences ===
+// === /referencesForInheritedProperties4.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    [|propName|]: string;
+// }
+// 
+// var c: class1;
+// c.doStuff();
+// c./*FIND ALL REFS*/[|propName|];

@@ -1,0 +1,54 @@
+// === findRenameLocations ===
+// === /renameLocationsForClassExpression01.ts ===
+// class Foo {
+// }
+// 
+// var x = class /*RENAME*/[|FooRENAME|] {
+//     doIt() {
+//         return [|FooRENAME|];
+//     }
+// 
+//     static doItStatically() {
+//         return [|FooRENAME|].y;
+//     }
+// }
+// 
+// // --- (line: 14) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameLocationsForClassExpression01.ts ===
+// class Foo {
+// }
+// 
+// var x = class [|FooRENAME|] {
+//     doIt() {
+//         return /*RENAME*/[|FooRENAME|];
+//     }
+// 
+//     static doItStatically() {
+//         return [|FooRENAME|].y;
+//     }
+// }
+// 
+// // --- (line: 14) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /renameLocationsForClassExpression01.ts ===
+// class Foo {
+// }
+// 
+// var x = class [|FooRENAME|] {
+//     doIt() {
+//         return [|FooRENAME|];
+//     }
+// 
+//     static doItStatically() {
+//         return /*RENAME*/[|FooRENAME|].y;
+//     }
+// }
+// 
+// // --- (line: 14) skipped ---

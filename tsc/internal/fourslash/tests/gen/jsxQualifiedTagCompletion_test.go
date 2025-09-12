@@ -13,11 +13,11 @@ func TestJsxQualifiedTagCompletion(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
- declare var React: any;
- namespace NS {
-     export var Foo: any = null;
- }
- const j = <NS.Foo>Hello!/**/
+declare var React: any;
+namespace NS {
+    export var Foo: any = null;
+}
+const j = <NS.Foo>Hello!/**/
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.GoToMarker(t, "")

@@ -1,0 +1,6 @@
+// === goToDefinition ===
+// === /goToDefinitionInstanceof1.ts ===
+// class  [|C|] {
+// }
+// declare var obj: any;
+// obj /*GOTO DEF*/instanceof C;

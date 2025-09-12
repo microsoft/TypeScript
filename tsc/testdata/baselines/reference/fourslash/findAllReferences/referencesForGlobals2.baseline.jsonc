@@ -1,0 +1,27 @@
+// === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+// /*FIND ALL REFS*/class globalClass {
+//     public f() { }
+// }
+
+
+
+// === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+// class /*FIND ALL REFS*/[|globalClass|] {
+//     public f() { }
+// }
+
+// === /referencesForGlobals_2.ts ===
+// var c = [|globalClass|]();
+
+
+
+// === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+// class [|globalClass|] {
+//     public f() { }
+// }
+
+// === /referencesForGlobals_2.ts ===
+// var c = /*FIND ALL REFS*/[|globalClass|]();

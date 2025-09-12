@@ -1,0 +1,46 @@
+--- old.jsdocTypedefTagRename01.baseline.jsonc
++++ new.jsdocTypedefTagRename01.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form1.js ===
+-// 
+ // /** @typedef {(string | number)} */
+ // var /*RENAME*/[|NumberLikeRENAME|];
+ // 
+ // [|NumberLikeRENAME|] = 10;
+ // 
+-// /** @type {[|NumberLikeRENAME|]} */
++// /** @type {NumberLike} */
+ // var numberLike;
+
+
+
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form1.js ===
+-// 
+ // /** @typedef {(string | number)} */
+ // var [|NumberLikeRENAME|];
+ // 
+ // /*RENAME*/[|NumberLikeRENAME|] = 10;
+ // 
+-// /** @type {[|NumberLikeRENAME|]} */
++// /** @type {NumberLike} */
+ // var numberLike;
+
+
+
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form1.js ===
+-// 
+ // /** @typedef {(string | number)} */
+-// var [|NumberLikeRENAME|];
++// var NumberLike;
+ // 
+-// [|NumberLikeRENAME|] = 10;
++// NumberLike = 10;
+ // 
+ // /** @type {/*RENAME*/[|NumberLikeRENAME|]} */
+ // var numberLike;

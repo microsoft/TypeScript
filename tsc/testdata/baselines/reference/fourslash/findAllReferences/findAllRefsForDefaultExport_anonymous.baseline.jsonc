@@ -1,0 +1,3 @@
+// === findAllReferences ===
+// === /a.ts ===
+// export /*FIND ALL REFS*/default 1;

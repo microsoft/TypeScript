@@ -1,0 +1,73 @@
+--- old.renameBindingElementInitializerExternal.baseline.jsonc
++++ new.renameBindingElementInitializerExternal.baseline.jsonc
+@@= skipped -2, +2 lines =@@
+ // const /*RENAME*/[|externalRENAME|] = true;
+ // 
+ // function f({
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// } = obj;
++//     lvl1 = external,
++// // --- (line: 5) skipped ---
+
+
+
+ // === findRenameLocations ===
+ // === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
++// const external = true;
+ // 
+ // function f({
+ //     lvl1 = /*RENAME*/[|externalRENAME|],
+@@= skipped -33, +25 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
++// const external = true;
+ // 
+ // function f({
+ //     lvl1 = [|externalRENAME|],
+@@= skipped -18, +18 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
++// const external = true;
+ // 
+ // function f({
+ //     lvl1 = [|externalRENAME|],
+@@= skipped -18, +18 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
++// const external = true;
+ // 
+ // function f({
+ //     lvl1 = [|externalRENAME|],
+@@= skipped -18, +18 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
++// const external = true;
+ // 
+ // function f({
+ //     lvl1 = [|externalRENAME|],
+@@= skipped -18, +18 lines =@@
+
+ // === findRenameLocations ===
+ // === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
++// const external = true;
+ // 
+ // function f({
+ //     lvl1 = [|externalRENAME|],

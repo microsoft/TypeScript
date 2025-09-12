@@ -1,0 +1,42 @@
+--- old.renameForDefaultExport01.baseline.jsonc
++++ new.renameForDefaultExport01.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport01.ts ===
+ // export default class /*RENAME*/[|DefaultExportedClassRENAME|] {
+ // }
+ // /*
+-//  *  Commenting [|DefaultExportedClassRENAME|]
++//  *  Commenting DefaultExportedClass
+ //  */
+ // 
+ // var x: [|DefaultExportedClassRENAME|];
+@@= skipped -13, +12 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport01.ts ===
+ // export default class [|DefaultExportedClassRENAME|] {
+ // }
+ // /*
+-//  *  Commenting [|DefaultExportedClassRENAME|]
++//  *  Commenting DefaultExportedClass
+ //  */
+ // 
+ // var x: /*RENAME*/[|DefaultExportedClassRENAME|];
+@@= skipped -15, +14 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport01.ts ===
+ // export default class [|DefaultExportedClassRENAME|] {
+ // }
+ // /*
+-//  *  Commenting [|DefaultExportedClassRENAME|]
++//  *  Commenting DefaultExportedClass
+ //  */
+ // 
+ // var x: [|DefaultExportedClassRENAME|];

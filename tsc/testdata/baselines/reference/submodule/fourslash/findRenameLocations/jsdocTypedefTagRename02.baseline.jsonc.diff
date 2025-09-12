@@ -1,0 +1,20 @@
+--- old.jsdocTypedefTagRename02.baseline.jsonc
++++ new.jsdocTypedefTagRename02.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form2.js ===
+-// 
+ // /** @typedef {(string | number)} /*RENAME*/[|NumberLikeRENAME|] */
+ // 
+ // /** @type {[|NumberLikeRENAME|]} */
+@@= skipped -9, +7 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /jsDocTypedef_form2.js ===
+-// 
+ // /** @typedef {(string | number)} [|NumberLikeRENAME|] */
+ // 
+ // /** @type {/*RENAME*/[|NumberLikeRENAME|]} */

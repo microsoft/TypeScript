@@ -1,0 +1,104 @@
+// === findAllReferences ===
+// === /findAllRefsIsDefinition.ts ===
+// declare function [|foo|](a: number): number;
+// declare function [|foo|](a: string): string;
+// declare function [|foo|]/*FIND ALL REFS*/(a: string | number): string | number;
+// 
+// function foon(a: number): number;
+// function foon(a: string): string;
+// function foon(a: string | number): string | number {
+//     return a
+// }
+// 
+// [|foo|]; foon;
+// 
+// export const bar = 123;
+// console.log({ bar });
+// // --- (line: 15) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsIsDefinition.ts ===
+// declare function foo(a: number): number;
+// declare function foo(a: string): string;
+// declare function foo(a: string | number): string | number;
+// 
+// function [|foon|](a: number): number;
+// function [|foon|](a: string): string;
+// function [|foon|]/*FIND ALL REFS*/(a: string | number): string | number {
+//     return a
+// }
+// 
+// foo; [|foon|];
+// 
+// export const bar = 123;
+// console.log({ bar });
+// // --- (line: 15) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsIsDefinition.ts ===
+// --- (line: 9) skipped ---
+// 
+// foo; foon;
+// 
+// export const [|bar|]/*FIND ALL REFS*/ = 123;
+// console.log({ [|bar|] });
+// 
+// interface IFoo {
+//     foo(): void;
+// // --- (line: 18) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsIsDefinition.ts ===
+// --- (line: 13) skipped ---
+// console.log({ bar });
+// 
+// interface IFoo {
+//     [|foo|]/*FIND ALL REFS*/(): void;
+// }
+// class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
+//     [|foo|](): void { }
+//     static init() { return new this() }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsIsDefinition.ts ===
+// --- (line: 15) skipped ---
+// interface IFoo {
+//     foo(): void;
+// }
+// class [|Foo|] implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     /*FIND ALL REFS*/constructor(n: number?) { }
+//     foo(): void { }
+//     static init() { return new this() }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsIsDefinition.ts ===
+// --- (line: 13) skipped ---
+// console.log({ bar });
+// 
+// interface IFoo {
+//     [|foo|](): void;
+// }
+// class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
+//     [|foo|]/*FIND ALL REFS*/(): void { }
+//     static init() { return new this() }
+// }

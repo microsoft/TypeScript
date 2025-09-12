@@ -1,0 +1,46 @@
+// === goToDefinition ===
+// === /goToDefinition_super.ts ===
+// class A {
+//     [|constructor() {}|]
+//     x() {}
+// }
+// class [|B|] extends A {}
+// class C extends B {
+//     constructor() {
+//         /*GOTO DEF*/super();
+//     }
+//     method() {
+//         super.x();
+// // --- (line: 12) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinition_super.ts ===
+// class A {
+//     constructor() {}
+//     x() {}
+// }
+// class [|B|] extends A {}
+// class C extends B {
+//     constructor() {
+//         super();
+//     }
+//     method() {
+//         /*GOTO DEF*/super.x();
+//     }
+// }
+// class D {
+// // --- (line: 15) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinition_super.ts ===
+// --- (line: 12) skipped ---
+// }
+// class D {
+//     constructor() {
+//         /*GOTO DEF*/super();
+//     }
+// }

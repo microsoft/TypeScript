@@ -1,0 +1,14 @@
+// === goToDefinition ===
+// === /indexdef.d.ts ===
+// export declare class Foo {
+//     member: string;
+//     [|methodName|](propName: SomeType): void;
+//     otherMethod(): {
+//         x: number;
+//         y?: undefined;
+// // --- (line: 7) skipped ---
+
+// === /mymodule.ts ===
+// import * as mod from "./indexdef";
+// const instance = new mod.Foo();
+// instance./*GOTO DEF*/methodName({member: 12});

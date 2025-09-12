@@ -1,0 +1,138 @@
+// === findAllReferences ===
+// === /findAllReferencesLinkTag2.ts ===
+// namespace NPR {
+//     export class Consider {
+//         This = class {
+//             show() { }
+//         }
+//         [|m|]/*FIND ALL REFS*/() { }
+//     }
+//     /**
+//      * @see {Consider.prototype.[|m|]}
+//      * {@link Consider#[|m|]}
+//      * @see {Consider#This#show}
+//      * {@link Consider.This.show}
+//      * @see {NPR.Consider#This#show}
+// // --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag2.ts ===
+// namespace NPR {
+//     export class Consider {
+//         This = class {
+//             [|show|]/*FIND ALL REFS*/() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * @see {Consider.prototype.m}
+//      * {@link Consider#m}
+//      * @see {Consider#This#[|show|]}
+//      * {@link Consider.This.[|show|]}
+//      * @see {NPR.Consider#This#[|show|]}
+//      * {@link NPR.Consider.This#[|show|]}
+//      * @see {NPR.Consider#This.show} # doesn't parse trailing .
+//      * @see {NPR.Consider.This.[|show|]}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@link NPR.Consider#This#[|show|] hello hello}
+//  * {@link NPR.Consider.This#[|show|]}
+//  * @see {NPR.Consider#This.show} # doesn't parse trailing .
+//  * @see {NPR.Consider.This.[|show|]}
+//  */
+// export function outerref() { }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag2.ts ===
+// namespace NPR {
+//     export class Consider {
+//         [|This|]/*FIND ALL REFS*/ = class {
+//             show() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * @see {Consider.prototype.m}
+//      * {@link Consider#m}
+//      * @see {Consider#[|This|]#show}
+//      * {@link Consider.[|This|].show}
+//      * @see {NPR.Consider#[|This|]#show}
+//      * {@link NPR.Consider.[|This|]#show}
+//      * @see {NPR.Consider#[|This|].show} # doesn't parse trailing .
+//      * @see {NPR.Consider.[|This|].show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@link NPR.Consider#[|This|]#show hello hello}
+//  * {@link NPR.Consider.[|This|]#show}
+//  * @see {NPR.Consider#[|This|].show} # doesn't parse trailing .
+//  * @see {NPR.Consider.[|This|].show}
+//  */
+// export function outerref() { }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag2.ts ===
+// namespace NPR {
+//     export class [|Consider|]/*FIND ALL REFS*/ {
+//         This = class {
+//             show() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * @see {[|Consider|].prototype.m}
+//      * {@link [|Consider|]#m}
+//      * @see {[|Consider|]#This#show}
+//      * {@link [|Consider|].This.show}
+//      * @see {NPR.[|Consider|]#This#show}
+//      * {@link NPR.[|Consider|].This#show}
+//      * @see {NPR.[|Consider|]#This.show} # doesn't parse trailing .
+//      * @see {NPR.[|Consider|].This.show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@link NPR.[|Consider|]#This#show hello hello}
+//  * {@link NPR.[|Consider|].This#show}
+//  * @see {NPR.[|Consider|]#This.show} # doesn't parse trailing .
+//  * @see {NPR.[|Consider|].This.show}
+//  */
+// export function outerref() { }
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag2.ts ===
+// namespace [|NPR|]/*FIND ALL REFS*/ {
+//     export class Consider {
+//         This = class {
+//             show() { }
+// // --- (line: 5) skipped ---
+
+// --- (line: 9) skipped ---
+//      * {@link Consider#m}
+//      * @see {Consider#This#show}
+//      * {@link Consider.This.show}
+//      * @see {[|NPR|].Consider#This#show}
+//      * {@link [|NPR|].Consider.This#show}
+//      * @see {[|NPR|].Consider#This.show} # doesn't parse trailing .
+//      * @see {[|NPR|].Consider.This.show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@link [|NPR|].Consider#This#show hello hello}
+//  * {@link [|NPR|].Consider.This#show}
+//  * @see {[|NPR|].Consider#This.show} # doesn't parse trailing .
+//  * @see {[|NPR|].Consider.This.show}
+//  */
+// export function outerref() { }

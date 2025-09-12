@@ -1,0 +1,7 @@
+// === goToDefinition ===
+// === /a.ts ===
+// export default function [|f|]() {}
+
+// === /b.ts ===
+// import g from "./a";
+// /*GOTO DEF*/g();

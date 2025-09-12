@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /a.js ===
+// /**
+//  * @typedef {Object} [|T|]
+//  * @property {number} a
+//  */
+// 
+// /** @satisfies {/*GOTO DEF*/T} comment */
+// const foo = { a: 1 };

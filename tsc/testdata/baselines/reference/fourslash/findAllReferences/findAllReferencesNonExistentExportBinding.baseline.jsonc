@@ -1,0 +1,3 @@
+// === findAllReferences ===
+// === /bar.ts ===
+// import { [|Foo|]/*FIND ALL REFS*/ } from "./foo";

@@ -1,0 +1,7 @@
+// === findRenameLocations ===
+// === /renameStringPropertyNames2.ts ===
+// --- (line: 4) skipped ---
+// let { foo }: Props = null as any;
+// foo;
+// 
+// let asd: Props = { "foo"/*RENAME*/: true }; // rename foo here

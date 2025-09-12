@@ -1,0 +1,10 @@
+// === goToDefinition ===
+// === /goToDefinitionOverloadsInMultiplePropertyAccesses.ts ===
+// namespace A {
+//     export namespace B {
+//         export function f(value: number): void;
+//         export function [|f|](value: string): void;
+//         export function f(value: number | string) {}
+//     }
+// }
+// A.B./*GOTO DEF*/f("");

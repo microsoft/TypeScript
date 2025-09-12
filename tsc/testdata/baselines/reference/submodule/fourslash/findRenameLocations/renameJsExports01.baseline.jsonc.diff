@@ -1,0 +1,19 @@
+--- old.renameJsExports01.baseline.jsonc
++++ new.renameJsExports01.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.js ===
+ // exports./*RENAME*/[|areaRENAME|] = function (r) { return r * r; }
+
+-// === /b.js ===
+-// var mod = require('./a');
+-// var t = mod.[|areaRENAME|](10);
+-
+
+
+ // === findRenameLocations ===
+@@= skipped -12, +8 lines =@@
+
+ // === /b.js ===
+ // var mod = require('./a');
+-// var t = mod./*RENAME*/[|areaRENAME|](10);
++// var t = mod./*RENAME*/area(10);

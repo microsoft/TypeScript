@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /renamePrivateFields1.ts ===
+// class Foo {
+//    /*RENAME*/#foo = 1;
+// 
+//    getFoo() {
+//        return this.#foo;
+//    }
+// }
+
+
+
+// === findRenameLocations ===
+// === /renamePrivateFields1.ts ===
+// class Foo {
+//    #foo = 1;
+// 
+//    getFoo() {
+//        return this./*RENAME*/#foo;
+//    }
+// }

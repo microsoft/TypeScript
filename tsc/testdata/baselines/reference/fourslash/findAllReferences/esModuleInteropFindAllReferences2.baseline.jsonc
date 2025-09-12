@@ -1,0 +1,26 @@
+// === findAllReferences ===
+// === /a.d.ts ===
+// export as namespace abc;
+// /*FIND ALL REFS*/export const x: number;
+
+
+
+// === findAllReferences ===
+// === /a.d.ts ===
+// export as namespace abc;
+// export const /*FIND ALL REFS*/[|x|]: number;
+
+// === /b.ts ===
+// import a from "./a";
+// a.[|x|];
+
+
+
+// === findAllReferences ===
+// === /a.d.ts ===
+// export as namespace abc;
+// export const [|x|]: number;
+
+// === /b.ts ===
+// import a from "./a";
+// a./*FIND ALL REFS*/[|x|];

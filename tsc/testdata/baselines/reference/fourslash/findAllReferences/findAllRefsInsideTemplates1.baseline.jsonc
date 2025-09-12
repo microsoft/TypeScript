@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates1.ts ===
+// /*FIND ALL REFS*/var x = 10;
+// var y = `${ x } ${ x }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates1.ts ===
+// var /*FIND ALL REFS*/[|x|] = 10;
+// var y = `${ [|x|] } ${ [|x|] }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates1.ts ===
+// var [|x|] = 10;
+// var y = `${ /*FIND ALL REFS*/[|x|] } ${ [|x|] }`
+
+
+
+// === findAllReferences ===
+// === /findAllRefsInsideTemplates1.ts ===
+// var [|x|] = 10;
+// var y = `${ [|x|] } ${ /*FIND ALL REFS*/[|x|] }`

@@ -1,6 +1,0 @@
-// === goToDefinition ===
-// === /foo.js ===
-
-// const [|Foo|] = module.[|exports|] = function () {}
-// Foo.prototype.bar = function() {}
-// new Foo/*GO TO DEFINITION*/();

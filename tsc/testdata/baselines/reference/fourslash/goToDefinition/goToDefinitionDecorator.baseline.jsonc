@@ -1,0 +1,33 @@
+// === goToDefinition ===
+// === /a.ts ===
+// function [|decorator|](target) {
+//     return target;
+// }
+// function decoratorFactory(...args) {
+//     return target => target;
+// }
+
+// === /b.ts ===
+// @/*GOTO DEF*/decorator
+// class C {
+//     @decoratorFactory(a, "22", true)
+//     method() {}
+// }
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// function decorator(target) {
+//     return target;
+// }
+// function [|decoratorFactory|](...args) {
+//     return target => target;
+// }
+
+// === /b.ts ===
+// @decorator
+// class C {
+//     @decora/*GOTO DEF*/torFactory(a, "22", true)
+//     method() {}
+// }

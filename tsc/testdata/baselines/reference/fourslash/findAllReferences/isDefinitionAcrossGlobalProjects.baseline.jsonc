@@ -1,0 +1,121 @@
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/index.ts ===
+// namespace NS {
+//     export function /*FIND ALL REFS*/[|FA|]() {
+//         FB();
+//     }
+// }
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/index.ts ===
+// --- (line: 3) skipped ---
+//     }
+// }
+// 
+// interface /*FIND ALL REFS*/[|I|] {
+//     FA();
+// }
+// 
+// const ia: [|I|] = {
+//     FA() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/index.ts ===
+// --- (line: 4) skipped ---
+// }
+// 
+// interface I {
+//     /*FIND ALL REFS*/[|FA|]();
+// }
+// 
+// const ia: I = {
+//     [|FA|]() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/b/index.ts ===
+// namespace NS {
+//     export function /*FIND ALL REFS*/[|FB|]() {}
+// }
+// 
+// interface I {
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/b/index.ts ===
+// namespace NS {
+//     export function FB() {}
+// }
+// 
+// interface /*FIND ALL REFS*/[|I|] {
+//     FB();
+// }
+// 
+// const ib: [|I|] = { FB() {} };
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/b/index.ts ===
+// namespace NS {
+//     export function FB() {}
+// }
+// 
+// interface I {
+//     /*FIND ALL REFS*/[|FB|]();
+// }
+// 
+// const ib: I = { [|FB|]() {} };
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/c/index.ts ===
+// namespace NS {
+//     export function /*FIND ALL REFS*/[|FC|]() {}
+// }
+// 
+// interface I {
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/c/index.ts ===
+// namespace NS {
+//     export function FC() {}
+// }
+// 
+// interface /*FIND ALL REFS*/[|I|] {
+//     FC();
+// }
+// 
+// const ic: [|I|] = { FC() {} };
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/c/index.ts ===
+// namespace NS {
+//     export function FC() {}
+// }
+// 
+// interface I {
+//     /*FIND ALL REFS*/[|FC|]();
+// }
+// 
+// const ic: I = { [|FC|]() {} };

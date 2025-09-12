@@ -1,7 +1,0 @@
-// === goToDefinition ===
-// === /gotoDefinitionLinkTag6.ts ===
-
-// enum E {
-//     /** {@link E./*GO TO DEFINITION*/A} */
-//     [|A|]
-// }

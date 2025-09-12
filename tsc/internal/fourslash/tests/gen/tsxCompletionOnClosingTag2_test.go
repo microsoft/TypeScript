@@ -13,15 +13,15 @@ func TestTsxCompletionOnClosingTag2(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
- declare module JSX {
-     interface Element { }
-     interface IntrinsicElements {
-         div: { ONE: string; TWO: number; }
-     }
- }
- var x1 = <div>
-    <h1> Hello world </ /*2*/>
-    </ /*1*/>`
+declare module JSX {
+    interface Element { }
+    interface IntrinsicElements {
+        div: { ONE: string; TWO: number; }
+    }
+}
+var x1 = <div>
+   <h1> Hello world </ /*2*/>
+   </ /*1*/>`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

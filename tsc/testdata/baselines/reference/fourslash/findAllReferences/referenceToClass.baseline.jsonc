@@ -1,0 +1,123 @@
+// === findAllReferences ===
+// === /referenceToClass_1.ts ===
+// class /*FIND ALL REFS*/[|foo|] {
+//     public n: [|foo|];
+//     public foo: number;
+// }
+// 
+// class bar {
+//     public n: [|foo|];
+//     public k = new [|foo|]();
+// }
+// 
+// module mod {
+//     var k: [|foo|] = null;
+// }
+
+// === /referenceToClass_2.ts ===
+// var k: [|foo|];
+
+
+
+// === findAllReferences ===
+// === /referenceToClass_1.ts ===
+// class [|foo|] {
+//     public n: /*FIND ALL REFS*/[|foo|];
+//     public foo: number;
+// }
+// 
+// class bar {
+//     public n: [|foo|];
+//     public k = new [|foo|]();
+// }
+// 
+// module mod {
+//     var k: [|foo|] = null;
+// }
+
+// === /referenceToClass_2.ts ===
+// var k: [|foo|];
+
+
+
+// === findAllReferences ===
+// === /referenceToClass_1.ts ===
+// class [|foo|] {
+//     public n: [|foo|];
+//     public foo: number;
+// }
+// 
+// class bar {
+//     public n: /*FIND ALL REFS*/[|foo|];
+//     public k = new [|foo|]();
+// }
+// 
+// module mod {
+//     var k: [|foo|] = null;
+// }
+
+// === /referenceToClass_2.ts ===
+// var k: [|foo|];
+
+
+
+// === findAllReferences ===
+// === /referenceToClass_1.ts ===
+// class [|foo|] {
+//     public n: [|foo|];
+//     public foo: number;
+// }
+// 
+// class bar {
+//     public n: [|foo|];
+//     public k = new /*FIND ALL REFS*/[|foo|]();
+// }
+// 
+// module mod {
+//     var k: [|foo|] = null;
+// }
+
+// === /referenceToClass_2.ts ===
+// var k: [|foo|];
+
+
+
+// === findAllReferences ===
+// === /referenceToClass_1.ts ===
+// class [|foo|] {
+//     public n: [|foo|];
+//     public foo: number;
+// }
+// 
+// class bar {
+//     public n: [|foo|];
+//     public k = new [|foo|]();
+// }
+// 
+// module mod {
+//     var k: /*FIND ALL REFS*/[|foo|] = null;
+// }
+
+// === /referenceToClass_2.ts ===
+// var k: [|foo|];
+
+
+
+// === findAllReferences ===
+// === /referenceToClass_1.ts ===
+// class [|foo|] {
+//     public n: [|foo|];
+//     public foo: number;
+// }
+// 
+// class bar {
+//     public n: [|foo|];
+//     public k = new [|foo|]();
+// }
+// 
+// module mod {
+//     var k: [|foo|] = null;
+// }
+
+// === /referenceToClass_2.ts ===
+// var k: /*FIND ALL REFS*/[|foo|];

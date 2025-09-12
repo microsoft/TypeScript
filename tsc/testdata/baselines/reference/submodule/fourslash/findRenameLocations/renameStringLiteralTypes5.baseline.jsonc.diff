@@ -1,0 +1,14 @@
+--- old.renameStringLiteralTypes5.baseline.jsonc
++++ new.renameStringLiteralTypes5.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+ // === /renameStringLiteralTypes5.ts ===
+-// type T = {
+-//     "[|Prop 1RENAME|]": string;
+-// }
++// --- (line: 3) skipped ---
+ // 
+ // declare const fn: <K extends keyof T>(p: K) => void
+ // 
+-// fn("[|Prop 1RENAME|]"/*RENAME*/)
++// fn("Prop 1"/*RENAME*/)

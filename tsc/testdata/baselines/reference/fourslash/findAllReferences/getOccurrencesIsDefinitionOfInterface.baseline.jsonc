@@ -1,0 +1,24 @@
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterface.ts ===
+// /*FIND ALL REFS*/interface I {
+//     p: number;
+// }
+// let i: I = { p: 12 };
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterface.ts ===
+// interface /*FIND ALL REFS*/[|I|] {
+//     p: number;
+// }
+// let i: [|I|] = { p: 12 };
+
+
+
+// === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterface.ts ===
+// interface [|I|] {
+//     p: number;
+// }
+// let i: /*FIND ALL REFS*/[|I|] = { p: 12 };

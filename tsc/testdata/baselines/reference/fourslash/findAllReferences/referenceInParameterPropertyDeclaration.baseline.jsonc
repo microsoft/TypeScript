@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /file1.ts ===
+// class Foo {
+//     constructor(private /*FIND ALL REFS*/[|privateParam|]: number,
+//         public publicParam: string,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = [|privateParam|];
+//         this.[|privateParam|] += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         public /*FIND ALL REFS*/[|publicParam|]: string,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = [|publicParam|];
+//         this.[|publicParam|] += " Hello!";
+// 
+//         let localProtected = protectedParam;
+//         this.protectedParam = false;
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         public publicParam: string,
+//         protected /*FIND ALL REFS*/[|protectedParam|]: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = [|protectedParam|];
+//         this.[|protectedParam|] = false;
+//     }
+// }

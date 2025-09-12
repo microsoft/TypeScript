@@ -1,0 +1,11 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// module SomeModule { export class /*RENAME*/[|SomeClassRENAME|] { } }
+// export = SomeModule;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import M = require("./a");
+// import C = M./*RENAME*/[|SomeClassRENAME|];

@@ -1,0 +1,149 @@
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// /*FIND ALL REFS*/[|this|];
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// this;
+// function f(/*FIND ALL REFS*/[|this|]) {
+//     return [|this|];
+//     function g(this) { return this; }
+// }
+// class C {
+// // --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// this;
+// function f([|this|]) {
+//     return /*FIND ALL REFS*/[|this|];
+//     function g(this) { return this; }
+// }
+// class C {
+// // --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(/*FIND ALL REFS*/[|this|]) { return [|this|]; }
+// }
+// class C {
+//     static x() {
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g([|this|]) { return /*FIND ALL REFS*/[|this|]; }
+// }
+// class C {
+//     static x() {
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// --- (line: 4) skipped ---
+// }
+// class C {
+//     static x() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     static y() {
+//         () => [|this|];
+//     }
+//     constructor() {
+//         this;
+// // --- (line: 15) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// --- (line: 4) skipped ---
+// }
+// class C {
+//     static x() {
+//         [|this|];
+//     }
+//     static y() {
+//         () => /*FIND ALL REFS*/[|this|];
+//     }
+//     constructor() {
+//         this;
+// // --- (line: 15) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// --- (line: 10) skipped ---
+//         () => this;
+//     }
+//     constructor() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     method() {
+//         () => [|this|];
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// --- (line: 10) skipped ---
+//         () => this;
+//     }
+//     constructor() {
+//         [|this|];
+//     }
+//     method() {
+//         () => /*FIND ALL REFS*/[|this|];
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// --- (line: 17) skipped ---
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { /*FIND ALL REFS*/[|this|]: 0 }
+// x.[|this|];
+
+
+
+// === findAllReferences ===
+// === /findAllRefsThisKeyword.ts ===
+// --- (line: 17) skipped ---
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { [|this|]: 0 }
+// x./*FIND ALL REFS*/[|this|];

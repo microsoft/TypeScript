@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /goToDefinitionOverriddenMember15.ts ===
+// class A {
+//     static [|m|]() {}
+// }
+// class B extends A {}
+// class C extends B {
+//     static /*GOTO DEF*/override m() {}
+// }

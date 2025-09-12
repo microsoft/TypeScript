@@ -1,0 +1,11 @@
+// === goToDefinition ===
+// === /index.js ===
+// const Core = {}
+// 
+// Core.[|Test|] = class {
+//   [|constructor() { }|]
+// }
+// 
+// Core.Test.prototype.foo = 10
+// 
+// new Core.Tes/*GOTO DEF*/t()

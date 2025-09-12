@@ -1,0 +1,14 @@
+// === findRenameLocations ===
+// === /decl.js ===
+// var [|objRENAME|] = {};
+
+// === /forof.js ===
+// for ([|objRENAME|]/*RENAME*/.prop of arr) {
+// 
+// }
+
+// === /unicode1.js ===
+// [|objRENAME|].𝒜 ;
+
+// === /unicode2.js ===
+// [|objRENAME|].¬ ;

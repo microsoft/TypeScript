@@ -1,0 +1,135 @@
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// /*FIND ALL REFS*/interface Foo {
+// }
+// 
+// module Foo {
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// interface /*FIND ALL REFS*/[|Foo|] {
+// }
+// 
+// module Foo {
+// // --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+// }
+// 
+// var f1: Foo.Bar;
+// var f2: [|Foo|];
+// Foo.bind(this);
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// interface Foo {
+// }
+// 
+// /*FIND ALL REFS*/module Foo {
+//     export interface Bar { }
+// }
+// 
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// interface Foo {
+// }
+// 
+// module /*FIND ALL REFS*/[|Foo|] {
+//     export interface Bar { }
+// }
+// 
+// function Foo(): void {
+// }
+// 
+// var f1: [|Foo|].Bar;
+// var f2: Foo;
+// Foo.bind(this);
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// --- (line: 4) skipped ---
+//     export interface Bar { }
+// }
+// 
+// /*FIND ALL REFS*/function Foo(): void {
+// }
+// 
+// var f1: Foo.Bar;
+// var f2: Foo;
+// Foo.bind(this);
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// --- (line: 4) skipped ---
+//     export interface Bar { }
+// }
+// 
+// function /*FIND ALL REFS*/[|Foo|](): void {
+// }
+// 
+// var f1: Foo.Bar;
+// var f2: Foo;
+// [|Foo|].bind(this);
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// interface Foo {
+// }
+// 
+// module [|Foo|] {
+//     export interface Bar { }
+// }
+// 
+// function Foo(): void {
+// }
+// 
+// var f1: /*FIND ALL REFS*/[|Foo|].Bar;
+// var f2: Foo;
+// Foo.bind(this);
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// interface [|Foo|] {
+// }
+// 
+// module Foo {
+// // --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+// }
+// 
+// var f1: Foo.Bar;
+// var f2: /*FIND ALL REFS*/[|Foo|];
+// Foo.bind(this);
+
+
+
+// === findAllReferences ===
+// === /referencesForMergedDeclarations.ts ===
+// --- (line: 4) skipped ---
+//     export interface Bar { }
+// }
+// 
+// function [|Foo|](): void {
+// }
+// 
+// var f1: Foo.Bar;
+// var f2: Foo;
+// /*FIND ALL REFS*/[|Foo|].bind(this);

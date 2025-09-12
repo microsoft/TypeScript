@@ -1,0 +1,85 @@
+--- old.renameImportOfExportEquals.baseline.jsonc
++++ new.renameImportOfExportEquals.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+ // }
+ // declare module "a" {
+ //     import * as [|NRENAME|] from "mod";
+-//     export { [|NRENAME|] as N/*END SUFFIX*/ }; // Renaming N here would rename
++//     export { N }; // Renaming N here would rename
+ // }
+ // declare module "b" {
+-//     import { N } from "a";
+-//     export const y: typeof N.x;
+-// }
++// // --- (line: 12) skipped ---
+
+
+
+@@= skipped -19, +17 lines =@@
+ // }
+ // declare module "a" {
+ //     import * as [|NRENAME|] from "mod";
+-//     export { [|NRENAME|] as N/*END SUFFIX*/ }; // Renaming N here would rename
++//     export { N }; // Renaming N here would rename
+ // }
+ // declare module "b" {
+-//     import { N } from "a";
+-//     export const y: typeof N.x;
+-// }
++// // --- (line: 12) skipped ---
+
+
+
+@@= skipped -16, +14 lines =@@
+ // }
+ // declare module "a" {
+ //     import * as /*RENAME*/[|NRENAME|] from "mod";
+-//     export { [|NRENAME|] as N/*END SUFFIX*/ }; // Renaming N here would rename
++//     export { N }; // Renaming N here would rename
+ // }
+ // declare module "b" {
+-//     import { N } from "a";
+-//     export const y: typeof N.x;
+-// }
++// // --- (line: 12) skipped ---
+
+
+
+ // === findRenameLocations ===
+ // === /renameImportOfExportEquals.ts ===
+-// --- (line: 5) skipped ---
++// --- (line: 4) skipped ---
++//     export = N;
+ // }
+ // declare module "a" {
+-//     import * as N from "mod";
+-//     export { /*START PREFIX*/N as /*RENAME*/[|NRENAME|] }; // Renaming N here would rename
++//     import * as [|NRENAME|] from "mod";
++//     export { /*RENAME*/N }; // Renaming N here would rename
+ // }
+ // declare module "b" {
+-//     import { [|NRENAME|] } from "a";
+-//     export const y: typeof [|NRENAME|].x;
++//     import { N } from "a";
++//     export const y: typeof N.x;
+ // }
+
+
+@@= skipped -55, +54 lines =@@
+ // }
+ // declare module "mod" {
+ //     export = N;
+-// --- (line: 6) skipped ---
++// // --- (line: 6) skipped ---
+
+ // --- (line: 9) skipped ---
+ // }
+@@= skipped -18, +18 lines =@@
+ // }
+ // declare module "mod" {
+ //     export = N;
+-// --- (line: 6) skipped ---
++// // --- (line: 6) skipped ---
+
+ // --- (line: 9) skipped ---
+ // }

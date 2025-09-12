@@ -1,0 +1,32 @@
+--- old.renameLocationsForClassExpression01.baseline.jsonc
++++ new.renameLocationsForClassExpression01.baseline.jsonc
+@@= skipped -12, +12 lines =@@
+ //     }
+ // }
+ // 
+-// var y = class {
+-//    getSomeName() {
+-// --- (line: 16) skipped ---
++// // --- (line: 14) skipped ---
+
+
+
+@@= skipped -21, +19 lines =@@
+ //     }
+ // }
+ // 
+-// var y = class {
+-//    getSomeName() {
+-// --- (line: 16) skipped ---
++// // --- (line: 14) skipped ---
+
+
+
+@@= skipped -21, +19 lines =@@
+ //     }
+ // }
+ // 
+-// var y = class {
+-//    getSomeName() {
+-// --- (line: 16) skipped ---
++// // --- (line: 14) skipped ---

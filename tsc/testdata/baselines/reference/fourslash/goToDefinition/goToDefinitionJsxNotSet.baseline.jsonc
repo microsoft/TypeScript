@@ -1,0 +1,10 @@
+// === goToDefinition ===
+// === /foo.jsx ===
+// const [|Foo|] = () => (
+//     <div>foo</div>
+// );
+// export default Foo;
+
+// === /bar.jsx ===
+// import Foo from './foo';
+// const a = </*GOTO DEF*/Foo />

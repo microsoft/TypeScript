@@ -1,0 +1,7 @@
+// === findRenameLocations ===
+// === /renameStringLiteralTypes4.ts ===
+// --- (line: 3) skipped ---
+// 
+// declare const fn: <K extends keyof I>(p: K) => void
+// 
+// fn("Prop 1"/*RENAME*/)

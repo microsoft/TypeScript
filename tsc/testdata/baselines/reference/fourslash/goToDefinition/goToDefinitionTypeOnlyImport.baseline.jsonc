@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /a.ts ===
+// enum [|SyntaxKind|] { SourceFile }
+// export type { SyntaxKind }
+
+// === /c.ts ===
+// import type { SyntaxKind } from './b';
+// let kind: /*GOTO DEF*/SyntaxKind;

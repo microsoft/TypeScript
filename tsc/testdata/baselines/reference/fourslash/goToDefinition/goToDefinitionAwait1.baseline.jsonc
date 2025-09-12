@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /goToDefinitionAwait1.ts ===
+// async function [|foo|]() {
+//     /*GOTO DEF*/await Promise.resolve(0);
+// }
+// function notAsync() {
+//     await Promise.resolve(0);
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionAwait1.ts ===
+// async function foo() {
+//     await Promise.resolve(0);
+// }
+// function [|notAsync|]() {
+//     /*GOTO DEF*/await Promise.resolve(0);
+// }
