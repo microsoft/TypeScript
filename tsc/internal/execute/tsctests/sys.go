@@ -141,6 +141,7 @@ type snapshot struct {
 type testSys struct {
 	currentWrite              *strings.Builder
 	programBaselines          strings.Builder
+	programIncludeBaselines   strings.Builder
 	tracer                    *harnessutil.TracerForBaselining
 	serializedDiff            *snapshot
 	forIncrementalCorrectness bool
@@ -287,18 +288,23 @@ func (s *testSys) GetTrace(w io.Writer) func(str string) {
 	}
 }
 
-func (s *testSys) OnProgram(program *incremental.Program) {
-	if s.programBaselines.Len() != 0 {
-		s.programBaselines.WriteString("\n")
+func (s *testSys) writeHeaderToBaseline(builder *strings.Builder, program *incremental.Program) {
+	if builder.Len() != 0 {
+		builder.WriteString("\n")
 	}
 
-	testingData := program.GetTestingData()
 	if configFilePath := program.Options().ConfigFilePath; configFilePath != "" {
-		s.programBaselines.WriteString(tspath.GetRelativePathFromDirectory(s.cwd, configFilePath, tspath.ComparePathsOptions{
+		builder.WriteString(tspath.GetRelativePathFromDirectory(s.cwd, configFilePath, tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: s.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          s.GetCurrentDirectory(),
 		}) + "::\n")
 	}
+}
+
+func (s *testSys) OnProgram(program *incremental.Program) {
+	s.writeHeaderToBaseline(&s.programBaselines, program)
+
+	testingData := program.GetTestingData()
 	s.programBaselines.WriteString("SemanticDiagnostics::\n")
 	for _, file := range program.GetProgram().GetSourceFiles() {
 		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile.Load(file.Path()); ok {
@@ -324,11 +330,44 @@ func (s *testSys) OnProgram(program *incremental.Program) {
 			}
 		}
 	}
+
+	var filesWithoutIncludeReason []string
+	var fileNotInProgramWithIncludeReason []string
+	includeReasons := program.GetProgram().GetIncludeReasons()
+	for _, file := range program.GetProgram().GetSourceFiles() {
+		if _, ok := includeReasons[file.Path()]; !ok {
+			filesWithoutIncludeReason = append(filesWithoutIncludeReason, string(file.Path()))
+		}
+	}
+	for path := range includeReasons {
+		if program.GetProgram().GetSourceFileByPath(path) == nil && !program.GetProgram().IsMissingPath(path) {
+			fileNotInProgramWithIncludeReason = append(fileNotInProgramWithIncludeReason, string(path))
+		}
+	}
+	if len(filesWithoutIncludeReason) > 0 || len(fileNotInProgramWithIncludeReason) > 0 {
+		s.writeHeaderToBaseline(&s.programIncludeBaselines, program)
+		s.programIncludeBaselines.WriteString("!!! Expected all files to have include reasons\nfilesWithoutIncludeReason::\n")
+		for _, file := range filesWithoutIncludeReason {
+			s.programIncludeBaselines.WriteString("  " + file + "\n")
+		}
+		s.programIncludeBaselines.WriteString("filesNotInProgramWithIncludeReason::\n")
+		for _, file := range fileNotInProgramWithIncludeReason {
+			s.programIncludeBaselines.WriteString("  " + file + "\n")
+		}
+	}
 }
 
-func (s *testSys) baselinePrograms(baseline *strings.Builder) {
+func (s *testSys) baselinePrograms(baseline *strings.Builder, header string) string {
 	baseline.WriteString(s.programBaselines.String())
 	s.programBaselines.Reset()
+	var result string
+	if s.programIncludeBaselines.Len() > 0 {
+		result += fmt.Sprintf("\n\n%s\n!!! Include reasons expectations don't match pls review!!!\n", header)
+		result += s.programIncludeBaselines.String()
+		s.programIncludeBaselines.Reset()
+		baseline.WriteString(result)
+	}
+	return result
 }
 
 func (s *testSys) serializeState(baseline *strings.Builder) {

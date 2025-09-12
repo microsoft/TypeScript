@@ -104,6 +104,7 @@ core/index.d.ts
    Imported via '../core/index' from file 'tests/index.ts'
    File is output of project reference source 'core/index.ts'
 core/anotherModule.d.ts
+   Imported via '../core/anotherModule' from file 'logic/index.d.ts'
    Imported via '../core/anotherModule' from file 'tests/index.ts'
    File is output of project reference source 'core/anotherModule.ts'
 logic/index.d.ts
@@ -527,6 +528,7 @@ core/index.d.ts
    Imported via '../core/index' from file 'tests/index.ts'
    File is output of project reference source 'core/index.ts'
 core/anotherModule.d.ts
+   Imported via '../core/anotherModule' from file 'logic/index.d.ts'
    Imported via '../core/anotherModule' from file 'tests/index.ts'
    File is output of project reference source 'core/anotherModule.ts'
 logic/index.d.ts

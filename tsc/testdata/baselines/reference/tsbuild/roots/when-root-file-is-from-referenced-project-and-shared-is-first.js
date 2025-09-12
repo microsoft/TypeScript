@@ -88,6 +88,7 @@ projects/shared/dist/src/logging.d.ts
    File is output of project reference source 'projects/shared/src/logging.ts'
 projects/shared/dist/src/myClass.d.ts
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
    File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/shared/dist/src/random.d.ts
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -426,6 +427,7 @@ projects/shared/dist/src/logging.d.ts
    File is output of project reference source 'projects/shared/src/logging.ts'
 projects/shared/dist/src/myClass.d.ts
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
    File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/shared/dist/src/random.d.ts
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -699,6 +701,7 @@ projects/shared/dist/src/logging.d.ts
    File is output of project reference source 'projects/shared/src/logging.ts'
 projects/shared/dist/src/myClass.d.ts
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
    File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
    Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'

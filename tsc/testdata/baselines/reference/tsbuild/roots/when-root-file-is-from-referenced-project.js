@@ -84,6 +84,7 @@ File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 projects/shared/dist/src/myClass.d.ts
+   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
    File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
@@ -422,6 +423,7 @@ File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 projects/shared/dist/src/myClass.d.ts
+   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
    File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
@@ -695,6 +697,7 @@ File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 projects/shared/dist/src/myClass.d.ts
+   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
    Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
    File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts

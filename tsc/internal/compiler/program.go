@@ -1541,6 +1541,18 @@ func (p *Program) GetSourceFiles() []*ast.SourceFile {
 	return p.files
 }
 
+// Testing only
+func (p *Program) GetIncludeReasons() map[tspath.Path][]*fileIncludeReason {
+	return p.includeProcessor.fileIncludeReasons
+}
+
+// Testing only
+func (p *Program) IsMissingPath(path tspath.Path) bool {
+	return slices.ContainsFunc(p.missingFiles, func(missingPath string) bool {
+		return p.toPath(missingPath) == path
+	})
+}
+
 func (p *Program) ExplainFiles(w io.Writer) {
 	toRelativeFileName := func(fileName string) string {
 		return tspath.GetRelativePathFromDirectory(p.GetCurrentDirectory(), fileName, p.comparePathsOptions)
