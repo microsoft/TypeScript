@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @noUncheckedSideEffectImports: false
+
 ////import * as /*a0*/Bar from "does-not-exist";
 ////
 ////let a: /*a1*/Bar;
