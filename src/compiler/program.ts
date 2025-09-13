@@ -3867,7 +3867,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const existing = resolvedLibProcessing?.get(libFileName);
         if (existing) return existing;
 
-        if (options.libReplacement === false) {
+        if (!options.libReplacement) {
             const result: LibResolution = {
                 resolution: {
                     resolvedModule: undefined,
@@ -4083,10 +4083,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(resolvedRef.commandLine, !host.useCaseSensitiveFileNames()));
             commandLine.fileNames.forEach(fileName => {
-                if (isDeclarationFileName(fileName)) return;
                 const path = toPath(fileName);
                 let outputDts;
-                if (!fileExtensionIs(fileName, Extension.Json)) {
+                if (!isDeclarationFileName(fileName) && !fileExtensionIs(fileName, Extension.Json)) {
                     if (!commandLine.options.outFile) {
                         outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory);
                         mapOutputFileToResolvedRef!.set(toPath(outputDts), { resolvedRef, source: fileName });
