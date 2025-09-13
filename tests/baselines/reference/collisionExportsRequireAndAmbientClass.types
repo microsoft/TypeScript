@@ -9,7 +9,7 @@ export declare class exports {
 >exports : exports
 >        : ^^^^^^^
 }
-declare module m1 {
+declare namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -22,7 +22,7 @@ declare module m1 {
 >        : ^^^^^^^
     }
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -45,7 +45,7 @@ declare class exports {
 >exports : exports
 >        : ^^^^^^^
 }
-declare module m3 {
+declare namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -58,7 +58,7 @@ declare module m3 {
 >        : ^^^^^^^
     }
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

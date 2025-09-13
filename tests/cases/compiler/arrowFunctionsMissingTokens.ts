@@ -1,5 +1,5 @@
 
-module missingArrowsWithCurly {
+namespace missingArrowsWithCurly {
     var a = () { };
 
     var b = (): void { }
@@ -11,8 +11,8 @@ module missingArrowsWithCurly {
     var e = (x: number, y: string): void { };
 }
 
-module missingCurliesWithArrow {
-    module withStatement {
+namespace missingCurliesWithArrow {
+    namespace withStatement {
         var a = () => var k = 10;};
 
         var b = (): void => var k = 10;}
@@ -26,7 +26,7 @@ module missingCurliesWithArrow {
         var f = () => var k = 10;}
     }
 
-    module withoutStatement {
+    namespace withoutStatement {
         var a = () => };
 
         var b = (): void => }
@@ -41,7 +41,7 @@ module missingCurliesWithArrow {
     }
 }
 
-module ce_nEst_pas_une_arrow_function {
+namespace ce_nEst_pas_une_arrow_function {
     var a = ();
 
     var b = (): void;
@@ -53,7 +53,7 @@ module ce_nEst_pas_une_arrow_function {
     var e = (x: number, y: string): void;
 }
 
-module okay {
+namespace okay {
     var a = () => { };
 
     var b = (): void => { }

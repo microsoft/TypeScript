@@ -2,7 +2,7 @@ switchStatements.ts(35,20): error TS2353: Object literal may only specify known 
 
 
 ==== switchStatements.ts (1 errors) ====
-    module M {
+    namespace M {
         export function fn(x: number) {
             return '';
         }

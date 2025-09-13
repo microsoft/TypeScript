@@ -5,7 +5,7 @@ import foo0 = require("./foo_0");
 >foo0 : typeof foo0
 >     : ^^^^^^^^^^^
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -26,7 +26,7 @@ import foo1 = require('./foo_1');
 >foo1 : typeof foo1
 >     : ^^^^^^^^^^^
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -47,7 +47,7 @@ import foo2 = require("./foo_2");
 >foo2 : typeof foo2
 >     : ^^^^^^^^^^^
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

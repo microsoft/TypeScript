@@ -51,7 +51,7 @@ assignmentCompatWithObjectMembersAccessibility.ts(106,5): error TS2322: Type 'D'
 ==== assignmentCompatWithObjectMembersAccessibility.ts (24 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     
-    module TargetIsPublic {
+    namespace TargetIsPublic {
         // targets
         class Base {
             public foo: string;
@@ -128,7 +128,7 @@ assignmentCompatWithObjectMembersAccessibility.ts(106,5): error TS2322: Type 'D'
     
     }
     
-    module TargetIsPublic {
+    namespace TargetIsPublic {
         // targets
         class Base {
             private foo: string;

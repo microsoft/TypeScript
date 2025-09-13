@@ -40,10 +40,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsc
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -96,6 +100,10 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/a/b/projects: *new*
+  {}
+/a/b/projects/temp: *new*
+  {}
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
@@ -221,6 +229,9 @@ After running Immedidate callback:: count: 0
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -246,9 +257,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/no
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
-11: /dev/null/inferredProject1*
-12: *ensureProjectForOpenFiles*
-14: /dev/null/inferredProject1*FailedLookupInvalidation
+12: /dev/null/inferredProject1*
+13: *ensureProjectForOpenFiles*
+15: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/a/b/projects/temp/node_modules/@types/pad/index.d.ts]
 export = pad;declare function pad(length: number, text: string, char ?: string): string;
 
@@ -270,6 +281,10 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/projects:
+  {}
+/a/b/projects/temp:
+  {}
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
@@ -280,9 +295,9 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 3
-11: /dev/null/inferredProject1* *new*
-12: *ensureProjectForOpenFiles* *new*
-14: /dev/null/inferredProject1*FailedLookupInvalidation *new*
+12: /dev/null/inferredProject1* *new*
+13: *ensureProjectForOpenFiles* *new*
+15: /dev/null/inferredProject1*FailedLookupInvalidation *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -345,6 +360,10 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/projects:
+  {}
+/a/b/projects/temp:
+  {}
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
@@ -355,9 +374,9 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 1
-12: *ensureProjectForOpenFiles* *deleted*
-14: /dev/null/inferredProject1*FailedLookupInvalidation *deleted*
-15: *ensureProjectForOpenFiles* *new*
+13: *ensureProjectForOpenFiles* *deleted*
+15: /dev/null/inferredProject1*FailedLookupInvalidation *deleted*
+16: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -381,7 +400,7 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 Before running Timeout callback:: count: 1
-15: *ensureProjectForOpenFiles*
+16: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:

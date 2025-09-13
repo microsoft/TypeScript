@@ -25,7 +25,7 @@ verify.completions({
   includes: [{
     name: "classNames",
     hasAction: true,
-    source: "/node_modules/@types/classnames/index",
+    source: "classnames",
     sortText: completion.SortText.AutoImportSuggestions,
   }],
   preferences: {

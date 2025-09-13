@@ -1,5 +1,9 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 // @Filename: /a.ts
 ////const foo = require(`foo`);
 

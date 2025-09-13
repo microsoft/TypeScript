@@ -1066,11 +1066,11 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
 >T3 : Symbol(T3, Decl(underscoreTest1_underscore.ts, 23, 28))
 }
 
-module Underscore {
+namespace Underscore {
 >Underscore : Symbol(Underscore, Decl(underscoreTest1_underscore.ts, 28, 1))
 
     export interface WrappedObject<T> {
->WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 19))
+>WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 22))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 31, 35))
 
         keys(): string[];
@@ -1185,7 +1185,7 @@ module Underscore {
 >WrappedFunction : Symbol(WrappedFunction, Decl(underscoreTest1_underscore.ts, 62, 5))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 64, 37))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 19))
+>WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 22))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 64, 37))
 
         bind(object: any): T;
@@ -1257,7 +1257,7 @@ module Underscore {
     export interface WrappedArray<T> extends WrappedObject<Array<T>> {
 >WrappedArray : Symbol(WrappedArray, Decl(underscoreTest1_underscore.ts, 77, 5))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 79, 34))
->WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 19))
+>WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 22))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 79, 34))
 
@@ -1796,7 +1796,7 @@ module Underscore {
     export interface WrappedDictionary<T> extends WrappedObject<Dictionary<T>> {
 >WrappedDictionary : Symbol(WrappedDictionary, Decl(underscoreTest1_underscore.ts, 160, 5))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 162, 39))
->WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 19))
+>WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 22))
 >Dictionary : Symbol(Dictionary, Decl(underscoreTest1_underscore.ts, 0, 0))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 162, 39))
 
@@ -3356,7 +3356,7 @@ module Underscore {
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 391, 9))
 >obj : Symbol(obj, Decl(underscoreTest1_underscore.ts, 391, 12))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 391, 9))
->WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 19))
+>WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 22))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 391, 9))
 
         chain<T>(list: T[]): ChainedArray<T>;

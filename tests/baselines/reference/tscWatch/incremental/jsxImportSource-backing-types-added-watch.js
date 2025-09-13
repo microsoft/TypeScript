@@ -119,6 +119,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
+  {}
 /users/username/projects/project/index.tsx: *new*
   {}
 /users/username/projects/project/tsconfig.json: *new*
@@ -127,6 +131,9 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project: *new*
   {}
+
+Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions *new*
 
 Program root files: [
   "/users/username/projects/project/index.tsx"
@@ -191,6 +198,10 @@ PolledWatches *deleted*::
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
+  {}
 /users/username/projects/project/index.tsx:
   {}
 /users/username/projects/project/tsconfig.json:
@@ -199,6 +210,9 @@ FsWatches *deleted*::
 FsWatchesRecursive *deleted*::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 0
+2: timerToInvalidateFailedLookupResolutions *deleted*
 
 Output::
 >> Screen clear
@@ -283,6 +297,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}

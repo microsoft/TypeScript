@@ -30,7 +30,7 @@ function point(x: number, y: number): Point {
 >y : number
 >  : ^^^^^^
 }
-module point {
+namespace point {
 >point : typeof point
 >      : ^^^^^^^^^^^^
 

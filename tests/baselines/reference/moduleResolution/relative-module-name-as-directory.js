@@ -20,7 +20,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
     "/a/b/c/bar.tsx",
-    "/a/b/c/bar.d.ts"
+    "/a/b/c/bar.d.ts",
+    "/a/b/c/bar.js",
+    "/a/b/c/bar.jsx"
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
@@ -49,7 +51,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
     "/a/b/c/bar.tsx",
-    "/a/b/c/bar.d.ts"
+    "/a/b/c/bar.d.ts",
+    "/a/b/c/bar.js",
+    "/a/b/c/bar.jsx"
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
@@ -78,7 +82,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/bar.ts",
     "/a/bar.tsx",
-    "/a/bar.d.ts"
+    "/a/bar.d.ts",
+    "/a/bar.js",
+    "/a/bar.jsx"
   ],
   "affectingLocations": [
     "/a/bar/package.json"
@@ -107,7 +113,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/bar.ts",
     "/a/bar.tsx",
-    "/a/bar.d.ts"
+    "/a/bar.d.ts",
+    "/a/bar.js",
+    "/a/bar.jsx"
   ],
   "affectingLocations": [
     "/a/bar/package.json"
@@ -136,7 +144,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/bar.ts",
     "/bar.tsx",
-    "/bar.d.ts"
+    "/bar.d.ts",
+    "/bar.js",
+    "/bar.jsx"
   ],
   "affectingLocations": [
     "/bar/package.json"
@@ -165,7 +175,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/bar.ts",
     "/bar.tsx",
-    "/bar.d.ts"
+    "/bar.d.ts",
+    "/bar.js",
+    "/bar.jsx"
   ],
   "affectingLocations": [
     "/bar/package.json"
@@ -194,7 +206,9 @@ Resolution:: {
   "failedLookupLocations": [
     "c:/bar.ts",
     "c:/bar.tsx",
-    "c:/bar.d.ts"
+    "c:/bar.d.ts",
+    "c:/bar.js",
+    "c:/bar.jsx"
   ],
   "affectingLocations": [
     "c:/bar/package.json"
@@ -223,7 +237,9 @@ Resolution:: {
   "failedLookupLocations": [
     "c:/bar.ts",
     "c:/bar.tsx",
-    "c:/bar.d.ts"
+    "c:/bar.d.ts",
+    "c:/bar.js",
+    "c:/bar.jsx"
   ],
   "affectingLocations": [
     "c:/bar/package.json"

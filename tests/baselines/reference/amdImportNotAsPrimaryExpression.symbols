@@ -13,7 +13,7 @@ import f = foo.M1;
 var i: f.I2;
 >i : Symbol(i, Decl(foo_1.ts, 3, 3))
 >f : Symbol(f, Decl(foo_1.ts, 0, 32))
->I2 : Symbol(f.I2, Decl(foo_0.ts, 10, 18))
+>I2 : Symbol(f.I2, Decl(foo_0.ts, 10, 21))
 
 var x: foo.C1 = <{m1: number}>{};
 >x : Symbol(x, Decl(foo_1.ts, 4, 3))
@@ -33,7 +33,7 @@ var z: foo.M1.I2;
 >z : Symbol(z, Decl(foo_1.ts, 6, 3))
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 >M1 : Symbol(foo.M1, Decl(foo_0.ts, 8, 1))
->I2 : Symbol(f.I2, Decl(foo_0.ts, 10, 18))
+>I2 : Symbol(f.I2, Decl(foo_0.ts, 10, 21))
 
 var e: number = <foo.E1>0;
 >e : Symbol(e, Decl(foo_1.ts, 7, 3))
@@ -61,11 +61,11 @@ export interface I1 {
 >age : Symbol(I1.age, Decl(foo_0.ts, 6, 14))
 }
 
-export module M1 {
+export namespace M1 {
 >M1 : Symbol(M1, Decl(foo_0.ts, 8, 1))
 
 	export interface I2 {
->I2 : Symbol(I2, Decl(foo_0.ts, 10, 18))
+>I2 : Symbol(I2, Decl(foo_0.ts, 10, 21))
 
 		foo: string;
 >foo : Symbol(I2.foo, Decl(foo_0.ts, 11, 22))

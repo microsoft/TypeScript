@@ -299,7 +299,7 @@ var r4 = foo13(E.A);
 function f() { }
 >f : Symbol(f, Decl(enumAssignabilityInInheritance.ts, 80, 20), Decl(enumAssignabilityInInheritance.ts, 82, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(enumAssignabilityInInheritance.ts, 80, 20), Decl(enumAssignabilityInInheritance.ts, 82, 16))
 
     export var bar = 1;
@@ -328,7 +328,7 @@ class CC { baz: string }
 >CC : Symbol(CC, Decl(enumAssignabilityInInheritance.ts, 89, 20), Decl(enumAssignabilityInInheritance.ts, 91, 24))
 >baz : Symbol(CC.baz, Decl(enumAssignabilityInInheritance.ts, 91, 10))
 
-module CC {
+namespace CC {
 >CC : Symbol(CC, Decl(enumAssignabilityInInheritance.ts, 89, 20), Decl(enumAssignabilityInInheritance.ts, 91, 24))
 
     export var bar = 1;

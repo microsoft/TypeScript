@@ -3867,7 +3867,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const existing = resolvedLibProcessing?.get(libFileName);
         if (existing) return existing;
 
-        if (options.libReplacement === false) {
+        if (!options.libReplacement) {
             const result: LibResolution = {
                 resolution: {
                     resolvedModule: undefined,
@@ -4083,10 +4083,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(resolvedRef.commandLine, !host.useCaseSensitiveFileNames()));
             commandLine.fileNames.forEach(fileName => {
-                if (isDeclarationFileName(fileName)) return;
                 const path = toPath(fileName);
                 let outputDts;
-                if (!fileExtensionIs(fileName, Extension.Json)) {
+                if (!isDeclarationFileName(fileName) && !fileExtensionIs(fileName, Extension.Json)) {
                     if (!commandLine.options.outFile) {
                         outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory);
                         mapOutputFileToResolvedRef!.set(toPath(outputDts), { resolvedRef, source: fileName });
@@ -4436,10 +4435,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            // While we could do Version.tryParse here to support any version,
-            // for now, only allow "5.0". We aren't planning on deprecating anything
-            // until 6.0.
-            if (ignoreDeprecations === "5.0") {
+            if (ignoreDeprecations === "5.0" || ignoreDeprecations === "6.0") {
                 return new Version(ignoreDeprecations);
             }
             reportInvalidIgnoreDeprecations();
@@ -4525,6 +4521,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             if (options.preserveValueImports) {
                 createDeprecatedDiagnostic("preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+        });
+
+        checkDeprecations("6.0", "7.0", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.moduleResolution === ModuleResolutionKind.Node10) {
+                createDeprecatedDiagnostic("moduleResolution", "node10");
             }
         });
     }

@@ -1,6 +1,6 @@
 // @target: ES5
 // @sourcemap: true
-module sas.tools {
+namespace sas.tools {
     export class Test {
         public doX(): void {
             let f: number = 2;
