@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/identityRelationEnumTypes.ts] ////
+
+=== identityRelationEnumTypes.ts ===
+namespace identityRelationEnumTypes {
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+
+    type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>A : Symbol(A, Decl(identityRelationEnumTypes.ts, 1, 16))
+>B : Symbol(B, Decl(identityRelationEnumTypes.ts, 1, 18))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 26))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 26))
+>B : Symbol(B, Decl(identityRelationEnumTypes.ts, 1, 18))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 65))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 65))
+>A : Symbol(A, Decl(identityRelationEnumTypes.ts, 1, 16))
+
+    enum Enum {
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+
+        A = 'a',
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+
+        B = 'b',
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+    }
+
+    enum DifferentEnum {
+>DifferentEnum : Symbol(DifferentEnum, Decl(identityRelationEnumTypes.ts, 6, 5))
+
+        A = 'a',
+>A : Symbol(DifferentEnum.A, Decl(identityRelationEnumTypes.ts, 8, 24))
+
+        B = 'b',
+>B : Symbol(DifferentEnum.B, Decl(identityRelationEnumTypes.ts, 9, 16))
+    }
+
+    type Identical1 = typeof Enum[keyof typeof Enum];
+>Identical1 : Symbol(Identical1, Decl(identityRelationEnumTypes.ts, 11, 5))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+
+    type Identical2 = Enum.A | Enum.B;
+>Identical2 : Symbol(Identical2, Decl(identityRelationEnumTypes.ts, 13, 53))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+
+    type Identical3 = Enum.B | Enum.A | Enum.B;
+>Identical3 : Symbol(Identical3, Decl(identityRelationEnumTypes.ts, 14, 38))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+
+    type Identical4 = Enum.B | (Enum.A | Enum.B);
+>Identical4 : Symbol(Identical4, Decl(identityRelationEnumTypes.ts, 15, 47))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+
+    type Identical5 = (Enum.A & {}) | (Enum.B & {})
+>Identical5 : Symbol(Identical5, Decl(identityRelationEnumTypes.ts, 16, 49))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+
+    type Different1 = Enum.A | Enum.A;
+>Different1 : Symbol(Different1, Decl(identityRelationEnumTypes.ts, 17, 51))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+
+    type Different2 = Enum.A | DifferentEnum.B;
+>Different2 : Symbol(Different2, Decl(identityRelationEnumTypes.ts, 19, 38))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 15))
+>DifferentEnum : Symbol(DifferentEnum, Decl(identityRelationEnumTypes.ts, 6, 5))
+>B : Symbol(DifferentEnum.B, Decl(identityRelationEnumTypes.ts, 9, 16))
+
+    type Result1 = Equals<Enum, Identical1>;  // true
+>Result1 : Symbol(Result1, Decl(identityRelationEnumTypes.ts, 20, 47))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Identical1 : Symbol(Identical1, Decl(identityRelationEnumTypes.ts, 11, 5))
+
+    type Result2 = Equals<Enum, Identical2>;  // true
+>Result2 : Symbol(Result2, Decl(identityRelationEnumTypes.ts, 22, 44))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Identical2 : Symbol(Identical2, Decl(identityRelationEnumTypes.ts, 13, 53))
+
+    type Result3 = Equals<Enum, Identical3>;  // true
+>Result3 : Symbol(Result3, Decl(identityRelationEnumTypes.ts, 23, 44))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Identical3 : Symbol(Identical3, Decl(identityRelationEnumTypes.ts, 14, 38))
+
+    type Result4 = Equals<Enum, Identical4>;  // true
+>Result4 : Symbol(Result4, Decl(identityRelationEnumTypes.ts, 24, 44))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Identical4 : Symbol(Identical4, Decl(identityRelationEnumTypes.ts, 15, 47))
+
+    type Result5 = Equals<Enum, Identical5>;  // true
+>Result5 : Symbol(Result5, Decl(identityRelationEnumTypes.ts, 25, 44))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Identical5 : Symbol(Identical5, Decl(identityRelationEnumTypes.ts, 16, 49))
+
+    type Result6 = Equals<Enum, Different1>;  // false
+>Result6 : Symbol(Result6, Decl(identityRelationEnumTypes.ts, 26, 44))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Different1 : Symbol(Different1, Decl(identityRelationEnumTypes.ts, 17, 51))
+
+    type Result7 = Equals<Enum, Different2>;  // false
+>Result7 : Symbol(Result7, Decl(identityRelationEnumTypes.ts, 27, 44))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 109))
+>Different2 : Symbol(Different2, Decl(identityRelationEnumTypes.ts, 19, 38))
+}
+
