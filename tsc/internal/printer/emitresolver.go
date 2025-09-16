@@ -52,6 +52,7 @@ type EmitResolver interface {
 	RequiresAddingImplicitUndefined(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
 	IsDeclarationVisible(node *ast.Node) bool
 	IsImportRequiredByAugmentation(decl *ast.ImportDeclaration) bool
+	IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node) bool
 	IsImplementationOfOverload(node *ast.SignatureDeclaration) bool
 	GetEnumMemberValue(node *ast.Node) evaluator.Result
 	IsLateBound(node *ast.Node) bool

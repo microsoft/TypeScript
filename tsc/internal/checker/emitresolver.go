@@ -498,6 +498,30 @@ func (r *emitResolver) IsImportRequiredByAugmentation(decl *ast.ImportDeclaratio
 	return false
 }
 
+func (r *emitResolver) IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node) bool {
+	if !ast.IsPropertyAccessExpression(node) ||
+		!ast.IsIdentifier(node.Name()) ||
+		!ast.IsPropertyAccessExpression(node.Expression()) && !ast.IsIdentifier(node.Expression()) {
+		return false
+	}
+	if node.Expression().Kind == ast.KindIdentifier {
+		if node.Expression().AsIdentifier().Text != "Symbol" {
+			return false
+		}
+		r.checkerMu.Lock()
+		defer r.checkerMu.Unlock()
+		// Exactly `Symbol.something` and `Symbol` either does not resolve or definitely resolves to the global Symbol
+		return r.checker.getResolvedSymbol(node.Expression()) == r.checker.getGlobalSymbol("Symbol", ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*diagnostic*/)
+	}
+	if node.Expression().Expression().Kind != ast.KindIdentifier || node.Expression().Expression().AsIdentifier().Text != "globalThis" || node.Expression().Name().Text() != "Symbol" {
+		return false
+	}
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	// Exactly `globalThis.Symbol.something` and `globalThis` resolves to the global `globalThis`
+	return r.checker.getResolvedSymbol(node.Expression().Expression()) == r.checker.globalThisSymbol
+}
+
 func (r *emitResolver) RequiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
 	if !ast.IsParseTreeNode(declaration) {
 		return false

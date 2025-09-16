@@ -112,9 +112,14 @@ export declare class Cls {
     get getSetOk3(): number;
     set getSetOk3(value: number);
 }
+declare let noAnnotationStringName: string;
+declare const noAnnotationLiteralName = "noAnnotationLiteralName";
 export declare class C {
     [x: string]: any;
     [x: number]: number;
 }
 export interface I {
+    [noAnnotationStringName]: 10;
+    [noAnnotationLiteralName](): any;
 }
+export {};

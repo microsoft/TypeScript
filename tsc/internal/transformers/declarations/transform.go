@@ -384,8 +384,20 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		}
 		if ast.HasDynamicName(input) {
 			if tx.state.isolatedDeclarations {
-				// !!! isolatedDeclarations support
-				return nil
+				// Classes and object literals usually elide properties with computed names that are not of a literal type
+				// In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
+				if !tx.resolver.IsDefinitelyReferenceToGlobalSymbolObject(input.Name().Expression()) {
+					if ast.IsClassDeclaration(input.Parent) || ast.IsObjectLiteralExpression(input.Parent) {
+						// !!! TODO: isolatedDeclarations diagnostics
+						// context.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations))
+						return nil
+					} else if (ast.IsInterfaceDeclaration(input.Parent) || ast.IsTypeLiteralNode(input.Parent)) && !ast.IsEntityNameExpression(input.Name().Expression()) {
+						// Type declarations just need to double-check that the input computed name is an entity name expression
+						// !!! TODO: isolatedDeclarations diagnostics
+						// context.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations))
+						return nil
+					}
+				}
 			} else if !tx.resolver.IsLateBound(tx.EmitContext().ParseNode(input)) || !ast.IsEntityNameExpression(input.Name().AsComputedPropertyName().Expression) {
 				return nil
 			}
