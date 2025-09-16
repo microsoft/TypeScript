@@ -32,11 +32,6 @@ let n3 = test[numbersNotConst.one];
 
 
 //// [constIndexedAccess.js]
-var numbers;
-(function (numbers) {
-    numbers[numbers["zero"] = 0] = "zero";
-    numbers[numbers["one"] = 1] = "one";
-})(numbers || (numbers = {}));
 let test;
 let s = test[0];
 let n = test[1];

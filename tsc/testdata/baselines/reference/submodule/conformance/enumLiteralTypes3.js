@@ -122,12 +122,6 @@ function f13(x: Choice): Choice {
 }
 
 //// [enumLiteralTypes3.js]
-var Choice;
-(function (Choice) {
-    Choice[Choice["Unknown"] = 0] = "Unknown";
-    Choice[Choice["Yes"] = 1] = "Yes";
-    Choice[Choice["No"] = 2] = "No";
-})(Choice || (Choice = {}));
 ;
 function f1(a, b, c, d) {
     a = a;

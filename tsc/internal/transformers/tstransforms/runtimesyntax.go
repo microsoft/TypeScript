@@ -64,7 +64,7 @@ func (tx *RuntimeSyntaxTransformer) pushScope(node *ast.Node) (savedCurrentScope
 	case ast.KindCaseBlock, ast.KindModuleBlock, ast.KindBlock:
 		tx.currentScope = node
 		tx.currentScopeFirstDeclarationsOfName = nil
-	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindEnumDeclaration, ast.KindModuleDeclaration, ast.KindVariableStatement:
+	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindVariableStatement:
 		tx.recordDeclarationInScope(node)
 	}
 	return savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName
@@ -309,6 +309,10 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 }
 
 func (tx *RuntimeSyntaxTransformer) visitEnumDeclaration(node *ast.EnumDeclaration) *ast.Node {
+	if !tx.shouldEmitEnumDeclaration(node) {
+		return tx.EmitContext().NewNotEmittedStatement(node.AsNode())
+	}
+
 	statements := []*ast.Statement{}
 
 	// If needed, we should emit a variable declaration for the enum:
@@ -553,6 +557,10 @@ func (tx *RuntimeSyntaxTransformer) transformEnumMember(
 }
 
 func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node *ast.ModuleDeclaration) *ast.Node {
+	if !tx.shouldEmitModuleDeclaration(node) {
+		return tx.EmitContext().NewNotEmittedStatement(node.AsNode())
+	}
+
 	statements := []*ast.Statement{}
 
 	// If needed, we should emit a variable declaration for the module:
@@ -1128,6 +1136,19 @@ func (tx *RuntimeSyntaxTransformer) evaluateEntity(node *ast.Node, location *ast
 		}
 	}
 	return result
+}
+
+func (tx *RuntimeSyntaxTransformer) shouldEmitEnumDeclaration(node *ast.EnumDeclaration) bool {
+	return !ast.IsEnumConst(node.AsNode()) || tx.compilerOptions.ShouldPreserveConstEnums()
+}
+
+func (tx *RuntimeSyntaxTransformer) shouldEmitModuleDeclaration(node *ast.ModuleDeclaration) bool {
+	pn := tx.EmitContext().ParseNode(node.AsNode())
+	if pn == nil {
+		// If we can't find a parse tree node, assume the node is instantiated.
+		return true
+	}
+	return isInstantiatedModule(node.AsNode(), tx.compilerOptions.ShouldPreserveConstEnums())
 }
 
 func getInnermostModuleDeclarationFromDottedModule(moduleDeclaration *ast.ModuleDeclaration) *ast.ModuleDeclaration {

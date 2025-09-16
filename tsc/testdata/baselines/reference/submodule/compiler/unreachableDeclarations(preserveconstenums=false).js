@@ -102,10 +102,6 @@ function func1() {
     (function (EnumA) {
         EnumA[EnumA["Value"] = 0] = "Value";
     })(EnumA || (EnumA = {}));
-    let EnumB;
-    (function (EnumB) {
-        EnumB[EnumB["Value"] = 0] = "Value";
-    })(EnumB || (EnumB = {}));
 }
 function func2() {
     aFunc();
@@ -126,10 +122,6 @@ function func3() {
     function aFunc() {
         console.log(0 /* EnumB.Value */);
     }
-    let EnumB;
-    (function (EnumB) {
-        EnumB[EnumB["Value"] = 0] = "Value";
-    })(EnumB || (EnumB = {}));
 }
 function func4() {
     aFunc();

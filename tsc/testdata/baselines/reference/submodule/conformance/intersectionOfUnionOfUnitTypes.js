@@ -28,16 +28,6 @@ let z5: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E) & (E.D | E.E |
 
 
 //// [intersectionOfUnionOfUnitTypes.js]
-// @strict
-var E;
-(function (E) {
-    E[E["A"] = 0] = "A";
-    E[E["B"] = 1] = "B";
-    E[E["C"] = 2] = "C";
-    E[E["D"] = 3] = "D";
-    E[E["E"] = 4] = "E";
-    E[E["F"] = 5] = "F";
-})(E || (E = {}));
 let x0; // 'a' | 'b' | 'c'
 let x1; // 'b' | 'c'
 let x2; // 'c'

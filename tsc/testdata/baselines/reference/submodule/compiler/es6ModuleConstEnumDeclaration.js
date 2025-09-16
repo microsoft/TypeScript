@@ -48,36 +48,11 @@ module m2 {
 }
 
 //// [es6ModuleConstEnumDeclaration.js]
-export { e1 };
-var e1;
-(function (e1) {
-    e1[e1["a"] = 0] = "a";
-    e1[e1["b"] = 1] = "b";
-    e1[e1["c"] = 2] = "c";
-})(e1 || (e1 = {}));
-var e2;
-(function (e2) {
-    e2[e2["x"] = 0] = "x";
-    e2[e2["y"] = 1] = "y";
-    e2[e2["z"] = 2] = "z";
-})(e2 || (e2 = {}));
 var x = 0 /* e1.a */;
 var y = 0 /* e2.x */;
 export { m1 };
 var m1;
 (function (m1) {
-    let e3;
-    (function (e3) {
-        e3[e3["a"] = 0] = "a";
-        e3[e3["b"] = 1] = "b";
-        e3[e3["c"] = 2] = "c";
-    })(e3 = m1.e3 || (m1.e3 = {}));
-    let e4;
-    (function (e4) {
-        e4[e4["x"] = 0] = "x";
-        e4[e4["y"] = 1] = "y";
-        e4[e4["z"] = 2] = "z";
-    })(e4 || (e4 = {}));
     var x1 = 0 /* e1.a */;
     var y1 = 0 /* e2.x */;
     var x2 = 0 /* e3.a */;
@@ -85,18 +60,6 @@ var m1;
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
-    let e5;
-    (function (e5) {
-        e5[e5["a"] = 0] = "a";
-        e5[e5["b"] = 1] = "b";
-        e5[e5["c"] = 2] = "c";
-    })(e5 = m2.e5 || (m2.e5 = {}));
-    let e6;
-    (function (e6) {
-        e6[e6["x"] = 0] = "x";
-        e6[e6["y"] = 1] = "y";
-        e6[e6["z"] = 2] = "z";
-    })(e6 || (e6 = {}));
     var x1 = 0 /* e1.a */;
     var y1 = 0 /* e2.x */;
     var x2 = 0 /* e5.a */;

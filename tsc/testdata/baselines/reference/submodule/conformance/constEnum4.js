@@ -10,18 +10,9 @@ else
 
 
 //// [constEnum4.js]
-if (1) {
-    var A;
-    (function (A) {
-    })(A || (A = {}));
-}
-else if (2) {
-    var B;
-    (function (B) {
-    })(B || (B = {}));
-}
-else {
-    var C;
-    (function (C) {
-    })(C || (C = {}));
-}
+if (1)
+    ;
+else if (2)
+    ;
+else
+    ;

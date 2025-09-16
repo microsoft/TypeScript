@@ -72,16 +72,3 @@ var E5;
     E5["g"] = -Infinity;
     if (typeof E5.g !== "string") E5[E5.g] = "g";
 })(E5 || (E5 = {}));
-var E6;
-(function (E6) {
-    E6[E6["a"] = 1 / 0] = "a";
-    E6[E6["b"] = 2 / 0.0] = "b";
-    E6[E6["c"] = 1.0 / 0.0] = "c";
-    E6[E6["d"] = 0.0 / 0.0] = "d";
-    E6["e"] = NaN;
-    if (typeof E6.e !== "string") E6[E6.e] = "e";
-    E6["f"] = Infinity;
-    if (typeof E6.f !== "string") E6[E6.f] = "f";
-    E6["g"] = -Infinity;
-    if (typeof E6.g !== "string") E6[E6.g] = "g";
-})(E6 || (E6 = {}));

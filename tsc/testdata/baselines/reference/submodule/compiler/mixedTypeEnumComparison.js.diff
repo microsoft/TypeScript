@@ -5,17 +5,10 @@
 
  //// [mixedTypeEnumComparison.js]
 -"use strict";
-+var E;
-+(function (E) {
-+    E["S1"] = "foo";
-+    E["S2"] = "bar";
-+    E[E["N1"] = 1000] = "N1";
-+    E[E["N2"] = 25] = "N2";
-+})(E || (E = {}));
  if (someNumber > 25 /* E.N2 */) {
      someNumber = 25 /* E.N2 */;
  }
-@@= skipped -14, +20 lines =@@
+@@= skipped -14, +13 lines =@@
  (function (E2) {
      E2["S1"] = "foo";
      E2[E2["N1"] = 1000] = "N1";

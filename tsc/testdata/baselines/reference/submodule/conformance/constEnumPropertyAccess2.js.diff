@@ -1,20 +1,16 @@
 --- old.constEnumPropertyAccess2.js
 +++ new.constEnumPropertyAccess2.js
-@@= skipped -24, +24 lines =@@
- // constant enum declarations are completely erased in the emitted JavaScript code.
- // it is an error to reference a constant enum object in any other context
- // than a property access that selects one of the enum's members
-+var G;
-+(function (G) {
-+    G[G["A"] = 1] = "A";
-+    G[G["B"] = 2] = "B";
-+    G[G["C"] = 3] = "C";
-+    G[G["D"] = 2] = "D";
-+})(G || (G = {}));
+@@= skipped -21, +21 lines =@@
+
+
+ //// [constEnumPropertyAccess2.js]
+-// constant enum declarations are completely erased in the emitted JavaScript code.
+-// it is an error to reference a constant enum object in any other context
+-// than a property access that selects one of the enum's members
  // Error from referring constant enum in any other context than a property access
  var z = G;
  var z1 = G[1 /* G.A */];
-@@= skipped -10, +17 lines =@@
+@@= skipped -13, +10 lines =@@
 
 
  //// [constEnumPropertyAccess2.d.ts]

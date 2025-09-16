@@ -130,12 +130,6 @@ var m1;
     }
     m1.b = b;
 })(m1 || (m1 = {}));
-var color;
-(function (color) {
-    color[color["red"] = 0] = "red";
-    color[color["green"] = 1] = "green";
-    color[color["blue"] = 2] = "blue";
-})(color || (color = {}));
 var shade = 1;
 
 

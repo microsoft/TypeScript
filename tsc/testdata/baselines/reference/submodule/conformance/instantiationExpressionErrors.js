@@ -172,12 +172,6 @@ class C4 {
     specialFoo = f;
     bar = 123;
 }
-// Repro from #49551
-var MyVer;
-(function (MyVer) {
-    MyVer[MyVer["v1"] = 1] = "v1";
-    MyVer[MyVer["v2"] = 2] = "v2";
-})(MyVer || (MyVer = {}));
 let ver = 21;
 const a = ver < (1 /* MyVer.v1 */ >= 2 /* MyVer.v2 */ ? 1 /* MyVer.v1 */ : 2 /* MyVer.v2 */);
 

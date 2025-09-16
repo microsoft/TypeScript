@@ -28,12 +28,6 @@ var My;
     (function (Internal) {
         function getThing() { }
         Internal.getThing = getThing;
-        let WhichThing;
-        (function (WhichThing) {
-            WhichThing[WhichThing["A"] = 0] = "A";
-            WhichThing[WhichThing["B"] = 1] = "B";
-            WhichThing[WhichThing["C"] = 2] = "C";
-        })(WhichThing = Internal.WhichThing || (Internal.WhichThing = {}));
     })(Internal = My.Internal || (My.Internal = {}));
 })(My || (My = {}));
 //// [usage.js]

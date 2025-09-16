@@ -31,12 +31,6 @@ MyConstEnum.Foo;
 //// [ConstEnum.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyConstEnum = void 0;
-var MyConstEnum;
-(function (MyConstEnum) {
-    MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";
-    MyConstEnum[MyConstEnum["Bar"] = 1] = "Bar";
-})(MyConstEnum || (exports.MyConstEnum = MyConstEnum = {}));
 ;
 //// [ImportExport.js]
 "use strict";

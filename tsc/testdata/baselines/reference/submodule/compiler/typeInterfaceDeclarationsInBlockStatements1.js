@@ -37,6 +37,7 @@ function f4() {
 // https://github.com/microsoft/TypeScript/issues/60175
 function f1() {
     if (true)
+        ;
     console.log("");
 }
 function f2() {
@@ -46,6 +47,7 @@ function f2() {
 }
 function f3() {
     if (true)
+        ;
     console.log("");
 }
 function f4() {

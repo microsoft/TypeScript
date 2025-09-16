@@ -115,12 +115,6 @@ function f4(x) {
         }
     }
 }
-// Repro from #31319
-var EnumTypeNode;
-(function (EnumTypeNode) {
-    EnumTypeNode["Pattern"] = "Pattern";
-    EnumTypeNode["Disjunction"] = "Disjunction";
-})(EnumTypeNode || (EnumTypeNode = {}));
 let n;
 if (n.type === "Disjunction") {
     n.alternatives.slice();

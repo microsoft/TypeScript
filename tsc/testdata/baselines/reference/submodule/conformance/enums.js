@@ -39,11 +39,6 @@ var SyntaxKind;
     SyntaxKind[SyntaxKind["ImportClause"] = 0] = "ImportClause";
     SyntaxKind[SyntaxKind["ExportDeclaration"] = 1] = "ExportDeclaration";
 })(SyntaxKind || (SyntaxKind = {}));
-var SymbolFlags;
-(function (SymbolFlags) {
-    SymbolFlags["Type"] = "Type";
-    SymbolFlags["Value"] = "Value";
-})(SymbolFlags || (SymbolFlags = {}));
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

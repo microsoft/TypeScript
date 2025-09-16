@@ -139,10 +139,6 @@ var NotLegalEnum;
 (function (NotLegalEnum) {
     NotLegalEnum[NotLegalEnum["B"] = 1] = "B";
 })(NotLegalEnum || (NotLegalEnum = {}));
-var NotLegalConstEnum;
-(function (NotLegalConstEnum) {
-    NotLegalConstEnum[NotLegalConstEnum["C"] = 2] = "C";
-})(NotLegalConstEnum || (NotLegalConstEnum = {}));
 // No errors after this point
 class MyClassOk {
     // Not a parameter property, ok

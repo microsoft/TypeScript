@@ -319,11 +319,6 @@ function foo(obj) {
 function onlyPlus(arg) {
     return arg;
 }
-var BarEnum;
-(function (BarEnum) {
-    BarEnum[BarEnum["bar1"] = 1] = "bar1";
-    BarEnum[BarEnum["bar2"] = 2] = "bar2";
-})(BarEnum || (BarEnum = {}));
 function func3(value) {
     if (value.type !== undefined) {
         switch (value.type) {

@@ -181,56 +181,6 @@ function baz(c: Comments) {
 
 
 //// [constEnums.js]
-var Enum1;
-(function (Enum1) {
-    Enum1[Enum1["A0"] = 100] = "A0";
-})(Enum1 || (Enum1 = {}));
-(function (Enum1) {
-    // correct cases
-    Enum1[Enum1["A"] = 0] = "A";
-    Enum1[Enum1["B"] = 1] = "B";
-    Enum1[Enum1["C"] = 10] = "C";
-    Enum1[Enum1["D"] = 1] = "D";
-    Enum1[Enum1["E"] = 1] = "E";
-    Enum1[Enum1["F"] = 1] = "F";
-    Enum1[Enum1["G"] = 1] = "G";
-    Enum1[Enum1["H"] = -2] = "H";
-    Enum1[Enum1["I"] = 0] = "I";
-    Enum1[Enum1["J"] = 0] = "J";
-    Enum1[Enum1["K"] = -6] = "K";
-    Enum1[Enum1["L"] = -2] = "L";
-    Enum1[Enum1["M"] = 2] = "M";
-    Enum1[Enum1["N"] = 2] = "N";
-    Enum1[Enum1["O"] = 0] = "O";
-    Enum1[Enum1["P"] = 0] = "P";
-    Enum1[Enum1["PQ"] = 1] = "PQ";
-    Enum1[Enum1["Q"] = -1] = "Q";
-    Enum1[Enum1["R"] = 0] = "R";
-    Enum1[Enum1["S"] = 0] = "S";
-    Enum1[Enum1["T"] = 11] = "T";
-    Enum1[Enum1["U"] = 11] = "U";
-    Enum1[Enum1["V"] = 11] = "V";
-    Enum1[Enum1["W"] = 11] = "W";
-    // correct cases: reference to the enum member from different enum declaration
-    Enum1["W1"] = A0;
-    if (typeof Enum1.W1 !== "string") Enum1[Enum1.W1] = "W1";
-    Enum1["W2"] = 100 /* Enum1.A0 */;
-    if (typeof Enum1.W2 !== "string") Enum1[Enum1.W2] = "W2";
-    Enum1["W3"] = 100 /* Enum1["A0"] */;
-    if (typeof Enum1.W3 !== "string") Enum1[Enum1.W3] = "W3";
-    Enum1[Enum1["W4"] = 11] = "W4";
-    Enum1[Enum1["W5"] = 11] = "W5";
-})(Enum1 || (Enum1 = {}));
-var Comments;
-(function (Comments) {
-    Comments[Comments["//"] = 0] = "//";
-    Comments[Comments["/*"] = 1] = "/*";
-    Comments[Comments["*/"] = 2] = "*/";
-    Comments[Comments["///"] = 3] = "///";
-    Comments[Comments["#"] = 4] = "#";
-    Comments[Comments["<!--"] = 5] = "<!--";
-    Comments[Comments["-->"] = 6] = "-->";
-})(Comments || (Comments = {}));
 var A2;
 (function (A2) {
     let B;

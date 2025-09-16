@@ -22,14 +22,6 @@ E["E"].toString();
 
 
 //// [constEnumPropertyAccess3.js]
-var E;
-(function (E) {
-    E[E["A"] = -2] = "A";
-    E[E["B"] = -1] = "B";
-    E[E["C"] = -3] = "C";
-    E[E["D"] = -3] = "D";
-    E[E["E"] = -9] = "E";
-})(E || (E = {}));
 (-2 /* E.A */).toString();
 (-1 /* E.B */).toString();
 (-3 /* E.C */).toString();

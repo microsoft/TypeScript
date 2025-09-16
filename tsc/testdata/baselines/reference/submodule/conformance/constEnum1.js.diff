@@ -1,26 +1,18 @@
 --- old.constEnum1.js
 +++ new.constEnum1.js
-@@= skipped -19, +19 lines =@@
+@@= skipped -16, +16 lines =@@
+ }
+
+ //// [constEnum1.js]
++
++
++//// [constEnum1.d.ts]
  // An enum declaration that specifies a const modifier is a constant enum declaration.
  // In a constant enum declaration, all members must have constant values and
  // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
-+var E;
-+(function (E) {
-+    E[E["a"] = 10] = "a";
-+    E[E["b"] = 10] = "b";
-+    E[E["c"] = 11] = "c";
-+    E[E["e"] = 12] = "e";
-+    E[E["d"] = -13] = "d";
-+    E[E["f"] = 20] = "f";
-+    E[E["g"] = 20] = "g";
-+    E[E["h"] = 10] = "h";
-+})(E || (E = {}));
-
-
- //// [constEnum1.d.ts]
-+// An enum declaration that specifies a const modifier is a constant enum declaration.
-+// In a constant enum declaration, all members must have constant values and
-+// it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+-
+-
+-//// [constEnum1.d.ts]
  declare const enum E {
      a = 10,
      b = 10,

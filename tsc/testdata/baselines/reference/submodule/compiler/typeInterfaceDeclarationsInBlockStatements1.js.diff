@@ -8,19 +8,7 @@
  // https://github.com/microsoft/TypeScript/issues/60175
  function f1() {
      if (true)
--        ;
-     console.log("");
- }
- function f2() {
-@@= skipped -14, +12 lines =@@
- }
- function f3() {
-     if (true)
--        ;
-     console.log("");
- }
- function f4() {
-@@= skipped -11, +10 lines =@@
+@@= skipped -25, +24 lines =@@
 
 
  //// [typeInterfaceDeclarationsInBlockStatements1.d.ts]

@@ -30,15 +30,7 @@ function foo1() {
 }
 function foo2() {
     return 0 /* E.A */;
-    let E;
-    (function (E) {
-        E[E["A"] = 0] = "A";
-    })(E || (E = {}));
 }
 const config = {
     a: 2 /* AfterObject.A */,
 };
-var AfterObject;
-(function (AfterObject) {
-    AfterObject[AfterObject["A"] = 2] = "A";
-})(AfterObject || (AfterObject = {}));

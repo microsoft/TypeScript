@@ -156,11 +156,5 @@ function foo(node) {
 function bar(node) {
     const a = tryCast(node, isExpression); // tryCast<Expression, Node>
 }
-// Repro from #49924
-var SyntaxKind1;
-(function (SyntaxKind1) {
-    SyntaxKind1[SyntaxKind1["ClassExpression"] = 0] = "ClassExpression";
-    SyntaxKind1[SyntaxKind1["ClassStatement"] = 1] = "ClassStatement";
-})(SyntaxKind1 || (SyntaxKind1 = {}));
 const maybeClassStatement = tryCast(statement, isClassLike); // ClassLike1
 const x = tryCast(types, isNodeArray); // NodeAray<TypeNode>

@@ -126,14 +126,6 @@ function foo() {
 
 
 //// [coAndContraVariantInferences3.js]
-var SyntaxKind;
-(function (SyntaxKind) {
-    SyntaxKind[SyntaxKind["ImportDeclaration"] = 0] = "ImportDeclaration";
-    SyntaxKind[SyntaxKind["Modifier"] = 1] = "Modifier";
-    SyntaxKind[SyntaxKind["ImportClause"] = 2] = "ImportClause";
-    SyntaxKind[SyntaxKind["AssertClause"] = 3] = "AssertClause";
-    SyntaxKind[SyntaxKind["Decorator"] = 4] = "Decorator";
-})(SyntaxKind || (SyntaxKind = {}));
 ;
 buildOverload("updateImportDeclaration")
     .overload({

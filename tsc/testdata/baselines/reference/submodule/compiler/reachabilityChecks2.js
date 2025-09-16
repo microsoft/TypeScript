@@ -15,10 +15,6 @@ module A4 {
 
 //// [reachabilityChecks2.js]
 while (true) { }
-var E;
-(function (E) {
-    E[E["X"] = 0] = "X";
-})(E || (E = {}));
 var A4;
 (function (A4) {
     while (true)

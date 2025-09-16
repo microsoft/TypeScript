@@ -25,15 +25,6 @@ let c1 = Foo["C"].toString();
 
 
 //// [constEnumToStringWithComments.js]
-var Foo;
-(function (Foo) {
-    Foo[Foo["X"] = 100] = "X";
-    Foo[Foo["Y"] = 0.5] = "Y";
-    Foo[Foo["Z"] = 2] = "Z";
-    Foo[Foo["A"] = -1] = "A";
-    Foo[Foo["B"] = -1.5] = "B";
-    Foo[Foo["C"] = -1] = "C";
-})(Foo || (Foo = {}));
 let x0 = 100 /* Foo.X */.toString();
 let x1 = 100 /* Foo["X"] */.toString();
 let y0 = 0.5 /* Foo.Y */.toString();

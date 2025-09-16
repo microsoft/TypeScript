@@ -1,20 +1,6 @@
 --- old.declarationEmitStringEnumUsedInNonlocalSpread.js
 +++ new.declarationEmitStringEnumUsedInNonlocalSpread.js
-@@= skipped -33, +33 lines =@@
- //// [class.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--exports.A = void 0;
-+exports.A = exports.TestEnum = void 0;
-+var TestEnum;
-+(function (TestEnum) {
-+    TestEnum["Test1"] = "123123";
-+    TestEnum["Test2"] = "12312312312";
-+})(TestEnum || (exports.TestEnum = TestEnum = {}));
- class A {
-     getA() {
-         return {
-@@= skipped -25, +30 lines =@@
+@@= skipped -58, +58 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.B = void 0;

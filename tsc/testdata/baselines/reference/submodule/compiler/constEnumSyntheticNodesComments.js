@@ -21,13 +21,6 @@ function verify(a: En) {
 }
 
 //// [constEnumSyntheticNodesComments.js]
-var En;
-(function (En) {
-    En[En["A"] = 0] = "A";
-    En[En["B"] = 1] = "B";
-    En[En["C"] = 2] = "C";
-    En[En["D"] = 3] = "D";
-})(En || (En = {}));
 function assert(x) {
     return x;
 }

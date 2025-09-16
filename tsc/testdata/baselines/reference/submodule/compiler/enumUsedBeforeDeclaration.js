@@ -17,9 +17,3 @@ var Color;
     Color[Color["Green"] = 1] = "Green";
     Color[Color["Blue"] = 2] = "Blue";
 })(Color || (Color = {}));
-var ConstColor;
-(function (ConstColor) {
-    ConstColor[ConstColor["Red"] = 0] = "Red";
-    ConstColor[ConstColor["Green"] = 1] = "Green";
-    ConstColor[ConstColor["Blue"] = 2] = "Blue";
-})(ConstColor || (ConstColor = {}));

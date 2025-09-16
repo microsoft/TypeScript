@@ -1,21 +1,6 @@
 --- old.superInStaticMembers1(target=es5).js
 +++ new.superInStaticMembers1(target=es5).js
-@@= skipped -493, +493 lines =@@
- //// [external.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--exports.Reflect = void 0;
-+exports.Baz = exports.Reflect = void 0;
- class Reflect {
- }
- exports.Reflect = Reflect;
-+var Baz;
-+(function (Baz) {
-+})(Baz || (exports.Baz = Baz = {}));
- class default_1 {
- }
- exports.default = default_1;
-@@= skipped -11, +14 lines =@@
+@@= skipped -504, +504 lines =@@
  //// [locals.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
@@ -30,17 +15,7 @@
          (() => {
              var Reflect; // collision (es2015-es2021 only)
              super.w();
-@@= skipped -34, +30 lines =@@
-             super.w();
-         })(),
-         (() => {
-+            let Reflect;
-+            (function (Reflect) {
-+            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-             super.w();
-         })(),
-         (() => {
-@@= skipped -19, +22 lines =@@
+@@= skipped -53, +49 lines =@@
              super.w();
          })(),
      ];
@@ -75,10 +50,12 @@
          super.w();
 -    })();
 -    (() => {
--        let Reflect;
--        (function (Reflect) {
--        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
--        super.w();
++    }
++    static {
+         let Reflect;
+         (function (Reflect) {
+         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+         super.w();
 -    })();
 -    (() => {
 -        super.w();
@@ -92,15 +69,6 @@
 -    (() => {
 +    }
 +    static {
-+        let Reflect;
-+        (function (Reflect) {
-+        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-+        super.w();
-+    }
-+    static {
-+        let Reflect;
-+        (function (Reflect) {
-+        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {
@@ -328,9 +296,6 @@
 -    C._ = super.w();
 -    return C;
 -})();
-+var Reflect;
-+(function (Reflect) {
-+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -338,9 +303,6 @@
  "use strict";
 -var _a;
  Object.defineProperty(exports, "__esModule", { value: true });
-+var Reflect;
-+(function (Reflect) {
-+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
  class C extends B {
 +    static { super.w(); }
  }

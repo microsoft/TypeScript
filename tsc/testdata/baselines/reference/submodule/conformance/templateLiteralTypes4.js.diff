@@ -5,32 +5,10 @@
 
  //// [templateLiteralTypes4.js]
 -"use strict";
-+// infer from literal enums
-+var StringLiteralEnum;
-+(function (StringLiteralEnum) {
-+    StringLiteralEnum["Zero"] = "0";
-+    StringLiteralEnum["True"] = "true";
-+    StringLiteralEnum["False"] = "false";
-+    StringLiteralEnum["Undefined"] = "undefined";
-+    StringLiteralEnum["Null"] = "null";
-+})(StringLiteralEnum || (StringLiteralEnum = {}));
-+var NumberLiteralEnum;
-+(function (NumberLiteralEnum) {
-+    NumberLiteralEnum[NumberLiteralEnum["Zero"] = 0] = "Zero";
-+    NumberLiteralEnum[NumberLiteralEnum["One"] = 1] = "One";
-+})(NumberLiteralEnum || (NumberLiteralEnum = {}));
-+// infer from non-literal enums
-+var NonLiteralEnum;
-+(function (NonLiteralEnum) {
-+    NonLiteralEnum["Zero"] = 0 /* NumberLiteralEnum.Zero */;
-+    if (typeof NonLiteralEnum.Zero !== "string") NonLiteralEnum[NonLiteralEnum.Zero] = "Zero";
-+    NonLiteralEnum["One"] = 1 /* NumberLiteralEnum.One */;
-+    if (typeof NonLiteralEnum.One !== "string") NonLiteralEnum[NonLiteralEnum.One] = "One";
-+})(NonLiteralEnum || (NonLiteralEnum = {}));
  p.getIndex(0); // ok, 0 is a valid index
  p.getIndex(1); // ok, 1 is a valid index
  p.getIndex(2); // error, 2 is not a valid index
-@@= skipped -15, +36 lines =@@
+@@= skipped -15, +14 lines =@@
 
 
  //// [templateLiteralTypes4.d.ts]

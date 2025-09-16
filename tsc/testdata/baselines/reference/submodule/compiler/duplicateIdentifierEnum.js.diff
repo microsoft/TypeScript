@@ -6,17 +6,9 @@
  class A {
 +    foo;
  }
-+var B;
-+(function (B) {
-+    B[B["bar"] = 0] = "bar";
-+})(B || (B = {}));
-+var C;
-+(function (C) {
-+})(C || (C = {}));
  function C() {
      return 0;
- }
-@@= skipped -9, +17 lines =@@
+@@= skipped -9, +10 lines =@@
      D[D["bar"] = 0] = "bar";
  })(D || (D = {}));
  class E {

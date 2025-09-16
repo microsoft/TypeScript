@@ -23,13 +23,16 @@ function f3(): void {
 //// [typeAliasDeclarationEmit3.js]
 function f1() {
     for (let i = 0; i < 1; i++)
+        ;
     console.log('f1');
 }
 function f2() {
     while (true)
+        ;
     console.log('f2');
 }
 function f3() {
     if (true)
+        ;
     console.log('f3');
 }

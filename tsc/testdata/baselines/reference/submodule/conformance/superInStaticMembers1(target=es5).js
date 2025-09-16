@@ -494,13 +494,10 @@ declare class B { static w(): number; }
 //// [external.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Baz = exports.Reflect = void 0;
+exports.Reflect = void 0;
 class Reflect {
 }
 exports.Reflect = Reflect;
-var Baz;
-(function (Baz) {
-})(Baz || (exports.Baz = Baz = {}));
 class default_1 {
 }
 exports.default = default_1;
@@ -538,9 +535,6 @@ class C extends B {
             super.w();
         })(),
         (() => {
-            let Reflect;
-            (function (Reflect) {
-            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
@@ -588,9 +582,6 @@ class C extends B {
         super.w();
     }
     static {
-        let Reflect;
-        (function (Reflect) {
-        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
         super.w();
     }
     static {
@@ -714,18 +705,12 @@ class C extends B {
 //// [constEnumInContainingScopeStaticField.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Reflect;
-(function (Reflect) {
-})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
 //// [constEnumInContainingScopeStaticBlock.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Reflect;
-(function (Reflect) {
-})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }

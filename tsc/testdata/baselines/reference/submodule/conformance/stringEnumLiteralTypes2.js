@@ -102,12 +102,6 @@ function f21(x: Item) {
 }
 
 //// [stringEnumLiteralTypes2.js]
-var Choice;
-(function (Choice) {
-    Choice["Unknown"] = "";
-    Choice["Yes"] = "yes";
-    Choice["No"] = "no";
-})(Choice || (Choice = {}));
 ;
 function f1() {
     var a;

@@ -1,14 +1,6 @@
 --- old.superInStaticMembers1(target=es2021).js
 +++ new.superInStaticMembers1(target=es2021).js
-@@= skipped -493, +493 lines =@@
- //// [external.js]
- export class Reflect {
- }
-+export { Baz };
-+var Baz;
-+(function (Baz) {
-+})(Baz || (Baz = {}));
- export default class {
+@@= skipped -497, +497 lines =@@
  }
  ;
  //// [locals.js]
@@ -52,9 +44,6 @@
 +            super.w();
 +        })(),
 +        (() => {
-+            let Reflect;
-+            (function (Reflect) {
-+            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
@@ -105,9 +94,12 @@
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
--        let Reflect;
--        (function (Reflect) {
--        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
++        super.w();
++    }
++    static {
+         let Reflect;
+         (function (Reflect) {
+         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
@@ -124,15 +116,6 @@
 +        super.w();
 +    }
 +    static {
-+        let Reflect;
-+        (function (Reflect) {
-+        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-+        super.w();
-+    }
-+    static {
-+        let Reflect;
-+        (function (Reflect) {
-+        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {
@@ -364,9 +347,6 @@
  //// [constEnumInContainingScopeStaticField.js]
 -var _a, _b;
 -class C extends (_b = B) {
-+var Reflect;
-+(function (Reflect) {
-+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
  }
@@ -376,9 +356,6 @@
  //// [constEnumInContainingScopeStaticBlock.js]
 -var _a, _b;
 -class C extends (_b = B) {
-+var Reflect;
-+(function (Reflect) {
-+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static { super.w(); }
  }

@@ -8,16 +8,3 @@
  function f1(x) {
      if (typeof x !== 'string') {
          switch (x.kind) {
-@@= skipped -33, +32 lines =@@
-         }
-     }
- }
-+// Repro from #31319
-+var EnumTypeNode;
-+(function (EnumTypeNode) {
-+    EnumTypeNode["Pattern"] = "Pattern";
-+    EnumTypeNode["Disjunction"] = "Disjunction";
-+})(EnumTypeNode || (EnumTypeNode = {}));
- let n;
- if (n.type === "Disjunction") {
-     n.alternatives.slice();

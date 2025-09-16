@@ -45,13 +45,6 @@ var A;
 class A {
     foo;
 }
-var B;
-(function (B) {
-    B[B["bar"] = 0] = "bar";
-})(B || (B = {}));
-var C;
-(function (C) {
-})(C || (C = {}));
 function C() {
     return 0;
 }

@@ -19,16 +19,9 @@
  class Options {
 +    visible;
  }
-+var E;
-+(function (E) {
-+    E[E["A"] = 0] = "A";
-+    E[E["B"] = 1] = "B";
-+    E[E["C"] = 2] = "C";
-+})(E || (E = {}));
  function getProperty(obj, key) {
      return obj[key];
- }
-@@= skipped -36, +50 lines =@@
+@@= skipped -36, +44 lines =@@
      let z = getProperty(foo, bar); // any
  }
  class Component {

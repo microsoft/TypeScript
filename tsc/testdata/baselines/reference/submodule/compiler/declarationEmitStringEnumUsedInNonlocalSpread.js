@@ -34,12 +34,7 @@ export class B extends A {
 //// [class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = exports.TestEnum = void 0;
-var TestEnum;
-(function (TestEnum) {
-    TestEnum["Test1"] = "123123";
-    TestEnum["Test2"] = "12312312312";
-})(TestEnum || (exports.TestEnum = TestEnum = {}));
+exports.A = void 0;
 class A {
     getA() {
         return {

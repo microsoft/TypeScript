@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/constEnumInEmbeddedStatements.ts] ////
+
+=== constEnumInEmbeddedStatements.ts ===
+function t(x: number) {
+>t : (x: number) => void
+>x : number
+
+    if (x)
+>x : number
+
+        /* before E */ const enum E { A = 1 } /* after E */
+>E : E
+>A : E.A
+>1 : 1
+}
+

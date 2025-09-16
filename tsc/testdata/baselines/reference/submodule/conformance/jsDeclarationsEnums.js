@@ -67,7 +67,7 @@ export const enum L {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.L = exports.K = exports.J = exports.I = exports.H = exports.G = exports.F = exports.FF = exports.EE = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
+exports.K = exports.I = exports.H = exports.G = exports.F = exports.FF = exports.EE = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
 // Pretty much all of this should be an error, (since enums are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
 var A;
@@ -106,12 +106,6 @@ var I;
     I[I["B"] = 0] = "B";
     I[I["C"] = 1] = "C";
 })(I || (exports.I = I = {}));
-var J;
-(function (J) {
-    J[J["A"] = 1] = "A";
-    J[J["B"] = 2] = "B";
-    J[J["C"] = 3] = "C";
-})(J || (exports.J = J = {}));
 var K;
 (function (K) {
     K[K["None"] = 0] = "None";
@@ -120,14 +114,6 @@ var K;
     K[K["C"] = 4] = "C";
     K[K["Mask"] = 7] = "Mask";
 })(K || (exports.K = K = {}));
-var L;
-(function (L) {
-    L[L["None"] = 0] = "None";
-    L[L["A"] = 1] = "A";
-    L[L["B"] = 2] = "B";
-    L[L["C"] = 4] = "C";
-    L[L["Mask"] = 7] = "Mask";
-})(L || (exports.L = L = {}));
 
 
 //// [index.d.ts]

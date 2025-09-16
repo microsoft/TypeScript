@@ -25,10 +25,6 @@ foo[k] = ['foo'];
 
 //// [a.js]
 const k = Symbol();
-var Props;
-(function (Props) {
-    Props["k"] = "k";
-})(Props || (Props = {}));
 foo.k = ['foo'];
 foo['k'] = ['foo'];
 foo["k" /* Props.k */] = ['foo'];

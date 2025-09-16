@@ -494,10 +494,6 @@ declare class B { static w(): number; }
 //// [external.js]
 export class Reflect {
 }
-export { Baz };
-var Baz;
-(function (Baz) {
-})(Baz || (Baz = {}));
 export default class {
 }
 ;
@@ -532,9 +528,6 @@ class C extends B {
             super.w();
         })(),
         (() => {
-            let Reflect;
-            (function (Reflect) {
-            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
@@ -582,9 +575,6 @@ class C extends B {
         super.w();
     }
     static {
-        let Reflect;
-        (function (Reflect) {
-        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
         super.w();
     }
     static {
@@ -693,17 +683,11 @@ class C extends B {
 }
 export {};
 //// [constEnumInContainingScopeStaticField.js]
-var Reflect;
-(function (Reflect) {
-})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
 export {};
 //// [constEnumInContainingScopeStaticBlock.js]
-var Reflect;
-(function (Reflect) {
-})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
