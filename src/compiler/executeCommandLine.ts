@@ -617,7 +617,10 @@ function executeCommandLineWorker(
 
         const fixBaseURLLogs: string[] = [];
         try {
-            fixBaseURLSync(configFileName, log => fixBaseURLLogs.push(log));
+            const fixes = fixBaseURLSync(configFileName, log => fixBaseURLLogs.push(log));
+            for (const [fileName, text] of Object.entries(fixes)) {
+                sys.writeFile(fileName, text);
+            }
         }
         catch (e) {
             throw new Error([...fixBaseURLLogs, `Error: ${e instanceof Error ? e.message : e}`].join(sys.newLine));
@@ -758,7 +761,10 @@ export function executeCommandLine(
         const fixBaseURLLogs: string[] = [];
         try {
             for (const project of projects) {
-                fixBaseURLSync(project, log => fixBaseURLLogs.push(log));
+                const fixes = fixBaseURLSync(project, log => fixBaseURLLogs.push(log));
+                for (const [fileName, text] of Object.entries(fixes)) {
+                    sys.writeFile(fileName, text);
+                }
             }
         }
         catch (e) {
