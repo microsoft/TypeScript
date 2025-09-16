@@ -116,6 +116,6 @@
         "npm": "8.19.4"
     },
     "dependencies": {
-        "@andrewbranch/ts-fix-baseurl": "^1.0.7"
+        "@andrewbranch/ts-fix-baseurl": "^1.0.8"
     }
 }
