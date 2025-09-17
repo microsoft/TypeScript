@@ -1,6 +1,7 @@
 error TS5055: Cannot write file '/src/a.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
+/src/a.js(1,6): error TS8016: Type assertion expressions can only be used in TypeScript files.
 /src/a.js(2,10): error TS17008: JSX element 'string' has no corresponding closing tag.
 /src/a.js(3,1): error TS1005: '</' expected.
 
@@ -8,8 +9,10 @@ error TS5102: Option 'outFile' has been removed. Please remove it from your conf
 !!! error TS5055: Cannot write file '/src/a.js' because it would overwrite input file.
 !!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 !!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-==== /src/a.js (2 errors) ====
+==== /src/a.js (3 errors) ====
     0 as number;
+         ~~~~~~
+!!! error TS8016: Type assertion expressions can only be used in TypeScript files.
     var v = <string>undefined;
              ~~~~~~
 !!! error TS17008: JSX element 'string' has no corresponding closing tag.

@@ -1,16 +1,16 @@
 --- old.jsDeclarationsImportAliasExposedWithinNamespace.errors.txt
 +++ new.jsDeclarationsImportAliasExposedWithinNamespace.errors.txt
 @@= skipped -0, +0 lines =@@
--file2.js(1,9): error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
--
--
--==== file.js (0 errors) ====
 +file.js(4,11): error TS2315: Type 'Object' is not generic.
 +file.js(10,51): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(13,13): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(14,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file.js(18,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file.js(18,39): error TS2300: Duplicate identifier 'myTypes'.
+ file2.js(1,9): error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
+-
+-
+-==== file.js (0 errors) ====
 +file2.js(6,11): error TS2315: Type 'Object' is not generic.
 +file2.js(12,23): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
@@ -50,12 +50,11 @@
      
      export {myTypes};
 -==== file2.js (1 errors) ====
-+==== file2.js (3 errors) ====
++==== file2.js (4 errors) ====
      import {myTypes} from './file.js';
--            ~~~~~~~
--!!! error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
-     
-     /**
+             ~~~~~~~
+ !!! error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
+@@= skipped -30, +51 lines =@@
       * @namespace testFnTypes
       * @global
       * @type {Object<string,*>}

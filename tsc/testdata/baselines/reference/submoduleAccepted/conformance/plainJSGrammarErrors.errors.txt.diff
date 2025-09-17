@@ -1,30 +1,16 @@
 --- old.plainJSGrammarErrors.errors.txt
 +++ new.plainJSGrammarErrors.errors.txt
-@@= skipped -4, +4 lines =@@
- plainJSGrammarErrors.js(17,9): error TS18041: A 'return' statement cannot be used inside a class static block.
- plainJSGrammarErrors.js(20,5): error TS1089: 'static' modifier cannot appear on a constructor declaration.
- plainJSGrammarErrors.js(21,5): error TS1089: 'async' modifier cannot appear on a constructor declaration.
--plainJSGrammarErrors.js(22,5): error TS8009: The 'const' modifier can only be used in TypeScript files.
- plainJSGrammarErrors.js(22,11): error TS1248: A class member cannot have the 'const' keyword.
--plainJSGrammarErrors.js(23,5): error TS8009: The 'const' modifier can only be used in TypeScript files.
- plainJSGrammarErrors.js(23,11): error TS1248: A class member cannot have the 'const' keyword.
+@@= skipped -11, +11 lines =@@
  plainJSGrammarErrors.js(26,11): error TS1030: 'async' modifier already seen.
  plainJSGrammarErrors.js(28,11): error TS1029: 'static' modifier must precede 'async' modifier.
  plainJSGrammarErrors.js(29,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
 -plainJSGrammarErrors.js(29,5): error TS8009: The 'export' modifier can only be used in TypeScript files.
  plainJSGrammarErrors.js(30,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
++plainJSGrammarErrors.js(34,9): error TS8017: Signature declarations can only be used in TypeScript files.
  plainJSGrammarErrors.js(34,22): error TS1005: '{' expected.
  plainJSGrammarErrors.js(35,9): error TS1054: A 'get' accessor cannot have parameters.
-@@= skipped -24, +21 lines =@@
- plainJSGrammarErrors.js(54,8): error TS1030: 'export' modifier already seen.
- plainJSGrammarErrors.js(55,8): error TS1044: 'static' modifier cannot appear on a module or namespace element.
- plainJSGrammarErrors.js(56,22): error TS1090: 'static' modifier cannot appear on a parameter.
--plainJSGrammarErrors.js(56,22): error TS8012: Parameter modifiers can only be used in TypeScript files.
- plainJSGrammarErrors.js(57,7): error TS1029: 'export' modifier must precede 'async' modifier.
- plainJSGrammarErrors.js(58,26): error TS1090: 'export' modifier cannot appear on a parameter.
--plainJSGrammarErrors.js(58,26): error TS8012: Parameter modifiers can only be used in TypeScript files.
- plainJSGrammarErrors.js(59,25): error TS1090: 'async' modifier cannot appear on a parameter.
--plainJSGrammarErrors.js(59,25): error TS8012: Parameter modifiers can only be used in TypeScript files.
+ plainJSGrammarErrors.js(36,9): error TS1049: A 'set' accessor must have exactly one parameter.
+@@= skipped -26, +26 lines =@@
  plainJSGrammarErrors.js(60,7): error TS1030: 'async' modifier already seen.
  plainJSGrammarErrors.js(61,1): error TS1042: 'async' modifier cannot be used here.
  plainJSGrammarErrors.js(62,5): error TS1042: 'async' modifier cannot be used here.
@@ -32,38 +18,16 @@
  plainJSGrammarErrors.js(64,1): error TS1042: 'async' modifier cannot be used here.
  plainJSGrammarErrors.js(65,1): error TS1042: 'async' modifier cannot be used here.
  plainJSGrammarErrors.js(66,1): error TS1042: 'async' modifier cannot be used here.
-@@= skipped -38, +34 lines =@@
- plainJSGrammarErrors.js(106,5): error TS1042: 'export' modifier cannot be used here.
- plainJSGrammarErrors.js(108,25): error TS1162: An object member cannot be declared optional.
- plainJSGrammarErrors.js(109,6): error TS1162: An object member cannot be declared optional.
--plainJSGrammarErrors.js(109,6): error TS8009: The '?' modifier can only be used in TypeScript files.
- plainJSGrammarErrors.js(110,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
- plainJSGrammarErrors.js(111,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
- plainJSGrammarErrors.js(114,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
-@@= skipped -35, +34 lines =@@
+@@= skipped -64, +63 lines =@@
  plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
 
 
 -==== plainJSGrammarErrors.js (102 errors) ====
-+==== plainJSGrammarErrors.js (94 errors) ====
++==== plainJSGrammarErrors.js (101 errors) ====
      class C {
          // #private mistakes
          q = #unbound
-@@= skipped -37, +37 lines =@@
-         ~~~~~
- !!! error TS1089: 'async' modifier cannot appear on a constructor declaration.
-         const x = 1
--        ~~~~~
--!!! error TS8009: The 'const' modifier can only be used in TypeScript files.
-               ~
- !!! error TS1248: A class member cannot have the 'const' keyword.
-         const y() {
--        ~~~~~
--!!! error TS8009: The 'const' modifier can only be used in TypeScript files.
-               ~
- !!! error TS1248: A class member cannot have the 'const' keyword.
-             return 12
-@@= skipped -21, +17 lines =@@
+@@= skipped -58, +58 lines =@@
          export cantExportProperty = 1
          ~~~~~~
  !!! error TS1031: 'export' modifier cannot appear on class elements of this kind.
@@ -72,29 +36,16 @@
          export cantExportMethod() {
          ~~~~~~
  !!! error TS1031: 'export' modifier cannot appear on class elements of this kind.
-@@= skipped -61, +59 lines =@@
-     function staticParam(static x = 1) { return x }
-                          ~~~~~~
- !!! error TS1090: 'static' modifier cannot appear on a parameter.
--                         ~~~~~~
--!!! error TS8012: Parameter modifiers can only be used in TypeScript files.
-     async export function oorder(x = 1) { return x }
-           ~~~~~~
- !!! error TS1029: 'export' modifier must precede 'async' modifier.
-     function cantExportParam(export x = 1) { return x }
-                              ~~~~~~
- !!! error TS1090: 'export' modifier cannot appear on a parameter.
--                             ~~~~~~
--!!! error TS8012: Parameter modifiers can only be used in TypeScript files.
-     function cantAsyncParam(async x = 1) { return x }
-                             ~~~~~
- !!! error TS1090: 'async' modifier cannot appear on a parameter.
--                            ~~~~~
--!!! error TS8012: Parameter modifiers can only be used in TypeScript files.
-     async async function extremelyAsync() {}
-           ~~~~~
- !!! error TS1030: 'async' modifier already seen.
-@@= skipped -24, +18 lines =@@
+@@= skipped -9, +7 lines =@@
+     
+         // accessor mistakes
+         get incorporeal();
++            ~~~~~~~~~~~
++!!! error TS8017: Signature declarations can only be used in TypeScript files.
+                          ~
+ !!! error TS1005: '{' expected.
+         get parametric(n) { return 1 }
+@@= skipped -76, +78 lines =@@
          async cantAsyncPropert = 1
          ~~~~~
  !!! error TS1042: 'async' modifier cannot be used here.
@@ -103,12 +54,3 @@
      }
      async const cantAsyncConst = 2
      ~~~~~
-@@= skipped -105, +103 lines =@@
-         m?() { return 12 },
-          ~
- !!! error TS1162: An object member cannot be declared optional.
--         ~
--!!! error TS8009: The '?' modifier can only be used in TypeScript files.
-         definitely!,
-                   ~
- !!! error TS1255: A definite assignment assertion '!' is not permitted in this context.

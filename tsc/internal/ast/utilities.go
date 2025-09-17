@@ -1015,8 +1015,6 @@ func ModifierToFlag(token Kind) ModifierFlags {
 		return ModifierFlagsIn
 	case KindOutKeyword:
 		return ModifierFlagsOut
-	case KindImmediateKeyword:
-		return ModifierFlagsImmediate
 	case KindDecorator:
 		return ModifierFlagsDecorator
 	}
@@ -2086,10 +2084,7 @@ func IsComputedNonLiteralName(name *Node) bool {
 }
 
 func IsQuestionToken(node *Node) bool {
-	if node == nil {
-		return false
-	}
-	return node.Kind == KindQuestionToken
+	return node != nil && node.Kind == KindQuestionToken
 }
 
 func GetTextOfPropertyName(name *Node) string {
@@ -3552,23 +3547,7 @@ func ShouldTransformImportCall(fileName string, options *core.CompilerOptions, i
 }
 
 func HasQuestionToken(node *Node) bool {
-	switch node.Kind {
-	case KindParameter:
-		return node.AsParameterDeclaration().QuestionToken != nil
-	case KindMethodDeclaration:
-		return IsQuestionToken(node.AsMethodDeclaration().PostfixToken)
-	case KindShorthandPropertyAssignment:
-		return IsQuestionToken(node.AsShorthandPropertyAssignment().PostfixToken)
-	case KindMethodSignature:
-		return IsQuestionToken(node.AsMethodSignatureDeclaration().PostfixToken)
-	case KindPropertySignature:
-		return IsQuestionToken(node.AsPropertySignatureDeclaration().PostfixToken)
-	case KindPropertyAssignment:
-		return IsQuestionToken(node.AsPropertyAssignment().PostfixToken)
-	case KindPropertyDeclaration:
-		return IsQuestionToken(node.AsPropertyDeclaration().PostfixToken)
-	}
-	return false
+	return IsQuestionToken(node.PostfixToken())
 }
 
 func IsJsxOpeningLikeElement(node *Node) bool {
@@ -3876,4 +3855,8 @@ func IsJSDocNameReferenceContext(node *Node) bool {
 	return node.Flags&NodeFlagsJSDoc != 0 && FindAncestor(node, func(node *Node) bool {
 		return IsJSDocNameReference(node) || IsJSDocLinkLike(node)
 	}) != nil
+}
+
+func IsImportOrImportEqualsDeclaration(node *Node) bool {
+	return IsImportDeclaration(node) || IsImportEqualsDeclaration(node)
 }

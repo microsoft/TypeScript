@@ -116,11 +116,17 @@ Output::
 [7m1[0m import { Nominal } from '../common/nominal';
 [7m [0m [91m         ~~~~~~~[0m
 
+[96msub-project-2/index.js[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18042: [0m'MyNominal' is a type and cannot be imported in JavaScript files. Use 'import("../sub-project/index").MyNominal' in a JSDoc type annotation.
 
-Found 2 errors in 2 files.
+[7m1[0m import { MyNominal } from '../sub-project/index';
+[7m [0m [91m         ~~~~~~~~~[0m
+
+
+Found 3 errors in 3 files.
 
 Errors  Files
      1  common/nominal.js[90m:5[0m
+     1  sub-project-2/index.js[90m:1[0m
      1  sub-project/index.js[90m:1[0m
 
 //// [/home/src/workspaces/lib/common/nominal.d.ts] *new* 
@@ -238,7 +244,7 @@ function getVar() {
 }
 
 //// [/home/src/workspaces/lib/sub-project-2/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[4],"fileNames":["lib.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileInfos":[{"version":"24b4796cd50d1a9aabad1583878c494d-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    readonly species: symbol;\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"de751e2539eb6f12413f7067ad0a0ef5-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\ndeclare const _default: {};\nexport = _default;\n","225285a996cc5c4120877a377890d79e-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */ \n",{"version":"db2a90e082fd17d65127bda69975a727-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}","signature":"f2cd6630b2dfa04d1fc92179f15d1647-declare const variable: {\n    key: Nominal<string, \"MyNominal\">;\n};\n/**\n * @return {keyof typeof variable}\n */\nexport declare function getVar(): keyof typeof variable;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[4],"fileNames":["lib.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileInfos":[{"version":"24b4796cd50d1a9aabad1583878c494d-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    readonly species: symbol;\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"de751e2539eb6f12413f7067ad0a0ef5-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\ndeclare const _default: {};\nexport = _default;\n","225285a996cc5c4120877a377890d79e-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */ \n",{"version":"db2a90e082fd17d65127bda69975a727-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}","signature":"f2cd6630b2dfa04d1fc92179f15d1647-declare const variable: {\n    key: Nominal<string, \"MyNominal\">;\n};\n/**\n * @return {keyof typeof variable}\n */\nexport declare function getVar(): keyof typeof variable;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[4,[{"pos":9,"end":18,"code":18042,"category":1,"message":"'MyNominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../sub-project/index\").MyNominal' in a JSDoc type annotation."}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/lib/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -318,8 +324,22 @@ function getVar() {
       "../sub-project/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../solution/sub-project-2/index.js",
+      [
+        {
+          "pos": 9,
+          "end": 18,
+          "code": 18042,
+          "category": 1,
+          "message": "'MyNominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../sub-project/index\").MyNominal' in a JSDoc type annotation."
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2085
+  "size": 2322
 }
 //// [/home/src/workspaces/lib/sub-project/index.d.ts] *new* 
 import { Nominal } from '../common/nominal';

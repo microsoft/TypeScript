@@ -1,4 +1,8 @@
-/index.js(5,10): error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
+/index.js(1,21): error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
+/index.js(1,39): error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
+/index.js(5,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
+/index.js(6,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
+/index.js(7,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
 
 
 ==== /node_modules/@types/node/index.d.ts (0 errors) ====
@@ -7,14 +11,24 @@
       export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
     }
     
-==== /index.js (1 errors) ====
+==== /index.js (5 errors) ====
     import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
+                        ~~~~~~~~~~~~~~~~
+!!! error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
+                                          ~~~~~~~~~~~~~~~~
+!!! error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
     
     /** @typedef {{ x: any }} JSDocType */
     
     export { JSDocType };
              ~~~~~~~~~
-!!! error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
+!!! error TS18043: Types cannot appear in export declarations in JavaScript files.
+!!! related TS18044 /index.js:3:27: 'JSDocType' is automatically exported here.
     export { JSDocType as ThisIsFine };
+             ~~~~~~~~~
+!!! error TS18043: Types cannot appear in export declarations in JavaScript files.
+!!! related TS18044 /index.js:3:27: 'JSDocType' is automatically exported here.
     export { WriteFileOptions };
+             ~~~~~~~~~~~~~~~~
+!!! error TS18043: Types cannot appear in export declarations in JavaScript files.
     

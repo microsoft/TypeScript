@@ -57,6 +57,7 @@ type Parser struct {
 	scriptKind       core.ScriptKind
 	languageVariant  core.LanguageVariant
 	diagnostics      []*ast.Diagnostic
+	jsDiagnostics    []*ast.Diagnostic
 	jsdocDiagnostics []*ast.Diagnostic
 
 	token                       ast.Kind
@@ -356,6 +357,9 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 		}
 	}
 	collectExternalModuleReferences(result)
+	if ast.IsInJSFile(node) {
+		result.SetJSDiagnostics(getJSSyntacticDiagnosticsForFile(result))
+	}
 	return result
 }
 
@@ -6431,4 +6435,113 @@ func parseResolutionMode(mode string, pos int, end int /*reportDiagnostic: Pragm
 	return resolutionKind
 	// reportDiagnostic(pos, end - pos, Diagnostics.resolution_mode_should_be_either_require_or_import);
 	// return undefined;
+}
+
+func getJSSyntacticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	var diags []*ast.Diagnostic
+
+	errorAtRange := func(loc core.TextRange, message *diagnostics.Message, args ...any) {
+		diags = append(diags, ast.NewDiagnostic(sourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), loc.Pos()), loc.End()), message, args...))
+	}
+
+	errorAtNode := func(node *ast.Node, message *diagnostics.Message, args ...any) {
+		diags = append(diags, ast.NewDiagnostic(sourceFile, scanner.GetErrorRangeForNode(sourceFile, node), message, args...))
+	}
+
+	var visit func(*ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		if node.Flags&ast.NodeFlagsReparsed != 0 || ast.IsTypeNode(node) && !ast.IsExpressionWithTypeArguments(node) {
+			return false
+		}
+		switch node.Kind {
+		case ast.KindParameter, ast.KindPropertyDeclaration, ast.KindMethodDeclaration:
+			if token := node.PostfixToken(); token != nil && token.Flags&ast.NodeFlagsReparsed == 0 && ast.IsQuestionToken(token) {
+				errorAtNode(node.PostfixToken(), diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?")
+			}
+			fallthrough
+		case ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindFunctionExpression,
+			ast.KindFunctionDeclaration, ast.KindArrowFunction, ast.KindVariableDeclaration:
+			if t := node.Type(); t != nil && t.Flags&ast.NodeFlagsReparsed == 0 {
+				errorAtNode(node.Type(), diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files)
+			} else if ast.IsFunctionLike(node) && node.Body() == nil {
+				errorAtNode(node, diagnostics.Signature_declarations_can_only_be_used_in_TypeScript_files)
+			}
+		case ast.KindImportClause:
+			if node.IsTypeOnly() {
+				errorAtNode(node.Parent, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import type")
+			}
+		case ast.KindExportDeclaration:
+			if node.IsTypeOnly() {
+				errorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "export type")
+			}
+		case ast.KindImportSpecifier:
+			if node.IsTypeOnly() {
+				errorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import...type")
+			}
+		case ast.KindExportSpecifier:
+			if node.IsTypeOnly() {
+				errorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "export...type")
+			}
+		case ast.KindImportEqualsDeclaration:
+			errorAtNode(node, diagnostics.X_import_can_only_be_used_in_TypeScript_files)
+		case ast.KindExportAssignment:
+			if node.AsExportAssignment().IsExportEquals {
+				errorAtNode(node, diagnostics.X_export_can_only_be_used_in_TypeScript_files)
+			}
+		case ast.KindHeritageClause:
+			if node.AsHeritageClause().Token == ast.KindImplementsKeyword {
+				errorAtNode(node, diagnostics.X_implements_clauses_can_only_be_used_in_TypeScript_files)
+			}
+		case ast.KindInterfaceDeclaration:
+			errorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "interface")
+			return false
+		case ast.KindModuleDeclaration:
+			errorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, scanner.TokenToString(node.AsModuleDeclaration().Keyword))
+			return false
+		case ast.KindTypeAliasDeclaration:
+			errorAtNode(node, diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files)
+			return false
+		case ast.KindEnumDeclaration:
+			errorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "enum")
+			return false
+		case ast.KindNonNullExpression:
+			errorAtNode(node, diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files)
+			return false
+		case ast.KindAsExpression:
+			errorAtNode(node.Type(), diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files)
+			return false
+		case ast.KindSatisfiesExpression:
+			errorAtNode(node.Type(), diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files)
+			return false
+		}
+		// Check absence of type parameters, type arguments and non-JavaScript modifiers
+		switch node.Kind {
+		case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor,
+			ast.KindSetAccessor, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindArrowFunction:
+			if list := node.TypeParameterList(); list != nil && core.Some(list.Nodes, func(n *ast.Node) bool { return n.Flags&ast.NodeFlagsReparsed == 0 }) {
+				errorAtRange(list.Loc, diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files)
+			}
+			fallthrough
+		case ast.KindVariableStatement, ast.KindPropertyDeclaration:
+			if modifiers := node.Modifiers(); modifiers != nil {
+				for _, modifier := range modifiers.Nodes {
+					if modifier.Flags&ast.NodeFlagsReparsed == 0 && modifier.Kind != ast.KindDecorator && ast.ModifierToFlag(modifier.Kind)&ast.ModifierFlagsJavaScript == 0 {
+						errorAtNode(modifier, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, scanner.TokenToString(modifier.Kind))
+					}
+				}
+			}
+		case ast.KindParameter:
+			if core.Some(node.ModifierNodes(), ast.IsModifier) {
+				errorAtRange(node.Modifiers().Loc, diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files)
+			}
+		case ast.KindCallExpression, ast.KindNewExpression, ast.KindExpressionWithTypeArguments, ast.KindJsxSelfClosingElement,
+			ast.KindJsxOpeningElement, ast.KindTaggedTemplateExpression:
+			if list := node.TypeArgumentList(); list != nil && core.Some(list.Nodes, func(n *ast.Node) bool { return n.Flags&ast.NodeFlagsReparsed == 0 }) {
+				errorAtRange(list.Loc, diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files)
+			}
+		}
+		return node.ForEachChild(visit)
+	}
+	sourceFile.ForEachChild(visit)
+	return diags
 }

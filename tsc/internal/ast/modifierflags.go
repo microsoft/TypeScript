@@ -13,7 +13,7 @@ const (
 	// Syntactic-only modifiers
 	ModifierFlagsExport    ModifierFlags = 1 << 5  // Declarations
 	ModifierFlagsAbstract  ModifierFlags = 1 << 6  // Class/Method/ConstructSignature
-	ModifierFlagsAmbient   ModifierFlags = 1 << 7  // Declarations
+	ModifierFlagsAmbient   ModifierFlags = 1 << 7  // Declarations (declare keyword)
 	ModifierFlagsStatic    ModifierFlags = 1 << 8  // Property/Method
 	ModifierFlagsAccessor  ModifierFlags = 1 << 9  // Property
 	ModifierFlagsAsync     ModifierFlags = 1 << 10 // Property/Method/Function
@@ -21,11 +21,9 @@ const (
 	ModifierFlagsConst     ModifierFlags = 1 << 12 // Const enum
 	ModifierFlagsIn        ModifierFlags = 1 << 13 // Contravariance modifier
 	ModifierFlagsOut       ModifierFlags = 1 << 14 // Covariance modifier
-	ModifierFlagsDecorator ModifierFlags = 1 << 15 // Contains a decorator.
-	ModifierFlagsImmediate ModifierFlags = 1 << 16 // Parameter
+	ModifierFlagsDecorator ModifierFlags = 1 << 15 // Contains a decorator
 	// JSDoc-only modifiers
-	ModifierFlagsDeprecated     ModifierFlags = 1 << 17 // Deprecated tag.
-	ModifierFlagsJSDocImmediate ModifierFlags = 1 << 18 // Parameter
+	ModifierFlagsDeprecated ModifierFlags = 1 << 16 // Deprecated tag
 	// Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
 	ModifierFlagsJSDocPublic               ModifierFlags = 1 << 23 // if this value changes, `selectEffectiveModifierFlags` must change accordingly
 	ModifierFlagsJSDocPrivate              ModifierFlags = 1 << 24
@@ -36,10 +34,10 @@ const (
 	ModifierFlagsHasComputedFlags          ModifierFlags = 1 << 29 // Modifier flags have been computed
 
 	ModifierFlagsSyntacticOrJSDocModifiers = ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsReadonly | ModifierFlagsOverride
-	ModifierFlagsSyntacticOnlyModifiers    = ModifierFlagsExport | ModifierFlagsAmbient | ModifierFlagsAbstract | ModifierFlagsStatic | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault | ModifierFlagsConst | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsDecorator | ModifierFlagsImmediate
+	ModifierFlagsSyntacticOnlyModifiers    = ModifierFlagsExport | ModifierFlagsAmbient | ModifierFlagsAbstract | ModifierFlagsStatic | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault | ModifierFlagsConst | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsDecorator
 	ModifierFlagsSyntacticModifiers        = ModifierFlagsSyntacticOrJSDocModifiers | ModifierFlagsSyntacticOnlyModifiers
 	ModifierFlagsJSDocCacheOnlyModifiers   = ModifierFlagsJSDocPublic | ModifierFlagsJSDocPrivate | ModifierFlagsJSDocProtected | ModifierFlagsJSDocReadonly | ModifierFlagsJSDocOverride
-	ModifierFlagsJSDocOnlyModifiers        = ModifierFlagsDeprecated | ModifierFlagsJSDocImmediate
+	ModifierFlagsJSDocOnlyModifiers        = ModifierFlagsDeprecated
 	ModifierFlagsNonCacheOnlyModifiers     = ModifierFlagsSyntacticOrJSDocModifiers | ModifierFlagsSyntacticOnlyModifiers | ModifierFlagsJSDocOnlyModifiers
 
 	ModifierFlagsAccessibilityModifier = ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected
@@ -47,8 +45,9 @@ const (
 	ModifierFlagsParameterPropertyModifier      = ModifierFlagsAccessibilityModifier | ModifierFlagsReadonly | ModifierFlagsOverride
 	ModifierFlagsNonPublicAccessibilityModifier = ModifierFlagsPrivate | ModifierFlagsProtected
 
-	ModifierFlagsTypeScriptModifier = ModifierFlagsAmbient | ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsReadonly | ModifierFlagsAbstract | ModifierFlagsConst | ModifierFlagsOverride | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsImmediate
+	ModifierFlagsTypeScriptModifier = ModifierFlagsAmbient | ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsReadonly | ModifierFlagsAbstract | ModifierFlagsConst | ModifierFlagsOverride | ModifierFlagsIn | ModifierFlagsOut
 	ModifierFlagsExportDefault      = ModifierFlagsExport | ModifierFlagsDefault
-	ModifierFlagsAll                = ModifierFlagsExport | ModifierFlagsAmbient | ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsStatic | ModifierFlagsReadonly | ModifierFlagsAbstract | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault | ModifierFlagsConst | ModifierFlagsDeprecated | ModifierFlagsOverride | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsImmediate | ModifierFlagsDecorator
+	ModifierFlagsAll                = ModifierFlagsExport | ModifierFlagsAmbient | ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsStatic | ModifierFlagsReadonly | ModifierFlagsAbstract | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault | ModifierFlagsConst | ModifierFlagsDeprecated | ModifierFlagsOverride | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsDecorator
 	ModifierFlagsModifier           = ModifierFlagsAll & ^ModifierFlagsDecorator
+	ModifierFlagsJavaScript         = ModifierFlagsExport | ModifierFlagsStatic | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault
 )

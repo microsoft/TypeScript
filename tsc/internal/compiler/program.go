@@ -990,7 +990,7 @@ func (p *Program) getOptionsDiagnosticsOfConfigFile() []*ast.Diagnostic {
 }
 
 func (p *Program) getSyntacticDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return sourceFile.Diagnostics()
+	return core.Concatenate(sourceFile.Diagnostics(), sourceFile.JSDiagnostics())
 }
 
 func (p *Program) getBindDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {

@@ -8,6 +8,7 @@
 /main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
 /main3.cjs(1,10): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 /main3.cjs(1,13): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+/main3.cjs(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 /main3.cjs(5,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 /main3.cjs(8,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 /main3.cjs(10,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
@@ -112,13 +113,15 @@
     import g1 from "./g"; // { default: 0 }
     import g2 = require("./g"); // { default: 0 }
     
-==== /main3.cjs (8 errors) ====
+==== /main3.cjs (9 errors) ====
     import { x, y } from "./a"; // No y
              ~
 !!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
                 ~
 !!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     import a1 = require("./a"); // Error in JS
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     const a2 = require("./a"); // { x: 0 }
     
     import b1 from "./b"; // 0

@@ -1,12 +1,18 @@
+bar.js(1,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+bar.js(2,1): error TS8003: 'export =' can only be used in TypeScript files.
 globalNs.js(2,1): error TS1315: Global module exports may only appear in declaration files.
 
 
 ==== cls.js (0 errors) ====
     export class Foo {}
     
-==== bar.js (0 errors) ====
+==== bar.js (2 errors) ====
     import ns = require("./cls");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     export = ns; // TS Only
+    ~~~~~~~~~~~~
+!!! error TS8003: 'export =' can only be used in TypeScript files.
     
 ==== bin.js (0 errors) ====
     import * as ns from "./cls";
