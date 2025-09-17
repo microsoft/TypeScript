@@ -170,6 +170,7 @@ import {
     getCombinedModifierFlags,
     getCombinedNodeFlags,
     getCommonSourceDirectory,
+    getCommonSourceDirectory60,
     getContainerFlags,
     getDirectoryPath,
     getImpliedNodeFormatForEmitWorker,
@@ -897,7 +898,8 @@ export function createModeMismatchDetails(currentSourceFile: SourceFile): Diagno
     return result;
 }
 
-function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
+/** @internal */
+export function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
     return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
 
@@ -6549,6 +6551,16 @@ export interface EmitFileNames {
     buildInfoPath?: string | undefined;
 }
 
+/** @internal */
+export function emitFileNamesIsEqual(a: EmitFileNames | undefined, b: EmitFileNames | undefined): boolean {
+    return a === b || !!a && !!b &&
+            a.jsFilePath === b.jsFilePath &&
+            a.sourceMapFilePath === b.jsFilePath &&
+            a.declarationFilePath === b.declarationFilePath &&
+            a.declarationMapPath === b.declarationMapPath &&
+            a.buildInfoPath === b.buildInfoPath;
+}
+
 /**
  * Gets the source files that are expected to have an emit output.
  *
@@ -6610,6 +6622,35 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
     if (options.rootDir || (options.composite && options.configFilePath)) {
         const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
+        const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
+        if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
+    }
+    return true;
+}
+
+export function sourceFileMayBeEmitted60(sourceFile: SourceFile, host: SourceFileMayBeEmittedHost, forceDtsEmit?: boolean): boolean {
+    const options = host.getCompilerOptions();
+    // Js files are emitted only if option is enabled
+    if (options.noEmitForJsFiles && isSourceFileJS(sourceFile)) return false;
+    // Declaration files are not emitted
+    if (sourceFile.isDeclarationFile) return false;
+    // Source file from node_modules are not emitted
+    if (host.isSourceFileFromExternalLibrary(sourceFile)) return false;
+    // forcing dts emit => file needs to be emitted
+    if (forceDtsEmit) return true;
+    // Check other conditions for file emit
+    // Source files from referenced projects are not emitted
+    if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
+    // Any non json file should be emitted
+    if (!isJsonSourceFile(sourceFile)) return true;
+    if (host.getRedirectFromSourceFile(sourceFile.fileName)) return false;
+    // Emit json file if outFile is specified
+    if (options.outFile) return true;
+    // Json file is not emitted if outDir is not specified
+    if (!options.outDir) return false;
+    // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
+    if (!options.rootDir && !options.composite && options.configFilePath) {
+        const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory60(options)!, host.getCurrentDirectory());
         const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
         if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
     }
