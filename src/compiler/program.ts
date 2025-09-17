@@ -4438,28 +4438,29 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             });
         }
         {
-            const commonDirWithConfig = getCommonSourceDirectory60(options);
-            if (commonDirWithConfig) {
+            const commonDir60 = getCommonSourceDirectory60(options);
+            if (commonDir60) {
                 const emitHost = getEmitHost();
-                const emitHostWithConfig = {
+                const emitHost60 = {
                     ...emitHost,
-                    getCommonSourceDirectory: () => commonDirWithConfig,
+                    getCommonSourceDirectory: () => commonDir60,
                 };
 
                 for (const sourceFile of emitHost.getSourceFiles()) {
                     const canBeEmitted = sourceFileMayBeEmitted(sourceFile, emitHost);
-                    const canBeEmitted60 = sourceFileMayBeEmitted60(sourceFile, emitHostWithConfig);
+                    const canBeEmitted60 = sourceFileMayBeEmitted60(sourceFile, emitHost60);
                     const outputPaths = canBeEmitted ?
                         getOutputPathsFor(sourceFile, emitHost, /*forceDtsPaths*/ false) :
                         undefined;
                     const outputPaths60 = canBeEmitted60 ?
-                        getOutputPathsFor(sourceFile, emitHostWithConfig, /*forceDtsPaths*/ false) :
+                        getOutputPathsFor(sourceFile, emitHost60, /*forceDtsPaths*/ false) :
                         undefined;
                     if (!emitFileNamesIsEqual(outputPaths, outputPaths60)) {
                         // Report error
                         programDiagnostics.addConfigDiagnostic(createCompilerDiagnostic(
                             Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files,
                             "!!! Sheetal: Output layout chaned for file: " + sourceFile.fileName +
+                                "\n commonDir: " + getCommonSourceDirectory() + " commonDir 6.0:: " + commonDir60 +
                                 "\n outputPaths:: " + JSON.stringify(outputPaths) +
                                 "\n Output paths in 6.0: " + JSON.stringify(outputPaths60),
                         ));
