@@ -21,9 +21,10 @@ exports.Test = Test;
 
 
 //// [declarationEmitMultipleComputedNamesSameDomain.d.ts]
+declare const x: string;
 declare const y: "y";
 export declare class Test {
-    [x: string]: number;
+    [x]: number;
     [y]: number;
 }
 export {};

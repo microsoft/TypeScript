@@ -7,27 +7,5 @@
 -    [fieldName]: () => string;
 +    [x: string]: () => string;
  };
--declare const classFieldName: string;
--declare const otherField: string;
--declare const staticField: string;
- export declare class Holder {
--    static [staticField]: () => {
-+    static [x: string]: Holder | (() => {
-         static: boolean;
--    };
--    static [staticField]: () => {
-+    }) | (() => {
-         static: string;
--    };
--    [classFieldName]: () => string;
--    [otherField]: () => number;
-+    });
-+    [x: string]: (() => string) | (() => number);
- }
- /**
-  * Could be `"prototype"`, so all static string indexers include the instance type
-@@= skipped -24, +19 lines =@@
-     static: string;
- });
- export declare const instanceLookup: (() => string) | (() => number);
--export {};
+ declare const classFieldName: string;
+ declare const otherField: string;

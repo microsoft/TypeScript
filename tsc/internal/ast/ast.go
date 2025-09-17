@@ -1067,6 +1067,48 @@ func (n *Node) Elements() []*Node {
 	return nil
 }
 
+func (n *Node) postfixToken() *Node {
+	switch n.Kind {
+	case KindEnumMember:
+		return n.AsEnumMember().PostfixToken
+	case KindPropertyAssignment:
+		return n.AsPropertyAssignment().PostfixToken
+	case KindShorthandPropertyAssignment:
+		return n.AsShorthandPropertyAssignment().PostfixToken
+	case KindPropertySignature:
+		return n.AsPropertySignatureDeclaration().PostfixToken
+	case KindPropertyDeclaration:
+		return n.AsPropertyDeclaration().PostfixToken
+	case KindMethodSignature:
+		return n.AsMethodSignatureDeclaration().PostfixToken
+	case KindMethodDeclaration:
+		return n.AsMethodDeclaration().PostfixToken
+	case KindGetAccessor:
+		return n.AsGetAccessorDeclaration().PostfixToken
+	case KindSetAccessor:
+		return n.AsSetAccessorDeclaration().PostfixToken
+	}
+	return nil
+}
+
+func (n *Node) QuestionToken() *TokenNode {
+	switch n.Kind {
+	case KindParameter:
+		return n.AsParameterDeclaration().QuestionToken
+	case KindConditionalExpression:
+		return n.AsConditionalExpression().QuestionToken
+	case KindMappedType:
+		return n.AsMappedTypeNode().QuestionToken
+	case KindNamedTupleMember:
+		return n.AsNamedTupleMember().QuestionToken
+	}
+	postfix := n.postfixToken()
+	if postfix != nil && postfix.Kind == KindQuestionToken {
+		return postfix
+	}
+	return nil
+}
+
 func (n *Node) QuestionDotToken() *Node {
 	switch n.Kind {
 	case KindElementAccessExpression:

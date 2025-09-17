@@ -1,13 +1,6 @@
 --- old.classNonUniqueSymbolMethodHasSymbolIndexer.js
 +++ new.classNonUniqueSymbolMethodHasSymbolIndexer.js
-@@= skipped -26, +26 lines =@@
-
-
- //// [classNonUniqueSymbolMethodHasSymbolIndexer.d.ts]
--declare const a: symbol;
- export declare class A {
--    [a]: () => number;
-+    [x: symbol]: () => number;
+@@= skipped -32, +32 lines =@@
  }
  export declare const Mixer: {
      new (): {
@@ -16,5 +9,3 @@
      };
  } & (new (...args: any[]) => {
      mixed: true;
- });
--export {};

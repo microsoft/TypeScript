@@ -1010,9 +1010,44 @@ func (r *emitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 			if info == r.checker.anyBaseTypeIndexInfo {
 				continue // inherited, but looks like a late-bound signature because it has no declarations
 			}
-			// if info.components {
-			// !!! TODO: Complete late-bound index info support - getObjectLiteralIndexInfo does not yet add late bound components to index signatures
-			// }
+			if len(info.components) != 0 {
+				// !!! TODO: Complete late-bound index info support - getObjectLiteralIndexInfo does not yet add late bound components to index signatures
+				allComponentComputedNamesSerializable := enclosingDeclaration != nil && core.Every(info.components, func(c *ast.Node) bool {
+					return c.Name() != nil &&
+						ast.IsComputedPropertyName(c.Name()) &&
+						ast.IsEntityNameExpression(c.Name().AsComputedPropertyName().Expression) &&
+						r.isEntityNameVisible(c.Name().AsComputedPropertyName().Expression, enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
+				})
+				if allComponentComputedNamesSerializable {
+					for _, c := range info.components {
+						if r.checker.hasLateBindableName(c) {
+							// skip late bound props that contribute to the index signature - they'll be preserved via other means
+							continue
+						}
+
+						firstIdentifier := ast.GetFirstIdentifier(c.Name().Expression())
+						name := r.checker.resolveName(firstIdentifier, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
+						if name != nil {
+							tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
+						}
+
+						mods := core.IfElse(isStatic, []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}, nil)
+						if info.isReadonly {
+							mods = append(mods, emitContext.Factory.NewModifier(ast.KindReadonlyKeyword))
+						}
+
+						decl := emitContext.Factory.NewPropertyDeclaration(
+							core.IfElse(mods != nil, emitContext.Factory.NewModifierList(mods), nil),
+							c.Name(),
+							c.QuestionToken(),
+							requestNodeBuilder.TypeToTypeNode(r.checker.getTypeOfSymbol(c.Symbol()), enclosingDeclaration, flags, internalFlags, tracker),
+							nil,
+						)
+						result = append(result, decl)
+					}
+					continue
+				}
+			}
 			node := requestNodeBuilder.IndexInfoToIndexSignatureDeclaration(info, enclosingDeclaration, flags, internalFlags, tracker)
 			if node != nil && isStatic {
 				modNodes := []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}

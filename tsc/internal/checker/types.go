@@ -1198,7 +1198,8 @@ type IndexInfo struct {
 	keyType     *Type
 	valueType   *Type
 	isReadonly  bool
-	declaration *ast.Node // IndexSignatureDeclaration
+	declaration *ast.Node   // IndexSignatureDeclaration
+	components  []*ast.Node // ElementWithComputedPropertyName
 }
 
 /**
