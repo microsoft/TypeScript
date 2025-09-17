@@ -6555,7 +6555,7 @@ export interface EmitFileNames {
 export function emitFileNamesIsEqual(a: EmitFileNames | undefined, b: EmitFileNames | undefined): boolean {
     return a === b || !!a && !!b &&
             a.jsFilePath === b.jsFilePath &&
-            a.sourceMapFilePath === b.jsFilePath &&
+            a.sourceMapFilePath === b.sourceMapFilePath &&
             a.declarationFilePath === b.declarationFilePath &&
             a.declarationMapPath === b.declarationMapPath &&
             a.buildInfoPath === b.buildInfoPath;
