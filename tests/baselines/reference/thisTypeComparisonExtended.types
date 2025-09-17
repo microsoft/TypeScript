@@ -1,0 +1,235 @@
+//// [tests/cases/compiler/thisTypeComparisonExtended.ts] ////
+
+=== thisTypeComparisonExtended.ts ===
+// Test 1: Original issue - this === subclass instance should work
+class AA {
+>AA : AA
+>   : ^^
+
+    do1() {
+>do1 : () => void
+>    : ^^^^^^^^^^
+
+        const b = dd.getB();
+>b : BB
+>  : ^^
+>dd.getB() : BB
+>          : ^^
+>dd.getB : () => BB
+>        : ^^^^^^  
+>dd : BB
+>   : ^^
+>getB : () => BB
+>     : ^^^^^^  
+
+        if (this === b) {  // Should not error
+>this === b : boolean
+>           : ^^^^^^^
+>this : this
+>     : ^^^^
+>b : BB
+>  : ^^
+
+            console.log("this === b");
+>console.log("this === b") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"this === b" : "this === b"
+>             : ^^^^^^^^^^^^
+        }
+    }
+}
+
+class BB extends AA {
+>BB : BB
+>   : ^^
+>AA : AA
+>   : ^^
+
+    getB(): BB { return this; }
+>getB : () => BB
+>     : ^^^^^^  
+>this : this
+>     : ^^^^
+}
+
+let dd = new BB();
+>dd : BB
+>   : ^^
+>new BB() : BB
+>         : ^^
+>BB : typeof BB
+>   : ^^^^^^^^^
+
+dd.do1();
+>dd.do1() : void
+>         : ^^^^
+>dd.do1 : () => void
+>       : ^^^^^^^^^^
+>dd : BB
+>   : ^^
+>do1 : () => void
+>    : ^^^^^^^^^^
+
+// Test 2: this === unrelated class should still error
+class CC {
+>CC : CC
+>   : ^^
+
+    value: number = 42;
+>value : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+class DD {
+>DD : DD
+>   : ^^
+
+    test() {
+>test : () => void
+>     : ^^^^^^^^^^
+
+        const c = new CC();
+>c : CC
+>  : ^^
+>new CC() : CC
+>         : ^^
+>CC : typeof CC
+>   : ^^^^^^^^^
+
+        if (this === c) {  // Should still error - no relationship
+>this === c : boolean
+>           : ^^^^^^^
+>this : this
+>     : ^^^^
+>c : CC
+>  : ^^
+
+            console.log("unrelated");
+>console.log("unrelated") : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"unrelated" : "unrelated"
+>            : ^^^^^^^^^^^
+        }
+    }
+}
+
+// Test 3: Multiple inheritance levels
+class EE extends BB {
+>EE : EE
+>   : ^^
+>BB : BB
+>   : ^^
+
+    getE(): EE { return this; }
+>getE : () => EE
+>     : ^^^^^^  
+>this : this
+>     : ^^^^
+}
+
+class FF extends EE {
+>FF : FF
+>   : ^^
+>EE : EE
+>   : ^^
+
+    testMultiLevel() {
+>testMultiLevel : () => void
+>               : ^^^^^^^^^^
+
+        const e = new EE();
+>e : EE
+>  : ^^
+>new EE() : EE
+>         : ^^
+>EE : typeof EE
+>   : ^^^^^^^^^
+
+        if (this === e) {  // Should not error - FF extends EE
+>this === e : boolean
+>           : ^^^^^^^
+>this : this
+>     : ^^^^
+>e : EE
+>  : ^^
+
+            console.log("multi-level inheritance");
+>console.log("multi-level inheritance") : void
+>                                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"multi-level inheritance" : "multi-level inheritance"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+        }
+    }
+}
+
+// Test 4: Interface implementation
+interface ITest {
+    getValue(): number;
+>getValue : () => number
+>         : ^^^^^^      
+}
+
+class GG implements ITest {
+>GG : GG
+>   : ^^
+
+    getValue() { return 42; }
+>getValue : () => number
+>         : ^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+    
+    testInterface() {
+>testInterface : () => void
+>              : ^^^^^^^^^^
+
+        const impl: ITest = new GG();
+>impl : ITest
+>     : ^^^^^
+>new GG() : GG
+>         : ^^
+>GG : typeof GG
+>   : ^^^^^^^^^
+
+        if (this === impl) {  // Should not error
+>this === impl : boolean
+>              : ^^^^^^^
+>this : this
+>     : ^^^^
+>impl : ITest
+>     : ^^^^^
+
+            console.log("interface implementation");
+>console.log("interface implementation") : void
+>                                        : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"interface implementation" : "interface implementation"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        }
+    }
+}
