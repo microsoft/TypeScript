@@ -1,9 +1,9 @@
-amdDependencyCommentName4.ts(6,8): error TS2792: Cannot find module 'unaliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(6,8): error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule1'.
 amdDependencyCommentName4.ts(8,21): error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(11,26): error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(14,15): error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(17,21): error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-amdDependencyCommentName4.ts(20,8): error TS2792: Cannot find module 'unaliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(20,8): error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule2'.
 
 
 ==== amdDependencyCommentName4.ts (6 errors) ====
@@ -14,7 +14,7 @@ amdDependencyCommentName4.ts(20,8): error TS2792: Cannot find module 'unaliasedM
     
     import "unaliasedModule1";
            ~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'unaliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule1'.
     
     import r1 = require("aliasedModule1");
                         ~~~~~~~~~~~~~~~~
@@ -38,4 +38,4 @@ amdDependencyCommentName4.ts(20,8): error TS2792: Cannot find module 'unaliasedM
     
     import "unaliasedModule2";
            ~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'unaliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule2'.

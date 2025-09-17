@@ -98,8 +98,8 @@ declare module "main" {
 //// [DtsFileErrors]
 
 
-f.d.ts(11,12): error TS2792: Cannot find module 'D'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-f.d.ts(12,12): error TS2792: Cannot find module 'E'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+f.d.ts(11,12): error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
+f.d.ts(12,12): error TS2882: Cannot find module or type declarations for side-effect import of 'E'.
 
 
 ==== f.d.ts (2 errors) ====
@@ -115,10 +115,10 @@ f.d.ts(12,12): error TS2792: Cannot find module 'E'. Did you mean to set the 'mo
     declare module "main" {
         import "D";
                ~~~
-!!! error TS2792: Cannot find module 'D'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
         import "E";
                ~~~
-!!! error TS2792: Cannot find module 'E'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'E'.
     }
     
 ==== c.d.ts (0 errors) ====

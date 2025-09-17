@@ -1,5 +1,5 @@
 client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
-client.ts(1,15): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(1,15): error TS2882: Cannot find module or type declarations for side-effect import of 'server'.
 
 
 ==== server.ts (0 errors) ====
@@ -10,4 +10,4 @@ client.ts(1,15): error TS2307: Cannot find module 'server' or its corresponding 
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                   ~~~~~~~~
-!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'server'.

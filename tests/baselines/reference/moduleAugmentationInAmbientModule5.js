@@ -38,13 +38,13 @@ import "array";
 //// [DtsFileErrors]
 
 
-f.d.ts(1,8): error TS2307: Cannot find module 'array' or its corresponding type declarations.
+f.d.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of 'array'.
 
 
 ==== f.d.ts (1 errors) ====
     import "array";
            ~~~~~~~
-!!! error TS2307: Cannot find module 'array' or its corresponding type declarations.
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'array'.
     
 ==== array.d.ts (0 errors) ====
     declare module "A" {

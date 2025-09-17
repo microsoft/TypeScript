@@ -1,4 +1,4 @@
-jsxImportForSideEffectsNonExtantNoError.tsx(4,8): error TS2307: Cannot find module './App.css' or its corresponding type declarations.
+jsxImportForSideEffectsNonExtantNoError.tsx(4,8): error TS2882: Cannot find module or type declarations for side-effect import of './App.css'.
 
 
 ==== jsxImportForSideEffectsNonExtantNoError.tsx (1 errors) ====
@@ -7,7 +7,7 @@ jsxImportForSideEffectsNonExtantNoError.tsx(4,8): error TS2307: Cannot find modu
     
     import "./App.css"; // doesn't actually exist
            ~~~~~~~~~~~
-!!! error TS2307: Cannot find module './App.css' or its corresponding type declarations.
+!!! error TS2882: Cannot find module or type declarations for side-effect import of './App.css'.
     
     const tag = <div></div>;
     
