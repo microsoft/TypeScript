@@ -63,7 +63,6 @@ import {
     DiagnosticWithLocation,
     directorySeparator,
     DirectoryStructureHost,
-    emitDetachedComments,
     emitFileNamesIsEqual,
     emitFiles,
     EmitHost,
@@ -316,6 +315,7 @@ import {
     trace,
     tracing,
     tryCast,
+    tsFixRootDirSignal,
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
@@ -2177,6 +2177,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                         sourceFile.fileName,
                         "!!! Sheetal CommonDir computed: " + commonSourceDirectory + " commonDir in 6.0 : " + commonDir60,
                     );
+                    tsFixRootDirSignal("allFilesDontBelong", commonSourceDirectory, commonDir60);
                 });
             }
         }
@@ -4464,6 +4465,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                                 "\n outputPaths:: " + JSON.stringify(outputPaths) +
                                 "\n Output paths in 6.0: " + JSON.stringify(outputPaths60),
                         ));
+                        tsFixRootDirSignal("outputPathsChange", getCommonSourceDirectory(), commonDir60);
                     }
                 }
             }

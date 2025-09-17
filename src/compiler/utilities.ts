@@ -6628,6 +6628,12 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     return true;
 }
 
+/**@internal */
+export function tsFixRootDirSignal(kind: string, rootDir: string, rootDir60: string): void {
+    throw new Error(`TS_FIX_ROOTDIR_SIGNAL:: ${kind}:: 5.9:: ${rootDir} 6.0:: ${rootDir60} <End>`);
+}
+
+/** @internal */
 export function sourceFileMayBeEmitted60(sourceFile: SourceFile, host: SourceFileMayBeEmittedHost, forceDtsEmit?: boolean): boolean {
     const options = host.getCompilerOptions();
     // Js files are emitted only if option is enabled
