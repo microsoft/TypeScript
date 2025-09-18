@@ -1,3 +1,4 @@
+import { fixRootDirSync } from "@sheetalkamat/ts-fix-rootdir";
 import {
     arrayFrom,
     BuilderProgram,
@@ -613,6 +614,17 @@ function executeCommandLineWorker(
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
+
+        const fixRootDirLogs: string[] = [];
+        try {
+            const fixes = fixRootDirSync(configFileName, log => fixRootDirLogs.push(log));
+            for (const [fileName, text] of Object.entries(fixes)) {
+                sys.writeFile(fileName, text);
+            }
+        }
+        catch (e) {
+            throw new Error([...fixRootDirLogs, `Error: ${e instanceof Error ? e.message : e}`].join(sys.newLine));
+        }
     }
     else if (commandLine.fileNames.length === 0) {
         const searchPath = normalizePath(sys.getCurrentDirectory());
@@ -746,6 +758,18 @@ export function executeCommandLine(
 ): void | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> {
     if (isBuildCommand(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs);
+        const fixRootDirLogs: string[] = [];
+        try {
+            for (const project of projects) {
+                const fixes = fixRootDirSync(project, log => fixRootDirLogs.push(log));
+                for (const [fileName, text] of Object.entries(fixes)) {
+                    sys.writeFile(fileName, text);
+                }
+            }
+        }
+        catch (e) {
+            throw new Error([...fixRootDirLogs, `Error: ${e instanceof Error ? e.message : e}`].join(sys.newLine));
+        }
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {
             system.enableCPUProfiler(buildOptions.generateCpuProfile, () =>
                 performBuild(

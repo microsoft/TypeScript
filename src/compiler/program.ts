@@ -63,7 +63,6 @@ import {
     DiagnosticWithLocation,
     directorySeparator,
     DirectoryStructureHost,
-    emitDetachedComments,
     emitFileNamesIsEqual,
     emitFiles,
     EmitHost,
