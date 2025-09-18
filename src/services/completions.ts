@@ -36,6 +36,7 @@ import {
     CompletionTriggerKind,
     concatenate,
     ConstructorDeclaration,
+    containsNonPublicProperties,
     ContextFlags,
     countWhere,
     createModuleSpecifierResolutionHost,
@@ -5652,10 +5653,6 @@ function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAt
             || checker.isTypeInvalidDueToUnionDiscriminant(memberType, node)
             || checker.typeHasCallOrConstructSignatures(memberType)
             || memberType.isClass() && containsNonPublicProperties(memberType.getApparentProperties()))));
-}
-
-function containsNonPublicProperties(props: Symbol[]) {
-    return some(props, p => !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier));
 }
 
 /**
