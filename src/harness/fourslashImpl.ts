@@ -423,26 +423,23 @@ export class TestState {
                 this.addMatchedInputFile(importedFilePath, exts);
             });
 
-            // Check if no-default-lib flag is false and if so add default library
-            if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(
-                    libName(Harness.Compiler.defaultLibFileName),
-                    Harness.Compiler.getDefaultLibrarySourceFile()!.text,
-                    /*isRootFile*/ false,
-                );
+            this.languageServiceAdapterHost.addScript(
+                libName(Harness.Compiler.defaultLibFileName),
+                Harness.Compiler.getDefaultLibrarySourceFile()!.text,
+                /*isRootFile*/ false,
+            );
 
-                compilationOptions.lib?.forEach(fileName => {
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                    ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    if (libFile) {
-                        this.languageServiceAdapterHost.addScript(
-                            libName(fileName),
-                            libFile.text,
-                            /*isRootFile*/ false,
-                        );
-                    }
-                });
-            }
+            compilationOptions.lib?.forEach(fileName => {
+                const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
+                ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
+                if (libFile) {
+                    this.languageServiceAdapterHost.addScript(
+                        libName(fileName),
+                        libFile.text,
+                        /*isRootFile*/ false,
+                    );
+                }
+            });
         }
         else {
             // resolveReference file-option is not specified then do not resolve any files and include all inputFiles

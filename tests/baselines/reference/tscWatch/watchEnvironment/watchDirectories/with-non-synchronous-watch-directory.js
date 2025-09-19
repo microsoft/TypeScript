@@ -10,7 +10,6 @@ export const x = 10;
 { "compilerOptions": { "moduleResolution": "node10" } }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 16
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

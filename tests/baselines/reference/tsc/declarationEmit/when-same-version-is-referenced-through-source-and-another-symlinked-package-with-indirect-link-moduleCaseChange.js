@@ -93,7 +93,6 @@ export default actionCreatorFactory;
 //// [/user/username/projects/myProject/plugin-one/node_modules/plugin-two] symlink(/temp/yarn/data/link/plugin-two)
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

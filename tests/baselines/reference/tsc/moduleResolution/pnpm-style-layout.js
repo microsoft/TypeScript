@@ -140,7 +140,6 @@ const button: Button = createButton();
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk] symlink(/home/src/projects/component-type-checker/packages/sdk)
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
