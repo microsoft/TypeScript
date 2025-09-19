@@ -1,0 +1,128 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadSameExcessProperty.ts] ////
+
+=== excessPropertyCheckSpreadSameExcessProperty.ts ===
+type MyObj = { foo: number; bar: number };
+>MyObj : MyObj
+>      : ^^^^^
+>foo : number
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+
+const containsExcessProperty = { bar: 2, excessProperty: "A" };
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+
+const a1 : MyObj = {
+>a1 : MyObj
+>   : ^^^^^
+>{    foo: 1,    bar: 1,     ...containsExcessProperty,    ...{ bar: 2, excessProperty: "A" },} : { bar: number; excessProperty: string; foo: number; }
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    bar: 1, 
+>bar : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...containsExcessProperty,
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ...{ bar: 2, excessProperty: "A" },
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+
+};
+
+// no EPC errors because the inline excessProperty will be overwritten
+const a2 : MyObj = {
+>a2 : MyObj
+>   : ^^^^^
+>{    foo: 1,    ...{ bar: 2, excessProperty: "A" },    ...containsExcessProperty,    bar: 1, } : { bar: number; excessProperty: string; foo: number; }
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...{ bar: 2, excessProperty: "A" },
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+
+    ...containsExcessProperty,
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    bar: 1, 
+>bar : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+};
+
+// no EPC errors because the inline excessProperty will be overwritten
+const a3 : MyObj = {
+>a3 : MyObj
+>   : ^^^^^
+>{    foo: 1,    ...{ bar: 2, excessProperty: "A" },    ...containsExcessProperty,} : { bar: number; excessProperty: string; foo: number; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...{ bar: 2, excessProperty: "A" },
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+
+    ...containsExcessProperty,
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
