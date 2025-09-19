@@ -1,0 +1,357 @@
+// === findAllReferences ===
+// === /mod.ts ===
+// class Cls {
+//   /*FIND ALL REFS*/<|[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|]() {}|>
+// };
+// 
+// export = new Cls();
+
+// === /index.ts ===
+// <|import { [|{| defId: 1, isWriteAccess: true |}foo|] } from "./mod"|>
+// [|{| defId: 1 |}foo|]();
+
+  // === Definitions ===
+  // === /mod.ts ===
+  // class Cls {
+  //   /*FIND ALL REFS*/<|[|{| defId: 0 |}foo|]() {}|>
+  // };
+  // 
+  // export = new Cls();
+
+  // === /index.ts ===
+  // <|import { [|{| defId: 1 |}foo|] } from "./mod"|>
+  // foo();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Cls.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Cls",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (method) foo(): void\nimport foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /index.ts ===
+// <|import { /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|] } from "./mod"|>
+// [|foo|]();
+
+  // === Definitions ===
+  // === /index.ts ===
+  // <|import { /*FIND ALL REFS*/[|foo|] } from "./mod"|>
+  // foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (method) foo(): void\nimport foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /index.ts ===
+// <|import { [|{| isWriteAccess: true |}foo|] } from "./mod"|>
+// /*FIND ALL REFS*/[|foo|]();
+
+  // === Definitions ===
+  // === /index.ts ===
+  // <|import { [|foo|] } from "./mod"|>
+  // /*FIND ALL REFS*/foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) (method) foo(): void\nimport foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
