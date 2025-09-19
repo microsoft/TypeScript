@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/propertyAccessOnUnionWithGenericConditional.ts] ////
+
+=== propertyAccessOnUnionWithGenericConditional.ts ===
+type InCommon = { common: string };
+>InCommon : InCommon
+>         : ^^^^^^^^
+>common : string
+>       : ^^^^^^
+
+type CondWithAny<K extends string | number> =
+>CondWithAny : CondWithAny<K>
+>            : ^^^^^^^^^^^^^^
+
+  K extends number ? any : { two: string };
+>two : string
+>    : ^^^^^^
+
+type UnionWithAny<K extends string | number> =
+>UnionWithAny : UnionWithAny<K>
+>             : ^^^^^^^^^^^^^^^
+
+  InCommon | (CondWithAny<K> & InCommon);
+
+function testWithAny<K extends string | number>(k: K) {
+>testWithAny : <K extends string | number>(k: K) => void
+>            : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^
+>k : K
+>  : ^
+
+  const val = {} as UnionWithAny<K>;
+>val : UnionWithAny<K>
+>    : ^^^^^^^^^^^^^^^
+>{} as UnionWithAny<K> : UnionWithAny<K>
+>                      : ^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  val.common;
+>val.common : string
+>           : ^^^^^^
+>val : UnionWithAny<K>
+>    : ^^^^^^^^^^^^^^^
+>common : string
+>       : ^^^^^^
+}
