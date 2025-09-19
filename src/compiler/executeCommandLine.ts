@@ -49,6 +49,7 @@ import {
     formatMessage,
     generateTSConfig,
     getBuildOrderFromAnyBuildOrder,
+    getCompilerOptionsOfBuildOptions,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
     getErrorSummaryText,
@@ -639,7 +640,7 @@ function executeCommandLineWorker(
     if (configFileName) {
         const fixRootDirLogs: string[] = [];
         try {
-            const fixes = fixRootDirSync(configFileName, log => fixRootDirLogs.push(log));
+            const fixes = fixRootDirSync(configFileName, commandLineOptions as any, log => fixRootDirLogs.push(log));
             for (const [fileName, text] of Object.entries(fixes)) {
                 sys.writeFile(fileName, text);
             }
@@ -761,7 +762,7 @@ export function executeCommandLine(
         const fixRootDirLogs: string[] = [];
         try {
             for (const project of projects) {
-                const fixes = fixRootDirSync(project, log => fixRootDirLogs.push(log));
+                const fixes = fixRootDirSync(project, getCompilerOptionsOfBuildOptions(buildOptions) as any, log => fixRootDirLogs.push(log));
                 for (const [fileName, text] of Object.entries(fixes)) {
                     sys.writeFile(fileName, text);
                 }

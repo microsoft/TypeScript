@@ -116,6 +116,6 @@
         "npm": "8.19.4"
     },
     "dependencies": {
-        "@sheetalkamat/ts-fix-rootdir": "^1.0.0"
+        "@sheetalkamat/ts-fix-rootdir": "^1.0.1"
     }
 }
