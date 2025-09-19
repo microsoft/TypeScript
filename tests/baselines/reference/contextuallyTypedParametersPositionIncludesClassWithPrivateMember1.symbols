@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts] ////
+
+=== contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 0, 0))
+
+  #foo = "foo";
+>#foo : Symbol(Foo.#foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 0, 11))
+
+  doStuff(cb: (arg: string) => void) {}
+>doStuff : Symbol(Foo.doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 1, 15))
+>cb : Symbol(cb, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 2, 10))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 2, 15))
+}
+
+interface FooLike {
+>FooLike : Symbol(FooLike, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 3, 1))
+
+  doStuff: (cb: (arg: number) => void) => void;
+>doStuff : Symbol(FooLike.doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 5, 19))
+>cb : Symbol(cb, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 6, 12))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 6, 17))
+}
+
+declare function useIt(arg: Foo | FooLike): void;
+>useIt : Symbol(useIt, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 7, 1))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 9, 23))
+>Foo : Symbol(Foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 0, 0))
+>FooLike : Symbol(FooLike, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 3, 1))
+
+useIt({
+>useIt : Symbol(useIt, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 7, 1))
+
+  doStuff: (arg) => {},
+>doStuff : Symbol(doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 11, 7))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 12, 12))
+
+});
+
+declare function useIt2(arg: Foo): void;
+>useIt2 : Symbol(useIt2, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 13, 3))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 15, 24))
+>Foo : Symbol(Foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 0, 0))
+
+useIt2({
+>useIt2 : Symbol(useIt2, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 13, 3))
+
+  doStuff: (arg) => {},
+>doStuff : Symbol(doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 17, 8))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 18, 12))
+
+});
+
+declare function useIt3(arg: FooLike): void;
+>useIt3 : Symbol(useIt3, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 19, 3))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 21, 24))
+>FooLike : Symbol(FooLike, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 3, 1))
+
+useIt3({
+>useIt3 : Symbol(useIt3, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 19, 3))
+
+  doStuff: (arg) => {},
+>doStuff : Symbol(doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 23, 8))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts, 24, 12))
+
+});
+
