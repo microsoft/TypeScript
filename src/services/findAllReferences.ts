@@ -134,6 +134,7 @@ import {
     isFunctionLikeDeclaration,
     isIdentifier,
     isIdentifierPart,
+    isImportDeclaration,
     isImportMeta,
     isImportOrExportSpecifier,
     isImportSpecifier,
@@ -1012,7 +1013,27 @@ export namespace Core {
 
         const checker = program.getTypeChecker();
         // constructors should use the class symbol, detected by name, if present
-        const symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
+        let symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
+
+        // Handle export = namespace case where ES6 import cannot resolve the symbol
+        if (!symbol && isIdentifier(node) && isImportSpecifier(node.parent)) {
+            const spec = node.parent;
+            // Get the imported name: for 'import { foo as bar }', use 'foo'; for 'import { foo }', use 'foo'
+            const importedName = spec.propertyName && isIdentifier(spec.propertyName)
+                ? spec.propertyName.escapedText
+                : spec.name.escapedText;
+            const importDecl = findAncestor(spec, isImportDeclaration);
+            const moduleSymbol = importDecl?.moduleSpecifier ? checker.getSymbolAtLocation(importDecl.moduleSpecifier) : undefined;
+            if (moduleSymbol) {
+                // Fall back to module exports when direct symbol resolution fails
+                // Handles export= namespace members for ES6 import specifiers
+                const moduleExports = checker.getExportsOfModule(moduleSymbol);
+                const exportedSymbol = find(moduleExports, s => s.escapedName === importedName);
+                if (exportedSymbol) {
+                    symbol = exportedSymbol;
+                }
+            }
+        }
 
         // Could not find a symbol e.g. unknown identifier
         if (!symbol) {
