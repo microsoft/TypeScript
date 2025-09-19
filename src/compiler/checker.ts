@@ -15496,7 +15496,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let mergedInstantiations = false;
         for (const current of containingType.types) {
             const type = getApparentType(current);
-            if (!(isErrorType(type) || type.flags & TypeFlags.Never)) {
+            if (!(isErrorType(type) || type.flags & TypeFlags.Never || type.flags & TypeFlags.Any)) {
                 const prop = getPropertyOfType(type, name, skipObjectFunctionPropertyAugment);
                 const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                 if (prop) {
