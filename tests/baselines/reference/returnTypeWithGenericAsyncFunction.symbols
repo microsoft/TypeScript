@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/returnTypeWithGenericAsyncFunction.ts] ////
+
+=== /index.ts ===
+type MockFactoryWithHelper<M = unknown> = (
+>MockFactoryWithHelper : Symbol(MockFactoryWithHelper, Decl(index.ts, 0, 0))
+>M : Symbol(M, Decl(index.ts, 0, 27))
+
+  importOriginal: <T extends M = M>() => Promise<T>
+>importOriginal : Symbol(importOriginal, Decl(index.ts, 0, 43))
+>T : Symbol(T, Decl(index.ts, 1, 19))
+>M : Symbol(M, Decl(index.ts, 0, 27))
+>M : Symbol(M, Decl(index.ts, 0, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(index.ts, 1, 19))
+
+) => Partial<Record<keyof M, any>>;
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(index.ts, 0, 27))
+
+type PromiseMockFactoryWithHelper<M = unknown> = (
+>PromiseMockFactoryWithHelper : Symbol(PromiseMockFactoryWithHelper, Decl(index.ts, 2, 35))
+>M : Symbol(M, Decl(index.ts, 3, 34))
+
+  importOriginal: <T extends M = M>() => Promise<T>
+>importOriginal : Symbol(importOriginal, Decl(index.ts, 3, 50))
+>T : Symbol(T, Decl(index.ts, 4, 19))
+>M : Symbol(M, Decl(index.ts, 3, 34))
+>M : Symbol(M, Decl(index.ts, 3, 34))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(index.ts, 4, 19))
+
+) => Promise<Partial<Record<keyof M, any>>>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(index.ts, 3, 34))
+
+const util: {
+>util : Symbol(util, Decl(index.ts, 7, 5))
+
+  mock<T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void;
+>mock : Symbol(mock, Decl(index.ts, 7, 13), Decl(index.ts, 8, 72))
+>T : Symbol(T, Decl(index.ts, 8, 7))
+>module : Symbol(module, Decl(index.ts, 8, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(index.ts, 8, 7))
+>factory : Symbol(factory, Decl(index.ts, 8, 29))
+>MockFactoryWithHelper : Symbol(MockFactoryWithHelper, Decl(index.ts, 0, 0))
+>T : Symbol(T, Decl(index.ts, 8, 7))
+
+  mock<T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void;
+>mock : Symbol(mock, Decl(index.ts, 7, 13), Decl(index.ts, 8, 72))
+>T : Symbol(T, Decl(index.ts, 9, 7))
+>module : Symbol(module, Decl(index.ts, 9, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(index.ts, 9, 7))
+>factory : Symbol(factory, Decl(index.ts, 9, 29))
+>PromiseMockFactoryWithHelper : Symbol(PromiseMockFactoryWithHelper, Decl(index.ts, 2, 35))
+>T : Symbol(T, Decl(index.ts, 9, 7))
+
+} = {
+  mock: (() => {}) as any,
+>mock : Symbol(mock, Decl(index.ts, 10, 5))
+
+};
+
+util.mock(import("pkg"), async (importOriginal) => ({
+>util.mock : Symbol(mock, Decl(index.ts, 7, 13), Decl(index.ts, 8, 72))
+>util : Symbol(util, Decl(index.ts, 7, 5))
+>mock : Symbol(mock, Decl(index.ts, 7, 13), Decl(index.ts, 8, 72))
+>"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+>importOriginal : Symbol(importOriginal, Decl(index.ts, 14, 32))
+
+  ...(await importOriginal()),
+>importOriginal : Symbol(importOriginal, Decl(index.ts, 14, 32))
+
+}));
+
+=== /node_modules/pkg/import.d.ts ===
+export interface ImportInterface {}
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
