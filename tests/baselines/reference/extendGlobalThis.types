@@ -24,6 +24,7 @@ globalThis.tests = "a-b";
 >globalThis.tests = "a-b" : "a-b"
 >                         : ^^^^^
 >globalThis.tests : any
+>                 : ^^^
 >globalThis : typeof globalThis
 >           : ^^^^^^^^^^^^^^^^^
 >tests : any

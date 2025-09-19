@@ -4007,6 +4007,10 @@
         "category": "Error",
         "code": 2881
     },
+    "Cannot find module or type declarations for side-effect import of '{0}'.": {
+        "category": "Error",
+        "code": 2882
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -106,3 +106,53 @@ declare module "main" {
     import "D";
     import "e";
 }
+
+
+//// [DtsFileErrors]
+
+
+f.d.ts(20,12): error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
+
+
+==== f.d.ts (1 errors) ====
+    /// <reference path="c.d.ts" preserve="true" />
+    declare module "a" {
+        export class A {
+        }
+    }
+    declare module "b" {
+        export class B {
+            x: number;
+        }
+    }
+    declare module "e" {
+        import { Cls } from "C";
+        module "a" {
+            interface A {
+                getCls(): Cls;
+            }
+        }
+    }
+    declare module "main" {
+        import "D";
+               ~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
+        import "e";
+    }
+    
+==== c.d.ts (0 errors) ====
+    declare module "C" {
+        class Cls {y: string; }
+    }
+    
+==== d.d.ts (0 errors) ====
+    declare module "D" {
+        import {A} from "a";
+        import {B} from "b";
+        module "a" {
+            interface A {
+                getB(): B;
+            }
+        }
+    }
+    
