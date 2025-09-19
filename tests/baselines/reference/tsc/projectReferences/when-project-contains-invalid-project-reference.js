@@ -49,7 +49,7 @@ Found 1 error in tsconfig.json[90m:7[0m
 
 
 //// [/home/src/workspaces/project/theApp.js]
-define("main", ["require", "exports"], function (require, exports) {
+define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;

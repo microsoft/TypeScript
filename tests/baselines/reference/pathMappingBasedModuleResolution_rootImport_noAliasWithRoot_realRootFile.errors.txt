@@ -1,0 +1,32 @@
+error TS5055: Cannot write file '/bar.js' because it would overwrite input file.
+/root/a.ts(1,21): error TS6059: File '/foo.ts' is not under 'rootDir' '/root'. 'rootDir' is expected to contain all source files.
+/root/a.ts(2,21): error TS6059: File '/bar.js' is not under 'rootDir' '/root'. 'rootDir' is expected to contain all source files.
+
+
+!!! error TS5055: Cannot write file '/bar.js' because it would overwrite input file.
+==== /root/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+                "*": ["./src/*"]
+            },
+            "allowJs": true,
+            "outDir": "bin"
+        }
+    }
+    
+==== /root/a.ts (2 errors) ====
+    import { foo } from "/foo";
+                        ~~~~~~
+!!! error TS6059: File '/foo.ts' is not under 'rootDir' '/root'. 'rootDir' is expected to contain all source files.
+    import { bar } from "/bar";
+                        ~~~~~~
+!!! error TS6059: File '/bar.js' is not under 'rootDir' '/root'. 'rootDir' is expected to contain all source files.
+    
+==== /foo.ts (0 errors) ====
+    export function foo() {}
+    
+==== /bar.js (0 errors) ====
+    export function bar() {}
+    
