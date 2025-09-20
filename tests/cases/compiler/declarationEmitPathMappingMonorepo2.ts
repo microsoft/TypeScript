@@ -32,6 +32,7 @@ export default createSvgIcon("Hello", "ArrowLeft");
         "outDir": "dist",
         "declaration": true,
         "baseUrl": "../",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "@ts-bug/core": ["./core/src"],
             "@ts-bug/core/*": ["./core/src/*"],

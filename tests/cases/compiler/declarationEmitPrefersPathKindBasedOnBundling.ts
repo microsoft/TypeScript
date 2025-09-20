@@ -1,6 +1,7 @@
 // @declaration: true
 // @target: es5
 // @baseUrl: .
+// @ignoreDeprecations: 6.0
 // @outDir: ./dist
 // @rootDir: ./src
 // @filename: src/lib/operators/scalar.ts

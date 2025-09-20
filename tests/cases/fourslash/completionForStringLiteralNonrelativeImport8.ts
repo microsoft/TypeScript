@@ -6,6 +6,7 @@
 //// {
 ////     "compilerOptions": {
 ////         "baseUrl": "./modules",
+        "ignoreDeprecations": "6.0",
 ////         "paths": {
 ////             "*": [
 ////                 "prefix/0*/suffix.ts",

@@ -14,6 +14,7 @@
 ////    "compilerOptions": {
 ////        "resolveJsonModule": false,
 ////        "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
 ////        "paths": {
 ////            "foo/*": ["./*"]
 ////        }

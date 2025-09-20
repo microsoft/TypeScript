@@ -15,6 +15,7 @@ import foobar from "foo/bar/foobar.json";
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "*": ["node_modules/*", "src/types"]
         },

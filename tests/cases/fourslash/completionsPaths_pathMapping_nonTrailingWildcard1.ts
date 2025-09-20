@@ -16,6 +16,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
 ////        "paths": {
 ////            "foo/_*/suffix": ["src/*.ts"]
 ////        }

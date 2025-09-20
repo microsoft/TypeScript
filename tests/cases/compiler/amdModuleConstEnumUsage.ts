@@ -1,6 +1,7 @@
 // @module: amd
 // @preserveConstEnums: true
 // @baseUrl: /proj
+// @ignoreDeprecations: 6.0
 // @filename: /proj/defs/cc.ts
 export const enum CharCode {
     A,

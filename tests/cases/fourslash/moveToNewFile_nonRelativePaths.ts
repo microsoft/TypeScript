@@ -4,7 +4,8 @@
 //// {
 ////     "compilerOptions": {
 ////         "moduleResolution": "Bundler",
-////         "baseUrl": "."
+////         "baseUrl": ".",
+        "ignoreDeprecations": "6.0"
 ////         "paths": {
 ////             "@foo/*": ["src/*"]
 ////         }
