@@ -57,7 +57,7 @@ var n2: Number = 34;
 
 var s: String = "yo";
 >s : Symbol(s, Decl(primitiveMembers.ts, 17, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var b: Boolean = true;
 >b : Symbol(b, Decl(primitiveMembers.ts, 18, 3))

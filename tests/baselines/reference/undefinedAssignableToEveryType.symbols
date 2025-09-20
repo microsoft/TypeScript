@@ -113,7 +113,7 @@ var p: Number = undefined;
 
 var q: String = undefined;
 >q : Symbol(q, Decl(undefinedAssignableToEveryType.ts, 30, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
