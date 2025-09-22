@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPattern01.ts] ////
+
+=== emptyArrayBindingPattern01.ts ===
+export const cilBlurLinear1: string[][] = [[]];
+>cilBlurLinear1 : Symbol(cilBlurLinear1, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+const [,] = cilBlurLinear1;
+>cilBlurLinear1 : Symbol(cilBlurLinear1, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+export const cilBlurLinear2: string[][] = [[]];
+>cilBlurLinear2 : Symbol(cilBlurLinear2, Decl(emptyArrayBindingPattern01.ts, 3, 12))
+
+let [,] = cilBlurLinear2;
+>cilBlurLinear2 : Symbol(cilBlurLinear2, Decl(emptyArrayBindingPattern01.ts, 3, 12))
+
+export const cilBlurLinear3: string[][] = [[]];
+>cilBlurLinear3 : Symbol(cilBlurLinear3, Decl(emptyArrayBindingPattern01.ts, 6, 12))
+
+var [,] = cilBlurLinear3;
+>cilBlurLinear3 : Symbol(cilBlurLinear3, Decl(emptyArrayBindingPattern01.ts, 6, 12))
+
+export const cilBlurLinear4: string[][] = [[]];
+>cilBlurLinear4 : Symbol(cilBlurLinear4, Decl(emptyArrayBindingPattern01.ts, 9, 12))
+
+const [[]] = cilBlurLinear4;
+>cilBlurLinear4 : Symbol(cilBlurLinear4, Decl(emptyArrayBindingPattern01.ts, 9, 12))
+
+export const cilBlurLinear5: string[][] = [[]];
+>cilBlurLinear5 : Symbol(cilBlurLinear5, Decl(emptyArrayBindingPattern01.ts, 12, 12))
+
+let [[]] = cilBlurLinear5;
+>cilBlurLinear5 : Symbol(cilBlurLinear5, Decl(emptyArrayBindingPattern01.ts, 12, 12))
+
+export const cilBlurLinear6: string[][] = [[]];
+>cilBlurLinear6 : Symbol(cilBlurLinear6, Decl(emptyArrayBindingPattern01.ts, 15, 12))
+
+var [[]] = cilBlurLinear6;
+>cilBlurLinear6 : Symbol(cilBlurLinear6, Decl(emptyArrayBindingPattern01.ts, 15, 12))
+
