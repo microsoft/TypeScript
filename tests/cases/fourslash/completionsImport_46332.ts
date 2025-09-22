@@ -1,8 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: esnext
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /node_modules/vue/package.json
 //// {
 ////   "name": "vue",

@@ -314,10 +314,14 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -368,6 +372,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/myprojects: *new*
+  {}
+/home/src/myprojects/project: *new*
+  {}
 /home/src/myprojects/project/tsconfig.json:
   {}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
@@ -537,10 +545,14 @@ Info seq  [hh:mm:ss:mss] Running: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -601,6 +613,12 @@ FsWatches::
 /home/src/myprojects/project/tsconfig.json:
   {}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {}
+
+FsWatches *deleted*::
+/home/src/myprojects:
+  {}
+/home/src/myprojects/project:
   {}
 
 FsWatchesRecursive::
@@ -673,10 +691,14 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -723,6 +745,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/myprojects: *new*
+  {}
+/home/src/myprojects/project: *new*
+  {}
 /home/src/myprojects/project/tsconfig.json:
   {}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:

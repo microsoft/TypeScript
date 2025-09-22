@@ -20,7 +20,7 @@ x = b;
 
 x = { f() {} }
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 function f<T>(a: T) {

@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/declarationEmitMappedTypePreservesTypeParameterConstraint.ts] ////
+
+=== declarationEmitMappedTypePreservesTypeParameterConstraint.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54560
+
+declare type requiredKeys<T extends object> = {
+>requiredKeys : requiredKeys<T>
+>             : ^^^^^^^^^^^^^^^
+
+  [k in keyof T]: undefined extends T[k] ? never : k;
+}[keyof T];
+
+declare type addQuestionMarks<
+>addQuestionMarks : addQuestionMarks<T, R>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+
+  T extends object,
+  R extends keyof T = requiredKeys<T>
+> = Pick<Required<T>, R> & Partial<T>;
+
+declare type identity<T> = T;
+>identity : T
+>         : ^
+
+declare type flatten<T> = identity<{
+>flatten : { [k in keyof T]: T[k]; }
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+  [k in keyof T]: T[k];
+}>;
+
+export declare abstract class ZodType<Output = any> {
+>ZodType : ZodType<Output>
+>        : ^^^^^^^^^^^^^^^
+
+  readonly _output: Output;
+>_output : Output
+>        : ^^^^^^
+}
+
+export declare class ZodLiteral<T> extends ZodType<T> {}
+>ZodLiteral : ZodLiteral<T>
+>           : ^^^^^^^^^^^^^
+>ZodType : ZodType<T>
+>        : ^^^^^^^^^^
+
+export declare type ZodTypeAny = ZodType<any>;
+>ZodTypeAny : ZodTypeAny
+>           : ^^^^^^^^^^
+
+export declare type baseObjectOutputType<Shape extends ZodRawShape> = {
+>baseObjectOutputType : baseObjectOutputType<Shape>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [k in keyof Shape]: Shape[k]["_output"];
+};
+
+export declare type objectOutputType<Shape extends ZodRawShape> = flatten<
+>objectOutputType : addQuestionMarks<baseObjectOutputType<Shape>, requiredKeys<baseObjectOutputType<Shape>>> extends infer T ? { [k in keyof T]: T[k]; } : never
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  addQuestionMarks<baseObjectOutputType<Shape>>
+>;
+
+export declare type ZodRawShape = {
+>ZodRawShape : ZodRawShape
+>            : ^^^^^^^^^^^
+
+  [k: string]: ZodTypeAny;
+>k : string
+>  : ^^^^^^
+
+};
+
+export const buildSchema = <V extends string>(
+>buildSchema : <V extends string>(version: V) => objectOutputType<{ version: ZodLiteral<V>; }>
+>            : ^ ^^^^^^^^^      ^^       ^^ ^^^^^                                             
+><V extends string>(  version: V): objectOutputType<{  version: ZodLiteral<V>;}> => ({} as any) : <V extends string>(version: V) => objectOutputType<{ version: ZodLiteral<V>; }>
+>                                                                                               : ^ ^^^^^^^^^      ^^       ^^ ^^^^^                                             
+
+  version: V
+>version : V
+>        : ^
+
+): objectOutputType<{
+  version: ZodLiteral<V>;
+>version : ZodLiteral<V>
+>        : ^^^^^^^^^^^^^
+
+}> => ({} as any);
+>({} as any) : any
+>{} as any : any
+>{} : {}
+>   : ^^
+
+// repro from https://github.com/microsoft/TypeScript/issues/55049
+
+type evaluate<t> = { [k in keyof t]: t[k] } & unknown
+>evaluate : { [k in keyof t]: t[k]; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+export type entryOf<o> = evaluate<
+>entryOf : { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
+        ? keyof o & number
+        : keyof o]
+>
+
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
+>entriesOf : ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const entriesOf = <o extends object>(o: o) =>
+>entriesOf : <o extends object>(o: o) => entriesOf<o>
+>          : ^ ^^^^^^^^^      ^^ ^^ ^^^^^            
+><o extends object>(o: o) =>    Object.entries(o) as entriesOf<o> : <o extends object>(o: o) => entriesOf<o>
+>                                                                 : ^ ^^^^^^^^^      ^^ ^^ ^^^^^            
+>o : o
+>  : ^
+
+    Object.entries(o) as entriesOf<o>
+>Object.entries(o) as entriesOf<o> : ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.entries(o) : [string, any][]
+>                  : ^^^^^^^^^^^^^^^
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
+>o : o
+>  : ^
+

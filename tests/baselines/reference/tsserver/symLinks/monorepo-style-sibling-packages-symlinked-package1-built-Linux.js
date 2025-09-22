@@ -87,20 +87,20 @@ declare const console: { log(msg: any): void; };
 
 //// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 34
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 123
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 125
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 124
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 126
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 125
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 127
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 126
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 128
 {
   "root": [
     "./src/index.ts"
@@ -154,8 +154,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Config: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package2/package.json'.
+Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -187,6 +190,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
@@ -327,9 +331,9 @@ FsWatches::
 /home/src/projects/project/packages/package1: *new*
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":122}
-/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":124}
+/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
+  {"inode":126}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"inode":7}
 /home/src/projects/project/packages/package1/src: *new*
@@ -537,9 +541,9 @@ FsWatches::
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":122}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":124}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":126}
 
 Timeout callback:: count: 3
 2: /home/src/projects/project/packages/package2/tsconfig.json *new*
@@ -572,8 +576,11 @@ ScriptInfos::
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -596,8 +603,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
@@ -606,34 +612,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript, JSON.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.js' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
-Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
-Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
-Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -773,8 +755,11 @@ Before running Timeout callback:: count: 2
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -798,8 +783,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
@@ -808,34 +792,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript, JSON.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.js' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
-Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
-Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
-Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -1024,14 +984,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
 14: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 125
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 126
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 128
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 127
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 128
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 130
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 129
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 131
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1065,7 +1025,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":129}
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1131,9 +1091,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":127}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":129}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1177,8 +1137,11 @@ Before running Timeout callback:: count: 2
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -1273,9 +1236,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":127}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":129}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:

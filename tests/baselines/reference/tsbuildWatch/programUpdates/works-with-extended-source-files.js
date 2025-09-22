@@ -1169,16 +1169,18 @@ Input::
 //// [/user/username/projects/project/extendsConfig2.tsconfig.json] deleted
 
 Timeout callback:: count: 1
-11: timerToBuildInvalidatedProject *new*
+12: timerToBuildInvalidatedProject *new*
 
 Before running Timeout callback:: count: 1
-11: timerToBuildInvalidatedProject
+12: timerToBuildInvalidatedProject
 
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is up to date because newest input 'other2.ts' is older than output 'project2.tsconfig.tsbuildinfo'
 
 [[90mHH:MM:SS AM[0m] Project 'project3.tsconfig.json' is up to date because newest input 'other2.ts' is older than output 'project3.tsconfig.tsbuildinfo'
 

@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts] ////
 
 === duplicateIdentifiersAcrossContainerBoundaries.ts ===
-module M {
+namespace M {
     export interface I { }
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -13,7 +13,7 @@ module M {
 >  : ^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -21,7 +21,7 @@ module M {
 >f : typeof f
 >  : ^^^^^^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -30,7 +30,7 @@ module M {
 >  : ^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -38,7 +38,7 @@ module M {
 >g : () => void
 >  : ^^^^^^^^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -47,7 +47,7 @@ module M {
 >  : ^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -55,7 +55,7 @@ module M {
 >C : C
 >  : ^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -64,7 +64,7 @@ module M {
 >  : ^^^^^^^^^^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -74,7 +74,7 @@ module M {
 >3 : 3
 >  : ^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -94,7 +94,7 @@ class Foo {
 >  : ^^^^^^
 }
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -103,11 +103,11 @@ module Foo {
 >  : ^^^^^^
 }
 
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
-    export module F {
+    export namespace F {
 >F : typeof F
 >  : ^^^^^^^^
 
@@ -116,7 +116,7 @@ module N {
 >  : ^^^
     }
 }
-declare module N {
+declare namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

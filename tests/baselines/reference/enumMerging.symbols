@@ -3,11 +3,11 @@
 === enumMerging.ts ===
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(enumMerging.ts, 0, 0))
 
     enum EImpl1 {
->EImpl1 : Symbol(EImpl1, Decl(enumMerging.ts, 2, 11), Decl(enumMerging.ts, 5, 5))
+>EImpl1 : Symbol(EImpl1, Decl(enumMerging.ts, 2, 14), Decl(enumMerging.ts, 5, 5))
 
         A, B, C
 >A : Symbol(EImpl1.A, Decl(enumMerging.ts, 3, 17))
@@ -16,7 +16,7 @@ module M1 {
     }
 
     enum EImpl1 {
->EImpl1 : Symbol(EImpl1, Decl(enumMerging.ts, 2, 11), Decl(enumMerging.ts, 5, 5))
+>EImpl1 : Symbol(EImpl1, Decl(enumMerging.ts, 2, 14), Decl(enumMerging.ts, 5, 5))
 
         D = 1, E, F
 >D : Symbol(EImpl1.D, Decl(enumMerging.ts, 7, 17))
@@ -65,11 +65,11 @@ module M1 {
 }
 
 // Enum with only computed members across 2 declarations with the same root module 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(enumMerging.ts, 20, 1))
 
     export enum EComp2 {
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
 >A : Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
@@ -84,7 +84,7 @@ module M2 {
     }
 
     export enum EComp2 {
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 
         D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
 >D : Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
@@ -101,31 +101,31 @@ module M2 {
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
 >x : Symbol(x, Decl(enumMerging.ts, 32, 7))
 >EComp2.A : Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 >A : Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
 >EComp2.B : Symbol(EComp2.B, Decl(enumMerging.ts, 25, 25))
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 >B : Symbol(EComp2.B, Decl(enumMerging.ts, 25, 25))
 >EComp2.C : Symbol(EComp2.C, Decl(enumMerging.ts, 25, 43))
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 >C : Symbol(EComp2.C, Decl(enumMerging.ts, 25, 43))
 >EComp2.D : Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 >D : Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
 >EComp2.E : Symbol(EComp2.E, Decl(enumMerging.ts, 29, 25))
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 >E : Symbol(EComp2.E, Decl(enumMerging.ts, 29, 25))
 >EComp2.F : Symbol(EComp2.F, Decl(enumMerging.ts, 29, 43))
->EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>EComp2 : Symbol(EComp2, Decl(enumMerging.ts, 23, 14), Decl(enumMerging.ts, 26, 5))
 >F : Symbol(EComp2.F, Decl(enumMerging.ts, 29, 43))
 }
 
 // Enum with initializer in only one of two declarations with constant members with the same root module
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(enumMerging.ts, 33, 1))
 
     enum EInit {
->EInit : Symbol(EInit, Decl(enumMerging.ts, 36, 11), Decl(enumMerging.ts, 40, 5))
+>EInit : Symbol(EInit, Decl(enumMerging.ts, 36, 14), Decl(enumMerging.ts, 40, 5))
 
         A,
 >A : Symbol(EInit.A, Decl(enumMerging.ts, 37, 16))
@@ -135,7 +135,7 @@ module M3 {
     }
 
     enum EInit {
->EInit : Symbol(EInit, Decl(enumMerging.ts, 36, 11), Decl(enumMerging.ts, 40, 5))
+>EInit : Symbol(EInit, Decl(enumMerging.ts, 36, 14), Decl(enumMerging.ts, 40, 5))
 
         C = 1, D, E
 >C : Symbol(EInit.C, Decl(enumMerging.ts, 42, 16))
@@ -145,59 +145,59 @@ module M3 {
 }
 
 // Enums with same name but different root module
-module M4 {
+namespace M4 {
 >M4 : Symbol(M4, Decl(enumMerging.ts, 45, 1))
 
     export enum Color { Red, Green, Blue }
->Color : Symbol(Color, Decl(enumMerging.ts, 48, 11))
+>Color : Symbol(Color, Decl(enumMerging.ts, 48, 14))
 >Red : Symbol(Color.Red, Decl(enumMerging.ts, 49, 23))
 >Green : Symbol(Color.Green, Decl(enumMerging.ts, 49, 28))
 >Blue : Symbol(Color.Blue, Decl(enumMerging.ts, 49, 35))
 }
-module M5 {
+namespace M5 {
 >M5 : Symbol(M5, Decl(enumMerging.ts, 50, 1))
 
     export enum Color { Red, Green, Blue }
->Color : Symbol(Color, Decl(enumMerging.ts, 51, 11))
+>Color : Symbol(Color, Decl(enumMerging.ts, 51, 14))
 >Red : Symbol(Color.Red, Decl(enumMerging.ts, 52, 23))
 >Green : Symbol(Color.Green, Decl(enumMerging.ts, 52, 28))
 >Blue : Symbol(Color.Blue, Decl(enumMerging.ts, 52, 35))
 }
 
-module M6.A {
+namespace M6.A {
 >M6 : Symbol(M6, Decl(enumMerging.ts, 53, 1), Decl(enumMerging.ts, 57, 1))
->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
+>A : Symbol(A, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 58, 14))
 
     export enum Color { Red, Green, Blue }
->Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>Color : Symbol(Color, Decl(enumMerging.ts, 55, 16), Decl(enumMerging.ts, 59, 24))
 >Red : Symbol(Color.Red, Decl(enumMerging.ts, 56, 23))
 >Green : Symbol(Color.Green, Decl(enumMerging.ts, 56, 28))
 >Blue : Symbol(Color.Blue, Decl(enumMerging.ts, 56, 35))
 }
-module M6 {
+namespace M6 {
 >M6 : Symbol(M6, Decl(enumMerging.ts, 53, 1), Decl(enumMerging.ts, 57, 1))
 
-    export module A {
->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
+    export namespace A {
+>A : Symbol(A, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 58, 14))
 
         export enum Color { Yellow = 1 }
->Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>Color : Symbol(Color, Decl(enumMerging.ts, 55, 16), Decl(enumMerging.ts, 59, 24))
 >Yellow : Symbol(Color.Yellow, Decl(enumMerging.ts, 60, 27))
     }
     var t = A.Color.Yellow;
 >t : Symbol(t, Decl(enumMerging.ts, 62, 7))
 >A.Color.Yellow : Symbol(A.Color.Yellow, Decl(enumMerging.ts, 60, 27))
->A.Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
->Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>A.Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 16), Decl(enumMerging.ts, 59, 24))
+>A : Symbol(A, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 58, 14))
+>Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 16), Decl(enumMerging.ts, 59, 24))
 >Yellow : Symbol(A.Color.Yellow, Decl(enumMerging.ts, 60, 27))
 
     t = A.Color.Red;
 >t : Symbol(t, Decl(enumMerging.ts, 62, 7))
 >A.Color.Red : Symbol(A.Color.Red, Decl(enumMerging.ts, 56, 23))
->A.Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
->Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>A.Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 16), Decl(enumMerging.ts, 59, 24))
+>A : Symbol(A, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 58, 14))
+>Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 16), Decl(enumMerging.ts, 59, 24))
 >Red : Symbol(A.Color.Red, Decl(enumMerging.ts, 56, 23))
 }
 

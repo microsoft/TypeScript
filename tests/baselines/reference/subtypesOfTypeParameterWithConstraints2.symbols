@@ -139,7 +139,7 @@ enum E { A }
 function f() { }
 >f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 12), Decl(subtypesOfTypeParameterWithConstraints2.ts, 40, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 12), Decl(subtypesOfTypeParameterWithConstraints2.ts, 40, 16))
 
     export var bar = 1;
@@ -149,7 +149,7 @@ class c { baz: string }
 >c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
 >baz : Symbol(c.baz, Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 9))
 
-module c {
+namespace c {
 >c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
 
     export var bar = 1;

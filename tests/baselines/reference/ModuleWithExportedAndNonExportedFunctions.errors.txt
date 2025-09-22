@@ -3,7 +3,7 @@ ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng
 
 
 ==== ModuleWithExportedAndNonExportedFunctions.ts (2 errors) ====
-    module A {
+    namespace A {
     
         export function fn(s: string) {
             return true;

@@ -12,7 +12,7 @@ lib.decorators.d.ts-Text
 lib.decorators.legacy.d.ts-Text
 
 //// [/tests/cases/fourslash/server/format01.ts]
-module Default{var x= ( { } ) ;}
+namespace Default{var x= ( { } ) ;}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -30,10 +30,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -46,7 +42,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/format01.ts SVC-1-0 "module Default{var x= ( { } ) ;}"
+	/tests/cases/fourslash/server/format01.ts SVC-1-0 "namespace Default{var x= ( { } ) ;}"
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.d.ts
@@ -91,11 +87,7 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/tests/cases/fourslash/node_modules: *new*
-  {}
 /tests/cases/fourslash/node_modules/@types: *new*
-  {}
-/tests/cases/fourslash/server/node_modules: *new*
   {}
 /tests/cases/fourslash/server/node_modules/@types: *new*
   {}
@@ -133,7 +125,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 1,
         "offset": 1,
         "endLine": 1,
-        "endOffset": 33
+        "endOffset": 36
       },
       "command": "format"
     }
@@ -148,33 +140,22 @@ Info seq  [hh:mm:ss:mss] response:
         {
           "start": {
             "line": 1,
-            "offset": 15
+            "offset": 18
           },
           "end": {
             "line": 1,
-            "offset": 15
+            "offset": 18
           },
           "newText": " "
         },
         {
           "start": {
             "line": 1,
-            "offset": 16
+            "offset": 19
           },
           "end": {
             "line": 1,
-            "offset": 16
-          },
-          "newText": " "
-        },
-        {
-          "start": {
-            "line": 1,
-            "offset": 21
-          },
-          "end": {
-            "line": 1,
-            "offset": 21
+            "offset": 19
           },
           "newText": " "
         },
@@ -185,51 +166,62 @@ Info seq  [hh:mm:ss:mss] response:
           },
           "end": {
             "line": 1,
-            "offset": 25
+            "offset": 24
           },
-          "newText": ""
+          "newText": " "
         },
         {
           "start": {
-            "line": 1,
-            "offset": 26
-          },
-          "end": {
             "line": 1,
             "offset": 27
           },
-          "newText": ""
-        },
-        {
-          "start": {
+          "end": {
             "line": 1,
             "offset": 28
           },
-          "end": {
+          "newText": ""
+        },
+        {
+          "start": {
             "line": 1,
             "offset": 29
           },
-          "newText": ""
-        },
-        {
-          "start": {
+          "end": {
             "line": 1,
             "offset": 30
           },
-          "end": {
+          "newText": ""
+        },
+        {
+          "start": {
             "line": 1,
             "offset": 31
+          },
+          "end": {
+            "line": 1,
+            "offset": 32
           },
           "newText": ""
         },
         {
           "start": {
             "line": 1,
-            "offset": 32
+            "offset": 33
           },
           "end": {
             "line": 1,
-            "offset": 32
+            "offset": 34
+          },
+          "newText": ""
+        },
+        {
+          "start": {
+            "line": 1,
+            "offset": 35
+          },
+          "end": {
+            "line": 1,
+            "offset": 35
           },
           "newText": " "
         }
@@ -242,9 +234,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 15,
+        "offset": 18,
         "endLine": 1,
-        "endOffset": 15,
+        "endOffset": 18,
         "insertString": " "
       },
       "command": "change"
@@ -290,9 +282,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 17,
+        "offset": 20,
         "endLine": 1,
-        "endOffset": 17,
+        "endOffset": 20,
         "insertString": " "
       },
       "command": "change"
@@ -331,9 +323,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 23,
+        "offset": 26,
         "endLine": 1,
-        "endOffset": 23,
+        "endOffset": 26,
         "insertString": " "
       },
       "command": "change"
@@ -372,9 +364,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 27,
+        "offset": 30,
         "endLine": 1,
-        "endOffset": 28,
+        "endOffset": 31,
         "insertString": ""
       },
       "command": "change"
@@ -413,9 +405,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 28,
+        "offset": 31,
         "endLine": 1,
-        "endOffset": 29,
+        "endOffset": 32,
         "insertString": ""
       },
       "command": "change"
@@ -454,9 +446,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 29,
+        "offset": 32,
         "endLine": 1,
-        "endOffset": 30,
+        "endOffset": 33,
         "insertString": ""
       },
       "command": "change"
@@ -495,9 +487,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 30,
+        "offset": 33,
         "endLine": 1,
-        "endOffset": 31,
+        "endOffset": 34,
         "insertString": ""
       },
       "command": "change"
@@ -536,9 +528,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/tests/cases/fourslash/server/format01.ts",
         "line": 1,
-        "offset": 31,
+        "offset": 34,
         "endLine": 1,
-        "endOffset": 31,
+        "endOffset": 34,
         "insertString": " "
       },
       "command": "change"

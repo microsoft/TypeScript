@@ -61,6 +61,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
@@ -75,7 +79,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excl
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Wild card directory
 
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 118
+//// [/user/username/projects/myproject/src/main.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -100,6 +104,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":20}
+/user/username/projects: *new*
+  {"inode":3}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -175,7 +181,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 120
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 122
 export function temp(): string;
 
 

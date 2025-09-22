@@ -1,6 +1,6 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
-module A {
-    module B {}
+namespace A {
+    namespace B {}
 }

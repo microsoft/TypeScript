@@ -312,7 +312,7 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
         export class Continuation {
             public exceptionBlock = -1;
             constructor (public normalBlock: number) { }

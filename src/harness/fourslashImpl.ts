@@ -2455,11 +2455,16 @@ export class TestState {
         return result;
     }
 
-    public baselineQuickInfo(verbosityLevels?: VerbosityLevels): void {
+    public baselineQuickInfo(verbosityLevels?: VerbosityLevels, maximumLength?: number): void {
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
             const verbosityLevel = toArray(verbosityLevels?.[name]);
             const items = verbosityLevel.map(verbosityLevel => {
-                const item: ts.QuickInfo & { verbosityLevel?: number; } | undefined = this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position, verbosityLevel);
+                const item: ts.QuickInfo & { verbosityLevel?: number; } | undefined = this.languageService.getQuickInfoAtPosition(
+                    marker.fileName,
+                    marker.position,
+                    maximumLength,
+                    verbosityLevel,
+                );
                 if (item) item.verbosityLevel = verbosityLevel;
                 return {
                     marker: { ...marker, name },
@@ -2598,9 +2603,9 @@ export class TestState {
         const sorted = items.slice();
         // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
         sorted.sort((q1, q2) =>
-            q1.marker.fileName === q1.marker.fileName
+            q1.marker.fileName === q2.marker.fileName
                 ? (q1.marker.position > q2.marker.position ? -1 : 1)
-                : (q1.marker.fileName > q1.marker.fileName ? 1 : -1)
+                : (q1.marker.fileName > q2.marker.fileName ? 1 : -1)
         );
         const files = new Map<string, string[]>();
         let previous: T | undefined;

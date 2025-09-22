@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmitWhitespace2.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;

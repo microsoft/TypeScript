@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module m {
+////namespace m {
 ////    export /*1*/const x;
 ////    export [|const|] enum E {
 ////    }

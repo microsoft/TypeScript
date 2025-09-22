@@ -78,7 +78,7 @@ var derived2: Derived2;
 >derived2 : Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
 >Derived2 : Symbol(Derived2, Decl(heterogeneousArrayLiterals.ts, 21, 43))
 
-module Derived {
+namespace Derived {
 >Derived : Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
@@ -139,7 +139,7 @@ module Derived {
 >derived : Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 }
 
-module WithContextualType {
+namespace WithContextualType {
 >WithContextualType : Symbol(WithContextualType, Decl(heterogeneousArrayLiterals.ts, 39, 1))
 
     // no errors

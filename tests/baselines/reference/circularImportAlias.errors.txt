@@ -4,7 +4,7 @@ circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaratio
 ==== circularImportAlias.ts (1 errors) ====
     // expected no error
     
-    module B {
+    namespace B {
         export import a = A;
         export class D extends a.C {
                                  ~
@@ -14,7 +14,7 @@ circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaratio
         }
     }
     
-    module A {
+    namespace A {
         export class C { name: string }
         export import b = B;
     }

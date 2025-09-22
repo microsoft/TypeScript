@@ -4,7 +4,7 @@ NonInitializedExportInInternalModule.ts(4,10): error TS1123: Variable declaratio
 
 
 ==== NonInitializedExportInInternalModule.ts (3 errors) ====
-    module Inner {
+    namespace Inner {
         var;
            
 !!! error TS1123: Variable declaration list cannot be empty.
@@ -28,7 +28,7 @@ NonInitializedExportInInternalModule.ts(4,10): error TS1123: Variable declaratio
             export let x, y, z;
         }
         
-        module C {
+        namespace C {
             export var a = 1, b, c = 2;
             export var x, y, z;
         }

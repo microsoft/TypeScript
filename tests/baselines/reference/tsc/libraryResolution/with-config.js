@@ -121,93 +121,6 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js -p project1 --explainFiles
 Output::
-======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-webworker' was not resolved. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-scripthost' was not resolved. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-es5' was not resolved. ========
 ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
 Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
 File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
@@ -215,35 +128,6 @@ File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' doe
 File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-dom' was not resolved. ========
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions

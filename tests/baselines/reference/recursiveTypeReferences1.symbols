@@ -377,9 +377,9 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >idx.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >idx : Symbol(idx, Decl(recursiveTypeReferences1.ts, 102, 9))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->el.textContent : Symbol(Node.textContent, Decl(lib.dom.d.ts, --, --))
+>el.textContent : Symbol(Element.textContent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
->textContent : Symbol(Node.textContent, Decl(lib.dom.d.ts, --, --))
+>textContent : Symbol(Element.textContent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
       children.length > 0 ? parse(children, idx) : frag()
 >children.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))

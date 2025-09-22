@@ -14,10 +14,10 @@ enum E {
 const enum D {
     A, B, C
 }
-module M {
+namespace M {
     export var x;
 }
-module N {
+namespace N {
     export interface I {
     }
 }

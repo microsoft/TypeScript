@@ -90,6 +90,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/foo/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -209,6 +213,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects: *new*
+  {}
+/home/src/projects/project: *new*
+  {}
 /home/src/projects/project/a/node_modules/foo/package.json: *new*
   {}
 /home/src/projects/project/b/node_modules/foo/package.json: *new*
@@ -299,6 +307,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {}
+/home/src/projects/project:
+  {}
 /home/src/projects/project/a/node_modules/foo/package.json:
   {}
 /home/src/projects/project/b/node_modules/foo/package.json:

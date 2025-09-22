@@ -8,7 +8,7 @@ class C {
     private static bar: string;
 }
 
-module C {
+namespace C {
     export var y = C.bar; // error
 }
 

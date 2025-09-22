@@ -4,7 +4,7 @@
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using function arguments, no errors expected
 
-module ImmediatelyFix {
+namespace ImmediatelyFix {
     class C<T> {
         foo<T>(x: (a: T) => T) {
             return x(null);
@@ -27,7 +27,7 @@ module ImmediatelyFix {
     var r3a = c2.foo(x => 1); // number
 }
 
-module WithCandidates {
+namespace WithCandidates {
     class C<T> {
         foo2<T, U>(x: T, cb: (a: T) => U) {
             return cb(x);

@@ -55,9 +55,9 @@ x = { f() {} }
 >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))
 >f : Symbol(f, Decl(invalidVoidValues.ts, 17, 5))
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : Symbol(M, Decl(invalidVoidValues.ts, 17, 14))
->x : Symbol(x, Decl(invalidVoidValues.ts, 19, 21))
+>x : Symbol(x, Decl(invalidVoidValues.ts, 19, 24))
 
 x = M;
 >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))

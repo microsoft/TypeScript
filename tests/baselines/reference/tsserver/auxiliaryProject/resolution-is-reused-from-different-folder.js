@@ -89,7 +89,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/m
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/yargs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -163,14 +171,22 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
+/user/users/projects: *new*
+  {}
+/user/users/projects/myproject: *new*
+  {}
 /user/users/projects/myproject/folder/random.ts: *new*
   {}
 /user/users/projects/myproject/node_modules/@types/yargs/package.json: *new*
   {}
 /user/users/projects/myproject/node_modules/yargs/package.json: *new*
   {}
+/user/users/projects/myproject/some: *new*
+  {}
 
 FsWatchesRecursive::
+/user/users/projects/myproject/folder: *new*
+  {}
 /user/users/projects/myproject/node_modules: *new*
   {}
 /user/users/projects/myproject/node_modules/@types: *new*
@@ -219,13 +235,21 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Creating AuxiliaryProject: /dev/null/auxiliaryProject1*, currentDirectory: /user/users/projects/myproject/some
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some 0 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/yargs/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -301,14 +325,22 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/users/projects:
+  {}
+/user/users/projects/myproject:
+  {}
 /user/users/projects/myproject/folder/random.ts:
   {}
 /user/users/projects/myproject/node_modules/@types/yargs/package.json:
   {}
 /user/users/projects/myproject/node_modules/yargs/package.json:
   {}
+/user/users/projects/myproject/some:
+  {}
 
 FsWatchesRecursive::
+/user/users/projects/myproject/folder:
+  {}
 /user/users/projects/myproject/node_modules:
   {}
 /user/users/projects/myproject/node_modules/@types:

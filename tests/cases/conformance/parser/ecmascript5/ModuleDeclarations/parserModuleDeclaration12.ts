@@ -1,2 +1,2 @@
-module A.string {
+namespace A.string {
 }
