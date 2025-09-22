@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { forEachNoEmitOnErrorScenarioTsc } from "../helpers/noEmitOnError.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -27,7 +26,7 @@ describe("unittests:: tsc:: ignoreConfig::", () => {
             scenario: "ignoreConfig",
             subScenario,
             sys: sysWithConfig,
-            commandLineArgs: commandLineArgs,
+            commandLineArgs,
         });
 
         verifyTsc({
@@ -41,7 +40,7 @@ describe("unittests:: tsc:: ignoreConfig::", () => {
             scenario: "ignoreConfig",
             subScenario: subScenario + " when config file absent",
             sys: sysWithoutConfig,
-            commandLineArgs: commandLineArgs,
+            commandLineArgs,
         });
 
         verifyTsc({
