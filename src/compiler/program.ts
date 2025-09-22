@@ -71,8 +71,6 @@ import {
     EmitResult,
     emptyArray,
     ensureTrailingDirectorySeparator,
-    equateStringsCaseInsensitive,
-    equateStringsCaseSensitive,
     exclusivelyPrefixedNodeCoreModules,
     ExportAssignment,
     ExportDeclaration,
