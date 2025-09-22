@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasFunction.ts] ////
 
 === internalAliasFunction.ts ===
-module a {
+namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 
@@ -17,7 +17,7 @@ module a {
     }
 }
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

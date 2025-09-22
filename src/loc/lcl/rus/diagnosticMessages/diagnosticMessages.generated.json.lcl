@@ -1889,15 +1889,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Разрешите файлам JavaScript быть частью программы. Используйте параметр "checkJS" для получения ошибок из этих файлов.]]></Val>
+            <Val><![CDATA[Разрешите файлам JavaScript быть частью программы. Используйте параметр "checkJs" для получения ошибок из этих файлов.]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3041,6 +3038,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Call_target_does_not_contain_any_signatures_2346" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call target does not contain any signatures.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Объект вызова не содержит сигнатуры.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert logical AND access chains]]></Val>
@@ -4067,11 +4073,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Класс не может иметь имя "Object" при выборе ES5 с модулем {0} в качестве целевого.]]></Val>
+            <Val><![CDATA[Класс не может иметь имя Object при выборе в качестве цели версии ES5 и более поздней с модулем {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6053,20 +6059,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_1286" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Синтаксис ESM не разрешен в модуле CommonJS, если для параметра "модуль" установлено значение "сохранить".]]></Val>
+            <Val><![CDATA[Импорты и экспорты ECMAScript невозможно записать в файл CommonJS в разделе "verbatimModuleSyntax".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled_1286" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjus_1295" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Синтаксис ESM не разрешен в модуле CommonJS, если включен "verbatimModuleSyntax".]]></Val>
+            <Val><![CDATA[Импорты и экспорты ECMAScript невозможно записать в файл CommonJS в разделе "verbatimModuleSyntax". Измените поле "type" в ближайшем файле "package.json", чтобы сделать этот файл модулем ECMAScript, или настройте параметры "verbatimModuleSyntax", "module" и "moduleResolution" в TypeScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Синтаксис модуля ECMAScript не разрешен в модуле CommonJS, если для параметра "module" установлено значение "preserve".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10538,11 +10553,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" можно использовать только в том случае, если для параметра "module" установлено значение "preserve" или "es2015" или более поздней версии.]]></Val>
+            <Val><![CDATA[Опцию "{0}" можно использовать только в том случае, если для параметра "module" установлено значение "preserve", "commonjs", "es2015" или более поздней версии.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -15,7 +15,7 @@ var n: number = modM.x;
 >  : ^^^
 
 === exportAssignmentInternalModule_A.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

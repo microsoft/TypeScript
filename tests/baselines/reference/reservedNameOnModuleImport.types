@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/reservedNameOnModuleImport.ts] ////
 
 === reservedNameOnModuleImport.ts ===
-declare module test {
+declare namespace test {
 >test : typeof test
 >     : ^^^^^^^^^^^
 
-    module mstring { }
+    namespace mstring { }
 
     // Should be fine; this does not clobber any declared values.
     export import string = mstring;

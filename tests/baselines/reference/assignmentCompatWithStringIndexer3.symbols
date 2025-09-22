@@ -33,11 +33,11 @@ b1 = a; // error
 >b1 : Symbol(b1, Decl(assignmentCompatWithStringIndexer3.ts, 7, 3))
 >a : Symbol(a, Decl(assignmentCompatWithStringIndexer3.ts, 6, 3))
 
-module Generics {
+namespace Generics {
 >Generics : Symbol(Generics, Decl(assignmentCompatWithStringIndexer3.ts, 9, 7))
 
     class A<T extends Derived> {
->A : Symbol(A, Decl(assignmentCompatWithStringIndexer3.ts, 11, 17))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer3.ts, 11, 20))
 >T : Symbol(T, Decl(assignmentCompatWithStringIndexer3.ts, 12, 12))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer3.ts, 2, 31))
 
@@ -53,7 +53,7 @@ module Generics {
 
         var a: A<T>;
 >a : Symbol(a, Decl(assignmentCompatWithStringIndexer3.ts, 17, 11))
->A : Symbol(A, Decl(assignmentCompatWithStringIndexer3.ts, 11, 17))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer3.ts, 11, 20))
 >T : Symbol(T, Decl(assignmentCompatWithStringIndexer3.ts, 16, 17))
 
         var b: { [x: string]: string; }

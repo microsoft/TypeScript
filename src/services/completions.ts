@@ -3851,6 +3851,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
+
+                // Symbol completions should have lower priority since they represent computed property access
+                symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
+
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
@@ -4181,10 +4185,6 @@ function getCompletionData(
                         return charactersFuzzyMatchInString(symbolName, lowerCaseTokenText);
                     },
                     (info, symbolName, isFromAmbientModule, exportMapKey) => {
-                        if (detailsEntryId && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name))) {
-                            return;
-                        }
-
                         // Do a relatively cheap check to bail early if all re-exports are non-importable
                         // due to file location or package.json dependency filtering. For non-node16+
                         // module resolution modes, getting past this point guarantees that we'll be
@@ -4211,6 +4211,10 @@ function getCompletionData(
                         let exportInfo: SymbolExportInfo | FutureSymbolExportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
                             ({ exportInfo = info[0], moduleSpecifier } = result);
+                        }
+
+                        if (detailsEntryId && (detailsEntryId.source !== moduleSpecifier && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name)))) {
+                            return;
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;

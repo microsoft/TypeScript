@@ -69,8 +69,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module 'package-b' from '/home/src/workspace/packageC/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Found 'package.json' at '/home/src/workspace/packageC/package.json'.
+Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/workspace/packageC/node_modules/package-b/package.json'.
 File '/home/src/workspace/packageC/node_modules/package-b.ts' does not exist.
@@ -86,8 +88,10 @@ File '/home/src/workspace/packageC/node_modules/package-b/index.d.ts' exists - u
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-b/index.d.ts', result '/home/src/workspace/packageB/index.d.ts'.
 ======== Module name 'package-b' was successfully resolved to '/home/src/workspace/packageB/index.d.ts'. ========
 ======== Resolving module 'package-a' from '/home/src/workspace/packageB/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Found 'package.json' at '/home/src/workspace/packageB/package.json'.
+Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspace/packageB/node_modules/package-a/package.json' does not exist.
 File '/home/src/workspace/packageB/node_modules/package-a.ts' does not exist.
@@ -99,11 +103,28 @@ File '/home/src/workspace/packageB/node_modules/package-a/index.d.ts' exists - u
 Resolving real path for '/home/src/workspace/packageB/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
 ======== Resolving module 'package-b' from '/home/src/workspace/packageC/package.json'. ========
-Resolution for module 'package-b' was found in cache from location '/home/src/workspace/packageC'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspace/packageC/package.json' exists according to earlier cached lookups.
+Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspace/packageC/node_modules/package-b/package.json' exists according to earlier cached lookups.
+File '/home/src/workspace/packageC/node_modules/package-b.ts' does not exist.
+File '/home/src/workspace/packageC/node_modules/package-b.tsx' does not exist.
+File '/home/src/workspace/packageC/node_modules/package-b.d.ts' does not exist.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' does not have a 'main' field.
+File '/home/src/workspace/packageC/node_modules/package-b/index.ts' does not exist.
+File '/home/src/workspace/packageC/node_modules/package-b/index.tsx' does not exist.
+File '/home/src/workspace/packageC/node_modules/package-b/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspace/packageC/node_modules/package-b/index.d.ts', result '/home/src/workspace/packageB/index.d.ts'.
 ======== Module name 'package-b' was successfully resolved to '/home/src/workspace/packageB/index.d.ts'. ========
 ======== Resolving module 'package-a' from '/home/src/workspace/packageC/package.json'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspace/packageC/package.json' exists according to earlier cached lookups.
+Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspace/packageC/node_modules/package-a/package.json' does not exist.
 File '/home/src/workspace/packageC/node_modules/package-a.ts' does not exist.
@@ -155,6 +176,8 @@ FsWatches::
 /home/src/workspace/packageB/package.json: *new*
   {}
 /home/src/workspace/packageC/index.ts: *new*
+  {}
+/home/src/workspace/packageC/package.json: *new*
   {}
 /home/src/workspace/packageC/tsconfig.json: *new*
   {}
@@ -225,8 +248,10 @@ Output::
 
 Reusing resolution of module 'package-b' from '/home/src/workspace/packageC/index.ts' of old program, it was successfully resolved to '/home/src/workspace/packageB/index.d.ts'.
 ======== Resolving module 'package-b' from '/home/src/workspace/packageC/package.json'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspace/packageC/package.json' exists according to earlier cached lookups.
+Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspace/packageC/node_modules/package-b/package.json' exists according to earlier cached lookups.
 File '/home/src/workspace/packageC/node_modules/package-b.ts' does not exist.
@@ -241,8 +266,10 @@ File '/home/src/workspace/packageC/node_modules/package-b/index.d.ts' exists - u
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-b/index.d.ts', result '/home/src/workspace/packageB/index.d.ts'.
 ======== Module name 'package-b' was successfully resolved to '/home/src/workspace/packageB/index.d.ts'. ========
 ======== Resolving module 'package-a' from '/home/src/workspace/packageC/package.json'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspace/packageC/package.json' exists according to earlier cached lookups.
+Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspace/packageC/node_modules/package-a/package.json' does not exist.
 File '/home/src/workspace/packageC/node_modules/package-a.ts' does not exist.

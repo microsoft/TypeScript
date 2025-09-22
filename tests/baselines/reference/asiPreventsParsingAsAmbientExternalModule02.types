@@ -9,7 +9,7 @@ var module: string;
 >module : string
 >       : ^^^^^^
 
-module container {
+namespace container {
 >container : typeof container
 >          : ^^^^^^^^^^^^^^^^
 

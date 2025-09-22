@@ -1,7 +1,7 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 // @target: es5
-module MyModule {
+namespace MyModule {
 
     export function inject(target: any, key: string): void { }
 

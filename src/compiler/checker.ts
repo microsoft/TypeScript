@@ -338,6 +338,7 @@ import {
     getMembersOfDeclaration,
     getModifiers,
     getModuleInstanceState,
+    getModuleSpecifierOfBareOrAccessedRequire,
     getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -710,6 +711,7 @@ import {
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
+    isPrivateIdentifierSymbol,
     isPropertyAccessEntityNameExpression,
     isPropertyAccessExpression,
     isPropertyAccessOrQualifiedName,
@@ -2526,6 +2528,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const diagnostic = createError(location, message, ...args);
         diagnostics.add(diagnostic);
         return diagnostic;
+    }
+
+    function getVerbatimModuleSyntaxErrorMessage(node: Node): DiagnosticMessage {
+        const sourceFile = getSourceFileOfNode(node);
+        const fileName = sourceFile.fileName;
+
+        // Check if the file is .cts or .cjs (CommonJS-specific extensions)
+        if (fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs])) {
+            return Diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax;
+        }
+        else {
+            // For .ts, .tsx, .js, etc.
+            return Diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjust_the_type_field_in_the_nearest_package_json_to_make_this_file_an_ECMAScript_module_or_adjust_your_verbatimModuleSyntax_module_and_moduleResolution_settings_in_TypeScript;
+        }
     }
 
     function addErrorOrSuggestion(isError: boolean, diagnostic: Diagnostic) {
@@ -4698,7 +4714,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
-                (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
+                isVariableDeclarationInitializedToBareOrAccessedRequire(location) && getModuleSpecifierOfBareOrAccessedRequire(location) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, or(isImportDeclaration, isJSDocImportTag, isExportDeclaration))?.moduleSpecifier ||
                 findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression;
@@ -6156,7 +6172,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         verbosityLevel?: number,
         out?: WriterContextOut,
     ): string {
-        const noTruncation = compilerOptions.noErrorTruncation ||
+        const noTruncation = !maximumLength && compilerOptions.noErrorTruncation ||
             flags & TypeFormatFlags.NoTruncation;
         const typeNode = nodeBuilder.typeToTypeNode(
             type,
@@ -7595,6 +7611,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
                             context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                        }
+                        if (isPrivateIdentifierSymbol(propertySymbol) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                            context.tracker.reportPrivateInBaseOfClassExpression(idText((propertySymbol.valueDeclaration! as NamedDeclaration).name! as PrivateIdentifier));
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
@@ -32741,6 +32760,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function popContextualType() {
         contextualTypeCount--;
+        // Clear out the popped element's referenced objects.
+        contextualTypeNodes[contextualTypeCount] = undefined!;
+        contextualTypes[contextualTypeCount] = undefined;
+        contextualIsCache[contextualTypeCount] = undefined!;
     }
 
     function findContextualNode(node: Node, includeCaches: boolean) {
@@ -32760,6 +32783,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function popInferenceContext() {
         inferenceContextCount--;
+        inferenceContextNodes[inferenceContextCount] = undefined!;
+        inferenceContexts[inferenceContextCount] = undefined;
     }
 
     function getInferenceContext(node: Node) {
@@ -32772,12 +32797,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function pushActiveMapper(mapper: TypeMapper) {
         activeTypeMappers[activeTypeMappersCount] = mapper;
-        activeTypeMappersCaches[activeTypeMappersCount] = new Map();
+        activeTypeMappersCaches[activeTypeMappersCount] ??= new Map();
         activeTypeMappersCount++;
     }
 
     function popActiveMapper() {
         activeTypeMappersCount--;
+        // Clear out the popped element's referenced objects.
+        activeTypeMappers[activeTypeMappersCount] = undefined!;
+        activeTypeMappersCaches[activeTypeMappersCount].clear();
     }
 
     function findActiveMapper(mapper: TypeMapper) {
@@ -37975,7 +38003,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
-                error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
+                error(expression, Diagnostics.A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
             return getRegularTypeOfLiteralType(exprType);
         }
@@ -48316,7 +48344,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !isInJSFile(node) &&
                     host.getEmitModuleFormatOfFile(getSourceFileOfNode(node)) === ModuleKind.CommonJS
                 ) {
-                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                    error(node, getVerbatimModuleSyntaxErrorMessage(node));
                 }
                 else if (
                     moduleKind === ModuleKind.Preserve &&
@@ -48328,7 +48356,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // when we look at the `impliedNodeFormat` of this file and decide it's CommonJS (i.e., currently,
                     // only if the file extension is .cjs/.cts). To avoid that inconsistency, we disallow ESM syntax
                     // in files that are unambiguously CommonJS in this mode.
-                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
+                    error(node, Diagnostics.ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
                 }
 
                 if (
@@ -48760,7 +48788,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isIllegalExportDefaultInCJS) {
-            error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+            error(node, getVerbatimModuleSyntaxErrorMessage(node));
         }
 
         checkExternalModuleExports(container);
@@ -53325,7 +53353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarImportCallExpression(node: ImportCall): boolean {
         if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
-            return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+            return grammarErrorOnNode(node, getVerbatimModuleSyntaxErrorMessage(node));
         }
 
         if (node.expression.kind === SyntaxKind.MetaProperty) {

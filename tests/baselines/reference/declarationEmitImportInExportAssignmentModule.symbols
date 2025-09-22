@@ -1,19 +1,19 @@
 //// [tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts] ////
 
 === declarationEmitImportInExportAssignmentModule.ts ===
-module m {
+namespace m {
 >m : Symbol(m, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 0))
 
-    export module c {
->c : Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 10))
+    export namespace c {
+>c : Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 13))
 
         export class c {
->c : Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 1, 21))
+>c : Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 1, 24))
         }
     }
     import x = c;
 >x : Symbol(x, Decl(declarationEmitImportInExportAssignmentModule.ts, 4, 5))
->c : Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 10))
+>c : Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 13))
 
     export var a: typeof x;
 >a : Symbol(a, Decl(declarationEmitImportInExportAssignmentModule.ts, 6, 14))

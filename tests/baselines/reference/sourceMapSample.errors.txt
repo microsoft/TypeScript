@@ -2,7 +2,7 @@ sourceMapSample.ts(14,45): error TS2694: Namespace 'Foo.Bar' has no exported mem
 
 
 ==== sourceMapSample.ts (1 errors) ====
-    module Foo.Bar {
+    namespace Foo.Bar {
         "use strict";
     
         class Greeter {

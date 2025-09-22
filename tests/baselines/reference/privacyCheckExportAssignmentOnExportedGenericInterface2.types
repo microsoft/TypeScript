@@ -19,7 +19,7 @@ function Foo<T>(array: T[]): Foo<T> {
 >          : ^^^^^^^^^
 }
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

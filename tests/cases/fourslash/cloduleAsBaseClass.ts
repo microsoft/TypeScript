@@ -6,7 +6,7 @@
 ////    static bar() { }
 ////}
 ////
-////module A {
+////namespace A {
 ////    export var x = 1;
 ////    export function baz() { }
 ////}

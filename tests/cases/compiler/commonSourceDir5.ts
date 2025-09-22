@@ -1,7 +1,6 @@
 // @outFile: concat.js
 // @module: amd
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: A:/bar.ts
 import {z} from "./foo";
 export var x = z + z;

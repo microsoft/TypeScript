@@ -1,5 +1,5 @@
 // class inheritance to ensure __extends is emitted
-module m {
+namespace m {
     export class base {}
     export class child extends base {}
 }

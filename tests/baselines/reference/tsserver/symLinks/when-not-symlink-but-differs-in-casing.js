@@ -280,13 +280,11 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/replay/axios-src/lib/core/dispatchRequest.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: c:/temp/replay/axios-src/lib/core
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/settle.js 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/settle.js 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/settle.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
@@ -297,6 +295,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/no
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -388,15 +387,11 @@ c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json:
   {"pollingInterval":2000}
-c:/temp/replay/axios-src/lib/core/AxiosHeaders.js: *new*
-  {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/jsconfig.json:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/node_modules: *new*
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/node_modules/@types:
-  {"pollingInterval":500}
-c:/temp/replay/axios-src/lib/core/settle.js: *new*
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/tsconfig.json:
   {"pollingInterval":2000}
@@ -425,6 +420,8 @@ FsWatches::
 C:/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+  {}
+c:/temp/replay/axios-src/lib: *new*
   {}
 c:/temp/replay/axios-src/lib/core: *new*
   {}
@@ -493,8 +490,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/replay/axios-src/lib/core/mergeConfig.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject3*, currentDirectory: c:/temp/replay/axios-src/lib/core
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
@@ -658,15 +653,11 @@ c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json:
   {"pollingInterval":2000}
-c:/temp/replay/axios-src/lib/core/AxiosHeaders.js:
-  {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/jsconfig.json:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/node_modules:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/node_modules/@types:
-  {"pollingInterval":500}
-c:/temp/replay/axios-src/lib/core/settle.js:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/tsconfig.json:
   {"pollingInterval":2000}
@@ -695,6 +686,8 @@ FsWatches::
 C:/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+  {}
+c:/temp/replay/axios-src/lib:
   {}
 c:/temp/replay/axios-src/lib/core:
   {}
@@ -818,15 +811,11 @@ c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json:
   {"pollingInterval":2000}
-c:/temp/replay/axios-src/lib/core/AxiosHeaders.js:
-  {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/jsconfig.json:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/node_modules:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/node_modules/@types:
-  {"pollingInterval":500}
-c:/temp/replay/axios-src/lib/core/settle.js:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/tsconfig.json:
   {"pollingInterval":2000}
@@ -855,6 +844,8 @@ FsWatches::
 C:/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+  {}
+c:/temp/replay/axios-src/lib:
   {}
 c:/temp/replay/axios-src/lib/core:
   {}

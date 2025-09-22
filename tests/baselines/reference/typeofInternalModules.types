@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/typeofInternalModules.ts] ////
 
 === typeofInternalModules.ts ===
-module Outer {
+namespace Outer {
 >Outer : typeof Outer
 >      : ^^^^^^^^^^^^
 
-    export module instantiated {
+    export namespace instantiated {
 >instantiated : typeof instantiated
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -13,7 +13,7 @@ module Outer {
 >C : C
 >  : ^
     }
-    export module uninstantiated {
+    export namespace uninstantiated {
         export interface P { }
     }
 }

@@ -20,7 +20,7 @@ if(foo.answer === 42){
 }
 
 === foo_0.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

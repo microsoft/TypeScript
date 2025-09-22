@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/systemDefaultImportCallable.ts] ////
 
 === core-js.d.ts ===
-declare module core {
+declare namespace core {
 >core : typeof core
 >     : ^^^^^^^^^^^
 

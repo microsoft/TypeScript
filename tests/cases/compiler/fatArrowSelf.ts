@@ -1,4 +1,4 @@
-module Events {
+namespace Events {
     export interface ListenerCallback {
         (value:any):void;
     }
@@ -8,7 +8,7 @@ module Events {
     }
 }
 
-module Consumer {
+namespace Consumer {
     class EventEmitterConsummer {
         constructor (private emitter: Events.EventEmitter) { }
 
