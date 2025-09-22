@@ -120,6 +120,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -264,6 +265,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 

@@ -357,6 +357,7 @@ Info seq  [hh:mm:ss:mss] response:
           "projectFileName": "/home/src/workspace/projects/b/tsconfig.json",
           "fileNames": [
             "/home/src/workspace/projects/b/globalFile3.ts",
+            "/home/src/tslibs/TS/Lib/lib.d.ts",
             "/home/src/workspace/projects/b/moduleFile1.ts",
             "/home/src/workspace/projects/b/file1Consumer1.ts",
             "/home/src/workspace/projects/b/file1Consumer2.ts",

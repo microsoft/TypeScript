@@ -710,6 +710,7 @@ Info seq  [hh:mm:ss:mss] response:
           "projectFileName": "/user/username/projects/myproject/tsconfig.json",
           "fileNames": [
             "/user/username/projects/myproject/file2.ts",
+            "/home/src/tslibs/TS/Lib/lib.d.ts",
             "/user/username/projects/myproject/file1.ts",
             "/user/username/projects/myproject/file3.ts",
             "/user/username/projects/myproject/module.ts"

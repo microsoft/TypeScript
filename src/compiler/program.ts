@@ -1813,6 +1813,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const defaultLibraryFileName = getDefaultLibraryFileName();
             if (!options.lib && defaultLibraryFileName) {
+                libFiles.add(toPath(defaultLibraryFileName));
                 processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true, { kind: FileIncludeKind.LibFile });
             }
             else {
@@ -2674,30 +2675,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     function isSourceFileDefaultLibrary(file: SourceFile): boolean {
-        if (!file.isDeclarationFile) {
-            return false;
-        }
-
-        if (libFiles.has(file.path)) {
-            return true;
-        }
-
-        if (options.noLib) {
-            return false;
-        }
-
-        // If '--lib' is not specified, include default library file according to '--target'
-        // otherwise, using options specified in '--lib' instead of '--target' default library file
-        const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
-        if (!options.lib) {
-            return equalityComparer(file.fileName, getDefaultLibraryFileName());
-        }
-        else {
-            return some(options.lib, libFileName => {
-                const resolvedLib = resolvedLibReferences!.get(libFileName);
-                return !!resolvedLib && equalityComparer(file.fileName, resolvedLib.actual);
-            });
-        }
+        return libFiles.has(file.path);
     }
 
     function getTypeChecker() {
