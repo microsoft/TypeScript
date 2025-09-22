@@ -1539,7 +1539,6 @@
         "category": "Error",
         "code": 1464
     },
-
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
         "code": 1470
@@ -1849,7 +1848,10 @@
         "category": "Error",
         "code": 1546
     },
-
+    "Ignore the tsconfig found and build with commandline options and files.": {
+        "category": "Message",
+        "code": 1547
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1890,7 +1892,6 @@
         "category": "Error",
         "code": 2208
     },
-
     "The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
         "category": "Error",
         "code": 2209
@@ -1907,7 +1908,6 @@
         "category": "Message",
         "code": 2212
     },
-
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2888,7 +2888,6 @@
         "category": "Error",
         "code": 2568
     },
-
     "Could not find name '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2570
@@ -3129,7 +3128,6 @@
         "category": "Error",
         "code": 2639
     },
-
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -4011,7 +4009,6 @@
         "category": "Error",
         "code": 2882
     },
-
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -4456,7 +4453,6 @@
         "category": "Error",
         "code": 4128
     },
-
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -4721,7 +4717,10 @@
         "category": "Error",
         "code": 5110
     },
-
+    "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
+        "category": "Error",
+        "code": 5111
+    },
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
         "code": 6000
@@ -5665,7 +5664,6 @@
         "category": "Error",
         "code": 6266
     },
-
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",
         "code": 6270
@@ -5758,7 +5756,6 @@
         "category": "Message",
         "code": 6294
     },
-
     "Enable project compilation": {
         "category": "Message",
         "code": 6302
@@ -6041,7 +6038,6 @@
         "category": "Message",
         "code": 6421
     },
-
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
         "code": 6500
@@ -6566,7 +6562,6 @@
         "category": "Message",
         "code": 6808
     },
-
     "one of:": {
         "category": "Message",
         "code": 6900
@@ -6695,7 +6690,6 @@
         "category": "Error",
         "code": 6931
     },
-
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -6918,7 +6912,6 @@
         "category": "Error",
         "code": 7061
     },
-
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -7063,7 +7056,6 @@
         "category": "Error",
         "code": 8039
     },
-
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005
@@ -7296,7 +7288,6 @@
         "category": "Error",
         "code": 18003
     },
-
     "File is a CommonJS module; it may be converted to an ES module.": {
         "category": "Suggestion",
         "code": 80001
@@ -7337,7 +7328,6 @@
         "category": "Suggestion",
         "code": 80010
     },
-
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -7558,7 +7548,6 @@
         "category": "Message",
         "code": 90071
     },
-
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -8327,7 +8316,6 @@
         "category": "Message",
         "code": 95197
     },
-
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
