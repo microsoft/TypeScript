@@ -74,11 +74,11 @@ config3.default; // Ok
 
 === /loosey.cts ===
 import config from "./config.json" with { type: "json" }; // Error
->config : any
+>config : { version: number; }
 >type : any
 
 import config2 from "./config.json"; // Ok
->config2 : any
+>config2 : { version: number; }
 
 import { version } from "./config.json"; // Ok
 >version : number

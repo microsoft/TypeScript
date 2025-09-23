@@ -1,7 +1,6 @@
 --- old.nodeModulesImportAssertions(module=node18).errors.txt
 +++ new.nodeModulesImportAssertions(module=node18).errors.txt
 @@= skipped -0, +0 lines =@@
-+otherc.cts(1,8): error TS1259: Module '"package"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
  otherc.cts(1,35): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
 +otherc.cts(2,40): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
 
@@ -9,11 +8,8 @@
  ==== index.ts (0 errors) ====
      import json from "./package.json" assert { type: "json" };
 -==== otherc.cts (1 errors) ====
-+==== otherc.cts (3 errors) ====
++==== otherc.cts (2 errors) ====
      import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
-+           ~~~~
-+!!! error TS1259: Module '"package"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-+!!! related TS2594 package.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
                                        ~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
      const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine

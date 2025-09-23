@@ -7,7 +7,7 @@ import json from "./package.json" assert { type: "json" };
 
 === otherc.cts ===
 import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
->json : any
+>json : { name: string; private: boolean; type: string; }
 >type : any
 
 const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine

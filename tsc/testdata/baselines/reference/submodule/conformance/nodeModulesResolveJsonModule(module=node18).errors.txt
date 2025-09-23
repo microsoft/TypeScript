@@ -1,4 +1,3 @@
-index.cts(2,25): error TS2339: Property 'name' does not exist on type 'string'.
 index.cts(5,33): error TS2339: Property 'name' does not exist on type 'string'.
 
 
@@ -8,11 +7,9 @@ index.cts(5,33): error TS2339: Property 'name' does not exist on type 'string'.
     import * as ns from "./package.json" with { type: "json" };
     export const thing = ns;
     export const name2 = ns.default.name;
-==== index.cts (2 errors) ====
+==== index.cts (1 errors) ====
     import pkg from "./package.json";
     export const name = pkg.name;
-                            ~~~~
-!!! error TS2339: Property 'name' does not exist on type 'string'.
     import * as ns from "./package.json";
     export const thing = ns;
     export const name2 = ns.default.name;

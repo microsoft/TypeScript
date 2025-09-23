@@ -1,19 +1,6 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=node18).js
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=node18).js
-@@= skipped -34, +34 lines =@@
- exports.default = getInterR();
- //// [index.js]
- "use strict";
--var __importDefault = (this && this.__importDefault) || function (mod) {
--    return (mod && mod.__esModule) ? mod : { "default": mod };
--};
- Object.defineProperty(exports, "__esModule", { value: true });
--const uses_js_1 = __importDefault(require("./uses.js"));
-+const uses_js_1 = require("./uses.js");
- exports.default = uses_js_1.default;
-
-
-@@= skipped -13, +10 lines =@@
+@@= skipped -47, +47 lines =@@
  declare const _default: RequireInterface;
  export default _default;
  //// [index.d.ts]

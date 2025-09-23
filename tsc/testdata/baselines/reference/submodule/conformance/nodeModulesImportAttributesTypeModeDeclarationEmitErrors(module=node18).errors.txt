@@ -8,7 +8,7 @@
 /other.ts(3,52): error TS1128: Declaration or statement expected.
 /other.ts(3,53): error TS2304: Cannot find name 'RequireInterface'.
 /other.ts(4,22): error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
-/other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<typeof import("/node_modules/pkg/import")>'.
+/other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other.ts(6,49): error TS1005: 'with' expected.
 /other.ts(6,66): error TS1005: ';' expected.
@@ -40,7 +40,7 @@
 /other3.ts(3,56): error TS1128: Declaration or statement expected.
 /other3.ts(3,57): error TS2304: Cannot find name 'RequireInterface'.
 /other3.ts(4,21): error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
-/other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<typeof import("/node_modules/pkg/import")>'.
+/other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other3.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other3.ts(6,48): error TS1005: '{' expected.
 /other3.ts(6,50): error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
@@ -56,7 +56,7 @@
 /other4.ts(6,32): error TS1128: Declaration or statement expected.
 /other4.ts(6,33): error TS2448: Block-scoped variable 'RequireInterface' used before its declaration.
 /other4.ts(7,21): error TS2448: Block-scoped variable 'Attribute2' used before its declaration.
-/other4.ts(7,33): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<typeof import("/node_modules/pkg/import")>'.
+/other4.ts(7,33): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other4.ts(9,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other4.ts(9,48): error TS1005: '{' expected.
 /other4.ts(9,58): error TS1005: ',' expected.
@@ -125,7 +125,7 @@
                          ~~~~~~~~~~~~~~~~~
 !!! error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
                                                        ~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<typeof import("/node_modules/pkg/import")>'.
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     
     export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
                                      ~~~~~~~~~~~~~~~
@@ -210,7 +210,7 @@
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
                                                            ~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<typeof import("/node_modules/pkg/import")>'.
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     
     export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
                                      ~~~~~~~~~~~~~
@@ -260,7 +260,7 @@
 !!! error TS2448: Block-scoped variable 'Attribute2' used before its declaration.
 !!! related TS2728 /other4.ts:10:48: 'Attribute2' is declared here.
                                     ~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<typeof import("/node_modules/pkg/import")>'.
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     
     export const a = (null as any as import("pkg", Attribute1).RequireInterface);
                                      ~~~~~~~~~~~~~

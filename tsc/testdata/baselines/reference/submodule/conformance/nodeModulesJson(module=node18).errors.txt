@@ -1,6 +1,4 @@
-/loosey.cts(1,8): error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
 /loosey.cts(1,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-/loosey.cts(2,8): error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
 /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
 /main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
 /main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
@@ -71,17 +69,11 @@
 !!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
     config3.default; // Ok
     
-==== /loosey.cts (4 errors) ====
+==== /loosey.cts (2 errors) ====
     import config from "./config.json" with { type: "json" }; // Error
-           ~~~~~~
-!!! error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-!!! related TS2594 /config.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
                                        ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     import config2 from "./config.json"; // Ok
-           ~~~~~~~
-!!! error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-!!! related TS2594 /config.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
     import { version } from "./config.json"; // Ok
     import * as config3 from "./config.json";
     config3.version; // Ok
