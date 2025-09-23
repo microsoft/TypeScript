@@ -6,7 +6,7 @@
  plainJSGrammarErrors.js(29,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
 -plainJSGrammarErrors.js(29,5): error TS8009: The 'export' modifier can only be used in TypeScript files.
  plainJSGrammarErrors.js(30,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
-+plainJSGrammarErrors.js(34,9): error TS8017: Signature declarations can only be used in TypeScript files.
++plainJSGrammarErrors.js(34,5): error TS8017: Signature declarations can only be used in TypeScript files.
  plainJSGrammarErrors.js(34,22): error TS1005: '{' expected.
  plainJSGrammarErrors.js(35,9): error TS1054: A 'get' accessor cannot have parameters.
  plainJSGrammarErrors.js(36,9): error TS1049: A 'set' accessor must have exactly one parameter.
@@ -40,7 +40,7 @@
      
          // accessor mistakes
          get incorporeal();
-+            ~~~~~~~~~~~
++        ~~~~~~~~~~~~~~~~~~
 +!!! error TS8017: Signature declarations can only be used in TypeScript files.
                           ~
  !!! error TS1005: '{' expected.

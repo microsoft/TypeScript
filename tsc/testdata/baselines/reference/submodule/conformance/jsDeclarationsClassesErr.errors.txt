@@ -3,22 +3,22 @@ index.js(5,12): error TS8010: Type annotations can only be used in TypeScript fi
 index.js(8,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
 index.js(8,29): error TS8011: Type arguments can only be used in TypeScript files.
 index.js(9,12): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(13,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(19,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(23,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(27,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(28,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(32,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(39,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(43,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(47,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(48,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(52,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(53,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(59,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(63,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(67,11): error TS8010: Type annotations can only be used in TypeScript files.
-index.js(68,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(13,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(19,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(23,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(27,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(28,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(32,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(39,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(43,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(47,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(48,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(52,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(53,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(59,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(63,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(67,5): error TS8017: Signature declarations can only be used in TypeScript files.
+index.js(68,5): error TS8017: Signature declarations can only be used in TypeScript files.
 
 
 ==== index.js (21 errors) ====
@@ -45,37 +45,37 @@ index.js(68,11): error TS8010: Type annotations can only be used in TypeScript f
     
     export class O {
         [idx: string]: string;
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class P extends O {}
     
     export class Q extends O {
         [idx: string]: "ok";
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class R extends O {
         [idx: number]: "ok";
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class S extends O {
         [idx: string]: "ok";
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
         [idx: number]: never;
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class T {
         [idx: number]: string;
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class U extends T {}
@@ -83,54 +83,54 @@ index.js(68,11): error TS8010: Type annotations can only be used in TypeScript f
     
     export class V extends T {
         [idx: string]: string;
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class W extends T {
         [idx: number]: "ok";
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class X extends T {
         [idx: string]: string;
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
         [idx: number]: "ok";
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class Y {
         [idx: string]: {x: number};
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
         [idx: number]: {x: number, y: number};
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class Z extends Y {}
     
     export class AA extends Y {
         [idx: string]: {x: number, y: number};
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class BB extends Y {
         [idx: number]: {x: 0, y: 0};
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
     export class CC extends Y {
         [idx: string]: {x: number, y: number};
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
         [idx: number]: {x: 0, y: 0};
-              ~~~~~~
-!!! error TS8010: Type annotations can only be used in TypeScript files.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
     }
     
