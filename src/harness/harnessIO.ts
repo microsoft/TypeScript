@@ -249,7 +249,7 @@ export namespace Compiler {
 
         let sourceFile = libFileNameSourceFileMap.get(fileName);
         if (!sourceFile) {
-            const file = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest)
+            const file = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest);
             sourceFile = { file, stringified: JSON.stringify(file.text) };
             libFileNameSourceFileMap.set(fileName, sourceFile);
         }
