@@ -2328,7 +2328,7 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkJsxSelfClosingElementDeferred(node)
 	case ast.KindJsxElement:
 		c.checkJsxElementDeferred(node)
-	case ast.KindTypeAssertionExpression, ast.KindAsExpression, ast.KindParenthesizedExpression:
+	case ast.KindTypeAssertionExpression, ast.KindAsExpression:
 		c.checkAssertionDeferred(node)
 	case ast.KindVoidExpression:
 		c.checkExpression(node.AsVoidExpression().Expression)
@@ -11799,7 +11799,11 @@ func (c *Checker) checkAssertionDeferred(node *ast.Node) {
 	if !c.isErrorType(targetType) {
 		widenedType := c.getWidenedType(exprType)
 		if !c.isTypeComparableTo(targetType, widenedType) {
-			c.checkTypeComparableTo(exprType, targetType, node, diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first)
+			errNode := node
+			if node.Flags&ast.NodeFlagsReparsed != 0 {
+				errNode = node.Type()
+			}
+			c.checkTypeComparableTo(exprType, targetType, errNode, diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first)
 		}
 	}
 }

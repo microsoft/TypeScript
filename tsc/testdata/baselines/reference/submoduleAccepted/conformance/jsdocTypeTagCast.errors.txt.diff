@@ -1,28 +1,17 @@
 --- old.jsdocTypeTagCast.errors.txt
 +++ new.jsdocTypeTagCast.errors.txt
-@@= skipped -0, +0 lines =@@
--b.js(4,20): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
--b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
--b.js(51,24): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
--b.js(52,24): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+@@= skipped -6, +6 lines =@@
+   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+ b.js(52,24): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
 -b.js(58,1): error TS2322: Type 'SomeFakeClass' is not assignable to type 'SomeBase'.
 -  Types of property 'p' are incompatible.
 -    Type 'string | number' is not assignable to type 'number'.
 -      Type 'string' is not assignable to type 'number'.
-+b.js(4,31): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-+b.js(45,36): error TS2741: Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
-+b.js(49,42): error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
-+b.js(51,38): error TS2741: Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
-+b.js(52,38): error TS2741: Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
  b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
  b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
  b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
-@@= skipped -20, +12 lines =@@
+@@= skipped -14, +10 lines =@@
  ==== a.ts (0 errors) ====
      var W: string;
      
@@ -31,49 +20,7 @@
      // @ts-check
      var W = /** @type {string} */(/** @type {*} */ (4));
      
-     var W = /** @type {string} */(4); // Error
--                       ~~~~~~
-+                                  ~
- !!! error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-     
-     /** @type {*} */
-@@= skipped -48, +48 lines =@@
-     someBase = /** @type {SomeBase} */(someDerived);
-     someBase = /** @type {SomeBase} */(someBase);
-     someBase = /** @type {SomeBase} */(someOther); // Error
--                          ~~~~~~~~
--!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
-+                                       ~~~~~~~~~
-+!!! error TS2741: Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
- !!! related TS2728 b.js:17:9: 'p' is declared here.
-     
-     someDerived = /** @type {SomeDerived} */(someDerived);
-     someDerived = /** @type {SomeDerived} */(someBase);
-     someDerived = /** @type {SomeDerived} */(someOther); // Error
--                             ~~~~~~~~~~~
--!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
-+                                             ~~~~~~~~~
-+!!! error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
-     
-     someOther = /** @type {SomeOther} */(someDerived); // Error
--                           ~~~~~~~~~
--!!! error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
-+                                         ~~~~~~~~~~~
-+!!! error TS2741: Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
- !!! related TS2728 b.js:28:9: 'q' is declared here.
-     someOther = /** @type {SomeOther} */(someBase); // Error
--                           ~~~~~~~~~
--!!! error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
-+                                         ~~~~~~~~
-+!!! error TS2741: Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
- !!! related TS2728 b.js:28:9: 'q' is declared here.
-     someOther = /** @type {SomeOther} */(someOther);
-     
-@@= skipped -28, +24 lines =@@
+@@= skipped -76, +76 lines =@@
      someFakeClass = someDerived;
      
      someBase = someFakeClass; // Error
