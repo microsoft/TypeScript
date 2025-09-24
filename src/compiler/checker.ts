@@ -21504,7 +21504,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         let issuedElaboration = false;
                         if (!targetProp) {
                             const indexInfo = getApplicableIndexInfo(target, nameType);
-                            if (indexInfo && indexInfo.declaration && !getSourceFileOfNode(indexInfo.declaration).hasNoDefaultLib) {
+                            if (indexInfo && indexInfo.declaration && !host.isSourceFileDefaultLibrary(getSourceFileOfNode(indexInfo.declaration))) {
                                 issuedElaboration = true;
                                 addRelatedInfo(reportedDiag, createDiagnosticForNode(indexInfo.declaration, Diagnostics.The_expected_type_comes_from_this_index_signature));
                             }
@@ -21512,7 +21512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         if (!issuedElaboration && (targetProp && length(targetProp.declarations) || target.symbol && length(target.symbol.declarations))) {
                             const targetNode = targetProp && length(targetProp.declarations) ? targetProp.declarations![0] : target.symbol.declarations![0];
-                            if (!getSourceFileOfNode(targetNode).hasNoDefaultLib) {
+                            if (!host.isSourceFileDefaultLibrary(getSourceFileOfNode(targetNode))) {
                                 addRelatedInfo(
                                     reportedDiag,
                                     createDiagnosticForNode(

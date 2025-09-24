@@ -45,7 +45,6 @@ import { a } from "a"; export const f = a;
 import { b } from "b"; export const g = b;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
