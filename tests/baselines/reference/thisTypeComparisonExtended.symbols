@@ -1,0 +1,145 @@
+//// [tests/cases/compiler/thisTypeComparisonExtended.ts] ////
+
+=== thisTypeComparisonExtended.ts ===
+// Test 1: Original issue - this === subclass instance should work
+class AA {
+>AA : Symbol(AA, Decl(thisTypeComparisonExtended.ts, 0, 0))
+
+    do1() {
+>do1 : Symbol(AA.do1, Decl(thisTypeComparisonExtended.ts, 1, 10))
+
+        const b = dd.getB();
+>b : Symbol(b, Decl(thisTypeComparisonExtended.ts, 3, 13))
+>dd.getB : Symbol(BB.getB, Decl(thisTypeComparisonExtended.ts, 10, 21))
+>dd : Symbol(dd, Decl(thisTypeComparisonExtended.ts, 14, 3))
+>getB : Symbol(BB.getB, Decl(thisTypeComparisonExtended.ts, 10, 21))
+
+        if (this === b) {  // Should not error
+>this : Symbol(AA, Decl(thisTypeComparisonExtended.ts, 0, 0))
+>b : Symbol(b, Decl(thisTypeComparisonExtended.ts, 3, 13))
+
+            console.log("this === b");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
+
+class BB extends AA {
+>BB : Symbol(BB, Decl(thisTypeComparisonExtended.ts, 8, 1))
+>AA : Symbol(AA, Decl(thisTypeComparisonExtended.ts, 0, 0))
+
+    getB(): BB { return this; }
+>getB : Symbol(BB.getB, Decl(thisTypeComparisonExtended.ts, 10, 21))
+>BB : Symbol(BB, Decl(thisTypeComparisonExtended.ts, 8, 1))
+>this : Symbol(BB, Decl(thisTypeComparisonExtended.ts, 8, 1))
+}
+
+let dd = new BB();
+>dd : Symbol(dd, Decl(thisTypeComparisonExtended.ts, 14, 3))
+>BB : Symbol(BB, Decl(thisTypeComparisonExtended.ts, 8, 1))
+
+dd.do1();
+>dd.do1 : Symbol(AA.do1, Decl(thisTypeComparisonExtended.ts, 1, 10))
+>dd : Symbol(dd, Decl(thisTypeComparisonExtended.ts, 14, 3))
+>do1 : Symbol(AA.do1, Decl(thisTypeComparisonExtended.ts, 1, 10))
+
+// Test 2: this === unrelated class should still error
+class CC {
+>CC : Symbol(CC, Decl(thisTypeComparisonExtended.ts, 15, 9))
+
+    value: number = 42;
+>value : Symbol(CC.value, Decl(thisTypeComparisonExtended.ts, 18, 10))
+}
+
+class DD {
+>DD : Symbol(DD, Decl(thisTypeComparisonExtended.ts, 20, 1))
+
+    test() {
+>test : Symbol(DD.test, Decl(thisTypeComparisonExtended.ts, 22, 10))
+
+        const c = new CC();
+>c : Symbol(c, Decl(thisTypeComparisonExtended.ts, 24, 13))
+>CC : Symbol(CC, Decl(thisTypeComparisonExtended.ts, 15, 9))
+
+        if (this === c) {  // Should still error - no relationship
+>this : Symbol(DD, Decl(thisTypeComparisonExtended.ts, 20, 1))
+>c : Symbol(c, Decl(thisTypeComparisonExtended.ts, 24, 13))
+
+            console.log("unrelated");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
+
+// Test 3: Multiple inheritance levels
+class EE extends BB {
+>EE : Symbol(EE, Decl(thisTypeComparisonExtended.ts, 29, 1))
+>BB : Symbol(BB, Decl(thisTypeComparisonExtended.ts, 8, 1))
+
+    getE(): EE { return this; }
+>getE : Symbol(EE.getE, Decl(thisTypeComparisonExtended.ts, 32, 21))
+>EE : Symbol(EE, Decl(thisTypeComparisonExtended.ts, 29, 1))
+>this : Symbol(EE, Decl(thisTypeComparisonExtended.ts, 29, 1))
+}
+
+class FF extends EE {
+>FF : Symbol(FF, Decl(thisTypeComparisonExtended.ts, 34, 1))
+>EE : Symbol(EE, Decl(thisTypeComparisonExtended.ts, 29, 1))
+
+    testMultiLevel() {
+>testMultiLevel : Symbol(FF.testMultiLevel, Decl(thisTypeComparisonExtended.ts, 36, 21))
+
+        const e = new EE();
+>e : Symbol(e, Decl(thisTypeComparisonExtended.ts, 38, 13))
+>EE : Symbol(EE, Decl(thisTypeComparisonExtended.ts, 29, 1))
+
+        if (this === e) {  // Should not error - FF extends EE
+>this : Symbol(FF, Decl(thisTypeComparisonExtended.ts, 34, 1))
+>e : Symbol(e, Decl(thisTypeComparisonExtended.ts, 38, 13))
+
+            console.log("multi-level inheritance");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
+
+// Test 4: Interface implementation
+interface ITest {
+>ITest : Symbol(ITest, Decl(thisTypeComparisonExtended.ts, 43, 1))
+
+    getValue(): number;
+>getValue : Symbol(ITest.getValue, Decl(thisTypeComparisonExtended.ts, 46, 17))
+}
+
+class GG implements ITest {
+>GG : Symbol(GG, Decl(thisTypeComparisonExtended.ts, 48, 1))
+>ITest : Symbol(ITest, Decl(thisTypeComparisonExtended.ts, 43, 1))
+
+    getValue() { return 42; }
+>getValue : Symbol(GG.getValue, Decl(thisTypeComparisonExtended.ts, 50, 27))
+    
+    testInterface() {
+>testInterface : Symbol(GG.testInterface, Decl(thisTypeComparisonExtended.ts, 51, 29))
+
+        const impl: ITest = new GG();
+>impl : Symbol(impl, Decl(thisTypeComparisonExtended.ts, 54, 13))
+>ITest : Symbol(ITest, Decl(thisTypeComparisonExtended.ts, 43, 1))
+>GG : Symbol(GG, Decl(thisTypeComparisonExtended.ts, 48, 1))
+
+        if (this === impl) {  // Should not error
+>this : Symbol(GG, Decl(thisTypeComparisonExtended.ts, 48, 1))
+>impl : Symbol(impl, Decl(thisTypeComparisonExtended.ts, 54, 13))
+
+            console.log("interface implementation");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
