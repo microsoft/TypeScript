@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsSpeculativeParsingError.ts] ////
+
+=== t.js ===
+const is_morning = new Date().getHours() < 12;
+>is_morning : Symbol(is_morning, Decl(t.js, 0, 5))
+>new Date().getHours : Symbol(Date.getHours, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>getHours : Symbol(Date.getHours, Decl(lib.es5.d.ts, --, --))
+
+// prettier-ignore
+const greeting = ([
+>greeting : Symbol(greeting, Decl(t.js, 3, 5))
+
+  is_morning ? 'good morning' : 'good evening'
+>is_morning : Symbol(is_morning, Decl(t.js, 0, 5))
+
+]);
+

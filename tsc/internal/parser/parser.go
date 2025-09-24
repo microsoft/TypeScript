@@ -261,6 +261,7 @@ type ParserState struct {
 	scannerState                scanner.ScannerState
 	contextFlags                ast.NodeFlags
 	diagnosticsLen              int
+	jsDiagnosticsLen            int
 	statementHasAwaitIdentifier bool
 	hasParseError               bool
 }
@@ -270,6 +271,7 @@ func (p *Parser) mark() ParserState {
 		scannerState:                p.scanner.Mark(),
 		contextFlags:                p.contextFlags,
 		diagnosticsLen:              len(p.diagnostics),
+		jsDiagnosticsLen:            len(p.jsDiagnostics),
 		statementHasAwaitIdentifier: p.statementHasAwaitIdentifier,
 		hasParseError:               p.hasParseError,
 	}
@@ -280,6 +282,7 @@ func (p *Parser) rewind(state ParserState) {
 	p.token = p.scanner.Token()
 	p.contextFlags = state.contextFlags
 	p.diagnostics = p.diagnostics[0:state.diagnosticsLen]
+	p.jsDiagnostics = p.jsDiagnostics[0:state.jsDiagnosticsLen]
 	p.statementHasAwaitIdentifier = state.statementHasAwaitIdentifier
 	p.hasParseError = state.hasParseError
 }
