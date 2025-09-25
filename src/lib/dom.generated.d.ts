@@ -33764,7 +33764,7 @@ interface WaveShaperNode extends AudioNode {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WaveShaperNode/curve)
      */
-    curve: Float32Array<ArrayBuffer> | null;
+    curve: Float32Array | null;
     /**
      * The `oversample` property of the WaveShaperNode interface is an enumerated value indicating if oversampling must be used.
      *
