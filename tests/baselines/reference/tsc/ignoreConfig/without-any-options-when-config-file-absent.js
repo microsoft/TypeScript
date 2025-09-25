@@ -1,6 +1,16 @@
 currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
+//// [/home/src/workspaces/project/src/a.ts]
+export const a = 10;
+
+//// [/home/src/workspaces/project/src/b.ts]
+export const b = 10;
+
+//// [/home/src/workspaces/project/c.ts]
+export const c = 10;
+
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -15,8 +25,9 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/TS/Lib/tsc.js --help
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
+Version FakeTSVersion
 tsc: The TypeScript Compiler - Version FakeTSVersion
 
 [1mCOMMON COMMANDS[22m
@@ -163,4 +174,4 @@ You can learn about all of the compiler options at https://aka.ms/tsc
 
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
