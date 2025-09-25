@@ -203,6 +203,7 @@ import {
     tryCast,
     TypeAliasDeclaration,
     TypeNode,
+    TypeOperatorNode,
     TypeParameterDeclaration,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -1476,7 +1477,10 @@ export function transformDeclarations(context: TransformationContext): Transform
                             exportMappings.push([name, nameStr]);
                         }
                         const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
-                        return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
+                        const modifiers = isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)];
+                        const isConst = isUniqueSymbolType(type);
+                        const variableDeclarationList = factory.createVariableDeclarationList([varDecl], isConst ? NodeFlags.Const : NodeFlags.None);
+                        return factory.createVariableStatement(modifiers, variableDeclarationList);
                     });
                     if (!exportMappings.length) {
                         declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
@@ -1812,6 +1816,13 @@ export function transformDeclarations(context: TransformationContext): Transform
 
     function isScopeMarker(node: Node) {
         return isExportAssignment(node) || isExportDeclaration(node);
+    }
+
+    function isUniqueSymbolType(type: TypeNode | undefined): boolean {
+        return !!type &&
+            type.kind === SyntaxKind.TypeOperator &&
+            (type as TypeOperatorNode).operator === SyntaxKind.UniqueKeyword &&
+            (type as TypeOperatorNode).type.kind === SyntaxKind.SymbolKeyword;
     }
 
     function hasScopeMarker(statements: readonly Statement[]) {
