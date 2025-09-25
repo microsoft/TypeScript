@@ -504,9 +504,8 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         });
         return children;
     }
-    const languageVariant = sourceFile?.languageVariant ?? LanguageVariant.Standard;
+
     scanner.setText((sourceFile || node.getSourceFile()).text);
-    scanner.setLanguageVariant(languageVariant);
     let pos = node.pos;
     const processNode = (child: Node) => {
         addSyntheticNodes(children, pos, child.pos, node);
@@ -527,7 +526,6 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
     node.forEachChild(processNode, processNodes);
     addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
-    scanner.setLanguageVariant(LanguageVariant.Standard);
     return children;
 }
 
