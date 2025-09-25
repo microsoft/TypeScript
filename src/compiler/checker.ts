@@ -9571,11 +9571,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     symbol.flags & SymbolFlags.ExportDoesNotSupportDefaultModifier
                     || (symbol.flags & SymbolFlags.Function && length(getPropertiesOfType(getTypeOfSymbol(symbol))))
                 ) && !(symbol.flags & SymbolFlags.Alias); // An alias symbol should preclude needing to make an alias ourselves
-                let needsExportDeclaration = !needsPostExportDefault && !isPrivate && isStringANonContextualKeyword(symbolName) && !isDefault;
-                // `serializeVariableOrProperty` will handle adding the export declaration if it is run (since `getInternalSymbolName` will create the name mapping), so we need to ensuer we unset `needsExportDeclaration` if it is
-                if (needsPostExportDefault || needsExportDeclaration) {
-                    isPrivate = true;
-                }
+                isPrivate ||= needsPostExportDefault;
                 const modifierFlags = (!isPrivate ? ModifierFlags.Export : 0) | (isDefault && !needsPostExportDefault ? ModifierFlags.Default : 0);
                 const isConstMergedWithNS = symbol.flags & SymbolFlags.Module &&
                     symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property) &&
@@ -9600,7 +9596,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (propertyAsAlias) {
                         const createdExport = serializeMaybeAliasAssignment(symbol);
                         if (createdExport) {
-                            needsExportDeclaration = false;
                             needsPostExportDefault = false;
                         }
                     }
@@ -9698,7 +9693,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         ),
                                         ModifierFlags.None,
                                     );
-                                    needsExportDeclaration = false;
                                     needsPostExportDefault = false;
                                 }
                             }
@@ -9755,18 +9749,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const internalSymbolName = getInternalSymbolName(symbol, symbolName);
                     context.approximateLength += 16 + internalSymbolName.length; // `export default internalName;`
                     addResult(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportEquals*/ false, factory.createIdentifier(internalSymbolName)), ModifierFlags.None);
-                }
-                else if (needsExportDeclaration) {
-                    const internalSymbolName = getInternalSymbolName(symbol, symbolName);
-                    context.approximateLength += 22 + symbolName.length + internalSymbolName.length; // `export { internalName as symbolName };`
-                    addResult(
-                        factory.createExportDeclaration(
-                            /*modifiers*/ undefined,
-                            /*isTypeOnly*/ false,
-                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, internalSymbolName, symbolName)]),
-                        ),
-                        ModifierFlags.None,
-                    );
                 }
             }
 
