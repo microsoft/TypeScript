@@ -1,0 +1,229 @@
+//// [tests/cases/compiler/contextSensitiveCallNewArguments1.ts] ////
+
+=== contextSensitiveCallNewArguments1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62380
+
+class Foo<T> {
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>T : Symbol(T, Decl(contextSensitiveCallNewArguments1.ts, 2, 10))
+
+  constructor(public inner: T) {}
+>inner : Symbol(Foo.inner, Decl(contextSensitiveCallNewArguments1.ts, 3, 14))
+>T : Symbol(T, Decl(contextSensitiveCallNewArguments1.ts, 2, 10))
+}
+
+class BarClass<T> {
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>T : Symbol(T, Decl(contextSensitiveCallNewArguments1.ts, 6, 15))
+
+  constructor(public accessor: (state: T) => boolean) {}
+>accessor : Symbol(BarClass.accessor, Decl(contextSensitiveCallNewArguments1.ts, 7, 14))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 7, 32))
+>T : Symbol(T, Decl(contextSensitiveCallNewArguments1.ts, 6, 15))
+}
+
+{
+  class Container<C, F> {
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 10, 1))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 11, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 11, 20))
+
+    constructor(
+      public ctx: C,
+>ctx : Symbol(Container.ctx, Decl(contextSensitiveCallNewArguments1.ts, 12, 16))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 11, 18))
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : Symbol(Container.fooFactory, Decl(contextSensitiveCallNewArguments1.ts, 13, 20))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 14, 26))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 11, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 11, 20))
+
+      public bars: BarClass<F>[],
+>bars : Symbol(Container.bars, Decl(contextSensitiveCallNewArguments1.ts, 14, 39))
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 11, 20))
+
+    ) {}
+  }
+
+  const container = new Container(42, (ctx) => new Foo({ answer: ctx }), [
+>container : Symbol(container, Decl(contextSensitiveCallNewArguments1.ts, 19, 7))
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 10, 1))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 19, 39))
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>answer : Symbol(answer, Decl(contextSensitiveCallNewArguments1.ts, 19, 56))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 19, 39))
+
+    new BarClass((state) => true),
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 20, 18))
+
+  ]);
+}
+
+{
+  class Container<C, F> {
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 24, 1))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 25, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 25, 20))
+
+    constructor(
+      public ctx: C,
+>ctx : Symbol(Container.ctx, Decl(contextSensitiveCallNewArguments1.ts, 26, 16))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 25, 18))
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : Symbol(Container.fooFactory, Decl(contextSensitiveCallNewArguments1.ts, 27, 20))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 28, 26))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 25, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 25, 20))
+
+      public bar: BarClass<F>,
+>bar : Symbol(Container.bar, Decl(contextSensitiveCallNewArguments1.ts, 28, 39))
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 25, 20))
+
+    ) {}
+  }
+
+  const containerWithoutAnnotation = new Container(
+>containerWithoutAnnotation : Symbol(containerWithoutAnnotation, Decl(contextSensitiveCallNewArguments1.ts, 33, 7))
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 24, 1))
+
+    42,
+    (ctx) => new Foo({ answer: ctx }),
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 35, 5))
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>answer : Symbol(answer, Decl(contextSensitiveCallNewArguments1.ts, 35, 22))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 35, 5))
+
+    new BarClass((state) => true),
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 36, 18))
+
+  );
+
+  const containerWithAnnotation = new Container(
+>containerWithAnnotation : Symbol(containerWithAnnotation, Decl(contextSensitiveCallNewArguments1.ts, 39, 7))
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 24, 1))
+
+    42,
+    (ctx: number) => new Foo({ answer: ctx }),
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 41, 5))
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>answer : Symbol(answer, Decl(contextSensitiveCallNewArguments1.ts, 41, 30))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 41, 5))
+
+    new BarClass((state) => true),
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 42, 18))
+
+  );
+}
+
+{
+  class Container<C, F> {
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 46, 1))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 47, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 47, 20))
+
+    constructor(
+      public ctx: C,
+>ctx : Symbol(Container.ctx, Decl(contextSensitiveCallNewArguments1.ts, 48, 16))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 47, 18))
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : Symbol(Container.fooFactory, Decl(contextSensitiveCallNewArguments1.ts, 49, 20))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 50, 26))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 47, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 47, 20))
+
+      public barFactory: () => BarClass<F>,
+>barFactory : Symbol(Container.barFactory, Decl(contextSensitiveCallNewArguments1.ts, 50, 39))
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 47, 20))
+
+    ) {}
+  }
+
+  const container = new Container(
+>container : Symbol(container, Decl(contextSensitiveCallNewArguments1.ts, 55, 7))
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 46, 1))
+
+    42,
+    (ctx) => new Foo({ answer: ctx }),
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 57, 5))
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>answer : Symbol(answer, Decl(contextSensitiveCallNewArguments1.ts, 57, 22))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 57, 5))
+
+    () => new BarClass((state) => true),
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 58, 24))
+
+  );
+}
+
+{
+  class Container<C, F> {
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 62, 1))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 63, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 63, 20))
+
+    constructor(
+      public ctx: C,
+>ctx : Symbol(Container.ctx, Decl(contextSensitiveCallNewArguments1.ts, 64, 16))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 63, 18))
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : Symbol(Container.fooFactory, Decl(contextSensitiveCallNewArguments1.ts, 65, 20))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 66, 26))
+>C : Symbol(C, Decl(contextSensitiveCallNewArguments1.ts, 63, 18))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 63, 20))
+
+      public barFactory: (dummy: never) => BarClass<F>,
+>barFactory : Symbol(Container.barFactory, Decl(contextSensitiveCallNewArguments1.ts, 66, 39))
+>dummy : Symbol(dummy, Decl(contextSensitiveCallNewArguments1.ts, 67, 26))
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>F : Symbol(F, Decl(contextSensitiveCallNewArguments1.ts, 63, 20))
+
+    ) {}
+  }
+
+  const containerWithDummy = new Container(
+>containerWithDummy : Symbol(containerWithDummy, Decl(contextSensitiveCallNewArguments1.ts, 71, 7))
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 62, 1))
+
+    42,
+    (ctx) => new Foo({ answer: ctx }),
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 73, 5))
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>answer : Symbol(answer, Decl(contextSensitiveCallNewArguments1.ts, 73, 22))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 73, 5))
+
+    (dummy) => new BarClass((state) => true),
+>dummy : Symbol(dummy, Decl(contextSensitiveCallNewArguments1.ts, 74, 5))
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 74, 29))
+
+  );
+
+  const containerWithWrongArity = new Container(
+>containerWithWrongArity : Symbol(containerWithWrongArity, Decl(contextSensitiveCallNewArguments1.ts, 77, 7))
+>Container : Symbol(Container, Decl(contextSensitiveCallNewArguments1.ts, 62, 1))
+
+    42,
+    (ctx) => new Foo({ answer: ctx }),
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 79, 5))
+>Foo : Symbol(Foo, Decl(contextSensitiveCallNewArguments1.ts, 0, 0))
+>answer : Symbol(answer, Decl(contextSensitiveCallNewArguments1.ts, 79, 22))
+>ctx : Symbol(ctx, Decl(contextSensitiveCallNewArguments1.ts, 79, 5))
+
+    () => new BarClass((state) => true),
+>BarClass : Symbol(BarClass, Decl(contextSensitiveCallNewArguments1.ts, 4, 1))
+>state : Symbol(state, Decl(contextSensitiveCallNewArguments1.ts, 80, 24))
+
+  );
+}
+
