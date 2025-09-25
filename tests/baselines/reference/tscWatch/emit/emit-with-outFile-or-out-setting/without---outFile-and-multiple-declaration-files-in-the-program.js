@@ -55,7 +55,7 @@ Output::
 
 
 
-//// [/home/src/projects/a/b/output/main.js]
+//// [/home/src/projects/a/b/output/src/main.js]
 var Main;
 (function (Main) {
     function fooBar() { }
@@ -63,7 +63,7 @@ var Main;
 })(Main || (Main = {}));
 
 
-//// [/home/src/projects/a/b/output/main2.js]
+//// [/home/src/projects/a/b/output/src/main2.js]
 var main;
 (function (main) {
     var file4;

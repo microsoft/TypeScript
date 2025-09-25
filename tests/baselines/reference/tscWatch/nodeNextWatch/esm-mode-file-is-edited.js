@@ -54,7 +54,7 @@ Output::
 
 //// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib*
 
-//// [/home/src/projects/dist/index.js]
+//// [/home/src/projects/dist/src/index.js]
 import * as Thing from "thing";
 Thing.fn();
 
@@ -151,7 +151,7 @@ Output::
 
 
 
-//// [/home/src/projects/dist/index.js] file written with same contents
+//// [/home/src/projects/dist/src/index.js] file written with same contents
 
 
 Program root files: [

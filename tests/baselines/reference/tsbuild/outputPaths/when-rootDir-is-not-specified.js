@@ -36,7 +36,7 @@ Output::
 
 
 
-//// [/home/src/workspaces/project/dist/index.js]
+//// [/home/src/workspaces/project/dist/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -67,7 +67,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/index.ts' is older than output 'dist/index.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/index.ts' is older than output 'dist/src/index.js'
 
 
 
@@ -82,6 +82,6 @@ Input::
 Output::
 
 
-//// [/home/src/workspaces/project/dist/index.js] file written with same contents
+//// [/home/src/workspaces/project/dist/src/index.js] file written with same contents
 
 exitCode:: ExitStatus.Success
