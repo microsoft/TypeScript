@@ -77,7 +77,7 @@ declare class B extends A {
     x: number;
 }
 declare class C {
-    a!: number;
+    a: number;
     b: number;
 }
 // Repro from #37979

@@ -40,7 +40,7 @@ void type; // Ok
 
 //// [a.d.ts]
 declare class A {
-    a!: string;
+    a: string;
 }
 export = A;
 //// [b.d.ts]
