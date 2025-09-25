@@ -79,7 +79,6 @@ export interface MyType<T = any> extends Function {
 
 
 //// [D:/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -96,11 +95,10 @@ declare const console: { log(msg: any): void; };
 
 D:\home\src\tslibs\TS\Lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
-[96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Cannot assign an abstract constructor type to a non-abstract constructor type.
+[96mtsconfig.json[0m:[93m21[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m8[0m     return PartialClassType as MyReturnType;
-[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m21[0m     "moduleResolution": "node",
+[7m  [0m [91m                        ~~~~~~[0m
 
 ../../home/src/tslibs/TS/Lib/lib.es2017.full.d.ts
   Default library for target 'es2017'
@@ -113,7 +111,7 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 1 error in src/utils/index.ts[90m:8[0m
+Found 1 error in tsconfig.json[90m:21[0m
 
 
 

@@ -873,7 +873,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsProgramStructure: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Enable_lib_replacement,
-        defaultValueDescription: true,
+        defaultValueDescription: false,
     },
 
     // Strict Type Checks
@@ -1243,7 +1243,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Check_side_effect_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
 
     // Source Maps

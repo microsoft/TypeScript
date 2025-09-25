@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxSpreadChildren.tsx] ////
 
 === tsxSpreadChildren.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxSpreadChildren.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(tsxSpreadChildren.tsx, 0, 20))
+>Element : Symbol(Element, Decl(tsxSpreadChildren.tsx, 0, 23))
 
 	interface IntrinsicElements {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))

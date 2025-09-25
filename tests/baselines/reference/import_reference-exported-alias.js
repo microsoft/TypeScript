@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/import_reference-exported-alias.ts] ////
 
 //// [file1.ts]
-module App {
-    export module Services {
+namespace App {
+    export namespace Services {
         export class UserServices {
             public getUserName(): string {
                 return "Bill Gates";

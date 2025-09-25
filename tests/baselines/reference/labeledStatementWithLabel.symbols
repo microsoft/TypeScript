@@ -28,7 +28,7 @@ label: let b = 1;
 label: const c = 1;
 >c : Symbol(c, Decl(labeledStatementWithLabel.ts, 8, 12))
 
-label: module M { }
+label: namespace M { }
 >M : Symbol(M, Decl(labeledStatementWithLabel.ts, 10, 6))
 
 label: namespace N {}

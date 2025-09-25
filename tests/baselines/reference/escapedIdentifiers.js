@@ -22,7 +22,7 @@ b ++;
 \u0062 ++;
 
 // modules
-module moduleType1 { 
+namespace moduleType1 { 
     export var baz1: number;
 }
 module moduleType\u0032 { 

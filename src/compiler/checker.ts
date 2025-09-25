@@ -338,6 +338,7 @@ import {
     getMembersOfDeclaration,
     getModifiers,
     getModuleInstanceState,
+    getModuleSpecifierOfBareOrAccessedRequire,
     getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -710,6 +711,7 @@ import {
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
+    isPrivateIdentifierSymbol,
     isPropertyAccessEntityNameExpression,
     isPropertyAccessExpression,
     isPropertyAccessOrQualifiedName,
@@ -1529,7 +1531,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
-    var noUncheckedSideEffectImports = !!compilerOptions.noUncheckedSideEffectImports;
+    var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports !== false;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -4682,9 +4684,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean): Symbol | undefined {
+    function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean, errorMessage?: DiagnosticMessage): Symbol | undefined {
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
-        const errorMessage = isClassic ?
+        errorMessage ??= isClassic ?
             Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
             : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
         return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : errorMessage, ignoreErrors);
@@ -4712,7 +4714,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
-                (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
+                isVariableDeclarationInitializedToBareOrAccessedRequire(location) && getModuleSpecifierOfBareOrAccessedRequire(location) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, or(isImportDeclaration, isJSDocImportTag, isExportDeclaration))?.moduleSpecifier ||
                 findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression;
@@ -7609,6 +7611,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
                             context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                        }
+                        if (isPrivateIdentifierSymbol(propertySymbol) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                            context.tracker.reportPrivateInBaseOfClassExpression(idText((propertySymbol.valueDeclaration! as NamedDeclaration).name! as PrivateIdentifier));
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
@@ -21499,7 +21504,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         let issuedElaboration = false;
                         if (!targetProp) {
                             const indexInfo = getApplicableIndexInfo(target, nameType);
-                            if (indexInfo && indexInfo.declaration && !getSourceFileOfNode(indexInfo.declaration).hasNoDefaultLib) {
+                            if (indexInfo && indexInfo.declaration && !host.isSourceFileDefaultLibrary(getSourceFileOfNode(indexInfo.declaration))) {
                                 issuedElaboration = true;
                                 addRelatedInfo(reportedDiag, createDiagnosticForNode(indexInfo.declaration, Diagnostics.The_expected_type_comes_from_this_index_signature));
                             }
@@ -21507,7 +21512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         if (!issuedElaboration && (targetProp && length(targetProp.declarations) || target.symbol && length(target.symbol.declarations))) {
                             const targetNode = targetProp && length(targetProp.declarations) ? targetProp.declarations![0] : target.symbol.declarations![0];
-                            if (!getSourceFileOfNode(targetNode).hasNoDefaultLib) {
+                            if (!host.isSourceFileDefaultLibrary(getSourceFileOfNode(targetNode))) {
                                 addRelatedInfo(
                                     reportedDiag,
                                     createDiagnosticForNode(
@@ -37998,7 +38003,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
-                error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
+                error(expression, Diagnostics.A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
             return getRegularTypeOfLiteralType(exprType);
         }
@@ -48511,7 +48516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (noUncheckedSideEffectImports && !importClause) {
-                void resolveExternalModuleName(node, node.moduleSpecifier);
+                void resolveExternalModuleName(node, node.moduleSpecifier, /*ignoreErrors*/ undefined, Diagnostics.Cannot_find_module_or_type_declarations_for_side_effect_import_of_0);
             }
         }
         checkImportAttributes(node);

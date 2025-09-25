@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @moduleResolution: node10
+
 // @Filename: /src/a.ts
 ////export const x = 0;
 

@@ -8,11 +8,11 @@ declare module "foo" {
 }
  
 declare module "baz" {
-    export module a {
+    export namespace a {
         export var b: number;
     }
  
-    module c {
+    namespace c {
         export var c: string;
     }
  

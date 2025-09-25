@@ -1595,7 +1595,7 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
         switch (node.kind) {
             case SyntaxKind.JsxClosingElement:
                 return true;
-            case SyntaxKind.LessThanSlashToken:
+            case SyntaxKind.SlashToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.Identifier:
             case SyntaxKind.PropertyAccessExpression:
@@ -3508,7 +3508,7 @@ function getCompletionData(
                         }
                         break;
 
-                    case SyntaxKind.LessThanSlashToken:
+                    case SyntaxKind.SlashToken:
                         if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
                             location = currentToken;
                         }
@@ -3518,7 +3518,7 @@ function getCompletionData(
 
             switch (parent.kind) {
                 case SyntaxKind.JsxClosingElement:
-                    if (contextToken.kind === SyntaxKind.LessThanSlashToken) {
+                    if (contextToken.kind === SyntaxKind.SlashToken) {
                         isStartingCloseTag = true;
                         location = contextToken;
                     }
@@ -4185,10 +4185,6 @@ function getCompletionData(
                         return charactersFuzzyMatchInString(symbolName, lowerCaseTokenText);
                     },
                     (info, symbolName, isFromAmbientModule, exportMapKey) => {
-                        if (detailsEntryId && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name))) {
-                            return;
-                        }
-
                         // Do a relatively cheap check to bail early if all re-exports are non-importable
                         // due to file location or package.json dependency filtering. For non-node16+
                         // module resolution modes, getting past this point guarantees that we'll be
@@ -4215,6 +4211,10 @@ function getCompletionData(
                         let exportInfo: SymbolExportInfo | FutureSymbolExportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
                             ({ exportInfo = info[0], moduleSpecifier } = result);
+                        }
+
+                        if (detailsEntryId && (detailsEntryId.source !== moduleSpecifier && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name)))) {
+                            return;
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
@@ -5809,7 +5809,7 @@ function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTri
         case "/":
             return !!contextToken && (isStringLiteralLike(contextToken)
                 ? !!tryGetImportFromModuleSpecifier(contextToken)
-                : contextToken.kind === SyntaxKind.LessThanSlashToken && isJsxClosingElement(contextToken.parent));
+                : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
         case " ":
             return !!contextToken && isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile;
         default:

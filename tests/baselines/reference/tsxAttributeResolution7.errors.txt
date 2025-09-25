@@ -4,7 +4,7 @@ file.tsx(9,2): error TS2322: Type '{ "data-foo": number; }' is not assignable to
 
 
 ==== file.tsx (1 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		test1: { "data-foo"?: string };

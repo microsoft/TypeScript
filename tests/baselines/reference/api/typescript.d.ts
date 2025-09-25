@@ -2530,6 +2530,7 @@ declare namespace ts {
                 Node = "node",
                 /** @deprecated Renamed to `Node10` */
                 NodeJs = "node",
+                /** @deprecated */
                 Node10 = "node10",
                 Node16 = "node16",
                 NodeNext = "nodenext",
@@ -3646,7 +3647,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.9";
+    const versionMajorMinor = "6.0";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -5907,7 +5908,6 @@ declare namespace ts {
      */
     interface SourceFileLike {
         readonly text: string;
-        languageVariant?: LanguageVariant;
     }
     interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
@@ -5926,14 +5926,7 @@ declare namespace ts {
         libReferenceDirectives: readonly FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
-        /**
-         * lib.d.ts should have a reference comment like
-         *
-         *  /// <reference no-default-lib="true"/>
-         *
-         * If any other file has this comment, it signals not to include lib.d.ts
-         * because this containing file is intended to act as a default library.
-         */
+        /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
         /**
@@ -6958,6 +6951,9 @@ declare namespace ts {
          * Use the new name or consider switching to a modern module resolution target.
          */
         NodeJs = 2,
+        /**
+         * @deprecated
+         */
         Node10 = 2,
         Node16 = 3,
         NodeNext = 99,
@@ -10039,6 +10035,7 @@ declare namespace ts {
         libReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules?: string[];
+        /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
         isLibFile: boolean;
     }
     interface HostCancellationToken {

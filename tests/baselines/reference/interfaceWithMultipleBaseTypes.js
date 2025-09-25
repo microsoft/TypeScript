@@ -27,7 +27,7 @@ interface Derived2 extends Base1, Base2 { // error
     }
 }
 
-module Generic {
+namespace Generic {
     interface Base1<T> {
         x: {
             a: T;

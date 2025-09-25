@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constEnumNamespaceReferenceCausesNoImport2.ts] ////
 
 //// [foo.ts]
-export module ConstEnumOnlyModule {
+export namespace ConstEnumOnlyModule {
   export const enum ConstFooEnum {
     Some,
     Values,

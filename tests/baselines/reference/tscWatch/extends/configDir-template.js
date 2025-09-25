@@ -71,7 +71,6 @@ export const k = 10;
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -98,25 +97,40 @@ CreatingProgramWith::
   options: {"declarationDir":"/home/src/projects/myproject/decls","paths":{"@myscope/*":["/home/src/projects/myproject/types/*"],"other/*":["other/*"]},"baseUrl":"/home/src/projects/myproject","pathsBasePath":"/home/src/projects/configs/second","typeRoots":["/home/src/projects/configs/first/root1","/home/src/projects/myproject/root2","/home/src/projects/configs/first/root3"],"types":[],"declaration":true,"outDir":"/home/src/projects/myproject/outDir","traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/myproject/tsconfig.json"}
 ExcludeWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
 'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
 Module name '@myscope/sometype', matched pattern '@myscope/*'.
 Trying substitution '/home/src/projects/myproject/types/*', candidate module location: '/home/src/projects/myproject/types/sometype'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/sometype.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/secondary.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
 'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
 Module name 'other/sometype2', matched pattern 'other/*'.
 Trying substitution 'other/*', candidate module location: 'other/sometype2'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, Declaration.
-Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, JavaScript, Declaration, JSON.
+File '/home/src/projects/myproject/src/package.json' does not exist.
+File '/home/src/projects/myproject/package.json' does not exist.
+File '/home/src/projects/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
@@ -135,6 +149,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"exc
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
@@ -143,6 +159,12 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFile
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/myproject/outDir :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/outDir :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/myproject/decls :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/decls :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -206,9 +228,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects: *new*
+  {}
 /home/src/projects/configs/first/tsconfig.json: *new*
   {}
 /home/src/projects/configs/second/tsconfig.json: *new*
+  {}
+/home/src/projects/myproject: *new*
   {}
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts: *new*
   {}
@@ -324,23 +350,38 @@ CreatingProgramWith::
   roots: ["/home/src/projects/myproject/main.ts","/home/src/projects/myproject/src/secondary.ts"]
   options: {"declarationDir":"/home/src/projects/myproject/decls","paths":{"@myscope/*":["/home/src/projects/myproject/types/*"],"other/*":["other/*"]},"baseUrl":"/home/src/projects/myproject","pathsBasePath":"/home/src/projects/configs/second","typeRoots":["/home/src/projects/myproject/root2"],"types":[],"declaration":true,"outDir":"/home/src/projects/myproject/outDir","traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/myproject/tsconfig.json"}
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
 'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
 Module name '@myscope/sometype', matched pattern '@myscope/*'.
 Trying substitution '/home/src/projects/myproject/types/*', candidate module location: '/home/src/projects/myproject/types/sometype'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
 ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
 'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
 Module name 'other/sometype2', matched pattern 'other/*'.
 Trying substitution 'other/*', candidate module location: 'other/sometype2'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, Declaration.
-Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, JavaScript, Declaration, JSON.
+File '/home/src/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
@@ -378,9 +419,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {}
 /home/src/projects/configs/first/tsconfig.json:
   {}
 /home/src/projects/configs/second/tsconfig.json:
+  {}
+/home/src/projects/myproject:
   {}
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts:
   {}
