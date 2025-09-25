@@ -1,7 +1,8 @@
-usedBeforeAssignedTypeAssertion.ts(28,12): error TS2454: Variable 'uninitialized' is used before being assigned.
+usedBeforeAssignedTypeAssertion.ts(28,6): error TS2588: Cannot assign to 'm' because it is a constant.
+usedBeforeAssignedTypeAssertion.ts(34,12): error TS2454: Variable 'uninitialized' is used before being assigned.
 
 
-==== usedBeforeAssignedTypeAssertion.ts (1 errors) ====
+==== usedBeforeAssignedTypeAssertion.ts (2 errors) ====
     // Test case for type assertion (angle bracket syntax) - assignment should not error
     function testTypeAssertion() {
         let x: number;
@@ -24,6 +25,14 @@ usedBeforeAssignedTypeAssertion.ts(28,12): error TS2454: Variable 'uninitialized
     function testNested() {
         let nested: any;
         ((nested as any) as unknown) = "test"; // Should not error
+    }
+    
+    // Test case for const assignment via type assertion - should error
+    function testConstAssignment() {
+        const m = 32;
+        (m as any) = 16; // Should error - cannot assign to const
+         ~
+!!! error TS2588: Cannot assign to 'm' because it is a constant.
     }
     
     // Test cases that should still produce errors for proper context

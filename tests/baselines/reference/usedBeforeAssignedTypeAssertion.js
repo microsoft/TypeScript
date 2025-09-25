@@ -25,6 +25,12 @@ function testNested() {
     ((nested as any) as unknown) = "test"; // Should not error
 }
 
+// Test case for const assignment via type assertion - should error
+function testConstAssignment() {
+    const m = 32;
+    (m as any) = 16; // Should error - cannot assign to const
+}
+
 // Test cases that should still produce errors for proper context
 function shouldStillError() {
     let uninitialized: number;
@@ -52,6 +58,11 @@ function testParentheses() {
 function testNested() {
     var nested;
     nested = "test"; // Should not error
+}
+// Test case for const assignment via type assertion - should error
+function testConstAssignment() {
+    var m = 32;
+    m = 16; // Should error - cannot assign to const
 }
 // Test cases that should still produce errors for proper context
 function shouldStillError() {

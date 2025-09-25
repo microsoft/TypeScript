@@ -45,13 +45,24 @@ function testNested() {
 >nested : Symbol(nested, Decl(usedBeforeAssignedTypeAssertion.ts, 20, 7))
 }
 
+// Test case for const assignment via type assertion - should error
+function testConstAssignment() {
+>testConstAssignment : Symbol(testConstAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 22, 1))
+
+    const m = 32;
+>m : Symbol(m, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 9))
+
+    (m as any) = 16; // Should error - cannot assign to const
+>m : Symbol(m, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 9))
+}
+
 // Test cases that should still produce errors for proper context
 function shouldStillError() {
->shouldStillError : Symbol(shouldStillError, Decl(usedBeforeAssignedTypeAssertion.ts, 22, 1))
+>shouldStillError : Symbol(shouldStillError, Decl(usedBeforeAssignedTypeAssertion.ts, 28, 1))
 
     let uninitialized: number;
->uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 7))
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 7))
 
     return uninitialized; // Should error - never assigned
->uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 7))
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 7))
 }

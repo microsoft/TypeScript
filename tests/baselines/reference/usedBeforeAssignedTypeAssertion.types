@@ -91,6 +91,30 @@ function testNested() {
 >       : ^^^^^^
 }
 
+// Test case for const assignment via type assertion - should error
+function testConstAssignment() {
+>testConstAssignment : () => void
+>                    : ^^^^^^^^^^
+
+    const m = 32;
+>m : 32
+>  : ^^
+>32 : 32
+>   : ^^
+
+    (m as any) = 16; // Should error - cannot assign to const
+>(m as any) = 16 : 16
+>                : ^^
+>(m as any) : any
+>           : ^^^
+>m as any : any
+>         : ^^^
+>m : any
+>  : ^^^
+>16 : 16
+>   : ^^
+}
+
 // Test cases that should still produce errors for proper context
 function shouldStillError() {
 >shouldStillError : () => number
