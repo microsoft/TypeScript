@@ -342,7 +342,7 @@ interface ActiveLabel {
 export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
     if (node.body && !node.body.parent) {
         // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
-        setParent(node.body, node);
+        setParent(node.body as ModuleDeclaration["parent"], node);
         setParentRecursive(node.body, /*incremental*/ false);
     }
     return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
