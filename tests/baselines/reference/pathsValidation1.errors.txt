@@ -1,10 +1,11 @@
-tsconfig.json(5,18): error TS5063: Substitutions for pattern '*' should be an array.
+tsconfig.json(6,18): error TS5063: Substitutions for pattern '*' should be an array.
 
 
 ==== tsconfig.json (1 errors) ====
     {
         "compilerOptions": {
             "baseUrl": ".",
+            "ignoreDeprecations": "6.0",
             "paths": {
                 "*": "*"
                      ~~~

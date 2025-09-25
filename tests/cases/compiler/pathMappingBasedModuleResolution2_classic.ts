@@ -10,7 +10,8 @@
         "baseUrl": "./src",
         "paths": {
             "*1*": [ "*2*" ]
-        }
+        },
+        "ignoreDeprecations": "6.0"
     }
 }
 

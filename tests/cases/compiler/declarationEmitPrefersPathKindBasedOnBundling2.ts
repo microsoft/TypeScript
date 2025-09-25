@@ -1,6 +1,7 @@
 // @declaration: true
 // @target: es5
 // @baseUrl: .
+// @ignoreDeprecations: 6.0
 // @module: amd
 // @outFile: ./dist.js
 // @rootDir: ./src

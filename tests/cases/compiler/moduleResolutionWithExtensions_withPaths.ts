@@ -5,6 +5,7 @@
 		"target": "ES6",
 		"module": "ES6",
 		"baseUrl": "/",
+        "ignoreDeprecations": "6.0",
 		"moduleResolution": "Node",
 		"noImplicitAny": true,
 		"traceResolution": true,

@@ -8,6 +8,7 @@
 {
     "compilerOptions": {
         "baseUrl": "./src",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "*1*": [ "*2*" ]
         }
