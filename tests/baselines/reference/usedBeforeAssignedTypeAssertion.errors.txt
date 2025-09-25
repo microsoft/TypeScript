@@ -1,8 +1,9 @@
 usedBeforeAssignedTypeAssertion.ts(28,6): error TS2588: Cannot assign to 'm' because it is a constant.
-usedBeforeAssignedTypeAssertion.ts(34,12): error TS2454: Variable 'uninitialized' is used before being assigned.
+usedBeforeAssignedTypeAssertion.ts(41,10): error TS2540: Cannot assign to 'prop' because it is a read-only property.
+usedBeforeAssignedTypeAssertion.ts(47,12): error TS2454: Variable 'uninitialized' is used before being assigned.
 
 
-==== usedBeforeAssignedTypeAssertion.ts (2 errors) ====
+==== usedBeforeAssignedTypeAssertion.ts (3 errors) ====
     // Test case for type assertion (angle bracket syntax) - assignment should not error
     function testTypeAssertion() {
         let x: number;
@@ -33,6 +34,21 @@ usedBeforeAssignedTypeAssertion.ts(34,12): error TS2454: Variable 'uninitialized
         (m as any) = 16; // Should error - cannot assign to const
          ~
 !!! error TS2588: Cannot assign to 'm' because it is a constant.
+    }
+    
+    // Test case for readonly property assignment via type assertion - should error
+    function testReadonlyPropertyAssignment() {
+        interface ReadonlyInterface {
+            readonly prop: number;
+        }
+        
+        let obj: ReadonlyInterface;
+        obj = { prop: 42 };
+        
+        // Should error - cannot assign to readonly property, even through type assertion
+        (obj.prop as any) = 100;
+             ~~~~
+!!! error TS2540: Cannot assign to 'prop' because it is a read-only property.
     }
     
     // Test cases that should still produce errors for proper context

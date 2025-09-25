@@ -31,6 +31,19 @@ function testConstAssignment() {
     (m as any) = 16; // Should error - cannot assign to const
 }
 
+// Test case for readonly property assignment via type assertion - should error
+function testReadonlyPropertyAssignment() {
+    interface ReadonlyInterface {
+        readonly prop: number;
+    }
+    
+    let obj: ReadonlyInterface;
+    obj = { prop: 42 };
+    
+    // Should error - cannot assign to readonly property, even through type assertion
+    (obj.prop as any) = 100;
+}
+
 // Test cases that should still produce errors for proper context
 function shouldStillError() {
     let uninitialized: number;
@@ -63,6 +76,13 @@ function testNested() {
 function testConstAssignment() {
     var m = 32;
     m = 16; // Should error - cannot assign to const
+}
+// Test case for readonly property assignment via type assertion - should error
+function testReadonlyPropertyAssignment() {
+    var obj;
+    obj = { prop: 42 };
+    // Should error - cannot assign to readonly property, even through type assertion
+    obj.prop = 100;
 }
 // Test cases that should still produce errors for proper context
 function shouldStillError() {

@@ -56,13 +56,39 @@ function testConstAssignment() {
 >m : Symbol(m, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 9))
 }
 
+// Test case for readonly property assignment via type assertion - should error
+function testReadonlyPropertyAssignment() {
+>testReadonlyPropertyAssignment : Symbol(testReadonlyPropertyAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 28, 1))
+
+    interface ReadonlyInterface {
+>ReadonlyInterface : Symbol(ReadonlyInterface, Decl(usedBeforeAssignedTypeAssertion.ts, 31, 43))
+
+        readonly prop: number;
+>prop : Symbol(ReadonlyInterface.prop, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 33))
+    }
+    
+    let obj: ReadonlyInterface;
+>obj : Symbol(obj, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+>ReadonlyInterface : Symbol(ReadonlyInterface, Decl(usedBeforeAssignedTypeAssertion.ts, 31, 43))
+
+    obj = { prop: 42 };
+>obj : Symbol(obj, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+>prop : Symbol(prop, Decl(usedBeforeAssignedTypeAssertion.ts, 37, 11))
+    
+    // Should error - cannot assign to readonly property, even through type assertion
+    (obj.prop as any) = 100;
+>obj.prop : Symbol(ReadonlyInterface.prop, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 33))
+>obj : Symbol(obj, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+>prop : Symbol(ReadonlyInterface.prop, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 33))
+}
+
 // Test cases that should still produce errors for proper context
 function shouldStillError() {
->shouldStillError : Symbol(shouldStillError, Decl(usedBeforeAssignedTypeAssertion.ts, 28, 1))
+>shouldStillError : Symbol(shouldStillError, Decl(usedBeforeAssignedTypeAssertion.ts, 41, 1))
 
     let uninitialized: number;
->uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 7))
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 45, 7))
 
     return uninitialized; // Should error - never assigned
->uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 7))
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 45, 7))
 }

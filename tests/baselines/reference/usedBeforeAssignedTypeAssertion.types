@@ -115,6 +115,51 @@ function testConstAssignment() {
 >   : ^^
 }
 
+// Test case for readonly property assignment via type assertion - should error
+function testReadonlyPropertyAssignment() {
+>testReadonlyPropertyAssignment : () => void
+>                               : ^^^^^^^^^^
+
+    interface ReadonlyInterface {
+        readonly prop: number;
+>prop : number
+>     : ^^^^^^
+    }
+    
+    let obj: ReadonlyInterface;
+>obj : ReadonlyInterface
+>    : ^^^^^^^^^^^^^^^^^
+
+    obj = { prop: 42 };
+>obj = { prop: 42 } : { prop: number; }
+>                   : ^^^^^^^^^^^^^^^^^
+>obj : ReadonlyInterface
+>    : ^^^^^^^^^^^^^^^^^
+>{ prop: 42 } : { prop: number; }
+>             : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+    
+    // Should error - cannot assign to readonly property, even through type assertion
+    (obj.prop as any) = 100;
+>(obj.prop as any) = 100 : 100
+>                        : ^^^
+>(obj.prop as any) : any
+>                  : ^^^
+>obj.prop as any : any
+>                : ^^^
+>obj.prop : any
+>         : ^^^
+>obj : ReadonlyInterface
+>    : ^^^^^^^^^^^^^^^^^
+>prop : any
+>     : ^^^
+>100 : 100
+>    : ^^^
+}
+
 // Test cases that should still produce errors for proper context
 function shouldStillError() {
 >shouldStillError : () => number
