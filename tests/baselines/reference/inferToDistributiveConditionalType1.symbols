@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/inferToDistributiveConditionalType1.ts] ////
+
+=== inferToDistributiveConditionalType1.ts ===
+declare class Animal { eat(): void; }
+>Animal : Symbol(Animal, Decl(inferToDistributiveConditionalType1.ts, 0, 0))
+>eat : Symbol(Animal.eat, Decl(inferToDistributiveConditionalType1.ts, 0, 22))
+
+declare class Cat extends Animal { meow(): void; }
+>Cat : Symbol(Cat, Decl(inferToDistributiveConditionalType1.ts, 0, 37))
+>Animal : Symbol(Animal, Decl(inferToDistributiveConditionalType1.ts, 0, 0))
+>meow : Symbol(Cat.meow, Decl(inferToDistributiveConditionalType1.ts, 1, 34))
+
+declare class Dog extends Animal { bark(): void; }
+>Dog : Symbol(Dog, Decl(inferToDistributiveConditionalType1.ts, 1, 50))
+>Animal : Symbol(Animal, Decl(inferToDistributiveConditionalType1.ts, 0, 0))
+>bark : Symbol(Dog.bark, Decl(inferToDistributiveConditionalType1.ts, 2, 34))
+
+declare function test1<T>(a: T extends unknown ? { prop: T } : never): T;
+>test1 : Symbol(test1, Decl(inferToDistributiveConditionalType1.ts, 2, 50))
+>T : Symbol(T, Decl(inferToDistributiveConditionalType1.ts, 4, 23))
+>a : Symbol(a, Decl(inferToDistributiveConditionalType1.ts, 4, 26))
+>T : Symbol(T, Decl(inferToDistributiveConditionalType1.ts, 4, 23))
+>prop : Symbol(prop, Decl(inferToDistributiveConditionalType1.ts, 4, 50))
+>T : Symbol(T, Decl(inferToDistributiveConditionalType1.ts, 4, 23))
+>T : Symbol(T, Decl(inferToDistributiveConditionalType1.ts, 4, 23))
+
+declare const arg1: { prop: Dog } | { prop: Cat };
+>arg1 : Symbol(arg1, Decl(inferToDistributiveConditionalType1.ts, 5, 13))
+>prop : Symbol(prop, Decl(inferToDistributiveConditionalType1.ts, 5, 21))
+>Dog : Symbol(Dog, Decl(inferToDistributiveConditionalType1.ts, 1, 50))
+>prop : Symbol(prop, Decl(inferToDistributiveConditionalType1.ts, 5, 37))
+>Cat : Symbol(Cat, Decl(inferToDistributiveConditionalType1.ts, 0, 37))
+
+const result1 = test1(arg1);
+>result1 : Symbol(result1, Decl(inferToDistributiveConditionalType1.ts, 6, 5))
+>test1 : Symbol(test1, Decl(inferToDistributiveConditionalType1.ts, 2, 50))
+>arg1 : Symbol(arg1, Decl(inferToDistributiveConditionalType1.ts, 5, 13))
+
