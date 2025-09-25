@@ -601,9 +601,6 @@ SemanticDiagnostics::
 *refresh*    /user/username/projects/project/other.ts
 *refresh*    /user/username/projects/project/other2.ts
 Signatures::
-(computed .d.ts) /user/username/projects/project/commonFile1.ts
-(computed .d.ts) /user/username/projects/project/commonFile2.ts
-(computed .d.ts) /user/username/projects/project/other2.ts
 
 
 Edit [3]:: update aplha config
@@ -740,11 +737,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project3.tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'project3.tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/project/other2.js] *mTime changed*
+//// [/user/username/projects/project/other2.js] *rewrite with same content*
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
@@ -776,11 +771,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project3.tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'project3.tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/project/other2.js] *mTime changed*
+//// [/user/username/projects/project/other2.js] *rewrite with same content*
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 

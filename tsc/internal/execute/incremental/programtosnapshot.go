@@ -16,22 +16,25 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if oldProgram != nil && oldProgram.program == program {
 		return oldProgram.snapshot
 	}
-
+	snapshot := &snapshot{
+		options:      program.Options(),
+		hashWithText: hashWithText,
+		checkPending: program.Options().NoCheck.IsTrue(),
+	}
 	to := &toProgramSnapshot{
 		program:    program,
 		oldProgram: oldProgram,
-		snapshot: &snapshot{
-			options:      program.Options(),
-			hashWithText: hashWithText,
-		},
+		snapshot:   snapshot,
 	}
 
-	to.reuseFromOldProgram()
-	to.computeProgramFileChanges()
-	to.handleFileDelete()
-	to.handlePendingEmit()
-	to.handlePendingCheck()
-	return to.snapshot
+	if to.snapshot.canUseIncrementalState() {
+		to.reuseFromOldProgram()
+		to.computeProgramFileChanges()
+		to.handleFileDelete()
+		to.handlePendingEmit()
+		to.handlePendingCheck()
+	}
+	return snapshot
 }
 
 type toProgramSnapshot struct {
@@ -42,14 +45,10 @@ type toProgramSnapshot struct {
 }
 
 func (t *toProgramSnapshot) reuseFromOldProgram() {
-	if t.oldProgram != nil && t.snapshot.options.Composite.IsTrue() {
-		t.snapshot.latestChangedDtsFile = t.oldProgram.snapshot.latestChangedDtsFile
-	}
-	if t.snapshot.options.NoCheck.IsTrue() {
-		t.snapshot.checkPending = true
-	}
-
 	if t.oldProgram != nil {
+		if t.snapshot.options.Composite.IsTrue() {
+			t.snapshot.latestChangedDtsFile = t.oldProgram.snapshot.latestChangedDtsFile
+		}
 		// Copy old snapshot's changed files set
 		t.oldProgram.snapshot.changedFilesSet.Range(func(key tspath.Path) bool {
 			t.snapshot.changedFilesSet.Add(key)

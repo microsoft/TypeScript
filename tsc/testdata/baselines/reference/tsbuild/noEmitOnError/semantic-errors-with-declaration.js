@@ -207,9 +207,6 @@ SemanticDiagnostics::
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
-(stored at emit) /user/username/projects/noEmitOnError/shared/types/db.ts
-(stored at emit) /user/username/projects/noEmitOnError/src/main.ts
-(stored at emit) /user/username/projects/noEmitOnError/src/other.ts
 
 
 Edit [2]:: no change

@@ -263,7 +263,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
-(stored at emit) /home/src/projects/project/a.ts
 
 
 Edit [5]:: Fix the error

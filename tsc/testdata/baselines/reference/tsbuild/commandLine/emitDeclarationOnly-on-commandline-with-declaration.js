@@ -162,10 +162,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -176,9 +172,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [0]:: no change
@@ -219,9 +212,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [1]:: local change
@@ -271,10 +261,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -285,9 +271,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [2]:: non local change
@@ -340,10 +323,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -354,9 +333,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [3]:: emit js files
@@ -454,10 +430,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -468,9 +440,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [4]:: no change
@@ -511,9 +480,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [5]:: js emit with change without emitDeclarationOnly
@@ -577,10 +543,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -591,9 +553,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [6]:: local change
@@ -643,10 +602,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -657,9 +612,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [7]:: non local change
@@ -712,10 +664,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -726,9 +674,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts
 
 
 Edit [8]:: js emit with change without emitDeclarationOnly
@@ -799,10 +744,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
 *refresh*    /home/src/workspaces/solution/project1/src/d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project1/src/a.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/b.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/c.ts
-(stored at emit) /home/src/workspaces/solution/project1/src/d.ts
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
@@ -813,6 +754,3 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/solution/project1/src/b.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/g.ts
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project2/src/e.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/f.ts
-(stored at emit) /home/src/workspaces/solution/project2/src/g.ts

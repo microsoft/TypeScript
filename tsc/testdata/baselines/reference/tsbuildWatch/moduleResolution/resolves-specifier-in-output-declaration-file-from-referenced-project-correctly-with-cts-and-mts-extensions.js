@@ -494,8 +494,8 @@ Signatures::
 
 packages/pkg1/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
+*refresh*    /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 *refresh*    /user/username/projects/myproject/packages/pkg2/build/index.d.cts
 *refresh*    /user/username/projects/myproject/packages/pkg1/index.ts
 Signatures::
-(used version)   /user/username/projects/myproject/packages/pkg2/build/index.d.cts
-(computed .d.ts) /user/username/projects/myproject/packages/pkg1/index.ts

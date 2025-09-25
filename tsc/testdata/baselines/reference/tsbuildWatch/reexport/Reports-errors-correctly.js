@@ -264,11 +264,9 @@ Output::
     [7m3[0m     bar: number;
     [7m [0m [96m    ~~~[0m
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'src/main/tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/user/username/projects/reexport/out/main/index.js] *mTime changed*
+//// [/user/username/projects/reexport/out/main/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":["../../src/main/index.ts"],"semanticErrors":true}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -380,13 +378,11 @@ Signatures::
 
 src/main/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /user/username/projects/reexport/out/pure/session.d.ts
 *refresh*    /user/username/projects/reexport/out/pure/index.d.ts
 *refresh*    /user/username/projects/reexport/src/main/index.ts
 Signatures::
-(used version)   /user/username/projects/reexport/out/pure/session.d.ts
-(used version)   /user/username/projects/reexport/out/pure/index.d.ts
-(used version)   /user/username/projects/reexport/src/main/index.ts
 
 
 Edit [1]:: Fix error
@@ -413,11 +409,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'src/main/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'src/main/tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/reexport/out/main/index.js] *mTime changed*
+//// [/user/username/projects/reexport/out/main/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":["../../src/main/index.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -527,10 +521,8 @@ Signatures::
 
 src/main/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /user/username/projects/reexport/out/pure/session.d.ts
 *refresh*    /user/username/projects/reexport/out/pure/index.d.ts
 *refresh*    /user/username/projects/reexport/src/main/index.ts
 Signatures::
-(used version)   /user/username/projects/reexport/out/pure/session.d.ts
-(used version)   /user/username/projects/reexport/out/pure/index.d.ts
-(used version)   /user/username/projects/reexport/src/main/index.ts

@@ -133,8 +133,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::
-(stored at emit) /home/src/projects/myproject/types/sometype.ts
-(stored at emit) /home/src/projects/myproject/main.ts
 
 
 Edit [0]:: edit extended config file
@@ -174,14 +172,18 @@ types/sometype.ts
    Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
    Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/projects/myproject/decls/main.d.ts] *mTime changed*
-//// [/home/src/projects/myproject/outDir/main.js] *mTime changed*
-//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo] *mTime changed*
+//// [/home/src/projects/myproject/decls/main.d.ts] *rewrite with same content*
+//// [/home/src/projects/myproject/decls/types/sometype.d.ts] *rewrite with same content*
+//// [/home/src/projects/myproject/outDir/main.js] *rewrite with same content*
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
+//// [/home/src/projects/myproject/outDir/types/sometype.js] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/projects/myproject/types/sometype.ts
+*refresh*    /home/src/projects/myproject/main.ts
 Signatures::

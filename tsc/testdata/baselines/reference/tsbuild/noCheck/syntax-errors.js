@@ -102,8 +102,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [0]:: no change
@@ -139,8 +137,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [1]:: Fix `a` error with noCheck
@@ -195,8 +191,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [2]:: no change
@@ -256,8 +250,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [4]:: No Change run with checking
@@ -347,8 +339,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [7]:: no change
@@ -384,8 +374,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [8]:: No Change run with checking
@@ -441,8 +429,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [9]:: Fix `a` error with noCheck
@@ -497,8 +483,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [10]:: No Change run with checking
@@ -545,8 +529,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
 
 
 Edit [11]:: Add file with error
@@ -620,9 +602,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/b.ts
 *refresh*    /home/src/workspaces/project/c.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
-(stored at emit) /home/src/workspaces/project/c.ts
 
 
 Edit [12]:: Introduce error with noCheck
@@ -695,9 +674,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/b.ts
 *not cached* /home/src/workspaces/project/c.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
-(stored at emit) /home/src/workspaces/project/c.ts
 
 
 Edit [13]:: Fix `a` error with noCheck
@@ -761,9 +737,6 @@ SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/b.ts
 *not cached* /home/src/workspaces/project/c.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
-(stored at emit) /home/src/workspaces/project/c.ts
 
 
 Edit [14]:: No Change run with checking
@@ -828,9 +801,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/b.ts
 *refresh*    /home/src/workspaces/project/c.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
-(stored at emit) /home/src/workspaces/project/c.ts
 
 
 Edit [15]:: no change
@@ -882,6 +852,3 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/b.ts
 *refresh*    /home/src/workspaces/project/c.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/a.ts
-(stored at emit) /home/src/workspaces/project/b.ts
-(stored at emit) /home/src/workspaces/project/c.ts

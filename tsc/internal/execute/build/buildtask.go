@@ -46,6 +46,17 @@ type buildInfoEntry struct {
 	dtsTime   *time.Time
 }
 
+type taskResult struct {
+	builder            strings.Builder
+	reportStatus       tsc.DiagnosticReporter
+	diagnosticReporter tsc.DiagnosticReporter
+	exitStatus         tsc.ExitStatus
+	statistics         *tsc.Statistics
+	program            *incremental.Program
+	buildKind          buildKind
+	filesToDelete      []string
+}
+
 type buildTask struct {
 	config     string
 	resolved   *tsoptions.ParsedCommandLine
@@ -55,17 +66,9 @@ type buildTask struct {
 	done       chan struct{}
 
 	// task reporting
-	builder            strings.Builder
-	errors             []*ast.Diagnostic
-	reportStatus       tsc.DiagnosticReporter
-	diagnosticReporter tsc.DiagnosticReporter
-	exitStatus         tsc.ExitStatus
-	statistics         *tsc.Statistics
-	program            *incremental.Program
-	buildKind          buildKind
-	filesToDelete      []string
-	prevReporter       *buildTask
-	reportDone         chan struct{}
+	result       *taskResult
+	prevReporter *buildTask
+	reportDone   chan struct{}
 
 	// Watching things
 	configTime          time.Time
@@ -75,6 +78,7 @@ type buildTask struct {
 	buildInfoEntry   *buildInfoEntry
 	buildInfoEntryMu sync.Mutex
 
+	errors             []*ast.Diagnostic
 	pending            atomic.Bool
 	isInitialCycle     bool
 	downStreamUpdateMu sync.Mutex
@@ -95,7 +99,7 @@ func (t *buildTask) unblockDownstream() {
 
 func (t *buildTask) reportDiagnostic(err *ast.Diagnostic) {
 	t.errors = append(t.errors, err)
-	t.diagnosticReporter(err)
+	t.result.diagnosticReporter(err)
 }
 
 func (t *buildTask) report(orchestrator *Orchestrator, configPath tspath.Path, buildResult *orchestratorResult) {
@@ -105,30 +109,26 @@ func (t *buildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 	if len(t.errors) > 0 {
 		buildResult.errors = append(core.IfElse(buildResult.errors != nil, buildResult.errors, []*ast.Diagnostic{}), t.errors...)
 	}
-	fmt.Fprint(orchestrator.opts.Sys.Writer(), t.builder.String())
-	t.builder.Reset()
-	if t.exitStatus > buildResult.result.Status {
-		buildResult.result.Status = t.exitStatus
+	fmt.Fprint(orchestrator.opts.Sys.Writer(), t.result.builder.String())
+	if t.result.exitStatus > buildResult.result.Status {
+		buildResult.result.Status = t.result.exitStatus
 	}
-	if t.statistics != nil {
-		buildResult.programStats = append(buildResult.programStats, t.statistics)
-		t.statistics = nil
+	if t.result.statistics != nil {
+		buildResult.statistics.Aggregate(t.result.statistics)
 	}
 	// If we built the program, or updated timestamps, or had errors, we need to
 	// delete files that are no longer needed
-	switch t.buildKind {
+	switch t.result.buildKind {
 	case buildKindProgram:
 		if orchestrator.opts.Testing != nil {
-			orchestrator.opts.Testing.OnProgram(t.program)
+			orchestrator.opts.Testing.OnProgram(t.result.program)
 		}
-		t.program.MakeReadonly()
 		buildResult.statistics.ProjectsBuilt++
-		t.buildKind = buildKindNone
 	case buildKindPseudo:
 		buildResult.statistics.TimestampUpdates++
-		t.buildKind = buildKindNone
 	}
-	buildResult.filesToDelete = append(buildResult.filesToDelete, t.filesToDelete...)
+	buildResult.filesToDelete = append(buildResult.filesToDelete, t.result.filesToDelete...)
+	t.result = nil
 	close(t.reportDone)
 }
 
@@ -148,7 +148,7 @@ func (t *buildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
 				}
 			}
 			if len(t.errors) > 0 {
-				t.exitStatus = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
+				t.result.exitStatus = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
 			}
 		}
 	} else {
@@ -156,7 +156,7 @@ func (t *buildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
 			t.reportUpToDateStatus(orchestrator)
 			for _, err := range t.errors {
 				// Should not add the diagnostics so just reporting
-				t.diagnosticReporter(err)
+				t.result.diagnosticReporter(err)
 			}
 		}
 	}
@@ -176,14 +176,14 @@ func (t *buildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Pat
 		if downStream.status != nil {
 			switch downStream.status.kind {
 			case upToDateStatusTypeUpToDate:
-				if !t.program.HasChangedDtsFile() {
+				if !t.result.program.HasChangedDtsFile() {
 					downStream.status = &upToDateStatus{kind: upToDateStatusTypeUpToDateWithUpstreamTypes, data: downStream.status.data}
 					break
 				}
 				fallthrough
 			case upToDateStatusTypeUpToDateWithUpstreamTypes,
 				upToDateStatusTypeUpToDateWithInputFileText:
-				if t.program.HasChangedDtsFile() {
+				if t.result.program.HasChangedDtsFile() {
 					downStream.status = &upToDateStatus{kind: upToDateStatusTypeInputFileNewer, data: &inputOutputName{t.config, downStream.status.oldestOutputFileName()}}
 				}
 			case upToDateStatusTypeUpstreamErrors:
@@ -202,7 +202,7 @@ func (t *buildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Pat
 func (t *buildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path) {
 	t.errors = nil
 	if orchestrator.opts.Command.BuildOptions.Verbose.IsTrue() {
-		t.reportStatus(ast.NewCompilerDiagnostic(diagnostics.Building_project_0, orchestrator.relativeFileName(t.config)))
+		t.result.reportStatus(ast.NewCompilerDiagnostic(diagnostics.Building_project_0, orchestrator.relativeFileName(t.config)))
 	}
 
 	// Real build
@@ -212,11 +212,7 @@ func (t *buildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 	buildInfoReadStart := orchestrator.opts.Sys.Now()
 	var oldProgram *incremental.Program
 	if !orchestrator.opts.Command.BuildOptions.Force.IsTrue() {
-		if t.program != nil {
-			oldProgram = t.program
-		} else {
-			oldProgram = incremental.ReadBuildInfoProgram(t.resolved, orchestrator.host, orchestrator.host)
-		}
+		oldProgram = incremental.ReadBuildInfoProgram(t.resolved, orchestrator.host, orchestrator.host)
 	}
 	compileTimes.BuildInfoReadTime = orchestrator.opts.Sys.Now().Sub(buildInfoReadStart)
 	parseStart := orchestrator.opts.Sys.Now()
@@ -224,23 +220,23 @@ func (t *buildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 		Config: t.resolved,
 		Host: &compilerHost{
 			host:  orchestrator.host,
-			trace: tsc.GetTraceWithWriterFromSys(&t.builder, orchestrator.opts.Testing),
+			trace: tsc.GetTraceWithWriterFromSys(&t.result.builder, orchestrator.opts.Testing),
 		},
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	})
 	compileTimes.ParseTime = orchestrator.opts.Sys.Now().Sub(parseStart)
 	changesComputeStart := orchestrator.opts.Sys.Now()
-	t.program = incremental.NewProgram(program, oldProgram, orchestrator.host, orchestrator.opts.Testing != nil)
+	t.result.program = incremental.NewProgram(program, oldProgram, orchestrator.host, orchestrator.opts.Testing != nil)
 	compileTimes.ChangesComputeTime = orchestrator.opts.Sys.Now().Sub(changesComputeStart)
 
 	result, statistics := tsc.EmitAndReportStatistics(tsc.EmitInput{
 		Sys:                orchestrator.opts.Sys,
-		ProgramLike:        t.program,
+		ProgramLike:        t.result.program,
 		Program:            program,
 		Config:             t.resolved,
 		ReportDiagnostic:   t.reportDiagnostic,
 		ReportErrorSummary: tsc.QuietDiagnosticsReporter,
-		Writer:             &t.builder,
+		Writer:             &t.result.builder,
 		WriteFile: func(fileName, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
 			return t.writeFile(orchestrator, fileName, text, writeByteOrderMark, data)
 		},
@@ -248,14 +244,14 @@ func (t *buildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 		Testing:            orchestrator.opts.Testing,
 		TestingMTimesCache: orchestrator.host.mTimes,
 	})
-	t.exitStatus = result.Status
-	t.statistics = statistics
+	t.result.exitStatus = result.Status
+	t.result.statistics = statistics
 	if (!program.Options().NoEmitOnError.IsTrue() || len(result.Diagnostics) == 0) &&
 		(len(result.EmitResult.EmittedFiles) > 0 || t.status.kind != upToDateStatusTypeOutOfDateBuildInfoWithErrors) {
 		// Update time stamps for rest of the outputs
 		t.updateTimeStamps(orchestrator, result.EmitResult.EmittedFiles, diagnostics.Updating_unchanged_output_timestamps_of_project_0)
 	}
-	t.buildKind = buildKindProgram
+	t.result.buildKind = buildKindProgram
 	if result.Status == tsc.ExitStatusDiagnosticsPresent_OutputsSkipped || result.Status == tsc.ExitStatusDiagnosticsPresent_OutputsGenerated {
 		t.status = &upToDateStatus{kind: upToDateStatusTypeBuildErrors}
 	} else {
@@ -273,13 +269,13 @@ func (t *buildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrato
 	switch t.status.kind {
 	case upToDateStatusTypeUpToDate:
 		if orchestrator.opts.Command.BuildOptions.Dry.IsTrue() {
-			t.reportStatus(ast.NewCompilerDiagnostic(diagnostics.Project_0_is_up_to_date, t.config))
+			t.result.reportStatus(ast.NewCompilerDiagnostic(diagnostics.Project_0_is_up_to_date, t.config))
 		}
 		return true
 	case upToDateStatusTypeUpstreamErrors:
 		upstreamStatus := t.status.upstreamErrors()
 		if orchestrator.opts.Command.BuildOptions.Verbose.IsTrue() {
-			t.reportStatus(ast.NewCompilerDiagnostic(
+			t.result.reportStatus(ast.NewCompilerDiagnostic(
 				core.IfElse(
 					upstreamStatus.refHasUpstreamErrors,
 					diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built,
@@ -300,19 +296,19 @@ func (t *buildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrato
 	// update timestamps
 	if t.status.isPseudoBuild() {
 		if orchestrator.opts.Command.BuildOptions.Dry.IsTrue() {
-			t.reportStatus(ast.NewCompilerDiagnostic(diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, t.config))
+			t.result.reportStatus(ast.NewCompilerDiagnostic(diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, t.config))
 			t.status = &upToDateStatus{kind: upToDateStatusTypeUpToDate}
 			return true
 		}
 
 		t.updateTimeStamps(orchestrator, nil, diagnostics.Updating_output_timestamps_of_project_0)
 		t.status = &upToDateStatus{kind: upToDateStatusTypeUpToDate, data: t.status.data}
-		t.buildKind = buildKindPseudo
+		t.result.buildKind = buildKindPseudo
 		return true
 	}
 
 	if orchestrator.opts.Command.BuildOptions.Dry.IsTrue() {
-		t.reportStatus(ast.NewCompilerDiagnostic(diagnostics.A_non_dry_build_would_build_project_0, t.config))
+		t.result.reportStatus(ast.NewCompilerDiagnostic(diagnostics.A_non_dry_build_would_build_project_0, t.config))
 		t.status = &upToDateStatus{kind: upToDateStatusTypeUpToDate}
 		return true
 	}
@@ -537,13 +533,13 @@ func (t *buildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
 	}
 	switch t.status.kind {
 	case upToDateStatusTypeConfigFileNotFound:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_config_file_does_not_exist,
 			orchestrator.relativeFileName(t.config),
 		))
 	case upToDateStatusTypeUpstreamErrors:
 		upstreamStatus := t.status.upstreamErrors()
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			core.IfElse(
 				upstreamStatus.refHasUpstreamErrors,
 				diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built,
@@ -553,7 +549,7 @@ func (t *buildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
 			orchestrator.relativeFileName(upstreamStatus.ref),
 		))
 	case upToDateStatusTypeBuildErrors:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_it_has_errors,
 			orchestrator.relativeFileName(t.config),
 		))
@@ -561,7 +557,7 @@ func (t *buildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
 		// This is to ensure skipping verbose log for projects that were built,
 		// and then some other package changed but this package doesnt need update
 		if inputOutputFileAndTime := t.status.inputOutputFileAndTime(); inputOutputFileAndTime != nil {
-			t.reportStatus(ast.NewCompilerDiagnostic(
+			t.result.reportStatus(ast.NewCompilerDiagnostic(
 				diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_output_2,
 				orchestrator.relativeFileName(t.config),
 				orchestrator.relativeFileName(inputOutputFileAndTime.input.file),
@@ -569,70 +565,70 @@ func (t *buildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
 			))
 		}
 	case upToDateStatusTypeUpToDateWithUpstreamTypes:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
 			orchestrator.relativeFileName(t.config),
 		))
 	case upToDateStatusTypeUpToDateWithInputFileText:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_files,
 			orchestrator.relativeFileName(t.config),
 		))
 	case upToDateStatusTypeInputFileMissing:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_input_1_does_not_exist,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(t.status.data.(string)),
 		))
 	case upToDateStatusTypeOutputMissing:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(t.status.data.(string)),
 		))
 	case upToDateStatusTypeInputFileNewer:
 		inputOutput := t.status.inputOutputName()
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_output_1_is_older_than_input_2,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(inputOutput.output),
 			orchestrator.relativeFileName(inputOutput.input),
 		))
 	case upToDateStatusTypeOutOfDateBuildInfoWithPendingEmit:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the_changes_were_not_emitted,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(t.status.data.(string)),
 		))
 	case upToDateStatusTypeOutOfDateBuildInfoWithErrors:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_program_needs_to_report_errors,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(t.status.data.(string)),
 		))
 	case upToDateStatusTypeOutOfDateOptions:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_there_is_change_in_compilerOptions,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(t.status.data.(string)),
 		))
 	case upToDateStatusTypeOutOfDateRoots:
 		inputOutput := t.status.inputOutputName()
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_file_2_was_root_file_of_compilation_but_not_any_more,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(inputOutput.output),
 			orchestrator.relativeFileName(inputOutput.input),
 		))
 	case upToDateStatusTypeTsVersionOutputOfDate:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2,
 			orchestrator.relativeFileName(t.config),
 			orchestrator.relativeFileName(t.status.data.(string)),
 			core.Version(),
 		))
 	case upToDateStatusTypeForceBuild:
-		t.reportStatus(ast.NewCompilerDiagnostic(
+		t.result.reportStatus(ast.NewCompilerDiagnostic(
 			diagnostics.Project_0_is_being_forcibly_rebuilt,
 			orchestrator.relativeFileName(t.config),
 		))
@@ -657,7 +653,7 @@ func (t *buildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []
 			return
 		}
 		if !verboseMessageReported && orchestrator.opts.Command.BuildOptions.Verbose.IsTrue() {
-			t.reportStatus(ast.NewCompilerDiagnostic(verboseMessage, orchestrator.relativeFileName(t.config)))
+			t.result.reportStatus(ast.NewCompilerDiagnostic(verboseMessage, orchestrator.relativeFileName(t.config)))
 			verboseMessageReported = true
 		}
 		err := orchestrator.host.SetMTime(file, now)
@@ -685,7 +681,7 @@ func (t *buildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []
 func (t *buildTask) cleanProject(orchestrator *Orchestrator, path tspath.Path) {
 	if t.resolved == nil {
 		t.reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.File_0_not_found, t.config))
-		t.exitStatus = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
+		t.result.exitStatus = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
 		return
 	}
 
@@ -709,7 +705,7 @@ func (t *buildTask) cleanProjectOutput(orchestrator *Orchestrator, outputFile st
 				t.reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Failed_to_delete_file_0, outputFile))
 			}
 		} else {
-			t.filesToDelete = append(t.filesToDelete, outputFile)
+			t.result.filesToDelete = append(t.result.filesToDelete, outputFile)
 		}
 	}
 }
@@ -849,7 +845,7 @@ func (t *buildTask) writeFile(orchestrator *Orchestrator, fileName string, text 
 	err := orchestrator.host.FS().WriteFile(fileName, text, writeByteOrderMark)
 	if err == nil {
 		if data != nil && data.BuildInfo != nil {
-			t.onBuildInfoEmit(orchestrator, fileName, data.BuildInfo.(*incremental.BuildInfo), t.program.HasChangedDtsFile())
+			t.onBuildInfoEmit(orchestrator, fileName, data.BuildInfo.(*incremental.BuildInfo), t.result.program.HasChangedDtsFile())
 		} else if t.storeOutputTimeStamp(orchestrator) {
 			// Store time stamps
 			orchestrator.host.storeMTime(fileName, orchestrator.opts.Sys.Now())

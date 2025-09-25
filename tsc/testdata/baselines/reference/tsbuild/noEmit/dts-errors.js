@@ -199,7 +199,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
-(stored at emit) /home/src/projects/project/a.ts
 
 
 Edit [4]:: no change
@@ -309,7 +308,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
-(stored at emit) /home/src/projects/project/a.ts
 
 
 Edit [7]:: no change

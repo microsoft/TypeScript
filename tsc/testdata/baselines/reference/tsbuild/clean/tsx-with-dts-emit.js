@@ -76,7 +76,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/solution/project/src/main.tsx
 Signatures::
-(stored at emit) /home/src/workspaces/solution/project/src/main.tsx
 
 
 Edit [0]:: no change

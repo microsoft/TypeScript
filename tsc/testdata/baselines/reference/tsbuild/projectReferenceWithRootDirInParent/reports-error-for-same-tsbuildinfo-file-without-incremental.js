@@ -159,8 +159,7 @@ Signatures::
 
 src/main/tsconfig.json::
 SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
 *not cached* /home/src/workspaces/solution/src/main/b.ts
 *not cached* /home/src/workspaces/solution/src/main/a.ts
 Signatures::
-(computed .d.ts) /home/src/workspaces/solution/src/main/b.ts
-(computed .d.ts) /home/src/workspaces/solution/src/main/a.ts

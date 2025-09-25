@@ -117,7 +117,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/node_modules/ky/distribution/index.d.ts
 *refresh*    /home/src/workspaces/project/index.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/index.ts
 
 
 Edit [0]:: no change
@@ -162,4 +161,3 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/node_modules/ky/distribution/index.d.ts
 *refresh*    /home/src/workspaces/project/index.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/index.ts

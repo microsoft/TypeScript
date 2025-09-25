@@ -124,6 +124,8 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
@@ -205,7 +207,6 @@ SemanticDiagnostics::
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
-(computed .d.ts) /user/username/projects/noEmitOnError/src/main.ts
 
 
 Edit [2]:: No Change
@@ -222,17 +223,20 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
+*refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
 
 
@@ -290,9 +294,11 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
-(computed .d.ts) /user/username/projects/noEmitOnError/src/main.ts
 
 
 Edit [4]:: No Change
@@ -316,9 +322,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
+*refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
 
 
@@ -338,17 +350,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *modified* 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const a = "hello";
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -379,9 +389,11 @@ const a = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
-(computed .d.ts) /user/username/projects/noEmitOnError/src/main.ts
 
 
 Edit [6]:: No Change
@@ -398,17 +410,20 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
+*refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
 
 
@@ -428,11 +443,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *modified* 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -442,15 +455,17 @@ const a = class {
 };
 exports.a = a;
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
-(computed .d.ts) /user/username/projects/noEmitOnError/src/main.ts
 
 
 Edit [8]:: No Change
@@ -467,17 +482,20 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
+*refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
 
 
@@ -497,21 +515,21 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *rewrite with same content*
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::
-(computed .d.ts) /user/username/projects/noEmitOnError/src/main.ts
 
 
 Edit [10]:: No Change
@@ -528,15 +546,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *mTime changed*
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *mTime changed*
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
+*refresh*    /user/username/projects/noEmitOnError/src/main.ts
+*refresh*    /user/username/projects/noEmitOnError/src/other.ts
 Signatures::

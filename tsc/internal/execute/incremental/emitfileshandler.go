@@ -2,6 +2,7 @@ package incremental
 
 import (
 	"context"
+	"sync/atomic"
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -26,6 +27,7 @@ type emitFilesHandler struct {
 	latestChangedDtsFiles collections.SyncMap[tspath.Path, string]
 	deletedPendingKinds   collections.Set[tspath.Path]
 	emitUpdates           collections.SyncMap[tspath.Path, *emitUpdate]
+	hasEmitDiagnostics    atomic.Bool
 }
 
 // Determining what all is pending to be emitted based on previous options or previous file emit flags
@@ -44,14 +46,57 @@ func (h *emitFilesHandler) getPendingEmitKindForEmitOptions(emitKind FileEmitKin
 // The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
 // in that order would be used to write the files
 func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *compiler.EmitResult {
+	// Emit all affected files
+	if h.program.snapshot.canUseIncrementalState() {
+		results := h.emitFilesIncremental(options)
+		if h.isForDtsErrors {
+			if options.TargetSourceFile != nil {
+				// Result from cache
+				diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(options.TargetSourceFile.Path())
+				return &compiler.EmitResult{
+					EmitSkipped: true,
+					Diagnostics: diagnostics.getDiagnostics(h.program.program, options.TargetSourceFile),
+				}
+			}
+			return compiler.CombineEmitResults(results)
+		} else {
+			// Combine results and update buildInfo
+			result := compiler.CombineEmitResults(results)
+			h.emitBuildInfo(options, result)
+			return result
+		}
+	} else if !h.isForDtsErrors {
+		result := h.program.program.Emit(h.ctx, h.getEmitOptions(options))
+		h.updateSnapshot()
+		h.emitBuildInfo(options, result)
+		return result
+	} else {
+		result := &compiler.EmitResult{
+			EmitSkipped: true,
+			Diagnostics: h.program.program.GetDeclarationDiagnostics(h.ctx, options.TargetSourceFile),
+		}
+		if len(result.Diagnostics) != 0 {
+			h.program.snapshot.hasEmitDiagnostics = true
+		}
+		return result
+	}
+}
+
+func (h *emitFilesHandler) emitBuildInfo(options compiler.EmitOptions, result *compiler.EmitResult) {
+	buildInfoResult := h.program.emitBuildInfo(h.ctx, options)
+	if buildInfoResult != nil {
+		result.Diagnostics = append(result.Diagnostics, buildInfoResult.Diagnostics...)
+		result.EmittedFiles = append(result.EmittedFiles, buildInfoResult.EmittedFiles...)
+	}
+}
+
+func (h *emitFilesHandler) emitFilesIncremental(options compiler.EmitOptions) []*compiler.EmitResult {
 	// Get all affected files
 	collectAllAffectedFiles(h.ctx, h.program)
 	if h.ctx.Err() != nil {
 		return nil
 	}
 
-	// Emit all affected files
-	var results []*compiler.EmitResult
 	wg := core.NewWorkGroup(h.program.program.SingleThreaded())
 	h.program.snapshot.affectedFilesPendingEmit.Range(func(path tspath.Path, emitKind FileEmitKind) bool {
 		affectedFile := h.program.program.GetSourceFileByPath(path)
@@ -120,58 +165,42 @@ func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *c
 		return true
 	})
 
-	results = h.updateSnapshot()
-
-	// Combine results and update buildInfo
-	if h.isForDtsErrors && options.TargetSourceFile != nil {
-		// Result from cache
-		diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(options.TargetSourceFile.Path())
-		return &compiler.EmitResult{
-			EmitSkipped: true,
-			Diagnostics: diagnostics.getDiagnostics(h.program.program, options.TargetSourceFile),
-		}
-	}
-
-	result := compiler.CombineEmitResults(results)
-	if !h.isForDtsErrors {
-		buildInfoResult := h.program.emitBuildInfo(h.ctx, options)
-		if buildInfoResult != nil {
-			result.Diagnostics = append(result.Diagnostics, buildInfoResult.Diagnostics...)
-			result.EmittedFiles = append(result.EmittedFiles, buildInfoResult.EmittedFiles...)
-		}
-	}
-
-	return result
+	return h.updateSnapshot()
 }
 
 func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler.EmitOptions {
 	if !h.program.snapshot.options.GetEmitDeclarations() {
 		return options
 	}
+	canUseIncrementalState := h.program.snapshot.canUseIncrementalState()
 	return compiler.EmitOptions{
 		TargetSourceFile: options.TargetSourceFile,
 		EmitOnly:         options.EmitOnly,
 		WriteFile: func(fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
 			var differsOnlyInMap bool
 			if tspath.IsDeclarationFileName(fileName) {
-				var emitSignature string
-				info, _ := h.program.snapshot.fileInfos.Load(options.TargetSourceFile.Path())
-				if info.signature == info.version {
-					signature := h.program.snapshot.computeSignatureWithDiagnostics(options.TargetSourceFile, text, data)
-					// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
-					if len(data.Diagnostics) == 0 {
-						emitSignature = signature
+				if canUseIncrementalState {
+					var emitSignature string
+					info, _ := h.program.snapshot.fileInfos.Load(options.TargetSourceFile.Path())
+					if info.signature == info.version {
+						signature := h.program.snapshot.computeSignatureWithDiagnostics(options.TargetSourceFile, text, data)
+						// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
+						if len(data.Diagnostics) == 0 {
+							emitSignature = signature
+						}
+						if signature != info.version { // Update it
+							h.signatures.Store(options.TargetSourceFile.Path(), signature)
+						}
 					}
-					if signature != info.version { // Update it
-						h.signatures.Store(options.TargetSourceFile.Path(), signature)
-					}
-				}
 
-				// Store d.ts emit hash so later can be compared to check if d.ts has changed.
-				// Currently we do this only for composite projects since these are the only projects that can be referenced by other projects
-				// and would need their d.ts change time in --build mode
-				if h.skipDtsOutputOfComposite(options.TargetSourceFile, fileName, text, data, emitSignature, &differsOnlyInMap) {
-					return nil
+					// Store d.ts emit hash so later can be compared to check if d.ts has changed.
+					// Currently we do this only for composite projects since these are the only projects that can be referenced by other projects
+					// and would need their d.ts change time in --build mode
+					if h.skipDtsOutputOfComposite(options.TargetSourceFile, fileName, text, data, emitSignature, &differsOnlyInMap) {
+						return nil
+					}
+				} else if len(data.Diagnostics) > 0 {
+					h.hasEmitDiagnostics.Store(true)
 				}
 			}
 
@@ -231,56 +260,62 @@ func (h *emitFilesHandler) skipDtsOutputOfComposite(file *ast.SourceFile, output
 }
 
 func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
-	h.signatures.Range(func(file tspath.Path, signature string) bool {
-		info, _ := h.program.snapshot.fileInfos.Load(file)
-		info.signature = signature
-		if h.program.testingData != nil {
-			h.program.testingData.UpdatedSignatureKinds[file] = SignatureUpdateKindStoredAtEmit
-		}
-		h.program.snapshot.buildInfoEmitPending.Store(true)
-		return true
-	})
-	h.emitSignatures.Range(func(file tspath.Path, signature *emitSignature) bool {
-		h.program.snapshot.emitSignatures.Store(file, signature)
-		h.program.snapshot.buildInfoEmitPending.Store(true)
-		return true
-	})
-	for file := range h.deletedPendingKinds.Keys() {
-		h.program.snapshot.affectedFilesPendingEmit.Delete(file)
-		h.program.snapshot.buildInfoEmitPending.Store(true)
-	}
-	// Always use correct order when to collect the result
-	var results []*compiler.EmitResult
-	for _, file := range h.program.GetSourceFiles() {
-		if latestChangedDtsFile, ok := h.latestChangedDtsFiles.Load(file.Path()); ok {
-			h.program.snapshot.latestChangedDtsFile = latestChangedDtsFile
+	if h.program.snapshot.canUseIncrementalState() {
+		h.signatures.Range(func(file tspath.Path, signature string) bool {
+			info, _ := h.program.snapshot.fileInfos.Load(file)
+			info.signature = signature
+			if h.program.testingData != nil {
+				h.program.testingData.UpdatedSignatureKinds[file] = SignatureUpdateKindStoredAtEmit
+			}
 			h.program.snapshot.buildInfoEmitPending.Store(true)
-			h.program.snapshot.hasChangedDtsFile = true
+			return true
+		})
+		h.emitSignatures.Range(func(file tspath.Path, signature *emitSignature) bool {
+			h.program.snapshot.emitSignatures.Store(file, signature)
+			h.program.snapshot.buildInfoEmitPending.Store(true)
+			return true
+		})
+		for file := range h.deletedPendingKinds.Keys() {
+			h.program.snapshot.affectedFilesPendingEmit.Delete(file)
+			h.program.snapshot.buildInfoEmitPending.Store(true)
 		}
-		if update, ok := h.emitUpdates.Load(file.Path()); ok {
-			if !update.dtsErrorsFromCache {
-				if update.pendingKind == 0 {
-					h.program.snapshot.affectedFilesPendingEmit.Delete(file.Path())
-				} else {
-					h.program.snapshot.affectedFilesPendingEmit.Store(file.Path(), update.pendingKind)
-				}
+		// Always use correct order when to collect the result
+		var results []*compiler.EmitResult
+		for _, file := range h.program.GetSourceFiles() {
+			if latestChangedDtsFile, ok := h.latestChangedDtsFiles.Load(file.Path()); ok {
+				h.program.snapshot.latestChangedDtsFile = latestChangedDtsFile
 				h.program.snapshot.buildInfoEmitPending.Store(true)
+				h.program.snapshot.hasChangedDtsFile = true
 			}
-			if update.result != nil {
-				results = append(results, update.result)
-				if len(update.result.Diagnostics) != 0 {
-					h.program.snapshot.emitDiagnosticsPerFile.Store(file.Path(), &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
+			if update, ok := h.emitUpdates.Load(file.Path()); ok {
+				if !update.dtsErrorsFromCache {
+					if update.pendingKind == 0 {
+						h.program.snapshot.affectedFilesPendingEmit.Delete(file.Path())
+					} else {
+						h.program.snapshot.affectedFilesPendingEmit.Store(file.Path(), update.pendingKind)
+					}
+					h.program.snapshot.buildInfoEmitPending.Store(true)
+				}
+				if update.result != nil {
+					results = append(results, update.result)
+					if len(update.result.Diagnostics) != 0 {
+						h.program.snapshot.emitDiagnosticsPerFile.Store(file.Path(), &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
+					}
 				}
 			}
 		}
+		return results
+	} else if h.hasEmitDiagnostics.Load() {
+		h.program.snapshot.hasEmitDiagnostics = true
 	}
-	return results
+	return nil
 }
 
 func emitFiles(ctx context.Context, program *Program, options compiler.EmitOptions, isForDtsErrors bool) *compiler.EmitResult {
 	emitHandler := &emitFilesHandler{ctx: ctx, program: program, isForDtsErrors: isForDtsErrors}
 
-	if options.TargetSourceFile != nil {
+	// Single file emit - do direct from program
+	if !isForDtsErrors && options.TargetSourceFile != nil {
 		result := program.program.Emit(ctx, emitHandler.getEmitOptions(options))
 		if ctx.Err() != nil {
 			return nil

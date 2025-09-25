@@ -156,5 +156,3 @@ SemanticDiagnostics::
 *refresh*    /user/username/projects/sample1/core/index.ts
 *refresh*    /user/username/projects/sample1/core/some_decl.d.ts
 Signatures::
-(stored at emit) /user/username/projects/sample1/core/anotherModule.ts
-(stored at emit) /user/username/projects/sample1/core/index.ts

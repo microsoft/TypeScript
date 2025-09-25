@@ -129,5 +129,3 @@ SemanticDiagnostics::
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::
-(stored at emit) /home/src/projects/myproject/types/sometype.ts
-(stored at emit) /home/src/projects/myproject/main.ts

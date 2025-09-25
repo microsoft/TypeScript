@@ -75,11 +75,6 @@ func (p *Program) GetProgram() *compiler.Program {
 	return p.program
 }
 
-func (p *Program) MakeReadonly() {
-	p.program = nil
-	p.testingData = nil
-}
-
 func (p *Program) HasChangedDtsFile() bool {
 	return p.snapshot.hasChangedDtsFile
 }
@@ -208,15 +203,17 @@ func (p *Program) Emit(ctx context.Context, options compiler.EmitOptions) *compi
 
 // Handle affected files and cache the semantic diagnostics for all of them or the file asked for
 func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context, file *ast.SourceFile) {
-	// Get all affected files
-	collectAllAffectedFiles(ctx, p)
-	if ctx.Err() != nil {
-		return
-	}
+	if p.snapshot.canUseIncrementalState() {
+		// Get all affected files
+		collectAllAffectedFiles(ctx, p)
+		if ctx.Err() != nil {
+			return
+		}
 
-	if p.snapshot.semanticDiagnosticsPerFile.Size() == len(p.program.GetSourceFiles()) {
-		// If we have all the files,
-		return
+		if p.snapshot.semanticDiagnosticsPerFile.Size() == len(p.program.GetSourceFiles()) {
+			// If we have all the files,
+			return
+		}
 	}
 
 	var affectedFiles []*ast.SourceFile
@@ -299,24 +296,42 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 }
 
 func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler.Program) {
-	var hasIncludeProcessingDiagnostics bool
-	if slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
-		if _, ok := p.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
-			// emit diagnostics will be encoded in buildInfo;
-			return true
+	var hasIncludeProcessingDiagnostics func() bool
+	var hasEmitDiagnostics bool
+	if p.snapshot.canUseIncrementalState() {
+		if slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
+			if _, ok := p.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
+				// emit diagnostics will be encoded in buildInfo;
+				return true
+			}
+			if hasIncludeProcessingDiagnostics == nil && len(p.program.GetIncludeProcessorDiagnostics(file)) > 0 {
+				hasIncludeProcessingDiagnostics = func() bool { return true }
+			}
+			return false
+		}) {
+			hasEmitDiagnostics = true
 		}
-		if !hasIncludeProcessingDiagnostics && len(p.program.GetIncludeProcessorDiagnostics(file)) > 0 {
-			hasIncludeProcessingDiagnostics = true
+		if hasIncludeProcessingDiagnostics == nil {
+			hasIncludeProcessingDiagnostics = func() bool { return false }
 		}
-		return false
-	}) {
+	} else {
+		hasEmitDiagnostics = p.snapshot.hasEmitDiagnostics
+		hasIncludeProcessingDiagnostics = func() bool {
+			return slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
+				return len(p.program.GetIncludeProcessorDiagnostics(file)) > 0
+			})
+		}
+	}
+
+	if hasEmitDiagnostics {
 		// Record this for only non incremental build info
 		p.snapshot.hasErrors = core.IfElse(p.snapshot.options.IsIncremental(), core.TSFalse, core.TSTrue)
 		// Dont need to encode semantic errors state since the emit diagnostics are encoded
 		p.snapshot.hasSemanticErrors = false
 		return
 	}
-	if hasIncludeProcessingDiagnostics ||
+
+	if hasIncludeProcessingDiagnostics() ||
 		len(program.GetConfigFileParsingDiagnostics()) > 0 ||
 		len(program.GetSyntacticDiagnostics(ctx, nil)) > 0 ||
 		len(program.GetProgramDiagnostics()) > 0 ||

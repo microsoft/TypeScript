@@ -94,14 +94,16 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
-
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *mTime changed*
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /user/username/projects/myproject/a.js
+*refresh*    /user/username/projects/myproject/b.ts
 Signatures::
 
 
@@ -129,5 +131,5 @@ tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /user/username/projects/myproject/a.js
+*refresh*    /user/username/projects/myproject/b.ts
 Signatures::
-(computed .d.ts) /user/username/projects/myproject/a.js

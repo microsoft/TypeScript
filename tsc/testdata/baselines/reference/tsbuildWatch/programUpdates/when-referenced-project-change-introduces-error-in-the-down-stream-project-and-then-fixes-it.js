@@ -279,11 +279,10 @@ Signatures::
 
 App/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /user/username/projects/sample1/Library/library.d.ts
 *refresh*    /user/username/projects/sample1/App/app.ts
 Signatures::
-(used version)   /user/username/projects/sample1/Library/library.d.ts
-(computed .d.ts) /user/username/projects/sample1/App/app.ts
 
 
 Edit [1]:: Fix error
@@ -396,8 +395,7 @@ Signatures::
 
 App/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /user/username/projects/sample1/Library/library.d.ts
 *refresh*    /user/username/projects/sample1/App/app.ts
 Signatures::
-(used version)   /user/username/projects/sample1/Library/library.d.ts
-(computed .d.ts) /user/username/projects/sample1/App/app.ts

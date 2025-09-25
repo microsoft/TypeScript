@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
-	"github.com/microsoft/typescript-go/internal/execute/incremental"
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -28,7 +27,6 @@ type orchestratorResult struct {
 	result        tsc.CommandLineResult
 	errors        []*ast.Diagnostic
 	statistics    tsc.Statistics
-	programStats  []*tsc.Statistics
 	filesToDelete []string
 }
 
@@ -47,13 +45,10 @@ func (b *orchestratorResult) report(o *Orchestrator) {
 				}), ""),
 			))
 	}
-	if len(b.programStats) == 0 {
-		return
-	}
 	if !o.opts.Command.CompilerOptions.Diagnostics.IsTrue() && !o.opts.Command.CompilerOptions.ExtendedDiagnostics.IsTrue() {
 		return
 	}
-	b.statistics.Aggregate(b.programStats, o.opts.Sys.SinceStart())
+	b.statistics.SetTotalTime(o.opts.Sys.SinceStart())
 	b.statistics.Report(o.opts.Sys.Writer(), o.opts.Testing)
 }
 
@@ -114,7 +109,6 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 		wg.Queue(func() {
 			path := o.toPath(config)
 			var task *buildTask
-			var program *incremental.Program
 			var buildInfo *buildInfoEntry
 			if oldTasks != nil {
 				if existing, ok := oldTasks.Load(path); ok {
@@ -122,7 +116,6 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 						// Reuse existing task if config is same
 						task = existing
 					} else {
-						program = existing.program
 						buildInfo = existing.buildInfoEntry
 					}
 				}
@@ -130,7 +123,6 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 			if task == nil {
 				task = &buildTask{config: config, isInitialCycle: oldTasks == nil}
 				task.pending.Store(true)
-				task.program = program
 				task.buildInfoEntry = buildInfo
 			}
 			if _, loaded := o.tasks.LoadOrStore(path, task); loaded {
@@ -302,8 +294,7 @@ func (o *Orchestrator) DoCycle() {
 }
 
 func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
-	build := !o.opts.Command.BuildOptions.Clean.IsTrue()
-	if build && o.opts.Command.BuildOptions.Verbose.IsTrue() {
+	if !o.opts.Command.BuildOptions.Clean.IsTrue() && o.opts.Command.BuildOptions.Verbose.IsTrue() {
 		o.createBuilderStatusReporter(nil)(ast.NewCompilerDiagnostic(
 			diagnostics.Projects_in_this_build_Colon_0,
 			strings.Join(core.Map(o.Order(), func(p string) string {
@@ -313,23 +304,14 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	}
 	var buildResult orchestratorResult
 	if len(o.errors) == 0 {
-		wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
-		o.tasks.Range(func(path tspath.Path, task *buildTask) bool {
-			task.reportStatus = o.createBuilderStatusReporter(task)
-			task.diagnosticReporter = o.createDiagnosticReporter(task)
-			wg.Queue(func() {
-				if build {
-					task.buildProject(o, path)
-				} else {
-					task.cleanProject(o, path)
-				}
-				task.report(o, path, &buildResult)
-			})
-			return true
-		})
-		wg.RunAndWait()
 		buildResult.statistics.Projects = len(o.Order())
+		if o.opts.Command.CompilerOptions.SingleThreaded.IsTrue() {
+			o.singleThreadedBuildOrClean(&buildResult)
+		} else {
+			o.multiThreadedBuildOrClean(&buildResult)
+		}
 	} else {
+		// Circularity errors prevent any project from being built
 		buildResult.result.Status = tsc.ExitStatusProjectReferenceCycle_OutputsSkipped
 		reportDiagnostic := o.createDiagnosticReporter(nil)
 		for _, err := range o.errors {
@@ -341,11 +323,44 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	return buildResult.result
 }
 
+func (o *Orchestrator) singleThreadedBuildOrClean(buildResult *orchestratorResult) {
+	// Go in the order since only one project can be built at a time so that random order isnt picked by work group creating deadlock
+	for _, config := range o.Order() {
+		path := o.toPath(config)
+		task := o.getTask(path)
+		o.buildOrCleanProject(task, path, buildResult)
+	}
+}
+
+func (o *Orchestrator) multiThreadedBuildOrClean(buildResult *orchestratorResult) {
+	// Spin off the threads with waiting on upstream to build before actual project build
+	wg := core.NewWorkGroup(false)
+	o.tasks.Range(func(path tspath.Path, task *buildTask) bool {
+		wg.Queue(func() {
+			o.buildOrCleanProject(task, path, buildResult)
+		})
+		return true
+	})
+	wg.RunAndWait()
+}
+
+func (o *Orchestrator) buildOrCleanProject(task *buildTask, path tspath.Path, buildResult *orchestratorResult) {
+	task.result = &taskResult{}
+	task.result.reportStatus = o.createBuilderStatusReporter(task)
+	task.result.diagnosticReporter = o.createDiagnosticReporter(task)
+	if !o.opts.Command.BuildOptions.Clean.IsTrue() {
+		task.buildProject(o, path)
+	} else {
+		task.cleanProject(o, path)
+	}
+	task.report(o, path, buildResult)
+}
+
 func (o *Orchestrator) getWriter(task *buildTask) io.Writer {
 	if task == nil {
 		return o.opts.Sys.Writer()
 	}
-	return &task.builder
+	return &task.result.builder
 }
 
 func (o *Orchestrator) createBuilderStatusReporter(task *buildTask) tsc.DiagnosticReporter {

@@ -86,7 +86,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/user/username/projects/myproject/index.js] *mTime changed*
+//// [/user/username/projects/myproject/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":["./index.ts"]}
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
