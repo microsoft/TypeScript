@@ -81,12 +81,12 @@ export class Client {
         };
     }
 
-    async initialize(context: vscode.ExtensionContext): Promise<void> {
+    async initialize(context: vscode.ExtensionContext): Promise<vscode.Disposable> {
         const exe = await getExe(context);
-        this.start(context, exe);
+        return this.start(context, exe);
     }
 
-    async start(context: vscode.ExtensionContext, exe: { path: string; version: string; }): Promise<void> {
+    async start(context: vscode.ExtensionContext, exe: { path: string; version: string; }): Promise<vscode.Disposable> {
         this.exe = exe;
         this.outputChannel.appendLine(`Resolved to ${this.exe.path}`);
 
@@ -119,14 +119,12 @@ export class Client {
         await this.client.start();
         vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
         this.onStartedCallbacks.forEach(callback => callback());
-        context.subscriptions.push(
-            new vscode.Disposable(() => {
-                if (this.client) {
-                    this.client.stop();
-                }
-                vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
-            }),
-        );
+        return new vscode.Disposable(() => {
+            if (this.client) {
+                this.client.stop();
+            }
+            vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
+        });
     }
 
     getCurrentExe(): { path: string; version: string; } | undefined {
@@ -145,7 +143,7 @@ export class Client {
         });
     }
 
-    async restart(context: vscode.ExtensionContext): Promise<void> {
+    async restart(context: vscode.ExtensionContext): Promise<vscode.Disposable> {
         if (!this.client) {
             return Promise.reject(new Error("Language client is not initialized"));
         }
@@ -157,6 +155,7 @@ export class Client {
         }
 
         this.outputChannel.appendLine(`Restarting language server...`);
-        return this.client.restart();
+        this.client.restart();
+        return new vscode.Disposable(() => {});
     }
 }

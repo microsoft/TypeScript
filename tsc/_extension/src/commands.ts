@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Client } from "./client";
 
-export function registerCommands(context: vscode.ExtensionContext, client: Client, outputChannel: vscode.OutputChannel, traceOutputChannel: vscode.OutputChannel): void {
+export function registerEnablementCommands(context: vscode.ExtensionContext): void {
     context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.enable", () => {
         // Fire and forget, because this will restart the extension host and cause an error if we await
         updateUseTsgoSetting(true);
@@ -11,23 +11,29 @@ export function registerCommands(context: vscode.ExtensionContext, client: Clien
         // Fire and forget, because this will restart the extension host and cause an error if we await
         updateUseTsgoSetting(false);
     }));
+}
 
-    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.restart", () => {
+export function registerLanguageCommands(context: vscode.ExtensionContext, client: Client, outputChannel: vscode.OutputChannel, traceOutputChannel: vscode.OutputChannel): vscode.Disposable[] {
+    const disposables: vscode.Disposable[] = [];
+
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.restart", () => {
         return client.restart(context);
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
         outputChannel.show();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.lsp-trace.focus", () => {
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.lsp-trace.focus", () => {
         traceOutputChannel.show();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.showMenu", showCommands));
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.showMenu", showCommands));
+
+    return disposables;
 }
 
 /**
