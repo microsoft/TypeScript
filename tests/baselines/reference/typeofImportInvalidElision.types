@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/typeofImportInvalidElision.ts] ////
+
+=== input.ts ===
+export type X = 1;
+>X : 1
+>  : ^
+
+=== main.ts ===
+type T2 = typeof import('./input.js', ,);
+>T2 : typeof import("input")
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+
