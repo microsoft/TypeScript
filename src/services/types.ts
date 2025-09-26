@@ -248,6 +248,7 @@ export interface PreProcessedFileInfo {
     libReferenceDirectives: FileReference[];
     importedFiles: FileReference[];
     ambientExternalModules?: string[];
+    /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
     isLibFile: boolean;
 }
 

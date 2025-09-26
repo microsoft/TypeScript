@@ -18,7 +18,6 @@ export function foo(): string;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

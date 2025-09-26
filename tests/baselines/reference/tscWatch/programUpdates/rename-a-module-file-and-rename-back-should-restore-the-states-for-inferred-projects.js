@@ -7,7 +7,6 @@ export function bar() { };
 import * as T from "./moduleFile"; T.bar();
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

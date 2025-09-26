@@ -19,9 +19,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a.ts(2,17): error TS2306: File '/b.ts' is not a module.
 
@@ -48,9 +46,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a.ts(2,17): error TS2306: File '/b.ts' is not a module.
 
@@ -63,9 +59,7 @@ File: a.ts
 var x = 2
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -105,9 +99,7 @@ c: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a.ts(2,15): error TS2306: File '/b.ts' is not a module.
 a.ts(3,31): error TS2792: Cannot find module 'c'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

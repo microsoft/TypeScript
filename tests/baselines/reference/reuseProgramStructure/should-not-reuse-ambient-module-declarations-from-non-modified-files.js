@@ -131,9 +131,7 @@ File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -271,9 +269,7 @@ File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -411,9 +407,7 @@ File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/a/b/app.ts(2,21): error TS2792: Cannot find module 'fs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 

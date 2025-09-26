@@ -5908,7 +5908,6 @@ declare namespace ts {
      */
     interface SourceFileLike {
         readonly text: string;
-        languageVariant?: LanguageVariant;
     }
     interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
@@ -5927,14 +5926,7 @@ declare namespace ts {
         libReferenceDirectives: readonly FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
-        /**
-         * lib.d.ts should have a reference comment like
-         *
-         *  /// <reference no-default-lib="true"/>
-         *
-         * If any other file has this comment, it signals not to include lib.d.ts
-         * because this containing file is intended to act as a default library.
-         */
+        /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
         /**
@@ -10043,6 +10035,7 @@ declare namespace ts {
         libReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules?: string[];
+        /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
         isLibFile: boolean;
     }
     interface HostCancellationToken {

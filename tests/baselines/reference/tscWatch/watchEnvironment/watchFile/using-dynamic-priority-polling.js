@@ -4,7 +4,6 @@ Input::
 var z = 10;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -711,6 +710,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/username/projects/project/typescript.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 

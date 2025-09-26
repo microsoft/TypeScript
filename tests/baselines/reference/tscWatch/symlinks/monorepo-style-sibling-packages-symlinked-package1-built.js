@@ -68,7 +68,6 @@ type MyBarType = BarType;
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1)
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

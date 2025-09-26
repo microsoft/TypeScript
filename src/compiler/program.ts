@@ -71,8 +71,6 @@ import {
     EmitResult,
     emptyArray,
     ensureTrailingDirectorySeparator,
-    equateStringsCaseInsensitive,
-    equateStringsCaseSensitive,
     exclusivelyPrefixedNodeCoreModules,
     ExportAssignment,
     ExportDeclaration,
@@ -1577,7 +1575,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     const host = createProgramOptionsHost || createCompilerHost(options);
     const configParsingHost = parseConfigHostFromCompilerHostLike(host);
 
-    let skipDefaultLib = options.noLib;
     const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
     const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(getDefaultLibraryFileName());
 
@@ -1708,6 +1705,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
      * - undefined otherwise
      */
     const filesByName = new Map<Path, SourceFile | false | undefined>();
+    const libFiles = new Set<Path>();
     let missingFileNames = new Map<Path, string>();
     // stores 'filename -> file association' ignoring case
     // used to track cases when two file names differ only in casing
@@ -1779,7 +1777,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         }
 
         tracing?.push(tracing.Phase.Program, "processRootFiles", { count: rootNames.length });
-        forEach(rootNames, (name, index) => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.RootFile, index }));
+        forEach(rootNames, (name, index) => processRootFile(name, /*isDefaultLib*/ false, { kind: FileIncludeKind.RootFile, index }));
         tracing?.pop();
 
         // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -1808,20 +1806,17 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             tracing?.pop();
         }
 
-        // Do not process the default library if:
-        //  - The '--noLib' flag is used.
-        //  - A 'no-default-lib' reference comment is encountered in
-        //      processing the root files.
-        if (rootNames.length && !skipDefaultLib) {
+        if (rootNames.length && !options.noLib) {
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const defaultLibraryFileName = getDefaultLibraryFileName();
             if (!options.lib && defaultLibraryFileName) {
-                processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile });
+                libFiles.add(toPath(defaultLibraryFileName));
+                processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true, { kind: FileIncludeKind.LibFile });
             }
             else {
                 forEach(options.lib, (libFileName, index) => {
-                    processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, index });
+                    processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, { kind: FileIncludeKind.LibFile, index });
                 });
             }
         }
@@ -2453,11 +2448,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                     // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
                     structureIsReused = StructureIsReused.SafeModules;
                 }
-                else if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
-                    // value of no-default-lib has changed
-                    // this will affect if default library is injected into the list of files
-                    structureIsReused = StructureIsReused.SafeModules;
-                }
                 // check tripleslash references
                 else if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                     // tripleslash references has changed
@@ -2683,31 +2673,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     function isSourceFileDefaultLibrary(file: SourceFile): boolean {
-        if (!file.isDeclarationFile) {
-            return false;
-        }
-
-        if (file.hasNoDefaultLib) {
-            return true;
-        }
-
-        if (options.noLib) {
-            return false;
-        }
-
-        // If '--lib' is not specified, include default library file according to '--target'
-        // otherwise, using options specified in '--lib' instead of '--target' default library file
-        const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
-        if (!options.lib) {
-            return equalityComparer(file.fileName, getDefaultLibraryFileName());
-        }
-        else {
-            return some(options.lib, libFileName => {
-                // We might not have resolved lib if one of the root file included contained no-default-lib = true
-                const resolvedLib = resolvedLibReferences!.get(libFileName);
-                return !!resolvedLib && equalityComparer(file.fileName, resolvedLib.actual);
-            });
-        }
+        return libFiles.has(file.path);
     }
 
     function getTypeChecker() {
@@ -3317,8 +3283,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         return configFileParsingDiagnostics || emptyArray;
     }
 
-    function processRootFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason) {
-        processSourceFile(normalizePath(fileName), isDefaultLib, ignoreNoDefaultLib, /*packageId*/ undefined, reason);
+    function processRootFile(fileName: string, isDefaultLib: boolean, reason: FileIncludeReason) {
+        processSourceFile(normalizePath(fileName), isDefaultLib, /*packageId*/ undefined, reason);
     }
 
     function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -3512,17 +3478,17 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     /** This has side effects through `findSourceFile`. */
-    function processSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, packageId: PackageId | undefined, reason: FileIncludeReason): void {
+    function processSourceFile(fileName: string, isDefaultLib: boolean, packageId: PackageId | undefined, reason: FileIncludeReason): void {
         getSourceFileFromReferenceWorker(
             fileName,
-            fileName => findSourceFile(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId), // TODO: GH#18217
+            fileName => findSourceFile(fileName, isDefaultLib, reason, packageId), // TODO: GH#18217
             (diagnostic, ...args) => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, diagnostic, args),
             reason,
         );
     }
 
     function processProjectReferenceFile(fileName: string, reason: ProjectReferenceFile) {
-        return processSourceFile(fileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined, reason);
+        return processSourceFile(fileName, /*isDefaultLib*/ false, /*packageId*/ undefined, reason);
     }
 
     function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFile: SourceFile, reason: FileIncludeReason): void {
@@ -3548,13 +3514,13 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     // Get source file from normalized fileName
-    function findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+    function findSourceFile(fileName: string, isDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
         tracing?.push(tracing.Phase.Program, "findSourceFile", {
             fileName,
             isDefaultLib: isDefaultLib || undefined,
             fileIncludeKind: (FileIncludeKind as any)[reason.kind],
         });
-        const result = findSourceFileWorker(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
+        const result = findSourceFileWorker(fileName, isDefaultLib, reason, packageId);
         tracing?.pop();
         return result;
     }
@@ -3571,7 +3537,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode };
     }
 
-    function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+    function findSourceFileWorker(fileName: string, isDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
         const path = toPath(fileName);
         if (useSourceOfProjectReferenceRedirect) {
             let source = getRedirectFromOutput(path);
@@ -3590,7 +3556,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 if (realPath !== path) source = getRedirectFromOutput(realPath);
             }
             if (source?.source) {
-                const file = findSourceFile(source.source, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
+                const file = findSourceFile(source.source, isDefaultLib, reason, packageId);
                 if (file) addFileToFilesByName(file, path, fileName, /*redirectedPath*/ undefined);
                 return file;
             }
@@ -3712,8 +3678,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 }
             }
 
-            skipDefaultLib = skipDefaultLib || (file.hasNoDefaultLib && !ignoreNoDefaultLib);
-
             if (!options.noResolve) {
                 processReferencedFiles(file, isDefaultLib);
                 processTypeReferenceDirectives(file);
@@ -3793,7 +3757,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             processSourceFile(
                 resolveTripleslashReference(ref.fileName, file.fileName),
                 isDefaultLib,
-                /*ignoreNoDefaultLib*/ false,
                 /*packageId*/ undefined,
                 { kind: FileIncludeKind.ReferenceFile, file: file.path, index },
             );
@@ -3846,7 +3809,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth++;
 
             // resolved from the primary path
-            processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason); // TODO: GH#18217
+            processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason); // TODO: GH#18217
 
             if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth--;
         }
@@ -3860,6 +3823,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         if (existing) return existing.actual;
         const result = pathForLibFileWorker(libFileName);
         (resolvedLibReferences ??= new Map()).set(libFileName, result);
+        libFiles.add(toPath(result.actual));
         return result.actual;
     }
 
@@ -3924,8 +3888,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         forEach(file.libReferenceDirectives, (libReference, index) => {
             const libFileName = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
-                // we ignore any 'no-default-lib' reference set on this file.
-                processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
+                processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
             }
             else {
                 programDiagnostics.addFileProcessingDiagnostic({
@@ -3995,7 +3958,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                     findSourceFile(
                         resolvedFileName,
                         /*isDefaultLib*/ false,
-                        /*ignoreNoDefaultLib*/ false,
                         { kind: FileIncludeKind.Import, file: file.path, index },
                         resolution.packageId,
                     );
