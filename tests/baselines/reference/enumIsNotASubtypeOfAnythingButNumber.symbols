@@ -60,7 +60,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I5.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 22))
@@ -73,7 +73,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 5))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I6.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 24))

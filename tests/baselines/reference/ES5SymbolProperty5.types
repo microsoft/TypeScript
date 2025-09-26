@@ -2,8 +2,8 @@
 
 === ES5SymbolProperty5.ts ===
 var Symbol: { iterator: symbol };
->Symbol : { iterator: symbol; }
->       : ^^^^^^^^^^^^      ^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : symbol
 >         : ^^^^^^
 
@@ -14,12 +14,12 @@ class C {
     [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
->Symbol.iterator : symbol
->                : ^^^^^^
->Symbol : { iterator: symbol; }
->       : ^^^^^^^^^^^^      ^^^
->iterator : symbol
->         : ^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }
 
 (new C)[Symbol.iterator](0) // Should error
@@ -33,12 +33,12 @@ class C {
 >      : ^
 >C : typeof C
 >  : ^^^^^^^^
->Symbol.iterator : symbol
->                : ^^^^^^
->Symbol : { iterator: symbol; }
->       : ^^^^^^^^^^^^      ^^^
->iterator : symbol
->         : ^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

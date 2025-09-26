@@ -22,8 +22,8 @@ call(function* (a: 'a') { }); // error, 2nd argument required
 >                             : ^^^
 >call : <Fn extends (...args: any[]) => any>(fn: Fn, ...args: Parameters<Fn>) => any
 >     : ^  ^^^^^^^^^                       ^^  ^^  ^^^^^    ^^              ^^^^^   
->function* (a: 'a') { } : (a: "a") => {}
->                       : ^ ^^   ^^^^^^^
+>function* (a: 'a') { } : (a: "a") => Generator<never, void, unknown>
+>                       : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : "a"
 >  : ^^^
 

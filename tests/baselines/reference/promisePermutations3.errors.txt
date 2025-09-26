@@ -106,7 +106,7 @@ promisePermutations3.ts(143,35): error TS2345: Argument of type '(x: any) => IPr
 promisePermutations3.ts(151,36): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
-      Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
+      Type 'IPromise<string>' is missing the following properties from type 'Promise<number>': catch, [Symbol.toStringTag]
 promisePermutations3.ts(155,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
   Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
     Type 'number' is not assignable to type 'string'.
@@ -130,7 +130,7 @@ promisePermutations3.ts(159,21): error TS2769: No overload matches this call.
               Types of parameters 'value' and 'value' are incompatible.
                 Type 'number' is not assignable to type 'string'.
 promisePermutations3.ts(165,21): error TS2345: Argument of type '{ <T>(x: T): IPromise<T>; <T>(x: T, y: T): Promise<T>; }' is not assignable to parameter of type '(value: (x: any) => any) => Promise<unknown>'.
-  Property 'catch' is missing in type 'IPromise<any>' but required in type 'Promise<unknown>'.
+  Type 'IPromise<any>' is missing the following properties from type 'Promise<unknown>': catch, [Symbol.toStringTag]
 
 
 ==== promisePermutations3.ts (35 errors) ====
@@ -440,8 +440,7 @@ promisePermutations3.ts(165,21): error TS2345: Argument of type '{ <T>(x: T): IP
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
-!!! error TS2769:       Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-!!! related TS2728 lib.es5.d.ts:--:--: 'catch' is declared here.
+!!! error TS2769:       Type 'IPromise<string>' is missing the following properties from type 'Promise<number>': catch, [Symbol.toStringTag]
 !!! related TS2771 promisePermutations3.ts:7:5: The last overload is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
@@ -488,6 +487,5 @@ promisePermutations3.ts(165,21): error TS2345: Argument of type '{ <T>(x: T): IP
     var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
                         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ <T>(x: T): IPromise<T>; <T>(x: T, y: T): Promise<T>; }' is not assignable to parameter of type '(value: (x: any) => any) => Promise<unknown>'.
-!!! error TS2345:   Property 'catch' is missing in type 'IPromise<any>' but required in type 'Promise<unknown>'.
-!!! related TS2728 lib.es5.d.ts:--:--: 'catch' is declared here.
+!!! error TS2345:   Type 'IPromise<any>' is missing the following properties from type 'Promise<unknown>': catch, [Symbol.toStringTag]
     var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok

@@ -78,7 +78,7 @@ function e() {
 
     let x: string | number | boolean | RegExp;
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 27, 7))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     for (x = "" || 0; typeof x !== "string"; x = "" || true) {
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 27, 7))

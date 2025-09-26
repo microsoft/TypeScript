@@ -61,11 +61,11 @@ interface I1<T> {
 
     foo6: Date; // error
 >foo6 : Symbol(I1.foo6, Decl(subtypesOfUnion.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo7: RegExp; // error
 >foo7 : Symbol(I1.foo7, Decl(subtypesOfUnion.ts, 17, 15))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo8: { bar: number }; // error
 >foo8 : Symbol(I1.foo8, Decl(subtypesOfUnion.ts, 18, 17))
@@ -139,11 +139,11 @@ interface I2<T> {
 
     foo6: Date; // error
 >foo6 : Symbol(I2.foo6, Decl(subtypesOfUnion.ts, 37, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo7: RegExp; // error
 >foo7 : Symbol(I2.foo7, Decl(subtypesOfUnion.ts, 38, 15))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo8: { bar: number }; // error
 >foo8 : Symbol(I2.foo8, Decl(subtypesOfUnion.ts, 39, 17))
