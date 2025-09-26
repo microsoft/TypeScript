@@ -1,0 +1,21 @@
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue5.ts ===
+// --- (line: 56) skipped ---
+//     }
+// }
+// 
+// label5: /*HIGHLIGHTS*/[|while|] (true) [|break|] label5;
+// 
+// label7: while (true) continue label5;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue5.ts ===
+// --- (line: 56) skipped ---
+//     }
+// }
+// 
+// label5: [|while|] (true) /*HIGHLIGHTS*/[|break|] label5;
+// 
+// label7: while (true) continue label5;

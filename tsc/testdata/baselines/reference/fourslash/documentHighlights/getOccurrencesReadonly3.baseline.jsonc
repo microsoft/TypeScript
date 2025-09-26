@@ -1,0 +1,34 @@
+// === documentHighlights ===
+// === /getOccurrencesReadonly3.ts ===
+// class C {
+//   /*HIGHLIGHTS*/[|readonly|] prop: readonly string[] = [];
+//   constructor([|readonly|] prop2: string) {
+//     class D {
+//       readonly prop: string = "";  
+//     }
+//   }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReadonly3.ts ===
+// class C {
+//   [|readonly|] prop: readonly string[] = [];
+//   constructor(/*HIGHLIGHTS*/[|readonly|] prop2: string) {
+//     class D {
+//       readonly prop: string = "";  
+//     }
+//   }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReadonly3.ts ===
+// class C {
+//   readonly prop: /*HIGHLIGHTS*/[|readonly|] string[] = [];
+//   constructor(readonly prop2: string) {
+//     class D {
+//       readonly prop: string = "";  
+// // --- (line: 6) skipped ---

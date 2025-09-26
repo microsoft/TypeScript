@@ -1,0 +1,130 @@
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: /*HIGHLIGHTS*/[|for|] (var n in arr) {
+//     [|break|];
+//     [|continue|];
+//     [|break|] label1;
+//     [|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|break|] label1;
+//         [|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|for|] (var n in arr) {
+//     /*HIGHLIGHTS*/[|break|];
+//     [|continue|];
+//     [|break|] label1;
+//     [|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|break|] label1;
+//         [|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|for|] (var n in arr) {
+//     [|break|];
+//     /*HIGHLIGHTS*/[|continue|];
+//     [|break|] label1;
+//     [|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|break|] label1;
+//         [|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|for|] (var n in arr) {
+//     [|break|];
+//     [|continue|];
+//     /*HIGHLIGHTS*/[|break|] label1;
+//     [|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|break|] label1;
+//         [|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|for|] (var n in arr) {
+//     [|break|];
+//     [|continue|];
+//     [|break|] label1;
+//     /*HIGHLIGHTS*/[|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|break|] label1;
+//         [|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|for|] (var n in arr) {
+//     [|break|];
+//     [|continue|];
+//     [|break|] label1;
+//     [|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         /*HIGHLIGHTS*/[|break|] label1;
+//         [|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|for|] (var n in arr) {
+//     [|break|];
+//     [|continue|];
+//     [|break|] label1;
+//     [|continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|break|] label1;
+//         /*HIGHLIGHTS*/[|continue|] label1;
+// 
+//         break;
+//         continue;
+// // --- (line: 14) skipped ---

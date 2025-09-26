@@ -1,0 +1,156 @@
+// === findAllReferences ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         /*FIND ALL REFS*/[|div|]: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <[|div|]>
+//         Some content
+//         <[|div|]>More content</[|div|]>
+//     </[|div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         [|div|]: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     </*FIND ALL REFS*/[|div|]>
+//         Some content
+//         <[|div|]>More content</[|div|]>
+//     </[|div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         [|div|]: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <[|div|]>
+//         Some content
+//         </*FIND ALL REFS*/[|div|]>More content</[|div|]>
+//     </[|div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         [|div|]: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <[|div|]>
+//         Some content
+//         <[|div|]>More content<//*FIND ALL REFS*/[|div|]>
+//     </[|div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         [|div|]: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <[|div|]>
+//         Some content
+//         <[|div|]>More content</[|div|]>
+//     <//*FIND ALL REFS*/[|div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+//     }
+// }
+// 
+// const /*FIND ALL REFS*/[|Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = <[|Comp|]>
+//     Content
+// </[|Comp|]>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+//     }
+// }
+// 
+// const [|Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = </*FIND ALL REFS*/[|Comp|]>
+//     Content
+// </[|Comp|]>;
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+//     }
+// }
+// 
+// const [|Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = <[|Comp|]>
+//     Content
+// <//*FIND ALL REFS*/[|Comp|]>;

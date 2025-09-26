@@ -1,0 +1,12 @@
+// === documentHighlights ===
+// === /getOccurrencesThrow2.ts ===
+// function f(a: number) {
+//     try {
+//         throw "Hello";
+// 
+//         try {
+//             /*HIGHLIGHTS*/[|throw|] 10;
+//         }
+//         catch (x) {
+//             return 100;
+// // --- (line: 10) skipped ---

@@ -1,0 +1,19 @@
+// === documentHighlights ===
+// === /getOccurrencesThis.ts ===
+// /*HIGHLIGHTS*/[|this|];
+// [|this|];
+// 
+// function f() {
+//     this;
+// // --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis.ts ===
+// [|this|];
+// /*HIGHLIGHTS*/[|this|];
+// 
+// function f() {
+//     this;
+// // --- (line: 6) skipped ---

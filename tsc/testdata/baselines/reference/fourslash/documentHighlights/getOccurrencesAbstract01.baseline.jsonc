@@ -1,0 +1,67 @@
+// === documentHighlights ===
+// === /getOccurrencesAbstract01.ts ===
+// /*HIGHLIGHTS*/[|abstract|] class Animal {
+//     [|abstract|] prop1; // Does not compile
+//     [|abstract|] abstract();
+//     [|abstract|] walk(): void;
+//     [|abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract01.ts ===
+// [|abstract|] class Animal {
+//     /*HIGHLIGHTS*/[|abstract|] prop1; // Does not compile
+//     [|abstract|] abstract();
+//     [|abstract|] walk(): void;
+//     [|abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract01.ts ===
+// [|abstract|] class Animal {
+//     [|abstract|] prop1; // Does not compile
+//     /*HIGHLIGHTS*/[|abstract|] abstract();
+//     [|abstract|] walk(): void;
+//     [|abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract01.ts ===
+// [|abstract|] class Animal {
+//     [|abstract|] prop1; // Does not compile
+//     [|abstract|] abstract();
+//     /*HIGHLIGHTS*/[|abstract|] walk(): void;
+//     [|abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract01.ts ===
+// [|abstract|] class Animal {
+//     [|abstract|] prop1; // Does not compile
+//     [|abstract|] abstract();
+//     [|abstract|] walk(): void;
+//     /*HIGHLIGHTS*/[|abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// // --- (line: 9) skipped ---

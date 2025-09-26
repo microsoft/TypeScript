@@ -1,0 +1,183 @@
+// === documentHighlights ===
+// === /getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         /*HIGHLIGHTS*/[|protected|] prot1;
+//         [|protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|protected|] protected;
+// 
+//         public constructor(public a, private b, [|protected|] c, public d, private e, [|protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// // --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|protected|] prot1;
+//         /*HIGHLIGHTS*/[|protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|protected|] protected;
+// 
+//         public constructor(public a, private b, [|protected|] c, public d, private e, [|protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// // --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|protected|] prot1;
+//         [|protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         /*HIGHLIGHTS*/[|protected|] protected;
+// 
+//         public constructor(public a, private b, [|protected|] c, public d, private e, [|protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// // --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|protected|] prot1;
+//         [|protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|protected|] protected;
+// 
+//         public constructor(public a, private b, /*HIGHLIGHTS*/[|protected|] c, public d, private e, [|protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// // --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|protected|] prot1;
+//         [|protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|protected|] protected;
+// 
+//         public constructor(public a, private b, [|protected|] c, public d, private e, /*HIGHLIGHTS*/[|protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// // --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|protected|] prot1;
+//         [|protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|protected|] protected;
+// 
+//         public constructor(public a, private b, [|protected|] c, public d, private e, [|protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// // --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         /*HIGHLIGHTS*/[|protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---

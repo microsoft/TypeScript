@@ -1,0 +1,158 @@
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// /*HIGHLIGHTS*/[|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|else            if|] (null) {
+// }
+// [|else|] /* whar garbl */ [|if|] (undefined) {
+// }
+// [|else|]
+// [|if|] (false) {
+// }
+// [|else|] { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// [|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// /*HIGHLIGHTS*/[|else            if|] (null) {
+// }
+// [|else|] /* whar garbl */ [|if|] (undefined) {
+// }
+// [|else|]
+// [|if|] (false) {
+// }
+// [|else|] { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// [|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|else            if|] (null) {
+// }
+// /*HIGHLIGHTS*/[|else|] /* whar garbl */ [|if|] (undefined) {
+// }
+// [|else|]
+// [|if|] (false) {
+// }
+// [|else|] { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// [|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|else            if|] (null) {
+// }
+// [|else|] /* whar garbl */ /*HIGHLIGHTS*/[|if|] (undefined) {
+// }
+// [|else|]
+// [|if|] (false) {
+// }
+// [|else|] { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// [|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|else            if|] (null) {
+// }
+// [|else|] /* whar garbl */ [|if|] (undefined) {
+// }
+// /*HIGHLIGHTS*/[|else|]
+// [|if|] (false) {
+// }
+// [|else|] { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// [|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|else            if|] (null) {
+// }
+// [|else|] /* whar garbl */ [|if|] (undefined) {
+// }
+// [|else|]
+// /*HIGHLIGHTS*/[|if|] (false) {
+// }
+// [|else|] { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse.ts ===
+// [|if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// // --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|else            if|] (null) {
+// }
+// [|else|] /* whar garbl */ [|if|] (undefined) {
+// }
+// [|else|]
+// [|if|] (false) {
+// }
+// /*HIGHLIGHTS*/[|else|] { }

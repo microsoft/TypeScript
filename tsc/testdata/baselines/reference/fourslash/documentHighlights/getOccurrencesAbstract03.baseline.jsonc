@@ -1,0 +1,69 @@
+// === documentHighlights ===
+// === /getOccurrencesAbstract03.ts ===
+// function f() {
+//     /*HIGHLIGHTS*/[|abstract|] class A {
+//         [|abstract|] m(): void;
+//     }
+//     abstract class B {}
+// }
+// // --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract03.ts ===
+// function f() {
+//     [|abstract|] class A {
+//         /*HIGHLIGHTS*/[|abstract|] m(): void;
+//     }
+//     abstract class B {}
+// }
+// // --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract03.ts ===
+// --- (line: 5) skipped ---
+// }
+// switch (0) {
+//     case 0:
+//         /*HIGHLIGHTS*/[|abstract|] class A { [|abstract|] m(): void; }
+//     default:
+//         abstract class B { abstract m(): void; }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract03.ts ===
+// --- (line: 5) skipped ---
+// }
+// switch (0) {
+//     case 0:
+//         [|abstract|] class A { /*HIGHLIGHTS*/[|abstract|] m(): void; }
+//     default:
+//         abstract class B { abstract m(): void; }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract03.ts ===
+// --- (line: 7) skipped ---
+//     case 0:
+//         abstract class A { abstract m(): void; }
+//     default:
+//         /*HIGHLIGHTS*/[|abstract|] class B { [|abstract|] m(): void; }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract03.ts ===
+// --- (line: 7) skipped ---
+//     case 0:
+//         abstract class A { abstract m(): void; }
+//     default:
+//         [|abstract|] class B { /*HIGHLIGHTS*/[|abstract|] m(): void; }
+// }

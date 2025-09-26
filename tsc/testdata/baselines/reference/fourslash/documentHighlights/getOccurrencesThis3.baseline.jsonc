@@ -1,0 +1,31 @@
+// === documentHighlights ===
+// === /getOccurrencesThis3.ts ===
+// --- (line: 13) skipped ---
+//         }
+//     }
+//     function inside() {
+//         /*HIGHLIGHTS*/[|this|];
+//         (function (_) {
+//             this;
+//         })([|this|]);
+//     }
+// }
+// 
+// // --- (line: 24) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis3.ts ===
+// --- (line: 13) skipped ---
+//         }
+//     }
+//     function inside() {
+//         [|this|];
+//         (function (_) {
+//             this;
+//         })(/*HIGHLIGHTS*/[|this|]);
+//     }
+// }
+// 
+// // --- (line: 24) skipped ---

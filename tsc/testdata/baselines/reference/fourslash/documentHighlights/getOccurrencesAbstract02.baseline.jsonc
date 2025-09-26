@@ -1,0 +1,48 @@
+// === documentHighlights ===
+// === /getOccurrencesAbstract02.ts ===
+// --- (line: 3) skipped ---
+//     abstract makeSound(): void;
+// }
+// // abstract cannot appear here, won't get highlighted
+// let c = /*HIGHLIGHTS*/abstract class Foo {
+//     abstract foo(): void;
+//     abstract bar(): void;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract02.ts ===
+// --- (line: 4) skipped ---
+// }
+// // abstract cannot appear here, won't get highlighted
+// let c = abstract class Foo {
+//     /*HIGHLIGHTS*/[|abstract|] foo(): void;
+//     [|abstract|] bar(): void;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract02.ts ===
+// // Not valid TS (abstract methods can only appear in abstract classes)
+// class Animal {
+//     /*HIGHLIGHTS*/[|abstract|] walk(): void;
+//     [|abstract|] makeSound(): void;
+// }
+// // abstract cannot appear here, won't get highlighted
+// let c = abstract class Foo {
+// // --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAbstract02.ts ===
+// // Not valid TS (abstract methods can only appear in abstract classes)
+// class Animal {
+//     [|abstract|] walk(): void;
+//     /*HIGHLIGHTS*/[|abstract|] makeSound(): void;
+// }
+// // abstract cannot appear here, won't get highlighted
+// let c = abstract class Foo {
+// // --- (line: 8) skipped ---

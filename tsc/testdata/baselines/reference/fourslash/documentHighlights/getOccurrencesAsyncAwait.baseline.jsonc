@@ -1,0 +1,87 @@
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait.ts ===
+// /*HIGHLIGHTS*/[|async|] function f() {
+//  [|await|] 100;
+//  [|await|] [|await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait.ts ===
+// [|async|] function f() {
+//  /*HIGHLIGHTS*/[|await|] 100;
+//  [|await|] [|await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait.ts ===
+// [|async|] function f() {
+//  [|await|] 100;
+//  /*HIGHLIGHTS*/[|await|] [|await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait.ts ===
+// [|async|] function f() {
+//  [|await|] 100;
+//  [|await|] /*HIGHLIGHTS*/[|await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait.ts ===
+// [|async|] function f() {
+//  [|await|] 100;
+//  [|await|] [|await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return /*HIGHLIGHTS*/[|await|] async function () {
+//    await 300;
+//  }
+// }
+// // --- (line: 13) skipped ---

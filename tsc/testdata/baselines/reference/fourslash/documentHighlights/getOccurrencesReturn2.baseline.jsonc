@@ -1,0 +1,69 @@
+// === documentHighlights ===
+// === /getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             /*HIGHLIGHTS*/[|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             while (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             /*HIGHLIGHTS*/[|return|];
+//             [|return|];
+// 
+//             while (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             /*HIGHLIGHTS*/[|return|];
+// 
+//             while (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             while (false) {
+//                 /*HIGHLIGHTS*/[|return|] true;
+//             }
+//         })() || true;
+//     }
+// // --- (line: 13) skipped ---

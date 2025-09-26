@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /getOccurrencesDeclare2.ts ===
+// --- (line: 33) skipped ---
+//     }
+// 
+//     export module mb.m1.m2.m3 {
+//         /*HIGHLIGHTS*/[|declare|] var foo;
+// 
+//         export class C2 {
+//             public pub1;
+// // --- (line: 41) skipped ---

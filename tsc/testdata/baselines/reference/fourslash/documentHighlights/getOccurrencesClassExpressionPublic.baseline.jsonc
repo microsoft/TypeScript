@@ -1,0 +1,82 @@
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPublic.ts ===
+// let A = class Foo {
+//     /*HIGHLIGHTS*/[|public|] foo;
+//     [|public|] public;
+//     constructor([|public|] y: string, private x: string) {
+//     }
+//     [|public|] method() { }
+//     private method2() {}
+//     [|public|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPublic.ts ===
+// let A = class Foo {
+//     [|public|] foo;
+//     /*HIGHLIGHTS*/[|public|] public;
+//     constructor([|public|] y: string, private x: string) {
+//     }
+//     [|public|] method() { }
+//     private method2() {}
+//     [|public|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPublic.ts ===
+// let A = class Foo {
+//     [|public|] foo;
+//     [|public|] public;
+//     constructor(/*HIGHLIGHTS*/[|public|] y: string, private x: string) {
+//     }
+//     [|public|] method() { }
+//     private method2() {}
+//     [|public|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPublic.ts ===
+// let A = class Foo {
+//     [|public|] foo;
+//     [|public|] public;
+//     constructor([|public|] y: string, private x: string) {
+//     }
+//     /*HIGHLIGHTS*/[|public|] method() { }
+//     private method2() {}
+//     [|public|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPublic.ts ===
+// let A = class Foo {
+//     [|public|] foo;
+//     [|public|] public;
+//     constructor([|public|] y: string, private x: string) {
+//     }
+//     [|public|] method() { }
+//     private method2() {}
+//     /*HIGHLIGHTS*/[|public|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---

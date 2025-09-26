@@ -1,0 +1,303 @@
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         /*HIGHLIGHTS*/[|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         /*HIGHLIGHTS*/[|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         /*HIGHLIGHTS*/[|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         /*HIGHLIGHTS*/[|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         /*HIGHLIGHTS*/[|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => /*HIGHLIGHTS*/[|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 /*HIGHLIGHTS*/[|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|this|];
+//         [|this|].x;
+//         [|this|].y;
+//         [|this|].z;
+//     }
+//     foo() {
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return /*HIGHLIGHTS*/[|this|].x;
+//     }
+// 
+//     static bar() {
+// // --- (line: 29) skipped ---

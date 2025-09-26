@@ -1,0 +1,556 @@
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = /*HIGHLIGHTS*/[|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         /*HIGHLIGHTS*/[|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         /*HIGHLIGHTS*/[|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => /*HIGHLIGHTS*/[|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 /*HIGHLIGHTS*/[|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 /*HIGHLIGHTS*/[|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         /*HIGHLIGHTS*/[|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         /*HIGHLIGHTS*/[|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => /*HIGHLIGHTS*/[|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 /*HIGHLIGHTS*/[|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis4.ts ===
+// --- (line: 43) skipped ---
+// }
+// 
+// class A {
+//     public b = [|this|].method1;
+// 
+//     public method1() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 [|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
+//     }
+// 
+//     private method2() {
+//         [|this|];
+//         [|this|];
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//             else {
+//                 /*HIGHLIGHTS*/[|this|].this;
+//             }
+//         }
+//         function inside() {
+// // --- (line: 82) skipped ---

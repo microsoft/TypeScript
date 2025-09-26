@@ -1,0 +1,92 @@
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStaticThis.ts ===
+// --- (line: 26) skipped ---
+//     }
+// 
+//     static bar() {
+//         /*HIGHLIGHTS*/[|this|];
+//         [|this|].staticX;
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+// // --- (line: 39) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStaticThis.ts ===
+// --- (line: 26) skipped ---
+//     }
+// 
+//     static bar() {
+//         [|this|];
+//         /*HIGHLIGHTS*/[|this|].staticX;
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+// // --- (line: 39) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStaticThis.ts ===
+// --- (line: 26) skipped ---
+//     }
+// 
+//     static bar() {
+//         [|this|];
+//         [|this|].staticX;
+//         () => /*HIGHLIGHTS*/[|this|];
+//         () => {
+//             if ([|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+// // --- (line: 39) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStaticThis.ts ===
+// --- (line: 26) skipped ---
+//     }
+// 
+//     static bar() {
+//         [|this|];
+//         [|this|].staticX;
+//         () => [|this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|this|]) {
+//                 [|this|];
+//             }
+//         }
+//         function inside() {
+// // --- (line: 39) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStaticThis.ts ===
+// --- (line: 26) skipped ---
+//     }
+// 
+//     static bar() {
+//         [|this|];
+//         [|this|].staticX;
+//         () => [|this|];
+//         () => {
+//             if ([|this|]) {
+//                 /*HIGHLIGHTS*/[|this|];
+//             }
+//         }
+//         function inside() {
+// // --- (line: 39) skipped ---

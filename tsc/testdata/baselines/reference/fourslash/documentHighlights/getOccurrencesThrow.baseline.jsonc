@@ -1,0 +1,317 @@
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             /*HIGHLIGHTS*/[|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         /*HIGHLIGHTS*/[|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         /*HIGHLIGHTS*/[|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         /*HIGHLIGHTS*/[|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     /*HIGHLIGHTS*/[|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     /*HIGHLIGHTS*/[|return|];
+//     [|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     /*HIGHLIGHTS*/[|return|] true;
+//     [|throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|throw|] "Something";
+//     }
+//     finally {
+//         [|throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+//     /*HIGHLIGHTS*/[|throw|] false;
+// }

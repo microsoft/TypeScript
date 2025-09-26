@@ -1,0 +1,235 @@
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = /*HIGHLIGHTS*/[|super|].superMethod;
+//     private prop2 = [|super|].superMethod;
+// 
+//     constructor() {
+//         [|super|]();
+//     }
+// 
+//     public method1() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|super|].superMethod;
+//     private prop2 = /*HIGHLIGHTS*/[|super|].superMethod;
+// 
+//     constructor() {
+//         [|super|]();
+//     }
+// 
+//     public method1() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|super|].superMethod;
+//     private prop2 = [|super|].superMethod;
+// 
+//     constructor() {
+//         /*HIGHLIGHTS*/[|super|]();
+//     }
+// 
+//     public method1() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|super|].superMethod;
+//     private prop2 = [|super|].superMethod;
+// 
+//     constructor() {
+//         [|super|]();
+//     }
+// 
+//     public method1() {
+//         return /*HIGHLIGHTS*/[|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|super|].superMethod;
+//     private prop2 = [|super|].superMethod;
+// 
+//     constructor() {
+//         [|super|]();
+//     }
+// 
+//     public method1() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return /*HIGHLIGHTS*/[|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|super|].superMethod;
+//     private prop2 = [|super|].superMethod;
+// 
+//     constructor() {
+//         [|super|]();
+//     }
+// 
+//     public method1() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => /*HIGHLIGHTS*/[|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|super|].superMethod;
+//     private prop2 = [|super|].superMethod;
+// 
+//     constructor() {
+//         [|super|]();
+//     }
+// 
+//     public method1() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             /*HIGHLIGHTS*/[|super|].superMethod();
+//         }
+//     }
+// 
+// // --- (line: 35) skipped ---

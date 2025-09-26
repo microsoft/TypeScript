@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /getOccurrencesReturn.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         /*HIGHLIGHTS*/[|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|return|];
+//     [|return|] true;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     /*HIGHLIGHTS*/[|return|];
+//     [|return|] true;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// // --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|return|];
+//     /*HIGHLIGHTS*/[|return|] true;
+// }

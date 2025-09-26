@@ -1,0 +1,117 @@
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault2.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: /*HIGHLIGHTS*/[|switch|] (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 [|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// // --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault2.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             /*HIGHLIGHTS*/[|case|] 1:
+//             [|case|] 2:
+//                 [|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// // --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault2.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             /*HIGHLIGHTS*/[|case|] 2:
+//                 [|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// // --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault2.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 /*HIGHLIGHTS*/[|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// // --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault2.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 [|break|];
+//             /*HIGHLIGHTS*/[|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// // --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault2.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 [|break|];
+//             [|default|]:
+//                 /*HIGHLIGHTS*/[|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// // --- (line: 15) skipped ---

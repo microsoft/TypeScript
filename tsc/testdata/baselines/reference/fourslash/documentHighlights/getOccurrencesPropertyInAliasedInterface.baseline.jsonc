@@ -1,0 +1,85 @@
+// === documentHighlights ===
+// === /getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         /*HIGHLIGHTS*/[|abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     [|abc|]
+// }
+// 
+// class C implements Bar {
+//     [|abc|]
+// }
+// 
+// (new C()).[|abc|];
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         [|abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     /*HIGHLIGHTS*/[|abc|]
+// }
+// 
+// class C implements Bar {
+//     [|abc|]
+// }
+// 
+// (new C()).[|abc|];
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         [|abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     [|abc|]
+// }
+// 
+// class C implements Bar {
+//     /*HIGHLIGHTS*/[|abc|]
+// }
+// 
+// (new C()).[|abc|];
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesPropertyInAliasedInterface.ts ===
+// module m {
+//     export interface Foo {
+//         [|abc|]
+//     }
+// }
+// 
+// import Bar = m.Foo;
+// 
+// export interface I extends Bar {
+//     [|abc|]
+// }
+// 
+// class C implements Bar {
+//     [|abc|]
+// }
+// 
+// (new C())./*HIGHLIGHTS*/[|abc|];

@@ -1,0 +1,31 @@
+// === documentHighlights ===
+// === /getOccurrencesIfElse3.ts ===
+// if (true) {
+//     if (false) {
+//     }
+//     else {
+//     }
+//     /*HIGHLIGHTS*/[|if|] (true) {
+//     }
+//     [|else|] {
+//         if (false)
+//             if (true)
+//                 var x = undefined;
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse3.ts ===
+// if (true) {
+//     if (false) {
+//     }
+//     else {
+//     }
+//     [|if|] (true) {
+//     }
+//     /*HIGHLIGHTS*/[|else|] {
+//         if (false)
+//             if (true)
+//                 var x = undefined;
+// // --- (line: 12) skipped ---

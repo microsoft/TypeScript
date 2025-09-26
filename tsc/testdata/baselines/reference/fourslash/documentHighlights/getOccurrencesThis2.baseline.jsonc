@@ -1,0 +1,129 @@
+// === documentHighlights ===
+// === /getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     /*HIGHLIGHTS*/[|this|];
+//     [|this|];
+//     () => [|this|];
+//     () => {
+//         if ([|this|]) {
+//             [|this|];
+//         }
+//         else {
+//             [|this|].this;
+//         }
+//     }
+//     function inside() {
+// // --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|this|];
+//     /*HIGHLIGHTS*/[|this|];
+//     () => [|this|];
+//     () => {
+//         if ([|this|]) {
+//             [|this|];
+//         }
+//         else {
+//             [|this|].this;
+//         }
+//     }
+//     function inside() {
+// // --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|this|];
+//     [|this|];
+//     () => /*HIGHLIGHTS*/[|this|];
+//     () => {
+//         if ([|this|]) {
+//             [|this|];
+//         }
+//         else {
+//             [|this|].this;
+//         }
+//     }
+//     function inside() {
+// // --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|this|];
+//     [|this|];
+//     () => [|this|];
+//     () => {
+//         if (/*HIGHLIGHTS*/[|this|]) {
+//             [|this|];
+//         }
+//         else {
+//             [|this|].this;
+//         }
+//     }
+//     function inside() {
+// // --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|this|];
+//     [|this|];
+//     () => [|this|];
+//     () => {
+//         if ([|this|]) {
+//             /*HIGHLIGHTS*/[|this|];
+//         }
+//         else {
+//             [|this|].this;
+//         }
+//     }
+//     function inside() {
+// // --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|this|];
+//     [|this|];
+//     () => [|this|];
+//     () => {
+//         if ([|this|]) {
+//             [|this|];
+//         }
+//         else {
+//             /*HIGHLIGHTS*/[|this|].this;
+//         }
+//     }
+//     function inside() {
+// // --- (line: 17) skipped ---

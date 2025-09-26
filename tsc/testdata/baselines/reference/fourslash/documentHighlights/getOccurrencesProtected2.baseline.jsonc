@@ -1,0 +1,45 @@
+// === documentHighlights ===
+// === /getOccurrencesProtected2.ts ===
+// --- (line: 38) skipped ---
+//         export class C2 {
+//             public pub1;
+//             private priv1;
+//             /*HIGHLIGHTS*/[|protected|] prot1;
+// 
+//             [|protected|] constructor(public public, [|protected|] protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// // --- (line: 48) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected2.ts ===
+// --- (line: 38) skipped ---
+//         export class C2 {
+//             public pub1;
+//             private priv1;
+//             [|protected|] prot1;
+// 
+//             /*HIGHLIGHTS*/[|protected|] constructor(public public, [|protected|] protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// // --- (line: 48) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesProtected2.ts ===
+// --- (line: 38) skipped ---
+//         export class C2 {
+//             public pub1;
+//             private priv1;
+//             [|protected|] prot1;
+// 
+//             [|protected|] constructor(public public, /*HIGHLIGHTS*/[|protected|] protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// // --- (line: 48) skipped ---

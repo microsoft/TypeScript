@@ -1,0 +1,102 @@
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: /*HIGHLIGHTS*/[|for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|break|];
+//         [|continue|];
+//         [|break|] label2;
+//         [|continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// // --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         /*HIGHLIGHTS*/[|break|];
+//         [|continue|];
+//         [|break|] label2;
+//         [|continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// // --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|break|];
+//         /*HIGHLIGHTS*/[|continue|];
+//         [|break|] label2;
+//         [|continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// // --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|break|];
+//         [|continue|];
+//         /*HIGHLIGHTS*/[|break|] label2;
+//         [|continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// // --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|break|];
+//         [|continue|];
+//         [|break|] label2;
+//         /*HIGHLIGHTS*/[|continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// // --- (line: 19) skipped ---

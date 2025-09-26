@@ -178,6 +178,8 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                 case "baselineFindAllReferences":
                     // `verify.baselineFindAllReferences(...)`
                     return parseBaselineFindAllReferencesArgs(callExpression.arguments);
+                case "baselineDocumentHighlights":
+                    return parseBaselineDocumentHighlightsArgs(callExpression.arguments);
                 case "baselineQuickInfo":
                     return [parseBaselineQuickInfo(callExpression.arguments)];
                 case "baselineSignatureHelp":
@@ -778,6 +780,43 @@ function parseBaselineFindAllReferencesArgs(args: readonly ts.Expression[]): [Ve
     }];
 }
 
+function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [VerifyBaselineDocumentHighlightsCmd] | undefined {
+    const newArgs: string[] = [];
+    let preferences: string | undefined;
+    for (const arg of args) {
+        let strArg;
+        if (strArg = getArrayLiteralExpression(arg)) {
+            for (const elem of strArg.elements) {
+                const newArg = parseBaselineMarkerOrRangeArg(elem);
+                if (!newArg) {
+                    return undefined;
+                }
+                newArgs.push(newArg);
+            }
+        }
+        else if (ts.isObjectLiteralExpression(arg)) {
+            // !!! todo when multiple files supported in lsp
+        }
+        else if (strArg = parseBaselineMarkerOrRangeArg(arg)) {
+            newArgs.push(strArg);
+        }
+        else {
+            console.error(`Unrecognized argument in verify.baselineDocumentHighlights: ${arg.getText()}`);
+            return undefined;
+        }
+    }
+
+    if (newArgs.length === 0) {
+        newArgs.push("ToAny(f.Ranges())...");
+    }
+
+    return [{
+        kind: "verifyBaselineDocumentHighlights",
+        args: newArgs,
+        preferences: preferences ? preferences : "nil /*preferences*/",
+    }];
+}
+
 function parseBaselineGoToDefinitionArgs(args: readonly ts.Expression[]): [VerifyBaselineGoToDefinitionCmd] | undefined {
     const newArgs = [];
     for (const arg of args) {
@@ -843,7 +882,7 @@ function parseBaselineRenameArgs(funcName: string, args: readonly ts.Expression[
         let typedArg;
         if ((typedArg = getArrayLiteralExpression(arg))) {
             for (const elem of typedArg.elements) {
-                const newArg = parseBaselineRenameArg(elem);
+                const newArg = parseBaselineMarkerOrRangeArg(elem);
                 if (!newArg) {
                     return undefined;
                 }
@@ -858,7 +897,7 @@ function parseBaselineRenameArgs(funcName: string, args: readonly ts.Expression[
             }
             continue;
         }
-        else if (typedArg = parseBaselineRenameArg(arg)) {
+        else if (typedArg = parseBaselineMarkerOrRangeArg(arg)) {
             newArgs.push(typedArg);
         }
         else {
@@ -896,7 +935,7 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
     return `&ls.UserPreferences{${preferences.join(",")}}`;
 }
 
-function parseBaselineRenameArg(arg: ts.Expression): string | undefined {
+function parseBaselineMarkerOrRangeArg(arg: ts.Expression): string | undefined {
     if (ts.isStringLiteral(arg)) {
         return getGoStringLiteral(arg.text);
     }
@@ -1262,6 +1301,12 @@ interface VerifyBaselineRenameCmd {
     preferences: string;
 }
 
+interface VerifyBaselineDocumentHighlightsCmd {
+    kind: "verifyBaselineDocumentHighlights";
+    args: string[];
+    preferences: string;
+}
+
 interface GoToCmd {
     kind: "goTo";
     // !!! `selectRange` and `rangeStart` require parsing variables and `test.ranges()[n]`
@@ -1289,6 +1334,7 @@ interface VerifyRenameInfoCmd {
 type Cmd =
     | VerifyCompletionsCmd
     | VerifyBaselineFindAllReferencesCmd
+    | VerifyBaselineDocumentHighlightsCmd
     | VerifyBaselineGoToDefinitionCmd
     | VerifyBaselineQuickInfoCmd
     | VerifyBaselineSignatureHelpCmd
@@ -1332,6 +1378,10 @@ function generateBaselineFindAllReferences({ markers, ranges }: VerifyBaselineFi
     return `f.VerifyBaselineFindAllReferences(t, ${markers.join(", ")})`;
 }
 
+function generateBaselineDocumentHighlights({ args, preferences }: VerifyBaselineDocumentHighlightsCmd): string {
+    return `f.VerifyBaselineDocumentHighlights(t, ${preferences}, ${args.join(", ")})`;
+}
+
 function generateBaselineGoToDefinition({ markers, ranges }: VerifyBaselineGoToDefinitionCmd): string {
     if (ranges || markers.length === 0) {
         return `f.VerifyBaselineGoToDefinition(t)`;
@@ -1372,6 +1422,8 @@ function generateCmd(cmd: Cmd): string {
             return generateVerifyCompletions(cmd);
         case "verifyBaselineFindAllReferences":
             return generateBaselineFindAllReferences(cmd);
+        case "verifyBaselineDocumentHighlights":
+            return generateBaselineDocumentHighlights(cmd);
         case "verifyBaselineGoToDefinition":
             return generateBaselineGoToDefinition(cmd);
         case "verifyBaselineQuickInfo":

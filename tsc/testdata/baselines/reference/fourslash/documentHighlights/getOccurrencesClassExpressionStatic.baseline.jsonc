@@ -1,0 +1,69 @@
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public /*HIGHLIGHTS*/[|static|] foo;
+//     [|static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public [|static|] static() { }
+//     private [|static|] static2() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public [|static|] foo;
+//     /*HIGHLIGHTS*/[|static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public [|static|] static() { }
+//     private [|static|] static2() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public [|static|] foo;
+//     [|static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public /*HIGHLIGHTS*/[|static|] static() { }
+//     private [|static|] static2() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public [|static|] foo;
+//     [|static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public [|static|] static() { }
+//     private /*HIGHLIGHTS*/[|static|] static2() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 13) skipped ---

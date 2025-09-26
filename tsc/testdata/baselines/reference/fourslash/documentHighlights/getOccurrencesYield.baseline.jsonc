@@ -1,0 +1,33 @@
+// === documentHighlights ===
+// === /getOccurrencesYield.ts ===
+// function* f() {
+//  /*HIGHLIGHTS*/[|yield|] 100;
+//  [|yield|] [|yield|] 200;
+//   class Foo {
+//       *memberFunction() {
+//           return yield 1;
+// // --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesYield.ts ===
+// function* f() {
+//  [|yield|] 100;
+//  /*HIGHLIGHTS*/[|yield|] [|yield|] 200;
+//   class Foo {
+//       *memberFunction() {
+//           return yield 1;
+// // --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesYield.ts ===
+// function* f() {
+//  [|yield|] 100;
+//  [|yield|] /*HIGHLIGHTS*/[|yield|] 200;
+//   class Foo {
+//       *memberFunction() {
+//           return yield 1;
+// // --- (line: 7) skipped ---

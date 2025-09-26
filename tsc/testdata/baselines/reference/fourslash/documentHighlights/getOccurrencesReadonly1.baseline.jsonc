@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /getOccurrencesReadonly1.ts ===
+// interface I {
+//   /*HIGHLIGHTS*/[|readonly|] prop: string;
+// }

@@ -1,0 +1,82 @@
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     /*HIGHLIGHTS*/[|private|] foo;
+//     [|private|] private;
+//     constructor([|private|] y: string, public x: string) {
+//     }
+//     [|private|] method() { }
+//     public method2() { }
+//     [|private|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|private|] foo;
+//     /*HIGHLIGHTS*/[|private|] private;
+//     constructor([|private|] y: string, public x: string) {
+//     }
+//     [|private|] method() { }
+//     public method2() { }
+//     [|private|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|private|] foo;
+//     [|private|] private;
+//     constructor(/*HIGHLIGHTS*/[|private|] y: string, public x: string) {
+//     }
+//     [|private|] method() { }
+//     public method2() { }
+//     [|private|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|private|] foo;
+//     [|private|] private;
+//     constructor([|private|] y: string, public x: string) {
+//     }
+//     /*HIGHLIGHTS*/[|private|] method() { }
+//     public method2() { }
+//     [|private|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|private|] foo;
+//     [|private|] private;
+//     constructor([|private|] y: string, public x: string) {
+//     }
+//     [|private|] method() { }
+//     public method2() { }
+//     /*HIGHLIGHTS*/[|private|] static static() { }
+// }
+// 
+// let B = class D {
+// // --- (line: 12) skipped ---

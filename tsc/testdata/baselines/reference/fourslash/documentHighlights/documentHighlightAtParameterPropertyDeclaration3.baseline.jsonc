@@ -1,0 +1,109 @@
+// === documentHighlights ===
+// === /file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private [/*HIGHLIGHTS*/[|privateParam|]]: number,
+//         public [publicParam]: string,
+//         protected [protectedParam]: boolean) {
+// 
+//         let localPrivate = [|privateParam|];
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+// // --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private [privateParam]: number,
+//         public [/*HIGHLIGHTS*/[|publicParam|]]: string,
+//         protected [protectedParam]: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = [|publicParam|];
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = protectedParam;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private [privateParam]: number,
+//         public [publicParam]: string,
+//         protected [/*HIGHLIGHTS*/[|protectedParam|]]: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = [|protectedParam|];
+//         this.protectedParam = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private [[|privateParam|]]: number,
+//         public [publicParam]: string,
+//         protected [protectedParam]: boolean) {
+// 
+//         let localPrivate = /*HIGHLIGHTS*/[|privateParam|];
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+// // --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private [privateParam]: number,
+//         public [[|publicParam|]]: string,
+//         protected [protectedParam]: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = /*HIGHLIGHTS*/[|publicParam|];
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = protectedParam;
+// // --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private [privateParam]: number,
+//         public [publicParam]: string,
+//         protected [[|protectedParam|]]: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = /*HIGHLIGHTS*/[|protectedParam|];
+//         this.protectedParam = false;
+//     }
+// }

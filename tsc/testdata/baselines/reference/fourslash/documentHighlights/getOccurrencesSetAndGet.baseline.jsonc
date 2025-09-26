@@ -1,0 +1,25 @@
+// === documentHighlights ===
+// === /getOccurrencesSetAndGet.ts ===
+// class Foo {
+//     /*HIGHLIGHTS*/[|set|] bar(b: any) {
+//     }
+// 
+//     public [|get|] bar(): any {
+//         return undefined;
+//     }
+// 
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSetAndGet.ts ===
+// class Foo {
+//     [|set|] bar(b: any) {
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|get|] bar(): any {
+//         return undefined;
+//     }
+// 
+// // --- (line: 9) skipped ---

@@ -1,0 +1,45 @@
+// === documentHighlights ===
+// === /getOccurrencesStatic1.ts ===
+// --- (line: 19) skipped ---
+//         public get x() { return 10; }
+//         public set x(value) { }
+// 
+//         public /*HIGHLIGHTS*/[|static|] statPub;
+//         private [|static|] statPriv;
+//         protected [|static|] statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesStatic1.ts ===
+// --- (line: 19) skipped ---
+//         public get x() { return 10; }
+//         public set x(value) { }
+// 
+//         public [|static|] statPub;
+//         private /*HIGHLIGHTS*/[|static|] statPriv;
+//         protected [|static|] statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesStatic1.ts ===
+// --- (line: 19) skipped ---
+//         public get x() { return 10; }
+//         public set x(value) { }
+// 
+//         public [|static|] statPub;
+//         private [|static|] statPriv;
+//         protected /*HIGHLIGHTS*/[|static|] statProt;
+//     }
+// 
+//     export interface I1 {
+// // --- (line: 29) skipped ---

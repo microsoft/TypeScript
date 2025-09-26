@@ -1,0 +1,813 @@
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     /*HIGHLIGHTS*/[|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     /*HIGHLIGHTS*/[|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     /*HIGHLIGHTS*/[|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export /*HIGHLIGHTS*/[|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     /*HIGHLIGHTS*/[|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare /*HIGHLIGHTS*/[|export|] barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// // --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor(/*HIGHLIGHTS*/[|export|] conFoo,
+//                 declare conBar,
+//                 [|export|] declare conFooBar,
+//                 declare [|export|] conBarFoo,
+//                 static sue,
+//                 static [|export|] declare sueFooBar,
+//                 static declare [|export|] sueBarFoo,
+//                 declare static [|export|] barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 /*HIGHLIGHTS*/[|declare|] conBar,
+//                 export [|declare|] conFooBar,
+//                 [|declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|declare|] sueFooBar,
+//                 static [|declare|] export sueBarFoo,
+//                 [|declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor([|export|] conFoo,
+//                 declare conBar,
+//                 /*HIGHLIGHTS*/[|export|] declare conFooBar,
+//                 declare [|export|] conBarFoo,
+//                 static sue,
+//                 static [|export|] declare sueFooBar,
+//                 static declare [|export|] sueBarFoo,
+//                 declare static [|export|] barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|declare|] conBar,
+//                 export /*HIGHLIGHTS*/[|declare|] conFooBar,
+//                 [|declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|declare|] sueFooBar,
+//                 static [|declare|] export sueBarFoo,
+//                 [|declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|declare|] conBar,
+//                 export [|declare|] conFooBar,
+//                 /*HIGHLIGHTS*/[|declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|declare|] sueFooBar,
+//                 static [|declare|] export sueBarFoo,
+//                 [|declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor([|export|] conFoo,
+//                 declare conBar,
+//                 [|export|] declare conFooBar,
+//                 declare /*HIGHLIGHTS*/[|export|] conBarFoo,
+//                 static sue,
+//                 static [|export|] declare sueFooBar,
+//                 static declare [|export|] sueBarFoo,
+//                 declare static [|export|] barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 /*HIGHLIGHTS*/[|static|] sue,
+//                 [|static|] export declare sueFooBar,
+//                 [|static|] declare export sueBarFoo,
+//                 declare [|static|] export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 [|static|] sue,
+//                 /*HIGHLIGHTS*/[|static|] export declare sueFooBar,
+//                 [|static|] declare export sueBarFoo,
+//                 declare [|static|] export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor([|export|] conFoo,
+//                 declare conBar,
+//                 [|export|] declare conFooBar,
+//                 declare [|export|] conBarFoo,
+//                 static sue,
+//                 static /*HIGHLIGHTS*/[|export|] declare sueFooBar,
+//                 static declare [|export|] sueBarFoo,
+//                 declare static [|export|] barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|declare|] conBar,
+//                 export [|declare|] conFooBar,
+//                 [|declare|] export conBarFoo,
+//                 static sue,
+//                 static export /*HIGHLIGHTS*/[|declare|] sueFooBar,
+//                 static [|declare|] export sueBarFoo,
+//                 [|declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 [|static|] sue,
+//                 [|static|] export declare sueFooBar,
+//                 /*HIGHLIGHTS*/[|static|] declare export sueBarFoo,
+//                 declare [|static|] export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|declare|] conBar,
+//                 export [|declare|] conFooBar,
+//                 [|declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|declare|] sueFooBar,
+//                 static /*HIGHLIGHTS*/[|declare|] export sueBarFoo,
+//                 [|declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor([|export|] conFoo,
+//                 declare conBar,
+//                 [|export|] declare conFooBar,
+//                 declare [|export|] conBarFoo,
+//                 static sue,
+//                 static [|export|] declare sueFooBar,
+//                 static declare /*HIGHLIGHTS*/[|export|] sueBarFoo,
+//                 declare static [|export|] barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|declare|] bar;
+//     export [|declare|] foobar;
+//     [|declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|declare|] conBar,
+//                 export [|declare|] conFooBar,
+//                 [|declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|declare|] sueFooBar,
+//                 static [|declare|] export sueBarFoo,
+//                 /*HIGHLIGHTS*/[|declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 [|static|] sue,
+//                 [|static|] export declare sueFooBar,
+//                 [|static|] declare export sueBarFoo,
+//                 declare /*HIGHLIGHTS*/[|static|] export barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|export|] foo;
+//     declare bar;
+//     [|export|] declare foobar;
+//     declare [|export|] barfoo;
+// 
+//     constructor([|export|] conFoo,
+//                 declare conBar,
+//                 [|export|] declare conFooBar,
+//                 declare [|export|] conBarFoo,
+//                 static sue,
+//                 static [|export|] declare sueFooBar,
+//                 static declare [|export|] sueBarFoo,
+//                 declare static /*HIGHLIGHTS*/[|export|] barSueFoo) {
+//     }
+// }
+// 
+// // --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 15) skipped ---
+// }
+// 
+// module m {
+//     /*HIGHLIGHTS*/static a;
+//     public b;
+//     private c;
+//     protected d;
+// // --- (line: 23) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 16) skipped ---
+// 
+// module m {
+//     static a;
+//     /*HIGHLIGHTS*/public b;
+//     private c;
+//     protected d;
+//     static public private protected e;
+// // --- (line: 24) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 17) skipped ---
+// module m {
+//     static a;
+//     public b;
+//     /*HIGHLIGHTS*/private c;
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+// // --- (line: 25) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 18) skipped ---
+//     static a;
+//     public b;
+//     private c;
+//     /*HIGHLIGHTS*/protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     protected static public g;
+// // --- (line: 26) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     /*HIGHLIGHTS*/static public private protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// // --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     static /*HIGHLIGHTS*/public private protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// // --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     static public /*HIGHLIGHTS*/private protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// // --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     static public private /*HIGHLIGHTS*/protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// // --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     /*HIGHLIGHTS*/public static protected private f;
+//     protected static public g;
+// }
+// static a;
+// // --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     public /*HIGHLIGHTS*/static protected private f;
+//     protected static public g;
+// }
+// static a;
+// // --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     public static /*HIGHLIGHTS*/protected private f;
+//     protected static public g;
+// }
+// static a;
+// // --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     public static protected /*HIGHLIGHTS*/private f;
+//     protected static public g;
+// }
+// static a;
+// // --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 21) skipped ---
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     /*HIGHLIGHTS*/protected static public g;
+// }
+// static a;
+// public b;
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 21) skipped ---
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     protected /*HIGHLIGHTS*/static public g;
+// }
+// static a;
+// public b;
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 21) skipped ---
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     protected static /*HIGHLIGHTS*/public g;
+// }
+// static a;
+// public b;
+// // --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 23) skipped ---
+//     public static protected private f;
+//     protected static public g;
+// }
+// /*HIGHLIGHTS*/static a;
+// public b;
+// private c;
+// protected d;
+// // --- (line: 31) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 24) skipped ---
+//     protected static public g;
+// }
+// static a;
+// /*HIGHLIGHTS*/public b;
+// private c;
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 25) skipped ---
+// }
+// static a;
+// public b;
+// /*HIGHLIGHTS*/private c;
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 26) skipped ---
+// static a;
+// public b;
+// private c;
+// /*HIGHLIGHTS*/protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// /*HIGHLIGHTS*/static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// static /*HIGHLIGHTS*/public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// static public /*HIGHLIGHTS*/private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// static public private /*HIGHLIGHTS*/protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// /*HIGHLIGHTS*/public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// public /*HIGHLIGHTS*/static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// public static /*HIGHLIGHTS*/protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// public static protected /*HIGHLIGHTS*/private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 29) skipped ---
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// /*HIGHLIGHTS*/protected static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 29) skipped ---
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected /*HIGHLIGHTS*/static public g;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 29) skipped ---
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static /*HIGHLIGHTS*/public g;

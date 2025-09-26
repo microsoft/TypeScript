@@ -1,0 +1,51 @@
+// === documentHighlights ===
+// === /getOccurrencesSuper3.ts ===
+// let x = {
+//     a() {
+//         return /*HIGHLIGHTS*/[|super|].b();
+//     },
+//     b() {
+//         return [|super|].a();
+//     },
+//     c: function () {
+//         return super.a();
+// // --- (line: 10) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper3.ts ===
+// let x = {
+//     a() {
+//         return [|super|].b();
+//     },
+//     b() {
+//         return /*HIGHLIGHTS*/[|super|].a();
+//     },
+//     c: function () {
+//         return super.a();
+// // --- (line: 10) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper3.ts ===
+// --- (line: 5) skipped ---
+//         return super.a();
+//     },
+//     c: function () {
+//         return /*HIGHLIGHTS*/super.a();
+//     }
+//     d: () => super.b();
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSuper3.ts ===
+// --- (line: 7) skipped ---
+//     c: function () {
+//         return super.a();
+//     }
+//     d: () => /*HIGHLIGHTS*/super.b();
+// }

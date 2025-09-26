@@ -1,0 +1,33 @@
+// === documentHighlights ===
+// === /getOccurrencesPublic2.ts ===
+// --- (line: 36) skipped ---
+//         declare var foo;
+// 
+//         export class C2 {
+//             /*HIGHLIGHTS*/[|public|] pub1;
+//             private priv1;
+//             protected prot1;
+// 
+//             protected constructor([|public|] public, protected protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// // --- (line: 48) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesPublic2.ts ===
+// --- (line: 36) skipped ---
+//         declare var foo;
+// 
+//         export class C2 {
+//             [|public|] pub1;
+//             private priv1;
+//             protected prot1;
+// 
+//             protected constructor(/*HIGHLIGHTS*/[|public|] public, protected protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// // --- (line: 48) skipped ---

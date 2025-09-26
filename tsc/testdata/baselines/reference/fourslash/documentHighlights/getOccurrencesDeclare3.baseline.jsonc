@@ -1,0 +1,73 @@
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// /*HIGHLIGHTS*/[|declare|] var x;
+// export [|declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// // --- (line: 6) skipped ---
+
+// --- (line: 53) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|declare|] export var v1, v2;
+// [|declare|] module dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// [|declare|] var x;
+// export /*HIGHLIGHTS*/[|declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// // --- (line: 6) skipped ---
+
+// --- (line: 53) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|declare|] export var v1, v2;
+// [|declare|] module dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// [|declare|] var x;
+// export [|declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// // --- (line: 6) skipped ---
+
+// --- (line: 53) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// /*HIGHLIGHTS*/[|declare|] export var v1, v2;
+// [|declare|] module dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare3.ts ===
+// [|declare|] var x;
+// export [|declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// // --- (line: 6) skipped ---
+
+// --- (line: 53) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|declare|] export var v1, v2;
+// /*HIGHLIGHTS*/[|declare|] module dm { }
+// export class EC { }

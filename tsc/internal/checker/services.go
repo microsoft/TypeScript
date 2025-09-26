@@ -762,7 +762,7 @@ func (c *Checker) GetPropertySymbolsFromContextualType(node *ast.Node, contextua
 //
 //	[a] = [ property1, property2 ]
 func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node) *ast.Symbol {
-	if isArrayLiteralOrObjectLiteralDestructuringPattern(location.Parent.Parent) {
+	if ast.IsArrayLiteralOrObjectLiteralDestructuringPattern(location.Parent.Parent) {
 		// Get the type of the object or array literal and then look for property of given name in the type
 		if typeOfObjectLiteral := c.getTypeOfAssignmentPattern(location.Parent.Parent); typeOfObjectLiteral != nil {
 			return c.getPropertyOfType(typeOfObjectLiteral, location.Text())
@@ -808,28 +808,4 @@ func (c *Checker) getTypeOfAssignmentPattern(expr *ast.Node) *Type {
 	typeOfArrayLiteral := core.OrElse(c.getTypeOfAssignmentPattern(node), c.errorType)
 	elementType := core.OrElse(c.checkIteratedTypeOrElementType(IterationUseDestructuring, typeOfArrayLiteral, c.undefinedType, expr.Parent), c.errorType)
 	return c.checkArrayLiteralDestructuringElementAssignment(node, typeOfArrayLiteral, slices.Index(node.AsArrayLiteralExpression().Elements.Nodes, expr), elementType, CheckModeNormal)
-}
-
-func isArrayLiteralOrObjectLiteralDestructuringPattern(node *ast.Node) bool {
-	if !(ast.IsArrayLiteralExpression(node) || ast.IsObjectLiteralExpression(node)) {
-		return false
-	}
-	parent := node.Parent
-	// [a,b,c] from:
-	// [a, b, c] = someExpression;
-	if ast.IsBinaryExpression(parent) && parent.AsBinaryExpression().Left == node && parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken {
-		return true
-	}
-	// [a, b, c] from:
-	// for([a, b, c] of expression)
-	if ast.IsForOfStatement(parent) && parent.Initializer() == node {
-		return true
-	}
-	// {x, a: {a, b, c} } = someExpression
-	if ast.IsPropertyAssignment(parent) {
-		return isArrayLiteralOrObjectLiteralDestructuringPattern(parent.Parent)
-	}
-	// [a, b, c] of
-	// [x, [a, b, c] ] = someExpression
-	return isArrayLiteralOrObjectLiteralDestructuringPattern(parent)
 }

@@ -1,0 +1,66 @@
+// === documentHighlights ===
+// === /getOccurrencesDeclare1.ts ===
+// --- (line: 27) skipped ---
+//     export interface I1 {
+//     }
+// 
+//     export /*HIGHLIGHTS*/[|declare|] module ma.m1.m2.m3 {
+//         interface I2 {
+//         }
+//     }
+// // --- (line: 35) skipped ---
+
+// --- (line: 45) skipped ---
+//         }
+//     }
+// 
+//     [|declare|] var ambientThing: number;
+//     export var exportedThing = 10;
+//     [|declare|] function foo(): string;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare1.ts ===
+// --- (line: 27) skipped ---
+//     export interface I1 {
+//     }
+// 
+//     export [|declare|] module ma.m1.m2.m3 {
+//         interface I2 {
+//         }
+//     }
+// // --- (line: 35) skipped ---
+
+// --- (line: 45) skipped ---
+//         }
+//     }
+// 
+//     /*HIGHLIGHTS*/[|declare|] var ambientThing: number;
+//     export var exportedThing = 10;
+//     [|declare|] function foo(): string;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesDeclare1.ts ===
+// --- (line: 27) skipped ---
+//     export interface I1 {
+//     }
+// 
+//     export [|declare|] module ma.m1.m2.m3 {
+//         interface I2 {
+//         }
+//     }
+// // --- (line: 35) skipped ---
+
+// --- (line: 45) skipped ---
+//         }
+//     }
+// 
+//     [|declare|] var ambientThing: number;
+//     export var exportedThing = 10;
+//     /*HIGHLIGHTS*/[|declare|] function foo(): string;
+// }

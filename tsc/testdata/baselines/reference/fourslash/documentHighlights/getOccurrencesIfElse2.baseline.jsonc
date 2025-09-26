@@ -1,0 +1,23 @@
+// === documentHighlights ===
+// === /getOccurrencesIfElse2.ts ===
+// if (true) {
+//     /*HIGHLIGHTS*/[|if|] (false) {
+//     }
+//     [|else|]{
+//     }
+//     if (true) {
+//     }
+// // --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse2.ts ===
+// if (true) {
+//     [|if|] (false) {
+//     }
+//     /*HIGHLIGHTS*/[|else|]{
+//     }
+//     if (true) {
+//     }
+// // --- (line: 8) skipped ---

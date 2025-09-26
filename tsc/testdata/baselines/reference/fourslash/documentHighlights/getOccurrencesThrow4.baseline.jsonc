@@ -1,0 +1,102 @@
+// === documentHighlights ===
+// === /getOccurrencesThrow4.ts ===
+// --- (line: 19) skipped ---
+//     }
+//     if (a > 0) {
+//         return (function () {
+//             /*HIGHLIGHTS*/[|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//             [|throw|] "Hello!";
+//         })() || true;
+//     }
+// 
+// // --- (line: 34) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow4.ts ===
+// --- (line: 19) skipped ---
+//     }
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             /*HIGHLIGHTS*/[|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//             [|throw|] "Hello!";
+//         })() || true;
+//     }
+// 
+// // --- (line: 34) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow4.ts ===
+// --- (line: 19) skipped ---
+//     }
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             /*HIGHLIGHTS*/[|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//             [|throw|] "Hello!";
+//         })() || true;
+//     }
+// 
+// // --- (line: 34) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow4.ts ===
+// --- (line: 19) skipped ---
+//     }
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 /*HIGHLIGHTS*/[|return|] true;
+//             }
+//             [|throw|] "Hello!";
+//         })() || true;
+//     }
+// 
+// // --- (line: 34) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow4.ts ===
+// --- (line: 19) skipped ---
+//     }
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//             /*HIGHLIGHTS*/[|throw|] "Hello!";
+//         })() || true;
+//     }
+// 
+// // --- (line: 34) skipped ---
