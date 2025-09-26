@@ -743,9 +743,9 @@ declare class privateClass {
 export declare class publicClass {
 }
 export interface publicInterfaceWithPrivateTypeParameters {
-    new <T extends privateClass>(): privateClass; // Error
-    <T extends privateClass>(): privateClass; // Error
-    myMethod<T extends privateClass>(): privateClass; // Error
+    new <T extends privateClass>(): privateClass;
+    <T extends privateClass>(): privateClass;
+    myMethod<T extends privateClass>(): privateClass;
 }
 export interface publicInterfaceWithPublicTypeParameters {
     new <T extends publicClass>(): publicClass;
@@ -779,9 +779,9 @@ export declare class publicClassWithWithPublicTypeParametersWithoutExtends {
 }
 export declare function publicFunctionWithPublicTypeParametersWithoutExtends<T>(): void;
 export interface publicInterfaceWithPrivatModuleTypeParameters {
-    new <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
-    <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
-    myMethod<T extends privateModule.publicClass>(): privateModule.publicClass; // Error
+    new <T extends privateModule.publicClass>(): privateModule.publicClass;
+    <T extends privateModule.publicClass>(): privateModule.publicClass;
+    myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
 }
 export declare class publicClassWithWithPrivateModuleTypeParameters {
     static myPublicStaticMethod<T extends privateModule.publicClass>(): void;
@@ -794,9 +794,9 @@ export declare namespace publicModule {
     export class publicClass {
     }
     export interface publicInterfaceWithPrivateTypeParameters {
-        new <T extends privateClass>(): privateClass; // Error
-        <T extends privateClass>(): privateClass; // Error
-        myMethod<T extends privateClass>(): privateClass; // Error
+        new <T extends privateClass>(): privateClass;
+        <T extends privateClass>(): privateClass;
+        myMethod<T extends privateClass>(): privateClass;
     }
     export interface publicInterfaceWithPublicTypeParameters {
         new <T extends publicClass>(): publicClass;
@@ -830,9 +830,9 @@ export declare namespace publicModule {
     }
     export function publicFunctionWithPublicTypeParametersWithoutExtends<T>(): void;
     export interface publicInterfaceWithPrivatModuleTypeParameters {
-        new <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
-        <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
-        myMethod<T extends privateModule.publicClass>(): privateModule.publicClass; // Error
+        new <T extends privateModule.publicClass>(): privateModule.publicClass;
+        <T extends privateModule.publicClass>(): privateModule.publicClass;
+        myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
     }
     export class publicClassWithWithPrivateModuleTypeParameters {
         static myPublicStaticMethod<T extends privateModule.publicClass>(): void;

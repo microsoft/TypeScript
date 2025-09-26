@@ -98,7 +98,7 @@ declare class E {
     protected constructor(x: number);
 }
 declare var c: C;
-declare var d: any; // error
-declare var e: any; // error
+declare var d: any;
+declare var e: any;
 declare namespace Generic {
 }

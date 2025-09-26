@@ -124,7 +124,7 @@ declare class Bar {
     c?: number | undefined;
     constructor(d?: number | undefined, e?: number);
     f(): number;
-    g?(): number; // Body of optional method can be omitted
+    g?(): number;
     h?(): number;
 }
 declare function test2(x: Bar): void;

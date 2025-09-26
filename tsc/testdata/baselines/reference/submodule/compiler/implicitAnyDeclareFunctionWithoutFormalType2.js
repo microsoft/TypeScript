@@ -37,9 +37,6 @@ function fn3() {
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType2.d.ts]
-// generates function fn1(): number;
 declare function fn1(): number;
-// generates function fn2(): any;
 declare function fn2(): any;
-// generates function fn3();
 declare function fn3(): any;

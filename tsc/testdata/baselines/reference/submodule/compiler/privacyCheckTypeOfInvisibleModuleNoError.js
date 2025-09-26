@@ -24,6 +24,6 @@ declare namespace Outer {
     namespace Inner {
         var m: number;
     }
-    export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
+    export var f: typeof Inner;
     export {};
 }

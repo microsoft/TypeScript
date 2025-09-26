@@ -151,7 +151,7 @@ interface i1 {
     (a: number): number;
     new (b: string): any;
     [a: number]: string;
-    myFoo(/*param prop*/ a: number): string;
+    myFoo(a: number): string;
     prop: string;
 }
 declare var i1_i: i1;

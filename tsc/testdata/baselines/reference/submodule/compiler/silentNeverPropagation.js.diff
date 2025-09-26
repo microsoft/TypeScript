@@ -9,11 +9,3 @@
  const breaks = convert(createModule({ a: 12 }, { foo() { return true; } }));
  breaks.state.a;
  breaks.state.z;
-@@= skipped -9, +7 lines =@@
-
-
- //// [silentNeverPropagation.d.ts]
-+// Repro from #45041
- type ModuleWithState<TState> = {
-     state: TState;
- };

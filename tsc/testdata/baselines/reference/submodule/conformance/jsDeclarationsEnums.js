@@ -117,8 +117,6 @@ var K;
 
 
 //// [index.d.ts]
-// Pretty much all of this should be an error, (since enums are forbidden in js),
-// but we should be able to synthesize declarations from the symbols regardless
 export declare enum A {
 }
 export declare enum B {

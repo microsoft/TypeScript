@@ -74,7 +74,6 @@ const x = e;
 
 
 //// [numericEnumMappedType.d.ts]
-// Repro from #31771
 declare enum E1 {
     ONE = 0,
     TWO = 1,
@@ -95,7 +94,6 @@ declare const b1: Bins1;
 declare const b2: Bins2;
 declare const e1: E1;
 declare const e2: E2;
-// Multiple numeric enum types accrue to the same numeric index signature in a mapped type
 declare function val(): number;
 declare enum N1 {
     A,
@@ -108,9 +106,6 @@ declare enum N2 {
 type T1 = {
     [K in N1 | N2]: K;
 };
-// Enum types with string valued members are always literal enum types and therefore
-// ONE and TWO below are not computed members but rather just numerically valued members
-// with auto-incremented values.
 declare enum E {
     ONE,
     TWO,

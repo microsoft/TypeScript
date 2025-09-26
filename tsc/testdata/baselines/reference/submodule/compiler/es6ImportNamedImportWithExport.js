@@ -99,4 +99,4 @@ export declare var xxxx: number;
 export declare var xxxx: number;
 export declare var xxxx: number;
 export declare var z111: number;
-export declare var z2: number; // z2 shouldn't give redeclare error
+export declare var z2: number;

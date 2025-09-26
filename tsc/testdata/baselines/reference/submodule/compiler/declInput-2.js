@@ -61,16 +61,16 @@ declare namespace M {
     interface I2 {
     }
     export class D {
-        private c; // don't generate
+        private c;
         m1: number;
         m2: string;
-        m22: C; // don't generate
+        m22: C;
         m23: E;
         m24: I1;
-        m25: I2; // don't generate
+        m25: I2;
         m232(): E;
         m242(): I1;
-        m252(): I2; // don't generate
+        m252(): I2;
         m26(i: I1): void;
         m262(i: I2): void;
         m3(): C;

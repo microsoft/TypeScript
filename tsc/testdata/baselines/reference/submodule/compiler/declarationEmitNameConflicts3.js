@@ -91,8 +91,8 @@ declare namespace M.P {
     enum D {
         f = 0
     }
-    var v: M.D; // ok
-    var w: typeof M.D.f; // error, should be typeof M.D.f
-    var x: typeof M.C.f; // error, should be typeof M.C.f
-    var x: typeof M.C.f; // error, should be typeof M.E.f
+    var v: M.D;
+    var w: typeof M.D.f;
+    var x: typeof M.C.f;
+    var x: typeof M.C.f;
 }

@@ -893,47 +893,26 @@ declare const d: D;
 declare const ab: AB;
 declare const bc: BC;
 declare const x: any;
-// function without type parameters
 declare function f00(a?: A): A;
-// function with a type parameter without a default
 declare function f01<T>(a?: T): T;
-// function with a type paramter with a default
 declare function f02<T = A>(a?: T): T;
-// function with a type parameter with a default that refers to itself
 declare function f03<T = T>(a?: T): T;
-// function with a type paramter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
-// function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter
 declare function f05<T, U = T>(a?: T, b?: U): [T, U];
-// function with a type parameter with a default that refers to an earlier type parameter with a default
 declare function f06<T = A, U = T>(a?: T, b?: U): [T, U];
-// function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter with a default
 declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
-// function with a type parameter with a default that refers to an earlier type parameter with a constraint
 declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
-// function with a type parameter with a constraint and a default that refers to an earlier type parameter
 declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
-// function with a type parameter with a constraint and a default that refers to an earlier type parameter with a constraint
 declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
-// function with a type parameter with a default that refers to an earier type parameter in a union
 declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
-// function with a type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
-// function with a type parameter with a default that refers to a later type parameter with a default
 declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
-// function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default
 declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
-// function with two type parameters with defaults that mutually refer to each other
 declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
-// function with a type parameter without a default and two type parameters with defaults that mutually refer to each other
 declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
-// function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
-// function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
-// function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
-// function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 interface i00<T = number> {
     a: T;
@@ -1013,7 +992,6 @@ declare const Derived02c00: Derived02<string>;
 declare const Derived02c01: Derived02<number>;
 declare const Derived02c02: Derived02<number>;
 declare const Derived02c03: Derived02<number>;
-// https://github.com/Microsoft/TypeScript/issues/16211
 interface Base02 {
 }
 interface Base02Constructor {
@@ -1051,6 +1029,5 @@ declare const t03c01: [1, 1];
 declare const t03c02: [number, number];
 declare const t03c03: [1, 1];
 declare const t03c04: [number, 1];
-// https://github.com/Microsoft/TypeScript/issues/16221
 interface SelfReference<T = SelfReference<string>> {
 }

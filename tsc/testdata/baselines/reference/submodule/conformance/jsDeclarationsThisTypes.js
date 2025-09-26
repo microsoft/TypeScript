@@ -36,6 +36,5 @@ export declare class A {
     method(): this;
 }
 export default class Base extends A {
-    // This method is required to reproduce #35932
     verify(): void;
 }

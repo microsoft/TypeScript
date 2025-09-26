@@ -108,11 +108,9 @@ declare function f3<T extends undefined>(a: T): any;
 declare function f4<T extends undefined>(a: object | T): {};
 declare function f5<S, T extends undefined>(a: S | T): S | T;
 declare function f6<T extends object | undefined>(a: T): T;
-// Repro from #46976
 declare function g1<T extends {}, A extends {
     z: (T | undefined) & T;
 }>(a: A): T;
-// Repro from #47028
 interface DatafulFoo<T> {
     data: T;
 }

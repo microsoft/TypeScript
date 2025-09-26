@@ -107,7 +107,7 @@ export declare class Foo {
     isInternal3: string;
     isInternal4: string;
     isInternal5: string;
-    isInternal6: string /* trailing */;
+    isInternal6: string;
     isInternal7: string;
     notInternal1: string;
     notInternal2: string;
@@ -115,29 +115,15 @@ export declare class Foo {
     constructor(
     /** @internal */
     isInternal1: string, 
-    /** @internal */ isInternal2: string, /** @internal */ isInternal3: string, 
-    // @internal
-    isInternal4: string, 
-    // nothing
+    /** @internal */ isInternal2: string, /** @internal */ isInternal3: string, isInternal4: string, 
     /** @internal */
-    isInternal5: string, 
-    /* @internal */ isInternal6: string /* trailing */, 
-    /* @internal */ isInternal7: string, /** @internal */ 
-    // not work
-    notInternal1: string, 
-    // @internal
-    /* not work */
-    notInternal2: string, 
-    /* not work */
-    // @internal
-    /* not work */
-    notInternal3: string);
+    isInternal5: string, isInternal6: string, isInternal7: string, /** @internal */ notInternal1: string, notInternal2: string, notInternal3: string);
 }
 export declare class Bar {
     isInternal1: string;
-    constructor(/* @internal */ isInternal1: string);
+    constructor(isInternal1: string);
 }
 export declare class Baz {
     isInternal: string;
-    constructor(/* @internal */ isInternal: string);
+    constructor(isInternal: string);
 }

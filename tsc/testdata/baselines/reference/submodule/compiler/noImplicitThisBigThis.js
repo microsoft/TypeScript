@@ -99,7 +99,6 @@ function createObjNoCrash() {
 
 
 //// [noImplicitThisBigThis.d.ts]
-// https://github.com/microsoft/TypeScript/issues/29902
 declare function createObj(): {
     func1(): /*elided*/ any;
     func2(): /*elided*/ any;

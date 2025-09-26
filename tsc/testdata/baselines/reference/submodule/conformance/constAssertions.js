@@ -285,7 +285,7 @@ declare let o8: {
 declare let o9: {
     readonly x: 10;
     readonly foo: () => void;
-}; // Error
+};
 declare let p1: 10;
 declare let p2: -10;
 declare let p3: readonly [10];
@@ -308,9 +308,9 @@ declare let q5: {
     readonly y: 20;
 };
 declare function id<T>(x: T): T;
-declare let e1: "abc"; // Error
-declare let e2: 0 | 1; // Error
-declare let e3: 1; // Error
+declare let e1: "abc";
+declare let e2: 0 | 1;
+declare let e3: 1;
 declare let t1: "foo";
 declare let t2: "bar";
 declare let t3: "foo-bar";
@@ -328,7 +328,6 @@ declare function ff4(verify: boolean, contentMatches: boolean): "verify_match" |
 declare function ff5(verify: boolean, contentMatches: boolean): "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch";
 declare function accessorNames<S extends string>(propName: S): readonly [`get-${S}`, `set-${S}`];
 declare const ns1: readonly ["get-foo", "set-foo"];
-// repro from https://github.com/microsoft/TypeScript/issues/54374
 interface Foo54374 {
     a: 1;
     b: 2;

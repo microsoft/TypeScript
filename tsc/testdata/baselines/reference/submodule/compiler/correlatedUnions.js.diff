@@ -9,51 +9,7 @@
  function processRecord(rec) {
      rec.f(rec.v);
  }
-@@= skipped -122, +120 lines =@@
-
-
- //// [correlatedUnions.d.ts]
-+// Various repros from #30581
- type RecordMap = {
-     n: number;
-     s: string;
-@@= skipped -13, +14 lines =@@
-     };
- }[K];
- declare function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>): void;
--declare const r1: UnionRecord<'n'>;
--declare const r2: UnionRecord;
-+declare const r1: UnionRecord<'n'>; // { kind: 'n', v: number, f: (v: number) => void }
-+declare const r2: UnionRecord; // { kind: 'n', ... } | { kind: 's', ... } | { kind: 'b', ... }
-+// --------
- type TextFieldData = {
-     value: string;
- };
-@@= skipped -25, +26 lines =@@
- declare function renderSelectField(props: SelectFieldData): void;
- declare const renderFuncs: RenderFuncMap;
- declare function renderField<K extends keyof FieldMap>(field: FormField<K>): void;
-+// --------
- type TypeMap = {
-     foo: string;
-     bar: number;
-@@= skipped -17, +18 lines =@@
- }[K];
- declare const data: DataEntry[];
- declare function process<K extends Keys>(data: DataEntry<K>[]): void;
-+// --------
- type LetterMap = {
-     A: string;
-     B: number;
-@@= skipped -26, +27 lines =@@
-     letter: B;
-     caller: BCaller;
- };
-+// --------
- type Ev<K extends keyof DocumentEventMap> = {
-     [P in K]: {
-         readonly name: P;
-@@= skipped -11, +12 lines =@@
+@@= skipped -214, +212 lines =@@
  declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
  declare const clickEvent: {
      readonly name: "click";
@@ -67,55 +23,13 @@
 +    readonly once?: boolean | undefined;
      readonly callback: (ev: Event) => void;
  };
-+// --------
  declare function ff1(): void;
-+// Repro from #47368
- type ArgMap = {
-     a: number;
-     b: string;
-@@= skipped -21, +23 lines =@@
- declare function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
- declare function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
- declare function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]): void;
-+// Repro from #47890
- interface MyObj {
-     someKey: {
-         name: string;
-@@= skipped -10, +11 lines =@@
- }
- declare const ref: MyObj;
- declare function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined;
-+// Repro from #48157
- interface Foo {
-     bar?: string;
- }
- declare function foo<T extends keyof Foo>(prop: T, f: Required<Foo>): void;
- declare function bar(t: string): void;
-+// Repro from #48246
- declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr): {
-     [Item in T[number] as Item[Attr]]: Item;
- };
-@@= skipped -25, +27 lines =@@
- type Baz = {
-     [K in keyof BarLookup]: BarLookup[K]['name'];
- };
-+// repro from #43982
- interface Original {
-     prop1: {
-         subProp1: string;
-@@= skipped -18, +19 lines =@@
+@@= skipped -74, +74 lines =@@
      };
  };
  type MappedFromOriginal = SameKeys<Original>;
 -declare const getStringAndNumberFromOriginalAndMapped: <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
 +declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
-+// repro from #31675
  interface Config {
      string: string;
      number: number;
- }
- declare function getConfigOrDefault<T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]): Config[T];
-+// repro from #47523
- type Foo1 = {
-     x: number;
-     y: string;

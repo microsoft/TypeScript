@@ -5,7 +5,6 @@
 
  //// [foo.d.ts]
 -export class Foo {
-+// https://github.com/microsoft/TypeScript/issues/55391
 +export declare class Foo {
      /**
       * Bar.

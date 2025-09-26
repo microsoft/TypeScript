@@ -614,12 +614,10 @@ const data = [false, false]; // Error
 
 
 //// [variadicTuples1.d.ts]
-// Variadics in tuple types
 type TV0<T extends unknown[]> = [string, ...T];
 type TV1<T extends unknown[]> = [string, ...T, number];
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
 type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
-// Normalization
 type TN1 = TV1<[boolean, string]>;
 type TN2 = TV1<[]>;
 type TN3 = TV1<[boolean?]>;
@@ -627,7 +625,6 @@ type TN4 = TV1<string[]>;
 type TN5 = TV1<[boolean] | [symbol, symbol]>;
 type TN6 = TV1<any>;
 type TN7 = TV1<never>;
-// Variadics in array literals
 declare function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]): readonly [1, ...T, 2, ...U, 3];
 declare const t2: readonly [1, string, 2, number, boolean, 3];
 declare function concat<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]): [...T, ...U];
@@ -635,54 +632,42 @@ declare const sa: string[];
 declare const tc1: [];
 declare const tc2: [string, number];
 declare const tc3: [number, number, number, ...string[]];
-declare const tc4: [...string[], number, number, number]; // Ideally would be [...string[], number, number, number]
+declare const tc4: [...string[], number, number, number];
 declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
-declare const tc5: (1 | 2 | 3 | 4 | 5 | 6)[]; // (1 | 2 | 3 | 4 | 5 | 6)[]
-// Spread arguments
+declare const tc5: (1 | 2 | 3 | 4 | 5 | 6)[];
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
 declare function foo2(t1: [number, string], t2: [boolean], a1: number[]): void;
 declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
 declare function foo4<U extends unknown[]>(u: U): void;
-// Contextual typing of array literals
 declare function ft1<T extends unknown[]>(t: T): T;
 declare function ft2<T extends unknown[]>(t: T): readonly [...T];
 declare function ft3<T extends unknown[]>(t: [...T]): T;
 declare function ft4<T extends unknown[]>(t: [...T]): readonly [...T];
-// Indexing variadic tuple types
 declare function f0<T extends unknown[]>(t: [string, ...T], n: number): void;
 declare function f1<T extends unknown[]>(t: [string, ...T, number], n: number): void;
-// Destructuring variadic tuple types
 declare function f2<T extends unknown[]>(t: [string, ...T]): void;
 declare function f3<T extends unknown[]>(t: [string, ...T, number]): void;
-// Mapped types applied to variadic tuple types
 type Arrayify<T> = {
     [P in keyof T]: T[P][];
 };
-type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>; // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
-type TP1<T extends unknown[]> = Partial<[string, ...T, number]>; // [string?, Partial<T>, number?]
-type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>; // [string?, Partial<T>, ...(number | undefined)[]]
-// Reverse mapping through mapped type applied to variadic tuple type
+type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;
+type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;
+type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;
 declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
-declare let tm1: [boolean, string]; // [boolean, string]
-// Spread of readonly array-like infers mutable array-like
+declare let tm1: [boolean, string];
 declare function fx1<T extends unknown[]>(a: string, ...args: T): T;
 declare function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V): void;
 declare function fx2<T extends readonly unknown[]>(a: string, ...args: T): T;
 declare function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V): void;
-// Relations involving variadic tuple types
 declare function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [string, ...T], z: [string, ...U]): void;
-// For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
-// to [...T] when T is constrained to a mutable array or tuple type.
 declare function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]): void;
 declare function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]): void;
 declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
-// Constraints of variadic tuple types
 declare function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]): void;
 declare function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]): void;
 declare function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]): void;
-// Inference between variadic tuple types
 type First<T extends readonly unknown[]> = T extends readonly [unknown, ...unknown[]] ? T[0] : T[0] | undefined;
 type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
 type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer U] ? U : T extends readonly [unknown, ...unknown[]] ? T[number] : T[number] | undefined;
@@ -724,7 +709,7 @@ type T33 = DropLast<[number, symbol, ...string[]]>;
 type T34 = DropLast<[symbol, ...string[]]>;
 type T35 = DropLast<[string?]>;
 type T36 = DropLast<string[]>;
-type T37 = DropLast<[]>; // unknown[], maybe should be []
+type T37 = DropLast<[]>;
 type T38 = DropLast<any>;
 type T39 = DropLast<never>;
 type R00 = First<readonly [number, symbol, string]>;
@@ -755,44 +740,37 @@ type R33 = DropLast<readonly [number, symbol, ...string[]]>;
 type R34 = DropLast<readonly [symbol, ...string[]]>;
 type R35 = DropLast<readonly string[]>;
 type R36 = DropLast<readonly []>;
-// Inference to [...T, ...U] with implied arity for T
 declare function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T): (...b: U) => R;
 declare const fn1: (a: number, b: string, c: boolean, d: string[]) => number;
-declare const c0: (a: number, b: string, c: boolean, d: string[]) => number; // (a: number, b: string, c: boolean, d: string[]) => number
-declare const c1: (b: string, c: boolean, d: string[]) => number; // (b: string, c: boolean, d: string[]) => number
-declare const c2: (c: boolean, d: string[]) => number; // (c: boolean, d: string[]) => number
-declare const c3: (d: string[]) => number; // (d: string[]) => number
-declare const c4: () => number; // () => number
+declare const c0: (a: number, b: string, c: boolean, d: string[]) => number;
+declare const c1: (b: string, c: boolean, d: string[]) => number;
+declare const c2: (c: boolean, d: string[]) => number;
+declare const c3: (d: string[]) => number;
+declare const c4: () => number;
 declare const fn2: (x: number, b: boolean, ...args: string[]) => number;
-declare const c10: (x: number, b: boolean, ...args: string[]) => number; // (x: number, b: boolean, ...args: string[]) => number
-declare const c11: (b: boolean, ...args: string[]) => number; // (b: boolean, ...args: string[]) => number
-declare const c12: (...b: string[]) => number; // (...args: string[]) => number
-declare const c13: (...b: string[]) => number; // (...args: string[]) => number
+declare const c10: (x: number, b: boolean, ...args: string[]) => number;
+declare const c11: (b: boolean, ...args: string[]) => number;
+declare const c12: (...b: string[]) => number;
+declare const c13: (...b: string[]) => number;
 declare const fn3: (...args: string[]) => number;
-declare const c20: (...b: string[]) => number; // (...args: string[]) => number
-declare const c21: (...b: string[]) => number; // (...args: string[]) => number
-declare const c22: (...b: string[]) => number; // (...args: string[]) => number
-// No inference to [...T, ...U] when there is no implied arity
+declare const c20: (...b: string[]) => number;
+declare const c21: (...b: string[]) => number;
+declare const c22: (...b: string[]) => number;
 declare function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]): R;
 declare function fn10(a: string, b: number, c: boolean): string[];
-// Inference to [...T] has higher priority than inference to [...T, number?]
 declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
-// Last argument is contextually typed
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
-// No inference to ending optional elements (except with identical structure)
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 declare function f21<U extends string[]>(args: [...U, number?]): void;
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
 declare function f23<U extends string[]>(args: [...U, number]): void;
-// Repro from #39327
 interface Desc<A extends unknown[], T> {
     readonly f: (...args: A) => T;
     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
 }
 declare const a: Desc<[string, number, boolean], object>;
-declare const b: Desc<[boolean], object>; // Desc<[boolean], object>
-// Repro from #39607
+declare const b: Desc<[boolean], object>;
 declare function getUser(id: string, options?: {
     x?: string;
 }): string;
@@ -801,14 +779,12 @@ declare function getOrgUser(id: string, orgId: number, options?: {
     z?: boolean;
 }): void;
 declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: T) => U;
-// Repro from #40235
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
-declare const data: Unbounded; // Error
+declare const data: Unbounded;
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
-// Repro from #53563
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 type AnyArr = [...any];

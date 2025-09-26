@@ -31,7 +31,7 @@ var foo;
 
 
 //// [intrinsics.d.ts]
-declare var hasOwnProperty: hasOwnProperty; // Error
+declare var hasOwnProperty: hasOwnProperty;
 declare namespace m1 {
     var __proto__: any;
 }

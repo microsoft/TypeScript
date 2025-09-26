@@ -22,11 +22,3 @@
  }
  // Just the name
  var k = new c() || new m.c();
-@@= skipped -34, +38 lines =@@
- declare class g<T> {
-     private s;
- }
-+// Just the name
- declare var k: c | m.c;
- declare var l: c | m.c;
- declare var x: g<string> | m.g<number> | (() => c);

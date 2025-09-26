@@ -21,9 +21,9 @@ var [x3, y3, z3] = a; // emit x3, y3, z3
 
 
 //// [declarationEmitDestructuringArrayPattern1.d.ts]
-declare var x: number; // emit x: number
-declare var x1: number, y1: string; // emit x1: number, y1: string
-declare var z1: number; // emit z1: number
+declare var x: number;
+declare var x1: number, y1: string;
+declare var z1: number;
 declare var a: (string | number)[];
-declare var x2: string | number; // emit x2: number | string
-declare var x3: string | number, y3: string | number, z3: string | number; // emit x3, y3, z3 
+declare var x2: string | number;
+declare var x3: string | number, y3: string | number, z3: string | number;

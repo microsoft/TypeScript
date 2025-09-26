@@ -8,5 +8,4 @@
 -    private constructor();
 -    b: {};
 -}
-+// https://github.com/microsoft/TypeScript/issues/35801
 +declare let A: any;

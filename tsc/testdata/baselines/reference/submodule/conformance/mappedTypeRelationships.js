@@ -428,7 +428,6 @@ declare function f76<T, U extends T, K extends keyof T>(x: {
 declare function f80<T>(t: T): Partial<T>;
 declare function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]>;
 declare function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]>;
-// #31070
 type Numeric<T> = {
     [K in keyof T]?: number;
 };
@@ -438,7 +437,6 @@ declare function f90<T extends {
 declare function f<T extends {
     x: {};
 }>(): Partial<T>;
-// #32365
 interface SettingsTypes {
     audio: {
         volume: string;

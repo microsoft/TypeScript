@@ -18,7 +18,6 @@ function ExpandoMerge(n) {
 
 
 //// [expando.d.ts]
-// #27032
 declare function ExpandoMerge(n: number): number;
 declare namespace ExpandoMerge {
     interface I {

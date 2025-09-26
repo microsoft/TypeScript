@@ -333,7 +333,6 @@ interface Invariant<T> {
 declare function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>): void;
 declare function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>): void;
 declare function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>): void;
-// Extract<T, Function> is a T that is known to be a Function
 declare function isFunction<T>(value: T): value is Extract<T, Function>;
 declare function getFunction<T>(item: T): Extract<T, Function>;
 declare function f10<T>(x: T): void;
@@ -356,7 +355,6 @@ declare function fooBat(x: {
 type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
 declare function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>): void;
 declare function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>): void;
-// Repros from #22860
 declare class Opt<T> {
     toVector(): Vector<T>;
 }
@@ -375,11 +373,9 @@ interface B1<T> extends A1<T> {
     bat: B1<B1<T>>;
     boom: T extends any ? true : true;
 }
-// Repro from #22899
 declare function toString1(value: object | Function): string;
 declare function toString2(value: Function): string;
 declare function foo<T>(value: T): void;
-// Repro from #23052
 type A<T, V, E> = T extends object ? {
     [Q in {
         [P in keyof T]: T[P] extends V ? P : P;
@@ -395,7 +391,6 @@ type C<T, V, E> = {
         [P in keyof T]: T[P] extends V ? P : P;
     }[keyof T]]: C<T[Q], V, E>;
 };
-// Repro from #23100
 type A2<T, V, E> = T extends object ? T extends any[] ? T : {
     [Q in keyof T]: A2<T[Q], V, E>;
 } : T;
@@ -405,42 +400,37 @@ type B2<T, V> = T extends object ? T extends any[] ? T : {
 type C2<T, V, E> = T extends object ? {
     [Q in keyof T]: C2<T[Q], V, E>;
 } : T;
-// Repro from #28654
 type MaybeTrue<T extends {
     b: boolean;
 }> = true extends T["b"] ? "yes" : "no";
 type T0 = MaybeTrue<{
     b: never;
-}>; // "no"
+}>;
 type T1 = MaybeTrue<{
     b: false;
-}>; // "no"
+}>;
 type T2 = MaybeTrue<{
     b: true;
-}>; // "yes"
+}>;
 type T3 = MaybeTrue<{
     b: boolean;
-}>; // "yes"
-// Repro from #28824
+}>;
 type Union = 'a' | 'b';
 type Product<A extends Union, B> = {
     f1: A;
     f2: B;
 };
 type ProductUnion = Product<'a', 0> | Product<'b', 1>;
-// {a: "b"; b: "a"}
 type UnionComplement = {
     [K in Union]: Exclude<Union, K>;
 };
 type UCA = UnionComplement['a'];
 type UCB = UnionComplement['b'];
-// {a: "a"; b: "b"}
 type UnionComplementComplement = {
     [K in Union]: Exclude<Union, Exclude<Union, K>>;
 };
 type UCCA = UnionComplementComplement['a'];
 type UCCB = UnionComplementComplement['b'];
-// {a: Product<'b', 1>; b: Product<'a', 0>}
 type ProductComplement = {
     [K in Union]: Exclude<ProductUnion, {
         f1: K;
@@ -448,7 +438,6 @@ type ProductComplement = {
 };
 type PCA = ProductComplement['a'];
 type PCB = ProductComplement['b'];
-// {a: Product<'a', 0>; b: Product<'b', 1>}
 type ProductComplementComplement = {
     [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, {
         f1: K;
@@ -456,7 +445,6 @@ type ProductComplementComplement = {
 };
 type PCCA = ProductComplementComplement['a'];
 type PCCB = ProductComplementComplement['b'];
-// Repro from #31326
 type Hmm<T, U extends T> = U extends T ? {
     [K in keyof U]: number;
 } : never;
@@ -464,7 +452,6 @@ type What = Hmm<{}, {
     a: string;
 }>;
 declare const w: What;
-// Repro from #33568
 declare function save(_response: IRootResponse<string>): void;
 declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
 interface IExportCallback<TResponse> {
@@ -484,7 +471,6 @@ declare type GetPropertyNamesOfType<T, RestrictToType> = {
     [PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never;
 }[Extract<keyof T, string>];
 declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<T, GetPropertyNamesOfType<Required<T>, RestrictToType>>;
-// Repro from #33568
 declare function ff(x: Foo3<string>): void;
 declare function gg<T>(f: (x: Foo3<T>) => void): void;
 type Foo3<T> = T extends number ? {
@@ -492,7 +478,6 @@ type Foo3<T> = T extends number ? {
 } : {
     x: T;
 };
-// Repro from #41613
 type Wat<K extends string> = {
     x: {
         y: 0;
@@ -503,4 +488,4 @@ type Wat<K extends string> = {
         [P in K]: 0;
     };
 } ? true : false;
-type Huh = Wat<"y">; // true
+type Huh = Wat<"y">;

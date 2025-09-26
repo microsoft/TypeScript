@@ -131,11 +131,10 @@ export declare const func: Func<SegmentAnnotated>;
 export declare function useState<T>(initial: T): [value: T, setter: (T: any) => void];
 export type Iter = Func<[step: number, iterations: number]>;
 export declare function readSegment([length, count]: [number, number]): void;
-// documenting binding pattern behavior (currently does _not_ generate tuple names)
 export declare const val: [number, number];
 export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
 export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
 export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
 export type RecusiveRest2 = [string, ...RecusiveRest2[]];
-export declare const argumentsOfGAsFirstArgument: [[elem: object, index: number]]; // one tuple with captures arguments as first member
-export declare const argumentsOfG: [elem: object, index: number]; // captured arguments list re-spread
+export declare const argumentsOfGAsFirstArgument: [[elem: object, index: number]];
+export declare const argumentsOfG: [elem: object, index: number];

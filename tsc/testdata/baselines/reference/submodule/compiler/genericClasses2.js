@@ -39,6 +39,6 @@ declare class C<T> {
     z: Foo<number>;
 }
 declare var v1: C<string>;
-declare var y: string; // should be 'string'
-declare var w: string; // should be 'string'
-declare var z: number; // should be 'number'
+declare var y: string;
+declare var w: string;
+declare var z: number;

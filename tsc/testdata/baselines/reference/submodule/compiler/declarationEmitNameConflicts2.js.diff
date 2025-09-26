@@ -27,16 +27,3 @@
              (function (Z) {
                  Z.f = X.Y.base.f; // Should be base.f
                  Z.C = X.Y.base.C; // Should be base.C
-@@= skipped -28, +28 lines =@@
-     }
- }
- declare namespace X.Y.base.Z {
--    var f: typeof base.f;
--    var C: typeof base.C;
--    var M: typeof base.M;
--    var E: typeof base.E;
-+    var f: typeof base.f; // Should be base.f
-+    var C: typeof base.C; // Should be base.C
-+    var M: typeof base.M; // Should be base.M
-+    var E: typeof base.E; // Should be base.E
- }

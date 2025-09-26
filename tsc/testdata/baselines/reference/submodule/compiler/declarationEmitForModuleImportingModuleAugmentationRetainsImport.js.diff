@@ -9,12 +9,3 @@
  class ParentThing {
  }
  exports.ParentThing = ParentThing;
-@@= skipped -15, +15 lines =@@
-
-
- //// [parent.d.ts]
--import './child1';
-+import './child1'; // this import should still exist in some form in the output, since it augments this module
- export declare class ParentThing implements ParentThing {
- }
- //// [child1.d.ts]

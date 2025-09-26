@@ -99,15 +99,11 @@ declare namespace m {
 }
 declare class g<T> {
 }
-// Just the name
 declare function foo(): typeof c;
 declare function foo2(): typeof c;
-// Qualified name
 declare function foo3(): typeof m.c;
 declare function foo4(): typeof m.c;
-// Just the name with type arguments
 declare function foo5(): typeof g;
 declare function foo6(): typeof g;
-// Qualified name with type arguments
 declare function foo7(): typeof m.g;
 declare function foo8(): typeof m.g;

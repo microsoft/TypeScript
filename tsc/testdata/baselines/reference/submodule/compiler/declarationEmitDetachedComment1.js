@@ -62,14 +62,12 @@ class Hola {
 declare class Hello {
 }
 //// [test2.d.ts]
-/* A comment at the top of the file. */
 /**
  * Hi class
  */
 declare class Hi {
 }
 //// [test3.d.ts]
-// A one-line comment at the top of the file.
 /**
  * Hola class
  */

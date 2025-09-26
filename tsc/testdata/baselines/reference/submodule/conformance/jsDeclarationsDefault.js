@@ -119,7 +119,6 @@ export type default = string | number;
  * @typedef {string | number} default
  */
 //// [index6.d.ts]
-// merge type alias and function (OK)
 export default function func(): void;
 export type default = string | number;
 /**
@@ -136,12 +135,12 @@ out/index5.d.ts(3,13): error TS2457: Type alias name cannot be 'default'.
 out/index5.d.ts(3,21): error TS1128: Declaration or statement expected.
 out/index5.d.ts(3,23): error TS2693: 'string' only refers to a type, but is being used as a value here.
 out/index5.d.ts(3,32): error TS2693: 'number' only refers to a type, but is being used as a value here.
-out/index6.d.ts(3,1): error TS1128: Declaration or statement expected.
-out/index6.d.ts(3,8): error TS2304: Cannot find name 'type'.
-out/index6.d.ts(3,13): error TS2457: Type alias name cannot be 'default'.
-out/index6.d.ts(3,21): error TS1128: Declaration or statement expected.
-out/index6.d.ts(3,23): error TS2693: 'string' only refers to a type, but is being used as a value here.
-out/index6.d.ts(3,32): error TS2693: 'number' only refers to a type, but is being used as a value here.
+out/index6.d.ts(2,1): error TS1128: Declaration or statement expected.
+out/index6.d.ts(2,8): error TS2304: Cannot find name 'type'.
+out/index6.d.ts(2,13): error TS2457: Type alias name cannot be 'default'.
+out/index6.d.ts(2,21): error TS1128: Declaration or statement expected.
+out/index6.d.ts(2,23): error TS2693: 'string' only refers to a type, but is being used as a value here.
+out/index6.d.ts(2,32): error TS2693: 'number' only refers to a type, but is being used as a value here.
 
 
 ==== out/index1.d.ts (0 errors) ====
@@ -188,7 +187,6 @@ out/index6.d.ts(3,32): error TS2693: 'number' only refers to a type, but is bein
      */
     
 ==== out/index6.d.ts (6 errors) ====
-    // merge type alias and function (OK)
     export default function func(): void;
     export type default = string | number;
     ~~~~~~

@@ -78,27 +78,3 @@
      nc_f1() {
      }
      get nc_prop() {
-@@= skipped -28, +29 lines =@@
-     i1_f1(): void;
-     /** i1_l1*/
-     i1_l1: () => void;
-+    // il_nc_p1
-     i1_nc_p1: number;
-     i1_nc_f1(): void;
-     i1_nc_l1: () => void;
-@@= skipped -12, +13 lines =@@
- }
- declare class c1 implements i1 {
-     i1_p1: number;
-+    // i1_f1
-     i1_f1(): void;
-     i1_l1: () => void;
-     i1_nc_p1: number;
-@@= skipped -66, +67 lines =@@
-     i2_f1(): void;
-     /** i2_l1*/
-     i2_l1: () => void;
-+    // i2_nc_p1
-     i2_nc_p1: number;
-     i2_nc_f1(): void;
-     i2_nc_l1: () => void;

@@ -104,13 +104,11 @@ declare namespace templa.dom.mvc {
     interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
     }
 }
-// Module
 declare namespace templa.dom.mvc {
     class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
         constructor();
     }
 }
-// Module
 declare namespace templa.dom.mvc.composite {
     class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
         _controllers: templa.mvc.IController<templa.mvc.IModel>[];

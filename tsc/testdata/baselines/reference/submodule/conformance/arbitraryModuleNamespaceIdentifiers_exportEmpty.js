@@ -19,7 +19,5 @@ const bar = foo;
 
 
 //// [arbitraryModuleNamespaceIdentifiers_exportEmpty.d.ts]
-// This should result in a type error. In particular, the empty string is a now
-// a valid module export name, and should be treated as such here.
 declare const empty = "empty";
 export { empty as "" };

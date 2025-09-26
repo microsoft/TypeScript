@@ -47,12 +47,10 @@ export { bar as baz } from "fs";
 
 
 //// [index.d.ts]
-// cjs format file
 export { default } from "fs";
 export { default as foo } from "fs";
 export { bar as baz } from "fs";
 //// [index.d.ts]
-// esm format file
 export { default } from "fs";
 export { default as foo } from "fs";
 export { bar as baz } from "fs";

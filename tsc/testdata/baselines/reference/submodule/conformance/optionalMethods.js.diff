@@ -30,13 +30,3 @@
 +    a = 1;
      f() { return 1; }
  }
-
-@@= skipped -26, +24 lines =@@
-     c?: number | undefined;
-     constructor(d?: number | undefined, e?: number);
-     f(): number;
--    g?(): number;
-+    g?(): number; // Body of optional method can be omitted
-     h?(): number;
- }
- declare function test2(x: Bar): void;

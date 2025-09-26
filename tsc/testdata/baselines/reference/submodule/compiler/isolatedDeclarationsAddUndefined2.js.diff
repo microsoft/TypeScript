@@ -37,11 +37,3 @@
      constructor(x) {
          this.x = x;
      }
-@@= skipped -36, +40 lines =@@
-
-
- //// [isolatedDeclarationsAddUndefined2.d.ts]
-+// https://github.com/microsoft/TypeScript/issues/60123
- export declare class Bar {
-     private x?;
-     constructor(x?: Array | undefined);

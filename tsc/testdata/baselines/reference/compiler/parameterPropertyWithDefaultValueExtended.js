@@ -65,27 +65,22 @@ export class PublicWithDefault {
 
 
 //// [parameterPropertyWithDefaultValueExtended.d.ts]
-// Test with default value - should not have undefined
 export declare class WithDefault {
     readonly timestamp: Date;
     constructor(timestamp?: Date);
 }
-// Test without default value but optional - should have undefined
 export declare class WithoutDefault {
     readonly timestamp?: Date | undefined;
     constructor(timestamp?: Date | undefined);
 }
-// Test with explicit undefined type - should keep it
 export declare class ExplicitUndefined {
     readonly timestamp: Date | undefined;
     constructor(timestamp?: Date | undefined);
 }
-// Test private parameter property with default value
 export declare class PrivateWithDefault {
     private timestamp;
     constructor(timestamp?: Date);
 }
-// Test public parameter property with default value
 export declare class PublicWithDefault {
     timestamp: Date;
     constructor(timestamp?: Date);

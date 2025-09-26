@@ -424,7 +424,6 @@ function getValueConcrete(o, k) {
 
 
 //// [correlatedUnions.d.ts]
-// Various repros from #30581
 type RecordMap = {
     n: number;
     s: string;
@@ -438,9 +437,8 @@ type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = {
     };
 }[K];
 declare function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>): void;
-declare const r1: UnionRecord<'n'>; // { kind: 'n', v: number, f: (v: number) => void }
-declare const r2: UnionRecord; // { kind: 'n', ... } | { kind: 's', ... } | { kind: 'b', ... }
-// --------
+declare const r1: UnionRecord<'n'>;
+declare const r2: UnionRecord;
 type TextFieldData = {
     value: string;
 };
@@ -464,7 +462,6 @@ declare function renderTextField(props: TextFieldData): void;
 declare function renderSelectField(props: SelectFieldData): void;
 declare const renderFuncs: RenderFuncMap;
 declare function renderField<K extends keyof FieldMap>(field: FormField<K>): void;
-// --------
 type TypeMap = {
     foo: string;
     bar: number;
@@ -482,7 +479,6 @@ type DataEntry<K extends Keys = Keys> = {
 }[K];
 declare const data: DataEntry[];
 declare function process<K extends Keys>(data: DataEntry<K>[]): void;
-// --------
 type LetterMap = {
     A: string;
     B: number;
@@ -509,7 +505,6 @@ declare const xx: {
     letter: B;
     caller: BCaller;
 };
-// --------
 type Ev<K extends keyof DocumentEventMap> = {
     [P in K]: {
         readonly name: P;
@@ -529,9 +524,7 @@ declare const scrollEvent: {
     readonly once?: boolean | undefined;
     readonly callback: (ev: Event) => void;
 };
-// --------
 declare function ff1(): void;
-// Repro from #47368
 type ArgMap = {
     a: number;
     b: string;
@@ -544,7 +537,6 @@ declare function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]
 declare function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
 declare function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
 declare function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]): void;
-// Repro from #47890
 interface MyObj {
     someKey: {
         name: string;
@@ -555,13 +547,11 @@ interface MyObj {
 }
 declare const ref: MyObj;
 declare function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined;
-// Repro from #48157
 interface Foo {
     bar?: string;
 }
 declare function foo<T extends keyof Foo>(prop: T, f: Required<Foo>): void;
 declare function bar(t: string): void;
-// Repro from #48246
 declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr): {
     [Item in T[number] as Item[Attr]]: Item;
 };
@@ -582,7 +572,6 @@ type BarLookup = typeof BAR_LOOKUP;
 type Baz = {
     [K in keyof BarLookup]: BarLookup[K]['name'];
 };
-// repro from #43982
 interface Original {
     prop1: {
         subProp1: string;
@@ -602,13 +591,11 @@ type SameKeys<T> = {
 };
 type MappedFromOriginal = SameKeys<Original>;
 declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
-// repro from #31675
 interface Config {
     string: string;
     number: number;
 }
 declare function getConfigOrDefault<T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]): Config[T];
-// repro from #47523
 type Foo1 = {
     x: number;
     y: string;

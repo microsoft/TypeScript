@@ -181,11 +181,8 @@ declare let g5: () => number;
 declare let g6: (x: any) => number;
 declare let g7: (x: any, y: any) => string;
 declare let g8: (x: number, y: string) => string;
-// Repro from #25288
 declare var tuple: [number, string];
-// Repro from #25289
 declare function take(cb: (a: number, b: string) => void): void;
-// Repro from #29833
 type ArgsUnion = [number, string] | [number, Error];
 type TupleUnionFunc = (...params: ArgsUnion) => number;
 declare const funcUnionTupleNoRest: TupleUnionFunc;

@@ -58,7 +58,6 @@ function f4() {
 
 
 //// [typeInterfaceDeclarationsInBlockStatements1.d.ts]
-// https://github.com/microsoft/TypeScript/issues/60175
 declare function f1(): void;
 declare function f2(): void;
 declare function f3(): void;

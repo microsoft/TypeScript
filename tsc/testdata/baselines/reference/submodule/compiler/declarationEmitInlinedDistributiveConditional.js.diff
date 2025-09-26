@@ -18,8 +18,3 @@
  const a = (0, api_1.dropPrivateProps1)({ foo: 42, _bar: 'secret' }); // type is {foo: number}
  //a._bar                                                // error: _bar does not exist           <===== as expected
  const b = (0, api_1.dropPrivateProps2)({ foo: 42, _bar: 'secret' }); // type is {foo: number, _bar: string}
-@@= skipped -22, +22 lines =@@
- export declare const dropPrivateProps2: <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; };
- //// [test.d.ts]
- export {};
-+//b._bar                                                // no error, type of b._bar is string   <===== NOT expected

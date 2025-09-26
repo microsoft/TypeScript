@@ -48,19 +48,8 @@
  }
 
 
- //// [initializerWithThisPropertyAccess.d.ts]
- declare class A {
-     a: number;
--    b: number;
-+    b: number; // Error
-     c: () => number;
-     d: number;
-     constructor();
-@@= skipped -49, +44 lines =@@
-     a: number;
-     b: number;
+@@= skipped -51, +46 lines =@@
  }
-+// Repro from #37979
  declare class Foo {
      private bar;
 -    readonly barProp = false;

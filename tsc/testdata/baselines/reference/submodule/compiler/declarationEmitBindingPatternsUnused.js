@@ -209,13 +209,10 @@ let referencedInSignartureParamTypeCtorType;
 type Named = {
     name: string;
 };
-// Resons we can't remove aliases that are not used in the function signature: 
-// 1.Causes duplicate identifier if we remove alias
 declare function duplicateIndetifiers({ name: alias, name: alias2 }: Named): void;
 declare function duplicateIndetifiers2(name: string, { name: alias }: Named): void;
 declare function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named): void;
 declare let value: string;
-// 2.Can change in meaning for typeof value if we remove alias
 declare function shadowedVariable({ value: alias }: {
     value: string;
 }): typeof value;

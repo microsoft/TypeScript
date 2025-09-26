@@ -673,15 +673,15 @@ declare class privateClass {
 export declare class publicClass {
 }
 export interface publicInterfaceWithPrivatePropertyTypes {
-    myProperty: privateClass; // Error
+    myProperty: privateClass;
 }
 export interface publicInterfaceWithPublicPropertyTypes {
     myProperty: publicClass;
 }
 export declare class publicClassWithWithPrivatePropertyTypes {
-    static myPublicStaticProperty: privateClass; // Error
+    static myPublicStaticProperty: privateClass;
     private static myPrivateStaticProperty;
-    myPublicProperty: privateClass; // Error
+    myPublicProperty: privateClass;
     private myPrivateProperty;
 }
 export declare class publicClassWithWithPublicPropertyTypes {
@@ -690,34 +690,34 @@ export declare class publicClassWithWithPublicPropertyTypes {
     myPublicProperty: publicClass;
     private myPrivateProperty;
 }
-export declare var publicVarWithPrivatePropertyTypes: privateClass; // Error
+export declare var publicVarWithPrivatePropertyTypes: privateClass;
 export declare var publicVarWithPublicPropertyTypes: publicClass;
-export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
+export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass;
 export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
 export interface publicInterfaceWithPrivateModulePropertyTypes {
-    myProperty: privateModule.publicClass; // Error
+    myProperty: privateModule.publicClass;
 }
 export declare class publicClassWithPrivateModulePropertyTypes {
-    static myPublicStaticProperty: privateModule.publicClass; // Error
-    myPublicProperty: privateModule.publicClass; // Error
+    static myPublicStaticProperty: privateModule.publicClass;
+    myPublicProperty: privateModule.publicClass;
 }
-export declare var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
-export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+export declare var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
     }
     export interface publicInterfaceWithPrivatePropertyTypes {
-        myProperty: privateClass; // Error
+        myProperty: privateClass;
     }
     export interface publicInterfaceWithPublicPropertyTypes {
         myProperty: publicClass;
     }
     export class publicClassWithWithPrivatePropertyTypes {
-        static myPublicStaticProperty: privateClass; // Error
+        static myPublicStaticProperty: privateClass;
         private static myPrivateStaticProperty;
-        myPublicProperty: privateClass; // Error
+        myPublicProperty: privateClass;
         private myPrivateProperty;
     }
     export class publicClassWithWithPublicPropertyTypes {
@@ -726,19 +726,19 @@ export declare namespace publicModule {
         myPublicProperty: publicClass;
         private myPrivateProperty;
     }
-    export var publicVarWithPrivatePropertyTypes: privateClass; // Error
+    export var publicVarWithPrivatePropertyTypes: privateClass;
     export var publicVarWithPublicPropertyTypes: publicClass;
-    export var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
+    export var publicAmbientVarWithPrivatePropertyTypes: privateClass;
     export var publicAmbientVarWithPublicPropertyTypes: publicClass;
     export interface publicInterfaceWithPrivateModulePropertyTypes {
-        myProperty: privateModule.publicClass; // Error
+        myProperty: privateModule.publicClass;
     }
     export class publicClassWithPrivateModulePropertyTypes {
-        static myPublicStaticProperty: privateModule.publicClass; // Error
-        myPublicProperty: privateModule.publicClass; // Error
+        static myPublicStaticProperty: privateModule.publicClass;
+        myPublicProperty: privateModule.publicClass;
     }
-    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
-    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
     export {};
 }
 declare namespace privateModule {
@@ -838,15 +838,15 @@ declare namespace publicModuleInGlobal {
         export {};
     }
     export interface publicInterfaceWithPrivatePropertyTypes {
-        myProperty: privateClass; // Error
+        myProperty: privateClass;
     }
     export interface publicInterfaceWithPublicPropertyTypes {
         myProperty: publicClass;
     }
     export class publicClassWithWithPrivatePropertyTypes {
-        static myPublicStaticProperty: privateClass; // Error
+        static myPublicStaticProperty: privateClass;
         private static myPrivateStaticProperty;
-        myPublicProperty: privateClass; // Error
+        myPublicProperty: privateClass;
         private myPrivateProperty;
     }
     export class publicClassWithWithPublicPropertyTypes {
@@ -855,18 +855,18 @@ declare namespace publicModuleInGlobal {
         myPublicProperty: publicClass;
         private myPrivateProperty;
     }
-    export var publicVarWithPrivatePropertyTypes: privateClass; // Error
+    export var publicVarWithPrivatePropertyTypes: privateClass;
     export var publicVarWithPublicPropertyTypes: publicClass;
-    export var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
+    export var publicAmbientVarWithPrivatePropertyTypes: privateClass;
     export var publicAmbientVarWithPublicPropertyTypes: publicClass;
     export interface publicInterfaceWithPrivateModulePropertyTypes {
-        myProperty: privateModule.publicClass; // Error
+        myProperty: privateModule.publicClass;
     }
     export class publicClassWithPrivateModulePropertyTypes {
-        static myPublicStaticProperty: privateModule.publicClass; // Error
-        myPublicProperty: privateModule.publicClass; // Error
+        static myPublicStaticProperty: privateModule.publicClass;
+        myPublicProperty: privateModule.publicClass;
     }
-    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
-    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
     export {};
 }

@@ -23,13 +23,11 @@
 
  //// [index.d.ts]
 -export { default, default as foo, bar as baz } from "fs";
-+// cjs format file
 +export { default } from "fs";
 +export { default as foo } from "fs";
 +export { bar as baz } from "fs";
  //// [index.d.ts]
 -export { default, default as foo, bar as baz } from "fs";
-+// esm format file
 +export { default } from "fs";
 +export { default as foo } from "fs";
 +export { bar as baz } from "fs";

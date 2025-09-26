@@ -40,10 +40,8 @@ export * as fs from "fs";
 
 
 //// [index.d.ts]
-// cjs format file
 export * from "fs";
 export * as fs from "fs";
 //// [index.d.ts]
-// esm format file
 export * from "fs";
 export * as fs from "fs";

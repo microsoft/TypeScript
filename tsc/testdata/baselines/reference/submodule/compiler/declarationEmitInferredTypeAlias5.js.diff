@@ -1,9 +1,0 @@
---- old.declarationEmitInferredTypeAlias5.js
-+++ new.declarationEmitInferredTypeAlias5.js
-@@= skipped -25, +25 lines =@@
- //// [0.d.ts]
- export type Data = string | boolean;
- //// [1.d.ts]
-+//let v2: Z.Data;
- declare let v: string | boolean;
- export { v };

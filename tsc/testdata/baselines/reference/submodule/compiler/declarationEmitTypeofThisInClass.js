@@ -16,5 +16,5 @@ class Foo {
 //// [declarationEmitTypeofThisInClass.d.ts]
 declare class Foo {
     foo: string;
-    bar: typeof this.foo; //Public property 'bar' of exported class has or is using private name 'this'.(4031)
+    bar: typeof this.foo;
 }

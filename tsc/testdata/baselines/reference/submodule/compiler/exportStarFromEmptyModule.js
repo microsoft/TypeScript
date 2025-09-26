@@ -70,7 +70,6 @@ export declare class A {
     static r: any;
 }
 //// [exportStarFromEmptyModule_module2.d.ts]
-// empty
 //// [exportStarFromEmptyModule_module3.d.ts]
 export * from "./exportStarFromEmptyModule_module2";
 export * from "./exportStarFromEmptyModule_module1";

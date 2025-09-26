@@ -194,12 +194,13 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	// !!! strada skipped emit if there were diagnostics
 
 	printerOptions := printer.PrinterOptions{
-		RemoveComments:  options.RemoveComments.IsTrue(),
-		NewLine:         options.NewLine,
-		NoEmitHelpers:   options.NoEmitHelpers.IsTrue(),
-		SourceMap:       options.DeclarationMap.IsTrue(),
-		InlineSourceMap: options.InlineSourceMap.IsTrue(),
-		InlineSources:   options.InlineSources.IsTrue(),
+		RemoveComments:      options.RemoveComments.IsTrue(),
+		OnlyPrintJSDocStyle: true,
+		NewLine:             options.NewLine,
+		NoEmitHelpers:       options.NoEmitHelpers.IsTrue(),
+		SourceMap:           options.DeclarationMap.IsTrue(),
+		InlineSourceMap:     options.InlineSourceMap.IsTrue(),
+		InlineSources:       options.InlineSources.IsTrue(),
 		// !!!
 	}
 

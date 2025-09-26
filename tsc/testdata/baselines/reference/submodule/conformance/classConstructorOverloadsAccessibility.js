@@ -55,12 +55,12 @@ class D {
 
 //// [classConstructorOverloadsAccessibility.d.ts]
 declare class A {
-    constructor(a: boolean); // error
-    protected constructor(a: number); // error
+    constructor(a: boolean);
+    protected constructor(a: number);
     private constructor();
 }
 declare class B {
-    protected constructor(a: number); // error
+    protected constructor(a: number);
     constructor(a: string);
 }
 declare class C {

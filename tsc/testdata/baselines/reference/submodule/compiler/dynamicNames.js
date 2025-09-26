@@ -241,13 +241,11 @@ import { s0, T0 } from "./module";
 export declare const c4 = "a";
 export declare const c5 = 1;
 export declare const s2: typeof s0;
-// object literals
 export declare const o1: {
     a: number;
     1: string;
     [s0]: boolean;
 };
-// check element access types
 export declare const o1_c4: number;
 export declare const o1_c5: string;
 export declare const o1_s2: boolean;

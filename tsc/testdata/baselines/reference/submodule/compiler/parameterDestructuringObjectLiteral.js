@@ -19,7 +19,6 @@ fn2({ headers: { foo: 1 } });
 
 
 //// [parameterDestructuringObjectLiteral.d.ts]
-// Repro from #22644
 declare const fn1: (options: {
     headers?: {};
 }) => void;

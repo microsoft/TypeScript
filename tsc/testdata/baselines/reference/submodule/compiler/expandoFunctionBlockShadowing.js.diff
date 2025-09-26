@@ -12,11 +12,8 @@
  function X() { }
  if (Math.random()) {
      const X = {};
-@@= skipped -21, +21 lines =@@
-
-
+@@= skipped -23, +23 lines =@@
  //// [expandoFunctionBlockShadowing.d.ts]
-+// https://github.com/microsoft/TypeScript/issues/56538
  export declare function X(): void;
  export declare function Y(): void;
 -export declare namespace Y {

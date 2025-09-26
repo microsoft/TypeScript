@@ -34,7 +34,6 @@ const x = { [A]: s => s.length };
 
 
 //// [contextuallyTypedSymbolNamedProperties.d.ts]
-// Repros from #43628
 declare const A: unique symbol;
 declare const B: unique symbol;
 type Action = {

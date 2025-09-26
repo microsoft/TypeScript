@@ -221,9 +221,7 @@ export declare class c1 {
     private set nc_pp3(value);
     static get nc_s3(): string;
     static set nc_s3(value: string);
-    // Only getter property
     get onlyGetter(): number;
-    // Only setter property
     set onlySetter(value: number);
 }
 //// [declFileAccessors_1.d.ts]
@@ -247,8 +245,6 @@ declare class c2 {
     private set nc_pp3(value);
     static get nc_s3(): string;
     static set nc_s3(value: string);
-    // Only getter property
     get onlyGetter(): number;
-    // Only setter property
     set onlySetter(value: number);
 }

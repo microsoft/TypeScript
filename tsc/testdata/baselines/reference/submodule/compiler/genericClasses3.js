@@ -42,6 +42,6 @@ declare class C<T> extends B<T> {
     x: T;
 }
 declare var v2: C<string>;
-declare var y: string; // should be 'string'
-declare var u: string; // should be 'string'
+declare var y: string;
+declare var u: string;
 declare var z: string;

@@ -100,7 +100,6 @@ class C4 {
 
 
 //// [declarationEmitProtectedMembers.d.ts]
-// Class with protected members
 declare class C1 {
     protected x: number;
     protected f(): number;
@@ -111,12 +110,10 @@ declare class C1 {
     protected static set staticSetter(a: number);
     protected static get staticGetter(): number;
 }
-// Derived class overriding protected members
 declare class C2 extends C1 {
     protected f(): number;
     protected static sf(): number;
 }
-// Derived class making protected members public
 declare class C3 extends C2 {
     x: number;
     static sx: number;
@@ -124,7 +121,6 @@ declare class C3 extends C2 {
     static sf(): number;
     static get staticGetter(): number;
 }
-// Protected properties in constructors
 declare class C4 {
     protected a: number;
     protected b: any;

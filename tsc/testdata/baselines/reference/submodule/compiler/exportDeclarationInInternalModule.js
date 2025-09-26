@@ -50,6 +50,6 @@ declare namespace Aaa {
 declare namespace Bbb {
     export class SomeType {
     }
-    export * from Aaa; // this line causes the nullref
+    export * from Aaa;
 }
 declare var a: Bbb.SomeType;

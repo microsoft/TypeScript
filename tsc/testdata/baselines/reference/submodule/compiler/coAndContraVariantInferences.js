@@ -65,7 +65,6 @@ declare function foo<T>(x: {
 }, f: (arg: {
     kind: T;
 }) => void): void;
-// Repro from #45603
 interface Action<TName extends string, TPayload> {
     name: TName;
     payload: TPayload;

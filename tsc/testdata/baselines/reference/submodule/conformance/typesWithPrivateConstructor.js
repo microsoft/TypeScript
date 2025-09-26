@@ -33,10 +33,10 @@ var r2 = c2.constructor;
 declare class C {
     private constructor();
 }
-declare var c: any; // error C is private
+declare var c: any;
 declare var r: () => void;
 declare class C2 {
     private constructor();
 }
-declare var c2: any; // error C2 is private
+declare var c2: any;
 declare var r2: (x: number) => void;

@@ -67,8 +67,8 @@ declare namespace X.Y.base {
     }
 }
 declare namespace X.Y.base.Z {
-    var f: typeof base.f; // Should be base.f
-    var C: typeof base.C; // Should be base.C
-    var M: typeof base.M; // Should be base.M
-    var E: typeof base.E; // Should be base.E
+    var f: typeof base.f;
+    var C: typeof base.C;
+    var M: typeof base.M;
+    var E: typeof base.E;
 }

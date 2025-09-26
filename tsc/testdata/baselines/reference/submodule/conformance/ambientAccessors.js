@@ -20,7 +20,6 @@ declare class C {
 
 
 //// [ambientAccessors.d.ts]
-// ok to use accessors in ambient class in ES3
 declare class C {
     static get a(): string;
     static set a(value: string);

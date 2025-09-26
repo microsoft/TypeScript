@@ -9,16 +9,3 @@
      (function (P) {
          class C {
              static f() { }
-@@= skipped -43, +43 lines =@@
-     enum D {
-         f = 0
-     }
--    var v: M.D;
--    var w: typeof M.D.f;
--    var x: typeof M.C.f;
--    var x: typeof M.C.f;
-+    var v: M.D; // ok
-+    var w: typeof M.D.f; // error, should be typeof M.D.f
-+    var x: typeof M.C.f; // error, should be typeof M.C.f
-+    var x: typeof M.C.f; // error, should be typeof M.E.f
- }

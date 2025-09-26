@@ -153,11 +153,11 @@ export declare namespace M.P {
         }
     }
     export import im = M.P.f;
-    var a: typeof M.f; // emitted incorrectly as typeof f
-    var b: typeof M.C; // ok
-    var c: typeof M.N; // ok
-    var g: typeof M.c.g; // ok
-    var d: typeof import("./declarationEmit_nameConflicts_1"); // emitted incorrectly as typeof im
+    var a: typeof M.f;
+    var b: typeof M.C;
+    var c: typeof M.N;
+    var g: typeof M.c.g;
+    var d: typeof import("./declarationEmit_nameConflicts_1");
 }
 export declare namespace M.Q {
     function f(): void;
@@ -169,11 +169,11 @@ export declare namespace M.Q {
         }
     }
     interface b extends M.b {
-    } // ok
+    }
     interface I extends M.c.I {
-    } // ok
+    }
     namespace c {
         interface I extends M.c.I {
-        } // ok
+        }
     }
 }

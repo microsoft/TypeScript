@@ -18,7 +18,6 @@ declare namespace outer {
     interface Beta {
     }
     namespace inner {
-        // .d.ts emit: should be 'extends outer.Beta'
         interface Beta extends outer.Beta {
         }
     }

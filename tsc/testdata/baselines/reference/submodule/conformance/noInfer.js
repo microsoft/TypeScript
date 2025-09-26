@@ -124,7 +124,6 @@ class OkClass2 {
 
 
 //// [noInfer.d.ts]
-// NoInfer<T> is erased for primitives
 type T00 = NoInfer<string>;
 type T01 = NoInfer<string | number | boolean>;
 type T02 = NoInfer<undefined>;
@@ -132,16 +131,13 @@ type T03 = NoInfer<"foo">;
 type T04 = NoInfer<`foo${string}`>;
 type T05 = NoInfer<`foo${string}` & `${string}bar`>;
 type T06 = NoInfer<{}>;
-// NoInfer<T> is preserved for object types
 type T10 = NoInfer<string[]>;
 type T11 = NoInfer<{
     x: string;
 }>;
-// NoInfer<T> is erased if it has no effect
 type T20<T> = NoInfer<NoInfer<T>>;
 type T21<T> = NoInfer<NoInfer<T> & string>;
 type T22<T> = NoInfer<NoInfer<T> & string[]>;
-// keyof NoInfer<T> is transformed into NoInfer<keyof T>
 type T30 = keyof NoInfer<{
     a: string;
     b: string;

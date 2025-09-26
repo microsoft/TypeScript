@@ -191,7 +191,6 @@
 +     * @type {T & U}
 +     */
 +    field: T & U;
-+    // @readonly is currently unsupported, it seems - included here just in case that changes
 +    /**
 +     * @type {T & U}
 +     * @readonly
@@ -222,12 +221,7 @@
      /**
       * @type {string}
       */
-     static staticField: string;
-+    // @readonly is currently unsupported, it seems - included here just in case that changes
-     /**
-      * @type {string}
-      * @readonly
-@@= skipped -12, +45 lines =@@
+@@= skipped -12, +43 lines =@@
      static readonly staticReadonlyField: string;
      static staticInitializedField: number;
      /**

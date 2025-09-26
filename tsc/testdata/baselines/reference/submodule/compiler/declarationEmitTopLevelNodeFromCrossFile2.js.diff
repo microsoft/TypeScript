@@ -9,11 +9,3 @@
  exports._ = boxedBox_1.boxedBox;
  // At index 83
  /**
-@@= skipped -12, +12 lines =@@
- export declare const _: import("./box").Box<{
-     boxed: import("./box").Box<number>;
- }>;
-+// At index 83
- /**
-  * wat
-  */

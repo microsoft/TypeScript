@@ -20,4 +20,4 @@ interface WithNonPrimitive {
     foo: object;
 }
 declare var a: WithNonPrimitive;
-declare var b: WithNonPrimitive; // expect error
+declare var b: WithNonPrimitive;

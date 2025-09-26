@@ -51,16 +51,13 @@ module.exports = a;
 
 
 //// [index.d.ts]
-// cjs format file
 declare const a: {};
 export = a;
 //// [file.d.ts]
 export = a;
 //// [index.d.ts]
-// esm format file
 declare const a: {};
 export = a;
 //// [file.d.ts]
-// esm format file
 import "fs";
 export = a;

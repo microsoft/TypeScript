@@ -339,7 +339,6 @@ type Foo = {
     readonly b: string;
 };
 declare function f10(foo: Foo): void;
-// Repro from #12606
 type Func<T> = (...args: any[]) => T;
 type Spec<T> = {
     [P in keyof T]: Func<T[P]> | Spec<T[P]>;
@@ -350,14 +349,12 @@ type Spec<T> = {
  * of calling its associated function with the supplied arguments.
  */
 declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
-// Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
 declare var g1: (...args: any[]) => {
     sum: number;
     nested: {
         mul: string;
     };
 };
-// Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 declare var g2: (...args: any[]) => {
     foo: {
         bar: {
@@ -365,14 +362,11 @@ declare var g2: (...args: any[]) => {
         };
     };
 };
-// Repro from #12633
 declare const foo: <T>(object: T, partial: Partial<T>) => T;
 declare let o: {
     a: number;
     b: number;
 };
-// Inferring to { [P in K]: X }, where K extends keyof T, produces same inferences as
-// inferring to { [P in keyof T]: X }.
 declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
 declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
@@ -398,7 +392,6 @@ declare let x4: {
     foo: number;
     bar: string;
 };
-// Repro from #29765
 declare function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K>;
 declare const myAny: any;
 declare const o1: Pick<any, "bar" | "foo">;

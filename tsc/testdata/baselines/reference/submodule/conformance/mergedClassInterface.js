@@ -94,7 +94,6 @@ interface C5 {
 interface C5 {
     x4: number;
 }
-// checks if properties actually were merged
 declare var c5: C5;
 //// [file2.d.ts]
 declare class C6 {

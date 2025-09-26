@@ -260,7 +260,6 @@ interface i1 {
     i1_f1(): void;
     /** i1_l1*/
     i1_l1: () => void;
-    // il_nc_p1
     i1_nc_p1: number;
     i1_nc_f1(): void;
     i1_nc_l1: () => void;
@@ -273,7 +272,6 @@ interface i1 {
 }
 declare class c1 implements i1 {
     i1_p1: number;
-    // i1_f1
     i1_f1(): void;
     i1_l1: () => void;
     i1_nc_p1: number;
@@ -340,7 +338,6 @@ interface i2 {
     i2_f1(): void;
     /** i2_l1*/
     i2_l1: () => void;
-    // i2_nc_p1
     i2_nc_p1: number;
     i2_nc_f1(): void;
     i2_nc_l1: () => void;

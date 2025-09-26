@@ -33,15 +33,11 @@ const shadowedVariable = ({ value: alias }) => value;
 type Named = {
     name: string;
 };
-// Tempting to remove alias if unused 
 declare let notReferenced: ({ name: alias }: Named) => void;
-// Resons we can't remove aliases that are not used in the function signature: 
-// 1.Causes duplicate identifier if we remove alias
 declare const duplicateIndetifiers: ({ name: alias, name: alias2 }: Named) => void;
 declare const duplicateIndetifiers2: (name: string, { name: alias }: Named) => void;
 declare const duplicateIndetifiers3: ({ name: alias }: Named, { name: alias2 }: Named) => void;
 declare let value: string;
-// 2.Can change in meaning for typeof value if we remove alias
 declare const shadowedVariable: ({ value: alias }: {
     value: string;
 }) => string;

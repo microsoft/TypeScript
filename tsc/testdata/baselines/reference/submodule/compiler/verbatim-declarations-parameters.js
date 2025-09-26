@@ -63,19 +63,11 @@ export declare class Foo {
     resolveType?: {
         [x: string]: any;
     } | undefined;
-    constructor(
-    // Type node is accurate, preserve
-    reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, 
-    // Resolve type node, requires adding | undefined
-    resolveType?: {
+    constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: {
         [x: string]: any;
     } | undefined);
 }
-export declare function foo1(
-// Type node is accurate, preserve
-reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, 
-// Resolve type node, requires adding | undefined
-resolveType: {
+export declare function foo1(reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: {
     [x: string]: any;
 } | undefined, requiredParam: number): void;
 export {};

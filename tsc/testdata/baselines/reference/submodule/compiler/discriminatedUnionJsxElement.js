@@ -41,7 +41,6 @@ function ListItem(_data) {
 
 
 //// [discriminatedUnionJsxElement.d.ts]
-// Repro from #46021
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
     menuItemsVariant?: MenuItemVariant;
 }

@@ -8,5 +8,5 @@ type T2<out out> = T2 // Error: circularly references
 
 
 //// [varianceAnnotationsWithCircularlyReferencesError.d.ts]
-type T1<in , > = T1; // Error: circularly references 
-type T2<out out> = T2; // Error: circularly references 
+type T1<in , > = T1;
+type T2<out out> = T2;

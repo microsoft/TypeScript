@@ -28,5 +28,5 @@ export declare namespace M {
         interface I {
         }
     }
-    var w: v.I; // Gets emitted as C.I, which is the wrong interface
+    var w: v.I;
 }

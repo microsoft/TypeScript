@@ -70,9 +70,9 @@ type T12 = readonly string[];
 type T13 = ReadonlyArray<string>;
 type T20 = [number, number];
 type T21 = readonly [number, number];
-type T30 = readonly string; // Error
-type T31<T> = readonly T; // Error
-type T32 = readonly (readonly string[]); // Error
-type T33 = readonly Array<string>; // Error
+type T30 = readonly string;
+type T31<T> = readonly T;
+type T32 = readonly (readonly string[]);
+type T33 = readonly Array<string>;
 declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): void;
 declare var v: readonly [number, number, ...number[]];

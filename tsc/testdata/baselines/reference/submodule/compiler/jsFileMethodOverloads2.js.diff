@@ -1,14 +1,6 @@
 --- old.jsFileMethodOverloads2.js
 +++ new.jsFileMethodOverloads2.js
-@@= skipped -90, +90 lines =@@
-
-
- //// [jsFileMethodOverloads2.d.ts]
-+// Also works if all @overload tags are combined in one comment.
- /**
-  * @template T
-  */
-@@= skipped -8, +9 lines =@@
+@@= skipped -98, +98 lines =@@
       * @param {T} value
       */
      constructor(value: T);

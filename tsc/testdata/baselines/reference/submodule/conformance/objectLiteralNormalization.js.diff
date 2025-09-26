@@ -8,31 +8,7 @@
  var __assign = (this && this.__assign) || function () {
      __assign = Object.assign || function(t) {
          for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -51, +50 lines =@@
-
-
- //// [objectLiteralNormalization.d.ts]
-+// Object literals in unions are normalized upon widening
- declare let a1: {
-     a: number;
-     b?: undefined;
-@@= skipped -23, +24 lines =@@
-     b?: undefined;
-     a?: undefined;
- };
-+// Object literals containing spreads are not normalized
- declare let b1: {
-     a: string;
-     b: string;
-@@= skipped -25, +26 lines =@@
-     c: string;
-     z: number;
- };
-+// Before widening {} acts like { [x: string]: undefined }, which is a
-+// subtype of types with all optional properties
- declare let opts: {
-     foo?: string;
-     bar?: string;
+@@= skipped -105, +104 lines =@@
      baz?: boolean;
  };
  declare let c1: {
@@ -53,19 +29,3 @@
  };
  declare let c3: {
      a: number;
-@@= skipped -29, +31 lines =@@
-     a: number;
-     b: number;
- };
-+// Normalization applies to nested properties
- declare let d1: {
-     kind: string;
-     pos: {
-@@= skipped -28, +29 lines =@@
-     b: "abc";
-     c: true;
- };
-+// Object literals are inferred as a single normalized union type
- declare let e1: {
-     a: number;
-     b: number;

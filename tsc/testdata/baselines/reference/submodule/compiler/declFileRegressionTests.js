@@ -14,8 +14,6 @@ var n = { w: null, x: '', y: () => { }, z: 32 };
 
 
 //// [declFileRegressionTests.d.ts]
-// 'null' not converted to 'any' in d.ts
-// function types not piped through correctly
 declare var n: {
     w: any;
     x: string;

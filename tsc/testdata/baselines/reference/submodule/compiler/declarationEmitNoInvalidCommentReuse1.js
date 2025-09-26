@@ -24,7 +24,6 @@ export type Id<T> = T;
 export declare const _: {
     foo: {};
 };
-///////////
 /**
  * huh
  */ 

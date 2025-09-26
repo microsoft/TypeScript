@@ -30,9 +30,8 @@ x = Colors.FancyPink;
 /** Enum of colors*/
 declare enum Colors {
     /** Fancy name for 'blue'*/
-    Cornflower = 0 /* blue */,
+    Cornflower = 0,
     /** Fancy name for 'pink'*/
-    FancyPink = // trailing comment
-     1
-} // trailing comment
+    FancyPink = 1
+}
 declare var x: Colors;

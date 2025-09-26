@@ -406,7 +406,6 @@ export declare class E<T, U> {
      * @type {T & U}
      */
     field: T & U;
-    // @readonly is currently unsupported, it seems - included here just in case that changes
     /**
      * @type {T & U}
      * @readonly
@@ -438,7 +437,6 @@ export declare class E<T, U> {
      * @type {string}
      */
     static staticField: string;
-    // @readonly is currently unsupported, it seems - included here just in case that changes
     /**
      * @type {string}
      * @readonly

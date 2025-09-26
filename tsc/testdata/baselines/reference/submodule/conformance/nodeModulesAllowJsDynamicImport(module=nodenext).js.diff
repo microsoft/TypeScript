@@ -5,9 +5,7 @@
 
  //// [index.d.ts]
 -export function main(): Promise<void>;
-+// cjs format file
 +export declare function main(): Promise<void>;
  //// [index.d.ts]
 -export function main(): Promise<void>;
-+// esm format file
 +export declare function main(): Promise<void>;

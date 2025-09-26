@@ -260,18 +260,6 @@ declare let a: RoyalGuard;
 interface GuardInterface extends RoyalGuard {
 }
 declare let b: GuardInterface;
-// if (((a.isLeader)())) {
-//     a.lead();
-// }
-// else if (((a).isFollower())) {
-//     a.follow();
-// }
-// if (((a["isLeader"])())) {
-//     a.lead();
-// }
-// else if (((a)["isFollower"]())) {
-//     a.follow();
-// }
 declare var holder2: {
     a: RoyalGuard;
 };

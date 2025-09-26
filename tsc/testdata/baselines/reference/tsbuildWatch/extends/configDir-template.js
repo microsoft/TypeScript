@@ -69,7 +69,6 @@ main.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 //// [/home/src/projects/myproject/decls/main.d.ts] *new* 
-// some comment
 export declare const y = 10;
 
 //// [/home/src/projects/myproject/decls/types/sometype.d.ts] *new* 

@@ -78,7 +78,6 @@
  };
  export default _default;
 -export declare function fnWithPartialAnnotationOnDefaultparam(x: ({} & {
-+// allows `undefined` on the input side, thanks to the initializer
 +export declare function fnWithPartialAnnotationOnDefaultparam(x: {
      name: string;
 -}) | undefined, b: number): void;

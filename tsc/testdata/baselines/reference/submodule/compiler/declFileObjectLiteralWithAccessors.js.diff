@@ -1,0 +1,13 @@
+--- old.declFileObjectLiteralWithAccessors.js
++++ new.declFileObjectLiteralWithAccessors.js
+@@= skipped -30, +30 lines =@@
+     b: number;
+     x: number;
+ };
+-declare var /*4*/ point: {
++declare var point: {
+     b: number;
+     x: number;
+ };
+-declare var /*2*/ x: number;
++declare var x: number;

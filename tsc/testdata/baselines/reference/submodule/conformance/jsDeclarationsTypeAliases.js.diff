@@ -31,7 +31,7 @@
 
 
  //// [index.d.ts]
-+export {}; // flag file as module
++export {};
  export type PropName = string | number | symbol;
 -/**
 - * Callback

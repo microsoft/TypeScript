@@ -165,11 +165,6 @@ var E20;
 
 
 //// [enumClassification.d.ts]
-// An enum type where each member has no initializer or an initializer that specififes
-// a numeric literal, a string literal, or a single identifier naming another member in
-// the enum type is classified as a literal enum type. An enum type that doesn't adhere
-// to this pattern is classified as a numeric enum type.
-// Examples of literal enum types
 declare enum E01 {
     A = 0
 }
@@ -209,7 +204,6 @@ declare enum E08 {
     D = "hello",
     E = 10
 }
-// Examples of numeric enum types with only constant members
 declare enum E10 {
 }
 declare enum E11 {
@@ -222,7 +216,6 @@ declare enum E12 {
     B = 2,
     C = 4
 }
-// Examples of numeric enum types with constant and computed members
 declare enum E20 {
     A,
     B,

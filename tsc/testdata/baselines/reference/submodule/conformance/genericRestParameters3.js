@@ -136,25 +136,21 @@ declare const t1: [string] | [number, boolean];
 declare const t2: readonly [string] | [number, boolean];
 declare const t3: [string] | readonly [number, boolean];
 declare const t4: readonly [string] | readonly [number, boolean];
-// Repro from #26110
 interface CoolArray<E> extends Array<E> {
     hello: number;
 }
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 declare function bar<T extends any[]>(...args: T): T;
 declare let a: [number, number];
-declare let b: CoolArray<number>; // Error
+declare let b: CoolArray<number>;
 declare function baz<T>(...args: CoolArray<T>): void;
 declare const ca: CoolArray<number>;
-// Repro from #26491
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
-// Repro from #35066
 declare function foo2(...args: string[] | number[]): void;
 declare let x2: ReadonlyArray<string>;
-// Repros from #47754
 type RestParams = [y: string] | [y: number];
 type Signature = (x: string, ...rest: RestParams) => void;
-type MergedParams = Parameters<Signature>; // [x: string, y: string] | [x: string, y: number]
+type MergedParams = Parameters<Signature>;
 declare let ff1: (...rest: [string, string] | [string, number]) => void;
 declare let ff2: (x: string, ...rest: [string] | [number]) => void;
 declare function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void): void;

@@ -146,19 +146,19 @@ class c9 {
 //// [commentsClass.d.ts]
 /** This is class c2 without constuctor*/
 declare class c2 {
-} // trailing comment1
+}
 declare var i2: c2;
 declare var i2_c: typeof c2;
 declare class c3 {
     /** Constructor comment*/
-    constructor(); // trailing comment of constructor
-} /* trailing comment 2 */
+    constructor();
+}
 declare var i3: c3;
 declare var i3_c: typeof c3;
 /** Class comment*/
 declare class c4 {
     /** Constructor comment*/
-    constructor(); /* trailing comment of constructor 2*/
+    constructor();
 }
 declare var i4: c4;
 declare var i4_c: typeof c4;
@@ -168,20 +168,14 @@ declare class c5 {
 }
 declare var i5: c5;
 declare var i5_c: typeof c5;
-/// class with statics and constructor
 declare class c6 {
-    /// s1 comment
-    static s1: number; /// s1 comment2
-    /// constructor comment
+    static s1: number;
     constructor();
 }
 declare var i6: c6;
 declare var i6_c: typeof c6;
-// class with statics and constructor
 declare class c7 {
-    // s1 comment
     static s1: number;
-    // constructor comment
     constructor();
 }
 declare var i7: c7;

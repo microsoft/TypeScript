@@ -14,24 +14,3 @@
          m232() { return null; }
          m242() { return null; }
          m252() { return null; } // don't generate
-@@= skipped -22, +29 lines =@@
-     interface I2 {
-     }
-     export class D {
--        private c;
-+        private c; // don't generate
-         m1: number;
-         m2: string;
--        m22: C;
-+        m22: C; // don't generate
-         m23: E;
-         m24: I1;
--        m25: I2;
-+        m25: I2; // don't generate
-         m232(): E;
-         m242(): I1;
--        m252(): I2;
-+        m252(): I2; // don't generate
-         m26(i: I1): void;
-         m262(i: I2): void;
-         m3(): C;

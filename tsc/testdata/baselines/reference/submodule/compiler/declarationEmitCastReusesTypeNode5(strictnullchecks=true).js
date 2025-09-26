@@ -35,12 +35,8 @@ type R = {
     foo: string;
 };
 export declare class C {
-    // under !strictNullChecks all types can be reused from the assertion
-    // under strictNullChecks we need to add undefined, and we can't always know we can
-    // Can't know if references contain undefined, fall back to inference
     tsResolve?: R | undefined;
     tsResolve2?: string | R | undefined;
-    // Simple type. we can add undefined
     reuseType?: string | ((p: R) => void) | undefined;
     reuseType2?: string | (new (p: R) => R) | undefined;
     reuseType3?: any;

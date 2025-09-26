@@ -1,8 +1,0 @@
---- old.genericFunctions0.js
-+++ new.genericFunctions0.js
-@@= skipped -11, +11 lines =@@
-
- //// [genericFunctions0.d.ts]
- declare function foo<T>(x: T): T;
--declare var x: number;
-+declare var x: number; // 'x' should be number

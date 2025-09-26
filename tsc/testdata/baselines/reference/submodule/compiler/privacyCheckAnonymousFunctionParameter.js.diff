@@ -1,8 +1,0 @@
---- old.privacyCheckAnonymousFunctionParameter.js
-+++ new.privacyCheckAnonymousFunctionParameter.js
-@@= skipped -37, +37 lines =@@
-
-
- //// [privacyCheckAnonymousFunctionParameter.d.ts]
--export declare var x: number;
-+export declare var x: number; // Makes this an external module

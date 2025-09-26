@@ -8,11 +8,3 @@
  // Repros from #43628
  const A = Symbol("A");
  const B = Symbol("B");
-@@= skipped -12, +11 lines =@@
-
-
- //// [contextuallyTypedSymbolNamedProperties.d.ts]
-+// Repros from #43628
- declare const A: unique symbol;
- declare const B: unique symbol;
- type Action = {

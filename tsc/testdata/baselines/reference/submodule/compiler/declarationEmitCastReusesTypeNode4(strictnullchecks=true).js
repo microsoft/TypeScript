@@ -64,7 +64,7 @@ export declare class C {
     };
     /** @optional */ optField: {
         name?: string | undefined;
-    }; // not a thing
+    };
     /** @readonly */ readonly roFiled: {
         name?: string | undefined;
     };
@@ -89,7 +89,6 @@ declare const _default: {
     name?: string | undefined;
 };
 export default /** @type {P} */ _default;
-// allows `undefined` on the input side, thanks to the initializer
 /**
  *
  * @param {P} x

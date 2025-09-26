@@ -37,10 +37,8 @@ for await (const y of []) { }
 
 
 //// [index.d.ts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.ts]
-// esm format file
 declare const x = 1;
 export { x };

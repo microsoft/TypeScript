@@ -293,7 +293,6 @@ var import_private;
 
 
 //// [privacyLocalInternalReferenceImportWithExport.d.ts]
-// private elements
 declare namespace m_private {
     class c_private {
     }
@@ -314,7 +313,6 @@ declare namespace m_private {
         }
     }
 }
-// Public elements
 export declare namespace m_public {
     class c_public {
     }
@@ -336,7 +334,6 @@ export declare namespace m_public {
     }
 }
 export declare namespace import_public {
-    // Privacy errors - importing private elements
     export import im_public_c_private = m_private.c_private;
     export import im_public_e_private = m_private.e_private;
     export import im_public_f_private = m_private.f_private;
@@ -351,7 +348,6 @@ export declare namespace import_public {
     var publicUse_im_public_i_private: im_public_i_private;
     var publicUse_im_public_mi_private: im_public_mi_private.c;
     var publicUse_im_public_mu_private: im_public_mu_private.i;
-    // No Privacy errors - importing public elements
     export import im_public_c_public = m_public.c_public;
     export import im_public_e_public = m_public.e_public;
     export import im_public_f_public = m_public.f_public;

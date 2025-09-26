@@ -55,4 +55,3 @@ export declare const dropPrivateProps1: <Obj>(obj: Obj) => { [K in import("./int
 export declare const dropPrivateProps2: <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; };
 //// [test.d.ts]
 export {};
-//b._bar                                                // no error, type of b._bar is string   <===== NOT expected

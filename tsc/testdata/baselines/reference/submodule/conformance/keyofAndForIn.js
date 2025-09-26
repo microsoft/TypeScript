@@ -71,7 +71,6 @@ function f3(obj, k) {
 
 
 //// [keyofAndForIn.d.ts]
-// Repro from #12513
 declare function f1<K extends string, T>(obj: {
     [P in K]: T;
 }, k: K): void;

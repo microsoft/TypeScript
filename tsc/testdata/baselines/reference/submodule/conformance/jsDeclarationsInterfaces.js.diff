@@ -11,11 +11,7 @@
 
 
  //// [index.d.ts]
-+// Pretty much all of this should be an error, (since interfaces are forbidden in js),
-+// but we should be able to synthesize declarations from the symbols regardless
- export interface A {
- }
- export interface B {
+@@= skipped -12, +11 lines =@@
      cat: string;
  }
  export interface C<T, U> {
@@ -54,7 +50,7 @@
  export interface J {
  }
  export interface K extends I, J {
-@@= skipped -107, +116 lines =@@
+@@= skipped -95, +103 lines =@@
          y: 0;
      };
  }

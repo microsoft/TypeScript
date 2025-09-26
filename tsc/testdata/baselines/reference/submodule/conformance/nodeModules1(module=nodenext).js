@@ -673,50 +673,38 @@ export { x };
 
 
 //// [index.d.ts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x = 1;
 export { x };
 //// [index.d.ts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x = 1;
 export { x };
 //// [index.d.ts]
-// esm format file
 declare const x = 1;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x = 1;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x = 1;
 export { x };
 //// [index.d.ts]
-// esm format file
 declare const x = 1;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x = 1;
 export { x };

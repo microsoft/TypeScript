@@ -16,28 +16,3 @@
  }
  exports.c_public = c_public;
  //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
-@@= skipped -25, +26 lines =@@
-
-
- //// [privacyTopLevelAmbientExternalModuleImportWithExport_require2.d.ts]
-+// private elements
-+// Export - Error ambient modules allowed only in global
- declare module 'm' {
-     class c_private {
-         baz: string;
-@@= skipped -12, +14 lines =@@
-     }
- }
- //// [privacyTopLevelAmbientExternalModuleImportWithExport_require.d.ts]
-+// Public elements
- export declare class c_public {
-     foo: string;
- }
-@@= skipped -8, +9 lines =@@
-     bar: string;
- }
- //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.d.ts]
-+// Privacy errors - importing private elements
- export import im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
- export import im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
- export import im_public_mi_public = require("m");

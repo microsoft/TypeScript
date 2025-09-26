@@ -69,12 +69,12 @@ export declare class Foo {
 }
 //// [bar.d.ts]
 import ns = require("./cls");
-export = ns; // TS Only
+export = ns;
 //// [bin.d.ts]
 export = ns;
 //// [globalNs.d.ts]
 export * from "./cls";
-export as namespace GLO; // TS Only
+export as namespace GLO;
 //// [includeAll.d.ts]
 import "./bar";
 import "./bin";

@@ -14,5 +14,4 @@ A.prototype.b = {};
 
 
 //// [index.d.ts]
-// https://github.com/microsoft/TypeScript/issues/35801
 declare let A: any;

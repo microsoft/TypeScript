@@ -486,7 +486,6 @@ declare class Derived extends Test {
     baz(x: number): void;
 }
 declare function f11(items: Test[]): void;
-// Invalid constructs
 declare let Q1: new (x: unknown) => x is string;
 declare let Q2: new (x: boolean) => asserts x;
 declare let Q3: new (x: unknown) => asserts x is string;
@@ -497,7 +496,6 @@ declare class Wat {
     set p2(x: asserts this is string);
 }
 declare function f20(x: unknown): void;
-// Repro from #35940
 interface Thing {
     good: boolean;
     isGood(): asserts this is GoodThing;

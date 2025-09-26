@@ -76,7 +76,6 @@ var Test;
 
 
 //// [typeGuardOfFormThisMemberErrors.d.ts]
-// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 declare namespace Test {
     class FileSystemObject {
         path: string;

@@ -35,9 +35,7 @@ require("pkg");
 
 
 //// [index.d.ts]
-// incorrect mode
 import type { RequireInterface } from "pkg";
-// not type-only
 import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 export interface LocalInterface extends RequireInterface, ImportInterface {
 }

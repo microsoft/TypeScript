@@ -51,10 +51,7 @@ declare enum Hello1 {
     World1 = 0
 }
 declare class Foo {
-    // Same names + string => OK
     Bar: string;
-    // Same names + enum => OK
     Hello: typeof Hello;
-    // Different names + enum => OK
     Hello2: typeof Hello1;
 }

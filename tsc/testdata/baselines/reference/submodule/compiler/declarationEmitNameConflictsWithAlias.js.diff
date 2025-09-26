@@ -1,9 +1,0 @@
---- old.declarationEmitNameConflictsWithAlias.js
-+++ new.declarationEmitNameConflictsWithAlias.js
-@@= skipped -27, +27 lines =@@
-         interface I {
-         }
-     }
--    var w: v.I;
-+    var w: v.I; // Gets emitted as C.I, which is the wrong interface
- }

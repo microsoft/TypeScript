@@ -14,7 +14,6 @@ exports.b = [{ foo: 0, m() { } }, { bar: 1 }];
 
 
 //// [declarationEmitInferredUndefinedPropFromFunctionInArray.d.ts]
-// repro from https://github.com/microsoft/TypeScript/issues/53914
 export declare let b: ({
     foo: number;
     m(): void;

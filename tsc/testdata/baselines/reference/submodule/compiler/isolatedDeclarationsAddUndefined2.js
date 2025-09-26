@@ -68,7 +68,6 @@ function test3(x) { }
 
 
 //// [isolatedDeclarationsAddUndefined2.d.ts]
-// https://github.com/microsoft/TypeScript/issues/60123
 export declare class Bar {
     private x?;
     constructor(x?: Array | undefined);

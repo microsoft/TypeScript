@@ -74,7 +74,6 @@ declare const _default: {
     name: string;
 };
 export default _default;
-// allows `undefined` on the input side, thanks to the initializer
 export declare function fnWithPartialAnnotationOnDefaultparam(x: {} & {
     name: string;
 }, b: number): void;

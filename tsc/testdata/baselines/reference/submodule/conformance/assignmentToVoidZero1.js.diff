@@ -19,7 +19,6 @@
  //// [assignmentToVoidZero1.d.ts]
 -export const x: 1;
 -export const y: 2;
-+// #38552
 +export var y = exports.x = void 0;
 +export var x = 1;
 +export var y = 2;

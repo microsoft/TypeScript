@@ -13,4 +13,4 @@ exports.f = ((arg) => arg)({ '0': 0 }); // Original prop uses string syntax
 //// [declarationEmitMappedTypePropertyFromNumericStringKey.d.ts]
 export declare const f: {
     "0": string | number;
-}; // Original prop uses string syntax
+};

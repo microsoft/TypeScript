@@ -53,8 +53,6 @@ function f3(x, y) {
 
 
 //// [indexSignatureAndMappedType.d.ts]
-// A mapped type { [P in K]: X }, where K is a generic type, is related to
-// { [key: string]: Y } if X is related to Y.
 declare function f1<T, K extends string>(x: {
     [key: string]: T;
 }, y: Record<K, T>): void;
@@ -64,7 +62,6 @@ declare function f2<T>(x: {
 declare function f3<T, U, K extends string>(x: {
     [key: string]: T;
 }, y: Record<K, U>): void;
-// Repro from #14548
 type Dictionary = {
     [key: string]: string;
 };

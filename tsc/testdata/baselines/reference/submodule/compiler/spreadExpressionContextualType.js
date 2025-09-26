@@ -43,7 +43,6 @@ function test2(item) {
 
 
 //// [spreadExpressionContextualType.d.ts]
-// Repro from #43966
 interface Orange {
     name: string;
 }

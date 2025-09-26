@@ -6,7 +6,6 @@
    */
 -declare function x(y?: any[] | undefined): void;
 +declare function x(y?: Array | undefined): void;
-+// @ts-ignore
  /** @param {function (Array)} func Invoked
   */
 -declare function y(func: (arg0: any[]) => any): void;

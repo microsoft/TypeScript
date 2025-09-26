@@ -35,10 +35,3 @@
 +const server_9 = require("./server");
  exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
 
-
-@@= skipped -44, +44 lines =@@
- export declare var xxxx: number;
- export declare var xxxx: number;
- export declare var z111: number;
--export declare var z2: number;
-+export declare var z2: number; // z2 shouldn't give redeclare error

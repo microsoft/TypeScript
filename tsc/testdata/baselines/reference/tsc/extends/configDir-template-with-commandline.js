@@ -71,7 +71,6 @@ exports.x = void 0;
 exports.x = 10;
 
 //// [/home/src/projects/myproject/decls/main.d.ts] *new* 
-// some comment
 export declare const y = 10;
 
 //// [/home/src/projects/myproject/decls/types/sometype.d.ts] *new* 

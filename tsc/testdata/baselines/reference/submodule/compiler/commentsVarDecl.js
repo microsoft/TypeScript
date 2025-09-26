@@ -80,25 +80,22 @@ n4 = z2;
 
 //// [commentsVarDecl.d.ts]
 /** Variable comments*/
-declare var myVariable: number; // This trailing Comment1
+declare var myVariable: number;
 /** This is another variable comment*/
 declare var anotherVariable: number;
-// shouldn't appear
 declare var aVar: string;
 /** this is multiline comment
   * All these variables are of number type */
-declare var anotherAnotherVariable: number; /* these are multiple trailing comments */ /* multiple trailing comments */
+declare var anotherAnotherVariable: number;
 /** Triple slash multiline comment*/
 /** another line in the comment*/
 /** comment line 2*/
-declare var x: number; /* multiline trailing comment
-this is multiline trailing comment */
+declare var x: number;
 /** triple slash comment1*/
 /** jsdocstyle comment - only this comment should be in .d.ts file*/
 declare var n: number;
 /** var deckaration with comment on type as well*/
 declare var y: number;
-/// var deckaration with comment on type as well
 declare var yy: number;
 /** comment2 */
 declare var z: (x: number, y: number) => number;

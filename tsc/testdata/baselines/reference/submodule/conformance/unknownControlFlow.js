@@ -812,18 +812,18 @@ function fx20(value) {
 
 
 //// [unknownControlFlow.d.ts]
-type T01 = {} & string; // {} & string
-type T02 = {} & 'a'; // 'a'
-type T03 = {} & object; // object
+type T01 = {} & string;
+type T02 = {} & 'a';
+type T03 = {} & object;
 type T04 = {} & {
     x: number;
-}; // { x: number }
-type T05 = {} & null; // never
-type T06 = {} & undefined; // never
-type T07 = undefined & void; // undefined
-type T10 = string & {}; // Specially preserved
-type T11 = number & {}; // Specially preserved
-type T12 = bigint & {}; // Specially preserved
+};
+type T05 = {} & null;
+type T06 = {} & undefined;
+type T07 = undefined & void;
+type T10 = string & {};
+type T11 = number & {};
+type T12 = bigint & {};
 type ThisNode = {};
 type ThatNode = {};
 type ThisOrThatNode = ThisNode | ThatNode;
@@ -847,37 +847,27 @@ declare function ensureNotNullOrUndefined<T>(x: T): T & {};
 declare function f40(a: string | undefined, b: number | null | undefined): void;
 type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 declare function f41<T>(a: T): void;
-// Repro from #48468
 declare function deepEquals<T>(a: T, b: T): boolean;
-// Repro from #49386
 declare function foo<T>(x: T | null): void;
-// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
-// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
-// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
 declare function ff1<T>(t: T, k: keyof T): void;
 declare function ff2<T>(t: T & {}, k: keyof T): void;
 declare function ff3<T>(t: T, k: keyof (T & {})): void;
 declare function ff4<T>(t: T & {}, k: keyof (T & {})): void;
-// Repro from #49681
 type Foo = {
     [key: string]: unknown;
 };
 type NullableFoo = Foo | undefined;
 type Bar<T extends NullableFoo> = NonNullable<T>[string];
-// Generics and intersections with {}
 declare function fx0<T>(value: T & ({} | null)): void;
 declare function fx1<T extends unknown>(value: T & ({} | null)): void;
 declare function fx2<T extends {}>(value: T & ({} | null)): void;
 declare function fx3<T extends {} | undefined>(value: T & ({} | null)): void;
 declare function fx4<T extends {} | null>(value: T & ({} | null)): void;
 declare function fx5<T extends {} | null | undefined>(value: T & ({} | null)): void;
-// Double-equals narrowing
 declare function fx10(x: string | number, y: number): void;
-// Repros from #50706
 declare function SendBlob(encoding: unknown): void;
 declare function doSomething1<T extends unknown>(value: T): T;
 declare function doSomething2(value: unknown): void;
-// Repro from #51009
 type TypeA = {
     A: 'A';
     B: 'B';
@@ -889,10 +879,8 @@ type TypeB = {
 };
 type R<T extends keyof TypeA> = T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
 type R2<T extends PropertyKey> = T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
-// Repro from #51041
 type AB = "A" | "B";
 declare function x<T_AB extends AB>(x: T_AB & undefined, y: any): void;
-// Repro from #51538
 type Left = 'left';
 type Right = 'right' & {
     right: 'right';

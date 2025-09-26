@@ -55,7 +55,6 @@ export const obj4 = {
 
 
 //// [index.d.ts]
-// same type accessors
 export declare const obj1: {
     /**
      * my awesome getter (first in source order)
@@ -63,7 +62,6 @@ export declare const obj1: {
      */
     x: string;
 };
-// divergent accessors
 export declare const obj2: {
     /**
      * my awesome getter

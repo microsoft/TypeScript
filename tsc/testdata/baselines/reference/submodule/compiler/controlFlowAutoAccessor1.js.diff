@@ -8,18 +8,3 @@
  class Example {
      accessor test;
      constructor(test) {
-@@= skipped -59, +58 lines =@@
-     constructor(test: number | undefined);
-     getTest(): number;
- }
-+// https://github.com/microsoft/TypeScript/issues/59728
- declare class Example3 {
-     accessor value: number | null;
-     constructor(n: number);
-@@= skipped -9, +10 lines =@@
-     static accessor value: number | null;
- }
- declare class Example5 {
--    static accessor value: any;
-+    static accessor value: any; // error
- }

@@ -9,11 +9,3 @@
      l: this.f,
      /** own x*/
      x: this.f(10),
-@@= skipped -40, +40 lines =@@
-     /** this is fnfoo*/
-     fnfoo(/**param help*/ b: number): string;
-     nc_fnfoo(b: number): string;
-+    // nc_y
-     nc_y: number;
- }
- declare var i2_i: i2;

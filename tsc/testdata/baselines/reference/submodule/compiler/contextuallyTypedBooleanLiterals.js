@@ -38,17 +38,15 @@ const x = observable(false);
 
 
 //// [contextuallyTypedBooleanLiterals.d.ts]
-// Repro from #48363
 type Box<T> = {
     get: () => T;
     set: (value: T) => void;
 };
 declare function box<T>(value: T): Box<T>;
-declare const bn1: Box<number>; // Box<number>
-declare const bn2: Box<number>; // Ok
-declare const bb1: Box<boolean>; // Box<boolean>
-declare const bb2: Box<boolean>; // Error, box<false> not assignable to Box<boolean>
-// Repro from #48150
+declare const bn1: Box<number>;
+declare const bn2: Box<number>;
+declare const bb1: Box<boolean>;
+declare const bb2: Box<boolean>;
 interface Observable<T> {
     (): T;
     (value: T): any;

@@ -94,83 +94,79 @@ function f12({ a: string = "" }) { return "a"; }
 
 
 //// [renamingDestructuredPropertyInFunctionType.d.ts]
-// GH#37454, GH#41044
 type O = {
     a?: string;
     b: number;
     c: number;
 };
-type F1 = (arg: number) => any; // OK
-type F2 = ({ a: string }: O) => any; // Error
-type F3 = ({ a: string, b, c }: O) => any; // Error
-type F4 = ({ a: string }: O) => any; // Error
-type F5 = ({ a: string, b, c }: O) => any; // Error
+type F1 = (arg: number) => any;
+type F2 = ({ a: string }: O) => any;
+type F3 = ({ a: string, b, c }: O) => any;
+type F4 = ({ a: string }: O) => any;
+type F5 = ({ a: string, b, c }: O) => any;
 type F6 = ({ a: string }: {
     a: any;
-}) => typeof string; // OK
+}) => typeof string;
 type F7 = ({ a: string, b: number }: {
     a: any;
     b: any;
-}) => typeof number; // Error
+}) => typeof number;
 type F8 = ({ a, b: number }: {
     a: any;
     b: any;
-}) => typeof number; // OK
-type F9 = ([a, b, c]: [any, any, any]) => void; // OK
-type G1 = new (arg: number) => any; // OK
-type G2 = new ({ a: string }: O) => any; // Error
-type G3 = new ({ a: string, b, c }: O) => any; // Error
-type G4 = new ({ a: string }: O) => any; // Error
-type G5 = new ({ a: string, b, c }: O) => any; // Error
+}) => typeof number;
+type F9 = ([a, b, c]: [any, any, any]) => void;
+type G1 = new (arg: number) => any;
+type G2 = new ({ a: string }: O) => any;
+type G3 = new ({ a: string, b, c }: O) => any;
+type G4 = new ({ a: string }: O) => any;
+type G5 = new ({ a: string, b, c }: O) => any;
 type G6 = new ({ a: string }: {
     a: any;
-}) => typeof string; // OK
+}) => typeof string;
 type G7 = new ({ a: string, b: number }: {
     a: any;
     b: any;
-}) => typeof number; // Error
+}) => typeof number;
 type G8 = new ({ a, b: number }: {
     a: any;
     b: any;
-}) => typeof number; // OK
-type G9 = new ([a, b, c]: [any, any, any]) => void; // OK
-// Below are Error but renaming is retained in declaration emit,
-// since elinding it would leave invalid syntax.
+}) => typeof number;
+type G9 = new ([a, b, c]: [any, any, any]) => void;
 type F10 = ({ "a": string }: {
     a: any;
-}) => void; // Error
+}) => void;
 type F11 = ({ 2: string }: {
     2: any;
-}) => void; // Error
-type F12 = ({ ["a"]: string }: O) => void; // Error
+}) => void;
+type F12 = ({ ["a"]: string }: O) => void;
 type F13 = ({ [2]: string }: {
     2: any;
-}) => void; // Error
+}) => void;
 type G10 = new ({ "a": string }: {
     a: any;
-}) => void; // Error
+}) => void;
 type G11 = new ({ 2: string }: {
     2: any;
-}) => void; // Error
-type G12 = new ({ ["a"]: string }: O) => void; // Error
+}) => void;
+type G12 = new ({ ["a"]: string }: O) => void;
 type G13 = new ({ [2]: string }: {
     2: any;
-}) => void; // Error
+}) => void;
 interface I {
-    method1(arg: number): any; // OK
+    method1(arg: number): any;
     method2({ a: string }: {
         a: any;
-    }): any; // Error
-    (arg: number): any; // OK
+    }): any;
+    (arg: number): any;
     ({ a: string }: {
         a: any;
-    }): any; // Error
-    new (arg: number): any; // OK
+    }): any;
+    new (arg: number): any;
     new ({ a: string }: {
         a: any;
-    }): any; // Error
+    }): any;
 }
-// Below are OK but renaming should be removed from declaration emit
 declare function f1({ a: string }: O): void;
 declare const f2: ({ a: string }: O) => void;
 declare const f3: ({ a: string, b, c }: O) => void;
@@ -192,5 +188,4 @@ declare function f10({ ["a"]: string }: O): void;
 declare const f11: ({ [2]: string }: {
     2: any;
 }) => void;
-// In below case `string` should be kept because it is used
 declare function f12({ a: string }: O): typeof string;

@@ -16,10 +16,3 @@
 +const context_1 = require("@loopback/context");
  exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 
-
-@@= skipped -21, +21 lines =@@
- //// [usage.d.ts]
- import { ControllerClass } from './application';
- import { BindingKey } from '@loopback/context';
--export declare const CONTROLLER_CLASS: BindingKey<ControllerClass>;
-+export declare const CONTROLLER_CLASS: BindingKey<ControllerClass>; // line in question

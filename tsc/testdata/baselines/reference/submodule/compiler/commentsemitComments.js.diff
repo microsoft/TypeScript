@@ -20,13 +20,12 @@
          constructor(x) {
              this.x = x;
          }
-@@= skipped -56, +57 lines =@@
-         x: number;
-         constructor(x: number);
-     }
-+    /// module m2
-     namespace m2 {
-     }
+@@= skipped -43, +44 lines =@@
+     /**indexer property*/
+     [a: number]: string;
+     /** function property;*/
+-    myFoo(/*param prop*/ a: number): string;
++    myFoo(a: number): string;
+     /** prop*/
+     prop: string;
  }
-+/// this is x
- declare var x: any;

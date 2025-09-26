@@ -19,7 +19,7 @@ module T.U { // This needs to be emitted
 declare namespace M {
 }
 declare namespace M {
-    namespace R.S { } //This should be emitted
+    namespace R.S { }
 }
-declare namespace T.U { // This needs to be emitted
+declare namespace T.U {
 }

@@ -228,7 +228,7 @@ declare const b10: Box1;
 declare const b11: Box1;
 declare const b12: Box1;
 type Box2 = Box<Box2 | number>;
-declare const b20: Box2; // Error
+declare const b20: Box2;
 declare const b21: Box2;
 declare const b22: Box2;
 type RecArray<T> = Array<T | RecArray<T>>;
@@ -247,13 +247,12 @@ type ValueOrArray1<T> = T | ValueOrArray1<T>[];
 type ValueOrArray2<T> = T | ValueOrArray2<T>[];
 declare function foo1<T>(a: ValueOrArray1<T>): T;
 declare let ra1: ValueOrArray2<string>;
-declare let x1: string; // Boom!
+declare let x1: string;
 type NumberOrArray1<T> = T | ValueOrArray1<T>[];
 type NumberOrArray2<T> = T | ValueOrArray2<T>[];
 declare function foo2<T>(a: ValueOrArray1<T>): T;
 declare let ra2: ValueOrArray2<string>;
-declare let x2: string; // Boom!
-// Repro from #33617 (errors are expected)
+declare let x2: string;
 type Tree = [HTMLHeadingElement, Tree][];
 declare function parse(node: Tree, index?: number[]): HTMLUListElement;
 declare function cons(hs: HTMLHeadingElement[]): Tree;

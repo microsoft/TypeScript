@@ -290,11 +290,7 @@ class NoQuickInfoClass {
 
 
 //// [commentsCommentParsing.d.ts]
-/// This is simple /// comments
 declare function simple(): void;
-/// multiLine /// Comments
-/// This is example of multiline /// comments
-/// Another multiLine
 declare function multiLine(): void;
 /** this is eg of single line jsdoc style comment */
 declare function jsDocSingleLine(): void;
@@ -308,33 +304,20 @@ declare function jsDocMultiLine(): void;
 /** Shoul mege this line as well
 * and this too*/ /** Another this one too*/
 declare function jsDocMultiLineMerge(): void;
-/// Triple slash comment
 /** jsdoc comment */
 declare function jsDocMixedComments1(): void;
-/// Triple slash comment
 /** jsdoc comment */ /*** another jsDocComment*/
 declare function jsDocMixedComments2(): void;
 /** jsdoc comment */ /*** another jsDocComment*/
-/// Triple slash comment
 declare function jsDocMixedComments3(): void;
 /** jsdoc comment */ /*** another jsDocComment*/
-/// Triple slash comment
-/// Triple slash comment 2
 declare function jsDocMixedComments4(): void;
-/// Triple slash comment 1
 /** jsdoc comment */ /*** another jsDocComment*/
-/// Triple slash comment
-/// Triple slash comment 2
 declare function jsDocMixedComments5(): void;
 /*** another jsDocComment*/
-/// Triple slash comment 1
-/// Triple slash comment
-/// Triple slash comment 2
 /** jsdoc comment */
 declare function jsDocMixedComments6(): void;
-// This shoulnot be help comment
 declare function noHelpComment1(): void;
-/* This shoulnot be help comment */
 declare function noHelpComment2(): void;
 declare function noHelpComment3(): void;
 /** Adds two integers and returns the result
@@ -381,6 +364,5 @@ declare function divide(a: number, b: number): void;
 *@param c it is third parameter
 */
 declare function jsDocParamTest(/** this is inline comment for a */ a: number, /** this is inline comment for b*/ b: number, c: number, d: number): number;
-/**/
 declare class NoQuickInfoClass {
 }

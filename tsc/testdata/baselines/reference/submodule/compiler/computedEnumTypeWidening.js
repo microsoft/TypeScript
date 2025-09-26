@@ -180,7 +180,6 @@ declare class C {
     readonly p3: E;
     readonly p4: E.B;
 }
-// Repro from #52531
 declare enum MyEnum {
     A = 0,
     B = 1,

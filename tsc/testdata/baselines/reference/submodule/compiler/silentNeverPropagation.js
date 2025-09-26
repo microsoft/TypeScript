@@ -36,7 +36,6 @@ breaks.foo();
 
 
 //// [silentNeverPropagation.d.ts]
-// Repro from #45041
 type ModuleWithState<TState> = {
     state: TState;
 };

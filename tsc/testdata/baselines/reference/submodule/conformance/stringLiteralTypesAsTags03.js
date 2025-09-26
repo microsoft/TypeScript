@@ -81,10 +81,6 @@ interface B extends Entity {
     kind: "B";
     b: string;
 }
-// Currently (2015-12-14), we write '"A" | "A"' and '"B" | "B"' to avoid
-// interpreting respective overloads as "specialized" signatures.
-// That way, we can avoid the need to look for a compatible overload
-// signature and simply check compatibility with the implementation.
 declare function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
 declare function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
 declare let x: A;

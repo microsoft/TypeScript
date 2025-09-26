@@ -809,7 +809,6 @@ type Action = {
 declare function f10({ kind, payload }: Action): void;
 declare function f11(action: Action): void;
 declare function f12({ kind, payload }: Action): void;
-// repro #50206
 declare function f13<T extends Action>({ kind, payload }: T): void;
 declare function f14<T extends Action>(t: T): void;
 type Action2 = {
@@ -836,7 +835,6 @@ type Foo = {
 declare function f30({ kind, isA }: Foo): void;
 type Args = ['A', number] | ['B', string];
 declare function f40(...[kind, data]: Args): void;
-// Repro from #35283
 interface A<T> {
     variant: 'a';
     value: T;
@@ -849,7 +847,6 @@ type AB<T> = A<T> | B<T>;
 declare function printValue<T>(t: T): void;
 declare function printValueList<T>(t: Array<T>): void;
 declare function unrefined1<T>(ab: AB<T>): void;
-// Repro from #38020
 type Action3 = {
     type: 'add';
     payload: {
@@ -862,10 +859,8 @@ type Action3 = {
     };
 };
 declare const reducerBroken: (state: number, { type, payload }: Action3) => number;
-// Repro from #46143
 declare var it: Iterator<number>;
 declare const value: any, done: boolean | undefined;
-// Repro from #46658
 declare function f50(cb: (...args: Args) => void): void;
 declare const f51: (...args: ['A', number] | ['B', string]) => void;
 declare const f52: (...args: ['A', number] | ['B']) => void;
@@ -878,7 +873,6 @@ type ReducerArgs = ["add", {
     secondArr: any[];
 }];
 declare const reducer: (...args: ReducerArgs) => void;
-// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
 type FooMethod = {
     method(...args: [
         type: "str",
@@ -919,10 +913,8 @@ type FooAsyncGenMethod = {
     ]): AsyncGenerator<any, any, any>;
 };
 declare let fooAsyncGenM: FooAsyncGenMethod;
-// Repro from #48345
 type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
 declare const f60: Func;
-// Repro from #48902
 declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: {
     test1?: any;
     test2?: any;
@@ -935,7 +927,6 @@ declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, 
     test9?: any;
     value1: any;
 }): void;
-// Repro from #49772
 declare function fa1(x: [true, number] | [false, string]): void;
 declare function fa2(x: {
     guard: true;
@@ -945,7 +936,6 @@ declare function fa2(x: {
     value: string;
 }): void;
 declare const fa3: (...args: [true, number] | [false, string]) => void;
-// Repro from #52152
 interface ClientEvents {
     warn: [message: string];
     shardDisconnect: [closeEvent: CloseEvent, shardId: number];
@@ -954,12 +944,8 @@ declare class Client {
     on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
 }
 declare const bot: Client;
-// Destructuring tuple types with different arities
 declare function fz1([x, y]: [1, 2] | [3, 4] | [5]): void;
-// Repro from #55661
 declare function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]): void;
-// https://github.com/microsoft/TypeScript/issues/56312
 declare function parameterReassigned1([x, y]: [1, 2] | [3, 4]): void;
 declare function parameterReassigned2([x, y]: [1, 2] | [3, 4]): void;
-// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
 declare const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void;

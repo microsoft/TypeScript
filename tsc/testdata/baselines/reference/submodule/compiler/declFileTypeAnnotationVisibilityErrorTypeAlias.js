@@ -85,7 +85,7 @@ declare namespace M {
     export namespace N {
         class Window {
         }
-        var p: W; // Should report error that W is private
+        var p: W;
     }
     export {};
 }
@@ -94,7 +94,7 @@ declare namespace M1 {
     namespace N {
         class Window {
         }
-        var p: W; // No error
+        var p: W;
     }
 }
 declare namespace M2 {
@@ -106,8 +106,8 @@ declare namespace M2 {
         class public1 {
         }
     }
-    export type t2 = private1; // error
+    export type t2 = private1;
     export type t12 = public1;
-    export type t112 = m3.public1; // error
+    export type t112 = m3.public1;
     export {};
 }

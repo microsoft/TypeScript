@@ -37,8 +37,6 @@ export { default } from "fs";
 
 
 //// [index.d.ts]
-// cjs format file
 export { default } from "fs";
 //// [index.d.ts]
-// esm format file
 export { default } from "fs";

@@ -102,7 +102,7 @@ class LocalThing {
 
 
 //// [index.d.ts]
-export {}; // flag file as module
+export {};
 export type PropName = string | number | symbol;
 export type NumberToStringCb = (a: number) => string;
 export type MixinName<T> = T & {

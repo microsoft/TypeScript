@@ -176,7 +176,7 @@ interface i1 {
     /**indexer property*/
     [a: number]: string;
     /** function property;*/
-    myFoo(/*param prop*/ a: number): string;
+    myFoo(a: number): string;
     /** prop*/
     prop: string;
 }
@@ -189,9 +189,7 @@ declare namespace m1 {
         x: number;
         constructor(x: number);
     }
-    /// module m2
     namespace m2 {
     }
 }
-/// this is x
 declare var x: any;

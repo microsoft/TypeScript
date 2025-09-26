@@ -8,15 +8,7 @@
  foo(a, fab);
  foo(b, fab);
  const actionA = { payload: 'any-string' };
-@@= skipped -28, +27 lines =@@
- }, f: (arg: {
-     kind: T;
- }) => void): void;
-+// Repro from #45603
- interface Action<TName extends string, TPayload> {
-     name: TName;
-     payload: TPayload;
-@@= skipped -7, +8 lines =@@
+@@= skipped -35, +34 lines =@@
  declare const actionA: Action<"ACTION_A", string>;
  declare const actionB: Action<"ACTION_B", boolean>;
  declare function call<TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any): void;

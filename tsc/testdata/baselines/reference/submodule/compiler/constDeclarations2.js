@@ -20,7 +20,6 @@ var M;
 
 
 //// [constDeclarations2.d.ts]
-// No error
 declare namespace M {
     const c1 = false;
     const c2: number;

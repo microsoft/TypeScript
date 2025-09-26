@@ -58,4 +58,3 @@
 -export const origin: Point2D;
 -import { Point2D } from "./source";
 +export declare const origin: any;
-+// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this

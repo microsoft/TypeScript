@@ -46,7 +46,6 @@ declare module "SubModule" {
 /// <reference path="missingImportAfterModuleImport_0.d.ts" preserve="true" />
 import SubModule = require('SubModule');
 declare class MainModule {
-    // public static SubModule: SubModule;
     SubModule: SubModule;
     constructor();
 }

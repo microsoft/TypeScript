@@ -316,7 +316,6 @@ baz(makeFoo(Enum.A), makeFoo(Enum.A));
 
 
 //// [inferFromGenericFunctionReturnTypes3.d.ts]
-// Repro from #13594
 export declare namespace DiagnosticSeverity {
     const Error = 1;
     const Warning = 2;
@@ -330,7 +329,6 @@ export interface Diagnostic {
     source?: string;
     message: string;
 }
-// Repro from #27074
 interface OK<T> {
     kind: "OK";
     value: T;

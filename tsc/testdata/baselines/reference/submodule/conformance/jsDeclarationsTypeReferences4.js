@@ -40,13 +40,10 @@ var A;
 
 
 //// [index.d.ts]
-export declare const Something = 2; // to show conflict that can occur
-// @ts-ignore
+export declare const Something = 2;
 export declare namespace A {
-    // @ts-ignore
     namespace B {
         const thing: import("fs").Something;
-        // @ts-ignore
         export { thing };
     }
 }

@@ -22,4 +22,4 @@ declare class C<T> {
     x: T;
 }
 declare var v1: C<string>;
-declare var y: string; // should be 'string'
+declare var y: string;

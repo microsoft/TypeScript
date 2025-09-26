@@ -208,7 +208,6 @@ function foo2(value) {
 
 
 //// [recursiveConditionalTypes.d.ts]
-// Awaiting promises
 type __Awaited<T> = T extends null | undefined ? T : T extends PromiseLike<infer U> ? __Awaited<U> : T;
 type MyPromise<T> = {
     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
@@ -216,17 +215,15 @@ type MyPromise<T> = {
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 type P1 = __Awaited<any>;
-type P2 = __Awaited<InfinitePromise<number>>; // Error
+type P2 = __Awaited<InfinitePromise<number>>;
 declare function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>): void;
-// Flattening arrays
 type Flatten<T extends readonly unknown[]> = T extends unknown[] ? _Flatten<T>[] : readonly _Flatten<T>[];
 type _Flatten<T> = T extends readonly (infer U)[] ? _Flatten<U> : T;
 type InfiniteArray<T> = InfiniteArray<T>[];
 type B0 = Flatten<string[][][]>;
 type B1 = Flatten<string[][] | readonly (number[] | boolean[][])[]>;
 type B2 = Flatten<InfiniteArray<string>>;
-type B3 = B2[0]; // Error
-// Repeating tuples
+type B3 = B2[0];
 type TupleOf<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
 type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
 type TT0 = TupleOf<string, 4>;
@@ -234,10 +231,9 @@ type TT1 = TupleOf<number, 0 | 2 | 4>;
 type TT2 = TupleOf<number, number>;
 type TT3 = TupleOf<number, any>;
 type TT4 = TupleOf<number, 100>;
-type TT5 = TupleOf<number, 1000>; // Depth error
+type TT5 = TupleOf<number, 1000>;
 declare function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>): void;
 declare function f23<T>(t: TupleOf<T, 3>): T;
-// Inference to recursive type
 interface Box<T> {
     value: T;
 }
@@ -260,7 +256,6 @@ declare let b4: {
         };
     };
 };
-// Inference from nested instantiations of same generic types
 type Box1<T> = {
     value: T;
 };
@@ -269,17 +264,14 @@ type Box2<T> = {
 };
 declare function foo<T>(x: Box1<Box1<T>>): T;
 declare let z: Box2<Box2<string>>;
-// Intersect tuple element types
 type Intersect<U extends any[], R = unknown> = U extends [infer H, ...infer T] ? Intersect<T, R & H> : R;
 type QQ = Intersect<[string[], number[], 7]>;
-// Infer between structurally identical recursive conditional types
 type Unpack1<T> = T extends (infer U)[] ? Unpack1<U> : T;
 type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
 declare function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>): void;
 type Grow1<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow1<[number, ...T], N>;
 type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow2<[string, ...T], N>;
 declare function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>): void;
-// Repros from #41756
 type ParseSuccess<R extends string> = {
     rest: R;
 };
@@ -288,14 +280,12 @@ type TP1 = ParseManyWhitespace<" foo">;
 type ParseManyWhitespace2<S extends string> = S extends ` ${infer R0}` ? Helper<ParseManyWhitespace2<R0>> : ParseSuccess<S>;
 type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null;
 type TP2 = ParseManyWhitespace2<" foo">;
-// Repro from #46183
 type NTuple<N extends number, Tup extends unknown[] = []> = Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
 type Add<A extends number, B extends number> = [
     ...NTuple<A>,
     ...NTuple<B>
 ]['length'];
 declare let five: Add<2, 3>;
-// Repro from #46316
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T ? [T, ...A] extends [...infer X] ? X : never : never;
 type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length'] ? A : _Enumerate<_PrependNextNum<A>, N> & number;
 type Enumerate<N extends number> = number extends N ? number : _Enumerate<[], N> extends (infer E)[] ? E : never;

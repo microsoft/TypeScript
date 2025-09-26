@@ -65,7 +65,6 @@ types/sometype.ts
 main.ts
    Part of 'files' list in tsconfig.json
 //// [/home/src/projects/myproject/decls/main.d.ts] *new* 
-// some comment
 export declare const y = 10;
 
 //// [/home/src/projects/myproject/decls/types/sometype.d.ts] *new* 

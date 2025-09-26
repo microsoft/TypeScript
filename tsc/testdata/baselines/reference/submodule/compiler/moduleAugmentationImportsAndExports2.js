@@ -87,7 +87,6 @@ declare module "./f1" {
     export { B } from "./f2";
     import I = N.Ifc;
     import C = N.Cls;
-    // should have explicit export
     interface A {
         foo(): B;
         bar(): I;

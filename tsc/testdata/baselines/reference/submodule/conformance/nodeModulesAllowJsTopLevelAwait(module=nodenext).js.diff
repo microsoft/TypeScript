@@ -5,11 +5,9 @@
 
  //// [index.d.ts]
 -export const x: 1;
-+// cjs format file
 +declare const x = 1;
 +export { x };
  //// [index.d.ts]
 -export const x: 1;
-+// esm format file
 +declare const x = 1;
 +export { x };

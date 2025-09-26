@@ -63,9 +63,7 @@ exports.processedInternally2 = wrappedTest2({}, "a");
 
 
 //// [other.d.ts]
-// how Omit from lib is defined
 type OmitReal<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
-// what we see when we hover it
 type OmitUnveiled<T, K extends string | number | symbol> = {
     [P in Exclude<keyof T, K>]: T[P];
 };
@@ -116,9 +114,7 @@ index.d.ts(1,144): error TS2304: Cannot find name 'T_1'.
     };
     
 ==== other.d.ts (0 errors) ====
-    // how Omit from lib is defined
     type OmitReal<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
-    // what we see when we hover it
     type OmitUnveiled<T, K extends string | number | symbol> = {
         [P in Exclude<keyof T, K>]: T[P];
     };

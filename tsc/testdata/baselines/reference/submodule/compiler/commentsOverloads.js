@@ -276,7 +276,6 @@ interface i1 {
     foo(a: number): number;
     /** foo 2*/
     foo(b: string): number;
-    // foo 3
     foo(arr: number[]): number;
     /** foo 4 */
     foo(arr: string[]): number;
@@ -290,7 +289,6 @@ interface i1 {
     foo4(b: string): number;
     /** foo4 any */
     foo4(c: any): any;
-    /// new 1
     new (a: string): any;
     /** new 1*/
     new (b: number): any;
@@ -346,7 +344,6 @@ declare class c1 {
 declare class c2 {
     /** c2 1*/
     constructor(a: number);
-    // c2 2
     constructor(b: string);
 }
 declare class c3 {

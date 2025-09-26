@@ -55,7 +55,6 @@ import type { x as Require } from "foo" assert { "resolution-mode": "require" };
 type _Default = typeof Default;
 type _Import = typeof Import;
 type _Require = typeof Require;
-// resolution-mode does not enforce file extension in `bundler`, just sets conditions
 import type { x as ImportRelative } from "./other" assert { "resolution-mode": "import" };
 import type { x as RequireRelative } from "./other" assert { "resolution-mode": "require" };
 type _ImportRelative = typeof ImportRelative;

@@ -102,18 +102,18 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 //// [restTupleElements1.d.ts]
 type T00 = [string?];
 type T01 = [string, string?];
-type T02 = [string?, string]; // Error
+type T02 = [string?, string];
 type T03 = [...string[]];
 type T04 = [...[...string[]]];
 type T05 = [...[...[...string[]]]];
 type T06 = [string, ...string[]];
-type T07 = [...string[], string]; // Error
-type T08 = [...string]; // Error
-type T09 = [...string | null]; // Error
+type T07 = [...string[], string];
+type T08 = [...string];
+type T09 = [...string | null];
 type T10 = [string, ...[...string[]]];
 type T11 = [string, ...[...[...string[]]]];
 type T15 = [boolean, number, ...string[]];
-type L15 = T15["length"]; // number
+type L15 = T15["length"];
 declare function assign<T, S extends T>(): void;
 type T20 = [number, string, ...boolean[]];
 type T21 = T20[0];
@@ -126,11 +126,11 @@ type T27 = T20[3];
 type T28 = T20[number];
 declare const t: T20;
 declare const x: number;
-declare let e0: number; // number
-declare let e1: string; // string
-declare let e2: boolean; // boolean
-declare let e3: boolean; // boolean
-declare let ex: string | number | boolean; // number | string | boolean
+declare let e0: number;
+declare let e1: string;
+declare let e2: boolean;
+declare let e3: boolean;
+declare let ex: string | number | boolean;
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
 declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;

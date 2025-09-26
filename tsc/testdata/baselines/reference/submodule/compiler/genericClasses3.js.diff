@@ -12,12 +12,3 @@
  }
  var v2;
  var y = v2.x; // should be 'string'
-@@= skipped -18, +21 lines =@@
-     x: T;
- }
- declare var v2: C<string>;
--declare var y: string;
--declare var u: string;
-+declare var y: string; // should be 'string'
-+declare var u: string; // should be 'string'
- declare var z: string;

@@ -168,4 +168,4 @@ export declare var xxxx9: x11;
 import { z1 } from "./server";
 export declare var z111: z1;
 import { z2 as z3 } from "./server";
-export declare var z2: z3; // z2 shouldn't give redeclare error
+export declare var z2: z3;

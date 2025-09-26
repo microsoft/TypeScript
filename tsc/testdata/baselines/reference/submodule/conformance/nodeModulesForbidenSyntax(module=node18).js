@@ -135,50 +135,38 @@ export { x };
 
 
 //// [index.d.ts]
-// cjs format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.ts]
-// cjs format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.ts]
-// esm format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.mts]
-// esm format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.cts]
-// cjs format file
 declare const x: <T>() => T;
 export { x };
 //// [index.d.ts]
-// esm format file
 declare const x: <T>() => T;
 export { x };

@@ -105,11 +105,9 @@ x.type;
 
 
 //// [recursiveMappedTypes.d.ts]
-// Repro from #27881
 export type Circular<T> = {
     [P in keyof T]: Circular<T>;
 };
-// Repro from #29992
 type NonOptionalKeys<T> = {
     [P in keyof T]: undefined extends T[P] ? never : P;
 }[keyof T];
@@ -120,10 +118,9 @@ export interface ListWidget {
     "type": "list";
     "minimum_count": number;
     "maximum_count": number;
-    "collapsable"?: boolean; //default to false, means all expanded
+    "collapsable"?: boolean;
     "each": Child<ListWidget>;
 }
-// Repros from #41790
 export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
 export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
 export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> = ThemeType[K] extends TVal[] ? number : ThemeType[K] extends Record<infer E, TVal> ? E : ThemeType[K] extends ObjectOrArray<infer F> ? F : never;

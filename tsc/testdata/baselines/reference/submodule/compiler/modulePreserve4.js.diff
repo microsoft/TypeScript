@@ -64,5 +64,4 @@
 +export var x = require("./g");
 +export {};
  //// [dummy.d.ts]
--export {};
-+export {}; // Silly test harness
+ export {};

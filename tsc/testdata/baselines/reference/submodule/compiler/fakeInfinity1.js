@@ -38,7 +38,6 @@ exports.oops = 123456789123456789123456789123456789123456789123456789;
 
 
 //// [fakeInfinity1.d.ts]
-// These are not actually the real infinity.
 export type PositiveInfinity = 1e999;
 export type NegativeInfinity = -1e999;
 export type TypeOfInfinity = typeof Infinity;

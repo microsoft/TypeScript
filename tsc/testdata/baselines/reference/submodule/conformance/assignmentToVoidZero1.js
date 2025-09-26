@@ -21,7 +21,6 @@ exports.y = 2;
 
 
 //// [assignmentToVoidZero1.d.ts]
-// #38552
 export var y = exports.x = void 0;
 export var x = 1;
 export var y = 2;

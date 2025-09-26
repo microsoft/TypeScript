@@ -134,8 +134,6 @@ exports.CC = CC;
 
 
 //// [index.d.ts]
-// Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
-// but we should be able to synthesize declarations from the symbols regardless
 export declare class M<T> {
     field: T;
 }

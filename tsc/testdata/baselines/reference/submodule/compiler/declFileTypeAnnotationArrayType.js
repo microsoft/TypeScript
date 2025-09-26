@@ -114,18 +114,13 @@ declare namespace m {
 }
 declare class g<T> {
 }
-// Just the name
 declare function foo(): c[];
 declare function foo2(): c[];
-// Qualified name
 declare function foo3(): m.c[];
 declare function foo4(): typeof m.c;
-// Just the name with type arguments
 declare function foo5(): g<string>[];
 declare function foo6(): g<string>[];
-// Qualified name with type arguments
 declare function foo7(): m.g<number>[];
 declare function foo8(): m.g<number>[];
-// Array of function types
 declare function foo9(): (() => c)[];
 declare function foo10(): (() => c)[];

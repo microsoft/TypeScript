@@ -40,13 +40,3 @@
          constructor(x) {
              this.x = x;
          }
-@@= skipped -34, +37 lines =@@
-     protected constructor(x: number);
- }
- declare var c: C;
--declare var d: any;
--declare var e: any;
-+declare var d: any; // error
-+declare var e: any; // error
- declare namespace Generic {
- }

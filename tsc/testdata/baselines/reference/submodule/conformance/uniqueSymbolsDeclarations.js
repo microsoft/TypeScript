@@ -409,15 +409,11 @@ const o4 = {
 
 
 //// [uniqueSymbolsDeclarations.d.ts]
-// declarations with call initializer
 declare const constCall: unique symbol;
 declare let letCall: symbol;
 declare var varCall: symbol;
-// ambient declaration with type
 declare const constType: unique symbol;
-// declaration with type and call initializer
 declare const constTypeAndCall: unique symbol;
-// declaration from initializer
 declare const constInitToConstCall: symbol;
 declare const constInitToLetCall: symbol;
 declare const constInitToVarCall: symbol;
@@ -430,30 +426,22 @@ declare var varInitToConstCall: symbol;
 declare var varInitToLetCall: symbol;
 declare var varInitToVarCall: symbol;
 declare var varInitToConstDeclAmbient: symbol;
-// declaration from initializer with type query
 declare const constInitToConstCallWithTypeQuery: typeof constCall;
 declare const constInitToConstDeclAmbientWithTypeQuery: typeof constType;
-// function return inference
 declare function funcReturnConstCall(): symbol;
 declare function funcReturnLetCall(): symbol;
 declare function funcReturnVarCall(): symbol;
-// function return value with type query
 declare function funcReturnConstCallWithTypeQuery(): typeof constCall;
-// generator function yield inference
 declare function genFuncYieldConstCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldLetCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldVarCall(): Generator<symbol, void, unknown>;
-// generator function yield with return type query
 declare function genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall>;
-// async function return inference
 declare function asyncFuncReturnConstCall(): Promise<symbol>;
 declare function asyncFuncReturnLetCall(): Promise<symbol>;
 declare function asyncFuncReturnVarCall(): Promise<symbol>;
-// async generator function yield inference
 declare function asyncGenFuncYieldConstCall(): AsyncGenerator<symbol, void, unknown>;
 declare function asyncGenFuncYieldLetCall(): AsyncGenerator<symbol, void, unknown>;
 declare function asyncGenFuncYieldVarCall(): AsyncGenerator<symbol, void, unknown>;
-// classes
 declare class C {
     static readonly readonlyStaticCall: unique symbol;
     static readonly readonlyStaticType: unique symbol;
@@ -477,7 +465,6 @@ declare const constInitToCReadonlyCallWithTypeQuery: typeof c.readonlyCall;
 declare const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall;
 declare const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"];
 declare const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"];
-// interfaces
 interface I {
     readonly readonlyType: unique symbol;
 }
@@ -485,7 +472,6 @@ declare const i: I;
 declare const constInitToIReadonlyType: symbol;
 declare const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType;
 declare const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"];
-// type literals
 type L = {
     readonly readonlyType: unique symbol;
     nested: {
@@ -499,10 +485,8 @@ declare const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType;
 declare const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType;
 declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
 declare const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"];
-// type argument inference
 declare const promiseForConstCall: Promise<typeof constCall>;
 declare const arrayOfConstCall: symbol[];
-// unique symbol widening in expressions
 declare const s: unique symbol;
 declare namespace N {
     const s: unique symbol;
@@ -514,7 +498,6 @@ declare const o: {
 declare function f<T>(x: T): T;
 declare function g(x: typeof s): void;
 declare function g(x: typeof N.s): void;
-// property assignments/methods
 declare const o2: {
     a: symbol;
     b: symbol;
@@ -525,7 +508,6 @@ declare const o2: {
     method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 };
-// property initializers
 declare class C0 {
     static readonly a: symbol;
     static readonly b: symbol;
@@ -551,7 +533,6 @@ declare class C1 {
     [s]: "a";
     [N.s]: "b";
 }
-// contextual types
 interface Context {
     method1(): typeof s;
     method2(): Promise<typeof s>;

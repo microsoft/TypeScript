@@ -43,6 +43,6 @@ export { type as };
 export { type something };
 export { type type as foo };
 export { type as as bar };
-export type { type something as whatever }; // Error
+export type { type something as whatever };
 //// [imports.d.ts]
 export {};

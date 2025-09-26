@@ -47,7 +47,6 @@ function w() { return null; }
   * @param {Array=} y desc
   */
 declare function x(y?: Array | undefined): void;
-// @ts-ignore
 /** @param {function (Array)} func Invoked
  */
 declare function y(func: any): void;

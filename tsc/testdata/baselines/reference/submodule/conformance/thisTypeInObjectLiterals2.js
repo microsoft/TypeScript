@@ -406,8 +406,6 @@ vue.hello;
 
 
 //// [thisTypeInObjectLiterals2.d.ts]
-// In methods of an object literal with no contextual type, 'this' has the type
-// of the object literal.
 declare let obj1: {
     a: number;
     f(): number;
@@ -418,8 +416,6 @@ declare let obj1: {
     readonly d: number;
     e: string;
 };
-// In methods of an object literal with a contextual type, 'this' has the
-// contextual type.
 type Point = {
     x: number;
     y: number;
@@ -432,11 +428,9 @@ declare let p3: Point | undefined;
 declare let p4: Point | null | undefined;
 declare function f1(p: Point): void;
 declare function f2(p: Point | null | undefined): void;
-// In methods of an object literal with a contextual type that includes some
-// ThisType<T>, 'this' is of type T.
 type ObjectDescriptor<D, M> = {
     data?: D;
-    methods?: M & ThisType<D & M>; // Type of 'this' in methods is D & M
+    methods?: M & ThisType<D & M>;
 };
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 declare let x1: {
@@ -445,8 +439,6 @@ declare let x1: {
 } & {
     moveBy(dx: number, dy: number): void;
 };
-// In methods contained in an object literal with a contextual type that includes
-// some ThisType<T>, 'this' is of type T.
 type ObjectDescriptor2<D, M> = ThisType<D & M> & {
     data?: D;
     methods?: M;
@@ -458,7 +450,6 @@ declare let x2: {
 } & {
     moveBy(dx: number, dy: number): void;
 };
-// Check pattern similar to Object.defineProperty and Object.defineProperties
 type PropDesc<T> = {
     value?: T;
     get?(): T;
@@ -475,7 +466,6 @@ declare let p12: Point & {
     foo: number;
     bar: number;
 };
-// Proof of concept for typing of Vue.js
 type Accessors<T> = {
     [K in keyof T]: (() => T[K]) | Computed<T[K]>;
 };

@@ -35,12 +35,3 @@
  declare var fooVar: () => void;
  declare class c {
      constructor();
-@@= skipped -16, +16 lines =@@
-     (a: number): number;
-     new (b: string): any;
-     [a: number]: string;
--    myFoo(a: number): string;
-+    myFoo(/*param prop*/ a: number): string;
-     prop: string;
- }
- declare var i1_i: i1;

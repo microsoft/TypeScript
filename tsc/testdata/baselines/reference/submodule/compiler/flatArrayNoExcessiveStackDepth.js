@@ -41,11 +41,9 @@ function f(x, y) {
 
 
 //// [flatArrayNoExcessiveStackDepth.d.ts]
-// Repro from #43493
 declare const foo: unknown[];
 declare const bar: string[];
 interface Foo extends Array<string> {
 }
-// Repros from comments in #43249
 declare const repro_43249: (value: unknown) => void;
 declare function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>): void;

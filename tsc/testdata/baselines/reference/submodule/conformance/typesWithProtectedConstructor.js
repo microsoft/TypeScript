@@ -33,10 +33,10 @@ var r2 = c2.constructor;
 declare class C {
     protected constructor();
 }
-declare var c: any; // error C is protected
+declare var c: any;
 declare var r: () => void;
 declare class C2 {
     protected constructor(x: number);
 }
-declare var c2: any; // error C2 is protected
+declare var c2: any;
 declare var r2: (x: number) => void;

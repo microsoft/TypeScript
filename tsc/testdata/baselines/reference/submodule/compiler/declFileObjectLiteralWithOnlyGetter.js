@@ -25,7 +25,7 @@ var /*2*/ x = point. /*3*/x;
 declare function makePoint(x: number): {
     readonly x: number;
 };
-declare var /*4*/ point: {
+declare var point: {
     readonly x: number;
 };
-declare var /*2*/ x: number;
+declare var x: number;

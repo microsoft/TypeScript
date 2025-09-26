@@ -25,9 +25,6 @@ function baz4({} = { x: 10 }) { }
 
 
 //// [declarationEmitDestructuring4.d.ts]
-// For an array binding pattern with empty elements,
-// we will not make any modification and will emit
-// the similar binding pattern users' have written
 declare function baz([]: any[]): void;
 declare function baz1([]?: number[]): void;
 declare function baz2([[]]?: [number[]]): void;

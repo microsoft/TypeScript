@@ -32,32 +32,3 @@
      constructor(a, b) {
          this.a = a;
          this.b = b;
-@@= skipped -8, +10 lines =@@
-
-
- //// [declarationEmitProtectedMembers.d.ts]
-+// Class with protected members
- declare class C1 {
-     protected x: number;
-     protected f(): number;
-@@= skipped -10, +11 lines =@@
-     protected static set staticSetter(a: number);
-     protected static get staticGetter(): number;
- }
-+// Derived class overriding protected members
- declare class C2 extends C1 {
-     protected f(): number;
-     protected static sf(): number;
- }
-+// Derived class making protected members public
- declare class C3 extends C2 {
-     x: number;
-     static sx: number;
-@@= skipped -11, +13 lines =@@
-     static sf(): number;
-     static get staticGetter(): number;
- }
-+// Protected properties in constructors
- declare class C4 {
-     protected a: number;
-     protected b: any;

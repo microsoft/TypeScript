@@ -142,13 +142,12 @@ type DeepReadonlyFoo = {
 };
 declare var x1: DeepReadonly<Foo>;
 declare var x1: DeepReadonlyFoo;
-// Repro from #13232
 type Z = {
     a: number;
 };
 type Clone<T> = {
     [P in keyof (T & {})]: (T & {})[P];
 };
-type M = Clone<Z>; // M should be { a: number }
+type M = Clone<Z>;
 declare var z1: Z;
 declare var z1: Clone<Z>;

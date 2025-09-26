@@ -40,9 +40,9 @@ declare namespace m {
 }
 declare namespace m1 {
     import x = m.c;
-    var d: x; // emit the type as m.c
+    var d: x;
 }
 declare namespace m2 {
     export import x = m.c;
-    var d: x; // emit the type as x
+    var d: x;
 }

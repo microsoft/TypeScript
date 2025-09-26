@@ -51,7 +51,6 @@ declare namespace m {
 }
 declare class g<T> {
 }
-// Just the name
 declare var k: [c, m.c];
 declare var l: [c, m.c];
 declare var x: [g<string>, m.g<number>, () => c];

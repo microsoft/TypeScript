@@ -39,7 +39,7 @@ function child1(prototype) {
 
 
 //// [parent.d.ts]
-import './child1'; // this import should still exist in some form in the output, since it augments this module
+import './child1';
 export declare class ParentThing implements ParentThing {
 }
 //// [child1.d.ts]

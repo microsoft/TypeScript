@@ -12,12 +12,3 @@
  Object.defineProperty(exports, "default", { enumerable: true, get: function () { return tslib_1.__importDefault(fs_1).default; } });
  //// [index.js]
  // esm format file
-@@= skipped -10, +10 lines =@@
-
-
- //// [index.d.ts]
-+// cjs format file
- export { default } from "fs";
- //// [index.d.ts]
-+// esm format file
- export { default } from "fs";

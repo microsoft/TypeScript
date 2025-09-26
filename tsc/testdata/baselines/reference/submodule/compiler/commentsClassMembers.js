@@ -437,11 +437,11 @@ declare class c1 {
     /** p1 is property of c1*/
     p1: number;
     /** sum with property*/
-    p2(/** number to add*/ b: number): number; /* trailing comment of method*/
+    p2(/** number to add*/ b: number): number;
     /** getter property*/
-    get p3(): number; // trailing comment Getter
+    get p3(): number;
     /** setter property*/
-    set p3(/** this is value*/ value: number); // trailing comment Setter
+    set p3(/** this is value*/ value: number);
     /** pp1 is property of c1*/
     private pp1;
     /** sum with property*/
@@ -457,9 +457,9 @@ declare class c1 {
     /** static sum with property*/
     static s2(/** number to add*/ b: number): number;
     /** static getter property*/
-    static get s3(): number; /*trailing comment 1 getter*/
+    static get s3(): number;
     /** setter property*/
-    static set s3(/** this is value*/ value: number); /*trailing comment 2 */ /*setter*/
+    static set s3(/** this is value*/ value: number);
     nc_p1: number;
     nc_p2(b: number): number;
     get nc_p3(): number;
@@ -472,29 +472,17 @@ declare class c1 {
     static nc_s2(b: number): number;
     static get nc_s3(): number;
     static set nc_s3(value: number);
-    // p1 is property of c1
     a_p1: number;
-    // sum with property
     a_p2(b: number): number;
-    // getter property
     get a_p3(): number;
-    // setter property
     set a_p3(value: number);
-    // pp1 is property of c1
     private a_pp1;
-    // sum with property
     private a_pp2;
-    // getter property
     private get a_pp3();
-    // setter property
     private set a_pp3(value);
-    // s1 is static property of c1
     static a_s1: number;
-    // static sum with property
     static a_s2(b: number): number;
-    // static getter property
     static get a_s3(): number;
-    // setter property
     static set a_s3(value: number);
     /** p1 is property of c1 */
     b_p1: number;
@@ -544,12 +532,12 @@ declare var i1_c: typeof c1;
 declare class cProperties {
     private val;
     /** getter only property*/
-    get p1(): number; // trailing comment of only getter
+    get p1(): number;
     get nc_p1(): number;
     /**setter only property*/
     set p2(value: number);
-    set nc_p2(value: number); /* trailing comment of setter only*/
-    x: number; /*trailing comment for property*/
-    private y; // trailing comment of // style
+    set nc_p2(value: number);
+    x: number;
+    private y;
 }
 declare var cProperties_i: cProperties;

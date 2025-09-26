@@ -80,18 +80,13 @@ function foo10() {
 
 
 //// [declFileTypeAnnotationBuiltInType.d.ts]
-// string
 declare function foo(): string;
 declare function foo2(): string;
-// number
 declare function foo3(): number;
 declare function foo4(): number;
-// boolean
 declare function foo5(): boolean;
 declare function foo6(): boolean;
-// void
 declare function foo7(): void;
 declare function foo8(): void;
-// any
 declare function foo9(): any;
 declare function foo10(): any;

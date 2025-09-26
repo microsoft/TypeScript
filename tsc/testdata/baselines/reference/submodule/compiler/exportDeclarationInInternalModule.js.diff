@@ -7,12 +7,3 @@
 +    export * from Aaa; // this line causes the nullref
  })(Bbb || (Bbb = {}));
  var a;
-
-@@= skipped -16, +17 lines =@@
- declare namespace Bbb {
-     export class SomeType {
-     }
--    export * from Aaa;
-+    export * from Aaa; // this line causes the nullref
- }
- declare var a: Bbb.SomeType;

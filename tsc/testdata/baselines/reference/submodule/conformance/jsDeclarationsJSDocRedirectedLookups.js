@@ -62,7 +62,6 @@
 
 
 //// [index.d.ts]
-// these are recognized as TS concepts by the checker
 /** @type {String} */ declare const a: String;
 /** @type {Number} */ declare const b: Number;
 /** @type {Boolean} */ declare const c: Boolean;
@@ -74,17 +73,9 @@
 /** @type {array} */ declare const i: array;
 /** @type {promise} */ declare const j: promise;
 /** @type {Object<string, string>} */ declare const k: Object<string, string>;
-// these are not recognized as anything and should just be lookup failures
-// ignore the errors to try to ensure they're emitted as `any` in declaration emit
-// @ts-ignore
 /** @type {class} */ declare const l: class;
-// @ts-ignore
 /** @type {bool} */ declare const m: bool;
-// @ts-ignore
 /** @type {int} */ declare const n: int;
-// @ts-ignore
 /** @type {float} */ declare const o: float;
-// @ts-ignore
 /** @type {integer} */ declare const p: integer;
-// or, in the case of `event` likely erroneously refers to the type of the global Event object
 /** @type {event} */ declare const q: event;

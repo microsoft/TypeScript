@@ -488,7 +488,6 @@ const obj3 = { [sym]: 'hello ' }; // Error
 
 
 //// [indexSignatures1.d.ts]
-// Symbol index signature checking
 declare const sym: unique symbol;
 declare function gg3(x: {
     [key: string]: string;
@@ -497,7 +496,6 @@ declare function gg3(x: {
 }, z: {
     [sym]: number;
 }): void;
-// Overlapping index signatures
 declare function gg1(x: {
     [key: `a${string}`]: string;
     [key: `${string}a`]: string;
@@ -512,15 +510,14 @@ interface IY {
     [key: `a${string}a`]: string;
 }
 declare function gg2(x: IX, y: IY): void;
-// Intersection of multiple applicable index signatures
 declare let combo: {
     [x: `foo-${string}`]: 'a' | 'b';
 } & {
     [x: `${string}-bar`]: 'b' | 'c';
 };
-declare const x1: "a" | "b"; // 'a' | 'b'
-declare const x2: "b" | "c"; // 'b' | 'c'
-declare const x3: "b"; // 'b' (('a' | 'b') & ('b' | 'c'))
+declare const x1: "a" | "b";
+declare const x2: "b" | "c";
+declare const x3: "b";
 declare var str: string;
 declare const x4: "a" | "b";
 declare const x5: "b" | "c";
@@ -530,40 +527,34 @@ declare let combo2: {
 };
 declare const x7: string;
 declare const x8: string;
-declare const x9: any; // Error
-// Property access on template pattern index signature
+declare const x9: any;
 declare let dom: {
     [x: `data${string}`]: string;
 };
 declare const y1: string;
 declare const y2: string;
-// Contextual typing by index signature with template literal pattern
 type Funcs = {
     [key: `s${string}`]: (x: string) => void;
     [key: `n${string}`]: (x: number) => void;
 };
 declare const funcs: Funcs;
-// Duplicate index signature checking
 type Duplicates = {
-    [key: string | number]: any; // Error
-    [key: number | symbol]: any; // Error
-    [key: symbol | `foo${string}`]: any; // Error
-    [key: `foo${string}`]: any; // Error
+    [key: string | number]: any;
+    [key: number | symbol]: any;
+    [key: symbol | `foo${string}`]: any;
+    [key: `foo${string}`]: any;
 };
-// Conflicting index signature checking
 type Conflicting = {
     [key: `a${string}`]: 'a';
     [key: `${string}a`]: 'b';
-    [key: `a${string}a`]: 'c'; // Error
+    [key: `a${string}a`]: 'c';
 };
-// Invalid index signatures
 type Invalid<T extends string> = {
-    [key: 'a' | 'b' | 'c']: string; // Error
-    [key: T | number]: string; // Error
-    [key: Error]: string; // Error
-    [key: T & string]: string; // Error
+    [key: 'a' | 'b' | 'c']: string;
+    [key: T | number]: string;
+    [key: Error]: string;
+    [key: T & string]: string;
 };
-// Intersections in index signatures
 type Tag1 = {
     __tag1__: void;
 };
@@ -605,7 +596,6 @@ declare let o3: {
 declare let o4: {
     [key: TaggedString1 & TaggedString2]: string;
 };
-// Index signatures inferred from computed property names
 declare const obj10: {
     [x: string]: 0 | 1;
     x: 0;
@@ -626,7 +616,6 @@ declare const obj13: {
     1: 2;
     [sym]: 4;
 };
-// Repros from #1863
 declare const system: unique symbol;
 declare const SomeSytePlugin: unique symbol;
 interface Plugs {
@@ -638,7 +627,6 @@ declare const plugins: {
 };
 declare var theAnswer: symbol;
 declare var obj: Record<symbol, number>;
-// Repro from #26470
 declare const directive: unique symbol;
 declare function foo<TArg, TRet, TDir>(options: {
     [x in string]: (arg: TArg) => TRet;
@@ -648,27 +636,25 @@ declare function foo<TArg, TRet, TDir>(options: {
 declare let case1: void;
 declare let case2: void;
 declare let case3: void;
-// Repros from #42192
 type Pseudo = `&:${string}`;
 declare const AmIPseudo1: Pseudo;
-declare const AmIPseudo: Pseudo; // Error
+declare const AmIPseudo: Pseudo;
 type PseudoDeclaration = {
     [key in Pseudo]: string;
 };
-declare const test: PseudoDeclaration; // Error
+declare const test: PseudoDeclaration;
 type FieldPattern = `/${string}`;
 declare const path1: FieldPattern;
-declare const path2: FieldPattern; // Error
+declare const path2: FieldPattern;
 type PathsObject = {
     [P in FieldPattern]: object;
 };
-declare const pathObject: PathsObject; // Error
+declare const pathObject: PathsObject;
 type IdType = `${number}-${number}-${number}-${number}`;
 declare const id: IdType;
 type A = Record<IdType, string>;
 declare const a: A;
 declare let aid: string;
-// Repro from #44793
 interface AA {
     a?: string;
     b?: number;
@@ -680,11 +666,10 @@ declare const obj1: {
 };
 declare const obj2: {
     [key: string]: string;
-}; // Permitted for backwards compatibility
+};
 declare const obj3: {
     [key: number]: string;
-}; // Error
-// Repro from #45772
+};
 type Id = string & {
     __tag: 'id ';
 };
@@ -692,5 +677,5 @@ type Rec1 = {
     [key: Id]: number;
 };
 type Rec2 = Record<Id, number>;
-type K1 = keyof Rec1; // Id
-type K2 = keyof Rec2; // Id
+type K1 = keyof Rec1;
+type K2 = keyof Rec2;

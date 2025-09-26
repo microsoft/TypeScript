@@ -33,10 +33,8 @@ export { x };
 
 
 //// [index.d.ts]
-// cjs format file
 declare const x: string;
 export { x };
 //// [index.d.ts]
-// esm format file
 declare const x: string;
 export { x };

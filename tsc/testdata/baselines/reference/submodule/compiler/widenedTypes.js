@@ -52,8 +52,7 @@ declare var u: number[];
 declare var ob: {
     x: typeof undefined;
 };
-// Highlights the difference between array literals and object literals
-declare var arr: string[]; // not assignable because null is not widened. BCT is {}
+declare var arr: string[];
 declare var obj: {
     [x: string]: string;
-}; // assignable because null is widened, and therefore BCT is any
+};

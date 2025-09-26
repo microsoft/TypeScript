@@ -31,7 +31,6 @@ exports.c = {
 
 
 //// [emitMethodCalledNew.d.ts]
-// https://github.com/microsoft/TypeScript/issues/55075
 export declare const a: {
     "new"(x: number): number;
 };

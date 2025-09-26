@@ -12,4 +12,4 @@ var x = foo(5); // 'x' should be number
 
 //// [genericFunctions1.d.ts]
 declare function foo<T>(x: T): T;
-declare var x: number; // 'x' should be number
+declare var x: number;

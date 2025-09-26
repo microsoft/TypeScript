@@ -48,8 +48,8 @@ declare var v1: {
         b: string;
         c: string;
     };
-}; // Ok
+};
 declare var v2: G<{
     a: string;
-}, C>; // Ok, equivalent to G<A, C>
-declare var v4: G<G<A, B>, C>; // Ok
+}, C>;
+declare var v4: G<G<A, B>, C>;

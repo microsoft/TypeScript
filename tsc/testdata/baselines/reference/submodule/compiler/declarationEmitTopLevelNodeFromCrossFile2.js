@@ -38,7 +38,6 @@ exports._ = boxedBox_1.boxedBox;
 export declare const _: import("./box").Box<{
     boxed: import("./box").Box<number>;
 }>;
-// At index 83
 /**
  * wat
  */

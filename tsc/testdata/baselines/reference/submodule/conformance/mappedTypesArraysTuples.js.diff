@@ -8,28 +8,3 @@
  let y10 = unboxify(x10);
  let y11 = unboxify(x11);
  let y12 = unboxify(x12);
-@@= skipped -94, +93 lines =@@
- declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
- declare function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>): void;
- declare function f2<T extends any[]>(a: Boxified<T>): void;
-+// Repro from #26163
- type ElementType<T> = T extends Array<infer U> ? U : never;
- type Mapped<T> = {
-     [K in keyof T]: T[K];
- };
- type F<T> = ElementType<Mapped<T>>;
--type R1 = F<[string, number, boolean]>;
--type R2 = ElementType<Mapped<[string, number, boolean]>>;
-+type R1 = F<[string, number, boolean]>; // string | number | boolean
-+type R2 = ElementType<Mapped<[string, number, boolean]>>; // string | number | boolean
-+// Repro from #26163
- declare function acceptArray(arr: any[]): void;
- declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
- declare function acceptMappedArray<T extends any[]>(arr: T): void;
-+// Repro from #26163
- type Unconstrained<T> = ElementType<Mapped<T>>;
--type T1 = Unconstrained<[string, number, boolean]>;
-+type T1 = Unconstrained<[string, number, boolean]>; // string | number | boolean
- type Constrained<T extends any[]> = ElementType<Mapped<T>>;
--type T2 = Constrained<[string, number, boolean]>;
-+type T2 = Constrained<[string, number, boolean]>; // string | number | boolean

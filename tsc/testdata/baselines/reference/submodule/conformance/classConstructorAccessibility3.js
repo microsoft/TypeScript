@@ -94,9 +94,6 @@ declare class Qux {
     x: number;
     private constructor();
 }
-// b is public
 declare let a: typeof Foo;
-// b is protected
 declare let b: typeof Baz;
-// c is private
 declare let c: typeof Qux;

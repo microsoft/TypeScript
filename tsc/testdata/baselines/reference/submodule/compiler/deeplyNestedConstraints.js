@@ -23,7 +23,6 @@ class BufferPool {
 
 
 //// [deeplyNestedConstraints.d.ts]
-// Repro from #41931
 type Enum = Record<string, string | number>;
 type TypeMap<E extends Enum> = {
     [key in E[keyof E]]: number | boolean | string | number[];

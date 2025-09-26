@@ -37,12 +37,10 @@ export const a = (await import("inner")).x();
 
 
 //// [other.d.ts]
-// esm format file
 export interface Thing {
 }
 export declare const x: () => Thing;
 //// [index.d.ts]
-// esm format file
 export { x } from "./other.js";
 //// [index.d.ts]
 export declare const a: any;

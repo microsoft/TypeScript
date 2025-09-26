@@ -59,16 +59,13 @@ declare namespace multiM {
     /** class b*/
     class b {
     }
-    // class d
     class d {
     }
 }
-/// this is multi module 2
 declare namespace multiM {
     /** class c comment*/
     class c {
     }
-    /// class e
     class e {
     }
 }

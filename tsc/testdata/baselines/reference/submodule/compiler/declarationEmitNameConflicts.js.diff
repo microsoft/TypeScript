@@ -27,35 +27,14 @@
      (function (Q) {
          function f() { }
          Q.f = f;
-@@= skipped -49, +49 lines =@@
-         }
-     }
-     export import im = M.P.f;
--    var a: typeof M.f;
--    var b: typeof M.C;
--    var c: typeof M.N;
+@@= skipped -52, +52 lines =@@
+     var a: typeof M.f;
+     var b: typeof M.C;
+     var c: typeof M.N;
 -    var g: typeof M.N.g;
 -    var d: typeof M.d;
-+    var a: typeof M.f; // emitted incorrectly as typeof f
-+    var b: typeof M.C; // ok
-+    var c: typeof M.N; // ok
-+    var g: typeof M.c.g; // ok
-+    var d: typeof import("./declarationEmit_nameConflicts_1"); // emitted incorrectly as typeof im
++    var g: typeof M.c.g;
++    var d: typeof import("./declarationEmit_nameConflicts_1");
  }
  export declare namespace M.Q {
      function f(): void;
-@@= skipped -16, +16 lines =@@
-         }
-     }
-     interface b extends M.b {
--    }
-+    } // ok
-     interface I extends M.c.I {
--    }
-+    } // ok
-     namespace c {
-         interface I extends M.c.I {
--        }
-+        } // ok
-     }
- }

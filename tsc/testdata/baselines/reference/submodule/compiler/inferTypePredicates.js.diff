@@ -33,102 +33,7 @@
  }
  if (c.isC2()) {
      let c2 = c; // should error
-@@= skipped -71, +68 lines =@@
-
-
- //// [inferTypePredicates.d.ts]
-+// https://github.com/microsoft/TypeScript/issues/16069
- declare const numsOrNull: (number | null)[];
--declare const filteredNumsTruthy: number[];
--declare const filteredNumsNonNullish: number[];
--declare const evenSquaresInline: number[];
-+declare const filteredNumsTruthy: number[]; // should error
-+declare const filteredNumsNonNullish: number[]; // should ok
-+declare const evenSquaresInline: number[]; // tests truthiness, not non-nullishness
- declare const isTruthy: (x: number | null) => boolean;
- declare const evenSquares: number[];
- declare const evenSquaresNonNull: number[];
- declare function isNonNull(x: number | null): x is number;
-+// factoring out a boolean works thanks to aliased discriminants
- declare function isNonNullVar(x: number | null): x is number;
- declare function isNonNullGeneric<T>(x: T): x is T & ({} | undefined);
-+// Type guards can flow between functions
- declare const myGuard: (o: string | undefined) => o is string;
- declare const mySecondGuard: (o: string | undefined) => o is string;
-+// https://github.com/microsoft/TypeScript/issues/16069#issuecomment-1327449914
-+// This doesn't work because the false condition prevents type guard inference.
-+// Breaking up the filters does work.
- type MyObj = {
-     data?: string;
- };
-@@= skipped -21, +27 lines =@@
- declare const myArray: MyArray;
- declare const result: any[][];
- declare const result2: any[][];
-+// https://github.com/microsoft/TypeScript/issues/16069#issuecomment-1183547889
- type Foo = {
-     foo: string;
- };
-@@= skipped -7, +8 lines =@@
-     bar: string;
- };
- declare const list: (Foo | Bar)[];
--declare const resultBars: Bar[];
-+declare const resultBars: Bar[]; // should ok
- declare function isBarNonNull(x: Foo | Bar | null): x is Bar;
- declare const fooOrBar: Foo | Bar;
-+// https://github.com/microsoft/TypeScript/issues/38390#issuecomment-626019466
-+// Ryan's example (currently legal):
- declare const a: string[];
-+// Defer to explicit type guards, even when they're incorrect.
- declare function backwardsGuard(x: number | string): x is number;
-+// Partition tests. The "false" case matters.
- declare function isString(x: string | number): x is string;
- declare let strOrNum: string | number;
- declare function flakyIsString(x: string | number): boolean;
- declare function isDate(x: object): x is Date;
- declare function flakyIsDate(x: object): boolean;
- declare let maybeDate: object;
-+// This should not infer a type guard since the value on which we do the refinement
-+// is not related to the original parameter.
- declare function irrelevantIsNumber(x: string | number): boolean;
- declare function irrelevantIsNumberDestructuring(x: string | number): boolean;
-+// Cannot infer a type guard for either param because of the false case.
- declare function areBothNums(x: string | number, y: string | number): boolean;
-+// Could potentially infer a type guard here but it would require more bookkeeping.
- declare function doubleReturn(x: string | number): boolean;
- declare function guardsOneButNotOthers(a: string | number, b: string | number, c: string | number): b is string;
-+// Checks that there are no string escaping issues
- declare function dunderguard(__x: number | string): __x is string;
-+// could infer a type guard here but it doesn't seem that helpful.
- declare const booleanIdentity: (x: boolean) => boolean;
-+// we infer "x is number | true" which is accurate but of debatable utility.
- declare const numOrBoolean: (x: number | boolean) => x is number | true;
-+// inferred guards in methods
- interface NumberInferrer {
-     isNumber(x: number | string): x is number;
- }
-@@= skipped -27, +39 lines =@@
- }
- declare let numOrStr: number | string;
- declare const inf: Inferrer;
-+// Type predicates are not inferred on "this"
- declare class C1 {
-     isC2(): boolean;
- }
-@@= skipped -11, +12 lines =@@
-     x: number | null;
-     y: number;
- }): boolean;
-+// The type predicate must remain valid when the function is called with subtypes.
- declare function isShortString(x: unknown): boolean;
- declare let str: string;
- declare function isStringFromUnknown(x: unknown): x is string;
-+// infer a union type
- declare function isNumOrStr(x: unknown): x is string | number;
- declare let unk: unknown;
-+// A function can be a type predicate even if it throws.
- declare function assertAndPredicate(x: string | number | Date): x is string;
+@@= skipped -146, +143 lines =@@
  declare let snd: string | number | Date;
  declare function isNumberWithThis(this: Date, x: number | string): x is number;
  declare function narrowFromAny(x: any): x is number;
@@ -137,11 +42,9 @@
 +declare const noInferenceFromRest: (f_0: "a" | "b") => boolean;
 +declare const noInferenceFromImpossibleRest: () => boolean;
  declare function inferWithRest(x: string | null, ...f: ["a", "b"]): x is string;
-+// https://github.com/microsoft/TypeScript/issues/57947
  declare const foobar: {
      type: "foo";
-     foo: number;
-@@= skipped -19, +23 lines =@@
+@@= skipped -10, +10 lines =@@
      type: "bar";
      bar: string;
  };
@@ -156,6 +59,3 @@
      type: "foo";
      foo: number;
  };
-+// https://github.com/microsoft/TypeScript/issues/60778
- declare const arrTest: Array<number>;
- declare function isEmptyString(x: unknown): x is "";

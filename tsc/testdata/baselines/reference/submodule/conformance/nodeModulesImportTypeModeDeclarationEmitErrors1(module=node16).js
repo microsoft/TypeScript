@@ -124,17 +124,14 @@ export type LocalInterface = import("pkg", { assert: { "resolution-mode": "fooba
 export declare const a: import("pkg").RequireInterface;
 export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
 //// [other.d.ts]
-// missing assert:
 export type LocalInterface = import("pkg", { with: {} });
 export declare const a: any;
 export declare const b: any;
 //// [other2.d.ts]
-// wrong assertion key
 export type LocalInterface = import("pkg", { assert: { "bad": "require" } }).RequireInterface & import("pkg", { assert: { "bad": "import" } }).ImportInterface;
 export declare const a: import("pkg").RequireInterface;
 export declare const b: any;
 //// [other3.d.ts]
-// Array instead of object-y thing
 export type LocalInterface = import("pkg", { with: {} })[{
     "resolution-mode": "require";
 }];

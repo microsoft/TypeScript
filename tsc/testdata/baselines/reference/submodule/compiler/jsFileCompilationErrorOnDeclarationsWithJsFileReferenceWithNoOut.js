@@ -30,5 +30,4 @@ declare class c {
 //// [c.d.ts]
 declare function bar(): void;
 //// [b.d.ts]
-// b.d.ts should have c.d.ts as the reference path
 declare function foo(): void;

@@ -25,7 +25,6 @@ function foo() {
 
 
 //// [noExcessiveStackDepthError.d.ts]
-// Repro from #46631
 interface FindOperator<T> {
     foo: T;
 }

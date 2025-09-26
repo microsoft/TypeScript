@@ -1,8 +1,0 @@
---- old.importTypeAmbientMissing.js
-+++ new.importTypeAmbientMissing.js
-@@= skipped -23, +23 lines =@@
-     }
-     export = Point;
- }
--declare const x: import("fo");
-+declare const x: import("fo"); // typo, error

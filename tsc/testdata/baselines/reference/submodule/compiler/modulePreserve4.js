@@ -229,4 +229,4 @@ export {};
 export var x = require("./g");
 export {};
 //// [dummy.d.ts]
-export {}; // Silly test harness
+export {};

@@ -258,33 +258,32 @@ declare namespace m1 {
     }
     /** exported function*/
     function fooExport(): number;
-    // shouldn't appear
     function foo2Export(/**hm*/ a: string): void;
     /** foo3Export
      * comment
      */
     function foo3Export(): void;
-} // trailing comment module
+}
 declare var myvar: m1.m2.c;
 /** module comment of m2.m3*/
 declare namespace m2.m3 {
     /** Exported class comment*/
     class c {
     }
-} /* trailing dotted module comment*/
+}
 /** module comment of m3.m4.m5*/
 declare namespace m3.m4.m5 {
     /** Exported class comment*/
     class c {
     }
-} // trailing dotted module 2
+}
 /** module comment of m4.m5.m6*/
 declare namespace m4.m5.m6 {
     namespace m7 {
         /** Exported class comment*/
         class c {
         }
-    } /* trailing inner module */ /* multiple comments*/
+    }
 }
 /** module comment of m5.m6.m7*/
 declare namespace m5.m6.m7 {
@@ -308,7 +307,6 @@ declare namespace m7.m8 {
         /** Exported class comment*/
         class c {
         }
-        // class e
         class e {
         }
     }

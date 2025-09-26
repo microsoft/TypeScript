@@ -227,16 +227,14 @@ type Invariant<in out T> = {
 };
 declare let super_invariant: Invariant<unknown>;
 declare let sub_invariant: Invariant<string>;
-// Variance of various type constructors
 type T10<out T> = T;
 type T11<in T> = keyof T;
 type T12<out T, out K extends keyof T> = T[K];
 type T13<in out T> = T[keyof T];
-// Variance annotation errors
 type Covariant1<in T> = {
     x: T;
 };
-type Contravariant1<out T> = keyof T; // Error
+type Contravariant1<out T> = keyof T;
 type Contravariant2<out T> = {
     f: (x: T) => void;
 };
@@ -246,7 +244,6 @@ type Invariant1<in T> = {
 type Invariant2<out T> = {
     f: (x: T) => T;
 };
-// Variance in circular types
 type Foo1<in T> = {
     x: T;
     f: FooFn1<T>;
@@ -271,25 +268,22 @@ type FooFn3<T> = (foo: Bar3<T[]>) => void;
 type Bar3<T> = {
     value: Foo3<T[]>;
 };
-// Wrong modifier usage
-type T20<public T> = T; // Error
-type T21<in out in T> = T; // Error
-type T22<in out out T> = T; // Error
-type T23<out in T> = T; // Error
-declare function f1<in T>(x: T): void; // Error
-declare function f2<out T>(): T; // Error
+type T20<public T> = T;
+type T21<in out in T> = T;
+type T22<in out out T> = T;
+type T23<out in T> = T;
+declare function f1<in T>(x: T): void;
+declare function f2<out T>(): T;
 declare class C {
-    in a: number; // Error
-    out b: number; // Error
+    in a: number;
+    out b: number;
 }
-// Interface merging
 interface Baz<out T> {
 }
 interface Baz<in T> {
 }
 declare let baz1: Baz<unknown>;
 declare let baz2: Baz<string>;
-// Repro from #44572
 interface Parent<out A> {
     child: Child<A> | null;
     parent: Parent<A> | null;
@@ -300,8 +294,7 @@ interface Child<A, B = unknown> extends Parent<A> {
 }
 declare function fn<A>(inp: Child<A>): void;
 declare const pu: Parent<unknown>;
-declare const notString: Parent<string>; // Error
-// Repro from comment in #44572
+declare const notString: Parent<string>;
 declare class StateNode<TContext, in out TEvent extends {
     type: string;
 }> {
@@ -323,7 +316,6 @@ declare const qq: ActionObject<{
     type: "PLAY";
     value: number;
 }>;
-// Repros from #48618
 declare let Anon: {
     new <out T>(): {
         foo(): /*elided*/ any;

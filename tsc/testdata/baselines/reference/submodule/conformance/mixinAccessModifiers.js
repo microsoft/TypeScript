@@ -284,7 +284,6 @@ declare function f5(x: Protected & Public): void;
 declare function f6(x: Public & Public2): void;
 declare function Mix<T, U>(c1: T, c2: U): T & U;
 declare const C1_base: typeof Private & typeof Private2;
-// Can't derive from type with inaccessible properties
 declare class C1 extends C1_base {
 }
 declare const C2_base: typeof Private & typeof Protected;

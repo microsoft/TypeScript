@@ -26,6 +26,5 @@ exports.v = v;
 //// [0.d.ts]
 export type Data = string | boolean;
 //// [1.d.ts]
-//let v2: Z.Data;
 declare let v: string | boolean;
 export { v };

@@ -470,7 +470,6 @@ function foo(services, s) {
 
 
 //// [neverReturningFunctions1.d.ts]
-// Repro from #33582
 export interface Component<T extends object = any> {
     attrName?: string;
     data: T;

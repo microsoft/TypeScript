@@ -193,7 +193,6 @@ f("a"); // Error, should allow only "b"
 
 
 //// [mappedTypeAsClauses.d.ts]
-// Mapped type 'as N' clauses
 type Getters<T> = {
     [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P];
 };
@@ -204,7 +203,6 @@ type TG1 = Getters<{
         z: boolean;
     };
 }>;
-// Mapped type with 'as N' clause has no constraint on 'in T' clause
 type PropDef<K extends keyof any, T> = {
     name: K;
     type: T;
@@ -222,10 +220,8 @@ type TP1 = TypeFromDefs<{
     name: 'a';
     type: boolean;
 }>;
-// No array or tuple type mapping when 'as N' clause present
 type TA1 = Getters<string[]>;
 type TA2 = Getters<[number, boolean]>;
-// Filtering using 'as N' clause
 type Methods<T> = {
     [P in keyof T as T[P] extends Function ? P : never]: T[P];
 };
@@ -234,21 +230,19 @@ type TM1 = Methods<{
     bar(x: string): boolean;
     baz: string | number;
 }>;
-// Mapping to multiple names using 'as N' clause
 type DoubleProp<T> = {
     [P in keyof T & string as `${P}1` | `${P}2`]: T[P];
 };
 type TD1 = DoubleProp<{
     a: string;
     b: number;
-}>; // { a1: string, a2: string, b1: number, b2: number }
-type TD2 = keyof TD1; // 'a1' | 'a2' | 'b1' | 'b2'
-type TD3<U> = keyof DoubleProp<U>; // keyof DoubleProp<U>
+}>;
+type TD2 = keyof TD1;
+type TD3<U> = keyof DoubleProp<U>;
 type TD4 = TD3<{
     a: string;
     b: number;
-}>; // 'a1' | 'a2' | 'b1' | 'b2'
-// Repro from #40619
+}>;
 type Lazyify<T> = {
     [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];
 };
@@ -258,7 +252,6 @@ interface Person {
     location?: string;
 }
 type LazyPerson = Lazyify<Person>;
-// Repro from #40833
 type Example = {
     foo: string;
     bar: number;
@@ -270,7 +263,6 @@ type T1 = PickByValueType<Example, string>;
 declare const e1: T1;
 type T2 = keyof T1;
 declare const e2: T2;
-// Repro from #41133
 interface Car {
     name: string;
     seats: number;
@@ -289,11 +281,10 @@ type Primitive = string | number | boolean;
 type OnlyPrimitives<T> = {
     [K in keyof T as T[K] extends Primitive ? K : never]: T[K];
 };
-declare let primitiveCar: OnlyPrimitives<Car>; // { name: string; seats: number; }
-declare let keys: keyof OnlyPrimitives<Car>; //  "name" | "seats"
+declare let primitiveCar: OnlyPrimitives<Car>;
+declare let keys: keyof OnlyPrimitives<Car>;
 type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
-declare let carKeys: KeysOfPrimitives<Car>; // "name" | "seats"
-// Repro from #41453
+declare let carKeys: KeysOfPrimitives<Car>;
 type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
 type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
 type GetKey<S, V> = keyof {
@@ -315,10 +306,9 @@ type Schema = {
     };
     Task: Task;
 };
-type Res1 = GetKey<Schema, Schema['root']['task']>; // "Task"
-type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>; // "Task"
-type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>; // "Task"
-// Repro from #44019
+type Res1 = GetKey<Schema, Schema['root']['task']>;
+type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;
+type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;
 type KeysExtendedBy<T, U> = keyof {
     [K in keyof T as U extends T[K] ? K : never]: T[K];
 };
@@ -332,7 +322,6 @@ type NameMap = {
     'b': 'y';
     'c': 'z';
 };
-// Distributive, will be simplified
 type TS0<T> = keyof {
     [P in keyof T as keyof Record<P, number>]: string;
 };
@@ -354,7 +343,6 @@ type TS5<T> = keyof {
 type TS6<T, U, V> = keyof {
     [K in keyof T as V & (K extends U ? K : never)]: string;
 };
-// Non-distributive, won't be simplified
 type TN0<T> = keyof {
     [P in keyof T as T[P] extends number ? P : never]: string;
 };
@@ -375,7 +363,6 @@ type TN5<T, U> = keyof {
         [P in K as T[P] extends U ? K : never]: true;
     }]: string;
 };
-// repro from https://github.com/microsoft/TypeScript/issues/55129
 type Fruit = {
     name: "apple";
     color: "red";
@@ -398,5 +385,5 @@ type Result2<T extends {
 }> = keyof {
     [Key in T as `${Key['name']}:${Key['color']}`]: unknown;
 };
-type Test1 = keyof Result1<Fruit>; // "apple:red" | "banana:yellow" | "orange:orange"
-type Test2 = Result2<Fruit>; // "apple:red" | "banana:yellow" | "orange:orange"
+type Test1 = keyof Result1<Fruit>;
+type Test2 = Result2<Fruit>;

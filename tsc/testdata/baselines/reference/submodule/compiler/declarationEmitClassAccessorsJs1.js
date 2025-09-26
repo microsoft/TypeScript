@@ -22,7 +22,6 @@ export class VFile {
 
 
 //// [index.d.ts]
-// https://github.com/microsoft/TypeScript/issues/58167
 export declare class VFile {
     /**
      * @returns {string}

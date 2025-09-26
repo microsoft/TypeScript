@@ -20,5 +20,5 @@ exports.Bar = Bar;
 //// [declarationEmitConstantNoWidening.d.ts]
 export declare const FOO = "FOO";
 export declare class Bar {
-    readonly type: string; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
+    readonly type: string;
 }

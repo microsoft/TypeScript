@@ -28,7 +28,7 @@
 +    };
 +    /** @optional */ optField: {
 +        name?: string | undefined;
-+    }; // not a thing
++    };
 +    /** @readonly */ readonly roFiled: {
 +        name?: string | undefined;
 +    };
@@ -53,7 +53,6 @@
 +    name?: string | undefined;
 +};
 +export default /** @type {P} */ _default;
-+// allows `undefined` on the input side, thanks to the initializer
  /**
   *
   * @param {P} x

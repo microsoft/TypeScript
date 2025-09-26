@@ -88,10 +88,8 @@ declare namespace m {
         y: m2.public1;
         method(): private1;
     };
-    // Function type
     export var y: (a: private1) => m2.public1;
     export var y2: (a: private1) => m2.public1;
-    // constructor type
     export var z: new (a: private1) => m2.public1;
     export var z2: new (a: private1) => m2.public1;
     export {};

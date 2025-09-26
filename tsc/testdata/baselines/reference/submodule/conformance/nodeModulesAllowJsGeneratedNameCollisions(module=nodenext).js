@@ -49,7 +49,6 @@ export { require, exports, Object };
 
 
 //// [index.d.ts]
-// cjs format file
 declare function require(): void;
 declare const exports: {};
 declare class Object {
@@ -57,7 +56,6 @@ declare class Object {
 export declare const __esModule = false;
 export { require, exports, Object };
 //// [index.d.ts]
-// esm format file
 declare function require(): void;
 declare const exports: {};
 declare class Object {

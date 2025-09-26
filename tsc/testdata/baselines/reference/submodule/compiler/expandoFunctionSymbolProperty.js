@@ -28,7 +28,6 @@ export function test() {
 
 
 //// [expandoFunctionSymbolProperty.d.ts]
-// repro from https://github.com/microsoft/TypeScript/issues/54220
 declare const symb: unique symbol;
 interface TestSymb {
     (): void;

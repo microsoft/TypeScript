@@ -41,7 +41,6 @@ declare function f2({ a, b }?: {
     a: number;
     b: number;
 }): void;
-// Repro from #8681
 interface Type {
     t: void;
 }

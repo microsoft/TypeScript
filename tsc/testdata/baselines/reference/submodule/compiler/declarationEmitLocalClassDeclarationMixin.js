@@ -73,7 +73,6 @@ export declare const Mixed: {
 } & typeof Unmixed;
 declare const FilteredThing_base: (abstract new (...args: any[]) => {
     match(path: string): boolean;
-    // other concrete methods, fields, constructor
     thing: number;
 }) & typeof Unmixed;
 export declare class FilteredThing extends FilteredThing_base {

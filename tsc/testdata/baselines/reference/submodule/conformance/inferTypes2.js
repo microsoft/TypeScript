@@ -40,7 +40,6 @@ const b = a;
 
 
 //// [inferTypes2.d.ts]
-// Repros from #22755
 export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
 export declare function bar<T>(obj: T): T extends () => infer P ? P : never;
 export type BadNested<T> = {

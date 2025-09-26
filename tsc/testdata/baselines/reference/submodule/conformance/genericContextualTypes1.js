@@ -104,6 +104,5 @@ declare const f23: <A>(a: A[]) => Box<A>[];
 declare const f30: (a: string[]) => string[];
 declare const f31: <T extends Box<number>>(a: T[]) => T[];
 declare const f40: <A, B>(b: B, a: A) => [A, B];
-// Repro from #16293
 type fn = <A>(a: A) => A;
 declare const fn: fn;

@@ -155,7 +155,6 @@
 +export var h = hh;
 +export var i = function i();;
 +export var ii = module.exports.i;
-+// note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
 +export var jj = module.exports.j;
 +export var j = function j();;
 +export {};
