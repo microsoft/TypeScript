@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/verbatimModuleSyntaxEmptyNamedImport.ts] ////
+
+=== verbatimModuleSyntaxEmptyNamedImport_module.ts ===
+export const ValueExport = 0;
+>ValueExport : Symbol(ValueExport, Decl(verbatimModuleSyntaxEmptyNamedImport_module.ts, 0, 12))
+
+export type TypeOnlyExport = number;
+>TypeOnlyExport : Symbol(TypeOnlyExport, Decl(verbatimModuleSyntaxEmptyNamedImport_module.ts, 0, 29))
+
+const DefaultExport = class {};
+>DefaultExport : Symbol(DefaultExport, Decl(verbatimModuleSyntaxEmptyNamedImport_module.ts, 2, 5))
+
+export default DefaultExport;
+>DefaultExport : Symbol(DefaultExport, Decl(verbatimModuleSyntaxEmptyNamedImport_module.ts, 2, 5))
+
+=== verbatimModuleSyntaxEmptyNamedImport_module.d.ts ===
+declare module "verbatimModuleSyntaxEmptyNamedImport_module";
+>"verbatimModuleSyntaxEmptyNamedImport_module" : Symbol("verbatimModuleSyntaxEmptyNamedImport_module", Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+
+=== verbatimModuleSyntaxEmptyNamedImport_test.ts ===
+import DefaultExportA, {
+>DefaultExportA : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 0, 6))
+
+  type TypeOnlyExport as TypeOnlyExportA,
+>TypeOnlyExport : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+>TypeOnlyExportA : Symbol(TypeOnlyExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 0, 24))
+
+} from "verbatimModuleSyntaxEmptyNamedImport_module";
+import DefaultExportB, {
+>DefaultExportB : Symbol(DefaultExportB, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 3, 6))
+
+  type TypeOnlyExport as TypeOnlyExportB,
+>TypeOnlyExport : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+>TypeOnlyExportB : Symbol(TypeOnlyExportB, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 3, 24))
+
+  ValueExport as ValueExportB,
+>ValueExport : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+>ValueExportB : Symbol(ValueExportB, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 4, 41))
+
+} from "verbatimModuleSyntaxEmptyNamedImport_module";
+import DefaultExportC, {
+>DefaultExportC : Symbol(DefaultExportC, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 7, 6))
+
+  ValueExport as RenamedValueExportC,
+>ValueExport : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+>RenamedValueExportC : Symbol(RenamedValueExportC, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 7, 24))
+
+} from "verbatimModuleSyntaxEmptyNamedImport_module";
+import DefaultExportD from "verbatimModuleSyntaxEmptyNamedImport_module";
+>DefaultExportD : Symbol(DefaultExportD, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 10, 6))
+
+import { type TypeOnlyExport as RenamedTypeOnlyExportE } from "verbatimModuleSyntaxEmptyNamedImport_module";
+>TypeOnlyExport : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+>RenamedTypeOnlyExportE : Symbol(RenamedTypeOnlyExportE, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 11, 8))
+
+import { ValueExport as RenamedValueExportF } from "verbatimModuleSyntaxEmptyNamedImport_module";
+>ValueExport : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_module.d.ts, 0, 0))
+>RenamedValueExportF : Symbol(RenamedValueExportF, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 12, 8))
+
+import * as NamespaceImportG from "verbatimModuleSyntaxEmptyNamedImport_module";
+>NamespaceImportG : Symbol(NamespaceImportG, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 13, 6))
+
+new DefaultExportA();
+>DefaultExportA : Symbol(DefaultExportA, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 0, 6))
+
+new DefaultExportB();
+>DefaultExportB : Symbol(DefaultExportB, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 3, 6))
+
+new DefaultExportC();
+>DefaultExportC : Symbol(DefaultExportC, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 7, 6))
+
+new DefaultExportD();
+>DefaultExportD : Symbol(DefaultExportD, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 10, 6))
+
+console.log(ValueExportB);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ValueExportB : Symbol(ValueExportB, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 4, 41))
+
+console.log(RenamedValueExportC);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>RenamedValueExportC : Symbol(RenamedValueExportC, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 7, 24))
+
+console.log(RenamedValueExportF);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>RenamedValueExportF : Symbol(RenamedValueExportF, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 12, 8))
+
+console.log(NamespaceImportG.ValueExport);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>NamespaceImportG : Symbol(NamespaceImportG, Decl(verbatimModuleSyntaxEmptyNamedImport_test.ts, 13, 6))
+
