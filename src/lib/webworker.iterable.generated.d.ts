@@ -107,7 +107,7 @@ interface IDBDatabase {
 
 interface IDBObjectStore {
     /**
-     * The **`createIndex()`** method of the field/column defining a new data point for each database record to contain.
+     * The **`createIndex()`** method of the IDBObjectStore interface creates and returns a new IDBIndex object in the connected database.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/createIndex)
      */
