@@ -1,4 +1,5 @@
 /// <reference lib="es2015" />
+/// <reference lib="es2018.asynciterable" />
 
 /////////////////////////////
 /// Window APIs
@@ -39964,4 +39965,28 @@ interface WebGLRenderingContextOverloads {
     uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Iterable<GLfloat>): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) */
     uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Iterable<GLfloat>): void;
+}
+
+/////////////////////////////
+/// Window Async Iterable APIs
+/////////////////////////////
+
+interface FileSystemDirectoryHandleAsyncIterator<T> extends AsyncIteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.asyncIterator](): FileSystemDirectoryHandleAsyncIterator<T>;
+}
+
+interface FileSystemDirectoryHandle {
+    [Symbol.asyncIterator](): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemHandle]>;
+    entries(): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemHandle]>;
+    keys(): FileSystemDirectoryHandleAsyncIterator<string>;
+    values(): FileSystemDirectoryHandleAsyncIterator<FileSystemHandle>;
+}
+
+interface ReadableStreamAsyncIterator<T> extends AsyncIteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.asyncIterator](): ReadableStreamAsyncIterator<T>;
+}
+
+interface ReadableStream<R = any> {
+    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): ReadableStreamAsyncIterator<R>;
+    values(options?: ReadableStreamIteratorOptions): ReadableStreamAsyncIterator<R>;
 }

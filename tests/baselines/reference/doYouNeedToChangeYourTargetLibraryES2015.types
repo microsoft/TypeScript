@@ -28,9 +28,7 @@ const testReflectApply = Reflect.apply(noOp, this, []);
 
 const testReflectConstruct = Reflect.construct(noOp, []);
 >testReflectConstruct : any
->                     : ^^^
 >Reflect.construct(noOp, []) : any
->                            : ^^^
 >Reflect.construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: new (...args: any) => any): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function): any; }
 >                  : ^^^ ^^^^^^^^^              ^^ ^^      ^^                     ^^             ^^           ^^         ^^^                         ^^^ ^^^      ^^        ^^             ^^              ^^         ^^^        ^^^   ^^^
 >Reflect : typeof Reflect
@@ -78,9 +76,7 @@ const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
 
 const testReflectGet = Reflect.get({}, "");
 >testReflectGet : any
->               : ^^^
 >Reflect.get({}, "") : any
->                    : ^^^
 >Reflect.get : <T extends object, P extends PropertyKey>(target: T, propertyKey: P, receiver?: unknown) => P extends keyof T ? T[P] : any
 >            : ^ ^^^^^^^^^      ^^ ^^^^^^^^^           ^^      ^^ ^^           ^^ ^^        ^^^       ^^^^^                              
 >Reflect : typeof Reflect
@@ -418,9 +414,7 @@ const testObjectConstructorIs = Object.is({}, {});
 
 const testObjectConstructorSetPrototypeOf = Object.setPrototypeOf({}, {});
 >testObjectConstructorSetPrototypeOf : any
->                                    : ^^^
 >Object.setPrototypeOf({}, {}) : any
->                              : ^^^
 >Object.setPrototypeOf : (o: any, proto: object | null) => any
 >                      : ^ ^^   ^^     ^^             ^^^^^   
 >Object : ObjectConstructor
@@ -762,13 +756,11 @@ const testMap: Map<any, any> = null as any;
 >testMap : Map<any, any>
 >        : ^^^^^^^^^^^^^
 >null as any : any
->            : ^^^
 
 const testSet: Set<any> = null as any;
 >testSet : Set<any>
 >        : ^^^^^^^^
 >null as any : any
->            : ^^^
 
 const testPromiseAll = Promise.all([]);
 >testPromiseAll : Promise<[]>
@@ -854,25 +846,21 @@ const testWeakMap: WeakMap<any, any> = null as any;
 >testWeakMap : WeakMap<any, any>
 >            : ^^^^^^^^^^^^^^^^^
 >null as any : any
->            : ^^^
 
 const testWeakSet: WeakMap<any, any> = null as any;
 >testWeakSet : WeakMap<any, any>
 >            : ^^^^^^^^^^^^^^^^^
 >null as any : any
->            : ^^^
 
 const testIterator: Iterator<any, any, any> = null as any;
 >testIterator : Iterator<any, any, any>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->            : ^^^
 
 const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 >testAsyncIterator : AsyncIterator<any, any, any>
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->            : ^^^
 
 const testStringCodePointAt = "".codePointAt(0);
 >testStringCodePointAt : number

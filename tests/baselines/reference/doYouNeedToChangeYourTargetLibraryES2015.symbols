@@ -364,7 +364,7 @@ const testIterator: Iterator<any, any, any> = null as any;
 
 const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 >testAsyncIterator : Symbol(testAsyncIterator, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 66, 5))
->AsyncIterator : Symbol(AsyncIterator)
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 
 const testStringCodePointAt = "".codePointAt(0);
 >testStringCodePointAt : Symbol(testStringCodePointAt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 67, 5))

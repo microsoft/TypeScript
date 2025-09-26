@@ -14,7 +14,7 @@ declare global {
 >global : Symbol(global, Decl(f1.d.ts, 4, 1))
 
     interface SymbolConstructor {
->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(f1.d.ts, 5, 16))
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(f1.d.ts, 5, 16))
 
         observable: symbol;
 >observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
