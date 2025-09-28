@@ -24457,16 +24457,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return Ternary.False;
             }
-            if (isObjectLiteralType(target)) {
+            if (getObjectFlags(target) & ObjectFlags.FreshLiteral) {
                 for (const sourceProp of excludeProperties(getPropertiesOfType(source), excludedProperties)) {
                     if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
-                        const sourceType = getTypeOfSymbol(sourceProp);
-                        if (!(sourceType.flags & TypeFlags.Undefined)) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(sourceProp), typeToString(target));
-                            }
-                            return Ternary.False;
+                        if (reportErrors) {
+                            reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(sourceProp), typeToString(target));
                         }
+                        return Ternary.False;
                     }
                 }
             }
