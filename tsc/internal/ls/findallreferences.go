@@ -616,7 +616,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 
 	if node.Kind == ast.KindSourceFile {
 		resolvedRef := getReferenceAtPosition(node.AsSourceFile(), position, program)
-		if resolvedRef.file == nil {
+		if resolvedRef == nil || resolvedRef.file == nil {
 			return nil
 		}
 
