@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/freshObjectLiteralSubtype.ts] ////
+
+=== freshObjectLiteralSubtype.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(freshObjectLiteralSubtype.ts, 0, 0))
+
+    if (!!true) {
+        return { valid: true }
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 2, 16))
+    }
+    return f2()
+>f2 : Symbol(f2, Decl(freshObjectLiteralSubtype.ts, 7, 13))
+}
+
+declare const f2: () => { valid: boolean, msg?: undefined }
+>f2 : Symbol(f2, Decl(freshObjectLiteralSubtype.ts, 7, 13))
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 7, 25))
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 7, 41))
+
+f1().msg
+>f1().msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 7, 41))
+>f1 : Symbol(f1, Decl(freshObjectLiteralSubtype.ts, 0, 0))
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 7, 41))
+
+// Repro from https://github.com/microsoft/typescript-go/issues/1742
+
+function validate() {
+>validate : Symbol(validate, Decl(freshObjectLiteralSubtype.ts, 9, 8))
+
+    if(Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        return utilValidate();
+>utilValidate : Symbol(utilValidate, Decl(freshObjectLiteralSubtype.ts, 18, 2))
+    }
+    return { valid: true };
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 17, 12))
+
+};
+
+
+declare function utilValidate(): {
+>utilValidate : Symbol(utilValidate, Decl(freshObjectLiteralSubtype.ts, 18, 2))
+
+    valid: boolean;
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 21, 34))
+
+    msg?: undefined;
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19))
+
+} | {
+    valid: boolean;
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 24, 5))
+
+    msg: string;
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 25, 19))
+}
+
+validate().msg; // Error in TSGO
+>validate().msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19), Decl(freshObjectLiteralSubtype.ts, 25, 19))
+>validate : Symbol(validate, Decl(freshObjectLiteralSubtype.ts, 9, 8))
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19), Decl(freshObjectLiteralSubtype.ts, 25, 19))
+

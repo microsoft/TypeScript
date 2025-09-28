@@ -4153,16 +4153,13 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 		}
 		return TernaryFalse
 	}
-	if isObjectLiteralType(target) {
+	if target.objectFlags&ObjectFlagsFreshLiteral != 0 {
 		for _, sourceProp := range excludeProperties(r.c.getPropertiesOfType(source), excludedProperties) {
 			if r.c.getPropertyOfObjectType(target, sourceProp.Name) == nil {
-				sourceType := r.c.getTypeOfSymbol(sourceProp)
-				if sourceType.flags&TypeFlagsUndefined == 0 {
-					if reportErrors {
-						r.reportError(diagnostics.Property_0_does_not_exist_on_type_1, r.c.symbolToString(sourceProp), r.c.TypeToString(target))
-					}
-					return TernaryFalse
+				if reportErrors {
+					r.reportError(diagnostics.Property_0_does_not_exist_on_type_1, r.c.symbolToString(sourceProp), r.c.TypeToString(target))
 				}
+				return TernaryFalse
 			}
 		}
 	}

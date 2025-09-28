@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/freshObjectLiteralSubtype.ts] ////
+
+=== freshObjectLiteralSubtype.ts ===
+function f1() {
+>f1 : () => { valid: boolean; msg?: undefined; }
+
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        return { valid: true }
+>{ valid: true } : { valid: boolean; }
+>valid : boolean
+>true : true
+    }
+    return f2()
+>f2() : { valid: boolean; msg?: undefined; }
+>f2 : () => { valid: boolean; msg?: undefined; }
+}
+
+declare const f2: () => { valid: boolean, msg?: undefined }
+>f2 : () => { valid: boolean; msg?: undefined; }
+>valid : boolean
+>msg : undefined
+
+f1().msg
+>f1().msg : undefined
+>f1() : { valid: boolean; msg?: undefined; }
+>f1 : () => { valid: boolean; msg?: undefined; }
+>msg : undefined
+
+// Repro from https://github.com/microsoft/typescript-go/issues/1742
+
+function validate() {
+>validate : () => { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
+
+    if(Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+        return utilValidate();
+>utilValidate() : { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
+>utilValidate : () => { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
+    }
+    return { valid: true };
+>{ valid: true } : { valid: boolean; }
+>valid : boolean
+>true : true
+
+};
+
+
+declare function utilValidate(): {
+>utilValidate : () => { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
+
+    valid: boolean;
+>valid : boolean
+
+    msg?: undefined;
+>msg : undefined
+
+} | {
+    valid: boolean;
+>valid : boolean
+
+    msg: string;
+>msg : string
+}
+
+validate().msg; // Error in TSGO
+>validate().msg : string | undefined
+>validate() : { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
+>validate : () => { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
+>msg : string | undefined
+
