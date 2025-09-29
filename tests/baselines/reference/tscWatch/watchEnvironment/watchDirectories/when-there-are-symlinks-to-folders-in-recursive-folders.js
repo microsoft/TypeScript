@@ -26,7 +26,6 @@ export {}
 //// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a) Inode:: 18
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 23
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

@@ -106,9 +106,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -216,9 +214,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/a.ts(3,3): error TS2345: Argument of type 'import("/home/src/workspaces/project/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/home/src/workspaces/project/node_modules/a/node_modules/x/index").default'.
   Property 'y' is missing in type 'import("/home/src/workspaces/project/node_modules/b/node_modules/x/index").default' but required in type 'import("/home/src/workspaces/project/node_modules/a/node_modules/x/index").default'.

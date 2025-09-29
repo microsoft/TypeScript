@@ -104,7 +104,6 @@ interface ScriptHostInterface { }
 export const unrelated = 10;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -255,14 +254,14 @@ project1/file2.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.es5.d.ts (used version)
-/home/src/tslibs/ts/lib/lib.webworker.d.ts (used version)
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
 /home/src/workspace/projects/project1/core.d.ts (used version)
 /home/src/workspace/projects/project1/utils.d.ts (used version)
 /home/src/workspace/projects/project1/file.ts (used version)
 /home/src/workspace/projects/project1/index.ts (used version)
 /home/src/workspace/projects/project1/file2.ts (used version)
 /home/src/tslibs/ts/lib/lib.dom.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.webworker.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
