@@ -217,8 +217,12 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
+import {
+    idText,
+    isIdentifier,
+    PrivateIdentifier,
+} from "../_namespaces/ts.js";
 import { collectExternalModuleInfo } from "./utilities.js";
-import { PrivateIdentifier, isIdentifier, idText } from "../_namespaces/ts.js";
 /** @internal */
 export function getDeclarationDiagnostics(
     host: EmitHost,
@@ -1464,15 +1468,15 @@ export function transformDeclarations(context: TransformationContext): Transform
                     fakespace.locals = createSymbolTable(props);
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
-                    
+
                     // Before emitting expando properties, get all exported names for the file
                     const moduleInfo = collectExternalModuleInfo(context, input.parent as SourceFile);
                     const topLevelExportNames = new Set(
                         (moduleInfo.exportedNames ?? [])
                             .filter(n => isIdentifier(n) || isPrivateIdentifier(n))
-                            .map(n => idText(n as Identifier | PrivateIdentifier))
+                            .map(n => idText(n as Identifier | PrivateIdentifier)),
                     );
-                    
+
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
                         if (!isExpandoPropertyDeclaration(p.valueDeclaration)) {
                             return undefined;
