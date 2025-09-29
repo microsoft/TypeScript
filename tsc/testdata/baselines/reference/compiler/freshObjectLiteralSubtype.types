@@ -78,3 +78,91 @@ validate().msg; // Error in TSGO
 >validate : () => { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
 >msg : string | undefined
 
+// https://github.com/microsoft/typescript-go/issues/1761
+
+function normalise_trace_logs([log]: any[]) {
+>normalise_trace_logs : ([log]: any[]) => ({ log: string; highlighted: boolean; } | { highlighted?: undefined; log: any; })[]
+>log : any
+
+	let normalised = [];
+>normalised : any[]
+>[] : never[]
+
+    if (typeof log === "string" && log.includes("%c")) {
+>typeof log === "string" && log.includes("%c") : boolean
+>typeof log === "string" : boolean
+>typeof log : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>log : any
+>"string" : "string"
+>log.includes("%c") : boolean
+>log.includes : (searchString: string, position?: number | undefined) => boolean
+>log : string
+>includes : (searchString: string, position?: number | undefined) => boolean
+>"%c" : "%c"
+
+        normalised.push({ log, highlighted: log.includes("foo") });
+>normalised.push({ log, highlighted: log.includes("foo") }) : number
+>normalised.push : (...items: any[]) => number
+>normalised : any[]
+>push : (...items: any[]) => number
+>{ log, highlighted: log.includes("foo") } : { log: string; highlighted: boolean; }
+>log : string
+>highlighted : boolean
+>log.includes("foo") : boolean
+>log.includes : (searchString: string, position?: number | undefined) => boolean
+>log : string
+>includes : (searchString: string, position?: number | undefined) => boolean
+>"foo" : "foo"
+
+    } else {
+        normalised.push({ log });
+>normalised.push({ log }) : number
+>normalised.push : (...items: any[]) => number
+>normalised : any[]
+>push : (...items: any[]) => number
+>{ log } : { log: any; }
+>log : any
+    }
+	return normalised;
+>normalised : ({ log: string; highlighted: boolean; } | { log: any; })[]
+}
+
+function equal<T>(_actual: T, _expected: T): void {}
+>equal : <T>(_actual: T, _expected: T) => void
+>_actual : T
+>_expected : T
+
+equal(normalise_trace_logs([]), [
+>equal(normalise_trace_logs([]), [    { log: 'effect' },    { log: '$derived', highlighted: true },    { log: 'double', highlighted: false },    { log: 4 },]) : void
+>equal : <T>(_actual: T, _expected: T) => void
+>normalise_trace_logs([]) : ({ log: string; highlighted: boolean; } | { highlighted?: undefined; log: any; })[]
+>normalise_trace_logs : ([log]: any[]) => ({ log: string; highlighted: boolean; } | { highlighted?: undefined; log: any; })[]
+>[] : never[]
+>[    { log: 'effect' },    { log: '$derived', highlighted: true },    { log: 'double', highlighted: false },    { log: 4 },] : ({ log: string; } | { log: string; highlighted: true; } | { log: string; highlighted: false; } | { log: number; })[]
+
+    { log: 'effect' },
+>{ log: 'effect' } : { log: string; }
+>log : string
+>'effect' : "effect"
+
+    { log: '$derived', highlighted: true },
+>{ log: '$derived', highlighted: true } : { log: string; highlighted: true; }
+>log : string
+>'$derived' : "$derived"
+>highlighted : true
+>true : true
+
+    { log: 'double', highlighted: false },
+>{ log: 'double', highlighted: false } : { log: string; highlighted: false; }
+>log : string
+>'double' : "double"
+>highlighted : false
+>false : false
+
+    { log: 4 },
+>{ log: 4 } : { log: number; }
+>log : number
+>4 : 4
+
+]);
+

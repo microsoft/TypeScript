@@ -4153,7 +4153,7 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 		}
 		return TernaryFalse
 	}
-	if target.objectFlags&ObjectFlagsFreshLiteral != 0 {
+	if isObjectLiteralType(target) {
 		for _, sourceProp := range excludeProperties(r.c.getPropertiesOfType(source), excludedProperties) {
 			if r.c.getPropertyOfObjectType(target, sourceProp.Name) == nil {
 				if reportErrors {

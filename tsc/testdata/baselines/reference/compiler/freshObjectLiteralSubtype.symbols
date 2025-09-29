@@ -29,7 +29,7 @@ function validate() {
 
     if(Math.random() > 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
         return utilValidate();
@@ -62,4 +62,68 @@ validate().msg; // Error in TSGO
 >validate().msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19), Decl(freshObjectLiteralSubtype.ts, 25, 19))
 >validate : Symbol(validate, Decl(freshObjectLiteralSubtype.ts, 9, 8))
 >msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19), Decl(freshObjectLiteralSubtype.ts, 25, 19))
+
+// https://github.com/microsoft/typescript-go/issues/1761
+
+function normalise_trace_logs([log]: any[]) {
+>normalise_trace_logs : Symbol(normalise_trace_logs, Decl(freshObjectLiteralSubtype.ts, 29, 15))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+
+	let normalised = [];
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+
+    if (typeof log === "string" && log.includes("%c")) {
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+>log.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+        normalised.push({ log, highlighted: log.includes("foo") });
+>normalised.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 36, 25))
+>highlighted : Symbol(highlighted, Decl(freshObjectLiteralSubtype.ts, 36, 30))
+>log.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+    } else {
+        normalised.push({ log });
+>normalised.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 38, 25))
+    }
+	return normalised;
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+}
+
+function equal<T>(_actual: T, _expected: T): void {}
+>equal : Symbol(equal, Decl(freshObjectLiteralSubtype.ts, 41, 1))
+>T : Symbol(T, Decl(freshObjectLiteralSubtype.ts, 43, 15))
+>_actual : Symbol(_actual, Decl(freshObjectLiteralSubtype.ts, 43, 18))
+>T : Symbol(T, Decl(freshObjectLiteralSubtype.ts, 43, 15))
+>_expected : Symbol(_expected, Decl(freshObjectLiteralSubtype.ts, 43, 29))
+>T : Symbol(T, Decl(freshObjectLiteralSubtype.ts, 43, 15))
+
+equal(normalise_trace_logs([]), [
+>equal : Symbol(equal, Decl(freshObjectLiteralSubtype.ts, 41, 1))
+>normalise_trace_logs : Symbol(normalise_trace_logs, Decl(freshObjectLiteralSubtype.ts, 29, 15))
+
+    { log: 'effect' },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 46, 5))
+
+    { log: '$derived', highlighted: true },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 47, 5))
+>highlighted : Symbol(highlighted, Decl(freshObjectLiteralSubtype.ts, 47, 22))
+
+    { log: 'double', highlighted: false },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 48, 5))
+>highlighted : Symbol(highlighted, Decl(freshObjectLiteralSubtype.ts, 48, 20))
+
+    { log: 4 },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 49, 5))
+
+]);
 

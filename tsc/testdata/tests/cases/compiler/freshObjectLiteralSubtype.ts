@@ -1,5 +1,6 @@
 // @strict: true
 // @noEmit: true
+// @target: esnext
 
 function f1() {
     if (!!true) {
@@ -31,3 +32,24 @@ declare function utilValidate(): {
 }
 
 validate().msg; // Error in TSGO
+
+// https://github.com/microsoft/typescript-go/issues/1761
+
+function normalise_trace_logs([log]: any[]) {
+	let normalised = [];
+    if (typeof log === "string" && log.includes("%c")) {
+        normalised.push({ log, highlighted: log.includes("foo") });
+    } else {
+        normalised.push({ log });
+    }
+	return normalised;
+}
+
+function equal<T>(_actual: T, _expected: T): void {}
+
+equal(normalise_trace_logs([]), [
+    { log: 'effect' },
+    { log: '$derived', highlighted: true },
+    { log: 'double', highlighted: false },
+    { log: 4 },
+]);
