@@ -258,7 +258,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/solution/projects/server/src/server.ts",
         "configFile": "/home/src/workspaces/solution/projects/server/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/home/src/workspaces/solution/projects/server/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/solution/projects/server/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/solution/tsconfig.json

@@ -4446,8 +4446,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     function checkDeprecations(
         deprecatedIn: string,
         removedIn: string,
-        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) => void,
-        fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
+        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, related: DiagnosticMessage | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) => void,
+        fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string, related?: DiagnosticMessage) => void) => void,
     ) {
         const deprecatedInVersion = new Version(deprecatedIn);
         const removedInVersion = new Version(removedIn);
@@ -4458,21 +4458,21 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const canBeSilenced = !mustBeRemoved && ignoreDeprecationsVersion.compareTo(deprecatedInVersion) === Comparison.LessThan;
 
         if (mustBeRemoved || canBeSilenced) {
-            fn((name, value, useInstead) => {
+            fn((name, value, useInstead, related) => {
                 if (mustBeRemoved) {
                     if (value === undefined) {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_has_been_removed_Please_remove_it_from_your_configuration, name);
+                        createDiagnostic(name, value, useInstead, related, Diagnostics.Option_0_has_been_removed_Please_remove_it_from_your_configuration, name);
                     }
                     else {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_has_been_removed_Please_remove_it_from_your_configuration, name, value);
+                        createDiagnostic(name, value, useInstead, related, Diagnostics.Option_0_1_has_been_removed_Please_remove_it_from_your_configuration, name, value);
                     }
                 }
                 else {
                     if (value === undefined) {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
+                        createDiagnostic(name, value, useInstead, related, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
                     }
                     else {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
+                        createDiagnostic(name, value, useInstead, related, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
                     }
                 }
             });
@@ -4480,14 +4480,22 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     function verifyDeprecatedCompilerOptions() {
-        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
+        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, related: DiagnosticMessage | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
             if (useInstead) {
-                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                let details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                if (related) {
+                    details = chainDiagnosticMessages(details, related);
+                }
                 const chain = chainDiagnosticMessages(details, message, ...args);
                 createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
             }
             else {
-                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, ...args);
+                let details: DiagnosticMessageChain | undefined;
+                if (related) {
+                    details = chainDiagnosticMessages(/*details*/ undefined, related);
+                }
+                const chain = chainDiagnosticMessages(details, message, ...args);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
             }
         }
 
@@ -4526,13 +4534,16 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
         checkDeprecations("6.0", "7.0", createDiagnostic, createDeprecatedDiagnostic => {
             if (options.moduleResolution === ModuleResolutionKind.Node10) {
-                createDeprecatedDiagnostic("moduleResolution", "node10");
+                createDeprecatedDiagnostic("moduleResolution", "node10", /*useInstead*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information);
+            }
+            if (options.baseUrl !== undefined) {
+                createDeprecatedDiagnostic("baseUrl", /*value*/ undefined, /*useInstead*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information);
             }
         });
     }
 
     function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
-        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
+        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, _related: DiagnosticMessage | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
             createDiagnosticForReference(parentFile, index, message, ...args);
         }
 

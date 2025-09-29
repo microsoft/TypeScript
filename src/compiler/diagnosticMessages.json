@@ -4721,6 +4721,10 @@
         "category": "Error",
         "code": 5110
     },
+    "Visit https://aka.ms/ts6 for migration information.": {
+        "category": "Message",
+        "code": 5111
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

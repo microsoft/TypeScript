@@ -87,18 +87,25 @@ Output::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.ts
 [96mtsconfig.b.json[0m:[93m4[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m4[0m     "moduleResolution": "node"
 [7m [0m [91m                        ~~~~~~[0m
 
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/b.ts
+[96mtsconfig.c.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m6[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -235,15 +242,16 @@ a_1.X;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo]
-{"root":["./c.ts"],"version":"FakeTSVersion"}
+{"root":["./c.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./c.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 45
+  "size": 59
 }
 
 

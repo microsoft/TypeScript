@@ -200,7 +200,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
         "configFile": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
@@ -822,7 +837,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json",
         "configFile": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
