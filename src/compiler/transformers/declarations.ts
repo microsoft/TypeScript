@@ -217,7 +217,8 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
-
+import { collectExternalModuleInfo } from "./utilities.js";
+import { PrivateIdentifier, isIdentifier, idText } from "../_namespaces/ts.js";
 /** @internal */
 export function getDeclarationDiagnostics(
     host: EmitHost,
@@ -1463,6 +1464,15 @@ export function transformDeclarations(context: TransformationContext): Transform
                     fakespace.locals = createSymbolTable(props);
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
+                    
+                    // Before emitting expando properties, get all exported names for the file
+                    const moduleInfo = collectExternalModuleInfo(context, input.parent as SourceFile);
+                    const topLevelExportNames = new Set(
+                        (moduleInfo.exportedNames ?? [])
+                            .filter(n => isIdentifier(n) || isPrivateIdentifier(n))
+                            .map(n => idText(n as Identifier | PrivateIdentifier))
+                    );
+                    
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
                         if (!isExpandoPropertyDeclaration(p.valueDeclaration)) {
                             return undefined;
@@ -1472,7 +1482,12 @@ export function transformDeclarations(context: TransformationContext): Transform
                             return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
-                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags | InternalNodeBuilderFlags.NoSyntacticPrinter, symbolTracker);
+                        let type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags | InternalNodeBuilderFlags.NoSyntacticPrinter, symbolTracker);
+                        const wasUniqueSymbol = isUniqueSymbolType(type);
+                        // If this is a unique symbol and also exported at the top level, emit typeof <name>
+                        if (wasUniqueSymbol && topLevelExportNames.has(nameStr)) {
+                            type = factory.createTypeQueryNode(factory.createIdentifier(nameStr));
+                        }
                         getSymbolAccessibilityDiagnostic = oldDiag;
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
@@ -1481,7 +1496,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                         }
                         const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                         const modifiers = isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)];
-                        const isConst = isUniqueSymbolType(type);
+                        const isConst = wasUniqueSymbol;
                         const variableDeclarationList = factory.createVariableDeclarationList([varDecl], isConst ? NodeFlags.Const : NodeFlags.None);
                         return factory.createVariableStatement(modifiers, variableDeclarationList);
                     });
