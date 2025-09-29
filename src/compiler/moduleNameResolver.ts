@@ -1672,7 +1672,11 @@ function tryLoadModuleUsingBaseUrl(extensions: Extensions, moduleName: string, l
     if (state.traceEnabled) {
         trace(state.host, Diagnostics.Resolving_module_name_0_relative_to_base_url_1_2, moduleName, baseUrl, candidate);
     }
-    return loader(extensions, candidate, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
+    const res = loader(extensions, candidate, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
+    if (res) {
+        throw new Error("TS_FIX_BASEURL_SIGNAL");
+    }
+    return res;
 }
 
 /**
