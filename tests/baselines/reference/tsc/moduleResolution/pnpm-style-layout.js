@@ -331,6 +331,9 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
+[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+  Visit https://aka.ms/ts6 for migration information.
+
 [96mtsconfig.json[0m:[93m8[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m8[0m     "moduleResolution": "node",
@@ -352,7 +355,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 1 error in tsconfig.json[90m:8[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:8[0m
 
 
 

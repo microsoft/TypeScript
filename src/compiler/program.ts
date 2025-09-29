@@ -111,6 +111,7 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory as ts_getCommonSourceDirectory,
     getCommonSourceDirectoryOfConfig,
+    getComputedCommonSourceDirectory,
     getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
     getDirectoryPath,
@@ -4290,6 +4291,27 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
             if (options.outDir && dir === "" && files.some(file => getRootLength(file.fileName) > 1)) {
                 createDiagnosticForOptionName(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files, "outDir");
+            }
+        }
+
+        if (
+            !options.noEmit &&
+            !options.composite &&
+            !options.rootDir &&
+            options.configFilePath &&
+            (options.outDir || // there is --outDir specified
+                (getEmitDeclarations(options) && options.declarationDir)) // there is --declarationDir specified
+        ) {
+            // Check if rootDir inferred changed and issue diagnostic
+            const dir = getCommonSourceDirectory();
+            const emittedFiles = mapDefined(files, file => !file.isDeclarationFile && sourceFileMayBeEmitted(file, program) ? file.fileName : undefined);
+            const dir59 = getComputedCommonSourceDirectory(emittedFiles, currentDirectory, getCanonicalFileName);
+            if (dir59 !== "" && getCanonicalFileName(dir) !== getCanonicalFileName(dir59)) {
+                // change in layout
+                programDiagnostics.addConfigDiagnostic(createCompilerDiagnosticFromMessageChain(chainDiagnosticMessages(
+                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
+                    Diagnostics.Inferred_common_source_directory_differs_from_tsconfig_directory_output_layout_will_be_changed,
+                )));
             }
         }
 

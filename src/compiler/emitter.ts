@@ -665,6 +665,23 @@ export function getCommonSourceDirectory(
 }
 
 /** @internal */
+export function getComputedCommonSourceDirectory(
+    emittedFiles: readonly string[],
+    currentDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string {
+    let commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(emittedFiles, currentDirectory, getCanonicalFileName);
+
+    if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+        // Make sure directory path ends with directory separator so this string can directly
+        // used to replace with "" to get the relative path of the source file and the relative path doesn't
+        // start with / making it rooted path
+        commonSourceDirectory += directorySeparator;
+    }
+    return commonSourceDirectory;
+}
+
+/** @internal */
 export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
     return getCommonSourceDirectory(
         options,

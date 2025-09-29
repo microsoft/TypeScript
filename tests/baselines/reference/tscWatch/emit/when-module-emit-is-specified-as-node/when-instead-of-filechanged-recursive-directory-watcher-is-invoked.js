@@ -39,7 +39,10 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+  Visit https://aka.ms/ts6 for migration information.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -93,10 +96,7 @@ Program files::
 /home/src/projects/a/rootFolder/project/Scripts/Javascript.js
 /home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/projects/a/rootFolder/project/Scripts/Javascript.js
-/home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -124,7 +124,10 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+  Visit https://aka.ms/ts6 for migration information.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -152,10 +155,7 @@ Program files::
 /home/src/projects/a/rootFolder/project/Scripts/Javascript.js
 /home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/projects/a/rootFolder/project/Scripts/Javascript.js
-/home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/rootfolder/project/scripts/typescript.ts (computed .d.ts)

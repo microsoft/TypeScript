@@ -293,7 +293,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/src/main.ts",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
@@ -1030,7 +1036,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/src/main.ts",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
@@ -1254,7 +1266,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/tsconfig.json",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined

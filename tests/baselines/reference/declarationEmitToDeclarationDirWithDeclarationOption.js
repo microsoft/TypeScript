@@ -17,3 +17,19 @@ interface Foo {
     x: number;
 }
 export default Foo;
+
+
+//// [DtsFileErrors]
+
+
+error TS5011: Inferred common source directory differs from tsconfig directory, output layout will be changed.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+!!! error TS5011: Inferred common source directory differs from tsconfig directory, output layout will be changed.
+!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
+==== /foo/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": { "declaration": true, "declarationDir": "out" }
+    }
+    

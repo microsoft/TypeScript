@@ -273,6 +273,11 @@ Info seq  [hh:mm:ss:mss] event:
             ]
           },
           {
+            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error"
+          },
+          {
             "start": {
               "line": 7,
               "offset": 25

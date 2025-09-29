@@ -210,7 +210,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/src/somefolder/srcfile.ts",
         "configFile": "/user/username/projects/myproject/src/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
