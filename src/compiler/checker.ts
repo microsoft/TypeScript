@@ -27885,24 +27885,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const type of types) {
             if (type.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive)) {
                 const discriminant = getTypeOfPropertyOfType(type, name);
-                if (discriminant) {
-                    if (!isLiteralType(discriminant)) {
-                        return undefined;
-                    }
-                    let duplicate = false;
-                    forEachType(discriminant, t => {
-                        const id = getTypeId(getRegularTypeOfLiteralType(t));
-                        const existing = map.get(id);
-                        if (!existing) {
-                            map.set(id, type);
-                        }
-                        else if (existing !== unknownType) {
-                            map.set(id, unknownType);
-                            duplicate = true;
-                        }
-                    });
-                    if (!duplicate) count++;
+                if (!discriminant || !isLiteralType(discriminant)) {
+                    return undefined;
                 }
+                let duplicate = false;
+                forEachType(discriminant, t => {
+                    const id = getTypeId(getRegularTypeOfLiteralType(t));
+                    const existing = map.get(id);
+                    if (!existing) {
+                        map.set(id, type);
+                    }
+                    else if (existing !== unknownType) {
+                        map.set(id, unknownType);
+                        duplicate = true;
+                    }
+                });
+                if (!duplicate) count++;
             }
         }
         return count >= 10 && count * 2 >= types.length ? map : undefined;
