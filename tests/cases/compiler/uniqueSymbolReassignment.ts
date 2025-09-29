@@ -1,4 +1,4 @@
-// @filename: uniqueSymbolFullTest.ts
+// @filename: uniqueSymbolReassignment.ts
 // @declaration: true
 // @lib: esnext
 
