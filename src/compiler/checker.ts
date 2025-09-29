@@ -24457,7 +24457,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return Ternary.False;
             }
-            if (getObjectFlags(target) & ObjectFlags.FreshLiteral) {
+            if (isObjectLiteralType(target)) {
                 for (const sourceProp of excludeProperties(getPropertiesOfType(source), excludedProperties)) {
                     if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
                         if (reportErrors) {
