@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/missingDiscriminants2.ts] ////
+
+=== missingDiscriminants2.ts ===
+// https://github.com/microsoft/typescript-go/issues/1020
+
+// This tests ensures the change also works for discriminated unions with more than 10 cases
+
+type Thing =
+>Thing : Thing
+
+  | { str: "a", num: 0 }
+>str : "a"
+>num : 0
+
+  | { str: "b" }
+>str : "b"
+
+  | { str: "c" }
+>str : "c"
+
+  | { str: "d" }
+>str : "d"
+
+  | { str: "e" }
+>str : "e"
+
+  | { str: "f" }
+>str : "f"
+
+  | { str: "g" }
+>str : "g"
+
+  | { str: "h" }
+>str : "h"
+
+  | { str: "i" }
+>str : "i"
+
+  | { str: "j" }
+>str : "j"
+
+  | { str: "k" }
+>str : "k"
+
+  | { str: "l" }
+>str : "l"
+
+  | { str: "m" }
+>str : "m"
+
+  | { str: "n" }
+>str : "n"
+
+  | { str: "o" }
+>str : "o"
+
+  | { num: 1 }
+>num : 1
+
+const thing1: Thing = { str: "a", num: 0 }
+>thing1 : Thing
+>{ str: "a", num: 0 } : { str: "a"; num: 0; }
+>str : "a"
+>"a" : "a"
+>num : 0
+>0 : 0
+
+const thing2: Thing = { str: "b", num: 1 } // Shouldn't be error
+>thing2 : Thing
+>{ str: "b", num: 1 } : { str: "b"; num: 1; }
+>str : "b"
+>"b" : "b"
+>num : 1
+>1 : 1
+
+const thing3: Thing = { num: 1, str: "b" } // Shouldn't be error
+>thing3 : Thing
+>{ num: 1, str: "b" } : { num: 1; str: "b"; }
+>num : 1
+>1 : 1
+>str : "b"
+>"b" : "b"
+
+type Item =
+>Item : Item
+
+  | { kind: "a", subkind: 0, value: string }
+>kind : "a"
+>subkind : 0
+>value : string
+
+  | { kind: "a", subkind: 1, value: number }
+>kind : "a"
+>subkind : 1
+>value : number
+
+  | { kind: "b" }
+>kind : "b"
+
+const item1: Item = { subkind: 1, kind: "b" } // Error, type "b" not assignable to type "a"
+>item1 : Item
+>{ subkind: 1, kind: "b" } : { subkind: number; kind: "b"; }
+>subkind : number
+>1 : 1
+>kind : "b"
+>"b" : "b"
+
+const item2: Item = { kind: "b", subkind: 1 } // Error, 'subkind' isn't a known property
+>item2 : Item
+>{ kind: "b", subkind: 1 } : { kind: "b"; subkind: number; }
+>kind : "b"
+>"b" : "b"
+>subkind : number
+>1 : 1
+
