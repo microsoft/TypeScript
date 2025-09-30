@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/uniqueSymbolReassignment.ts] ////
 
-=== uniqueSymbolFullTest.ts ===
+=== uniqueSymbolReassignment.ts ===
 // -------------------------
 // Explicit unique symbols (should emit `const` / `typeof` when exported)
 // -------------------------

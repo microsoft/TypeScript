@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/uniqueSymbolReassignment.ts] ////
 
-//// [uniqueSymbolFullTest.ts]
+//// [uniqueSymbolReassignment.ts]
 // -------------------------
 // Explicit unique symbols (should emit `const` / `typeof` when exported)
 // -------------------------
@@ -37,7 +37,7 @@ myFunction.symbolName = symbolName;
 export { myFunction, anotherUnique };
 
 
-//// [uniqueSymbolFullTest.js]
+//// [uniqueSymbolReassignment.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.anotherUnique = void 0;
@@ -68,7 +68,7 @@ myFunction.normalVar = normalVar;
 myFunction.symbolName = symbolName;
 
 
-//// [uniqueSymbolFullTest.d.ts]
+//// [uniqueSymbolReassignment.d.ts]
 declare const anotherUnique: unique symbol;
 declare function myFunction(): void;
 declare namespace myFunction {
@@ -85,10 +85,10 @@ export { myFunction, anotherUnique };
 //// [DtsFileErrors]
 
 
-uniqueSymbolFullTest.d.ts(5,11): error TS2502: 'anotherUnique' is referenced directly or indirectly in its own type annotation.
+uniqueSymbolReassignment.d.ts(5,11): error TS2502: 'anotherUnique' is referenced directly or indirectly in its own type annotation.
 
 
-==== uniqueSymbolFullTest.d.ts (1 errors) ====
+==== uniqueSymbolReassignment.d.ts (1 errors) ====
     declare const anotherUnique: unique symbol;
     declare function myFunction(): void;
     declare namespace myFunction {
