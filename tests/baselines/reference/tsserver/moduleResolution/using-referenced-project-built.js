@@ -143,7 +143,7 @@ export * from "./subfolder";
 //# sourceMappingURL=index.d.ts.map
 
 //// [/home/src/projects/project/packages/package-a/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.es2021.d.ts","../src/subfolder/index.ts","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11228512861-export const FOO = \"bar\";","signature":"-8746013027-export declare const FOO = \"bar\";\n"},{"version":"-16576232793-export * from \"./subfolder\";","signature":"-14439737455-export * from \"./subfolder\";\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.es2021.d.ts","../src/subfolder/index.ts","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11228512861-export const FOO = \"bar\";","signature":"-8746013027-export declare const FOO = \"bar\";\n"},{"version":"-16576232793-export * from \"./subfolder\";","signature":"-14439737455-export * from \"./subfolder\";\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package-a/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -210,9 +210,23 @@ export * from "./subfolder";
       "../src/subfolder/index.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../tslibs/ts/lib/lib.es2021.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/subfolder/index.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1168
+  "size": 1205
 }
 
 //// [/home/src/projects/project/packages/package-b/build/index.js]
@@ -228,7 +242,7 @@ export {};
 //# sourceMappingURL=index.d.ts.map
 
 //// [/home/src/projects/project/packages/package-b/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.es2021.d.ts","../../package-a/build/subfolder/index.d.ts","../../package-a/build/index.d.ts","../src/index.ts"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8746013027-export declare const FOO = \"bar\";\n","-14439737455-export * from \"./subfolder\";\n",{"version":"-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.es2021.d.ts","../../package-a/build/subfolder/index.d.ts","../../package-a/build/index.d.ts","../src/index.ts"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8746013027-export declare const FOO = \"bar\";\n","-14439737455-export * from \"./subfolder\";\n",{"version":"-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package-b/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -298,9 +312,27 @@ export {};
       "../../package-a/build/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../tslibs/ts/lib/lib.es2021.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../package-a/build/subfolder/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../package-a/build/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1212
+  "size": 1251
 }
 
 
@@ -578,7 +610,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/projects/project/packages/package-b/src/index.ts",
         "configFile": "/home/src/projects/project/packages/package-b/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/home/src/projects/project/packages/package-b/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/package-b/tsconfig.json ProjectRootPath: undefined:: Result: undefined

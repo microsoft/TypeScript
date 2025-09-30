@@ -3,7 +3,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
 
 !!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== lib/classA.ts (0 errors) ====
-    namespace test {
+    module test {
         export class ClassA
         {
             public method() { }
@@ -12,7 +12,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
 ==== lib/classB.ts (0 errors) ====
     /// <reference path="classA.ts" />
     
-    namespace test {
+    module test {
         export class ClassB extends ClassA 
         {
         }

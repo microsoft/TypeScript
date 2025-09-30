@@ -28,54 +28,14 @@ let b = a.a;
 let c = x.B.b;
 
 //// [file1.js]
-<<<<<<< HEAD
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    class foo {
-    }
-    (function (foo) {
-        class A {
-        }
-        foo.A = A;
-        let B;
-        (function (B) {
-        })(B = foo.B || (foo.B = {}));
-    })(foo || (foo = {}));
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var foo = /** @class */ (function () {
-        function foo() {
-        }
-        return foo;
-    }());
-    (function (foo) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
-        foo.A = A;
-        var B;
-        (function (B) {
-        })(B = foo.B || (foo.B = {}));
-    })(foo || (foo = {}));
-=======
 "use strict";
-var foo = /** @class */ (function () {
-    function foo() {
-    }
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-    return foo;
-}());
+class foo {
+}
 (function (foo) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     foo.A = A;
-    var B;
+    let B;
     (function (B) {
     })(B = foo.B || (foo.B = {}));
 })(foo || (foo = {}));
@@ -86,95 +46,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var x = require("./file1");
 x.B.b = 1;
 //// [file3.js]
-<<<<<<< HEAD
-define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    let a;
-    let b = a.a;
-    let c = x.B.b;
-});
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    x = __importStar(x);
-    var a;
-    var b = a.a;
-    var c = x.B.b;
-});
-=======
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var x = __importStar(require("./file1"));
+var x = require("./file1");
 require("./file2");
-var a;
-var b = a.a;
-var c = x.B.b;
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+let a;
+let b = a.a;
+let c = x.B.b;

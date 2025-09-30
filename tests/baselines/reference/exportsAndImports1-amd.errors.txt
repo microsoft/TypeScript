@@ -15,10 +15,10 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     const enum D {
         A, B, C
     }
-    namespace M {
+    module M {
         export var x;
     }
-    namespace N {
+    module N {
         export interface I {
         }
     }

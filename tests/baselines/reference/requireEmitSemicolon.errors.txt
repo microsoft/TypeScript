@@ -6,7 +6,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     ///<reference path='requireEmitSemicolon_0.ts'/>
     import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
     
-    export namespace Database {
+    export module Database {
     	export class DB {
     	    public findPerson(id: number): P.Models.Person {
     	        return new P.Models.Person("Rock");
@@ -14,7 +14,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     	}
     } 
 ==== requireEmitSemicolon_0.ts (0 errors) ====
-    export namespace Models {
+    export module Models {
     	export class Person {
             constructor(name: string) { }
     	}

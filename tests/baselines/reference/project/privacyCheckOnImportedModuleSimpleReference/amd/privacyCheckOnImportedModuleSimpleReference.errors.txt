@@ -5,7 +5,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 !!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== mExported.ts (0 errors) ====
-    export namespace me {
+    export module me {
         export class class1 {
             public prop1 = 0;
         }
@@ -16,7 +16,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
         }
     }
 ==== mNonExported.ts (0 errors) ====
-    export namespace mne {
+    export module mne {
         export class class1 {
             public prop1 = 0;
         }

@@ -22,7 +22,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     	age: number;
     }
     
-    export namespace M1 {
+    export module M1 {
     	export interface I2 {
     		foo: string;
     	}

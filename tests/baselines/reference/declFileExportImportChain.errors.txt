@@ -6,8 +6,8 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     import c = require("declFileExportImportChain_c");
     export var x: c.b1.a.m2.c1;
 ==== declFileExportImportChain_a.ts (0 errors) ====
-    namespace m1 {
-        export namespace m2 {
+    module m1 {
+        export module m2 {
             export class c1 {
             }
         }

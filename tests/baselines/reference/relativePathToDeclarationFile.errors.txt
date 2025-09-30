@@ -12,12 +12,12 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
     }
     
 ==== test/foo.d.ts (0 errors) ====
-    export declare namespace M2 {
+    export declare module M2 {
     	export var x: boolean;
     }
     
 ==== test/other.d.ts (0 errors) ====
-    export declare namespace M2 {
+    export declare module M2 {
     	export var x: string;
     }
     

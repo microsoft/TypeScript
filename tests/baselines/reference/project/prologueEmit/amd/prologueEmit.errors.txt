@@ -10,7 +10,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
     
 ==== __extends.ts (0 errors) ====
     // class inheritance to ensure __extends is emitted
-    namespace m {
+    module m {
         export class base {}
         export class child extends base {}
     }

@@ -50,74 +50,20 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.js]
-<<<<<<< HEAD
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c_public = void 0;
-    // Public elements
-    class c_public {
-    }
-    exports.c_public = c_public;
-});
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c_public = void 0;
-    // Public elements
-    var c_public = /** @class */ (function () {
-        function c_public() {
-        }
-        return c_public;
-    }());
-    exports.c_public = c_public;
-});
-=======
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c_public = void 0;
 // Public elements
-var c_public = /** @class */ (function () {
-    function c_public() {
-    }
-    return c_public;
-}());
+class c_public {
+}
 exports.c_public = c_public;
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
-<<<<<<< HEAD
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c_public = void 0;
-    class c_public {
-    }
-    exports.c_public = c_public;
-});
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c_public = void 0;
-    var c_public = /** @class */ (function () {
-        function c_public() {
-        }
-        return c_public;
-    }());
-    exports.c_public = c_public;
-});
-=======
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c_public = void 0;
-var c_public = /** @class */ (function () {
-    function c_public() {
-    }
-    return c_public;
-}());
+class c_public {
+}
 exports.c_public = c_public;
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

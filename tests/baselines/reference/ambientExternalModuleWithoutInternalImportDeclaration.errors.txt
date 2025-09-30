@@ -8,7 +8,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     var c = new A();
 ==== ambientExternalModuleWithoutInternalImportDeclaration_0.ts (0 errors) ====
     declare module 'M' {
-        namespace C {
+        module C {
             export var f: number;
         }
         class C {

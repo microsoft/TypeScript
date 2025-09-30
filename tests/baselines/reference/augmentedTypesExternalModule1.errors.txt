@@ -5,4 +5,4 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 ==== augmentedTypesExternalModule1.ts (0 errors) ====
     export var a = 1;
     class c5 { public foo() { } }
-    namespace c5 { } // should be ok everywhere
+    module c5 { } // should be ok everywhere

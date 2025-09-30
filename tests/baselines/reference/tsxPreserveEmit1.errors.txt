@@ -11,10 +11,10 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     
     var routes1 = <Route />;
     
-    namespace M {
+    module M {
     	export var X: any;
     }
-    namespace M {
+    module M {
     	// Should emit 'M.X' in both opening and closing tags
     	var y = <X></X>;
     }
@@ -25,7 +25,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     	export = x;
     }
     
-    declare namespace ReactRouter {
+    declare module ReactRouter {
     	var Route: any;
     	interface Thing { }
     }

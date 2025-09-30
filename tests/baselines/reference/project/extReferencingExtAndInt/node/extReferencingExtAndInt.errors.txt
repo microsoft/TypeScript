@@ -3,7 +3,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
 
 !!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== internal.ts (0 errors) ====
-    namespace outer {
+    module outer {
     	export var b = "foo";
     }
 ==== external2.ts (0 errors) ====

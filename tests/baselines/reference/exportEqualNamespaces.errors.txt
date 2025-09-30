@@ -3,7 +3,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== exportEqualNamespaces.ts (0 errors) ====
-    declare namespace server {
+    declare module server {
         interface Server extends Object { }
     }
     

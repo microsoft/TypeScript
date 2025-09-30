@@ -6,13 +6,13 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     import RT_ALIAS = require("file1");
     import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
     
-    export namespace ImportingModule {
+    export module ImportingModule {
         class UsesReferredType {
             constructor(private referred: ReferredTo) { }
         }
     }
 ==== file1.ts (0 errors) ====
-    export namespace elaborate.nested.mod.name {
+    export module elaborate.nested.mod.name {
         export class ReferredTo {
             doSomething(): void {
             }

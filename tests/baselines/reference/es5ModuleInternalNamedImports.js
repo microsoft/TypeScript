@@ -38,68 +38,6 @@ import M3 from "M3";
 
 
 //// [es5ModuleInternalNamedImports.js]
-<<<<<<< HEAD
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.M = void 0;
-    var M;
-    (function (M) {
-        // variable
-        M.M_V = 0;
-        //calss
-        class M_C {
-        }
-        M.M_C = M_C;
-        // instantiated module
-        let M_M;
-        (function (M_M) {
-            var x;
-        })(M_M = M.M_M || (M.M_M = {}));
-        // function
-        function M_F() { }
-        M.M_F = M_F;
-        // enum
-        let M_E;
-        (function (M_E) {
-        })(M_E = M.M_E || (M.M_E = {}));
-        // alias
-        M.M_A = M_M;
-    })(M || (exports.M = M = {}));
-});
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.M = void 0;
-    var M;
-    (function (M) {
-        // variable
-        M.M_V = 0;
-        //calss
-        var M_C = /** @class */ (function () {
-            function M_C() {
-            }
-            return M_C;
-        }());
-        M.M_C = M_C;
-        // instantiated module
-        var M_M;
-        (function (M_M) {
-            var x;
-        })(M_M = M.M_M || (M.M_M = {}));
-        // function
-        function M_F() { }
-        M.M_F = M_F;
-        // enum
-        var M_E;
-        (function (M_E) {
-        })(M_E = M.M_E || (M.M_E = {}));
-        // alias
-        M.M_A = M_M;
-    })(M || (exports.M = M = {}));
-});
-=======
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
@@ -108,14 +46,11 @@ var M;
     // variable
     M.M_V = 0;
     //calss
-    var M_C = /** @class */ (function () {
-        function M_C() {
-        }
-        return M_C;
-    }());
+    class M_C {
+    }
     M.M_C = M_C;
     // instantiated module
-    var M_M;
+    let M_M;
     (function (M_M) {
         var x;
     })(M_M = M.M_M || (M.M_M = {}));
@@ -123,10 +58,9 @@ var M;
     function M_F() { }
     M.M_F = M_F;
     // enum
-    var M_E;
+    let M_E;
     (function (M_E) {
     })(M_E = M.M_E || (M.M_E = {}));
     // alias
     M.M_A = M_M;
 })(M || (exports.M = M = {}));
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))

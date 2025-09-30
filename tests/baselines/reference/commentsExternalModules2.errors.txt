@@ -12,7 +12,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     
 ==== commentsExternalModules2_0.ts (0 errors) ====
     /** Module comment*/
-    export namespace m1 {
+    export module m1 {
         /** b's comment*/
         export var b: number;
         /** foo's comment*/
@@ -20,7 +20,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
             return b;
         }
         /** m2 comments*/
-        export namespace m2 {
+        export module m2 {
             /** class comment;*/
             export class c {
             };
@@ -36,7 +36,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     var myvar = new m1.m2.c();
     
     /** Module comment */
-    export namespace m4 {
+    export module m4 {
         /** b's comment */
         export var b: number;
         /** foo's comment
@@ -46,7 +46,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         }
         /** m2 comments
         */
-        export namespace m2 {
+        export module m2 {
             /** class comment; */
             export class c {
             };

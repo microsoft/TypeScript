@@ -210,26 +210,6 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/src/somefolder/srcfile.ts",
         "configFile": "/user/username/projects/myproject/src/tsconfig.json",
-<<<<<<< HEAD
-        "diagnostics": []
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-        "diagnostics": [
-          {
-            "start": {
-              "line": 7,
-              "offset": 5
-            },
-            "end": {
-              "line": 7,
-              "offset": 14
-            },
-            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
-            "code": 5101,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
-          }
-        ]
-=======
         "diagnostics": [
           {
             "start": {
@@ -274,7 +254,6 @@ Info seq  [hh:mm:ss:mss] event:
             "fileName": "/user/username/projects/myproject/src/tsconfig.json"
           }
         ]
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)

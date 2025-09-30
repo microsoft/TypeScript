@@ -13,7 +13,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     enum foo {
     	red, green, blue
     }
-    namespace foo {
+    module foo {
     	export var answer = 42;
     }
     export = foo;

@@ -1040,13 +1040,18 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules:
+  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
-/home/src/workspaces/project/node_modules: *new*
+/home/src/workspaces/project/node_modules:
   {}
+  {} *new*
 /home/src/workspaces/project/node_modules/@types:
   {}
+  {}
+/home/src/workspaces/project/node_modules/common-dependency/node_modules:
   {}
 /home/src/workspaces/project/node_modules/common-dependency/node_modules/@types:
   {}

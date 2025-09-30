@@ -7,14 +7,8 @@ systemModule9.ts(6,22): error TS2792: Cannot find module 'file6'. Did you mean t
 systemModule9.ts(16,15): error TS2792: Cannot find module 'file7'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-<<<<<<< HEAD
-==== systemModule9.ts (6 errors) ====
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-==== systemModule9.ts (7 errors) ====
-=======
 !!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== systemModule9.ts (7 errors) ====
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+==== systemModule9.ts (6 errors) ====
     import * as ns from 'file1';
                         ~~~~~~~
 !!! error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

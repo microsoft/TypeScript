@@ -40,18 +40,18 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         return simpleFunction();
     }
     
-    namespace m1 {
+    module m1 {
         export function foo() {
             return "Hello";
         }
     }
-    export declare namespace m2 {
+    export declare module m2 {
     
         export var a: number;
     }
     
     
-    export namespace m3 {
+    export module m3 {
     
         export function foo() {
             return m1.foo();

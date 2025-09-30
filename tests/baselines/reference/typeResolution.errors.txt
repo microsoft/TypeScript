@@ -3,9 +3,9 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== typeResolution.ts (0 errors) ====
-    export namespace TopLevelModule1 {
-        export namespace SubModule1 {
-            export namespace SubSubModule1 {
+    export module TopLevelModule1 {
+        export module SubModule1 {
+            export module SubSubModule1 {
                 export class ClassA {
                     public AisIn1_1_1() {
                         // Try all qualified names of this type
@@ -78,8 +78,8 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
             }
         }
     
-        export namespace SubModule2 {
-            export namespace SubSubModule2 {
+        export module SubModule2 {
+            export module SubSubModule2 {
                 // No code here since these are the mirror of the above calls
                 export class ClassA { public AisIn1_2_2() { } }
                 export class ClassB { public BisIn1_2_2() { } }
@@ -99,13 +99,13 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
             YisIn1();
         }
         
-        namespace NotExportedModule {
+        module NotExportedModule {
             export class ClassA { }
         }
     }
     
-    namespace TopLevelModule2 {
-        export namespace SubModule3 {
+    module TopLevelModule2 {
+        export module SubModule3 {
             export class ClassA {
                 public AisIn2_3() { }
             }

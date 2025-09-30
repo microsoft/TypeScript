@@ -5,7 +5,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 ==== importedModuleClassNameClash.ts (0 errors) ====
     import foo = m1;
      
-    export namespace m1 { }
+    export module m1 { }
      
     class foo { }
     

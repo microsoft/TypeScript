@@ -26,5 +26,5 @@ error TS5107: Option 'module=System' is deprecated and will stop functioning in 
     export declare enum E {X = 1}
     
 ==== file6.ts (0 errors) ====
-    export declare namespace M { var v: number; }
+    export declare module M { var v: number; }
     

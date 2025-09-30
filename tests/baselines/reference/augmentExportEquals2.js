@@ -25,21 +25,7 @@ module.exports = foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [file3.js]
-<<<<<<< HEAD
-define(["require", "exports", "./file2"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    let a; // should not work
-});
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports", "./file2"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a; // should not work
-});
-=======
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./file2");
-var a; // should not work
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+let a; // should not work

@@ -10,7 +10,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
     }
     export as namespace moduleA;
 ==== useModule.ts (0 errors) ====
-    namespace moduleB {
+    module moduleB {
         export interface IUseModuleA {
             a: moduleA.A;
         }

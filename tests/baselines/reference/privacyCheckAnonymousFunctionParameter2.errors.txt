@@ -6,13 +6,13 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     export var x = 1;  // Makes this an external module 
     interface Iterator<T> { x: T }
     
-    namespace Q {
+    module Q {
         export function foo<T>(x: (a: Iterator<T>) => number) {
             return x;
         }
     }
     
-    namespace Q {
+    module Q {
         function bar() {
             foo(null);
         }

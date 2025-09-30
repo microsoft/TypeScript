@@ -5,7 +5,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 ==== commentsMultiModuleMultiFile_1.ts (0 errors) ====
     import m = require('commentsMultiModuleMultiFile_0');
     /** this is multi module 3 comment*/
-    export namespace multiM {
+    export module multiM {
         /** class d comment*/
         export class d {
         }
@@ -17,13 +17,13 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     new multiM.d();
 ==== commentsMultiModuleMultiFile_0.ts (0 errors) ====
     /** this is multi declare module*/
-    export namespace multiM {
+    export module multiM {
         /// class b comment
         export class b {
         }
     }
     /** thi is multi module 2*/
-    export namespace multiM {
+    export module multiM {
         /** class c comment*/
         export class c {
         }

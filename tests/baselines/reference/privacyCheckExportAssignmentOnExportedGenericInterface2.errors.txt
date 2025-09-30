@@ -12,7 +12,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         return undefined;
     }
     
-    namespace Foo {
+    module Foo {
         export var x = "hello";
     }
     

@@ -7,4 +7,4 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     export declare function f();
     export declare class C { }
     export declare enum E { }
-    export declare namespace M { }
+    export declare module M { }

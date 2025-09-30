@@ -84,24 +84,8 @@ const y = x.id;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [consumer.js]
-<<<<<<< HEAD
-define(["require", "exports", "./augmentation"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    let x;
-    const y = x.id;
-});
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports", "./augmentation"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var x;
-    var y = x.id;
-});
-=======
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./augmentation");
-var x;
-var y = x.id;
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+let x;
+const y = x.id;

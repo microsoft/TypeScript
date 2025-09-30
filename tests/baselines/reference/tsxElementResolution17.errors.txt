@@ -10,7 +10,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     <s1.MyElement />;
     
 ==== file.tsx (0 errors) ====
-    declare namespace JSX {
+    declare module JSX {
     	interface Element { }
     	interface IntrinsicElements { }
     }

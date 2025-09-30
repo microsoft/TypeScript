@@ -9,7 +9,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     }
     
 ==== foo_0.ts (0 errors) ====
-    namespace Foo {
+    module Foo {
     	export var answer = 42;
     }
     export = Foo;

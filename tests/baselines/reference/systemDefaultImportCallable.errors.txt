@@ -3,7 +3,7 @@ error TS5107: Option 'module=System' is deprecated and will stop functioning in 
 
 !!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== core-js.d.ts (0 errors) ====
-    declare namespace core {
+    declare module core {
         var String: {
             repeat(text: string, count: number): string;
         };

@@ -7,7 +7,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     
     var n: number = modM.x;
 ==== exportAssignmentInternalModule_A.ts (0 errors) ====
-    namespace M {
+    module M {
     	export var x;
     }
     

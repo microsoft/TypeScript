@@ -15,39 +15,11 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 
 
 //// [crashIntypeCheckInvocationExpression.js]
-<<<<<<< HEAD
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.compileServer = void 0;
-    var nake;
-    function doCompile(fileset, moduleType) {
-        return undefined;
-    }
-    exports.compileServer = task(() => {
-        var folder = path.join(), fileset = nake.fileSetSync(folder);
-        return doCompile(fileset, moduleType);
-    });
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.compileServer = void 0;
-    var nake;
-    function doCompile(fileset, moduleType) {
-        return undefined;
-    }
-    exports.compileServer = task(function () {
-        var folder = path.join(), fileset = nake.fileSetSync(folder);
-        return doCompile(fileset, moduleType);
-    });
-=======
 var nake;
 function doCompile(fileset, moduleType) {
     return undefined;
 }
-export var compileServer = task(function () {
+export var compileServer = task(() => {
     var folder = path.join(), fileset = nake.fileSetSync(folder);
     return doCompile(fileset, moduleType);
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 });
