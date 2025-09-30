@@ -64,6 +64,17 @@ function foo1 () {
     }
 }
 
+class foo2 {
+    static {
+        this.b  // should error
+        let b: typeof this.b;   // ok
+        if (1) {
+            this.b; // should error
+        }
+    }
+
+    static b = 1;
+}
 
 //// [classStaticBlock6.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -137,3 +148,18 @@ function foo1() {
         }
     })();
 }
+let foo2 = (() => {
+    var _a;
+    class foo2 {
+    }
+    _a = foo2;
+    (() => {
+        _a.b; // should error
+        let b; // ok
+        if (1) {
+            _a.b; // should error
+        }
+    })();
+    foo2.b = 1;
+    return foo2;
+})();

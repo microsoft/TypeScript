@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/accessorInAmbientContextES5.ts] ////
+
+=== accessorInAmbientContextES5.ts ===
+// Should allow accessor in ambient contexts even when targeting ES5
+
+declare class AmbientClass {
+>AmbientClass : Symbol(AmbientClass, Decl(accessorInAmbientContextES5.ts, 0, 0))
+
+    accessor prop1: string;
+>prop1 : Symbol(AmbientClass.prop1, Decl(accessorInAmbientContextES5.ts, 2, 28))
+
+    static accessor prop2: number;
+>prop2 : Symbol(AmbientClass.prop2, Decl(accessorInAmbientContextES5.ts, 3, 27))
+
+    private accessor prop3: boolean;
+>prop3 : Symbol(AmbientClass.prop3, Decl(accessorInAmbientContextES5.ts, 4, 34))
+
+    private static accessor prop4: symbol;
+>prop4 : Symbol(AmbientClass.prop4, Decl(accessorInAmbientContextES5.ts, 5, 36))
+}
+
+declare namespace AmbientNamespace {
+>AmbientNamespace : Symbol(AmbientNamespace, Decl(accessorInAmbientContextES5.ts, 7, 1))
+
+    class C {
+>C : Symbol(C, Decl(accessorInAmbientContextES5.ts, 9, 36))
+
+        accessor prop: string;
+>prop : Symbol(C.prop, Decl(accessorInAmbientContextES5.ts, 10, 13))
+    }
+}
+
+// Should also work in .d.ts files (simulated with declare)
+declare module "some-module" {
+>"some-module" : Symbol("some-module", Decl(accessorInAmbientContextES5.ts, 13, 1))
+
+    export class ExportedClass {
+>ExportedClass : Symbol(ExportedClass, Decl(accessorInAmbientContextES5.ts, 16, 30))
+
+        accessor value: any;
+>value : Symbol(ExportedClass.value, Decl(accessorInAmbientContextES5.ts, 17, 32))
+    }
+}
+
+// Regular class should still error when targeting ES5
+class RegularClass {
+>RegularClass : Symbol(RegularClass, Decl(accessorInAmbientContextES5.ts, 20, 1))
+
+    accessor shouldError: string; // Should still error
+>shouldError : Symbol(RegularClass.shouldError, Decl(accessorInAmbientContextES5.ts, 23, 20))
+}

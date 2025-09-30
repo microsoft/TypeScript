@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/propTypeValidatorInference.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 2,500
-
 === node_modules/prop-types/index.d.ts ===
 export const nominalTypeHack: unique symbol;
 >nominalTypeHack : unique symbol

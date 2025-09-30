@@ -2,7 +2,6 @@
 
 === Performance Stats ===
 Type Count: 1,000
-Instantiation count: 1,000
 
 === other.tsx ===
 /// <reference path="react18/react18.d.ts" />

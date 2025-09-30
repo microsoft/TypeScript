@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 'lts/*'
       - run: |
@@ -30,7 +30,7 @@ jobs:
           # corepack enable npm
           npm install -g $(jq -r '.packageManager' < package.json)
           npm --version
-      - name: Setup and publish nightly
+      - name: Setup and test nightly
         run: |
           npm ci
           npx hereby configure-nightly
@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 'lts/*'
           # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.

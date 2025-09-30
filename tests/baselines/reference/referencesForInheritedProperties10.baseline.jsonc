@@ -1,0 +1,501 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForInheritedProperties10.ts ===
+// interface IFeedbackHandler {
+//   /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}handleAccept|]?(): void;|>
+//   handleReject?(): void;
+// }
+// 
+// abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+// 
+// class FeedbackHandler extends AbstractFeedbackHandler {
+//   <|[|{| defId: 1, isWriteAccess: true |}handleAccept|](): void {
+//     console.log("Feedback accepted");
+//   }|>
+// 
+//   handleReject(): void {
+//     console.log("Feedback rejected");
+//   }
+// }
+// 
+// function foo(handler: IFeedbackHandler) {
+//   handler.[|{| defId: 0 |}handleAccept|]?.();
+//   handler.handleReject?.();
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties10.ts ===
+  // interface IFeedbackHandler {
+  //   /*FIND ALL REFS*/<|[|{| defId: 0 |}handleAccept|]?(): void;|>
+  //   handleReject?(): void;
+  // }
+  // 
+  // abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+  // 
+  // class FeedbackHandler extends AbstractFeedbackHandler {
+  //   <|[|{| defId: 1 |}handleAccept|](): void {
+  //     console.log("Feedback accepted");
+  //   }|>
+  // 
+  //   handleReject(): void {
+  //     console.log("Feedback rejected");
+  // --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) IFeedbackHandler.handleAccept?(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "IFeedbackHandler",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "handleAccept",
+      "kind": "methodName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) FeedbackHandler.handleAccept(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FeedbackHandler",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "handleAccept",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForInheritedProperties10.ts ===
+// interface IFeedbackHandler {
+//   <|[|{| defId: 0 |}handleAccept|]?(): void;|>
+//   handleReject?(): void;
+// }
+// 
+// abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+// 
+// class FeedbackHandler extends AbstractFeedbackHandler {
+//   /*FIND ALL REFS*/<|[|{| defId: 1, isWriteAccess: true, isDefinition: true |}handleAccept|](): void {
+//     console.log("Feedback accepted");
+//   }|>
+// 
+//   handleReject(): void {
+//     console.log("Feedback rejected");
+//   }
+// }
+// 
+// function foo(handler: IFeedbackHandler) {
+//   handler.[|{| defId: 0 |}handleAccept|]?.();
+//   handler.handleReject?.();
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties10.ts ===
+  // interface IFeedbackHandler {
+  //   <|[|{| defId: 0 |}handleAccept|]?(): void;|>
+  //   handleReject?(): void;
+  // }
+  // 
+  // abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+  // 
+  // class FeedbackHandler extends AbstractFeedbackHandler {
+  //   /*FIND ALL REFS*/<|[|{| defId: 1 |}handleAccept|](): void {
+  //     console.log("Feedback accepted");
+  //   }|>
+  // 
+  //   handleReject(): void {
+  //     console.log("Feedback rejected");
+  // --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) IFeedbackHandler.handleAccept?(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "IFeedbackHandler",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "handleAccept",
+      "kind": "methodName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) FeedbackHandler.handleAccept(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FeedbackHandler",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "handleAccept",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForInheritedProperties10.ts ===
+// interface IFeedbackHandler {
+//   <|[|{| defId: 0 |}handleAccept|]?(): void;|>
+//   handleReject?(): void;
+// }
+// 
+// abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+// 
+// class FeedbackHandler extends AbstractFeedbackHandler {
+//   <|[|{| defId: 1, isWriteAccess: true |}handleAccept|](): void {
+//     console.log("Feedback accepted");
+//   }|>
+// 
+//   handleReject(): void {
+//     console.log("Feedback rejected");
+//   }
+// }
+// 
+// function foo(handler: IFeedbackHandler) {
+//   handler./*FIND ALL REFS*/[|{| defId: 0 |}handleAccept|]?.();
+//   handler.handleReject?.();
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties10.ts ===
+  // interface IFeedbackHandler {
+  //   <|[|{| defId: 0 |}handleAccept|]?(): void;|>
+  //   handleReject?(): void;
+  // }
+  // 
+  // abstract class AbstractFeedbackHandler implements IFeedbackHandler {}
+  // 
+  // class FeedbackHandler extends AbstractFeedbackHandler {
+  //   <|[|{| defId: 1 |}handleAccept|](): void {
+  //     console.log("Feedback accepted");
+  //   }|>
+  // 
+  //   handleReject(): void {
+  //     console.log("Feedback rejected");
+  //   }
+  // }
+  // 
+  // function foo(handler: IFeedbackHandler) {
+  //   handler./*FIND ALL REFS*/handleAccept?.();
+  //   handler.handleReject?.();
+  // }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) IFeedbackHandler.handleAccept?(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "IFeedbackHandler",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "handleAccept",
+      "kind": "methodName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) FeedbackHandler.handleAccept(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FeedbackHandler",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "handleAccept",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

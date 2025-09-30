@@ -1112,7 +1112,7 @@ export function createSyntacticTypeNodeBuilder(
     function ensureParameter(p: ParameterDeclaration, context: SyntacticTypeNodeBuilderContext) {
         return factory.updateParameterDeclaration(
             p,
-            [],
+            /*modifiers*/ undefined,
             reuseNode(context, p.dotDotDotToken),
             resolver.serializeNameOfParameter(context, p),
             resolver.isOptionalParameter(p) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,

@@ -1707,3 +1707,79 @@ function isEmptyString(x: unknown) {
 >   : ^^^^^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+>Animal : Animal
+>       : ^^^^^^
+
+  breath: true,
+>breath : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+};
+
+type Rock = {
+>Rock : Rock
+>     : ^^^^
+
+  breath: false,
+>breath : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+
+};
+
+type Something = Animal | Rock;
+>Something : Something
+>          : ^^^^^^^^^
+
+function isAnimal(something: Something): something is Animal {
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>something : Something
+>          : ^^^^^^^^^
+
+  return something.breath
+>something.breath : boolean
+>                 : ^^^^^^^
+>something : Something
+>          : ^^^^^^^^^
+>breath : boolean
+>       : ^^^^^^^
+}
+
+function positive(t: Something) {
+>positive : (t: Something) => t is Animal
+>         : ^ ^^         ^^^^^^^^^^^^^^^^
+>t : Something
+>  : ^^^^^^^^^
+
+  return isAnimal(t)
+>isAnimal(t) : boolean
+>            : ^^^^^^^
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>t : Something
+>  : ^^^^^^^^^
+}
+
+function negative(t: Something) { 
+>negative : (t: Something) => t is Rock
+>         : ^ ^^         ^^^^^^^^^^^^^^
+>t : Something
+>  : ^^^^^^^^^
+
+  return !isAnimal(t)
+>!isAnimal(t) : boolean
+>             : ^^^^^^^
+>isAnimal(t) : boolean
+>            : ^^^^^^^
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>t : Something
+>  : ^^^^^^^^^
+}
+

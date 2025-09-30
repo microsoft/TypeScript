@@ -42,3 +42,60 @@ const added2 = addP2({ bar: 2 });
 >addP2 : Symbol(addP2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 9, 5))
 >bar : Symbol(bar, Decl(genericCallInferenceWithGenericLocalFunction.ts, 10, 22))
 
+function withP3<P>(p: P) {
+>withP3 : Symbol(withP3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 10, 33))
+>P : Symbol(P, Decl(genericCallInferenceWithGenericLocalFunction.ts, 12, 16))
+>p : Symbol(p, Decl(genericCallInferenceWithGenericLocalFunction.ts, 12, 19))
+>P : Symbol(P, Decl(genericCallInferenceWithGenericLocalFunction.ts, 12, 16))
+
+  const m =
+>m : Symbol(m, Decl(genericCallInferenceWithGenericLocalFunction.ts, 13, 7))
+
+    <I,>(from: I) =>
+>I : Symbol(I, Decl(genericCallInferenceWithGenericLocalFunction.ts, 14, 5))
+>from : Symbol(from, Decl(genericCallInferenceWithGenericLocalFunction.ts, 14, 9))
+>I : Symbol(I, Decl(genericCallInferenceWithGenericLocalFunction.ts, 14, 5))
+
+    <I2,>(from2: I2) => ({ ...from, ...from2, ...p });
+>I2 : Symbol(I2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 15, 5))
+>from2 : Symbol(from2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 15, 10))
+>I2 : Symbol(I2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 15, 5))
+>from : Symbol(from, Decl(genericCallInferenceWithGenericLocalFunction.ts, 14, 9))
+>from2 : Symbol(from2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 15, 10))
+>p : Symbol(p, Decl(genericCallInferenceWithGenericLocalFunction.ts, 12, 19))
+
+  return createTransform(m);
+>createTransform : Symbol(createTransform, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 5))
+>m : Symbol(m, Decl(genericCallInferenceWithGenericLocalFunction.ts, 13, 7))
+}
+
+const addP3 = withP3({ a: 1 });
+>addP3 : Symbol(addP3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 19, 5))
+>withP3 : Symbol(withP3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 10, 33))
+>a : Symbol(a, Decl(genericCallInferenceWithGenericLocalFunction.ts, 19, 22))
+
+const addedSome3 = addP3({ b: '' });
+>addedSome3 : Symbol(addedSome3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 20, 5))
+>addP3 : Symbol(addP3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 19, 5))
+>b : Symbol(b, Decl(genericCallInferenceWithGenericLocalFunction.ts, 20, 26))
+
+const added3 = addedSome3({ c: true });
+>added3 : Symbol(added3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 21, 5))
+>addedSome3 : Symbol(addedSome3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 20, 5))
+>c : Symbol(c, Decl(genericCallInferenceWithGenericLocalFunction.ts, 21, 27))
+
+const addP3_other = withP3({ foo: 'bar' });
+>addP3_other : Symbol(addP3_other, Decl(genericCallInferenceWithGenericLocalFunction.ts, 23, 5))
+>withP3 : Symbol(withP3, Decl(genericCallInferenceWithGenericLocalFunction.ts, 10, 33))
+>foo : Symbol(foo, Decl(genericCallInferenceWithGenericLocalFunction.ts, 23, 28))
+
+const addedSome3_other = addP3_other({ qwerty: 123 });
+>addedSome3_other : Symbol(addedSome3_other, Decl(genericCallInferenceWithGenericLocalFunction.ts, 24, 5))
+>addP3_other : Symbol(addP3_other, Decl(genericCallInferenceWithGenericLocalFunction.ts, 23, 5))
+>qwerty : Symbol(qwerty, Decl(genericCallInferenceWithGenericLocalFunction.ts, 24, 38))
+
+const added3_other = addedSome3_other({ bazinga: true });
+>added3_other : Symbol(added3_other, Decl(genericCallInferenceWithGenericLocalFunction.ts, 25, 5))
+>addedSome3_other : Symbol(addedSome3_other, Decl(genericCallInferenceWithGenericLocalFunction.ts, 24, 5))
+>bazinga : Symbol(bazinga, Decl(genericCallInferenceWithGenericLocalFunction.ts, 25, 39))
+

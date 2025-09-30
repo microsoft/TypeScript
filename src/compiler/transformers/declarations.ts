@@ -876,6 +876,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 tryGetResolutionModeOverride(decl.attributes),
             );
         }
+        const phaseModifier = decl.importClause.phaseModifier === SyntaxKind.DeferKeyword ? undefined : decl.importClause.phaseModifier;
         // The `importClause` visibility corresponds to the default's visibility.
         const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ? decl.importClause.name : undefined;
         if (!decl.importClause.namedBindings) {
@@ -885,7 +886,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    phaseModifier,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
                 ),
@@ -901,7 +902,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    phaseModifier,
                     visibleDefaultBinding,
                     namedBindings,
                 ),
@@ -917,7 +918,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    phaseModifier,
                     visibleDefaultBinding,
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),

@@ -1,5 +1,5 @@
 // @moduleResolution: nodenext
-// @module: node18,nodenext
+// @module: node18,node20,nodenext
 // @jsx: preserve
 
 // @filename: /src/foo.tsx
