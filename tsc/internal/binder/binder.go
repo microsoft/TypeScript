@@ -2243,12 +2243,12 @@ func (b *Binder) bindBinaryExpressionFlow(node *ast.Node) {
 		b.bind(expr.Left)
 		b.bind(expr.Type)
 		if operator == ast.KindCommaToken {
-			b.maybeBindExpressionFlowIfCall(node)
+			b.maybeBindExpressionFlowIfCall(expr.Left)
 		}
 		b.bind(expr.OperatorToken)
 		b.bind(expr.Right)
 		if operator == ast.KindCommaToken {
-			b.maybeBindExpressionFlowIfCall(node)
+			b.maybeBindExpressionFlowIfCall(expr.Right)
 		}
 		if ast.IsAssignmentOperator(operator) && !ast.IsAssignmentTarget(node) {
 			b.bindAssignmentTargetFlow(expr.Left)

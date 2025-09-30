@@ -20,10 +20,10 @@ function func(foo: any, bar: any) {
 >bar : any
 
     foo;
->foo : any
+>foo : number
 
     bar;
->bar : any
+>bar : string
 }
 
 function func2(foo: any, bar: any, baz: any) {
@@ -46,12 +46,12 @@ function func2(foo: any, bar: any, baz: any) {
 >baz : any
 
     foo;
->foo : any
+>foo : number
 
     bar;
->bar : any
+>bar : string
 
     baz;
->baz : any
+>baz : boolean
 }
 
