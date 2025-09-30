@@ -4821,7 +4821,7 @@ interface CSSFontFaceRule extends CSSRule {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSFontFaceRule/style)
      */
-    get style(): CSSStyleProperties;
+    get style(): CSSStyleDeclaration;
     set style(cssText: string);
 }
 
@@ -4991,7 +4991,7 @@ interface CSSKeyframeRule extends CSSRule {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSKeyframeRule/style)
      */
-    get style(): CSSStyleProperties;
+    get style(): CSSStyleDeclaration;
     set style(cssText: string);
 }
 
@@ -5326,7 +5326,7 @@ interface CSSNestedDeclarations extends CSSRule {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSNestedDeclarations/style)
      */
-    get style(): CSSStyleProperties;
+    get style(): CSSStyleDeclaration;
     set style(cssText: string);
 }
 
@@ -7417,7 +7417,7 @@ interface CSSStyleRule extends CSSGroupingRule {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule/style)
      */
-    get style(): CSSStyleProperties;
+    get style(): CSSStyleDeclaration;
     set style(cssText: string);
     /**
      * The **`styleMap`** read-only property of the CSSStyleRule interface returns a StylePropertyMap object which provides access to the rule's property-value pairs.
@@ -11461,7 +11461,7 @@ interface ElementCSSInlineStyle {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/attributeStyleMap) */
     readonly attributeStyleMap: StylePropertyMap;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/style) */
-    get style(): CSSStyleProperties;
+    get style(): CSSStyleDeclaration;
     set style(cssText: string);
 }
 
@@ -37358,7 +37358,7 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/getComputedStyle)
      */
-    getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleProperties;
+    getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleDeclaration;
     /**
      * The **`getSelection()`** method of the Window interface returns the Selection object associated with the window's document, representing the range of text selected by the user or the current position of the caret.
      *
@@ -39460,7 +39460,7 @@ declare function focus(): void;
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/getComputedStyle)
  */
-declare function getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleProperties;
+declare function getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleDeclaration;
 /**
  * The **`getSelection()`** method of the Window interface returns the Selection object associated with the window's document, representing the range of text selected by the user or the current position of the caret.
  *
