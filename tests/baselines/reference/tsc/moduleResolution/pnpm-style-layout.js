@@ -305,9 +305,16 @@ Resolving real path for '/home/src/projects/component-type-checker/node_modules/
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/package.json'.
 [96mtsconfig.json[0m:[93m8[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m8[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m9[0m     "baseUrl": ".",
+[7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../tslibs/TS/Lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -325,7 +332,7 @@ Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 1 error in tsconfig.json[90m:8[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:8[0m
 
 
 

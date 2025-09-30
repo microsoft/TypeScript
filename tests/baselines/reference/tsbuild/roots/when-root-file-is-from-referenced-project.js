@@ -118,6 +118,12 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
+[96mprojects/server/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./src",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/myClass.d.ts
@@ -132,6 +138,9 @@ projects/shared/dist/src/logging.d.ts
 projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/random.ts'
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/solution/projects/shared/dist/src/logging.js]
@@ -256,7 +265,7 @@ export {};
 
 
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"},"2292560907-export declare function log(str: string): void;\n","-1751303682-export declare function randomFn(str: string): void;\n"],"root":[[2,5]],"resolvedRoot":[[4,6],[2,7],[5,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"},"2292560907-export declare function log(str: string): void;\n","-1751303682-export declare function randomFn(str: string): void;\n"],"root":[[2,5]],"resolvedRoot":[[4,6],[2,7],[5,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -362,13 +371,35 @@ export {};
       "../../../shared/dist/src/myclass.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/myclass.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../src/server.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/logging.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/random.d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./src/server.d.ts",
   "version": "FakeTSVersion",
-  "size": 1304
+  "size": 1345
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No change
 
@@ -382,12 +413,48 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/random.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/server/src/server.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
+
+======== Resolving module ':shared/myClass.js' from '/home/src/workspaces/solution/projects/server/src/server.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+'baseUrl' option is set to '/home/src/workspaces/solution/projects/server/src', using this value to resolve non-relative module name ':shared/myClass.js'.
+'paths' option is specified, looking for a pattern to match module name ':shared/myClass.js'.
+Module name ':shared/myClass.js', matched pattern ':shared/*'.
+Trying substitution '../../shared/src/*', candidate module location: '../../shared/src/myClass.js'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
+File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
+======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
+[96mprojects/server/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./src",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../tslibs/TS/Lib/lib.d.ts
+  Default library for target 'es5'
+projects/shared/dist/src/myClass.d.ts
+  Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/myClass.ts'
+projects/server/src/server.ts
+  Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
+projects/shared/dist/src/logging.d.ts
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
+
+Found 1 error.
 
 
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: edit logging file
 
@@ -417,7 +484,7 @@ projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/random.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because output 'projects/server/dist/server/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
 
@@ -432,6 +499,12 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
+[96mprojects/server/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./src",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/myClass.d.ts
@@ -446,6 +519,9 @@ projects/shared/dist/src/logging.d.ts
 projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/random.ts'
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/solution/projects/shared/dist/src/logging.js]
@@ -533,7 +609,7 @@ export declare const x = 10;
 }
 
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","-1751303682-export declare function randomFn(str: string): void;\n"],"root":[[2,5]],"resolvedRoot":[[4,6],[2,7],[5,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","-1751303682-export declare function randomFn(str: string): void;\n"],"root":[[2,5]],"resolvedRoot":[[4,6],[2,7],[5,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -639,13 +715,35 @@ export declare const x = 10;
       "../../../shared/dist/src/myclass.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/myclass.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../src/server.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/logging.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/random.d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./src/server.d.ts",
   "version": "FakeTSVersion",
-  "size": 1335
+  "size": 1376
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No change
 
@@ -659,12 +757,48 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
+
+======== Resolving module ':shared/myClass.js' from '/home/src/workspaces/solution/projects/server/src/server.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+'baseUrl' option is set to '/home/src/workspaces/solution/projects/server/src', using this value to resolve non-relative module name ':shared/myClass.js'.
+'paths' option is specified, looking for a pattern to match module name ':shared/myClass.js'.
+Module name ':shared/myClass.js', matched pattern ':shared/*'.
+Trying substitution '../../shared/src/*', candidate module location: '../../shared/src/myClass.js'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
+File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
+======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
+[96mprojects/server/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./src",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../tslibs/TS/Lib/lib.d.ts
+  Default library for target 'es5'
+projects/shared/dist/src/myClass.d.ts
+  Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/myClass.ts'
+projects/server/src/server.ts
+  Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
+projects/shared/dist/src/logging.d.ts
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
+
+Found 1 error.
 
 
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: delete random file
 
@@ -687,7 +821,7 @@ projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
 
@@ -702,6 +836,12 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
+[96mprojects/server/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./src",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/myClass.d.ts
@@ -713,6 +853,9 @@ projects/server/src/server.ts
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/logging.ts'
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/solution/projects/shared/dist/tsconfig.tsbuildinfo]
@@ -772,7 +915,7 @@ projects/shared/dist/src/logging.d.ts
 }
 
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n"],"root":[[2,4]],"resolvedRoot":[[4,5],[2,6]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n"],"root":[[2,4]],"resolvedRoot":[[4,5],[2,6]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -861,13 +1004,31 @@ projects/shared/dist/src/logging.d.ts
       "../../../shared/dist/src/myclass.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/myclass.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../src/server.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../../shared/dist/src/logging.d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./src/server.d.ts",
   "version": "FakeTSVersion",
-  "size": 1189
+  "size": 1228
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No change
 
@@ -881,9 +1042,42 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
+
+======== Resolving module ':shared/myClass.js' from '/home/src/workspaces/solution/projects/server/src/server.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+'baseUrl' option is set to '/home/src/workspaces/solution/projects/server/src', using this value to resolve non-relative module name ':shared/myClass.js'.
+'paths' option is specified, looking for a pattern to match module name ':shared/myClass.js'.
+Module name ':shared/myClass.js', matched pattern ':shared/*'.
+Trying substitution '../../shared/src/*', candidate module location: '../../shared/src/myClass.js'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
+File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
+======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
+[96mprojects/server/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./src",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../tslibs/TS/Lib/lib.d.ts
+  Default library for target 'es5'
+projects/shared/dist/src/myClass.d.ts
+  Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/myClass.ts'
+projects/server/src/server.ts
+  Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
+projects/shared/dist/src/logging.d.ts
+  Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/logging.ts'
+
+Found 1 error.
 
 
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

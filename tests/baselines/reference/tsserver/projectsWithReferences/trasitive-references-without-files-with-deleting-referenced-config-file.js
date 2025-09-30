@@ -261,7 +261,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/c/index.ts",
         "configFile": "/user/username/projects/myproject/c/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/c/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
@@ -415,6 +430,20 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/c/tsconfig.json",
         "configFile": "/user/username/projects/myproject/c/tsconfig.json",
         "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/c/tsconfig.json"
+          },
           {
             "start": {
               "line": 11,
@@ -646,7 +675,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/c/tsconfig.json",
         "configFile": "/user/username/projects/myproject/c/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/c/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*

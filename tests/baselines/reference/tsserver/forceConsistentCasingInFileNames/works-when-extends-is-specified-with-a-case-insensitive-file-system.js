@@ -182,7 +182,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/Users/username/dev/project/index.ts",
         "configFile": "/Users/username/dev/project/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/Users/username/dev/project/tsconfig.json' (Configured)
@@ -254,7 +260,13 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": [],
+      "response": [
+        {
+          "message": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+          "category": "error",
+          "code": 5101
+        }
+      ],
       "responseRequired": true
     }
 After request
