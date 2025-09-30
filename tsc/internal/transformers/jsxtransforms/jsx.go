@@ -791,26 +791,26 @@ func fixupWhitespaceAndDecodeEntities(text string) string {
 	initial := true
 	// First non-whitespace character on this line.
 	firstNonWhitespace := 0
-	// Last non-whitespace character on this line.
-	lastNonWhitespace := -1
+	// End byte position of the last non-whitespace character on this line.
+	lastNonWhitespaceEnd := -1
 	// These initial values are special because the first line is:
 	// firstNonWhitespace = 0 to indicate that we want leading whitespace,
-	// but lastNonWhitespace = -1 as a special flag to indicate that we *don't* include the line if it's all whitespace.
+	// but lastNonWhitespaceEnd = -1 as a special flag to indicate that we *don't* include the line if it's all whitespace.
 	for i := 0; i < len(text); i++ {
 		c, size := utf8.DecodeRuneInString(text[i:])
 		if stringutil.IsLineBreak(c) {
 			// If we've seen any non-whitespace characters on this line, add the 'trim' of the line.
-			// (lastNonWhitespace === -1 is a special flag to detect whether the first line is all whitespace.)
-			if firstNonWhitespace != -1 && lastNonWhitespace != -1 {
-				addLineOfJsxText(acc, text[firstNonWhitespace:lastNonWhitespace+1], initial)
+			// (lastNonWhitespaceEnd === -1 is a special flag to detect whether the first line is all whitespace.)
+			if firstNonWhitespace != -1 && lastNonWhitespaceEnd != -1 {
+				addLineOfJsxText(acc, text[firstNonWhitespace:lastNonWhitespaceEnd+1], initial)
 				initial = false
 			}
 
 			// Reset firstNonWhitespace for the next line.
-			// Don't bother to reset lastNonWhitespace because we ignore it if firstNonWhitespace = -1.
+			// Don't bother to reset lastNonWhitespaceEnd because we ignore it if firstNonWhitespace = -1.
 			firstNonWhitespace = -1
 		} else if !stringutil.IsWhiteSpaceSingleLine(c) {
-			lastNonWhitespace = i
+			lastNonWhitespaceEnd = i + size - 1 // Store the end byte position of the character
 			if firstNonWhitespace == -1 {
 				firstNonWhitespace = i
 			}

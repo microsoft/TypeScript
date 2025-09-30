@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/jsxUnicodeEscapeSequence.tsx] ////
+
+=== jsxUnicodeEscapeSequence.tsx ===
+/// <reference path="react16.d.ts" />
+
+export const InlineUnicodeChar = () => {
+>InlineUnicodeChar : Symbol(InlineUnicodeChar, Decl(jsxUnicodeEscapeSequence.tsx, 2, 12))
+
+    // This should work correctly - inline character with other content
+    return <div><span>Warning: ⚠ Error</span></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+};
+
+export const StandaloneUnicodeChar = () => {
+>StandaloneUnicodeChar : Symbol(StandaloneUnicodeChar, Decl(jsxUnicodeEscapeSequence.tsx, 7, 12))
+
+    // This should reproduce the issue - unicode character on its own line
+    return (<div><span>⚠</span>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+
+        ⚠
+    </div>);
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+};
+
+export const MultipleUnicodeChars = () => {
+>MultipleUnicodeChars : Symbol(MultipleUnicodeChars, Decl(jsxUnicodeEscapeSequence.tsx, 14, 12))
+
+    // Test multiple unicode characters
+    return (<div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+        ⚠
+        ⛔
+        🚨
+    </div>);
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+};
+
