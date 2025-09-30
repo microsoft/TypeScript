@@ -8,6 +8,7 @@ import { foo } from "foo";
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "foo": ["foo/foo.ts"]
         }

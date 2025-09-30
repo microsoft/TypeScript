@@ -4,6 +4,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "baseUrl": "./old",
+        "ignoreDeprecations": "6.0",
 ////        "paths": {
 ////            "foo": ["old"],
 ////        },
@@ -27,6 +28,7 @@ verify.getEditsForFileRename({
 `{
     "compilerOptions": {
         "baseUrl": "new",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "foo": ["new"],
         },

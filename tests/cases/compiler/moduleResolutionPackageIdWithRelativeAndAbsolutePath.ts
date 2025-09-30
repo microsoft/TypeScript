@@ -43,6 +43,7 @@ import { makeSharedOption } from "@shared/lib/app"; // Includes option as module
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "@shared/*": ["../shared/*"]
         }

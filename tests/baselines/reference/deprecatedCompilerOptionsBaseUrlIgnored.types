@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/deprecatedCompilerOptionsBaseUrlIgnored.ts] ////
+
+=== /foo/src/app/module.ts ===
+export const value = 42;
+>value : 42
+>      : ^^
+>42 : 42
+>   : ^^
+
+=== /foo/src/main.ts ===
+import { value } from "@app/module";
+>value : 42
+>      : ^^
+
+const result = value;
+>result : 42
+>       : ^^
+>value : 42
+>      : ^^
+

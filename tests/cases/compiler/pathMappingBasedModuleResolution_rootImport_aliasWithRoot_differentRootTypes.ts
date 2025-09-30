@@ -32,6 +32,7 @@ import { bar as bar9 } from "http://server/bar";
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "/*": ["./src/*"],
             "c:/*": ["./src/*"],

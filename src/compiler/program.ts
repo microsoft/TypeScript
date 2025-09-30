@@ -4490,6 +4490,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             if (options.moduleResolution === ModuleResolutionKind.Node10) {
                 createDeprecatedDiagnostic("moduleResolution", "node10");
             }
+            if (options.baseUrl) {
+                createDeprecatedDiagnostic("baseUrl");
+            }
         });
     }
 
