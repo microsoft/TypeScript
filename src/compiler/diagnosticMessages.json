@@ -1155,7 +1155,7 @@
         "category": "Error",
         "code": 1354
     },
-    "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
+    "A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
         "category": "Error",
         "code": 1355
     },
@@ -4006,6 +4006,10 @@
     "This expression is never nullish.": {
         "category": "Error",
         "code": 2881
+    },
+    "Cannot find module or type declarations for side-effect import of '{0}'.": {
+        "category": "Error",
+        "code": 2882
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

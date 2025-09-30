@@ -10617,7 +10617,6 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
     context.typeReferenceDirectives = [];
     context.libReferenceDirectives = [];
     context.amdDependencies = [];
-    context.hasNoDefaultLib = false;
     context.pragmas!.forEach((entryOrList, key) => { // TODO: GH#18217
         // TODO: The below should be strongly type-guarded and not need casts/explicit annotations, since entryOrList is related to
         // key and key is constrained to a union; but it's not (see GH#21483 for at least partial fix) :(
@@ -10630,7 +10629,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                     const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
                     const preserve = _preserve === "true" ? true : undefined;
                     if (arg.arguments["no-default-lib"] === "true") {
-                        context.hasNoDefaultLib = true;
+                        // This has been removed; parse but ignore it.
                     }
                     else if (types) {
                         const parsed = parseResolutionMode(res, types.pos, types.end, reportDiagnostic);

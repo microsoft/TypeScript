@@ -52,7 +52,7 @@ const libs = memoize(() => {
     /** @type {{ libs: string[]; paths: Record<string, string | undefined>; }} */
     const libraries = readJson("./src/lib/libs.json");
     const libs = libraries.libs.map(lib => {
-        const relativeSources = ["header.d.ts", lib + ".d.ts"];
+        const relativeSources = [lib + ".d.ts"];
         const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
         const sources = relativeSources.map(s => path.posix.join("src/lib", s));
         const target = `built/local/${relativeTarget}`;

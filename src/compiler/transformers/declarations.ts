@@ -468,11 +468,9 @@ export function transformDeclarations(context: TransformationContext): Transform
             rawReferencedFiles = [];
             rawTypeReferenceDirectives = [];
             rawLibReferenceDirectives = [];
-            let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
                     if (sourceFile.isDeclarationFile) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
-                    hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                     currentSourceFile = sourceFile;
                     enclosingDeclaration = sourceFile;
                     lateMarkedStatements = undefined;
@@ -510,7 +508,6 @@ export function transformDeclarations(context: TransformationContext): Transform
             bundle.syntheticFileReferences = getReferencedFiles(outputFilePath);
             bundle.syntheticTypeReferences = getTypeReferences();
             bundle.syntheticLibReferences = getLibReferences();
-            bundle.hasNoDefaultLib = hasNoDefaultLib;
             return bundle;
         }
 
@@ -542,7 +539,7 @@ export function transformDeclarations(context: TransformationContext): Transform
             }
         }
         const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
-        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), /*hasNoDefaultLib*/ false, getLibReferences());
 
         function collectFileReferences(sourceFile: SourceFile) {
             rawReferencedFiles = concatenate(rawReferencedFiles, map(sourceFile.referencedFiles, f => [sourceFile, f]));
