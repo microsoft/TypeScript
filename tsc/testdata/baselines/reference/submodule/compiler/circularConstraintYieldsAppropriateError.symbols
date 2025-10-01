@@ -42,5 +42,9 @@ const foo = new Foo();
 >Foo : Symbol(Foo, Decl(circularConstraintYieldsAppropriateError.ts, 7, 1))
 
 foo.bar.test
+>foo.bar.test : Symbol(test, Decl(circularConstraintYieldsAppropriateError.ts, 10, 15))
+>foo.bar : Symbol(BaseType.bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
 >foo : Symbol(foo, Decl(circularConstraintYieldsAppropriateError.ts, 15, 5))
+>bar : Symbol(BaseType.bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
+>test : Symbol(test, Decl(circularConstraintYieldsAppropriateError.ts, 10, 15))
 

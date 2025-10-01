@@ -1,8 +1,7 @@
 circularConstraintYieldsAppropriateError.ts(10,7): error TS2310: Type 'Foo' recursively references itself as a base type.
-circularConstraintYieldsAppropriateError.ts(17,5): error TS2339: Property 'bar' does not exist on type 'Foo'.
 
 
-==== circularConstraintYieldsAppropriateError.ts (2 errors) ====
+==== circularConstraintYieldsAppropriateError.ts (1 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/16861
     class BaseType<T> {
         bar: T
@@ -22,5 +21,3 @@ circularConstraintYieldsAppropriateError.ts(17,5): error TS2339: Property 'bar' 
     
     const foo = new Foo();
     foo.bar.test
-        ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'Foo'.

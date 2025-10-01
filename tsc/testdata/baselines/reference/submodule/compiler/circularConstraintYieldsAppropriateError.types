@@ -37,9 +37,9 @@ const foo = new Foo();
 >Foo : typeof Foo
 
 foo.bar.test
->foo.bar.test : any
->foo.bar : any
+>foo.bar.test : true
+>foo.bar : { test: true; }
 >foo : Foo
->bar : any
->test : any
+>bar : { test: true; }
+>test : true
 
