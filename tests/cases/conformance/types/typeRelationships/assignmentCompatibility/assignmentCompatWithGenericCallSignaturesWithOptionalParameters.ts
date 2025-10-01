@@ -1,6 +1,6 @@
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 
-module ClassTypeParam {
+namespace ClassTypeParam {
     class Base<T> {
         a: () => T;
         a2: (x?: T) => T;
@@ -36,7 +36,7 @@ module ClassTypeParam {
     }
 }
 
-module GenericSignaturesInvalid {
+namespace GenericSignaturesInvalid {
 
     class Base2 {
         a: <T>() => T;
@@ -92,7 +92,7 @@ module GenericSignaturesInvalid {
     }
 }
 
-module GenericSignaturesValid {
+namespace GenericSignaturesValid {
 
     class Base2 {
         a: <T>() => T;

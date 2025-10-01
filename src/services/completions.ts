@@ -256,7 +256,6 @@ import {
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeParameterDeclaration,
-    isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
@@ -1595,7 +1594,7 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
         switch (node.kind) {
             case SyntaxKind.JsxClosingElement:
                 return true;
-            case SyntaxKind.LessThanSlashToken:
+            case SyntaxKind.SlashToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.Identifier:
             case SyntaxKind.PropertyAccessExpression:
@@ -3508,7 +3507,7 @@ function getCompletionData(
                         }
                         break;
 
-                    case SyntaxKind.LessThanSlashToken:
+                    case SyntaxKind.SlashToken:
                         if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
                             location = currentToken;
                         }
@@ -3518,7 +3517,7 @@ function getCompletionData(
 
             switch (parent.kind) {
                 case SyntaxKind.JsxClosingElement:
-                    if (contextToken.kind === SyntaxKind.LessThanSlashToken) {
+                    if (contextToken.kind === SyntaxKind.SlashToken) {
                         isStartingCloseTag = true;
                         location = contextToken;
                     }
@@ -3626,17 +3625,20 @@ function getCompletionData(
     }
 
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
-    const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
+    const contextualTypeOrConstraint = previousToken && (
+        getContextualType(previousToken, position, sourceFile, typeChecker) ??
+            getConstraintOfTypeArgumentProperty(previousToken, typeChecker)
+    );
 
     // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
     // for strings getStringLiteralCompletions handles completions
     const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
     const literals = !isLiteralExpected ? [] : mapDefined(
-        contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
+        contextualTypeOrConstraint && (contextualTypeOrConstraint.isUnion() ? contextualTypeOrConstraint.types : [contextualTypeOrConstraint]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined,
     );
 
-    const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
+    const recommendedCompletion = previousToken && contextualTypeOrConstraint && getRecommendedCompletion(previousToken, contextualTypeOrConstraint, typeChecker);
     return {
         kind: CompletionDataKind.Data,
         symbols,
@@ -5766,11 +5768,13 @@ function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
     return undefined;
 }
 
-function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
+/** @internal */
+export function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
     if (!node) return undefined;
 
-    if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
-        return checker.getTypeArgumentConstraint(node);
+    if (isTypeNode(node)) {
+        const constraint = checker.getTypeArgumentConstraint(node);
+        if (constraint) return constraint;
     }
 
     const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
@@ -5779,10 +5783,19 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
             return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
+        case SyntaxKind.ColonToken:
+            if (node.parent.kind === SyntaxKind.PropertySignature) {
+                // The cursor is at a property value location like `Foo<{ x: | }`.
+                // `t` already refers to the appropriate property type.
+                return t;
+            }
+            break;
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
             return t;
+        case SyntaxKind.OpenBracketToken:
+            return checker.getElementTypeOfArrayType(t);
     }
 }
 
@@ -5809,7 +5822,7 @@ function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTri
         case "/":
             return !!contextToken && (isStringLiteralLike(contextToken)
                 ? !!tryGetImportFromModuleSpecifier(contextToken)
-                : contextToken.kind === SyntaxKind.LessThanSlashToken && isJsxClosingElement(contextToken.parent));
+                : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
         case " ":
             return !!contextToken && isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile;
         default:

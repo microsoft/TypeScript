@@ -45,7 +45,7 @@ class A {
 >a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 15, 11))
     }
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 18, 1))
 
     export var n: any;

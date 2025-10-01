@@ -4303,18 +4303,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-        emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
+        emitTripleSlashDirectives(node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
     }
 
     function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-        if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
+        if (node.isDeclarationFile) emitTripleSlashDirectives(node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
     }
 
-    function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: readonly FileReference[], types: readonly FileReference[], libs: readonly FileReference[]) {
-        if (hasNoDefaultLib) {
-            writeComment(`/// <reference no-default-lib="true"/>`);
-            writeLine();
-        }
+    function emitTripleSlashDirectives(files: readonly FileReference[], types: readonly FileReference[], libs: readonly FileReference[]) {
         if (currentSourceFile && currentSourceFile.moduleName) {
             writeComment(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
             writeLine();

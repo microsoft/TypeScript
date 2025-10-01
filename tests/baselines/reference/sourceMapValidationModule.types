@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapValidationModule.ts] ////
 
 === sourceMapValidationModule.ts ===
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -17,11 +17,11 @@ module m2 {
 >a : number
 >  : ^^^^^^
 }
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
-    module m4 {
+    namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

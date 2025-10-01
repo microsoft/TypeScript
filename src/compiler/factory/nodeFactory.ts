@@ -6181,16 +6181,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isDeclarationFile = node.isDeclarationFile,
         referencedFiles = node.referencedFiles,
         typeReferenceDirectives = node.typeReferenceDirectives,
-        hasNoDefaultLib = node.hasNoDefaultLib,
+        _hasNoDefaultLib = false,
         libReferenceDirectives = node.libReferenceDirectives,
     ) {
         return node.statements !== statements
                 || node.isDeclarationFile !== isDeclarationFile
                 || node.referencedFiles !== referencedFiles
                 || node.typeReferenceDirectives !== typeReferenceDirectives
-                || node.hasNoDefaultLib !== hasNoDefaultLib
                 || node.libReferenceDirectives !== libReferenceDirectives
-            ? update(cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, hasNoDefaultLib, libReferenceDirectives), node)
+            ? update(cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, /*hasNoDefaultLib*/ false, libReferenceDirectives), node)
             : node;
     }
 
@@ -6201,7 +6200,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.syntheticFileReferences = undefined;
         node.syntheticTypeReferences = undefined;
         node.syntheticLibReferences = undefined;
-        node.hasNoDefaultLib = undefined;
         return node;
     }
 

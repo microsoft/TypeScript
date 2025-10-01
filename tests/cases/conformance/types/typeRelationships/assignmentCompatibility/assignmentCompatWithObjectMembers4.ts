@@ -1,6 +1,6 @@
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 
-module OnlyDerived {
+namespace OnlyDerived {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Base { baz: string; }
@@ -45,7 +45,7 @@ module OnlyDerived {
     a2 = t; // error
 }
 
-module WithBase {
+namespace WithBase {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Base { baz: string; }

@@ -1,4 +1,4 @@
-// @strict: esnext
+// @strict: true
 // @target: esnext
 // @useDefineForClassFields: true
 // @noEmit: true

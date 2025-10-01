@@ -55,7 +55,7 @@ class privateClassWithTypeParametersFromPrivateModule<T extends privateModule.pu
     }
 }
 
-export module publicModule {
+export namespace publicModule {
     class privateClassInPublicModule {
     }
 
@@ -111,7 +111,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
     class privateClassInPrivateModule {
     }
 

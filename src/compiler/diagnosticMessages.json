@@ -1155,7 +1155,7 @@
         "category": "Error",
         "code": 1354
     },
-    "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
+    "A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
         "category": "Error",
         "code": 1355
     },

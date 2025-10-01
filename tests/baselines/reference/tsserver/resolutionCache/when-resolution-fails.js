@@ -35,7 +35,6 @@ export const x = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -126,7 +125,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/src/somefolder/module1.ts Text-1 "\nexport const x = 10;"
 	/user/username/projects/myproject/src/somefolder/srcfile.ts SVC-1-0 "\nimport { x } from \"somefolder/module1\";\nimport { x } from \"somefolder/module2\";\nconst y = x;"
 	/user/username/projects/myproject/src/typings/electron.d.ts Text-1 "\ndeclare module 'original-fs' {\n    import * as fs from 'fs';\n    export = fs;\n}"
@@ -171,7 +170,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 2,
-            "dtsSize": 493,
+            "dtsSize": 454,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -215,6 +214,20 @@ Info seq  [hh:mm:ss:mss] event:
             "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5011,
             "category": "error"
+          },
+          {
+            "start": {
+              "line": 7,
+              "offset": 5
+            },
+            "end": {
+              "line": 7,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
           }
         ]
       }

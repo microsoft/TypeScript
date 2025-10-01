@@ -14,7 +14,6 @@ import * as data from './data.json'
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -35,6 +34,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m3[0m     "moduleResolution": "node"
 [7m [0m [91m                        ~~~~~~[0m
@@ -117,6 +117,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m3[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m

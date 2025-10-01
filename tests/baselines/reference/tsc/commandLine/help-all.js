@@ -1,7 +1,6 @@
 currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -101,7 +100,7 @@ default: false
 [94m--noUncheckedSideEffectImports[39m
 Check side effect imports.
 type: boolean
-default: false
+default: true
 
 [94m--paths[39m
 Specify a set of entries that re-map imports to additional lookup locations.
@@ -581,7 +580,7 @@ default: undefined
 [94m--libReplacement[39m
 Enable lib replacement.
 type: boolean
-default: true
+default: false
 
 [94m--moduleDetection[39m
 Control what method is used to detect module-format JS files.

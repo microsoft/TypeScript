@@ -11,13 +11,13 @@ collisionExportsRequireAndClass_externalmodule.ts(3,14): error TS2441: Duplicate
                  ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     }
-    module m1 {
+    namespace m1 {
         class require {
         }
         class exports {
         }
     }
-    module m2 {
+    namespace m2 {
         export class require {
         }
         export class exports {
@@ -29,13 +29,13 @@ collisionExportsRequireAndClass_externalmodule.ts(3,14): error TS2441: Duplicate
     }
     class exports {
     }
-    module m3 {
+    namespace m3 {
         class require {
         }
         class exports {
         }
     }
-    module m4 {
+    namespace m4 {
         export class require {
         }
         export class exports {

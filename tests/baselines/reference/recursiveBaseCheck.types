@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursiveBaseCheck.ts] ////
 
 === recursiveBaseCheck.ts ===
-declare module Module {
+declare namespace Module {
 >Module : typeof Module
 >       : ^^^^^^^^^^^^^
 

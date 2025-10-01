@@ -508,11 +508,11 @@ declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privat
 >privateModule : Symbol(privateModule, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 456, 1))
 >publicClass : Symbol(privateModule.publicClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 460, 5))
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 226, 100))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
     }
 
     export class publicClass {
@@ -523,18 +523,18 @@ export module publicModule {
 >publicInterfaceWithPrivateParmeterTypes : Symbol(publicInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 233, 5))
 
         new (): privateClass; // Error
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         (): privateClass; // Error
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         [x: number]: privateClass; // Error
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 238, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         myMethod(): privateClass; // Error
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 238, 34))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -559,18 +559,18 @@ export module publicModule {
 >privateInterfaceWithPrivateParmeterTypes : Symbol(privateInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 247, 5))
 
         new (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         [x: number]: privateClass;
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 252, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         myMethod(): privateClass;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 252, 34))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -596,25 +596,25 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 263, 58))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 266, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
         myPublicMethod(): privateClass { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 269, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 272, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
@@ -622,25 +622,25 @@ export module publicModule {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 275, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
         private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 278, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
         myPublicMethod1() { // Error
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 281, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
         private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 284, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
     }
 
@@ -702,25 +702,25 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 317, 52))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 320, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 323, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 326, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
             return null;
         }
@@ -728,25 +728,25 @@ export module publicModule {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 329, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
         private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 332, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
         myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 335, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
         private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 338, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
         }
     }
 
@@ -805,7 +805,7 @@ export module publicModule {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 369, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         return null;
     }
@@ -817,7 +817,7 @@ export module publicModule {
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 376, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
         return null;
     }
@@ -831,7 +831,7 @@ export module publicModule {
 >publicFunctionWithPrivateParmeterTypes1 : Symbol(publicFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 382, 5))
 
         return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
     }
     export function publicFunctionWithPublicParmeterTypes1() {
 >publicFunctionWithPublicParmeterTypes1 : Symbol(publicFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 385, 5))
@@ -843,7 +843,7 @@ export module publicModule {
 >privateFunctionWithPrivateParmeterTypes1 : Symbol(privateFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 388, 5))
 
         return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
     }
     function privateFunctionWithPublicParmeterTypes1() {
 >privateFunctionWithPublicParmeterTypes1 : Symbol(privateFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 391, 5))
@@ -854,7 +854,7 @@ export module publicModule {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 394, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 396, 90))
@@ -862,7 +862,7 @@ export module publicModule {
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 397, 88))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 228, 31))
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 398, 84))
@@ -1019,11 +1019,11 @@ export module publicModule {
 >publicClass : Symbol(privateModule.publicClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 460, 5))
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 456, 1))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
     }
 
     export class publicClass {
@@ -1034,18 +1034,18 @@ module privateModule {
 >publicInterfaceWithPrivateParmeterTypes : Symbol(publicInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 463, 5))
 
         new (): privateClass; 
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         (): privateClass; 
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         [x: number]: privateClass; 
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 468, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         myMethod(): privateClass; 
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 468, 34))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -1070,18 +1070,18 @@ module privateModule {
 >privateInterfaceWithPrivateParmeterTypes : Symbol(privateInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 477, 5))
 
         new (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         [x: number]: privateClass;
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 482, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         myMethod(): privateClass;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 482, 34))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -1107,25 +1107,25 @@ module privateModule {
 
         static myPublicStaticMethod(): privateClass { 
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 493, 58))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 496, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
         myPublicMethod(): privateClass { 
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 499, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 502, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
@@ -1133,25 +1133,25 @@ module privateModule {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 505, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
         private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 508, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
         myPublicMethod1() { 
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 511, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
         private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 514, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
     }
 
@@ -1213,25 +1213,25 @@ module privateModule {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 547, 52))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 550, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 553, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 556, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
             return null;
         }
@@ -1239,25 +1239,25 @@ module privateModule {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 559, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
         private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 562, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
         myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 565, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
         private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 568, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
         }
     }
 
@@ -1316,7 +1316,7 @@ module privateModule {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { 
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 599, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         return null;
     }
@@ -1328,7 +1328,7 @@ module privateModule {
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 606, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
         return null;
     }
@@ -1342,7 +1342,7 @@ module privateModule {
 >publicFunctionWithPrivateParmeterTypes1 : Symbol(publicFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 612, 5))
 
         return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
     }
     export function publicFunctionWithPublicParmeterTypes1() {
 >publicFunctionWithPublicParmeterTypes1 : Symbol(publicFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 615, 5))
@@ -1354,7 +1354,7 @@ module privateModule {
 >privateFunctionWithPrivateParmeterTypes1 : Symbol(privateFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 618, 5))
 
         return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
     }
     function privateFunctionWithPublicParmeterTypes1() {
 >privateFunctionWithPublicParmeterTypes1 : Symbol(privateFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 621, 5))
@@ -1365,7 +1365,7 @@ module privateModule {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; 
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 624, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 626, 90))
@@ -1373,7 +1373,7 @@ module privateModule {
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 627, 88))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 458, 25))
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 628, 84))
@@ -1619,22 +1619,22 @@ declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicC
 >publicAmbientFunctionWithPublicParmeterTypesInGlobal : Symbol(publicAmbientFunctionWithPublicParmeterTypesInGlobal, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 39, 1))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 0, 0))
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
 >publicModuleInGlobal : Symbol(publicModuleInGlobal, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 40, 93))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
     }
 
     export class publicClass {
 >publicClass : Symbol(publicClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 44, 5))
     }
 
-    module privateModule {
+    namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 47, 5))
 
         class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
         }
 
         export class publicClass {
@@ -1645,18 +1645,18 @@ module publicModuleInGlobal {
 >publicInterfaceWithPrivateParmeterTypes : Symbol(publicInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 54, 9))
 
             new (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             [x: number]: privateClass;
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 59, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             myMethod(): privateClass;
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 59, 38))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
         }
 
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -1681,18 +1681,18 @@ module publicModuleInGlobal {
 >privateInterfaceWithPrivateParmeterTypes : Symbol(privateInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 68, 9))
 
             new (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             [x: number]: privateClass;
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 73, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             myMethod(): privateClass;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 73, 38))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
         }
 
         interface privateInterfaceWithPublicParmeterTypes {
@@ -1718,25 +1718,25 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 84, 62))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 87, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
             myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 90, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
             private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 93, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
@@ -1744,25 +1744,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 96, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
             private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 99, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
             myPublicMethod1() {
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 102, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
             private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 105, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
         }
 
@@ -1824,25 +1824,25 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 138, 56))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 141, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
             myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 144, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
             private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 147, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
                 return null;
             }
@@ -1850,25 +1850,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 150, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
             private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 153, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
             myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 156, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
             private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 159, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
             }
         }
 
@@ -1927,7 +1927,7 @@ module publicModuleInGlobal {
 
         export function publicFunctionWithPrivateParmeterTypes(): privateClass {
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 190, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             return null;
         }
@@ -1939,7 +1939,7 @@ module publicModuleInGlobal {
         }
         function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 197, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
             return null;
         }
@@ -1953,7 +1953,7 @@ module publicModuleInGlobal {
 >publicFunctionWithPrivateParmeterTypes1 : Symbol(publicFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 203, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
         }
         export function publicFunctionWithPublicParmeterTypes1() {
 >publicFunctionWithPublicParmeterTypes1 : Symbol(publicFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 206, 9))
@@ -1965,7 +1965,7 @@ module publicModuleInGlobal {
 >privateFunctionWithPrivateParmeterTypes1 : Symbol(privateFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 209, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
         }
         function privateFunctionWithPublicParmeterTypes1() {
 >privateFunctionWithPublicParmeterTypes1 : Symbol(privateFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 212, 9))
@@ -1976,7 +1976,7 @@ module publicModuleInGlobal {
 
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 215, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
         export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 217, 94))
@@ -1984,7 +1984,7 @@ module publicModuleInGlobal {
 
         declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 218, 92))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 49, 29))
 
         declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 219, 88))
@@ -2145,18 +2145,18 @@ module publicModuleInGlobal {
 >publicInterfaceWithPrivateParmeterTypes : Symbol(publicInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 277, 5))
 
         new (): privateClass; // Error
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         (): privateClass; // Error
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         [x: number]: privateClass; // Error
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 282, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         myMethod(): privateClass; // Error
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 282, 34))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -2181,18 +2181,18 @@ module publicModuleInGlobal {
 >privateInterfaceWithPrivateParmeterTypes : Symbol(privateInterfaceWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 291, 5))
 
         new (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         (): privateClass;
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         [x: number]: privateClass;
 >x : Symbol(x, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 296, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         myMethod(): privateClass;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 296, 34))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -2218,25 +2218,25 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 307, 58))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 310, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
         myPublicMethod(): privateClass { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 313, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 316, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
@@ -2244,25 +2244,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 319, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
         private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 322, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
         myPublicMethod1() { // Error
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 325, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
         private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 328, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
     }
 
@@ -2324,25 +2324,25 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 361, 52))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 364, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 367, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 370, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
             return null;
         }
@@ -2350,25 +2350,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 373, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
         private static myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 376, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
         myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 379, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
         private myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 382, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
         }
     }
 
@@ -2427,7 +2427,7 @@ module publicModuleInGlobal {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 413, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         return null;
     }
@@ -2439,7 +2439,7 @@ module publicModuleInGlobal {
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 420, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
         return null;
     }
@@ -2453,7 +2453,7 @@ module publicModuleInGlobal {
 >publicFunctionWithPrivateParmeterTypes1 : Symbol(publicFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 426, 5))
 
         return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
     }
     export function publicFunctionWithPublicParmeterTypes1() {
 >publicFunctionWithPublicParmeterTypes1 : Symbol(publicFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 429, 5))
@@ -2465,7 +2465,7 @@ module publicModuleInGlobal {
 >privateFunctionWithPrivateParmeterTypes1 : Symbol(privateFunctionWithPrivateParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 432, 5))
 
         return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
     }
     function privateFunctionWithPublicParmeterTypes1() {
 >privateFunctionWithPublicParmeterTypes1 : Symbol(privateFunctionWithPublicParmeterTypes1, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 435, 5))
@@ -2476,7 +2476,7 @@ module publicModuleInGlobal {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 438, 5))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 440, 90))
@@ -2484,7 +2484,7 @@ module publicModuleInGlobal {
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 441, 88))
->privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 42, 32))
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 442, 84))
