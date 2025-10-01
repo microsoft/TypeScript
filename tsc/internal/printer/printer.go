@@ -629,7 +629,7 @@ func (p *Printer) writeCommentRange(comment ast.CommentRange) {
 	}
 
 	text := p.currentSourceFile.Text()
-	lineMap := p.currentSourceFile.LineMap()
+	lineMap := p.currentSourceFile.ECMALineMap()
 	p.writeCommentRangeWorker(text, lineMap, comment.Kind, comment.TextRange)
 }
 
@@ -5227,7 +5227,7 @@ func (p *Printer) writeSynthesizedComment(comment SynthesizedComment) {
 	text := formatSynthesizedComment(comment)
 	var lineMap []core.TextPos
 	if comment.Kind == ast.KindMultiLineCommentTrivia {
-		lineMap = core.ComputeLineStarts(text)
+		lineMap = core.ComputeECMALineStarts(text)
 	}
 	p.writeCommentRangeWorker(text, lineMap, comment.Kind, core.NewTextRange(0, len(text)))
 }
@@ -5294,7 +5294,7 @@ func (p *Printer) shouldEmitNewLineBeforeLeadingCommentOfPosition(pos int, comme
 	// If the leading comments start on different line than the start of node, write new line
 	return p.currentSourceFile != nil &&
 		pos != commentPos &&
-		scanner.ComputeLineOfPosition(p.currentSourceFile.LineMap(), pos) != scanner.ComputeLineOfPosition(p.currentSourceFile.LineMap(), commentPos)
+		scanner.ComputeLineOfPosition(p.currentSourceFile.ECMALineMap(), pos) != scanner.ComputeLineOfPosition(p.currentSourceFile.ECMALineMap(), commentPos)
 }
 
 func (p *Printer) emitTrailingComments(pos int, commentSeparator commentSeparator) {
@@ -5329,7 +5329,7 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 	}
 
 	text := p.currentSourceFile.Text()
-	lineMap := p.currentSourceFile.LineMap()
+	lineMap := p.currentSourceFile.ECMALineMap()
 
 	var leadingComments []ast.CommentRange
 	if p.commentsDisabled {
@@ -5482,7 +5482,7 @@ func (p *Printer) emitPos(pos int) {
 		return
 	}
 
-	sourceLine, sourceCharacter := scanner.GetLineAndCharacterOfPosition(p.sourceMapSource, pos)
+	sourceLine, sourceCharacter := scanner.GetECMALineAndCharacterOfPosition(p.sourceMapSource, pos)
 	if err := p.sourceMapGenerator.AddSourceMapping(
 		p.writer.GetLine(),
 		p.writer.GetColumn(),

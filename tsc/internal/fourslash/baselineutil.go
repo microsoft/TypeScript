@@ -357,7 +357,7 @@ type textWithContext struct {
 	isLibFile  bool
 	fileName   string
 	content    string // content of the original file
-	lineStarts *ls.LineMap
+	lineStarts *ls.LSPLineMap
 	converters *ls.Converters
 
 	// posLineInfo
@@ -386,10 +386,10 @@ func newTextWithContext(fileName string, content string) *textWithContext {
 		pos:        lsproto.Position{Line: 0, Character: 0},
 		fileName:   fileName,
 		content:    content,
-		lineStarts: ls.ComputeLineStarts(content),
+		lineStarts: ls.ComputeLSPLineStarts(content),
 	}
 
-	t.converters = ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LineMap {
+	t.converters = ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LSPLineMap {
 		return t.lineStarts
 	})
 	t.readableContents.WriteString("// === " + fileName + " ===")

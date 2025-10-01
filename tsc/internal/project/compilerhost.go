@@ -6,7 +6,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
-	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -127,13 +126,6 @@ func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.Sourc
 	c.seenFiles.Add(opts.Path)
 	if fh := c.fs.GetFileByPath(opts.FileName, opts.Path); fh != nil {
 		return c.builder.parseCache.Acquire(fh, opts, fh.Kind())
-	}
-	return nil
-}
-
-func (c *compilerHost) GetLineMap(fileName string) *ls.LineMap {
-	if fh := c.compilerFS.source.GetFile(fileName); fh != nil {
-		return fh.LineMap()
 	}
 	return nil
 }

@@ -343,7 +343,7 @@ func forEachASTNode(node *ast.Node) []*ast.Node {
 
 func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk bool) *typeWriterResult {
 	actualPos := scanner.SkipTrivia(walker.currentSourceFile.Text(), node.Pos())
-	line, _ := scanner.GetLineAndCharacterOfPosition(walker.currentSourceFile, actualPos)
+	line, _ := scanner.GetECMALineAndCharacterOfPosition(walker.currentSourceFile, actualPos)
 	sourceText := scanner.GetSourceTextOfNodeFromSourceFile(walker.currentSourceFile, node, false /*includeTrivia*/)
 	fileChecker, done := walker.getTypeCheckerForCurrentFile()
 	defer done()
@@ -434,7 +434,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 		}
 
 		declSourceFile := ast.GetSourceFileOfNode(declaration)
-		declLine, declChar := scanner.GetLineAndCharacterOfPosition(declSourceFile, declaration.Pos())
+		declLine, declChar := scanner.GetECMALineAndCharacterOfPosition(declSourceFile, declaration.Pos())
 		fileName := tspath.GetBaseFileName(declSourceFile.FileName())
 		symbolString.WriteString("Decl(")
 		symbolString.WriteString(fileName)

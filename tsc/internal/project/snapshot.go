@@ -59,7 +59,7 @@ func NewSnapshot(
 		ProjectCollection:                  &ProjectCollection{toPath: toPath},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 	}
-	s.converters = ls.NewConverters(s.sessionOptions.PositionEncoding, s.LineMap)
+	s.converters = ls.NewConverters(s.sessionOptions.PositionEncoding, s.LSPLineMap)
 	s.refCount.Store(1)
 	return s
 }
@@ -74,9 +74,9 @@ func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
 
-func (s *Snapshot) LineMap(fileName string) *ls.LineMap {
+func (s *Snapshot) LSPLineMap(fileName string) *ls.LSPLineMap {
 	if file := s.fs.GetFile(fileName); file != nil {
-		return file.LineMap()
+		return file.LSPLineMap()
 	}
 	return nil
 }

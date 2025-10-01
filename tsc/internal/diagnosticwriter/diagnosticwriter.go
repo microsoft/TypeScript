@@ -84,13 +84,13 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic *ast.Diagn
 }
 
 func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
-	firstLine, firstLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start)
-	lastLine, lastLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start+length)
+	firstLine, firstLineChar := scanner.GetECMALineAndCharacterOfPosition(sourceFile, start)
+	lastLine, lastLineChar := scanner.GetECMALineAndCharacterOfPosition(sourceFile, start+length)
 	if length == 0 {
 		lastLineChar++ // When length is zero, squiggle the character right after the start position.
 	}
 
-	lastLineOfFile, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.Text()))
+	lastLineOfFile, _ := scanner.GetECMALineAndCharacterOfPosition(sourceFile, len(sourceFile.Text()))
 
 	hasMoreThanFiveLines := lastLine-firstLine >= 4
 	gutterWidth := len(strconv.Itoa(lastLine + 1))
@@ -113,10 +113,10 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 			i = lastLine - 1
 		}
 
-		lineStart := scanner.GetPositionOfLineAndCharacter(sourceFile, i, 0)
+		lineStart := scanner.GetECMAPositionOfLineAndCharacter(sourceFile, i, 0)
 		var lineEnd int
 		if i < lastLineOfFile {
-			lineEnd = scanner.GetPositionOfLineAndCharacter(sourceFile, i+1, 0)
+			lineEnd = scanner.GetECMAPositionOfLineAndCharacter(sourceFile, i+1, 0)
 		} else {
 			lineEnd = sourceFile.Loc.End()
 		}
@@ -216,7 +216,7 @@ func writeWithStyleAndReset(output io.Writer, text string, formatStyle string) {
 }
 
 func WriteLocation(output io.Writer, file *ast.SourceFile, pos int, formatOpts *FormattingOptions, writeWithStyleAndReset FormattedWriter) {
-	firstLine, firstChar := scanner.GetLineAndCharacterOfPosition(file, pos)
+	firstLine, firstChar := scanner.GetECMALineAndCharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
 		relativeFileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
@@ -357,7 +357,7 @@ func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, 
 	if file == nil || len(fileErrors) == 0 {
 		return ""
 	}
-	line, _ := scanner.GetLineAndCharacterOfPosition(file, fileErrors[0].Loc().Pos())
+	line, _ := scanner.GetECMALineAndCharacterOfPosition(file, fileErrors[0].Loc().Pos())
 	fileName := file.FileName()
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
 		fileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
@@ -378,7 +378,7 @@ func WriteFormatDiagnostics(output io.Writer, diagnostics []*ast.Diagnostic, for
 
 func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatOpts *FormattingOptions) {
 	if diagnostic.File() != nil {
-		line, character := scanner.GetLineAndCharacterOfPosition(diagnostic.File(), diagnostic.Loc().Pos())
+		line, character := scanner.GetECMALineAndCharacterOfPosition(diagnostic.File(), diagnostic.Loc().Pos())
 		fileName := diagnostic.File().FileName()
 		relativeFileName := tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, character+1)

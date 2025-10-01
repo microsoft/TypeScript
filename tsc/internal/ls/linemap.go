@@ -9,12 +9,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
-type LineMap struct {
+type LSPLineMap struct {
 	LineStarts []core.TextPos
 	AsciiOnly  bool // TODO(jakebailey): collect ascii-only info per line
 }
 
-func ComputeLineStarts(text string) *LineMap {
+func ComputeLSPLineStarts(text string) *LSPLineMap {
 	// This is like core.ComputeLineStarts, but only considers "\n", "\r", and "\r\n" as line breaks,
 	// and reports when the text is ASCII-only.
 	lineStarts := make([]core.TextPos, 0, strings.Count(text, "\n")+1)
@@ -45,13 +45,13 @@ func ComputeLineStarts(text string) *LineMap {
 	}
 	lineStarts = append(lineStarts, lineStart)
 
-	return &LineMap{
+	return &LSPLineMap{
 		LineStarts: lineStarts,
 		AsciiOnly:  asciiOnly,
 	}
 }
 
-func (lm *LineMap) ComputeIndexOfLineStart(targetPos core.TextPos) int {
+func (lm *LSPLineMap) ComputeIndexOfLineStart(targetPos core.TextPos) int {
 	// port of computeLineOfPosition(lineStarts: readonly number[], position: number, lowerBound?: number): number {
 	lineNumber, ok := slices.BinarySearchFunc(lm.LineStarts, targetPos, func(p, t core.TextPos) int {
 		return cmp.Compare(int(p), int(t))

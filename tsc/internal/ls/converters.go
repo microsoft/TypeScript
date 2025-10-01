@@ -14,7 +14,7 @@ import (
 )
 
 type Converters struct {
-	getLineMap       func(fileName string) *LineMap
+	getLineMap       func(fileName string) *LSPLineMap
 	positionEncoding lsproto.PositionEncodingKind
 }
 
@@ -23,7 +23,7 @@ type Script interface {
 	Text() string
 }
 
-func NewConverters(positionEncoding lsproto.PositionEncodingKind, getLineMap func(fileName string) *LineMap) *Converters {
+func NewConverters(positionEncoding lsproto.PositionEncodingKind, getLineMap func(fileName string) *LSPLineMap) *Converters {
 	return &Converters{
 		getLineMap:       getLineMap,
 		positionEncoding: positionEncoding,

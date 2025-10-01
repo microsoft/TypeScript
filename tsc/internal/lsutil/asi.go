@@ -98,7 +98,7 @@ func NodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool {
 		return true
 	}
 
-	startLine, _ := scanner.GetLineAndCharacterOfPosition(file, node.End())
-	endLine, _ := scanner.GetLineAndCharacterOfPosition(file, astnav.GetStartOfNode(nextToken, file, false /*includeJSDoc*/))
+	startLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, node.End())
+	endLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, astnav.GetStartOfNode(nextToken, file, false /*includeJSDoc*/))
 	return startLine != endLine
 }

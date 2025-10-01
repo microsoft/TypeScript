@@ -362,12 +362,12 @@ func Coalesce[T *U, U any](a T, b T) T {
 	}
 }
 
-func ComputeLineStarts(text string) []TextPos {
+func ComputeECMALineStarts(text string) []TextPos {
 	result := make([]TextPos, 0, strings.Count(text, "\n")+1)
-	return slices.AppendSeq(result, ComputeLineStartsSeq(text))
+	return slices.AppendSeq(result, ComputeECMALineStartsSeq(text))
 }
 
-func ComputeLineStartsSeq(text string) iter.Seq[TextPos] {
+func ComputeECMALineStartsSeq(text string) iter.Seq[TextPos] {
 	return func(yield func(TextPos) bool) {
 		textLen := TextPos(len(text))
 		var pos TextPos

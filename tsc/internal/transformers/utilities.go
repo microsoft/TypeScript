@@ -259,8 +259,8 @@ func IsOriginalNodeSingleLine(emitContext *printer.EmitContext, node *ast.Node) 
 	if source == nil {
 		return false
 	}
-	startLine, _ := scanner.GetLineAndCharacterOfPosition(source, original.Loc.Pos())
-	endLine, _ := scanner.GetLineAndCharacterOfPosition(source, original.Loc.End())
+	startLine, _ := scanner.GetECMALineAndCharacterOfPosition(source, original.Loc.Pos())
+	endLine, _ := scanner.GetECMALineAndCharacterOfPosition(source, original.Loc.End())
 	return startLine == endLine
 }
 

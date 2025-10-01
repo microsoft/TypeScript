@@ -146,18 +146,18 @@ func FormatOnSemicolon(ctx context.Context, sourceFile *ast.SourceFile, position
 }
 
 func FormatOnEnter(ctx context.Context, sourceFile *ast.SourceFile, position int) []core.TextChange {
-	line, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, position)
+	line, _ := scanner.GetECMALineAndCharacterOfPosition(sourceFile, position)
 	if line == 0 {
 		return nil
 	}
 	// get start position for the previous line
-	startPos := int(scanner.GetLineStarts(sourceFile)[line-1])
+	startPos := int(scanner.GetECMALineStarts(sourceFile)[line-1])
 	// After the enter key, the cursor is now at a new line. The new line may or may not contain non-whitespace characters.
 	// If the new line has only whitespaces, we won't want to format this line, because that would remove the indentation as
 	// trailing whitespaces. So the end of the formatting span should be the later one between:
 	//  1. the end of the previous line
 	//  2. the last non-whitespace character in the current line
-	endOfFormatSpan := scanner.GetEndLinePosition(sourceFile, line)
+	endOfFormatSpan := scanner.GetECMAEndLinePosition(sourceFile, line)
 	for endOfFormatSpan > startPos {
 		ch, s := utf8.DecodeRuneInString(sourceFile.Text()[endOfFormatSpan:])
 		if s == 0 || stringutil.IsWhiteSpaceSingleLine(ch) { // on multibyte character keep backing up

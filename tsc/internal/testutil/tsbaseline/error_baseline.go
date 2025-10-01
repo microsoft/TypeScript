@@ -171,7 +171,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 		markedErrorCount := 0
 		// For each line, emit the line followed by any error squiggles matching this line
 
-		lineStarts := core.ComputeLineStarts(inputFile.Content)
+		lineStarts := core.ComputeECMALineStarts(inputFile.Content)
 		lines := lineDelimiter.Split(inputFile.Content, -1)
 
 		for lineIndex, line := range lines {

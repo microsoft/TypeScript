@@ -204,7 +204,7 @@ func (ct *changeTracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, no
 	if fullStart == start {
 		return start
 	}
-	lineStarts := sourceFile.LineMap()
+	lineStarts := sourceFile.ECMALineMap()
 	fullStartLineIndex := scanner.ComputeLineOfPosition(lineStarts, fullStart)
 	fullStartLinePos := int(lineStarts[fullStartLineIndex])
 	if startOfLinePos == fullStartLinePos {
@@ -249,7 +249,7 @@ func (ct *changeTracker) getEndPositionOfMultilineTrailingComment(sourceFile *as
 	if trailingOpt == trailingTriviaOptionInclude {
 		// If the trailing comment is a multiline comment that extends to the next lines,
 		// return the end of the comment and track it for the next nodes to adjust.
-		lineStarts := sourceFile.LineMap()
+		lineStarts := sourceFile.ECMALineMap()
 		nodeEndLine := scanner.ComputeLineOfPosition(lineStarts, node.End())
 		for comment := range scanner.GetTrailingCommentRanges(ct.NodeFactory, sourceFile.Text(), node.End()) {
 			// Single line can break the loop as trivia will only be this line.
@@ -363,7 +363,7 @@ func (ct *changeTracker) getInsertionPositionAtSourceFileTop(sourceFile *ast.Sou
 	firstNodeLine := -1
 
 	lenStatements := len(sourceFile.Statements.Nodes)
-	lineMap := sourceFile.LineMap()
+	lineMap := sourceFile.ECMALineMap()
 	for _, r := range ranges {
 		if r.Kind == ast.KindMultiLineCommentTrivia {
 			if printer.IsPinnedComment(text, r) {

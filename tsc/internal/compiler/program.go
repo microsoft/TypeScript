@@ -1074,10 +1074,10 @@ func (p *Program) getDiagnosticsWithPrecedingDirectives(sourceFile *ast.SourceFi
 	// Build map of directives by line number
 	directivesByLine := make(map[int]ast.CommentDirective)
 	for _, directive := range sourceFile.CommentDirectives {
-		line, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, directive.Loc.Pos())
+		line, _ := scanner.GetECMALineAndCharacterOfPosition(sourceFile, directive.Loc.Pos())
 		directivesByLine[line] = directive
 	}
-	lineStarts := scanner.GetLineStarts(sourceFile)
+	lineStarts := scanner.GetECMALineStarts(sourceFile)
 	filtered := make([]*ast.Diagnostic, 0, len(diags))
 	for _, diagnostic := range diags {
 		ignoreDiagnostic := false
@@ -1225,7 +1225,7 @@ func (p *Program) getDiagnosticsHelper(ctx context.Context, sourceFile *ast.Sour
 func (p *Program) LineCount() int {
 	var count int
 	for _, file := range p.files {
-		count += len(file.LineMap())
+		count += len(file.ECMALineMap())
 	}
 	return count
 }

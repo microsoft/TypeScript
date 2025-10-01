@@ -94,7 +94,7 @@ func newSourceMapSpanWriter(sourceMapRecorder *writerAggregator, sourceMap *sour
 		sourceMapSources:     sourceMap.Sources,
 		sourceMapNames:       sourceMap.Names,
 		jsFile:               jsFile,
-		jsLineMap:            core.ComputeLineStarts(jsFile.Content),
+		jsLineMap:            core.ComputeECMALineStarts(jsFile.Content),
 		spansOnSingleLine:    make([]sourceMapSpanWithDecodeErrors, 0),
 		prevWrittenSourcePos: 0,
 		nextJsLineToWrite:    0,
@@ -104,7 +104,7 @@ func newSourceMapSpanWriter(sourceMapRecorder *writerAggregator, sourceMap *sour
 
 	sourceMapRecorder.WriteLine("===================================================================")
 	sourceMapRecorder.WriteLineF("JsFile: %s", sourceMap.File)
-	sourceMapRecorder.WriteLineF("mapUrl: %s", sourcemap.TryGetSourceMappingURL(sourcemap.GetLineInfo(jsFile.Content, writer.jsLineMap)))
+	sourceMapRecorder.WriteLineF("mapUrl: %s", sourcemap.TryGetSourceMappingURL(sourcemap.GetECMALineInfo(jsFile.Content, writer.jsLineMap)))
 	sourceMapRecorder.WriteLineF("sourceRoot: %s", sourceMap.SourceRoot)
 	sourceMapRecorder.WriteLineF("sources: %s", strings.Join(sourceMap.Sources, ","))
 	if len(sourceMap.SourcesContent) > 0 {
@@ -187,7 +187,7 @@ func (w *sourceMapSpanWriter) recordNewSourceFileSpan(sourceMapSpan *sourcemap.M
 	w.sourceMapRecorder.WriteLineF("sourceFile:%s", w.sourceMapSources[w.spansOnSingleLine[0].sourceMapSpan.SourceIndex])
 	w.sourceMapRecorder.WriteLine("-------------------------------------------------------------------")
 
-	w.tsLineMap = core.ComputeLineStarts(newSourceFileCode)
+	w.tsLineMap = core.ComputeECMALineStarts(newSourceFileCode)
 	w.tsCode = newSourceFileCode
 	w.prevWrittenSourcePos = 0
 }
@@ -302,7 +302,7 @@ func (sw *recordedSpanWriter) writeSourceMapSourceText(currentSpan *sourceMapSpa
 		sw.w.sourceMapRecorder.WriteLine(decodeError)
 	}
 
-	tsCodeLineMap := core.ComputeLineStarts(sourceText)
+	tsCodeLineMap := core.ComputeECMALineStarts(sourceText)
 	for i := range tsCodeLineMap {
 		if i == 0 {
 			sw.writeSourceMapIndent(sw.prevEmittedCol, sw.markerIds[index])

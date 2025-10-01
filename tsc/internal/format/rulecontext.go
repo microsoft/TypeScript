@@ -584,8 +584,8 @@ func isSemicolonDeletionContext(context *formattingContext) bool {
 		nextTokenStart = scanner.GetTokenPosOfNode(nextRealToken, context.SourceFile, false)
 	}
 
-	startLine, _ := scanner.GetLineAndCharacterOfPosition(context.SourceFile, context.currentTokenSpan.Loc.Pos())
-	endLine, _ := scanner.GetLineAndCharacterOfPosition(context.SourceFile, nextTokenStart)
+	startLine, _ := scanner.GetECMALineAndCharacterOfPosition(context.SourceFile, context.currentTokenSpan.Loc.Pos())
+	endLine, _ := scanner.GetECMALineAndCharacterOfPosition(context.SourceFile, nextTokenStart)
 	if startLine == endLine {
 		return nextTokenKind == ast.KindCloseBraceToken || nextTokenKind == ast.KindEndOfFile
 	}

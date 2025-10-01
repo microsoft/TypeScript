@@ -490,10 +490,10 @@ func probablyUsesSemicolons(file *ast.SourceFile) bool {
 			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
 				withSemicolon++
 			} else if lastToken != nil && lastToken.Kind != ast.KindCommaToken {
-				lastTokenLine, _ := scanner.GetLineAndCharacterOfPosition(
+				lastTokenLine, _ := scanner.GetECMALineAndCharacterOfPosition(
 					file,
 					astnav.GetStartOfNode(lastToken, file, false /*includeJSDoc*/))
-				nextTokenLine, _ := scanner.GetLineAndCharacterOfPosition(
+				nextTokenLine, _ := scanner.GetECMALineAndCharacterOfPosition(
 					file,
 					scanner.GetRangeOfTokenAtPosition(file, lastToken.End()).Pos())
 				// Avoid counting missing semicolon in single-line objects:

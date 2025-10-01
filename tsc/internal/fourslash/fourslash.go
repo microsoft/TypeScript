@@ -51,7 +51,7 @@ type FourslashTest struct {
 type scriptInfo struct {
 	fileName string
 	content  string
-	lineMap  *ls.LineMap
+	lineMap  *ls.LSPLineMap
 	version  int32
 }
 
@@ -59,14 +59,14 @@ func newScriptInfo(fileName string, content string) *scriptInfo {
 	return &scriptInfo{
 		fileName: fileName,
 		content:  content,
-		lineMap:  ls.ComputeLineStarts(content),
+		lineMap:  ls.ComputeLSPLineStarts(content),
 		version:  1,
 	}
 }
 
 func (s *scriptInfo) editContent(start int, end int, newText string) {
 	s.content = s.content[:start] + newText + s.content[end:]
-	s.lineMap = ls.ComputeLineStarts(s.content)
+	s.lineMap = ls.ComputeLSPLineStarts(s.content)
 	s.version++
 }
 
@@ -170,7 +170,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		}
 	}()
 
-	converters := ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(fileName string) *ls.LineMap {
+	converters := ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(fileName string) *ls.LSPLineMap {
 		scriptInfo, ok := scriptInfos[fileName]
 		if !ok {
 			return nil
@@ -1484,7 +1484,7 @@ func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames
 		)))
 
 		currentFile := newScriptInfo(f.activeFilename, fileContent)
-		converters := ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LineMap {
+		converters := ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LSPLineMap {
 			return currentFile.lineMap
 		})
 		var list []*lsproto.CompletionItem

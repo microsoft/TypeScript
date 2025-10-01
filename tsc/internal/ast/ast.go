@@ -10724,10 +10724,10 @@ type SourceFile struct {
 	ClassifiableNames         collections.Set[string]
 	PatternAmbientModules     []*PatternAmbientModule
 
-	// Fields set by LineMap
+	// Fields set by ECMALineMap
 
-	lineMapMu sync.RWMutex
-	lineMap   []core.TextPos
+	ecmaLineMapMu sync.RWMutex
+	ecmaLineMap   []core.TextPos
 
 	// Fields set by language service
 
@@ -10862,17 +10862,17 @@ func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements *StatementLi
 	return node.AsNode()
 }
 
-func (node *SourceFile) LineMap() []core.TextPos {
-	node.lineMapMu.RLock()
-	lineMap := node.lineMap
-	node.lineMapMu.RUnlock()
+func (node *SourceFile) ECMALineMap() []core.TextPos {
+	node.ecmaLineMapMu.RLock()
+	lineMap := node.ecmaLineMap
+	node.ecmaLineMapMu.RUnlock()
 	if lineMap == nil {
-		node.lineMapMu.Lock()
-		defer node.lineMapMu.Unlock()
-		lineMap = node.lineMap
+		node.ecmaLineMapMu.Lock()
+		defer node.ecmaLineMapMu.Unlock()
+		lineMap = node.ecmaLineMap
 		if lineMap == nil {
-			lineMap = core.ComputeLineStarts(node.Text())
-			node.lineMap = lineMap
+			lineMap = core.ComputeECMALineStarts(node.Text())
+			node.ecmaLineMap = lineMap
 		}
 	}
 	return lineMap
@@ -11054,7 +11054,7 @@ func getDeclarationName(declaration *Node) string {
 
 type SourceFileLike interface {
 	Text() string
-	LineMap() []core.TextPos
+	ECMALineMap() []core.TextPos
 }
 
 type CommentRange struct {

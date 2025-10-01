@@ -2541,13 +2541,13 @@ func jsxAttributeCompletionStyleIs(preferenceStyle *JsxAttributeCompletionStyle,
 }
 
 func getLineOfPosition(file *ast.SourceFile, pos int) int {
-	line, _ := scanner.GetLineAndCharacterOfPosition(file, pos)
+	line, _ := scanner.GetECMALineAndCharacterOfPosition(file, pos)
 	return line
 }
 
 func getLineEndOfPosition(file *ast.SourceFile, pos int) int {
 	line := getLineOfPosition(file, pos)
-	lineStarts := scanner.GetLineStarts(file)
+	lineStarts := scanner.GetECMALineStarts(file)
 	var lastCharPos int
 	if line+1 >= len(lineStarts) {
 		lastCharPos = file.End()
@@ -3532,8 +3532,8 @@ func getContextualKeywords(file *ast.SourceFile, contextToken *ast.Node, positio
 	// Source: https://tc39.es/proposal-import-assertions/
 	if contextToken != nil {
 		parent := contextToken.Parent
-		tokenLine, _ := scanner.GetLineAndCharacterOfPosition(file, contextToken.End())
-		currentLine, _ := scanner.GetLineAndCharacterOfPosition(file, position)
+		tokenLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, contextToken.End())
+		currentLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, position)
 		if (ast.IsImportDeclaration(parent) ||
 			ast.IsExportDeclaration(parent) && parent.AsExportDeclaration().ModuleSpecifier != nil) &&
 			contextToken == parent.ModuleSpecifier() &&

@@ -2,23 +2,23 @@ package sourcemap
 
 import "github.com/microsoft/typescript-go/internal/core"
 
-type LineInfo struct {
+type ECMALineInfo struct {
 	text       string
 	lineStarts []core.TextPos
 }
 
-func GetLineInfo(text string, lineStarts []core.TextPos) *LineInfo {
-	return &LineInfo{
+func GetECMALineInfo(text string, lineStarts []core.TextPos) *ECMALineInfo {
+	return &ECMALineInfo{
 		text:       text,
 		lineStarts: lineStarts,
 	}
 }
 
-func (li *LineInfo) LineCount() int {
+func (li *ECMALineInfo) LineCount() int {
 	return len(li.lineStarts)
 }
 
-func (li *LineInfo) LineText(line int) string {
+func (li *ECMALineInfo) LineText(line int) string {
 	pos := li.lineStarts[line]
 	var end core.TextPos
 	if line+1 < len(li.lineStarts) {

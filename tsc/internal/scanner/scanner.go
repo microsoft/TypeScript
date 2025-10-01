@@ -2331,12 +2331,12 @@ func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) c
 	pos := SkipTrivia(sourceFile.Text(), node.Pos())
 	body := node.AsArrowFunction().Body
 	if body != nil && body.Kind == ast.KindBlock {
-		startLine, _ := GetLineAndCharacterOfPosition(sourceFile, body.Pos())
-		endLine, _ := GetLineAndCharacterOfPosition(sourceFile, body.End())
+		startLine, _ := GetECMALineAndCharacterOfPosition(sourceFile, body.Pos())
+		endLine, _ := GetECMALineAndCharacterOfPosition(sourceFile, body.End())
 		if startLine < endLine {
 			// The arrow function spans multiple lines,
 			// make the error span be the first line, inclusive.
-			return core.NewTextRange(pos, GetEndLinePosition(sourceFile, startLine))
+			return core.NewTextRange(pos, GetECMAEndLinePosition(sourceFile, startLine))
 		}
 	}
 	return core.NewTextRange(pos, node.End())
@@ -2424,19 +2424,19 @@ func ComputeLineOfPosition(lineStarts []core.TextPos, pos int) int {
 	return low - 1
 }
 
-func GetLineStarts(sourceFile ast.SourceFileLike) []core.TextPos {
-	return sourceFile.LineMap()
+func GetECMALineStarts(sourceFile ast.SourceFileLike) []core.TextPos {
+	return sourceFile.ECMALineMap()
 }
 
-func GetLineAndCharacterOfPosition(sourceFile ast.SourceFileLike, pos int) (line int, character int) {
-	lineMap := GetLineStarts(sourceFile)
+func GetECMALineAndCharacterOfPosition(sourceFile ast.SourceFileLike, pos int) (line int, character int) {
+	lineMap := GetECMALineStarts(sourceFile)
 	line = ComputeLineOfPosition(lineMap, pos)
 	character = utf8.RuneCountInString(sourceFile.Text()[lineMap[line]:pos])
 	return line, character
 }
 
-func GetEndLinePosition(sourceFile *ast.SourceFile, line int) int {
-	pos := int(GetLineStarts(sourceFile)[line])
+func GetECMAEndLinePosition(sourceFile *ast.SourceFile, line int) int {
+	pos := int(GetECMALineStarts(sourceFile)[line])
 	for {
 		ch, size := utf8.DecodeRuneInString(sourceFile.Text()[pos:])
 		if size == 0 || stringutil.IsLineBreak(ch) {
@@ -2446,8 +2446,8 @@ func GetEndLinePosition(sourceFile *ast.SourceFile, line int) int {
 	}
 }
 
-func GetPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, character int) int {
-	return ComputePositionOfLineAndCharacter(GetLineStarts(sourceFile), line, character)
+func GetECMAPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, character int) int {
+	return ComputePositionOfLineAndCharacter(GetECMALineStarts(sourceFile), line, character)
 }
 
 func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, character int) int {

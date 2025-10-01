@@ -23,7 +23,7 @@ type FileHandle interface {
 	Version() int32
 	MatchesDiskText() bool
 	IsOverlay() bool
-	LineMap() *ls.LineMap
+	LSPLineMap() *ls.LSPLineMap
 	Kind() core.ScriptKind
 }
 
@@ -33,7 +33,7 @@ type fileBase struct {
 	hash     xxh3.Uint128
 
 	lineMapOnce sync.Once
-	lineMap     *ls.LineMap
+	lineMap     *ls.LSPLineMap
 }
 
 func (f *fileBase) FileName() string {
@@ -48,9 +48,9 @@ func (f *fileBase) Content() string {
 	return f.content
 }
 
-func (f *fileBase) LineMap() *ls.LineMap {
+func (f *fileBase) LSPLineMap() *ls.LSPLineMap {
 	f.lineMapOnce.Do(func() {
-		f.lineMap = ls.ComputeLineStarts(f.content)
+		f.lineMap = ls.ComputeLSPLineStarts(f.content)
 	})
 	return f.lineMap
 }
@@ -318,8 +318,8 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 				panic("overlay not found for changed file: " + uri)
 			}
 			for _, change := range events.changes {
-				converters := ls.NewConverters(fs.positionEncoding, func(fileName string) *ls.LineMap {
-					return o.LineMap()
+				converters := ls.NewConverters(fs.positionEncoding, func(fileName string) *ls.LSPLineMap {
+					return o.LSPLineMap()
 				})
 				for _, textChange := range change.Changes {
 					if partialChange := textChange.Partial; partialChange != nil {

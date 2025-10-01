@@ -8,7 +8,7 @@ import (
 )
 
 // Tries to find the sourceMappingURL comment at the end of a file.
-func TryGetSourceMappingURL(lineInfo *LineInfo) string {
+func TryGetSourceMappingURL(lineInfo *ECMALineInfo) string {
 	for index := lineInfo.LineCount() - 1; index >= 0; index-- {
 		line := lineInfo.LineText(index)
 		line = strings.TrimLeftFunc(line, unicode.IsSpace)

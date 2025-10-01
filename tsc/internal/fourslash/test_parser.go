@@ -368,8 +368,8 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 
 	outputString := output.String()
 	// Set LS positions for markers
-	lineMap := ls.ComputeLineStarts(outputString)
-	converters := ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LineMap {
+	lineMap := ls.ComputeLSPLineStarts(outputString)
+	converters := ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LSPLineMap {
 		return lineMap
 	})
 

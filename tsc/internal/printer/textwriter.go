@@ -89,7 +89,7 @@ func (w *textWriter) updateLineCountAndPosFor(s string) {
 	var count int
 	var lastLineStart core.TextPos
 
-	for lineStart := range core.ComputeLineStartsSeq(s) {
+	for lineStart := range core.ComputeECMALineStartsSeq(s) {
 		count++
 		lastLineStart = lineStart
 	}
