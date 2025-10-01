@@ -7395,7 +7395,11 @@ export enum PollingWatchKind {
 
 export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
+/** @internal */
+export type IssueType = "baseUrl" | "rootDir" | "types";
+
 export interface CompilerOptions {
+    /** @internal */ issueType?: IssueType;
     /** @internal */ all?: boolean;
     allowImportingTsExtensions?: boolean;
     allowJs?: boolean;

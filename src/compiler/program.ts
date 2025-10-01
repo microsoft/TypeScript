@@ -315,7 +315,6 @@ import {
     trace,
     tracing,
     tryCast,
-    tsFixRootDirSignal,
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
@@ -2147,6 +2146,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
     function toPath(fileName: string): Path {
         return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
+    }
+
+    function tsFixRootDirSignal(kind: string, rootDir: string, rootDir60: string): void {
+        if (options.issueType === "rootDir") {
+            throw new Error(`TS_FIX_ROOTDIR_SIGNAL:: ${kind}:: 5.9:: ${rootDir} 6.0:: ${rootDir60} <End>`);
+        }
     }
 
     function getCommonSourceDirectory() {
