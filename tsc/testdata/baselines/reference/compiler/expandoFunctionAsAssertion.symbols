@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/expandoFunctionAsAssertion.ts] ////
+
+=== expandoFunctionAsAssertion.ts ===
+function example() {}
+>example : Symbol(example, Decl(expandoFunctionAsAssertion.ts, 0, 0))
+
+example.isFoo = function isFoo(value: string): asserts value is 'foo' {
+>example.isFoo : Symbol(example.isFoo, Decl(expandoFunctionAsAssertion.ts, 0, 21))
+>example : Symbol(example, Decl(expandoFunctionAsAssertion.ts, 0, 0))
+>isFoo : Symbol(example.isFoo, Decl(expandoFunctionAsAssertion.ts, 0, 21))
+>isFoo : Symbol(isFoo, Decl(expandoFunctionAsAssertion.ts, 2, 15))
+>value : Symbol(value, Decl(expandoFunctionAsAssertion.ts, 2, 31))
+>value : Symbol(value, Decl(expandoFunctionAsAssertion.ts, 2, 31))
+
+  if (value !== 'foo') {
+>value : Symbol(value, Decl(expandoFunctionAsAssertion.ts, 2, 31))
+
+    throw new Error('Not foo');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+};
+
+example.isFoo('test');
+>example.isFoo : Symbol(example.isFoo, Decl(expandoFunctionAsAssertion.ts, 0, 21))
+>example : Symbol(example, Decl(expandoFunctionAsAssertion.ts, 0, 0))
+>isFoo : Symbol(example.isFoo, Decl(expandoFunctionAsAssertion.ts, 0, 21))
+
