@@ -107,7 +107,6 @@ interface ScriptHostInterface { }
 export const unrelated = 10;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -192,7 +191,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
@@ -256,7 +255,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 7,
-            "dtsSize": 576,
+            "dtsSize": 537,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -481,7 +480,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspac
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
@@ -649,7 +648,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometyp
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
@@ -939,7 +938,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
@@ -1174,7 +1173,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
@@ -1460,7 +1459,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/pr
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 6 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
@@ -1767,7 +1766,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/pr
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 7 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"

@@ -33,8 +33,7 @@ typerefs: {
 
 
 MissingPaths:: [
-  "non-existing-file.ts",
-  "lib.d.ts"
+  "non-existing-file.ts"
 ]
 
 a.ts(2,22): error TS6059: File 'b.ts' is not under 'rootDir' '/home/src/workspaces/project/a/b'. 'rootDir' is expected to contain all source files.
@@ -79,8 +78,7 @@ typerefs: {
 
 
 MissingPaths:: [
-  "non-existing-file.ts",
-  "lib.d.ts"
+  "non-existing-file.ts"
 ]
 
 a.ts(2,22): error TS6059: File 'b.ts' is not under 'rootDir' '/home/src/workspaces/project/a/c'. 'rootDir' is expected to contain all source files.

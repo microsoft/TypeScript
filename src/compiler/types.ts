@@ -4288,7 +4288,6 @@ export interface SourceFileLike {
     lineMap?: readonly number[];
     /** @internal */
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
-    languageVariant?: LanguageVariant;
 }
 
 /** @internal */
@@ -4363,14 +4362,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */
     renamedDependencies?: ReadonlyMap<string, string>;
 
-    /**
-     * lib.d.ts should have a reference comment like
-     *
-     *  /// <reference no-default-lib="true"/>
-     *
-     * If any other file has this comment, it signals not to include lib.d.ts
-     * because this containing file is intended to act as a default library.
-     */
+    /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
     hasNoDefaultLib: boolean;
 
     languageVersion: ScriptTarget;
@@ -4471,7 +4463,6 @@ export interface ReadonlyPragmaContext {
     typeReferenceDirectives: readonly FileReference[];
     libReferenceDirectives: readonly FileReference[];
     amdDependencies: readonly AmdDependency[];
-    hasNoDefaultLib?: boolean;
     moduleName?: string;
 }
 
@@ -4505,7 +4496,6 @@ export interface Bundle extends Node {
     /** @internal */ syntheticFileReferences?: readonly FileReference[];
     /** @internal */ syntheticTypeReferences?: readonly FileReference[];
     /** @internal */ syntheticLibReferences?: readonly FileReference[];
-    /** @internal */ hasNoDefaultLib?: boolean;
 }
 
 export interface JsonSourceFile extends SourceFile {
@@ -7410,6 +7400,7 @@ export interface CompilerOptions {
     allowUnreachableCode?: boolean;
     allowUnusedLabels?: boolean;
     alwaysStrict?: boolean; // Always combine with strict property
+    /** @deprecated */
     baseUrl?: string;
     /**
      * An error if set - this should only go through the -b pipeline and not actually be observed

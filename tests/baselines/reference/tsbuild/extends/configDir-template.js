@@ -71,7 +71,6 @@ export const k = 10;
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -140,6 +139,12 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
+[96mtsconfig.json[0m:[93m3[0m:[93m3[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -150,6 +155,9 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
+
+Found 1 error.
+
 
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
@@ -188,7 +196,7 @@ export declare const z = 10;
 
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo]
-{"root":["../main.ts","../src/secondary.ts"],"version":"FakeTSVersion"}
+{"root":["../main.ts","../src/secondary.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -196,9 +204,10 @@ export declare const z = 10;
     "../main.ts",
     "../src/secondary.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 71
+  "size": 85
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

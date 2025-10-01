@@ -4717,9 +4717,13 @@
         "category": "Error",
         "code": 5110
     },
+    "Visit https://aka.ms/ts6 for migration information.": {
+        "category": "Message",
+        "code": 5111
+    },
     "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
         "category": "Error",
-        "code": 5111
+        "code": 5112
     },
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
