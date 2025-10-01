@@ -112,12 +112,12 @@ function isShape(s : Shapes): s is Shape {
 >                  : ^^^^^^^
 >Array.isArray(s) : boolean
 >                 : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^
 >s : Shapes
 >  : ^^^^^^
 }

@@ -63,9 +63,9 @@ function f2() {
     let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
 >a4 : Symbol(a4, Decl(literalFreshnessPropagationOnNarrowing.ts, 21, 7))
 >ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
 >elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
 >elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
@@ -76,9 +76,9 @@ function f2() {
     let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
 >a5 : Symbol(a5, Decl(literalFreshnessPropagationOnNarrowing.ts, 26, 7))
 >ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
 >elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
 >elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))

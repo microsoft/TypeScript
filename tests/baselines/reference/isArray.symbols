@@ -1,24 +1,126 @@
 //// [tests/cases/compiler/isArray.ts] ////
 
 === isArray.ts ===
-var maybeArray: number | number[];
->maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
+/// @errors: 2322 4104
 
+// https://github.com/microsoft/TypeScript/issues/17002
+// Preserves mutability, false branch removes arrays, mutable or not
 
-if (Array.isArray(maybeArray)) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
+declare const mutable: string | string[];
+>mutable : Symbol(mutable, Decl(isArray.ts, 5, 13))
 
-    maybeArray.length; // OK
->maybeArray.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+if (Array.isArray(mutable)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>mutable : Symbol(mutable, Decl(isArray.ts, 5, 13))
+
+  const stillMutable: string[] = mutable;
+>stillMutable : Symbol(stillMutable, Decl(isArray.ts, 7, 7))
+>mutable : Symbol(mutable, Decl(isArray.ts, 5, 13))
+
+} else {
+  const narrowed: string = mutable;
+>narrowed : Symbol(narrowed, Decl(isArray.ts, 9, 7))
+>mutable : Symbol(mutable, Decl(isArray.ts, 5, 13))
 }
-else {
-    maybeArray.toFixed(); // OK
->maybeArray.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+declare const immutable: string | readonly string[];
+>immutable : Symbol(immutable, Decl(isArray.ts, 12, 13))
+
+if (Array.isArray(immutable)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>immutable : Symbol(immutable, Decl(isArray.ts, 12, 13))
+
+  const notMutable: string[] = immutable; // Should fail: readonly string[] isn't assignable to string[]
+>notMutable : Symbol(notMutable, Decl(isArray.ts, 14, 7))
+>immutable : Symbol(immutable, Decl(isArray.ts, 12, 13))
+
+} else {
+  const narrowed: string = immutable;
+>narrowed : Symbol(narrowed, Decl(isArray.ts, 16, 7))
+>immutable : Symbol(immutable, Decl(isArray.ts, 12, 13))
 }
+
+// https://github.com/microsoft/TypeScript/issues/33700
+// Preserves element or iterated type of wider types
+
+declare const arrayLike: string | ArrayLike<string>;
+>arrayLike : Symbol(arrayLike, Decl(isArray.ts, 22, 13))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+if (Array.isArray(arrayLike)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>arrayLike : Symbol(arrayLike, Decl(isArray.ts, 22, 13))
+
+  const arrayOfElementType: readonly string[] = arrayLike;
+>arrayOfElementType : Symbol(arrayOfElementType, Decl(isArray.ts, 24, 7))
+>arrayLike : Symbol(arrayLike, Decl(isArray.ts, 22, 13))
+
+  const notArrayOfAny: readonly void[] = arrayLike; // Should fail: string isn't assignable to void
+>notArrayOfAny : Symbol(notArrayOfAny, Decl(isArray.ts, 25, 7))
+>arrayLike : Symbol(arrayLike, Decl(isArray.ts, 22, 13))
+}
+
+declare const iterable: string | Iterable<string>;
+>iterable : Symbol(iterable, Decl(isArray.ts, 28, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+if (Array.isArray(iterable)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>iterable : Symbol(iterable, Decl(isArray.ts, 28, 13))
+
+  const arrayOfIteratedType: readonly string[] = iterable;
+>arrayOfIteratedType : Symbol(arrayOfIteratedType, Decl(isArray.ts, 30, 7))
+>iterable : Symbol(iterable, Decl(isArray.ts, 28, 13))
+
+  const notArrayOfAny: readonly void[] = iterable; // Should fail: string isn't assignable to void
+>notArrayOfAny : Symbol(notArrayOfAny, Decl(isArray.ts, 31, 7))
+>iterable : Symbol(iterable, Decl(isArray.ts, 28, 13))
+}
+
+// https://github.com/microsoft/TypeScript/pull/42316#discussion_r823218462
+// any and unknown backward compatibility
+
+declare const any: any;
+>any : Symbol(any, Decl(isArray.ts, 37, 13))
+
+if (Array.isArray(any)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>any : Symbol(any, Decl(isArray.ts, 37, 13))
+
+  const mutableArrayOfAny: void[] = any;
+>mutableArrayOfAny : Symbol(mutableArrayOfAny, Decl(isArray.ts, 39, 7))
+>any : Symbol(any, Decl(isArray.ts, 37, 13))
+
+  const notAny: void = any; // Should fail: any[] isn't assignable to void
+>notAny : Symbol(notAny, Decl(isArray.ts, 40, 7))
+>any : Symbol(any, Decl(isArray.ts, 37, 13))
+}
+
+declare const unknown: unknown;
+>unknown : Symbol(unknown, Decl(isArray.ts, 43, 13))
+
+if (Array.isArray(unknown)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>unknown : Symbol(unknown, Decl(isArray.ts, 43, 13))
+
+  const mutableArrayOfAny: void[] = unknown;
+>mutableArrayOfAny : Symbol(mutableArrayOfAny, Decl(isArray.ts, 45, 7))
+>unknown : Symbol(unknown, Decl(isArray.ts, 43, 13))
+
+  const notAny: void = unknown; // Should fail: any[] isn't assignable to void
+>notAny : Symbol(notAny, Decl(isArray.ts, 46, 7))
+>unknown : Symbol(unknown, Decl(isArray.ts, 43, 13))
+}
+

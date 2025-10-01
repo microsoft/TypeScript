@@ -25,9 +25,9 @@ class ElementsArray extends Array {
     static {
         const superisArray = super.isArray;
 >superisArray : Symbol(superisArray, Decl(a.js, 11, 13))
->super.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>super.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >super : Symbol(ArrayConstructor, Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         const customIsArray = (arg)=> superisArray(arg);
 >customIsArray : Symbol(customIsArray, Decl(a.js, 12, 13))

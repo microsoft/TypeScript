@@ -263,9 +263,9 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 
     // "accidentally" guards the first branch on the length
     if (Array.isArray(obj) && obj.length) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
 >obj.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
@@ -318,9 +318,9 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
     if (Array.isArray(obj)) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
 
         // obj should only be an array type here

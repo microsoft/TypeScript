@@ -798,9 +798,9 @@ define(function () {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 297, 34))
 >Object.prototype.toString.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >Object.prototype.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))

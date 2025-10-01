@@ -391,12 +391,12 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 >                                 : ^^^^^^^^^^^^^^
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^
 >obj : Record<string, any> | Record<string, any>[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.length : number
@@ -491,12 +491,12 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
     if (Array.isArray(obj)) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^
 >obj : Record<string, any> | Record<string, any>[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

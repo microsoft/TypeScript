@@ -90,9 +90,9 @@ function isShape(s : Shapes): s is Shape {
 >Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
 
     return !Array.isArray(s);
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
 }
 

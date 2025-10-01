@@ -959,22 +959,22 @@ function deepEquals<T>(a: T, b: T): boolean {
 >                                     : ^^^^^^^
 >Array.isArray(a) : boolean
 >                 : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; }
+>              : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; }
+>        : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^
 >a : T & object
 >  : ^^^^^^^^^^
 >Array.isArray(b) : boolean
 >                 : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; }
+>              : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; }
+>        : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^
 >b : T & object
 >  : ^^^^^^^^^^
 

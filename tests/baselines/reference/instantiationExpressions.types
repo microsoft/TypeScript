@@ -95,18 +95,18 @@ function f2() {
 >      : ^^^^^^^^^^^^^^^^
 
     const A1 = Array<string>;  // new (...) => string[]
->A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
->   : ^^^           ^^      ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^      ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
->Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
->              : ^^^           ^^      ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^      ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray<T>(arg: ArrayLike<T>): arg is readonly T[]; isArray(arg: unknown): arg is any[]; readonly prototype: any[]; }
+>   : ^^^           ^^      ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^      ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^            ^^^                   ^^^^^^^^^^   ^^       ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray<T>(arg: ArrayLike<T>): arg is readonly T[]; isArray(arg: unknown): arg is any[]; readonly prototype: any[]; }
+>              : ^^^           ^^      ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^      ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^            ^^^                   ^^^^^^^^^^   ^^       ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 
     const A2 = Array<string, number>;  // Error
->A2 : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
->   : ^^^^^^^^^^   ^^   ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
->Array<string, number> : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
->                      : ^^^^^^^^^^   ^^   ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>A2 : { isArray<T>(arg: ArrayLike<T>): arg is readonly T[]; isArray(arg: unknown): arg is any[]; readonly prototype: any[]; }
+>   : ^^^^^^^^^^ ^^   ^^            ^^^                   ^^^^^^^^^^   ^^       ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>Array<string, number> : { isArray<T>(arg: ArrayLike<T>): arg is readonly T[]; isArray(arg: unknown): arg is any[]; readonly prototype: any[]; }
+>                      : ^^^^^^^^^^ ^^   ^^            ^^^                   ^^^^^^^^^^   ^^       ^^^            ^^^^^^^^^^^^^^^^^^^^^^     ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 }
