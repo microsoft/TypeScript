@@ -150,5 +150,8 @@ func (s *Statistics) Aggregate(stat *Statistics) {
 }
 
 func (s *Statistics) SetTotalTime(totalTime time.Duration) {
+	if s.compileTimes == nil {
+		s.compileTimes = &CompileTimes{}
+	}
 	s.compileTimes.totalTime = totalTime
 }
