@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType1.ts] ////
+
+=== reverseMappedTypeInferFromFilteringNameType1.ts ===
+declare class User {
+>User : Symbol(User, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 0))
+
+  public name: string;
+>name : Symbol(User.name, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 20))
+
+  public last: string;
+>last : Symbol(User.last, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 1, 22))
+
+  public age: number;
+>age : Symbol(User.age, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 2, 22))
+}
+
+type AllowedNeeds<T> = {
+>AllowedNeeds : Symbol(AllowedNeeds, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 4, 1))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 6, 18))
+
+  [K in keyof T as K & keyof User]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 7, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 6, 18))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 7, 3))
+>User : Symbol(User, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 6, 18))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 7, 3))
+
+};
+
+declare function extend<T>(
+>extend : Symbol(extend, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 8, 2))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 10, 24))
+
+  input: {
+>input : Symbol(input, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 10, 27))
+
+    [K in keyof T]: {
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 12, 5))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 10, 24))
+
+      needs: AllowedNeeds<T[K]>
+>needs : Symbol(needs, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 12, 21))
+>AllowedNeeds : Symbol(AllowedNeeds, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 4, 1))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 10, 24))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 12, 5))
+
+      compute: (x: Pick<User, keyof T[K] & keyof User>) => any;
+>compute : Symbol(compute, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 13, 31))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 14, 16))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>User : Symbol(User, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 10, 24))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 12, 5))
+>User : Symbol(User, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 0))
+
+    };
+  }
+): T
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 10, 24))
+
+const inferred1 = extend({
+>inferred1 : Symbol(inferred1, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 19, 5))
+>extend : Symbol(extend, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 8, 2))
+
+  fullName: {
+>fullName : Symbol(fullName, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 19, 26))
+
+    needs: {
+>needs : Symbol(needs, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 20, 13))
+
+      name: true,
+>name : Symbol(name, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 21, 12))
+
+      last: true,
+>last : Symbol(last, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 22, 17))
+
+    },
+    compute: (user) => `${user.name} ${user.last}`,
+>compute : Symbol(compute, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 24, 6))
+>user : Symbol(user, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 25, 14))
+>user.name : Symbol(name, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 20))
+>user : Symbol(user, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 25, 14))
+>name : Symbol(name, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 0, 20))
+>user.last : Symbol(last, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 1, 22))
+>user : Symbol(user, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 25, 14))
+>last : Symbol(last, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 1, 22))
+
+  },
+});
+
+const inferred2 = extend({
+>inferred2 : Symbol(inferred2, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 29, 5))
+>extend : Symbol(extend, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 8, 2))
+
+  fullName: {
+>fullName : Symbol(fullName, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 29, 26))
+
+    needs: {
+>needs : Symbol(needs, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 30, 13))
+
+      last: true,
+>last : Symbol(last, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 31, 12))
+
+      doesntExist: true // error
+>doesntExist : Symbol(doesntExist, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 32, 17))
+
+    },
+    compute: (user) => {},
+>compute : Symbol(compute, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 34, 6))
+>user : Symbol(user, Decl(reverseMappedTypeInferFromFilteringNameType1.ts, 35, 14))
+
+  },
+});
+
