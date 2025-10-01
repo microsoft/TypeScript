@@ -211,9 +211,18 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/user/username/projects/myproject/src/tsconfig.json",
         "diagnostics": [
           {
+            "start": {
+              "line": 6,
+              "offset": 5
+            },
+            "end": {
+              "line": 6,
+              "offset": 13
+            },
             "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5011,
-            "category": "error"
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
           },
           {
             "start": {

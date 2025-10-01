@@ -4269,10 +4269,15 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             const dir59 = getComputedCommonSourceDirectory(emittedFiles, currentDirectory, getCanonicalFileName);
             if (dir59 !== "" && getCanonicalFileName(dir) !== getCanonicalFileName(dir59)) {
                 // change in layout
-                programDiagnostics.addConfigDiagnostic(createCompilerDiagnosticFromMessageChain(chainDiagnosticMessages(
-                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
-                    Diagnostics.Inferred_common_source_directory_differs_from_tsconfig_directory_output_layout_will_be_changed,
-                )));
+                createDiagnosticForOption(
+                    /*onKey*/ true,
+                    options.outDir ? "outDir" : "declarationDir",
+                    options.outDir ? "declarationDir" : undefined,
+                    chainDiagnosticMessages(
+                        chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
+                        Diagnostics.Inferred_common_source_directory_differs_from_tsconfig_directory_output_layout_will_be_changed,
+                    ),
+                );
             }
         }
 

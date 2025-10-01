@@ -38,8 +38,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outDir": "Static/scripts/"
+[7m [0m [91m    ~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -123,8 +126,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outDir": "Static/scripts/"
+[7m [0m [91m    ~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 

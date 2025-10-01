@@ -32,16 +32,17 @@ export {};
 //// [DtsFileErrors]
 
 
-error TS5011: Inferred common source directory differs from tsconfig directory, output layout will be changed.
+/app/tsconfig.json(3,9): error TS5011: Inferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
 
 
-!!! error TS5011: Inferred common source directory differs from tsconfig directory, output layout will be changed.
-!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
-==== /app/tsconfig.json (0 errors) ====
+==== /app/tsconfig.json (1 errors) ====
     {
         "compilerOptions": {
             "outDir": "bin",
+            ~~~~~~~~
+!!! error TS5011: Inferred common source directory differs from tsconfig directory, output layout will be changed.
+!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
             "typeRoots": ["../types"],
             "sourceMap": true,
             "mapRoot": "myMapRoot",

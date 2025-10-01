@@ -272,11 +272,6 @@ Info seq  [hh:mm:ss:mss] event:
             ]
           },
           {
-            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
-            "code": 5011,
-            "category": "error"
-          },
-          {
             "start": {
               "line": 7,
               "offset": 25
@@ -287,6 +282,20 @@ Info seq  [hh:mm:ss:mss] event:
             },
             "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5107,
+            "category": "error",
+            "fileName": "/Users/someuser/work/applications/frontend/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 17,
+              "offset": 5
+            },
+            "end": {
+              "line": 17,
+              "offset": 13
+            },
+            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
             "category": "error",
             "fileName": "/Users/someuser/work/applications/frontend/tsconfig.json"
           },

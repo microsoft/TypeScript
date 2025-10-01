@@ -95,8 +95,11 @@ declare const console: { log(msg: any): void; };
 
 D:\home\src\tslibs\TS\Lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m13[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
+
+[7m13[0m     "outDir": "./dist",
+[7m  [0m [91m    ~~~~~~~~[0m
 
 [96mtsconfig.json[0m:[93m14[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
   Visit https://aka.ms/ts6 for migration information.
@@ -121,7 +124,7 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 3 errors in the same file, starting at: tsconfig.json[90m:14[0m
+Found 3 errors in the same file, starting at: tsconfig.json[90m:13[0m
 
 
 

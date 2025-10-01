@@ -34,8 +34,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
 
 Found 1 error.
@@ -78,8 +81,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
 
 Found 1 error.
@@ -98,11 +104,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p /home/src/workspaces/project/tsconfig.json
 Output::
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
   Visit https://aka.ms/ts6 for migration information.
 
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
-Found 1 error.
+
+Found 1 error in tsconfig.json[90m:3[0m
 
 
 

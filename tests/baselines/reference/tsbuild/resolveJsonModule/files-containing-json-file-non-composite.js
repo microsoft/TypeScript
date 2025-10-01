@@ -51,14 +51,17 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-[91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
-  Visit https://aka.ms/ts6 for migration information.
-
 [96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
   Visit https://aka.ms/ts6 for migration information.
 
 [7m3[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m
+
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
 
 TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
 TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
