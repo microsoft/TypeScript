@@ -32,16 +32,16 @@ element.style = "color: red";
 >             : ^^^^^^^^^^^^
 
 element.style.animationTimingFunction;
->element.style.animationTimingFunction : any
->                                      : ^^^
+>element.style.animationTimingFunction : string
+>                                      : ^^^^^^
 >element.style : CSSStyleDeclaration
 >              : ^^^^^^^^^^^^^^^^^^^
 >element : Element
 >        : ^^^^^^^
 >style : CSSStyleDeclaration
 >      : ^^^^^^^^^^^^^^^^^^^
->animationTimingFunction : any
->                        : ^^^
+>animationTimingFunction : string
+>                        : ^^^^^^
 
 element.style = element.style; // error
 >element.style = element.style : CSSStyleDeclaration
