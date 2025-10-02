@@ -86,9 +86,9 @@ const (
 )
 
 type UserPreferences struct {
-	ImportModuleSpecifierPreference       ImportModuleSpecifierPreference
-	ImportModuleSpecifierEndingPreference ImportModuleSpecifierEndingPreference
-	AutoImportSpecifierExcludeRegexes     []string
+	ImportModuleSpecifierPreference   ImportModuleSpecifierPreference
+	ImportModuleSpecifierEnding       ImportModuleSpecifierEndingPreference
+	AutoImportSpecifierExcludeRegexes []string
 }
 
 type ModuleSpecifierOptions struct {

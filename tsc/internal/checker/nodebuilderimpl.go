@@ -1207,8 +1207,8 @@ func (b *nodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 		contextFile,
 		host,
 		modulespecifiers.UserPreferences{
-			ImportModuleSpecifierPreference:       specifierPref,
-			ImportModuleSpecifierEndingPreference: endingPref,
+			ImportModuleSpecifierPreference: specifierPref,
+			ImportModuleSpecifierEnding:     endingPref,
 		},
 		modulespecifiers.ModuleSpecifierOptions{
 			OverrideImportMode: overrideImportMode,

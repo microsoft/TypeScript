@@ -911,6 +911,17 @@ function parseBaselineRenameArgs(funcName: string, args: readonly ts.Expression[
     }];
 }
 
+function stringToTristate(s: string): string {
+    switch (s) {
+        case "true":
+            return "core.TSTrue";
+        case "false":
+            return "core.TSFalse";
+        default:
+            return "core.TSUnknown";
+    }
+}
+
 function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefined {
     const preferences: string[] = [];
     for (const prop of arg.properties) {
@@ -918,10 +929,10 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
             switch (prop.name.getText()) {
                 // !!! other preferences
                 case "providePrefixAndSuffixTextForRename":
-                    preferences.push(`UseAliasesForRename: PtrTo(${prop.initializer.getText()})`);
+                    preferences.push(`UseAliasesForRename: ${stringToTristate(prop.initializer.getText())}`);
                     break;
                 case "quotePreference":
-                    preferences.push(`QuotePreference: PtrTo(ls.QuotePreference(${prop.initializer.getText()}))`);
+                    preferences.push(`QuotePreference: ls.QuotePreference(${prop.initializer.getText()})`);
                     break;
             }
         }
@@ -1465,13 +1476,16 @@ function generateGoTest(failingTests: Set<string>, test: GoTest): string {
     const commands = test.commands.map(cmd => generateCmd(cmd)).join("\n");
     const imports = [`"github.com/microsoft/typescript-go/internal/fourslash"`];
     // Only include these imports if the commands use them to avoid unused import errors.
+    if (commands.includes("core.")) {
+        imports.unshift(`"github.com/microsoft/typescript-go/internal/core"`);
+    }
     if (commands.includes("ls.")) {
         imports.push(`"github.com/microsoft/typescript-go/internal/ls"`);
     }
     if (commands.includes("lsproto.")) {
         imports.push(`"github.com/microsoft/typescript-go/internal/lsp/lsproto"`);
     }
-    if (usesHelper(commands)) {
+    if (usesFourslashUtil(commands)) {
         imports.push(`. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"`);
     }
     imports.push(`"github.com/microsoft/typescript-go/internal/testutil"`);
@@ -1494,7 +1508,7 @@ func Test${testName}(t *testing.T) {
     return template;
 }
 
-function usesHelper(goTxt: string): boolean {
+function usesFourslashUtil(goTxt: string): boolean {
     for (const [_, constant] of completionConstants) {
         if (goTxt.includes(constant)) {
             return true;

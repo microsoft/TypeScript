@@ -131,7 +131,7 @@ func getPreferredEnding(
 		resolutionMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
 	}
 	return getModuleSpecifierEndingPreference(
-		prefs.ImportModuleSpecifierEndingPreference,
+		prefs.ImportModuleSpecifierEnding,
 		resolutionMode,
 		compilerOptions,
 		importingSourceFile,

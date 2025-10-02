@@ -3,8 +3,8 @@ package fourslash_test
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
-	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -16,5 +16,5 @@ func TestRenameModuleExportsProperties1(t *testing.T) {
 	const content = `[|class [|{| "contextRangeIndex": 0 |}A|] {}|]
 module.exports = { [|A|] }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineRename(t, &ls.UserPreferences{UseAliasesForRename: PtrTo(true)}, f.Ranges()[1], f.Ranges()[2])
+	f.VerifyBaselineRename(t, &ls.UserPreferences{UseAliasesForRename: core.TSTrue}, f.Ranges()[1], f.Ranges()[2])
 }

@@ -354,7 +354,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 
 	if triggerCharacter != nil && *triggerCharacter == " " {
 		// `isValidTrigger` ensures we are at `import |`
-		if ptrIsTrue(preferences.IncludeCompletionsForImportStatements) {
+		if preferences.IncludeCompletionsForImportStatements.IsTrue() {
 			return &lsproto.CompletionList{
 				IsIncomplete: true,
 			}
@@ -586,7 +586,7 @@ func (l *LanguageService) getCompletionData(
 			}
 			keywordFilters = keywordFiltersFromSyntaxKind(importStatementCompletionInfo.keywordCompletion)
 		}
-		if importStatementCompletionInfo.replacementSpan != nil && ptrIsTrue(preferences.IncludeCompletionsForImportStatements) {
+		if importStatementCompletionInfo.replacementSpan != nil && preferences.IncludeCompletionsForImportStatements.IsTrue() {
 			// !!! flags |= CompletionInfoFlags.IsImportStatementCompletion;
 			importStatementCompletion = &importStatementCompletionInfo
 			isNewIdentifierLocation = importStatementCompletionInfo.isNewIdentifierLocation
@@ -936,7 +936,7 @@ func (l *LanguageService) getCompletionData(
 						insertQuestionDot := false
 						if typeChecker.IsNullableType(t) {
 							canCorrectToQuestionDot := isRightOfDot && !isRightOfQuestionDot &&
-								!ptrIsFalse(preferences.IncludeAutomaticOptionalChainCompletions)
+								!preferences.IncludeAutomaticOptionalChainCompletions.IsFalse()
 							if canCorrectToQuestionDot || isRightOfQuestionDot {
 								t = typeChecker.GetNonNullableType(t)
 								if canCorrectToQuestionDot {
@@ -963,7 +963,7 @@ func (l *LanguageService) getCompletionData(
 				insertQuestionDot := false
 				if typeChecker.IsNullableType(t) {
 					canCorrectToQuestionDot := isRightOfDot && !isRightOfQuestionDot &&
-						!ptrIsFalse(preferences.IncludeAutomaticOptionalChainCompletions)
+						!preferences.IncludeAutomaticOptionalChainCompletions.IsFalse()
 
 					if canCorrectToQuestionDot || isRightOfQuestionDot {
 						t = typeChecker.GetNonNullableType(t)
@@ -1128,7 +1128,7 @@ func (l *LanguageService) getCompletionData(
 			symbols = append(symbols, filteredMembers...)
 
 			// Set sort texts.
-			transformObjectLiteralMembers := ptrIsTrue(preferences.IncludeCompletionsWithObjectLiteralMethodSnippets) &&
+			transformObjectLiteralMembers := preferences.IncludeCompletionsWithObjectLiteralMethodSnippets.IsTrue() &&
 				objectLikeContainer.Kind == ast.KindObjectLiteralExpression
 			for _, member := range filteredMembers {
 				symbolId := ast.GetSymbolId(member)
@@ -1156,7 +1156,7 @@ func (l *LanguageService) getCompletionData(
 			return true
 		}
 		// If not already a module, must have modules enabled.
-		if !ptrIsTrue(preferences.IncludeCompletionsForModuleExports) {
+		if !preferences.IncludeCompletionsForModuleExports.IsTrue() {
 			return false
 		}
 		// Always using ES modules in 6.0+
@@ -2240,7 +2240,7 @@ func (l *LanguageService) createCompletionItem(
 		}
 	}
 
-	if ptrIsTrue(preferences.IncludeCompletionsWithClassMemberSnippets) &&
+	if preferences.IncludeCompletionsWithClassMemberSnippets.IsTrue() &&
 		data.completionKind == CompletionKindMemberLike &&
 		isClassLikeMemberCompletion(symbol, data.location, file) {
 		// !!! class member completions
@@ -2261,13 +2261,13 @@ func (l *LanguageService) createCompletionItem(
 	if data.isJsxIdentifierExpected &&
 		!data.isRightOfOpenTag &&
 		clientSupportsItemSnippet(clientOptions) &&
-		!jsxAttributeCompletionStyleIs(preferences.JsxAttributeCompletionStyle, JsxAttributeCompletionStyleNone) &&
+		preferences.JsxAttributeCompletionStyle != JsxAttributeCompletionStyleNone &&
 		!(ast.IsJsxAttribute(data.location.Parent) && data.location.Parent.Initializer() != nil) {
-		useBraces := jsxAttributeCompletionStyleIs(preferences.JsxAttributeCompletionStyle, JsxAttributeCompletionStyleBraces)
+		useBraces := preferences.JsxAttributeCompletionStyle == JsxAttributeCompletionStyleBraces
 		t := typeChecker.GetTypeOfSymbolAtLocation(symbol, data.location)
 
 		// If is boolean like or undefined, don't return a snippet, we want to return just the completion.
-		if jsxAttributeCompletionStyleIs(preferences.JsxAttributeCompletionStyle, JsxAttributeCompletionStyleAuto) &&
+		if preferences.JsxAttributeCompletionStyle == JsxAttributeCompletionStyleAuto &&
 			!t.IsBooleanLike() &&
 			!(t.IsUnion() && core.Some(t.Types(), (*checker.Type).IsBooleanLike)) {
 			if t.IsStringLike() ||
@@ -2531,13 +2531,6 @@ func boolToPtr(v bool) *bool {
 		return ptrTo(true)
 	}
 	return nil
-}
-
-func jsxAttributeCompletionStyleIs(preferenceStyle *JsxAttributeCompletionStyle, style JsxAttributeCompletionStyle) bool {
-	if preferenceStyle == nil {
-		return false
-	}
-	return *preferenceStyle == style
 }
 
 func getLineOfPosition(file *ast.SourceFile, pos int) int {
@@ -5170,7 +5163,7 @@ func (l *LanguageService) getSymbolCompletionFromItemData(
 		}
 	}
 
-	completionData := l.getCompletionData(ctx, ch, file, position, &UserPreferences{IncludeCompletionsForModuleExports: ptrTo(true), IncludeCompletionsForImportStatements: ptrTo(true)})
+	completionData := l.getCompletionData(ctx, ch, file, position, &UserPreferences{IncludeCompletionsForModuleExports: core.TSTrue, IncludeCompletionsForImportStatements: core.TSTrue})
 	if completionData == nil {
 		return detailsData{}
 	}
