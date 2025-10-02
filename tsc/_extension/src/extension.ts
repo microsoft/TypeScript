@@ -6,6 +6,7 @@ import {
     registerLanguageCommands,
 } from "./commands";
 import { setupStatusBar } from "./statusBar";
+import { needsExtHostRestartOnChange } from "./util";
 import { setupVersionStatusItem } from "./versionStatusItem";
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -15,14 +16,11 @@ export async function activate(context: vscode.ExtensionContext) {
     const traceOutput = vscode.window.createOutputChannel("typescript-native-preview (LSP)");
     context.subscriptions.push(output, traceOutput);
 
-    const majorVersion = parseInt(vscode.version.split(".")[0]);
-    const minorVersion = parseInt(vscode.version.split(".")[1]);
-    const needsExtHostRestartOnChange = majorVersion <= 1 && minorVersion < 105;
     let disposeLanguageFeatures: vscode.Disposable | undefined;
 
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async event => {
         if (event.affectsConfiguration("typescript.experimental.useTsgo")) {
-            if (needsExtHostRestartOnChange) {
+            if (needsExtHostRestartOnChange()) {
                 // Delay because the command to change the config setting will restart
                 // the extension host, so no need to show a message
                 setTimeout(async () => {

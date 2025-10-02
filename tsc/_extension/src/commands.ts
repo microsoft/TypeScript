@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { Client } from "./client";
+import { restartExtHostOnChangeIfNeeded } from "./util";
 
 export function registerEnablementCommands(context: vscode.ExtensionContext): void {
     context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.enable", () => {
@@ -50,7 +51,7 @@ async function updateUseTsgoSetting(enable: boolean): Promise<void> {
     }
     // Update the setting and restart the extension host (needed to change the state of the built-in TS extension)
     await tsConfig.update("experimental.useTsgo", enable, target);
-    await vscode.commands.executeCommand("workbench.action.restartExtensionHost");
+    await restartExtHostOnChangeIfNeeded();
 }
 
 /**

@@ -89,3 +89,15 @@ export function getLanguageForUri(uri: vscode.Uri): string | undefined {
             return undefined;
     }
 }
+
+export function needsExtHostRestartOnChange() {
+    const majorVersion = parseInt(vscode.version.split(".")[0]);
+    const minorVersion = parseInt(vscode.version.split(".")[1]);
+    return majorVersion <= 1 && minorVersion < 105;
+}
+
+export async function restartExtHostOnChangeIfNeeded(): Promise<void> {
+    if (needsExtHostRestartOnChange()) {
+        await vscode.commands.executeCommand("workbench.action.restartExtensionHost");
+    }
+}
