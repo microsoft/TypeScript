@@ -267,11 +267,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array__1355" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_o_1355" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
+          <Val><![CDATA[A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 断言只能作用于枚举成员、字符串、数字、布尔值、数组或对象字面量。]]></Val>
+            <Val><![CDATA["const" 断言只能作用于枚举成员、字符串、数字、布尔值、数组或对象字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3365,6 +3365,15 @@
           <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[找不到模块“{0}”或其相应的类型声明。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_or_type_declarations_for_side_effect_import_of_0_2882" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module or type declarations for side-effect import of '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到“{0}”的副作用导入的模块或类型声明。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
