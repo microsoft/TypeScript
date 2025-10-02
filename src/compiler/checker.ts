@@ -3809,7 +3809,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // There are _many_ declaration files not written with esmodules in mind that still get compiled into a format with __esModule set
             // Meaning there may be no default at runtime - however to be on the permissive side, we allow access to a synthetic default member
             // as there is no marker to indicate if the accompanying JS has `__esModule` or not, or is even native esm
-            return true;
+            return hasExportAssignmentSymbol(moduleSymbol);
         }
         // TypeScript files never have a synthetic default (as they are always emitted with an __esModule marker) _unless_ they contain an export= statement
         if (!isSourceFileJS(file)) {
