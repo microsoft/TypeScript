@@ -90,9 +90,9 @@ namespace TypeScript {
     export function instanceCompare(a: Symbol, b: Symbol) {
 >instanceCompare : Symbol(instanceCompare, Decl(parserRealSource8.ts, 29, 5))
 >a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >b : Symbol(b, Decl(parserRealSource8.ts, 31, 46))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         if (((a == null) || (!a.isInstanceProperty()))) {
 >a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
@@ -110,7 +110,7 @@ namespace TypeScript {
     export function instanceFilterStop(s: Symbol) {
 >instanceFilterStop : Symbol(instanceFilterStop, Decl(parserRealSource8.ts, 38, 5))
 >s : Symbol(s, Decl(parserRealSource8.ts, 40, 39))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         return s.isInstanceProperty();
 >s : Symbol(s, Decl(parserRealSource8.ts, 40, 39))
@@ -122,19 +122,19 @@ namespace TypeScript {
         constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
 >select : Symbol(ScopeSearchFilter.select, Decl(parserRealSource8.ts, 46, 21))
 >a : Symbol(a, Decl(parserRealSource8.ts, 46, 37))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >b : Symbol(b, Decl(parserRealSource8.ts, 46, 47))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                             public stop: (s: Symbol) =>boolean) { }
 >stop : Symbol(ScopeSearchFilter.stop, Decl(parserRealSource8.ts, 46, 68))
 >s : Symbol(s, Decl(parserRealSource8.ts, 47, 42))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public result: Symbol = null;
 >result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public reset() {
 >reset : Symbol(ScopeSearchFilter.reset, Decl(parserRealSource8.ts, 49, 37))
@@ -148,7 +148,7 @@ namespace TypeScript {
         public update(b: Symbol): boolean {
 >update : Symbol(ScopeSearchFilter.update, Decl(parserRealSource8.ts, 53, 9))
 >b : Symbol(b, Decl(parserRealSource8.ts, 55, 22))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             this.result = this.select(this.result, b);
 >this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
@@ -561,11 +561,11 @@ namespace TypeScript {
 
         var container: Symbol = null;
 >container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var localContainer: Symbol = null;
 >localContainer : Symbol(localContainer, Decl(parserRealSource8.ts, 179, 11))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         if (funcDecl.type) {
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))

@@ -989,12 +989,12 @@ function deepEquals<T>(a: T, b: T): boolean {
 >                      : ^^^^^^
 >Object.keys(a) : string[]
 >               : ^^^^^^^^
->Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^        
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->keys : (o: object) => string[]
->     : ^ ^^      ^^^^^        
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >a : T & object
 >  : ^^^^^^^^^^
 >length : number
@@ -1003,12 +1003,12 @@ function deepEquals<T>(a: T, b: T): boolean {
 >                      : ^^^^^^
 >Object.keys(b) : string[]
 >               : ^^^^^^^^
->Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^        
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->keys : (o: object) => string[]
->     : ^ ^^      ^^^^^        
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >b : T & object
 >  : ^^^^^^^^^^
 >length : number
