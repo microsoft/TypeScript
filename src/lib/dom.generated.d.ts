@@ -2363,8 +2363,8 @@ interface ULongRange {
 }
 
 interface URLPatternComponentResult {
-    groups?: Record<string, string | undefined>;
-    input?: string;
+    groups: Record<string, string | undefined>;
+    input: string;
 }
 
 interface URLPatternInit {
@@ -2384,15 +2384,15 @@ interface URLPatternOptions {
 }
 
 interface URLPatternResult {
-    hash?: URLPatternComponentResult;
-    hostname?: URLPatternComponentResult;
-    inputs?: URLPatternInput[];
-    password?: URLPatternComponentResult;
-    pathname?: URLPatternComponentResult;
-    port?: URLPatternComponentResult;
-    protocol?: URLPatternComponentResult;
-    search?: URLPatternComponentResult;
-    username?: URLPatternComponentResult;
+    hash: URLPatternComponentResult;
+    hostname: URLPatternComponentResult;
+    inputs: URLPatternInput[];
+    password: URLPatternComponentResult;
+    pathname: URLPatternComponentResult;
+    port: URLPatternComponentResult;
+    protocol: URLPatternComponentResult;
+    search: URLPatternComponentResult;
+    username: URLPatternComponentResult;
 }
 
 interface UnderlyingByteSource {
