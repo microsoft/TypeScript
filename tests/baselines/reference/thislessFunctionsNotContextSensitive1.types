@@ -1,0 +1,926 @@
+//// [tests/cases/compiler/thislessFunctionsNotContextSensitive1.ts] ////
+
+=== thislessFunctionsNotContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62204
+
+declare function TestConfig<const TConfig extends { a?: any; b?: any; c?: any }>(
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>           : ^^^^^^^       ^^^^^^^^^                              ^^      ^^       ^^    ^^                                                           ^^^^^    
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : any
+>  : ^^^
+
+  config: TConfig,
+>config : TConfig
+>       : ^^^^^^^
+
+  test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false,
+>test : Exclude<keyof TConfig, "a" | "b"> extends never ? true : false
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+): void;
+
+TestConfig(
+>TestConfig(  {    a: "hello",    b: function () {      return 123;    },  },  true,) : void
+>                                                                                     : ^^^^
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>           : ^^^^^^^       ^^^^^^^^^                              ^^      ^^       ^^    ^^                                                           ^^^^^    
+  {
+>{    a: "hello",    b: function () {      return 123;    },  } : { a: "hello"; b: () => 123; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: "hello",
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    b: function () {
+>b : () => 123
+>  : ^^^^^^^^^
+>function () {      return 123;    } : () => 123
+>                                    : ^^^^^^^^^
+
+      return 123;
+>123 : 123
+>    : ^^^
+
+    },
+  },
+  true,
+>true : true
+>     : ^^^^
+
+);
+
+TestConfig(
+>TestConfig(  {    a: "hello",    b: function () {      return 123;    },  },  false, // error) : void
+>                                                                                               : ^^^^
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>           : ^^^^^^^       ^^^^^^^^^                              ^^      ^^       ^^    ^^                                                           ^^^^^    
+  {
+>{    a: "hello",    b: function () {      return 123;    },  } : { a: "hello"; b: () => 123; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: "hello",
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    b: function () {
+>b : () => 123
+>  : ^^^^^^^^^
+>function () {      return 123;    } : () => 123
+>                                    : ^^^^^^^^^
+
+      return 123;
+>123 : 123
+>    : ^^^
+
+    },
+  },
+  false, // error
+>false : false
+>      : ^^^^^
+
+);
+
+// https://github.com/microsoft/TypeScript/issues/60986
+interface SubscribeFieldOptions<Event> {
+  subscribe: () => Event;
+>subscribe : () => Event
+>          : ^^^^^^     
+
+  resolve: (event: Event) => number;
+>resolve : (event: Event) => number
+>        : ^     ^^     ^^^^^      
+>event : Event
+>      : ^^^^^
+}
+
+declare function defineOptions<Event>(
+>defineOptions : <Event>(options: SubscribeFieldOptions<Event>) => void
+>              : ^     ^^       ^^                            ^^^^^    
+
+  options: SubscribeFieldOptions<Event>,
+>options : SubscribeFieldOptions<Event>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): void;
+
+defineOptions({
+>defineOptions({  resolve: (event) => event, // number  subscribe() {    return 123;  },}) : void
+>                                                                                          : ^^^^
+>defineOptions : <Event>(options: SubscribeFieldOptions<Event>) => void
+>              : ^     ^^       ^^                            ^^^^^    
+>{  resolve: (event) => event, // number  subscribe() {    return 123;  },} : { resolve: (event: number) => number; subscribe(): number; }
+>                                                                           : ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  resolve: (event) => event, // number
+>resolve : (event: number) => number
+>        : ^     ^^^^^^^^^^^^^^^^^^^
+>(event) => event : (event: number) => number
+>                 : ^     ^^^^^^^^^^^^^^^^^^^
+>event : number
+>      : ^^^^^^
+>event : number
+>      : ^^^^^^
+
+  subscribe() {
+>subscribe : () => number
+>          : ^^^^^^^^^^^^
+
+    return 123;
+>123 : 123
+>    : ^^^
+
+  },
+});
+
+defineOptions({
+>defineOptions({  resolve: (event) => event, // number  subscribe: function () {    return 123;  },}) : void
+>                                                                                                     : ^^^^
+>defineOptions : <Event>(options: SubscribeFieldOptions<Event>) => void
+>              : ^     ^^       ^^                            ^^^^^    
+>{  resolve: (event) => event, // number  subscribe: function () {    return 123;  },} : { resolve: (event: number) => number; subscribe: () => number; }
+>                                                                                      : ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  resolve: (event) => event, // number
+>resolve : (event: number) => number
+>        : ^     ^^^^^^^^^^^^^^^^^^^
+>(event) => event : (event: number) => number
+>                 : ^     ^^^^^^^^^^^^^^^^^^^
+>event : number
+>      : ^^^^^^
+>event : number
+>      : ^^^^^^
+
+  subscribe: function () {
+>subscribe : () => number
+>          : ^^^^^^^^^^^^
+>function () {    return 123;  } : () => number
+>                                : ^^^^^^^^^^^^
+
+    return 123;
+>123 : 123
+>    : ^^^
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/58630
+
+export type StateFunction<State> = (s: State, ...args: any[]) => any;
+>StateFunction : StateFunction<State>
+>              : ^^^^^^^^^^^^^^^^^^^^
+>s : State
+>  : ^^^^^
+>args : any[]
+>     : ^^^^^
+
+export type VuexStoreOptions<State, Modules> = {
+>VuexStoreOptions : VuexStoreOptions<State, Modules>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  state?: State | (() => State) | { (): State };
+>state : State | (() => State) | (() => State) | undefined
+>      : ^^^^^^^^^^^^^^^     ^^^^^^^^^^^     ^^^^^^^^^^^^^
+
+  mutations?: Record<string, StateFunction<State>>;
+>mutations : Record<string, StateFunction<State>> | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  modules?: {
+>modules : { [k in keyof Modules]: VuexStoreOptions<Modules[k], never>; } | undefined
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [k in keyof Modules]: VuexStoreOptions<Modules[k], never>;
+  };
+};
+
+export function createStore<
+>createStore : <State extends Record<string, unknown>, Modules extends Record<string, Record<string, unknown>>>(options: VuexStoreOptions<State, Modules>) => void
+>            : ^     ^^^^^^^^^                       ^^       ^^^^^^^^^                                       ^^       ^^                                ^^^^^^^^^
+
+  State extends Record<string, unknown>,
+  Modules extends Record<string, Record<string, unknown>>,
+>(options: VuexStoreOptions<State, Modules>) {}
+>options : VuexStoreOptions<State, Modules>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const store = createStore({
+>store : void
+>      : ^^^^
+>createStore({  state() {    return { bar2: 1 };  },  mutations: { inc: (state123) => state123.bar2++ },  modules: {    foo: {      state() {        return { bar2: 1 };      },      mutations: { inc: (state) => state.bar2++ },    },  },}) : void
+>                                                                                                                                                                                                                                              : ^^^^
+>createStore : <State extends Record<string, unknown>, Modules extends Record<string, Record<string, unknown>>>(options: VuexStoreOptions<State, Modules>) => void
+>            : ^     ^^^^^^^^^                       ^^       ^^^^^^^^^                                       ^^       ^^                                ^^^^^^^^^
+>{  state() {    return { bar2: 1 };  },  mutations: { inc: (state123) => state123.bar2++ },  modules: {    foo: {      state() {        return { bar2: 1 };      },      mutations: { inc: (state) => state.bar2++ },    },  },} : { state(): { bar2: number; }; mutations: { inc: (state123: { bar2: number; }) => number; }; modules: { foo: { state(): { bar2: number; }; mutations: { inc: (state: { bar2: number; }) => number; }; }; }; }
+>                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  state() {
+>state : () => { bar2: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    return { bar2: 1 };
+>{ bar2: 1 } : { bar2: number; }
+>            : ^^^^^^^^^^^^^^^^^
+>bar2 : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+
+  },
+  mutations: { inc: (state123) => state123.bar2++ },
+>mutations : { inc: (state123: { bar2: number; }) => number; }
+>          : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ inc: (state123) => state123.bar2++ } : { inc: (state123: { bar2: number; }) => number; }
+>                                       : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inc : (state123: { bar2: number; }) => number
+>    : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(state123) => state123.bar2++ : (state123: { bar2: number; }) => number
+>                              : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state123 : { bar2: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>state123.bar2++ : number
+>                : ^^^^^^
+>state123.bar2 : number
+>              : ^^^^^^
+>state123 : { bar2: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>bar2 : number
+>     : ^^^^^^
+
+  modules: {
+>modules : { foo: { state(): { bar2: number; }; mutations: { inc: (state: { bar2: number; }) => number; }; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: {      state() {        return { bar2: 1 };      },      mutations: { inc: (state) => state.bar2++ },    },  } : { foo: { state(): { bar2: number; }; mutations: { inc: (state: { bar2: number; }) => number; }; }; }
+>                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: {
+>foo : { state(): { bar2: number; }; mutations: { inc: (state: { bar2: number; }) => number; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      state() {        return { bar2: 1 };      },      mutations: { inc: (state) => state.bar2++ },    } : { state(): { bar2: number; }; mutations: { inc: (state: { bar2: number; }) => number; }; }
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      state() {
+>state : () => { bar2: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+        return { bar2: 1 };
+>{ bar2: 1 } : { bar2: number; }
+>            : ^^^^^^^^^^^^^^^^^
+>bar2 : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+
+      },
+      mutations: { inc: (state) => state.bar2++ },
+>mutations : { inc: (state: { bar2: number; }) => number; }
+>          : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ inc: (state) => state.bar2++ } : { inc: (state: { bar2: number; }) => number; }
+>                                 : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inc : (state: { bar2: number; }) => number
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(state) => state.bar2++ : (state: { bar2: number; }) => number
+>                        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : { bar2: number; }
+>      : ^^^^^^^^^^^^^^^^^
+>state.bar2++ : number
+>             : ^^^^^^
+>state.bar2 : number
+>           : ^^^^^^
+>state : { bar2: number; }
+>      : ^^^^^^^^^^^^^^^^^
+>bar2 : number
+>     : ^^^^^^
+
+    },
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/57572
+
+type C = <Methods, Attached = (methods: Methods) => void>(options: {
+>C : C
+>  : ^
+>methods : Methods
+>        : ^^^^^^^
+>options : { methods: Methods; attached: Attached; }
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^        ^^^
+
+  methods: Methods;
+>methods : Methods
+>        : ^^^^^^^
+
+  attached: Attached;
+>attached : Attached
+>         : ^^^^^^^^
+
+}) => any;
+
+var Component: C = () => {};
+>Component : C
+>          : ^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+Component({
+>Component({  attached(methods) {    methods.bbb(); // ok  },  methods: {    bbb() {},  },}) : any
+>                                                                                            : ^^^
+>Component : C
+>          : ^
+>{  attached(methods) {    methods.bbb(); // ok  },  methods: {    bbb() {},  },} : { attached(methods: { bbb(): void; }): void; methods: { bbb(): void; }; }
+>                                                                                 : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  attached(methods) {
+>attached : (methods: { bbb(): void; }) => void
+>         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>methods : { bbb(): void; }
+>        : ^^^^^^^^^^^^^^^^
+
+    methods.bbb(); // ok
+>methods.bbb() : void
+>              : ^^^^
+>methods.bbb : () => void
+>            : ^^^^^^^^^^
+>methods : { bbb(): void; }
+>        : ^^^^^^^^^^^^^^^^
+>bbb : () => void
+>    : ^^^^^^^^^^
+
+  },
+  methods: {
+>methods : { bbb(): void; }
+>        : ^^^^^^^^^^^^^^^^
+>{    bbb() {},  } : { bbb(): void; }
+>                  : ^^^^^^^^^^^^^^^^
+
+    bbb() {},
+>bbb : () => void
+>    : ^^^^^^^^^^
+
+  },
+});
+
+Component({
+>Component({  attached(methods) {    methods.bbb(); // ok  },  methods: {    bbb: () => {},  },}) : any
+>                                                                                                 : ^^^
+>Component : C
+>          : ^
+>{  attached(methods) {    methods.bbb(); // ok  },  methods: {    bbb: () => {},  },} : { attached(methods: { bbb: () => void; }): void; methods: { bbb: () => void; }; }
+>                                                                                      : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  attached(methods) {
+>attached : (methods: { bbb: () => void; }) => void
+>         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>methods : { bbb: () => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+    methods.bbb(); // ok
+>methods.bbb() : void
+>              : ^^^^
+>methods.bbb : () => void
+>            : ^^^^^^^^^^
+>methods : { bbb: () => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>bbb : () => void
+>    : ^^^^^^^^^^
+
+  },
+  methods: {
+>methods : { bbb: () => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>{    bbb: () => {},  } : { bbb: () => void; }
+>                       : ^^^^^^^^^^^^^^^^^^^^
+
+    bbb: () => {},
+>bbb : () => void
+>    : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/56067
+
+declare function create56067<
+>create56067 : <State extends Record<string, any>, Data extends Record<string, any>, Actions extends (state: State, data: Data) => Record<string, any>>(args: { getState: () => State; actions: Actions; getData: () => Data; }) => void
+>            : ^     ^^^^^^^^^                   ^^    ^^^^^^^^^                   ^^       ^^^^^^^^^                                                 ^^    ^^                                                                 ^^^^^    
+
+  State extends Record<string, any>,
+  Data extends Record<string, any>,
+  Actions extends (state: State, data: Data) => Record<string, any>,
+>state : State
+>      : ^^^^^
+>data : Data
+>     : ^^^^
+
+>(args: { getState: () => State; actions: Actions; getData: () => Data }): void;
+>args : { getState: () => State; actions: Actions; getData: () => Data; }
+>     : ^^^^^^^^^^^^           ^^^^^^^^^^^       ^^^^^^^^^^^          ^^^
+>getState : () => State
+>         : ^^^^^^     
+>actions : Actions
+>        : ^^^^^^^
+>getData : () => Data
+>        : ^^^^^^    
+
+create56067({
+>create56067({  getState() {    return { a: 1 };  },  getData: () => {    return { b: 2 };  },  actions(state, data) {    state // { a: number }    data; // { b: number }    return {      z: 1,    };  },}) : void
+>                                                                                                                                                                                                             : ^^^^
+>create56067 : <State extends Record<string, any>, Data extends Record<string, any>, Actions extends (state: State, data: Data) => Record<string, any>>(args: { getState: () => State; actions: Actions; getData: () => Data; }) => void
+>            : ^     ^^^^^^^^^                   ^^    ^^^^^^^^^                   ^^       ^^^^^^^^^                                                 ^^    ^^                                                                 ^^^^^    
+>{  getState() {    return { a: 1 };  },  getData: () => {    return { b: 2 };  },  actions(state, data) {    state // { a: number }    data; // { b: number }    return {      z: 1,    };  },} : { getState(): { a: number; }; getData: () => { b: number; }; actions(state: { a: number; }, data: { b: number; }): { z: number; }; }
+>                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  getState() {
+>getState : () => { a: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^
+
+    return { a: 1 };
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+  },
+  getData: () => {
+>getData : () => { b: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>() => {    return { b: 2 };  } : () => { b: number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^
+
+    return { b: 2 };
+>{ b: 2 } : { b: number; }
+>         : ^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+  },
+  actions(state, data) {
+>actions : (state: { a: number; }, data: { b: number; }) => { z: number; }
+>        : ^     ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : { a: number; }
+>      : ^^^^^^^^^^^^^^
+>data : { b: number; }
+>     : ^^^^^^^^^^^^^^
+
+    state // { a: number }
+>state : { a: number; }
+>      : ^^^^^^^^^^^^^^
+
+    data; // { b: number }
+>data : { b: number; }
+>     : ^^^^^^^^^^^^^^
+
+    return {
+>{      z: 1,    } : { z: number; }
+>                  : ^^^^^^^^^^^^^^
+
+      z: 1,
+>z : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    };
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/55489
+type NonStringIterable<T> = 
+>NonStringIterable : NonStringIterable<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+  T extends string ? never : T extends Iterable<any> ? T : never;
+
+declare function doSomething<T>(value: NonStringIterable<T>): T;
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>value : NonStringIterable<T>
+>      : ^^^^^^^^^^^^^^^^^^^^
+
+const o = { foo() {} };
+>o : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
+>{ foo() {} } : { foo(): void; }
+>             : ^^^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+doSomething('value'); // error
+>doSomething('value') : "value"
+>                     : ^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>'value' : "value"
+>        : ^^^^^^^
+
+doSomething(['v']); // ok
+>doSomething(['v']) : string[]
+>                   : ^^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>['v'] : string[]
+>      : ^^^^^^^^
+>'v' : "v"
+>    : ^^^
+
+doSomething([o]); // ok
+>doSomething([o]) : { foo(): void; }[]
+>                 : ^^^^^^^^^^^^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>[o] : { foo(): void; }[]
+>    : ^^^^^^^^^^^^^^^^^^
+>o : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
+
+doSomething([{ foo() {} }]); // ok
+>doSomething([{ foo() {} }]) : { foo(): void; }[]
+>                            : ^^^^^^^^^^^^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>[{ foo() {} }] : { foo(): void; }[]
+>               : ^^^^^^^^^^^^^^^^^^
+>{ foo() {} } : { foo(): void; }
+>             : ^^^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/55124
+type Values<T> = T[keyof T];
+>Values : Values<T>
+>       : ^^^^^^^^^
+
+type ExtractFields<Options> = Values<{
+>ExtractFields : ExtractFields<Options>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof Options]: Options[K] extends object ? keyof Options[K] : never;
+}>;
+type SetType<Options> = {
+>SetType : SetType<Options>
+>        : ^^^^^^^^^^^^^^^^
+
+  [key: string]: any;
+>key : string
+>    : ^^^^^^
+
+  target?: ExtractFields<Options>;
+>target : ExtractFields<Options> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function test55124<OptionsData extends SetType<OptionsData>>(
+>test55124 : <OptionsData extends SetType<OptionsData>>(options: OptionsData) => void
+>          : ^           ^^^^^^^^^                    ^^       ^^           ^^^^^    
+
+  options: OptionsData,
+>options : OptionsData
+>        : ^^^^^^^^^^^
+
+): void;
+
+test55124({
+>test55124({  target: "$test4", // ok  data1: {    $test1: 111,    $test2: null,  },  data2: {    $test3: {},    $test4: () => {},    $test5() {},  },}) : void
+>                                                                                                                                                        : ^^^^
+>test55124 : <OptionsData extends SetType<OptionsData>>(options: OptionsData) => void
+>          : ^           ^^^^^^^^^                    ^^       ^^           ^^^^^    
+>{  target: "$test4", // ok  data1: {    $test1: 111,    $test2: null,  },  data2: {    $test3: {},    $test4: () => {},    $test5() {},  },} : { target: "$test4"; data1: { $test1: number; $test2: null; }; data2: { $test3: {}; $test4: () => void; $test5(): void; }; }
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  target: "$test4", // ok
+>target : "$test4"
+>       : ^^^^^^^^
+>"$test4" : "$test4"
+>         : ^^^^^^^^
+
+  data1: {
+>data1 : { $test1: number; $test2: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test1: 111,    $test2: null,  } : { $test1: number; $test2: null; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test1: 111,
+>$test1 : number
+>       : ^^^^^^
+>111 : 111
+>    : ^^^
+
+    $test2: null,
+>$test2 : null
+>       : ^^^^
+
+  },
+  data2: {
+>data2 : { $test3: {}; $test4: () => void; $test5(): void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test3: {},    $test4: () => {},    $test5() {},  } : { $test3: {}; $test4: () => void; $test5(): void; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test3: {},
+>$test3 : {}
+>       : ^^
+>{} : {}
+>   : ^^
+
+    $test4: () => {},
+>$test4 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    $test5() {},
+>$test5 : () => void
+>       : ^^^^^^^^^^
+
+  },
+});
+
+test55124({
+>test55124({  target: "$test6", // error  data1: {    $test1: 111,    $test2: null,  },  data2: {    $test3: {},    $test4: () => {},    $test5() {},  },}) : void
+>                                                                                                                                                           : ^^^^
+>test55124 : <OptionsData extends SetType<OptionsData>>(options: OptionsData) => void
+>          : ^           ^^^^^^^^^                    ^^       ^^           ^^^^^    
+>{  target: "$test6", // error  data1: {    $test1: 111,    $test2: null,  },  data2: {    $test3: {},    $test4: () => {},    $test5() {},  },} : { target: "$test6"; data1: { $test1: number; $test2: null; }; data2: { $test3: {}; $test4: () => void; $test5(): void; }; }
+>                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  target: "$test6", // error
+>target : "$test6"
+>       : ^^^^^^^^
+>"$test6" : "$test6"
+>         : ^^^^^^^^
+
+  data1: {
+>data1 : { $test1: number; $test2: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test1: 111,    $test2: null,  } : { $test1: number; $test2: null; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test1: 111,
+>$test1 : number
+>       : ^^^^^^
+>111 : 111
+>    : ^^^
+
+    $test2: null,
+>$test2 : null
+>       : ^^^^
+
+  },
+  data2: {
+>data2 : { $test3: {}; $test4: () => void; $test5(): void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test3: {},    $test4: () => {},    $test5() {},  } : { $test3: {}; $test4: () => void; $test5(): void; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test3: {},
+>$test3 : {}
+>       : ^^
+>{} : {}
+>   : ^^
+
+    $test4: () => {},
+>$test4 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    $test5() {},
+>$test5 : () => void
+>       : ^^^^^^^^^^
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/53924
+function test53924<T = unknown>(options: { a: (c: T) => void; b: () => T }) {}
+>test53924 : <T = unknown>(options: { a: (c: T) => void; b: () => T; }) => void
+>          : ^ ^^^^^^^^^^^^       ^^                                  ^^^^^^^^^
+>options : { a: (c: T) => void; b: () => T; }
+>        : ^^^^^              ^^^^^       ^^^
+>a : (c: T) => void
+>  : ^ ^^ ^^^^^    
+>c : T
+>  : ^
+>b : () => T
+>  : ^^^^^^ 
+
+test53924({
+>test53924({  a: (c) => {    c; // number;  },  b: () => 123,}) : void
+>                                                               : ^^^^
+>test53924 : <T = unknown>(options: { a: (c: T) => void; b: () => T; }) => void
+>          : ^ ^^^^^^^^^^^^       ^^                                  ^^^^^^^^^
+>{  a: (c) => {    c; // number;  },  b: () => 123,} : { a: (c: number) => void; b: () => number; }
+>                                                    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (c) => {
+>a : (c: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
+>(c) => {    c; // number;  } : (c: number) => void
+>                             : ^ ^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+
+    c; // number;
+>c : number
+>  : ^^^^^^
+
+  },
+  b: () => 123,
+>b : () => number
+>  : ^^^^^^^^^^^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+});
+
+test53924({
+>test53924({  b: () => 123,  a: (c) => {    return c; // number  },}) : void
+>                                                                     : ^^^^
+>test53924 : <T = unknown>(options: { a: (c: T) => void; b: () => T; }) => void
+>          : ^ ^^^^^^^^^^^^       ^^                                  ^^^^^^^^^
+>{  b: () => 123,  a: (c) => {    return c; // number  },} : { b: () => number; a: (c: number) => number; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+  b: () => 123,
+>b : () => number
+>  : ^^^^^^^^^^^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+  a: (c) => {
+>a : (c: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
+>(c) => {    return c; // number  } : (c: number) => number
+>                                   : ^ ^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+
+    return c; // number
+>c : number
+>  : ^^^^^^
+
+  },
+});
+
+test53924({
+>test53924({  b() {    return 123;  },  a(c) {    return c; // number  },}) : void
+>                                                                           : ^^^^
+>test53924 : <T = unknown>(options: { a: (c: T) => void; b: () => T; }) => void
+>          : ^ ^^^^^^^^^^^^       ^^                                  ^^^^^^^^^
+>{  b() {    return 123;  },  a(c) {    return c; // number  },} : { b(): number; a(c: number): number; }
+>                                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  b() {
+>b : () => number
+>  : ^^^^^^^^^^^^
+
+    return 123;
+>123 : 123
+>    : ^^^
+
+  },
+  a(c) {
+>a : (c: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+
+    return c; // number
+>c : number
+>  : ^^^^^^
+
+  },
+});
+
+test53924({
+>test53924({  a(c) {    return c; // number  },  b() {    return 123;  },}) : void
+>                                                                           : ^^^^
+>test53924 : <T = unknown>(options: { a: (c: T) => void; b: () => T; }) => void
+>          : ^ ^^^^^^^^^^^^       ^^                                  ^^^^^^^^^
+>{  a(c) {    return c; // number  },  b() {    return 123;  },} : { a(c: number): number; b(): number; }
+>                                                                : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a(c) {
+>a : (c: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+
+    return c; // number
+>c : number
+>  : ^^^^^^
+
+  },
+  b() {
+>b : () => number
+>  : ^^^^^^^^^^^^
+
+    return 123;
+>123 : 123
+>    : ^^^
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/50258
+declare function monitor<T extends (...args: any) => any>(
+>monitor : <T extends (...args: any) => any>(extractor: (...args: Parameters<T>) => Record<string, unknown>, executor: T) => (...args: Parameters<T>) => ReturnType<T>
+>        : ^ ^^^^^^^^^                     ^^         ^^                                                   ^^        ^^ ^^^^^                                         
+>args : any
+>     : ^^^
+
+  extractor: (...args: Parameters<T>) => Record<string, unknown>,
+>extractor : (...args: Parameters<T>) => Record<string, unknown>
+>          : ^^^^    ^^             ^^^^^                       
+>args : Parameters<T>
+>     : ^^^^^^^^^^^^^
+
+  executor: T,
+>executor : T
+>         : ^
+
+): (...args: Parameters<T>) => ReturnType<T>;
+>args : Parameters<T>
+>     : ^^^^^^^^^^^^^
+
+monitor(
+>monitor(  (p) => ({ p }), // { p: number }  (p: number) => p,) : (p: number) => number
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^
+>monitor : <T extends (...args: any) => any>(extractor: (...args: Parameters<T>) => Record<string, unknown>, executor: T) => (...args: Parameters<T>) => ReturnType<T>
+>        : ^ ^^^^^^^^^                     ^^         ^^                                                   ^^        ^^ ^^^^^                                         
+
+  (p) => ({ p }), // { p: number }
+>(p) => ({ p }) : (p: number) => { p: number; }
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+>({ p }) : { p: number; }
+>        : ^^^^^^^^^^^^^^
+>{ p } : { p: number; }
+>      : ^^^^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+  (p: number) => p,
+>(p: number) => p : (p: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+>p : number
+>  : ^^^^^^
+
+);
+monitor(
+>monitor(  (p) => ({ p }), // { p: number }  function (p: number) {    return p;  },) : (p: number) => number
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^
+>monitor : <T extends (...args: any) => any>(extractor: (...args: Parameters<T>) => Record<string, unknown>, executor: T) => (...args: Parameters<T>) => ReturnType<T>
+>        : ^ ^^^^^^^^^                     ^^         ^^                                                   ^^        ^^ ^^^^^                                         
+
+  (p) => ({ p }), // { p: number }
+>(p) => ({ p }) : (p: number) => { p: number; }
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+>({ p }) : { p: number; }
+>        : ^^^^^^^^^^^^^^
+>{ p } : { p: number; }
+>      : ^^^^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+  function (p: number) {
+>function (p: number) {    return p;  } : (p: number) => number
+>                                       : ^ ^^      ^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+    return p;
+>p : number
+>  : ^^^^^^
+
+  },
+);
+
