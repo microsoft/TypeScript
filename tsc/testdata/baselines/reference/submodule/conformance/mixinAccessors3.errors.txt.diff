@@ -1,0 +1,17 @@
+--- old.mixinAccessors3.errors.txt
++++ new.mixinAccessors3.errors.txt
+@@= skipped -0, +0 lines =@@
+-mixinAccessors3.ts(15,7): error TS2611: 'name' is defined as a property in class 'mixin<typeof BaseClass>.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
++mixinAccessors3.ts(15,7): error TS2611: 'name' is defined as a property in class 'mixin.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
+
+
+ ==== mixinAccessors3.ts (1 errors) ====
+@@= skipped -17, +17 lines =@@
+     class MyClass extends mixin(BaseClass) { 
+       get name() {
+           ~~~~
+-!!! error TS2611: 'name' is defined as a property in class 'mixin<typeof BaseClass>.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
++!!! error TS2611: 'name' is defined as a property in class 'mixin.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
+         return "";
+       }
+     }

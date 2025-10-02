@@ -1,12 +1,12 @@
 --- old.exportDefaultClassNameWithObject.errors.txt
 +++ new.exportDefaultClassNameWithObject.errors.txt
 @@= skipped -0, +0 lines =@@
--exportDefaultClassNameWithObject.ts(1,22): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
+-exportDefaultClassNameWithObject.ts(1,22): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
 -
 -
 -==== exportDefaultClassNameWithObject.ts (1 errors) ====
 -    export default class Object {}
 -                         ~~~~~~
--!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
+-!!! error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
 -    
 +<no content>

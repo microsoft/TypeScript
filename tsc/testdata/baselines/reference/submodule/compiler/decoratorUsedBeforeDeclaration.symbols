@@ -1,0 +1,235 @@
+//// [tests/cases/compiler/decoratorUsedBeforeDeclaration.ts] ////
+
+=== decoratorUsedBeforeDeclaration.ts ===
+@lambda(Enum.No)
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+@deco(Enum.No)
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+class Greeter {
+>Greeter : Symbol(Greeter, Decl(decoratorUsedBeforeDeclaration.ts, 0, 0))
+
+  @lambda(Enum.No)
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  @deco(Enum.No)
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  greeting: string;
+>greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+
+  constructor(message: string) {
+>message : Symbol(message, Decl(decoratorUsedBeforeDeclaration.ts, 7, 14))
+
+    this.greeting = message;
+>this.greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+>this : Symbol(Greeter, Decl(decoratorUsedBeforeDeclaration.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+>message : Symbol(message, Decl(decoratorUsedBeforeDeclaration.ts, 7, 14))
+  }
+
+  @lambda(Enum.No)
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  @deco(Enum.No)
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  greet() {
+>greet : Symbol(Greeter.greet, Decl(decoratorUsedBeforeDeclaration.ts, 9, 3))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+>this : Symbol(Greeter, Decl(decoratorUsedBeforeDeclaration.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+  }
+
+  @lambda
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+
+  @deco
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+
+  greet1() {
+>greet1 : Symbol(Greeter.greet1, Decl(decoratorUsedBeforeDeclaration.ts, 15, 3))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+>this : Symbol(Greeter, Decl(decoratorUsedBeforeDeclaration.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+  }
+
+  greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+>greet2 : Symbol(Greeter.greet2, Decl(decoratorUsedBeforeDeclaration.ts, 21, 3))
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>param : Symbol(param, Decl(decoratorUsedBeforeDeclaration.ts, 23, 9))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+>this : Symbol(Greeter, Decl(decoratorUsedBeforeDeclaration.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+  }
+
+  greet3(@lambda @deco param) {
+>greet3 : Symbol(Greeter.greet3, Decl(decoratorUsedBeforeDeclaration.ts, 25, 3))
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>param : Symbol(param, Decl(decoratorUsedBeforeDeclaration.ts, 27, 9))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+>this : Symbol(Greeter, Decl(decoratorUsedBeforeDeclaration.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 2, 15))
+  }
+}
+
+function deco(...args: any[]): any {}
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>args : Symbol(args, Decl(decoratorUsedBeforeDeclaration.ts, 32, 14))
+
+enum Enum {
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+
+  No = 0,
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  Yes = 1,
+>Yes : Symbol(Enum.Yes, Decl(decoratorUsedBeforeDeclaration.ts, 35, 9))
+}
+
+const lambda = (...args: any[]): any => {};
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>args : Symbol(args, Decl(decoratorUsedBeforeDeclaration.ts, 39, 16))
+
+@lambda(Enum.No)
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+@deco(Enum.No)
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+class Greeter1 {
+>Greeter1 : Symbol(Greeter1, Decl(decoratorUsedBeforeDeclaration.ts, 39, 43))
+
+  @lambda(Enum.No)
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  @deco(Enum.No)
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  greeting: string;
+>greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+
+  constructor(message: string) {
+>message : Symbol(message, Decl(decoratorUsedBeforeDeclaration.ts, 48, 14))
+
+    this.greeting = message;
+>this.greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+>this : Symbol(Greeter1, Decl(decoratorUsedBeforeDeclaration.ts, 39, 43))
+>greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+>message : Symbol(message, Decl(decoratorUsedBeforeDeclaration.ts, 48, 14))
+  }
+
+  @lambda(Enum.No)
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  @deco(Enum.No)
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+
+  greet() {
+>greet : Symbol(Greeter1.greet, Decl(decoratorUsedBeforeDeclaration.ts, 50, 3))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+>this : Symbol(Greeter1, Decl(decoratorUsedBeforeDeclaration.ts, 39, 43))
+>greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+  }
+
+  @lambda
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+
+  @deco
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+
+  greet1() {
+>greet1 : Symbol(Greeter1.greet1, Decl(decoratorUsedBeforeDeclaration.ts, 56, 3))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+>this : Symbol(Greeter1, Decl(decoratorUsedBeforeDeclaration.ts, 39, 43))
+>greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+  }
+
+  greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+>greet2 : Symbol(Greeter1.greet2, Decl(decoratorUsedBeforeDeclaration.ts, 62, 3))
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>Enum : Symbol(Enum, Decl(decoratorUsedBeforeDeclaration.ts, 32, 37))
+>No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))
+>param : Symbol(param, Decl(decoratorUsedBeforeDeclaration.ts, 64, 9))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+>this : Symbol(Greeter1, Decl(decoratorUsedBeforeDeclaration.ts, 39, 43))
+>greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+  }
+
+  greet3(@lambda @deco param) {
+>greet3 : Symbol(Greeter1.greet3, Decl(decoratorUsedBeforeDeclaration.ts, 66, 3))
+>lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
+>deco : Symbol(deco, Decl(decoratorUsedBeforeDeclaration.ts, 30, 1))
+>param : Symbol(param, Decl(decoratorUsedBeforeDeclaration.ts, 68, 9))
+
+    return "Hello, " + this.greeting;
+>this.greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+>this : Symbol(Greeter1, Decl(decoratorUsedBeforeDeclaration.ts, 39, 43))
+>greeting : Symbol(Greeter1.greeting, Decl(decoratorUsedBeforeDeclaration.ts, 43, 16))
+  }
+}
+

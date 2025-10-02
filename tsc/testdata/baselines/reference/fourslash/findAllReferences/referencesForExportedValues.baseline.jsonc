@@ -1,0 +1,50 @@
+// === findAllReferences ===
+// === /referencesForExportedValues.ts ===
+// module M {
+//     /*FIND ALL REFS*/export var variable = 0;
+// 
+//     // local use
+//     var x = variable;
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /referencesForExportedValues.ts ===
+// module M {
+//     export var /*FIND ALL REFS*/[|variable|] = 0;
+// 
+//     // local use
+//     var x = [|variable|];
+// }
+// 
+// // external use
+// M.[|variable|]
+
+
+
+// === findAllReferences ===
+// === /referencesForExportedValues.ts ===
+// module M {
+//     export var [|variable|] = 0;
+// 
+//     // local use
+//     var x = /*FIND ALL REFS*/[|variable|];
+// }
+// 
+// // external use
+// M.[|variable|]
+
+
+
+// === findAllReferences ===
+// === /referencesForExportedValues.ts ===
+// module M {
+//     export var [|variable|] = 0;
+// 
+//     // local use
+//     var x = [|variable|];
+// }
+// 
+// // external use
+// M./*FIND ALL REFS*/[|variable|]

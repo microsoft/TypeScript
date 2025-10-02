@@ -472,7 +472,7 @@ var An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enable
 
 var An_export_default_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration = &Message{code: 1285, category: CategoryError, key: "An_export_default_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_1285", text: "An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration."}
 
-var ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled = &Message{code: 1286, category: CategoryError, key: "ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled_1286", text: "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled."}
+var ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax = &Message{code: 1286, category: CategoryError, key: "ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_1286", text: "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'."}
 
 var A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled = &Message{code: 1287, category: CategoryError, key: "A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimM_1287", text: "A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled."}
 
@@ -486,9 +486,11 @@ var X_0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_e
 
 var X_0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default = &Message{code: 1292, category: CategoryError, key: "_0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enable_1292", text: "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'."}
 
-var ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve = &Message{code: 1293, category: CategoryError, key: "ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293", text: "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'."}
+var ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve = &Message{code: 1293, category: CategoryError, key: "ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293", text: "ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'."}
 
 var This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled = &Message{code: 1294, category: CategoryError, key: "This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled_1294", text: "This syntax is not allowed when 'erasableSyntaxOnly' is enabled."}
+
+var ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjust_the_type_field_in_the_nearest_package_json_to_make_this_file_an_ECMAScript_module_or_adjust_your_verbatimModuleSyntax_module_and_moduleResolution_settings_in_TypeScript = &Message{code: 1295, category: CategoryError, key: "ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjus_1295", text: "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript."}
 
 var X_with_statements_are_not_allowed_in_an_async_function_block = &Message{code: 1300, category: CategoryError, key: "with_statements_are_not_allowed_in_an_async_function_block_1300", text: "'with' statements are not allowed in an async function block."}
 
@@ -518,9 +520,9 @@ var Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_o
 
 var Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member = &Message{code: 1322, category: CategoryError, key: "Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_con_1322", text: "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member."}
 
-var Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext = &Message{code: 1323, category: CategoryError, key: "Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323", text: "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'."}
+var Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_node20_or_nodenext = &Message{code: 1323, category: CategoryError, key: "Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323", text: "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', 'node20', or 'nodenext'."}
 
-var Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_nodenext_or_preserve = &Message{code: 1324, category: CategoryError, key: "Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_1324", text: "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'."}
+var Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_node20_nodenext_or_preserve = &Message{code: 1324, category: CategoryError, key: "Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_1324", text: "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'."}
 
 var Argument_of_dynamic_import_cannot_be_spread_element = &Message{code: 1325, category: CategoryError, key: "Argument_of_dynamic_import_cannot_be_spread_element_1325", text: "Argument of dynamic import cannot be spread element."}
 
@@ -554,7 +556,7 @@ var Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_ty
 
 var Class_constructor_may_not_be_an_accessor = &Message{code: 1341, category: CategoryError, key: "Class_constructor_may_not_be_an_accessor_1341", text: "Class constructor may not be an accessor."}
 
-var The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_or_nodenext = &Message{code: 1343, category: CategoryError, key: "The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343", text: "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'."}
+var The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_node20_or_nodenext = &Message{code: 1343, category: CategoryError, key: "The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343", text: "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', or 'nodenext'."}
 
 var A_label_is_not_allowed_here = &Message{code: 1344, category: CategoryError, key: "A_label_is_not_allowed_here_1344", text: "'A label is not allowed here."}
 
@@ -614,7 +616,7 @@ var X_0_was_imported_here = &Message{code: 1376, category: CategoryMessage, key:
 
 var X_0_was_exported_here = &Message{code: 1377, category: CategoryMessage, key: "_0_was_exported_here_1377", text: "'{0}' was exported here."}
 
-var Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 1378, category: CategoryError, key: "Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378", text: "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
+var Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 1378, category: CategoryError, key: "Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378", text: "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
 
 var An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type = &Message{code: 1379, category: CategoryError, key: "An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type_1379", text: "An import alias cannot reference a declaration that was exported using 'export type'."}
 
@@ -716,7 +718,7 @@ var The_file_is_in_the_program_because_Colon = &Message{code: 1430, category: Ca
 
 var X_for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module = &Message{code: 1431, category: CategoryError, key: "for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_1431", text: "'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module."}
 
-var Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 1432, category: CategoryError, key: "Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432", text: "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
+var Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 1432, category: CategoryError, key: "Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432", text: "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
 
 var Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters = &Message{code: 1433, category: CategoryError, key: "Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters_1433", text: "Neither decorators nor modifiers may be applied to 'this' parameters."}
 
@@ -920,6 +922,10 @@ var Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_i
 
 var Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0 = &Message{code: 1544, category: CategoryError, key: "Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0_1544", text: "Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'."}
 
+var X_using_declarations_are_not_allowed_in_ambient_contexts = &Message{code: 1545, category: CategoryError, key: "using_declarations_are_not_allowed_in_ambient_contexts_1545", text: "'using' declarations are not allowed in ambient contexts."}
+
+var X_await_using_declarations_are_not_allowed_in_ambient_contexts = &Message{code: 1546, category: CategoryError, key: "await_using_declarations_are_not_allowed_in_ambient_contexts_1546", text: "'await using' declarations are not allowed in ambient contexts."}
+
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
 var The_types_returned_by_0_are_incompatible_between_these_types = &Message{code: 2201, category: CategoryError, key: "The_types_returned_by_0_are_incompatible_between_these_types_2201", text: "The types returned by '{0}' are incompatible between these types."}
@@ -1033,6 +1039,8 @@ var This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Co
 var Type_0_does_not_satisfy_the_constraint_1 = &Message{code: 2344, category: CategoryError, key: "Type_0_does_not_satisfy_the_constraint_1_2344", text: "Type '{0}' does not satisfy the constraint '{1}'."}
 
 var Argument_of_type_0_is_not_assignable_to_parameter_of_type_1 = &Message{code: 2345, category: CategoryError, key: "Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_2345", text: "Argument of type '{0}' is not assignable to parameter of type '{1}'."}
+
+var Call_target_does_not_contain_any_signatures = &Message{code: 2346, category: CategoryError, key: "Call_target_does_not_contain_any_signatures_2346", text: "Call target does not contain any signatures."}
 
 var Untyped_function_calls_may_not_accept_type_arguments = &Message{code: 2347, category: CategoryError, key: "Untyped_function_calls_may_not_accept_type_arguments_2347", text: "Untyped function calls may not accept type arguments."}
 
@@ -1702,7 +1710,7 @@ var Cannot_invoke_an_object_which_is_possibly_null_or_undefined = &Message{code:
 
 var X_0_has_no_exported_member_named_1_Did_you_mean_2 = &Message{code: 2724, category: CategoryError, key: "_0_has_no_exported_member_named_1_Did_you_mean_2_2724", text: "'{0}' has no exported member named '{1}'. Did you mean '{2}'?"}
 
-var Class_name_cannot_be_Object_when_targeting_ES5_with_module_0 = &Message{code: 2725, category: CategoryError, key: "Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725", text: "Class name cannot be 'Object' when targeting ES5 with module {0}."}
+var Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0 = &Message{code: 2725, category: CategoryError, key: "Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725", text: "Class name cannot be 'Object' when targeting ES5 and above with module {0}."}
 
 var Cannot_find_lib_definition_for_0 = &Message{code: 2726, category: CategoryError, key: "Cannot_find_lib_definition_for_0_2726", text: "Cannot find lib definition for '{0}'."}
 
@@ -1880,7 +1888,7 @@ var Class_declaration_cannot_implement_overload_list_for_0 = &Message{code: 2813
 
 var Function_with_bodies_can_only_merge_with_classes_that_are_ambient = &Message{code: 2814, category: CategoryError, key: "Function_with_bodies_can_only_merge_with_classes_that_are_ambient_2814", text: "Function with bodies can only merge with classes that are ambient."}
 
-var X_arguments_cannot_be_referenced_in_property_initializers = &Message{code: 2815, category: CategoryError, key: "arguments_cannot_be_referenced_in_property_initializers_2815", text: "'arguments' cannot be referenced in property initializers."}
+var X_arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_blocks = &Message{code: 2815, category: CategoryError, key: "arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_blocks_2815", text: "'arguments' cannot be referenced in property initializers or class static initialization blocks."}
 
 var Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class = &Message{code: 2816, category: CategoryError, key: "Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class_2816", text: "Cannot use 'this' in a static property initializer of a decorated class."}
 
@@ -1892,11 +1900,11 @@ var Namespace_name_cannot_be_0 = &Message{code: 2819, category: CategoryError, k
 
 var Type_0_is_not_assignable_to_type_1_Did_you_mean_2 = &Message{code: 2820, category: CategoryError, key: "Type_0_is_not_assignable_to_type_1_Did_you_mean_2_2820", text: "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?"}
 
-var Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve = &Message{code: 2821, category: CategoryError, key: "Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2821", text: "Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'."}
+var Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve = &Message{code: 2821, category: CategoryError, key: "Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext__2821", text: "Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'."}
 
 var Import_assertions_cannot_be_used_with_type_only_imports_or_exports = &Message{code: 2822, category: CategoryError, key: "Import_assertions_cannot_be_used_with_type_only_imports_or_exports_2822", text: "Import assertions cannot be used with type-only imports or exports."}
 
-var Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve = &Message{code: 2823, category: CategoryError, key: "Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2823", text: "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'."}
+var Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve = &Message{code: 2823, category: CategoryError, key: "Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext__2823", text: "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'."}
 
 var Cannot_find_namespace_0_Did_you_mean_1 = &Message{code: 2833, category: CategoryError, key: "Cannot_find_namespace_0_Did_you_mean_1_2833", text: "Cannot find namespace '{0}'. Did you mean '{1}'?"}
 
@@ -1936,7 +1944,7 @@ var X_await_using_statements_are_only_allowed_within_async_functions_and_at_the_
 
 var X_await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module = &Message{code: 2853, category: CategoryError, key: "await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_th_2853", text: "'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module."}
 
-var Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 2854, category: CategoryError, key: "Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854", text: "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
+var Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 2854, category: CategoryError, key: "Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854", text: "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
 
 var Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super = &Message{code: 2855, category: CategoryError, key: "Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super_2855", text: "Class field '{0}' defined by the parent class is not accessible in the child class via super."}
 
@@ -1989,6 +1997,8 @@ var This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project
 var Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found = &Message{code: 2879, category: CategoryError, key: "Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found_2879", text: "Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found."}
 
 var Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert = &Message{code: 2880, category: CategoryError, key: "Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert_2880", text: "Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'."}
+
+var This_expression_is_never_nullish = &Message{code: 2881, category: CategoryError, key: "This_expression_is_never_nullish_2881", text: "This expression is never nullish."}
 
 var Import_declaration_0_is_using_private_name_1 = &Message{code: 4000, category: CategoryError, key: "Import_declaration_0_is_using_private_name_1_4000", text: "Import declaration '{0}' is using private name '{1}'."}
 
@@ -2840,6 +2850,24 @@ var Found_peerDependency_0_with_1_version = &Message{code: 6282, category: Categ
 
 var Failed_to_find_peerDependency_0 = &Message{code: 6283, category: CategoryMessage, key: "Failed_to_find_peerDependency_0_6283", text: "Failed to find peerDependency '{0}'."}
 
+var File_Layout = &Message{code: 6284, category: CategoryMessage, key: "File_Layout_6284", text: "File Layout"}
+
+var Environment_Settings = &Message{code: 6285, category: CategoryMessage, key: "Environment_Settings_6285", text: "Environment Settings"}
+
+var See_also_https_Colon_Slash_Slashaka_ms_Slashtsconfig_Slashmodule = &Message{code: 6286, category: CategoryMessage, key: "See_also_https_Colon_Slash_Slashaka_ms_Slashtsconfig_Slashmodule_6286", text: "See also https://aka.ms/tsconfig/module"}
+
+var For_nodejs_Colon = &Message{code: 6287, category: CategoryMessage, key: "For_nodejs_Colon_6287", text: "For nodejs:"}
+
+var X_and_npm_install_D_types_Slashnode = &Message{code: 6290, category: CategoryMessage, key: "and_npm_install_D_types_Slashnode_6290", text: "and npm install -D @types/node"}
+
+var Other_Outputs = &Message{code: 6291, category: CategoryMessage, key: "Other_Outputs_6291", text: "Other Outputs"}
+
+var Stricter_Typechecking_Options = &Message{code: 6292, category: CategoryMessage, key: "Stricter_Typechecking_Options_6292", text: "Stricter Typechecking Options"}
+
+var Style_Options = &Message{code: 6293, category: CategoryMessage, key: "Style_Options_6293", text: "Style Options"}
+
+var Recommended_Options = &Message{code: 6294, category: CategoryMessage, key: "Recommended_Options_6294", text: "Recommended Options"}
+
 var Enable_project_compilation = &Message{code: 6302, category: CategoryMessage, key: "Enable_project_compilation_6302", text: "Enable project compilation"}
 
 var Composite_projects_may_not_disable_declaration_emit = &Message{code: 6304, category: CategoryError, key: "Composite_projects_may_not_disable_declaration_emit_6304", text: "Composite projects may not disable declaration emit."}
@@ -2996,7 +3024,7 @@ var Print_names_of_files_and_the_reason_they_are_part_of_the_compilation = &Mess
 
 var Consider_adding_a_declare_modifier_to_this_class = &Message{code: 6506, category: CategoryMessage, key: "Consider_adding_a_declare_modifier_to_this_class_6506", text: "Consider adding a 'declare' modifier to this class."}
 
-var Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files = &Message{code: 6600, category: CategoryMessage, key: "Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600", text: "Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files."}
+var Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files = &Message{code: 6600, category: CategoryMessage, key: "Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600", text: "Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files."}
 
 var Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export = &Message{code: 6601, category: CategoryMessage, key: "Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export_6601", text: "Allow 'import x from y' when a module doesn't have a default export."}
 
@@ -3695,6 +3723,14 @@ var X_0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax
 var Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled = &Message{code: 18056, category: CategoryError, key: "Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is__18056", text: "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled."}
 
 var String_literal_import_and_export_names_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es2020 = &Message{code: 18057, category: CategoryError, key: "String_literal_import_and_export_names_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es_18057", text: "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'."}
+
+var Default_imports_are_not_allowed_in_a_deferred_import = &Message{code: 18058, category: CategoryError, key: "Default_imports_are_not_allowed_in_a_deferred_import_18058", text: "Default imports are not allowed in a deferred import."}
+
+var Named_imports_are_not_allowed_in_a_deferred_import = &Message{code: 18059, category: CategoryError, key: "Named_imports_are_not_allowed_in_a_deferred_import_18059", text: "Named imports are not allowed in a deferred import."}
+
+var Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve = &Message{code: 18060, category: CategoryError, key: "Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve_18060", text: "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'."}
+
+var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer = &Message{code: 18061, category: CategoryError, key: "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061", text: "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?"}
 
 var X_module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node = &Message{code: 69010, category: CategoryMessage, key: "module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node_69010", text: "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`"}
 

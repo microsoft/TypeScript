@@ -1,0 +1,38 @@
+a.js(3,10): error TS6133: 'f1' is declared but its value is never read.
+a.js(11,10): error TS6133: 'f3' is declared but its value is never read.
+a.js(19,10): error TS6133: 'f4' is declared but its value is never read.
+a.js(19,17): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== types.d.ts (0 errors) ====
+    export type Foo = string;
+    
+==== a.js (4 errors) ====
+    /** @import { Foo } from './types.d.ts' */
+    
+    function f1() { return undefined; }
+             ~~
+!!! error TS6133: 'f1' is declared but its value is never read.
+    
+    export function f2() {
+        /** @type {Set<Foo>} */
+        const foo = new Set([ 'a', 'b' ]);
+        return foo;
+    }
+    
+    function f3() { return undefined; }
+             ~~
+!!! error TS6133: 'f3' is declared but its value is never read.
+    
+    /** @type {Set<Foo>} */
+    export const foo = new Set([ 'a', 'b' ]);
+    
+    /**
+     * @returns {Foo}
+     */
+    function f4() { return 1; }
+             ~~
+!!! error TS6133: 'f4' is declared but its value is never read.
+                    ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    

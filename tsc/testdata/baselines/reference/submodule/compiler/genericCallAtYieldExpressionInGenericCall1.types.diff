@@ -1,0 +1,73 @@
+--- old.genericCallAtYieldExpressionInGenericCall1.types
++++ new.genericCallAtYieldExpressionInGenericCall1.types
+@@= skipped -1, +1 lines =@@
+
+ === genericCallAtYieldExpressionInGenericCall1.ts ===
+ declare const inner: {
+->inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
++>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, A>; }; }
+
+   <A>(value: A): {
+ >value : A
+
+     (): A;
+     [Symbol.iterator](): {
+->[Symbol.iterator] : () => { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }
++>[Symbol.iterator] : () => { next(...args: readonly any[]): IteratorResult<any, A>; }
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+
+       next(...args: ReadonlyArray<any>): IteratorResult<any, A>;
+->next : (...args: ReadonlyArray<any>) => IteratorResult<any, A>
++>next : (...args: readonly any[]) => IteratorResult<any, A>
+ >args : readonly any[]
+
+     };
+@@= skipped -28, +28 lines =@@
+ outer(function* <T>(value: T) {
+ >outer(function* <T>(value: T) {  const result = yield* inner(value); // ok}) : void
+ >outer : <A>(body: (value: A) => Generator<any, any, any>) => void
+->function* <T>(value: T) {  const result = yield* inner(value); // ok} : <T>(value: T) => Generator<never, void, never>
++>function* <T>(value: T) {  const result = yield* inner(value); // ok} : <T>(value: T) => Generator<any, void, any>
+ >value : T
+
+   const result = yield* inner(value); // ok
+ >result : T
+ >yield* inner(value) : T
+->inner(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+->inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
++>inner(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
++>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, A>; }; }
+ >value : T
+
+ });
+@@= skipped -19, +19 lines =@@
+ >value : T
+
+   const x = inner(value);
+->x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+->inner(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+->inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
++>x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
++>inner(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
++>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, A>; }; }
+ >value : T
+
+   const result = yield* x; // ok
+ >result : T
+ >yield* x : T
+->x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
++>x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
+
+ });
+
+@@= skipped -23, +23 lines =@@
+ outer(function* <T>(value: T) {
+ >outer(function* <T>(value: T) {  const result = yield* inner2(value); // error}) : void
+ >outer : <A>(body: (value: A) => Generator<any, any, any>) => void
+->function* <T>(value: T) {  const result = yield* inner2(value); // error} : <T>(value: T) => Generator<never, void, never>
++>function* <T>(value: T) {  const result = yield* inner2(value); // error} : <T>(value: T) => Generator<any, void, any>
+ >value : T
+
+   const result = yield* inner2(value); // error

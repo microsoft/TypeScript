@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/computedPropertyBindingElementDeclarationNoCrash1.ts] ////
+
+=== computedPropertyBindingElementDeclarationNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61351
+
+export type State = {
+>State : Symbol(State, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 0, 0))
+
+  a: number;
+>a : Symbol(a, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 2, 21))
+
+  b: string;
+>b : Symbol(b, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 3, 12))
+
+};
+
+export class Test {
+>Test : Symbol(Test, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 5, 2))
+
+  setState(state: State) {}
+>setState : Symbol(Test.setState, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 7, 19))
+>state : Symbol(state, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 8, 11))
+>State : Symbol(State, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 0, 0))
+
+  test = (e: any) => {
+>test : Symbol(Test.test, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 8, 27))
+>e : Symbol(e, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 9, 10))
+
+    for (const [key, value] of Object.entries(e)) {
+>key : Symbol(key, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 10, 16))
+>value : Symbol(value, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 10, 20))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>e : Symbol(e, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 9, 10))
+
+      this.setState({
+>this.setState : Symbol(Test.setState, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 7, 19))
+>this : Symbol(Test, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 5, 2))
+>setState : Symbol(Test.setState, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 7, 19))
+
+        [key]: value,
+>[key] : Symbol([key], Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 11, 21))
+>key : Symbol(key, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 10, 16))
+>value : Symbol(value, Decl(computedPropertyBindingElementDeclarationNoCrash1.ts, 10, 20))
+
+      });
+    }
+  };
+}
+

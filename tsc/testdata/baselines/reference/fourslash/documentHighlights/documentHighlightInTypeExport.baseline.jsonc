@@ -1,0 +1,98 @@
+// === documentHighlights ===
+// === /1.ts ===
+// type /*HIGHLIGHTS*/[|A|] = 1;
+// export { A as B };
+
+
+
+// === documentHighlights ===
+// === /1.ts ===
+// type A = 1;
+// export { /*HIGHLIGHTS*/A as B };
+
+
+
+// === documentHighlights ===
+// === /1.ts ===
+// type A = 1;
+// export { A as /*HIGHLIGHTS*/B };
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type /*HIGHLIGHTS*/[|A|] = 1;
+// let A: [|A|] = 1;
+// export { A as B };
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type A = 1;
+// let /*HIGHLIGHTS*/[|A|]: A = 1;
+// export { A as B };
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type [|A|] = 1;
+// let A: /*HIGHLIGHTS*/[|A|] = 1;
+// export { A as B };
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type A = 1;
+// let [|A|]: A = 1;
+// export { /*HIGHLIGHTS*/A as B };
+
+
+
+// === documentHighlights ===
+// === /2.ts ===
+// type A = 1;
+// let A: A = 1;
+// export { A as /*HIGHLIGHTS*/B };
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type /*HIGHLIGHTS*/[|A|] = 1;
+// let A: [|A|] = 1;
+// export type { A as B };
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type A = 1;
+// let /*HIGHLIGHTS*/[|A|]: A = 1;
+// export type { A as B };
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type [|A|] = 1;
+// let A: /*HIGHLIGHTS*/[|A|] = 1;
+// export type { A as B };
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type A = 1;
+// let [|A|]: A = 1;
+// export type { /*HIGHLIGHTS*/A as B };
+
+
+
+// === documentHighlights ===
+// === /3.ts ===
+// type A = 1;
+// let A: A = 1;
+// export type { A as /*HIGHLIGHTS*/B };

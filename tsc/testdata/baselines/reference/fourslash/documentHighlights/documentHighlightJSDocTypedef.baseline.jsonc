@@ -1,0 +1,45 @@
+// === documentHighlights ===
+// === /index.js ===
+// /**
+//  * @typedef {{
+//  *   /*HIGHLIGHTS*/foo: string;
+//  *   bar: number;
+//  * }} Foo
+//  */
+// // --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /index.js ===
+// /**
+//  * @typedef {{
+//  *   foo: string;
+//  *   /*HIGHLIGHTS*/bar: number;
+//  * }} Foo
+//  */
+// 
+// // --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /index.js ===
+// --- (line: 6) skipped ---
+// 
+// /** @type {Foo} */
+// const x = {
+//   /*HIGHLIGHTS*/[|foo|]: "",
+//   bar: 42,
+// };
+
+
+
+// === documentHighlights ===
+// === /index.js ===
+// --- (line: 7) skipped ---
+// /** @type {Foo} */
+// const x = {
+//   foo: "",
+//   /*HIGHLIGHTS*/[|bar|]: 42,
+// };

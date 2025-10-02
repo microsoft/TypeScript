@@ -1,0 +1,80 @@
+--- old.nodeModulesAllowJsPackageImports(module=node20).types
++++ new.nodeModulesAllowJsPackageImports(module=node20).types
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ // esm format file
+ import * as cjs from "#cjs";
+->cjs : typeof cjs
++>cjs : any
+
+ import * as mjs from "#mjs";
+->mjs : typeof mjs
++>mjs : any
+
+ import * as type from "#type";
+->type : typeof type
++>type : any
+
+ cjs;
+->cjs : typeof cjs
++>cjs : any
+
+ mjs;
+->mjs : typeof mjs
++>mjs : any
+
+ type;
+->type : typeof type
++>type : any
+
+ === index.mjs ===
+ // esm format file
+ import * as cjs from "#cjs";
+->cjs : typeof cjs
++>cjs : any
+
+ import * as mjs from "#mjs";
+->mjs : typeof mjs
++>mjs : any
+
+ import * as type from "#type";
+->type : typeof type
++>type : any
+
+ cjs;
+->cjs : typeof cjs
++>cjs : any
+
+ mjs;
+->mjs : typeof mjs
++>mjs : any
+
+ type;
+->type : typeof type
++>type : any
+
+ === index.cjs ===
+ // esm format file
+ import * as cjs from "#cjs";
+->cjs : typeof cjs
++>cjs : any
+
+ import * as mjs from "#mjs";
+->mjs : typeof mjs
++>mjs : any
+
+ import * as type from "#type";
+->type : typeof type
++>type : any
+
+ cjs;
+->cjs : typeof cjs
++>cjs : any
+
+ mjs;
+->mjs : typeof mjs
++>mjs : any
+
+ type;
+->type : typeof type
++>type : any

@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/classes/mixinAccessors3.ts] ////
+
+=== mixinAccessors3.ts ===
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : Symbol(mixin, Decl(mixinAccessors3.ts, 0, 0))
+>T : Symbol(T, Decl(mixinAccessors3.ts, 0, 15))
+>args : Symbol(args, Decl(mixinAccessors3.ts, 0, 32))
+>superclass : Symbol(superclass, Decl(mixinAccessors3.ts, 0, 55))
+>T : Symbol(T, Decl(mixinAccessors3.ts, 0, 15))
+
+  return class extends superclass {
+>superclass : Symbol(superclass, Decl(mixinAccessors3.ts, 0, 55))
+
+    get name() {
+>name : Symbol((Anonymous class).name, Decl(mixinAccessors3.ts, 1, 35))
+
+      return "";
+    }
+  };
+}
+
+class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(mixinAccessors3.ts, 6, 1))
+
+  set name(v: string) {}
+>name : Symbol(BaseClass.name, Decl(mixinAccessors3.ts, 8, 17))
+>v : Symbol(v, Decl(mixinAccessors3.ts, 9, 11))
+}
+
+// error
+class MyClass extends mixin(BaseClass) { 
+>MyClass : Symbol(MyClass, Decl(mixinAccessors3.ts, 10, 1))
+>mixin : Symbol(mixin, Decl(mixinAccessors3.ts, 0, 0))
+>BaseClass : Symbol(BaseClass, Decl(mixinAccessors3.ts, 6, 1))
+
+  get name() {
+>name : Symbol(MyClass.name, Decl(mixinAccessors3.ts, 13, 40))
+
+    return "";
+  }
+}
+

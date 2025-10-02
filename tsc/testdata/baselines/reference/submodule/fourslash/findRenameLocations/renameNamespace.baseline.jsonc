@@ -1,0 +1,9 @@
+// === findRenameLocations ===
+// === /renameNamespace.ts ===
+// namespace /*RENAME*/[|NSRENAME|] {
+//     export const enum E {
+//         A = 'a'
+//     }
+// }
+// 
+// const a: [|NSRENAME|].E = NS.E.A;

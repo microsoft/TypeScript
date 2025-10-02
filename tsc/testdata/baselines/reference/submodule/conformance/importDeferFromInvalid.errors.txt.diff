@@ -1,0 +1,21 @@
+--- old.importDeferFromInvalid.errors.txt
++++ new.importDeferFromInvalid.errors.txt
+@@= skipped -0, +0 lines =@@
+-b.ts(1,8): error TS18058: Default imports are not allowed in a deferred import.
++b.ts(1,19): error TS1141: String literal expected.
++b.ts(1,24): error TS1005: ';' expected.
+
+
+ ==== a.ts (0 errors) ====
+     export default 2;
+     
+-==== b.ts (1 errors) ====
++==== b.ts (2 errors) ====
+     import defer from from "./a.js";
+-           ~~~~~~~~~~
+-!!! error TS18058: Default imports are not allowed in a deferred import.
++                      ~~~~
++!!! error TS1141: String literal expected.
++                           ~~~~~~~~
++!!! error TS1005: ';' expected.
+     

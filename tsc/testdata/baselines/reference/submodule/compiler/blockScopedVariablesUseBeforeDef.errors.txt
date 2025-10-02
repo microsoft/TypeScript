@@ -180,3 +180,11 @@ blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable
         })();
     }
     
+    function foo18() {
+        let a = (() => Enum.Yes)();
+        enum Enum {
+            No = 0,
+            Yes = 1,
+        }
+    }
+    

@@ -1,0 +1,12 @@
+--- old.importDeferNamespace(module=es2015).js
++++ new.importDeferNamespace(module=es2015).js
+@@= skipped -14, +14 lines =@@
+     console.log("foo from a");
+ }
+ //// [b.js]
+-import defer * as aNs from "./a.js";
++ * as;
++aNs;
++from;
++"./a.js";
+ aNs.foo();

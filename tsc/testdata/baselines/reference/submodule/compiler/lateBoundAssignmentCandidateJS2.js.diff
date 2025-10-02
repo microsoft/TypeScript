@@ -1,0 +1,18 @@
+--- old.lateBoundAssignmentCandidateJS2.js
++++ new.lateBoundAssignmentCandidateJS2.js
+@@= skipped -30, +30 lines =@@
+
+
+ //// [index.d.ts]
+-export class foo1 {
++declare const prop = "prop";
++export declare class foo1 {
++    constructor();
+     /**
+      * @protected
+      * @type {string}
+      */
+-    protected prop: string;
++    protected [prop]: string;
+ }
++export {};

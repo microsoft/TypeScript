@@ -1,0 +1,28 @@
+--- old.usingDeclarations.16.errors.txt
++++ new.usingDeclarations.16.errors.txt
+@@= skipped -0, +0 lines =@@
+-usingDeclarations.16.ts(2,5): error TS1545: 'using' declarations are not allowed in ambient contexts.
+-usingDeclarations.16.ts(3,5): error TS1545: 'using' declarations are not allowed in ambient contexts.
+-usingDeclarations.16.ts(6,5): error TS1545: 'using' declarations are not allowed in ambient contexts.
+-usingDeclarations.16.ts(7,5): error TS1545: 'using' declarations are not allowed in ambient contexts.
+-
+-
+-==== usingDeclarations.16.ts (4 errors) ====
+-    declare namespace N {
+-        using x: { [Symbol.dispose](): void };
+-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS1545: 'using' declarations are not allowed in ambient contexts.
+-        using y: null;
+-        ~~~~~~~~~~~~~
+-!!! error TS1545: 'using' declarations are not allowed in ambient contexts.
+-    }
+-    declare module 'M' {
+-        using x: { [Symbol.dispose](): void };
+-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS1545: 'using' declarations are not allowed in ambient contexts.
+-        using y: null;
+-        ~~~~~~~~~~~~~
+-!!! error TS1545: 'using' declarations are not allowed in ambient contexts.
+-    }
+-    
++<no content>

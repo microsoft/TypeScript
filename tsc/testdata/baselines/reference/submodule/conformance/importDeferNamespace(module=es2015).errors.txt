@@ -1,0 +1,32 @@
+b.ts(1,14): error TS1005: '=' expected.
+b.ts(1,16): error TS2304: Cannot find name 'as'.
+b.ts(1,19): error TS1005: ';' expected.
+b.ts(1,19): error TS2304: Cannot find name 'aNs'.
+b.ts(1,23): error TS1434: Unexpected keyword or identifier.
+b.ts(1,23): error TS2304: Cannot find name 'from'.
+b.ts(3,1): error TS2304: Cannot find name 'aNs'.
+
+
+==== a.ts (0 errors) ====
+    export function foo() {
+        console.log("foo from a");
+    }
+    
+==== b.ts (7 errors) ====
+    import defer * as aNs from "./a.js";
+                 ~
+!!! error TS1005: '=' expected.
+                   ~~
+!!! error TS2304: Cannot find name 'as'.
+                      ~~~
+!!! error TS1005: ';' expected.
+                      ~~~
+!!! error TS2304: Cannot find name 'aNs'.
+                          ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                          ~~~~
+!!! error TS2304: Cannot find name 'from'.
+    
+    aNs.foo();
+    ~~~
+!!! error TS2304: Cannot find name 'aNs'.

@@ -1,0 +1,47 @@
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionConstructor.ts ===
+// let A = class [|Foo|] {
+//     /*HIGHLIGHTS*/constructor();
+//     constructor(x: number);
+//     constructor(y: string);
+//     constructor(a?: any) {
+// // --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionConstructor.ts ===
+// let A = class [|Foo|] {
+//     constructor();
+//     /*HIGHLIGHTS*/constructor(x: number);
+//     constructor(y: string);
+//     constructor(a?: any) {
+//     }
+// // --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionConstructor.ts ===
+// let A = class [|Foo|] {
+//     constructor();
+//     constructor(x: number);
+//     /*HIGHLIGHTS*/constructor(y: string);
+//     constructor(a?: any) {
+//     }
+// }
+// // --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesClassExpressionConstructor.ts ===
+// let A = class [|Foo|] {
+//     constructor();
+//     constructor(x: number);
+//     constructor(y: string);
+//     /*HIGHLIGHTS*/constructor(a?: any) {
+//     }
+// }
+// 
+// // --- (line: 9) skipped ---

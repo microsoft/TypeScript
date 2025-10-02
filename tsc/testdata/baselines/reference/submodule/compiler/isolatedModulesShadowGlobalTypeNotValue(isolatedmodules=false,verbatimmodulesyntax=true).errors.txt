@@ -1,8 +1,8 @@
-bad.ts(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+bad.ts(1,10): error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
 bad.ts(1,10): error TS1484: 'Date' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-bad.ts(1,16): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+bad.ts(1,16): error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
 bad.ts(1,16): error TS1484: 'Event' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-good.ts(2,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+good.ts(2,10): error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
 
 
 ==== types.ts (0 errors) ====
@@ -36,11 +36,11 @@ good.ts(2,10): error TS1286: ESM syntax is not allowed in a CommonJS module when
 ==== bad.ts (4 errors) ====
     import { Date, Event } from './types';
              ~~~~
-!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
              ~~~~
 !!! error TS1484: 'Date' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
                    ~~~~~
-!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
                    ~~~~~
 !!! error TS1484: 'Event' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
     function foo(a: Date) {
@@ -55,7 +55,7 @@ good.ts(2,10): error TS1286: ESM syntax is not allowed in a CommonJS module when
     import type { Date, Event } from './types';
     import { Console } from 'node:console';
              ~~~~~~~
-!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
     function foo(a: Date) {
         const b = new Date(a.year, a.month, a.day);
         return b.getTime();

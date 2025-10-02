@@ -1,0 +1,14 @@
+--- old.arbitraryModuleNamespaceIdentifiers_module(module=node20).symbols
++++ new.arbitraryModuleNamespaceIdentifiers_module(module=node20).symbols
+@@= skipped -72, +72 lines =@@
+ >typeC : Symbol(typeC, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 8))
+
+ export type otherType = "otherType";
+->otherType : Symbol(valueZ.otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
++>otherType : Symbol(otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
+
+ const importStarTestA: typeC.otherType = "expect error about otherType";
+ >importStarTestA : Symbol(importStarTestA, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 28, 5))
+ >typeC : Symbol(typeC, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 8))
+->otherType : Symbol(valueZ.otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
++>otherType : Symbol(otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))

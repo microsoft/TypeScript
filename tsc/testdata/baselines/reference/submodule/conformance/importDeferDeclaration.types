@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/importDefer/importDeferDeclaration.ts] ////
+
+=== a.ts ===
+export interface Foo {
+  x: number;
+>x : number
+}
+
+=== b.ts ===
+import defer * as ns from "./a.js";
+>defer : any
+> : any
+>* as : number
+> : any
+>as : any
+>ns : any
+>from : any
+>"./a.js" : "./a.js"
+
+export type X = { foo: ns.Foo };
+>X : X
+>foo : ns.Foo
+>ns : any
+

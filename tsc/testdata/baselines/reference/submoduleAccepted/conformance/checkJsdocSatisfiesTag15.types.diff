@@ -1,0 +1,44 @@
+--- old.checkJsdocSatisfiesTag15.types
++++ new.checkJsdocSatisfiesTag15.types
+@@= skipped -43, +43 lines =@@
+  * @param {number} b
+  */
+ export const fn4 = (a, b) => {};
+->fn4 : (a: string, b: number) => void
+->(a, b) => {} : (a: string, b: number) => void
++>fn4 : (a: string, b: never) => void
++>(a, b) => {} : (a: string, b: never) => void
+ >a : string
+->b : number
++>b : never
+
+ /** 
+  * @satisfies {(a: string, ...args: number[]) => void}
+@@= skipped -11, +11 lines =@@
+  * @param {string} b
+  */
+ export const fn5 = (a, b) => {};
+->fn5 : (a: string, b: string) => void
+->(a, b) => {} : (a: string, b: string) => void
++>fn5 : (a: string, b: number) => void
++>(a, b) => {} : (a: string, b: number) => void
+ >a : string
+->b : string
++>b : number
+
+ /** 
+  * @satisfies {(a: string, ...args: number[]) => void}
+@@= skipped -11, +11 lines =@@
+  * @param {string | number} b
+  */
+ export const fn6 = (a, b) => {};
+->fn6 : (a: string, b: string | number) => void
+->(a, b) => {} : (a: string, b: string | number) => void
++>fn6 : (a: string, b: number) => void
++>(a, b) => {} : (a: string, b: number) => void
+ >a : string
+->b : string | number
++>b : number
+
+ /** @satisfies {(uuid: string) => void} */
+ export function fn7(uuid) {}

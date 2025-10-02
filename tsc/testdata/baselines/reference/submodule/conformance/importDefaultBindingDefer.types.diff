@@ -1,0 +1,14 @@
+--- old.importDefaultBindingDefer.types
++++ new.importDefaultBindingDefer.types
+@@= skipped -13, +13 lines =@@
+
+ === b.ts ===
+ import defer from "a";
+->defer : () => void
++>defer : any
+
+ defer();
+->defer() : void
+->defer : () => void
++>defer() : any
++>defer : any

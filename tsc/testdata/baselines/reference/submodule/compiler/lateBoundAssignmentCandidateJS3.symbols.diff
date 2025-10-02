@@ -1,0 +1,9 @@
+--- old.lateBoundAssignmentCandidateJS3.symbols
++++ new.lateBoundAssignmentCandidateJS3.symbols
+@@= skipped -17, +17 lines =@@
+      * @type {string}
+      */
+     prop = 'baz';
+->prop : Symbol(foo2.prop, Decl(index.js, 5, 5), Decl(index.js, 3, 19))
++>prop : Symbol(foo2.prop, Decl(index.js, 5, 5))
+ }

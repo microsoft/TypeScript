@@ -1,0 +1,21 @@
+--- old.jsdocTypeTagOnParameter1.types
++++ new.jsdocTypeTagOnParameter1.types
+@@= skipped -12, +12 lines =@@
+ ) {
+ 	return Array(times).fill(message).join(` `);
+ >Array(times).fill(message).join(` `) : string
+->Array(times).fill(message).join : (separator?: string) => string
++>Array(times).fill(message).join : (separator?: string | undefined) => string
+ >Array(times).fill(message) : any[]
+->Array(times).fill : (value: any, start?: number, end?: number) => any[]
++>Array(times).fill : (value: any, start?: number | undefined, end?: number | undefined) => any[]
+ >Array(times) : any[]
+ >Array : ArrayConstructor
+ >times : number
+->fill : (value: any, start?: number, end?: number) => any[]
++>fill : (value: any, start?: number | undefined, end?: number | undefined) => any[]
+ >message : string
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >` ` : " "
+ }

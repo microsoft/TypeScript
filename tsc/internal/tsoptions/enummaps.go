@@ -108,6 +108,8 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "esnext.iterator", Value: "lib.esnext.iterator.d.ts"},
 	{Key: "esnext.promise", Value: "lib.esnext.promise.d.ts"},
 	{Key: "esnext.float16", Value: "lib.esnext.float16.d.ts"},
+	{Key: "esnext.error", Value: "lib.esnext.error.d.ts"},
+	{Key: "esnext.sharedmemory", Value: "lib.esnext.sharedmemory.d.ts"},
 	{Key: "decorators", Value: "lib.decorators.d.ts"},
 	{Key: "decorators.legacy", Value: "lib.decorators.legacy.d.ts"},
 })
@@ -169,6 +171,7 @@ var moduleOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[s
 	{Key: "esnext", Value: core.ModuleKindESNext},
 	{Key: "node16", Value: core.ModuleKindNode16},
 	{Key: "node18", Value: core.ModuleKindNode18},
+	{Key: "node20", Value: core.ModuleKindNode20},
 	{Key: "nodenext", Value: core.ModuleKindNodeNext},
 	{Key: "preserve", Value: core.ModuleKindPreserve},
 })

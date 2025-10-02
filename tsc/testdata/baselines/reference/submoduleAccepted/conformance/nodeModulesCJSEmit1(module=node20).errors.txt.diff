@@ -1,0 +1,34 @@
+--- old.nodeModulesCJSEmit1(module=node20).errors.txt
++++ new.nodeModulesCJSEmit1(module=node20).errors.txt
+@@= skipped -0, +0 lines =@@
+-/3.cjs(2,1): error TS2304: Cannot find name 'exports'.
++error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
++/5.cjs(1,8): error TS1192: Module '"/2"' has no default export.
+ /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
+
+
++!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+ ==== /1.cjs (0 errors) ====
+     module.exports = {};
+     
+ ==== /2.cjs (0 errors) ====
+     exports.foo = 0;
+     
+-==== /3.cjs (1 errors) ====
++==== /3.cjs (0 errors) ====
+     import "foo";
+     exports.foo = {};
+-    ~~~~~~~
+-!!! error TS2304: Cannot find name 'exports'.
+     
+ ==== /4.cjs (0 errors) ====
+     ;
+     
+-==== /5.cjs (1 errors) ====
++==== /5.cjs (2 errors) ====
+     import two from "./2.cjs";   // ok
++           ~~~
++!!! error TS1192: Module '"/2"' has no default export.
+     import three from "./3.cjs"; // error
+            ~~~~~
+ !!! error TS1192: Module '"/3"' has no default export.

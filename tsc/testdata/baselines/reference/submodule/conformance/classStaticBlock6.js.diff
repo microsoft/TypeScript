@@ -1,7 +1,7 @@
 --- old.classStaticBlock6.js
 +++ new.classStaticBlock6.js
-@@= skipped -65, +65 lines =@@
-
+@@= skipped -76, +76 lines =@@
+ }
 
  //// [classStaticBlock6.js]
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -112,3 +112,25 @@
 -    })();
 +    }
  }
+-let foo2 = (() => {
+-    var _a;
+-    class foo2 {
+-    }
+-    _a = foo2;
+-    (() => {
+-        _a.b; // should error
++class foo2 {
++    static {
++        this.b; // should error
+         let b; // ok
+         if (1) {
+-            _a.b; // should error
++            this.b; // should error
+         }
+-    })();
+-    foo2.b = 1;
+-    return foo2;
+-})();
++    }
++    static b = 1;
++}

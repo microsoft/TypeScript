@@ -1,0 +1,32 @@
+--- old.genericCallAtYieldExpressionInGenericCall1.errors.txt
++++ new.genericCallAtYieldExpressionInGenericCall1.errors.txt
+@@= skipped -0, +0 lines =@@
++genericCallAtYieldExpressionInGenericCall1.ts(13,25): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+ genericCallAtYieldExpressionInGenericCall1.ts(26,25): error TS2488: Type '() => T' must have a '[Symbol.iterator]()' method that returns an iterator.
+-
+-
+-==== genericCallAtYieldExpressionInGenericCall1.ts (1 errors) ====
++genericCallAtYieldExpressionInGenericCall1.ts(26,25): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
++==== genericCallAtYieldExpressionInGenericCall1.ts (3 errors) ====
+     declare const inner: {
+       <A>(value: A): {
+         (): A;
+@@= skipped -14, +16 lines =@@
+     
+     outer(function* <T>(value: T) {
+       const result = yield* inner(value); // ok
++                            ~~~~~~~~~~~~
++!!! error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+     });
+     
+     outer(function* <T>(value: T) {
+@@= skipped -15, +17 lines =@@
+       const result = yield* inner2(value); // error
+                             ~~~~~~~~~~~~~
+ !!! error TS2488: Type '() => T' must have a '[Symbol.iterator]()' method that returns an iterator.
++                            ~~~~~~~~~~~~~
++!!! error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+     });
+     

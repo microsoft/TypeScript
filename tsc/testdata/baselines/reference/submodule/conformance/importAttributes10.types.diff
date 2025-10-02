@@ -1,0 +1,50 @@
+--- old.importAttributes10.types
++++ new.importAttributes10.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/importAttributes/importAttributes10.ts] ////
+
+-=== a.json ===
+-{ "key": "value" }
+->{ "key": "value" } : { key: string; }
+->"key" : string
+->"value" : "value"
+-
+ === b.ts ===
+ declare global {
+ >global : any
+@@= skipped -16, +10 lines =@@
+ }
+
+ export type Test1 = typeof import("./a.json", {
+->Test1 : { key: string; }
++>Test1 : any
+
+   with: {
+     type: "json"
+@@= skipped -10, +10 lines =@@
+ });
+
+ export type Test2 = typeof import("./a.json", {
+->Test2 : { key: string; }
++>Test2 : any
+
+   with: {
+     type: "json",
+@@= skipped -9, +9 lines =@@
+ });
+
+ export type Test3 = typeof import("./a.json", {
+->Test3 : { key: string; }
++>Test3 : any
+
+   with: {
+     type: "json"
+@@= skipped -10, +10 lines =@@
+ });
+
+ export type Test4 = typeof import("./a.json", {
+->Test4 : { key: string; }
++>Test4 : any
+
+   with: {
+     type: "json",,

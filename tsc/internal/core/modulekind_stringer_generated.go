@@ -19,19 +19,20 @@ func _() {
 	_ = x[ModuleKindESNext-99]
 	_ = x[ModuleKindNode16-100]
 	_ = x[ModuleKindNode18-101]
+	_ = x[ModuleKindNode20-102]
 	_ = x[ModuleKindNodeNext-199]
 	_ = x[ModuleKindPreserve-200]
 }
 
 const (
 	_ModuleKind_name_0 = "NoneCommonJSAMDUMDSystemES2015ES2020ES2022"
-	_ModuleKind_name_1 = "ESNextNode16Node18"
+	_ModuleKind_name_1 = "ESNextNode16Node18Node20"
 	_ModuleKind_name_2 = "NodeNextPreserve"
 )
 
 var (
 	_ModuleKind_index_0 = [...]uint8{0, 4, 12, 15, 18, 24, 30, 36, 42}
-	_ModuleKind_index_1 = [...]uint8{0, 6, 12, 18}
+	_ModuleKind_index_1 = [...]uint8{0, 6, 12, 18, 24}
 	_ModuleKind_index_2 = [...]uint8{0, 8, 16}
 )
 
@@ -39,7 +40,7 @@ func (i ModuleKind) String() string {
 	switch {
 	case 0 <= i && i <= 7:
 		return _ModuleKind_name_0[_ModuleKind_index_0[i]:_ModuleKind_index_0[i+1]]
-	case 99 <= i && i <= 101:
+	case 99 <= i && i <= 102:
 		i -= 99
 		return _ModuleKind_name_1[_ModuleKind_index_1[i]:_ModuleKind_index_1[i+1]]
 	case 199 <= i && i <= 200:

@@ -62,3 +62,157 @@ function C() {
 >arguments : Symbol(arguments)
   }
 }
+
+function D() {
+>D : Symbol(D, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 28, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 31, 8))
+
+     a = () => arguments  // should error
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 31, 18))
+>arguments : Symbol(arguments)
+  }
+}
+
+function D1() {
+>D1 : Symbol(D1, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 34, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 37, 8))
+
+    a = () => {
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 37, 18))
+
+      arguments;    // should error
+>arguments : Symbol(arguments)
+
+      const b = () => {
+>b : Symbol(b, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 40, 11))
+
+        return arguments;     // should error
+>arguments : Symbol(arguments)
+      }
+
+      function f() {
+>f : Symbol(f, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 42, 7))
+
+        return arguments;      // ok
+>arguments : Symbol(arguments)
+      }
+    }
+ }
+}
+
+function D2() {
+>D2 : Symbol(D2, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 49, 1))
+
+  return class {
+    constructor() {
+      arguments;  // ok
+>arguments : Symbol(arguments)
+    }
+    get foo() {
+>foo : Symbol((Anonymous class).foo, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 55, 5), Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 58, 5))
+
+      return arguments;  // ok
+>arguments : Symbol(arguments)
+    }
+    set foo(foo: any) {
+>foo : Symbol((Anonymous class).foo, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 55, 5), Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 58, 5))
+>foo : Symbol(foo, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 59, 12))
+
+      arguments;  // ok
+>arguments : Symbol(arguments)
+    }
+    bar() {
+>bar : Symbol((Anonymous class).bar, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 61, 5))
+
+      arguments;  // ok
+>arguments : Symbol(arguments)
+    }
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol((Anonymous class)[Symbol.iterator], Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 64, 5))
+
+      arguments;  // ok
+>arguments : Symbol(arguments)
+    }
+  }
+}
+
+function D3() {
+>D3 : Symbol(D3, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 69, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 72, 8))
+
+    static {
+      arguments;  // should error
+>arguments : Symbol(arguments)
+
+      while(1) {
+        arguments // should error
+>arguments : Symbol(arguments)
+      }
+    }
+  }
+}
+
+function D4() {
+>D4 : Symbol(D4, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 80, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 83, 8))
+
+    static {
+      function f() {
+>f : Symbol(f, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 84, 12))
+
+        arguments;  // ok
+>arguments : Symbol(arguments)
+      }
+    }
+  }
+}
+
+
+function D5() {
+>D5 : Symbol(D5, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 90, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 94, 8))
+
+     a = (() => { return arguments; })()  // should error
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 94, 18))
+>arguments : Symbol(arguments)
+  }
+}
+
+function D6() {
+>D6 : Symbol(D6, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 97, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 100, 8))
+
+     a = (x = arguments) => {}    // should error
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 100, 18))
+>x : Symbol(x, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 101, 10))
+>arguments : Symbol(arguments)
+  }
+}
+
+function D7() {
+>D7 : Symbol(D7, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 103, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 106, 8))
+
+     a(x = arguments){  // ok
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 106, 18))
+>x : Symbol(x, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 107, 7))
+>arguments : Symbol(arguments)
+
+     }
+  }
+}
+

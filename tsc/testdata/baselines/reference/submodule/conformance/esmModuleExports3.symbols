@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/node/esmModuleExports3.ts] ////
+
+=== /importer-cjs.cjs ===
+const Foo = require("./exporter.mjs");
+>Foo : Symbol(Foo, Decl(importer-cjs.cjs, 0, 5))
+>require : Symbol(require)
+>"./exporter.mjs" : Symbol(Foo, Decl(exporter.mts, 0, 0))
+
+new Foo();
+>Foo : Symbol(Foo, Decl(importer-cjs.cjs, 0, 5))
+
+=== /importer-cts.cts ===
+import Foo = require("./exporter.mjs");
+>Foo : Symbol(Foo, Decl(importer-cts.cts, 0, 0))
+
+new Foo();
+>Foo : Symbol(Foo, Decl(importer-cts.cts, 0, 0))
+
+import Foo2 from "./exporter.mjs";
+>Foo2 : Symbol(Foo2, Decl(importer-cts.cts, 3, 6))
+
+new Foo2();
+>Foo2 : Symbol(Foo2, Decl(importer-cts.cts, 3, 6))
+
+import * as Foo3 from "./exporter.mjs";
+>Foo3 : Symbol(Foo3, Decl(importer-cts.cts, 6, 6))
+
+new Foo3();
+>Foo3 : Symbol(Foo3, Decl(importer-cts.cts, 6, 6))
+
+import { Oops } from "./exporter.mjs";
+>Oops : Symbol(Oops, Decl(importer-cts.cts, 9, 8))
+
+=== /exporter.mts ===
+export default class Foo {}
+>Foo : Symbol(Foo, Decl(exporter.mts, 0, 0))
+
+export type { Foo as "module.exports" }
+>Foo : Symbol(Foo, Decl(exporter.mts, 0, 0))
+>"module.exports" : Symbol("module.exports", Decl(exporter.mts, 1, 13))
+

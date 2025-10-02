@@ -2,7 +2,7 @@
 +++ new.nodeModulesImportAssertions(module=node18).errors.txt
 @@= skipped -0, +0 lines =@@
  otherc.cts(1,35): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
-+otherc.cts(2,40): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
++otherc.cts(2,40): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'.
 
 
  ==== index.ts (0 errors) ====
@@ -14,7 +14,7 @@
  !!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
      const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
 +                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
++!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'.
  ==== package.json (0 errors) ====
      {
          "name": "pkg",

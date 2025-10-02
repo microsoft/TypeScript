@@ -10,7 +10,7 @@ import (
 
 func TestDocumentHighlightInTypeExport(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /1.ts
 type [|A|] = 1;

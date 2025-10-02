@@ -2129,7 +2129,17 @@ func (b *nodeBuilderImpl) getPropertyNameNodeForSymbol(symbol *ast.Symbol) *ast.
 	if fromNameType != nil {
 		return fromNameType
 	}
-	return b.createPropertyNameNodeForIdentifierOrLiteral(symbol.Name, singleQuote, stringNamed, isMethod)
+
+	name := symbol.Name
+	const privateNamePrefix = ast.InternalSymbolNamePrefix + "#"
+	if strings.HasPrefix(name, privateNamePrefix) {
+		// symbol IDs are unstable - replace #nnn# with #private#
+		name = name[len(privateNamePrefix):]
+		name = strings.TrimLeftFunc(name, stringutil.IsDigit)
+		name = "__#private" + name
+	}
+
+	return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod)
 }
 
 // See getNameForSymbolFromNameType for a stringy equivalent

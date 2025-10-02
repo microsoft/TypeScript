@@ -1,0 +1,31 @@
+--- old.mixinAccessors1.errors.txt
++++ new.mixinAccessors1.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++mixinAccessors1.ts(18,7): error TS2611: 'validationTarget' is defined as a property in class 'mixin.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
++
++
++==== mixinAccessors1.ts (1 errors) ====
++    // https://github.com/microsoft/TypeScript/issues/58790
++    
++    function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
++      return class extends superclass {
++        get validationTarget(): HTMLElement {
++          return document.createElement("input");
++        }
++      };
++    }
++    
++    class BaseClass {
++      get validationTarget(): HTMLElement {
++        return document.createElement("div");
++      }
++    }
++    
++    class MyClass extends mixin(BaseClass) {
++      get validationTarget(): HTMLElement {
++          ~~~~~~~~~~~~~~~~
++!!! error TS2611: 'validationTarget' is defined as a property in class 'mixin.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
++        return document.createElement("select");
++      }
++    }

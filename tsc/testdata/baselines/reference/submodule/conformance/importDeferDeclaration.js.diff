@@ -1,0 +1,21 @@
+--- old.importDeferDeclaration.js
++++ new.importDeferDeclaration.js
+@@= skipped -13, +13 lines =@@
+ //// [a.js]
+ export {};
+ //// [b.js]
++ * as;
++ns;
++from;
++"./a.js";
+ export {};
+
+
+@@= skipped -8, +12 lines =@@
+     x: number;
+ }
+ //// [b.d.ts]
+-import * as ns from "./a.js";
+ export type X = {
+     foo: ns.Foo;
+ };

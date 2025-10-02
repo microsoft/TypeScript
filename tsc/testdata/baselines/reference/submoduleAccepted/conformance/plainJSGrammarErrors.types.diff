@@ -9,7 +9,17 @@
 
      export { staticParam }
  >staticParam : any
-@@= skipped -291, +291 lines =@@
+@@= skipped -97, +97 lines =@@
+ var x = 2 ?? 3 || 4
+ >x : number
+ >2 ?? 3 || 4 : 2 | 3 | 4
+->2 ?? 3 : 2 | 3
+ >2 : 2
++>3 || 4 : 3 | 4
+ >3 : 3
+ >4 : 4
+
+@@= skipped -194, +194 lines =@@
  >b : any
 
  switch (b) {

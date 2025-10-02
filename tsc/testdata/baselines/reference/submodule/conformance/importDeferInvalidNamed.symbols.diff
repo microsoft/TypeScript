@@ -1,0 +1,12 @@
+--- old.importDeferInvalidNamed.symbols
++++ new.importDeferInvalidNamed.symbols
+@@= skipped -11, +11 lines =@@
+
+ === b.ts ===
+ import defer { foo } from "a";
+->foo : Symbol(foo, Decl(b.ts, 0, 14))
++>defer : Symbol(defer, Decl(b.ts, 0, 0))
+
+ foo();
+->foo : Symbol(foo, Decl(b.ts, 0, 14))
+-

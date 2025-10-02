@@ -1,0 +1,16 @@
+--- old.nodeModulesAllowJsCjsFromJs(module=node20).types
++++ new.nodeModulesAllowJsCjsFromJs(module=node20).types
+@@= skipped -9, +9 lines =@@
+
+ === bar.ts ===
+ import foo from "./foo.cjs"
+->foo : typeof foo
++>foo : any
+
+ foo.foo;
+->foo.foo : "foo"
+->foo : typeof foo
+->foo : "foo"
++>foo.foo : any
++>foo : any
++>foo : any

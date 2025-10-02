@@ -1,0 +1,14 @@
+b.ts(1,19): error TS1141: String literal expected.
+b.ts(1,24): error TS1005: ';' expected.
+
+
+==== a.ts (0 errors) ====
+    export default 2;
+    
+==== b.ts (2 errors) ====
+    import defer from from "./a.js";
+                      ~~~~
+!!! error TS1141: String literal expected.
+                           ~~~~~~~~
+!!! error TS1005: ';' expected.
+    

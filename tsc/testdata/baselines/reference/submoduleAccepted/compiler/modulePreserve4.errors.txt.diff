@@ -2,7 +2,7 @@
 +++ new.modulePreserve4.errors.txt
 @@= skipped -0, +0 lines =@@
 -/a.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
- /f.cts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+ /f.cts(1,1): error TS1286: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.
 -/main1.ts(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
  /main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
  /main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
@@ -12,14 +12,14 @@
  /main2.mts(4,4): error TS2339: Property 'default' does not exist on type 'typeof import("/a")'.
  /main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
  /main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
- /main3.cjs(1,10): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+ /main3.cjs(1,10): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 -/main3.cjs(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
-+/main3.cjs(1,13): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
++/main3.cjs(1,13): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
  /main3.cjs(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
- /main3.cjs(5,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
- /main3.cjs(8,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+ /main3.cjs(5,8): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+ /main3.cjs(8,8): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 @@= skipped -18, +16 lines =@@
- /main3.cjs(17,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+ /main3.cjs(17,8): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 
 
 -==== /a.js (1 errors) ====
@@ -59,10 +59,10 @@
      a1.default.x; // Arguably should exist but doesn't
 @@= skipped -38, +38 lines =@@
               ~
- !!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+ !!! error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
                  ~
 -!!! error TS2305: Module '"./a"' has no exported member 'y'.
-+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
++!!! error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
      import a1 = require("./a"); // Error in JS
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS8002: 'import ... =' can only be used in TypeScript files.

@@ -1,0 +1,21 @@
+--- old.anonymousClassAccessorsDeclarationEmit1.js
++++ new.anonymousClassAccessorsDeclarationEmit1.js
+@@= skipped -50, +50 lines =@@
+     accessor a: number;
+ }
+ export declare function middle(Super?: typeof Base): abstract new () => {
+-    get a(): number;
+-    set a(arg: number);
++    a: number;
+ };
+ declare class A {
+     constructor(...args: any[]);
+ }
+ export declare function Mixin<T extends typeof A>(Super: T): {
+     new (...args: any[]): {
+-        get myName(): string;
+-        set myName(arg: string);
++        myName: string;
+     };
+ } & T;
+ export {};

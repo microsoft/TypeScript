@@ -1,0 +1,11 @@
+--- old.importDeferTypeConflict2.js
++++ new.importDeferTypeConflict2.js
+@@= skipped -13, +13 lines =@@
+     console.log("foo from a");
+ }
+ //// [b.js]
++ * as;
+ ns1;
+ from;
+ "a";
+-export {};

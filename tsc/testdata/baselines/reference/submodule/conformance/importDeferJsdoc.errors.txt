@@ -1,0 +1,21 @@
+/foo.js(2,18): error TS1141: String literal expected.
+/foo.js(6,12): error TS2503: Cannot find namespace 'ns'.
+
+
+==== /types.ts (0 errors) ====
+    export type X = 1;
+    
+==== /foo.js (2 errors) ====
+    /**
+     * @import defer * as ns from "./types"
+                     ~~~~
+!!! error TS1141: String literal expected.
+     */
+    
+    /**
+     * @type { ns.X }
+               ~~
+!!! error TS2503: Cannot find namespace 'ns'.
+     */
+    let a = 2;
+    

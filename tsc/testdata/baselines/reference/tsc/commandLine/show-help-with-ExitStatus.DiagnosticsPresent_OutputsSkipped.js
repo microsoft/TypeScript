@@ -112,8 +112,8 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 
 [94m           --module, -m  [39mSpecify what module code is generated.
 
-                one of:  none, commonjs, amd, system, umd, es6/es2015, es2020, es2022, esnext, node16, node18, nodenext,
-                          preserve
+                one of:  none, commonjs, amd, system, umd, es6/es2015, es2020, es2022, esnext, node16, node18, node20, n
+                         odenext, preserve
 
                default:  undefined
 
@@ -135,12 +135,13 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
                          23.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024.object/
                          esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024.string/
                          esnext.string, esnext.array, esnext.collection, esnext.intl, esnext.disposable, esnext.promise,
-                          esnext.decorators, esnext.iterator, esnext.float16, decorators, decorators.legacy
+                          esnext.decorators, esnext.iterator, esnext.float16, esnext.error, esnext.sharedmemory, decorat
+                         ors, decorators.legacy
 
                default:  undefined
 
 
-[94m              --allowJs  [39mAllow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors fro
+[94m              --allowJs  [39mAllow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors fro
                          m these files.
 
                   type:  boolean

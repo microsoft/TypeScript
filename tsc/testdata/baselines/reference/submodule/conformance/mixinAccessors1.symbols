@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/classes/mixinAccessors1.ts] ////
+
+=== mixinAccessors1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58790
+
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : Symbol(mixin, Decl(mixinAccessors1.ts, 0, 0))
+>T : Symbol(T, Decl(mixinAccessors1.ts, 2, 15))
+>args : Symbol(args, Decl(mixinAccessors1.ts, 2, 32))
+>superclass : Symbol(superclass, Decl(mixinAccessors1.ts, 2, 55))
+>T : Symbol(T, Decl(mixinAccessors1.ts, 2, 15))
+
+  return class extends superclass {
+>superclass : Symbol(superclass, Decl(mixinAccessors1.ts, 2, 55))
+
+    get validationTarget(): HTMLElement {
+>validationTarget : Symbol((Anonymous class).validationTarget, Decl(mixinAccessors1.ts, 3, 35))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+      return document.createElement("input");
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+    }
+  };
+}
+
+class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(mixinAccessors1.ts, 8, 1))
+
+  get validationTarget(): HTMLElement {
+>validationTarget : Symbol(BaseClass.validationTarget, Decl(mixinAccessors1.ts, 10, 17))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    return document.createElement("div");
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+class MyClass extends mixin(BaseClass) {
+>MyClass : Symbol(MyClass, Decl(mixinAccessors1.ts, 14, 1))
+>mixin : Symbol(mixin, Decl(mixinAccessors1.ts, 0, 0))
+>BaseClass : Symbol(BaseClass, Decl(mixinAccessors1.ts, 8, 1))
+
+  get validationTarget(): HTMLElement {
+>validationTarget : Symbol(MyClass.validationTarget, Decl(mixinAccessors1.ts, 16, 40))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    return document.createElement("select");
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+  }
+}

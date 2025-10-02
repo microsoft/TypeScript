@@ -1,0 +1,31 @@
+b.ts(1,1): error TS1128: Declaration or statement expected.
+b.ts(1,8): error TS2304: Cannot find name 'defer'.
+b.ts(1,16): error TS2304: Cannot find name 'as'.
+b.ts(1,19): error TS1005: ';' expected.
+b.ts(1,19): error TS2304: Cannot find name 'ns'.
+b.ts(1,22): error TS1434: Unexpected keyword or identifier.
+b.ts(1,22): error TS2304: Cannot find name 'from'.
+
+
+==== a.ts (0 errors) ====
+    export function foo() {
+      console.log("foo from a");
+    }
+    
+==== b.ts (7 errors) ====
+    export defer * as ns from "a";
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~~
+!!! error TS2304: Cannot find name 'defer'.
+                   ~~
+!!! error TS2304: Cannot find name 'as'.
+                      ~~
+!!! error TS1005: ';' expected.
+                      ~~
+!!! error TS2304: Cannot find name 'ns'.
+                         ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                         ~~~~
+!!! error TS2304: Cannot find name 'from'.
+    

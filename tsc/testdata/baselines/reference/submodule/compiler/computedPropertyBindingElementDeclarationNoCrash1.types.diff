@@ -1,0 +1,14 @@
+--- old.computedPropertyBindingElementDeclarationNoCrash1.types
++++ new.computedPropertyBindingElementDeclarationNoCrash1.types
+@@= skipped -29, +29 lines =@@
+ >key : string
+ >value : unknown
+ >Object.entries(e) : [string, unknown][]
+->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
++>Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+ >Object : ObjectConstructor
+->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
++>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+ >e : any
+
+       this.setState({

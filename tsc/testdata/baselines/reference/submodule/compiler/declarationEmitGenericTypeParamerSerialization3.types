@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/declarationEmitGenericTypeParamerSerialization3.ts] ////
+
+=== declarationEmitGenericTypeParamerSerialization3.ts ===
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+>args : any[]
+>superclass : T
+
+  return class extends superclass {};
+>class extends superclass {} : { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+>superclass : {}
+}
+
+export function wrapper<T>(value: T) {
+>wrapper : <T>(value: T) => typeof MyClass
+>value : T
+
+  class BaseClass {
+>BaseClass : BaseClass
+
+    accessor name = value;
+>name : T
+>value : T
+  }
+  return class MyClass extends mixin(BaseClass) {
+>class MyClass extends mixin(BaseClass) {    accessor name = value;  } : typeof MyClass
+>MyClass : typeof MyClass
+>mixin(BaseClass) : mixin.(Anonymous class) & BaseClass
+>mixin : <T_1 extends new (...args: any[]) => {}>(superclass: T_1) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T_1
+>BaseClass : typeof BaseClass
+
+    accessor name = value;
+>name : T
+>value : T
+  }
+}
+
+export const Cls = wrapper("test");
+>Cls : typeof MyClass
+>wrapper("test") : typeof MyClass
+>wrapper : <T>(value: T) => typeof MyClass
+>"test" : "test"
+

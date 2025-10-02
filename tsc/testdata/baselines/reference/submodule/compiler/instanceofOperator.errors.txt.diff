@@ -1,7 +1,7 @@
 --- old.instanceofOperator.errors.txt
 +++ new.instanceofOperator.errors.txt
 @@= skipped -0, +0 lines =@@
--instanceofOperator.ts(7,11): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
+-instanceofOperator.ts(7,11): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
  instanceofOperator.ts(12,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
  instanceofOperator.ts(15,20): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
  instanceofOperator.ts(16,23): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
@@ -19,7 +19,7 @@
      module test {
          class Object { }
 -              ~~~~~~
--!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
+-!!! error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
          var obj: Object;
      
      

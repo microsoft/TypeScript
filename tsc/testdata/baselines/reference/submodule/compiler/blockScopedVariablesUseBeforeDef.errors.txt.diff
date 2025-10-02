@@ -1,0 +1,44 @@
+--- old.blockScopedVariablesUseBeforeDef.errors.txt
++++ new.blockScopedVariablesUseBeforeDef.errors.txt
+@@= skipped -4, +4 lines =@@
+ blockScopedVariablesUseBeforeDef.ts(111,28): error TS2448: Block-scoped variable 'a' used before its declaration.
+ blockScopedVariablesUseBeforeDef.ts(112,21): error TS2448: Block-scoped variable 'a' used before its declaration.
+ blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable 'a' used before its declaration.
+-blockScopedVariablesUseBeforeDef.ts(128,9): error TS2448: Block-scoped variable 'foo' used before its declaration.
+-blockScopedVariablesUseBeforeDef.ts(131,9): error TS2448: Block-scoped variable 'foo' used before its declaration.
+-blockScopedVariablesUseBeforeDef.ts(153,20): error TS2450: Enum 'Enum' used before its declaration.
+-
+-
+-==== blockScopedVariablesUseBeforeDef.ts (10 errors) ====
++
++
++==== blockScopedVariablesUseBeforeDef.ts (7 errors) ====
+     function foo0() {
+         let a = x;
+                 ~
+@@= skipped -155, +152 lines =@@
+         const promise = (async () => {
+             promise
+             foo
+-            ~~~
+-!!! error TS2448: Block-scoped variable 'foo' used before its declaration.
+-!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:134:11: 'foo' is declared here.
+             await null
+             promise
+             foo
+-            ~~~
+-!!! error TS2448: Block-scoped variable 'foo' used before its declaration.
+-!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:134:11: 'foo' is declared here.
+         })()
+     
+         const foo = 1;
+@@= skipped -31, +25 lines =@@
+     
+     function foo18() {
+         let a = (() => Enum.Yes)();
+-                       ~~~~
+-!!! error TS2450: Enum 'Enum' used before its declaration.
+-!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:154:10: 'Enum' is declared here.
+         enum Enum {
+             No = 0,
+             Yes = 1,

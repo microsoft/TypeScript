@@ -181,7 +181,7 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                 case "baselineDocumentHighlights":
                     return parseBaselineDocumentHighlightsArgs(callExpression.arguments);
                 case "baselineQuickInfo":
-                    return [parseBaselineQuickInfo(callExpression.arguments)];
+                    return parseBaselineQuickInfo(callExpression.arguments);
                 case "baselineSignatureHelp":
                     return [parseBaselineSignatureHelp(callExpression.arguments)];
                 case "baselineGoToDefinition":
@@ -991,14 +991,14 @@ function getRangesByTextArg(arg: ts.CallExpression): string | undefined {
     return undefined;
 }
 
-function parseBaselineQuickInfo(args: ts.NodeArray<ts.Expression>): VerifyBaselineQuickInfoCmd {
+function parseBaselineQuickInfo(args: ts.NodeArray<ts.Expression>): VerifyBaselineQuickInfoCmd[] | undefined {
     if (args.length !== 0) {
-        // All calls are currently empty!
-        throw new Error("Expected no arguments in verify.baselineQuickInfo");
+        // !!!
+        return undefined;
     }
-    return {
+    return [{
         kind: "verifyBaselineQuickInfo",
-    };
+    }];
 }
 
 function parseQuickInfoArgs(funcName: string, args: readonly ts.Expression[]): VerifyQuickInfoCmd[] | undefined {

@@ -1,0 +1,131 @@
+--- old.nodeModulesAllowJsPackagePatternExports(module=node20).types
++++ new.nodeModulesAllowJsPackagePatternExports(module=node20).types
+@@= skipped -5, +5 lines =@@
+ >cjsi : typeof cjsi
+
+ import * as mjsi from "inner/mjs/index";
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof mjsi
+
+ import * as typei from "inner/js/index";
+ >typei : typeof typei
+@@= skipped -9, +9 lines =@@
+ >cjsi : typeof cjsi
+
+ mjsi;
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof mjsi
+
+ typei;
+ >typei : typeof typei
+@@= skipped -11, +11 lines =@@
+ >cjsi : typeof cjsi
+
+ import * as mjsi from "inner/mjs/index";
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof mjsi
+
+ import * as typei from "inner/js/index";
+ >typei : typeof typei
+@@= skipped -9, +9 lines =@@
+ >cjsi : typeof cjsi
+
+ mjsi;
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof mjsi
+
+ typei;
+ >typei : typeof typei
+@@= skipped -11, +11 lines =@@
+ >cjsi : typeof cjsi
+
+ import * as mjsi from "inner/mjs/index";
+->mjsi : typeof cjsi.mjs
++>mjsi : typeof mjsi
+
+ import * as typei from "inner/js/index";
+->typei : typeof cjsi.mjs.cjs.type
++>typei : typeof typei
+
+ cjsi;
+ >cjsi : typeof cjsi
+
+ mjsi;
+->mjsi : typeof cjsi.mjs
++>mjsi : typeof mjsi
+
+ typei;
+->typei : typeof cjsi.mjs.cjs.type
++>typei : typeof typei
+
+ === node_modules/inner/index.d.ts ===
+ // cjs format file
+ import * as cjs from "inner/cjs/index";
+->cjs : any
++>cjs : typeof cjs
+
+ import * as mjs from "inner/mjs/index";
+ >mjs : typeof mjs
+
+ import * as type from "inner/js/index";
+->type : typeof mjs.cjs.cjs.type
++>type : typeof type
+
+ export { cjs };
+->cjs : any
++>cjs : typeof cjs
+
+ export { mjs };
+ >mjs : typeof mjs
+
+ export { type };
+->type : typeof mjs.cjs.cjs.type
++>type : typeof type
+
+ === node_modules/inner/index.d.mts ===
+ // esm format file
+@@= skipped -40, +40 lines =@@
+ >cjs : typeof cjs
+
+ import * as mjs from "inner/mjs/index";
+->mjs : typeof cjs.cjs.mjs
++>mjs : typeof mjs
+
+ import * as type from "inner/js/index";
+->type : typeof cjs.cjs.mjs.type
++>type : typeof type
+
+ export { cjs };
+ >cjs : typeof cjs
+
+ export { mjs };
+->mjs : typeof cjs.cjs.mjs
++>mjs : typeof mjs
+
+ export { type };
+->type : typeof cjs.cjs.mjs.type
++>type : typeof type
+
+ === node_modules/inner/index.d.cts ===
+ // cjs format file
+@@= skipped -20, +20 lines =@@
+ >cjs : typeof cjs
+
+ import * as mjs from "inner/mjs/index";
+->mjs : typeof cjs.mjs
++>mjs : typeof mjs
+
+ import * as type from "inner/js/index";
+->type : typeof cjs.mjs.cjs.type
++>type : typeof type
+
+ export { cjs };
+ >cjs : typeof cjs
+
+ export { mjs };
+->mjs : typeof cjs.mjs
++>mjs : typeof mjs
+
+ export { type };
+->type : typeof cjs.mjs.cjs.type
++>type : typeof type

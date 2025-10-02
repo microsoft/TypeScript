@@ -1,0 +1,18 @@
+--- old.declarationEmitGenericTypeParamerSerialization3.js
++++ new.declarationEmitGenericTypeParamerSerialization3.js
+@@= skipped -35, +35 lines =@@
+ //// [declarationEmitGenericTypeParamerSerialization3.d.ts]
+ export declare function wrapper<T>(value: T): {
+     new (): {
+-        get name(): T;
+-        set name(arg: T);
++        name: T;
+     };
+ };
+ export declare const Cls: {
+     new (): {
+-        get name(): string;
+-        set name(arg: string);
++        name: string;
+     };
+ };

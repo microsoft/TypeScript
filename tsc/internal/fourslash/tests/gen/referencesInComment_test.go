@@ -9,7 +9,7 @@ import (
 
 func TestReferencesInComment(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// References to /*1*/foo or b/*2*/ar
 /* in comments should not find fo/*3*/o or bar/*4*/ */

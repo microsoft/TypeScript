@@ -15,7 +15,7 @@
      readonly name: "click";
 -    readonly once?: boolean;
 +    readonly once?: boolean | undefined;
-     readonly callback: (ev: MouseEvent) => void;
+     readonly callback: (ev: PointerEvent) => void;
  };
  declare const scrollEvent: {
      readonly name: "scroll";

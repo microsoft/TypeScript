@@ -1,0 +1,59 @@
+--- old.noCircularitySelfReferentialGetter4.types
++++ new.noCircularitySelfReferentialGetter4.types
+@@= skipped -1, +1 lines =@@
+
+ === noCircularitySelfReferentialGetter4.ts ===
+ const a = {
+->a : { prop: number; readonly self: any; }
+->{  prop: 42,  get self() {    return a;  },} satisfies { prop: number; self: any } : { prop: number; readonly self: { prop: number; readonly self: any; }; }
+->{  prop: 42,  get self() {    return a;  },} : { prop: number; readonly self: { prop: number; readonly self: any; }; }
++>a : any
++>{  prop: 42,  get self() {    return a;  },} satisfies { prop: number; self: any } : { prop: number; readonly self: any; }
++>{  prop: 42,  get self() {    return a;  },} : { prop: number; readonly self: any; }
+
+   prop: 42,
+ >prop : number
+ >42 : 42
+
+   get self() {
+->self : { prop: number; readonly self: any; }
++>self : any
+
+     return a;
+->a : { prop: number; readonly self: any; }
++>a : any
+
+   },
+ } satisfies { prop: number; self: any };
+@@= skipped -20, +20 lines =@@
+ >self : any
+
+ const prop = a.self.self.self.self.self.prop;
+->prop : number
+->a.self.self.self.self.self.prop : number
+->a.self.self.self.self.self : { prop: number; readonly self: any; }
+->a.self.self.self.self : { prop: number; readonly self: any; }
+->a.self.self.self : { prop: number; readonly self: any; }
+->a.self.self : { prop: number; readonly self: any; }
+->a.self : { prop: number; readonly self: any; }
+->a : { prop: number; readonly self: any; }
+->self : { prop: number; readonly self: any; }
+->self : { prop: number; readonly self: any; }
+->self : { prop: number; readonly self: any; }
+->self : { prop: number; readonly self: any; }
+->self : { prop: number; readonly self: any; }
+->prop : number
++>prop : any
++>a.self.self.self.self.self.prop : any
++>a.self.self.self.self.self : any
++>a.self.self.self.self : any
++>a.self.self.self : any
++>a.self.self : any
++>a.self : any
++>a : any
++>self : any
++>self : any
++>self : any
++>self : any
++>self : any
++>prop : any

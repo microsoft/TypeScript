@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/lateBoundAssignmentCandidateJS2.ts] ////
+
+=== index.js ===
+const prop = 'prop';
+>prop : Symbol(prop, Decl(index.js, 0, 5))
+
+export class foo1 {
+>foo1 : Symbol(foo1, Decl(index.js, 0, 20))
+
+    constructor() {
+        this[prop] = 'bar'
+>this : Symbol(foo1, Decl(index.js, 0, 20))
+>prop : Symbol(prop, Decl(index.js, 0, 5))
+    }
+
+    /**
+     * @protected
+     * @type {string}
+     */
+    [prop] = 'baz';
+>[prop] : Symbol(foo1[prop], Decl(index.js, 5, 5))
+>prop : Symbol(prop, Decl(index.js, 0, 5))
+}
+

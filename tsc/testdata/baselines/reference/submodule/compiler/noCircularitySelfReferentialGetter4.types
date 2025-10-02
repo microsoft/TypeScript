@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/noCircularitySelfReferentialGetter4.ts] ////
+
+=== noCircularitySelfReferentialGetter4.ts ===
+const a = {
+>a : any
+>{  prop: 42,  get self() {    return a;  },} satisfies { prop: number; self: any } : { prop: number; readonly self: any; }
+>{  prop: 42,  get self() {    return a;  },} : { prop: number; readonly self: any; }
+
+  prop: 42,
+>prop : number
+>42 : 42
+
+  get self() {
+>self : any
+
+    return a;
+>a : any
+
+  },
+} satisfies { prop: number; self: any };
+>prop : number
+>self : any
+
+const prop = a.self.self.self.self.self.prop;
+>prop : any
+>a.self.self.self.self.self.prop : any
+>a.self.self.self.self.self : any
+>a.self.self.self.self : any
+>a.self.self.self : any
+>a.self.self : any
+>a.self : any
+>a : any
+>self : any
+>self : any
+>self : any
+>self : any
+>self : any
+>prop : any
+

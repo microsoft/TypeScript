@@ -29,15 +29,27 @@ declare namespace Intl {
         granularity?: "grapheme" | "word" | "sentence" | undefined;
     }
 
+    /**
+     * The `Intl.Segmenter` object enables locale-sensitive text segmentation, enabling you to get meaningful items (graphemes, words or sentences) from a string.
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter)
+     */
     interface Segmenter {
         /**
          * Returns `Segments` object containing the segments of the input string, using the segmenter's locale and granularity.
+         *
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/segment)
          *
          * @param input - The text to be segmented as a `string`.
          *
          * @returns A new iterable Segments object containing the segments of the input string, using the segmenter's locale and granularity.
          */
         segment(input: string): Segments;
+        /**
+         * The `resolvedOptions()` method of `Intl.Segmenter` instances returns a new object with properties reflecting the options computed during initialization of this `Segmenter` object.
+         *
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/resolvedOptions)
+         */
         resolvedOptions(): ResolvedSegmenterOptions;
     }
 
@@ -50,13 +62,20 @@ declare namespace Intl {
         [Symbol.iterator](): SegmentIterator<T>;
     }
 
+    /**
+     * A `Segments` object is an iterable collection of the segments of a text string. It is returned by a call to the `segment()` method of an `Intl.Segmenter` object.
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/segment/Segments)
+     */
     interface Segments {
         /**
          * Returns an object describing the segment in the original string that includes the code unit at a specified index.
          *
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/segment/Segments/containing)
+         *
          * @param codeUnitIndex - A number specifying the index of the code unit in the original input string. If the value is omitted, it defaults to `0`.
          */
-        containing(codeUnitIndex?: number): SegmentData;
+        containing(codeUnitIndex?: number): SegmentData | undefined;
 
         /** Returns an iterator to iterate over the segments. */
         [Symbol.iterator](): SegmentIterator<SegmentData>;
@@ -76,6 +95,11 @@ declare namespace Intl {
         isWordLike?: boolean;
     }
 
+    /**
+     * The `Intl.Segmenter` object enables locale-sensitive text segmentation, enabling you to get meaningful items (graphemes, words or sentences) from a string.
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter)
+     */
     const Segmenter: {
         prototype: Segmenter;
 

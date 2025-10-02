@@ -1,6 +1,6 @@
 --- old.inferTypePredicates.js
 +++ new.inferTypePredicates.js
-@@= skipped -295, +295 lines =@@
+@@= skipped -318, +318 lines =@@
  const numsOrNull = [1, 2, 3, 4, null];
  const filteredNumsTruthy = numsOrNull.filter(x => !!x); // should error
  const filteredNumsNonNullish = numsOrNull.filter(x => x !== null); // should ok
@@ -33,7 +33,7 @@
  }
  if (c.isC2()) {
      let c2 = c; // should error
-@@= skipped -146, +143 lines =@@
+@@= skipped -155, +152 lines =@@
  declare let snd: string | number | Date;
  declare function isNumberWithThis(this: Date, x: number | string): x is number;
  declare function narrowFromAny(x: any): x is number;
@@ -59,3 +59,9 @@
      type: "foo";
      foo: number;
  };
+@@= skipped -15, +21 lines =@@
+ type Something = Animal | Rock;
+ declare function isAnimal(something: Something): something is Animal;
+ declare function positive(t: Something): t is Animal;
+-declare function negative(t: Something): t is Rock;
++declare function negative(t: Something): boolean;

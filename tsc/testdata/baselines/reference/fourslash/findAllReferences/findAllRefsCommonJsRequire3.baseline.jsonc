@@ -1,0 +1,4 @@
+// === findAllReferences ===
+// === /b.js ===
+// const { [|f|] } = require('./a')
+// /*FIND ALL REFS*/[|f|]

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/typeAliasInstantiationNoLeak1.ts] ////
+
+=== typeAliasInstantiationNoLeak1.ts ===
+type Foo<T> = T | string | number;
+>Foo : Symbol(Foo, Decl(typeAliasInstantiationNoLeak1.ts, 0, 0))
+>T : Symbol(T, Decl(typeAliasInstantiationNoLeak1.ts, 0, 9))
+>T : Symbol(T, Decl(typeAliasInstantiationNoLeak1.ts, 0, 9))
+
+type Bar<T> = Foo<T> | undefined;
+>Bar : Symbol(Bar, Decl(typeAliasInstantiationNoLeak1.ts, 0, 34))
+>T : Symbol(T, Decl(typeAliasInstantiationNoLeak1.ts, 1, 9))
+>Foo : Symbol(Foo, Decl(typeAliasInstantiationNoLeak1.ts, 0, 0))
+>T : Symbol(T, Decl(typeAliasInstantiationNoLeak1.ts, 1, 9))
+
+declare let x1: Bar<"a">;
+>x1 : Symbol(x1, Decl(typeAliasInstantiationNoLeak1.ts, 3, 11))
+>Bar : Symbol(Bar, Decl(typeAliasInstantiationNoLeak1.ts, 0, 34))
+
+declare let x2: Bar<"b">;
+>x2 : Symbol(x2, Decl(typeAliasInstantiationNoLeak1.ts, 4, 11))
+>Bar : Symbol(Bar, Decl(typeAliasInstantiationNoLeak1.ts, 0, 34))
+

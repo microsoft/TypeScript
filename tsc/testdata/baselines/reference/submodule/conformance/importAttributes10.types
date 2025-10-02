@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/importAttributes/importAttributes10.ts] ////
+
+=== b.ts ===
+declare global {
+>global : any
+
+    interface ImportAttributes {
+        type: "json"
+>type : "json"
+    }
+}
+
+export type Test1 = typeof import("./a.json", {
+>Test1 : any
+
+  with: {
+    type: "json"
+>type : any
+
+  },
+});
+
+export type Test2 = typeof import("./a.json", {
+>Test2 : any
+
+  with: {
+    type: "json",
+>type : any
+  }
+});
+
+export type Test3 = typeof import("./a.json", {
+>Test3 : any
+
+  with: {
+    type: "json"
+>type : any
+
+  },,
+});
+
+export type Test4 = typeof import("./a.json", {
+>Test4 : any
+
+  with: {
+    type: "json",,
+>type : any
+  }
+});
+

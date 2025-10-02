@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/disallowedBlockScopedInPresenceOfParseErrors1.ts] ////
+
+=== disallowedBlockScopedInPresenceOfParseErrors1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61734
+
+function f1() {
+>f1 : () => void
+
+  if (1 > 0)
+>1 > 0 : boolean
+>1 : 1
+>0 : 0
+
+    const e = 3;
+>e : 3
+>3 : 3
+
+    console.log(e);
+>console.log(e) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>e : 3
+  }
+}
+
+function f2() {
+>f2 : () => void
+
+  if (1 > 0)
+>1 > 0 : boolean
+>1 : 1
+>0 : 0
+
+    let e = 3;
+>e : number
+>3 : 3
+
+    console.log(e);
+>console.log(e) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>e : number
+  }
+}
+
+declare const resource: Disposable
+>resource : Disposable
+
+function f3() {
+>f3 : () => void
+
+  if (1 > 0)
+>1 > 0 : boolean
+>1 : 1
+>0 : 0
+
+    using e = resource;
+>e : Disposable
+>resource : Disposable
+
+    console.log(e);
+>console.log(e) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>e : Disposable
+  }
+}
+
+declare const asyncResource: AsyncDisposable
+>asyncResource : AsyncDisposable
+
+async function f4() {
+>f4 : () => Promise<void>
+
+  if (1 > 0)
+>1 > 0 : boolean
+>1 : 1
+>0 : 0
+
+    await using e = asyncResource;
+>e : AsyncDisposable
+>asyncResource : AsyncDisposable
+
+    console.log(e);
+>console.log(e) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>e : AsyncDisposable
+  }
+}
+

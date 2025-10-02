@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/noCircularitySelfReferentialGetter2.ts] ////
+
+=== noCircularitySelfReferentialGetter2.ts ===
+interface ZodType {
+>ZodType : Symbol(ZodType, Decl(noCircularitySelfReferentialGetter2.ts, 0, 0))
+
+  optional: "true" | "false";
+>optional : Symbol(ZodType.optional, Decl(noCircularitySelfReferentialGetter2.ts, 0, 19))
+
+  output: any;
+>output : Symbol(ZodType.output, Decl(noCircularitySelfReferentialGetter2.ts, 1, 29))
+}
+
+interface ZodString extends ZodType {
+>ZodString : Symbol(ZodString, Decl(noCircularitySelfReferentialGetter2.ts, 3, 1))
+>ZodType : Symbol(ZodType, Decl(noCircularitySelfReferentialGetter2.ts, 0, 0))
+
+  optional: "false";
+>optional : Symbol(ZodString.optional, Decl(noCircularitySelfReferentialGetter2.ts, 5, 37))
+
+  output: string;
+>output : Symbol(ZodString.output, Decl(noCircularitySelfReferentialGetter2.ts, 6, 20))
+}
+
+type ZodShape = Record<string, any>;
+>ZodShape : Symbol(ZodShape, Decl(noCircularitySelfReferentialGetter2.ts, 8, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(noCircularitySelfReferentialGetter2.ts, 10, 36))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 11, 14))
+>K : Symbol(K, Decl(noCircularitySelfReferentialGetter2.ts, 11, 22))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 11, 14))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 11, 14))
+>K : Symbol(K, Decl(noCircularitySelfReferentialGetter2.ts, 11, 22))
+
+type InferObjectType<Shape extends ZodShape> = Prettify<
+>InferObjectType : Symbol(InferObjectType, Decl(noCircularitySelfReferentialGetter2.ts, 11, 49))
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>ZodShape : Symbol(ZodShape, Decl(noCircularitySelfReferentialGetter2.ts, 8, 1))
+>Prettify : Symbol(Prettify, Decl(noCircularitySelfReferentialGetter2.ts, 10, 36))
+  {
+    [k in keyof Shape as Shape[k] extends { optional: "true" }
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 14, 5))
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 14, 5))
+>optional : Symbol(optional, Decl(noCircularitySelfReferentialGetter2.ts, 14, 43))
+
+      ? k
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 14, 5))
+
+      : never]?: Shape[k]["output"];
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 14, 5))
+
+  } & {
+    [k in keyof Shape as Shape[k] extends { optional: "true" }
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 18, 5))
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 18, 5))
+>optional : Symbol(optional, Decl(noCircularitySelfReferentialGetter2.ts, 18, 43))
+
+      ? never
+      : k]: Shape[k]["output"];
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 18, 5))
+>Shape : Symbol(Shape, Decl(noCircularitySelfReferentialGetter2.ts, 12, 21))
+>k : Symbol(k, Decl(noCircularitySelfReferentialGetter2.ts, 18, 5))
+  }
+>;
+interface ZodObject<T extends ZodShape> extends ZodType {
+>ZodObject : Symbol(ZodObject, Decl(noCircularitySelfReferentialGetter2.ts, 22, 2))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 23, 20))
+>ZodShape : Symbol(ZodShape, Decl(noCircularitySelfReferentialGetter2.ts, 8, 1))
+>ZodType : Symbol(ZodType, Decl(noCircularitySelfReferentialGetter2.ts, 0, 0))
+
+  optional: "false";
+>optional : Symbol(ZodObject.optional, Decl(noCircularitySelfReferentialGetter2.ts, 23, 57))
+
+  output: InferObjectType<T>;
+>output : Symbol(ZodObject.output, Decl(noCircularitySelfReferentialGetter2.ts, 24, 20))
+>InferObjectType : Symbol(InferObjectType, Decl(noCircularitySelfReferentialGetter2.ts, 11, 49))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 23, 20))
+}
+
+interface ZodOptional<T extends ZodType> extends ZodType {
+>ZodOptional : Symbol(ZodOptional, Decl(noCircularitySelfReferentialGetter2.ts, 26, 1))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 28, 22))
+>ZodType : Symbol(ZodType, Decl(noCircularitySelfReferentialGetter2.ts, 0, 0))
+>ZodType : Symbol(ZodType, Decl(noCircularitySelfReferentialGetter2.ts, 0, 0))
+
+  optional: "true";
+>optional : Symbol(ZodOptional.optional, Decl(noCircularitySelfReferentialGetter2.ts, 28, 58))
+
+  output: T["output"] | undefined;
+>output : Symbol(ZodOptional.output, Decl(noCircularitySelfReferentialGetter2.ts, 29, 19))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 28, 22))
+}
+
+declare function object<T extends ZodShape>(shape: T): ZodObject<T>;
+>object : Symbol(object, Decl(noCircularitySelfReferentialGetter2.ts, 31, 1))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 33, 24))
+>ZodShape : Symbol(ZodShape, Decl(noCircularitySelfReferentialGetter2.ts, 8, 1))
+>shape : Symbol(shape, Decl(noCircularitySelfReferentialGetter2.ts, 33, 44))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 33, 24))
+>ZodObject : Symbol(ZodObject, Decl(noCircularitySelfReferentialGetter2.ts, 22, 2))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 33, 24))
+
+declare function string(): ZodString;
+>string : Symbol(string, Decl(noCircularitySelfReferentialGetter2.ts, 33, 68))
+>ZodString : Symbol(ZodString, Decl(noCircularitySelfReferentialGetter2.ts, 3, 1))
+
+declare function optional<T extends ZodType>(schema: T): ZodOptional<T>;
+>optional : Symbol(optional, Decl(noCircularitySelfReferentialGetter2.ts, 34, 37))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 35, 26))
+>ZodType : Symbol(ZodType, Decl(noCircularitySelfReferentialGetter2.ts, 0, 0))
+>schema : Symbol(schema, Decl(noCircularitySelfReferentialGetter2.ts, 35, 45))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 35, 26))
+>ZodOptional : Symbol(ZodOptional, Decl(noCircularitySelfReferentialGetter2.ts, 26, 1))
+>T : Symbol(T, Decl(noCircularitySelfReferentialGetter2.ts, 35, 26))
+
+const Category = object({
+>Category : Symbol(Category, Decl(noCircularitySelfReferentialGetter2.ts, 37, 5))
+>object : Symbol(object, Decl(noCircularitySelfReferentialGetter2.ts, 31, 1))
+
+  name: string(),
+>name : Symbol(name, Decl(noCircularitySelfReferentialGetter2.ts, 37, 25))
+>string : Symbol(string, Decl(noCircularitySelfReferentialGetter2.ts, 33, 68))
+
+  get parent() {
+>parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+
+    return optional(Category);
+>optional : Symbol(optional, Decl(noCircularitySelfReferentialGetter2.ts, 34, 37))
+>Category : Symbol(Category, Decl(noCircularitySelfReferentialGetter2.ts, 37, 5))
+
+  },
+});
+
+export const name = Category.output.parent?.parent?.parent?.parent?.name;
+>name : Symbol(name, Decl(noCircularitySelfReferentialGetter2.ts, 44, 12))
+>Category.output.parent?.parent?.parent?.parent?.name : Symbol(name, Decl(noCircularitySelfReferentialGetter2.ts, 37, 25))
+>Category.output.parent?.parent?.parent?.parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>Category.output.parent?.parent?.parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>Category.output.parent?.parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>Category.output.parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>Category.output : Symbol(ZodObject.output, Decl(noCircularitySelfReferentialGetter2.ts, 24, 20))
+>Category : Symbol(Category, Decl(noCircularitySelfReferentialGetter2.ts, 37, 5))
+>output : Symbol(ZodObject.output, Decl(noCircularitySelfReferentialGetter2.ts, 24, 20))
+>parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>parent : Symbol(parent, Decl(noCircularitySelfReferentialGetter2.ts, 38, 17))
+>name : Symbol(name, Decl(noCircularitySelfReferentialGetter2.ts, 37, 25))
+

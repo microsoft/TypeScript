@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsExportAssignment.ts] ////
+
+=== subfolder/index.js ===
+// cjs format file
+const a = {};
+>a : Symbol(a, Decl(index.js, 1, 5))
+
+export = a;
+>a : Symbol(a, Decl(index.js, 1, 5))
+
+=== subfolder/file.js ===
+// cjs format file
+const a = {};
+>a : Symbol(a, Decl(file.js, 1, 5))
+
+module.exports = a;
+>module.exports : Symbol(a, Decl(file.js, 1, 5))
+>module : Symbol(module.exports)
+>exports : Symbol(a, Decl(file.js, 1, 5))
+>a : Symbol(a, Decl(file.js, 1, 5))
+
+=== index.js ===
+// esm format file
+const a = {};
+>a : Symbol(a, Decl(index.js, 1, 5))
+
+export = a;
+>a : Symbol(a, Decl(index.js, 1, 5))
+
+=== file.js ===
+// esm format file
+import "fs";
+const a = {};
+>a : Symbol(a, Decl(file.js, 2, 5))
+
+module.exports = a;
+>module.exports : Symbol(a, Decl(file.js, 2, 5))
+>module : Symbol(module.exports)
+>exports : Symbol(a, Decl(file.js, 2, 5))
+>a : Symbol(a, Decl(file.js, 2, 5))
+

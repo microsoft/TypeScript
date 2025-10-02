@@ -1,0 +1,39 @@
+--- old.importDeferNamespace(module=commonjs).errors.txt
++++ new.importDeferNamespace(module=commonjs).errors.txt
+@@= skipped -0, +0 lines =@@
+-b.ts(1,8): error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
++b.ts(1,14): error TS1005: '=' expected.
++b.ts(1,16): error TS2304: Cannot find name 'as'.
++b.ts(1,19): error TS1005: ';' expected.
++b.ts(1,19): error TS2304: Cannot find name 'aNs'.
++b.ts(1,23): error TS1434: Unexpected keyword or identifier.
++b.ts(1,23): error TS2304: Cannot find name 'from'.
++b.ts(3,1): error TS2304: Cannot find name 'aNs'.
+
+
+ ==== a.ts (0 errors) ====
+@@= skipped -5, +11 lines =@@
+         console.log("foo from a");
+     }
+     
+-==== b.ts (1 errors) ====
++==== b.ts (7 errors) ====
+     import defer * as aNs from "./a.js";
+-           ~~~~~~~~~~~~~~
+-!!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
++                 ~
++!!! error TS1005: '=' expected.
++                   ~~
++!!! error TS2304: Cannot find name 'as'.
++                      ~~~
++!!! error TS1005: ';' expected.
++                      ~~~
++!!! error TS2304: Cannot find name 'aNs'.
++                          ~~~~
++!!! error TS1434: Unexpected keyword or identifier.
++                          ~~~~
++!!! error TS2304: Cannot find name 'from'.
+     
+     aNs.foo();
++    ~~~
++!!! error TS2304: Cannot find name 'aNs'.

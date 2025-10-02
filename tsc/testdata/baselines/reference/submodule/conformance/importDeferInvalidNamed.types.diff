@@ -1,0 +1,18 @@
+--- old.importDeferInvalidNamed.types
++++ new.importDeferInvalidNamed.types
+@@= skipped -13, +13 lines =@@
+
+ === b.ts ===
+ import defer { foo } from "a";
+->foo : () => void
++>defer : any
++> : any
++>foo : any
++>from : any
++>"a" : "a"
+
+ foo();
+->foo() : void
+->foo : () => void
++>foo() : any
++>foo : any

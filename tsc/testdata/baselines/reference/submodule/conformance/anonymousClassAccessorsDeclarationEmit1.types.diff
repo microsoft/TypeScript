@@ -1,0 +1,19 @@
+--- old.anonymousClassAccessorsDeclarationEmit1.types
++++ new.anonymousClassAccessorsDeclarationEmit1.types
+@@= skipped -29, +29 lines =@@
+ }
+
+ export function Mixin<T extends typeof A>(Super: T) {
+->Mixin : <T extends typeof A>(Super: T) => { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
++>Mixin : <T extends typeof A>(Super: T) => { new (...args: any[]): B; prototype: Mixin.B; } & T
+ >A : typeof A
+ >Super : T
+
+   return class B extends Super {
+->class B extends Super {    get myName(): string {      return "B";    }    set myName(arg: string) {}  } : { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
+->B : { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
++>class B extends Super {    get myName(): string {      return "B";    }    set myName(arg: string) {}  } : { new (...args: any[]): B; prototype: Mixin.B; } & T
++>B : { new (...args: any[]): B; prototype: Mixin.B; } & T
+ >Super : A
+
+     get myName(): string {

@@ -1,0 +1,69 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+==== index.js (0 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index";
+    import * as mjsi from "inner/mjs/index";
+    import * as typei from "inner/js/index";
+    cjsi;
+    mjsi;
+    typei;
+==== index.mjs (0 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index";
+    import * as mjsi from "inner/mjs/index";
+    import * as typei from "inner/js/index";
+    cjsi;
+    mjsi;
+    typei;
+==== index.cjs (0 errors) ====
+    // cjs format file
+    import * as cjsi from "inner/cjs/index";
+    import * as mjsi from "inner/mjs/index";
+    import * as typei from "inner/js/index";
+    cjsi;
+    mjsi;
+    typei;
+==== node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index";
+    import * as mjs from "inner/mjs/index";
+    import * as type from "inner/js/index";
+    export { cjs };
+    export { mjs };
+    export { type };
+==== node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    import * as cjs from "inner/cjs/index";
+    import * as mjs from "inner/mjs/index";
+    import * as type from "inner/js/index";
+    export { cjs };
+    export { mjs };
+    export { type };
+==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index";
+    import * as mjs from "inner/mjs/index";
+    import * as type from "inner/js/index";
+    export { cjs };
+    export { mjs };
+    export { type };
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs/*": "./*.cjs",
+            "./mjs/*": "./*.mjs",
+            "./js/*": "./*.js"
+        }
+    }
+    

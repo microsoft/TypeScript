@@ -1,0 +1,69 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+index.cjs(2,22): error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
+index.cjs(3,22): error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
+index.cjs(4,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.js(2,22): error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
+index.js(3,22): error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
+index.js(4,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.mjs(2,22): error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
+index.mjs(3,22): error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
+index.mjs(4,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+!!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.js (3 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+                         ~~~~~~
+!!! error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
+    cjs;
+    mjs;
+    type;
+==== index.mjs (3 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+                         ~~~~~~
+!!! error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
+    cjs;
+    mjs;
+    type;
+==== index.cjs (3 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+                         ~~~~~~
+!!! error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
+    cjs;
+    mjs;
+    type;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js",
+        "imports": {
+            "#cjs": "./index.cjs",
+            "#mjs": "./index.mjs",
+            "#type": "./index.js"
+        }
+    }

@@ -1,0 +1,10 @@
+--- old.importDeferInvalidDefault.js
++++ new.importDeferInvalidDefault.js
+@@= skipped -14, +14 lines =@@
+     console.log("foo from a");
+ }
+ //// [b.js]
+-import defer foo from "a";
++from;
++"a";
+ foo();

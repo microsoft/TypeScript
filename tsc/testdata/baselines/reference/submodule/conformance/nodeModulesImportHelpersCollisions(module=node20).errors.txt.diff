@@ -1,0 +1,24 @@
+--- old.nodeModulesImportHelpersCollisions(module=node20).errors.txt
++++ new.nodeModulesImportHelpersCollisions(module=node20).errors.txt
+@@= skipped -0, +0 lines =@@
+-subfolder/index.ts(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+-subfolder/index.ts(4,1): error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+-
+-
+-==== subfolder/index.ts (2 errors) ====
++error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
++
++
++!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
++==== subfolder/index.ts (0 errors) ====
+     // cjs format file
+     import {default as _fs} from "fs";
+-            ~~~~~~~~~~~~~~
+-!!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+     _fs.readFile;
+     import * as fs from "fs";
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+     fs.readFile;
+ ==== index.ts (0 errors) ====
+     // esm format file

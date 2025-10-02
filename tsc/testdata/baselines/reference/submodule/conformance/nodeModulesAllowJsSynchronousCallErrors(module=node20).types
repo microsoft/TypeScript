@@ -1,0 +1,70 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsSynchronousCallErrors.ts] ////
+
+=== subfolder/index.js ===
+// cjs format file
+import {h} from "../index.js";
+>h : () => Promise<void>
+
+import mod = require("../index.js");
+>mod : typeof mod
+
+import {f as _f} from "./index.js";
+>f : () => Promise<void>
+>_f : () => Promise<void>
+
+import mod2 = require("./index.js");
+>mod2 : typeof mod2
+
+export async function f() {
+>f : () => Promise<void>
+
+    const mod3 = await import ("../index.js");
+>mod3 : { h(): Promise<void>; default: typeof mod; }
+>await import ("../index.js") : { h(): Promise<void>; default: typeof mod; }
+>import ("../index.js") : Promise<{ h(): Promise<void>; default: typeof mod; }>
+>"../index.js" : "../index.js"
+
+    const mod4 = await import ("./index.js");
+>mod4 : { f(): Promise<void>; default: typeof mod2; }
+>await import ("./index.js") : { f(): Promise<void>; default: typeof mod2; }
+>import ("./index.js") : Promise<{ f(): Promise<void>; default: typeof mod2; }>
+>"./index.js" : "./index.js"
+
+    h();
+>h() : Promise<void>
+>h : () => Promise<void>
+}
+=== index.js ===
+// esm format file
+import {h as _h} from "./index.js";
+>h : () => Promise<void>
+>_h : () => Promise<void>
+
+import mod = require("./index.js");
+>mod : typeof mod
+
+import {f} from "./subfolder/index.js";
+>f : () => Promise<void>
+
+import mod2 = require("./subfolder/index.js");
+>mod2 : typeof mod2
+
+export async function h() {
+>h : () => Promise<void>
+
+    const mod3 = await import ("./index.js");
+>mod3 : { h(): Promise<void>; default: typeof mod; }
+>await import ("./index.js") : { h(): Promise<void>; default: typeof mod; }
+>import ("./index.js") : Promise<{ h(): Promise<void>; default: typeof mod; }>
+>"./index.js" : "./index.js"
+
+    const mod4 = await import ("./subfolder/index.js");
+>mod4 : { f(): Promise<void>; default: typeof mod2; }
+>await import ("./subfolder/index.js") : { f(): Promise<void>; default: typeof mod2; }
+>import ("./subfolder/index.js") : Promise<{ f(): Promise<void>; default: typeof mod2; }>
+>"./subfolder/index.js" : "./subfolder/index.js"
+
+    f();
+>f() : Promise<void>
+>f : () => Promise<void>
+}

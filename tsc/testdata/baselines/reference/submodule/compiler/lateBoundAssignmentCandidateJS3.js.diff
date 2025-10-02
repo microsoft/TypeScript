@@ -1,0 +1,12 @@
+--- old.lateBoundAssignmentCandidateJS3.js
++++ new.lateBoundAssignmentCandidateJS3.js
+@@= skipped -30, +30 lines =@@
+
+
+ //// [index.d.ts]
+-export class foo2 {
++export declare class foo2 {
++    constructor();
+     /**
+      * @protected
+      * @type {string}

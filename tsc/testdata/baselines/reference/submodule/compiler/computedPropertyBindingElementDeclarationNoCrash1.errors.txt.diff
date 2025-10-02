@@ -1,0 +1,19 @@
+--- old.computedPropertyBindingElementDeclarationNoCrash1.errors.txt
++++ new.computedPropertyBindingElementDeclarationNoCrash1.errors.txt
+@@= skipped -0, +0 lines =@@
+-computedPropertyBindingElementDeclarationNoCrash1.ts(12,21): error TS2345: Argument of type '{ [x: string]: unknown; }' is not assignable to parameter of type 'State'.
+-  Type '{ [x: string]: unknown; }' is missing the following properties from type 'State': a, b
++computedPropertyBindingElementDeclarationNoCrash1.ts(12,21): error TS2739: Type '{ [x: string]: unknown; }' is missing the following properties from type 'State': a, b
+
+
+ ==== computedPropertyBindingElementDeclarationNoCrash1.ts (1 errors) ====
+@@= skipped -19, +18 lines =@@
+     ~~~~~~~~~~~~~~~~~~~~~
+           });
+     ~~~~~~~
+-!!! error TS2345: Argument of type '{ [x: string]: unknown; }' is not assignable to parameter of type 'State'.
+-!!! error TS2345:   Type '{ [x: string]: unknown; }' is missing the following properties from type 'State': a, b
++!!! error TS2739: Type '{ [x: string]: unknown; }' is missing the following properties from type 'State': a, b
+         }
+       };
+     }

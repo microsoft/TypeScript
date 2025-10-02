@@ -1,0 +1,19 @@
+--- old.dynamicImportDefer(module=preserve).errors.txt
++++ new.dynamicImportDefer(module=preserve).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++b.ts(1,8): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
++
++
++==== a.ts (0 errors) ====
++    export function foo() {
++      console.log("foo from a");
++    }
++    
++==== b.ts (1 errors) ====
++    import.defer("./a.js").then(ns => {
++           ~~~~~
++!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
++      ns.foo();
++    });
++    

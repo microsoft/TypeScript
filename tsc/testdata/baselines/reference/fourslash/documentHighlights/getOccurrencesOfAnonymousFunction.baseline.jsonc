@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /getOccurrencesOfAnonymousFunction.ts ===
+// (function /*HIGHLIGHTS*/foo(): number {
+//     var x = [|foo|];
+//     return 0;
+// })
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesOfAnonymousFunction.ts ===
+// (function foo(): number {
+//     var x = /*HIGHLIGHTS*/[|foo|];
+//     return 0;
+// })

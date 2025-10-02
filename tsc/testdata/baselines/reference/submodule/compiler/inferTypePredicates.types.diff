@@ -142,3 +142,12 @@
  >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 
    foobar.foo;
+@@= skipped -88, +88 lines =@@
+ }
+
+ function negative(t: Something) { 
+->negative : (t: Something) => t is Rock
++>negative : (t: Something) => boolean
+ >t : Something
+
+   return !isAnimal(t)

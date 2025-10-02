@@ -1,6 +1,6 @@
 --- old.blockScopedVariablesUseBeforeDef.js
 +++ new.blockScopedVariablesUseBeforeDef.js
-@@= skipped -153, +153 lines =@@
+@@= skipped -161, +161 lines =@@
 
 
  //// [blockScopedVariablesUseBeforeDef.js]
@@ -133,3 +133,4 @@
 +        yield 1;
      })();
  }
+ function foo18() {

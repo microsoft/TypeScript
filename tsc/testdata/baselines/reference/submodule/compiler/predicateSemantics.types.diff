@@ -1,6 +1,6 @@
 --- old.predicateSemantics.types
 +++ new.predicateSemantics.types
-@@= skipped -135, +135 lines =@@
+@@= skipped -253, +253 lines =@@
  >cond : any
 
  function foo(this: Object | undefined) {

@@ -1,0 +1,483 @@
+//// [tests/cases/compiler/longObjectInstantiationChain2.ts] ////
+
+=== longObjectInstantiationChain2.ts ===
+type merge<base, props> = Omit<base, keyof props & keyof base> & props;
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 0, 0))
+>base : Symbol(base, Decl(longObjectInstantiationChain2.ts, 0, 11))
+>props : Symbol(props, Decl(longObjectInstantiationChain2.ts, 0, 16))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>base : Symbol(base, Decl(longObjectInstantiationChain2.ts, 0, 11))
+>props : Symbol(props, Decl(longObjectInstantiationChain2.ts, 0, 16))
+>base : Symbol(base, Decl(longObjectInstantiationChain2.ts, 0, 11))
+>props : Symbol(props, Decl(longObjectInstantiationChain2.ts, 0, 16))
+
+type Type<t> = {
+>Type : Symbol(Type, Decl(longObjectInstantiationChain2.ts, 0, 71))
+>t : Symbol(t, Decl(longObjectInstantiationChain2.ts, 2, 10))
+
+  shape: t;
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>t : Symbol(t, Decl(longObjectInstantiationChain2.ts, 2, 10))
+
+  merge: <r>(r: r) => Type<merge<t, r>>;
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>r : Symbol(r, Decl(longObjectInstantiationChain2.ts, 4, 10), Decl(longObjectInstantiationChain2.ts, 4, 13))
+>r : Symbol(r, Decl(longObjectInstantiationChain2.ts, 4, 10), Decl(longObjectInstantiationChain2.ts, 4, 13))
+>r : Symbol(r, Decl(longObjectInstantiationChain2.ts, 4, 10), Decl(longObjectInstantiationChain2.ts, 4, 13))
+>Type : Symbol(Type, Decl(longObjectInstantiationChain2.ts, 0, 71))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 0, 0))
+>t : Symbol(t, Decl(longObjectInstantiationChain2.ts, 2, 10))
+>r : Symbol(r, Decl(longObjectInstantiationChain2.ts, 4, 10), Decl(longObjectInstantiationChain2.ts, 4, 13))
+
+};
+
+declare const o1: Type<{ p1: 1 }>;
+>o1 : Symbol(o1, Decl(longObjectInstantiationChain2.ts, 7, 13))
+>Type : Symbol(Type, Decl(longObjectInstantiationChain2.ts, 0, 71))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+
+const o2 = o1.merge({ p2: 2 });
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain2.ts, 9, 5))
+>o1.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o1 : Symbol(o1, Decl(longObjectInstantiationChain2.ts, 7, 13))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p2 : Symbol(p2, Decl(longObjectInstantiationChain2.ts, 9, 21))
+
+const o3 = o2.merge({ p3: 3 });
+>o3 : Symbol(o3, Decl(longObjectInstantiationChain2.ts, 10, 5))
+>o2.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain2.ts, 9, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p3 : Symbol(p3, Decl(longObjectInstantiationChain2.ts, 10, 21))
+
+const o4 = o3.merge({ p4: 4 });
+>o4 : Symbol(o4, Decl(longObjectInstantiationChain2.ts, 11, 5))
+>o3.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o3 : Symbol(o3, Decl(longObjectInstantiationChain2.ts, 10, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p4 : Symbol(p4, Decl(longObjectInstantiationChain2.ts, 11, 21))
+
+const o5 = o4.merge({ p5: 5 });
+>o5 : Symbol(o5, Decl(longObjectInstantiationChain2.ts, 12, 5))
+>o4.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o4 : Symbol(o4, Decl(longObjectInstantiationChain2.ts, 11, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p5 : Symbol(p5, Decl(longObjectInstantiationChain2.ts, 12, 21))
+
+const o6 = o5.merge({ p6: 6 });
+>o6 : Symbol(o6, Decl(longObjectInstantiationChain2.ts, 13, 5))
+>o5.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o5 : Symbol(o5, Decl(longObjectInstantiationChain2.ts, 12, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p6 : Symbol(p6, Decl(longObjectInstantiationChain2.ts, 13, 21))
+
+const o7 = o6.merge({ p7: 7 });
+>o7 : Symbol(o7, Decl(longObjectInstantiationChain2.ts, 14, 5))
+>o6.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o6 : Symbol(o6, Decl(longObjectInstantiationChain2.ts, 13, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p7 : Symbol(p7, Decl(longObjectInstantiationChain2.ts, 14, 21))
+
+const o8 = o7.merge({ p8: 8 });
+>o8 : Symbol(o8, Decl(longObjectInstantiationChain2.ts, 15, 5))
+>o7.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o7 : Symbol(o7, Decl(longObjectInstantiationChain2.ts, 14, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p8 : Symbol(p8, Decl(longObjectInstantiationChain2.ts, 15, 21))
+
+const o9 = o8.merge({ p9: 9 });
+>o9 : Symbol(o9, Decl(longObjectInstantiationChain2.ts, 16, 5))
+>o8.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o8 : Symbol(o8, Decl(longObjectInstantiationChain2.ts, 15, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p9 : Symbol(p9, Decl(longObjectInstantiationChain2.ts, 16, 21))
+
+const o10 = o9.merge({ p10: 10 });
+>o10 : Symbol(o10, Decl(longObjectInstantiationChain2.ts, 17, 5))
+>o9.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o9 : Symbol(o9, Decl(longObjectInstantiationChain2.ts, 16, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p10 : Symbol(p10, Decl(longObjectInstantiationChain2.ts, 17, 22))
+
+const o11 = o10.merge({ p11: 11 });
+>o11 : Symbol(o11, Decl(longObjectInstantiationChain2.ts, 18, 5))
+>o10.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o10 : Symbol(o10, Decl(longObjectInstantiationChain2.ts, 17, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p11 : Symbol(p11, Decl(longObjectInstantiationChain2.ts, 18, 23))
+
+const o12 = o11.merge({ p12: 12 });
+>o12 : Symbol(o12, Decl(longObjectInstantiationChain2.ts, 19, 5))
+>o11.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o11 : Symbol(o11, Decl(longObjectInstantiationChain2.ts, 18, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p12 : Symbol(p12, Decl(longObjectInstantiationChain2.ts, 19, 23))
+
+const o13 = o12.merge({ p13: 13 });
+>o13 : Symbol(o13, Decl(longObjectInstantiationChain2.ts, 20, 5))
+>o12.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o12 : Symbol(o12, Decl(longObjectInstantiationChain2.ts, 19, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p13 : Symbol(p13, Decl(longObjectInstantiationChain2.ts, 20, 23))
+
+const o14 = o13.merge({ p14: 14 });
+>o14 : Symbol(o14, Decl(longObjectInstantiationChain2.ts, 21, 5))
+>o13.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o13 : Symbol(o13, Decl(longObjectInstantiationChain2.ts, 20, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p14 : Symbol(p14, Decl(longObjectInstantiationChain2.ts, 21, 23))
+
+const o15 = o14.merge({ p15: 15 });
+>o15 : Symbol(o15, Decl(longObjectInstantiationChain2.ts, 22, 5))
+>o14.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o14 : Symbol(o14, Decl(longObjectInstantiationChain2.ts, 21, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p15 : Symbol(p15, Decl(longObjectInstantiationChain2.ts, 22, 23))
+
+const o16 = o15.merge({ p16: 16 });
+>o16 : Symbol(o16, Decl(longObjectInstantiationChain2.ts, 23, 5))
+>o15.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o15 : Symbol(o15, Decl(longObjectInstantiationChain2.ts, 22, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p16 : Symbol(p16, Decl(longObjectInstantiationChain2.ts, 23, 23))
+
+const o17 = o16.merge({ p17: 17 });
+>o17 : Symbol(o17, Decl(longObjectInstantiationChain2.ts, 24, 5))
+>o16.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o16 : Symbol(o16, Decl(longObjectInstantiationChain2.ts, 23, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p17 : Symbol(p17, Decl(longObjectInstantiationChain2.ts, 24, 23))
+
+const o18 = o17.merge({ p18: 18 });
+>o18 : Symbol(o18, Decl(longObjectInstantiationChain2.ts, 25, 5))
+>o17.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o17 : Symbol(o17, Decl(longObjectInstantiationChain2.ts, 24, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p18 : Symbol(p18, Decl(longObjectInstantiationChain2.ts, 25, 23))
+
+const o19 = o18.merge({ p19: 19 });
+>o19 : Symbol(o19, Decl(longObjectInstantiationChain2.ts, 26, 5))
+>o18.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o18 : Symbol(o18, Decl(longObjectInstantiationChain2.ts, 25, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p19 : Symbol(p19, Decl(longObjectInstantiationChain2.ts, 26, 23))
+
+const o20 = o19.merge({ p20: 20 });
+>o20 : Symbol(o20, Decl(longObjectInstantiationChain2.ts, 27, 5))
+>o19.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o19 : Symbol(o19, Decl(longObjectInstantiationChain2.ts, 26, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p20 : Symbol(p20, Decl(longObjectInstantiationChain2.ts, 27, 23))
+
+const o21 = o20.merge({ p21: 21 });
+>o21 : Symbol(o21, Decl(longObjectInstantiationChain2.ts, 28, 5))
+>o20.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o20 : Symbol(o20, Decl(longObjectInstantiationChain2.ts, 27, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p21 : Symbol(p21, Decl(longObjectInstantiationChain2.ts, 28, 23))
+
+const o22 = o21.merge({ p22: 22 });
+>o22 : Symbol(o22, Decl(longObjectInstantiationChain2.ts, 29, 5))
+>o21.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o21 : Symbol(o21, Decl(longObjectInstantiationChain2.ts, 28, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p22 : Symbol(p22, Decl(longObjectInstantiationChain2.ts, 29, 23))
+
+const o23 = o22.merge({ p23: 23 });
+>o23 : Symbol(o23, Decl(longObjectInstantiationChain2.ts, 30, 5))
+>o22.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o22 : Symbol(o22, Decl(longObjectInstantiationChain2.ts, 29, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p23 : Symbol(p23, Decl(longObjectInstantiationChain2.ts, 30, 23))
+
+const o24 = o23.merge({ p24: 24 });
+>o24 : Symbol(o24, Decl(longObjectInstantiationChain2.ts, 31, 5))
+>o23.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o23 : Symbol(o23, Decl(longObjectInstantiationChain2.ts, 30, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p24 : Symbol(p24, Decl(longObjectInstantiationChain2.ts, 31, 23))
+
+const o25 = o24.merge({ p25: 25 });
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain2.ts, 32, 5))
+>o24.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o24 : Symbol(o24, Decl(longObjectInstantiationChain2.ts, 31, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p25 : Symbol(p25, Decl(longObjectInstantiationChain2.ts, 32, 23))
+
+const o26 = o25.merge({ p26: 26 });
+>o26 : Symbol(o26, Decl(longObjectInstantiationChain2.ts, 33, 5))
+>o25.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain2.ts, 32, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p26 : Symbol(p26, Decl(longObjectInstantiationChain2.ts, 33, 23))
+
+const o27 = o26.merge({ p27: 27 });
+>o27 : Symbol(o27, Decl(longObjectInstantiationChain2.ts, 34, 5))
+>o26.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o26 : Symbol(o26, Decl(longObjectInstantiationChain2.ts, 33, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p27 : Symbol(p27, Decl(longObjectInstantiationChain2.ts, 34, 23))
+
+const o28 = o27.merge({ p28: 28 });
+>o28 : Symbol(o28, Decl(longObjectInstantiationChain2.ts, 35, 5))
+>o27.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o27 : Symbol(o27, Decl(longObjectInstantiationChain2.ts, 34, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p28 : Symbol(p28, Decl(longObjectInstantiationChain2.ts, 35, 23))
+
+const o29 = o28.merge({ p29: 29 });
+>o29 : Symbol(o29, Decl(longObjectInstantiationChain2.ts, 36, 5))
+>o28.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o28 : Symbol(o28, Decl(longObjectInstantiationChain2.ts, 35, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p29 : Symbol(p29, Decl(longObjectInstantiationChain2.ts, 36, 23))
+
+const o30 = o29.merge({ p30: 30 });
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain2.ts, 37, 5))
+>o29.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o29 : Symbol(o29, Decl(longObjectInstantiationChain2.ts, 36, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p30 : Symbol(p30, Decl(longObjectInstantiationChain2.ts, 37, 23))
+
+const o31 = o30.merge({ p31: 31 });
+>o31 : Symbol(o31, Decl(longObjectInstantiationChain2.ts, 38, 5))
+>o30.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain2.ts, 37, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p31 : Symbol(p31, Decl(longObjectInstantiationChain2.ts, 38, 23))
+
+const o32 = o31.merge({ p32: 32 });
+>o32 : Symbol(o32, Decl(longObjectInstantiationChain2.ts, 39, 5))
+>o31.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o31 : Symbol(o31, Decl(longObjectInstantiationChain2.ts, 38, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p32 : Symbol(p32, Decl(longObjectInstantiationChain2.ts, 39, 23))
+
+const o33 = o32.merge({ p33: 33 });
+>o33 : Symbol(o33, Decl(longObjectInstantiationChain2.ts, 40, 5))
+>o32.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o32 : Symbol(o32, Decl(longObjectInstantiationChain2.ts, 39, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p33 : Symbol(p33, Decl(longObjectInstantiationChain2.ts, 40, 23))
+
+const o34 = o33.merge({ p34: 34 });
+>o34 : Symbol(o34, Decl(longObjectInstantiationChain2.ts, 41, 5))
+>o33.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o33 : Symbol(o33, Decl(longObjectInstantiationChain2.ts, 40, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p34 : Symbol(p34, Decl(longObjectInstantiationChain2.ts, 41, 23))
+
+const o35 = o34.merge({ p35: 35 });
+>o35 : Symbol(o35, Decl(longObjectInstantiationChain2.ts, 42, 5))
+>o34.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o34 : Symbol(o34, Decl(longObjectInstantiationChain2.ts, 41, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p35 : Symbol(p35, Decl(longObjectInstantiationChain2.ts, 42, 23))
+
+const o36 = o35.merge({ p36: 36 });
+>o36 : Symbol(o36, Decl(longObjectInstantiationChain2.ts, 43, 5))
+>o35.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o35 : Symbol(o35, Decl(longObjectInstantiationChain2.ts, 42, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p36 : Symbol(p36, Decl(longObjectInstantiationChain2.ts, 43, 23))
+
+const o37 = o36.merge({ p37: 37 });
+>o37 : Symbol(o37, Decl(longObjectInstantiationChain2.ts, 44, 5))
+>o36.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o36 : Symbol(o36, Decl(longObjectInstantiationChain2.ts, 43, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p37 : Symbol(p37, Decl(longObjectInstantiationChain2.ts, 44, 23))
+
+const o38 = o37.merge({ p38: 38 });
+>o38 : Symbol(o38, Decl(longObjectInstantiationChain2.ts, 45, 5))
+>o37.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o37 : Symbol(o37, Decl(longObjectInstantiationChain2.ts, 44, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p38 : Symbol(p38, Decl(longObjectInstantiationChain2.ts, 45, 23))
+
+const o39 = o38.merge({ p39: 39 });
+>o39 : Symbol(o39, Decl(longObjectInstantiationChain2.ts, 46, 5))
+>o38.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o38 : Symbol(o38, Decl(longObjectInstantiationChain2.ts, 45, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p39 : Symbol(p39, Decl(longObjectInstantiationChain2.ts, 46, 23))
+
+const o40 = o39.merge({ p40: 40 });
+>o40 : Symbol(o40, Decl(longObjectInstantiationChain2.ts, 47, 5))
+>o39.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o39 : Symbol(o39, Decl(longObjectInstantiationChain2.ts, 46, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p40 : Symbol(p40, Decl(longObjectInstantiationChain2.ts, 47, 23))
+
+const o41 = o40.merge({ p41: 41 });
+>o41 : Symbol(o41, Decl(longObjectInstantiationChain2.ts, 48, 5))
+>o40.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o40 : Symbol(o40, Decl(longObjectInstantiationChain2.ts, 47, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p41 : Symbol(p41, Decl(longObjectInstantiationChain2.ts, 48, 23))
+
+const o42 = o41.merge({ p42: 42 });
+>o42 : Symbol(o42, Decl(longObjectInstantiationChain2.ts, 49, 5))
+>o41.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o41 : Symbol(o41, Decl(longObjectInstantiationChain2.ts, 48, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p42 : Symbol(p42, Decl(longObjectInstantiationChain2.ts, 49, 23))
+
+const o43 = o42.merge({ p43: 43 });
+>o43 : Symbol(o43, Decl(longObjectInstantiationChain2.ts, 50, 5))
+>o42.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o42 : Symbol(o42, Decl(longObjectInstantiationChain2.ts, 49, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p43 : Symbol(p43, Decl(longObjectInstantiationChain2.ts, 50, 23))
+
+const o44 = o43.merge({ p44: 44 });
+>o44 : Symbol(o44, Decl(longObjectInstantiationChain2.ts, 51, 5))
+>o43.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o43 : Symbol(o43, Decl(longObjectInstantiationChain2.ts, 50, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p44 : Symbol(p44, Decl(longObjectInstantiationChain2.ts, 51, 23))
+
+const o45 = o44.merge({ p45: 45 });
+>o45 : Symbol(o45, Decl(longObjectInstantiationChain2.ts, 52, 5))
+>o44.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o44 : Symbol(o44, Decl(longObjectInstantiationChain2.ts, 51, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p45 : Symbol(p45, Decl(longObjectInstantiationChain2.ts, 52, 23))
+
+const o46 = o45.merge({ p46: 46 });
+>o46 : Symbol(o46, Decl(longObjectInstantiationChain2.ts, 53, 5))
+>o45.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o45 : Symbol(o45, Decl(longObjectInstantiationChain2.ts, 52, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p46 : Symbol(p46, Decl(longObjectInstantiationChain2.ts, 53, 23))
+
+const o47 = o46.merge({ p47: 47 });
+>o47 : Symbol(o47, Decl(longObjectInstantiationChain2.ts, 54, 5))
+>o46.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o46 : Symbol(o46, Decl(longObjectInstantiationChain2.ts, 53, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p47 : Symbol(p47, Decl(longObjectInstantiationChain2.ts, 54, 23))
+
+const o48 = o47.merge({ p48: 48 });
+>o48 : Symbol(o48, Decl(longObjectInstantiationChain2.ts, 55, 5))
+>o47.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o47 : Symbol(o47, Decl(longObjectInstantiationChain2.ts, 54, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p48 : Symbol(p48, Decl(longObjectInstantiationChain2.ts, 55, 23))
+
+const o49 = o48.merge({ p49: 49 });
+>o49 : Symbol(o49, Decl(longObjectInstantiationChain2.ts, 56, 5))
+>o48.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o48 : Symbol(o48, Decl(longObjectInstantiationChain2.ts, 55, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p49 : Symbol(p49, Decl(longObjectInstantiationChain2.ts, 56, 23))
+
+const o50 = o49.merge({ p50: 50 });
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain2.ts, 57, 5))
+>o49.merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>o49 : Symbol(o49, Decl(longObjectInstantiationChain2.ts, 56, 5))
+>merge : Symbol(merge, Decl(longObjectInstantiationChain2.ts, 3, 11))
+>p50 : Symbol(p50, Decl(longObjectInstantiationChain2.ts, 57, 23))
+
+o1.shape.p1;
+>o1.shape.p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+>o1.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o1 : Symbol(o1, Decl(longObjectInstantiationChain2.ts, 7, 13))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+
+o1.shape.p51; // error
+>o1.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o1 : Symbol(o1, Decl(longObjectInstantiationChain2.ts, 7, 13))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+
+o2.shape.p1;
+>o2.shape.p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+>o2.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain2.ts, 9, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+
+o2.shape.p2;
+>o2.shape.p2 : Symbol(p2, Decl(longObjectInstantiationChain2.ts, 9, 21))
+>o2.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain2.ts, 9, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p2 : Symbol(p2, Decl(longObjectInstantiationChain2.ts, 9, 21))
+
+o2.shape.p3; // error
+>o2.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain2.ts, 9, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+
+o25.shape.p1;
+>o25.shape.p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+>o25.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain2.ts, 32, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+
+o25.shape.p10;
+>o25.shape.p10 : Symbol(p10, Decl(longObjectInstantiationChain2.ts, 17, 22))
+>o25.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain2.ts, 32, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p10 : Symbol(p10, Decl(longObjectInstantiationChain2.ts, 17, 22))
+
+o25.shape.p25;
+>o25.shape.p25 : Symbol(p25, Decl(longObjectInstantiationChain2.ts, 32, 23))
+>o25.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain2.ts, 32, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p25 : Symbol(p25, Decl(longObjectInstantiationChain2.ts, 32, 23))
+
+o30.shape.p1;
+>o30.shape.p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+>o30.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain2.ts, 37, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+
+o30.shape.p31;
+>o30.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain2.ts, 37, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+
+o30.shape.p38; // error
+>o30.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain2.ts, 37, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+
+o30.shape.p50; // error
+>o30.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain2.ts, 37, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+
+o50.shape.p1;
+>o50.shape.p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+>o50.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain2.ts, 57, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain2.ts, 7, 24))
+
+o50.shape.p31;
+>o50.shape.p31 : Symbol(p31, Decl(longObjectInstantiationChain2.ts, 38, 23))
+>o50.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain2.ts, 57, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p31 : Symbol(p31, Decl(longObjectInstantiationChain2.ts, 38, 23))
+
+o50.shape.p38;
+>o50.shape.p38 : Symbol(p38, Decl(longObjectInstantiationChain2.ts, 45, 23))
+>o50.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain2.ts, 57, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p38 : Symbol(p38, Decl(longObjectInstantiationChain2.ts, 45, 23))
+
+o50.shape.p50;
+>o50.shape.p50 : Symbol(p50, Decl(longObjectInstantiationChain2.ts, 57, 23))
+>o50.shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain2.ts, 57, 5))
+>shape : Symbol(shape, Decl(longObjectInstantiationChain2.ts, 2, 16))
+>p50 : Symbol(p50, Decl(longObjectInstantiationChain2.ts, 57, 23))
+

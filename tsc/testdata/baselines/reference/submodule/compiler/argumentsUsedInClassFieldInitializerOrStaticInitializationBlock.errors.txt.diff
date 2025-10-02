@@ -1,0 +1,71 @@
+--- old.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.errors.txt
++++ new.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.errors.txt
+@@= skipped -1, +1 lines =@@
+ argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(9,10): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+ argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(15,15): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+ argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(21,15): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(33,16): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(40,7): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(42,16): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+ argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(66,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+ argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(75,7): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(77,9): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(96,26): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(102,15): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+-
+-
+-==== argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts (12 errors) ====
++
++
++==== argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts (6 errors) ====
+     function A() {
+       return class T {
+          a = arguments
+@@= skipped -52, +46 lines =@@
+     function D() {
+       return class T {
+          a = () => arguments  // should error
+-                   ~~~~~~~~~
+-!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+       }
+     }
+     
+@@= skipped -9, +7 lines =@@
+       return class T {
+         a = () => {
+           arguments;    // should error
+-          ~~~~~~~~~
+-!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+           const b = () => {
+             return arguments;     // should error
+-                   ~~~~~~~~~
+-!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+           }
+     
+           function f() {
+@@= skipped -45, +41 lines =@@
+ !!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+           while(1) {
+             arguments // should error
+-            ~~~~~~~~~
+-!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+           }
+         }
+       }
+@@= skipped -21, +19 lines =@@
+     function D5() {
+       return class T {
+          a = (() => { return arguments; })()  // should error
+-                             ~~~~~~~~~
+-!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+       }
+     }
+     
+     function D6() {
+       return class T {
+          a = (x = arguments) => {}    // should error
+-                  ~~~~~~~~~
+-!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+       }
+     }
+     

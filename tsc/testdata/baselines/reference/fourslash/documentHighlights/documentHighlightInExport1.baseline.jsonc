@@ -1,0 +1,32 @@
+// === documentHighlights ===
+// === /documentHighlightInExport1.ts ===
+// class /*HIGHLIGHTS*/[|C|] {}
+// export { C as D };
+
+
+
+// === documentHighlights ===
+// === /documentHighlightInExport1.ts ===
+// class C {}
+// /*HIGHLIGHTS*/export { C as D };
+
+
+
+// === documentHighlights ===
+// === /documentHighlightInExport1.ts ===
+// class [|C|] {}
+// export { /*HIGHLIGHTS*/C as D };
+
+
+
+// === documentHighlights ===
+// === /documentHighlightInExport1.ts ===
+// class C {}
+// export { C /*HIGHLIGHTS*/as D };
+
+
+
+// === documentHighlights ===
+// === /documentHighlightInExport1.ts ===
+// class C {}
+// export { C as /*HIGHLIGHTS*/D };

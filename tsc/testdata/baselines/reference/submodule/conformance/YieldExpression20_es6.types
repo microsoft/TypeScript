@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression20_es6.ts] ////
+
+=== YieldExpression20_es6.ts ===
+function* test() {
+>test : () => Generator<never, () => { b: any; }, unknown>
+
+  return () => ({
+>() => ({    b: yield 2, // error  }) : () => { b: any; }
+>({    b: yield 2, // error  }) : { b: any; }
+>{    b: yield 2, // error  } : { b: any; }
+
+    b: yield 2, // error
+>b : any
+>yield 2 : any
+>2 : 2
+
+  });
+}
+

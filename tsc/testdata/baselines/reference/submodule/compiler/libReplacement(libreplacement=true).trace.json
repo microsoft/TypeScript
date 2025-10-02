@@ -1256,6 +1256,23 @@ Searching all ancestor node_modules directories for fallback extensions: JavaScr
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-esnext/disposable' was not resolved. ========
+======== Resolving module '@typescript/lib-esnext/error' from '/.src/__lib_node_modules_lookup_lib.esnext.error.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-esnext/error' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-esnext/error'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-esnext/error'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-esnext/error' was not resolved. ========
 ======== Resolving module '@typescript/lib-esnext/float16' from '/.src/__lib_node_modules_lookup_lib.esnext.float16.d.ts__.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
@@ -1324,3 +1341,20 @@ Searching all ancestor node_modules directories for fallback extensions: JavaScr
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-esnext/promise' was not resolved. ========
+======== Resolving module '@typescript/lib-esnext/sharedmemory' from '/.src/__lib_node_modules_lookup_lib.esnext.sharedmemory.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-esnext/sharedmemory' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-esnext/sharedmemory'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-esnext/sharedmemory'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-esnext/sharedmemory' was not resolved. ========

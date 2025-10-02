@@ -1,0 +1,32 @@
+--- old.nodeAllowJsPackageSelfName(module=node20).types
++++ new.nodeAllowJsPackageSelfName(module=node20).types
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ // esm format file
+ import * as self from "package";
+->self : typeof self
++>self : any
+
+ self;
+->self : typeof self
++>self : any
+
+ === index.mjs ===
+ // esm format file
+ import * as self from "package";
+->self : typeof self
++>self : any
+
+ self;
+->self : typeof self
++>self : any
+
+ === index.cjs ===
+ // esm format file
+ import * as self from "package";
+->self : typeof self
++>self : any
+
+ self;
+->self : typeof self
++>self : any

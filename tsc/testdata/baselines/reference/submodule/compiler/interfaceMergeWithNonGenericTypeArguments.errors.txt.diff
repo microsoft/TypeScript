@@ -1,0 +1,22 @@
+--- old.interfaceMergeWithNonGenericTypeArguments.errors.txt
++++ new.interfaceMergeWithNonGenericTypeArguments.errors.txt
+@@= skipped -0, +0 lines =@@
+ interfaceMergeWithNonGenericTypeArguments.ts(4,34): error TS2315: Type 'SomeBaseClass' is not generic.
+-interfaceMergeWithNonGenericTypeArguments.ts(6,3): error TS2346: Call target does not contain any signatures.
+-
+-
+-==== interfaceMergeWithNonGenericTypeArguments.ts (2 errors) ====
++
++
++==== interfaceMergeWithNonGenericTypeArguments.ts (1 errors) ====
+     export class SomeBaseClass { }
+     export interface SomeInterface { }
+     export interface MergedClass extends SomeInterface { }
+@@= skipped -10, +9 lines =@@
+ !!! error TS2315: Type 'SomeBaseClass' is not generic.
+     	public constructor() {
+     		super();
+-    		~~~~~
+-!!! error TS2346: Call target does not contain any signatures.
+     	}
+     }

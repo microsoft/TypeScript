@@ -1,0 +1,10 @@
+// === documentHighlights ===
+// === /getOccurrencesConstructor2.ts ===
+// --- (line: 10) skipped ---
+//     }
+// }
+// 
+// class [|D|] {
+//     /*HIGHLIGHTS*/constructor(public x: number, public y: number) {
+//     }
+// }

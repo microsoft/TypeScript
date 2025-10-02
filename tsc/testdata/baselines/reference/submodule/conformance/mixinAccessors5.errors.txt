@@ -1,0 +1,29 @@
+mixinAccessors5.ts(21,16): error TS2611: 'inCompendium' is defined as a property in class 'GetterA & GetterB', but is overridden here in 'TestB' as an accessor.
+
+
+==== mixinAccessors5.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61967
+    
+    declare function basicMixin<T extends object, U extends object>(
+      t: T,
+      u: U,
+    ): T & U;
+      
+    declare class GetterA {
+      constructor(...args: any[]);
+    
+      get inCompendium(): boolean;
+    }
+      
+    declare class GetterB {
+      constructor(...args: any[]);
+    
+      get inCompendium(): boolean;
+    }
+      
+    declare class TestB extends basicMixin(GetterA, GetterB) {
+      override get inCompendium(): boolean;
+                   ~~~~~~~~~~~~
+!!! error TS2611: 'inCompendium' is defined as a property in class 'GetterA & GetterB', but is overridden here in 'TestB' as an accessor.
+    }
+      

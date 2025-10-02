@@ -1,0 +1,8 @@
+--- old.importDeferComments.symbols
++++ new.importDeferComments.symbols
+@@= skipped -5, +5 lines =@@
+
+ === b.ts ===
+ /*1*/ import /*2*/ defer /*3*/ * /*4*/ as /*5*/ aNs /*6*/ from /*7*/ "a" /*8*/;
+->aNs : Symbol(aNs, Decl(b.ts, 0, 24))
++>defer : Symbol(defer, Decl(b.ts, 0, 0))

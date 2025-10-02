@@ -180,4 +180,4 @@
 +>join : (separator?: string | undefined) => string
  >'.' : "."
  >el.textContent! : string
- >el.textContent : string | null
+ >el.textContent : string

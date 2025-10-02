@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/interfaceMergeWithNonGenericTypeArguments.ts] ////
+
+=== interfaceMergeWithNonGenericTypeArguments.ts ===
+export class SomeBaseClass { }
+>SomeBaseClass : SomeBaseClass
+
+export interface SomeInterface { }
+export interface MergedClass extends SomeInterface { }
+export class MergedClass extends SomeBaseClass<any> {
+>MergedClass : MergedClass
+>SomeBaseClass : SomeInterface
+
+	public constructor() {
+		super();
+>super() : void
+>super : typeof SomeBaseClass
+	}
+}

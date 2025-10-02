@@ -1,0 +1,16 @@
+--- old.nestedGenericSpreadInference.types
++++ new.nestedGenericSpreadInference.types
+@@= skipped -13, +13 lines =@@
+ >args : A
+
+ const leak = call(wrap(<T>(x: T) => x), 1);
+->leak : unknown
+->call(wrap(<T>(x: T) => x), 1) : unknown
++>leak : number
++>call(wrap(<T>(x: T) => x), 1) : number
+ >call : <A extends unknown[], T>(x: { x: (...args: A) => T; }, ...args: A) => T
+->wrap(<T>(x: T) => x) : { x: (x: unknown) => unknown; }
++>wrap(<T>(x: T) => x) : { x: (x: A[0]) => A[0]; }
+ >wrap : <X>(x: X) => { x: X; }
+ ><T>(x: T) => x : <T>(x: T) => T
+ >x : T

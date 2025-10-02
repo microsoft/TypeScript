@@ -1,0 +1,10 @@
+--- old.importDeferFromInvalid.types
++++ new.importDeferFromInvalid.types
+@@= skipped -5, +5 lines =@@
+
+ === b.ts ===
+ import defer from from "./a.js";
+->from : 2
++>defer : any
++>from : any
++>"./a.js" : "./a.js"

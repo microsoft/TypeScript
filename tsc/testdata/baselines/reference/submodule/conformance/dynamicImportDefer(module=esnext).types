@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/importDefer/dynamicImportDefer.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+
+  console.log("foo from a");
+>console.log("foo from a") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"foo from a" : "foo from a"
+}
+
+=== b.ts ===
+import.defer("./a.js").then(ns => {
+>import.defer("./a.js").then(ns => {  ns.foo();}) : any
+>import.defer("./a.js").then : any
+>import.defer("./a.js") : any
+>import.defer : any
+>defer : any
+>"./a.js" : "./a.js"
+>then : any
+>ns => {  ns.foo();} : (ns: any) => void
+>ns : any
+
+  ns.foo();
+>ns.foo() : any
+>ns.foo : any
+>ns : any
+>foo : any
+
+});
+

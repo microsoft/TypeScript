@@ -1,0 +1,8 @@
+--- old.importDeferTypeConflict2.symbols
++++ new.importDeferTypeConflict2.symbols
+@@= skipped -11, +11 lines =@@
+
+ === b.ts ===
+ import defer type * as ns1 from "a";
+->type : Symbol(type, Decl(b.ts, 0, 6))
++>defer : Symbol(defer, Decl(b.ts, 0, 0))

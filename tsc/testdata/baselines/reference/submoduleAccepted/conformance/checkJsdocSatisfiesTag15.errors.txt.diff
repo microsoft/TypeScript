@@ -1,0 +1,26 @@
+--- old.checkJsdocSatisfiesTag15.errors.txt
++++ new.checkJsdocSatisfiesTag15.errors.txt
+@@= skipped -0, +0 lines =@@
+ /a.js(9,20): error TS2322: Type 'number' is not assignable to type 'string'.
+-/a.js(28,5): error TS1360: Type '(a: string, b: string) => void' does not satisfy the expected type '(a: string, ...args: number[]) => void'.
+-  Types of parameters 'b' and 'args' are incompatible.
+-    Type 'number' is not assignable to type 'string'.
+ /a.js(42,21): error TS7006: Parameter 'uuid' implicitly has an 'any' type.
+
+
+-==== /a.js (3 errors) ====
++==== /a.js (2 errors) ====
+     /** @satisfies {(uuid: string) => void} */
+     export const fn1 = uuid => {};
+     
+@@= skipped -35, +32 lines =@@
+     
+     /** 
+      * @satisfies {(a: string, ...args: number[]) => void}
+-        ~~~~~~~~~
+-!!! error TS1360: Type '(a: string, b: string) => void' does not satisfy the expected type '(a: string, ...args: number[]) => void'.
+-!!! error TS1360:   Types of parameters 'b' and 'args' are incompatible.
+-!!! error TS1360:     Type 'number' is not assignable to type 'string'.
+      * @param {string} a
+      * @param {string} b
+      */

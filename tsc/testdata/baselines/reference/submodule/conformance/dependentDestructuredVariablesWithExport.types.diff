@@ -1,0 +1,9 @@
+--- old.dependentDestructuredVariablesWithExport.types
++++ new.dependentDestructuredVariablesWithExport.types
+@@= skipped -48, +48 lines =@@
+ >discriminator2 : boolean
+
+   value2;
+->value2 : string
++>value2 : string | null | undefined
+ }

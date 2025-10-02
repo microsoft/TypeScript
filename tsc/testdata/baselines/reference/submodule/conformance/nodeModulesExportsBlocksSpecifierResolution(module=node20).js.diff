@@ -1,0 +1,15 @@
+--- old.nodeModulesExportsBlocksSpecifierResolution(module=node20).js
++++ new.nodeModulesExportsBlocksSpecifierResolution(module=node20).js
+@@= skipped -26, +26 lines =@@
+ }
+
+ //// [index.js]
+-export const a = (await import("inner")).x();
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.a = void 0;
++exports.a = (await import("inner")).x();
++
++
++//// [index.d.ts]
++export declare const a: any;

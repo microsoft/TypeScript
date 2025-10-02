@@ -1,0 +1,25 @@
+--- old.dynamicImportDefer(module=nodenext).errors.txt
++++ new.dynamicImportDefer(module=nodenext).errors.txt
+@@= skipped -0, +0 lines =@@
+-b.ts(1,1): error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
++b.ts(1,1): error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
++b.ts(1,8): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+
+
+ ==== a.ts (0 errors) ====
+@@= skipped -5, +6 lines =@@
+       console.log("foo from a");
+     }
+     
+-==== b.ts (1 errors) ====
++==== b.ts (2 errors) ====
+     import.defer("./a.js").then(ns => {
+-    ~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
++    ~~~~~~~~~~~~
++!!! error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
++           ~~~~~
++!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+       ns.foo();
+     });
+     

@@ -517,7 +517,7 @@ declare function createEventListener<K extends keyof DocumentEventMap>({ name, o
 declare const clickEvent: {
     readonly name: "click";
     readonly once?: boolean | undefined;
-    readonly callback: (ev: MouseEvent) => void;
+    readonly callback: (ev: PointerEvent) => void;
 };
 declare const scrollEvent: {
     readonly name: "scroll";

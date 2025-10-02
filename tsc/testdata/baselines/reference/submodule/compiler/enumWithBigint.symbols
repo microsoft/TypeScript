@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/enumWithBigint.ts] ////
+
+=== enumWithBigint.ts ===
+enum E {
+>E : Symbol(E, Decl(enumWithBigint.ts, 0, 0))
+
+  0n = 0,
+>0n : Symbol(E[0n], Decl(enumWithBigint.ts, 0, 8))
+}
+

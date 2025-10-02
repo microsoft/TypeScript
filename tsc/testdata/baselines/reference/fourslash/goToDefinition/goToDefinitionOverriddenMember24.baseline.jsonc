@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /goToDefinitionOverriddenMember24.ts ===
+// --- (line: 4) skipped ---
+// }
+// 
+// export class B extends A {
+//   /*GOTO DEF*/override [|[prop]|]() {}
+// }

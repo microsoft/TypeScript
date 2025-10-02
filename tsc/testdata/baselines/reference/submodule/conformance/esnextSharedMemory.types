@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/esnext/esnextSharedMemory.ts] ////
+
+=== esnextSharedMemory.ts ===
+Atomics.pause();
+>Atomics.pause() : void
+>Atomics.pause : (n?: number) => void
+>Atomics : Atomics
+>pause : (n?: number) => void
+
+Atomics.pause(1);
+>Atomics.pause(1) : void
+>Atomics.pause : (n?: number) => void
+>Atomics : Atomics
+>pause : (n?: number) => void
+>1 : 1
+

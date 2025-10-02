@@ -1,0 +1,1917 @@
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// /*FIND ALL REFS*/var globalVar: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+// // --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var /*FIND ALL REFS*/[|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     /*FIND ALL REFS*/static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static /*FIND ALL REFS*/[|clsSVar|] = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.[|clsSVar|]++;
+//         // References to a class parameter.
+//         this.clsParam++;
+//         modTest.modVar++;
+// // --- (line: 19) skipped ---
+
+// --- (line: 24) skipped ---
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.[|clsSVar|]++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// // --- (line: 32) skipped ---
+
+// --- (line: 39) skipped ---
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.[|clsSVar|]++;
+//     modVar++;
+// 
+//     class testCls {
+// // --- (line: 47) skipped ---
+
+// --- (line: 51) skipped ---
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.[|clsSVar|]++;
+//         modVar++;
+//     }
+// 
+// // --- (line: 59) skipped ---
+
+// --- (line: 70) skipped ---
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.[|clsSVar|]++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// // --- (line: 78) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 5) skipped ---
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     /*FIND ALL REFS*/[|clsVar|] = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.[|clsVar|]++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+//         this.clsParam++;
+// // --- (line: 18) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 7) skipped ---
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (/*FIND ALL REFS*/public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+// // --- (line: 15) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 7) skipped ---
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public /*FIND ALL REFS*/[|clsParam|]: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+//         this.[|clsParam|]++;
+//         modTest.modVar++;
+//     }
+// }
+// // --- (line: 21) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         /*FIND ALL REFS*/[|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 5) skipped ---
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     [|clsVar|] = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this./*FIND ALL REFS*/[|clsVar|]++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+//         this.clsParam++;
+// // --- (line: 18) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static [|clsSVar|] = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls./*FIND ALL REFS*/[|clsSVar|]++;
+//         // References to a class parameter.
+//         this.clsParam++;
+//         modTest.modVar++;
+// // --- (line: 19) skipped ---
+
+// --- (line: 24) skipped ---
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.[|clsSVar|]++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// // --- (line: 32) skipped ---
+
+// --- (line: 39) skipped ---
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.[|clsSVar|]++;
+//     modVar++;
+// 
+//     class testCls {
+// // --- (line: 47) skipped ---
+
+// --- (line: 51) skipped ---
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.[|clsSVar|]++;
+//         modVar++;
+//     }
+// 
+// // --- (line: 59) skipped ---
+
+// --- (line: 70) skipped ---
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.[|clsSVar|]++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// // --- (line: 78) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 7) skipped ---
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public [|clsParam|]: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+//         this./*FIND ALL REFS*/[|clsParam|]++;
+//         modTest.modVar++;
+//     }
+// }
+// // --- (line: 21) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// /*FIND ALL REFS*/function foo(x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function /*FIND ALL REFS*/[|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = [|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = [|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = [|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// [|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// [|foo|] = [|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function foo(/*FIND ALL REFS*/[|x|]: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 30) skipped ---
+//     fnVar++;
+// 
+//     //Return
+//     return [|x|]++;
+// }
+// 
+// module modTest {
+// // --- (line: 38) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 21) skipped ---
+// // References to a function parameter.
+// function foo(x: number) {
+//     // References to a variable declared in a function.
+//     /*FIND ALL REFS*/var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+// // --- (line: 29) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 21) skipped ---
+// // References to a function parameter.
+// function foo(x: number) {
+//     // References to a variable declared in a function.
+//     var /*FIND ALL REFS*/[|fnVar|] = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     [|fnVar|]++;
+// 
+//     //Return
+//     return x++;
+// // --- (line: 35) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static [|clsSVar|] = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.[|clsSVar|]++;
+//         // References to a class parameter.
+//         this.clsParam++;
+//         modTest.modVar++;
+// // --- (line: 19) skipped ---
+
+// --- (line: 24) skipped ---
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls./*FIND ALL REFS*/[|clsSVar|]++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// // --- (line: 32) skipped ---
+
+// --- (line: 39) skipped ---
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.[|clsSVar|]++;
+//     modVar++;
+// 
+//     class testCls {
+// // --- (line: 47) skipped ---
+
+// --- (line: 51) skipped ---
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.[|clsSVar|]++;
+//         modVar++;
+//     }
+// 
+// // --- (line: 59) skipped ---
+
+// --- (line: 70) skipped ---
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.[|clsSVar|]++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// // --- (line: 78) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     /*FIND ALL REFS*/[|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 21) skipped ---
+// // References to a function parameter.
+// function foo(x: number) {
+//     // References to a variable declared in a function.
+//     var [|fnVar|] = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     /*FIND ALL REFS*/[|fnVar|]++;
+// 
+//     //Return
+//     return x++;
+// // --- (line: 35) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function foo([|x|]: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 30) skipped ---
+//     fnVar++;
+// 
+//     //Return
+//     return /*FIND ALL REFS*/[|x|]++;
+// }
+// 
+// module modTest {
+// // --- (line: 38) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     /*FIND ALL REFS*/[|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static [|clsSVar|] = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.[|clsSVar|]++;
+//         // References to a class parameter.
+//         this.clsParam++;
+//         modTest.modVar++;
+// // --- (line: 19) skipped ---
+
+// --- (line: 24) skipped ---
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.[|clsSVar|]++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// // --- (line: 32) skipped ---
+
+// --- (line: 39) skipped ---
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls./*FIND ALL REFS*/[|clsSVar|]++;
+//     modVar++;
+// 
+//     class testCls {
+// // --- (line: 47) skipped ---
+
+// --- (line: 51) skipped ---
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.[|clsSVar|]++;
+//         modVar++;
+//     }
+// 
+// // --- (line: 59) skipped ---
+
+// --- (line: 70) skipped ---
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.[|clsSVar|]++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// // --- (line: 78) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function [|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = /*FIND ALL REFS*/[|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = [|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = [|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// [|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// [|foo|] = [|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function [|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = [|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = /*FIND ALL REFS*/[|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = [|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// [|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// [|foo|] = [|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         /*FIND ALL REFS*/[|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static [|clsSVar|] = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.[|clsSVar|]++;
+//         // References to a class parameter.
+//         this.clsParam++;
+//         modTest.modVar++;
+// // --- (line: 19) skipped ---
+
+// --- (line: 24) skipped ---
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.[|clsSVar|]++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// // --- (line: 32) skipped ---
+
+// --- (line: 39) skipped ---
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.[|clsSVar|]++;
+//     modVar++;
+// 
+//     class testCls {
+// // --- (line: 47) skipped ---
+
+// --- (line: 51) skipped ---
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls./*FIND ALL REFS*/[|clsSVar|]++;
+//         modVar++;
+//     }
+// 
+// // --- (line: 59) skipped ---
+
+// --- (line: 70) skipped ---
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.[|clsSVar|]++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// // --- (line: 78) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function [|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = [|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = [|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = /*FIND ALL REFS*/[|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// [|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// [|foo|] = [|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls(/*FIND ALL REFS*/[|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function [|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = [|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = [|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = [|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// /*FIND ALL REFS*/[|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// [|foo|] = [|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo(/*FIND ALL REFS*/[|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 3) skipped ---
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static [|clsSVar|] = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.[|clsSVar|]++;
+//         // References to a class parameter.
+//         this.clsParam++;
+//         modTest.modVar++;
+// // --- (line: 19) skipped ---
+
+// --- (line: 24) skipped ---
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.[|clsSVar|]++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// // --- (line: 32) skipped ---
+
+// --- (line: 39) skipped ---
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.[|clsSVar|]++;
+//     modVar++;
+// 
+//     class testCls {
+// // --- (line: 47) skipped ---
+
+// --- (line: 51) skipped ---
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.[|clsSVar|]++;
+//         modVar++;
+//     }
+// 
+// // --- (line: 59) skipped ---
+
+// --- (line: 70) skipped ---
+// foo(globalVar);
+// 
+// //Increments
+// fooCls./*FIND ALL REFS*/[|clsSVar|]++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// // --- (line: 78) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// /*FIND ALL REFS*/[|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = /*FIND ALL REFS*/[|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + /*FIND ALL REFS*/[|globalVar|];
+// 
+// //ETC - Other cases
+// [|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// // References to a variable declared in global.
+// var [|globalVar|]: number = 2;
+// 
+// class fooCls {
+//     // References to static variable declared in a class.
+//     static clsSVar = 1;
+//     // References to a variable declared in a class.
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         [|globalVar|]++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         // References to a class parameter.
+// // --- (line: 17) skipped ---
+
+// --- (line: 25) skipped ---
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     [|globalVar|]++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+// // --- (line: 33) skipped ---
+
+// --- (line: 38) skipped ---
+//     export var modVar:number;
+// 
+//     //Increments
+//     [|globalVar|]++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+// // --- (line: 46) skipped ---
+
+// --- (line: 50) skipped ---
+//         static boo = foo;
+// 
+//         //Increments
+//         [|globalVar|]++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// // --- (line: 58) skipped ---
+
+// --- (line: 65) skipped ---
+// 
+// //Arguments
+// // References to a class argument.
+// clsTest = new fooCls([|globalVar|]);
+// // References to a function argument.
+// foo([|globalVar|]);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// [|globalVar|] = [|globalVar|] + [|globalVar|];
+// 
+// //ETC - Other cases
+// /*FIND ALL REFS*/[|globalVar|] = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// // --- (line: 83) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function [|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = [|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = [|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = [|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// [|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// /*FIND ALL REFS*/[|foo|] = [|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// // References to a function parameter.
+// function [|foo|](x: number) {
+//     // References to a variable declared in a function.
+//     var fnVar = 1;
+// 
+// // --- (line: 27) skipped ---
+
+// --- (line: 43) skipped ---
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = [|foo|];
+//     }
+// 
+//     function testFn(){
+//         static boo = [|foo|];
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = [|foo|];
+//     }
+// }
+// 
+// // --- (line: 64) skipped ---
+
+// --- (line: 67) skipped ---
+// // References to a class argument.
+// clsTest = new fooCls(globalVar);
+// // References to a function argument.
+// [|foo|](globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// // References to illegal assignment.
+// [|foo|] = /*FIND ALL REFS*/[|foo|] + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// // --- (line: 85) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 81) skipped ---
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(/*FIND ALL REFS*/[|globalVar|]: number) {
+//     //Increments
+//     [|globalVar|]++;
+//     return [|globalVar|];
+// }
+// 
+// //Remotes
+// // --- (line: 92) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 81) skipped ---
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw([|globalVar|]: number) {
+//     //Increments
+//     /*FIND ALL REFS*/[|globalVar|]++;
+//     return [|globalVar|];
+// }
+// 
+// //Remotes
+// // --- (line: 92) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 81) skipped ---
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw([|globalVar|]: number) {
+//     //Increments
+//     [|globalVar|]++;
+//     return /*FIND ALL REFS*/[|globalVar|];
+// }
+// 
+// //Remotes
+// // --- (line: 92) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 113) skipped ---
+// array.forEach(
+// 
+// 
+// function(/*FIND ALL REFS*/[|str|]) {
+// 
+// 
+// 
+//    // Reference misses function parameter.
+//    return [|str|] + " ";
+// 
+// });
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 113) skipped ---
+// array.forEach(
+// 
+// 
+// function([|str|]) {
+// 
+// 
+// 
+//    // Reference misses function parameter.
+//    return /*FIND ALL REFS*/[|str|] + " ";
+// 
+// });
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// // Comment Refence Test: g/*FIND ALL REFS*/lobalVar
+// // References to a variable declared in global.
+// var globalVar: number = 2;
+// 
+// // --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 78) skipped ---
+// globalVar = 3;
+// // References to illegal assignment.
+// foo = foo + 1;
+// /*FIND ALL REFS*/err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+// // --- (line: 86) skipped ---
+
+
+
+// === findAllReferences ===
+// === /localGetReferences_1.ts ===
+// --- (line: 79) skipped ---
+// // References to illegal assignment.
+// foo = foo + 1;
+// err = err++;
+// /*FIND ALL REFS*/
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+// // --- (line: 87) skipped ---

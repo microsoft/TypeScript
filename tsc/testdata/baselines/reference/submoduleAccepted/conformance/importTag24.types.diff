@@ -1,0 +1,9 @@
+--- old.importTag24.types
++++ new.importTag24.types
+@@= skipped -43, +43 lines =@@
+  * @returns {Foo}
+  */
+ function f4() { return 1; }
+->f4 : () => Foo
++>f4 : () => string
+ >1 : 1

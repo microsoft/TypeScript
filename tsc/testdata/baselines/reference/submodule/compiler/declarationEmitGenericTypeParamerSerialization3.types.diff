@@ -1,0 +1,28 @@
+--- old.declarationEmitGenericTypeParamerSerialization3.types
++++ new.declarationEmitGenericTypeParamerSerialization3.types
+@@= skipped -1, +1 lines =@@
+
+ === declarationEmitGenericTypeParamerSerialization3.ts ===
+ function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+->mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
++>mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+ >args : any[]
+ >superclass : T
+
+   return class extends superclass {};
+->class extends superclass {} : { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
++>class extends superclass {} : { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+ >superclass : {}
+ }
+
+@@= skipped -23, +23 lines =@@
+   return class MyClass extends mixin(BaseClass) {
+ >class MyClass extends mixin(BaseClass) {    accessor name = value;  } : typeof MyClass
+ >MyClass : typeof MyClass
+->mixin(BaseClass) : mixin<typeof BaseClass>.(Anonymous class) & BaseClass
+->mixin : <T_1 extends { new (...args: any[]): {}; }>(superclass: T_1) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T_1
++>mixin(BaseClass) : mixin.(Anonymous class) & BaseClass
++>mixin : <T_1 extends new (...args: any[]) => {}>(superclass: T_1) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T_1
+ >BaseClass : typeof BaseClass
+
+     accessor name = value;

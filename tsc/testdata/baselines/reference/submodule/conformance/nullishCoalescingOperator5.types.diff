@@ -1,0 +1,11 @@
+--- old.nullishCoalescingOperator5.types
++++ new.nullishCoalescingOperator5.types
+@@= skipped -12, +12 lines =@@
+ // should be a syntax error
+ a ?? b || c;
+ >a ?? b || c : string | undefined
+->a ?? b : string | undefined
+ >a : string | undefined
++>b || c : string | undefined
+ >b : string | undefined
+ >c : string | undefined

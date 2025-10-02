@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /goToDefinitionOverriddenMember20.ts ===
+// --- (line: 4) skipped ---
+// }
+// 
+// export class B extends A {
+//   /*GOTO DEF*/override readonly [|[prop]|] = "B";
+// }

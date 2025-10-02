@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/genericCallAtYieldExpressionInGenericCall2.ts] ////
+
+=== genericCallAtYieldExpressionInGenericCall2.ts ===
+interface Effect {
+>Effect : Symbol(Effect, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 0, 0))
+
+  [Symbol.iterator](): {
+>[Symbol.iterator] : Symbol(Effect[Symbol.iterator], Decl(genericCallAtYieldExpressionInGenericCall2.ts, 0, 18))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    next(...args: ReadonlyArray<any>): IteratorResult<any, any>;
+>next : Symbol(next, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 1, 24))
+>args : Symbol(args, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 2, 9))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+
+  };
+}
+
+interface Enqueue<A> {
+>Enqueue : Symbol(Enqueue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 4, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 6, 18))
+
+  offer: (value: A) => Effect;
+>offer : Symbol(Enqueue.offer, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 6, 22))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 7, 10))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 6, 18))
+>Effect : Symbol(Effect, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 0, 0))
+}
+
+declare const offer: {
+>offer : Symbol(offer, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 10, 13))
+
+  <A>(value: A): (self: Enqueue<A>) => Effect;
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 11, 3))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 11, 6))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 11, 3))
+>self : Symbol(self, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 11, 18))
+>Enqueue : Symbol(Enqueue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 4, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 11, 3))
+>Effect : Symbol(Effect, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 0, 0))
+
+  <A>(self: Enqueue<A>, value: A): Effect;
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 12, 3))
+>self : Symbol(self, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 12, 6))
+>Enqueue : Symbol(Enqueue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 4, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 12, 3))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 12, 23))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 12, 3))
+>Effect : Symbol(Effect, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 0, 0))
+
+};
+
+declare function fn<Eff extends Effect, AEff, Args extends Array<any>>(
+>fn : Symbol(fn, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 13, 2))
+>Eff : Symbol(Eff, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 20))
+>Effect : Symbol(Effect, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 0, 0))
+>AEff : Symbol(AEff, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 39))
+>Args : Symbol(Args, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 45))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+
+  body: (...args: Args) => Generator<Eff, AEff, any>,
+>body : Symbol(body, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 71))
+>args : Symbol(args, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 16, 9))
+>Args : Symbol(Args, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 45))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Eff : Symbol(Eff, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 20))
+>AEff : Symbol(AEff, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 39))
+
+): (...args: Args) => any;
+>args : Symbol(args, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 17, 4))
+>Args : Symbol(Args, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 15, 45))
+
+fn(function* <T>(queue: Enqueue<T>, value: T) {
+>fn : Symbol(fn, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 13, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 14))
+>queue : Symbol(queue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 17))
+>Enqueue : Symbol(Enqueue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 4, 1))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 14))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 35))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 14))
+
+  yield* offer(queue, value);
+>offer : Symbol(offer, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 10, 13))
+>queue : Symbol(queue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 17))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 19, 35))
+
+});
+
+fn(function* <T>(queue: Enqueue<T>, value: T) {
+>fn : Symbol(fn, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 13, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 14))
+>queue : Symbol(queue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 17))
+>Enqueue : Symbol(Enqueue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 4, 1))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 14))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 35))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 14))
+
+  const x = offer(queue, value);
+>x : Symbol(x, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 24, 7))
+>offer : Symbol(offer, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 10, 13))
+>queue : Symbol(queue, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 17))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 23, 35))
+
+  yield* x;
+>x : Symbol(x, Decl(genericCallAtYieldExpressionInGenericCall2.ts, 24, 7))
+
+});
+

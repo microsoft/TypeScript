@@ -152,6 +152,14 @@ function wrapI2() {
     })();
 }
 
+function foo18() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
+}
+
 
 //// [blockScopedVariablesUseBeforeDef.js]
 function foo0() {
@@ -280,4 +288,12 @@ function wrapI2() {
         iter;
         yield 1;
     })();
+}
+function foo18() {
+    let a = (() => Enum.Yes)();
+    let Enum;
+    (function (Enum) {
+        Enum[Enum["No"] = 0] = "No";
+        Enum[Enum["Yes"] = 1] = "Yes";
+    })(Enum || (Enum = {}));
 }

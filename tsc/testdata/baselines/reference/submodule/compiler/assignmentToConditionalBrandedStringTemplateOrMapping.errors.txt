@@ -1,0 +1,31 @@
+assignmentToConditionalBrandedStringTemplateOrMapping.ts(4,1): error TS2719: Type '<T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2' is not assignable to type '<T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+  Type 'T extends `${"a" & { a: 1; }}` ? 1 : 2' is not assignable to type 'T extends `${"a" & { a: 1; }}` ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+    Type '1 | 2' is not assignable to type 'T extends `${"a" & { a: 1; }}` ? 1 : 2'.
+      Type '1' is not assignable to type 'T extends `${"a" & { a: 1; }}` ? 1 : 2'.
+assignmentToConditionalBrandedStringTemplateOrMapping.ts(9,1): error TS2719: Type '<T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2' is not assignable to type '<T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+  Type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2' is not assignable to type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+    Type '1 | 2' is not assignable to type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'.
+      Type '1' is not assignable to type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'.
+
+
+==== assignmentToConditionalBrandedStringTemplateOrMapping.ts (2 errors) ====
+    let a: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
+    let b: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
+    
+    a = b;
+    ~
+!!! error TS2719: Type '<T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2' is not assignable to type '<T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Type 'T extends `${"a" & { a: 1; }}` ? 1 : 2' is not assignable to type 'T extends `${"a" & { a: 1; }}` ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:     Type '1 | 2' is not assignable to type 'T extends `${"a" & { a: 1; }}` ? 1 : 2'.
+!!! error TS2719:       Type '1' is not assignable to type 'T extends `${"a" & { a: 1; }}` ? 1 : 2'.
+    
+    let c: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
+    let d: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
+    
+    c = d;
+    ~
+!!! error TS2719: Type '<T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2' is not assignable to type '<T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2' is not assignable to type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:     Type '1 | 2' is not assignable to type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'.
+!!! error TS2719:       Type '1' is not assignable to type 'T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2'.
+    

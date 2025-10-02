@@ -1,0 +1,33 @@
+--- old.dynamicImportDefer(module=commonjs).types
++++ new.dynamicImportDefer(module=commonjs).types
+@@= skipped -13, +13 lines =@@
+
+ === b.ts ===
+ import.defer("./a.js").then(ns => {
+->import.defer("./a.js").then(ns => {  ns.foo();}) : Promise<void>
+->import.defer("./a.js").then : <TResult1 = typeof import("a"), TResult2 = never>(onfulfilled?: (value: typeof import("a")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+->import.defer("./a.js") : Promise<typeof import("a")>
++>import.defer("./a.js").then(ns => {  ns.foo();}) : any
++>import.defer("./a.js").then : any
++>import.defer("./a.js") : any
++>import.defer : any
+ >defer : any
+ >"./a.js" : "./a.js"
+->then : <TResult1 = typeof import("a"), TResult2 = never>(onfulfilled?: (value: typeof import("a")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+->ns => {  ns.foo();} : (ns: typeof import("a")) => void
+->ns : typeof import("a")
++>then : any
++>ns => {  ns.foo();} : (ns: any) => void
++>ns : any
+
+   ns.foo();
+->ns.foo() : void
+->ns.foo : () => void
+->ns : typeof import("a")
+->foo : () => void
++>ns.foo() : any
++>ns.foo : any
++>ns : any
++>foo : any
+
+ });

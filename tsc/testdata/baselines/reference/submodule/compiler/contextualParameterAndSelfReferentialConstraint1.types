@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/contextualParameterAndSelfReferentialConstraint1.ts] ////
+
+=== contextualParameterAndSelfReferentialConstraint1.ts ===
+type NoExcessProperties<T, U> = T & {
+>NoExcessProperties : NoExcessProperties<T, U>
+
+  readonly [K in Exclude<keyof U, keyof T>]: never;
+};
+
+interface Effect<out A> {
+  readonly EffectTypeId: {
+>EffectTypeId : { readonly _A: (_: never) => A; }
+
+    readonly _A: (_: never) => A;
+>_A : (_: never) => A
+>_ : never
+
+  };
+}
+
+declare function pipe<A, B>(a: A, ab: (a: A) => B): B;
+>pipe : <A, B>(a: A, ab: (a: A) => B) => B
+>a : A
+>ab : (a: A) => B
+>a : A
+
+interface RepeatOptions<A> {
+  until?: (_: A) => boolean;
+>until : ((_: A) => boolean) | undefined
+>_ : A
+}
+
+declare const repeat: {
+>repeat : <O extends NoExcessProperties<RepeatOptions<A>, O>, A>(options: O) => (self: Effect<A>) => Effect<A>
+
+  <O extends NoExcessProperties<RepeatOptions<A>, O>, A>(
+    options: O,
+>options : O
+
+  ): (self: Effect<A>) => Effect<A>;
+>self : Effect<A>
+
+};
+
+pipe(
+>pipe(  {} as Effect<boolean>,  repeat({    until: (x) => {      return x; // boolean    },  }),) : Effect<boolean>
+>pipe : <A, B>(a: A, ab: (a: A) => B) => B
+
+  {} as Effect<boolean>,
+>{} as Effect<boolean> : Effect<boolean>
+>{} : {}
+
+  repeat({
+>repeat({    until: (x) => {      return x; // boolean    },  }) : (self: Effect<boolean>) => Effect<boolean>
+>repeat : <O extends NoExcessProperties<RepeatOptions<A>, O>, A>(options: O) => (self: Effect<A>) => Effect<A>
+>{    until: (x) => {      return x; // boolean    },  } : { until: (x: boolean) => boolean; }
+
+    until: (x) => {
+>until : (x: boolean) => boolean
+>(x) => {      return x; // boolean    } : (x: boolean) => boolean
+>x : boolean
+
+      return x; // boolean
+>x : boolean
+
+    },
+  }),
+);
+

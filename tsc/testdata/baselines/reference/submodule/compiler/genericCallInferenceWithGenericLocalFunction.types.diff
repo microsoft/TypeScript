@@ -1,0 +1,36 @@
+--- old.genericCallInferenceWithGenericLocalFunction.types
++++ new.genericCallInferenceWithGenericLocalFunction.types
+@@= skipped -95, +95 lines =@@
+ >true : true
+
+ const addP3_other = withP3({ foo: 'bar' });
+->addP3_other : <I>(from: I) => <I2>(from2: I2) => I & I2 & { foo: string; }
+->withP3({ foo: 'bar' }) : <I>(from: I) => <I2>(from2: I2) => I & I2 & { foo: string; }
++>addP3_other : <I>(from: I) => <I2>(from2: I2) => I & I2 & { a: number; }
++>withP3({ foo: 'bar' }) : <I>(from: I) => <I2>(from2: I2) => I & I2 & { a: number; }
+ >withP3 : <P>(p: P) => <I>(from: I) => <I2>(from2: I2) => I & I2 & P
+ >{ foo: 'bar' } : { foo: string; }
+ >foo : string
+ >'bar' : "bar"
+
+ const addedSome3_other = addP3_other({ qwerty: 123 });
+->addedSome3_other : <I2>(from2: I2) => { qwerty: number; } & I2 & { foo: string; }
+->addP3_other({ qwerty: 123 }) : <I2>(from2: I2) => { qwerty: number; } & I2 & { foo: string; }
+->addP3_other : <I>(from: I) => <I2>(from2: I2) => I & I2 & { foo: string; }
++>addedSome3_other : <I2>(from2: I2) => { qwerty: number; } & I2 & { a: number; }
++>addP3_other({ qwerty: 123 }) : <I2>(from2: I2) => { qwerty: number; } & I2 & { a: number; }
++>addP3_other : <I>(from: I) => <I2>(from2: I2) => I & I2 & { a: number; }
+ >{ qwerty: 123 } : { qwerty: number; }
+ >qwerty : number
+ >123 : 123
+
+ const added3_other = addedSome3_other({ bazinga: true });
+->added3_other : { qwerty: number; } & { bazinga: boolean; } & { foo: string; }
+->addedSome3_other({ bazinga: true }) : { qwerty: number; } & { bazinga: boolean; } & { foo: string; }
+->addedSome3_other : <I2>(from2: I2) => { qwerty: number; } & I2 & { foo: string; }
++>added3_other : { qwerty: number; } & { bazinga: boolean; } & { a: number; }
++>addedSome3_other({ bazinga: true }) : { qwerty: number; } & { bazinga: boolean; } & { a: number; }
++>addedSome3_other : <I2>(from2: I2) => { qwerty: number; } & I2 & { a: number; }
+ >{ bazinga: true } : { bazinga: true; }
+ >bazinga : true
+ >true : true

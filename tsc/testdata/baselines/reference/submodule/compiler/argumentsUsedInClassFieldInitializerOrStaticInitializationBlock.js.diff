@@ -1,6 +1,6 @@
 --- old.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js
 +++ new.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js
-@@= skipped -33, +33 lines =@@
+@@= skipped -117, +117 lines =@@
  //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
  function A() {
      return class T {
@@ -42,3 +42,86 @@
 +        a = function () { arguments; };
      };
  }
+ function D() {
+     return class T {
+-        constructor() {
+-            this.a = () => arguments; // should error
+-        }
++        a = () => arguments; // should error
+     };
+ }
+ function D1() {
+     return class T {
+-        constructor() {
+-            this.a = () => {
+-                arguments; // should error
+-                const b = () => {
+-                    return arguments; // should error
+-                };
+-                function f() {
+-                    return arguments; // ok
+-                }
++        a = () => {
++            arguments; // should error
++            const b = () => {
++                return arguments; // should error
+             };
+-        }
++            function f() {
++                return arguments; // ok
++            }
++        };
+     };
+ }
+ function D2() {
+@@= skipped -75, +61 lines =@@
+     };
+ }
+ function D3() {
+-    var _a;
+-    return _a = class T {
+-        },
+-        (() => {
++    return class T {
++        static {
+             arguments; // should error
+             while (1) {
+                 arguments; // should error
+             }
+-        })(),
+-        _a;
++        }
++    };
+ }
+ function D4() {
+-    var _a;
+-    return _a = class T {
+-        },
+-        (() => {
++    return class T {
++        static {
+             function f() {
+                 arguments; // ok
+             }
+-        })(),
+-        _a;
++        }
++    };
+ }
+ function D5() {
+     return class T {
+-        constructor() {
+-            this.a = (() => { return arguments; })(); // should error
+-        }
++        a = (() => { return arguments; })(); // should error
+     };
+ }
+ function D6() {
+     return class T {
+-        constructor() {
+-            this.a = (x = arguments) => { }; // should error
+-        }
++        a = (x = arguments) => { }; // should error
+     };
+ }
+ function D7() {

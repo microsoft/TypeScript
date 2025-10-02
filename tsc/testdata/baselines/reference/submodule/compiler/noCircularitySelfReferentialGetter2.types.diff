@@ -1,0 +1,20 @@
+--- old.noCircularitySelfReferentialGetter2.types
++++ new.noCircularitySelfReferentialGetter2.types
+@@= skipped -23, +23 lines =@@
+ >Prettify : { [K in keyof T]: T[K]; }
+
+ type InferObjectType<Shape extends ZodShape> = Prettify<
+->InferObjectType : { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? k : never]?: Shape[k]["output"] | undefined; } & { [k_1 in keyof Shape as Shape[k_1] extends { optional: "true"; } ? never : k_1]: Shape[k_1]["output"]; } extends infer T ? { [K in keyof T]: T[K]; } : never
++>InferObjectType : { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? k : never]?: Shape[k]["output"] | undefined; } & { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? never : k]: Shape[k]["output"]; } extends infer T extends unknown ? { [K in keyof T]: ({ [k in keyof Shape as Shape[k] extends { optional: "true"; } ? k : never]?: Shape[k]["output"] | undefined; } & { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? never : k]: Shape[k]["output"]; })[K]; } : never
+   {
+     [k in keyof Shape as Shape[k] extends { optional: "true" }
+ >optional : "true"
+@@= skipped -20, +20 lines =@@
+ >optional : "false"
+
+   output: InferObjectType<T>;
+->output : { [k in keyof T as T[k] extends { optional: "true"; } ? k : never]?: T[k]["output"] | undefined; } & { [k_1 in keyof T as T[k_1] extends { optional: "true"; } ? never : k_1]: T[k_1]["output"]; } extends infer T_1 ? { [K in keyof T_1]: T_1[K]; } : never
++>output : { [k in keyof T as T[k] extends { optional: "true"; } ? k : never]?: T[k]["output"] | undefined; } & { [k in keyof T as T[k] extends { optional: "true"; } ? never : k]: T[k]["output"]; } extends infer T_1 extends unknown ? { [K in keyof T_1]: ({ [k in keyof T as T[k] extends { optional: "true"; } ? k : never]?: T[k]["output"] | undefined; } & { [k in keyof T as T[k] extends { optional: "true"; } ? never : k]: T[k]["output"]; })[K]; } : never
+ }
+
+ interface ZodOptional<T extends ZodType> extends ZodType {

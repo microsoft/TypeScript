@@ -1,0 +1,25 @@
+--- old.mixinAccessors4.js
++++ new.mixinAccessors4.js
+@@= skipped -25, +25 lines =@@
+
+
+ //// [mixinAccessors4.js]
+-"use strict";
+ // https://github.com/microsoft/TypeScript/issues/44938
+ class A {
+     constructor(...args) { }
+@@= skipped -29, +28 lines =@@
+ }
+ declare function Mixin<T extends typeof A>(Super: T): {
+     new (...args: any[]): {
+-        get myName(): string;
++        readonly myName: string;
+     };
+ } & T;
+ declare const C_base: {
+     new (...args: any[]): {
+-        get myName(): string;
++        readonly myName: string;
+     };
+ } & typeof A;
+ declare class C extends C_base {

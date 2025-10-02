@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /documentHighlightsInvalidGlobalThis.ts ===
+// declare global {
+//     export { globalThis as /*HIGHLIGHTS*/global }
+// }

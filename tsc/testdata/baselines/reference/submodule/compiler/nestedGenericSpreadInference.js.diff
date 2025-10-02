@@ -1,9 +1,8 @@
 --- old.nestedGenericSpreadInference.js
 +++ new.nestedGenericSpreadInference.js
-@@= skipped -8, +8 lines =@@
+@@= skipped -7, +7 lines =@@
 
 
  //// [nestedGenericSpreadInference.js]
 -"use strict";
- // This should be of type `number` - ideally, it also would not error.
  const leak = call(wrap((x) => x), 1);

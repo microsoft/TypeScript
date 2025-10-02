@@ -1,0 +1,22 @@
+--- old.noCircularitySelfReferentialGetter4.errors.txt
++++ new.noCircularitySelfReferentialGetter4.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++noCircularitySelfReferentialGetter4.ts(1,7): error TS7022: 'a' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
++noCircularitySelfReferentialGetter4.ts(3,7): error TS7023: 'self' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++
++
++==== noCircularitySelfReferentialGetter4.ts (2 errors) ====
++    const a = {
++          ~
++!!! error TS7022: 'a' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
++      prop: 42,
++      get self() {
++          ~~~~
++!!! error TS7023: 'self' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++        return a;
++      },
++    } satisfies { prop: number; self: any };
++    
++    const prop = a.self.self.self.self.self.prop;
++    

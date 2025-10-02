@@ -1,0 +1,18 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+==== /app/test.ts (0 errors) ====
+    import { test } from '../lib';
+    
+==== /lib/package.json (0 errors) ====
+    {
+      "main": "./cjs/index.js"
+    }
+    
+==== /lib/cjs/index.js (0 errors) ====
+    export function test() {}
+    
+==== /lib/cjs/index.d.ts (0 errors) ====
+    export function test(): void;
+    

@@ -1,6 +1,6 @@
 /foo.js(1,25): error TS2306: File '/foo.js' is not a module.
 /foo.js(1,33): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
-/foo.js(1,33): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/foo.js(1,33): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
 
 
 ==== /foo.js (3 errors) ====
@@ -10,5 +10,5 @@
                                     ~~~~
 !!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
                                     ~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
     

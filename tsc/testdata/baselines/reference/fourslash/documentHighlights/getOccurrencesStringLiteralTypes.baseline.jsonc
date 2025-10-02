@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /getOccurrencesStringLiteralTypes.ts ===
+// function foo(a: "/*HIGHLIGHTS*/option 1") { }
+// foo("option 1");
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesStringLiteralTypes.ts ===
+// function foo(a: "option 1") { }
+// foo("/*HIGHLIGHTS*/option 1");

@@ -1,0 +1,59 @@
+// === findAllReferences ===
+// === /a.ts ===
+// interface A {
+//     /*FIND ALL REFS*/[|foo|]: string;
+// }
+
+// === /b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// function foo(x: A) {
+//     x.[|foo|]
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// interface A {
+//     [|foo|]: string;
+// }
+
+// === /b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// function foo(x: A) {
+//     x./*FIND ALL REFS*/[|foo|]
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// interface A {
+//     /*FIND ALL REFS*/[|foo|]: string;
+// }
+
+// === /b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// 
+// function foo(x: A) {
+//     x.[|foo|]
+// }
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// interface A {
+//     [|foo|]: string;
+// }
+
+// === /b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// 
+// function foo(x: A) {
+//     x./*FIND ALL REFS*/[|foo|]
+// }

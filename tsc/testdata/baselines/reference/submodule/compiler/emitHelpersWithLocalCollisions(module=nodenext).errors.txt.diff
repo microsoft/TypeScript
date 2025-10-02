@@ -1,0 +1,11 @@
+--- old.emitHelpersWithLocalCollisions(module=nodenext).errors.txt
++++ new.emitHelpersWithLocalCollisions(module=nodenext).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+ error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
+
+
+-!!! error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+ !!! error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
+ ==== a.ts (0 errors) ====
+     declare var dec: any, __decorate: any;

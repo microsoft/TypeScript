@@ -1,0 +1,11 @@
+--- old.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.types
++++ new.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.types
+@@= skipped -174, +174 lines =@@
+ >1 : 1
+
+         arguments // should error
+->arguments : any
++>arguments : IArguments
+       }
+     }
+   }

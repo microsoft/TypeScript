@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/importDeferJsdoc.ts] ////
+
+=== /types.ts ===
+export type X = 1;
+>X : Symbol(X, Decl(types.ts, 0, 0))
+
+=== /foo.js ===
+/**
+ * @import defer * as ns from "./types"
+ */
+
+/**
+ * @type { ns.X }
+ */
+let a = 2;
+>a : Symbol(a, Decl(foo.js, 7, 3))
+

@@ -29,13 +29,13 @@ interface SharedArrayBuffer {
      * Returns a section of an SharedArrayBuffer.
      */
     slice(begin?: number, end?: number): SharedArrayBuffer;
-    readonly [Symbol.species]: SharedArrayBuffer;
     readonly [Symbol.toStringTag]: "SharedArrayBuffer";
 }
 
 interface SharedArrayBufferConstructor {
     readonly prototype: SharedArrayBuffer;
     new (byteLength?: number): SharedArrayBuffer;
+    readonly [Symbol.species]: SharedArrayBufferConstructor;
 }
 declare var SharedArrayBuffer: SharedArrayBufferConstructor;
 

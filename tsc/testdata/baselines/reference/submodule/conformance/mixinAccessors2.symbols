@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/classes/mixinAccessors2.ts] ////
+
+=== mixinAccessors2.ts ===
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : Symbol(mixin, Decl(mixinAccessors2.ts, 0, 0))
+>T : Symbol(T, Decl(mixinAccessors2.ts, 0, 15))
+>args : Symbol(args, Decl(mixinAccessors2.ts, 0, 32))
+>superclass : Symbol(superclass, Decl(mixinAccessors2.ts, 0, 55))
+>T : Symbol(T, Decl(mixinAccessors2.ts, 0, 15))
+
+  return class extends superclass {
+>superclass : Symbol(superclass, Decl(mixinAccessors2.ts, 0, 55))
+
+    accessor name = "";
+>name : Symbol((Anonymous class).name, Decl(mixinAccessors2.ts, 1, 35))
+
+  };
+}
+
+class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(mixinAccessors2.ts, 4, 1))
+
+  accessor name = "";
+>name : Symbol(BaseClass.name, Decl(mixinAccessors2.ts, 6, 17))
+}
+
+class MyClass extends mixin(BaseClass) {
+>MyClass : Symbol(MyClass, Decl(mixinAccessors2.ts, 8, 1))
+>mixin : Symbol(mixin, Decl(mixinAccessors2.ts, 0, 0))
+>BaseClass : Symbol(BaseClass, Decl(mixinAccessors2.ts, 4, 1))
+
+  accessor name = "";
+>name : Symbol(MyClass.name, Decl(mixinAccessors2.ts, 10, 40))
+}
+

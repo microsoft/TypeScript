@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/typeAliasInstantiationNoLeak1.ts] ////
+
+=== typeAliasInstantiationNoLeak1.ts ===
+type Foo<T> = T | string | number;
+>Foo : Foo<T>
+
+type Bar<T> = Foo<T> | undefined;
+>Bar : Bar<T>
+
+declare let x1: Bar<"a">;
+>x1 : Bar<"a">
+
+declare let x2: Bar<"b">;
+>x2 : Bar<"b">
+

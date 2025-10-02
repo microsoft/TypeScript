@@ -412,6 +412,7 @@ const (
 	// Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
 	ModuleKindNode16   ModuleKind = 100
 	ModuleKindNode18   ModuleKind = 101
+	ModuleKindNode20   ModuleKind = 102
 	ModuleKindNodeNext ModuleKind = 199
 	// Emit as written
 	ModuleKindPreserve ModuleKind = 200

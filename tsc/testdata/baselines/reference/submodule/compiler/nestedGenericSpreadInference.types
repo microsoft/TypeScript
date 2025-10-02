@@ -13,7 +13,6 @@ declare function call<A extends unknown[], T>(x: { x: (...args: A) => T }, ...ar
 >args : A
 >args : A
 
-// This should be of type `number` - ideally, it also would not error.
 const leak = call(wrap(<T>(x: T) => x), 1);
 >leak : number
 >call(wrap(<T>(x: T) => x), 1) : number

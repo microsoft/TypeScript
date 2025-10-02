@@ -1,0 +1,26 @@
+b.ts(1,14): error TS1005: '=' expected.
+b.ts(1,16): error TS2304: Cannot find name 'foo'.
+b.ts(1,22): error TS1434: Unexpected keyword or identifier.
+b.ts(1,22): error TS2304: Cannot find name 'from'.
+b.ts(3,1): error TS2304: Cannot find name 'foo'.
+
+
+==== a.ts (0 errors) ====
+    export function foo() {
+        console.log("foo from a");
+    }
+    
+==== b.ts (5 errors) ====
+    import defer { foo } from "a";
+                 ~
+!!! error TS1005: '=' expected.
+                   ~~~
+!!! error TS2304: Cannot find name 'foo'.
+                         ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                         ~~~~
+!!! error TS2304: Cannot find name 'from'.
+    
+    foo();
+    ~~~
+!!! error TS2304: Cannot find name 'foo'.

@@ -9,7 +9,7 @@ import (
 
 func TestLocalGetReferences(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: localGetReferences_1.ts
 // Comment Refence Test: g/*43*/lobalVar

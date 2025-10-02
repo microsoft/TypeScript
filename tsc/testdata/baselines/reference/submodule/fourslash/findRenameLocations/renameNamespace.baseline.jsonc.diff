@@ -1,0 +1,8 @@
+--- old.renameNamespace.baseline.jsonc
++++ new.renameNamespace.baseline.jsonc
+@@= skipped -5, +5 lines =@@
+ //     }
+ // }
+ // 
+-// const a: [|NSRENAME|].E = [|NSRENAME|].E.A;
++// const a: [|NSRENAME|].E = NS.E.A;

@@ -1,0 +1,28 @@
+--- old.mixinAccessors2.types
++++ new.mixinAccessors2.types
+@@= skipped -1, +1 lines =@@
+
+ === mixinAccessors2.ts ===
+ function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+->mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
++>mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+ >args : any[]
+ >superclass : T
+
+   return class extends superclass {
+->class extends superclass {    accessor name = "";  } : { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
++>class extends superclass {    accessor name = "";  } : { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+ >superclass : {}
+
+     accessor name = "";
+@@= skipped -25, +25 lines =@@
+
+ class MyClass extends mixin(BaseClass) {
+ >MyClass : MyClass
+->mixin(BaseClass) : mixin<typeof BaseClass>.(Anonymous class) & BaseClass
+->mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
++>mixin(BaseClass) : mixin.(Anonymous class) & BaseClass
++>mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+ >BaseClass : typeof BaseClass
+
+   accessor name = "";

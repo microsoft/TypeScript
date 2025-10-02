@@ -1,0 +1,13 @@
+--- old.importAttributes10.symbols
++++ new.importAttributes10.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/importAttributes/importAttributes10.ts] ////
+
+-=== ./a.json ===
+-{ "key": "value" }
+->"key" : Symbol("key", Decl(a.json, 0, 1))
+-
+-=== ./b.ts ===
++=== b.ts ===
+ declare global {
+ >global : Symbol(global, Decl(b.ts, 0, 0))

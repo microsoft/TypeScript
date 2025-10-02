@@ -1,0 +1,22 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+==== subfolder/index.ts (0 errors) ====
+    // cjs format file
+    const a = {};
+    export = a;
+==== index.ts (0 errors) ====
+    // esm format file
+    const a = {};
+    export = a;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== subfolder/package.json (0 errors) ====
+    {
+        "type": "commonjs"
+    }

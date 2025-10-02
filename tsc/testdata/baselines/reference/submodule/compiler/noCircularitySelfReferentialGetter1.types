@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/noCircularitySelfReferentialGetter1.ts] ////
+
+=== noCircularitySelfReferentialGetter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61659
+
+interface ZodType {
+  optional: "true" | "false";
+>optional : "false" | "true"
+
+  output: any;
+>output : any
+}
+
+interface ZodString extends ZodType {
+  optional: "false";
+>optional : "false"
+
+  output: string;
+>output : string
+}
+
+type ZodShape = Record<string, any>;
+>ZodShape : ZodShape
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : { [K in keyof T]: T[K]; }
+
+type InferObjectType<Shape extends ZodShape> = Prettify<
+>InferObjectType : { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? k : never]?: Shape[k]["output"] | undefined; } & { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? never : k]: Shape[k]["output"]; } extends infer T extends unknown ? { [K in keyof T]: ({ [k in keyof Shape as Shape[k] extends { optional: "true"; } ? k : never]?: Shape[k]["output"] | undefined; } & { [k in keyof Shape as Shape[k] extends { optional: "true"; } ? never : k]: Shape[k]["output"]; })[K]; } : never
+  {
+    [k in keyof Shape as Shape[k] extends { optional: "true" }
+>optional : "true"
+
+      ? k
+      : never]?: Shape[k]["output"];
+  } & {
+    [k in keyof Shape as Shape[k] extends { optional: "true" }
+>optional : "true"
+
+      ? never
+      : k]: Shape[k]["output"];
+  }
+>;
+interface ZodObject<T extends ZodShape> extends ZodType {
+  optional: "false";
+>optional : "false"
+
+  output: InferObjectType<T>;
+>output : { [k in keyof T as T[k] extends { optional: "true"; } ? k : never]?: T[k]["output"] | undefined; } & { [k in keyof T as T[k] extends { optional: "true"; } ? never : k]: T[k]["output"]; } extends infer T_1 extends unknown ? { [K in keyof T_1]: ({ [k in keyof T as T[k] extends { optional: "true"; } ? k : never]?: T[k]["output"] | undefined; } & { [k in keyof T as T[k] extends { optional: "true"; } ? never : k]: T[k]["output"]; })[K]; } : never
+}
+
+interface ZodOptional<T extends ZodType> extends ZodType {
+  optional: "true";
+>optional : "true"
+
+  output: T["output"] | undefined;
+>output : T["output"] | undefined
+}
+
+declare function object<T extends ZodShape>(shape: T): ZodObject<T>;
+>object : <T extends ZodShape>(shape: T) => ZodObject<T>
+>shape : T
+
+declare function string(): ZodString;
+>string : () => ZodString
+
+declare function optional<T extends ZodType>(schema: T): ZodOptional<T>;
+>optional : <T extends ZodType>(schema: T) => ZodOptional<T>
+>schema : T
+
+const Category = object({
+>Category : ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>
+>object({  name: string(),  get parent() {    return optional(Category);  },}) : ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>
+>object : <T extends ZodShape>(shape: T) => ZodObject<T>
+>{  name: string(),  get parent() {    return optional(Category);  },} : { name: ZodString; readonly parent: ZodOptional<ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>>; }
+
+  name: string(),
+>name : ZodString
+>string() : ZodString
+>string : () => ZodString
+
+  get parent() {
+>parent : ZodOptional<ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>>
+
+    return optional(Category);
+>optional(Category) : ZodOptional<ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>>
+>optional : <T extends ZodType>(schema: T) => ZodOptional<T>
+>Category : ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>
+
+  },
+});
+

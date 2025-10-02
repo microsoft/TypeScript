@@ -111,6 +111,8 @@ var esnextLibs = []string{
 	"lib.esnext.decorators.d.ts",
 	"lib.esnext.iterator.d.ts",
 	"lib.esnext.float16.d.ts",
+	"lib.esnext.error.d.ts",
+	"lib.esnext.sharedmemory.d.ts",
 	"lib.decorators.d.ts",
 	"lib.decorators.legacy.d.ts",
 	"lib.esnext.full.d.ts",

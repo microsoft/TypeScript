@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagOnParameter1.ts] ////
+
+=== /index.js ===
+function repeat(
+>repeat : Symbol(repeat, Decl(index.js, 0, 0))
+
+	/** @type {string} */ message,
+>message : Symbol(message, Decl(index.js, 0, 16))
+
+	/** @type {number} */ times,
+>times : Symbol(times, Decl(index.js, 1, 31))
+
+) {
+	return Array(times).fill(message).join(` `);
+>Array(times).fill(message).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Array(times).fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>times : Symbol(times, Decl(index.js, 1, 31))
+>fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --))
+>message : Symbol(message, Decl(index.js, 0, 16))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+}
+
+/** @type {Parameters<typeof repeat>[0]} */
+const message = `hello`;
+>message : Symbol(message, Decl(index.js, 8, 5))
+
+/** @type {Parameters<typeof repeat>[1]} */
+const times = 3;
+>times : Symbol(times, Decl(index.js, 11, 5))
+

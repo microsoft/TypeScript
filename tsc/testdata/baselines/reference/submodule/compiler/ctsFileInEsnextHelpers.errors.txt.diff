@@ -1,0 +1,13 @@
+--- old.ctsFileInEsnextHelpers.errors.txt
++++ new.ctsFileInEsnextHelpers.errors.txt
+@@= skipped -0, +0 lines =@@
+-notmodule.cts(1,23): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-
+-
+-==== notmodule.cts (1 errors) ====
+-    export async function foo() {
+-                          ~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-      await 0;
+-    }
++<no content>

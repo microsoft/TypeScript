@@ -802,3 +802,58 @@ function isEmptyString(x: unknown) {
 >rv : Symbol(rv, Decl(inferTypePredicates.ts, 285, 7))
 }
 
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+>Animal : Symbol(Animal, Decl(inferTypePredicates.ts, 287, 1))
+
+  breath: true,
+>breath : Symbol(breath, Decl(inferTypePredicates.ts, 290, 15))
+
+};
+
+type Rock = {
+>Rock : Symbol(Rock, Decl(inferTypePredicates.ts, 292, 2))
+
+  breath: false,
+>breath : Symbol(breath, Decl(inferTypePredicates.ts, 294, 13))
+
+};
+
+type Something = Animal | Rock;
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+>Animal : Symbol(Animal, Decl(inferTypePredicates.ts, 287, 1))
+>Rock : Symbol(Rock, Decl(inferTypePredicates.ts, 292, 2))
+
+function isAnimal(something: Something): something is Animal {
+>isAnimal : Symbol(isAnimal, Decl(inferTypePredicates.ts, 298, 31))
+>something : Symbol(something, Decl(inferTypePredicates.ts, 300, 18))
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+>something : Symbol(something, Decl(inferTypePredicates.ts, 300, 18))
+>Animal : Symbol(Animal, Decl(inferTypePredicates.ts, 287, 1))
+
+  return something.breath
+>something.breath : Symbol(breath, Decl(inferTypePredicates.ts, 290, 15), Decl(inferTypePredicates.ts, 294, 13))
+>something : Symbol(something, Decl(inferTypePredicates.ts, 300, 18))
+>breath : Symbol(breath, Decl(inferTypePredicates.ts, 290, 15), Decl(inferTypePredicates.ts, 294, 13))
+}
+
+function positive(t: Something) {
+>positive : Symbol(positive, Decl(inferTypePredicates.ts, 302, 1))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 304, 18))
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+
+  return isAnimal(t)
+>isAnimal : Symbol(isAnimal, Decl(inferTypePredicates.ts, 298, 31))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 304, 18))
+}
+
+function negative(t: Something) { 
+>negative : Symbol(negative, Decl(inferTypePredicates.ts, 306, 1))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 308, 18))
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+
+  return !isAnimal(t)
+>isAnimal : Symbol(isAnimal, Decl(inferTypePredicates.ts, 298, 31))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 308, 18))
+}
+

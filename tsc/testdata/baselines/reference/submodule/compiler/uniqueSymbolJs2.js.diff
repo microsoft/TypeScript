@@ -1,0 +1,10 @@
+--- old.uniqueSymbolJs2.js
++++ new.uniqueSymbolJs2.js
+@@= skipped -11, +11 lines =@@
+ z == y // error
+
+ //// [index.js]
+-"use strict";
+ /** @type {unique symbol} */
+ const x = Symbol();
+ /** @type {unique symbol} */

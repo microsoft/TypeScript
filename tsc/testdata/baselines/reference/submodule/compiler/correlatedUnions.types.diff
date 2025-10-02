@@ -64,12 +64,12 @@
  }
 
  const clickEvent = createEventListener({
-->clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
-->createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
-+>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
-+>createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
+->clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; }
+->createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; }
++>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; }
++>createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; }
  >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
- >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
+ >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: PointerEvent) => void; }
 
 @@= skipped -22, +22 lines =@@
  });
@@ -86,11 +86,11 @@
  processEvents([clickEvent, scrollEvent]);
  >processEvents([clickEvent, scrollEvent]) : void
  >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
-->[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; })[]
-->clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
+->[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; })[]
+->clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; }
 ->scrollEvent : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
-+>[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
-+>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
++>[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
++>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; }
 +>scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
 
  processEvents([

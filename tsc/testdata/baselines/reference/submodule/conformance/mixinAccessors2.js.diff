@@ -1,0 +1,30 @@
+--- old.mixinAccessors2.js
++++ new.mixinAccessors2.js
+@@= skipped -16, +16 lines =@@
+
+
+ //// [mixinAccessors2.js]
+-"use strict";
+ function mixin(superclass) {
+     return class extends superclass {
+         accessor name = "";
+@@= skipped -19, +18 lines =@@
+     new (...args: any[]): {};
+ }>(superclass: T): {
+     new (...args: any[]): {
+-        get name(): string;
+-        set name(arg: string);
++        name: string;
+     };
+ } & T;
+ declare class BaseClass {
+@@= skipped -9, +8 lines =@@
+ }
+ declare const MyClass_base: {
+     new (...args: any[]): {
+-        get name(): string;
+-        set name(arg: string);
++        name: string;
+     };
+ } & typeof BaseClass;
+ declare class MyClass extends MyClass_base {

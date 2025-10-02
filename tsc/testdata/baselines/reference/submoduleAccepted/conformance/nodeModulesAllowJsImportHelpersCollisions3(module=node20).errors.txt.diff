@@ -1,0 +1,19 @@
+--- old.nodeModulesAllowJsImportHelpersCollisions3(module=node20).errors.txt
++++ new.nodeModulesAllowJsImportHelpersCollisions3(module=node20).errors.txt
+@@= skipped -0, +0 lines =@@
+-subfolder/index.js(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+-
+-
+-==== subfolder/index.js (1 errors) ====
++error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
++
++
++!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
++==== subfolder/index.js (0 errors) ====
+     // cjs format file
+     export {default} from "fs";
+-            ~~~~~~~
+-!!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+     export {default as foo} from "fs";
+     export {bar as baz} from "fs";
+ ==== index.js (0 errors) ====

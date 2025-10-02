@@ -1,0 +1,47 @@
+--- old.genericCallAtYieldExpressionInGenericCall2.types
++++ new.genericCallAtYieldExpressionInGenericCall2.types
+@@= skipped -2, +2 lines =@@
+ === genericCallAtYieldExpressionInGenericCall2.ts ===
+ interface Effect {
+   [Symbol.iterator](): {
+->[Symbol.iterator] : () => { next(...args: ReadonlyArray<any>): IteratorResult<any, any>; }
++>[Symbol.iterator] : () => { next(...args: readonly any[]): IteratorResult<any, any>; }
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+
+     next(...args: ReadonlyArray<any>): IteratorResult<any, any>;
+->next : (...args: ReadonlyArray<any>) => IteratorResult<any, any>
++>next : (...args: readonly any[]) => IteratorResult<any, any>
+ >args : readonly any[]
+
+   };
+@@= skipped -32, +32 lines =@@
+ };
+
+ declare function fn<Eff extends Effect, AEff, Args extends Array<any>>(
+->fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
++>fn : <Eff extends Effect, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
+
+   body: (...args: Args) => Generator<Eff, AEff, any>,
+ >body : (...args: Args) => Generator<Eff, AEff, any>
+@@= skipped -11, +11 lines =@@
+
+ fn(function* <T>(queue: Enqueue<T>, value: T) {
+ >fn(function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);}) : <T>(queue: Enqueue<T>, value: T) => any
+->fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
+->function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);} : <T>(queue: Enqueue<T>, value: T) => Generator<never, void, never>
++>fn : <Eff extends Effect, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
++>function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);} : <T>(queue: Enqueue<T>, value: T) => Generator<any, void, any>
+ >queue : Enqueue<T>
+ >value : T
+
+@@= skipped -16, +16 lines =@@
+
+ fn(function* <T>(queue: Enqueue<T>, value: T) {
+ >fn(function* <T>(queue: Enqueue<T>, value: T) {  const x = offer(queue, value);  yield* x;}) : <T>(queue: Enqueue<T>, value: T) => any
+->fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
++>fn : <Eff extends Effect, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
+ >function* <T>(queue: Enqueue<T>, value: T) {  const x = offer(queue, value);  yield* x;} : <T>(queue: Enqueue<T>, value: T) => Generator<any, void, any>
+ >queue : Enqueue<T>
+ >value : T

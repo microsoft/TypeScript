@@ -1,0 +1,15 @@
+--- old.importDeferComments.types
++++ new.importDeferComments.types
+@@= skipped -5, +5 lines =@@
+
+ === b.ts ===
+ /*1*/ import /*2*/ defer /*3*/ * /*4*/ as /*5*/ aNs /*6*/ from /*7*/ "a" /*8*/;
+->aNs : typeof aNs
++>defer : any
++> : any
++>* /*4*/ as : number
++> : any
++>as : any
++>aNs : any
++>from : any
++>"a" : "a"
