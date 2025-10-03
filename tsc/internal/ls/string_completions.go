@@ -375,6 +375,22 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 				hasIndexSignature: false,
 			},
 		}
+	case ast.KindBinaryExpression:
+		if parent.AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword {
+			t := typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Right)
+			properties := getPropertiesForCompletion(t, typeChecker)
+			return &stringLiteralCompletions{
+				fromProperties: &completionsFromProperties{
+					symbols: core.Filter(properties, func(s *ast.Symbol) bool {
+						return s.ValueDeclaration == nil || !ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration)
+					}),
+					hasIndexSignature: false,
+				},
+			}
+		}
+		return &stringLiteralCompletions{
+			fromTypes: fromContextualType(checker.ContextFlagsNone, node, typeChecker),
+		}
 	default:
 		result := fromContextualType(checker.ContextFlagsCompletions, node, typeChecker)
 		if result != nil {
