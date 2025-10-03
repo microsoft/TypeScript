@@ -3298,6 +3298,22 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 					return result
 				}
 			}
+		case source.flags&TypeFlagsTemplateLiteral != 0:
+			if slices.Equal(source.AsTemplateLiteralType().texts, target.AsTemplateLiteralType().texts) {
+				result = TernaryTrue
+				for i, sourceType := range source.AsTemplateLiteralType().types {
+					targetType := target.AsTemplateLiteralType().types[i]
+					result &= r.isRelatedTo(sourceType, targetType, RecursionFlagsBoth, false /*reportErrors*/)
+					if result == TernaryFalse {
+						return result
+					}
+				}
+				return result
+			}
+		case source.flags&TypeFlagsStringMapping != 0:
+			if source.AsStringMappingType().Symbol() == target.AsStringMappingType().Symbol() {
+				return r.isRelatedTo(source.AsStringMappingType().target, target.AsStringMappingType().target, RecursionFlagsBoth, false /*reportErrors*/)
+			}
 		}
 		if source.flags&TypeFlagsObject == 0 {
 			return TernaryFalse
