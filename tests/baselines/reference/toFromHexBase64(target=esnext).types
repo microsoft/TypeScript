@@ -6,12 +6,12 @@ const arr1 = Uint8Array.fromBase64("AAAAAA==");
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array.fromBase64("AAAAAA==") : Uint8Array<ArrayBuffer>
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^
->Uint8Array.fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => Uint8Array<ArrayBuffer>
->                      : ^      ^^      ^^       ^^^                                                                                                      ^^^^^                       
+>Uint8Array.fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; } | undefined) => Uint8Array<ArrayBuffer>
+>                      : ^      ^^      ^^       ^^^                                                                                                                                          ^^^^^                       
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => Uint8Array<ArrayBuffer>
->           : ^      ^^      ^^       ^^^                                                                                                      ^^^^^                       
+>fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; } | undefined) => Uint8Array<ArrayBuffer>
+>           : ^      ^^      ^^       ^^^                                                                                                                                          ^^^^^                       
 >"AAAAAA==" : "AAAAAA=="
 >           : ^^^^^^^^^^
 
@@ -20,12 +20,12 @@ const arr2 = Uint8Array.fromBase64("AAAAAA", { alphabet: "base64url" });
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array.fromBase64("AAAAAA", { alphabet: "base64url" }) : Uint8Array<ArrayBuffer>
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^
->Uint8Array.fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => Uint8Array<ArrayBuffer>
->                      : ^      ^^      ^^       ^^^                                                                                                      ^^^^^                       
+>Uint8Array.fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; } | undefined) => Uint8Array<ArrayBuffer>
+>                      : ^      ^^      ^^       ^^^                                                                                                                                          ^^^^^                       
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => Uint8Array<ArrayBuffer>
->           : ^      ^^      ^^       ^^^                                                                                                      ^^^^^                       
+>fromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; } | undefined) => Uint8Array<ArrayBuffer>
+>           : ^      ^^      ^^       ^^^                                                                                                                                          ^^^^^                       
 >"AAAAAA" : "AAAAAA"
 >         : ^^^^^^^^
 >{ alphabet: "base64url" } : { alphabet: "base64url"; }
@@ -54,24 +54,24 @@ const encodedBase64_1 = arr1.toBase64();
 >                : ^^^^^^
 >arr1.toBase64() : string
 >                : ^^^^^^
->arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url"; omitPadding?: boolean; }) => string
->              : ^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^       ^^^^^^^^      
+>arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
+>              : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 >arr1 : Uint8Array<ArrayBuffer>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
->toBase64 : (options?: { alphabet?: "base64" | "base64url"; omitPadding?: boolean; }) => string
->         : ^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^       ^^^^^^^^      
+>toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
+>         : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 
 const encodedBase64_2 = arr1.toBase64({ alphabet: "base64" });
 >encodedBase64_2 : string
 >                : ^^^^^^
 >arr1.toBase64({ alphabet: "base64" }) : string
 >                                      : ^^^^^^
->arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url"; omitPadding?: boolean; }) => string
->              : ^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^       ^^^^^^^^      
+>arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
+>              : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 >arr1 : Uint8Array<ArrayBuffer>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
->toBase64 : (options?: { alphabet?: "base64" | "base64url"; omitPadding?: boolean; }) => string
->         : ^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^       ^^^^^^^^      
+>toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
+>         : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 >{ alphabet: "base64" } : { alphabet: "base64"; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >alphabet : "base64"
@@ -84,12 +84,12 @@ const encodedBase64_3 = arr1.toBase64({ alphabet: "base64url", omitPadding: true
 >                : ^^^^^^
 >arr1.toBase64({ alphabet: "base64url", omitPadding: true }) : string
 >                                                            : ^^^^^^
->arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url"; omitPadding?: boolean; }) => string
->              : ^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^       ^^^^^^^^      
+>arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
+>              : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 >arr1 : Uint8Array<ArrayBuffer>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
->toBase64 : (options?: { alphabet?: "base64" | "base64url"; omitPadding?: boolean; }) => string
->         : ^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^       ^^^^^^^^      
+>toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
+>         : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 >{ alphabet: "base64url", omitPadding: true } : { alphabet: "base64url"; omitPadding: true; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >alphabet : "base64url"
@@ -128,12 +128,12 @@ const r1 = target1.setFromBase64("AAAAAA==");
 >   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1.setFromBase64("AAAAAA==") : { read: number; written: number; }
 >                                  : ^^^^^^^^      ^^^^^^^^^^^      ^^^
->target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => { read: number; written: number; }
->                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1 : Uint8Array<ArrayBuffer>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
->setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => { read: number; written: number; }
->              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >"AAAAAA==" : "AAAAAA=="
 >           : ^^^^^^^^^^
 
@@ -142,12 +142,12 @@ const r2 = target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" });
 >   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" }) : { read: number; written: number; }
 >                                                                   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
->target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => { read: number; written: number; }
->                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1 : Uint8Array<ArrayBuffer>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
->setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => { read: number; written: number; }
->              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >"AAAAAA==" : "AAAAAA=="
 >           : ^^^^^^^^^^
 >{ lastChunkHandling: "strict" } : { lastChunkHandling: "strict"; }
@@ -162,12 +162,12 @@ const r3 = target1.setFromBase64("AAAAAA", {
 >   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1.setFromBase64("AAAAAA", {  alphabet: "base64url",  lastChunkHandling: "stop-before-partial"}) : { read: number; written: number; }
 >                                                                                                      : ^^^^^^^^      ^^^^^^^^^^^      ^^^
->target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => { read: number; written: number; }
->                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1 : Uint8Array<ArrayBuffer>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
->setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url"; lastChunkHandling?: "loose" | "strict" | "stop-before-partial"; }) => { read: number; written: number; }
->              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >"AAAAAA" : "AAAAAA"
 >         : ^^^^^^^^
 >{  alphabet: "base64url",  lastChunkHandling: "stop-before-partial"} : { alphabet: "base64url"; lastChunkHandling: "stop-before-partial"; }
