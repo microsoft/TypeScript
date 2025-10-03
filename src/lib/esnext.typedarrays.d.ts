@@ -8,7 +8,7 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
         options?: {
             alphabet?: "base64" | "base64url" | undefined;
             omitPadding?: boolean | undefined;
-        } | undefined,
+        },
     ): string;
 
     /**
@@ -24,7 +24,7 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
         options?: {
             alphabet?: "base64" | "base64url" | undefined;
             lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined;
-        } | undefined,
+        },
     ): {
         read: number;
         written: number;
@@ -61,7 +61,7 @@ interface Uint8ArrayConstructor {
         options?: {
             alphabet?: "base64" | "base64url" | undefined;
             lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined;
-        } | undefined,
+        },
     ): Uint8Array<ArrayBuffer>;
 
     /**
