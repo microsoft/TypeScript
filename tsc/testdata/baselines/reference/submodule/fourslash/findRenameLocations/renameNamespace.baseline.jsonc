@@ -6,4 +6,4 @@
 //     }
 // }
 // 
-// const a: [|NSRENAME|].E = NS.E.A;
+// const a: [|NSRENAME|].E = [|NSRENAME|].E.A;

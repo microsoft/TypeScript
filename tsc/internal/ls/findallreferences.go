@@ -1192,7 +1192,10 @@ func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, s
 	symbol := core.Coalesce(skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker /*useLocalSymbolForExportSpecifier*/, !isForRenameWithPrefixAndSuffixText(options)), originalSymbol)
 
 	// Compute the meaning from the location and the symbol it references
-	searchMeaning := getIntersectingMeaningFromDeclarations(node, symbol, ast.SemanticMeaningAll)
+	searchMeaning := ast.SemanticMeaningAll
+	if options.use != referenceUseRename {
+		searchMeaning = getIntersectingMeaningFromDeclarations(node, symbol, ast.SemanticMeaningAll)
+	}
 	state := newState(sourceFiles, sourceFilesSet, node, checker /*, cancellationToken*/, searchMeaning, options)
 
 	var exportSpecifier *ast.Node

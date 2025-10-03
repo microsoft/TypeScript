@@ -1,3 +1,6 @@
 // === findRenameLocations ===
 // === /canada.ts ===
 // export interface /*RENAME*/[|GingerRENAME|] {}
+
+// === /dry.ts ===
+// import { [|GingerRENAME|] as Ale } from './canada';
