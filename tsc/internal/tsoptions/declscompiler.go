@@ -498,7 +498,7 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsProgramStructure: true,
 		Category:                diagnostics.Language_and_Environment,
 		Description:             diagnostics.Enable_lib_replacement,
-		DefaultValueDescription: true,
+		DefaultValueDescription: false,
 	},
 
 	// Strict Type Checks
