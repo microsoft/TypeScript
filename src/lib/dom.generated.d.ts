@@ -40739,10 +40739,10 @@ interface FileSystemDirectoryHandleAsyncIterator<T> extends AsyncIteratorObject<
 }
 
 interface FileSystemDirectoryHandle {
-    [Symbol.asyncIterator](): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemHandle]>;
-    entries(): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemHandle]>;
+    [Symbol.asyncIterator](): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemDirectoryHandle | FileSystemFileHandle]>;
+    entries(): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemDirectoryHandle | FileSystemFileHandle]>;
     keys(): FileSystemDirectoryHandleAsyncIterator<string>;
-    values(): FileSystemDirectoryHandleAsyncIterator<FileSystemHandle>;
+    values(): FileSystemDirectoryHandleAsyncIterator<FileSystemDirectoryHandle | FileSystemFileHandle>;
 }
 
 interface ReadableStreamAsyncIterator<T> extends AsyncIteratorObject<T, BuiltinIteratorReturn, unknown> {
