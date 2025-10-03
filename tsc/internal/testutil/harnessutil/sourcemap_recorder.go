@@ -16,7 +16,7 @@ type writerAggregator struct {
 	strings.Builder
 }
 
-func (w *writerAggregator) WriteStringF(format string, args ...any) {
+func (w *writerAggregator) WriteStringf(format string, args ...any) {
 	w.WriteString(fmt.Sprintf(format, args...))
 }
 
@@ -24,8 +24,8 @@ func (w *writerAggregator) WriteLine(s string) {
 	w.WriteString(s + "\r\n")
 }
 
-func (w *writerAggregator) WriteLineF(format string, args ...any) {
-	w.WriteStringF(format+"\r\n", args...)
+func (w *writerAggregator) WriteLinef(format string, args ...any) {
+	w.WriteStringf(format+"\r\n", args...)
 }
 
 type sourceMapSpanWithDecodeErrors struct {
@@ -103,16 +103,16 @@ func newSourceMapSpanWriter(sourceMapRecorder *writerAggregator, sourceMap *sour
 	}
 
 	sourceMapRecorder.WriteLine("===================================================================")
-	sourceMapRecorder.WriteLineF("JsFile: %s", sourceMap.File)
-	sourceMapRecorder.WriteLineF("mapUrl: %s", sourcemap.TryGetSourceMappingURL(sourcemap.CreateECMALineInfo(jsFile.Content, writer.jsLineMap)))
-	sourceMapRecorder.WriteLineF("sourceRoot: %s", sourceMap.SourceRoot)
-	sourceMapRecorder.WriteLineF("sources: %s", strings.Join(sourceMap.Sources, ","))
+	sourceMapRecorder.WriteLinef("JsFile: %s", sourceMap.File)
+	sourceMapRecorder.WriteLinef("mapUrl: %s", sourcemap.TryGetSourceMappingURL(sourcemap.CreateECMALineInfo(jsFile.Content, writer.jsLineMap)))
+	sourceMapRecorder.WriteLinef("sourceRoot: %s", sourceMap.SourceRoot)
+	sourceMapRecorder.WriteLinef("sources: %s", strings.Join(sourceMap.Sources, ","))
 	if len(sourceMap.SourcesContent) > 0 {
 		content, err := json.Marshal(sourceMap.SourcesContent)
 		if err != nil {
 			panic(err)
 		}
-		sourceMapRecorder.WriteLineF("sourcesContent: %s", content)
+		sourceMapRecorder.WriteLinef("sourcesContent: %s", content)
 	}
 	sourceMapRecorder.WriteLine("===================================================================")
 	return writer
@@ -120,14 +120,14 @@ func newSourceMapSpanWriter(sourceMapRecorder *writerAggregator, sourceMap *sour
 
 func (w *sourceMapSpanWriter) getSourceMapSpanString(mapEntry *sourcemap.Mapping, getAbsentNameIndex bool) string {
 	var mapString writerAggregator
-	mapString.WriteStringF("Emitted(%d, %d)", mapEntry.GeneratedLine+1, mapEntry.GeneratedCharacter+1)
+	mapString.WriteStringf("Emitted(%d, %d)", mapEntry.GeneratedLine+1, mapEntry.GeneratedCharacter+1)
 	if mapEntry.IsSourceMapping() {
-		mapString.WriteStringF(" Source(%d, %d) + SourceIndex(%d)", mapEntry.SourceLine+1, mapEntry.SourceCharacter+1, mapEntry.SourceIndex)
+		mapString.WriteStringf(" Source(%d, %d) + SourceIndex(%d)", mapEntry.SourceLine+1, mapEntry.SourceCharacter+1, mapEntry.SourceIndex)
 		if mapEntry.NameIndex >= 0 && int(mapEntry.NameIndex) < len(w.sourceMapNames) {
-			mapString.WriteStringF(" name (%s)", w.sourceMapNames[mapEntry.NameIndex])
+			mapString.WriteStringf(" name (%s)", w.sourceMapNames[mapEntry.NameIndex])
 		} else {
 			if mapEntry.NameIndex != sourcemap.MissingName || getAbsentNameIndex {
-				mapString.WriteStringF(" nameIndex (%d)", mapEntry.NameIndex)
+				mapString.WriteStringf(" nameIndex (%d)", mapEntry.NameIndex)
 			}
 		}
 	}
@@ -180,11 +180,11 @@ func (w *sourceMapSpanWriter) recordNewSourceFileSpan(sourceMapSpan *sourcemap.M
 
 	w.sourceMapRecorder.WriteLine("-------------------------------------------------------------------")
 	if continuesLine {
-		w.sourceMapRecorder.WriteLineF("emittedFile:%s (%d, %d)", w.jsFile.UnitName, sourceMapSpan.GeneratedLine+1, sourceMapSpan.GeneratedCharacter+1)
+		w.sourceMapRecorder.WriteLinef("emittedFile:%s (%d, %d)", w.jsFile.UnitName, sourceMapSpan.GeneratedLine+1, sourceMapSpan.GeneratedCharacter+1)
 	} else {
-		w.sourceMapRecorder.WriteLineF("emittedFile:%s", w.jsFile.UnitName)
+		w.sourceMapRecorder.WriteLinef("emittedFile:%s", w.jsFile.UnitName)
 	}
-	w.sourceMapRecorder.WriteLineF("sourceFile:%s", w.sourceMapSources[w.spansOnSingleLine[0].sourceMapSpan.SourceIndex])
+	w.sourceMapRecorder.WriteLinef("sourceFile:%s", w.sourceMapSources[w.spansOnSingleLine[0].sourceMapSpan.SourceIndex])
 	w.sourceMapRecorder.WriteLine("-------------------------------------------------------------------")
 
 	w.tsLineMap = core.ComputeECMALineStarts(newSourceFileCode)
@@ -198,7 +198,7 @@ func (w *sourceMapSpanWriter) close() {
 
 	if !w.sourceMapDecoder.hasCompletedDecoding() {
 		w.sourceMapRecorder.WriteLine("!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded")
-		w.sourceMapRecorder.WriteLineF("!!!! **** Remaining decoded string: %s", w.sourceMapDecoder.getRemainingDecodeString())
+		w.sourceMapRecorder.WriteLinef("!!!! **** Remaining decoded string: %s", w.sourceMapDecoder.getRemainingDecodeString())
 	}
 
 	// write remaining js lines
@@ -223,7 +223,7 @@ func (w *sourceMapSpanWriter) getTextOfLine(line int, lineMap []core.TextPos, co
 
 func (w *sourceMapSpanWriter) writeJsFileLines(endJsLine int) {
 	for ; w.nextJsLineToWrite < endJsLine; w.nextJsLineToWrite++ {
-		w.sourceMapRecorder.WriteStringF(">>>%s", w.getTextOfLine(w.nextJsLineToWrite, w.jsLineMap, w.jsFile.Content))
+		w.sourceMapRecorder.WriteStringf(">>>%s", w.getTextOfLine(w.nextJsLineToWrite, w.jsLineMap, w.jsFile.Content))
 	}
 }
 
@@ -319,7 +319,7 @@ func (sw *recordedSpanWriter) writeSourceMapSourceText(currentSpan *sourceMapSpa
 }
 
 func (sw *recordedSpanWriter) writeSpanDetails(currentSpan *sourceMapSpanWithDecodeErrors, index int) {
-	sw.w.sourceMapRecorder.WriteLineF("%s%s", sw.markerIds[index], sw.w.getSourceMapSpanString(currentSpan.sourceMapSpan, false /*getAbsentNameIndex*/))
+	sw.w.sourceMapRecorder.WriteLinef("%s%s", sw.markerIds[index], sw.w.getSourceMapSpanString(currentSpan.sourceMapSpan, false /*getAbsentNameIndex*/))
 }
 
 func (sw *recordedSpanWriter) writeRecordedSpans() {

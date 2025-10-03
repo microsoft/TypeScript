@@ -9,13 +9,13 @@
         "@types/which": "^3.0.4",
         "adm-zip": "^0.5.16",
         "chokidar": "^4.0.3",
-        "dprint": "^0.50.1",
+        "dprint": "^0.50.2",
         "execa": "^9.6.0",
         "glob": "^10.4.5",
         "hereby": "^1.11.0",
         "p-limit": "^6.2.0",
         "picocolors": "^1.1.1",
-        "typescript": "^5.9.2",
+        "typescript": "^5.9.3",
         "which": "^5.0.0"
     },
     "scripts": {

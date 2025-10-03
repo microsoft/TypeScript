@@ -106,7 +106,7 @@
     },
     "devDependencies": {
         "@types/vscode": "^1.100.0",
-        "@vscode/vsce": "^3.6.0",
-        "esbuild": "^0.25.8"
+        "@vscode/vsce": "^3.6.2",
+        "esbuild": "^0.25.10"
     }
 }

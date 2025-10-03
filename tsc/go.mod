@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/dlclark/regexp2 v1.11.5
-	github.com/go-json-experiment/json v0.0.0-20250813233538-9b1f9ea2e11b
+	github.com/go-json-experiment/json v0.0.0-20250910080747-cc2cfa0554c3
 	github.com/google/go-cmp v0.7.0
 	github.com/peter-evans/patience v0.3.0
 	github.com/zeebo/xxh3 v1.0.2
