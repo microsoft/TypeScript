@@ -7,19 +7,19 @@ declare function test<T>(cb: (arg: T) => T): T;
 >arg : T
 
 const res1 = test((arg): number => 1); // ok
->res1 : unknown
->test((arg): number => 1) : unknown
+>res1 : number
+>test((arg): number => 1) : number
 >test : <T>(cb: (arg: T) => T) => T
->(arg): number => 1 : (arg: unknown) => number
->arg : unknown
+>(arg): number => 1 : (arg: number) => number
+>arg : number
 >1 : 1
 
 const res2 = test((arg): number => 'foo'); // error
->res2 : unknown
->test((arg): number => 'foo') : unknown
+>res2 : number
+>test((arg): number => 'foo') : number
 >test : <T>(cb: (arg: T) => T) => T
->(arg): number => 'foo' : (arg: unknown) => number
->arg : unknown
+>(arg): number => 'foo' : (arg: number) => number
+>arg : number
 >'foo' : "foo"
 
 export declare function linkedSignal<S, D>(options: {
@@ -36,10 +36,10 @@ export declare function linkedSignal<S, D>(options: {
 }): D;
 
 const signal = linkedSignal({
->signal : unknown
->linkedSignal({  source: () => 3,  computation: (s): number => 3,}) : unknown
+>signal : number
+>linkedSignal({  source: () => 3,  computation: (s): number => 3,}) : number
 >linkedSignal : <S, D>(options: { source: () => S; computation: (source: NoInfer<D>) => D; }) => D
->{  source: () => 3,  computation: (s): number => 3,} : { source: () => number; computation: (s: unknown) => number; }
+>{  source: () => 3,  computation: (s): number => 3,} : { source: () => number; computation: (s: number) => number; }
 
   source: () => 3,
 >source : () => number
@@ -47,9 +47,9 @@ const signal = linkedSignal({
 >3 : 3
 
   computation: (s): number => 3,
->computation : (s: unknown) => number
->(s): number => 3 : (s: unknown) => number
->s : unknown
+>computation : (s: number) => number
+>(s): number => 3 : (s: number) => number
+>s : number
 >3 : 3
 
 });
@@ -66,10 +66,10 @@ class Foo<T, R> {
 }
 
 const _1 = new Foo((name: string, { x }): { name: string; x: number } => ({
->_1 : Foo<string, unknown>
->new Foo((name: string, { x }): { name: string; x: number } => ({  name,  x,})) : Foo<string, unknown>
+>_1 : Foo<string, { name: string; x: number; }>
+>new Foo((name: string, { x }): { name: string; x: number } => ({  name,  x,})) : Foo<string, { name: string; x: number; }>
 >Foo : typeof Foo
->(name: string, { x }): { name: string; x: number } => ({  name,  x,}) : (name: string, { x }: { x: number; other: unknown; }) => { name: string; x: number; }
+>(name: string, { x }): { name: string; x: number } => ({  name,  x,}) : (name: string, { x }: { x: number; other: NoInfer<{ name: string; x: number; }>; }) => { name: string; x: number; }
 >name : string
 >x : number
 >name : string
