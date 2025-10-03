@@ -367,7 +367,7 @@ func (s *Session) GetLanguageService(ctx context.Context, uri lsproto.DocumentUr
 	if project == nil {
 		return nil, fmt.Errorf("no project found for URI %s", uri)
 	}
-	return ls.NewLanguageService(project, snapshot.Converters()), nil
+	return ls.NewLanguageService(project.GetProgram(), snapshot), nil
 }
 
 func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*overlay, change SnapshotChange) *Snapshot {

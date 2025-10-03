@@ -362,7 +362,9 @@ func Coalesce[T *U, U any](a T, b T) T {
 	}
 }
 
-func ComputeECMALineStarts(text string) []TextPos {
+type ECMALineStarts []TextPos
+
+func ComputeECMALineStarts(text string) ECMALineStarts {
 	result := make([]TextPos, 0, strings.Count(text, "\n")+1)
 	return slices.AppendSeq(result, ComputeECMALineStartsSeq(text))
 }
@@ -647,4 +649,23 @@ func Deduplicate[T comparable](slice []T) []T {
 		}
 	}
 	return slice
+}
+
+func DeduplicateSorted[T any](slice []T, isEqual func(a, b T) bool) []T {
+	if len(slice) == 0 {
+		return slice
+	}
+	last := slice[0]
+	deduplicated := slice[:1]
+	for i := 1; i < len(slice); i++ {
+		next := slice[i]
+		if isEqual(last, next) {
+			continue
+		}
+
+		deduplicated = append(deduplicated, next)
+		last = next
+	}
+
+	return deduplicated
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/project/logging"
@@ -48,8 +47,6 @@ const (
 	PendingReloadFileNames
 	PendingReloadFull
 )
-
-var _ ls.Host = (*Project)(nil)
 
 // Project represents a TypeScript project.
 // If changing struct fields, also update the Clone method.
@@ -195,7 +192,6 @@ func (p *Project) ConfigFilePath() tspath.Path {
 	return p.configFilePath
 }
 
-// GetProgram implements ls.Host.
 func (p *Project) GetProgram() *compiler.Program {
 	return p.Program
 }

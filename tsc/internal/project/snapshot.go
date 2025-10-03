@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/project/dirty"
 	"github.com/microsoft/typescript-go/internal/project/logging"
+	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -81,12 +82,31 @@ func (s *Snapshot) LSPLineMap(fileName string) *ls.LSPLineMap {
 	return nil
 }
 
+func (s *Snapshot) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
+	if file := s.fs.GetFile(fileName); file != nil {
+		return file.ECMALineInfo()
+	}
+	return nil
+}
+
 func (s *Snapshot) Converters() *ls.Converters {
 	return s.converters
 }
 
 func (s *Snapshot) ID() uint64 {
 	return s.id
+}
+
+func (s *Snapshot) UseCaseSensitiveFileNames() bool {
+	return s.fs.fs.UseCaseSensitiveFileNames()
+}
+
+func (s *Snapshot) ReadFile(fileName string) (string, bool) {
+	handle := s.GetFile(fileName)
+	if handle == nil {
+		return "", false
+	}
+	return handle.Content(), true
 }
 
 type APISnapshotRequest struct {

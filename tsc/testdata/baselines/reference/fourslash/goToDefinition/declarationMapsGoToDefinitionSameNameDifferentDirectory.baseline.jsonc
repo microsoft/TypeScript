@@ -1,11 +1,10 @@
 // === goToDefinition ===
-// === /BaseClass/Source.d.ts ===
-// declare class [|Control|] {
-//     constructor();
-//     /** this is a super var */
-//     myVar: boolean | 'yeah';
-// }
-// //# sourceMappingURL=Source.d.ts.map
+// === /BaseClass/Source.ts ===
+// class [|Control|]{
+//     constructor(){
+//         return;
+//     }
+// // --- (line: 5) skipped ---
 
 // === /buttonClass/Source.ts ===
 // // I cannot F12 navigate to Control
@@ -19,13 +18,14 @@
 
 
 // === goToDefinition ===
-// === /BaseClass/Source.d.ts ===
-// declare class Control {
-//     constructor();
+// === /BaseClass/Source.ts ===
+// class Control{
+//     constructor(){
+//         return;
+//     }
 //     /** this is a super var */
-//     [|myVar|]: boolean | 'yeah';
+//     public [|myVar|]: boolean | 'yeah' = true;
 // }
-// //# sourceMappingURL=Source.d.ts.map
 
 // === /buttonClass/Source.ts ===
 // --- (line: 3) skipped ---

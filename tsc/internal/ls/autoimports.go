@@ -702,7 +702,7 @@ func (l *LanguageService) createPackageJsonImportFilter(fromFile *ast.SourceFile
 			return nil
 		}
 		specifier := modulespecifiers.GetNodeModulesPackageName(
-			l.host.GetProgram().Options(),
+			l.program.Options(),
 			fromFile,
 			importedFileName,
 			moduleSpecifierResolutionHost,

@@ -4,10 +4,10 @@ import "github.com/microsoft/typescript-go/internal/core"
 
 type ECMALineInfo struct {
 	text       string
-	lineStarts []core.TextPos
+	lineStarts core.ECMALineStarts
 }
 
-func GetECMALineInfo(text string, lineStarts []core.TextPos) *ECMALineInfo {
+func CreateECMALineInfo(text string, lineStarts core.ECMALineStarts) *ECMALineInfo {
 	return &ECMALineInfo{
 		text:       text,
 		lineStarts: lineStarts,

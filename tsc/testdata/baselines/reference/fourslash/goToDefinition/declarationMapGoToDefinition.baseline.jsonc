@@ -1,11 +1,11 @@
 // === goToDefinition ===
-// === /indexdef.d.ts ===
-// export declare class Foo {
+// === /index.ts ===
+// export class Foo {
 //     member: string;
-//     [|methodName|](propName: SomeType): void;
-//     otherMethod(): {
-//         x: number;
-//         y?: undefined;
+//     [|methodName|](propName: SomeType): void {}
+//     otherMethod() {
+//         if (Math.random() > 0.5) {
+//             return {x: 42};
 // // --- (line: 7) skipped ---
 
 // === /mymodule.ts ===

@@ -11,6 +11,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -2451,31 +2452,42 @@ func GetECMAPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, cha
 }
 
 func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, character int) int {
-	/// !!! debugText, allowEdits
+	return ComputePositionOfLineAndCharacterEx(lineStarts, line, character, nil, false)
+}
+
+func ComputePositionOfLineAndCharacterEx(lineStarts []core.TextPos, line int, character int, text *string, allowEdits bool) int {
 	if line < 0 || line >= len(lineStarts) {
-		// if (allowEdits) {
-		//     // Clamp line to nearest allowable value
-		//     line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
-		// }
-		panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
+		if allowEdits {
+			// Clamp line to nearest allowable value
+			if line < 0 {
+				line = 0
+			} else if line >= len(lineStarts) {
+				line = len(lineStarts) - 1
+			}
+		} else {
+			panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
+		}
 	}
 
 	res := int(lineStarts[line]) + character
 
-	// !!!
-	// if (allowEdits) {
-	//     // Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
-	//     // TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
-	//     // apply them to the computed position to improve accuracy
-	//     return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
-	// }
+	if allowEdits {
+		// Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
+		// TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
+		// apply them to the computed position to improve accuracy
+		if line+1 < len(lineStarts) && res > int(lineStarts[line+1]) {
+			return int(lineStarts[line+1])
+		}
+		if text != nil && res > len(*text) {
+			return len(*text)
+		}
+		return res
+	}
 	if line < len(lineStarts)-1 && res >= int(lineStarts[line+1]) {
 		panic("Computed position is beyond that of the following line.")
+	} else if text != nil {
+		debug.Assert(res <= len(*text)) // Allow single character overflow for trailing newline
 	}
-	// !!!
-	// else if (debugText !== undefined) {
-	//     Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
-	// }
 	return res
 }
 

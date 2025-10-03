@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/zeebo/xxh3"
@@ -24,6 +25,7 @@ type FileHandle interface {
 	MatchesDiskText() bool
 	IsOverlay() bool
 	LSPLineMap() *ls.LSPLineMap
+	ECMALineInfo() *sourcemap.ECMALineInfo
 	Kind() core.ScriptKind
 }
 
@@ -32,8 +34,10 @@ type fileBase struct {
 	content  string
 	hash     xxh3.Uint128
 
-	lineMapOnce sync.Once
-	lineMap     *ls.LSPLineMap
+	lineMapOnce  sync.Once
+	lineMap      *ls.LSPLineMap
+	lineInfoOnce sync.Once
+	lineInfo     *sourcemap.ECMALineInfo
 }
 
 func (f *fileBase) FileName() string {
@@ -53,6 +57,14 @@ func (f *fileBase) LSPLineMap() *ls.LSPLineMap {
 		f.lineMap = ls.ComputeLSPLineStarts(f.content)
 	})
 	return f.lineMap
+}
+
+func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
+	f.lineInfoOnce.Do(func() {
+		lineStarts := core.ComputeECMALineStarts(f.content)
+		f.lineInfo = sourcemap.CreateECMALineInfo(f.content, lineStarts)
+	})
+	return f.lineInfo
 }
 
 type diskFile struct {
