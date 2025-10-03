@@ -450,6 +450,16 @@ export namespace SmartIndenter {
                 //   ? 1 : (          L1: whenTrue indented because it's on a new line
                 //     0              L2: indented two stops, one because whenTrue was indented
                 //   );                   and one because of the parentheses spanning multiple lines
+
+                // For nested ternary expressions in a chain (a ? b : c ? d : e), we want to align
+                // all components at the same indentation level
+                if (child.kind === SyntaxKind.ConditionalExpression) {
+                    // If the whenFalse branch is itself a conditional expression (nested ternary),
+                    // treat it as unindented to align with the parent, so the nested ternary expressions
+                    // remain aligned at the same level instead of increasing indentation
+                    return true;
+                }
+
                 const trueStartLine = getStartLineAndCharacterForNode(parent.whenTrue, sourceFile).line;
                 const trueEndLine = getLineAndCharacterOfPosition(sourceFile, parent.whenTrue.end).line;
                 return conditionEndLine === trueStartLine && trueEndLine === childStartLine;
