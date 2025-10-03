@@ -26,12 +26,14 @@ const encodedBase64_1 = arr1.toBase64();
 >arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
 >toBase64 : Symbol(Uint8Array.toBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 
-const encodedBase64_2 = arr1.toBase64({ alphabet: "base64" });
+const encodedBase64_2 = arr1.toBase64({ alphabet: "base64", omitPadding: undefined });
 >encodedBase64_2 : Symbol(encodedBase64_2, Decl(toFromHexBase64.ts, 5, 5))
 >arr1.toBase64 : Symbol(Uint8Array.toBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
 >toBase64 : Symbol(Uint8Array.toBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 5, 39))
+>omitPadding : Symbol(omitPadding, Decl(toFromHexBase64.ts, 5, 59))
+>undefined : Symbol(undefined)
 
 const encodedBase64_3 = arr1.toBase64({ alphabet: "base64url", omitPadding: true });
 >encodedBase64_3 : Symbol(encodedBase64_3, Decl(toFromHexBase64.ts, 6, 5))
@@ -51,70 +53,83 @@ const target1 = new Uint8Array(10);
 >target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
 >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 
-const r1 = target1.setFromBase64("AAAAAA==");
->r1 : Symbol(r1, Decl(toFromHexBase64.ts, 11, 5))
+const r0 = target1.setFromBase64("AAAAAA==");
+>r0 : Symbol(r0, Decl(toFromHexBase64.ts, 11, 5))
 >target1.setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
 >setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
+
+const r1 = target1.setFromBase64("AAAAAA==", undefined);
+>r1 : Symbol(r1, Decl(toFromHexBase64.ts, 12, 5))
+>target1.setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
+>target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
+>setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
+>undefined : Symbol(undefined)
 
 const r2 = target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" });
->r2 : Symbol(r2, Decl(toFromHexBase64.ts, 12, 5))
+>r2 : Symbol(r2, Decl(toFromHexBase64.ts, 13, 5))
 >target1.setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
 >setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
->lastChunkHandling : Symbol(lastChunkHandling, Decl(toFromHexBase64.ts, 12, 46))
+>lastChunkHandling : Symbol(lastChunkHandling, Decl(toFromHexBase64.ts, 13, 46))
 
 const r3 = target1.setFromBase64("AAAAAA", {
->r3 : Symbol(r3, Decl(toFromHexBase64.ts, 13, 5))
+>r3 : Symbol(r3, Decl(toFromHexBase64.ts, 14, 5))
 >target1.setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
 >setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.esnext.typedarrays.d.ts, --, --))
 
   alphabet: "base64url",
->alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 13, 44))
+>alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 14, 44))
 
   lastChunkHandling: "stop-before-partial"
->lastChunkHandling : Symbol(lastChunkHandling, Decl(toFromHexBase64.ts, 14, 24))
+>lastChunkHandling : Symbol(lastChunkHandling, Decl(toFromHexBase64.ts, 15, 24))
 
 });
 
 const target2 = new Uint8Array(10);
->target2 : Symbol(target2, Decl(toFromHexBase64.ts, 18, 5))
+>target2 : Symbol(target2, Decl(toFromHexBase64.ts, 19, 5))
 >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 
 const r4 = target2.setFromHex("000000");
->r4 : Symbol(r4, Decl(toFromHexBase64.ts, 19, 5))
+>r4 : Symbol(r4, Decl(toFromHexBase64.ts, 20, 5))
 >target2.setFromHex : Symbol(Uint8Array.setFromHex, Decl(lib.esnext.typedarrays.d.ts, --, --))
->target2 : Symbol(target2, Decl(toFromHexBase64.ts, 18, 5))
+>target2 : Symbol(target2, Decl(toFromHexBase64.ts, 19, 5))
 >setFromHex : Symbol(Uint8Array.setFromHex, Decl(lib.esnext.typedarrays.d.ts, --, --))
 
-const totalWritten = r1.written + r2.written + r3.written + r4.written;
->totalWritten : Symbol(totalWritten, Decl(toFromHexBase64.ts, 21, 5))
+const totalWritten = r0.written + r1.written + r2.written + r3.written + r4.written;
+>totalWritten : Symbol(totalWritten, Decl(toFromHexBase64.ts, 22, 5))
+>r0.written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
+>r0 : Symbol(r0, Decl(toFromHexBase64.ts, 11, 5))
+>written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r1.written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r1 : Symbol(r1, Decl(toFromHexBase64.ts, 11, 5))
+>r1 : Symbol(r1, Decl(toFromHexBase64.ts, 12, 5))
 >written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r2.written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r2 : Symbol(r2, Decl(toFromHexBase64.ts, 12, 5))
+>r2 : Symbol(r2, Decl(toFromHexBase64.ts, 13, 5))
 >written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r3.written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r3 : Symbol(r3, Decl(toFromHexBase64.ts, 13, 5))
+>r3 : Symbol(r3, Decl(toFromHexBase64.ts, 14, 5))
 >written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r4.written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r4 : Symbol(r4, Decl(toFromHexBase64.ts, 19, 5))
+>r4 : Symbol(r4, Decl(toFromHexBase64.ts, 20, 5))
 >written : Symbol(written, Decl(lib.esnext.typedarrays.d.ts, --, --))
 
-const totalRead = r1.read + r2.read + r3.read + r4.read;
->totalRead : Symbol(totalRead, Decl(toFromHexBase64.ts, 22, 5))
+const totalRead = r0.read + r1.read + r2.read + r3.read + r4.read;
+>totalRead : Symbol(totalRead, Decl(toFromHexBase64.ts, 23, 5))
+>r0.read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
+>r0 : Symbol(r0, Decl(toFromHexBase64.ts, 11, 5))
+>read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r1.read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r1 : Symbol(r1, Decl(toFromHexBase64.ts, 11, 5))
+>r1 : Symbol(r1, Decl(toFromHexBase64.ts, 12, 5))
 >read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r2.read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r2 : Symbol(r2, Decl(toFromHexBase64.ts, 12, 5))
+>r2 : Symbol(r2, Decl(toFromHexBase64.ts, 13, 5))
 >read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r3.read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r3 : Symbol(r3, Decl(toFromHexBase64.ts, 13, 5))
+>r3 : Symbol(r3, Decl(toFromHexBase64.ts, 14, 5))
 >read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
 >r4.read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
->r4 : Symbol(r4, Decl(toFromHexBase64.ts, 19, 5))
+>r4 : Symbol(r4, Decl(toFromHexBase64.ts, 20, 5))
 >read : Symbol(read, Decl(lib.esnext.typedarrays.d.ts, --, --))
 

@@ -61,23 +61,27 @@ const encodedBase64_1 = arr1.toBase64();
 >toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
 >         : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 
-const encodedBase64_2 = arr1.toBase64({ alphabet: "base64" });
+const encodedBase64_2 = arr1.toBase64({ alphabet: "base64", omitPadding: undefined });
 >encodedBase64_2 : string
 >                : ^^^^^^
->arr1.toBase64({ alphabet: "base64" }) : string
->                                      : ^^^^^^
+>arr1.toBase64({ alphabet: "base64", omitPadding: undefined }) : string
+>                                                              : ^^^^^^
 >arr1.toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
 >              : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
 >arr1 : Uint8Array<ArrayBuffer>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >toBase64 : (options?: { alphabet?: "base64" | "base64url" | undefined; omitPadding?: boolean | undefined; }) => string
 >         : ^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^                   ^^^^^^^^      
->{ alphabet: "base64" } : { alphabet: "base64"; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>{ alphabet: "base64", omitPadding: undefined } : { alphabet: "base64"; omitPadding: undefined; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >alphabet : "base64"
 >         : ^^^^^^^^
 >"base64" : "base64"
 >         : ^^^^^^^^
+>omitPadding : undefined
+>            : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
 const encodedBase64_3 = arr1.toBase64({ alphabet: "base64url", omitPadding: true });
 >encodedBase64_3 : string
@@ -123,8 +127,8 @@ const target1 = new Uint8Array(10);
 >10 : 10
 >   : ^^
 
-const r1 = target1.setFromBase64("AAAAAA==");
->r1 : { read: number; written: number; }
+const r0 = target1.setFromBase64("AAAAAA==");
+>r0 : { read: number; written: number; }
 >   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
 >target1.setFromBase64("AAAAAA==") : { read: number; written: number; }
 >                                  : ^^^^^^^^      ^^^^^^^^^^^      ^^^
@@ -136,6 +140,22 @@ const r1 = target1.setFromBase64("AAAAAA==");
 >              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >"AAAAAA==" : "AAAAAA=="
 >           : ^^^^^^^^^^
+
+const r1 = target1.setFromBase64("AAAAAA==", undefined);
+>r1 : { read: number; written: number; }
+>   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
+>target1.setFromBase64("AAAAAA==", undefined) : { read: number; written: number; }
+>                                             : ^^^^^^^^      ^^^^^^^^^^^      ^^^
+>target1.setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>                      : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>target1 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>setFromBase64 : (string: string, options?: { alphabet?: "base64" | "base64url" | undefined; lastChunkHandling?: "loose" | "strict" | "stop-before-partial" | undefined; }) => { read: number; written: number; }
+>              : ^      ^^      ^^       ^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+>"AAAAAA==" : "AAAAAA=="
+>           : ^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
 const r2 = target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" });
 >r2 : { read: number; written: number; }
@@ -211,15 +231,23 @@ const r4 = target2.setFromHex("000000");
 >"000000" : "000000"
 >         : ^^^^^^^^
 
-const totalWritten = r1.written + r2.written + r3.written + r4.written;
+const totalWritten = r0.written + r1.written + r2.written + r3.written + r4.written;
 >totalWritten : number
 >             : ^^^^^^
->r1.written + r2.written + r3.written + r4.written : number
+>r0.written + r1.written + r2.written + r3.written + r4.written : number
+>                                                               : ^^^^^^
+>r0.written + r1.written + r2.written + r3.written : number
 >                                                  : ^^^^^^
->r1.written + r2.written + r3.written : number
+>r0.written + r1.written + r2.written : number
 >                                     : ^^^^^^
->r1.written + r2.written : number
+>r0.written + r1.written : number
 >                        : ^^^^^^
+>r0.written : number
+>           : ^^^^^^
+>r0 : { read: number; written: number; }
+>   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
+>written : number
+>        : ^^^^^^
 >r1.written : number
 >           : ^^^^^^
 >r1 : { read: number; written: number; }
@@ -245,15 +273,23 @@ const totalWritten = r1.written + r2.written + r3.written + r4.written;
 >written : number
 >        : ^^^^^^
 
-const totalRead = r1.read + r2.read + r3.read + r4.read;
+const totalRead = r0.read + r1.read + r2.read + r3.read + r4.read;
 >totalRead : number
 >          : ^^^^^^
->r1.read + r2.read + r3.read + r4.read : number
+>r0.read + r1.read + r2.read + r3.read + r4.read : number
+>                                                : ^^^^^^
+>r0.read + r1.read + r2.read + r3.read : number
 >                                      : ^^^^^^
->r1.read + r2.read + r3.read : number
+>r0.read + r1.read + r2.read : number
 >                            : ^^^^^^
->r1.read + r2.read : number
+>r0.read + r1.read : number
 >                  : ^^^^^^
+>r0.read : number
+>        : ^^^^^^
+>r0 : { read: number; written: number; }
+>   : ^^^^^^^^      ^^^^^^^^^^^      ^^^
+>read : number
+>     : ^^^^^^
 >r1.read : number
 >        : ^^^^^^
 >r1 : { read: number; written: number; }
