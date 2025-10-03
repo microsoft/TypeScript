@@ -1092,7 +1092,7 @@ function positive(t: Something) {
 }
 
 function negative(t: Something) { 
->negative : (t: Something) => boolean
+>negative : (t: Something) => t is Rock
 >t : Something
 
   return !isAnimal(t)

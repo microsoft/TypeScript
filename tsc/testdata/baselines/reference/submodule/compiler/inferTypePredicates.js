@@ -648,4 +648,4 @@ type Rock = {
 type Something = Animal | Rock;
 declare function isAnimal(something: Something): something is Animal;
 declare function positive(t: Something): t is Animal;
-declare function negative(t: Something): boolean;
+declare function negative(t: Something): t is Rock;

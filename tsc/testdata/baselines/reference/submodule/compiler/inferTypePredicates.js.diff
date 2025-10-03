@@ -59,9 +59,3 @@
      type: "foo";
      foo: number;
  };
-@@= skipped -15, +21 lines =@@
- type Something = Animal | Rock;
- declare function isAnimal(something: Something): something is Animal;
- declare function positive(t: Something): t is Animal;
--declare function negative(t: Something): t is Rock;
-+declare function negative(t: Something): boolean;
