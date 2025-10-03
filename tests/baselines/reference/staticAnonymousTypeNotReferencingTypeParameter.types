@@ -774,12 +774,12 @@ class ListWrapper {
     list.fill(value, start, end === null ? list.length : end);
 >list.fill(value, start, end === null ? list.length : end) : void
 >                                                          : ^^^^
->list.fill : (value: any, start: number, end: number) => void
->          : ^     ^^   ^^     ^^      ^^   ^^      ^^^^^    
+>list.fill : { (value: any, start?: number, end?: number): any[]; (value: any, start: number, end: number): void; }
+>          : ^^^     ^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^     ^^   ^^     ^^      ^^   ^^      ^^^    ^^^
 >list : any[]
 >     : ^^^^^
->fill : (value: any, start: number, end: number) => void
->     : ^     ^^   ^^     ^^      ^^   ^^      ^^^^^    
+>fill : { (value: any, start?: number, end?: number): any[]; (value: any, start: number, end: number): void; }
+>     : ^^^     ^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^     ^^   ^^     ^^      ^^   ^^      ^^^    ^^^
 >value : any
 >start : number
 >      : ^^^^^^
@@ -1179,8 +1179,8 @@ declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
 
 interface Array<T> {
 	fill(value: any, start: number, end: number): void;
->fill : (value: any, start: number, end: number) => void
->     : ^     ^^   ^^     ^^      ^^   ^^      ^^^^^    
+>fill : { (value: T, start?: number, end?: number): this; (value: any, start: number, end: number): void; }
+>     : ^^^     ^^ ^^     ^^^      ^^   ^^^      ^^^    ^^^     ^^   ^^     ^^      ^^   ^^      ^^^    ^^^
 >value : any
 >start : number
 >      : ^^^^^^
