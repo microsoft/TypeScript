@@ -1427,7 +1427,7 @@ func (c *Checker) getCandidateDiscriminantPropertyAccess(f *FlowState, expr *ast
 		// parameter declared in the same parameter list is a candidate.
 		if ast.IsIdentifier(expr) {
 			symbol := c.getResolvedSymbol(expr)
-			declaration := symbol.ValueDeclaration
+			declaration := c.getExportSymbolOfValueSymbolIfExported(symbol).ValueDeclaration
 			if declaration != nil && (ast.IsBindingElement(declaration) || ast.IsParameter(declaration)) && f.reference == declaration.Parent && declaration.Initializer() == nil && !hasDotDotDotToken(declaration) {
 				return declaration
 			}

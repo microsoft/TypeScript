@@ -49,5 +49,5 @@ if (discriminator2) {
 >discriminator2 : boolean
 
   value2;
->value2 : string | null | undefined
+>value2 : string
 }
