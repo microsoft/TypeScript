@@ -260,7 +260,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 13
             },
-            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5011,
             "category": "error",
             "fileName": "/user/username/projects/myproject/tsconfig.json"
@@ -956,7 +956,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 13
             },
-            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5011,
             "category": "error",
             "fileName": "/user/username/projects/myproject/tsconfig.json"
@@ -1179,7 +1179,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 13
             },
-            "text": "Inferred common source directory differs from tsconfig directory, output layout will be changed.\n  Visit https://aka.ms/ts6 for migration information.",
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5011,
             "category": "error",
             "fileName": "/user/username/projects/myproject/tsconfig.json"

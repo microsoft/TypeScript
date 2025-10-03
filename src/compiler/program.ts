@@ -133,6 +133,7 @@ import {
     getPackageScopeForPath,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
+    getRelativePathFromFile,
     getResolvedModuleFromResolution,
     getResolvedTypeReferenceDirectiveFromResolution,
     getResolveJsonModule,
@@ -4275,7 +4276,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                     options.outDir ? "declarationDir" : undefined,
                     chainDiagnosticMessages(
                         chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
-                        Diagnostics.Inferred_common_source_directory_differs_from_tsconfig_directory_output_layout_will_be_changed,
+                        Diagnostics.The_common_source_directory_of_0_is_1_The_rootDir_setting_must_be_explicitly_set_to_this_or_another_path_to_adjust_your_output_s_file_layout,
+                        getBaseFileName(options.configFilePath),
+                        getRelativePathFromFile(options.configFilePath, dir59, getCanonicalFileName),
                     ),
                 );
             }

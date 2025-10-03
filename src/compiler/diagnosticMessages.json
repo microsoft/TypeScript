@@ -4469,7 +4469,7 @@
         "category": "Error",
         "code": 5010
     },
-    "Inferred common source directory differs from tsconfig directory, output layout will be changed.": {
+    "The common source directory of '{0}' is '{1}'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.": {
         "category": "Error",
         "code": 5011
     },

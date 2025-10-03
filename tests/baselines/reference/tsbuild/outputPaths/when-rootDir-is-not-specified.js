@@ -34,7 +34,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
   Visit https://aka.ms/ts6 for migration information.
 
 [7m3[0m     "outDir": "dist"
@@ -81,7 +81,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
   Visit https://aka.ms/ts6 for migration information.
 
 [7m3[0m     "outDir": "dist"
@@ -104,7 +104,7 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p /home/src/workspaces/project/tsconfig.json
 Output::
-[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mInferred common source directory differs from tsconfig directory, output layout will be changed.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
   Visit https://aka.ms/ts6 for migration information.
 
 [7m3[0m     "outDir": "dist"
