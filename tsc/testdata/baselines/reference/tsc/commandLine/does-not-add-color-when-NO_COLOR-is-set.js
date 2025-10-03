@@ -117,7 +117,7 @@ default: false
 
 --jsx
 Specify what JSX code is generated.
-one of: preserve, react-native, react, react-jsx, react-jsxdev
+one of: preserve, react-native, react-jsx, react-jsxdev, react
 default: undefined
 
 --outFile

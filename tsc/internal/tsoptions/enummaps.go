@@ -185,9 +185,9 @@ var moduleDetectionOptionMap = collections.NewOrderedMapFromList([]collections.M
 var jsxOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
 	{Key: "preserve", Value: core.JsxEmitPreserve},
 	{Key: "react-native", Value: core.JsxEmitReactNative},
-	{Key: "react", Value: core.JsxEmitReact},
 	{Key: "react-jsx", Value: core.JsxEmitReactJSX},
 	{Key: "react-jsxdev", Value: core.JsxEmitReactJSXDev},
+	{Key: "react", Value: core.JsxEmitReact},
 })
 
 var InverseJsxOptionMap = collections.NewOrderedMapFromList(func() []collections.MapEntry[core.JsxEmit, string] {
