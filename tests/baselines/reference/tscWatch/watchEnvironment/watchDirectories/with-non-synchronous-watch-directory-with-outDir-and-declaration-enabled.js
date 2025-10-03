@@ -44,12 +44,12 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 118
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 119
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/projects/myproject/dist/src/file1.d.ts] Inode:: 119
+//// [/user/username/projects/myproject/dist/src/file1.d.ts] Inode:: 120
 export {};
 
 
@@ -76,9 +76,9 @@ FsWatches::
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
-  {"inode":116}
-/user/username/projects/myproject/dist/src: *new*
   {"inode":117}
+/user/username/projects/myproject/dist/src: *new*
+  {"inode":118}
 /user/username/projects/myproject/node_modules: *new*
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2: *new*
@@ -126,7 +126,7 @@ exitCode:: ExitStatus.undefined
 Change:: Add new file, should schedule and run timeout to update directory watcher
 
 Input::
-//// [/user/username/projects/myproject/src/file3.ts] Inode:: 120
+//// [/user/username/projects/myproject/src/file3.ts] Inode:: 121
 export const y = 10;
 
 
@@ -170,14 +170,14 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/file3.js] Inode:: 121
+//// [/user/username/projects/myproject/dist/src/file3.js] Inode:: 122
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
-//// [/user/username/projects/myproject/dist/src/file3.d.ts] Inode:: 122
+//// [/user/username/projects/myproject/dist/src/file3.d.ts] Inode:: 123
 export declare const y = 10;
 
 
@@ -204,9 +204,9 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":116}
-/user/username/projects/myproject/dist/src:
   {"inode":117}
+/user/username/projects/myproject/dist/src:
+  {"inode":118}
 /user/username/projects/myproject/node_modules:
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2:
@@ -218,7 +218,7 @@ FsWatches::
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/file3.ts: *new*
-  {"inode":120}
+  {"inode":121}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":10}
 

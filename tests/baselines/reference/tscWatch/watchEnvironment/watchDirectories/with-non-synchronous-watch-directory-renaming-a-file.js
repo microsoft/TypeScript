@@ -43,14 +43,14 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 116
+//// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 117
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 117
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 118
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -68,9 +68,9 @@ FsWatches::
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
-  {"inode":114}
-/user/username/projects/myproject/dist/src: *new*
   {"inode":115}
+/user/username/projects/myproject/dist/src: *new*
+  {"inode":116}
 /user/username/projects/myproject/src: *new*
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts: *new*
@@ -114,7 +114,7 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 118
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 119
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
@@ -137,9 +137,9 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":114}
-/user/username/projects/myproject/dist/src:
   {"inode":115}
+/user/username/projects/myproject/dist/src:
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -179,7 +179,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/file1.js] file written with same contents Inode:: 117
+//// [/user/username/projects/myproject/dist/src/file1.js] file written with same contents Inode:: 118
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -199,9 +199,9 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":114}
-/user/username/projects/myproject/dist/src:
   {"inode":115}
+/user/username/projects/myproject/dist/src:
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -264,7 +264,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 119
+//// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -288,15 +288,15 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":114}
-/user/username/projects/myproject/dist/src:
   {"inode":115}
+/user/username/projects/myproject/dist/src:
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/renamed.ts: *new*
-  {"inode":118}
+  {"inode":119}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":8}
 
