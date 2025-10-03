@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
 )
@@ -41,6 +42,22 @@ type ImportsResult struct {
 }
 
 type ImportTracker func(exportSymbol *ast.Symbol, exportInfo *ExportInfo, isForRename bool) *ImportsResult
+
+type ModuleReferenceKind int32
+
+const (
+	ModuleReferenceKindImport ModuleReferenceKind = iota
+	ModuleReferenceKindReference
+	ModuleReferenceKindImplicit
+)
+
+// ModuleReference represents a reference to a module, either via import, <reference>, or implicit reference
+type ModuleReference struct {
+	kind            ModuleReferenceKind
+	literal         *ast.Node // for import and implicit kinds (StringLiteralLike)
+	referencingFile *ast.SourceFile
+	ref             *ast.FileReference // for reference kind
+}
 
 // Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.
 func createImportTracker(sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], checker *checker.Checker) ImportTracker {
@@ -653,4 +670,59 @@ func symbolNameNoDefault(symbol *ast.Symbol) string {
 		}
 	}
 	return ""
+}
+
+// findModuleReferences finds all references to a module symbol across the given source files.
+// This includes import statements, <reference> directives, and implicit references (e.g., JSX runtime imports).
+func findModuleReferences(program *compiler.Program, sourceFiles []*ast.SourceFile, searchModuleSymbol *ast.Symbol, checker *checker.Checker) []ModuleReference {
+	refs := []ModuleReference{}
+
+	for _, referencingFile := range sourceFiles {
+		searchSourceFile := searchModuleSymbol.ValueDeclaration
+		if searchSourceFile != nil && searchSourceFile.Kind == ast.KindSourceFile {
+			// Check <reference path> directives
+			for _, ref := range referencingFile.ReferencedFiles {
+				if program.GetSourceFileFromReference(referencingFile, ref) == searchSourceFile.AsSourceFile() {
+					refs = append(refs, ModuleReference{
+						kind:            ModuleReferenceKindReference,
+						referencingFile: referencingFile,
+						ref:             ref,
+					})
+				}
+			}
+
+			// Check <reference types> directives
+			for _, ref := range referencingFile.TypeReferenceDirectives {
+				referenced := program.GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(ref, referencingFile)
+				if referenced != nil && referenced.ResolvedFileName == searchSourceFile.AsSourceFile().FileName() {
+					refs = append(refs, ModuleReference{
+						kind:            ModuleReferenceKindReference,
+						referencingFile: referencingFile,
+						ref:             ref,
+					})
+				}
+			}
+		}
+
+		// Check all imports (including require() calls)
+		forEachImport(referencingFile, func(importDecl *ast.Node, moduleSpecifier *ast.Node) {
+			moduleSymbol := checker.GetSymbolAtLocation(moduleSpecifier)
+			if moduleSymbol == searchModuleSymbol {
+				if ast.NodeIsSynthesized(importDecl) {
+					refs = append(refs, ModuleReference{
+						kind:            ModuleReferenceKindImplicit,
+						literal:         moduleSpecifier,
+						referencingFile: referencingFile,
+					})
+				} else {
+					refs = append(refs, ModuleReference{
+						kind:    ModuleReferenceKindImport,
+						literal: moduleSpecifier,
+					})
+				}
+			}
+		})
+	}
+
+	return refs
 }

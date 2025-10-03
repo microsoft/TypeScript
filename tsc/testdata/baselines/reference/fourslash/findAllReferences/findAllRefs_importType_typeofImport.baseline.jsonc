@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /b.ts ===
+// /*FIND ALL REFS*/const x: typeof import("./a") = { x: 0 };
+// const y: typeof import("./a") = { x: 0 };
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// const x: typeof import("/*FIND ALL REFS*/[|./a|]") = { x: 0 };
+// const y: typeof import("[|./a|]") = { x: 0 };
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// const x: typeof import("./a") = { x: 0 };
+// /*FIND ALL REFS*/const y: typeof import("./a") = { x: 0 };
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// const x: typeof import("[|./a|]") = { x: 0 };
+// const y: typeof import("/*FIND ALL REFS*/[|./a|]") = { x: 0 };

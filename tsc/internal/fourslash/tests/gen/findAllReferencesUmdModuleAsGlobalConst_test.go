@@ -9,7 +9,7 @@ import (
 
 func TestFindAllReferencesUmdModuleAsGlobalConst(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/@types/three/three-core.d.ts
 export class Vector3 {

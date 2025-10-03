@@ -9,10 +9,10 @@
 
 // === findAllReferences ===
 // === /a.js ===
-// class [|A|] {
-//     /*FIND ALL REFS*/constructor() { }
+// class A {
+//     /*FIND ALL REFS*/[|constructor|]() { }
 // }
-// module.exports = [|A|];
+// module.exports = A;
 
 
 

@@ -2,9 +2,15 @@
 // === /findAllRefsClassWithStaticThisAccess.ts ===
 // class /*FIND ALL REFS*/[|C|] {
 //     static s() {
-//         this;
+//         [|this|];
 //     }
-// // --- (line: 5) skipped ---
+//     static get f() {
+//         return [|this|];
+// 
+//         function inner() { this; }
+//         class Inner { x = this; }
+//     }
+// }
 
 
 

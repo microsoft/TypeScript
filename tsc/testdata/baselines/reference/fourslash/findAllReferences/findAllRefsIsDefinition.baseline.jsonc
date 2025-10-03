@@ -73,16 +73,15 @@
 
 // === findAllReferences ===
 // === /findAllRefsIsDefinition.ts ===
-// --- (line: 15) skipped ---
-// interface IFoo {
+// --- (line: 16) skipped ---
 //     foo(): void;
 // }
-// class [|Foo|] implements IFoo {
-//     constructor(n: number)
-//     constructor()
-//     /*FIND ALL REFS*/constructor(n: number?) { }
+// class Foo implements IFoo {
+//     [|constructor|](n: number)
+//     [|constructor|]()
+//     /*FIND ALL REFS*/[|constructor|](n: number?) { }
 //     foo(): void { }
-//     static init() { return new this() }
+//     static init() { return new [|this|]() }
 // }
 
 
