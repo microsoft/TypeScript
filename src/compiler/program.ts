@@ -4262,7 +4262,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             !options.rootDir &&
             options.configFilePath &&
             (options.outDir || // there is --outDir specified
-                (getEmitDeclarations(options) && options.declarationDir)) // there is --declarationDir specified
+                (getEmitDeclarations(options) && options.declarationDir) || // there is --declarationDir specified
+                options.outFile)
         ) {
             // Check if rootDir inferred changed and issue diagnostic
             const dir = getCommonSourceDirectory();
@@ -4272,8 +4273,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 // change in layout
                 createDiagnosticForOption(
                     /*onKey*/ true,
-                    options.outDir ? "outDir" : "declarationDir",
-                    options.outDir ? "declarationDir" : undefined,
+                    options.outFile ? "outFile" : options.outDir ? "outDir" : "declarationDir",
+                    !options.outFile && options.outDir ? "declarationDir" : undefined,
                     chainDiagnosticMessages(
                         chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
                         Diagnostics.The_common_source_directory_of_0_is_1_The_rootDir_setting_must_be_explicitly_set_to_this_or_another_path_to_adjust_your_output_s_file_layout,

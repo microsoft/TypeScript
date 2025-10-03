@@ -57,6 +57,12 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
@@ -66,7 +72,7 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -80,7 +86,7 @@ define("src/index", ["require", "exports", "ky"], function (require, exports, ky
 
 
 //// [/home/src/workspaces/project/outFile.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./ky.d.ts","./src/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"],"root":[3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js","skipDefaultLibCheck":true,"skipLibCheck":true},"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/home/src/workspaces/project/ky\" but cannot be named.","category":1,"code":4023}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./ky.d.ts","./src/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"],"root":[3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js","skipDefaultLibCheck":true,"skipLibCheck":true},"semanticDiagnosticsPerFile":[1,2,3],"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/home/src/workspaces/project/ky\" but cannot be named.","category":1,"code":4023}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -107,6 +113,20 @@ define("src/index", ["require", "exports", "ky"], function (require, exports, ky
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./ky.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "emitDiagnosticsPerFile": [
     [
       "./src/index.ts",
@@ -122,7 +142,7 @@ define("src/index", ["require", "exports", "ky"], function (require, exports, ky
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1094
+  "size": 1131
 }
 
 
@@ -146,6 +166,12 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
@@ -153,7 +179,7 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 1 error.
+Found 2 errors.
 
 
 

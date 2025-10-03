@@ -33,6 +33,12 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "outFile": "theApp.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/Util/Dates' not found.
 
 [7m7[0m     {
@@ -43,7 +49,7 @@ Output::
 [7m [0m [91m~~~~~[0m
 
 
-Found 1 error in tsconfig.json[90m:7[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 
