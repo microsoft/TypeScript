@@ -1052,11 +1052,11 @@ func (c *Checker) findMatchingDiscriminantType(source *Type, target *Type, isRel
 		if match := c.getMatchingUnionConstituentForType(target, source); match != nil {
 			return match
 		}
-		discriminantProperties := c.findDiscriminantProperties(c.getPropertiesOfType(source), target)
-		discriminator := &TypeDiscriminator{c: c, props: discriminantProperties, isRelatedTo: isRelatedTo}
-		discriminated := c.discriminateTypeByDiscriminableItems(target, discriminator)
-		if discriminated != target {
-			return discriminated
+		if discriminantProperties := c.findDiscriminantProperties(c.getPropertiesOfType(source), target); len(discriminantProperties) != 0 {
+			discriminator := &TypeDiscriminator{c: c, props: discriminantProperties, isRelatedTo: isRelatedTo}
+			if discriminated := c.discriminateTypeByDiscriminableItems(target, discriminator); discriminated != target {
+				return discriminated
+			}
 		}
 	}
 	return nil
