@@ -37,7 +37,7 @@ func (c *Checker) grammarErrorAtPos(nodeForSourceFile *ast.Node, start int, leng
 func (c *Checker) grammarErrorOnNode(node *ast.Node, message *diagnostics.Message, args ...any) bool {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	if !c.hasParseDiagnostics(sourceFile) {
-		c.diagnostics.Add(NewDiagnosticForNode(node, message, args...))
+		c.error(node, message, args...)
 		return true
 	}
 	return false
@@ -1846,7 +1846,7 @@ func (c *Checker) checkGrammarForDisallowedBlockScopedVariableStatement(node *as
 			default:
 				panic("Unknown BlockScope flag")
 			}
-			return c.grammarErrorOnNode(node.AsNode(), diagnostics.X_0_declarations_can_only_be_declared_inside_a_block, keyword)
+			c.error(node.AsNode(), diagnostics.X_0_declarations_can_only_be_declared_inside_a_block, keyword)
 		}
 	}
 

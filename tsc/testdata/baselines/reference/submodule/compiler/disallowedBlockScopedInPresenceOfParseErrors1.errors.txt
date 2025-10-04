@@ -1,19 +1,25 @@
+disallowedBlockScopedInPresenceOfParseErrors1.ts(5,5): error TS1156: 'const' declarations can only be declared inside a block.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(6,17): error TS2454: Variable 'e' is used before being assigned.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(8,1): error TS1128: Declaration or statement expected.
+disallowedBlockScopedInPresenceOfParseErrors1.ts(12,5): error TS1156: 'let' declarations can only be declared inside a block.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(13,17): error TS2454: Variable 'e' is used before being assigned.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(15,1): error TS1128: Declaration or statement expected.
+disallowedBlockScopedInPresenceOfParseErrors1.ts(21,5): error TS1156: 'using' declarations can only be declared inside a block.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(22,17): error TS2454: Variable 'e' is used before being assigned.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(24,1): error TS1128: Declaration or statement expected.
+disallowedBlockScopedInPresenceOfParseErrors1.ts(30,5): error TS1156: 'await using' declarations can only be declared inside a block.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(31,17): error TS2454: Variable 'e' is used before being assigned.
 disallowedBlockScopedInPresenceOfParseErrors1.ts(33,1): error TS1128: Declaration or statement expected.
 
 
-==== disallowedBlockScopedInPresenceOfParseErrors1.ts (8 errors) ====
+==== disallowedBlockScopedInPresenceOfParseErrors1.ts (12 errors) ====
     // https://github.com/microsoft/TypeScript/issues/61734
     
     function f1() {
       if (1 > 0)
         const e = 3;
+        ~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
         console.log(e);
                     ~
 !!! error TS2454: Variable 'e' is used before being assigned.
@@ -25,6 +31,8 @@ disallowedBlockScopedInPresenceOfParseErrors1.ts(33,1): error TS1128: Declaratio
     function f2() {
       if (1 > 0)
         let e = 3;
+        ~~~~~~~~~~
+!!! error TS1156: 'let' declarations can only be declared inside a block.
         console.log(e);
                     ~
 !!! error TS2454: Variable 'e' is used before being assigned.
@@ -38,6 +46,8 @@ disallowedBlockScopedInPresenceOfParseErrors1.ts(33,1): error TS1128: Declaratio
     function f3() {
       if (1 > 0)
         using e = resource;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1156: 'using' declarations can only be declared inside a block.
         console.log(e);
                     ~
 !!! error TS2454: Variable 'e' is used before being assigned.
@@ -51,6 +61,8 @@ disallowedBlockScopedInPresenceOfParseErrors1.ts(33,1): error TS1128: Declaratio
     async function f4() {
       if (1 > 0)
         await using e = asyncResource;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1156: 'await using' declarations can only be declared inside a block.
         console.log(e);
                     ~
 !!! error TS2454: Variable 'e' is used before being assigned.
