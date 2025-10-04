@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/types/literal/numericStringLiteralTypes2.ts] ////
+
+=== numericStringLiteralTypes2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55383
+
+type LiteralType = string | number | boolean;
+>LiteralType : LiteralType
+>            : ^^^^^^^^^^^
+
+type ValueGetter<ValueType extends LiteralType = LiteralType> = () => ValueType;
+>ValueGetter : ValueGetter<ValueType>
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+
+type Schema = SchemaArray | SchemaObject | LiteralType;
+>Schema : Schema
+>       : ^^^^^^
+
+type SchemaArray = Array<SchemaObject | SchemaArray | LiteralType>;
+>SchemaArray : SchemaArray
+>            : ^^^^^^^^^^^
+
+type SchemaObject = {
+>SchemaObject : SchemaObject
+>             : ^^^^^^^^^^^^
+
+  [key: string]: SchemaObject | SchemaArray | LiteralType;
+>key : string
+>    : ^^^^^^
+
+};
+
+type InferValuesFromSchema<S extends Schema> = S extends LiteralType
+>InferValuesFromSchema : InferValuesFromSchema<S>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? ValueGetter<S>
+  : S extends SchemaArray
+  ? {
+      [K in keyof S]: InferValuesFromSchema<S[K]>; // `S[K]` should satisfy the required `Schema` constraint here
+    }
+  : S extends SchemaObject
+  ? {
+      [K in keyof S]: InferValuesFromSchema<S[K]>;
+    }
+  : never;
+
