@@ -1,24 +1,24 @@
-awaitUsingDeclarations.16.ts(2,5): error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
-awaitUsingDeclarations.16.ts(3,5): error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
-awaitUsingDeclarations.16.ts(6,5): error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
-awaitUsingDeclarations.16.ts(7,5): error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+awaitUsingDeclarations.16.ts(2,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
+awaitUsingDeclarations.16.ts(3,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
+awaitUsingDeclarations.16.ts(6,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
+awaitUsingDeclarations.16.ts(7,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
 
 
 ==== awaitUsingDeclarations.16.ts (4 errors) ====
     declare namespace N {
         await using x: { [Symbol.asyncDispose](): Promise<void> };
-        ~~~~~
-!!! error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
         await using y: null;
-        ~~~~~
-!!! error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
     }
     declare module 'M' {
         await using x: { [Symbol.asyncDispose](): Promise<void> };
-        ~~~~~
-!!! error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
         await using y: null;
-        ~~~~~
-!!! error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
     }
     
