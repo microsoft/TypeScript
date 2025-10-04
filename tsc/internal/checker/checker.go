@@ -15400,9 +15400,7 @@ func (c *Checker) addDeclarationToLateBoundSymbol(symbol *ast.Symbol, member *as
 		symbol.Declarations = append(symbol.Declarations, member)
 	}
 	if symbolFlags&ast.SymbolFlagsValue != 0 {
-		if symbol.ValueDeclaration == nil || symbol.ValueDeclaration.Kind != member.Kind {
-			symbol.ValueDeclaration = member
-		}
+		binder.SetValueDeclaration(symbol, member)
 	}
 }
 
