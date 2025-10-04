@@ -23066,6 +23066,8 @@ func (c *Checker) computeEnumMemberValues(node *ast.Node) {
 func (c *Checker) computeEnumMemberValue(member *ast.Node, autoValue jsnum.Number, previous *ast.Node) evaluator.Result {
 	if ast.IsComputedNonLiteralName(member.Name()) {
 		c.error(member.Name(), diagnostics.Computed_property_names_are_not_allowed_in_enums)
+	} else if ast.IsBigIntLiteral(member.Name()) {
+		c.error(member.Name(), diagnostics.An_enum_member_cannot_have_a_numeric_name)
 	} else {
 		text := ast.GetTextOfPropertyName(member.Name())
 		if isNumericLiteralName(text) && !isInfinityOrNaNString(text) {
