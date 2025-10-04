@@ -2145,7 +2145,8 @@ func (c *Checker) checkGrammarNumericLiteral(node *ast.NumericLiteral) {
 func (c *Checker) checkGrammarBigIntLiteral(node *ast.BigIntLiteral) bool {
 	literalType := ast.IsLiteralTypeNode(node.Parent) || ast.IsPrefixUnaryExpression(node.Parent) && ast.IsLiteralTypeNode(node.Parent.Parent)
 	if !literalType {
-		if c.languageVersion < core.ScriptTargetES2020 {
+		// Don't error on BigInt literals in ambient contexts
+		if node.Flags&ast.NodeFlagsAmbient == 0 && c.languageVersion < core.ScriptTargetES2020 {
 			if c.grammarErrorOnNode(node.AsNode(), diagnostics.BigInt_literals_are_not_available_when_targeting_lower_than_ES2020) {
 				return true
 			}

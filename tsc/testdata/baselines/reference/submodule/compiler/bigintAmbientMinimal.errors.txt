@@ -1,24 +1,15 @@
-/ambient.d.ts(1,25): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-/ambient.d.ts(3,19): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-/main.ts(2,19): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 /main.ts(5,17): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 
 
-==== /ambient.d.ts (2 errors) ====
+==== /ambient.d.ts (0 errors) ====
     declare const fromDts = 789n;
-                            ~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     declare namespace Lib {
         const value = 999n;
-                      ~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     }
     
-==== /main.ts (2 errors) ====
+==== /main.ts (1 errors) ====
     // Minimal repro from issue
     declare const n = 123n;
-                      ~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     
     // Non-ambient for comparison
     const regular = 456n;
