@@ -20,5 +20,17 @@ const a = {
 
 const prop = a.self.self.self.self.self.prop;
 >prop : Symbol(prop, Decl(noCircularitySelfReferentialGetter4.ts, 7, 5))
+>a.self.self.self.self.self.prop : Symbol(prop, Decl(noCircularitySelfReferentialGetter4.ts, 0, 11))
+>a.self.self.self.self.self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>a.self.self.self.self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>a.self.self.self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>a.self.self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>a.self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
 >a : Symbol(a, Decl(noCircularitySelfReferentialGetter4.ts, 0, 5))
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter4.ts, 1, 11))
+>prop : Symbol(prop, Decl(noCircularitySelfReferentialGetter4.ts, 0, 11))
 
