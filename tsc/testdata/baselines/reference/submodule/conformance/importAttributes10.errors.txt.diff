@@ -1,15 +1,10 @@
 --- old.importAttributes10.errors.txt
 +++ new.importAttributes10.errors.txt
 @@= skipped -0, +0 lines =@@
--b.ts(22,5): error TS1005: '}' expected.
 +b.ts(7,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-+b.ts(10,4): error TS1005: '}' expected.
-+b.ts(11,1): error TS1128: Declaration or statement expected.
-+b.ts(11,2): error TS1128: Declaration or statement expected.
 +b.ts(13,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 +b.ts(19,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-+b.ts(22,4): error TS1005: '}' expected.
-+b.ts(22,5): error TS1128: Declaration or statement expected.
+ b.ts(22,5): error TS1005: '}' expected.
  b.ts(23,1): error TS1128: Declaration or statement expected.
  b.ts(23,2): error TS1128: Declaration or statement expected.
 +b.ts(25,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
@@ -20,11 +15,11 @@
      { "key": "value" }
      
 -==== b.ts (4 errors) ====
-+==== b.ts (12 errors) ====
++==== b.ts (8 errors) ====
      declare global {
          interface ImportAttributes {
              type: "json"
-@@= skipped -14, +22 lines =@@
+@@= skipped -14, +18 lines =@@
      }
      
      export type Test1 = typeof import("./a.json", {
@@ -33,14 +28,7 @@
        with: {
          type: "json"
        },
-+       ~
-+!!! error TS1005: '}' expected.
-+!!! related TS1007 b.ts:7:47: The parser expected to find a '}' to match the '{' token here.
      });
-+    ~
-+!!! error TS1128: Declaration or statement expected.
-+     ~
-+!!! error TS1128: Declaration or statement expected.
      
      export type Test2 = typeof import("./a.json", {
 +                                      ~~~~~~~~~~
@@ -56,16 +44,7 @@
        with: {
          type: "json"
        },,
--        ~
-+       ~
- !!! error TS1005: '}' expected.
- !!! related TS1007 b.ts:19:47: The parser expected to find a '}' to match the '{' token here.
-+        ~
-+!!! error TS1128: Declaration or statement expected.
-     });
-     ~
- !!! error TS1128: Declaration or statement expected.
-@@= skipped -25, +40 lines =@@
+@@= skipped -25, +31 lines =@@
  !!! error TS1128: Declaration or statement expected.
      
      export type Test4 = typeof import("./a.json", {

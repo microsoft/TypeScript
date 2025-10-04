@@ -2887,6 +2887,7 @@ func (p *Parser) parseImportType() *ast.Node {
 		}
 		p.parseExpected(ast.KindColonToken)
 		attributes = p.parseImportAttributes(currentToken, true /*skipKeyword*/)
+		p.parseOptional(ast.KindCommaToken)
 		if !p.parseExpected(ast.KindCloseBraceToken) {
 			if len(p.diagnostics) != 0 {
 				lastDiagnostic := p.diagnostics[len(p.diagnostics)-1]

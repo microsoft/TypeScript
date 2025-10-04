@@ -39,4 +39,3 @@ export type Test4 = typeof import("./a.json", {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ;
-;
