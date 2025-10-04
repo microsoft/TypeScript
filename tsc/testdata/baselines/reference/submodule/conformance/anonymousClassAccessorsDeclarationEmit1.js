@@ -51,14 +51,16 @@ export declare abstract class Base {
     accessor a: number;
 }
 export declare function middle(Super?: typeof Base): abstract new () => {
-    a: number;
+    get a(): number;
+    set a(arg: number);
 };
 declare class A {
     constructor(...args: any[]);
 }
 export declare function Mixin<T extends typeof A>(Super: T): {
     new (...args: any[]): {
-        myName: string;
+        get myName(): string;
+        set myName(arg: string);
     };
 } & T;
 export {};

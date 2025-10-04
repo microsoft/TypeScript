@@ -54,12 +54,12 @@ declare class A {
 }
 declare function Mixin<T extends typeof A>(Super: T): {
     new (...args: any[]): {
-        readonly myName: string;
+        get myName(): string;
     };
 } & T;
 declare const C_base: {
     new (...args: any[]): {
-        readonly myName: string;
+        get myName(): string;
     };
 } & typeof A;
 declare class C extends C_base {

@@ -2214,22 +2214,45 @@ func (b *nodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 
 	if propertySymbol.Flags&ast.SymbolFlagsAccessor != 0 {
 		writeType := b.ch.getWriteTypeOfSymbol(propertySymbol)
-		if propertyType != writeType && !b.ch.isErrorType(propertyType) && !b.ch.isErrorType(writeType) {
-			getterDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindGetAccessor)
-			getterSignature := b.ch.getSignatureFromDeclaration(getterDeclaration)
-			getter := b.signatureToSignatureDeclarationHelper(getterSignature, ast.KindGetAccessor, &SignatureToSignatureDeclarationOptions{
-				name: propertyName,
-			})
-			b.setCommentRange(getter, getterDeclaration)
-			typeElements = append(typeElements, getter)
-			setterDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindSetAccessor)
-			setterSignature := b.ch.getSignatureFromDeclaration(setterDeclaration)
-			setter := b.signatureToSignatureDeclarationHelper(setterSignature, ast.KindSetAccessor, &SignatureToSignatureDeclarationOptions{
-				name: propertyName,
-			})
-			b.setCommentRange(setter, setterDeclaration)
-			typeElements = append(typeElements, setter)
-			return typeElements
+		if !b.ch.isErrorType(propertyType) && !b.ch.isErrorType(writeType) {
+			propDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindPropertyDeclaration)
+			if propertyType != writeType || propertySymbol.Parent.Flags&ast.SymbolFlagsClass != 0 && propDeclaration == nil {
+				if getterDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindGetAccessor); getterDeclaration != nil {
+					getterSignature := b.ch.getSignatureFromDeclaration(getterDeclaration)
+					getter := b.signatureToSignatureDeclarationHelper(getterSignature, ast.KindGetAccessor, &SignatureToSignatureDeclarationOptions{
+						name: propertyName,
+					})
+					b.setCommentRange(getter, getterDeclaration)
+					typeElements = append(typeElements, getter)
+				}
+				if setterDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindSetAccessor); setterDeclaration != nil {
+					setterSignature := b.ch.getSignatureFromDeclaration(setterDeclaration)
+					setter := b.signatureToSignatureDeclarationHelper(setterSignature, ast.KindSetAccessor, &SignatureToSignatureDeclarationOptions{
+						name: propertyName,
+					})
+					b.setCommentRange(setter, setterDeclaration)
+					typeElements = append(typeElements, setter)
+				}
+				return typeElements
+			} else if propertySymbol.Parent.Flags&ast.SymbolFlagsClass != 0 && propDeclaration != nil && core.Find(propDeclaration.ModifierNodes(), func(m *ast.Node) bool {
+				return m.Kind == ast.KindAccessorKeyword
+			}) != nil {
+				fakeGetterSignature := b.ch.newSignature(SignatureFlagsNone, nil, nil, nil, nil, propertyType, nil, 0)
+				fakeGetterDeclaration := b.signatureToSignatureDeclarationHelper(fakeGetterSignature, ast.KindGetAccessor, &SignatureToSignatureDeclarationOptions{
+					name: propertyName,
+				})
+				b.setCommentRange(fakeGetterDeclaration, propDeclaration)
+				typeElements = append(typeElements, fakeGetterDeclaration)
+
+				setterParam := b.ch.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "arg")
+				b.ch.valueSymbolLinks.Get(setterParam).resolvedType = writeType
+				fakeSetterSignature := b.ch.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{setterParam}, b.ch.voidType, nil, 0)
+				fakeSetterDeclaration := b.signatureToSignatureDeclarationHelper(fakeSetterSignature, ast.KindSetAccessor, &SignatureToSignatureDeclarationOptions{
+					name: propertyName,
+				})
+				typeElements = append(typeElements, fakeSetterDeclaration)
+				return typeElements
+			}
 		}
 	}
 

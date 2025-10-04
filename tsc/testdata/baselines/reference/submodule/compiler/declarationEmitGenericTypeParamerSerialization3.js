@@ -36,11 +36,13 @@ export const Cls = wrapper("test");
 //// [declarationEmitGenericTypeParamerSerialization3.d.ts]
 export declare function wrapper<T>(value: T): {
     new (): {
-        name: T;
+        get name(): T;
+        set name(arg: T);
     };
 };
 export declare const Cls: {
     new (): {
-        name: string;
+        get name(): string;
+        set name(arg: string);
     };
 };

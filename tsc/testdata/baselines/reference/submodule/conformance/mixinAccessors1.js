@@ -49,7 +49,7 @@ declare function mixin<T extends {
     new (...args: any[]): {};
 }>(superclass: T): {
     new (...args: any[]): {
-        readonly validationTarget: HTMLElement;
+        get validationTarget(): HTMLElement;
     };
 } & T;
 declare class BaseClass {
@@ -57,7 +57,7 @@ declare class BaseClass {
 }
 declare const MyClass_base: {
     new (...args: any[]): {
-        readonly validationTarget: HTMLElement;
+        get validationTarget(): HTMLElement;
     };
 } & typeof BaseClass;
 declare class MyClass extends MyClass_base {

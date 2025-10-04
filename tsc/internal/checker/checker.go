@@ -15705,14 +15705,14 @@ func (c *Checker) getWriteTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type
 // properties deriving from set accessors will either pre-compute or defer the union or
 // intersection of the writeTypes of their constituents.
 func (c *Checker) getWriteTypeOfSymbol(symbol *ast.Symbol) *Type {
-	if symbol.Flags&ast.SymbolFlagsProperty != 0 {
-		if symbol.CheckFlags&ast.CheckFlagsSyntheticProperty != 0 {
-			if symbol.CheckFlags&ast.CheckFlagsDeferredType != 0 {
-				return c.getWriteTypeOfSymbolWithDeferredType(symbol)
-			}
-			links := c.valueSymbolLinks.Get(symbol)
-			return core.OrElse(links.writeType, links.resolvedType)
+	if symbol.CheckFlags&ast.CheckFlagsSyntheticProperty != 0 {
+		if symbol.CheckFlags&ast.CheckFlagsDeferredType != 0 {
+			return c.getWriteTypeOfSymbolWithDeferredType(symbol)
 		}
+		links := c.valueSymbolLinks.Get(symbol)
+		return core.OrElse(links.writeType, links.resolvedType)
+	}
+	if symbol.Flags&ast.SymbolFlagsProperty != 0 {
 		return c.removeMissingType(c.getTypeOfSymbol(symbol), symbol.Flags&ast.SymbolFlagsOptional != 0)
 	}
 	if symbol.Flags&ast.SymbolFlagsAccessor != 0 {
@@ -20603,6 +20603,7 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 }
 
 func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
+	propFlags := ast.SymbolFlagsNone
 	var singleProp *ast.Symbol
 	var propSet collections.OrderedSet[*ast.Symbol]
 	var indexTypes []*Type
@@ -20632,6 +20633,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 				}
 				if singleProp == nil {
 					singleProp = prop
+					propFlags = core.OrElse(prop.Flags&ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
 				} else if prop != singleProp {
 					isInstantiation := c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp)
 					// If the symbols are instances of one another with identical types - consider the symbols
@@ -20647,6 +20649,13 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 							propSet.Add(singleProp)
 						}
 						propSet.Add(prop)
+					}
+					// classes created by mixins are represented as intersections
+					// and overriding a property in a derived class redefines it completely at runtime
+					// so a get accessor can't be merged with a set accessor in a base class,
+					// for that reason the accessor flags are only used when they are the same in all constituents
+					if propFlags&ast.SymbolFlagsAccessor != 0 && (prop.Flags&ast.SymbolFlagsAccessor != (propFlags & ast.SymbolFlagsAccessor)) {
+						propFlags = (propFlags &^ ast.SymbolFlagsAccessor) | ast.SymbolFlagsProperty
 					}
 				}
 				if isUnion && c.isReadonlySymbol(prop) {
@@ -20675,6 +20684,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 					indexInfo = c.getApplicableIndexInfoForName(t, name)
 				}
 				if indexInfo != nil {
+					propFlags = propFlags&^ast.SymbolFlagsAccessor | ast.SymbolFlagsProperty
 					checkFlags |= ast.CheckFlagsWritePartial | (core.IfElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0))
 					if isTupleType(t) {
 						indexType := c.getRestTypeOfTupleType(t)
@@ -20767,7 +20777,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		propTypes = append(propTypes, t)
 	}
 	propTypes = append(propTypes, indexTypes...)
-	result := c.newSymbolEx(ast.SymbolFlagsProperty|optionalFlag, name, checkFlags|syntheticFlag)
+	result := c.newSymbolEx(propFlags|optionalFlag, name, checkFlags|syntheticFlag)
 	result.Declarations = declarations
 	if !hasNonUniformValueDeclaration && firstValueDeclaration != nil {
 		result.ValueDeclaration = firstValueDeclaration

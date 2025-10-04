@@ -8,21 +8,3 @@
  function mixin(superclass) {
      return class extends superclass {
          get name() {
-@@= skipped -24, +23 lines =@@
-     new (...args: any[]): {};
- }>(superclass: T): {
-     new (...args: any[]): {
--        get name(): string;
-+        readonly name: string;
-     };
- } & T;
- declare class BaseClass {
-@@= skipped -8, +8 lines =@@
- }
- declare const MyClass_base: {
-     new (...args: any[]): {
--        get name(): string;
-+        readonly name: string;
-     };
- } & typeof BaseClass;
- declare class MyClass extends MyClass_base {

@@ -8,21 +8,3 @@
  // https://github.com/microsoft/TypeScript/issues/58790
  function mixin(superclass) {
      return class extends superclass {
-@@= skipped -26, +25 lines =@@
-     new (...args: any[]): {};
- }>(superclass: T): {
-     new (...args: any[]): {
--        get validationTarget(): HTMLElement;
-+        readonly validationTarget: HTMLElement;
-     };
- } & T;
- declare class BaseClass {
-@@= skipped -8, +8 lines =@@
- }
- declare const MyClass_base: {
-     new (...args: any[]): {
--        get validationTarget(): HTMLElement;
-+        readonly validationTarget: HTMLElement;
-     };
- } & typeof BaseClass;
- declare class MyClass extends MyClass_base {
