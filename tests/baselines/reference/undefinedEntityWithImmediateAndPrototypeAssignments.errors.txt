@@ -1,0 +1,15 @@
+tests/cases/compiler/a.js(2,7): error TS2339: Property 'prototype' does not exist on type 'typeof Thing'.
+tests/cases/compiler/a.js(3,5): error TS2351: This expression is not constructable.
+  Type 'typeof Thing' has no construct signatures.
+
+
+==== tests/cases/compiler/a.js (2 errors) ====
+    Thing.abc = 123
+    Thing.prototype.def = 456
+          ~~~~~~~~~
+!!! error TS2339: Property 'prototype' does not exist on type 'typeof Thing'.
+    new Thing();
+        ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'typeof Thing' has no construct signatures.
+    
