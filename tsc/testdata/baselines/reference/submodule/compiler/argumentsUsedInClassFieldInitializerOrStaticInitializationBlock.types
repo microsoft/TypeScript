@@ -81,9 +81,9 @@ function D() {
 >T : typeof T
 
      a = () => arguments  // should error
->a : () => IArguments
->() => arguments : () => IArguments
->arguments : IArguments
+>a : () => any
+>() => arguments : () => any
+>arguments : any
   }
 }
 
@@ -99,14 +99,14 @@ function D1() {
 >() => {      arguments;    // should error      const b = () => {        return arguments;     // should error      }      function f() {        return arguments;      // ok      }    } : () => void
 
       arguments;    // should error
->arguments : IArguments
+>arguments : any
 
       const b = () => {
->b : () => IArguments
->() => {        return arguments;     // should error      } : () => IArguments
+>b : () => any
+>() => {        return arguments;     // should error      } : () => any
 
         return arguments;     // should error
->arguments : IArguments
+>arguments : any
       }
 
       function f() {
@@ -175,7 +175,7 @@ function D3() {
 >1 : 1
 
         arguments // should error
->arguments : IArguments
+>arguments : any
       }
     }
   }
@@ -208,11 +208,11 @@ function D5() {
 >T : typeof T
 
      a = (() => { return arguments; })()  // should error
->a : IArguments
->(() => { return arguments; })() : IArguments
->(() => { return arguments; }) : () => IArguments
->() => { return arguments; } : () => IArguments
->arguments : IArguments
+>a : any
+>(() => { return arguments; })() : any
+>(() => { return arguments; }) : () => any
+>() => { return arguments; } : () => any
+>arguments : any
   }
 }
 
@@ -224,10 +224,10 @@ function D6() {
 >T : typeof T
 
      a = (x = arguments) => {}    // should error
->a : (x?: IArguments) => void
->(x = arguments) => {} : (x?: IArguments) => void
->x : IArguments
->arguments : IArguments
+>a : (x?: any) => void
+>(x = arguments) => {} : (x?: any) => void
+>x : any
+>arguments : any
   }
 }
 

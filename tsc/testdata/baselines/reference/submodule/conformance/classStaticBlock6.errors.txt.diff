@@ -8,17 +8,15 @@
  classStaticBlock6.ts(46,22): error TS1109: Expression expected.
  classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
  classStaticBlock6.ts(66,14): error TS2729: Property 'b' is used before its initialization.
--classStaticBlock6.ts(69,18): error TS2729: Property 'b' is used before its initialization.
--
--
+ classStaticBlock6.ts(69,18): error TS2729: Property 'b' is used before its initialization.
+
+
 -==== classStaticBlock6.ts (17 errors) ====
-+
-+
-+==== classStaticBlock6.ts (15 errors) ====
++==== classStaticBlock6.ts (16 errors) ====
      class B {
          static a = 1;
      }
-@@= skipped -77, +75 lines =@@
+@@= skipped -77, +76 lines =@@
      
                  async function ff () {
                      arguments;
@@ -27,13 +25,3 @@
                      await;
                           ~
  !!! error TS1109: Expression expected.
-@@= skipped -33, +31 lines =@@
-             let b: typeof this.b;   // ok
-             if (1) {
-                 this.b; // should error
--                     ~
--!!! error TS2729: Property 'b' is used before its initialization.
--!!! related TS2728 classStaticBlock6.ts:73:12: 'b' is declared here.
-             }
-         }
-     

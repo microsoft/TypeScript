@@ -3,10 +3,12 @@ decoratorUsedBeforeDeclaration.ts(1,9): error TS2450: Enum 'Enum' used before it
 decoratorUsedBeforeDeclaration.ts(2,7): error TS2450: Enum 'Enum' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(4,4): error TS2448: Block-scoped variable 'lambda' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(4,11): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(4,16): error TS2729: Property 'No' is used before its initialization.
 decoratorUsedBeforeDeclaration.ts(5,9): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(5,14): error TS2729: Property 'No' is used before its initialization.
 
 
-==== decoratorUsedBeforeDeclaration.ts (6 errors) ====
+==== decoratorUsedBeforeDeclaration.ts (8 errors) ====
     @lambda(Enum.No)
      ~~~~~~
 !!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
@@ -26,10 +28,16 @@ decoratorUsedBeforeDeclaration.ts(5,9): error TS2450: Enum 'Enum' used before it
               ~~~~
 !!! error TS2450: Enum 'Enum' used before its declaration.
 !!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+                   ~~
+!!! error TS2729: Property 'No' is used before its initialization.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:36:3: 'No' is declared here.
       @deco(Enum.No)
             ~~~~
 !!! error TS2450: Enum 'Enum' used before its declaration.
 !!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+                 ~~
+!!! error TS2729: Property 'No' is used before its initialization.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:36:3: 'No' is declared here.
       greeting: string;
     
       constructor(message: string) {
