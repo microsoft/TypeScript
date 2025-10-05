@@ -12406,17 +12406,32 @@ func (c *Checker) checkNullishCoalesceOperands(left *ast.Node, right *ast.Node) 
 	if ast.IsBinaryExpression(right) && ast.IsLogicalBinaryOperator(right.AsBinaryExpression().OperatorToken.Kind) {
 		c.grammarErrorOnNode(right, diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses, scanner.TokenToString(right.AsBinaryExpression().OperatorToken.Kind), scanner.TokenToString(ast.KindQuestionQuestionToken))
 	}
+	c.checkNullishCoalesceOperandLeft(left)
+	c.checkNullishCoalesceOperandRight(right)
+}
+
+func (c *Checker) checkNullishCoalesceOperandLeft(left *ast.Node) {
 	leftTarget := ast.SkipOuterExpressions(left, ast.OEKAll)
 	nullishSemantics := c.getSyntacticNullishnessSemantics(leftTarget)
 	if nullishSemantics != PredicateSemanticsSometimes {
-		if left.Parent.Parent.Kind == ast.KindBinaryExpression {
-			c.error(leftTarget, diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses)
+		if nullishSemantics == PredicateSemanticsAlways {
+			c.error(leftTarget, diagnostics.This_expression_is_always_nullish)
 		} else {
-			if nullishSemantics == PredicateSemanticsAlways {
-				c.error(leftTarget, diagnostics.This_expression_is_always_nullish)
-			} else {
-				c.error(leftTarget, diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish)
-			}
+			c.error(leftTarget, diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish)
+		}
+	}
+}
+
+func (c *Checker) checkNullishCoalesceOperandRight(right *ast.Node) {
+	binaryExpression := right.Parent
+	if binaryExpression.Parent != nil && ast.IsBinaryExpression(binaryExpression.Parent) && binaryExpression.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionToken {
+		rightTarget := ast.SkipOuterExpressions(right, ast.OEKAll)
+		nullishSemantics := c.getSyntacticNullishnessSemantics(rightTarget)
+		switch nullishSemantics {
+		case PredicateSemanticsAlways:
+			c.error(rightTarget, diagnostics.This_expression_is_always_nullish)
+		case PredicateSemanticsNever:
+			c.error(rightTarget, diagnostics.This_expression_is_never_nullish)
 		}
 	}
 }
