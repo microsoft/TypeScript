@@ -94,7 +94,7 @@ export declare type ZodRawShape = {
 };
 export declare const buildSchema: <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{
     version: ZodLiteral<V>;
-}>, undefined extends V ? never : "version"> extends infer T extends unknown ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<{
+}>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<{
     version: ZodLiteral<V>;
 }>, undefined extends V ? never : "version">[k]; } : never;
 type evaluate<t> = {
@@ -104,15 +104,15 @@ export type entryOf<o> = evaluate<{
     [k in keyof o]-?: [k, o[k] & ({} | null)];
 }[o extends readonly unknown[] ? keyof o & number : keyof o]>;
 export type entriesOf<o extends object> = evaluate<entryOf<o>[]>;
-export declare const entriesOf: <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T extends unknown ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[];
+export declare const entriesOf: <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[];
 export {};
 
 
 //// [DtsFileErrors]
 
 
-declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts(24,98): error TS2536: Type 'k' cannot be used to index type 'addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">'.
-declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts(34,226): error TS2536: Type 'k' cannot be used to index type '{ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]'.
+declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts(24,82): error TS2536: Type 'k' cannot be used to index type 'addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">'.
+declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts(34,210): error TS2536: Type 'k' cannot be used to index type '{ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]'.
 
 
 ==== declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts (2 errors) ====
@@ -139,8 +139,8 @@ declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts(34,226): error TS
     };
     export declare const buildSchema: <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{
         version: ZodLiteral<V>;
-    }>, undefined extends V ? never : "version"> extends infer T extends unknown ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<{
-                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<{
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         version: ZodLiteral<V>;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }>, undefined extends V ? never : "version">[k]; } : never;
@@ -153,8 +153,8 @@ declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts(34,226): error TS
         [k in keyof o]-?: [k, o[k] & ({} | null)];
     }[o extends readonly unknown[] ? keyof o & number : keyof o]>;
     export type entriesOf<o extends object> = evaluate<entryOf<o>[]>;
-    export declare const entriesOf: <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T extends unknown ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[];
-                                                                                                                                                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    export declare const entriesOf: <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[];
+                                                                                                                                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2536: Type 'k' cannot be used to index type '{ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]'.
     export {};
     

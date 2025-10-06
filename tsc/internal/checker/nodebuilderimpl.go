@@ -1440,7 +1440,7 @@ func (b *nodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 		originalConstraint := b.ch.instantiateType(rawConstraintTypeFromDeclaration, mapped.mapper)
 
 		var originalConstraintNode *ast.Node
-		if originalConstraint.flags&TypeFlagsUnknown != 0 {
+		if originalConstraint.flags&TypeFlagsUnknown == 0 {
 			originalConstraintNode = b.typeToTypeNode(originalConstraint)
 		}
 
