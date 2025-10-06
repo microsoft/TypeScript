@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/inferenceFromGenericClass1.ts] ////
+
+=== inferenceFromGenericClass1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61633
+
+type AnyConstructor = new (...args: any[]) => object;
+>AnyConstructor : Symbol(AnyConstructor, Decl(inferenceFromGenericClass1.ts, 0, 0))
+>args : Symbol(args, Decl(inferenceFromGenericClass1.ts, 2, 27))
+
+class Container<T> {}
+>Container : Symbol(Container, Decl(inferenceFromGenericClass1.ts, 2, 53))
+>T : Symbol(T, Decl(inferenceFromGenericClass1.ts, 4, 16))
+
+declare function RenderFlagsMixin1<
+>RenderFlagsMixin1 : Symbol(RenderFlagsMixin1, Decl(inferenceFromGenericClass1.ts, 4, 21))
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 6, 35))
+>AnyConstructor : Symbol(AnyConstructor, Decl(inferenceFromGenericClass1.ts, 0, 0))
+
+>(Base?: BaseClass): BaseClass;
+>Base : Symbol(Base, Decl(inferenceFromGenericClass1.ts, 8, 2))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 6, 35))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 6, 35))
+
+const result1 = RenderFlagsMixin1(Container);
+>result1 : Symbol(result1, Decl(inferenceFromGenericClass1.ts, 10, 5))
+>RenderFlagsMixin1 : Symbol(RenderFlagsMixin1, Decl(inferenceFromGenericClass1.ts, 4, 21))
+>Container : Symbol(Container, Decl(inferenceFromGenericClass1.ts, 2, 53))
+
+declare function RenderFlagsMixin2<
+>RenderFlagsMixin2 : Symbol(RenderFlagsMixin2, Decl(inferenceFromGenericClass1.ts, 10, 45))
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 12, 35))
+>AnyConstructor : Symbol(AnyConstructor, Decl(inferenceFromGenericClass1.ts, 0, 0))
+
+>(Base: BaseClass): BaseClass;
+>Base : Symbol(Base, Decl(inferenceFromGenericClass1.ts, 14, 2))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 12, 35))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 12, 35))
+
+const result2 = RenderFlagsMixin2(Container);
+>result2 : Symbol(result2, Decl(inferenceFromGenericClass1.ts, 16, 5))
+>RenderFlagsMixin2 : Symbol(RenderFlagsMixin2, Decl(inferenceFromGenericClass1.ts, 10, 45))
+>Container : Symbol(Container, Decl(inferenceFromGenericClass1.ts, 2, 53))
+
+declare function RenderFlagsMixin3<
+>RenderFlagsMixin3 : Symbol(RenderFlagsMixin3, Decl(inferenceFromGenericClass1.ts, 16, 45))
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 18, 35))
+>AnyConstructor : Symbol(AnyConstructor, Decl(inferenceFromGenericClass1.ts, 0, 0))
+
+>(Base: BaseClass | number): BaseClass;
+>Base : Symbol(Base, Decl(inferenceFromGenericClass1.ts, 20, 2))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 18, 35))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 18, 35))
+
+const result3 = RenderFlagsMixin3(Container);
+>result3 : Symbol(result3, Decl(inferenceFromGenericClass1.ts, 22, 5))
+>RenderFlagsMixin3 : Symbol(RenderFlagsMixin3, Decl(inferenceFromGenericClass1.ts, 16, 45))
+>Container : Symbol(Container, Decl(inferenceFromGenericClass1.ts, 2, 53))
+
+declare function RenderFlagsMixin4<
+>RenderFlagsMixin4 : Symbol(RenderFlagsMixin4, Decl(inferenceFromGenericClass1.ts, 22, 45))
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 24, 35))
+>AnyConstructor : Symbol(AnyConstructor, Decl(inferenceFromGenericClass1.ts, 0, 0))
+
+>(Base?: BaseClass | number): BaseClass;
+>Base : Symbol(Base, Decl(inferenceFromGenericClass1.ts, 26, 2))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 24, 35))
+>BaseClass : Symbol(BaseClass, Decl(inferenceFromGenericClass1.ts, 24, 35))
+
+const result4 = RenderFlagsMixin4(Container);
+>result4 : Symbol(result4, Decl(inferenceFromGenericClass1.ts, 28, 5))
+>RenderFlagsMixin4 : Symbol(RenderFlagsMixin4, Decl(inferenceFromGenericClass1.ts, 22, 45))
+>Container : Symbol(Container, Decl(inferenceFromGenericClass1.ts, 2, 53))
+
