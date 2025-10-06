@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/classStaticPropertyNoSpuriousCircularityError1.ts] ////
+
+=== classStaticPropertyNoSpuriousCircularityError1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62552
+
+function id<T>(x: T): T {
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>x : T
+>  : ^
+
+  return x
+>x : T
+>  : ^
+}
+
+const Foo = id(class {
+>Foo : typeof (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id(class {  static readonly foo = id(42) // ok}) : typeof (Anonymous class)
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>class {  static readonly foo = id(42) // ok} : typeof (Anonymous class)
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  static readonly foo = id(42) // ok
+>foo : 42
+>    : ^^
+>id(42) : 42
+>       : ^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>42 : 42
+>   : ^^
+
+})
+
+Foo.foo // 42
+>Foo.foo : 42
+>        : ^^
+>Foo : typeof (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : 42
+>    : ^^
+
+const Foo2 = id(class {
+>Foo2 : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id(class {  static foo = id(42) // ok}) : typeof (Anonymous class)
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>class {  static foo = id(42) // ok} : typeof (Anonymous class)
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  static foo = id(42) // ok
+>foo : number
+>    : ^^^^^^
+>id(42) : 42
+>       : ^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>42 : 42
+>   : ^^
+
+})
+
+Foo2.foo // number
+>Foo2.foo : number
+>         : ^^^^^^
+>Foo2 : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+
