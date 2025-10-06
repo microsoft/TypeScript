@@ -52,10 +52,10 @@ declare const _default: {
         fn: <T extends {
             x: T["x"] extends infer T_1 extends {
                 [x: string]: (...params: unknown[]) => unknown;
-            } ? { [K in keyof T_1]: T["x"][K]; } : never;
-        }>(sliceIndex: T) => T["x"] extends infer T_1 extends {
+            } ? { [K in keyof T_1]: T_1[K]; } : never;
+        }>(sliceIndex: T) => T["x"] extends infer T_2 extends {
             [x: string]: (...params: unknown[]) => unknown;
-        } ? { [K in keyof T_1]: Parameters<T["x"][K]>; } : never;
+        } ? { [K in keyof T_2]: Parameters<T_2[K]>; } : never;
     };
 };
 export default _default;

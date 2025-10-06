@@ -1367,6 +1367,8 @@ func (b *nodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 	}
 	var appropriateConstraintTypeNode *ast.Node
 	var newTypeVariable *ast.Node
+	templateType := b.ch.getTemplateTypeFromMappedType(t)
+	typeParameter := b.ch.getTypeParameterFromMappedType(t)
 
 	// If the mapped type isn't `keyof` constraint-declared, _but_ still has modifiers preserved, and its naive instantiation won't preserve modifiers because its constraint isn't `keyof` constrained, we have work to do
 	needsModifierPreservingWrapper := !b.ch.isMappedTypeWithKeyofConstraintDeclaration(t) &&
@@ -1374,18 +1376,17 @@ func (b *nodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 		b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 &&
 		!(b.ch.getConstraintTypeFromMappedType(t).flags&TypeFlagsTypeParameter != 0 && b.ch.getConstraintOfTypeParameter(b.ch.getConstraintTypeFromMappedType(t)).flags&TypeFlagsIndex != 0)
 
-	cleanup := b.enterNewScope(mapped.declaration.AsNode(), nil, []*Type{b.ch.getTypeParameterFromMappedType(t)}, nil, nil)
-	defer cleanup()
-
 	if b.ch.isMappedTypeWithKeyofConstraintDeclaration(t) {
 		// We have a { [P in keyof T]: X }
 		// We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
 		if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 && b.isHomomorphicMappedTypeWithNonHomomorphicInstantiation(mapped) {
-			newParam := b.ch.newTypeParameter(
+			newConstraintParam := b.ch.newTypeParameter(
 				b.ch.newSymbol(ast.SymbolFlagsTypeParameter, "T"),
 			)
-			name := b.typeParameterToName(newParam)
+			name := b.typeParameterToName(newConstraintParam)
+			target := t.Target()
 			newTypeVariable = b.f.NewTypeReferenceNode(name.AsNode(), nil)
+			templateType = b.ch.instantiateType(b.ch.getTemplateTypeFromMappedType(target), newTypeMapper([]*Type{b.ch.getTypeParameterFromMappedType(target), b.ch.getModifiersTypeFromMappedType(target)}, []*Type{typeParameter, newConstraintParam}))
 		}
 		indexTarget := newTypeVariable
 		if indexTarget == nil {
@@ -1405,15 +1406,18 @@ func (b *nodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 		appropriateConstraintTypeNode = b.typeToTypeNode(b.ch.getConstraintTypeFromMappedType(t))
 	}
 
-	typeParameterNode := b.typeParameterToDeclarationWithConstraint(b.ch.getTypeParameterFromMappedType(t), appropriateConstraintTypeNode)
+	// nameType and templateType nodes have to be in the new scope
+	cleanup := b.enterNewScope(mapped.declaration.AsNode(), nil, []*Type{b.ch.getTypeParameterFromMappedType(t)}, nil, nil)
+	typeParameterNode := b.typeParameterToDeclarationWithConstraint(typeParameter, appropriateConstraintTypeNode)
 	var nameTypeNode *ast.Node
 	if mapped.declaration.NameType != nil {
 		nameTypeNode = b.typeToTypeNode(b.ch.getNameTypeFromMappedType(t))
 	}
 	templateTypeNode := b.typeToTypeNode(b.ch.removeMissingType(
-		b.ch.getTemplateTypeFromMappedType(t),
+		templateType,
 		getMappedTypeModifiers(t)&MappedTypeModifiersIncludeOptional != 0,
 	))
+	cleanup()
 	result := b.f.NewMappedTypeNode(
 		readonlyToken,
 		typeParameterNode,

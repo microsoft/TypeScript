@@ -46,7 +46,7 @@ export declare type baseObjectOutputType<Shape extends ZodRawShape> = {
 };
 
 export declare type objectOutputType<Shape extends ZodRawShape> = flatten<
->objectOutputType : addQuestionMarks<baseObjectOutputType<Shape>, requiredKeys<baseObjectOutputType<Shape>>> extends infer T ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<Shape>, requiredKeys<baseObjectOutputType<Shape>>>[k]; } : never
+>objectOutputType : addQuestionMarks<baseObjectOutputType<Shape>, requiredKeys<baseObjectOutputType<Shape>>> extends infer T ? { [k in keyof T]: T[k]; } : never
 
   addQuestionMarks<baseObjectOutputType<Shape>>
 >;
@@ -60,8 +60,8 @@ export declare type ZodRawShape = {
 };
 
 export const buildSchema = <V extends string>(
->buildSchema : <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">[k]; } : never
-><V extends string>(  version: V): objectOutputType<{  version: ZodLiteral<V>;}> => ({} as any) : <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">[k]; } : never
+>buildSchema : <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: T[k]; } : never
+><V extends string>(  version: V): objectOutputType<{  version: ZodLiteral<V>;}> => ({} as any) : <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: T[k]; } : never
 
   version: V
 >version : V
@@ -81,7 +81,7 @@ type evaluate<t> = { [k in keyof t]: t[k] } & unknown
 >evaluate : { [k in keyof t]: t[k]; }
 
 export type entryOf<o> = evaluate<
->entryOf : { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never
+>entryOf : { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never
 
     { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
         ? keyof o & number
@@ -89,15 +89,15 @@ export type entryOf<o> = evaluate<
 >
 
 export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
->entriesOf : ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[]
+>entriesOf : ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
 
 export const entriesOf = <o extends object>(o: o) =>
->entriesOf : <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[]
-><o extends object>(o: o) =>    Object.entries(o) as entriesOf<o> : <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[]
+>entriesOf : <o extends object>(o: o) => ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
+><o extends object>(o: o) =>    Object.entries(o) as entriesOf<o> : <o extends object>(o: o) => ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
 >o : o
 
     Object.entries(o) as entriesOf<o>
->Object.entries(o) as entriesOf<o> : ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: { [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; } : never)[]
+>Object.entries(o) as entriesOf<o> : ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
 >Object.entries(o) : [string, any][]
 >Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
