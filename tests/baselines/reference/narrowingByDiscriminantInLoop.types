@@ -58,11 +58,11 @@ function insertInterface(callbackType: InterfaceType) {
         if (memberType.type === "const") {
 >memberType.type === "const" : boolean
 >                            : ^^^^^^^
->memberType.type : "operation" | "const"
+>memberType.type : "const" | "operation"
 >                : ^^^^^^^^^^^^^^^^^^^^^
 >memberType : IDLMemberTypes
 >           : ^^^^^^^^^^^^^^
->type : "operation" | "const"
+>type : "const" | "operation"
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >"const" : "const"
 >        : ^^^^^^^
@@ -133,11 +133,11 @@ function insertInterface2(callbackType: InterfaceType) {
         if (memberType.type === "operation") {
 >memberType.type === "operation" : boolean
 >                                : ^^^^^^^
->memberType.type : "operation" | "const"
+>memberType.type : "const" | "operation"
 >                : ^^^^^^^^^^^^^^^^^^^^^
 >memberType : IDLMemberTypes
 >           : ^^^^^^^^^^^^^^
->type : "operation" | "const"
+>type : "const" | "operation"
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >"operation" : "operation"
 >            : ^^^^^^^^^^^
@@ -166,11 +166,11 @@ function foo(memberType: IDLMemberTypes) {
     if (memberType.type === "const") {
 >memberType.type === "const" : boolean
 >                            : ^^^^^^^
->memberType.type : "operation" | "const"
+>memberType.type : "const" | "operation"
 >                : ^^^^^^^^^^^^^^^^^^^^^
 >memberType : IDLMemberTypes
 >           : ^^^^^^^^^^^^^^
->type : "operation" | "const"
+>type : "const" | "operation"
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >"const" : "const"
 >        : ^^^^^^^

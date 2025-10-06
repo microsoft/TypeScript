@@ -78,12 +78,12 @@ export class Argument extends Base {
      * @param {*} tokeniser
      */
     static parse(tokeniser: any): void;
+    idlType: any;
+    default: null;
     get type(): string;
     /**
      * @param {*} defs
      */
     validate(defs: any): Generator<never, void, unknown>;
-    idlType: any;
-    default: null;
 }
 import { Base } from "./base.js";

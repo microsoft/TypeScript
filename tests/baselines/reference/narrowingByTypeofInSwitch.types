@@ -144,7 +144,7 @@ function testUnion(x: Basic) {
 >  : ^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
 >  : ^^^^^
@@ -235,7 +235,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >  : ^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -325,7 +325,7 @@ function testAny(x: any) {
 >x : any
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
@@ -423,7 +423,7 @@ function testUnionExplicitDefault(x: Basic) {
 >  : ^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
 >  : ^^^^^
@@ -485,7 +485,7 @@ function testUnionImplicitDefault(x: Basic) {
 >  : ^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
 >  : ^^^^^
@@ -546,7 +546,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >  : ^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -609,7 +609,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >  : ^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -680,13 +680,13 @@ type R = { x: string, y: number }
 function exhaustiveChecks(x: number | string | L | R): string {
 >exhaustiveChecks : (x: number | string | L | R) => string
 >                 : ^ ^^                       ^^^^^      
->x : string | number | R | L
+>x : string | number | L | R
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number | R | L
+>x : string | number | L | R
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'number': return x.toString(2);
@@ -738,7 +738,7 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >  : ^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -800,7 +800,7 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 >   : ^^^^^
 
     switch (typeof xy) {
->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
 >   : ^^^^^
@@ -850,7 +850,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 >   : ^^^^^
 
     switch (typeof xy) {
->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
 >   : ^^^^^
@@ -892,7 +892,7 @@ function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, str
 >   : ^^^^^
 
     switch (typeof xy) {
->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
 >   : ^^^^^
@@ -934,7 +934,7 @@ function switchOrdering(x: string | number | boolean) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -998,7 +998,7 @@ function switchOrderingWithDefault(x: string | number | boolean) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1048,7 +1048,7 @@ function fallThroughTest(x: string | number | boolean | object) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean | object
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1114,7 +1114,7 @@ function unknownNarrowing(x: unknown) {
 >  : ^^^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
@@ -1204,7 +1204,7 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >   : ^^^^^^^
 
     switch (typeof k) {
->typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof k : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : keyof S
 >  : ^^^^^^^
@@ -1266,7 +1266,7 @@ function narrowingNarrows(x: {} | undefined) {
 >  : ^^^^^^^^^^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {} | undefined
 >  : ^^^^^^^^^^^^^^
@@ -1360,15 +1360,15 @@ function narrowingNarrows(x: {} | undefined) {
 function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >narrowingNarrows2 : (x: true | 3 | "hello" | undefined) => void
 >                  : ^ ^^                              ^^^^^^^^^
->x : true | 3 | "hello" | undefined
+>x : "hello" | 3 | true | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : true | 3 | "hello" | undefined
+>x : "hello" | 3 | true | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'number': assertNumber(x); return;
@@ -1474,7 +1474,7 @@ function testUnionWithTempalte(x: Basic) {
 >  : ^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
 >  : ^^^^^
@@ -1565,7 +1565,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean | object
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1637,7 +1637,7 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >   : ^^^^^^^
 
     switch (typeof k) {
->typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof k : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : keyof S
 >  : ^^^^^^^
@@ -1701,7 +1701,7 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 >   : ^^^^^
 
     switch (typeof xy) {
->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
 >   : ^^^^^

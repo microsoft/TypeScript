@@ -244,11 +244,11 @@ function area(s: Shape): number {
 >     : ^^^
 
     switch (s.kind) {
->s.kind : "square" | "rectangle" | "circle" | "triangle"
+>s.kind : "circle" | "rectangle" | "square" | "triangle"
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
->kind : "square" | "rectangle" | "circle" | "triangle"
+>kind : "circle" | "rectangle" | "square" | "triangle"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case "square": area = s.size * s.size; break;
@@ -391,11 +391,11 @@ function areaWrapped(s: Shape): number {
 >                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^
 
         switch (s.kind) {
->s.kind : "square" | "rectangle" | "circle" | "triangle"
+>s.kind : "circle" | "rectangle" | "square" | "triangle"
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
->kind : "square" | "rectangle" | "circle" | "triangle"
+>kind : "circle" | "rectangle" | "square" | "triangle"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             case "square": return s.size * s.size;
@@ -764,11 +764,11 @@ function withDefault(s1: Shape2, s2: Shape2): string {
 >   : ^^^^^^
 
     switch (s1.kind) {
->s1.kind : "square" | "circle"
+>s1.kind : "circle" | "square"
 >        : ^^^^^^^^^^^^^^^^^^^
 >s1 : Shape2
 >   : ^^^^^^
->kind : "square" | "circle"
+>kind : "circle" | "square"
 >     : ^^^^^^^^^^^^^^^^^^^
 
         case "square":
@@ -784,11 +784,11 @@ function withDefault(s1: Shape2, s2: Shape2): string {
 >         : ^^^^^^^^
 
             switch (s2.kind) {
->s2.kind : "square" | "circle"
+>s2.kind : "circle" | "square"
 >        : ^^^^^^^^^^^^^^^^^^^
 >s2 : Shape2
 >   : ^^^^^^
->kind : "square" | "circle"
+>kind : "circle" | "square"
 >     : ^^^^^^^^^^^^^^^^^^^
 
                 case "square":
@@ -824,11 +824,11 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 >   : ^^^^^^
 
     switch (s1.kind) {
->s1.kind : "square" | "circle"
+>s1.kind : "circle" | "square"
 >        : ^^^^^^^^^^^^^^^^^^^
 >s1 : Shape2
 >   : ^^^^^^
->kind : "square" | "circle"
+>kind : "circle" | "square"
 >     : ^^^^^^^^^^^^^^^^^^^
 
         case "square":
@@ -844,11 +844,11 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 >         : ^^^^^^^^
 
             switch (s2.kind) {
->s2.kind : "square" | "circle"
+>s2.kind : "circle" | "square"
 >        : ^^^^^^^^^^^^^^^^^^^
 >s2 : Shape2
 >   : ^^^^^^
->kind : "square" | "circle"
+>kind : "circle" | "square"
 >     : ^^^^^^^^^^^^^^^^^^^
 
                 case "square":

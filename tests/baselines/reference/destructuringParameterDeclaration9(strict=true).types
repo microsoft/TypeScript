@@ -6,7 +6,7 @@
  * @param {Partial<Record<'json' | 'jsonc' | 'json5', string[]>>} [config.additionalFiles]
  */
 export function prepareConfig({
->prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined;}) => void
+>prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined;}) => void
 >              : ^                             ^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 
     additionalFiles: {

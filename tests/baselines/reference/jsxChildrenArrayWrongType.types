@@ -11,7 +11,7 @@ Type Count: 1,000
 
 interface PropsType {
     children: [string, number] | boolean[];
->children : [string, number] | boolean[]
+>children : boolean[] | [string, number]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare class Foo extends React.Component<PropsType, {}> {}

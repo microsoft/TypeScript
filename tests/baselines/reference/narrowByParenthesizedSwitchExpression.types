@@ -3,7 +3,7 @@
 === narrowByParenthesizedSwitchExpression.ts ===
 interface Base {
   type: "foo" | "bar";
->type : "foo" | "bar"
+>type : "bar" | "foo"
 >     : ^^^^^^^^^^^^^
 }
 
@@ -37,21 +37,21 @@ function getV(): Foo | Bar {
 }
 
 const v = getV();
->v : Foo | Bar
+>v : Bar | Foo
 >  : ^^^^^^^^^
->getV() : Foo | Bar
+>getV() : Bar | Foo
 >       : ^^^^^^^^^
 >getV : () => Foo | Bar
 >     : ^^^^^^         
 
 switch ((v.type)) {
->(v.type) : "foo" | "bar"
+>(v.type) : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
->v.type : "foo" | "bar"
+>v.type : "bar" | "foo"
 >       : ^^^^^^^^^^^^^
->v : Foo | Bar
+>v : Bar | Foo
 >  : ^^^^^^^^^
->type : "foo" | "bar"
+>type : "bar" | "foo"
 >     : ^^^^^^^^^^^^^
 
   case "bar":

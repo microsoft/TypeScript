@@ -58,7 +58,7 @@ var c: C;
 if (typeof strOrNum === "number") {
 >typeof strOrNum === "number" : boolean
 >                             : ^^^^^^^
->typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNum : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -85,7 +85,7 @@ else {
 if (typeof numOrBool === "number") {
 >typeof numOrBool === "number" : boolean
 >                              : ^^^^^^^
->typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof numOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrBool : number | boolean
 >          : ^^^^^^^^^^^^^^^^
@@ -110,7 +110,7 @@ else {
 if (typeof strOrNumOrBool === "number") {
 >typeof strOrNumOrBool === "number" : boolean
 >                                   : ^^^^^^^
->typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -137,7 +137,7 @@ else {
 if (typeof numOrC === "number") {
 >typeof numOrC === "number" : boolean
 >                           : ^^^^^^^
->typeof numOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof numOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrC : number | C
 >       : ^^^^^^^^^^
@@ -165,7 +165,7 @@ else {
 if (typeof strOrBool === "number") {
 >typeof strOrBool === "number" : boolean
 >                              : ^^^^^^^
->typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrBool : string | boolean
 >          : ^^^^^^^^^^^^^^^^
@@ -192,7 +192,7 @@ else {
 if (typeof strOrNum !== "number") {
 >typeof strOrNum !== "number" : boolean
 >                             : ^^^^^^^
->typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNum : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -219,7 +219,7 @@ else {
 if (typeof numOrBool !== "number") {
 >typeof numOrBool !== "number" : boolean
 >                              : ^^^^^^^
->typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof numOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrBool : number | boolean
 >          : ^^^^^^^^^^^^^^^^
@@ -244,7 +244,7 @@ else {
 if (typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "number" : boolean
 >                                   : ^^^^^^^
->typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -271,7 +271,7 @@ else {
 if (typeof numOrC !== "number") {
 >typeof numOrC !== "number" : boolean
 >                           : ^^^^^^^
->typeof numOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof numOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrC : number | C
 >       : ^^^^^^^^^^
@@ -299,7 +299,7 @@ else {
 if (typeof strOrBool !== "number") {
 >typeof strOrBool !== "number" : boolean
 >                              : ^^^^^^^
->typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrBool : string | boolean
 >          : ^^^^^^^^^^^^^^^^

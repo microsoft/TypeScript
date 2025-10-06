@@ -41,7 +41,7 @@ function attr(nameOrMap: any, value?: string): any {
 >          : ^^^
 >typeof nameOrMap === "object" : boolean
 >                              : ^^^^^^^
->typeof nameOrMap : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof nameOrMap : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nameOrMap : any
 >          : ^^^
@@ -99,7 +99,7 @@ function attr2(nameOrMap: any, value?: string): string {
 >          : ^^^
 >typeof nameOrMap === "object" : boolean
 >                              : ^^^^^^^
->typeof nameOrMap : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof nameOrMap : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nameOrMap : any
 >          : ^^^

@@ -2,7 +2,7 @@ mappedTypeErrors.ts(19,20): error TS2313: Type parameter 'P' has a circular cons
 mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
 mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
 mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
-mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
+mappedTypeErrors.ts(26,24): error TS2344: Type '"foo" | "name"' does not satisfy the constraint 'keyof Shape'.
   Type '"foo"' is not assignable to type 'keyof Shape'.
 mappedTypeErrors.ts(28,24): error TS2344: Type 'keyof Point' does not satisfy the constraint 'keyof Shape'.
   Type '"x"' is not assignable to type 'keyof Shape'.
@@ -68,7 +68,7 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
 !!! error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
     type T12 = Pick<Shape, "name" | "foo">;  // Error
                            ~~~~~~~~~~~~~~
-!!! error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344: Type '"foo" | "name"' does not satisfy the constraint 'keyof Shape'.
 !!! error TS2344:   Type '"foo"' is not assignable to type 'keyof Shape'.
     type T13 = Pick<Shape, keyof Named>;
     type T14 = Pick<Shape, keyof Point>;  // Error

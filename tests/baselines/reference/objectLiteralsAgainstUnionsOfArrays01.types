@@ -3,7 +3,7 @@
 === objectLiteralsAgainstUnionsOfArrays01.ts ===
 interface Foo {
   bar: Bar | Bar[];
->bar : Bar | Bar[]
+>bar : Bar[] | Bar
 >    : ^^^^^^^^^^^
 }
 

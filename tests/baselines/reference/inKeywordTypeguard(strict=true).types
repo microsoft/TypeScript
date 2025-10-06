@@ -751,7 +751,7 @@ function f1(x: unknown) {
 >  : ^^^^^^^
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
 >  : ^^
@@ -785,7 +785,7 @@ function f1(x: unknown) {
 >  : ^^^^^^^
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
 >  : ^^
@@ -959,7 +959,7 @@ function f3<T>(x: T) {
 >  : ^
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : NonNullable<T>
 >  : ^^^^^^^^^^^^^^
@@ -993,7 +993,7 @@ function f3<T>(x: T) {
 >  : ^
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : NonNullable<T>
 >  : ^^^^^^^^^^^^^^
@@ -1604,7 +1604,7 @@ function foo<A>(value: A) {
 >                                            : ^^^^^^^
 >typeof value === "object" : boolean
 >                          : ^^^^^^^
->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : A
 >      : ^
@@ -1612,7 +1612,7 @@ function foo<A>(value: A) {
 >         : ^^^^^^^^
 >value !== null : boolean
 >               : ^^^^^^^
->value : (A & object) | (A & null)
+>value : (A & null) | (A & object)
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"prop" in value : boolean
 >                : ^^^^^^^

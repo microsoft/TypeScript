@@ -26,7 +26,7 @@ type N = { d: "n"; cb: (x: number) => void };
 declare function foo(foo: S | N): void;
 >foo : (foo: S | N) => void
 >    : ^   ^^     ^^^^^    
->foo : S | N
+>foo : N | S
 >    : ^^^^^
 
 foo({

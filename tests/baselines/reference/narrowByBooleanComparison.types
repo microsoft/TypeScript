@@ -222,7 +222,7 @@ function test3(foo: unknown) {
 >                                                        : ^^^^^^^
 >typeof foo !== 'string' : boolean
 >                        : ^^^^^^^
->typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : unknown
 >    : ^^^^^^^
@@ -420,7 +420,7 @@ function isFunction(x: unknown): x is Function {
     return typeof x === "function";
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^

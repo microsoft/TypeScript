@@ -109,7 +109,7 @@
 
     const {
         param = (() => { foo = undefined })(),
->param : string | void
+>param : void | string
 >      : ^^^^^^^^^^^^^
 >(() => { foo = undefined })() : void
 >                              : ^^^^

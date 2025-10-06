@@ -24,11 +24,11 @@ let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? 
 >         : ^ ^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
->x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
+>x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "idk" | "no" | "yes"
 >                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->(x === 'yes' || x === 'no') ? x : 'idk' : "yes" | "no" | "idk"
+>(x === 'yes' || x === 'no') ? x : 'idk' : "idk" | "no" | "yes"
 >                                        : ^^^^^^^^^^^^^^^^^^^^
 >(x === 'yes' || x === 'no') : boolean
 >                            : ^^^^^^^
@@ -46,7 +46,7 @@ let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? 
 >  : ^^^^^^^
 >'no' : "no"
 >     : ^^^^
->x : "yes" | "no"
+>x : "no" | "yes"
 >  : ^^^^^^^^^^^^
 >'idk' : "idk"
 >      : ^^^^^
@@ -865,7 +865,7 @@ function switchResponse(x: unknown): SomeResponse {
 >      : ^^^^^
 
             return x;
->x : "yes" | "no" | "idk"
+>x : "idk" | "no" | "yes"
 >  : ^^^^^^^^^^^^^^^^^^^^
 
         default:
@@ -908,7 +908,7 @@ function switchResponseWrong(x: unknown): SomeResponse {
 >        : ^^^^^^^
 
             return x; // error
->x : "yes" | "no" | "maybe"
+>x : "maybe" | "no" | "yes"
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
         default:
@@ -947,7 +947,7 @@ function f2(x: unknown): string | undefined {
 >          : ^^^^^^^^^
 >typeof x !== 'string' : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {} | null
 >  : ^^^^^^^^^

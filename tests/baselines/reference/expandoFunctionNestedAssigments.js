@@ -116,9 +116,9 @@ declare namespace Foo {
     var fromDoCondition: number;
     var forInit: number;
     var forCond: number;
+    var forIncr: number;
     var fromForBody: number;
     var fromForBodyNested: number;
-    var forIncr: number;
     var forOf: any[];
     var fromForOfBody: number;
     var fromForOfBodyNested: number;

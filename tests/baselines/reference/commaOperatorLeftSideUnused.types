@@ -10,7 +10,7 @@ var yy: any;
 >   : ^^^
 
 function fn() {
->fn : () => "zero or one" | "more than one"
+>fn : () => "more than one" | "zero or one"
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   let arr: any[] = [];
@@ -267,7 +267,7 @@ xx = (typeof xx, 'unused');
 >                      : ^^^^^^^^
 >typeof xx, 'unused' : "unused"
 >                    : ^^^^^^^^
->typeof xx : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof xx : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xx : any
 >   : ^^^

@@ -26,7 +26,7 @@ import * as  while from "foo"
 >      : ^^^^^
 
 var typeof = 10;
->typeof : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : any
 > : ^^^

@@ -570,8 +570,8 @@ function ff2(value: { [index: number]: boolean, length: number } | string) {
 function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
 >ff3 : (value: string | string[] | { [index: number]: boolean; length: number; } | [number, boolean] | number | { length: string; } | { a: string; } | null | undefined) => void
 >    : ^     ^^                                                                                                                                                        ^^^^^^^^^
->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
 >length : number
@@ -586,12 +586,12 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 >                   : ^^^^^^^
 >isArrayLike : (value: any) => value is { length: number; }
 >            : ^     ^^   ^^^^^                            
->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         value;
->value : string | { [index: number]: boolean; length: number; } | [number, boolean] | string[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | string[] | { [index: number]: boolean; length: number; } | [number, boolean]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         value;
@@ -599,8 +599,8 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 >      : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
     }
     value;
->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from comment in #52984

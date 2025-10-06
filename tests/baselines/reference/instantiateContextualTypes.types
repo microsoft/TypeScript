@@ -491,7 +491,7 @@ class Interesting {
 >                                                                                                                                   : ^^^^^^               
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"ELSE" | "SOMETHING">
 >                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -505,7 +505,7 @@ class Interesting {
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "SOMETHING" | "ELSE"
+>() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "ELSE" | "SOMETHING"
 >                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 			if (1 < 2) {
@@ -533,7 +533,7 @@ class Interesting {
 >                                                                                         : ^^^^^^               
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
+>Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"ELSE" | "SOMETHING">
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -563,7 +563,7 @@ class Interesting {
 >                                                                                                                                        : ^^^^^^               
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"SOMETHING" | "ELSE">
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"ELSE" | "SOMETHING">
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

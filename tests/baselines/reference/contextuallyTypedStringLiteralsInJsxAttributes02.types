@@ -25,7 +25,7 @@ export interface ButtonProps extends ClickableProps {
 
 export interface LinkProps extends ClickableProps {
     goTo: "home" | "contact";
->goTo : "home" | "contact"
+>goTo : "contact" | "home"
 >     : ^^^^^^^^^^^^^^^^^^
 }
 
@@ -62,11 +62,11 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     if(linkProps.goTo) {
->linkProps.goTo : "home" | "contact"
+>linkProps.goTo : "contact" | "home"
 >               : ^^^^^^^^^^^^^^^^^^
 >linkProps : LinkProps
 >          : ^^^^^^^^^
->goTo : "home" | "contact"
+>goTo : "contact" | "home"
 >     : ^^^^^^^^^^^^^^^^^^
 
         return this._buildMainLink(props);

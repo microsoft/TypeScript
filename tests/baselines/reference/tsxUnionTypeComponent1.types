@@ -7,7 +7,7 @@ import React = require('react');
 
 interface ComponentProps {
     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+>AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
 >      : ^^^
@@ -30,7 +30,7 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 >       : ^^^^^^^^^^^^^^^^^
 
         const { AnyComponent } = this.props;
->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+>AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : ComponentProps & { children?: React.ReactNode; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -44,7 +44,7 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 >                   : ^^^^^^^^^^^
 ><AnyComponent /> : JSX.Element
 >                 : ^^^^^^^^^^^
->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+>AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

@@ -411,7 +411,7 @@ class C4 implements F2 {
 >  : ^^^
 
     d4({x, y, c}) { }
->d4 : ({ x, y, c }: { x: any; y: any; c: any; }) => void
+>d4 : ({ x, y, c }: { c: any; x: any; y: any; }) => void
 >   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^

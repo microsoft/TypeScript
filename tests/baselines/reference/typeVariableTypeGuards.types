@@ -301,7 +301,7 @@ function f6<T extends string | (new () => {})>(a: T) {
   if (typeof a !== "string") {
 >typeof a !== "string" : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^

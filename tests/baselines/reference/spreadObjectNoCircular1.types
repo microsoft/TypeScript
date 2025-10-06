@@ -6,7 +6,7 @@ type Box = {
 >    : ^^^
 
   content?: Foo | Box;
->content : Foo | Box | undefined
+>content : Box | Foo | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^
 
 };
@@ -28,9 +28,9 @@ class Foo {
 >                                                   : ^^^^^^^^^^^         ^^^
 
       content: this as Foo | Box,
->content : Foo | Box
+>content : Box | Foo
 >        : ^^^^^^^^^
->this as Foo | Box : Foo | Box
+>this as Foo | Box : Box | Foo
 >                  : ^^^^^^^^^
 >this : this
 >     : ^^^^

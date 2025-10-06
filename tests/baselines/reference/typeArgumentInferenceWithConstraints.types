@@ -674,9 +674,9 @@ interface A92 {
 >  : ^^^^^^
 }
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { z?: undefined; x: number; y: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { z?: undefined; x: number; y: string; }
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
@@ -704,7 +704,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >   : ^^
 
 var a9e: {};
->a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { z?: undefined; x: number; y: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });

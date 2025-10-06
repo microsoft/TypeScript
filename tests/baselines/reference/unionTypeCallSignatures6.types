@@ -53,13 +53,13 @@ f1(); // error
 >   : ^^^^^^^
 
 declare var f2: F0 | F1;
->f2 : F1 | F0
+>f2 : F0 | F1
 >   : ^^^^^^^
 
 f2(); // error
 >f2() : void
 >     : ^^^^
->f2 : F1 | F0
+>f2 : F0 | F1
 >   : ^^^^^^^
 
 interface F3 {

@@ -382,7 +382,7 @@ function example(x: Union) {
 function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
 >checksArrayOrObject1 : (obj: Record<string, any> | Record<string, any>[]) => void
 >                     : ^   ^^                                           ^^^^^^^^^
->obj : Record<string, any> | Record<string, any>[]
+>obj : Record<string, any>[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // "accidentally" guards the first branch on the length
@@ -397,7 +397,7 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->obj : Record<string, any> | Record<string, any>[]
+>obj : Record<string, any>[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.length : number
 >           : ^^^^^^
@@ -485,7 +485,7 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
 >checksArrayOrObject2 : (obj: Record<string, any> | Record<string, any>[]) => void
 >                     : ^   ^^                                           ^^^^^^^^^
->obj : Record<string, any> | Record<string, any>[]
+>obj : Record<string, any>[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (Array.isArray(obj)) {
@@ -497,7 +497,7 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->obj : Record<string, any> | Record<string, any>[]
+>obj : Record<string, any>[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         // obj should only be an array type here

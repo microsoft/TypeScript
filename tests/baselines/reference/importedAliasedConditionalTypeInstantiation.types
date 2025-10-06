@@ -111,7 +111,7 @@ import { Handler } from 'aws-lambda';
 >        : ^^^
 
 type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
->Actual : lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error> | lambdaTester.VerifierFn<any>
+>Actual : lambdaTester.VerifierFn<any> | lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lambdaTester : any
 >             : ^^^
@@ -119,7 +119,7 @@ type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
 >             : ^^^
 
 type Expected = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler<any, any>>>;
->Expected : lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error> | lambdaTester.VerifierFn<any>
+>Expected : lambdaTester.VerifierFn<any> | lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lambdaTester : any
 >             : ^^^

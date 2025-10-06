@@ -63,9 +63,9 @@ var xs = [list, myList]; // {}[]
 >       : ^^^^^^^^^^^^^^
 
 var ys = [list, list2]; // {}[]
->ys : (List<number> | List<string>)[]
+>ys : (List<string> | List<number>)[]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->[list, list2] : (List<number> | List<string>)[]
+>[list, list2] : (List<string> | List<number>)[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >list : List<number>
 >     : ^^^^^^^^^^^^

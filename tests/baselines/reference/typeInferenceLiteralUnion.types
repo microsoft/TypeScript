@@ -63,7 +63,7 @@ class NumCoercible {
 export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
 >extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
 >       : ^ ^^^^^^^^^       ^^     ^^                    ^^^^^                                                       
->array : (Primitive | T)[]
+>array : (T | Primitive)[]
 >      : ^^^^^^^^^^^^^^^^^
 
     return [undefined, undefined];
@@ -77,15 +77,15 @@ export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Pri
 
 
 let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefined, undefined];
->extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>extentMixed : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
->extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>extentMixed : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
 >       : ^ ^^^^^^^^^       ^^     ^^                    ^^^^^                                                       

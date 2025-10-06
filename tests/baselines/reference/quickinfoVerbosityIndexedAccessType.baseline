@@ -10,7 +10,7 @@
 // 	const value: T[K2] = undefined as any;
 //        ^^^^^
 // | ----------------------------------------------------------------------
-// | const value: T["string key" | "any key"]
+// | const value: T["any key" | "string key"]
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //        ^^^^^
@@ -137,7 +137,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "\"string key\"",
+          "text": "\"any key\"",
           "kind": "stringLiteral"
         },
         {
@@ -153,7 +153,7 @@
           "kind": "space"
         },
         {
-          "text": "\"any key\"",
+          "text": "\"string key\"",
           "kind": "stringLiteral"
         },
         {

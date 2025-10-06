@@ -2618,7 +2618,7 @@
 // | interface ClassDecoratorContext<Class extends abstract new (...args: any) => any = abstract new (...args: any) => any>
 // | interface ClassFieldDecoratorContext<This = unknown, Value = unknown>
 // | interface ClassGetterDecoratorContext<This = unknown, Value = unknown>
-// | type ClassMemberDecoratorContext = ClassMethodDecoratorContext<unknown, (this: unknown, ...args: any) => any> | ClassGetterDecoratorContext<unknown, unknown> | ClassSetterDecoratorContext<unknown, unknown> | ClassFieldDecoratorContext<...> | ClassAccessorDecoratorContext<...>
+// | type ClassMemberDecoratorContext = ClassAccessorDecoratorContext<unknown, unknown> | ClassFieldDecoratorContext<unknown, unknown> | ClassGetterDecoratorContext<unknown, unknown> | ClassMethodDecoratorContext<...> | ClassSetterDecoratorContext<...>
 // | interface ClassMethodDecoratorContext<This = unknown, Value extends (this: This, ...args: any) => any = (this: This, ...args: any) => any>
 // | interface ClassSetterDecoratorContext<This = unknown, Value = unknown>
 // | interface ConcatArray<T>
@@ -2629,7 +2629,7 @@
 // | interface Date
 // | var Date: DateConstructor
 // | interface DateConstructor
-// | type DecoratorContext = ClassMemberDecoratorContext | ClassDecoratorContext<abstract new (...args: any) => any>
+// | type DecoratorContext = ClassDecoratorContext<abstract new (...args: any) => any> | ClassMemberDecoratorContext
 // | type DecoratorMetadata = Record<PropertyKey, unknown> & object
 // | type DecoratorMetadataObject = Record<PropertyKey, unknown> & object
 // | interface Error
@@ -2798,7 +2798,7 @@
 // | interface ClassDecoratorContext<Class extends abstract new (...args: any) => any = abstract new (...args: any) => any>
 // | interface ClassFieldDecoratorContext<This = unknown, Value = unknown>
 // | interface ClassGetterDecoratorContext<This = unknown, Value = unknown>
-// | type ClassMemberDecoratorContext = ClassMethodDecoratorContext<unknown, (this: unknown, ...args: any) => any> | ClassGetterDecoratorContext<unknown, unknown> | ClassSetterDecoratorContext<unknown, unknown> | ClassFieldDecoratorContext<...> | ClassAccessorDecoratorContext<...>
+// | type ClassMemberDecoratorContext = ClassAccessorDecoratorContext<unknown, unknown> | ClassFieldDecoratorContext<unknown, unknown> | ClassGetterDecoratorContext<unknown, unknown> | ClassMethodDecoratorContext<...> | ClassSetterDecoratorContext<...>
 // | interface ClassMethodDecoratorContext<This = unknown, Value extends (this: This, ...args: any) => any = (this: This, ...args: any) => any>
 // | interface ClassSetterDecoratorContext<This = unknown, Value = unknown>
 // | interface ConcatArray<T>
@@ -2809,7 +2809,7 @@
 // | interface Date
 // | var Date: DateConstructor
 // | interface DateConstructor
-// | type DecoratorContext = ClassMemberDecoratorContext | ClassDecoratorContext<abstract new (...args: any) => any>
+// | type DecoratorContext = ClassDecoratorContext<abstract new (...args: any) => any> | ClassMemberDecoratorContext
 // | type DecoratorMetadata = Record<PropertyKey, unknown> & object
 // | type DecoratorMetadataObject = Record<PropertyKey, unknown> & object
 // | interface Error
@@ -76147,7 +76147,7 @@
               "kind": "space"
             },
             {
-              "text": "ClassMethodDecoratorContext",
+              "text": "ClassAccessorDecoratorContext",
               "kind": "interfaceName"
             },
             {
@@ -76167,20 +76167,32 @@
               "kind": "space"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
+              "text": "unknown",
+              "kind": "keyword"
             },
             {
-              "text": "this",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
+              "text": ">",
               "kind": "punctuation"
             },
             {
               "text": " ",
               "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ClassFieldDecoratorContext",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
             },
             {
               "text": "unknown",
@@ -76195,43 +76207,7 @@
               "kind": "space"
             },
             {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "args",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
+              "text": "unknown",
               "kind": "keyword"
             },
             {
@@ -76291,47 +76267,7 @@
               "kind": "space"
             },
             {
-              "text": "ClassSetterDecoratorContext",
-              "kind": "interfaceName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ClassFieldDecoratorContext",
+              "text": "ClassMethodDecoratorContext",
               "kind": "interfaceName"
             },
             {
@@ -76359,7 +76295,7 @@
               "kind": "space"
             },
             {
-              "text": "ClassAccessorDecoratorContext",
+              "text": "ClassSetterDecoratorContext",
               "kind": "interfaceName"
             },
             {
@@ -77253,22 +77189,6 @@
               "kind": "space"
             },
             {
-              "text": "ClassMemberDecoratorContext",
-              "kind": "aliasName"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
               "text": "ClassDecoratorContext",
               "kind": "interfaceName"
             },
@@ -77339,6 +77259,22 @@
             {
               "text": ">",
               "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ClassMemberDecoratorContext",
+              "kind": "aliasName"
             }
           ],
           "documentation": [
@@ -85618,7 +85554,7 @@
               "kind": "space"
             },
             {
-              "text": "ClassMethodDecoratorContext",
+              "text": "ClassAccessorDecoratorContext",
               "kind": "interfaceName"
             },
             {
@@ -85638,20 +85574,32 @@
               "kind": "space"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
+              "text": "unknown",
+              "kind": "keyword"
             },
             {
-              "text": "this",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
+              "text": ">",
               "kind": "punctuation"
             },
             {
               "text": " ",
               "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ClassFieldDecoratorContext",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
             },
             {
               "text": "unknown",
@@ -85666,43 +85614,7 @@
               "kind": "space"
             },
             {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "args",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
+              "text": "unknown",
               "kind": "keyword"
             },
             {
@@ -85762,47 +85674,7 @@
               "kind": "space"
             },
             {
-              "text": "ClassSetterDecoratorContext",
-              "kind": "interfaceName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ClassFieldDecoratorContext",
+              "text": "ClassMethodDecoratorContext",
               "kind": "interfaceName"
             },
             {
@@ -85830,7 +85702,7 @@
               "kind": "space"
             },
             {
-              "text": "ClassAccessorDecoratorContext",
+              "text": "ClassSetterDecoratorContext",
               "kind": "interfaceName"
             },
             {
@@ -86724,22 +86596,6 @@
               "kind": "space"
             },
             {
-              "text": "ClassMemberDecoratorContext",
-              "kind": "aliasName"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
               "text": "ClassDecoratorContext",
               "kind": "interfaceName"
             },
@@ -86810,6 +86666,22 @@
             {
               "text": ">",
               "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ClassMemberDecoratorContext",
+              "kind": "aliasName"
             }
           ],
           "documentation": [

@@ -32,13 +32,13 @@ map4.__underscores__();
 declare function Multimap4(): void;
 declare class Multimap4 {
     _map: {};
-    "add-on"(): void;
-    addon(): void;
-    __underscores__(): void;
     /**
      * @param {string} key
      * @returns {number} the value ok
      */
     get(key: string): number;
+    "add-on"(): void;
+    addon(): void;
+    __underscores__(): void;
 }
 declare const map4: Multimap4;

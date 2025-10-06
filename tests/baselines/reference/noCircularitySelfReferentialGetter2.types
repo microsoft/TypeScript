@@ -3,7 +3,7 @@
 === noCircularitySelfReferentialGetter2.ts ===
 interface ZodType {
   optional: "true" | "false";
->optional : "true" | "false"
+>optional : "false" | "true"
 >         : ^^^^^^^^^^^^^^^^
 
   output: any;
@@ -121,27 +121,27 @@ export const name = Category.output.parent?.parent?.parent?.parent?.name;
 >     : ^^^^^^^^^^^^^^^^^^
 >Category.output.parent?.parent?.parent?.parent?.name : string | undefined
 >                                                     : ^^^^^^^^^^^^^^^^^^
->Category.output.parent?.parent?.parent?.parent : { readonly parent?: any | undefined; name: string; } | undefined
+>Category.output.parent?.parent?.parent?.parent : { name: string; readonly parent?: any | undefined; } | undefined
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Category.output.parent?.parent?.parent : { readonly parent?: any | undefined; name: string; } | undefined
+>Category.output.parent?.parent?.parent : { name: string; readonly parent?: any | undefined; } | undefined
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Category.output.parent?.parent : { readonly parent?: any | undefined; name: string; } | undefined
+>Category.output.parent?.parent : { name: string; readonly parent?: any | undefined; } | undefined
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Category.output.parent : { readonly parent?: any | undefined; name: string; } | undefined
+>Category.output.parent : { name: string; readonly parent?: any | undefined; } | undefined
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Category.output : { readonly parent?: any | undefined; name: string; }
+>Category.output : { name: string; readonly parent?: any | undefined; }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Category : ZodObject<{ name: ZodString; readonly parent: ZodOptional<ZodObject<any>>; }>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->output : { readonly parent?: any | undefined; name: string; }
+>output : { name: string; readonly parent?: any | undefined; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->parent : { readonly parent?: any | undefined; name: string; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->parent : { readonly parent?: any | undefined; name: string; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->parent : { readonly parent?: any | undefined; name: string; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->parent : { readonly parent?: any | undefined; name: string; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
