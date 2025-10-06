@@ -19,8 +19,8 @@ export declare class Foo {
         x: number;
         y?: undefined;
     } | {
-        y: string;
         x?: undefined;
+        y: string;
     };
 }
 export interface SomeType {
@@ -406,4 +406,427 @@ Info seq  [hh:mm:ss:mss] response:
         "emitSkipped": false,
         "diagnostics": []
       }
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 3,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/mymodule.ts"
+      },
+      "command": "open"
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/mymodule.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/workspaces/project/mymodule.ts",
+        "configFile": "/home/src/workspaces/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/dist 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/dist 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/dist/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/dist/index.d.ts Text-1 "export declare class Foo {\n    member: string;\n    methodName(propName: SomeType): SomeType;\n    otherMethod(): {\n        x: number;\n        y?: undefined;\n    } | {\n        x?: undefined;\n        y: string;\n    };\n}\nexport interface SomeType {\n    member: number;\n}\n//# sourceMappingURL=index.d.ts.map"
+	/home/src/workspaces/project/mymodule.ts SVC-1-0 "import * as mod from \"/home/src/workspaces/project/dist/index\";\nconst instance = new mod.Foo();\ninstance.methodName({member: 12});"
+
+
+	../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
+	dist/index.d.ts
+	  Imported via "/home/src/workspaces/project/dist/index" from file 'mymodule.ts'
+	mymodule.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/mymodule.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
+After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/dist/index.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/dist: *new*
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+  {} *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/workspaces/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/home/src/workspaces/project/dist/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/home/src/workspaces/project/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/mymodule.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/home/src/workspaces/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 4,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/mymodule.ts",
+        "line": 3,
+        "offset": 10
+      },
+      "command": "implementation"
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/dist/index.d.ts.map 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "implementation",
+      "request_seq": 4,
+      "success": true,
+      "body": [
+        {
+          "file": "/home/src/workspaces/project/index.ts",
+          "start": {
+            "line": 3,
+            "offset": 5
+          },
+          "end": {
+            "line": 3,
+            "offset": 15
+          },
+          "contextStart": {
+            "line": 3,
+            "offset": 5
+          },
+          "contextEnd": {
+            "line": 4,
+            "offset": 5
+          }
+        }
+      ]
+    }
+After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/dist/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/dist/index.d.ts.map: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+  {}
+/home/src/workspaces/project/dist:
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /home/src/workspaces/project/dist/index.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
+/home/src/workspaces/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/home/src/workspaces/project/dist/index.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: /home/src/workspaces/project/dist/index.d.ts.map *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/home/src/workspaces/project/dist/index.d.ts.map *new*
+    version: Text-1
+    declarationInfoPath: /home/src/workspaces/project/dist/index.d.ts
+    sourceInfos: 1
+        /home/src/workspaces/project/index.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/home/src/workspaces/project/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/mymodule.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/home/src/workspaces/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 5,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/mymodule.ts",
+        "line": 3,
+        "offset": 10
+      },
+      "command": "typeDefinition"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "typeDefinition",
+      "request_seq": 5,
+      "success": true,
+      "body": [
+        {
+          "file": "/home/src/workspaces/project/index.ts",
+          "start": {
+            "line": 12,
+            "offset": 18
+          },
+          "end": {
+            "line": 12,
+            "offset": 26
+          },
+          "contextStart": {
+            "line": 12,
+            "offset": 1
+          },
+          "contextEnd": {
+            "line": 14,
+            "offset": 2
+          }
+        }
+      ]
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 6,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/mymodule.ts",
+        "line": 3,
+        "offset": 10
+      },
+      "command": "definitionAndBoundSpan"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "definitionAndBoundSpan",
+      "request_seq": 6,
+      "success": true,
+      "body": {
+        "definitions": [
+          {
+            "file": "/home/src/workspaces/project/index.ts",
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 15
+            },
+            "contextStart": {
+              "line": 3,
+              "offset": 5
+            },
+            "contextEnd": {
+              "line": 4,
+              "offset": 5
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 3,
+            "offset": 10
+          },
+          "end": {
+            "line": 3,
+            "offset": 20
+          }
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 7,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/mymodule.ts",
+        "line": 3,
+        "offset": 10
+      },
+      "command": "definition"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "definition",
+      "request_seq": 7,
+      "success": true,
+      "body": [
+        {
+          "file": "/home/src/workspaces/project/index.ts",
+          "start": {
+            "line": 3,
+            "offset": 5
+          },
+          "end": {
+            "line": 3,
+            "offset": 15
+          },
+          "contextStart": {
+            "line": 3,
+            "offset": 5
+          },
+          "contextEnd": {
+            "line": 4,
+            "offset": 5
+          }
+        }
+      ]
     }
