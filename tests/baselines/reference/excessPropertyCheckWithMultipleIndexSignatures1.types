@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleIndexSignatures1.ts] ////
+
+=== excessPropertyCheckWithMultipleIndexSignatures1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58442
+
+interface ITopType {
+  tKey: string;
+>tKey : string
+>     : ^^^^^^
+}
+
+interface ISubType extends ITopType {
+  sKey: string;
+>sKey : string
+>     : ^^^^^^
+}
+
+interface ITestInteface {
+  [pA: string]: ITopType;
+>pA : string
+>   : ^^^^^^
+
+  [pB: number]: ISubType;
+>pB : number
+>   : ^^^^^^
+}
+
+const testObj1: ITestInteface = {
+>testObj1 : ITestInteface
+>         : ^^^^^^^^^^^^^
+>{  a: { tKey: "tVal" },  1: { tKey: "tVal", sKey: "sVal" },} : { a: { tKey: string; }; 1: { tKey: string; sKey: string; }; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: { tKey: "tVal" },
+>a : { tKey: string; }
+>  : ^^^^^^^^^^^^^^^^^
+>{ tKey: "tVal" } : { tKey: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>tKey : string
+>     : ^^^^^^
+>"tVal" : "tVal"
+>       : ^^^^^^
+
+  1: { tKey: "tVal", sKey: "sVal" },
+>1 : { tKey: string; sKey: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ tKey: "tVal", sKey: "sVal" } : { tKey: string; sKey: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tKey : string
+>     : ^^^^^^
+>"tVal" : "tVal"
+>       : ^^^^^^
+>sKey : string
+>     : ^^^^^^
+>"sVal" : "sVal"
+>       : ^^^^^^
+
+};
+
+const testObj1_2: ITestInteface = {
+>testObj1_2 : ITestInteface
+>           : ^^^^^^^^^^^^^
+>{  a: { tKey: "tVal" },  1: { tKey: "tVal", sKey: "sVal", extra: "val3" },} : { a: { tKey: string; }; 1: { tKey: string; sKey: string; extra: string; }; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: { tKey: "tVal" },
+>a : { tKey: string; }
+>  : ^^^^^^^^^^^^^^^^^
+>{ tKey: "tVal" } : { tKey: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>tKey : string
+>     : ^^^^^^
+>"tVal" : "tVal"
+>       : ^^^^^^
+
+  1: { tKey: "tVal", sKey: "sVal", extra: "val3" },
+>1 : { tKey: string; sKey: string; extra: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ tKey: "tVal", sKey: "sVal", extra: "val3" } : { tKey: string; sKey: string; extra: string; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tKey : string
+>     : ^^^^^^
+>"tVal" : "tVal"
+>       : ^^^^^^
+>sKey : string
+>     : ^^^^^^
+>"sVal" : "sVal"
+>       : ^^^^^^
+>extra : string
+>      : ^^^^^^
+>"val3" : "val3"
+>       : ^^^^^^
+
+};
+
+interface ITopType_2 {
+  tKey_2: string;
+>tKey_2 : string
+>       : ^^^^^^
+}
+
+interface ISubType_2 extends ITopType_2 {
+  sKey_2: string;
+>sKey_2 : string
+>       : ^^^^^^
+}
+
+interface ITestInteface_2 {
+  [pA_2: string]: ITopType_2;
+>pA_2 : string
+>     : ^^^^^^
+
+  [pB_2: `sub_${string}`]: ISubType_2;
+>pB_2 : `sub_${string}`
+>     : ^^^^^^^^^^^^^^^
+}
+
+const testObj2: ITestInteface_2 = {
+>testObj2 : ITestInteface_2
+>         : ^^^^^^^^^^^^^^^
+>{  a: { tKey_2: "tVal_2 " },  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2" },} : { a: { tKey_2: string; }; sub_b: { tKey_2: string; sKey_2: string; }; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: { tKey_2: "tVal_2 " },
+>a : { tKey_2: string; }
+>  : ^^^^^^^^^^^^^^^^^^^
+>{ tKey_2: "tVal_2 " } : { tKey_2: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^
+>tKey_2 : string
+>       : ^^^^^^
+>"tVal_2 " : "tVal_2 "
+>          : ^^^^^^^^^
+
+  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2" },
+>sub_b : { tKey_2: string; sKey_2: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ tKey_2: "tVal_2 ", sKey_2: "sVal_2" } : { tKey_2: string; sKey_2: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tKey_2 : string
+>       : ^^^^^^
+>"tVal_2 " : "tVal_2 "
+>          : ^^^^^^^^^
+>sKey_2 : string
+>       : ^^^^^^
+>"sVal_2" : "sVal_2"
+>         : ^^^^^^^^
+
+};
+
+const testObj2_2: ITestInteface_2 = {
+>testObj2_2 : ITestInteface_2
+>           : ^^^^^^^^^^^^^^^
+>{  a: { tKey_2: "tVal_2 " },  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2", extra: "val3" },} : { a: { tKey_2: string; }; sub_b: { tKey_2: string; sKey_2: string; extra: string; }; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: { tKey_2: "tVal_2 " },
+>a : { tKey_2: string; }
+>  : ^^^^^^^^^^^^^^^^^^^
+>{ tKey_2: "tVal_2 " } : { tKey_2: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^
+>tKey_2 : string
+>       : ^^^^^^
+>"tVal_2 " : "tVal_2 "
+>          : ^^^^^^^^^
+
+  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2", extra: "val3" },
+>sub_b : { tKey_2: string; sKey_2: string; extra: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ tKey_2: "tVal_2 ", sKey_2: "sVal_2", extra: "val3" } : { tKey_2: string; sKey_2: string; extra: string; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tKey_2 : string
+>       : ^^^^^^
+>"tVal_2 " : "tVal_2 "
+>          : ^^^^^^^^^
+>sKey_2 : string
+>       : ^^^^^^
+>"sVal_2" : "sVal_2"
+>         : ^^^^^^^^
+>extra : string
+>      : ^^^^^^
+>"val3" : "val3"
+>       : ^^^^^^
+
+};
+
