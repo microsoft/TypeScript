@@ -1906,7 +1906,7 @@ func (c *Checker) isBlockScopedNameDeclaredBeforeUse(declaration *ast.Node, usag
 func (c *Checker) isUsedInFunctionOrInstanceProperty(usage *ast.Node, declaration *ast.Node, declContainer *ast.Node) bool {
 	for current := usage; current != nil && current != declContainer; current = current.Parent {
 		if ast.IsFunctionLike(current) {
-			return true
+			return ast.GetImmediatelyInvokedFunctionExpression(current) == nil
 		}
 		if ast.IsClassStaticBlockDeclaration(current) {
 			return declaration.Pos() < usage.Pos()
@@ -1931,6 +1931,15 @@ func (c *Checker) isUsedInFunctionOrInstanceProperty(usage *ast.Node, declaratio
 				if !isDeclarationInstanceProperty || ast.GetContainingClass(usage) != ast.GetContainingClass(declaration) {
 					return true
 				}
+			}
+		}
+		if current.Parent != nil && ast.IsDecorator(current.Parent) && current.Parent.AsDecorator().Expression == current {
+			decorator := current.Parent.AsDecorator()
+			if ast.IsParameter(decorator.Parent) {
+				return c.isUsedInFunctionOrInstanceProperty(decorator.Parent.Parent.Parent, declaration, declContainer)
+			}
+			if ast.IsMethodDeclaration(decorator.Parent) {
+				return c.isUsedInFunctionOrInstanceProperty(decorator.Parent.Parent, declaration, declContainer)
 			}
 		}
 	}
