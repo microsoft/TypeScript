@@ -101,4 +101,23 @@ func TestSnapshot(t *testing.T) {
 		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
 		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
 	})
+
+	t.Run("GetFile returns nil for non-existent files", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": "{}",
+			"/home/projects/TS/p1/index.ts":      "console.log('Hello, world!');",
+		}
+		session := setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		snapshot, release := session.Snapshot()
+		defer release()
+
+		handle := snapshot.GetFile("/home/projects/TS/p1/nonexistent.ts")
+		assert.Check(t, handle == nil, "GetFile should return nil for non-existent file")
+
+		// Test that ReadFile returns false for non-existent file
+		_, ok := snapshot.ReadFile("/home/projects/TS/p1/nonexistent.ts")
+		assert.Check(t, !ok, "ReadFile should return false for non-existent file")
+	})
 }

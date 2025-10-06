@@ -30,7 +30,7 @@ type snapshotFS struct {
 	readFiles collections.SyncMap[tspath.Path, memoizedDiskFile]
 }
 
-type memoizedDiskFile func() *diskFile
+type memoizedDiskFile func() FileHandle
 
 func (s *snapshotFS) FS() vfs.FS {
 	return s.fs
@@ -43,16 +43,14 @@ func (s *snapshotFS) GetFile(fileName string) FileHandle {
 	if file, ok := s.diskFiles[s.toPath(fileName)]; ok {
 		return file
 	}
-	newEntry := memoizedDiskFile(sync.OnceValue(func() *diskFile {
+	newEntry := memoizedDiskFile(sync.OnceValue(func() FileHandle {
 		if contents, ok := s.fs.ReadFile(fileName); ok {
 			return newDiskFile(fileName, contents)
 		}
 		return nil
 	}))
-	if entry, ok := s.readFiles.LoadOrStore(s.toPath(fileName), newEntry); ok {
-		return entry()
-	}
-	return nil
+	entry, _ := s.readFiles.LoadOrStore(s.toPath(fileName), newEntry)
+	return entry()
 }
 
 type snapshotFSBuilder struct {
