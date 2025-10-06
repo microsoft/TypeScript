@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/namespaceJsxPreserve1.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== namespaceJsxPreserve1.tsx ===
+/// <reference path="react16.d.ts" />
+
+export namespace form {
+>form : typeof form
+>     : ^^^^^^^^^^^
+
+  export const input = null;
+>input : null
+>      : ^^^^
+
+  export const HiddenInput = () => null;
+>HiddenInput : () => null
+>            : ^^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+  export const test1 = <input />;
+>test1 : JSX.Element
+>      : ^^^^^^^^^^^
+><input /> : JSX.Element
+>          : ^^^^^^^^^^^
+>input : null
+>      : ^^^^
+
+  export const test2 = <HiddenInput />;
+>test2 : JSX.Element
+>      : ^^^^^^^^^^^
+><HiddenInput /> : JSX.Element
+>                : ^^^^^^^^^^^
+>HiddenInput : () => null
+>            : ^^^^^^^^^^
+}
+
