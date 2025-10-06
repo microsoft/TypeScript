@@ -36,6 +36,7 @@ import {
     factory,
     FileTextChanges,
     findAncestor,
+    forEachChild,
     FunctionDeclaration,
     GeneratedIdentifierFlags,
     getEmitScriptTarget,
@@ -1097,6 +1098,11 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
+    function stripCommentsFromNode(node: Node): void {
+        setEmitFlags(node, EmitFlags.NoComments);
+        forEachChild(node, stripCommentsFromNode);
+    }
+
     function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
         const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
@@ -1112,6 +1118,11 @@ function withContext<T>(
             return undefined;
         }
         const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
+
+        if (result) {
+            stripCommentsFromNode(result);
+        }
+
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
     }
 
