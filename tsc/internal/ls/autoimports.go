@@ -941,7 +941,7 @@ func (info *FixAddToExistingImportInfo) getAddToExistingImportFix(isValidTypeOnl
 	namedBindings := importClause.NamedBindings
 	// A type-only import may not have both a default and named imports, so the only way a name can
 	// be added to an existing type-only import is adding a named import to existing named bindings.
-	if importClause.IsTypeOnly && !(info.importKind == ImportKindNamed && namedBindings != nil) {
+	if importClause.IsTypeOnly() && !(info.importKind == ImportKindNamed && namedBindings != nil) {
 		return nil
 	}
 

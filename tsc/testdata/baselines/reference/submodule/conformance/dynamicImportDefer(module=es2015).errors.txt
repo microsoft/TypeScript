@@ -1,5 +1,4 @@
-b.ts(1,1): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', or 'nodenext'.
-b.ts(1,8): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+b.ts(1,1): error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
 
 
 ==== a.ts (0 errors) ====
@@ -7,12 +6,10 @@ b.ts(1,8): error TS17012: 'defer' is not a valid meta-property for keyword 'impo
       console.log("foo from a");
     }
     
-==== b.ts (2 errors) ====
+==== b.ts (1 errors) ====
     import.defer("./a.js").then(ns => {
-    ~~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', or 'nodenext'.
-           ~~~~~
-!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
       ns.foo();
     });
     

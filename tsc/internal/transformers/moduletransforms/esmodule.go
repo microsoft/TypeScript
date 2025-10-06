@@ -215,8 +215,8 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 	importDecl := tx.Factory().NewImportDeclaration(
 		nil, /*modifiers*/
 		tx.Factory().NewImportClause(
-			false, /*isTypeOnly*/
-			nil,   /*name*/
+			ast.KindUnknown, /*phaseModifier*/
+			nil,             /*name*/
 			tx.Factory().NewNamespaceImport(synthName),
 		),
 		updatedModuleSpecifier,
@@ -308,8 +308,8 @@ func (tx *ESModuleTransformer) createRequireCall(node *ast.Node /*ImportDeclarat
 		importStatement := tx.Factory().NewImportDeclaration(
 			nil, /*modifiers*/
 			tx.Factory().NewImportClause(
-				false, /*isTypeOnly*/
-				nil,   /*name*/
+				ast.KindUnknown, /*phaseModifier*/
+				nil,             /*name*/
 				tx.Factory().NewNamedImports(
 					tx.Factory().NewNodeList([]*ast.Node{
 						tx.Factory().NewImportSpecifier(

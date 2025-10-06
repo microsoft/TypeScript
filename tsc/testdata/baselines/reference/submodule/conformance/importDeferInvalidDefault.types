@@ -14,10 +14,7 @@ export default function foo() {
 
 === b.ts ===
 import defer foo from "a";
->defer : any
 >foo : any
->from : any
->"a" : "a"
 
 foo();
 >foo() : any

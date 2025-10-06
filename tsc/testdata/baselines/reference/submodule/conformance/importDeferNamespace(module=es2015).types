@@ -14,18 +14,11 @@ export function foo() {
 
 === b.ts ===
 import defer * as aNs from "./a.js";
->defer : any
-> : any
->* as : number
-> : any
->as : any
->aNs : any
->from : any
->"./a.js" : "./a.js"
+>aNs : typeof aNs
 
 aNs.foo();
->aNs.foo() : any
->aNs.foo : any
->aNs : any
->foo : any
+>aNs.foo() : void
+>aNs.foo : () => void
+>aNs : typeof aNs
+>foo : () => void
 

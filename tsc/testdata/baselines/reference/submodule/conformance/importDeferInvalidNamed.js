@@ -15,9 +15,5 @@ export function foo() {
     console.log("foo from a");
 }
 //// [b.js]
-{
-    foo;
-}
-from;
-"a";
+import defer { foo } from "a";
 foo();

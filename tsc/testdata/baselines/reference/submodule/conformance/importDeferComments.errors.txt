@@ -1,26 +1,11 @@
-b.ts(1,32): error TS1005: '=' expected.
-b.ts(1,40): error TS2304: Cannot find name 'as'.
-b.ts(1,49): error TS1005: ';' expected.
-b.ts(1,49): error TS2304: Cannot find name 'aNs'.
-b.ts(1,59): error TS1434: Unexpected keyword or identifier.
-b.ts(1,59): error TS2304: Cannot find name 'from'.
+b.ts(1,70): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 
 
 ==== a.ts (0 errors) ====
     export {};
     
-==== b.ts (6 errors) ====
+==== b.ts (1 errors) ====
     /*1*/ import /*2*/ defer /*3*/ * /*4*/ as /*5*/ aNs /*6*/ from /*7*/ "a" /*8*/;
-                                   ~
-!!! error TS1005: '=' expected.
-                                           ~~
-!!! error TS2304: Cannot find name 'as'.
-                                                    ~~~
-!!! error TS1005: ';' expected.
-                                                    ~~~
-!!! error TS2304: Cannot find name 'aNs'.
-                                                              ~~~~
-!!! error TS1434: Unexpected keyword or identifier.
-                                                              ~~~~
-!!! error TS2304: Cannot find name 'from'.
+                                                                         ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
     

@@ -63,7 +63,7 @@ func (ct *changeTracker) doAddExistingFix(
 		importClause := clause.AsImportClause()
 
 		// promoteFromTypeOnly = true if we need to promote the entire original clause from type only
-		promoteFromTypeOnly := importClause.IsTypeOnly && core.Some(append(namedImports, defaultImport), func(i *Import) bool {
+		promoteFromTypeOnly := importClause.IsTypeOnly() && core.Some(append(namedImports, defaultImport), func(i *Import) bool {
 			if i == nil {
 				return false
 			}
@@ -89,7 +89,7 @@ func (ct *changeTracker) doAddExistingFix(
 					identifier = ct.NodeFactory.NewIdentifier(namedImport.propertyName).AsIdentifier().AsNode()
 				}
 				return ct.NodeFactory.NewImportSpecifier(
-					(!importClause.IsTypeOnly || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
+					(!importClause.IsTypeOnly() || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
 					identifier,
 					ct.NodeFactory.NewIdentifier(namedImport.name),
 				)
@@ -245,7 +245,7 @@ func (ct *changeTracker) makeImport(defaultImport *ast.IdentifierNode, namedImpo
 	}
 	var importClause *ast.Node
 	if defaultImport != nil || newNamedImports != nil {
-		importClause = ct.NodeFactory.NewImportClause(isTypeOnly, defaultImport, newNamedImports)
+		importClause = ct.NodeFactory.NewImportClause(core.IfElse(isTypeOnly, ast.KindTypeKeyword, ast.KindUnknown), defaultImport, newNamedImports)
 	}
 	return ct.NodeFactory.NewImportDeclaration( /*modifiers*/ nil, importClause, moduleSpecifier, nil /*attributes*/)
 }
@@ -300,7 +300,7 @@ func (ct *changeTracker) getNewImports(
 			declaration = ct.NodeFactory.NewImportDeclaration(
 				/*modifiers*/ nil,
 				ct.NodeFactory.NewImportClause(
-					shouldUseTypeOnly(namespaceLikeImport.addAsTypeOnly, preferences),
+					/*phaseModifier*/ core.IfElse(shouldUseTypeOnly(namespaceLikeImport.addAsTypeOnly, preferences), ast.KindTypeKeyword, ast.KindUnknown),
 					/*name*/ nil,
 					ct.NodeFactory.NewNamespaceImport(ct.NodeFactory.NewIdentifier(namespaceLikeImport.name)),
 				),

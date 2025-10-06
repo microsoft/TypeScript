@@ -18,8 +18,7 @@ function foo() {
     console.log("foo from a");
 }
 //// [b.js]
- * as;
-aNs;
-from;
-"./a.js";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const aNs = require("./a.js");
 aNs.foo();

@@ -714,7 +714,7 @@ func getNodeDefinedData(node *ast.Node) uint32 {
 		return uint32(boolToByte(n.IsTypeOnly)) << 24
 	case ast.KindImportClause:
 		n := node.AsImportClause()
-		return uint32(boolToByte(n.IsTypeOnly)) << 24
+		return uint32(boolToByte(n.PhaseModifier == ast.KindTypeKeyword))<<24 | uint32(boolToByte(n.PhaseModifier == ast.KindDeferKeyword))<<25
 	case ast.KindExportSpecifier:
 		n := node.AsExportSpecifier()
 		return uint32(boolToByte(n.IsTypeOnly)) << 24

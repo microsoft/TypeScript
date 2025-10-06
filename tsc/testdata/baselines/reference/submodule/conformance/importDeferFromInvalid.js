@@ -10,5 +10,4 @@ import defer from from "./a.js";
 //// [a.js]
 export default 2;
 //// [b.js]
-"./a.js";
 export {};

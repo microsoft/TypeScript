@@ -116,7 +116,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 			break
 		}
 		importClause := p.factory.DeepCloneReparse(importTag.ImportClause)
-		importClause.AsImportClause().IsTypeOnly = true
+		importClause.AsImportClause().PhaseModifier = ast.KindTypeKeyword
 		importDeclaration := p.factory.NewJSImportDeclaration(
 			p.factory.DeepCloneReparseModifiers(importTag.Modifiers()),
 			importClause,

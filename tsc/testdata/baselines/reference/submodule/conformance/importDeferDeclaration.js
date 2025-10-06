@@ -14,10 +14,6 @@ export type X = { foo: ns.Foo };
 //// [a.js]
 export {};
 //// [b.js]
- * as;
-ns;
-from;
-"./a.js";
 export {};
 
 
@@ -26,6 +22,7 @@ export interface Foo {
     x: number;
 }
 //// [b.d.ts]
+import * as ns from "./a.js";
 export type X = {
     foo: ns.Foo;
 };

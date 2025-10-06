@@ -269,7 +269,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindImportClause:
 		n := node.AsImportClause()
-		if n.IsTypeOnly {
+		if n.IsTypeOnly() {
 			// Always elide type-only imports
 			return nil
 		}
@@ -279,7 +279,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			// all import bindings were elided
 			return nil
 		}
-		return tx.Factory().UpdateImportClause(n, false /*isTypeOnly*/, name, namedBindings)
+		return tx.Factory().UpdateImportClause(n, n.PhaseModifier, name, namedBindings)
 
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()

@@ -1,33 +1,21 @@
 --- old.importDeferInvalidDefault.errors.txt
 +++ new.importDeferInvalidDefault.errors.txt
 @@= skipped -0, +0 lines =@@
--b.ts(1,8): error TS18058: Default imports are not allowed in a deferred import.
-+b.ts(1,14): error TS1005: '=' expected.
-+b.ts(1,14): error TS2503: Cannot find namespace 'foo'.
-+b.ts(1,18): error TS1005: ';' expected.
-+b.ts(1,18): error TS2304: Cannot find name 'from'.
-+b.ts(3,1): error TS2304: Cannot find name 'foo'.
+ b.ts(1,8): error TS18058: Default imports are not allowed in a deferred import.
++b.ts(1,23): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 
 
  ==== a.ts (0 errors) ====
-@@= skipped -5, +9 lines =@@
+@@= skipped -5, +6 lines =@@
          console.log("foo from a");
      }
      
 -==== b.ts (1 errors) ====
-+==== b.ts (5 errors) ====
++==== b.ts (2 errors) ====
      import defer foo from "a";
--           ~~~~~~~~~
--!!! error TS18058: Default imports are not allowed in a deferred import.
-+                 ~~~
-+!!! error TS1005: '=' expected.
-+                 ~~~
-+!!! error TS2503: Cannot find namespace 'foo'.
-+                     ~~~~
-+!!! error TS1005: ';' expected.
-+                     ~~~~
-+!!! error TS2304: Cannot find name 'from'.
+            ~~~~~~~~~
+ !!! error TS18058: Default imports are not allowed in a deferred import.
++                          ~~~
++!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
      
      foo();
-+    ~~~
-+!!! error TS2304: Cannot find name 'foo'.

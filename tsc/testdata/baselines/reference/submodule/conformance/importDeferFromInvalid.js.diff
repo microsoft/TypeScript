@@ -1,8 +1,0 @@
---- old.importDeferFromInvalid.js
-+++ new.importDeferFromInvalid.js
-@@= skipped -9, +9 lines =@@
- //// [a.js]
- export default 2;
- //// [b.js]
-+"./a.js";
- export {};

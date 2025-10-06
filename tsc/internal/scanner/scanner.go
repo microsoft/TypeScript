@@ -51,6 +51,7 @@ var textToKeyword = map[string]ast.Kind{
 	"debugger":    ast.KindDebuggerKeyword,
 	"declare":     ast.KindDeclareKeyword,
 	"default":     ast.KindDefaultKeyword,
+	"defer":       ast.KindDeferKeyword,
 	"delete":      ast.KindDeleteKeyword,
 	"do":          ast.KindDoKeyword,
 	"else":        ast.KindElseKeyword,

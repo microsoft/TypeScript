@@ -3653,8 +3653,8 @@ func (p *Printer) emitImportDeclaration(node *ast.ImportDeclaration) {
 
 func (p *Printer) emitImportClause(node *ast.ImportClause) {
 	state := p.enterNode(node.AsNode())
-	if node.IsTypeOnly {
-		p.emitToken(ast.KindTypeKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	if node.PhaseModifier != ast.KindUnknown {
+		p.emitToken(node.PhaseModifier, node.Pos(), WriteKindKeyword, node.AsNode())
 		p.writeSpace()
 	}
 	if name := node.Name(); name != nil {

@@ -1881,7 +1881,17 @@ func (c *Checker) checkGrammarMetaProperty(node *ast.MetaProperty) bool {
 		}
 	case ast.KindImportKeyword:
 		if nameText != "meta" {
-			return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, nameText, scanner.TokenToString(node.KeywordToken), "meta")
+			isCallee := ast.IsCallExpression(node.Parent) && node.Parent.AsCallExpression().Expression == node.AsNode()
+			if nameText == "defer" {
+				if !isCallee {
+					return c.grammarErrorAtPos(node.AsNode(), node.AsNode().End(), 0, diagnostics.X_0_expected, "(")
+				}
+			} else {
+				if isCallee {
+					return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, nameText)
+				}
+				return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, nameText, scanner.TokenToString(node.KeywordToken), "meta")
+			}
 		}
 	}
 
@@ -2156,11 +2166,24 @@ func (c *Checker) checkGrammarBigIntLiteral(node *ast.BigIntLiteral) bool {
 }
 
 func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
-	if node.Flags&ast.NodeFlagsJSDoc == 0 && node.IsTypeOnly && node.Name() != nil && node.NamedBindings != nil {
-		return c.grammarErrorOnNode(&node.Node, diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both)
-	}
-	if node.IsTypeOnly && node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
-		return c.checkGrammarTypeOnlyNamedImportsOrExports(node.NamedBindings)
+	switch node.PhaseModifier {
+	case ast.KindTypeKeyword:
+		if node.Flags&ast.NodeFlagsJSDoc == 0 && node.Name() != nil && node.NamedBindings != nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both)
+		}
+		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
+			return c.checkGrammarTypeOnlyNamedImportsOrExports(node.NamedBindings)
+		}
+	case ast.KindDeferKeyword:
+		if node.Name() != nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.Default_imports_are_not_allowed_in_a_deferred_import)
+		}
+		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
+		}
+		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+		}
 	}
 	return false
 }
@@ -2197,7 +2220,11 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 		return c.grammarErrorOnNode(node, getVerbatimModuleSyntaxErrorMessage(node))
 	}
 
-	if c.moduleKind == core.ModuleKindES2015 {
+	if node.Expression().Kind == ast.KindMetaProperty {
+		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
+			return c.grammarErrorOnNode(node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+		}
+	} else if c.moduleKind == core.ModuleKindES2015 {
 		return c.grammarErrorOnNode(node, diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_node20_or_nodenext)
 	}
 

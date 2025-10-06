@@ -165,6 +165,7 @@ export enum SyntaxKind {
     BigIntKeyword,
     OverrideKeyword,
     OfKeyword,
+    DeferKeyword,
     QualifiedName,
     ComputedPropertyName,
     TypeParameter,

@@ -1992,10 +1992,15 @@ export type NamedExportBindings =
 export interface ImportClause extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportClause;
     readonly parent: ImportDeclaration | JSDocImportTag;
-    readonly isTypeOnly: boolean;
+    readonly phaseModifier: ImportPhaseModifierSyntaxKind;
     readonly name?: Identifier; // Default binding
     readonly namedBindings?: NamedImportBindings;
 }
+
+export type ImportPhaseModifierSyntaxKind =
+    | SyntaxKind.Unknown
+    | SyntaxKind.TypeKeyword
+    | SyntaxKind.DeferKeyword;
 
 /** @deprecated */
 export type AssertionKey = ImportAttributeName;

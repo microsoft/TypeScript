@@ -1,8 +1,5 @@
-b.ts(1,14): error TS1005: '=' expected.
-b.ts(1,16): error TS2304: Cannot find name 'foo'.
-b.ts(1,22): error TS1434: Unexpected keyword or identifier.
-b.ts(1,22): error TS2304: Cannot find name 'from'.
-b.ts(3,1): error TS2304: Cannot find name 'foo'.
+b.ts(1,8): error TS18059: Named imports are not allowed in a deferred import.
+b.ts(1,27): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 
 
 ==== a.ts (0 errors) ====
@@ -10,17 +7,11 @@ b.ts(3,1): error TS2304: Cannot find name 'foo'.
         console.log("foo from a");
     }
     
-==== b.ts (5 errors) ====
+==== b.ts (2 errors) ====
     import defer { foo } from "a";
-                 ~
-!!! error TS1005: '=' expected.
-                   ~~~
-!!! error TS2304: Cannot find name 'foo'.
-                         ~~~~
-!!! error TS1434: Unexpected keyword or identifier.
-                         ~~~~
-!!! error TS2304: Cannot find name 'from'.
+           ~~~~~~~~~~~~~
+!!! error TS18059: Named imports are not allowed in a deferred import.
+                              ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
     
     foo();
-    ~~~
-!!! error TS2304: Cannot find name 'foo'.

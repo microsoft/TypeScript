@@ -7024,7 +7024,7 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 		return nil
 	// Optimize for the common case of a call to a function with a single non-generic call
 	// signature where we can just fetch the return type without checking the arguments.
-	case ast.IsCallExpression(expr) && expr.Expression().Kind != ast.KindSuperKeyword && !ast.IsRequireCall(expr, true /*requireStringLiteralLikeArgument*/) && !c.isSymbolOrSymbolForCall(expr):
+	case ast.IsCallExpression(expr) && expr.Expression().Kind != ast.KindSuperKeyword && !ast.IsRequireCall(expr, true /*requireStringLiteralLikeArgument*/) && !c.isSymbolOrSymbolForCall(expr) && !ast.IsImportCall(expr):
 		if isCallChain(expr) {
 			return c.getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr)
 		}
@@ -7420,7 +7420,7 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 	case ast.KindElementAccessExpression:
 		return c.checkIndexedAccess(node, checkMode)
 	case ast.KindCallExpression:
-		if node.AsCallExpression().Expression.Kind == ast.KindImportKeyword {
+		if ast.IsImportCall(node) {
 			return c.checkImportCallExpression(node)
 		}
 		return c.checkCallExpression(node, checkMode)
@@ -10313,6 +10313,10 @@ func (c *Checker) checkMetaProperty(node *ast.Node) *Type {
 	case ast.KindNewKeyword:
 		return c.checkNewTargetMetaProperty(node)
 	case ast.KindImportKeyword:
+		if node.Name().Text() == "defer" {
+			debug.Assert(!ast.IsCallExpression(node.Parent) || node.Parent.AsCallExpression().Expression != node, "Trying to get the type of `import.defer` in `import.defer(...)`")
+			return c.errorType
+		}
 		return c.checkImportMetaProperty(node)
 	}
 	panic("Unhandled case in checkMetaProperty")
@@ -30401,7 +30405,12 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 			return parent.Symbol()
 		}
 		return nil
-	case ast.KindImportKeyword, ast.KindNewKeyword:
+	case ast.KindImportKeyword:
+		if ast.IsMetaProperty(node.Parent) && node.Parent.Text() == "defer" {
+			return nil
+		}
+		fallthrough
+	case ast.KindNewKeyword:
 		if ast.IsMetaProperty(parent) {
 			return c.checkMetaPropertyKeyword(parent).symbol
 		}

@@ -1,7 +1,5 @@
-b.ts(1,14): error TS1005: '=' expected.
-b.ts(1,14): error TS2503: Cannot find namespace 'type'.
-b.ts(1,19): error TS1005: ';' expected.
-b.ts(1,21): error TS2304: Cannot find name 'as'.
+b.ts(1,19): error TS1005: 'from' expected.
+b.ts(1,19): error TS1141: String literal expected.
 b.ts(1,24): error TS1005: ';' expected.
 b.ts(1,24): error TS2304: Cannot find name 'ns1'.
 b.ts(1,28): error TS1434: Unexpected keyword or identifier.
@@ -13,16 +11,12 @@ b.ts(1,28): error TS2304: Cannot find name 'from'.
       console.log("foo from a");
     }
     
-==== b.ts (8 errors) ====
+==== b.ts (6 errors) ====
     import defer type * as ns1 from "a";
-                 ~~~~
-!!! error TS1005: '=' expected.
-                 ~~~~
-!!! error TS2503: Cannot find namespace 'type'.
                       ~
-!!! error TS1005: ';' expected.
-                        ~~
-!!! error TS2304: Cannot find name 'as'.
+!!! error TS1005: 'from' expected.
+                      ~~~~
+!!! error TS1141: String literal expected.
                            ~~~
 !!! error TS1005: ';' expected.
                            ~~~

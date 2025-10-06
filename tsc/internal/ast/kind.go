@@ -180,7 +180,8 @@ const (
 	KindGlobalKeyword
 	KindBigIntKeyword
 	KindOverrideKeyword
-	KindOfKeyword // LastKeyword and LastToken and LastContextualKeyword
+	KindOfKeyword
+	KindDeferKeyword // LastKeyword and LastToken and LastContextualKeyword
 	// Parse tree nodes
 	// Names
 	KindQualifiedName
@@ -399,7 +400,7 @@ const (
 	KindFirstReservedWord       = KindBreakKeyword
 	KindLastReservedWord        = KindWithKeyword
 	KindFirstKeyword            = KindBreakKeyword
-	KindLastKeyword             = KindOfKeyword
+	KindLastKeyword             = KindDeferKeyword
 	KindFirstFutureReservedWord = KindImplementsKeyword
 	KindLastFutureReservedWord  = KindYieldKeyword
 	KindFirstTypeNode           = KindTypePredicate
@@ -422,7 +423,7 @@ const (
 	KindFirstJSDocTagNode       = KindJSDocTag
 	KindLastJSDocTagNode        = KindJSDocImportTag
 	KindFirstContextualKeyword  = KindAbstractKeyword
-	KindLastContextualKeyword   = KindOfKeyword
+	KindLastContextualKeyword   = KindDeferKeyword
 	KindComment                 = KindSingleLineCommentTrivia | KindMultiLineCommentTrivia
 	KindFirstTriviaToken        = KindSingleLineCommentTrivia
 	KindLastTriviaToken         = KindConflictMarkerTrivia

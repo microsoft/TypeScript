@@ -2100,22 +2100,36 @@ func (p *Parser) parseImportDeclarationOrImportEqualsDeclaration(pos int, hasJSD
 	if p.isIdentifier() {
 		identifier = p.parseIdentifier()
 	}
-	isTypeOnly := false
+	phaseModifier := ast.KindUnknown
 	if identifier != nil && identifier.AsIdentifier().Text == "type" &&
 		(p.token != ast.KindFromKeyword || p.isIdentifier() && p.lookAhead((*Parser).nextTokenIsFromKeywordOrEqualsToken)) &&
 		(p.isIdentifier() || p.tokenAfterImportDefinitelyProducesImportDeclaration()) {
-		isTypeOnly = true
+		phaseModifier = ast.KindTypeKeyword
 		identifier = nil
 		if p.isIdentifier() {
 			identifier = p.parseIdentifier()
 		}
+	} else if identifier != nil && identifier.AsIdentifier().Text == "defer" {
+		var shouldParseAsDeferModifier bool
+		if p.token == ast.KindFromKeyword {
+			shouldParseAsDeferModifier = !p.lookAhead((*Parser).nextTokenIsTokenStringLiteral)
+		} else {
+			shouldParseAsDeferModifier = p.token != ast.KindCommaToken && p.token != ast.KindEqualsToken
+		}
+		if shouldParseAsDeferModifier {
+			phaseModifier = ast.KindDeferKeyword
+			identifier = nil
+			if p.isIdentifier() {
+				identifier = p.parseIdentifier()
+			}
+		}
 	}
-	if identifier != nil && !p.tokenAfterImportedIdentifierDefinitelyProducesImportDeclaration() {
-		importEquals := p.checkJSSyntax(p.parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, isTypeOnly))
+	if identifier != nil && !p.tokenAfterImportedIdentifierDefinitelyProducesImportDeclaration() && phaseModifier != ast.KindDeferKeyword {
+		importEquals := p.checkJSSyntax(p.parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, phaseModifier == ast.KindTypeKeyword))
 		p.statementHasAwaitIdentifier = saveHasAwaitIdentifier // Import= declaration is always parsed in an Await context, no need to reparse
 		return importEquals
 	}
-	importClause := p.tryParseImportClause(identifier, afterImportPos, isTypeOnly, false /*skipJSDocLeadingAsterisks*/)
+	importClause := p.tryParseImportClause(identifier, afterImportPos, phaseModifier, false /*skipJSDocLeadingAsterisks*/)
 	p.statementHasAwaitIdentifier = saveHasAwaitIdentifier // import clause is always parsed in an Await context
 	moduleSpecifier := p.parseModuleSpecifier()
 	attributes := p.tryParseImportAttributes()
@@ -2180,19 +2194,19 @@ func (p *Parser) parseModuleSpecifier() *ast.Expression {
 	return p.parseExpression()
 }
 
-func (p *Parser) tryParseImportClause(identifier *ast.Node, pos int, isTypeOnly bool, skipJSDocLeadingAsterisks bool) *ast.Node {
+func (p *Parser) tryParseImportClause(identifier *ast.Node, pos int, phaseModifier ast.Kind, skipJSDocLeadingAsterisks bool) *ast.Node {
 	// ImportDeclaration:
 	//  import ImportClause from ModuleSpecifier ;
 	//  import ModuleSpecifier;
 	if identifier != nil || p.token == ast.KindAsteriskToken || p.token == ast.KindOpenBraceToken {
-		importClause := p.parseImportClause(identifier, pos, isTypeOnly, skipJSDocLeadingAsterisks)
+		importClause := p.parseImportClause(identifier, pos, phaseModifier, skipJSDocLeadingAsterisks)
 		p.parseExpected(ast.KindFromKeyword)
 		return importClause
 	}
 	return nil
 }
 
-func (p *Parser) parseImportClause(identifier *ast.Node, pos int, isTypeOnly bool, skipJSDocLeadingAsterisks bool) *ast.Node {
+func (p *Parser) parseImportClause(identifier *ast.Node, pos int, phaseModifier ast.Kind, skipJSDocLeadingAsterisks bool) *ast.Node {
 	// ImportClause:
 	//  ImportedDefaultBinding
 	//  NameSpaceImport
@@ -2216,7 +2230,7 @@ func (p *Parser) parseImportClause(identifier *ast.Node, pos int, isTypeOnly boo
 			p.scanner.SetSkipJSDocLeadingAsterisks(false)
 		}
 	}
-	result := p.finishNode(p.factory.NewImportClause(isTypeOnly, identifier, namedBindings), pos)
+	result := p.finishNode(p.factory.NewImportClause(phaseModifier, identifier, namedBindings), pos)
 	p.statementHasAwaitIdentifier = saveHasAwaitIdentifier
 	return result
 }
@@ -5016,7 +5030,13 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 			p.nextToken() // advance past the 'import'
 			p.nextToken() // advance past the dot
 			expression = p.finishNode(p.factory.NewMetaProperty(ast.KindImportKeyword, p.parseIdentifierName()), pos)
-			p.sourceFlags |= ast.NodeFlagsPossiblyContainsImportMeta
+			if expression.Text() == "defer" {
+				if p.token == ast.KindOpenParenToken || p.token == ast.KindLessThanToken {
+					p.sourceFlags |= ast.NodeFlagsPossiblyContainsDynamicImport
+				}
+			} else {
+				p.sourceFlags |= ast.NodeFlagsPossiblyContainsImportMeta
+			}
 		} else {
 			expression = p.parseMemberExpressionOrHigher()
 		}
@@ -5879,7 +5899,7 @@ func (p *Parser) isStartOfStatement() bool {
 	case ast.KindConstKeyword, ast.KindExportKeyword:
 		return p.isStartOfDeclaration()
 	case ast.KindAsyncKeyword, ast.KindDeclareKeyword, ast.KindInterfaceKeyword, ast.KindModuleKeyword, ast.KindNamespaceKeyword,
-		ast.KindTypeKeyword, ast.KindGlobalKeyword:
+		ast.KindTypeKeyword, ast.KindGlobalKeyword, ast.KindDeferKeyword:
 		// When these don't start a declaration, they're an identifier in an expression statement
 		return true
 	case ast.KindAccessorKeyword, ast.KindPublicKeyword, ast.KindPrivateKeyword, ast.KindProtectedKeyword, ast.KindStaticKeyword,
@@ -5928,7 +5948,7 @@ func (p *Parser) scanStartOfDeclaration() bool {
 		//   I {}
 		//
 		// could be legal, it would add complexity for very little gain.
-		case ast.KindInterfaceKeyword, ast.KindTypeKeyword:
+		case ast.KindInterfaceKeyword, ast.KindTypeKeyword, ast.KindDeferKeyword:
 			return p.nextTokenIsIdentifierOnSameLine()
 		case ast.KindModuleKeyword, ast.KindNamespaceKeyword:
 			return p.nextTokenIsIdentifierOrStringLiteralOnSameLine()
@@ -5951,7 +5971,7 @@ func (p *Parser) scanStartOfDeclaration() bool {
 			return p.token == ast.KindOpenBraceToken || p.token == ast.KindIdentifier || p.token == ast.KindExportKeyword
 		case ast.KindImportKeyword:
 			p.nextToken()
-			return p.token == ast.KindStringLiteral || p.token == ast.KindAsteriskToken || p.token == ast.KindOpenBraceToken || tokenIsIdentifierOrKeyword(p.token)
+			return p.token == ast.KindDeferKeyword || p.token == ast.KindStringLiteral || p.token == ast.KindAsteriskToken || p.token == ast.KindOpenBraceToken || tokenIsIdentifierOrKeyword(p.token)
 		case ast.KindExportKeyword:
 			p.nextToken()
 			if p.token == ast.KindEqualsToken || p.token == ast.KindAsteriskToken || p.token == ast.KindOpenBraceToken ||

@@ -829,7 +829,7 @@ func (p *Parser) parseImportTag(start int, tagName *ast.IdentifierNode, margin i
 		identifier = p.parseIdentifier()
 	}
 
-	importClause := p.tryParseImportClause(identifier, afterImportTagPos, true /*isTypeOnly*/, true /*skipJSDocLeadingAsterisks*/)
+	importClause := p.tryParseImportClause(identifier, afterImportTagPos, ast.KindTypeKeyword, true /*skipJSDocLeadingAsterisks*/)
 	moduleSpecifier := p.parseModuleSpecifier()
 	attributes := p.tryParseImportAttributes()
 

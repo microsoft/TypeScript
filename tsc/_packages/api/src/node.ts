@@ -544,7 +544,6 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     get isTypeOnly(): boolean | undefined {
         switch (this.kind) {
             case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.ImportClause:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -918,6 +917,18 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                 return this.data & (1 << 24 | 1 << 25) >> 24;
             default:
                 return 0;
+        }
+    }
+
+    get phaseModifier(): SyntaxKind {
+        switch (this.kind) {
+            case SyntaxKind.ImportClause:
+                const flags = (this.data & (1 << 24 | 1 << 25)) >> 24;
+                if (flags & 1) return SyntaxKind.TypeKeyword;
+                if (flags & 2) return SyntaxKind.DeferKeyword;
+                // fallthrough
+            default:
+                return SyntaxKind.Unknown;
         }
     }
 

@@ -1666,6 +1666,10 @@ func (tx *DeclarationTransformer) transformImportDeclaration(decl *ast.ImportDec
 			tx.tryGetResolutionModeOverride(decl.Attributes),
 		)
 	}
+	phaseModifier := decl.ImportClause.AsImportClause().PhaseModifier
+	if phaseModifier == ast.KindDeferKeyword {
+		phaseModifier = ast.KindUnknown
+	}
 	// The `importClause` visibility corresponds to the default's visibility.
 	var visibleDefaultBinding *ast.Node
 	if decl.ImportClause != nil && decl.ImportClause.Name() != nil && tx.resolver.IsDeclarationVisible(decl.ImportClause) {
@@ -1681,7 +1685,7 @@ func (tx *DeclarationTransformer) transformImportDeclaration(decl *ast.ImportDec
 			decl.Modifiers(),
 			tx.Factory().UpdateImportClause(
 				decl.ImportClause.AsImportClause(),
-				decl.ImportClause.AsImportClause().IsTypeOnly,
+				phaseModifier,
 				visibleDefaultBinding,
 				/*namedBindings*/ nil,
 			),
@@ -1703,7 +1707,7 @@ func (tx *DeclarationTransformer) transformImportDeclaration(decl *ast.ImportDec
 			decl.Modifiers(),
 			tx.Factory().UpdateImportClause(
 				decl.ImportClause.AsImportClause(),
-				decl.ImportClause.AsImportClause().IsTypeOnly,
+				phaseModifier,
 				visibleDefaultBinding,
 				namedBindings,
 			),
@@ -1731,7 +1735,7 @@ func (tx *DeclarationTransformer) transformImportDeclaration(decl *ast.ImportDec
 			decl.Modifiers(),
 			tx.Factory().UpdateImportClause(
 				decl.ImportClause.AsImportClause(),
-				decl.ImportClause.AsImportClause().IsTypeOnly,
+				phaseModifier,
 				visibleDefaultBinding,
 				namedImports,
 			),

@@ -5,11 +5,7 @@
  === b.ts ===
  import defer { foo } from "a";
 ->foo : () => void
-+>defer : any
-+> : any
 +>foo : any
-+>from : any
-+>"a" : "a"
 
  foo();
 ->foo() : void

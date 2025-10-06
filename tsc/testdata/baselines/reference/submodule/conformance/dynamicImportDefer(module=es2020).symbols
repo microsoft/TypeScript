@@ -12,10 +12,15 @@ export function foo() {
 
 === b.ts ===
 import.defer("./a.js").then(ns => {
+>import.defer("./a.js").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>"./a.js" : Symbol("a", Decl(a.ts, 0, 0))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >ns : Symbol(ns, Decl(b.ts, 0, 28))
 
   ns.foo();
+>ns.foo : Symbol(foo, Decl(a.ts, 0, 0))
 >ns : Symbol(ns, Decl(b.ts, 0, 28))
+>foo : Symbol(foo, Decl(a.ts, 0, 0))
 
 });
 

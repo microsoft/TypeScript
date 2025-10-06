@@ -312,6 +312,8 @@ func (n *Node) Text() string {
 		return n.AsNumericLiteral().Text
 	case KindBigIntLiteral:
 		return n.AsBigIntLiteral().Text
+	case KindMetaProperty:
+		return n.AsMetaProperty().Name().Text()
 	case KindNoSubstitutionTemplateLiteral:
 		return n.AsNoSubstitutionTemplateLiteral().Text
 	case KindTemplateHead:
@@ -894,7 +896,7 @@ func (n *Node) IsTypeOnly() bool {
 	case KindImportSpecifier:
 		return n.AsImportSpecifier().IsTypeOnly
 	case KindImportClause:
-		return n.AsImportClause().IsTypeOnly
+		return n.AsImportClause().PhaseModifier == KindTypeKeyword
 	case KindExportDeclaration:
 		return n.AsExportDeclaration().IsTypeOnly
 	case KindExportSpecifier:
@@ -4945,22 +4947,22 @@ type ImportClause struct {
 	DeclarationBase
 	ExportableBase
 	compositeNodeBase
-	IsTypeOnly    bool
+	PhaseModifier Kind                 // KindTypeKeyword | KindDeferKeyword
 	NamedBindings *NamedImportBindings // NamedImportBindings. Optional, named bindings
 	name          *IdentifierNode      // IdentifierNode. Optional, default binding
 }
 
-func (f *NodeFactory) NewImportClause(isTypeOnly bool, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
+func (f *NodeFactory) NewImportClause(phaseModifier Kind, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
 	data := &ImportClause{}
-	data.IsTypeOnly = isTypeOnly
+	data.PhaseModifier = phaseModifier
 	data.name = name
 	data.NamedBindings = namedBindings
 	return f.newNode(KindImportClause, data)
 }
 
-func (f *NodeFactory) UpdateImportClause(node *ImportClause, isTypeOnly bool, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
-	if isTypeOnly != node.IsTypeOnly || name != node.name || namedBindings != node.NamedBindings {
-		return updateNode(f.NewImportClause(isTypeOnly, name, namedBindings), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateImportClause(node *ImportClause, phaseModifier Kind, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
+	if phaseModifier != node.PhaseModifier || name != node.name || namedBindings != node.NamedBindings {
+		return updateNode(f.NewImportClause(phaseModifier, name, namedBindings), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
@@ -4970,11 +4972,11 @@ func (node *ImportClause) ForEachChild(v Visitor) bool {
 }
 
 func (node *ImportClause) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportClause(node, node.IsTypeOnly, v.visitNode(node.name), v.visitNode(node.NamedBindings))
+	return v.Factory.UpdateImportClause(node, node.PhaseModifier, v.visitNode(node.name), v.visitNode(node.NamedBindings))
 }
 
 func (node *ImportClause) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportClause(node.IsTypeOnly, node.Name(), node.NamedBindings), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportClause(node.PhaseModifier, node.Name(), node.NamedBindings), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ImportClause) Name() *DeclarationName {
@@ -4982,7 +4984,7 @@ func (node *ImportClause) Name() *DeclarationName {
 }
 
 func (node *ImportClause) computeSubtreeFacts() SubtreeFacts {
-	if node.IsTypeOnly {
+	if node.PhaseModifier == KindTypeKeyword {
 		return SubtreeContainsTypeScript
 	} else {
 		return propagateSubtreeFacts(node.name) |

@@ -1,22 +1,22 @@
-b.ts(1,8): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-b.ts(3,9): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-b.ts(5,17): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-b.ts(7,8): error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+b.ts(1,13): error TS1005: '(' expected.
+b.ts(3,14): error TS1005: '(' expected.
+b.ts(5,22): error TS1005: '(' expected.
+b.ts(7,13): error TS1005: '(' expected.
 
 
 ==== b.ts (4 errors) ====
     import.defer;
-           ~~~~~
-!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+                
+!!! error TS1005: '(' expected.
     
     (import.defer)("a");
-            ~~~~~
-!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+                 
+!!! error TS1005: '(' expected.
     
     Function(import.defer);
-                    ~~~~~
-!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+                         
+!!! error TS1005: '(' expected.
     
     import.defer
-           ~~~~~
-!!! error TS17012: 'defer' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+                
+!!! error TS1005: '(' expected.

@@ -235,7 +235,7 @@ func (tx *JSXTransformer) visitSourceFile(file *ast.SourceFile) *ast.Node {
 			for importSource, importSpecifiersMap := range tx.utilizedImplicitRuntimeImports {
 				s := tx.Factory().NewImportDeclaration(
 					nil,
-					tx.Factory().NewImportClause(false, nil, tx.Factory().NewNamedImports(tx.Factory().NewNodeList(getSortedSpecifiers(importSpecifiersMap)))),
+					tx.Factory().NewImportClause(ast.KindUnknown, nil, tx.Factory().NewNamedImports(tx.Factory().NewNodeList(getSortedSpecifiers(importSpecifiersMap)))),
 					tx.Factory().NewStringLiteral(importSource),
 					nil,
 				)

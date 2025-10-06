@@ -53,7 +53,7 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 			// all import bindings were elided
 			return nil
 		}
-		return tx.Factory().UpdateImportClause(n, false /*isTypeOnly*/, name, namedBindings)
+		return tx.Factory().UpdateImportClause(n, n.PhaseModifier, name, namedBindings)
 	case ast.KindNamespaceImport:
 		if !tx.shouldEmitAliasDeclaration(node) {
 			// elide unused imports
