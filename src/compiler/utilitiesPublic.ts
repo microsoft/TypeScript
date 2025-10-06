@@ -2027,6 +2027,8 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.MetaProperty:
         case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
         case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.PartiallyEmittedExpression:
+        case SyntaxKind.AwaitExpression:
             return true;
         default:
             return false;
