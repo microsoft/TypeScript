@@ -100,8 +100,8 @@ var b: number | string;
 var b = foo(g);            // Error, number and string are disjoint types
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
->foo(g) : unknown
->       : ^^^^^^^
+>foo(g) : number
+>       : ^^^^^^
 >foo : <T>(cb: (x: number, y: string) => T) => T
 >    : ^ ^^  ^^                           ^^^^^ 
 >g : <T>(x: T, y: T) => T
@@ -110,8 +110,8 @@ var b = foo(g);            // Error, number and string are disjoint types
 var b = bar(1, "one", g);  // Error, number and string are disjoint types
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
->bar(1, "one", g) : unknown
->                 : ^^^^^^^
+>bar(1, "one", g) : number
+>                 : ^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >1 : 1
@@ -124,8 +124,8 @@ var b = bar(1, "one", g);  // Error, number and string are disjoint types
 var b = bar("one", 1, g);  // Error, number and string are disjoint types
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
->bar("one", 1, g) : unknown
->                 : ^^^^^^^
+>bar("one", 1, g) : string
+>                 : ^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >"one" : "one"
@@ -135,17 +135,21 @@ var b = bar("one", 1, g);  // Error, number and string are disjoint types
 >g : <T>(x: T, y: T) => T
 >  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
-var b = baz(b, b, g);      // Should be number | string
->b : string | number
->  : ^^^^^^^^^^^^^^^
->baz(b, b, g) : string | number
->             : ^^^^^^^^^^^^^^^
+var b2: number | string;
+>b2 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+var b2 = baz(b2, b2, g);      // Should be number | string
+>b2 : string | number
+>   : ^^^^^^^^^^^^^^^
+>baz(b2, b2, g) : string | number
+>               : ^^^^^^^^^^^^^^^
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
->b : string | number
->  : ^^^^^^^^^^^^^^^
->b : string | number
->  : ^^^^^^^^^^^^^^^
+>b2 : string | number
+>   : ^^^^^^^^^^^^^^^
+>b2 : string | number
+>   : ^^^^^^^^^^^^^^^
 >g : <T>(x: T, y: T) => T
 >  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 

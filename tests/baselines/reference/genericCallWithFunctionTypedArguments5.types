@@ -50,10 +50,10 @@ var r = foo(arg); // {}
 
 // more args not allowed
 var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
->r2 : unknown
->   : ^^^^^^^
->foo({ cb: <T>(x: T, y: T) => '' }) : unknown
->                                   : ^^^^^^^
+>r2 : string
+>   : ^^^^^^
+>foo({ cb: <T>(x: T, y: T) => '' }) : string
+>                                   : ^^^^^^
 >foo : <T, U>(arg: { cb: (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                    ^^^^^^
 >{ cb: <T>(x: T, y: T) => '' } : { cb: <T>(x: T, y: T) => string; }
