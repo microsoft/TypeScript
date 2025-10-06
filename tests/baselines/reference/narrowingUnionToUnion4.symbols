@@ -1,0 +1,427 @@
+//// [tests/cases/compiler/narrowingUnionToUnion4.ts] ////
+
+=== narrowingUnionToUnion4.ts ===
+const enum SyntaxKind {
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+
+  Identifier,
+>Identifier : Symbol(SyntaxKind.Identifier, Decl(narrowingUnionToUnion4.ts, 0, 23))
+
+  PropertyAccessExpression,
+>PropertyAccessExpression : Symbol(SyntaxKind.PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 1, 13))
+
+  ParenthesizedExpression,
+>ParenthesizedExpression : Symbol(SyntaxKind.ParenthesizedExpression, Decl(narrowingUnionToUnion4.ts, 2, 27))
+
+  ExpressionWithTypeArguments,
+>ExpressionWithTypeArguments : Symbol(SyntaxKind.ExpressionWithTypeArguments, Decl(narrowingUnionToUnion4.ts, 3, 26))
+
+  NullKeyword,
+>NullKeyword : Symbol(SyntaxKind.NullKeyword, Decl(narrowingUnionToUnion4.ts, 4, 30))
+
+  TrueKeyword,
+>TrueKeyword : Symbol(SyntaxKind.TrueKeyword, Decl(narrowingUnionToUnion4.ts, 5, 14))
+
+  FalseKeyword,
+>FalseKeyword : Symbol(SyntaxKind.FalseKeyword, Decl(narrowingUnionToUnion4.ts, 6, 14))
+
+  ThisKeyword,
+>ThisKeyword : Symbol(SyntaxKind.ThisKeyword, Decl(narrowingUnionToUnion4.ts, 7, 15))
+
+  DeleteExpression,
+>DeleteExpression : Symbol(SyntaxKind.DeleteExpression, Decl(narrowingUnionToUnion4.ts, 8, 14))
+
+  TypeOfExpression,
+>TypeOfExpression : Symbol(SyntaxKind.TypeOfExpression, Decl(narrowingUnionToUnion4.ts, 9, 19))
+
+  VoidExpression,
+>VoidExpression : Symbol(SyntaxKind.VoidExpression, Decl(narrowingUnionToUnion4.ts, 10, 19))
+
+  AwaitExpression,
+>AwaitExpression : Symbol(SyntaxKind.AwaitExpression, Decl(narrowingUnionToUnion4.ts, 11, 17))
+
+  TypeAssertionExpression,
+>TypeAssertionExpression : Symbol(SyntaxKind.TypeAssertionExpression, Decl(narrowingUnionToUnion4.ts, 12, 18))
+
+  NewExpression,
+>NewExpression : Symbol(SyntaxKind.NewExpression, Decl(narrowingUnionToUnion4.ts, 13, 26))
+
+  NumericLiteral,
+>NumericLiteral : Symbol(SyntaxKind.NumericLiteral, Decl(narrowingUnionToUnion4.ts, 14, 16))
+
+  StringLiteral,
+>StringLiteral : Symbol(SyntaxKind.StringLiteral, Decl(narrowingUnionToUnion4.ts, 15, 17))
+
+  TemplateExpression,
+>TemplateExpression : Symbol(SyntaxKind.TemplateExpression, Decl(narrowingUnionToUnion4.ts, 16, 16))
+}
+
+interface TypeNodeBase extends BaseNode {
+>TypeNodeBase : Symbol(TypeNodeBase, Decl(narrowingUnionToUnion4.ts, 18, 1))
+>BaseNode : Symbol(BaseNode, Decl(narrowingUnionToUnion4.ts, 81, 22))
+
+  _typeNodeBrand: any;
+>_typeNodeBrand : Symbol(TypeNodeBase._typeNodeBrand, Decl(narrowingUnionToUnion4.ts, 20, 41))
+}
+
+interface NullLiteral extends PrimaryExpressionBase, TypeNodeBase {
+>NullLiteral : Symbol(NullLiteral, Decl(narrowingUnionToUnion4.ts, 22, 1))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+>TypeNodeBase : Symbol(TypeNodeBase, Decl(narrowingUnionToUnion4.ts, 18, 1))
+
+  kind: SyntaxKind.NullKeyword;
+>kind : Symbol(NullLiteral.kind, Decl(narrowingUnionToUnion4.ts, 24, 67))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>NullKeyword : Symbol(SyntaxKind.NullKeyword, Decl(narrowingUnionToUnion4.ts, 4, 30))
+}
+
+interface BooleanLiteral extends PrimaryExpressionBase, TypeNodeBase {
+>BooleanLiteral : Symbol(BooleanLiteral, Decl(narrowingUnionToUnion4.ts, 26, 1))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+>TypeNodeBase : Symbol(TypeNodeBase, Decl(narrowingUnionToUnion4.ts, 18, 1))
+
+  kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
+>kind : Symbol(BooleanLiteral.kind, Decl(narrowingUnionToUnion4.ts, 28, 70))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>TrueKeyword : Symbol(SyntaxKind.TrueKeyword, Decl(narrowingUnionToUnion4.ts, 5, 14))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>FalseKeyword : Symbol(SyntaxKind.FalseKeyword, Decl(narrowingUnionToUnion4.ts, 6, 14))
+}
+
+interface ThisExpression extends PrimaryExpressionBase, TypeNodeBase {
+>ThisExpression : Symbol(ThisExpression, Decl(narrowingUnionToUnion4.ts, 30, 1))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+>TypeNodeBase : Symbol(TypeNodeBase, Decl(narrowingUnionToUnion4.ts, 18, 1))
+
+  kind: SyntaxKind.ThisKeyword;
+>kind : Symbol(ThisExpression.kind, Decl(narrowingUnionToUnion4.ts, 32, 70))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>ThisKeyword : Symbol(SyntaxKind.ThisKeyword, Decl(narrowingUnionToUnion4.ts, 7, 15))
+}
+
+interface NewExpression extends PrimaryExpressionBase {
+>NewExpression : Symbol(NewExpression, Decl(narrowingUnionToUnion4.ts, 34, 1))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+
+  kind: SyntaxKind.NewExpression;
+>kind : Symbol(NewExpression.kind, Decl(narrowingUnionToUnion4.ts, 36, 55))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>NewExpression : Symbol(SyntaxKind.NewExpression, Decl(narrowingUnionToUnion4.ts, 13, 26))
+
+  expression: Expression;
+>expression : Symbol(NewExpression.expression, Decl(narrowingUnionToUnion4.ts, 37, 33))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion4.ts, 76, 18))
+}
+
+interface LiteralLikeNodeBase extends BaseNode {
+>LiteralLikeNodeBase : Symbol(LiteralLikeNodeBase, Decl(narrowingUnionToUnion4.ts, 39, 1))
+>BaseNode : Symbol(BaseNode, Decl(narrowingUnionToUnion4.ts, 81, 22))
+
+  text: string;
+>text : Symbol(LiteralLikeNodeBase.text, Decl(narrowingUnionToUnion4.ts, 41, 48))
+
+  isUnterminated?: boolean;
+>isUnterminated : Symbol(LiteralLikeNodeBase.isUnterminated, Decl(narrowingUnionToUnion4.ts, 42, 15))
+
+  hasExtendedUnicodeEscape?: boolean;
+>hasExtendedUnicodeEscape : Symbol(LiteralLikeNodeBase.hasExtendedUnicodeEscape, Decl(narrowingUnionToUnion4.ts, 43, 27))
+}
+
+interface LiteralExpressionBase
+>LiteralExpressionBase : Symbol(LiteralExpressionBase, Decl(narrowingUnionToUnion4.ts, 45, 1))
+
+  extends LiteralLikeNodeBase,
+>LiteralLikeNodeBase : Symbol(LiteralLikeNodeBase, Decl(narrowingUnionToUnion4.ts, 39, 1))
+
+    PrimaryExpressionBase {
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+
+  _literalExpressionBrand: any;
+>_literalExpressionBrand : Symbol(LiteralExpressionBase._literalExpressionBrand, Decl(narrowingUnionToUnion4.ts, 49, 27))
+}
+
+interface StringLiteral extends LiteralExpressionBase {
+>StringLiteral : Symbol(StringLiteral, Decl(narrowingUnionToUnion4.ts, 51, 1))
+>LiteralExpressionBase : Symbol(LiteralExpressionBase, Decl(narrowingUnionToUnion4.ts, 45, 1))
+
+  kind: SyntaxKind.StringLiteral;
+>kind : Symbol(StringLiteral.kind, Decl(narrowingUnionToUnion4.ts, 53, 55))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>StringLiteral : Symbol(SyntaxKind.StringLiteral, Decl(narrowingUnionToUnion4.ts, 15, 17))
+
+  singleQuote?: boolean;
+>singleQuote : Symbol(StringLiteral.singleQuote, Decl(narrowingUnionToUnion4.ts, 54, 33))
+}
+
+interface NumericLiteral extends LiteralExpressionBase {
+>NumericLiteral : Symbol(NumericLiteral, Decl(narrowingUnionToUnion4.ts, 56, 1))
+>LiteralExpressionBase : Symbol(LiteralExpressionBase, Decl(narrowingUnionToUnion4.ts, 45, 1))
+
+  kind: SyntaxKind.NumericLiteral;
+>kind : Symbol(NumericLiteral.kind, Decl(narrowingUnionToUnion4.ts, 58, 56))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>NumericLiteral : Symbol(SyntaxKind.NumericLiteral, Decl(narrowingUnionToUnion4.ts, 14, 16))
+}
+
+type LiteralExpression = StringLiteral | NumericLiteral;
+>LiteralExpression : Symbol(LiteralExpression, Decl(narrowingUnionToUnion4.ts, 60, 1))
+>StringLiteral : Symbol(StringLiteral, Decl(narrowingUnionToUnion4.ts, 51, 1))
+>NumericLiteral : Symbol(NumericLiteral, Decl(narrowingUnionToUnion4.ts, 56, 1))
+
+interface TemplateExpression extends PrimaryExpressionBase {
+>TemplateExpression : Symbol(TemplateExpression, Decl(narrowingUnionToUnion4.ts, 62, 56))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+
+  kind: SyntaxKind.TemplateExpression;
+>kind : Symbol(TemplateExpression.kind, Decl(narrowingUnionToUnion4.ts, 64, 60))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>TemplateExpression : Symbol(SyntaxKind.TemplateExpression, Decl(narrowingUnionToUnion4.ts, 16, 16))
+}
+
+type PrimaryExpression =
+>PrimaryExpression : Symbol(PrimaryExpression, Decl(narrowingUnionToUnion4.ts, 66, 1))
+
+  | Identifier
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion4.ts, 109, 1))
+
+  | NullLiteral
+>NullLiteral : Symbol(NullLiteral, Decl(narrowingUnionToUnion4.ts, 22, 1))
+
+  | BooleanLiteral
+>BooleanLiteral : Symbol(BooleanLiteral, Decl(narrowingUnionToUnion4.ts, 26, 1))
+
+  | ThisExpression
+>ThisExpression : Symbol(ThisExpression, Decl(narrowingUnionToUnion4.ts, 30, 1))
+
+  | LiteralExpression
+>LiteralExpression : Symbol(LiteralExpression, Decl(narrowingUnionToUnion4.ts, 60, 1))
+
+  | TemplateExpression
+>TemplateExpression : Symbol(TemplateExpression, Decl(narrowingUnionToUnion4.ts, 62, 56))
+
+  | ParenthesizedExpression
+>ParenthesizedExpression : Symbol(ParenthesizedExpression, Decl(narrowingUnionToUnion4.ts, 125, 1))
+
+  | NewExpression;
+>NewExpression : Symbol(NewExpression, Decl(narrowingUnionToUnion4.ts, 34, 1))
+
+type Expression =
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion4.ts, 76, 18))
+
+  | PropertyAccessExpression
+>PropertyAccessExpression : Symbol(PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 114, 1))
+
+  | PropertyAccessEntityNameExpression
+>PropertyAccessEntityNameExpression : Symbol(PropertyAccessEntityNameExpression, Decl(narrowingUnionToUnion4.ts, 120, 1))
+
+  | PrimaryExpression;
+>PrimaryExpression : Symbol(PrimaryExpression, Decl(narrowingUnionToUnion4.ts, 66, 1))
+
+interface BaseNode {
+>BaseNode : Symbol(BaseNode, Decl(narrowingUnionToUnion4.ts, 81, 22))
+
+  kind: SyntaxKind;
+>kind : Symbol(BaseNode.kind, Decl(narrowingUnionToUnion4.ts, 83, 20))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+}
+
+interface ExpressionBase extends BaseNode {
+>ExpressionBase : Symbol(ExpressionBase, Decl(narrowingUnionToUnion4.ts, 85, 1))
+>BaseNode : Symbol(BaseNode, Decl(narrowingUnionToUnion4.ts, 81, 22))
+
+  _expressionBrand: any;
+>_expressionBrand : Symbol(ExpressionBase._expressionBrand, Decl(narrowingUnionToUnion4.ts, 87, 43))
+}
+
+interface UnaryExpressionBase extends ExpressionBase {
+>UnaryExpressionBase : Symbol(UnaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 89, 1))
+>ExpressionBase : Symbol(ExpressionBase, Decl(narrowingUnionToUnion4.ts, 85, 1))
+
+  _unaryExpressionBrand: any;
+>_unaryExpressionBrand : Symbol(UnaryExpressionBase._unaryExpressionBrand, Decl(narrowingUnionToUnion4.ts, 91, 54))
+}
+
+interface UpdateExpressionBase extends UnaryExpressionBase {
+>UpdateExpressionBase : Symbol(UpdateExpressionBase, Decl(narrowingUnionToUnion4.ts, 93, 1))
+>UnaryExpressionBase : Symbol(UnaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 89, 1))
+
+  _updateExpressionBrand: any;
+>_updateExpressionBrand : Symbol(UpdateExpressionBase._updateExpressionBrand, Decl(narrowingUnionToUnion4.ts, 95, 60))
+}
+
+interface LeftHandSideExpressionBase extends UpdateExpressionBase {
+>LeftHandSideExpressionBase : Symbol(LeftHandSideExpressionBase, Decl(narrowingUnionToUnion4.ts, 97, 1))
+>UpdateExpressionBase : Symbol(UpdateExpressionBase, Decl(narrowingUnionToUnion4.ts, 93, 1))
+
+  _leftHandSideExpressionBrand: any;
+>_leftHandSideExpressionBrand : Symbol(LeftHandSideExpressionBase._leftHandSideExpressionBrand, Decl(narrowingUnionToUnion4.ts, 99, 67))
+}
+
+interface MemberExpressionBase extends LeftHandSideExpressionBase {
+>MemberExpressionBase : Symbol(MemberExpressionBase, Decl(narrowingUnionToUnion4.ts, 101, 1))
+>LeftHandSideExpressionBase : Symbol(LeftHandSideExpressionBase, Decl(narrowingUnionToUnion4.ts, 97, 1))
+
+  _memberExpressionBrand: any;
+>_memberExpressionBrand : Symbol(MemberExpressionBase._memberExpressionBrand, Decl(narrowingUnionToUnion4.ts, 103, 67))
+}
+
+interface PrimaryExpressionBase extends MemberExpressionBase {
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+>MemberExpressionBase : Symbol(MemberExpressionBase, Decl(narrowingUnionToUnion4.ts, 101, 1))
+
+  _primaryExpressionBrand: any;
+>_primaryExpressionBrand : Symbol(PrimaryExpressionBase._primaryExpressionBrand, Decl(narrowingUnionToUnion4.ts, 107, 62))
+}
+
+interface Identifier extends PrimaryExpressionBase {
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion4.ts, 109, 1))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+
+  kind: SyntaxKind.Identifier;
+>kind : Symbol(Identifier.kind, Decl(narrowingUnionToUnion4.ts, 111, 52))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>Identifier : Symbol(SyntaxKind.Identifier, Decl(narrowingUnionToUnion4.ts, 0, 23))
+
+  escapedText: string;
+>escapedText : Symbol(Identifier.escapedText, Decl(narrowingUnionToUnion4.ts, 112, 30))
+}
+
+interface PropertyAccessExpression extends MemberExpressionBase {
+>PropertyAccessExpression : Symbol(PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 114, 1))
+>MemberExpressionBase : Symbol(MemberExpressionBase, Decl(narrowingUnionToUnion4.ts, 101, 1))
+
+  kind: SyntaxKind.PropertyAccessExpression;
+>kind : Symbol(PropertyAccessExpression.kind, Decl(narrowingUnionToUnion4.ts, 116, 65))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>PropertyAccessExpression : Symbol(SyntaxKind.PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 1, 13))
+
+  expression: Expression;
+>expression : Symbol(PropertyAccessExpression.expression, Decl(narrowingUnionToUnion4.ts, 117, 44))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion4.ts, 76, 18))
+
+  name: Identifier;
+>name : Symbol(PropertyAccessExpression.name, Decl(narrowingUnionToUnion4.ts, 118, 25))
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion4.ts, 109, 1))
+}
+
+interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+>PropertyAccessEntityNameExpression : Symbol(PropertyAccessEntityNameExpression, Decl(narrowingUnionToUnion4.ts, 120, 1))
+>PropertyAccessExpression : Symbol(PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 114, 1))
+
+  _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+>_propertyAccessExpressionLikeQualifiedNameBrand : Symbol(PropertyAccessEntityNameExpression._propertyAccessExpressionLikeQualifiedNameBrand, Decl(narrowingUnionToUnion4.ts, 122, 79))
+
+  expression: EntityNameExpression;
+>expression : Symbol(PropertyAccessEntityNameExpression.expression, Decl(narrowingUnionToUnion4.ts, 123, 56))
+>EntityNameExpression : Symbol(EntityNameExpression, Decl(narrowingUnionToUnion4.ts, 130, 1))
+}
+
+interface ParenthesizedExpression extends PrimaryExpressionBase {
+>ParenthesizedExpression : Symbol(ParenthesizedExpression, Decl(narrowingUnionToUnion4.ts, 125, 1))
+>PrimaryExpressionBase : Symbol(PrimaryExpressionBase, Decl(narrowingUnionToUnion4.ts, 105, 1))
+
+  kind: SyntaxKind.ParenthesizedExpression;
+>kind : Symbol(ParenthesizedExpression.kind, Decl(narrowingUnionToUnion4.ts, 127, 65))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>ParenthesizedExpression : Symbol(SyntaxKind.ParenthesizedExpression, Decl(narrowingUnionToUnion4.ts, 2, 27))
+
+  expression: Expression;
+>expression : Symbol(ParenthesizedExpression.expression, Decl(narrowingUnionToUnion4.ts, 128, 43))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion4.ts, 76, 18))
+}
+
+type EntityNameExpression =
+>EntityNameExpression : Symbol(EntityNameExpression, Decl(narrowingUnionToUnion4.ts, 130, 1))
+
+  | Identifier
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion4.ts, 109, 1))
+
+  | PropertyAccessEntityNameExpression
+>PropertyAccessEntityNameExpression : Symbol(PropertyAccessEntityNameExpression, Decl(narrowingUnionToUnion4.ts, 120, 1))
+
+  | ParenthesizedExpression;
+>ParenthesizedExpression : Symbol(ParenthesizedExpression, Decl(narrowingUnionToUnion4.ts, 125, 1))
+
+interface ExpressionWithTypeArguments extends BaseNode {
+>ExpressionWithTypeArguments : Symbol(ExpressionWithTypeArguments, Decl(narrowingUnionToUnion4.ts, 135, 28))
+>BaseNode : Symbol(BaseNode, Decl(narrowingUnionToUnion4.ts, 81, 22))
+
+  kind: SyntaxKind.ExpressionWithTypeArguments;
+>kind : Symbol(ExpressionWithTypeArguments.kind, Decl(narrowingUnionToUnion4.ts, 137, 56))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>ExpressionWithTypeArguments : Symbol(SyntaxKind.ExpressionWithTypeArguments, Decl(narrowingUnionToUnion4.ts, 3, 26))
+
+  expression: Expression;
+>expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion4.ts, 76, 18))
+}
+
+declare function assert(arg: unknown): asserts arg;
+>assert : Symbol(assert, Decl(narrowingUnionToUnion4.ts, 140, 1))
+>arg : Symbol(arg, Decl(narrowingUnionToUnion4.ts, 142, 24))
+>arg : Symbol(arg, Decl(narrowingUnionToUnion4.ts, 142, 24))
+
+declare function isEntityNameExpression(
+>isEntityNameExpression : Symbol(isEntityNameExpression, Decl(narrowingUnionToUnion4.ts, 142, 51))
+
+  node: Expression,
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 144, 40))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion4.ts, 76, 18))
+
+): node is EntityNameExpression;
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 144, 40))
+>EntityNameExpression : Symbol(EntityNameExpression, Decl(narrowingUnionToUnion4.ts, 130, 1))
+
+declare function emitEntityName(entityName: EntityNameExpression): void;
+>emitEntityName : Symbol(emitEntityName, Decl(narrowingUnionToUnion4.ts, 146, 32))
+>entityName : Symbol(entityName, Decl(narrowingUnionToUnion4.ts, 148, 32))
+>EntityNameExpression : Symbol(EntityNameExpression, Decl(narrowingUnionToUnion4.ts, 130, 1))
+
+export function emitExpressionWithTypeArguments(
+>emitExpressionWithTypeArguments : Symbol(emitExpressionWithTypeArguments, Decl(narrowingUnionToUnion4.ts, 148, 72))
+
+  node: ExpressionWithTypeArguments,
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 150, 48))
+>ExpressionWithTypeArguments : Symbol(ExpressionWithTypeArguments, Decl(narrowingUnionToUnion4.ts, 135, 28))
+
+) {
+  if (isEntityNameExpression(node.expression)) {
+>isEntityNameExpression : Symbol(isEntityNameExpression, Decl(narrowingUnionToUnion4.ts, 142, 51))
+>node.expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 150, 48))
+>expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+
+    assert(
+>assert : Symbol(assert, Decl(narrowingUnionToUnion4.ts, 140, 1))
+
+      node.expression.kind === SyntaxKind.Identifier ||
+>node.expression.kind : Symbol(kind, Decl(narrowingUnionToUnion4.ts, 116, 65), Decl(narrowingUnionToUnion4.ts, 111, 52), Decl(narrowingUnionToUnion4.ts, 127, 65))
+>node.expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 150, 48))
+>expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>kind : Symbol(kind, Decl(narrowingUnionToUnion4.ts, 116, 65), Decl(narrowingUnionToUnion4.ts, 111, 52), Decl(narrowingUnionToUnion4.ts, 127, 65))
+>SyntaxKind.Identifier : Symbol(SyntaxKind.Identifier, Decl(narrowingUnionToUnion4.ts, 0, 23))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>Identifier : Symbol(SyntaxKind.Identifier, Decl(narrowingUnionToUnion4.ts, 0, 23))
+
+        node.expression.kind === SyntaxKind.PropertyAccessExpression,
+>node.expression.kind : Symbol(kind, Decl(narrowingUnionToUnion4.ts, 116, 65), Decl(narrowingUnionToUnion4.ts, 127, 65))
+>node.expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 150, 48))
+>expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>kind : Symbol(kind, Decl(narrowingUnionToUnion4.ts, 116, 65), Decl(narrowingUnionToUnion4.ts, 127, 65))
+>SyntaxKind.PropertyAccessExpression : Symbol(SyntaxKind.PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 1, 13))
+>SyntaxKind : Symbol(SyntaxKind, Decl(narrowingUnionToUnion4.ts, 0, 0))
+>PropertyAccessExpression : Symbol(SyntaxKind.PropertyAccessExpression, Decl(narrowingUnionToUnion4.ts, 1, 13))
+
+    );
+    emitEntityName(node.expression);
+>emitEntityName : Symbol(emitEntityName, Decl(narrowingUnionToUnion4.ts, 146, 32))
+>node.expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+>node : Symbol(node, Decl(narrowingUnionToUnion4.ts, 150, 48))
+>expression : Symbol(ExpressionWithTypeArguments.expression, Decl(narrowingUnionToUnion4.ts, 138, 47))
+
+    // ...
+  }
+}
+
