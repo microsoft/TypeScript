@@ -235,6 +235,7 @@ export function nodeIsEligibleForRename(node: Node): boolean {
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.ThisKeyword:
+        case SyntaxKind.JsxNamespacedName:
             return true;
         case SyntaxKind.NumericLiteral:
             return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral);

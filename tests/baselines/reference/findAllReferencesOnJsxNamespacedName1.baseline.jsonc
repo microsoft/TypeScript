@@ -1,0 +1,204 @@
+// === findAllReferences ===
+// === /types.d.ts ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     'my-el': {
+//       <|'[|{| isWriteAccess: true |}prop:foo|]': string;|>
+//     };
+//   }
+// }
+
+// === /a.tsx ===
+// <my-el /*FIND ALL REFS*/<|[|prop:foo|]="bar"|> />
+
+  // === Definitions ===
+  // === /types.d.ts ===
+  // declare namespace JSX {
+  //   interface IntrinsicElements {
+  //     'my-el': {
+  //       <|'[|prop:foo|]': string;|>
+  //     };
+  //   }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) 'prop:foo': string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "'prop:foo'",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /types.d.ts ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     'my-el': {
+//       <|'[|{| isWriteAccess: true |}prop:foo|]': string;|>
+//     };
+//   }
+// }
+
+// === /a.tsx ===
+// <my-el <|[|prop:/*FIND ALL REFS*/foo|]="bar"|> />
+
+  // === Definitions ===
+  // === /types.d.ts ===
+  // declare namespace JSX {
+  //   interface IntrinsicElements {
+  //     'my-el': {
+  //       <|'[|prop:foo|]': string;|>
+  //     };
+  //   }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) 'prop:foo': string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "'prop:foo'",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /types.d.ts ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     'my-el': {
+//       <|'/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}prop:foo|]': string;|>
+//     };
+//   }
+// }
+
+// === /a.tsx ===
+// <my-el <|[|prop:foo|]="bar"|> />
+
+  // === Definitions ===
+  // === /types.d.ts ===
+  // declare namespace JSX {
+  //   interface IntrinsicElements {
+  //     'my-el': {
+  //       <|'/*FIND ALL REFS*/[|prop:foo|]': string;|>
+  //     };
+  //   }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) 'prop:foo': string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "'prop:foo'",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
