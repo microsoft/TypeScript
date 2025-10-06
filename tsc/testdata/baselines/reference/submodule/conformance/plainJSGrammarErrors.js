@@ -303,8 +303,8 @@ const { e: eep, m: em, ...rest: noRestAllowed } = doom;
 const { e: erp, m: erm, ...noInitialiser = true } = doom;
 // left-over parsing
 var ;
-var x = (1 || 2) ?? 3;
-var x = 2 ?? (3 || 4);
+var x = 1 || 2 ?? 3;
+var x = 2 ?? 3 || 4;
 const arr = x => x + 1;
 var a = [1, 2];
 a `length`;

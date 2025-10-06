@@ -13,8 +13,8 @@ declare const c: string | undefined
 // should be a syntax error
 a ?? b || c;
 >a ?? b || c : string | undefined
+>a ?? b : string | undefined
 >a : string | undefined
->b || c : string | undefined
 >b : string | undefined
 >c : string | undefined
 

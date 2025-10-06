@@ -38,15 +38,7 @@
  export import 'fs';
  export { C };
  function nestedExports() {
-@@= skipped -30, +30 lines =@@
- const { e: erp, m: erm, ...noInitialiser = true } = doom;
- // left-over parsing
- var ;
--var x = 1 || 2 ?? 3;
--var x = 2 ?? 3 || 4;
-+var x = (1 || 2) ?? 3;
-+var x = 2 ?? (3 || 4);
- const arr = x => x + 1;
+@@= skipped -36, +36 lines =@@
  var a = [1, 2];
  a `length`;
  const o = {

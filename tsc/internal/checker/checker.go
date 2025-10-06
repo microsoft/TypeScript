@@ -12409,11 +12409,22 @@ func (c *Checker) getSyntacticTruthySemantics(node *ast.Node) PredicateSemantics
 }
 
 func (c *Checker) checkNullishCoalesceOperands(left *ast.Node, right *ast.Node) {
-	if ast.IsBinaryExpression(left) && ast.IsLogicalBinaryOperator(left.AsBinaryExpression().OperatorToken.Kind) {
-		c.grammarErrorOnNode(left, diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses, scanner.TokenToString(left.AsBinaryExpression().OperatorToken.Kind), scanner.TokenToString(ast.KindQuestionQuestionToken))
-	}
-	if ast.IsBinaryExpression(right) && ast.IsLogicalBinaryOperator(right.AsBinaryExpression().OperatorToken.Kind) {
-		c.grammarErrorOnNode(right, diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses, scanner.TokenToString(right.AsBinaryExpression().OperatorToken.Kind), scanner.TokenToString(ast.KindQuestionQuestionToken))
+	if ast.IsBinaryExpression(left.Parent.Parent) {
+		grandparentLeft := left.Parent.Parent.AsBinaryExpression().Left
+		grandparentOperatorToken := left.Parent.Parent.AsBinaryExpression().OperatorToken
+		if ast.IsBinaryExpression(grandparentLeft) && grandparentOperatorToken.Kind == ast.KindBarBarToken {
+			c.grammarErrorOnNode(grandparentLeft, diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses, scanner.TokenToString(ast.KindQuestionQuestionToken), scanner.TokenToString(grandparentOperatorToken.Kind))
+		}
+	} else if ast.IsBinaryExpression(left) {
+		operatorToken := left.AsBinaryExpression().OperatorToken
+		if operatorToken.Kind == ast.KindBarBarToken || operatorToken.Kind == ast.KindAmpersandAmpersandToken {
+			c.grammarErrorOnNode(left, diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses, scanner.TokenToString(operatorToken.Kind), scanner.TokenToString(ast.KindQuestionQuestionToken))
+		}
+	} else if ast.IsBinaryExpression(right) {
+		operatorToken := right.AsBinaryExpression().OperatorToken
+		if operatorToken.Kind == ast.KindAmpersandAmpersandToken {
+			c.grammarErrorOnNode(right, diagnostics.X_0_and_1_operations_cannot_be_mixed_without_parentheses, scanner.TokenToString(ast.KindQuestionQuestionToken), scanner.TokenToString(operatorToken.Kind))
+		}
 	}
 	c.checkNullishCoalesceOperandLeft(left)
 	c.checkNullishCoalesceOperandRight(right)

@@ -2716,14 +2716,6 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 	case ast.OperatorPrecedenceAssignment:
 		// assignment is right-associative
 		leftPrec = ast.OperatorPrecedenceLeftHandSide
-	case ast.OperatorPrecedenceCoalesce:
-		// allow coalesce on the left, but short circuit to BitwiseOR
-		if isBinaryOperation(node.Left, ast.KindQuestionQuestionToken) {
-			leftPrec = ast.OperatorPrecedenceCoalesce
-		} else {
-			leftPrec = ast.OperatorPrecedenceBitwiseOR
-		}
-		rightPrec = ast.OperatorPrecedenceBitwiseOR
 	case ast.OperatorPrecedenceLogicalOR:
 		rightPrec = ast.OperatorPrecedenceLogicalAND
 	case ast.OperatorPrecedenceLogicalAND:
