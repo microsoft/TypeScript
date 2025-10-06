@@ -37,5 +37,5 @@ exports.createClient = createClient;
 type UpdatedClient<C> = C & {
     foo: number;
 };
-export declare const createClient: <D extends Record<string, new (...args: any[]) => string> | (new (...args: any[]) => string)>(clientDef: D) => D extends new (...args: any[]) => infer C ? UpdatedClient<C> : { [K in keyof D]: D[K] extends new (...args: any[]) => infer C ? UpdatedClient<C> : never; };
+export declare const createClient: <D extends Record<string, new (...args: any[]) => string> | (new (...args: any[]) => string)>(clientDef: D) => D extends new (...args: any[]) => infer C ? UpdatedClient<C> : { [K in keyof D]: D[K] extends new (...args: any[]) => infer C_1 ? UpdatedClient<C_1> : never; };
 export {};

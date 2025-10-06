@@ -24,12 +24,12 @@ func cloneNodeBuilderContext(context *NodeBuilderContext) func() {
 	// export const y: <T_1>(x: T_1) => T_1
 	oldMustCreateTypeParameterSymbolList := context.hasCreatedTypeParameterSymbolList
 	oldMustCreateTypeParametersNamesLookups := context.hasCreatedTypeParametersNamesLookups
-	context.hasCreatedTypeParameterSymbolList = false
-	context.hasCreatedTypeParametersNamesLookups = false
 	oldTypeParameterNames := context.typeParameterNames
 	oldTypeParameterNamesByText := context.typeParameterNamesByText
 	oldTypeParameterNamesByTextNextNameCount := context.typeParameterNamesByTextNextNameCount
 	oldTypeParameterSymbolList := context.typeParameterSymbolList
+	context.hasCreatedTypeParameterSymbolList = oldTypeParameterSymbolList != nil
+	context.hasCreatedTypeParametersNamesLookups = oldTypeParameterNames != nil
 	context.typeParameterNames = maps.Clone(context.typeParameterNames)
 	context.typeParameterNamesByText = maps.Clone(context.typeParameterNamesByText)
 	context.typeParameterNamesByTextNextNameCount = maps.Clone(context.typeParameterNamesByTextNextNameCount)
