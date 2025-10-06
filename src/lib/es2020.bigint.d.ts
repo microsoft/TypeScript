@@ -742,6 +742,6 @@ interface DataView<TArrayBuffer extends ArrayBufferLike> {
 
 declare namespace Intl {
     interface NumberFormat {
-        format(value: number | bigint): string;
+        format(value: number | bigint | string): string;
     }
 }
