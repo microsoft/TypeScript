@@ -58,3 +58,17 @@ fn(`${b} 3`);
 >b : string
 >  : ^^^^^^
 
+const empty = "";
+>empty : ""
+>      : ^^
+>"" : ""
+>   : ^^
+
+const empty2 = `${empty}`;
+>empty2 : ""
+>       : ^^
+>`${empty}` : ""
+>           : ^^
+>empty : ""
+>      : ^^
+
