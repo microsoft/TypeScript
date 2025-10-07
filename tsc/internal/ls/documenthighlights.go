@@ -550,14 +550,14 @@ func getLoopBreakContinueOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 }
 
 func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	parent := ast.FindAncestor(node.Parent, ast.IsFunctionLike)
-	if parent == nil {
+	fun := ast.GetContainingFunction(node)
+	if fun == nil {
 		return nil
 	}
-	parentFunc := parent.AsFunctionDeclaration()
+
 	var keywords []*ast.Node
 
-	modifiers := parentFunc.Modifiers()
+	modifiers := fun.Modifiers()
 	if modifiers != nil {
 		for _, modifier := range modifiers.Nodes {
 			if modifier.Kind == ast.KindAsyncKeyword {
@@ -566,7 +566,7 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 		}
 	}
 
-	parentFunc.ForEachChild(func(child *ast.Node) bool {
+	fun.ForEachChild(func(child *ast.Node) bool {
 		traverseWithoutCrossingFunction(child, sourceFile, func(child *ast.Node) {
 			if ast.IsAwaitExpression(child) {
 				token := lsutil.GetFirstToken(child, sourceFile)

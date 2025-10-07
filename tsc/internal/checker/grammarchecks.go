@@ -1263,7 +1263,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 				// use of 'for-await-of' in non-async function
 				if !c.hasParseDiagnostics(sourceFile) {
 					diagnostic := createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules)
-					containingFunc := getContainingFunction(forInOrOfStatement.AsNode())
+					containingFunc := ast.GetContainingFunction(forInOrOfStatement.AsNode())
 					if containingFunc != nil && containingFunc.Kind != ast.KindConstructor {
 						debug.Assert((getFunctionFlags(containingFunc)&FunctionFlagsAsync) == 0, "Enclosing function should never be an async function.")
 						if hasAsyncModifier(containingFunc) {

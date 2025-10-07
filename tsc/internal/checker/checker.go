@@ -2464,7 +2464,7 @@ func (c *Checker) checkParameter(node *ast.Node) {
 	// or if its FunctionBody is strict code(11.1.5).
 	c.checkGrammarModifiers(node)
 	c.checkVariableLikeDeclaration(node)
-	fn := getContainingFunction(node)
+	fn := ast.GetContainingFunction(node)
 	var paramName string
 	if node.Name() != nil && ast.IsIdentifier(node.Name()) {
 		paramName = node.Name().Text()
@@ -5522,7 +5522,7 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 	}
 	if ast.IsBindingElement(node) {
 		propName := node.PropertyName()
-		if propName != nil && ast.IsIdentifier(node.Name()) && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(getContainingFunction(node).Body()) {
+		if propName != nil && ast.IsIdentifier(node.Name()) && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(ast.GetContainingFunction(node).Body()) {
 			// type F = ({a: string}) => void;
 			//               ^^^^^^
 			// variable renaming in function type notation is confusing,
@@ -5557,7 +5557,7 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 		c.checkSourceElements(name.AsBindingPattern().Elements.Nodes)
 	}
 	// For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-	if initializer != nil && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(getContainingFunction(node).Body()) {
+	if initializer != nil && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(ast.GetContainingFunction(node).Body()) {
 		c.error(node, diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation)
 		return
 	}
@@ -10508,7 +10508,7 @@ func (c *Checker) checkSpreadExpression(node *ast.Node, checkMode CheckMode) *Ty
 
 func (c *Checker) checkYieldExpression(node *ast.Node) *Type {
 	c.checkGrammarYieldExpression(node)
-	fn := getContainingFunction(node)
+	fn := ast.GetContainingFunction(node)
 	if fn == nil {
 		return c.anyType
 	}
@@ -22814,7 +22814,7 @@ func (c *Checker) getTypeAliasInstantiation(symbol *ast.Symbol, typeArguments []
 
 func isLocalTypeAlias(symbol *ast.Symbol) bool {
 	declaration := core.Find(symbol.Declarations, isTypeAlias)
-	return declaration != nil && getContainingFunction(declaration) != nil
+	return declaration != nil && ast.GetContainingFunction(declaration) != nil
 }
 
 func (c *Checker) getDeclaredTypeOfSymbol(symbol *ast.Symbol) *Type {
@@ -28318,7 +28318,7 @@ func (c *Checker) getContextualTypeForStaticPropertyDeclaration(declaration *ast
 }
 
 func (c *Checker) getContextualTypeForReturnExpression(node *ast.Node, contextFlags ContextFlags) *Type {
-	fn := getContainingFunction(node)
+	fn := ast.GetContainingFunction(node)
 	if fn != nil {
 		contextualReturnType := c.getContextualReturnType(fn, contextFlags)
 		if contextualReturnType != nil {
@@ -28413,7 +28413,7 @@ func (c *Checker) getContextualSignatureForFunctionLikeDeclaration(node *ast.Nod
 }
 
 func (c *Checker) getContextualTypeForYieldOperand(node *ast.Node, contextFlags ContextFlags) *Type {
-	fn := getContainingFunction(node)
+	fn := ast.GetContainingFunction(node)
 	if fn != nil {
 		functionFlags := getFunctionFlags(fn)
 		contextualReturnType := c.getContextualReturnType(fn, contextFlags)

@@ -3865,3 +3865,7 @@ func IsJSDocNameReferenceContext(node *Node) bool {
 func IsImportOrImportEqualsDeclaration(node *Node) bool {
 	return IsImportDeclaration(node) || IsImportEqualsDeclaration(node)
 }
+
+func GetContainingFunction(node *Node) *Node {
+	return FindAncestor(node.Parent, IsFunctionLike)
+}

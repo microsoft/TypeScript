@@ -911,10 +911,6 @@ func (s *orderedSet[T]) add(value T) {
 	s.values = append(s.values, value)
 }
 
-func getContainingFunction(node *ast.Node) *ast.Node {
-	return ast.FindAncestor(node.Parent, ast.IsFunctionLike)
-}
-
 func getContainingFunctionOrClassStaticBlock(node *ast.Node) *ast.Node {
 	return ast.FindAncestor(node.Parent, ast.IsFunctionLikeOrClassStaticBlockDeclaration)
 }
