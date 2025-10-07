@@ -248,6 +248,7 @@ const libEntries: [string, string][] = [
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.float16", "lib.esnext.float16.d.ts"],
+    ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
@@ -873,7 +874,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsProgramStructure: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Enable_lib_replacement,
-        defaultValueDescription: true,
+        defaultValueDescription: false,
     },
 
     // Strict Type Checks
@@ -1243,7 +1244,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Check_side_effect_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
 
     // Source Maps

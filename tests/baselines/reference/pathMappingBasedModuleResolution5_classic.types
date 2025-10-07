@@ -21,6 +21,7 @@ declare function use(a: any): void;
 >use : (a: any) => void
 >    : ^ ^^   ^^^^^    
 >a : any
+>  : ^^^
 
 use(x.toExponential());
 >use(x.toExponential()) : void

@@ -61,7 +61,6 @@ export class A {}
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -93,7 +92,7 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -104,11 +103,11 @@ export declare class A {
   "fileInfos": {
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./index.ts": {
@@ -131,7 +130,7 @@ export declare class A {
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 774
+  "size": 734
 }
 
 //// [/user/username/projects/transitiveReferences/b/index.js]
@@ -148,7 +147,7 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-2591036212-import {A} from '@ref/a';\nexport const b = new A();","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-2591036212-import {A} from '@ref/a';\nexport const b = new A();","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -165,11 +164,11 @@ export declare const b: A;
   "fileInfos": {
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../a/index.d.ts": {
@@ -199,9 +198,23 @@ export declare const b: A;
       "../a/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../a/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 943
+  "size": 940
 }
 
 //// [/user/username/projects/transitiveReferences/c/index.js]
@@ -214,15 +227,16 @@ a_1.X;
 
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.tsbuildinfo]
-{"root":["./index.ts"],"version":"FakeTSVersion"}
+{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./index.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 49
+  "size": 63
 }
 
 
@@ -259,6 +273,12 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.d.ts
@@ -271,7 +291,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -340,12 +360,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -400,7 +415,7 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -417,11 +432,11 @@ export declare function gfoo(): void;
   "fileInfos": {
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../a/index.d.ts": {
@@ -451,10 +466,33 @@ export declare function gfoo(): void;
       "../a/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../a/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1006
+  "size": 1003
 }
+
+
+Output::
+[96mb/tsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 
 
 Timeout callback:: count: 1
@@ -469,6 +507,12 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.d.ts
@@ -481,7 +525,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -513,9 +557,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
@@ -611,6 +653,12 @@ File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.d.ts
@@ -623,7 +671,7 @@ nrefs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -701,9 +749,7 @@ Program files::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
@@ -792,6 +838,12 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.d.ts
@@ -804,7 +856,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -882,9 +934,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/refs/a.d.ts (used version)
@@ -952,6 +1002,12 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 nrefs/a.d.ts
@@ -963,7 +1019,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1038,10 +1094,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
@@ -1110,6 +1163,12 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
@@ -1120,7 +1179,7 @@ b/index.d.ts
   File is output of project reference source 'b/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1194,8 +1253,7 @@ Program files::
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b/index.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
@@ -1251,6 +1309,12 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mc/tsconfig.json[0m:[93m11[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
 
 [7m11[0m     {
@@ -1269,7 +1333,7 @@ b/index.ts
   Imported via '../b' from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -1346,9 +1410,7 @@ Program files::
 /user/username/projects/transitiveReferences/b/index.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b/index.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b/index.ts (computed .d.ts)
@@ -1414,6 +1476,12 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.d.ts
@@ -1426,7 +1494,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1503,10 +1571,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a/index.d.ts (used version)
@@ -1566,6 +1631,12 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m14[0m     }
 [7m  [0m [91m~~~~~[0m
 
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.ts
@@ -1577,7 +1648,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -1654,10 +1725,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a/index.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a/index.ts (computed .d.ts)
@@ -1714,6 +1782,12 @@ Output::
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
+[96mc/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/index.d.ts
@@ -1726,7 +1800,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1802,10 +1876,7 @@ Program files::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a/index.d.ts (used version)

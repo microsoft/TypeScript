@@ -29,7 +29,6 @@ export {}
 //// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a) Inode:: 18
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 23
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -111,7 +110,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchron
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 123
+//// [/home/user/projects/myproject/src/file.js] Inode:: 124
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -336,7 +335,7 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 {"synchro
 
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 123
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 124
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:
