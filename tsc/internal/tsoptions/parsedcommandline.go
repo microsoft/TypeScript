@@ -1,17 +1,24 @@
 package tsoptions
 
 import (
+	"fmt"
 	"iter"
 	"slices"
+	"strings"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/glob"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+)
+
+const (
+	fileGlobPattern          = "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json}"
+	recursiveFileGlobPattern = "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json}"
 )
 
 type ParsedCommandLine struct {
@@ -25,6 +32,8 @@ type ParsedCommandLine struct {
 	comparePathsOptions     tspath.ComparePathsOptions
 	wildcardDirectoriesOnce sync.Once
 	wildcardDirectories     map[string]bool
+	includeGlobsOnce        sync.Once
+	includeGlobs            []*glob.Glob
 	extraFileExtensions     []FileExtensionInfo
 
 	sourceAndOutputMapsOnce     sync.Once
@@ -197,19 +206,38 @@ func (p *ParsedCommandLine) WildcardDirectories() map[string]bool {
 		return nil
 	}
 
-	if p.wildcardDirectories != nil {
-		return p.wildcardDirectories
-	}
-
 	p.wildcardDirectoriesOnce.Do(func() {
-		p.wildcardDirectories = getWildcardDirectories(
-			p.ConfigFile.configFileSpecs.validatedIncludeSpecs,
-			p.ConfigFile.configFileSpecs.validatedExcludeSpecs,
-			p.comparePathsOptions,
-		)
+		if p.wildcardDirectories == nil {
+			p.wildcardDirectories = getWildcardDirectories(
+				p.ConfigFile.configFileSpecs.validatedIncludeSpecs,
+				p.ConfigFile.configFileSpecs.validatedExcludeSpecs,
+				p.comparePathsOptions,
+			)
+		}
 	})
 
 	return p.wildcardDirectories
+}
+
+func (p *ParsedCommandLine) WildcardDirectoryGlobs() []*glob.Glob {
+	wildcardDirectories := p.WildcardDirectories()
+	if wildcardDirectories == nil {
+		return nil
+	}
+
+	p.includeGlobsOnce.Do(func() {
+		if p.includeGlobs == nil {
+			globs := make([]*glob.Glob, 0, len(wildcardDirectories))
+			for dir, recursive := range wildcardDirectories {
+				if parsed, err := glob.Parse(fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlobPattern, fileGlobPattern))); err == nil {
+					globs = append(globs, parsed)
+				}
+			}
+			p.includeGlobs = globs
+		}
+	})
+
+	return p.includeGlobs
 }
 
 // Normalized file names explicitly specified in `files`
@@ -285,48 +313,30 @@ func (p *ParsedCommandLine) GetConfigFileParsingDiagnostics() []*ast.Diagnostic 
 	return p.Errors
 }
 
-// Porting reference: ProjectService.isMatchedByConfig
-func (p *ParsedCommandLine) MatchesFileName(fileName string) bool {
+// PossiblyMatchesFileName is a fast check to see if a file is currently included by a config
+// or would be included if the file were to be created. It may return false positives.
+func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName string) bool {
 	path := tspath.ToPath(fileName, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
-	if slices.ContainsFunc(p.FileNames(), func(f string) bool {
-		return path == tspath.ToPath(f, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
-	}) {
+	if _, ok := p.FileNamesByPath()[path]; ok {
 		return true
 	}
 
-	if p.ConfigFile == nil {
-		return false
+	for _, include := range p.ConfigFile.configFileSpecs.validatedIncludeSpecs {
+		if !strings.ContainsAny(include, "*?") && !vfs.IsImplicitGlob(include) {
+			includePath := tspath.ToPath(include, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+			if includePath == path {
+				return true
+			}
+		}
 	}
-
-	if len(p.ConfigFile.configFileSpecs.validatedIncludeSpecs) == 0 {
-		return false
+	if wildcardDirectoryGlobs := p.WildcardDirectoryGlobs(); len(wildcardDirectoryGlobs) > 0 {
+		for _, glob := range wildcardDirectoryGlobs {
+			if glob.Match(fileName) {
+				return true
+			}
+		}
 	}
-
-	supportedExtensions := GetSupportedExtensionsWithJsonIfResolveJsonModule(
-		p.CompilerOptions(),
-		GetSupportedExtensions(p.CompilerOptions(), p.extraFileExtensions),
-	)
-
-	if !tspath.FileExtensionIsOneOf(fileName, core.Flatten(supportedExtensions)) {
-		return false
-	}
-
-	if p.ConfigFile.configFileSpecs.matchesExclude(fileName, p.comparePathsOptions) {
-		return false
-	}
-
-	var allFileNames collections.Set[tspath.Path]
-	for _, fileName := range p.FileNames() {
-		allFileNames.Add(tspath.ToPath(fileName, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames()))
-	}
-
-	if hasFileWithHigherPriorityExtension(string(path), supportedExtensions, func(fileName string) bool {
-		return allFileNames.Has(tspath.Path(fileName))
-	}) {
-		return false
-	}
-
-	return p.ConfigFile.configFileSpecs.getMatchedIncludeSpec(fileName, p.comparePathsOptions) != ""
+	return false
 }
 
 func (p *ParsedCommandLine) GetMatchedFileSpec(fileName string) string {
@@ -363,6 +373,7 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		CompileOnSave:       p.CompileOnSave,
 		comparePathsOptions: p.comparePathsOptions,
 		wildcardDirectories: p.wildcardDirectories,
+		includeGlobs:        p.includeGlobs,
 		extraFileExtensions: p.extraFileExtensions,
 		literalFileNamesLen: literalFileNamesLen,
 	}

@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/project/logging"
+	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/text/language"
@@ -651,9 +652,27 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.watchEnabled = true
 	}
 
+	cwd := s.cwd
+	if s.initializeParams.Capabilities != nil &&
+		s.initializeParams.Capabilities.Workspace != nil &&
+		s.initializeParams.Capabilities.Workspace.WorkspaceFolders != nil &&
+		ptrIsTrue(s.initializeParams.Capabilities.Workspace.WorkspaceFolders) &&
+		s.initializeParams.WorkspaceFolders != nil &&
+		s.initializeParams.WorkspaceFolders.WorkspaceFolders != nil &&
+		len(*s.initializeParams.WorkspaceFolders.WorkspaceFolders) == 1 {
+		cwd = lsproto.DocumentUri((*s.initializeParams.WorkspaceFolders.WorkspaceFolders)[0].Uri).FileName()
+	} else if s.initializeParams.RootUri.DocumentUri != nil {
+		cwd = s.initializeParams.RootUri.DocumentUri.FileName()
+	} else if s.initializeParams.RootPath != nil && s.initializeParams.RootPath.String != nil {
+		cwd = *s.initializeParams.RootPath.String
+	}
+	if !tspath.PathIsAbsolute(cwd) {
+		cwd = s.cwd
+	}
+
 	s.session = project.NewSession(&project.SessionInit{
 		Options: &project.SessionOptions{
-			CurrentDirectory:   s.cwd,
+			CurrentDirectory:   cwd,
 			DefaultLibraryPath: s.defaultLibraryPath,
 			TypingsLocation:    s.typingsLocation,
 			PositionEncoding:   s.positionEncoding,

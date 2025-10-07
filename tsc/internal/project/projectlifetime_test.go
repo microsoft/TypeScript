@@ -70,7 +70,7 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p2/tsconfig.json")) != nil)
-		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 2)
+		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 1)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p2/tsconfig.json")) != nil)
 
@@ -89,8 +89,8 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p1/tsconfig.json")) == nil)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p2/tsconfig.json")) != nil)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p3/tsconfig.json")) != nil)
-		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 3)
-		assert.Equal(t, len(utils.Client().UnwatchFilesCalls()), 1)
+		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 1)
+		assert.Equal(t, len(utils.Client().UnwatchFilesCalls()), 0)
 
 		// Close p2 and p3 files, open p1 file again
 		session.DidCloseFile(context.Background(), uri2)
@@ -105,8 +105,8 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p2/tsconfig.json")) == nil)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/home/projects/ts/p3/tsconfig.json")) == nil)
-		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 4)
-		assert.Equal(t, len(utils.Client().UnwatchFilesCalls()), 3)
+		assert.Equal(t, len(utils.Client().WatchFilesCalls()), 1)
+		assert.Equal(t, len(utils.Client().UnwatchFilesCalls()), 0)
 	})
 
 	t.Run("unrooted inferred projects", func(t *testing.T) {

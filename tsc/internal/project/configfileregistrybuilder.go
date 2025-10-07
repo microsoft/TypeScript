@@ -165,21 +165,61 @@ func (c *configFileRegistryBuilder) updateRootFilesWatch(fileName string, entry 
 		return
 	}
 
-	wildcardGlobs := entry.commandLine.WildcardDirectories()
-	rootFileGlobs := make([]string, 0, len(wildcardGlobs)+1+len(entry.commandLine.ExtendedSourceFiles()))
-	rootFileGlobs = append(rootFileGlobs, fileName)
-	for _, extendedConfig := range entry.commandLine.ExtendedSourceFiles() {
-		rootFileGlobs = append(rootFileGlobs, extendedConfig)
+	var ignored map[string]struct{}
+	var globs []string
+	var externalDirectories []string
+	var includeWorkspace bool
+	var includeTsconfigDir bool
+	tsconfigDir := tspath.GetDirectoryPath(fileName)
+	wildcardDirectories := entry.commandLine.WildcardDirectories()
+	comparePathsOptions := tspath.ComparePathsOptions{
+		CurrentDirectory:          c.sessionOptions.CurrentDirectory,
+		UseCaseSensitiveFileNames: c.FS().UseCaseSensitiveFileNames(),
 	}
-	for dir, recursive := range wildcardGlobs {
-		rootFileGlobs = append(rootFileGlobs, fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlobPattern, fileGlobPattern)))
+	for dir := range wildcardDirectories {
+		if tspath.ContainsPath(c.sessionOptions.CurrentDirectory, dir, comparePathsOptions) {
+			includeWorkspace = true
+		} else if tspath.ContainsPath(tsconfigDir, dir, comparePathsOptions) {
+			includeTsconfigDir = true
+		} else {
+			externalDirectories = append(externalDirectories, dir)
+		}
 	}
 	for _, fileName := range entry.commandLine.LiteralFileNames() {
-		rootFileGlobs = append(rootFileGlobs, fileName)
+		if tspath.ContainsPath(c.sessionOptions.CurrentDirectory, fileName, comparePathsOptions) {
+			includeWorkspace = true
+		} else if tspath.ContainsPath(tsconfigDir, fileName, comparePathsOptions) {
+			includeTsconfigDir = true
+		} else {
+			externalDirectories = append(externalDirectories, tspath.GetDirectoryPath(fileName))
+		}
 	}
 
-	slices.Sort(rootFileGlobs)
-	entry.rootFilesWatch = entry.rootFilesWatch.Clone(rootFileGlobs)
+	if includeWorkspace {
+		globs = append(globs, getRecursiveGlobPattern(c.sessionOptions.CurrentDirectory))
+	}
+	if includeTsconfigDir {
+		globs = append(globs, getRecursiveGlobPattern(tsconfigDir))
+	}
+	for _, fileName := range entry.commandLine.ExtendedSourceFiles() {
+		if includeWorkspace && tspath.ContainsPath(c.sessionOptions.CurrentDirectory, fileName, comparePathsOptions) {
+			continue
+		}
+		globs = append(globs, fileName)
+	}
+	if len(externalDirectories) > 0 {
+		commonParents, ignoredExternalDirs := tspath.GetCommonParents(externalDirectories, minWatchLocationDepth, getPathComponentsForWatching, comparePathsOptions)
+		for _, parent := range commonParents {
+			globs = append(globs, getRecursiveGlobPattern(parent))
+		}
+		ignored = ignoredExternalDirs
+	}
+
+	slices.Sort(globs)
+	entry.rootFilesWatch = entry.rootFilesWatch.Clone(patternsAndIgnored{
+		patterns: globs,
+		ignored:  ignored,
+	})
 }
 
 // acquireConfigForProject loads a config file entry from the cache, or parses it if not already
@@ -347,11 +387,8 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 					}
 					logger.Logf("Checking if any of %d created files match root files for config %s", len(createdFiles), entry.Key())
 					for _, fileName := range createdFiles {
-						parsedGlobs := config.rootFilesWatch.ParsedGlobs()
-						for _, g := range parsedGlobs {
-							if g.Match(fileName) {
-								return true
-							}
+						if config.commandLine.PossiblyMatchesFileName(fileName) {
+							return true
 						}
 					}
 					return false

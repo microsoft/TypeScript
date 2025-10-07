@@ -1733,7 +1733,11 @@ func (r *resolutionState) readPackageJsonPeerDependencies(packageJsonInfo *packa
 		r.tracer.write(diagnostics.X_package_json_has_a_peerDependencies_field.Message())
 	}
 	packageDirectory := r.realPath(packageJsonInfo.PackageDirectory)
-	nodeModules := packageDirectory[:strings.LastIndex(packageDirectory, "/node_modules")+len("/node_modules")] + "/"
+	nodeModulesIndex := strings.LastIndex(packageDirectory, "/node_modules")
+	if nodeModulesIndex == -1 {
+		return ""
+	}
+	nodeModules := packageDirectory[:nodeModulesIndex+len("/node_modules")] + "/"
 	builder := strings.Builder{}
 	for name := range peerDependencies.Value {
 		peerPackageJson := r.getPackageJsonInfo(nodeModules+name /*onlyRecordFailures*/, false)

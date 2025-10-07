@@ -704,3 +704,107 @@ func normalizePath_old(path string) string {
 func getNormalizedAbsolutePath_old(fileName string, currentDirectory string) string {
 	return GetPathFromPathComponents(GetNormalizedPathComponents(fileName, currentDirectory))
 }
+
+func TestGetCommonParents(t *testing.T) {
+	t.Parallel()
+
+	opts := ComparePathsOptions{}
+
+	t.Run("empty input", func(t *testing.T) {
+		t.Parallel()
+		var paths []string
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		assert.DeepEqual(t, got, ([]string)(nil))
+	})
+
+	t.Run("single path returns itself", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d"}
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{paths[0]}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("paths shorter than minComponents are ignored", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g", "/x/y"}
+		got, ignored := GetCommonParents(paths, 4, GetPathComponents, opts)
+		assert.DeepEqual(t, ignored, map[string]struct{}{"/x/y": {}})
+		expected := []string{"/a/b/c", "/a/b/f/g"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("three paths share /a/b", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g"}
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a/b"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("mixed with short path collapses to root when minComponents=1", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g", "/x/y/z"}
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("mixed with short path preserves both when minComponents=3", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g", "/x/y/z"}
+		got, ignored := GetCommonParents(paths, 3, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a/b", "/x/y/z"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("different volumes are returned individually", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"c:/a/b/c/d", "d:/a/b/c/d"}
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{paths[0], paths[1]}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("duplicate paths deduplicate result", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/a/b/c/d"}
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{paths[0]}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("paths with few components are returned as-is when minComponents met", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/x/y"}
+		got, ignored := GetCommonParents(paths, 2, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a/b/c/d", "/x/y"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("minComponents=2", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/c/d", "/a/z/c/e", "/a/aaa/f/g", "/x/y/z"}
+		got, ignored := GetCommonParents(paths, 2, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a", "/x/y/z"}
+		assert.DeepEqual(t, got, expected)
+	})
+
+	t.Run("trailing separators are handled", func(t *testing.T) {
+		t.Parallel()
+		paths := []string{"/a/b/", "/a/b/c"}
+		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		assert.Equal(t, len(ignored), 0)
+		expected := []string{"/a/b"}
+		assert.DeepEqual(t, got, expected)
+	})
+}

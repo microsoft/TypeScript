@@ -69,10 +69,10 @@ type Project struct {
 	// The ID of the snapshot that created the program stored in this project.
 	ProgramLastUpdate uint64
 
+	programFilesWatch       *WatchedFiles[patternsAndIgnored]
 	failedLookupsWatch      *WatchedFiles[map[tspath.Path]string]
 	affectingLocationsWatch *WatchedFiles[map[tspath.Path]string]
-	typingsFilesWatch       *WatchedFiles[map[tspath.Path]string]
-	typingsDirectoryWatch   *WatchedFiles[map[tspath.Path]string]
+	typingsWatch            *WatchedFiles[patternsAndIgnored]
 
 	checkerPool *checkerPool
 
@@ -146,26 +146,26 @@ func NewProject(
 
 	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
 	if builder.sessionOptions.WatchEnabled {
+		project.programFilesWatch = NewWatchedFiles(
+			"non-root program files for "+configFileName,
+			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+			core.Identity,
+		)
 		project.failedLookupsWatch = NewWatchedFiles(
 			"failed lookups for "+configFileName,
 			lsproto.WatchKindCreate,
-			createResolutionLookupGlobMapper(project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+			createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
 		)
 		project.affectingLocationsWatch = NewWatchedFiles(
 			"affecting locations for "+configFileName,
 			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
-			createResolutionLookupGlobMapper(project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+			createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
 		)
 		if builder.sessionOptions.TypingsLocation != "" {
-			project.typingsFilesWatch = NewWatchedFiles(
+			project.typingsWatch = NewWatchedFiles(
 				"typings installer files",
 				lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
-				globMapperForTypingsInstaller,
-			)
-			project.typingsDirectoryWatch = NewWatchedFiles(
-				"typings installer directories",
-				lsproto.WatchKindCreate|lsproto.WatchKindDelete,
-				globMapperForTypingsInstaller,
+				core.Identity,
 			)
 		}
 	}
@@ -221,10 +221,10 @@ func (p *Project) Clone() *Project {
 		ProgramUpdateKind:           ProgramUpdateKindNone,
 		ProgramLastUpdate:           p.ProgramLastUpdate,
 
+		programFilesWatch:       p.programFilesWatch,
 		failedLookupsWatch:      p.failedLookupsWatch,
 		affectingLocationsWatch: p.affectingLocationsWatch,
-		typingsFilesWatch:       p.typingsFilesWatch,
-		typingsDirectoryWatch:   p.typingsDirectoryWatch,
+		typingsWatch:            p.typingsWatch,
 
 		checkerPool: p.checkerPool,
 
@@ -327,14 +327,19 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	}
 }
 
-func (p *Project) CloneWatchers() (failedLookupsWatch *WatchedFiles[map[tspath.Path]string], affectingLocationsWatch *WatchedFiles[map[tspath.Path]string]) {
+func (p *Project) CloneWatchers(workspaceDir string, libDir string) (programFilesWatch *WatchedFiles[patternsAndIgnored], failedLookupsWatch *WatchedFiles[map[tspath.Path]string], affectingLocationsWatch *WatchedFiles[map[tspath.Path]string]) {
 	failedLookups := make(map[tspath.Path]string)
 	affectingLocations := make(map[tspath.Path]string)
+	programFiles := getNonRootFileGlobs(workspaceDir, libDir, p.Program.GetSourceFiles(), p.CommandLine.FileNamesByPath(), tspath.ComparePathsOptions{
+		UseCaseSensitiveFileNames: p.host.FS().UseCaseSensitiveFileNames(),
+		CurrentDirectory:          p.currentDirectory,
+	})
 	extractLookups(p.toPath, failedLookups, affectingLocations, p.Program.GetResolvedModules())
 	extractLookups(p.toPath, failedLookups, affectingLocations, p.Program.GetResolvedTypeReferenceDirectives())
+	programFilesWatch = p.programFilesWatch.Clone(programFiles)
 	failedLookupsWatch = p.failedLookupsWatch.Clone(failedLookups)
 	affectingLocationsWatch = p.affectingLocationsWatch.Clone(affectingLocations)
-	return failedLookupsWatch, affectingLocationsWatch
+	return programFilesWatch, failedLookupsWatch, affectingLocationsWatch
 }
 
 func (p *Project) log(msg string) {
