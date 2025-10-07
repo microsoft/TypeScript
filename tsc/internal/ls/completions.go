@@ -767,6 +767,7 @@ func (l *LanguageService) getCompletionData(
 			}
 			if firstAccessibleSymbolId != 0 && seenPropertySymbols.AddIfAbsent(firstAccessibleSymbolId) {
 				symbols = append(symbols, firstAccessibleSymbol)
+				symbolToSortTextMap[firstAccessibleSymbolId] = SortTextGlobalsOrKeywords
 				moduleSymbol := firstAccessibleSymbol.Parent
 				if moduleSymbol == nil ||
 					!checker.IsExternalModuleSymbol(moduleSymbol) ||
