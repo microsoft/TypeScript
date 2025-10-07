@@ -74,8 +74,8 @@ class A {
 >  : ^
 
     async *#asyncGenMethod() { return 1; }     //OK
->#asyncGenMethod : () => {}
->                : ^^^^^^^^
+>#asyncGenMethod : () => AsyncIterableIterator<never, number, unknown>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

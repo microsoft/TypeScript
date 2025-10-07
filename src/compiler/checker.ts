@@ -30975,7 +30975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkIdentifierCalculateNodeCheckFlags(node, symbol);
 
         if (symbol === argumentsSymbol) {
-            if (isInPropertyInitializerOrClassStaticBlock(node)) {
+            if (isInPropertyInitializerOrClassStaticBlock(node, /*ignoreArrowFunctions*/ true)) {
                 return errorType;
             }
             return getTypeOfSymbol(symbol);

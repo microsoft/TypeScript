@@ -36,7 +36,7 @@ class Baz extends Object {
     constructor () { // ERROR, as expected
 
         super();
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
     }
 
