@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples4.ts] ////
+
+=== variadicTuples4.ts ===
+// https://github.com/microsoft/TypeScript/issues/62561
+
+function f<T extends unknown[], V extends unknown[]>(
+>f : Symbol(f, Decl(variadicTuples4.ts, 0, 0))
+>T : Symbol(T, Decl(variadicTuples4.ts, 2, 11))
+>V : Symbol(V, Decl(variadicTuples4.ts, 2, 31))
+
+  x: [boolean, ...V, ...T],
+>x : Symbol(x, Decl(variadicTuples4.ts, 2, 53))
+>V : Symbol(V, Decl(variadicTuples4.ts, 2, 31))
+>T : Symbol(T, Decl(variadicTuples4.ts, 2, 11))
+
+  ...args: V
+>args : Symbol(args, Decl(variadicTuples4.ts, 3, 27))
+>V : Symbol(V, Decl(variadicTuples4.ts, 2, 31))
+
+) {
+  return x;
+>x : Symbol(x, Decl(variadicTuples4.ts, 2, 53))
+}
+
+const a = f([true, 2, "b", true], 1, "a"); // ok
+>a : Symbol(a, Decl(variadicTuples4.ts, 9, 5))
+>f : Symbol(f, Decl(variadicTuples4.ts, 0, 0))
+

@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples4.ts] ////
+
+=== variadicTuples4.ts ===
+// https://github.com/microsoft/TypeScript/issues/62561
+
+function f<T extends unknown[], V extends unknown[]>(
+>f : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T], ...args: V) => [boolean, ...V, ...T]
+>  : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                     ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: [boolean, ...V, ...T],
+>x : [boolean, ...V, ...T]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: V
+>args : V
+>     : ^
+
+) {
+  return x;
+>x : [boolean, ...V, ...T]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+const a = f([true, 2, "b", true], 1, "a"); // ok
+>a : [boolean, number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f([true, 2, "b", true], 1, "a") : [boolean, number, string, boolean]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T], ...args: V) => [boolean, ...V, ...T]
+>  : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                     ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, 2, "b", true] : [true, number, string, true]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>2 : 2
+>  : ^
+>"b" : "b"
+>    : ^^^
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
