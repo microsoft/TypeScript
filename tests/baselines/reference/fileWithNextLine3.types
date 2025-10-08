@@ -5,4 +5,5 @@
 // 0.  It should be counted as a space and should not trigger ASI
 return0; 
 >0 : 0
+>  : ^
 

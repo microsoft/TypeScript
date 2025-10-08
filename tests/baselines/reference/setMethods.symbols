@@ -1,0 +1,234 @@
+//// [tests/cases/compiler/setMethods.ts] ////
+
+=== setMethods.ts ===
+let numberSet = new Set([0, 1, 2]);
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+let stringSet = new Set(["a", "b"]);
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+let numberMap = new Map([[4, {}], [5, {}]]);
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let numberSetLike = {
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+  size: 1,
+>size : Symbol(size, Decl(setMethods.ts, 6, 21))
+
+  *keys() { yield 3 },
+>keys : Symbol(keys, Decl(setMethods.ts, 7, 10))
+
+  has(x) { return x === 3 },
+>has : Symbol(has, Decl(setMethods.ts, 8, 22))
+>x : Symbol(x, Decl(setMethods.ts, 9, 6))
+>x : Symbol(x, Decl(setMethods.ts, 9, 6))
+
+};
+
+numberSet.union([]);
+>numberSet.union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.union(new Set);
+>numberSet.union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.union(stringSet);
+>numberSet.union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.union(numberMap);
+>numberSet.union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.union(numberSetLike);
+>numberSet.union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>union : Symbol(Set.union, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+numberSet.intersection([]);
+>numberSet.intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.intersection(new Set);
+>numberSet.intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.intersection(stringSet);
+>numberSet.intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.intersection(numberMap);
+>numberSet.intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.intersection(numberSetLike);
+>numberSet.intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>intersection : Symbol(Set.intersection, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+numberSet.difference([]);
+>numberSet.difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.difference(new Set);
+>numberSet.difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.difference(stringSet);
+>numberSet.difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.difference(numberMap);
+>numberSet.difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.difference(numberSetLike);
+>numberSet.difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>difference : Symbol(Set.difference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+numberSet.symmetricDifference([]);
+>numberSet.symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.symmetricDifference(new Set);
+>numberSet.symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.symmetricDifference(stringSet);
+>numberSet.symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.symmetricDifference(numberMap);
+>numberSet.symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.symmetricDifference(numberSetLike);
+>numberSet.symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>symmetricDifference : Symbol(Set.symmetricDifference, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+numberSet.isSubsetOf([]);
+>numberSet.isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.isSubsetOf(new Set);
+>numberSet.isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.isSubsetOf(stringSet);
+>numberSet.isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.isSubsetOf(numberMap);
+>numberSet.isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.isSubsetOf(numberSetLike);
+>numberSet.isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSubsetOf : Symbol(Set.isSubsetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+numberSet.isSupersetOf([]);
+>numberSet.isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.isSupersetOf(new Set);
+>numberSet.isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.isSupersetOf(stringSet);
+>numberSet.isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.isSupersetOf(numberMap);
+>numberSet.isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.isSupersetOf(numberSetLike);
+>numberSet.isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isSupersetOf : Symbol(Set.isSupersetOf, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+
+numberSet.isDisjointFrom([]);
+>numberSet.isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.isDisjointFrom(new Set);
+>numberSet.isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+numberSet.isDisjointFrom(stringSet);
+>numberSet.isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>stringSet : Symbol(stringSet, Decl(setMethods.ts, 2, 3))
+
+numberSet.isDisjointFrom(numberMap);
+>numberSet.isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberMap : Symbol(numberMap, Decl(setMethods.ts, 4, 3))
+
+numberSet.isDisjointFrom(numberSetLike);
+>numberSet.isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSet : Symbol(numberSet, Decl(setMethods.ts, 0, 3))
+>isDisjointFrom : Symbol(Set.isDisjointFrom, Decl(lib.esnext.collection.d.ts, --, --))
+>numberSetLike : Symbol(numberSetLike, Decl(setMethods.ts, 6, 3))
+

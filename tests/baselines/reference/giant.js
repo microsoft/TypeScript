@@ -14,6 +14,7 @@
 
     MAX DEPTH 3 LEVELS
 */
+const p = "propName";
 var V;
 function F() { };
 class C {
@@ -77,7 +78,7 @@ interface I {
     p7(pa1, pa2): void;
     p7? (pa1, pa2): void;
 }
-module M {
+namespace M {
     var V;
     function F() { };
     class C {
@@ -141,21 +142,21 @@ module M {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
     export function eF() { };
@@ -220,21 +221,21 @@ module M {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    export module eM {
+    export namespace eM {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
     export declare function eaF() { };
@@ -259,17 +260,17 @@ module M {
         static tgF() { }
         static get tgF()
     }
-    export declare module eaM {
+    export declare namespace eaM {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export var eV;
@@ -335,7 +336,7 @@ export interface eI {
     p7(pa1, pa2): void;
     p7? (pa1, pa2): void;
 }
-export module eM {
+export namespace eM {
     var V;
     function F() { };
     class C {
@@ -399,21 +400,21 @@ export module eM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
     export function eF() { };
@@ -478,21 +479,21 @@ export module eM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    export module eM {
+    export namespace eM {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
     export declare function eaF() { };
@@ -517,17 +518,17 @@ export module eM {
         static tgF() { }
         static get tgF()
     }
-    export declare module eaM {
+    export declare namespace eaM {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export declare var eaV;
@@ -553,7 +554,7 @@ export declare class eaC {
     static tgF() { }
     static get tgF()
 }
-export declare module eaM {
+export declare namespace eaM {
     var V;
     function F() { };
     class C {
@@ -603,21 +604,21 @@ export declare module eaM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
         export declare var eaV
         export declare function eaF() { };
         export declare class eaC { }
-        export declare module eaM { }
+        export declare namespace eaM { }
     }
     export var eV;
     export function eF() { };
@@ -669,16 +670,16 @@ export declare module eaM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    export module eM {
+    export namespace eM {
         var V;
         function F() { };
         class C { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 
@@ -686,7 +687,8 @@ export declare module eaM {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.eM = exports.eC = exports.eF = exports.eV = void 0;
+    exports.eM = exports.eC = exports.eV = void 0;
+    exports.eF = eF;
     /*
         Prefixes
         p -> public
@@ -700,6 +702,7 @@ define(["require", "exports"], function (require, exports) {
     
         MAX DEPTH 3 LEVELS
     */
+    var p = "propName";
     var V;
     function F() { }
     ;
@@ -905,7 +908,6 @@ define(["require", "exports"], function (require, exports) {
         ;
     })(M || (M = {}));
     function eF() { }
-    exports.eF = eF;
     ;
     var eC = /** @class */ (function () {
         function eC() {
@@ -1114,6 +1116,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [giant.d.ts]
+declare const p = "propName";
 export declare var eV: any;
 export declare function eF(): void;
 export declare class eC {
@@ -1153,6 +1156,7 @@ export interface eI {
     new (...p3: any[]): any;
     new (p4: string, p5?: string): any;
     new (p6: string, ...p7: any[]): any;
+    [p]: any;
     [p1: string]: any;
     [p2: string, p3: number]: any;
     p: any;
@@ -1205,6 +1209,7 @@ export declare namespace eM {
         new (...p3: any[]): any;
         new (p4: string, p5?: string): any;
         new (p6: string, ...p7: any[]): any;
+        [p]: any;
         [p1: string]: any;
         [p2: string, p3: number]: any;
         p: any;
@@ -1320,6 +1325,7 @@ export declare namespace eaM {
         new (...p3: any[]): any;
         new (p4: string, p5?: string): any;
         new (p6: string, ...p7: any[]): any;
+        [p]: any;
         [p1: string]: any;
         [p2: string, p3: number]: any;
         p: any;
@@ -1379,6 +1385,7 @@ export declare namespace eaM {
         new (...p3: any[]): any;
         new (p4: string, p5?: string): any;
         new (p6: string, ...p7: any[]): any;
+        [p]: any;
         [p1: string]: any;
         [p2: string, p3: number]: any;
         p: any;
@@ -1406,3 +1413,4 @@ export declare namespace eaM {
         namespace eM { }
     }
 }
+export {};

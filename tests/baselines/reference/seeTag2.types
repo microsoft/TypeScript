@@ -4,35 +4,49 @@
 /** @see {} empty*/
 const a = ""
 >a : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see {aaaaaa} unknown name*/
 const b = ""
 >b : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see {?????} invalid */
 const c = ""
 >c : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see c without brace */
 const d = ""
 >d : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see ?????? wowwwwww*/
 const e = ""
 >e : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see {}*/
 const f = ""
 >f : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see */
 const g = ""
 >g : ""
+>  : ^^
 >"" : ""
+>   : ^^
 

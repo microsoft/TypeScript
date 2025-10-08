@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     CancellationToken,
     cast,
@@ -27,6 +32,7 @@ import {
     isComputedPropertyName,
     isDeclarationWithTypeParameterChildren,
     isExpressionStatement,
+    isFunctionDeclaration,
     isIdentifier,
     isImportClause,
     isImportDeclaration,
@@ -58,12 +64,7 @@ import {
     TypeChecker,
     VariableDeclaration,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "unusedIdentifier";
 const fixIdPrefix = "unusedIdentifier_prefix";
@@ -127,6 +128,10 @@ registerCodeFix({
             return [
                 createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement),
             ];
+        }
+
+        if (isIdentifier(token) && isFunctionDeclaration(token.parent)) {
+            return [createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteFunctionLikeDeclaration(t, sourceFile, token.parent as FunctionLikeDeclaration)), [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)])];
         }
 
         const result: CodeFixAction[] = [];
@@ -194,6 +199,9 @@ registerCodeFix({
                     }
                     else if (canDeleteEntireVariableStatement(sourceFile, token)) {
                         deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
+                    }
+                    else if (isIdentifier(token) && isFunctionDeclaration(token.parent)) {
+                        deleteFunctionLikeDeclaration(changes, sourceFile, token.parent as FunctionLikeDeclaration);
                     }
                     else {
                         tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
@@ -430,4 +438,13 @@ function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDecl
 function mayDeleteExpression(node: Node) {
     return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
         ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
+}
+
+function deleteFunctionLikeDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: FunctionLikeDeclaration) {
+    const declarations = node.symbol.declarations;
+    if (declarations) {
+        for (const declaration of declarations) {
+            changes.delete(sourceFile, declaration);
+        }
+    }
 }

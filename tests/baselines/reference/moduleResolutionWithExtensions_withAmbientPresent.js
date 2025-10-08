@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleResolutionWithExtensions_withAmbientPresent.ts] ////
 
 //// [index.js]
-// Allowjs is false, but this should *not* warn about the unused 'index.js'
-
 
 //// [declarations.d.ts]
 declare module "js" {

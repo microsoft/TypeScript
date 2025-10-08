@@ -4,5 +4,6 @@
 interface abstract {
     abstract(): void;
 >abstract : () => void
+>         : ^^^^^^    
 }
 

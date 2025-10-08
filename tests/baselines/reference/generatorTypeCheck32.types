@@ -3,10 +3,15 @@
 === generatorTypeCheck32.ts ===
 var s: string;
 >s : string
+>  : ^^^^^^
 
 var f: () => number = () => yield s;
 >f : () => number
+>  : ^^^^^^      
 >() => yield s : () => any
+>              : ^^^^^^^^^
 >yield s : any
+>        : ^^^
 >s : string
+>  : ^^^^^^
 

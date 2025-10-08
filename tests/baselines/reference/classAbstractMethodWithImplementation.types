@@ -3,7 +3,9 @@
 === classAbstractMethodWithImplementation.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }

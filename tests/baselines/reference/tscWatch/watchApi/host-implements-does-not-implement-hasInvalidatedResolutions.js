@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
@@ -17,8 +17,7 @@ import { foo } from "./other";
 //// [/user/username/projects/myproject/other.d.ts]
 export function foo(): void;
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -29,12 +28,14 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -44,19 +45,20 @@ CreatingProgramWith::
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 undefined Source file
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -73,7 +75,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
@@ -92,17 +94,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/other.d.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/other.d.ts
 /user/username/projects/myproject/main.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/other.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
@@ -125,22 +127,24 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -156,7 +160,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/other.d.ts
 /user/username/projects/myproject/main.ts
 
@@ -185,22 +189,24 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
-[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -217,7 +223,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/other.d.ts
 /user/username/projects/myproject/main.ts
 
@@ -254,18 +260,19 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 undefined Source file
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -273,9 +280,8 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 
 //// [/user/username/projects/myproject/other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
+function foo() { }
 
 
 
@@ -286,7 +292,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
@@ -308,7 +314,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/other.ts
 /user/username/projects/myproject/main.ts
 

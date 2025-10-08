@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "out": "test.js",
+    "outFile": "test.js",
     "allowJs": true
   },
   "files": [ "a.ts", "b.js" ]

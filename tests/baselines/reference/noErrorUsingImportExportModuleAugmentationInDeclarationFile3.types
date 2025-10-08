@@ -3,12 +3,16 @@
 === 0.d.ts ===
 export = a;
 >a : number
+>  : ^^^^^^
 
 declare var a: number;
 >a : number
+>  : ^^^^^^
 
 === 1.ts ===
 export var j = "hello";  // error
 >j : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

@@ -84,7 +84,7 @@ import {
     visitEachChild,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformJsx(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -172,7 +172,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*attributes*/ undefined);
+                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*phaseModifier*/ undefined, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*attributes*/ undefined);
                     setParentRecursive(importStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                 }
@@ -667,7 +667,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         const name = node.name;
         if (isIdentifier(name)) {
             const text = idText(name);
-            return (/^[A-Za-z_]\w*$/.test(text)) ? name : factory.createStringLiteral(text);
+            return (/^[A-Z_]\w*$/i.test(text)) ? name : factory.createStringLiteral(text);
         }
         return factory.createStringLiteral(idText(name.namespace) + ":" + idText(name.name));
     }

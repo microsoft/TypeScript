@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/simpleRecursionWithBaseCase4.ts] ////
+
+=== simpleRecursionWithBaseCase4.ts ===
+var fn2 = function(name) {
+>fn2 : Symbol(fn2, Decl(simpleRecursionWithBaseCase4.ts, 0, 3))
+>name : Symbol(name, Decl(simpleRecursionWithBaseCase4.ts, 0, 19))
+
+  fn2 = compose(this, 0, 1)
+>fn2 : Symbol(fn2, Decl(simpleRecursionWithBaseCase4.ts, 0, 3))
+>compose : Symbol(compose, Decl(simpleRecursionWithBaseCase4.ts, 2, 18))
+
+  return fn2(name)
+>fn2 : Symbol(fn2, Decl(simpleRecursionWithBaseCase4.ts, 0, 3))
+>name : Symbol(name, Decl(simpleRecursionWithBaseCase4.ts, 0, 19))
+
+  function compose(child, level, find) {
+>compose : Symbol(compose, Decl(simpleRecursionWithBaseCase4.ts, 2, 18))
+>child : Symbol(child, Decl(simpleRecursionWithBaseCase4.ts, 4, 19))
+>level : Symbol(level, Decl(simpleRecursionWithBaseCase4.ts, 4, 25))
+>find : Symbol(find, Decl(simpleRecursionWithBaseCase4.ts, 4, 32))
+
+    if (child === find) {
+>child : Symbol(child, Decl(simpleRecursionWithBaseCase4.ts, 4, 19))
+>find : Symbol(find, Decl(simpleRecursionWithBaseCase4.ts, 4, 32))
+
+      return level
+>level : Symbol(level, Decl(simpleRecursionWithBaseCase4.ts, 4, 25))
+    }
+    return compose(child, level + 1, find)
+>compose : Symbol(compose, Decl(simpleRecursionWithBaseCase4.ts, 2, 18))
+>child : Symbol(child, Decl(simpleRecursionWithBaseCase4.ts, 4, 19))
+>level : Symbol(level, Decl(simpleRecursionWithBaseCase4.ts, 4, 25))
+>find : Symbol(find, Decl(simpleRecursionWithBaseCase4.ts, 4, 32))
+  }
+}
+
+var d = fn2(1); // d: any
+>d : Symbol(d, Decl(simpleRecursionWithBaseCase4.ts, 12, 3))
+>fn2 : Symbol(fn2, Decl(simpleRecursionWithBaseCase4.ts, 0, 3))
+
+d.redefined();
+>d : Symbol(d, Decl(simpleRecursionWithBaseCase4.ts, 12, 3))
+

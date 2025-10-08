@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/importTag8.ts] ////
+
+=== /types.ts ===
+export interface A {
+>A : Symbol(A, Decl(types.ts, 0, 0))
+
+    a: number;
+>a : Symbol(A.a, Decl(types.ts, 0, 20))
+}
+export interface B {
+>B : Symbol(B, Decl(types.ts, 2, 1))
+
+    a: number;
+>a : Symbol(B.a, Decl(types.ts, 3, 20))
+}
+
+=== /foo.js ===
+/**
+ * @import
+ * { A, B }
+ * from "./types"
+ */
+
+/**
+ * @param { A } a
+ * @param { B } b
+ */
+function f(a, b) {}
+>f : Symbol(f, Decl(foo.js, 0, 0))
+>a : Symbol(a, Decl(foo.js, 10, 11))
+>b : Symbol(b, Decl(foo.js, 10, 13))
+

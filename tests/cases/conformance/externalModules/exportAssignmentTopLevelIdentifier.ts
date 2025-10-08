@@ -1,6 +1,6 @@
 // @module: amd
 // @Filename: foo_0.ts
-module Foo {
+namespace Foo {
 	export var answer = 42;
 }
 export = Foo;

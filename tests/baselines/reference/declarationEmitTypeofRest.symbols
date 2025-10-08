@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/declarationEmitTypeofRest.ts] ////
+
+=== v1.ts ===
+export const v1 = (...a: [n: "n", a: "a"]): {
+>v1 : Symbol(v1, Decl(v1.ts, 0, 12))
+>a : Symbol(a, Decl(v1.ts, 0, 19))
+
+    /** r rest param */
+    a: typeof a,
+>a : Symbol(a, Decl(v1.ts, 0, 45))
+>a : Symbol(a, Decl(v1.ts, 0, 19))
+
+} => {
+    return null!
+}
+
+=== v2.ts ===
+const n = Symbol();
+>n : Symbol(n, Decl(v2.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export const v2 = (...a: [n: "n", a: "a"]): {
+>v2 : Symbol(v2, Decl(v2.ts, 1, 12))
+>a : Symbol(a, Decl(v2.ts, 1, 19))
+
+    /** r rest param */
+    a: typeof a,
+>a : Symbol(a, Decl(v2.ts, 1, 45))
+>a : Symbol(a, Decl(v2.ts, 1, 19))
+
+    /** module var */
+    n: typeof n,
+>n : Symbol(n, Decl(v2.ts, 3, 16))
+>n : Symbol(n, Decl(v2.ts, 0, 5))
+
+} => {
+    return null!
+}

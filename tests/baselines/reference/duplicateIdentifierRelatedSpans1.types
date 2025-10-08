@@ -3,23 +3,31 @@
 === file1.ts ===
 class Foo { }
 >Foo : Foo
+>    : ^^^
 
 const Bar = 3;
 >Bar : 3
+>    : ^
 >3 : 3
+>  : ^
 
 === file2.ts ===
 type Foo = number;
 >Foo : number
+>    : ^^^^^^
 
 class Bar {}
 >Bar : Bar
+>    : ^^^
 
 === file3.ts ===
 type Foo = 54;
 >Foo : 54
+>    : ^^
 
 let Bar = 42
 >Bar : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 

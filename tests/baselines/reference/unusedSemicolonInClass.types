@@ -3,6 +3,7 @@
 === unusedSemicolonInClass.ts ===
 class Unused {
 >Unused : Unused
+>       : ^^^^^^
 
     ;
 }

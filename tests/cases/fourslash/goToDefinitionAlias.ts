@@ -2,7 +2,7 @@
 
 // @Filename: b.ts
 ////import /*alias1Definition*/alias1 = require("fileb");
-////module Module {
+////namespace Module {
 ////    export import /*alias2Definition*/alias2 = alias1;
 ////}
 ////

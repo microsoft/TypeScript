@@ -3,7 +3,7 @@ internal2.ts(2,21): error TS2792: Cannot find module 'external2'. Did you mean t
 
 
 ==== internal2.ts (2 errors) ====
-    module outer {
+    namespace outer {
     	import g = require("external2")
     	                   ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.

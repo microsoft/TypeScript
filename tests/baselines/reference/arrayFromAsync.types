@@ -1,0 +1,505 @@
+//// [tests/cases/compiler/arrayFromAsync.ts] ////
+
+=== arrayFromAsync.ts ===
+export { };
+async function * asyncGen (n) {
+>asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : any
+
+    for (let i = 0; i < n; i++)
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < n : boolean
+>      : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>n : any
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+      yield i * 2;
+>yield i * 2 : any
+>i * 2 : number
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+  }
+
+function * genPromises (n) {
+>genPromises : (n: any) => Generator<Promise<number>, void, unknown>
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : any
+
+    for (let i = 0; i < n; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < n : boolean
+>      : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>n : any
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+        yield Promise.resolve(i * 2);
+>yield Promise.resolve(i * 2) : any
+>Promise.resolve(i * 2) : Promise<number>
+>                       : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>i * 2 : number
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+    }
+}
+
+const arrLike = {
+>arrLike : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    0: Promise.resolve(0),    1: Promise.resolve(2),    2: Promise.resolve(4),    3: Promise.resolve(6),    length: 4,} : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
+>                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    0: Promise.resolve(0),
+>0 : Promise<number>
+>  : ^^^^^^^^^^^^^^^
+>Promise.resolve(0) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>0 : 0
+>  : ^
+
+    1: Promise.resolve(2),
+>1 : Promise<number>
+>  : ^^^^^^^^^^^^^^^
+>Promise.resolve(2) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>2 : 2
+>  : ^
+
+    2: Promise.resolve(4),
+>2 : Promise<number>
+>  : ^^^^^^^^^^^^^^^
+>Promise.resolve(4) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>4 : 4
+>  : ^
+
+    3: Promise.resolve(6),
+>3 : Promise<number>
+>  : ^^^^^^^^^^^^^^^
+>Promise.resolve(6) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>6 : 6
+>  : ^
+
+    length: 4,
+>length : number
+>       : ^^^^^^
+>4 : 4
+>  : ^
+}
+
+const arr : number[] = [];
+>arr : number[]
+>    : ^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+for await (const v of asyncGen(4)) {
+>v : number
+>  : ^^^^^^
+>asyncGen(4) : AsyncGenerator<number, void, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+  arr.push(v);
+>arr.push(v) : number
+>            : ^^^^^^
+>arr.push : (...items: number[]) => number
+>         : ^^^^     ^^^^^^^^^^^^^^^      
+>arr : number[]
+>    : ^^^^^^^^
+>push : (...items: number[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
+>v : number
+>  : ^^^^^^
+}
+
+const sameArr1 = await Array.fromAsync(arrLike);
+>sameArr1 : number[]
+>         : ^^^^^^^^
+>await Array.fromAsync(arrLike) : number[]
+>                               : ^^^^^^^^
+>Array.fromAsync(arrLike) : Promise<number[]>
+>                         : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>arrLike : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
+>sameArr2 : number[]
+>         : ^^^^^^^^
+>await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : number[]
+>                                                                                                        : ^^^^^^^^
+>Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : Promise<number[]>
+>                                                                                                  : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>[Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)] : Promise<number>[]
+>                                                                                 : ^^^^^^^^^^^^^^^^^
+>Promise.resolve(0) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>0 : 0
+>  : ^
+>Promise.resolve(2) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>2 : 2
+>  : ^
+>Promise.resolve(4) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>4 : 4
+>  : ^
+>Promise.resolve(6) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>6 : 6
+>  : ^
+
+const sameArr3 = await Array.fromAsync(genPromises(4));
+>sameArr3 : number[]
+>         : ^^^^^^^^
+>await Array.fromAsync(genPromises(4)) : number[]
+>                                      : ^^^^^^^^
+>Array.fromAsync(genPromises(4)) : Promise<number[]>
+>                                : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>genPromises(4) : Generator<Promise<number>, void, unknown>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>genPromises : (n: any) => Generator<Promise<number>, void, unknown>
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+const sameArr4 = await Array.fromAsync(asyncGen(4));
+>sameArr4 : number[]
+>         : ^^^^^^^^
+>await Array.fromAsync(asyncGen(4)) : number[]
+>                                   : ^^^^^^^^
+>Array.fromAsync(asyncGen(4)) : Promise<number[]>
+>                             : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>asyncGen(4) : AsyncGenerator<number, void, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+function Data (n) {}
+>Data : typeof Data
+>     : ^^^^^^^^^^^
+>n : any
+
+Data.fromAsync = Array.fromAsync;
+>Data.fromAsync = Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                                 : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>               : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Data : typeof Data
+>     : ^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+
+const sameArr5 = await Data.fromAsync(asyncGen(4));
+>sameArr5 : number[]
+>         : ^^^^^^^^
+>await Data.fromAsync(asyncGen(4)) : number[]
+>                                  : ^^^^^^^^
+>Data.fromAsync(asyncGen(4)) : Promise<number[]>
+>                            : ^^^^^^^^^^^^^^^^^
+>Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>               : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Data : typeof Data
+>     : ^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>asyncGen(4) : AsyncGenerator<number, void, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+const mapArr1 = await Array.fromAsync(asyncGen(4), v => v ** 2);
+>mapArr1 : number[]
+>        : ^^^^^^^^
+>await Array.fromAsync(asyncGen(4), v => v ** 2) : number[]
+>                                                : ^^^^^^^^
+>Array.fromAsync(asyncGen(4), v => v ** 2) : Promise<number[]>
+>                                          : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>asyncGen(4) : AsyncGenerator<number, void, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+>v => v ** 2 : (v: number) => number
+>            : ^ ^^^^^^^^^^^^^^^^^^^
+>v : number
+>  : ^^^^^^
+>v ** 2 : number
+>       : ^^^^^^
+>v : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
+>mapArr2 : number[]
+>        : ^^^^^^^^
+>await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2)) : number[]
+>                                                               : ^^^^^^^^
+>Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2)) : Promise<number[]>
+>                                                         : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>[0,2,4,6] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>2 : 2
+>  : ^
+>4 : 4
+>  : ^
+>6 : 6
+>  : ^
+>v => Promise.resolve(v ** 2) : (v: number) => Promise<number>
+>                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : number
+>  : ^^^^^^
+>Promise.resolve(v ** 2) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>v ** 2 : number
+>       : ^^^^^^
+>v : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const mapArr3 = await Array.fromAsync([0,2,4,6], v => v ** 2);
+>mapArr3 : number[]
+>        : ^^^^^^^^
+>await Array.fromAsync([0,2,4,6], v => v ** 2) : number[]
+>                                              : ^^^^^^^^
+>Array.fromAsync([0,2,4,6], v => v ** 2) : Promise<number[]>
+>                                        : ^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>[0,2,4,6] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>2 : 2
+>  : ^
+>4 : 4
+>  : ^
+>6 : 6
+>  : ^
+>v => v ** 2 : (v: number) => number
+>            : ^ ^^^^^^^^^^^^^^^^^^^
+>v : number
+>  : ^^^^^^
+>v ** 2 : number
+>       : ^^^^^^
+>v : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const err = new Error;
+>err : Error
+>    : ^^^^^
+>new Error : Error
+>          : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+
+const badIterable = { [Symbol.iterator] () { throw err; } };
+>badIterable : { [Symbol.iterator](): never; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.iterator] () { throw err; } } : { [Symbol.iterator](): never; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.iterator] : () => never
+>                  : ^^^^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+>err : Error
+>    : ^^^^^
+
+// This returns a promise that will reject with `err`.
+const badArray = await Array.fromAsync(badIterable);
+>badArray : unknown[]
+>         : ^^^^^^^^^
+>await Array.fromAsync(badIterable) : unknown[]
+>                                   : ^^^^^^^^^
+>Array.fromAsync(badIterable) : Promise<unknown[]>
+>                             : ^^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>badIterable : { [Symbol.iterator](): never; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
+>withIndexResult : { index: number; str: string; }[]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : { index: number; str: string; }[]
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : Promise<{ index: number; str: string; }[]>
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>                : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                                       ^^       ^^^   ^^^                     ^^^
+>["a", "b"] : string[]
+>           : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+>(str, index) => ({ index, str }) : (str: string, index: number) => { index: number; str: string; }
+>                                 : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+>index : number
+>      : ^^^^^^
+>({ index, str }) : { index: number; str: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ index, str } : { index: number; str: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+>str : string
+>    : ^^^^^^
+

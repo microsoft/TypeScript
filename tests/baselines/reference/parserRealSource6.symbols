@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource6.ts, 0, 0))
 
     export class TypeCollectionContext {
->TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 19))
+>TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 22))
 
         public script: Script = null;
 >script : Symbol(TypeCollectionContext.script, Decl(parserRealSource6.ts, 6, 40))
@@ -286,7 +286,7 @@ module TypeScript {
     export function pushTypeCollectionScope(container: Symbol,
 >pushTypeCollectionScope : Symbol(pushTypeCollectionScope, Decl(parserRealSource6.ts, 89, 5))
 >container : Symbol(container, Decl(parserRealSource6.ts, 91, 44))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         valueMembers: ScopedMembers,
 >valueMembers : Symbol(valueMembers, Decl(parserRealSource6.ts, 91, 62))
@@ -306,7 +306,7 @@ module TypeScript {
 
         context: TypeCollectionContext,
 >context : Symbol(context, Decl(parserRealSource6.ts, 95, 44))
->TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 19))
+>TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 22))
 
         thisType: Type,
 >thisType : Symbol(thisType, Decl(parserRealSource6.ts, 96, 39))
@@ -359,7 +359,7 @@ module TypeScript {
     export function popTypeCollectionScope(context: TypeCollectionContext) {
 >popTypeCollectionScope : Symbol(popTypeCollectionScope, Decl(parserRealSource6.ts, 106, 5))
 >context : Symbol(context, Decl(parserRealSource6.ts, 108, 43))
->TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 19))
+>TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 22))
 
         context.scopeChain = context.scopeChain.previous;
 >context.scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))

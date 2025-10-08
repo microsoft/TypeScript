@@ -555,3 +555,64 @@ if (obj instanceof B) {
     obj; // B
 >obj : Symbol(obj, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 108, 13))
 }
+
+// intersections
+// https://github.com/microsoft/TypeScript/issues/56536
+
+interface HasInstanceOf { [Symbol.hasInstance](x: unknown): boolean }
+>HasInstanceOf : Symbol(HasInstanceOf, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 114, 1))
+>[Symbol.hasInstance] : Symbol(HasInstanceOf[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 119, 25))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 119, 47))
+
+type Rhs14 = HasInstanceOf & object;
+>Rhs14 : Symbol(Rhs14, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 119, 69))
+>HasInstanceOf : Symbol(HasInstanceOf, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 114, 1))
+
+declare const rhs14: Rhs14;
+>rhs14 : Symbol(rhs14, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 121, 13))
+>Rhs14 : Symbol(Rhs14, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 119, 69))
+
+lhs0 instanceof rhs14 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs14 : Symbol(rhs14, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 121, 13))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+// unions
+
+interface HasInstanceOf1 { [Symbol.hasInstance](x: unknown): x is Point }
+>HasInstanceOf1 : Symbol(HasInstanceOf1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 122, 30))
+>[Symbol.hasInstance] : Symbol(HasInstanceOf1[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 126, 26))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 126, 48))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 126, 48))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+
+interface HasInstanceOf2 { [Symbol.hasInstance](x: unknown): x is Line }
+>HasInstanceOf2 : Symbol(HasInstanceOf2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 126, 73))
+>[Symbol.hasInstance] : Symbol(HasInstanceOf2[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 127, 26))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 127, 48))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 127, 48))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+
+type Rhs15 = HasInstanceOf1 | HasInstanceOf2;
+>Rhs15 : Symbol(Rhs15, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 127, 72))
+>HasInstanceOf1 : Symbol(HasInstanceOf1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 122, 30))
+>HasInstanceOf2 : Symbol(HasInstanceOf2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 126, 73))
+
+declare const rhs15: Rhs15;
+>rhs15 : Symbol(rhs15, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 129, 13))
+>Rhs15 : Symbol(Rhs15, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 127, 72))
+
+lhs0 instanceof rhs15 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs15 : Symbol(rhs15, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 129, 13))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+

@@ -1,4 +1,4 @@
-// @module: node16,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @allowJs: true
 // @checkJs: true
@@ -115,7 +115,7 @@ export const cjsSource = true;
         "./types": {
             "types": {
                 "import": "./index.d.mts",
-                "require": "./index.d.cts",
+                "require": "./index.d.cts"
             },
             "node": {
                 "import": "./index.mjs",

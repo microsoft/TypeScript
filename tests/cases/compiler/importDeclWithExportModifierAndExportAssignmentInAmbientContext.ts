@@ -1,5 +1,5 @@
 declare module "m" {
-    module x {
+    namespace x {
         interface c {
         }
     }

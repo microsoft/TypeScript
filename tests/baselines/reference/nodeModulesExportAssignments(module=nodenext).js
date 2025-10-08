@@ -22,11 +22,11 @@ export = a;
 //// [index.js]
 "use strict";
 // cjs format file
-var a = {};
+const a = {};
 module.exports = a;
 //// [index.js]
 // esm format file
-var a = {};
+const a = {};
 export {};
 
 

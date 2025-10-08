@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
+// namespace FindRef3 {
+// 	namespace SimpleClassTest {
 // 		export class Foo {
 // 			<|public /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|](): void {
 // 			}|>
@@ -26,8 +26,8 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
-  // module FindRef3 {
-  // 	module SimpleClassTest {
+  // namespace FindRef3 {
+  // 	namespace SimpleClassTest {
   // 		export class Foo {
   // 			<|public /*FIND ALL REFS*/[|{| defId: 0 |}foo|](): void {
   // 			}|>
@@ -180,7 +180,7 @@
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
 // --- (line: 11) skipped ---
 // 
-// 	module SimpleInterfaceTest {
+// 	namespace SimpleInterfaceTest {
 // 		export interface IFoo {
 // 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}ifoo|](): void;|>
 // 		}
@@ -205,7 +205,7 @@
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
   // --- (line: 11) skipped ---
   // 
-  // 	module SimpleInterfaceTest {
+  // 	namespace SimpleInterfaceTest {
   // 		export interface IFoo {
   // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}ifoo|](): void;|>
   // 		}
@@ -356,7 +356,7 @@
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
 // --- (line: 20) skipped ---
 // 
-// 	module SimpleClassInterfaceTest {
+// 	namespace SimpleClassInterfaceTest {
 // 		export interface IFoo {
 // 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}icfoo|](): void;|>
 // 		}
@@ -382,7 +382,7 @@
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
   // --- (line: 20) skipped ---
   // 
-  // 	module SimpleClassInterfaceTest {
+  // 	namespace SimpleClassInterfaceTest {
   // 		export interface IFoo {
   // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}icfoo|](): void;|>
   // 		}
@@ -534,7 +534,7 @@
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
 // --- (line: 30) skipped ---
 // 
-// 	module Test {
+// 	namespace Test {
 // 		export interface IBase {
 // 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}field|]: string;|>
 // 			method(): void;
@@ -577,7 +577,7 @@
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
   // --- (line: 30) skipped ---
   // 
-  // 	module Test {
+  // 	namespace Test {
   // 		export interface IBase {
   // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}field|]: string;|>
   // 			method(): void;
@@ -901,7 +901,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
 // --- (line: 31) skipped ---
-// 	module Test {
+// 	namespace Test {
 // 		export interface IBase {
 // 			field: string;
 // 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}method|](): void;|>
@@ -936,7 +936,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
   // --- (line: 31) skipped ---
-  // 	module Test {
+  // 	namespace Test {
   // 		export interface IBase {
   // 			field: string;
   // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}method|](): void;|>

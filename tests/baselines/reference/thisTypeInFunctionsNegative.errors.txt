@@ -38,20 +38,22 @@ thisTypeInFunctionsNegative.ts(108,1): error TS2322: Type '(this: { x: number; }
     Property 'x' is missing in type '{ n: number; }' but required in type '{ x: number; }'.
 thisTypeInFunctionsNegative.ts(110,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'C' is not assignable to type 'D'.
+    Type 'C' is missing the following properties from type 'D': x, explicitD
 thisTypeInFunctionsNegative.ts(111,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'C' is not assignable to type 'D'.
+    Type 'C' is missing the following properties from type 'D': x, explicitD
 thisTypeInFunctionsNegative.ts(112,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'C' is not assignable to type 'D'.
+    Type 'C' is missing the following properties from type 'D': x, explicitD
 thisTypeInFunctionsNegative.ts(113,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'C' is not assignable to type 'D'.
+    Type 'C' is missing the following properties from type 'D': x, explicitD
 thisTypeInFunctionsNegative.ts(114,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
   The 'this' types of each signature are incompatible.
     Type '{ n: number; }' is missing the following properties from type 'D': x, explicitThis, explicitD
 thisTypeInFunctionsNegative.ts(115,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+  The 'this' types of each signature are incompatible.
+    Type 'C' is missing the following properties from type 'D': x, explicitD
 thisTypeInFunctionsNegative.ts(116,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
   The 'this' types of each signature are incompatible.
     Type 'void' is not assignable to type 'D'.
@@ -64,8 +66,10 @@ thisTypeInFunctionsNegative.ts(145,1): error TS2322: Type '(this: Base2) => numb
     Property 'y' is missing in type 'Base1' but required in type 'Base2'.
 thisTypeInFunctionsNegative.ts(146,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'Base1' is not assignable to type 'Base2'.
+    Property 'y' is missing in type 'Base1' but required in type 'Base2'.
 thisTypeInFunctionsNegative.ts(148,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+  The 'this' types of each signature are incompatible.
+    Property 'y' is missing in type 'Base1' but required in type 'Base2'.
 thisTypeInFunctionsNegative.ts(154,16): error TS2679: A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.
 thisTypeInFunctionsNegative.ts(158,17): error TS2681: A constructor cannot have a 'this' parameter.
 thisTypeInFunctionsNegative.ts(162,9): error TS2681: A constructor cannot have a 'this' parameter.
@@ -278,22 +282,22 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
     c.explicitC = d.explicitThis;
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
     c.explicitThis = d.explicitD;
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
     c.explicitThis = d.explicitThis;
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
     c.explicitProperty = d.explicitD;
     ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
@@ -302,6 +306,8 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     c.explicitThis = d.explicitThis;
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322:   The 'this' types of each signature are incompatible.
+!!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
     c.explicitVoid = d.explicitD;
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
@@ -351,11 +357,15 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'Base1' is not assignable to type 'Base2'.
+!!! error TS2322:     Property 'y' is missing in type 'Base1' but required in type 'Base2'.
+!!! related TS2728 thisTypeInFunctionsNegative.ts:131:5: 'y' is declared here.
     
     d1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+!!! error TS2322:   The 'this' types of each signature are incompatible.
+!!! error TS2322:     Property 'y' is missing in type 'Base1' but required in type 'Base2'.
+!!! related TS2728 thisTypeInFunctionsNegative.ts:131:5: 'y' is declared here.
     
     ////// use this-type for construction with new ////
     function VoidThis(this: void) {

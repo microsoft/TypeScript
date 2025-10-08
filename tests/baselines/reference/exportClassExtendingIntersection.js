@@ -63,7 +63,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyMixin = void 0;
+exports.MyMixin = MyMixin;
 function MyMixin(base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
@@ -73,7 +73,6 @@ function MyMixin(base) {
         return class_1;
     }(base));
 }
-exports.MyMixin = MyMixin;
 //// [FinalClass.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {

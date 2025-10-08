@@ -7,23 +7,34 @@ import * as cx from 'classnames';
 
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 let buttonProps : {[attributeName: string]: ''}
 >buttonProps : { [attributeName: string]: ""; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >attributeName : string
+>              : ^^^^^^
 
 let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
 >k : JSX.Element
+>  : ^^^^^^^^^^^
 ><button {...buttonProps} className={cx('class1', { class2: true })} /> : JSX.Element
+>                                                                       : ^^^^^^^^^^^
 >button : any
+>       : ^^^
 >buttonProps : { [attributeName: string]: ""; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >className : any
 >cx('class1', { class2: true }) : any
 >cx : any
 >'class1' : "class1"
+>         : ^^^^^^^^
 >{ class2: true } : { class2: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
 >class2 : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
 === declaration.d.ts ===
 declare module "classnames";

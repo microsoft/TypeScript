@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
-        "moduleResolution": "node10"
+        "moduleResolution": "node10",
+        "allowSyntheticDefaultImports": false,
+        "resolvePackageJsonExports": false,
+        "resolvePackageJsonImports": false,
+        "resolveJsonModule": false
     }
 }

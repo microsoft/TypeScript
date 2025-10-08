@@ -46,6 +46,7 @@ let a: A;
 let b = a.getB().x.toFixed();
 let c = a.getCls().y.toLowerCase();
 
+
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -79,8 +80,6 @@ define("main", ["require", "exports", "D", "E"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="d.d.ts" />
-/// <reference path="e.d.ts" />
 declare module "a" {
     export class A {
     }
@@ -94,3 +93,60 @@ declare module "main" {
     import "D";
     import "E";
 }
+
+
+//// [DtsFileErrors]
+
+
+f.d.ts(11,12): error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
+f.d.ts(12,12): error TS2882: Cannot find module or type declarations for side-effect import of 'E'.
+
+
+==== f.d.ts (2 errors) ====
+    declare module "a" {
+        export class A {
+        }
+    }
+    declare module "b" {
+        export class B {
+            x: number;
+        }
+    }
+    declare module "main" {
+        import "D";
+               ~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
+        import "E";
+               ~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'E'.
+    }
+    
+==== c.d.ts (0 errors) ====
+    declare module "C" {
+        class Cls {y: string; }
+    }
+    
+==== d.d.ts (0 errors) ====
+    declare module "D" {
+        import {A} from "a";
+        import {B} from "b";
+        module "a" {
+            interface A {
+                getB(): B;
+            }
+        }
+    }
+    
+==== e.d.ts (0 errors) ====
+    /// <reference path="c.d.ts"/>
+    declare module "E" {
+        import {A} from "a";
+        import {Cls} from "C";
+    
+        module "a" {
+            interface A {
+                getCls(): Cls;
+            }
+        }
+    }
+    

@@ -4,6 +4,4 @@
 let module = 10;
 >module : Symbol(module, Decl(asiPreventsParsingAsNamespace04.ts, 0, 3))
 
-module in {}
->module : Symbol(module, Decl(asiPreventsParsingAsNamespace04.ts, 0, 3))
-
+namespace in {}

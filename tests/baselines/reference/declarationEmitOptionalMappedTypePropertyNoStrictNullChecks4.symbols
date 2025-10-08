@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts] ////
+
+=== declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts ===
+type InputType = { enable_member_receipts?: boolean };
+>InputType : Symbol(InputType, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 0, 0))
+>enable_member_receipts : Symbol(enable_member_receipts, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 0, 18))
+
+type AsEmptyObject<T> = { [K in keyof T]?: undefined };
+>AsEmptyObject : Symbol(AsEmptyObject, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 0, 54))
+>T : Symbol(T, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 1, 19))
+>K : Symbol(K, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 1, 27))
+>T : Symbol(T, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 1, 19))
+
+export const test = {
+>test : Symbol(test, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 3, 12))
+
+  ...({} as AsEmptyObject<InputType>),
+>AsEmptyObject : Symbol(AsEmptyObject, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 0, 54))
+>InputType : Symbol(InputType, Decl(declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts, 0, 0))
+
+};
+

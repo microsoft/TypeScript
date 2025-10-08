@@ -286,7 +286,7 @@ type T06 = T05<[number, ...boolean[]]>;
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
 >P1 : Symbol(P1, Decl(genericRestParameters2.ts, 71, 39))
 >T : Symbol(T, Decl(genericRestParameters2.ts, 73, 8))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(genericRestParameters2.ts, 73, 8))
 >head : Symbol(head, Decl(genericRestParameters2.ts, 73, 41))
 >A : Symbol(A, Decl(genericRestParameters2.ts, 73, 52))

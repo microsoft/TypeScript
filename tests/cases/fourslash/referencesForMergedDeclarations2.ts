@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module ATest {
+////namespace ATest {
 ////    export interface Bar { }
 ////}
 ////

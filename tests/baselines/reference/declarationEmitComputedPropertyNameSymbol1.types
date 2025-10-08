@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyNameSymbol1.ts] ////
+
+=== type.ts ===
+export namespace Foo {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+  export const sym = Symbol();
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+}
+export type Type = { x?: { [Foo.sym]: 0 } };
+>Type : Type
+>     : ^^^^
+>x : { [Foo.sym]: 0; } | undefined
+>  : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>[Foo.sym] : 0
+>          : ^
+>Foo.sym : unique symbol
+>        : ^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
+
+=== index.ts ===
+import { type Type } from "./type";
+>Type : any
+>     : ^^^
+
+export const foo = { ...({} as Type) };
+>foo : { x?: { [Foo.sym]: 0; }; }
+>    : ^^^^^^                 ^^^
+>{ ...({} as Type) } : { x?: { [Foo.sym]: 0; }; }
+>                    : ^^^^^^                 ^^^
+>({} as Type) : Type
+>             : ^^^^
+>{} as Type : Type
+>           : ^^^^
+>{} : {}
+>   : ^^
+

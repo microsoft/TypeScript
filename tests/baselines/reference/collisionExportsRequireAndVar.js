@@ -5,11 +5,11 @@ export function foo() {
 }
 var exports = 1;
 var require = "require";
-module m1 {
+namespace m1 {
     var exports = 0;
     var require = "require";
 }
-module m2 {
+namespace m2 {
     export var exports = 0;
     export var require = "require";
 }
@@ -17,11 +17,11 @@ module m2 {
 //// [collisionExportsRequireAndVar_globalFile.ts]
 var exports = 0;
 var require = "require";
-module m3 {
+namespace m3 {
     var exports = 0;
     var require = "require";
 }
-module m4 {
+namespace m4 {
     export var exports = 0;
     export var require = "require";
 }
@@ -30,10 +30,9 @@ module m4 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = void 0;
+    exports.foo = foo;
     function foo() {
     }
-    exports.foo = foo;
     var exports = 1;
     var require = "require";
     var m1;

@@ -1,12 +1,12 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "esnext", "moduleResolution": "bundler" } }
 
-// @Filename: /node_modules/react/package.json
+// @Filename: /home/src/workspaces/project/node_modules/react/package.json
 //// { "name": "react", "version": "16.8.6", "main": "index.js" }
 
-// @Filename: /node_modules/react/index.js
+// @Filename: /home/src/workspaces/project/node_modules/react/index.js
 //// 'use strict';
 //// 
 //// if (process.env.NODE_ENV === 'production') {
@@ -15,10 +15,10 @@
 ////   module.exports = require('./cjs/react.development.js');
 //// }
 
-// @Filename: /node_modules/react/cjs/react.production.min.js
+// @Filename: /home/src/workspaces/project/node_modules/react/cjs/react.production.min.js
 //// 'use strict';exports./*production*/useState=function(a){};exports.version='16.8.6';
 
-// @Filename: /node_modules/react/cjs/react.development.js
+// @Filename: /home/src/workspaces/project/node_modules/react/cjs/react.development.js
 //// 'use strict';
 //// if (process.env.NODE_ENV !== 'production') {
 ////   (function() {
@@ -28,7 +28,7 @@
 ////   }());
 //// }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import { [|/*start*/useState|] } from 'react';
 
 verify.baselineGoToSourceDefinition("start");

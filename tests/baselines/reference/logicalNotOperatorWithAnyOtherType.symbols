@@ -45,7 +45,7 @@ class A {
 >a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 14, 11))
     }
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
 
     export var n: any;

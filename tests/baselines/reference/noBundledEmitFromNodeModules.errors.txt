@@ -1,0 +1,12 @@
+error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+
+
+!!! error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+==== /a.ts (0 errors) ====
+    import { C } from "projB";
+    
+==== /node_modules/projB/index.ts (0 errors) ====
+    export class C {}
+    

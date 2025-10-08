@@ -45,7 +45,7 @@ invalidBooleanAssignments.ts(26,1): error TS2630: Cannot assign to 'i' because i
 !!! error TS2322: Type 'boolean' is not assignable to type '() => string'.
     var h2: { toString(): string } = x; // no error
     
-    module M { export var a = 1; }
+    namespace M { export var a = 1; }
     M = x;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

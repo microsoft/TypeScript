@@ -559,11 +559,11 @@ var StaticArgumentsFn_Anonymous2 = class {
 // === Static properties on default exported classes ===
 
 // name
-module TestOnDefaultExportedClass_1 {
+namespace TestOnDefaultExportedClass_1 {
 >TestOnDefaultExportedClass_1 : Symbol(TestOnDefaultExportedClass_1, Decl(staticPropertyNameConflicts.ts, 219, 1))
 
     class StaticName {
->StaticName : Symbol(StaticName, Decl(staticPropertyNameConflicts.ts, 225, 37))
+>StaticName : Symbol(StaticName, Decl(staticPropertyNameConflicts.ts, 225, 40))
 
         static name: number; // error without useDefineForClassFields
 >name : Symbol(StaticName.name, Decl(staticPropertyNameConflicts.ts, 226, 22))
@@ -589,11 +589,11 @@ export class ExportedStaticName {
 >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 }
 
-module TestOnDefaultExportedClass_2 {
+namespace TestOnDefaultExportedClass_2 {
 >TestOnDefaultExportedClass_2 : Symbol(TestOnDefaultExportedClass_2, Decl(staticPropertyNameConflicts.ts, 235, 1))
 
     class StaticNameFn {
->StaticNameFn : Symbol(StaticNameFn, Decl(staticPropertyNameConflicts.ts, 237, 37))
+>StaticNameFn : Symbol(StaticNameFn, Decl(staticPropertyNameConflicts.ts, 237, 40))
 
         static name() {} // error without useDefineForClassFields
 >name : Symbol(StaticNameFn.name, Decl(staticPropertyNameConflicts.ts, 238, 24))
@@ -620,11 +620,11 @@ export class ExportedStaticNameFn {
 }
 
 // length
-module TestOnDefaultExportedClass_3 {
+namespace TestOnDefaultExportedClass_3 {
 >TestOnDefaultExportedClass_3 : Symbol(TestOnDefaultExportedClass_3, Decl(staticPropertyNameConflicts.ts, 247, 1))
 
     export default class StaticLength {
->StaticLength : Symbol(StaticLength, Decl(staticPropertyNameConflicts.ts, 250, 37))
+>StaticLength : Symbol(StaticLength, Decl(staticPropertyNameConflicts.ts, 250, 40))
 
         static length: number; // error without useDefineForClassFields
 >length : Symbol(StaticLength.length, Decl(staticPropertyNameConflicts.ts, 251, 39))
@@ -650,11 +650,11 @@ export class ExportedStaticLength {
 >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 }
 
-module TestOnDefaultExportedClass_4 {
+namespace TestOnDefaultExportedClass_4 {
 >TestOnDefaultExportedClass_4 : Symbol(TestOnDefaultExportedClass_4, Decl(staticPropertyNameConflicts.ts, 260, 1))
 
     export default class StaticLengthFn {
->StaticLengthFn : Symbol(StaticLengthFn, Decl(staticPropertyNameConflicts.ts, 262, 37))
+>StaticLengthFn : Symbol(StaticLengthFn, Decl(staticPropertyNameConflicts.ts, 262, 40))
 
         static length() {} // error without useDefineForClassFields
 >length : Symbol(StaticLengthFn.length, Decl(staticPropertyNameConflicts.ts, 263, 41))
@@ -681,11 +681,11 @@ export class ExportedStaticLengthFn {
 }
 
 // prototype
-module TestOnDefaultExportedClass_5 {
+namespace TestOnDefaultExportedClass_5 {
 >TestOnDefaultExportedClass_5 : Symbol(TestOnDefaultExportedClass_5, Decl(staticPropertyNameConflicts.ts, 272, 1))
 
     export default class StaticPrototype {
->StaticPrototype : Symbol(StaticPrototype, Decl(staticPropertyNameConflicts.ts, 275, 37))
+>StaticPrototype : Symbol(StaticPrototype, Decl(staticPropertyNameConflicts.ts, 275, 40))
 
         static prototype: number; // always an error
 >prototype : Symbol(StaticPrototype.prototype, Decl(staticPropertyNameConflicts.ts, 276, 42))
@@ -711,11 +711,11 @@ export class ExportedStaticPrototype {
 >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 }
 
-module TestOnDefaultExportedClass_6 {
+namespace TestOnDefaultExportedClass_6 {
 >TestOnDefaultExportedClass_6 : Symbol(TestOnDefaultExportedClass_6, Decl(staticPropertyNameConflicts.ts, 285, 1))
 
     export default class StaticPrototypeFn {
->StaticPrototypeFn : Symbol(StaticPrototypeFn, Decl(staticPropertyNameConflicts.ts, 287, 37))
+>StaticPrototypeFn : Symbol(StaticPrototypeFn, Decl(staticPropertyNameConflicts.ts, 287, 40))
 
         static prototype() {} // always an error
 >prototype : Symbol(StaticPrototypeFn.prototype, Decl(staticPropertyNameConflicts.ts, 288, 44))
@@ -742,11 +742,11 @@ export class ExportedStaticPrototypeFn {
 }
 
 // caller
-module TestOnDefaultExportedClass_7 {
+namespace TestOnDefaultExportedClass_7 {
 >TestOnDefaultExportedClass_7 : Symbol(TestOnDefaultExportedClass_7, Decl(staticPropertyNameConflicts.ts, 297, 1))
 
     export default class StaticCaller {
->StaticCaller : Symbol(StaticCaller, Decl(staticPropertyNameConflicts.ts, 300, 37))
+>StaticCaller : Symbol(StaticCaller, Decl(staticPropertyNameConflicts.ts, 300, 40))
 
         static caller: number; // error without useDefineForClassFields
 >caller : Symbol(StaticCaller.caller, Decl(staticPropertyNameConflicts.ts, 301, 39))
@@ -772,11 +772,11 @@ export class ExportedStaticCaller {
 >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 }
 
-module TestOnDefaultExportedClass_8 {
+namespace TestOnDefaultExportedClass_8 {
 >TestOnDefaultExportedClass_8 : Symbol(TestOnDefaultExportedClass_8, Decl(staticPropertyNameConflicts.ts, 310, 1))
 
     export default class StaticCallerFn {
->StaticCallerFn : Symbol(StaticCallerFn, Decl(staticPropertyNameConflicts.ts, 312, 37))
+>StaticCallerFn : Symbol(StaticCallerFn, Decl(staticPropertyNameConflicts.ts, 312, 40))
 
         static caller() {} // error without useDefineForClassFields
 >caller : Symbol(StaticCallerFn.caller, Decl(staticPropertyNameConflicts.ts, 313, 41))
@@ -803,11 +803,11 @@ export class ExportedStaticCallerFn {
 }
 
 // arguments
-module TestOnDefaultExportedClass_9 {
+namespace TestOnDefaultExportedClass_9 {
 >TestOnDefaultExportedClass_9 : Symbol(TestOnDefaultExportedClass_9, Decl(staticPropertyNameConflicts.ts, 322, 1))
 
     export default class StaticArguments {
->StaticArguments : Symbol(StaticArguments, Decl(staticPropertyNameConflicts.ts, 325, 37))
+>StaticArguments : Symbol(StaticArguments, Decl(staticPropertyNameConflicts.ts, 325, 40))
 
         static arguments: number; // error without useDefineForClassFields
 >arguments : Symbol(StaticArguments.arguments, Decl(staticPropertyNameConflicts.ts, 326, 42))
@@ -833,11 +833,11 @@ export class ExportedStaticArguments {
 >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 }
 
-module TestOnDefaultExportedClass_10 {
+namespace TestOnDefaultExportedClass_10 {
 >TestOnDefaultExportedClass_10 : Symbol(TestOnDefaultExportedClass_10, Decl(staticPropertyNameConflicts.ts, 335, 1))
 
     export default class StaticArgumentsFn {
->StaticArgumentsFn : Symbol(StaticArgumentsFn, Decl(staticPropertyNameConflicts.ts, 337, 38))
+>StaticArgumentsFn : Symbol(StaticArgumentsFn, Decl(staticPropertyNameConflicts.ts, 337, 41))
 
         static arguments() {} // error without useDefineForClassFields
 >arguments : Symbol(StaticArgumentsFn.arguments, Decl(staticPropertyNameConflicts.ts, 338, 44))

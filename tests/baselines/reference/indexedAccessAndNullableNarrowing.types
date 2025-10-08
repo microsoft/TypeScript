@@ -1,0 +1,204 @@
+//// [tests/cases/compiler/indexedAccessAndNullableNarrowing.ts] ////
+
+=== indexedAccessAndNullableNarrowing.ts ===
+function f1<T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) {
+>f1 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) => void
+>   : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^       ^^ ^^                ^^^^^^^^^
+>x : T[K] | undefined
+>  : ^^^^^^^^^^^^^^^^
+
+    if (x === undefined) return;
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T[K] | undefined
+>  : ^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    x;  // T[K] & ({} | null)
+>x : T[K] & ({} | null)
+>  : ^^^^^^^^^^^^^^^^^^
+
+    if (x === undefined) return;
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T[K] & ({} | null)
+>  : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    x;  // T[K] & ({} | null)
+>x : T[K] & ({} | null)
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
+>f2 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | null) => void
+>   : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^       ^^ ^^           ^^^^^^^^^
+>x : T[K] | null
+>  : ^^^^^^^^^^^
+
+    if (x === null) return;
+>x === null : boolean
+>           : ^^^^^^^
+>x : T[K] | null
+>  : ^^^^^^^^^^^
+
+    x;  // T[K] & ({} | undefined)
+>x : T[K] & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (x === null) return;
+>x === null : boolean
+>           : ^^^^^^^
+>x : T[K] & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    x;  // T[K] & ({} | undefined)
+>x : T[K] & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function f3<T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) {
+>f3 : <T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) => void
+>   : ^ ^^ ^^^^^^^^^       ^^ ^^    ^^  ^^                  ^^  ^^                           ^^^^^^^^^
+>t : T[K]
+>  : ^^^^
+>p1 : Partial<T>[K] & {}
+>   : ^^^^^^^^^^^^^^^^^^
+>p2 : Partial<T>[K] & ({} | null)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    t = p1;
+>t = p1 : Partial<T>[K] & {}
+>       : ^^^^^^^^^^^^^^^^^^
+>t : T[K]
+>  : ^^^^
+>p1 : Partial<T>[K] & {}
+>   : ^^^^^^^^^^^^^^^^^^
+
+    t = p2;
+>t = p2 : Partial<T>[K] & ({} | null)
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T[K]
+>  : ^^^^
+>p2 : Partial<T>[K] & ({} | null)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/57693
+
+type AnyObject = Record<string, any>;
+>AnyObject : AnyObject
+>          : ^^^^^^^^^
+
+type State = AnyObject;
+>State : AnyObject
+>      : ^^^^^^^^^
+
+declare function hasOwnProperty<T extends AnyObject>(
+>hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
+>               : ^ ^^^^^^^^^         ^^      ^^ ^^    ^^           ^^^^^               
+
+    object: T,
+>object : T
+>       : ^
+
+    prop: PropertyKey,
+>prop : PropertyKey
+>     : ^^^^^^^^^^^
+
+): prop is keyof T;
+
+interface Store<S = State> {
+    setState<K extends keyof S>(key: K, value: S[K]): void;
+>setState : <K extends keyof S>(key: K, value: S[K]) => void
+>         : ^ ^^^^^^^^^       ^^   ^^ ^^     ^^    ^^^^^    
+>key : K
+>    : ^
+>value : S[K]
+>      : ^^^^
+}
+
+export function syncStoreProp<
+>syncStoreProp : <S extends State, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
+>              : ^ ^^^^^^^^^     ^^ ^^^^^^^^^          ^^ ^^^^^^^^^       ^^     ^^        ^^     ^^ ^^   ^^ ^^^^^^^^^
+
+    S extends State,
+    P extends Partial<S>,
+    K extends keyof S,
+>(store: Store<S>, props: P, key: K) {
+>store : Store<S>
+>      : ^^^^^^^^
+>props : P
+>      : ^
+>key : K
+>    : ^
+
+    const value = hasOwnProperty(props, key) ? props[key] : undefined;
+>value : P[K] | undefined
+>      : ^^^^^^^^^^^^^^^^
+>hasOwnProperty(props, key) ? props[key] : undefined : P[K] | undefined
+>                                                    : ^^^^^^^^^^^^^^^^
+>hasOwnProperty(props, key) : boolean
+>                           : ^^^^^^^
+>hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
+>               : ^ ^^^^^^^^^         ^^      ^^ ^^    ^^           ^^^^^               
+>props : P
+>      : ^
+>key : string | number | symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>props[key] : P[K]
+>           : ^^^^
+>props : P
+>      : ^
+>key : K
+>    : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    if (value === undefined) return;
+>value === undefined : boolean
+>                    : ^^^^^^^
+>value : P[K] | undefined
+>      : ^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    store.setState(key, value);
+>store.setState(key, value) : void
+>                           : ^^^^
+>store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
+>               : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
+>store : Store<S>
+>      : ^^^^^^^^
+>setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
+>         : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
+>key : K
+>    : ^
+>value : P[K] & ({} | null)
+>      : ^^^^^^^^^^^^^^^^^^
+
+    if (value === undefined) return;
+>value === undefined : boolean
+>                    : ^^^^^^^
+>value : P[K] & ({} | null)
+>      : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    store.setState(key, value);
+>store.setState(key, value) : void
+>                           : ^^^^
+>store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
+>               : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
+>store : Store<S>
+>      : ^^^^^^^^
+>setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
+>         : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
+>key : K
+>    : ^
+>value : P[K] & ({} | null)
+>      : ^^^^^^^^^^^^^^^^^^
+}
+
