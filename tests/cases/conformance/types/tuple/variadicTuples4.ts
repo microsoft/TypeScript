@@ -11,3 +11,12 @@ function f<T extends unknown[], V extends unknown[]>(
 }
 
 const a = f([true, 2, "b", true], 1, "a"); // ok
+
+function f2<T extends unknown[], V extends unknown[]>(
+  x: [boolean, ...V, ...T, string],
+  ...args: V
+) {
+  return x;
+}
+
+const a2 = f2([true, 2, "b", true, "c"], 1, "a"); // ok

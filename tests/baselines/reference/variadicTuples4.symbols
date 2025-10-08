@@ -26,3 +26,26 @@ const a = f([true, 2, "b", true], 1, "a"); // ok
 >a : Symbol(a, Decl(variadicTuples4.ts, 9, 5))
 >f : Symbol(f, Decl(variadicTuples4.ts, 0, 0))
 
+function f2<T extends unknown[], V extends unknown[]>(
+>f2 : Symbol(f2, Decl(variadicTuples4.ts, 9, 42))
+>T : Symbol(T, Decl(variadicTuples4.ts, 11, 12))
+>V : Symbol(V, Decl(variadicTuples4.ts, 11, 32))
+
+  x: [boolean, ...V, ...T, string],
+>x : Symbol(x, Decl(variadicTuples4.ts, 11, 54))
+>V : Symbol(V, Decl(variadicTuples4.ts, 11, 32))
+>T : Symbol(T, Decl(variadicTuples4.ts, 11, 12))
+
+  ...args: V
+>args : Symbol(args, Decl(variadicTuples4.ts, 12, 35))
+>V : Symbol(V, Decl(variadicTuples4.ts, 11, 32))
+
+) {
+  return x;
+>x : Symbol(x, Decl(variadicTuples4.ts, 11, 54))
+}
+
+const a2 = f2([true, 2, "b", true, "c"], 1, "a"); // ok
+>a2 : Symbol(a2, Decl(variadicTuples4.ts, 18, 5))
+>f2 : Symbol(f2, Decl(variadicTuples4.ts, 9, 42))
+
