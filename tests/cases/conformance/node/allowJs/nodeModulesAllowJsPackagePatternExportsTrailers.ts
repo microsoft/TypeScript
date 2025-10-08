@@ -4,6 +4,7 @@
 // @checkJs: true
 // @outDir: out
 // @filename: index.js
+// @rootDir: .
 // esm format file
 import * as cjsi from "inner/cjs/index.cjs";
 import * as mjsi from "inner/mjs/index.mjs";

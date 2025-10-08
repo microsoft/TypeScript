@@ -2,6 +2,7 @@
 // @declaration: true
 // @outDir: out
 // @filename: index.ts
+// @rootDir: .
 // esm format file
 import * as cjsi from "inner/cjs/index";
 import * as mjsi from "inner/mjs/index";

@@ -3,6 +3,7 @@
 // @outDir: out
 // @filename: index.ts
 // @traceResolution: true
+// @rootDir: .
 // esm format file
 import * as cjsi from "inner/cjs/index.cjs";
 import * as mjsi from "inner/mjs/index.mjs";
