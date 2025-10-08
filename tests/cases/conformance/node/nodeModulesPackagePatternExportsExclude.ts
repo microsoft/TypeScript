@@ -45,6 +45,9 @@ mjsi2;
 typei2;
 // @filename: node_modules/inner/exclude/index.d.ts
 // cjs format file
+export const implicitCjsSource = true;
+// @filename: node_modules/inner/exclude/test.d.ts
+// cjs format file
 import * as cjs from "inner/cjs/exclude/index";
 import * as mjs from "inner/mjs/exclude/index";
 import * as type from "inner/js/exclude/index";
@@ -52,6 +55,9 @@ export { cjs };
 export { mjs };
 export { type };
 // @filename: node_modules/inner/exclude/index.d.mts
+// esm format file
+export const mjsSource = true;
+// @filename: node_modules/inner/exclude/test.d.mts
 // esm format file
 import * as cjs from "inner/cjs/exclude/index";
 import * as mjs from "inner/mjs/exclude/index";
@@ -61,6 +67,9 @@ export { mjs };
 export { type };
 // @filename: node_modules/inner/exclude/index.d.cts
 // cjs format file
+export const cjsSource = true;
+// @filename: node_modules/inner/exclude/test.d.cts
+// cjs format file
 import * as cjs from "inner/cjs/exclude/index";
 import * as mjs from "inner/mjs/exclude/index";
 import * as type from "inner/js/exclude/index";
@@ -68,6 +77,9 @@ export { cjs };
 export { mjs };
 export { type };
 // @filename: node_modules/inner/index.d.ts
+// cjs format file
+export const implicitCjsSource = true;
+// @filename: node_modules/inner/test.d.ts
 // cjs format file
 import * as cjs from "inner/cjs/index";
 import * as mjs from "inner/mjs/index";
@@ -77,6 +89,9 @@ export { mjs };
 export { type };
 // @filename: node_modules/inner/index.d.mts
 // esm format file
+export const mjsSource = true;
+// @filename: node_modules/inner/test.d.mts
+// esm format file
 import * as cjs from "inner/cjs/index";
 import * as mjs from "inner/mjs/index";
 import * as type from "inner/js/index";
@@ -84,6 +99,9 @@ export { cjs };
 export { mjs };
 export { type };
 // @filename: node_modules/inner/index.d.cts
+// cjs format file
+export const cjsSource = true;
+// @filename: node_modules/inner/test.d.cts
 // cjs format file
 import * as cjs from "inner/cjs/index";
 import * as mjs from "inner/mjs/index";
