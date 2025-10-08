@@ -49,3 +49,72 @@ const a2 = f2([true, 2, "b", true, "c"], 1, "a"); // ok
 >a2 : Symbol(a2, Decl(variadicTuples4.ts, 18, 5))
 >f2 : Symbol(f2, Decl(variadicTuples4.ts, 9, 42))
 
+function f3<T extends unknown[], V extends unknown[]>(
+>f3 : Symbol(f3, Decl(variadicTuples4.ts, 18, 49))
+>T : Symbol(T, Decl(variadicTuples4.ts, 20, 12))
+>V : Symbol(V, Decl(variadicTuples4.ts, 20, 32))
+
+  x: [boolean, ...V, ...T, string, number],
+>x : Symbol(x, Decl(variadicTuples4.ts, 20, 54))
+>V : Symbol(V, Decl(variadicTuples4.ts, 20, 32))
+>T : Symbol(T, Decl(variadicTuples4.ts, 20, 12))
+
+  ...args: V
+>args : Symbol(args, Decl(variadicTuples4.ts, 21, 43))
+>V : Symbol(V, Decl(variadicTuples4.ts, 20, 32))
+
+) {
+  return x;
+>x : Symbol(x, Decl(variadicTuples4.ts, 20, 54))
+}
+
+const a3 = f3([true, 2, "b", true, "c", 3], 1, "a"); // ok
+>a3 : Symbol(a3, Decl(variadicTuples4.ts, 27, 5))
+>f3 : Symbol(f3, Decl(variadicTuples4.ts, 18, 49))
+
+function f4<T extends unknown[], V extends unknown[]>(
+>f4 : Symbol(f4, Decl(variadicTuples4.ts, 27, 52))
+>T : Symbol(T, Decl(variadicTuples4.ts, 29, 12))
+>V : Symbol(V, Decl(variadicTuples4.ts, 29, 32))
+
+  x: [boolean, boolean, boolean, ...V, ...T, string, number],
+>x : Symbol(x, Decl(variadicTuples4.ts, 29, 54))
+>V : Symbol(V, Decl(variadicTuples4.ts, 29, 32))
+>T : Symbol(T, Decl(variadicTuples4.ts, 29, 12))
+
+  ...args: V
+>args : Symbol(args, Decl(variadicTuples4.ts, 30, 61))
+>V : Symbol(V, Decl(variadicTuples4.ts, 29, 32))
+
+) {
+  return x;
+>x : Symbol(x, Decl(variadicTuples4.ts, 29, 54))
+}
+
+const a4 = f4([true, true, true, 2, "b", true, "c", 3], 1, "a"); // ok
+>a4 : Symbol(a4, Decl(variadicTuples4.ts, 36, 5))
+>f4 : Symbol(f4, Decl(variadicTuples4.ts, 27, 52))
+
+function f5<T extends unknown[], V extends unknown[]>(
+>f5 : Symbol(f5, Decl(variadicTuples4.ts, 36, 64))
+>T : Symbol(T, Decl(variadicTuples4.ts, 38, 12))
+>V : Symbol(V, Decl(variadicTuples4.ts, 38, 32))
+
+  x: [boolean, boolean, boolean, ...V, ...T],
+>x : Symbol(x, Decl(variadicTuples4.ts, 38, 54))
+>V : Symbol(V, Decl(variadicTuples4.ts, 38, 32))
+>T : Symbol(T, Decl(variadicTuples4.ts, 38, 12))
+
+  ...args: V
+>args : Symbol(args, Decl(variadicTuples4.ts, 39, 45))
+>V : Symbol(V, Decl(variadicTuples4.ts, 38, 32))
+
+) {
+  return x;
+>x : Symbol(x, Decl(variadicTuples4.ts, 38, 54))
+}
+
+const a5 = f5([true, true, true, 2, "b", true], 1, "a"); // ok
+>a5 : Symbol(a5, Decl(variadicTuples4.ts, 45, 5))
+>f5 : Symbol(f5, Decl(variadicTuples4.ts, 36, 64))
+
