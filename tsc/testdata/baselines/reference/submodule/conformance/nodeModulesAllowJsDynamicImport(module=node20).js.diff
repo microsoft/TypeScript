@@ -1,17 +1,6 @@
 --- old.nodeModulesAllowJsDynamicImport(module=node20).js
 +++ new.nodeModulesAllowJsDynamicImport(module=node20).js
-@@= skipped -31, +31 lines =@@
-     const { readFile } = await import("fs");
- }
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.main = main;
- // esm format file
--export async function main() {
-+async function main() {
-     const { readFile } = await import("fs");
- }
+@@= skipped -38, +38 lines =@@
 
 
  //// [index.d.ts]

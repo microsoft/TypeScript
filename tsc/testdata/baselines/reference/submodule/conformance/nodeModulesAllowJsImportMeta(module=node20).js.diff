@@ -1,27 +1,13 @@
 --- old.nodeModulesAllowJsImportMeta(module=node20).js
 +++ new.nodeModulesAllowJsImportMeta(module=node20).js
-@@= skipped -26, +26 lines =@@
- const x = import.meta.url;
- exports.x = x;
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.x = void 0;
- // esm format file
- const x = import.meta.url;
--export { x };
--
--
--//// [index.d.ts]
+@@= skipped -32, +32 lines =@@
+
+
+ //// [index.d.ts]
 -export const x: string;
--//// [index.d.ts]
--export const x: string;
-+exports.x = x;
-+
-+
-+//// [index.d.ts]
 +declare const x: string;
 +export { x };
-+//// [index.d.ts]
+ //// [index.d.ts]
+-export const x: string;
 +declare const x: string;
 +export { x };

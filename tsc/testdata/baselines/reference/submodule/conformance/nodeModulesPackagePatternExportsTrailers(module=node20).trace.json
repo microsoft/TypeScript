@@ -1,6 +1,6 @@
 ======== Resolving module 'inner/cjs/index.cjs' from '/.src/index.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Found 'package.json' at '/.src/package.json'.
 Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -12,8 +12,8 @@ File '/.src/node_modules/inner/index.d.cts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/node_modules/inner/index.d.cts'.
 ======== Module name 'inner/cjs/index.cjs' was successfully resolved to '/.src/node_modules/inner/index.d.cts'. ========
 ======== Resolving module 'inner/mjs/index.mjs' from '/.src/index.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -25,8 +25,8 @@ File '/.src/node_modules/inner/index.d.mts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/node_modules/inner/index.d.mts'.
 ======== Module name 'inner/mjs/index.mjs' was successfully resolved to '/.src/node_modules/inner/index.d.mts'. ========
 ======== Resolving module 'inner/js/index.js' from '/.src/index.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -39,8 +39,8 @@ File '/.src/node_modules/inner/index.d.ts' exists - use it as a name resolution 
 Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/node_modules/inner/index.d.ts'.
 ======== Module name 'inner/js/index.js' was successfully resolved to '/.src/node_modules/inner/index.d.ts'. ========
 ======== Resolving module 'inner/cjs/index.cjs' from '/.src/index.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -52,8 +52,8 @@ File '/.src/node_modules/inner/index.d.cts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/node_modules/inner/index.d.cts'.
 ======== Module name 'inner/cjs/index.cjs' was successfully resolved to '/.src/node_modules/inner/index.d.cts'. ========
 ======== Resolving module 'inner/mjs/index.mjs' from '/.src/index.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -65,8 +65,8 @@ File '/.src/node_modules/inner/index.d.mts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/node_modules/inner/index.d.mts'.
 ======== Module name 'inner/mjs/index.mjs' was successfully resolved to '/.src/node_modules/inner/index.d.mts'. ========
 ======== Resolving module 'inner/js/index.js' from '/.src/index.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -79,8 +79,8 @@ File '/.src/node_modules/inner/index.d.ts' exists - use it as a name resolution 
 Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/node_modules/inner/index.d.ts'.
 ======== Module name 'inner/js/index.js' was successfully resolved to '/.src/node_modules/inner/index.d.ts'. ========
 ======== Resolving module 'inner/cjs/index.cjs' from '/.src/index.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -92,8 +92,8 @@ File '/.src/node_modules/inner/index.d.cts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/node_modules/inner/index.d.cts'.
 ======== Module name 'inner/cjs/index.cjs' was successfully resolved to '/.src/node_modules/inner/index.d.cts'. ========
 ======== Resolving module 'inner/mjs/index.mjs' from '/.src/index.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -105,8 +105,8 @@ File '/.src/node_modules/inner/index.d.mts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/node_modules/inner/index.d.mts'.
 ======== Module name 'inner/mjs/index.mjs' was successfully resolved to '/.src/node_modules/inner/index.d.mts'. ========
 ======== Resolving module 'inner/js/index.js' from '/.src/index.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
 Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -119,8 +119,8 @@ File '/.src/node_modules/inner/index.d.ts' exists - use it as a name resolution 
 Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/node_modules/inner/index.d.ts'.
 ======== Module name 'inner/js/index.js' was successfully resolved to '/.src/node_modules/inner/index.d.ts'. ========
 ======== Resolving module 'inner/cjs/index.cjs' from '/.src/node_modules/inner/test.d.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.
 File name '/.src/node_modules/inner/index.cjs' has a '.cjs' extension - stripping it.
@@ -129,8 +129,8 @@ File '/.src/node_modules/inner/index.d.cts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/node_modules/inner/index.d.cts'.
 ======== Module name 'inner/cjs/index.cjs' was successfully resolved to '/.src/node_modules/inner/index.d.cts'. ========
 ======== Resolving module 'inner/mjs/index.mjs' from '/.src/node_modules/inner/test.d.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './mjs/*.mjs' with target './index.mjs'.
 File name '/.src/node_modules/inner/index.mjs' has a '.mjs' extension - stripping it.
@@ -139,8 +139,8 @@ File '/.src/node_modules/inner/index.d.mts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/node_modules/inner/index.d.mts'.
 ======== Module name 'inner/mjs/index.mjs' was successfully resolved to '/.src/node_modules/inner/index.d.mts'. ========
 ======== Resolving module 'inner/js/index.js' from '/.src/node_modules/inner/test.d.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './js/*.js' with target './index.js'.
 File name '/.src/node_modules/inner/index.js' has a '.js' extension - stripping it.
@@ -150,8 +150,8 @@ File '/.src/node_modules/inner/index.d.ts' exists - use it as a name resolution 
 Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/node_modules/inner/index.d.ts'.
 ======== Module name 'inner/js/index.js' was successfully resolved to '/.src/node_modules/inner/index.d.ts'. ========
 ======== Resolving module 'inner/cjs/index.cjs' from '/.src/node_modules/inner/test.d.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.
 File name '/.src/node_modules/inner/index.cjs' has a '.cjs' extension - stripping it.
@@ -160,8 +160,8 @@ File '/.src/node_modules/inner/index.d.cts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/node_modules/inner/index.d.cts'.
 ======== Module name 'inner/cjs/index.cjs' was successfully resolved to '/.src/node_modules/inner/index.d.cts'. ========
 ======== Resolving module 'inner/mjs/index.mjs' from '/.src/node_modules/inner/test.d.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './mjs/*.mjs' with target './index.mjs'.
 File name '/.src/node_modules/inner/index.mjs' has a '.mjs' extension - stripping it.
@@ -170,8 +170,8 @@ File '/.src/node_modules/inner/index.d.mts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/node_modules/inner/index.d.mts'.
 ======== Module name 'inner/mjs/index.mjs' was successfully resolved to '/.src/node_modules/inner/index.d.mts'. ========
 ======== Resolving module 'inner/js/index.js' from '/.src/node_modules/inner/test.d.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './js/*.js' with target './index.js'.
 File name '/.src/node_modules/inner/index.js' has a '.js' extension - stripping it.
@@ -181,8 +181,8 @@ File '/.src/node_modules/inner/index.d.ts' exists - use it as a name resolution 
 Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/node_modules/inner/index.d.ts'.
 ======== Module name 'inner/js/index.js' was successfully resolved to '/.src/node_modules/inner/index.d.ts'. ========
 ======== Resolving module 'inner/cjs/index.cjs' from '/.src/node_modules/inner/test.d.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.
 File name '/.src/node_modules/inner/index.cjs' has a '.cjs' extension - stripping it.
@@ -191,8 +191,8 @@ File '/.src/node_modules/inner/index.d.cts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/node_modules/inner/index.d.cts'.
 ======== Module name 'inner/cjs/index.cjs' was successfully resolved to '/.src/node_modules/inner/index.d.cts'. ========
 ======== Resolving module 'inner/mjs/index.mjs' from '/.src/node_modules/inner/test.d.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './mjs/*.mjs' with target './index.mjs'.
 File name '/.src/node_modules/inner/index.mjs' has a '.mjs' extension - stripping it.
@@ -201,8 +201,8 @@ File '/.src/node_modules/inner/index.d.mts' exists - use it as a name resolution
 Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/node_modules/inner/index.d.mts'.
 ======== Module name 'inner/mjs/index.mjs' was successfully resolved to '/.src/node_modules/inner/index.d.mts'. ========
 ======== Resolving module 'inner/js/index.js' from '/.src/node_modules/inner/test.d.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './js/*.js' with target './index.js'.
 File name '/.src/node_modules/inner/index.js' has a '.js' extension - stripping it.

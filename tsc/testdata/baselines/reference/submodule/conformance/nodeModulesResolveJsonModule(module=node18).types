@@ -38,19 +38,19 @@ export const name = pkg.name;
 >name : string
 
 import * as ns from "./package.json";
->ns : { name: string; version: string; type: string; default: string; }
+>ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 
 export const thing = ns;
->thing : { name: string; version: string; type: string; default: string; }
->ns : { name: string; version: string; type: string; default: string; }
+>thing : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
+>ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 
 export const name2 = ns.default.name;
->name2 : any
->ns.default.name : any
->ns.default : string
->ns : { name: string; version: string; type: string; default: string; }
->default : string
->name : any
+>name2 : string
+>ns.default.name : string
+>ns.default : { name: string; version: string; type: string; default: string; }
+>ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
+>default : { name: string; version: string; type: string; default: string; }
+>name : string
 
 === index.mts ===
 import pkg from "./package.json" with { type: "json" };

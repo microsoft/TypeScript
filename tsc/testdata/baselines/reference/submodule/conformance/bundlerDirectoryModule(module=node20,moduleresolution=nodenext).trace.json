@@ -1,7 +1,7 @@
 ======== Resolving module '../lib' from '/app/test.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/lib', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/lib', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/lib.ts' does not exist.
 File '/lib.tsx' does not exist.
 File '/lib.d.ts' does not exist.

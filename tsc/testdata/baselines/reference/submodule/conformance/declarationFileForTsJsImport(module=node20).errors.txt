@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 main.ts(1,18): error TS2307: Cannot find module './file.js' or its corresponding type declarations.
 main.ts(2,18): error TS2307: Cannot find module './file.jsx' or its corresponding type declarations.
 main.ts(3,18): error TS2307: Cannot find module './file.ts' or its corresponding type declarations.
@@ -7,13 +6,15 @@ main.ts(5,18): error TS2307: Cannot find module './file.mjs' or its correspondin
 main.ts(6,18): error TS2307: Cannot find module './file.cjs' or its corresponding type declarations.
 main.ts(7,18): error TS2307: Cannot find module './file.mts' or its corresponding type declarations.
 main.ts(8,18): error TS2307: Cannot find module './file.cts' or its corresponding type declarations.
+main.ts(9,18): error TS2307: Cannot find module './file.d.ts' or its corresponding type declarations.
+main.ts(10,19): error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
+main.ts(11,19): error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
 main.ts(12,19): error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== package.json (0 errors) ====
     {"type": "module"}
-==== main.ts (9 errors) ====
+==== main.ts (12 errors) ====
     import def1 from "./file.js";
                      ~~~~~~~~~~~
 !!! error TS2307: Cannot find module './file.js' or its corresponding type declarations.
@@ -39,8 +40,14 @@ main.ts(12,19): error TS2307: Cannot find module './file.d.json.ts' or its corre
                      ~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './file.cts' or its corresponding type declarations.
     import def9 from "./file.d.ts";
+                     ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.ts' or its corresponding type declarations.
     import def10 from "./file.d.cts";
+                      ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
     import def11 from "./file.d.mts";
+                      ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
     import def12 from "./file.d.json.ts";
                       ~~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.

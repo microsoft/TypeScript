@@ -3,17 +3,17 @@
 === /index.ts ===
 /// <reference types="pkg" />
 foo; // foo should resolve while bar should not, since index.js is esm
->foo : any
+>foo : number
 
 bar;
->bar : number
+>bar : any
 
 export {};
-=== /node_modules/pkg/require.d.ts ===
+=== /node_modules/pkg/import.d.ts ===
 export {};
 declare global {
 >global : typeof global
 
-    var bar: number;
->bar : number
+    var foo: number;
+>foo : number
 }

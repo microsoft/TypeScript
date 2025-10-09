@@ -1,8 +1,6 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 /index.ts(2,1): error TS2304: Cannot find name 'foo'.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== /index.ts (1 errors) ====
     /// <reference types="pkg" resolution-mode="esm"/>
     foo; // bad resolution mode, which resolves is arbitrary

@@ -10,7 +10,7 @@ export = foo;
 
 === index.ts ===
 import * as foo from "./foo";
->foo : () => void
+>foo : { default: () => void; }
 
 function invoke(f: () => void) { f(); }
 >invoke : (f: () => void) => void
@@ -21,5 +21,5 @@ function invoke(f: () => void) { f(); }
 invoke(foo);
 >invoke(foo) : void
 >invoke : (f: () => void) => void
->foo : () => void
+>foo : { default: () => void; }
 

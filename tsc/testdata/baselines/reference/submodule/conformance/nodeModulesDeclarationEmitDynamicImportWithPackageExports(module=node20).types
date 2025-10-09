@@ -27,9 +27,9 @@ export const b = await import("package/mjs");
 >"package/mjs" : "package/mjs"
 
 export const c = await import("package");
->c : { default: typeof import("index"); }
->await import("package") : { default: typeof import("index"); }
->import("package") : Promise<{ default: typeof import("index"); }>
+>c : typeof import("index")
+>await import("package") : typeof import("index")
+>import("package") : Promise<typeof import("index")>
 >"package" : "package"
 
 export const f = await import("inner");
@@ -67,9 +67,9 @@ export const b = await import("package/mjs");
 >"package/mjs" : "package/mjs"
 
 export const c = await import("package");
->c : { default: typeof import("index"); }
->await import("package") : { default: typeof import("index"); }
->import("package") : Promise<{ default: typeof import("index"); }>
+>c : typeof import("index")
+>await import("package") : typeof import("index")
+>import("package") : Promise<typeof import("index")>
 >"package" : "package"
 
 export const f = await import("inner");
@@ -100,13 +100,13 @@ export const a = import("package/cjs");
 >"package/cjs" : "package/cjs"
 
 export const b = import("package/mjs");
->b : Promise<typeof import("index")>
->import("package/mjs") : Promise<typeof import("index")>
+>b : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
+>import("package/mjs") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 >"package/mjs" : "package/mjs"
 
 export const c = import("package");
->c : Promise<{ default: typeof import("index"); }>
->import("package") : Promise<{ default: typeof import("index"); }>
+>c : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
+>import("package") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 >"package" : "package"
 
 export const f = import("inner");
@@ -122,8 +122,8 @@ export const d = import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = import("inner/mjs");
->e : Promise<typeof import("node_modules/inner/index")>
->import("inner/mjs") : Promise<typeof import("node_modules/inner/index")>
+>e : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
+>import("inner/mjs") : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
 >"inner/mjs" : "inner/mjs"
 
 === node_modules/inner/index.d.ts ===

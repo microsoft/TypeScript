@@ -1,53 +1,36 @@
 --- old.nodeModulesAllowJsExportAssignment(module=node20).js
 +++ new.nodeModulesAllowJsExportAssignment(module=node20).js
-@@= skipped -33, +33 lines =@@
- const a = {};
+@@= skipped -34, +34 lines =@@
  module.exports = a;
  //// [file.js]
--"use strict";
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
  // cjs format file
  const a = {};
 +export = a;
  module.exports = a;
  //// [index.js]
-+"use strict";
  // esm format file
- const a = {};
--export {};
-+module.exports = a;
- //// [file.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -11, +13 lines =@@
  // esm format file
-+require("fs");
-+const a = {};
-+export = a;
-+module.exports = a;
-+
-+
-+//// [index.d.ts]
-+declare const a: {};
-+export = a;
-+//// [file.d.ts]
-+export = a;
-+//// [index.d.ts]
-+declare const a: {};
-+export = a;
-+//// [file.d.ts]
  import "fs";
--const a = {};
--module.exports = a;
--
--
--//// [index.d.ts]
+ const a = {};
++export = a;
+ module.exports = a;
+
+
+ //// [index.d.ts]
 -export = a;
+ declare const a: {};
++export = a;
+ //// [file.d.ts]
+ export = a;
 -declare const a: {};
--//// [file.d.ts]
+ //// [index.d.ts]
 -export = a;
--declare const a: {};
--//// [index.d.ts]
--export = a;
--declare const a: {};
--//// [file.d.ts]
+ declare const a: {};
++export = a;
+ //// [file.d.ts]
 -export {};
++import "fs";
 +export = a;

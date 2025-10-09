@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 file.js(4,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 file.js(6,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.js(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -7,7 +6,6 @@ subfolder/index.js(2,1): error TS8002: 'import ... =' can only be used in TypeSc
 subfolder/index.js(4,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== subfolder/index.js (2 errors) ====
     // cjs format file
     import fs = require("fs");

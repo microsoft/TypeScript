@@ -2,13 +2,13 @@
 
 === bar.d.ts ===
 import * as foo from './foo'
->foo : Root
+>foo : { default: Root; }
 
 export as namespace foo
->foo : Root
+>foo : { default: Root; }
 
 export = foo;
->foo : Root
+>foo : { default: Root; }
 
 declare global {
 >global : typeof global

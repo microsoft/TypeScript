@@ -5,15 +5,31 @@
 -
 -
 -==== subfolder/index.js (1 errors) ====
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+
-+
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+==== subfolder/index.js (0 errors) ====
-     // cjs format file
-     export {default} from "fs";
+-    // cjs format file
+-    export {default} from "fs";
 -            ~~~~~~~
 -!!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-     export {default as foo} from "fs";
-     export {bar as baz} from "fs";
- ==== index.js (0 errors) ====
+-    export {default as foo} from "fs";
+-    export {bar as baz} from "fs";
+-==== index.js (0 errors) ====
+-    // esm format file
+-    export {default} from "fs";
+-    export {default as foo} from "fs";
+-    export {bar as baz} from "fs";
+-==== package.json (0 errors) ====
+-    {
+-        "name": "package",
+-        "private": true,
+-        "type": "module"
+-    }
+-==== subfolder/package.json (0 errors) ====
+-    {
+-        "type": "commonjs"
+-    }
+-==== types.d.ts (0 errors) ====
+-    declare module "fs";
+-    declare module "tslib" {
+-        export {};
+-        // intentionally missing all helpers
+-    }
++<no content>

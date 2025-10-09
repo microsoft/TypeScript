@@ -1,9 +1,7 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 /5.cjs(1,8): error TS1192: Module '"/2"' has no default export.
 /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== /1.cjs (0 errors) ====
     module.exports = {};
     

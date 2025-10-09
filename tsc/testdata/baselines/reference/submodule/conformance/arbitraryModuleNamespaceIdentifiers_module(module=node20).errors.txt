@@ -1,10 +1,8 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 arbitraryModuleNamespaceIdentifiers_module.ts(20,7): error TS2322: Type '"expect error about someType"' is not assignable to type '"someType"'.
 arbitraryModuleNamespaceIdentifiers_module.ts(24,7): error TS2322: Type '"expect error about someType"' is not assignable to type '"someType"'.
 arbitraryModuleNamespaceIdentifiers_module.ts(29,7): error TS2322: Type '"expect error about otherType"' is not assignable to type '"otherType"'.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== arbitraryModuleNamespaceIdentifiers_module.ts (3 errors) ====
     const someValue = "someValue";
     type someType = "someType";

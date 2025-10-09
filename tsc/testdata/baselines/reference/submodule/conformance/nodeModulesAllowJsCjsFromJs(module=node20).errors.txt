@@ -1,8 +1,6 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 bar.ts(1,8): error TS2613: Module '"foo"' has no default export. Did you mean to use 'import { foo } from "foo"' instead?
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== foo.cjs (0 errors) ====
     exports.foo = "foo"
 ==== bar.ts (1 errors) ====

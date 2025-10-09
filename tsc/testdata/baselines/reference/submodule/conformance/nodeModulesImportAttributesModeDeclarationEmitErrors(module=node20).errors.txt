@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 /index.ts(2,45): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 /index.ts(2,71): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
@@ -6,7 +5,6 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
 /index.ts(6,76): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== /index.ts (5 errors) ====
     // incorrect mode
     import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };

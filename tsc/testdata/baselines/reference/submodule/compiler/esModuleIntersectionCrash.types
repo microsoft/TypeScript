@@ -19,15 +19,15 @@ declare namespace modObj {
 }
 === idx.ts ===
 import * as mod from "./mod";
->mod : mod.A & mod.B
+>mod : { a: string; b: string; default: mod.A & mod.B; }
 
 mod.a;
 >mod.a : string
->mod : mod.A & mod.B
+>mod : { a: string; b: string; default: mod.A & mod.B; }
 >a : string
 
 mod.b;
 >mod.b : string
->mod : mod.A & mod.B
+>mod : { a: string; b: string; default: mod.A & mod.B; }
 >b : string
 

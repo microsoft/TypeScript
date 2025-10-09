@@ -10,10 +10,10 @@ export = foo;
 
 === index.ts ===
 import * as foo from "./foo";
->foo : () => void
+>foo : { default: () => void; }
 
 foo.default;
->foo.default : any
->foo : () => void
->default : any
+>foo.default : () => void
+>foo : { default: () => void; }
+>default : () => void
 

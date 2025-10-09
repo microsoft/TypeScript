@@ -5162,7 +5162,7 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 		return
 	}
 
-	if c.moduleKind == core.ModuleKindNodeNext && !isImportAttributes {
+	if core.ModuleKindNode20 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext && !isImportAttributes {
 		c.grammarErrorOnNode(node, diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
 		return
 	}
@@ -13890,6 +13890,12 @@ func (c *Checker) getTargetOfImportEqualsDeclaration(node *ast.Node, dontResolve
 		}
 		immediate := c.resolveExternalModuleName(node, moduleReference, false /*ignoreErrors*/)
 		resolved := c.resolveExternalModuleSymbol(immediate, false /*dontResolveAlias*/)
+		if resolved != nil && core.ModuleKindNode20 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
+			moduleExports := c.getExportOfModule(resolved, ast.InternalSymbolNameModuleExports, node, dontResolveAlias)
+			if moduleExports != nil {
+				return moduleExports
+			}
+		}
 		c.markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, false /*overwriteEmpty*/, nil, "")
 		return resolved
 	}
@@ -13959,14 +13965,42 @@ func (c *Checker) getTargetOfImportClause(node *ast.Node, dontResolveAlias bool)
 }
 
 func (c *Checker) getTargetOfModuleDefault(moduleSymbol *ast.Symbol, node *ast.Node, dontResolveAlias bool) *ast.Symbol {
+	file := core.Find(moduleSymbol.Declarations, ast.IsSourceFile)
+	specifier := c.getModuleSpecifierForImportOrExport(node)
 	var exportDefaultSymbol *ast.Symbol
+	var exportModuleDotExportsSymbol *ast.Symbol
 	if isShorthandAmbientModuleSymbol(moduleSymbol) {
-		exportDefaultSymbol = moduleSymbol
+		// !!! exportDefaultSymbol = moduleSymbol
+		// Does nothing?
+	} else if file != nil && specifier != nil &&
+		core.ModuleKindNode20 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext &&
+		c.getEmitSyntaxForModuleSpecifierExpression(specifier) == core.ModuleKindCommonJS &&
+		c.program.GetImpliedNodeFormatForEmit(file.AsSourceFile()) == core.ModuleKindESNext {
+		exportModuleDotExportsSymbol = c.resolveExportByName(moduleSymbol, ast.InternalSymbolNameModuleExports, node, dontResolveAlias)
+	}
+	if exportModuleDotExportsSymbol != nil {
+		// We have a transpiled default import where the `require` resolves to an ES module with a `module.exports` named
+		// export. If `esModuleInterop` is enabled, this will work:
+		//
+		// const dep_1 = __importDefault(require("./dep.mjs")); // wraps like { default: require("./dep.mjs") }
+		// dep_1.default; // require("./dep.mjs") -> the `module.exports` export value
+		//
+		// But without `esModuleInterop`, it will be broken:
+		//
+		// const dep_1 = require("./dep.mjs"); // the `module.exports` export value (could be primitive)
+		// dep_1.default; // `default` property access on the `module.exports` export value
+		//
+		// We could try to resolve the 'default' property in the latter case, but it's a mistake to run in this
+		// environment without `esModuleInterop`, so just error.
+		if !c.compilerOptions.GetESModuleInterop() {
+			c.error(node.Name(), diagnostics.Module_0_can_only_be_default_imported_using_the_1_flag, c.symbolToString(moduleSymbol), "esModuleInterop")
+			return nil
+		}
+		c.markSymbolOfAliasDeclarationIfTypeOnly(node, exportModuleDotExportsSymbol /*finalTarget*/, nil /*overwriteEmpty*/, false, nil, "")
+		return exportModuleDotExportsSymbol
 	} else {
 		exportDefaultSymbol = c.resolveExportByName(moduleSymbol, ast.InternalSymbolNameDefault, node, dontResolveAlias)
 	}
-	file := core.Find(moduleSymbol.Declarations, ast.IsSourceFile)
-	specifier := c.getModuleSpecifierForImportOrExport(node)
 	if specifier == nil {
 		return exportDefaultSymbol
 	}
@@ -14948,7 +14982,11 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 			return symbol
 		}
 		referenceParent := referencingLocation.Parent
-		if ast.IsImportDeclaration(referenceParent) && ast.GetNamespaceDeclarationNode(referenceParent) != nil || ast.IsImportCall(referenceParent) {
+		var namespaceImport *ast.Node
+		if ast.IsImportDeclaration(referenceParent) {
+			namespaceImport = ast.GetNamespaceDeclarationNode(referenceParent)
+		}
+		if namespaceImport != nil || ast.IsImportCall(referenceParent) {
 			var reference *ast.Node
 			if ast.IsImportCall(referenceParent) {
 				reference = referenceParent.AsCallExpression().Arguments.Nodes[0]
@@ -14960,27 +14998,49 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 			if defaultOnlyType != nil {
 				return c.cloneTypeAsModuleType(symbol, defaultOnlyType, referenceParent)
 			}
-			// !!!
-			// targetFile := moduleSymbol. /* ? */ declarations. /* ? */ find(isSourceFile)
-			// isEsmCjsRef := targetFile && c.isESMFormatImportImportingCommonjsFormatFile(c.getEmitSyntaxForModuleSpecifierExpression(reference), host.getImpliedNodeFormatForEmit(targetFile))
-			// if c.compilerOptions.GetESModuleInterop() || isEsmCjsRef {
-			// 	sigs := c.getSignaturesOfStructuredType(type_, SignatureKindCall)
-			// 	if !sigs || !sigs.length {
-			// 		sigs = c.getSignaturesOfStructuredType(type_, SignatureKindConstruct)
-			// 	}
-			// 	if (sigs && sigs.length) || c.getPropertyOfType(type_, ast.InternalSymbolNameDefault /*skipObjectFunctionPropertyAugment*/, true) || isEsmCjsRef {
-			// 		var moduleType *Type
-			// 		if type_.flags & TypeFlagsStructuredType {
-			// 			moduleType = c.getTypeWithSyntheticDefaultImportType(type_, symbol, moduleSymbol, reference)
-			// 		} else {
-			// 			moduleType = c.createDefaultPropertyWrapperForModule(symbol, symbol.parent)
-			// 		}
-			// 		return c.cloneTypeAsModuleType(symbol, moduleType, referenceParent)
-			// 	}
-			// }
+
+			targetFile := core.Find(moduleSymbol.Declarations, ast.IsSourceFile)
+			usageMode := c.getEmitSyntaxForModuleSpecifierExpression(reference)
+			var exportModuleDotExportsSymbol *ast.Symbol
+			if namespaceImport != nil && targetFile != nil &&
+				core.ModuleKindNode20 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext &&
+				usageMode == core.ModuleKindCommonJS &&
+				c.program.GetImpliedNodeFormatForEmit(targetFile.AsSourceFile()) == core.ModuleKindESNext {
+				exportModuleDotExportsSymbol = c.getExportOfModule(symbol, ast.InternalSymbolNameModuleExports, namespaceImport, dontResolveAlias)
+			}
+			if exportModuleDotExportsSymbol != nil {
+				if !suppressInteropError && symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsVariable) == 0 {
+					c.error(referencingLocation, diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, "esModuleInterop")
+				}
+				if c.compilerOptions.GetESModuleInterop() && c.hasSignatures(typ) {
+					return c.cloneTypeAsModuleType(exportModuleDotExportsSymbol, typ, referenceParent)
+				}
+				return exportModuleDotExportsSymbol
+			}
+
+			isEsmCjsRef := targetFile != nil && isESMFormatImportImportingCommonjsFormatFile(usageMode, c.program.GetImpliedNodeFormatForEmit(targetFile.AsSourceFile()))
+			if c.compilerOptions.GetESModuleInterop() || isEsmCjsRef {
+				if c.hasSignatures(typ) || c.getPropertyOfTypeEx(typ, ast.InternalSymbolNameDefault, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/) != nil || isEsmCjsRef {
+					var moduleType *Type
+					if typ.Flags()&TypeFlagsStructuredType != 0 {
+						moduleType = c.getTypeWithSyntheticDefaultImportType(typ, symbol, moduleSymbol, reference)
+					} else {
+						moduleType = c.createDefaultPropertyWrapperForModule(symbol, symbol.Parent, nil)
+					}
+					return c.cloneTypeAsModuleType(symbol, moduleType, referenceParent)
+				}
+			}
 		}
 	}
 	return symbol
+}
+
+func (c *Checker) hasSignatures(t *Type) bool {
+	return len(c.getSignaturesOfStructuredType(t, SignatureKindCall)) > 0 || len(c.getSignaturesOfStructuredType(t, SignatureKindConstruct)) > 0
+}
+
+func isESMFormatImportImportingCommonjsFormatFile(usageMode core.ResolutionMode, targetMode core.ResolutionMode) bool {
+	return usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindCommonJS
 }
 
 func (c *Checker) getTypeWithSyntheticDefaultOnly(t *Type, symbol *ast.Symbol, originalSymbol *ast.Symbol, moduleSpecifier *ast.Node) *Type {

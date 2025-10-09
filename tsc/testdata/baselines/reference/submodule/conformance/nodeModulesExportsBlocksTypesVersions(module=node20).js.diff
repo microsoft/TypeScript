@@ -1,9 +1,0 @@
---- old.nodeModulesExportsBlocksTypesVersions(module=node20).js
-+++ new.nodeModulesExportsBlocksTypesVersions(module=node20).js
-@@= skipped -66, +66 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- //// [main.mjs]
--export {};
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });

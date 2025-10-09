@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 index.cts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
 index.cts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
@@ -14,7 +13,6 @@ node_modules/inner/index.d.mts(5,1): error TS1036: Statements are not allowed in
 node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 !!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 ==== index.ts (3 errors) ====
     // esm format file

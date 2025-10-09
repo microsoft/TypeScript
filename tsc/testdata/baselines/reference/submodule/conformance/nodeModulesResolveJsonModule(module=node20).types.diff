@@ -9,64 +9,16 @@
 
  export const name = pkg.name;
  >name : string
-@@= skipped -9, +9 lines =@@
- >name : string
+@@= skipped -10, +10 lines =@@
 
  import * as ns from "./package.json" with { type: "json" };
-->ns : { default: { name: string; version: string; type: string; default: string; }; }
+ >ns : { default: { name: string; version: string; type: string; default: string; }; }
 ->type : error
-+>ns : { name: string; version: string; type: string; default: string; }
 +>type : any
 
  export const thing = ns;
-->thing : { default: { name: string; version: string; type: string; default: string; }; }
-->ns : { default: { name: string; version: string; type: string; default: string; }; }
-+>thing : { name: string; version: string; type: string; default: string; }
-+>ns : { name: string; version: string; type: string; default: string; }
-
- export const name2 = ns.default.name;
-->name2 : string
-->ns.default.name : string
-->ns.default : { name: string; version: string; type: string; default: string; }
-->ns : { default: { name: string; version: string; type: string; default: string; }; }
-->default : { name: string; version: string; type: string; default: string; }
-->name : string
-+>name2 : any
-+>ns.default.name : any
-+>ns.default : string
-+>ns : { name: string; version: string; type: string; default: string; }
-+>default : string
-+>name : any
-
- === index.cts ===
- import pkg from "./package.json";
-@@= skipped -26, +26 lines =@@
- >name : string
-
- import * as ns from "./package.json";
-->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
-+>ns : { name: string; version: string; type: string; default: string; }
-
- export const thing = ns;
-->thing : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
-->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
-+>thing : { name: string; version: string; type: string; default: string; }
-+>ns : { name: string; version: string; type: string; default: string; }
-
- export const name2 = ns.default.name;
-->name2 : string
-->ns.default.name : string
-->ns.default : { name: string; version: string; type: string; default: string; }
-->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
-->default : { name: string; version: string; type: string; default: string; }
-->name : string
-+>name2 : any
-+>ns.default.name : any
-+>ns.default : string
-+>ns : { name: string; version: string; type: string; default: string; }
-+>default : string
-+>name : any
-
+ >thing : { default: { name: string; version: string; type: string; default: string; }; }
+@@= skipped -42, +42 lines =@@
  === index.mts ===
  import pkg from "./package.json" with { type: "json" };
  >pkg : { name: string; version: string; type: string; default: string; }
@@ -75,7 +27,7 @@
 
  export const name = pkg.name;
  >name : string
-@@= skipped -27, +27 lines =@@
+@@= skipped -10, +10 lines =@@
 
  import * as ns from "./package.json" with { type: "json" };
  >ns : { default: { name: string; version: string; type: string; default: string; }; }

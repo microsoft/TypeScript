@@ -1,9 +1,0 @@
---- old.importAttributes6(module=node20).js
-+++ new.importAttributes6(module=node20).js
-@@= skipped -9, +9 lines =@@
-
-
- //// [mod.mjs]
--export {};
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });

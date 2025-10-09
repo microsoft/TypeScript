@@ -1,11 +1,6 @@
 --- old.moduleAugmentationDuringSyntheticDefaultCheck.types
 +++ new.moduleAugmentationDuringSyntheticDefaultCheck.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="./idx" />
-
- import moment = require("moment-timezone");
-->moment : { default: () => moment.Moment; }
-+>moment : () => moment.Moment
+@@= skipped -7, +7 lines =@@
 
  === node_modules/moment/index.d.ts ===
  declare function moment(): moment.Moment;
@@ -14,7 +9,7 @@
  >moment : any
 
  declare namespace moment {
-@@= skipped -14, +14 lines =@@
+@@= skipped -10, +10 lines =@@
    }
  }
  export = moment;
@@ -23,15 +18,6 @@
 
  === node_modules/moment-timezone/index.d.ts ===
  import * as moment from 'moment';
-->moment : { default: () => moment.Moment; }
-+>moment : () => moment.Moment
-
- export = moment;
-->moment : { default: () => moment.Moment; }
-+>moment : () => moment.Moment
-
- declare module "moment" {
- >"moment" : () => Moment
 @@= skipped -15, +15 lines =@@
      interface Moment {
          tz(): string;

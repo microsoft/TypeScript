@@ -24,33 +24,33 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : any
+>mjsi : typeof cjsi
 
 import * as typei from "inner";
->typei : any
+>typei : typeof cjsi
 
 import * as ts from "inner/types";
 >ts : typeof cjsi
 
 cjsi.mjsSource;
->cjsi.mjsSource : any
+>cjsi.mjsSource : true
 >cjsi : typeof cjsi
->mjsSource : any
+>mjsSource : true
 
 mjsi.mjsSource;
->mjsi.mjsSource : any
->mjsi : any
->mjsSource : any
+>mjsi.mjsSource : true
+>mjsi : typeof cjsi
+>mjsSource : true
 
 typei.mjsSource;
->typei.mjsSource : any
->typei : any
->mjsSource : any
+>typei.mjsSource : true
+>typei : typeof cjsi
+>mjsSource : true
 
 ts.mjsSource;
->ts.mjsSource : any
+>ts.mjsSource : true
 >ts : typeof cjsi
->mjsSource : any
+>mjsSource : true
 
 === index.mts ===
 // esm format file
@@ -73,35 +73,35 @@ type;
 >type : typeof type
 
 import * as cjsi from "inner/a";
->cjsi : any
+>cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : typeof mjsi
+>mjsi : typeof cjsi
 
 import * as typei from "inner";
->typei : typeof mjsi
+>typei : typeof cjsi
 
 import * as ts from "inner/types";
->ts : typeof mjsi
+>ts : typeof cjsi
 
 cjsi.mjsSource;
->cjsi.mjsSource : any
->cjsi : any
->mjsSource : any
+>cjsi.mjsSource : true
+>cjsi : typeof cjsi
+>mjsSource : true
 
 mjsi.mjsSource;
 >mjsi.mjsSource : true
->mjsi : typeof mjsi
+>mjsi : typeof cjsi
 >mjsSource : true
 
 typei.mjsSource;
 >typei.mjsSource : true
->typei : typeof mjsi
+>typei : typeof cjsi
 >mjsSource : true
 
 ts.mjsSource;
 >ts.mjsSource : true
->ts : typeof mjsi
+>ts : typeof cjsi
 >mjsSource : true
 
 === index.cts ===
@@ -128,10 +128,10 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : any
+>mjsi : typeof cjsi
 
 import * as typei from "inner";
->typei : any
+>typei : typeof typei
 
 import * as ts from "inner/types";
 >ts : typeof cjsi
@@ -142,14 +142,14 @@ cjsi.cjsSource;
 >cjsSource : true
 
 mjsi.cjsSource;
->mjsi.cjsSource : any
->mjsi : any
->cjsSource : any
+>mjsi.cjsSource : true
+>mjsi : typeof cjsi
+>cjsSource : true
 
 typei.implicitCjsSource;
->typei.implicitCjsSource : any
->typei : any
->implicitCjsSource : any
+>typei.implicitCjsSource : true
+>typei : typeof typei
+>implicitCjsSource : true
 
 ts.cjsSource;
 >ts.cjsSource : true
@@ -168,10 +168,10 @@ import * as cjs from "inner/a";
 >cjs : typeof cjs
 
 import * as mjs from "inner/b";
->mjs : any
+>mjs : typeof cjs
 
 import * as type from "inner";
->type : any
+>type : typeof type
 
 import * as ts from "inner/types";
 >ts : typeof cjs
@@ -180,10 +180,10 @@ export { cjs };
 >cjs : typeof cjs
 
 export { mjs };
->mjs : any
+>mjs : typeof cjs
 
 export { type };
->type : any
+>type : typeof type
 
 export { ts };
 >ts : typeof cjs
@@ -197,28 +197,28 @@ export const mjsSource = true;
 === node_modules/inner/test.d.mts ===
 // esm format file
 import * as cjs from "inner/a";
->cjs : any
+>cjs : typeof cjs
 
 import * as mjs from "inner/b";
->mjs : typeof mjs
+>mjs : typeof cjs
 
 import * as type from "inner";
->type : typeof mjs
+>type : typeof cjs
 
 import * as ts from "inner/types";
->ts : typeof mjs
+>ts : typeof cjs
 
 export { cjs };
->cjs : any
+>cjs : typeof cjs
 
 export { mjs };
->mjs : typeof mjs
+>mjs : typeof cjs
 
 export { type };
->type : typeof mjs
+>type : typeof cjs
 
 export { ts };
->ts : typeof mjs
+>ts : typeof cjs
 
 === node_modules/inner/index.d.cts ===
 // cjs format file
@@ -232,10 +232,10 @@ import * as cjs from "inner/a";
 >cjs : typeof cjs
 
 import * as mjs from "inner/b";
->mjs : any
+>mjs : typeof cjs
 
 import * as type from "inner";
->type : any
+>type : typeof type
 
 import * as ts from "inner/types";
 >ts : typeof cjs
@@ -244,10 +244,10 @@ export { cjs };
 >cjs : typeof cjs
 
 export { mjs };
->mjs : any
+>mjs : typeof cjs
 
 export { type };
->type : any
+>type : typeof type
 
 export { ts };
 >ts : typeof cjs

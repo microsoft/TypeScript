@@ -1,31 +1,18 @@
 --- old.nodeModulesImportAttributes(module=node20).errors.txt
 +++ new.nodeModulesImportAttributes(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+error TS2468: Cannot find global value 'Promise'.
-+index.ts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
  otherc.cts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
--
--
--==== index.ts (0 errors) ====
-+otherc.cts(2,15): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +otherc.cts(2,40): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'.
-+
-+
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+!!! error TS2468: Cannot find global value 'Promise'.
-+==== index.ts (1 errors) ====
+
+
+ ==== index.ts (0 errors) ====
      import json from "./package.json" with { type: "json" };
 -==== otherc.cts (1 errors) ====
-+                                      ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-+==== otherc.cts (3 errors) ====
++==== otherc.cts (2 errors) ====
      import json from "./package.json" with { type: "json" }; // should error, cjs mode imports don't support attributes
                                        ~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
      const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
-+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'.
  ==== package.json (0 errors) ====

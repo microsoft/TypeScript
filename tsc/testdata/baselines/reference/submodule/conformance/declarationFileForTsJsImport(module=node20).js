@@ -53,5 +53,4 @@ declare var bad: "bad12";
 export default bad;
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

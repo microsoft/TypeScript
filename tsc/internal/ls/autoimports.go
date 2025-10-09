@@ -1237,7 +1237,7 @@ func getUmdImportKind(importingFile *ast.SourceFile /* | FutureSourceFile */, pr
 	case core.ModuleKindES2015, core.ModuleKindES2020, core.ModuleKindES2022, core.ModuleKindESNext, core.ModuleKindNone, core.ModuleKindPreserve:
 		// Fall back to the `import * as ns` style import.
 		return ImportKindNamespace
-	case core.ModuleKindNode16, core.ModuleKindNode18, core.ModuleKindNodeNext:
+	case core.ModuleKindNode16, core.ModuleKindNode18, core.ModuleKindNode20, core.ModuleKindNodeNext:
 		if program.GetImpliedNodeFormatForEmit(importingFile) == core.ModuleKindESNext {
 			return ImportKindNamespace
 		}

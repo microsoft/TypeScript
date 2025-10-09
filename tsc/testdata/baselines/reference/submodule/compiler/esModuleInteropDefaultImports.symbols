@@ -19,12 +19,12 @@ import a from "./a";
 >a : Symbol(a, Decl(b.ts, 0, 6))
 
 import { default as b } from "./a";
->default : Symbol(self.default, Decl(a.ts, 0, 30))
+>default : Symbol(mod, Decl(a.ts, 0, 30))
 >b : Symbol(b, Decl(b.ts, 1, 8))
 
 import c, { default as d } from "./a";
 >c : Symbol(c, Decl(b.ts, 2, 6))
->default : Symbol(self.default, Decl(a.ts, 0, 30))
+>default : Symbol(mod, Decl(a.ts, 0, 30))
 >d : Symbol(d, Decl(b.ts, 2, 11))
 
 import * as self from "./b";
@@ -34,7 +34,7 @@ export { default } from "./a";
 >default : Symbol(self.default, Decl(b.ts, 4, 8))
 
 export { default as def } from "./a";
->default : Symbol(self.default, Decl(a.ts, 0, 30))
+>default : Symbol(mod, Decl(a.ts, 0, 30))
 >def : Symbol(self.def, Decl(b.ts, 5, 8))
 
 a === b;

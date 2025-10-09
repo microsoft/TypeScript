@@ -2,37 +2,18 @@
 +++ new.nodeModulesAllowJsExportAssignment(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
 -file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
--index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
++file.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+ index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
  index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
  subfolder/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
-
-
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
- ==== subfolder/index.js (1 errors) ====
-     // cjs format file
-     const a = {};
-@@= skipped -13, +13 lines =@@
-     // cjs format file
-     const a = {};
-     module.exports = a;
--==== index.js (2 errors) ====
-+==== index.js (1 errors) ====
-     // esm format file
-     const a = {};
-     export = a;
-     ~~~~~~~~~~~
--!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
--    ~~~~~~~~~~~
- !!! error TS8003: 'export =' can only be used in TypeScript files.
--==== file.js (1 errors) ====
-+==== file.js (0 errors) ====
-     // esm format file
+@@= skipped -26, +26 lines =@@
      import "fs";
      const a = {};
      module.exports = a;
 -    ~~~~~~
 -!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    ~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
  ==== package.json (0 errors) ====
      {
          "name": "package",

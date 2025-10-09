@@ -1,9 +1,0 @@
---- old.nonTSExtensions(module=node20).js
-+++ new.nonTSExtensions(module=node20).js
-@@= skipped -10, +10 lines =@@
- import {} from "./styles.css"; // Ok
-
- //// [index.mjs]
--export {};
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });

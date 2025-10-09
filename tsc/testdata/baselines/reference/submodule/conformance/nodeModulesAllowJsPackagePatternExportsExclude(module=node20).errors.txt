@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 index.cjs(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
 index.cjs(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
 index.cjs(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
@@ -19,7 +18,6 @@ node_modules/inner/exclude/index.d.ts(3,22): error TS2307: Cannot find module 'i
 node_modules/inner/exclude/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== index.js (3 errors) ====
     // esm format file
     import * as cjsi from "inner/cjs/exclude/index";

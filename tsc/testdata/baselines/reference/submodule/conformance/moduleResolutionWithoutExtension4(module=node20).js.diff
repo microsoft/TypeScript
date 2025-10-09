@@ -1,9 +1,0 @@
---- old.moduleResolutionWithoutExtension4(module=node20).js
-+++ new.moduleResolutionWithoutExtension4(module=node20).js
-@@= skipped -17, +17 lines =@@
-     return "";
- }
- //// [bar.mjs]
--export {};
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });

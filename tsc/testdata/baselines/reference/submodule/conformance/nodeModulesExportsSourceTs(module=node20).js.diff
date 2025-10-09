@@ -1,32 +1,6 @@
 --- old.nodeModulesExportsSourceTs(module=node20).js
 +++ new.nodeModulesExportsSourceTs(module=node20).js
-@@= skipped -27, +27 lines =@@
- }
-
- //// [other.js]
--export const x = null;
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.x = void 0;
-+exports.x = null;
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.x = void 0;
- // esm format file
--export { x } from "./other.js";
-+const other_js_1 = require("./other.js");
-+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return other_js_1.x; } });
- //// [index.js]
--export const a = (await import("inner")).x();
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.a = void 0;
-+exports.a = (await import("inner")).x();
-
-
- //// [other.d.ts]
-@@= skipped -14, +24 lines =@@
+@@= skipped -41, +41 lines =@@
  export declare const x: () => Thing;
  //// [index.d.ts]
  export { x } from "./other.js";

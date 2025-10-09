@@ -109,9 +109,14 @@ export declare const thing: {
     name: string;
     version: string;
     type: string;
-    default: string;
+    default: {
+        name: string;
+        version: string;
+        type: string;
+        default: string;
+    };
 };
-export declare const name2: any;
+export declare const name2: string;
 //// [index.d.mts]
 export declare const name: string;
 export declare const thing: {

@@ -23,5 +23,9 @@ d.a;
 >a : Symbol(a, Decl(a.cts, 0, 12))
 
 ns.default.a;
+>ns.default.a : Symbol(a, Decl(a.cts, 0, 12))
+>ns.default : Symbol(d.default)
 >ns : Symbol(ns, Decl(foo.mts, 1, 6))
+>default : Symbol(d.default)
+>a : Symbol(a, Decl(a.cts, 0, 12))
 

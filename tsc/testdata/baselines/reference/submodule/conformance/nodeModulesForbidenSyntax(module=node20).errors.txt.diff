@@ -1,7 +1,6 @@
 --- old.nodeModulesForbidenSyntax(module=node20).errors.txt
 +++ new.nodeModulesForbidenSyntax(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
  index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
 -index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
 -index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
@@ -26,11 +25,8 @@
  subfolder2/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
 -subfolder2/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
 -subfolder2/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
--
--
-+
-+
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
+
+
  ==== subfolder/index.ts (0 errors) ====
      // cjs format file
      const x = <T>() => <T><any>(void 0);

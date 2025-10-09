@@ -1,9 +1,0 @@
---- old.declarationFileForTsJsImport(module=node20).js
-+++ new.declarationFileForTsJsImport(module=node20).js
-@@= skipped -52, +52 lines =@@
- export default bad;
-
- //// [main.js]
--export {};
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });

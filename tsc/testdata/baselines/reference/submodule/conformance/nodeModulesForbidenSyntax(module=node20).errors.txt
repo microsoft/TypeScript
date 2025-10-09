@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
 index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
 subfolder/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
@@ -9,7 +8,6 @@ subfolder2/index.cts(2,12): error TS7060: This syntax is reserved in files with 
 subfolder2/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== subfolder/index.ts (0 errors) ====
     // cjs format file
     const x = <T>() => <T><any>(void 0);

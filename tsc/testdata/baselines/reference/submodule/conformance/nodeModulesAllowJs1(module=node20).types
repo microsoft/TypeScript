@@ -120,37 +120,37 @@ import * as m12 from "./subfolder2/another/index.cjs";
 
 // The next ones shouldn't all work - esm format files have no index resolution or extension resolution
 import * as m13 from "./";
->m13 : typeof m1
+>m13 : any
 
 import * as m14 from "./index";
->m14 : typeof m1
+>m14 : any
 
 import * as m15 from "./subfolder";
->m15 : typeof m4
+>m15 : any
 
 import * as m16 from "./subfolder/";
->m16 : typeof m4
+>m16 : any
 
 import * as m17 from "./subfolder/index";
->m17 : typeof m4
+>m17 : any
 
 import * as m18 from "./subfolder2";
->m18 : typeof m7
+>m18 : any
 
 import * as m19 from "./subfolder2/";
->m19 : typeof m7
+>m19 : any
 
 import * as m20 from "./subfolder2/index";
->m20 : typeof m7
+>m20 : any
 
 import * as m21 from "./subfolder2/another";
->m21 : typeof m10
+>m21 : any
 
 import * as m22 from "./subfolder2/another/";
->m22 : typeof m10
+>m22 : any
 
 import * as m23 from "./subfolder2/another/index";
->m23 : typeof m10
+>m23 : any
 
 void m1;
 >void m1 : undefined
@@ -202,47 +202,47 @@ void m12;
 
 void m13;
 >void m13 : undefined
->m13 : typeof m1
+>m13 : any
 
 void m14;
 >void m14 : undefined
->m14 : typeof m1
+>m14 : any
 
 void m15;
 >void m15 : undefined
->m15 : typeof m4
+>m15 : any
 
 void m16;
 >void m16 : undefined
->m16 : typeof m4
+>m16 : any
 
 void m17;
 >void m17 : undefined
->m17 : typeof m4
+>m17 : any
 
 void m18;
 >void m18 : undefined
->m18 : typeof m7
+>m18 : any
 
 void m19;
 >void m19 : undefined
->m19 : typeof m7
+>m19 : any
 
 void m20;
 >void m20 : undefined
->m20 : typeof m7
+>m20 : any
 
 void m21;
 >void m21 : undefined
->m21 : typeof m10
+>m21 : any
 
 void m22;
 >void m22 : undefined
->m22 : typeof m10
+>m22 : any
 
 void m23;
 >void m23 : undefined
->m23 : typeof m10
+>m23 : any
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
@@ -252,22 +252,22 @@ import m25 = require("./index");
 >m25 : typeof m1
 
 import m26 = require("./subfolder");
->m26 : typeof m4
+>m26 : typeof m26
 
 import m27 = require("./subfolder/");
->m27 : typeof m4
+>m27 : typeof m26
 
 import m28 = require("./subfolder/index");
->m28 : typeof m4
+>m28 : typeof m26
 
 import m29 = require("./subfolder2");
->m29 : typeof m7
+>m29 : typeof m29
 
 import m30 = require("./subfolder2/");
->m30 : typeof m7
+>m30 : typeof m29
 
 import m31 = require("./subfolder2/index");
->m31 : typeof m7
+>m31 : typeof m29
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
@@ -288,27 +288,27 @@ void m25;
 
 void m26;
 >void m26 : undefined
->m26 : typeof m4
+>m26 : typeof m26
 
 void m27;
 >void m27 : undefined
->m27 : typeof m4
+>m27 : typeof m26
 
 void m28;
 >void m28 : undefined
->m28 : typeof m4
+>m28 : typeof m26
 
 void m29;
 >void m29 : undefined
->m29 : typeof m7
+>m29 : typeof m29
 
 void m30;
 >void m30 : undefined
->m30 : typeof m7
+>m30 : typeof m29
 
 void m31;
 >void m31 : undefined
->m31 : typeof m7
+>m31 : typeof m29
 
 void m32;
 >void m32 : undefined
@@ -324,58 +324,58 @@ void m34;
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
->_m35 : Promise<{ x: 1; default: typeof m1; }>
->import("./") : Promise<{ x: 1; default: typeof m1; }>
+>_m35 : Promise<any>
+>import("./") : Promise<any>
 >"./" : "./"
 
 const _m36 = import("./index");
->_m36 : Promise<{ x: 1; default: typeof m1; }>
->import("./index") : Promise<{ x: 1; default: typeof m1; }>
+>_m36 : Promise<any>
+>import("./index") : Promise<any>
 >"./index" : "./index"
 
 const _m37 = import("./subfolder");
->_m37 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder") : Promise<{ x: 1; default: typeof m4; }>
+>_m37 : Promise<any>
+>import("./subfolder") : Promise<any>
 >"./subfolder" : "./subfolder"
 
 const _m38 = import("./subfolder/");
->_m38 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder/") : Promise<{ x: 1; default: typeof m4; }>
+>_m38 : Promise<any>
+>import("./subfolder/") : Promise<any>
 >"./subfolder/" : "./subfolder/"
 
 const _m39 = import("./subfolder/index");
->_m39 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder/index") : Promise<{ x: 1; default: typeof m4; }>
+>_m39 : Promise<any>
+>import("./subfolder/index") : Promise<any>
 >"./subfolder/index" : "./subfolder/index"
 
 const _m40 = import("./subfolder2");
->_m40 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2") : Promise<{ x: 1; default: typeof m7; }>
+>_m40 : Promise<any>
+>import("./subfolder2") : Promise<any>
 >"./subfolder2" : "./subfolder2"
 
 const _m41 = import("./subfolder2/");
->_m41 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2/") : Promise<{ x: 1; default: typeof m7; }>
+>_m41 : Promise<any>
+>import("./subfolder2/") : Promise<any>
 >"./subfolder2/" : "./subfolder2/"
 
 const _m42 = import("./subfolder2/index");
->_m42 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2/index") : Promise<{ x: 1; default: typeof m7; }>
+>_m42 : Promise<any>
+>import("./subfolder2/index") : Promise<any>
 >"./subfolder2/index" : "./subfolder2/index"
 
 const _m43 = import("./subfolder2/another");
->_m43 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another") : Promise<{ x: 1; default: typeof m10; }>
+>_m43 : Promise<any>
+>import("./subfolder2/another") : Promise<any>
 >"./subfolder2/another" : "./subfolder2/another"
 
 const _m44 = import("./subfolder2/another/");
->_m44 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another/") : Promise<{ x: 1; default: typeof m10; }>
+>_m44 : Promise<any>
+>import("./subfolder2/another/") : Promise<any>
 >"./subfolder2/another/" : "./subfolder2/another/"
 
 const _m45 = import("./subfolder2/another/index");
->_m45 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another/index") : Promise<{ x: 1; default: typeof m10; }>
+>_m45 : Promise<any>
+>import("./subfolder2/another/index") : Promise<any>
 >"./subfolder2/another/index" : "./subfolder2/another/index"
 
 // esm format file
@@ -630,58 +630,58 @@ void m34;
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
->_m35 : Promise<{ x: 1; default: typeof m1; }>
->import("./") : Promise<{ x: 1; default: typeof m1; }>
+>_m35 : Promise<any>
+>import("./") : Promise<any>
 >"./" : "./"
 
 const _m36 = import("./index");
->_m36 : Promise<{ x: 1; default: typeof m1; }>
->import("./index") : Promise<{ x: 1; default: typeof m1; }>
+>_m36 : Promise<any>
+>import("./index") : Promise<any>
 >"./index" : "./index"
 
 const _m37 = import("./subfolder");
->_m37 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder") : Promise<{ x: 1; default: typeof m4; }>
+>_m37 : Promise<any>
+>import("./subfolder") : Promise<any>
 >"./subfolder" : "./subfolder"
 
 const _m38 = import("./subfolder/");
->_m38 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder/") : Promise<{ x: 1; default: typeof m4; }>
+>_m38 : Promise<any>
+>import("./subfolder/") : Promise<any>
 >"./subfolder/" : "./subfolder/"
 
 const _m39 = import("./subfolder/index");
->_m39 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder/index") : Promise<{ x: 1; default: typeof m4; }>
+>_m39 : Promise<any>
+>import("./subfolder/index") : Promise<any>
 >"./subfolder/index" : "./subfolder/index"
 
 const _m40 = import("./subfolder2");
->_m40 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2") : Promise<{ x: 1; default: typeof m7; }>
+>_m40 : Promise<any>
+>import("./subfolder2") : Promise<any>
 >"./subfolder2" : "./subfolder2"
 
 const _m41 = import("./subfolder2/");
->_m41 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2/") : Promise<{ x: 1; default: typeof m7; }>
+>_m41 : Promise<any>
+>import("./subfolder2/") : Promise<any>
 >"./subfolder2/" : "./subfolder2/"
 
 const _m42 = import("./subfolder2/index");
->_m42 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2/index") : Promise<{ x: 1; default: typeof m7; }>
+>_m42 : Promise<any>
+>import("./subfolder2/index") : Promise<any>
 >"./subfolder2/index" : "./subfolder2/index"
 
 const _m43 = import("./subfolder2/another");
->_m43 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another") : Promise<{ x: 1; default: typeof m10; }>
+>_m43 : Promise<any>
+>import("./subfolder2/another") : Promise<any>
 >"./subfolder2/another" : "./subfolder2/another"
 
 const _m44 = import("./subfolder2/another/");
->_m44 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another/") : Promise<{ x: 1; default: typeof m10; }>
+>_m44 : Promise<any>
+>import("./subfolder2/another/") : Promise<any>
 >"./subfolder2/another/" : "./subfolder2/another/"
 
 const _m45 = import("./subfolder2/another/index");
->_m45 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another/index") : Promise<{ x: 1; default: typeof m10; }>
+>_m45 : Promise<any>
+>import("./subfolder2/another/index") : Promise<any>
 >"./subfolder2/another/index" : "./subfolder2/another/index"
 
 // cjs format file
@@ -731,37 +731,37 @@ import * as m12 from "./subfolder2/another/index.cjs";
 
 // The next ones should all fail - esm format files have no index resolution or extension resolution
 import * as m13 from "./";
->m13 : typeof m1
+>m13 : any
 
 import * as m14 from "./index";
->m14 : typeof m1
+>m14 : any
 
 import * as m15 from "./subfolder";
->m15 : typeof m4
+>m15 : any
 
 import * as m16 from "./subfolder/";
->m16 : typeof m4
+>m16 : any
 
 import * as m17 from "./subfolder/index";
->m17 : typeof m4
+>m17 : any
 
 import * as m18 from "./subfolder2";
->m18 : typeof m7
+>m18 : any
 
 import * as m19 from "./subfolder2/";
->m19 : typeof m7
+>m19 : any
 
 import * as m20 from "./subfolder2/index";
->m20 : typeof m7
+>m20 : any
 
 import * as m21 from "./subfolder2/another";
->m21 : typeof m10
+>m21 : any
 
 import * as m22 from "./subfolder2/another/";
->m22 : typeof m10
+>m22 : any
 
 import * as m23 from "./subfolder2/another/index";
->m23 : typeof m10
+>m23 : any
 
 void m1;
 >void m1 : undefined
@@ -813,47 +813,47 @@ void m12;
 
 void m13;
 >void m13 : undefined
->m13 : typeof m1
+>m13 : any
 
 void m14;
 >void m14 : undefined
->m14 : typeof m1
+>m14 : any
 
 void m15;
 >void m15 : undefined
->m15 : typeof m4
+>m15 : any
 
 void m16;
 >void m16 : undefined
->m16 : typeof m4
+>m16 : any
 
 void m17;
 >void m17 : undefined
->m17 : typeof m4
+>m17 : any
 
 void m18;
 >void m18 : undefined
->m18 : typeof m7
+>m18 : any
 
 void m19;
 >void m19 : undefined
->m19 : typeof m7
+>m19 : any
 
 void m20;
 >void m20 : undefined
->m20 : typeof m7
+>m20 : any
 
 void m21;
 >void m21 : undefined
->m21 : typeof m10
+>m21 : any
 
 void m22;
 >void m22 : undefined
->m22 : typeof m10
+>m22 : any
 
 void m23;
 >void m23 : undefined
->m23 : typeof m10
+>m23 : any
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
@@ -863,22 +863,22 @@ import m25 = require("./index");
 >m25 : typeof m1
 
 import m26 = require("./subfolder");
->m26 : typeof m4
+>m26 : typeof m26
 
 import m27 = require("./subfolder/");
->m27 : typeof m4
+>m27 : typeof m26
 
 import m28 = require("./subfolder/index");
->m28 : typeof m4
+>m28 : typeof m26
 
 import m29 = require("./subfolder2");
->m29 : typeof m7
+>m29 : typeof m29
 
 import m30 = require("./subfolder2/");
->m30 : typeof m7
+>m30 : typeof m29
 
 import m31 = require("./subfolder2/index");
->m31 : typeof m7
+>m31 : typeof m29
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
@@ -899,27 +899,27 @@ void m25;
 
 void m26;
 >void m26 : undefined
->m26 : typeof m4
+>m26 : typeof m26
 
 void m27;
 >void m27 : undefined
->m27 : typeof m4
+>m27 : typeof m26
 
 void m28;
 >void m28 : undefined
->m28 : typeof m4
+>m28 : typeof m26
 
 void m29;
 >void m29 : undefined
->m29 : typeof m7
+>m29 : typeof m29
 
 void m30;
 >void m30 : undefined
->m30 : typeof m7
+>m30 : typeof m29
 
 void m31;
 >void m31 : undefined
->m31 : typeof m7
+>m31 : typeof m29
 
 void m32;
 >void m32 : undefined
@@ -935,58 +935,58 @@ void m34;
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
->_m35 : Promise<{ x: 1; default: typeof m1; }>
->import("./") : Promise<{ x: 1; default: typeof m1; }>
+>_m35 : Promise<any>
+>import("./") : Promise<any>
 >"./" : "./"
 
 const _m36 = import("./index");
->_m36 : Promise<{ x: 1; default: typeof m1; }>
->import("./index") : Promise<{ x: 1; default: typeof m1; }>
+>_m36 : Promise<any>
+>import("./index") : Promise<any>
 >"./index" : "./index"
 
 const _m37 = import("./subfolder");
->_m37 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder") : Promise<{ x: 1; default: typeof m4; }>
+>_m37 : Promise<any>
+>import("./subfolder") : Promise<any>
 >"./subfolder" : "./subfolder"
 
 const _m38 = import("./subfolder/");
->_m38 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder/") : Promise<{ x: 1; default: typeof m4; }>
+>_m38 : Promise<any>
+>import("./subfolder/") : Promise<any>
 >"./subfolder/" : "./subfolder/"
 
 const _m39 = import("./subfolder/index");
->_m39 : Promise<{ x: 1; default: typeof m4; }>
->import("./subfolder/index") : Promise<{ x: 1; default: typeof m4; }>
+>_m39 : Promise<any>
+>import("./subfolder/index") : Promise<any>
 >"./subfolder/index" : "./subfolder/index"
 
 const _m40 = import("./subfolder2");
->_m40 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2") : Promise<{ x: 1; default: typeof m7; }>
+>_m40 : Promise<any>
+>import("./subfolder2") : Promise<any>
 >"./subfolder2" : "./subfolder2"
 
 const _m41 = import("./subfolder2/");
->_m41 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2/") : Promise<{ x: 1; default: typeof m7; }>
+>_m41 : Promise<any>
+>import("./subfolder2/") : Promise<any>
 >"./subfolder2/" : "./subfolder2/"
 
 const _m42 = import("./subfolder2/index");
->_m42 : Promise<{ x: 1; default: typeof m7; }>
->import("./subfolder2/index") : Promise<{ x: 1; default: typeof m7; }>
+>_m42 : Promise<any>
+>import("./subfolder2/index") : Promise<any>
 >"./subfolder2/index" : "./subfolder2/index"
 
 const _m43 = import("./subfolder2/another");
->_m43 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another") : Promise<{ x: 1; default: typeof m10; }>
+>_m43 : Promise<any>
+>import("./subfolder2/another") : Promise<any>
 >"./subfolder2/another" : "./subfolder2/another"
 
 const _m44 = import("./subfolder2/another/");
->_m44 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another/") : Promise<{ x: 1; default: typeof m10; }>
+>_m44 : Promise<any>
+>import("./subfolder2/another/") : Promise<any>
 >"./subfolder2/another/" : "./subfolder2/another/"
 
 const _m45 = import("./subfolder2/another/index");
->_m45 : Promise<{ x: 1; default: typeof m10; }>
->import("./subfolder2/another/index") : Promise<{ x: 1; default: typeof m10; }>
+>_m45 : Promise<any>
+>import("./subfolder2/another/index") : Promise<any>
 >"./subfolder2/another/index" : "./subfolder2/another/index"
 
 // esm format file

@@ -1,20 +1,15 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-index.ts(2,11): error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
 subfolder/index.ts(2,11): error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== subfolder/index.ts (1 errors) ====
     // cjs format file
     const x = import.meta.url;
               ~~~~~~~~~~~
 !!! error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
     export {x};
-==== index.ts (1 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     const x = import.meta.url;
-              ~~~~~~~~~~~
-!!! error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
     export {x};
 ==== package.json (0 errors) ====
     {

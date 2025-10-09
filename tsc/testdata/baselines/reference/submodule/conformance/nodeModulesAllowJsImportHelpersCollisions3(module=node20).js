@@ -31,24 +31,19 @@ declare module "tslib" {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.baz = exports.foo = exports.default = void 0;
+const tslib_1 = require("tslib");
 // cjs format file
 const fs_1 = require("fs");
-Object.defineProperty(exports, "default", { enumerable: true, get: function () { return fs_1.default; } });
+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return tslib_1.__importDefault(fs_1).default; } });
 const fs_2 = require("fs");
-Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return fs_2.default; } });
+Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return tslib_1.__importDefault(fs_2).default; } });
 const fs_3 = require("fs");
 Object.defineProperty(exports, "baz", { enumerable: true, get: function () { return fs_3.bar; } });
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.baz = exports.foo = exports.default = void 0;
 // esm format file
-const fs_1 = require("fs");
-Object.defineProperty(exports, "default", { enumerable: true, get: function () { return fs_1.default; } });
-const fs_2 = require("fs");
-Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return fs_2.default; } });
-const fs_3 = require("fs");
-Object.defineProperty(exports, "baz", { enumerable: true, get: function () { return fs_3.bar; } });
+export { default } from "fs";
+export { default as foo } from "fs";
+export { bar as baz } from "fs";
 
 
 //// [index.d.ts]

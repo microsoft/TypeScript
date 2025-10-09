@@ -282,47 +282,36 @@ void m34;
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 >_m35 : Symbol(_m35, Decl(index.js, 73, 5))
->"./" : Symbol(m1, Decl(index.js, 0, 0))
 
 const _m36 = import("./index");
 >_m36 : Symbol(_m36, Decl(index.js, 74, 5))
->"./index" : Symbol(m1, Decl(index.js, 0, 0))
 
 const _m37 = import("./subfolder");
 >_m37 : Symbol(_m37, Decl(index.js, 75, 5))
->"./subfolder" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m38 = import("./subfolder/");
 >_m38 : Symbol(_m38, Decl(index.js, 76, 5))
->"./subfolder/" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m39 = import("./subfolder/index");
 >_m39 : Symbol(_m39, Decl(index.js, 77, 5))
->"./subfolder/index" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m40 = import("./subfolder2");
 >_m40 : Symbol(_m40, Decl(index.js, 78, 5))
->"./subfolder2" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m41 = import("./subfolder2/");
 >_m41 : Symbol(_m41, Decl(index.js, 79, 5))
->"./subfolder2/" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Symbol(_m42, Decl(index.js, 80, 5))
->"./subfolder2/index" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Symbol(_m43, Decl(index.js, 81, 5))
->"./subfolder2/another" : Symbol(m10, Decl(index.js, 0, 0))
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Symbol(_m44, Decl(index.js, 82, 5))
->"./subfolder2/another/" : Symbol(m10, Decl(index.js, 0, 0))
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Symbol(_m45, Decl(index.js, 83, 5))
->"./subfolder2/another/index" : Symbol(m10, Decl(index.js, 0, 0))
 
 // esm format file
 const x = 1;
@@ -542,47 +531,36 @@ void m34;
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 >_m35 : Symbol(_m35, Decl(index.cjs, 74, 5))
->"./" : Symbol(m1, Decl(index.js, 0, 0))
 
 const _m36 = import("./index");
 >_m36 : Symbol(_m36, Decl(index.cjs, 75, 5))
->"./index" : Symbol(m1, Decl(index.js, 0, 0))
 
 const _m37 = import("./subfolder");
 >_m37 : Symbol(_m37, Decl(index.cjs, 76, 5))
->"./subfolder" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m38 = import("./subfolder/");
 >_m38 : Symbol(_m38, Decl(index.cjs, 77, 5))
->"./subfolder/" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m39 = import("./subfolder/index");
 >_m39 : Symbol(_m39, Decl(index.cjs, 78, 5))
->"./subfolder/index" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m40 = import("./subfolder2");
 >_m40 : Symbol(_m40, Decl(index.cjs, 79, 5))
->"./subfolder2" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m41 = import("./subfolder2/");
 >_m41 : Symbol(_m41, Decl(index.cjs, 80, 5))
->"./subfolder2/" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Symbol(_m42, Decl(index.cjs, 81, 5))
->"./subfolder2/index" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Symbol(_m43, Decl(index.cjs, 82, 5))
->"./subfolder2/another" : Symbol(m10, Decl(index.js, 0, 0))
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Symbol(_m44, Decl(index.cjs, 83, 5))
->"./subfolder2/another/" : Symbol(m10, Decl(index.js, 0, 0))
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Symbol(_m45, Decl(index.cjs, 84, 5))
->"./subfolder2/another/index" : Symbol(m10, Decl(index.js, 0, 0))
 
 // cjs format file
 const x = 1;
@@ -801,47 +779,36 @@ void m34;
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 >_m35 : Symbol(_m35, Decl(index.mjs, 73, 5))
->"./" : Symbol(m1, Decl(index.js, 0, 0))
 
 const _m36 = import("./index");
 >_m36 : Symbol(_m36, Decl(index.mjs, 74, 5))
->"./index" : Symbol(m1, Decl(index.js, 0, 0))
 
 const _m37 = import("./subfolder");
 >_m37 : Symbol(_m37, Decl(index.mjs, 75, 5))
->"./subfolder" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m38 = import("./subfolder/");
 >_m38 : Symbol(_m38, Decl(index.mjs, 76, 5))
->"./subfolder/" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m39 = import("./subfolder/index");
 >_m39 : Symbol(_m39, Decl(index.mjs, 77, 5))
->"./subfolder/index" : Symbol(m4, Decl(index.js, 0, 0))
 
 const _m40 = import("./subfolder2");
 >_m40 : Symbol(_m40, Decl(index.mjs, 78, 5))
->"./subfolder2" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m41 = import("./subfolder2/");
 >_m41 : Symbol(_m41, Decl(index.mjs, 79, 5))
->"./subfolder2/" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Symbol(_m42, Decl(index.mjs, 80, 5))
->"./subfolder2/index" : Symbol(m7, Decl(index.js, 0, 0))
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Symbol(_m43, Decl(index.mjs, 81, 5))
->"./subfolder2/another" : Symbol(m10, Decl(index.js, 0, 0))
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Symbol(_m44, Decl(index.mjs, 82, 5))
->"./subfolder2/another/" : Symbol(m10, Decl(index.js, 0, 0))
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Symbol(_m45, Decl(index.mjs, 83, 5))
->"./subfolder2/another/index" : Symbol(m10, Decl(index.js, 0, 0))
 
 // esm format file
 const x = 1;

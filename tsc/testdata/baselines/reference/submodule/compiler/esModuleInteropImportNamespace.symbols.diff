@@ -1,9 +1,0 @@
---- old.esModuleInteropImportNamespace.symbols
-+++ new.esModuleInteropImportNamespace.symbols
-@@= skipped -14, +14 lines =@@
- >foo : Symbol(foo, Decl(index.ts, 0, 6))
-
- foo.default;
-->foo.default : Symbol(default)
- >foo : Symbol(foo, Decl(index.ts, 0, 6))
-->default : Symbol(default)

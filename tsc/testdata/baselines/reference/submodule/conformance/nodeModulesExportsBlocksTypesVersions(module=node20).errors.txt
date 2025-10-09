@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 /main.cts(1,16): error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
   If the 'exports-and-types-versions' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module 'exports-and-types-versions/foo';`
 /main.cts(2,16): error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
@@ -9,7 +8,6 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
 /main.mts(5,16): error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== /node_modules/exports-and-types-versions/package.json (0 errors) ====
     {
       "name": "exports-and-types-versions",

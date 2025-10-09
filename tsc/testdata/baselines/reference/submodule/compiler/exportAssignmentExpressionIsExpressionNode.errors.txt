@@ -1,4 +1,4 @@
-/index.ts(7,7): error TS2322: Type 'typeof import("/node_modules/eslint-plugin-import-x/lib/index")' is not assignable to type 'Plugin'.
+/index.ts(7,7): error TS2322: Type '{ default: { configs: { "stage-0": PluginConfig; }; }; configs: { "stage-0": PluginConfig; }; }' is not assignable to type 'Plugin'.
   Types of property 'configs' are incompatible.
     Type '{ "stage-0": PluginConfig; }' is not assignable to type 'Record<string, { parser: string | null; }>'.
       Property ''stage-0'' is incompatible with index signature.
@@ -43,7 +43,7 @@
     
     const p: Plugin = pluginImportX;
           ~
-!!! error TS2322: Type 'typeof import("/node_modules/eslint-plugin-import-x/lib/index")' is not assignable to type 'Plugin'.
+!!! error TS2322: Type '{ default: { configs: { "stage-0": PluginConfig; }; }; configs: { "stage-0": PluginConfig; }; }' is not assignable to type 'Plugin'.
 !!! error TS2322:   Types of property 'configs' are incompatible.
 !!! error TS2322:     Type '{ "stage-0": PluginConfig; }' is not assignable to type 'Record<string, { parser: string | null; }>'.
 !!! error TS2322:       Property ''stage-0'' is incompatible with index signature.

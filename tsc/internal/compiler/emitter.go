@@ -64,6 +64,7 @@ func getModuleTransformer(opts *transformers.TransformOptions) *transformers.Tra
 		core.ModuleKindES2022,
 		core.ModuleKindES2020,
 		core.ModuleKindES2015,
+		core.ModuleKindNode20,
 		core.ModuleKindNode18,
 		core.ModuleKindNode16,
 		core.ModuleKindNodeNext,

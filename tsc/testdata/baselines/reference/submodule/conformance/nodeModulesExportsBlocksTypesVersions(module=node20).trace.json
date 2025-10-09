@@ -1,6 +1,6 @@
 ======== Resolving module 'exports-and-types-versions/foo' from '/main.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/package.json' does not exist.
 Loading module 'exports-and-types-versions/foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -21,8 +21,8 @@ File '/node_modules/exports-and-types-versions/dist/foo.js' exists - use it as a
 Resolving real path for '/node_modules/exports-and-types-versions/dist/foo.js', result '/node_modules/exports-and-types-versions/dist/foo.js'.
 ======== Module name 'exports-and-types-versions/foo' was successfully resolved to '/node_modules/exports-and-types-versions/dist/foo.js' with Package ID 'exports-and-types-versions/dist/foo.js@1.0.0'. ========
 ======== Resolving module 'exports-and-types-versions/nope' from '/main.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/nope' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -34,8 +34,8 @@ File '/node_modules/exports-and-types-versions/package.json' exists according to
 Export specifier './nope' does not exist in package.json scope at path '/node_modules/exports-and-types-versions'.
 ======== Module name 'exports-and-types-versions/nope' was not resolved. ========
 ======== Resolving module 'exports-and-types-versions/yep' from '/main.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/yep' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -50,8 +50,8 @@ Exiting conditional exports.
 Resolving real path for '/node_modules/exports-and-types-versions/types/foo.d.ts', result '/node_modules/exports-and-types-versions/types/foo.d.ts'.
 ======== Module name 'exports-and-types-versions/yep' was successfully resolved to '/node_modules/exports-and-types-versions/types/foo.d.ts' with Package ID 'exports-and-types-versions/types/foo.d.ts@1.0.0'. ========
 ======== Resolving module 'exports-and-types-versions/versioned-yep' from '/main.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/versioned-yep' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -66,8 +66,8 @@ Exiting conditional exports.
 Resolving real path for '/node_modules/exports-and-types-versions/types/foo.d.ts', result '/node_modules/exports-and-types-versions/types/foo.d.ts'.
 ======== Module name 'exports-and-types-versions/versioned-yep' was successfully resolved to '/node_modules/exports-and-types-versions/types/foo.d.ts' with Package ID 'exports-and-types-versions/types/foo.d.ts@1.0.0'. ========
 ======== Resolving module 'exports-and-types-versions/versioned-nah' from '/main.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/versioned-nah' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -85,8 +85,8 @@ Exiting conditional exports.
 Export specifier './versioned-nah' does not exist in package.json scope at path '/node_modules/exports-and-types-versions'.
 ======== Module name 'exports-and-types-versions/versioned-nah' was not resolved. ========
 ======== Resolving module 'just-types-versions/foo' from '/main.cts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'just-types-versions/foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -99,8 +99,8 @@ File '/node_modules/just-types-versions/types/foo.d.ts' exists - use it as a nam
 Resolving real path for '/node_modules/just-types-versions/types/foo.d.ts', result '/node_modules/just-types-versions/types/foo.d.ts'.
 ======== Module name 'just-types-versions/foo' was successfully resolved to '/node_modules/just-types-versions/types/foo.d.ts'. ========
 ======== Resolving module 'exports-and-types-versions/foo' from '/main.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -132,8 +132,8 @@ File '/node_modules/exports-and-types-versions/types/foo.d.ts' exists - use it a
 Resolving real path for '/node_modules/exports-and-types-versions/types/foo.d.ts', result '/node_modules/exports-and-types-versions/types/foo.d.ts'.
 ======== Module name 'exports-and-types-versions/foo' was successfully resolved to '/node_modules/exports-and-types-versions/dist/foo.js' with Package ID 'exports-and-types-versions/dist/foo.js@1.0.0'. ========
 ======== Resolving module 'exports-and-types-versions/nope' from '/main.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/nope' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -145,8 +145,8 @@ File '/node_modules/exports-and-types-versions/package.json' exists according to
 Export specifier './nope' does not exist in package.json scope at path '/node_modules/exports-and-types-versions'.
 ======== Module name 'exports-and-types-versions/nope' was not resolved. ========
 ======== Resolving module 'exports-and-types-versions/yep' from '/main.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/yep' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -161,8 +161,8 @@ Exiting conditional exports.
 Resolving real path for '/node_modules/exports-and-types-versions/types/foo.d.ts', result '/node_modules/exports-and-types-versions/types/foo.d.ts'.
 ======== Module name 'exports-and-types-versions/yep' was successfully resolved to '/node_modules/exports-and-types-versions/types/foo.d.ts' with Package ID 'exports-and-types-versions/types/foo.d.ts@1.0.0'. ========
 ======== Resolving module 'exports-and-types-versions/versioned-yep' from '/main.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/versioned-yep' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -177,8 +177,8 @@ Exiting conditional exports.
 Resolving real path for '/node_modules/exports-and-types-versions/types/foo.d.ts', result '/node_modules/exports-and-types-versions/types/foo.d.ts'.
 ======== Module name 'exports-and-types-versions/versioned-yep' was successfully resolved to '/node_modules/exports-and-types-versions/types/foo.d.ts' with Package ID 'exports-and-types-versions/types/foo.d.ts@1.0.0'. ========
 ======== Resolving module 'exports-and-types-versions/versioned-nah' from '/main.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'exports-and-types-versions/versioned-nah' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -196,8 +196,8 @@ Exiting conditional exports.
 Export specifier './versioned-nah' does not exist in package.json scope at path '/node_modules/exports-and-types-versions'.
 ======== Module name 'exports-and-types-versions/versioned-nah' was not resolved. ========
 ======== Resolving module 'just-types-versions/foo' from '/main.mts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'import', 'types'.
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'just-types-versions/foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.

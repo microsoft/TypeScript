@@ -1240,7 +1240,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 						c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module))
 					}
 					switch c.moduleKind {
-					case core.ModuleKindNode16, core.ModuleKindNode18, core.ModuleKindNodeNext:
+					case core.ModuleKindNode16, core.ModuleKindNode18, core.ModuleKindNode20, core.ModuleKindNodeNext:
 						sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
 						if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {
 							c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
@@ -1752,6 +1752,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 				switch c.moduleKind {
 				case core.ModuleKindNode16,
 					core.ModuleKindNode18,
+					core.ModuleKindNode20,
 					core.ModuleKindNodeNext:
 					sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
 					if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {

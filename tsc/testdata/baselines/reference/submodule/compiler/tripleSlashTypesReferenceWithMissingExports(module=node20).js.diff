@@ -1,10 +1,10 @@
 --- old.tripleSlashTypesReferenceWithMissingExports(module=node20).js
 +++ new.tripleSlashTypesReferenceWithMissingExports(module=node20).js
-@@= skipped -13, +13 lines =@@
- const a: GlobalThing = { a: 0 };
+@@= skipped -14, +14 lines =@@
 
  //// [usage.js]
--"use strict";
- /// <reference types="pkg" />
--Object.defineProperty(exports, "__esModule", { value: true });
+ "use strict";
+-/// <reference types="pkg" />
+ Object.defineProperty(exports, "__esModule", { value: true });
++/// <reference types="pkg" />
  const a = { a: 0 };

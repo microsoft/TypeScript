@@ -2,36 +2,36 @@
 
 === /importer-cjs.cjs ===
 const Foo = require("./exporter.mjs");
->Foo : typeof Foo
->require("./exporter.mjs") : typeof Foo
+>Foo : "oops"
+>require("./exporter.mjs") : typeof import("/exporter", { with: { "resolution-mode": "import" } })
 >require : any
 >"./exporter.mjs" : "./exporter.mjs"
 
 new Foo();
 >new Foo() : any
->Foo : typeof Foo
+>Foo : "oops"
 
 === /importer-cts.cts ===
 import Foo = require("./exporter.mjs");
->Foo : typeof Foo
+>Foo : "oops"
 
 new Foo();
 >new Foo() : any
->Foo : typeof Foo
+>Foo : "oops"
 
 import Foo2 from "./exporter.mjs";
->Foo2 : typeof Foo2
+>Foo2 : "oops"
 
 new Foo2();
->new Foo2() : Foo2
->Foo2 : typeof Foo2
+>new Foo2() : any
+>Foo2 : "oops"
 
 import * as Foo3 from "./exporter.mjs";
->Foo3 : typeof Foo
+>Foo3 : "oops"
 
 new Foo3();
 >new Foo3() : any
->Foo3 : typeof Foo
+>Foo3 : "oops"
 
 import { Oops } from "./exporter.mjs";
 >Oops : any

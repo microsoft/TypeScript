@@ -1,11 +1,9 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 index.cjs(2,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
 index.js(2,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
 index.mjs(2,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 !!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 ==== index.js (1 errors) ====
     // esm format file

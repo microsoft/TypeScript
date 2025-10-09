@@ -25,11 +25,9 @@ exports.a = void 0;
 // cjs format file
 exports.a = 1;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const index_js_1 = require("./subfolder/index.js");
-index_js_1.default;
+import mod from "./subfolder/index.js";
+mod;
 
 
 //// [index.d.ts]

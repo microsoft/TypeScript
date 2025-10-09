@@ -1,10 +1,6 @@
 --- old.nodeModulesAllowJsGeneratedNameCollisions(module=node20).errors.txt
 +++ new.nodeModulesAllowJsGeneratedNameCollisions(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+index.js(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-+index.js(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-+index.js(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
  subfolder/index.js(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
  subfolder/index.js(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 -subfolder/index.js(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module Node20.
@@ -12,12 +8,11 @@
 
 
 -==== subfolder/index.js (4 errors) ====
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 +==== subfolder/index.js (3 errors) ====
      // cjs format file
      function require() {}
               ~~~~~~~
-@@= skipped -12, +16 lines =@@
+@@= skipped -12, +11 lines =@@
            ~~~~~~~
  !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
      class Object {}
@@ -26,20 +21,3 @@
      export const __esModule = false;
                   ~~~~~~~~~~
  !!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
-     export {require, exports, Object};
--==== index.js (0 errors) ====
-+==== index.js (3 errors) ====
-     // esm format file
-     function require() {}
-+             ~~~~~~~
-+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-     const exports = {};
-+          ~~~~~~~
-+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-     class Object {}
-     export const __esModule = false;
-+                 ~~~~~~~~~~
-+!!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
-     export {require, exports, Object};
- ==== package.json (0 errors) ====
-     {

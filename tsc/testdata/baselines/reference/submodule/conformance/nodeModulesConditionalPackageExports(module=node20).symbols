@@ -33,16 +33,24 @@ import * as ts from "inner/types";
 >ts : Symbol(ts, Decl(index.ts, 10, 6))
 
 cjsi.mjsSource;
+>cjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >cjsi : Symbol(cjsi, Decl(index.ts, 7, 6))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 mjsi.mjsSource;
+>mjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >mjsi : Symbol(mjsi, Decl(index.ts, 8, 6))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 typei.mjsSource;
+>typei.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >typei : Symbol(typei, Decl(index.ts, 9, 6))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 ts.mjsSource;
+>ts.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >ts : Symbol(ts, Decl(index.ts, 10, 6))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 === index.mts ===
 // esm format file
@@ -77,22 +85,24 @@ import * as ts from "inner/types";
 >ts : Symbol(ts, Decl(index.mts, 10, 6))
 
 cjsi.mjsSource;
+>cjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >cjsi : Symbol(cjsi, Decl(index.mts, 7, 6))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 mjsi.mjsSource;
->mjsi.mjsSource : Symbol(mjsi.mjsSource, Decl(index.d.mts, 1, 12))
+>mjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >mjsi : Symbol(mjsi, Decl(index.mts, 8, 6))
->mjsSource : Symbol(mjsi.mjsSource, Decl(index.d.mts, 1, 12))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 typei.mjsSource;
->typei.mjsSource : Symbol(mjsi.mjsSource, Decl(index.d.mts, 1, 12))
+>typei.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >typei : Symbol(typei, Decl(index.mts, 9, 6))
->mjsSource : Symbol(mjsi.mjsSource, Decl(index.d.mts, 1, 12))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 ts.mjsSource;
->ts.mjsSource : Symbol(mjsi.mjsSource, Decl(index.d.mts, 1, 12))
+>ts.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 >ts : Symbol(ts, Decl(index.mts, 10, 6))
->mjsSource : Symbol(mjsi.mjsSource, Decl(index.d.mts, 1, 12))
+>mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 1, 12))
 
 === index.cts ===
 // cjs format file
@@ -132,10 +142,14 @@ cjsi.cjsSource;
 >cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 1, 12))
 
 mjsi.cjsSource;
+>mjsi.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 1, 12))
 >mjsi : Symbol(mjsi, Decl(index.cts, 8, 6))
+>cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 1, 12))
 
 typei.implicitCjsSource;
+>typei.implicitCjsSource : Symbol(typei.implicitCjsSource, Decl(index.d.ts, 1, 12))
 >typei : Symbol(typei, Decl(index.cts, 9, 6))
+>implicitCjsSource : Symbol(typei.implicitCjsSource, Decl(index.d.ts, 1, 12))
 
 ts.cjsSource;
 >ts.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 1, 12))

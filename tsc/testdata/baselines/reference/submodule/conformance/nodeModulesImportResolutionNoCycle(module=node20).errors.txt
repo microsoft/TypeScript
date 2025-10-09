@@ -1,10 +1,8 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 index.cts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 index.mts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 index.ts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== index.ts (1 errors) ====
     // esm format file
     import * as type from "#type";

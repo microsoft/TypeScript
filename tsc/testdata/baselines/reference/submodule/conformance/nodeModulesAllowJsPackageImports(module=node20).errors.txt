@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 index.cjs(2,22): error TS2307: Cannot find module '#cjs' or its corresponding type declarations.
 index.cjs(3,22): error TS2307: Cannot find module '#mjs' or its corresponding type declarations.
@@ -11,7 +10,6 @@ index.mjs(3,22): error TS2307: Cannot find module '#mjs' or its corresponding ty
 index.mjs(4,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 !!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 ==== index.js (3 errors) ====
     // esm format file

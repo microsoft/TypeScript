@@ -1,4 +1,3 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 /loosey.cts(1,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
 /main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node20'.
@@ -9,7 +8,6 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
 /main.mts(12,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 ==== /node_modules/not.json/package.json (0 errors) ====
     {
       "name": "not.json",

@@ -6,19 +6,35 @@
 -
 -
 -==== subfolder/index.js (2 errors) ====
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+
-+
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-+==== subfolder/index.js (0 errors) ====
-     // cjs format file
-     import {default as _fs} from "fs";
+-    // cjs format file
+-    import {default as _fs} from "fs";
 -            ~~~~~~~~~~~~~~
 -!!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-     _fs.readFile;
-     import * as fs from "fs";
+-    _fs.readFile;
+-    import * as fs from "fs";
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-     fs.readFile;
- ==== index.js (0 errors) ====
-     // esm format file
+-    fs.readFile;
+-==== index.js (0 errors) ====
+-    // esm format file
+-    import {default as _fs} from "fs";
+-    _fs.readFile;
+-    import * as fs from "fs";
+-    fs.readFile;
+-==== package.json (0 errors) ====
+-    {
+-        "name": "package",
+-        "private": true,
+-        "type": "module"
+-    }
+-==== subfolder/package.json (0 errors) ====
+-    {
+-        "type": "commonjs"
+-    }
+-==== types.d.ts (0 errors) ====
+-    declare module "fs";
+-    declare module "tslib" {
+-        export {};
+-        // intentionally missing all helpers
+-    }
++<no content>

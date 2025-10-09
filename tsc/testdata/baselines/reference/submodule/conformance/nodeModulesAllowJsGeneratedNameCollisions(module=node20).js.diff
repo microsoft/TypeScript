@@ -1,50 +1,27 @@
 --- old.nodeModulesAllowJsGeneratedNameCollisions(module=node20).js
 +++ new.nodeModulesAllowJsGeneratedNameCollisions(module=node20).js
-@@= skipped -38, +38 lines =@@
- exports.Object = Object;
- exports.__esModule = false;
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.Object = exports.exports = exports.__esModule = void 0;
-+exports.require = require;
- // esm format file
- function require() { }
- const exports = {};
-+exports.exports = exports;
- class Object {
- }
--export const __esModule = false;
--export { require, exports, Object };
--
--
--//// [index.d.ts]
+@@= skipped -48, +48 lines =@@
+
+
+ //// [index.d.ts]
 -export const __esModule: false;
 -export function require(): void;
 -export const exports: {};
 -export class Object {
--}
--//// [index.d.ts]
--export const __esModule: false;
--export function require(): void;
--export const exports: {};
--export class Object {
--}
-+exports.Object = Object;
-+exports.__esModule = false;
-+
-+
-+//// [index.d.ts]
 +declare function require(): void;
 +declare const exports: {};
 +declare class Object {
-+}
+ }
 +export declare const __esModule = false;
 +export { require, exports, Object };
-+//// [index.d.ts]
+ //// [index.d.ts]
+-export const __esModule: false;
+-export function require(): void;
+-export const exports: {};
+-export class Object {
 +declare function require(): void;
 +declare const exports: {};
 +declare class Object {
-+}
+ }
 +export declare const __esModule = false;
 +export { require, exports, Object };

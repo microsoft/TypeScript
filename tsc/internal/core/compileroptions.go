@@ -190,6 +190,8 @@ func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 	switch options.GetEmitModuleKind() {
 	case ModuleKindNode16, ModuleKindNode18:
 		return ScriptTargetES2022
+	case ModuleKindNode20:
+		return ScriptTargetES2023
 	case ModuleKindNodeNext:
 		return ScriptTargetESNext
 	default:
@@ -212,7 +214,7 @@ func (options *CompilerOptions) GetModuleResolutionKind() ModuleResolutionKind {
 		return options.ModuleResolution
 	}
 	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNode18:
+	case ModuleKindNode16, ModuleKindNode18, ModuleKindNode20:
 		return ModuleResolutionKindNode16
 	case ModuleKindNodeNext:
 		return ModuleResolutionKindNodeNext
@@ -226,7 +228,7 @@ func (options *CompilerOptions) GetEmitModuleDetectionKind() ModuleDetectionKind
 		return options.ModuleDetection
 	}
 	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNodeNext:
+	case ModuleKindNode16, ModuleKindNode20, ModuleKindNodeNext:
 		return ModuleDetectionKindForce
 	default:
 		return ModuleDetectionKindAuto
@@ -254,7 +256,7 @@ func (options *CompilerOptions) GetESModuleInterop() bool {
 		return options.ESModuleInterop == TSTrue
 	}
 	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNode18, ModuleKindNodeNext, ModuleKindPreserve:
+	case ModuleKindNode16, ModuleKindNode18, ModuleKindNode20, ModuleKindNodeNext, ModuleKindPreserve:
 		return true
 	}
 	return false
@@ -272,6 +274,11 @@ func (options *CompilerOptions) GetAllowSyntheticDefaultImports() bool {
 func (options *CompilerOptions) GetResolveJsonModule() bool {
 	if options.ResolveJsonModule != TSUnknown {
 		return options.ResolveJsonModule == TSTrue
+	}
+	switch options.GetEmitModuleKind() {
+	// TODO in 6.0: add Node16/Node18
+	case ModuleKindNode20, ModuleKindESNext:
+		return true
 	}
 	return options.GetModuleResolutionKind() == ModuleResolutionKindBundler
 }

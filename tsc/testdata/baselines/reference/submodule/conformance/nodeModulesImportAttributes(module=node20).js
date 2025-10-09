@@ -14,8 +14,7 @@ const json2 = import("./package.json", { with: { type: "json" } }); // should be
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [otherc.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

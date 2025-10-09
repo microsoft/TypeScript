@@ -12,12 +12,12 @@ import d, {a} from './a.cjs';
 >a : number
 
 import * as ns from './a.cjs';
->ns : typeof d
+>ns : typeof ns
 
 export {d, a, ns};
 >d : typeof d
 >a : number
->ns : typeof d
+>ns : typeof ns
 
 d.a;
 >d.a : number
@@ -25,9 +25,9 @@ d.a;
 >a : number
 
 ns.default.a;
->ns.default.a : any
->ns.default : "string"
->ns : typeof d
->default : "string"
->a : any
+>ns.default.a : number
+>ns.default : typeof d
+>ns : typeof ns
+>default : typeof d
+>a : number
 

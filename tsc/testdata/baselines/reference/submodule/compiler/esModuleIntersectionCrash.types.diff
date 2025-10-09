@@ -12,22 +12,3 @@
 +>modObj : import("mod").A & import("mod").B
  >modObj : any
  >modObj : any
-
-@@= skipped -17, +17 lines =@@
- }
- === idx.ts ===
- import * as mod from "./mod";
-->mod : { a: string; b: string; default: mod.A & mod.B; }
-+>mod : mod.A & mod.B
-
- mod.a;
- >mod.a : string
-->mod : { a: string; b: string; default: mod.A & mod.B; }
-+>mod : mod.A & mod.B
- >a : string
-
- mod.b;
- >mod.b : string
-->mod : { a: string; b: string; default: mod.A & mod.B; }
-+>mod : mod.A & mod.B
- >b : string

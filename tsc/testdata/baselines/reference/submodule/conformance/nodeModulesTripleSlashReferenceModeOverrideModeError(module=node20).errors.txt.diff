@@ -2,12 +2,10 @@
 +++ new.nodeModulesTripleSlashReferenceModeOverrideModeError(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
 -/index.ts(1,23): error TS1453: `resolution-mode` should be either `require` or `import`.
-+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
  /index.ts(2,1): error TS2304: Cannot find name 'foo'.
 
 
 -==== /index.ts (2 errors) ====
-+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 +==== /index.ts (1 errors) ====
      /// <reference types="pkg" resolution-mode="esm"/>
 -                          ~~~
