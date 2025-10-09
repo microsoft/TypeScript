@@ -94,7 +94,7 @@ function test1(arg: string | undefined) {
 }
 
 function test2(arg: string | undefined) {
->test2 : (arg: string | undefined) => "Not A, B, C or D" | "D" | "A, B or C"
+>test2 : (arg: string | undefined) => "Not A, B, C or D" | "A, B or C" | "D"
 >      : ^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
