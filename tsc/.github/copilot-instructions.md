@@ -24,6 +24,19 @@ go test -run='TestLocal/<test name>' ./internal/testrunner      # For new "local
 
 Always make sure code is formatted, linted, and tested before sending a pull request.
 
+<critical>
+YOU MUST RUN THESE COMMANDS AT THE END OF YOUR SESSION!
+IF THESE COMMANDS FAIL, CI WILL FAIL, AND YOUR PR WILL BE REJECTED OUT OF HAND.
+FIXING ERRORS FROM THESE COMMANDS IS YOUR HIGHEST PRIORITY.
+ENSURE YOU DO THE RIGHT THINGS TO MAKE THEM PASS.
+```sh
+npx hereby build  # Build the project
+npx hereby test   # Run tests
+npx hereby lint   # Run linters
+npx hereby format # Format the code
+```
+</critical>
+
 ## Compiler Features, Fixes, and Tests
 
 When fixing a bug or implementing a new feature, at least one minimal test case should always be added in advance to verify the fix.
