@@ -1,0 +1,18 @@
+--- old.inferenceFromGenericClassNoCrash1.types
++++ new.inferenceFromGenericClassNoCrash1.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/61633#issuecomment-2841778576
+
+ function RenderFlagsMixin<T extends new (...args: any[]) => object>(Base?: T) {}
+->RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T) => void
++>RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T | undefined) => void
+ >args : any[]
+ >Base : T | undefined
+
+@@= skipped -12, +12 lines =@@
+ }
+ RenderFlagsMixin(Container);
+ >RenderFlagsMixin(Container) : void
+->RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T) => void
++>RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T | undefined) => void
+ >Container : typeof Container

@@ -1349,6 +1349,19 @@ func (c *Checker) getMapperFromContext(n *InferenceContext) *TypeMapper {
 	return n.mapper
 }
 
+// Return a type mapper that combines the context's return mapper with a mapper that erases any additional type parameters
+// to their inferences at the time of creation.
+func (c *Checker) createOuterReturnMapper(context *InferenceContext) *TypeMapper {
+	if context.outerReturnMapper == nil {
+		mapper := c.cloneInferenceContext(context, InferenceFlagsNone).mapper
+		if context.returnMapper != nil {
+			mapper = newMergedTypeMapper(context.returnMapper, mapper)
+		}
+		context.outerReturnMapper = mapper
+	}
+	return context.outerReturnMapper
+}
+
 func (c *Checker) getCovariantInference(inference *InferenceInfo, signature *Signature) *Type {
 	// Extract all object and array literal types and replace them with a single widened and normalized type.
 	candidates := c.unionObjectAndArrayLiteralCandidates(inference.candidates)

@@ -80,7 +80,7 @@ type Result1 = ComponentProps<typeof ComponentWithForwardRef>;
 
 // that could be incorrectly reused by this one
 type Result2 = Test<{ component: typeof ComponentWithForwardRef }>; // no `T` leak
->Result2 : PropsWithoutRef<ComponentProps<T>> & { ref?: Ref<HTMLElement> | undefined; }
+>Result2 : Omit<any, "ref"> & { ref?: Ref<HTMLElement> | undefined; }
 >component : <T extends FunctionComponent<any>>(props: PropsWithoutRef<ComponentProps<T>> & { ref?: Ref<HTMLElement> | undefined; }) => unknown
 >ComponentWithForwardRef : <T extends FunctionComponent<any>>(props: PropsWithoutRef<ComponentProps<T>> & { ref?: Ref<HTMLElement> | undefined; }) => unknown
 

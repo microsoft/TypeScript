@@ -105,9 +105,6 @@ var skippedTests = []string{
 	"noImplicitUseStrict_amd.ts",
 	"noImplicitAnyIndexingSuppressed.ts",
 	"excessPropertyErrorsSuppressed.ts",
-
-	// Broken
-	"inferenceFromGenericClassNoCrash1.ts",
 }
 
 func (r *CompilerBaselineRunner) RunTests(t *testing.T) {

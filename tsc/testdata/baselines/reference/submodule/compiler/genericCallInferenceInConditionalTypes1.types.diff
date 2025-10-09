@@ -29,14 +29,7 @@
 
      props: ComponentPropsWithoutRef<T>,
  >props : PropsWithoutRef<ComponentProps<T>>
-@@= skipped -38, +38 lines =@@
-
- // that could be incorrectly reused by this one
- type Result2 = Test<{ component: typeof ComponentWithForwardRef }>; // no `T` leak
-->Result2 : Omit<any, "ref"> & { ref?: Ref<HTMLElement> | undefined; }
-+>Result2 : PropsWithoutRef<ComponentProps<T>> & { ref?: Ref<HTMLElement> | undefined; }
- >component : <T extends FunctionComponent<any>>(props: PropsWithoutRef<ComponentProps<T>> & { ref?: Ref<HTMLElement> | undefined; }) => unknown
- >ComponentWithForwardRef : <T extends FunctionComponent<any>>(props: PropsWithoutRef<ComponentProps<T>> & { ref?: Ref<HTMLElement> | undefined; }) => unknown
+@@= skipped -44, +44 lines =@@
 
  // same as ComponentWithForwardRef above but using a resolved signature instead of a direct inferred result of `forwardRef`
  declare const ComponentWithForwardRef2: <T extends FunctionComponent<any>>(
@@ -49,7 +42,7 @@
 
      className?: string;
  >className : string | undefined
-@@= skipped -25, +25 lines =@@
+@@= skipped -19, +19 lines =@@
  ) => unknown;
 
  type Result3 = ComponentProps<typeof ComponentWithForwardRef2>;

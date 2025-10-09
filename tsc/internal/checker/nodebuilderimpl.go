@@ -2403,7 +2403,7 @@ func (b *nodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 	})
 	if len(abstractSignatures) > 0 {
 		types := core.Map(abstractSignatures, func(s *Signature) *Type {
-			return b.ch.getOrCreateTypeFromSignature(s, nil)
+			return b.ch.getOrCreateTypeFromSignature(s)
 		})
 		// count the number of type elements excluding abstract constructors
 		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.indexInfos) + (core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.properties, func(p *ast.Symbol) bool {

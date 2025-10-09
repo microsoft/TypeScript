@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/inferenceFromGenericClassNoCrash1.ts] ////
+
+=== inferenceFromGenericClassNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61633#issuecomment-2841778576
+
+function RenderFlagsMixin<T extends new (...args: any[]) => object>(Base?: T) {}
+>RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T | undefined) => void
+>args : any[]
+>Base : T | undefined
+
+class Container<T> {
+>Container : Container<T>
+
+  t: T;
+>t : T
+}
+RenderFlagsMixin(Container);
+>RenderFlagsMixin(Container) : void
+>RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T | undefined) => void
+>Container : typeof Container
+
