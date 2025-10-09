@@ -1,0 +1,188 @@
+//// [tests/cases/compiler/restSpreadingWithKeyofT.ts] ////
+
+=== restSpreadingWithKeyofT.ts ===
+// Test case 1: Using keyof T directly in rest spreading
+// Should result in Partial<T> instead of Omit<T, keyof T>
+function f1<T>(obj: T, key: keyof T) {
+>f1 : Symbol(f1, Decl(restSpreadingWithKeyofT.ts, 0, 0))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 2, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 2, 15))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 2, 12))
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 2, 22))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 2, 12))
+
+    const { [key]: removed, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 2, 22))
+>removed : Symbol(removed, Decl(restSpreadingWithKeyofT.ts, 3, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 3, 27))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 2, 15))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 3, 27))
+}
+
+// Test case 2: Union of keyof T
+// Should result in Partial<T> since both k1 and k2 are keyof T
+function f2<T>(obj: T, k1: keyof T, k2: keyof T) {
+>f2 : Symbol(f2, Decl(restSpreadingWithKeyofT.ts, 5, 1))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 9, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 9, 15))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 9, 12))
+>k1 : Symbol(k1, Decl(restSpreadingWithKeyofT.ts, 9, 22))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 9, 12))
+>k2 : Symbol(k2, Decl(restSpreadingWithKeyofT.ts, 9, 35))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 9, 12))
+
+    const { [k1]: removed1, [k2]: removed2, ...rest } = obj;
+>k1 : Symbol(k1, Decl(restSpreadingWithKeyofT.ts, 9, 22))
+>removed1 : Symbol(removed1, Decl(restSpreadingWithKeyofT.ts, 10, 11))
+>k2 : Symbol(k2, Decl(restSpreadingWithKeyofT.ts, 9, 35))
+>removed2 : Symbol(removed2, Decl(restSpreadingWithKeyofT.ts, 10, 27))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 10, 43))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 9, 15))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 10, 43))
+}
+
+// Test case 3: keyof T with additional literal
+// Should still use Partial<T> since the union contains keyof T
+function f3<T>(obj: T, key: keyof T | "extra") {
+>f3 : Symbol(f3, Decl(restSpreadingWithKeyofT.ts, 12, 1))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 16, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 16, 15))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 16, 12))
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 16, 22))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 16, 12))
+
+    const { [key]: removed, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 16, 22))
+>removed : Symbol(removed, Decl(restSpreadingWithKeyofT.ts, 17, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 17, 27))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 16, 15))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 17, 27))
+}
+
+// Test case 4: Specific type with keyof
+type MyObj = { a: string; b: number; c: boolean; };
+>MyObj : Symbol(MyObj, Decl(restSpreadingWithKeyofT.ts, 19, 1))
+>a : Symbol(a, Decl(restSpreadingWithKeyofT.ts, 22, 14))
+>b : Symbol(b, Decl(restSpreadingWithKeyofT.ts, 22, 25))
+>c : Symbol(c, Decl(restSpreadingWithKeyofT.ts, 22, 36))
+
+function f4(obj: MyObj, key: keyof MyObj) {
+>f4 : Symbol(f4, Decl(restSpreadingWithKeyofT.ts, 22, 51))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 23, 12))
+>MyObj : Symbol(MyObj, Decl(restSpreadingWithKeyofT.ts, 19, 1))
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 23, 23))
+>MyObj : Symbol(MyObj, Decl(restSpreadingWithKeyofT.ts, 19, 1))
+
+    const { [key]: removed, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 23, 23))
+>removed : Symbol(removed, Decl(restSpreadingWithKeyofT.ts, 24, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 24, 27))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 23, 12))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 24, 27))
+}
+
+// Test case 5: Constraint with keyof
+function f5<T extends { a: string; b: number }>(obj: T, key: keyof T) {
+>f5 : Symbol(f5, Decl(restSpreadingWithKeyofT.ts, 26, 1))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 29, 12))
+>a : Symbol(a, Decl(restSpreadingWithKeyofT.ts, 29, 23))
+>b : Symbol(b, Decl(restSpreadingWithKeyofT.ts, 29, 34))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 29, 48))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 29, 12))
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 29, 55))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 29, 12))
+
+    const { [key]: removed, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 29, 55))
+>removed : Symbol(removed, Decl(restSpreadingWithKeyofT.ts, 30, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 30, 27))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 29, 48))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 30, 27))
+}
+
+// Test case 6: Multiple parameters with keyof in object literal
+function f6<T>(obj: T, k1: keyof T, k2: keyof T, k3: keyof T) {
+>f6 : Symbol(f6, Decl(restSpreadingWithKeyofT.ts, 32, 1))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 35, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 35, 15))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 35, 12))
+>k1 : Symbol(k1, Decl(restSpreadingWithKeyofT.ts, 35, 22))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 35, 12))
+>k2 : Symbol(k2, Decl(restSpreadingWithKeyofT.ts, 35, 35))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 35, 12))
+>k3 : Symbol(k3, Decl(restSpreadingWithKeyofT.ts, 35, 48))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 35, 12))
+
+    const { [k1]: r1, [k2]: r2, [k3]: r3, ...rest } = obj;
+>k1 : Symbol(k1, Decl(restSpreadingWithKeyofT.ts, 35, 22))
+>r1 : Symbol(r1, Decl(restSpreadingWithKeyofT.ts, 36, 11))
+>k2 : Symbol(k2, Decl(restSpreadingWithKeyofT.ts, 35, 35))
+>r2 : Symbol(r2, Decl(restSpreadingWithKeyofT.ts, 36, 21))
+>k3 : Symbol(k3, Decl(restSpreadingWithKeyofT.ts, 35, 48))
+>r3 : Symbol(r3, Decl(restSpreadingWithKeyofT.ts, 36, 31))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 36, 41))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 35, 15))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 36, 41))
+}
+
+// Test case 7: Nested rest with keyof
+function f7<T>(obj: T, key: keyof T) {
+>f7 : Symbol(f7, Decl(restSpreadingWithKeyofT.ts, 38, 1))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 41, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 41, 15))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 41, 12))
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 41, 22))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 41, 12))
+
+    const { [key]: val, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 41, 22))
+>val : Symbol(val, Decl(restSpreadingWithKeyofT.ts, 42, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 42, 23))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 41, 15))
+
+    const consumed = val;
+>consumed : Symbol(consumed, Decl(restSpreadingWithKeyofT.ts, 43, 9))
+>val : Symbol(val, Decl(restSpreadingWithKeyofT.ts, 42, 11))
+
+    return { consumed, rest };
+>consumed : Symbol(consumed, Decl(restSpreadingWithKeyofT.ts, 44, 12))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 44, 22))
+}
+
+// Test case 8: Array of keyof (not applicable but shows edge case)
+function f8<T>(obj: T, keys: Array<keyof T>) {
+>f8 : Symbol(f8, Decl(restSpreadingWithKeyofT.ts, 45, 1))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 48, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 48, 15))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 48, 12))
+>keys : Symbol(keys, Decl(restSpreadingWithKeyofT.ts, 48, 22))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(restSpreadingWithKeyofT.ts, 48, 12))
+
+    // Can't destructure with array, but showing the type relationship
+    const key = keys[0];
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 50, 9))
+>keys : Symbol(keys, Decl(restSpreadingWithKeyofT.ts, 48, 22))
+
+    const { [key]: removed, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithKeyofT.ts, 50, 9))
+>removed : Symbol(removed, Decl(restSpreadingWithKeyofT.ts, 51, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 51, 27))
+>obj : Symbol(obj, Decl(restSpreadingWithKeyofT.ts, 48, 15))
+
+    return rest;
+>rest : Symbol(rest, Decl(restSpreadingWithKeyofT.ts, 51, 27))
+}
+

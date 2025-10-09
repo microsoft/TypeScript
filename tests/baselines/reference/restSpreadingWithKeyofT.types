@@ -1,0 +1,251 @@
+//// [tests/cases/compiler/restSpreadingWithKeyofT.ts] ////
+
+=== restSpreadingWithKeyofT.ts ===
+// Test case 1: Using keyof T directly in rest spreading
+// Should result in Partial<T> instead of Omit<T, keyof T>
+function f1<T>(obj: T, key: keyof T) {
+>f1 : <T>(obj: T, key: keyof T) => Partial<T>
+>   : ^ ^^   ^^ ^^   ^^       ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : keyof T
+>    : ^^^^^^^
+
+    const { [key]: removed, ...rest } = obj;
+>key : keyof T
+>    : ^^^^^^^
+>removed : T[keyof T]
+>        : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest;
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+
+// Test case 2: Union of keyof T
+// Should result in Partial<T> since both k1 and k2 are keyof T
+function f2<T>(obj: T, k1: keyof T, k2: keyof T) {
+>f2 : <T>(obj: T, k1: keyof T, k2: keyof T) => Partial<T>
+>   : ^ ^^   ^^ ^^  ^^       ^^  ^^       ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>k1 : keyof T
+>   : ^^^^^^^
+>k2 : keyof T
+>   : ^^^^^^^
+
+    const { [k1]: removed1, [k2]: removed2, ...rest } = obj;
+>k1 : keyof T
+>   : ^^^^^^^
+>removed1 : T[keyof T]
+>         : ^^^^^^^^^^
+>k2 : keyof T
+>   : ^^^^^^^
+>removed2 : T[keyof T]
+>         : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest;
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+
+// Test case 3: keyof T with additional literal
+// Should still use Partial<T> since the union contains keyof T
+function f3<T>(obj: T, key: keyof T | "extra") {
+>f3 : <T>(obj: T, key: keyof T | "extra") => Partial<T>
+>   : ^ ^^   ^^ ^^   ^^                 ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : keyof T | "extra"
+>    : ^^^^^^^^^^^^^^^^^
+
+    const { [key]: removed, ...rest } = obj;
+>key : keyof T | "extra"
+>    : ^^^^^^^^^^^^^^^^^
+>removed : T[keyof T | "extra"]
+>        : ^^^^^^^^^^^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest;
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+
+// Test case 4: Specific type with keyof
+type MyObj = { a: string; b: number; c: boolean; };
+>MyObj : MyObj
+>      : ^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>c : boolean
+>  : ^^^^^^^
+
+function f4(obj: MyObj, key: keyof MyObj) {
+>f4 : (obj: MyObj, key: keyof MyObj) => {}
+>   : ^   ^^     ^^   ^^           ^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>key : keyof MyObj
+>    : ^^^^^^^^^^^
+
+    const { [key]: removed, ...rest } = obj;
+>key : keyof MyObj
+>    : ^^^^^^^^^^^
+>removed : string | number | boolean
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : {}
+>     : ^^
+>obj : MyObj
+>    : ^^^^^
+
+    return rest;
+>rest : {}
+>     : ^^
+}
+
+// Test case 5: Constraint with keyof
+function f5<T extends { a: string; b: number }>(obj: T, key: keyof T) {
+>f5 : <T extends { a: string; b: number; }>(obj: T, key: keyof T) => Partial<T>
+>   : ^ ^^^^^^^^^                         ^^   ^^ ^^   ^^       ^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>obj : T
+>    : ^
+>key : keyof T
+>    : ^^^^^^^
+
+    const { [key]: removed, ...rest } = obj;
+>key : keyof T
+>    : ^^^^^^^
+>removed : T[keyof T]
+>        : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest;
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+
+// Test case 6: Multiple parameters with keyof in object literal
+function f6<T>(obj: T, k1: keyof T, k2: keyof T, k3: keyof T) {
+>f6 : <T>(obj: T, k1: keyof T, k2: keyof T, k3: keyof T) => Partial<T>
+>   : ^ ^^   ^^ ^^  ^^       ^^  ^^       ^^  ^^       ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>k1 : keyof T
+>   : ^^^^^^^
+>k2 : keyof T
+>   : ^^^^^^^
+>k3 : keyof T
+>   : ^^^^^^^
+
+    const { [k1]: r1, [k2]: r2, [k3]: r3, ...rest } = obj;
+>k1 : keyof T
+>   : ^^^^^^^
+>r1 : T[keyof T]
+>   : ^^^^^^^^^^
+>k2 : keyof T
+>   : ^^^^^^^
+>r2 : T[keyof T]
+>   : ^^^^^^^^^^
+>k3 : keyof T
+>   : ^^^^^^^
+>r3 : T[keyof T]
+>   : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest;
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+
+// Test case 7: Nested rest with keyof
+function f7<T>(obj: T, key: keyof T) {
+>f7 : <T>(obj: T, key: keyof T) => { consumed: T[keyof T]; rest: Partial<T>; }
+>   : ^ ^^   ^^ ^^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : keyof T
+>    : ^^^^^^^
+
+    const { [key]: val, ...rest } = obj;
+>key : keyof T
+>    : ^^^^^^^
+>val : T[keyof T]
+>    : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    const consumed = val;
+>consumed : T[keyof T]
+>         : ^^^^^^^^^^
+>val : T[keyof T]
+>    : ^^^^^^^^^^
+
+    return { consumed, rest };
+>{ consumed, rest } : { consumed: T[keyof T]; rest: Partial<T>; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>consumed : T[keyof T]
+>         : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+
+// Test case 8: Array of keyof (not applicable but shows edge case)
+function f8<T>(obj: T, keys: Array<keyof T>) {
+>f8 : <T>(obj: T, keys: Array<keyof T>) => Partial<T>
+>   : ^ ^^   ^^ ^^    ^^              ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>keys : (keyof T)[]
+>     : ^^^^^^^^^^^
+
+    // Can't destructure with array, but showing the type relationship
+    const key = keys[0];
+>key : keyof T
+>    : ^^^^^^^
+>keys[0] : keyof T
+>        : ^^^^^^^
+>keys : (keyof T)[]
+>     : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    const { [key]: removed, ...rest } = obj;
+>key : keyof T
+>    : ^^^^^^^
+>removed : T[keyof T]
+>        : ^^^^^^^^^^
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest;
+>rest : Partial<T>
+>     : ^^^^^^^^^^
+}
+

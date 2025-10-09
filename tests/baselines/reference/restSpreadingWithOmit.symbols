@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/restSpreadingWithOmit.ts] ////
+
+=== restSpreadingWithOmit.ts ===
+// This file demonstrates cases where Omit is still used (not Partial)
+// These are contrast cases to restSpreadingWithKeyofT.ts
+
+// Test case 1: Specific literal key (not keyof T)
+function f1<T extends { a: string; b: number; c: boolean }>(obj: T) {
+>f1 : Symbol(f1, Decl(restSpreadingWithOmit.ts, 0, 0))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 4, 12))
+>a : Symbol(a, Decl(restSpreadingWithOmit.ts, 4, 23))
+>b : Symbol(b, Decl(restSpreadingWithOmit.ts, 4, 34))
+>c : Symbol(c, Decl(restSpreadingWithOmit.ts, 4, 45))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 4, 60))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 4, 12))
+
+    const { a, ...rest } = obj;
+>a : Symbol(a, Decl(restSpreadingWithOmit.ts, 5, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 5, 14))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 4, 60))
+
+    return rest; // Should be Omit<T, "a">
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 5, 14))
+}
+
+// Test case 2: Multiple specific literal keys
+function f2<T extends { a: string; b: number; c: boolean }>(obj: T) {
+>f2 : Symbol(f2, Decl(restSpreadingWithOmit.ts, 7, 1))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 10, 12))
+>a : Symbol(a, Decl(restSpreadingWithOmit.ts, 10, 23))
+>b : Symbol(b, Decl(restSpreadingWithOmit.ts, 10, 34))
+>c : Symbol(c, Decl(restSpreadingWithOmit.ts, 10, 45))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 10, 60))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 10, 12))
+
+    const { a, b, ...rest } = obj;
+>a : Symbol(a, Decl(restSpreadingWithOmit.ts, 11, 11))
+>b : Symbol(b, Decl(restSpreadingWithOmit.ts, 11, 14))
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 11, 17))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 10, 60))
+
+    return rest; // Should be Omit<T, "a" | "b">
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 11, 17))
+}
+
+// Test case 3: K extends string (broader than keyof T)
+function f3<T, K extends string>(obj: T, key: K) {
+>f3 : Symbol(f3, Decl(restSpreadingWithOmit.ts, 13, 1))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 16, 12))
+>K : Symbol(K, Decl(restSpreadingWithOmit.ts, 16, 14))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 16, 33))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 16, 12))
+>key : Symbol(key, Decl(restSpreadingWithOmit.ts, 16, 40))
+>K : Symbol(K, Decl(restSpreadingWithOmit.ts, 16, 14))
+
+    // This will error because K is not guaranteed to be keyof T
+    // but shows the type relationship
+}
+
+// Test case 4: Mixing literal and keyof T extends
+function f4<T, K extends keyof T>(obj: T, key: K) {
+>f4 : Symbol(f4, Decl(restSpreadingWithOmit.ts, 19, 1))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 22, 12))
+>K : Symbol(K, Decl(restSpreadingWithOmit.ts, 22, 14))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 22, 12))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 22, 34))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 22, 12))
+>key : Symbol(key, Decl(restSpreadingWithOmit.ts, 22, 41))
+>K : Symbol(K, Decl(restSpreadingWithOmit.ts, 22, 14))
+
+    const { [key]: removed, ...rest } = obj;
+>key : Symbol(key, Decl(restSpreadingWithOmit.ts, 22, 41))
+>removed : Symbol(removed, Decl(restSpreadingWithOmit.ts, 23, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 23, 27))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 22, 34))
+
+    return rest; // Should be Omit<T, K>, not Partial<T> because K is a specific subset of keyof T
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 23, 27))
+}
+
+// Test case 5: Using specific keys from constrained type
+type Props = { x: number; y: number; z: number };
+>Props : Symbol(Props, Decl(restSpreadingWithOmit.ts, 25, 1))
+>x : Symbol(x, Decl(restSpreadingWithOmit.ts, 28, 14))
+>y : Symbol(y, Decl(restSpreadingWithOmit.ts, 28, 25))
+>z : Symbol(z, Decl(restSpreadingWithOmit.ts, 28, 36))
+
+function f5<T extends Props>(obj: T) {
+>f5 : Symbol(f5, Decl(restSpreadingWithOmit.ts, 28, 49))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 29, 12))
+>Props : Symbol(Props, Decl(restSpreadingWithOmit.ts, 25, 1))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 29, 29))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 29, 12))
+
+    const { x, y, ...rest } = obj;
+>x : Symbol(x, Decl(restSpreadingWithOmit.ts, 30, 11))
+>y : Symbol(y, Decl(restSpreadingWithOmit.ts, 30, 14))
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 30, 17))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 29, 29))
+
+    return rest; // Should be Omit<T, "x" | "y">
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 30, 17))
+}
+
+// Test case 6: Symbol keys
+const sym1 = Symbol();
+>sym1 : Symbol(sym1, Decl(restSpreadingWithOmit.ts, 35, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const sym2 = Symbol();
+>sym2 : Symbol(sym2, Decl(restSpreadingWithOmit.ts, 36, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+function f6<T extends { [sym1]: string; [sym2]: number }>(obj: T) {
+>f6 : Symbol(f6, Decl(restSpreadingWithOmit.ts, 36, 22))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 37, 12))
+>[sym1] : Symbol([sym1], Decl(restSpreadingWithOmit.ts, 37, 23))
+>sym1 : Symbol(sym1, Decl(restSpreadingWithOmit.ts, 35, 5))
+>[sym2] : Symbol([sym2], Decl(restSpreadingWithOmit.ts, 37, 39))
+>sym2 : Symbol(sym2, Decl(restSpreadingWithOmit.ts, 36, 5))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 37, 58))
+>T : Symbol(T, Decl(restSpreadingWithOmit.ts, 37, 12))
+
+    const { [sym1]: s1, ...rest } = obj;
+>sym1 : Symbol(sym1, Decl(restSpreadingWithOmit.ts, 35, 5))
+>s1 : Symbol(s1, Decl(restSpreadingWithOmit.ts, 38, 11))
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 38, 23))
+>obj : Symbol(obj, Decl(restSpreadingWithOmit.ts, 37, 58))
+
+    return rest; // Should be Omit<T, typeof sym1>
+>rest : Symbol(rest, Decl(restSpreadingWithOmit.ts, 38, 23))
+}
+
