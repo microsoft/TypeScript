@@ -96,4 +96,4 @@ The TypeScript submodule serves as the reference implementation for behavior and
 # Other Instructions
 
 - Do not add or change existing dependencies unless asked to.
- 
+- Do not remove any debug assertions or panic calls. Existing assertions are never too strict or incorrect.
