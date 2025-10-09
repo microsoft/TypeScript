@@ -109,6 +109,7 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory as ts_getCommonSourceDirectory,
     getCommonSourceDirectoryOfConfig,
+    getComputedCommonSourceDirectory,
     getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
     getDirectoryPath,
@@ -132,6 +133,7 @@ import {
     getPackageScopeForPath,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
+    getRelativePathFromFile,
     getResolvedModuleFromResolution,
     getResolvedTypeReferenceDirectiveFromResolution,
     getResolveJsonModule,
@@ -4251,6 +4253,35 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
             if (options.outDir && dir === "" && files.some(file => getRootLength(file.fileName) > 1)) {
                 createDiagnosticForOptionName(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files, "outDir");
+            }
+        }
+
+        if (
+            !options.noEmit &&
+            !options.composite &&
+            !options.rootDir &&
+            options.configFilePath &&
+            (options.outDir || // there is --outDir specified
+                (getEmitDeclarations(options) && options.declarationDir) || // there is --declarationDir specified
+                options.outFile)
+        ) {
+            // Check if rootDir inferred changed and issue diagnostic
+            const dir = getCommonSourceDirectory();
+            const emittedFiles = mapDefined(files, file => !file.isDeclarationFile && sourceFileMayBeEmitted(file, program) ? file.fileName : undefined);
+            const dir59 = getComputedCommonSourceDirectory(emittedFiles, currentDirectory, getCanonicalFileName);
+            if (dir59 !== "" && getCanonicalFileName(dir) !== getCanonicalFileName(dir59)) {
+                // change in layout
+                createDiagnosticForOption(
+                    /*onKey*/ true,
+                    options.outFile ? "outFile" : options.outDir ? "outDir" : "declarationDir",
+                    !options.outFile && options.outDir ? "declarationDir" : undefined,
+                    chainDiagnosticMessages(
+                        chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
+                        Diagnostics.The_common_source_directory_of_0_is_1_The_rootDir_setting_must_be_explicitly_set_to_this_or_another_path_to_adjust_your_output_s_file_layout,
+                        getBaseFileName(options.configFilePath),
+                        getRelativePathFromFile(options.configFilePath, dir59, getCanonicalFileName),
+                    ),
+                );
             }
         }
 
