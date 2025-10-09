@@ -45,6 +45,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.backup = backup;
 function backup() { return "backup"; }
 //// [2.js]
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -83,11 +116,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var C = /** @class */ (function () {
     function C() {
-        this.myModule = Promise.resolve().then(function () { return require("./0"); });
+        this.myModule = Promise.resolve().then(function () { return __importStar(require("./0")); });
     }
     C.prototype.method = function () {
         var _this = this;
-        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
+        var loadAsync = Promise.resolve().then(function () { return __importStar(require("./0")); });
         this.myModule.then(function (Zero) {
             console.log(Zero.foo());
         }, function (err) { return __awaiter(_this, void 0, void 0, function () {
@@ -96,7 +129,7 @@ var C = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log(err);
-                        return [4 /*yield*/, Promise.resolve().then(function () { return require("./1"); })];
+                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("./1")); })];
                     case 1:
                         one = _a.sent();
                         console.log(one.backup());

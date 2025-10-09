@@ -61,10 +61,13 @@ export default _default;
 
 //// [/home/src/workspaces/project/reexport.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConstantNumber = void 0;
 var constants_1 = require("./constants");
-Object.defineProperty(exports, "ConstantNumber", { enumerable: true, get: function () { return constants_1.default; } });
+Object.defineProperty(exports, "ConstantNumber", { enumerable: true, get: function () { return __importDefault(constants_1).default; } });
 
 
 //// [/home/src/workspaces/project/reexport.d.ts]

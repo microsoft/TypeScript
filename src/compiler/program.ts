@@ -4501,6 +4501,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             if (options.baseUrl !== undefined) {
                 createDeprecatedDiagnostic("baseUrl", /*value*/ undefined, /*useInstead*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information);
             }
+            if (options.esModuleInterop === false) {
+                createDeprecatedDiagnostic("esModuleInterop", "false", /*useInstead*/ undefined, /*related*/ undefined);
+            }
+            if (options.allowSyntheticDefaultImports === false) {
+                createDeprecatedDiagnostic("allowSyntheticDefaultImports", "false", /*useInstead*/ undefined, /*related*/ undefined);
+            }
         });
     }
 
