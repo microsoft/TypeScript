@@ -20,7 +20,7 @@ const getName1 = (person?: Person): string => {
 >                                                     : ^^^^^^
 >typeof person?.name === 'string' : boolean
 >                                 : ^^^^^^^
->typeof person?.name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof person?.name : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >person?.name : string | undefined
 >             : ^^^^^^^^^^^^^^^^^^
@@ -51,7 +51,7 @@ const isString = (value: any): value is string => {
   return typeof value === 'string';
 >typeof value === 'string' : boolean
 >                          : ^^^^^^^
->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
 >'string' : "string"

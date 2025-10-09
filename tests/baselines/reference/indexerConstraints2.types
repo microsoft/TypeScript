@@ -153,7 +153,7 @@ interface R {
 
 interface S {
     [u: "foo" | "bar"]: A;
->u : "foo" | "bar"
+>u : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 }
 

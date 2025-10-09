@@ -234,13 +234,13 @@ t9 // number
 >   : ^^^^^^
 
 declare const literalUnion: "a" | 0;
->literalUnion : 0 | "a"
+>literalUnion : "a" | 0
 >             : ^^^^^^^
 
 let t10 = literalUnion;
->t10 : 0 | "a"
+>t10 : "a" | 0
 >    : ^^^^^^^
->literalUnion : 0 | "a"
+>literalUnion : "a" | 0
 >             : ^^^^^^^
 
 t10 = t10 + 'b'
@@ -250,7 +250,7 @@ t10 = t10 + 'b'
 >    : ^^^^^^^^^^^^^^^
 >t10 + 'b' : string
 >          : ^^^^^^
->t10 : 0 | "a"
+>t10 : "a" | 0
 >    : ^^^^^^^
 >'b' : "b"
 >    : ^^^

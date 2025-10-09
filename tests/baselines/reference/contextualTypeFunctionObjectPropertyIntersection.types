@@ -147,11 +147,11 @@ createMachine({
 >   : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
 
       ev.type; // should be 'FOO' | 'BAR'
->ev.type : "FOO" | "BAR"
+>ev.type : "BAR" | "FOO"
 >        : ^^^^^^^^^^^^^
 >ev : { type: "FOO"; } | { type: "BAR"; }
 >   : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
->type : "FOO" | "BAR"
+>type : "BAR" | "FOO"
 >     : ^^^^^^^^^^^^^
 
     },

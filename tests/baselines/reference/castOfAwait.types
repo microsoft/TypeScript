@@ -14,7 +14,7 @@ async function f() {
 >  : ^
 
     typeof await 0;
->typeof await 0 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof await 0 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await 0 : 0
 >        : ^
@@ -36,7 +36,7 @@ async function f() {
 >                                           : ^^^^^^^^^
 ><string> typeof <number> void await 0 : string
 >                                      : ^^^^^^
->typeof <number> void await 0 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof <number> void await 0 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><number> void await 0 : number
 >                      : ^^^^^^

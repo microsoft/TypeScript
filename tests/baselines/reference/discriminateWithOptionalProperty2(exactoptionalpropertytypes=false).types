@@ -90,7 +90,7 @@ function mapAsyncIterable<T, U, R = undefined>(
       if (typeof iterator.return === "function") {
 >typeof iterator.return === "function" : boolean
 >                                      : ^^^^^^^
->typeof iterator.return : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof iterator.return : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
 >                : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -160,7 +160,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 >                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 >typeof iterator.return === "function" : boolean
 >                                      : ^^^^^^^
->typeof iterator.return : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof iterator.return : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
 >                : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -211,7 +211,7 @@ function mapAsyncIterable<T, U, R = undefined>(
       if (typeof iterator.throw === "function") {
 >typeof iterator.throw === "function" : boolean
 >                                     : ^^^^^^^
->typeof iterator.throw : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof iterator.throw : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
 >               : ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

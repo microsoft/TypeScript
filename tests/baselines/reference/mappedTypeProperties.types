@@ -10,7 +10,7 @@ type Before = {
 >       : ^^^^^^
 
     model: 'hour' | 'day';
->model : "hour" | "day"
+>model : "day" | "hour"
 >      : ^^^^^^^^^^^^^^
 
     [placeType in PlaceType]: void;
@@ -30,7 +30,7 @@ type After = {
 
     [placeType in PlaceType]: void;
     model: 'hour' | 'day'
->model : "hour" | "day"
+>model : "day" | "hour"
 >      : ^^^^^^^^^^^^^^
 }
 
@@ -40,7 +40,7 @@ type AfterQuestion = {
 
     [placeType in PlaceType]?: void;
     model: 'hour' | 'day';
->model : "hour" | "day"
+>model : "day" | "hour"
 >      : ^^^^^^^^^^^^^^
 }
 type AfterMethod = {
@@ -61,7 +61,7 @@ type AfterImplicit = {
 
     [placeType in PlaceType]
     model: 'hour' | 'day';
->model : "hour" | "day"
+>model : "day" | "hour"
 >      : ^^^^^^^^^^^^^^
 }
 type AfterImplicitQ = {
@@ -70,7 +70,7 @@ type AfterImplicitQ = {
 
     [placeType in PlaceType]?
     model: 'hour' | 'day'
->model : "hour" | "day"
+>model : "day" | "hour"
 >      : ^^^^^^^^^^^^^^
 }
 

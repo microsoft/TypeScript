@@ -137,7 +137,7 @@ class PersonMixin extends Function {
 >                                    : ^^^^^^^
 >typeof o === "object" : boolean
 >                      : ^^^^^^^
->typeof o : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : any
 >"object" : "object"
@@ -216,13 +216,13 @@ class Car {
 function test(o: Person | Car) {
 >test : (o: Person | Car) => void
 >     : ^ ^^            ^^^^^^^^^
->o : Person | Car
+>o : Car | Person
 >  : ^^^^^^^^^^^^
 
     if (o instanceof cls) {
 >o instanceof cls : boolean
 >                 : ^^^^^^^
->o : Person | Car
+>o : Car | Person
 >  : ^^^^^^^^^^^^
 >cls : PersonMixin
 >    : ^^^^^^^^^^^
@@ -248,7 +248,7 @@ function test(o: Person | Car) {
 >              : ^^^^^^
 >o as Person : Person
 >            : ^^^^^^
->o : Person | Car
+>o : Car | Person
 >  : ^^^^^^^^^^^^
 >work : () => void
 >     : ^^^^^^    
@@ -271,7 +271,7 @@ function test(o: Person | Car) {
 >          : ^^^^
 >o.sayHi : (() => void) | (() => void)
 >        : ^^^^^^^    ^^^^^^^^^^^    ^
->o : Person | Car
+>o : Car | Person
 >  : ^^^^^^^^^^^^
 >sayHi : (() => void) | (() => void)
 >      : ^^^^^^^    ^^^^^^^^^^^    ^

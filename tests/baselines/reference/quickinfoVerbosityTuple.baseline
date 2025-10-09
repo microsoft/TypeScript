@@ -107,11 +107,11 @@
 // | ----------------------------------------------------------------------
 // | type ManyFruits = ({
 // |     color: string;
-// | } | {
-// |     color: string;
 // |     other: {
 // |         color: string;
 // |     };
+// | } | {
+// |     color: string;
 // | })[]
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
@@ -119,15 +119,15 @@
 // | ----------------------------------------------------------------------
 // | type ManyFruits = ({
 // |     color: string;
+// |     other: Orange;
 // | } | {
 // |     color: string;
-// |     other: Orange;
 // | })[]
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //      ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | type ManyFruits = (Orange | Apple)[]
+// | type ManyFruits = (Apple | Orange)[]
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 // const mf: ManyFruits = [];
@@ -135,11 +135,11 @@
 // | ----------------------------------------------------------------------
 // | const mf: ({
 // |     color: string;
-// | } | {
-// |     color: string;
 // |     other: {
 // |         color: string;
 // |     };
+// | } | {
+// |     color: string;
 // | })[]
 // | (verbosity level: 3)
 // | ----------------------------------------------------------------------
@@ -147,15 +147,15 @@
 // | ----------------------------------------------------------------------
 // | const mf: ({
 // |     color: string;
+// |     other: Orange;
 // | } | {
 // |     color: string;
-// |     other: Orange;
 // | })[]
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | const mf: (Orange | Apple)[]
+// | const mf: (Apple | Orange)[]
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //       ^^
@@ -1560,7 +1560,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "Orange",
+          "text": "Apple",
           "kind": "interfaceName"
         },
         {
@@ -1576,7 +1576,7 @@
           "kind": "space"
         },
         {
-          "text": "Apple",
+          "text": "Orange",
           "kind": "interfaceName"
         },
         {
@@ -1676,6 +1676,34 @@
           "kind": "lineBreak"
         },
         {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "other",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Orange",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "}",
           "kind": "punctuation"
         },
@@ -1718,34 +1746,6 @@
         {
           "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "other",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Orange",
-          "kind": "interfaceName"
         },
         {
           "text": ";",
@@ -1856,58 +1856,6 @@
           "kind": "lineBreak"
         },
         {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "color",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
           "text": "    ",
           "kind": "space"
         },
@@ -1966,6 +1914,58 @@
         {
           "text": "}",
           "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "color",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -2080,7 +2080,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "Orange",
+          "text": "Apple",
           "kind": "interfaceName"
         },
         {
@@ -2096,7 +2096,7 @@
           "kind": "space"
         },
         {
-          "text": "Apple",
+          "text": "Orange",
           "kind": "interfaceName"
         },
         {
@@ -2192,6 +2192,34 @@
           "kind": "lineBreak"
         },
         {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "other",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Orange",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "}",
           "kind": "punctuation"
         },
@@ -2234,34 +2262,6 @@
         {
           "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "other",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Orange",
-          "kind": "interfaceName"
         },
         {
           "text": ";",
@@ -2368,58 +2368,6 @@
           "kind": "lineBreak"
         },
         {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "color",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
           "text": "    ",
           "kind": "space"
         },
@@ -2478,6 +2426,58 @@
         {
           "text": "}",
           "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "color",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
         },
         {
           "text": ";",

@@ -46,9 +46,9 @@ function area1(s: Shape) {
 >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
 
     if (s.kind === "square") {
->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 18, 15))
->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 
         return s.size * s.size;
 >s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
@@ -59,9 +59,9 @@ function area1(s: Shape) {
 >size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
     }
     else if (s.kind === "circle") {
->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 18, 15))
->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21))
 
         return Math.PI * s.radius * s.radius;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
@@ -98,9 +98,9 @@ function area2(s: Shape) {
 >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
 
     switch (s.kind) {
->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 33, 15))
->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 
         case "square": return s.size * s.size;
 >s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
@@ -146,9 +146,9 @@ function area3(s: Shape) {
 >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
 
     switch (s.kind) {
->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 45, 15))
->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 
         case "square": return s.size * s.size;
 >s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
@@ -189,9 +189,9 @@ function area4(s: Shape) {
 >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
 
     switch (s.kind) {
->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 54, 15))
->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
 
         case "square": return s.size * s.size;
 >s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
