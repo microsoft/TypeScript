@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/restSpreadingWithOmit.ts] ////
+
+=== restSpreadingWithOmit.ts ===
+// This file demonstrates cases where Omit is still used (not Partial)
+// These are contrast cases to restSpreadingWithKeyofT.ts
+
+// Test case 1: Specific literal key (not keyof T)
+function f1<T extends { a: string; b: number; c: boolean }>(obj: T) {
+>f1 : <T extends { a: string; b: number; c: boolean; }>(obj: T) => Omit<T, "a">
+>   : ^ ^^^^^^^^^                                     ^^   ^^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>c : boolean
+>  : ^^^^^^^
+>obj : T
+>    : ^
+
+    const { a, ...rest } = obj;
+>a : string
+>  : ^^^^^^
+>rest : Omit<T, "a">
+>     : ^^^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest; // Should be Omit<T, "a">
+>rest : Omit<T, "a">
+>     : ^^^^^^^^^^^^
+}
+
+// Test case 2: Multiple specific literal keys
+function f2<T extends { a: string; b: number; c: boolean }>(obj: T) {
+>f2 : <T extends { a: string; b: number; c: boolean; }>(obj: T) => Omit<T, "a" | "b">
+>   : ^ ^^^^^^^^^                                     ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>c : boolean
+>  : ^^^^^^^
+>obj : T
+>    : ^
+
+    const { a, b, ...rest } = obj;
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>rest : Omit<T, "a" | "b">
+>     : ^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest; // Should be Omit<T, "a" | "b">
+>rest : Omit<T, "a" | "b">
+>     : ^^^^^^^^^^^^^^^^^^
+}
+
+// Test case 3: K extends string (broader than keyof T)
+function f3<T, K extends string>(obj: T, key: K) {
+>f3 : <T, K extends string>(obj: T, key: K) => void
+>   : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^   ^^ ^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    // This will error because K is not guaranteed to be keyof T
+    // but shows the type relationship
+}
+
+// Test case 4: Mixing literal and keyof T extends
+function f4<T, K extends keyof T>(obj: T, key: K) {
+>f4 : <T, K extends keyof T>(obj: T, key: K) => Omit<T, K>
+>   : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    const { [key]: removed, ...rest } = obj;
+>key : K
+>    : ^
+>removed : T[K]
+>        : ^^^^
+>rest : Omit<T, K>
+>     : ^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest; // Should be Omit<T, K>, not Partial<T> because K is a specific subset of keyof T
+>rest : Omit<T, K>
+>     : ^^^^^^^^^^
+}
+
+// Test case 5: Using specific keys from constrained type
+type Props = { x: number; y: number; z: number };
+>Props : Props
+>      : ^^^^^
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+>z : number
+>  : ^^^^^^
+
+function f5<T extends Props>(obj: T) {
+>f5 : <T extends Props>(obj: T) => Omit<T, "x" | "y">
+>   : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+
+    const { x, y, ...rest } = obj;
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+>rest : Omit<T, "x" | "y">
+>     : ^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest; // Should be Omit<T, "x" | "y">
+>rest : Omit<T, "x" | "y">
+>     : ^^^^^^^^^^^^^^^^^^
+}
+
+// Test case 6: Symbol keys
+const sym1 = Symbol();
+>sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const sym2 = Symbol();
+>sym2 : unique symbol
+>     : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+function f6<T extends { [sym1]: string; [sym2]: number }>(obj: T) {
+>f6 : <T extends { [sym1]: string; [sym2]: number; }>(obj: T) => Omit<T, unique symbol>
+>   : ^ ^^^^^^^^^                                   ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[sym1] : string
+>       : ^^^^^^
+>sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
+>[sym2] : number
+>       : ^^^^^^
+>sym2 : unique symbol
+>     : ^^^^^^^^^^^^^
+>obj : T
+>    : ^
+
+    const { [sym1]: s1, ...rest } = obj;
+>sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
+>s1 : string
+>   : ^^^^^^
+>rest : Omit<T, unique symbol>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+
+    return rest; // Should be Omit<T, typeof sym1>
+>rest : Omit<T, unique symbol>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+}
+
