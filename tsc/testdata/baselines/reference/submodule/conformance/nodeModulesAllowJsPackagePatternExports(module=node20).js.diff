@@ -1,6 +1,6 @@
 --- old.nodeModulesAllowJsPackagePatternExports(module=node20).js
 +++ new.nodeModulesAllowJsPackagePatternExports(module=node20).js
-@@= skipped -66, +66 lines =@@
+@@= skipped -75, +75 lines =@@
 
 
  //// [index.js]

@@ -1,7 +1,7 @@
 --- old.nodeModulesPackagePatternExportsExclude(module=node20).js
 +++ new.nodeModulesPackagePatternExportsExclude(module=node20).js
-@@= skipped -110, +110 lines =@@
- } 
+@@= skipped -129, +129 lines =@@
+
 
  //// [index.js]
 +"use strict";

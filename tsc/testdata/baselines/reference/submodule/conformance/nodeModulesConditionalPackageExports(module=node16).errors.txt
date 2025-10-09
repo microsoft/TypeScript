@@ -1,27 +1,12 @@
-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
-index.cts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
-index.cts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
-index.cts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
-index.mts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
-index.mts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
-index.mts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
-index.ts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
-index.ts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
-index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
+index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
+index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
 
 
-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
-==== index.ts (3 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     cjs;
     mjs;
     type;
@@ -33,17 +18,11 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     mjsi.mjsSource;
     typei.mjsSource;
     ts.mjsSource;
-==== index.mts (3 errors) ====
+==== index.mts (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     cjs;
     mjs;
     type;
@@ -55,17 +34,15 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     mjsi.mjsSource;
     typei.mjsSource;
     ts.mjsSource;
-==== index.cts (3 errors) ====
+==== index.cts (2 errors) ====
     // cjs format file
     import * as cjs from "package/cjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
                          ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
     import * as type from "package";
                           ~~~~~~~~~
-!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     cjs;
     mjs;
     type;
@@ -79,27 +56,8 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     ts.cjsSource;
 ==== node_modules/inner/index.d.ts (0 errors) ====
     // cjs format file
-    import * as cjs from "inner/a";
-    import * as mjs from "inner/b";
-    import * as type from "inner";
-    import * as ts from "inner/types";
-    export { cjs };
-    export { mjs };
-    export { type };
-    export { ts };
     export const implicitCjsSource = true;
-==== node_modules/inner/index.d.mts (0 errors) ====
-    // esm format file
-    import * as cjs from "inner/a";
-    import * as mjs from "inner/b";
-    import * as type from "inner";
-    import * as ts from "inner/types";
-    export { cjs };
-    export { mjs };
-    export { type };
-    export { ts };
-    export const mjsSource = true;
-==== node_modules/inner/index.d.cts (0 errors) ====
+==== node_modules/inner/test.d.ts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/a";
     import * as mjs from "inner/b";
@@ -109,7 +67,32 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     export { mjs };
     export { type };
     export { ts };
+==== node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    export const mjsSource = true;
+==== node_modules/inner/test.d.mts (0 errors) ====
+    // esm format file
+    import * as cjs from "inner/a";
+    import * as mjs from "inner/b";
+    import * as type from "inner";
+    import * as ts from "inner/types";
+    export { cjs };
+    export { mjs };
+    export { type };
+    export { ts };
+==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
     export const cjsSource = true;
+==== node_modules/inner/test.d.cts (0 errors) ====
+    // cjs format file
+    import * as cjs from "inner/a";
+    import * as mjs from "inner/b";
+    import * as type from "inner";
+    import * as ts from "inner/types";
+    export { cjs };
+    export { mjs };
+    export { type };
+    export { ts };
 ==== package.json (0 errors) ====
     {
         "name": "package",

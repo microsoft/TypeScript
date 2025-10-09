@@ -1,6 +1,6 @@
 index.cts(3,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
-node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
-node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+node_modules/inner/test.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+node_modules/inner/test.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 
 
 ==== index.ts (0 errors) ====
@@ -29,7 +29,10 @@ node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJ
     cjsi;
     mjsi;
     typei;
-==== node_modules/inner/index.d.ts (1 errors) ====
+==== node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    export const implicitCjsSource = true;
+==== node_modules/inner/test.d.ts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";
@@ -41,13 +44,19 @@ node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJ
     export { type };
 ==== node_modules/inner/index.d.mts (0 errors) ====
     // esm format file
+    export const mjsSource = true;
+==== node_modules/inner/test.d.mts (0 errors) ====
+    // esm format file
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";
     import * as type from "inner/js/index";
     export { cjs };
     export { mjs };
     export { type };
-==== node_modules/inner/index.d.cts (1 errors) ====
+==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsSource = true;
+==== node_modules/inner/test.d.cts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";

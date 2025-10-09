@@ -1,29 +1,12 @@
 error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
-index.cts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
-index.cts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
-index.cts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
-index.mts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
-index.mts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
-index.mts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
-index.ts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
-index.ts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
-index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
 
 
 !!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
-==== index.ts (3 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     cjs;
     mjs;
     type;
@@ -33,17 +16,11 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     cjsi;
     mjsi;
     typei;
-==== index.mts (3 errors) ====
+==== index.mts (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     cjs;
     mjs;
     type;
@@ -53,17 +30,11 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     cjsi;
     mjsi;
     typei;
-==== index.cts (3 errors) ====
+==== index.cts (0 errors) ====
     // cjs format file
     import * as cjs from "package/cjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     cjs;
     mjs;
     type;
@@ -75,6 +46,9 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     typei;
 ==== node_modules/inner/index.d.ts (0 errors) ====
     // cjs format file
+    export const implicitCjsSource = true;
+==== node_modules/inner/test.d.ts (0 errors) ====
+    // cjs format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
     import * as type from "inner";
@@ -83,6 +57,9 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     export { type };
 ==== node_modules/inner/index.d.mts (0 errors) ====
     // esm format file
+    export const mjsSource = true;
+==== node_modules/inner/test.d.mts (0 errors) ====
+    // esm format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
     import * as type from "inner";
@@ -90,6 +67,9 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
     export { mjs };
     export { type };
 ==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsSource = true;
+==== node_modules/inner/test.d.cts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
@@ -118,3 +98,4 @@ index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding 
             ".": "./index.js"
         }
     }
+    

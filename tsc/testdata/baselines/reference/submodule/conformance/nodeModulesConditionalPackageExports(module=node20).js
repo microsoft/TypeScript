@@ -50,27 +50,8 @@ typei.implicitCjsSource;
 ts.cjsSource;
 //// [index.d.ts]
 // cjs format file
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
 export const implicitCjsSource = true;
-//// [index.d.mts]
-// esm format file
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
-export const mjsSource = true;
-//// [index.d.cts]
+//// [test.d.ts]
 // cjs format file
 import * as cjs from "inner/a";
 import * as mjs from "inner/b";
@@ -80,7 +61,32 @@ export { cjs };
 export { mjs };
 export { type };
 export { ts };
+//// [index.d.mts]
+// esm format file
+export const mjsSource = true;
+//// [test.d.mts]
+// esm format file
+import * as cjs from "inner/a";
+import * as mjs from "inner/b";
+import * as type from "inner";
+import * as ts from "inner/types";
+export { cjs };
+export { mjs };
+export { type };
+export { ts };
+//// [index.d.cts]
+// cjs format file
 export const cjsSource = true;
+//// [test.d.cts]
+// cjs format file
+import * as cjs from "inner/a";
+import * as mjs from "inner/b";
+import * as type from "inner";
+import * as ts from "inner/types";
+export { cjs };
+export { mjs };
+export { type };
+export { ts };
 //// [package.json]
 {
     "name": "package",
@@ -123,24 +129,6 @@ export const cjsSource = true;
 }
 
 
-//// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-// esm format file
-const cjs = require("package/cjs");
-const mjs = require("package/mjs");
-const type = require("package");
-cjs;
-mjs;
-type;
-const cjsi = require("inner/a");
-const mjsi = require("inner/b");
-const typei = require("inner");
-const ts = require("inner/types");
-cjsi.mjsSource;
-mjsi.mjsSource;
-typei.mjsSource;
-ts.mjsSource;
 //// [index.mjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -177,11 +165,29 @@ cjsi.cjsSource;
 mjsi.cjsSource;
 typei.implicitCjsSource;
 ts.cjsSource;
+//// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// esm format file
+const cjs = require("package/cjs");
+const mjs = require("package/mjs");
+const type = require("package");
+cjs;
+mjs;
+type;
+const cjsi = require("inner/a");
+const mjsi = require("inner/b");
+const typei = require("inner");
+const ts = require("inner/types");
+cjsi.mjsSource;
+mjsi.mjsSource;
+typei.mjsSource;
+ts.mjsSource;
 
 
-//// [index.d.ts]
-export {};
 //// [index.d.mts]
 export {};
 //// [index.d.cts]
+export {};
+//// [index.d.ts]
 export {};

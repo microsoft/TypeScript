@@ -1,6 +1,6 @@
 --- old.nodeModulesPackagePatternExportsTrailers(module=node20).js
 +++ new.nodeModulesPackagePatternExportsTrailers(module=node20).js
-@@= skipped -66, +66 lines =@@
+@@= skipped -75, +75 lines =@@
 
 
  //// [index.js]

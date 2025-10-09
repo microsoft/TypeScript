@@ -1,26 +1,82 @@
 --- old.nodeModulesAllowJsPackagePatternExports(module=node20).errors.txt
 +++ new.nodeModulesAllowJsPackagePatternExports(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
--node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
--
--
+-<no content>
 +error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
 +
 +
 +!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node20'.
- ==== index.js (0 errors) ====
-     // esm format file
-     import * as cjsi from "inner/cjs/index";
-@@= skipped -24, +25 lines =@@
-     cjsi;
-     mjsi;
-     typei;
--==== node_modules/inner/index.d.ts (1 errors) ====
++==== index.js (0 errors) ====
++    // esm format file
++    import * as cjsi from "inner/cjs/index";
++    import * as mjsi from "inner/mjs/index";
++    import * as typei from "inner/js/index";
++    cjsi;
++    mjsi;
++    typei;
++==== index.mjs (0 errors) ====
++    // esm format file
++    import * as cjsi from "inner/cjs/index";
++    import * as mjsi from "inner/mjs/index";
++    import * as typei from "inner/js/index";
++    cjsi;
++    mjsi;
++    typei;
++==== index.cjs (0 errors) ====
++    // cjs format file
++    import * as cjsi from "inner/cjs/index";
++    import * as mjsi from "inner/mjs/index";
++    import * as typei from "inner/js/index";
++    cjsi;
++    mjsi;
++    typei;
 +==== node_modules/inner/index.d.ts (0 errors) ====
-     // cjs format file
-     import * as cjs from "inner/cjs/index";
--                ~~~
--!!! error TS2303: Circular definition of import alias 'cjs'.
-     import * as mjs from "inner/mjs/index";
-     import * as type from "inner/js/index";
-     export { cjs };
++    // cjs format file
++    export const implicitCjsSource = true;
++==== node_modules/inner/test.d.ts (0 errors) ====
++    // cjs format file
++    import * as cjs from "inner/cjs/index";
++    import * as mjs from "inner/mjs/index";
++    import * as type from "inner/js/index";
++    export { cjs };
++    export { mjs };
++    export { type };
++==== node_modules/inner/index.d.mts (0 errors) ====
++    // esm format file
++    export const mjsSource = true;
++==== node_modules/inner/test.d.mts (0 errors) ====
++    // esm format file
++    import * as cjs from "inner/cjs/index";
++    import * as mjs from "inner/mjs/index";
++    import * as type from "inner/js/index";
++    export { cjs };
++    export { mjs };
++    export { type };
++==== node_modules/inner/index.d.cts (0 errors) ====
++    // cjs format file
++    export const cjsSource = true;
++==== node_modules/inner/test.d.cts (0 errors) ====
++    // cjs format file
++    import * as cjs from "inner/cjs/index";
++    import * as mjs from "inner/mjs/index";
++    import * as type from "inner/js/index";
++    export { cjs };
++    export { mjs };
++    export { type };
++==== package.json (0 errors) ====
++    {
++        "name": "package",
++        "private": true,
++        "type": "module"
++    }
++==== node_modules/inner/package.json (0 errors) ====
++    {
++        "name": "inner",
++        "private": true,
++        "exports": {
++            "./cjs/*": "./*.cjs",
++            "./mjs/*": "./*.mjs",
++            "./js/*": "./*.js"
++        }
++    }
++    

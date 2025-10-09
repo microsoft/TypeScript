@@ -28,6 +28,9 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
     typei;
 ==== node_modules/inner/index.d.ts (0 errors) ====
     // cjs format file
+    export const implicitCjsSource = true;
+==== node_modules/inner/test.d.ts (0 errors) ====
+    // cjs format file
     import * as cjs from "inner/cjs/index.cjs";
     import * as mjs from "inner/mjs/index.mjs";
     import * as type from "inner/js/index.js";
@@ -36,6 +39,9 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
     export { type };
 ==== node_modules/inner/index.d.mts (0 errors) ====
     // esm format file
+    export const mjsSource = true;
+==== node_modules/inner/test.d.mts (0 errors) ====
+    // esm format file
     import * as cjs from "inner/cjs/index.cjs";
     import * as mjs from "inner/mjs/index.mjs";
     import * as type from "inner/js/index.js";
@@ -43,6 +49,9 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
     export { mjs };
     export { type };
 ==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsSource = true;
+==== node_modules/inner/test.d.cts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/index.cjs";
     import * as mjs from "inner/mjs/index.mjs";
