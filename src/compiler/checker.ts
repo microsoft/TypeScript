@@ -2292,6 +2292,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalAsyncDisposableType: ObjectType | undefined;
     var deferredGlobalExtractSymbol: Symbol | undefined;
     var deferredGlobalOmitSymbol: Symbol | undefined;
+    var deferredGlobalPartialSymbol: Symbol | undefined;
     var deferredGlobalAwaitedSymbol: Symbol | undefined;
     var deferredGlobalBigIntType: ObjectType | undefined;
     var deferredGlobalNaNSymbol: Symbol | undefined;
@@ -11577,6 +11578,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return source;
             }
 
+            // In the case where we have
+            // const { [key]: _, ...rest } = obj;
+            // where key is keyof typeof obj, then the best type for rest is Partial<typeof obj>
+            if (isOrContainsKeyofT(omitKeyType, source)) {
+                const partialTypeAlias = getGlobalPartialSymbol();
+                if (!partialTypeAlias) {
+                    return errorType;
+                }
+                return getTypeAliasInstantiation(partialTypeAlias, [source]);
+            }
+
             const omitTypeAlias = getGlobalOmitSymbol();
             if (!omitTypeAlias) {
                 return errorType;
@@ -11590,6 +11602,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const result = createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfosOfType(source));
         result.objectFlags |= ObjectFlags.ObjectRestType;
         return result;
+    }
+
+    function isOrContainsKeyofT(keyType: Type, sourceType: Type): boolean {
+        if (keyType.flags & TypeFlags.Union) {
+            return !!forEach((keyType as UnionType).types, t => isOrContainsKeyofT(t, sourceType));
+        }
+        if (keyType.flags & TypeFlags.Index && (keyType as IndexType).type === sourceType) {
+            return true;
+        }
+        return false;
     }
 
     function isGenericTypeWithUndefinedConstraint(type: Type) {
@@ -17571,6 +17593,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
         deferredGlobalOmitSymbol ||= getGlobalTypeAliasSymbol("Omit" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
         return deferredGlobalOmitSymbol === unknownSymbol ? undefined : deferredGlobalOmitSymbol;
+    }
+
+    function getGlobalPartialSymbol(): Symbol | undefined {
+        // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
+        deferredGlobalPartialSymbol ||= getGlobalTypeAliasSymbol("Partial" as __String, /*arity*/ 1, /*reportErrors*/ true) || unknownSymbol;
+        return deferredGlobalPartialSymbol === unknownSymbol ? undefined : deferredGlobalPartialSymbol;
     }
 
     function getGlobalAwaitedSymbol(reportErrors: boolean): Symbol | undefined {
