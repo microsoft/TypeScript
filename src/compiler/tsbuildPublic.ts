@@ -328,7 +328,8 @@ export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = Em
     return host;
 }
 
-function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
+/** @internal */
+export function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
     const result = {} as CompilerOptions;
     commonOptionsWithBuild.forEach(option => {
         if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];

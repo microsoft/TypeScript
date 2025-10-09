@@ -42,6 +42,7 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getCommonSourceDirectory,
+    getCommonSourceDirectory60,
     getCompilerOptionValue,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
@@ -80,6 +81,7 @@ import {
     normalizePath,
     normalizeSlashes,
     PackageId,
+    packageIdIsEqual,
     packageIdToString,
     ParsedPatterns,
     Path,
@@ -146,6 +148,16 @@ function removeIgnoredPackageId(r: Resolved | undefined): PathAndExtension | und
         Debug.assert(r.packageId === undefined);
         return { path: r.path, ext: r.extension, resolvedUsingTsExtension: r.resolvedUsingTsExtension };
     }
+}
+
+function resolvedIsEqual(a: Resolved | undefined, b: Resolved | undefined) {
+    return a === b ||
+        !!a && !!b &&
+            a.path === b.path &&
+            a.extension === b.extension &&
+            packageIdIsEqual(a.packageId, b.packageId) &&
+            a.originalPath === b.originalPath &&
+            a.resolvedUsingTsExtension === b.resolvedUsingTsExtension;
 }
 
 /** Result of trying to resolve a module. */
@@ -2934,23 +2946,46 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                         packagePath,
                     ));
                 }
-                for (const commonSourceDirGuess of commonSourceDirGuesses) {
-                    const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
-                    for (const candidateDir of candidateDirectories) {
-                        if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames(state))) {
-                            // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
-                            const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
-                            const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
-                            const jsAndDtsExtensions = [Extension.Mjs, Extension.Cjs, Extension.Js, Extension.Json, Extension.Dmts, Extension.Dcts, Extension.Dts];
-                            for (const ext of jsAndDtsExtensions) {
-                                if (fileExtensionIs(possibleInputBase, ext)) {
-                                    const inputExts = getPossibleOriginalInputExtensionForExtension(possibleInputBase);
-                                    for (const possibleExt of inputExts) {
-                                        if (!extensionIsOk(extensions, possibleExt)) continue;
-                                        const possibleInputWithInputExtension = changeAnyExtension(possibleInputBase, possibleExt, ext, !useCaseSensitiveFileNames(state));
-                                        if (state.host.fileExists(possibleInputWithInputExtension)) {
-                                            return toSearchResult(withPackageId(scope, loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*packageJsonValue*/ undefined, /*onlyRecordFailures*/ false, state), state));
-                                        }
+                const result = guessFromCommonDirs(commonSourceDirGuesses, finalPath);
+                const commonDir60 = toAbsolutePath(getCommonSourceDirectory60(state.compilerOptions));
+                if (commonDir60) {
+                    if (!arrayIsEqualTo(commonSourceDirGuesses, [commonDir60])) {
+                        const result60 = guessFromCommonDirs([commonDir60], finalPath);
+                        // Compare and if not same report -- and add made up diagnostics
+                        if (!searchResultIsEqual(result, result60, resolvedIsEqual)) {
+                            state.reportDiagnostic(createCompilerDiagnostic(
+                                isImports
+                                    ? Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate
+                                    : Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
+                                entry === "" ? "." : entry, // replace empty string with `.` - the reverse of the operation done when entries are built - so main entrypoint errors don't look weird
+                                packagePath + "\nSheetal:: Change in behaviour: guessed " + commonSourceDirGuesses.join(", ") + " will be in 6.0::" + commonDir60 +
+                                    "\nResult " + JSON.stringify(result) + "\n Result.6.0: " + JSON.stringify(result60),
+                            ));
+                        }
+                    }
+                }
+                return result;
+            }
+            return undefined;
+        }
+
+        function guessFromCommonDirs(commonSourceDirGuesses: string[], finalPath: string) {
+            for (const commonSourceDirGuess of commonSourceDirGuesses) {
+                const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
+                for (const candidateDir of candidateDirectories) {
+                    if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames(state))) {
+                        // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
+                        const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
+                        const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
+                        const jsAndDtsExtensions = [Extension.Mjs, Extension.Cjs, Extension.Js, Extension.Json, Extension.Dmts, Extension.Dcts, Extension.Dts];
+                        for (const ext of jsAndDtsExtensions) {
+                            if (fileExtensionIs(possibleInputBase, ext)) {
+                                const inputExts = getPossibleOriginalInputExtensionForExtension(possibleInputBase);
+                                for (const possibleExt of inputExts) {
+                                    if (!extensionIsOk(extensions, possibleExt)) continue;
+                                    const possibleInputWithInputExtension = changeAnyExtension(possibleInputBase, possibleExt, ext, !useCaseSensitiveFileNames(state));
+                                    if (state.host.fileExists(possibleInputWithInputExtension)) {
+                                        return toSearchResult(withPackageId(scope, loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*packageJsonValue*/ undefined, /*onlyRecordFailures*/ false, state), state));
                                     }
                                 }
                             }
@@ -2958,7 +2993,6 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                     }
                 }
             }
-            return undefined;
 
             function getOutputDirectoriesForBaseDirectory(commonSourceDirGuess: string) {
                 // Config file ouput paths are processed to be relative to the host's current directory, while
@@ -3417,4 +3451,8 @@ function useCaseSensitiveFileNames(state: ModuleResolutionState) {
     return !state.host.useCaseSensitiveFileNames ? true :
         typeof state.host.useCaseSensitiveFileNames === "boolean" ? state.host.useCaseSensitiveFileNames :
         state.host.useCaseSensitiveFileNames();
+}
+
+function searchResultIsEqual<T>(a: SearchResult<T> | undefined, b: SearchResult<T> | undefined, compareValue: (a: T | undefined, b: T | undefined) => boolean) {
+    return a === b || !!a && !!b && compareValue(a.value, b.value);
 }
