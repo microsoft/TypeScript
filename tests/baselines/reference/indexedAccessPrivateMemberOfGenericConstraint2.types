@@ -1,22 +1,26 @@
-//// [tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts] ////
+//// [tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint2.ts] ////
 
-=== indexedAccessPrivateMemberOfGenericConstraint.ts ===
+=== indexedAccessPrivateMemberOfGenericConstraint2.ts ===
 class A {
 >A : A
 >  : ^
 
-  private a: number;
->a : number
->  : ^^^^^^
+  declare private a: { foo: number };
+>a : { foo: number; }
+>  : ^^^^^^^      ^^^
+>foo : number
+>    : ^^^^^^
 }
 
 class B {
 >B : B
 >  : ^
 
-  private a: string;
->a : string
->  : ^^^^^^
+  declare private a: { bar: string };
+>a : { bar: string; }
+>  : ^^^^^^^      ^^^
+>bar : string
+>    : ^^^^^^
 }
 
 type X<T extends A> = [T["a"], (T | B)["a"]];
@@ -55,18 +59,22 @@ class C {
 >C : C
 >  : ^
 
-  declare private a: number;
->a : number
->  : ^^^^^^
+  declare private a: { foo: number };
+>a : { foo: number; }
+>  : ^^^^^^^      ^^^
+>foo : number
+>    : ^^^^^^
 }
 
 class D {
 >D : D
 >  : ^
 
-  declare a: string;
->a : string
->  : ^^^^^^
+  declare a: { bar: string };
+>a : { bar: string; }
+>  : ^^^^^^^      ^^^
+>bar : string
+>    : ^^^^^^
 }
 
 type X2<T extends C> = [T["a"], (T | D)["a"]];
@@ -105,18 +113,22 @@ class E {
 >E : E
 >  : ^
 
-  declare a: number;
->a : number
->  : ^^^^^^
+  declare a: { foo: number };
+>a : { foo: number; }
+>  : ^^^^^^^      ^^^
+>foo : number
+>    : ^^^^^^
 }
 
 class F {
 >F : F
 >  : ^
 
-  declare private a: string;
->a : string
->  : ^^^^^^
+  declare private a: { bar: string };
+>a : { bar: string; }
+>  : ^^^^^^^      ^^^
+>bar : string
+>    : ^^^^^^
 }
 
 type X3<T extends E> = [T["a"], (T | F)["a"]];
@@ -155,18 +167,22 @@ class G {
 >G : G
 >  : ^
 
-  declare b: number;
->b : number
->  : ^^^^^^
+  declare b: { foo: number };
+>b : { foo: number; }
+>  : ^^^^^^^      ^^^
+>foo : number
+>    : ^^^^^^
 }
 
 class H {
 >H : H
 >  : ^
 
-  declare private a: string;
->a : string
->  : ^^^^^^
+  declare private a: { bar: string };
+>a : { bar: string; }
+>  : ^^^^^^^      ^^^
+>bar : string
+>    : ^^^^^^
 }
 
 type X4<T extends G> = [T["a"], (T | H)["a"]];
