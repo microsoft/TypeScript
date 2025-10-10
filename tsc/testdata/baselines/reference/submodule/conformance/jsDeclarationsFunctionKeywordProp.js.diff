@@ -1,22 +1,32 @@
 --- old.jsDeclarationsFunctionKeywordProp.js
 +++ new.jsDeclarationsFunctionKeywordProp.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [source.d.ts]
  declare function foo(): void;
--declare namespace foo {
+ declare namespace foo {
 -    let _null: boolean;
 -    export { _null as null };
--}
++    var _a: boolean;
++    export { _a as null };
+ }
  declare function bar(): void;
--declare namespace bar {
+ declare namespace bar {
 -    let async: boolean;
 -    let normal: boolean;
--}
++    var async: boolean;
++}
++declare namespace bar {
++    var normal: boolean;
+ }
  declare function baz(): void;
--declare namespace baz {
+ declare namespace baz {
 -    let _class: boolean;
 -    export { _class as class };
 -    let normal_1: boolean;
 -    export { normal_1 as normal };
--}
++    var _b: boolean;
++    export { _b as class };
++}
++declare namespace baz {
++    var normal: boolean;
+ }

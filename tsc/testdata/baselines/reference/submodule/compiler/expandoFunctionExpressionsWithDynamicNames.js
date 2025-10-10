@@ -27,11 +27,11 @@ exports.expr2[s] = 0;
 
 
 //// [expandoFunctionExpressionsWithDynamicNames.d.ts]
-export declare const expr: {
-    (): void;
-    X: number;
-};
-export declare const expr2: {
-    (): void;
-    X: number;
-};
+export declare function expr(): void;
+export declare namespace expr {
+    var X: number;
+}
+export declare function expr2(): void;
+export declare namespace expr2 {
+    var X: number;
+}

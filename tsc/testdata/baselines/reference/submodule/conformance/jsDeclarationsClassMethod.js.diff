@@ -20,7 +20,7 @@
 -     */
 -    method(x: number, y: number): number;
 -}
--declare namespace C1 {
+ declare namespace C1 {
 -    /**
 -     * A comment staticProp
 -     * @param {number} x
@@ -28,11 +28,11 @@
 -     * @returns {number}
 -     */
 -    function staticProp(x: number, y: number): number;
--}
++    var staticProp: (x: any, y: any) => any;
+ }
  declare class C2 {
      /**
-      * A comment method1
-@@= skipped -33, +8 lines =@@
+@@= skipped -33, +11 lines =@@
       * @returns {number}
       */
      method1(x: number, y: number): number;
@@ -43,8 +43,8 @@
 -     * @returns {number}
 -     */
 -    method2(x: number, y: number): number;
--}
--declare namespace C2 {
+ }
+ declare namespace C2 {
 -    /**
 -     * A comment staticProp
 -     * @param {number} x
@@ -52,4 +52,5 @@
 -     * @returns {number}
 -     */
 -    function staticProp(x: number, y: number): number;
++    var staticProp: (x: any, y: any) => any;
  }

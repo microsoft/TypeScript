@@ -121,7 +121,13 @@ arrow10[emoji] = 0;
 
 //// [declarationEmitLateBoundAssignments2.d.ts]
 export declare function decl(): void;
+export declare namespace decl {
+    var B: string;
+}
 export declare function decl2(): void;
+export declare namespace decl2 {
+    var C: number;
+}
 export declare function decl3(): void;
 export declare function decl4(): void;
 export declare function decl5(): void;
@@ -130,14 +136,14 @@ export declare function decl7(): void;
 export declare function decl8(): void;
 export declare function decl9(): void;
 export declare function decl10(): void;
-export declare const arrow: {
-    (): void;
-    B: string;
-};
-export declare const arrow2: {
-    (): void;
-    C: number;
-};
+export declare function arrow(): void;
+export declare namespace arrow {
+    var B: string;
+}
+export declare function arrow2(): void;
+export declare namespace arrow2 {
+    var C: number;
+}
 export declare const arrow3: {
     (): void;
     77: number;

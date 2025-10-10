@@ -31,53 +31,74 @@
  };
  ExpandoExpr3.prop = 3;
  ExpandoExpr3.m = function (n) {
-@@= skipped -13, +11 lines =@@
-
- //// [typeFromPropertyAssignment29.d.ts]
+@@= skipped -15, +13 lines =@@
  declare function ExpandoDecl(n: number): string;
--declare namespace ExpandoDecl {
--    var prop: number;
+ declare namespace ExpandoDecl {
+     var prop: number;
 -    var m: (n: number) => number;
 -}
- declare var n: number;
- declare const ExpandoExpr: {
-     (n: number): string;
-@@= skipped -14, +10 lines =@@
-         x?: undefined;
-         y: string;
-     };
+-declare var n: number;
+-declare const ExpandoExpr: {
+-    (n: number): string;
+-    prop: {
+-        x: number;
+-        y?: undefined;
+-    } | {
+-        x?: undefined;
+-        y: string;
+-    };
 -    m(n: number): number;
-+    m: (n: number) => number;
- };
- declare var n: number;
- declare const ExpandoArrow: {
-     (n: number): string;
-     prop: number;
+-};
+-declare var n: number;
+-declare const ExpandoArrow: {
+-    (n: number): string;
+-    prop: number;
 -    m(n: number): number;
-+    m: (n: number) => number;
- };
+-};
++}
++declare namespace ExpandoDecl {
++    var m: (n: number) => number;
++}
++declare var n: number;
++declare function ExpandoExpr(n: number): string;
++declare namespace ExpandoExpr {
++    var prop: {
++        x: number;
++        y?: undefined;
++    } | {
++        x?: undefined;
++        y: string;
++    };
++}
++declare namespace ExpandoExpr {
++    var prop: {
++        x: number;
++        y?: undefined;
++    } | {
++        x?: undefined;
++        y: string;
++    };
++}
++declare namespace ExpandoExpr {
++    var m: (n: number) => number;
++}
++declare var n: number;
++declare function ExpandoArrow(n: number): string;
++declare namespace ExpandoArrow {
++    var prop: number;
++}
++declare namespace ExpandoArrow {
++    var m: (n: number) => number;
++}
  declare function ExpandoNested(n: number): {
      (m: number): number;
      total: number;
- };
--declare namespace ExpandoNested {
--    var also: number;
--}
- declare function ExpandoMerge(n: number): number;
- declare namespace ExpandoMerge {
--    var p1: number;
--}
--declare namespace ExpandoMerge {
-     var p2: number;
- }
- declare namespace ExpandoMerge {
-@@= skipped -28, +22 lines =@@
+@@= skipped -40, +55 lines =@@
  declare var n: number;
  declare namespace Ns {
      function ExpandoNamespace(): void;
 -    namespace ExpandoNamespace {
--        var p6: number;
--    }
++    declare namespace ExpandoNamespace {
+         var p6: number;
+     }
      export function foo(): typeof ExpandoNamespace;
-     export {};
- }

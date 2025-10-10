@@ -30,4 +30,13 @@ map4.__underscores__();
 
 //// [a.d.ts]
 declare function Multimap4(): void;
+declare namespace Multimap4 {
+    var prototype: {
+        /**
+         * @param {string} key
+         * @returns {number} the value ok
+         */
+        get(key: string): number;
+    };
+}
 declare const map4: any;

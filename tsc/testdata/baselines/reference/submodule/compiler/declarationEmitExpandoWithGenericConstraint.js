@@ -36,8 +36,8 @@ export interface Rect<p extends Point> {
     readonly a: p;
     readonly b: p;
 }
-export declare const Point: {
-    (x: number, y: number): Point;
-    zero: () => Point;
-};
+export declare function Point(x: number, y: number): Point;
 export declare const Rect: <p extends Point>(a: p, b: p) => Rect<p>;
+export declare namespace Point {
+    var zero: () => Point;
+}

@@ -1,21 +1,21 @@
 --- old.declarationEmitFunctionKeywordProp.js
 +++ new.declarationEmitFunctionKeywordProp.js
-@@= skipped -24, +24 lines =@@
-
- //// [declarationEmitFunctionKeywordProp.d.ts]
- declare function foo(): void;
--declare namespace foo {
--    var _a: boolean;
--    export { _a as null };
--}
+@@= skipped -31, +31 lines =@@
  declare function bar(): void;
--declare namespace bar {
--    var async: boolean;
--    var normal: boolean;
--}
+ declare namespace bar {
+     var async: boolean;
++}
++declare namespace bar {
+     var normal: boolean;
+ }
  declare function baz(): void;
--declare namespace baz {
+ declare namespace baz {
 -    var _a: boolean;
 -    export var normal: boolean;
 -    export { _a as class };
--}
++    var _b: boolean;
++    export { _b as class };
++}
++declare namespace baz {
++    var normal: boolean;
+ }

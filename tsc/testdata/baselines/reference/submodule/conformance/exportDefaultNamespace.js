@@ -19,4 +19,8 @@ someFunc.someProp = 'yo';
 
 
 //// [exportDefaultNamespace.d.ts]
-export default function someFunc(): string;
+declare function someFunc(): string;
+export default someFunc;
+declare namespace someFunc {
+    var someProp: string;
+}

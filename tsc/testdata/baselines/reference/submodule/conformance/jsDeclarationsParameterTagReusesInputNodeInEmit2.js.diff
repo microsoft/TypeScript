@@ -16,13 +16,19 @@
 
 
  //// [base.d.ts]
- export = BaseFactory;
--declare function BaseFactory(): Base;
--declare namespace BaseFactory {
+-export = BaseFactory;
++declare class Base {
++    constructor();
++}
+ declare function BaseFactory(): Base;
+ declare namespace BaseFactory {
 -    export { Base };
 -}
 -declare class Base {
 -}
++    var Base: typeof Base;
++}
++export = BaseFactory;
  //// [file.d.ts]
 -/** @typedef {typeof import('./base')} BaseFactory */
 -/**

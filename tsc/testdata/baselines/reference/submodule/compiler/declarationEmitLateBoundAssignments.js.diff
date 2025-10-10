@@ -1,10 +1,10 @@
 --- old.declarationEmitLateBoundAssignments.js
 +++ new.declarationEmitLateBoundAssignments.js
-@@= skipped -35, +35 lines =@@
-
- //// [declarationEmitLateBoundAssignments.d.ts]
+@@= skipped -37, +37 lines =@@
  export declare function foo(): void;
--export declare namespace foo {
--    var bar: number;
--    var strMemName: string;
--}
+ export declare namespace foo {
+     var bar: number;
++}
++export declare namespace foo {
+     var strMemName: string;
+ }

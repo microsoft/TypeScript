@@ -46,6 +46,7 @@
 -    timeout: number;
 -}
  //// [context.d.ts]
+-export = Context;
 +export type Timer = import("./timer");
 +export type Hook = import("./hook");
 +export type HookHandler = import("./hook").HookHandler;
@@ -57,34 +58,13 @@
 +    timer: Timer;
 +    hook: Hook;
 +};
- export = Context;
--/**
-- * Imports
-- *
-- * @typedef {import("./timer")} Timer
-- * @typedef {import("./hook")} Hook
-- * @typedef {import("./hook").HookHandler} HookHandler
-- */
--/**
-- * Input type definition
-- *
-- * @typedef {Object} Input
-- * @prop {Timer} timer
-- * @prop {Hook} hook
-- */
--/**
-- * State type definition
-- *
-- * @typedef {Object} State
-- * @prop {Timer} timer
-- * @prop {Hook} hook
-- */
--/**
-- * New `Context`
-- *
-- * @class
-- * @param {Input} input
-- */
+ /**
+  * Imports
+  *
+@@= skipped -45, +45 lines =@@
+  * @class
+  * @param {Input} input
+  */
 -declare function Context(input: Input): Context;
 -declare class Context {
 -    /**
@@ -123,9 +103,18 @@
 -     */
 -    construct(input: Input, handle?: HookHandler | undefined): State;
 -}
--declare namespace Context {
++declare function Context(input: Input): any;
+ declare namespace Context {
 -    export { Timer, Hook, HookHandler, Input, State };
--}
++    var prototype: {
++        /**
++         * @param {Input} input
++         * @param {HookHandler=} handle
++         * @returns {State}
++         */
++        construct(input: Input, handle?: any): State;
++    };
+ }
 -/**
 - * Imports
 - */
@@ -152,6 +141,7 @@
 -    timer: Timer;
 -    hook: Hook;
 -};
++export = Context;
  //// [hook.d.ts]
 +export type HookHandler = (arg: import("./context")) => void;
  export = Hook;

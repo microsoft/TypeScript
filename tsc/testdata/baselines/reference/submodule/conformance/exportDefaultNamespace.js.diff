@@ -1,12 +1,11 @@
 --- old.exportDefaultNamespace.js
 +++ new.exportDefaultNamespace.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
 
  //// [exportDefaultNamespace.d.ts]
--declare function someFunc(): string;
--declare namespace someFunc {
--    var someProp: string;
--}
+ declare function someFunc(): string;
++export default someFunc;
+ declare namespace someFunc {
+     var someProp: string;
+ }
 -export default someFunc;
-+export default function someFunc(): string;

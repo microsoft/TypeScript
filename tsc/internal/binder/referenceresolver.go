@@ -11,6 +11,7 @@ type ReferenceResolver interface {
 	GetReferencedImportDeclaration(node *ast.IdentifierNode) *ast.Declaration
 	GetReferencedValueDeclaration(node *ast.IdentifierNode) *ast.Declaration
 	GetReferencedValueDeclarations(node *ast.IdentifierNode) []*ast.Declaration
+	GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string
 }
 
 type ReferenceResolverHooks struct {
@@ -21,6 +22,7 @@ type ReferenceResolverHooks struct {
 	GetSymbolOfDeclaration                 func(*ast.Declaration) *ast.Symbol
 	GetTypeOnlyAliasDeclaration            func(symbol *ast.Symbol, include ast.SymbolFlags) *ast.Declaration
 	GetExportSymbolOfValueSymbolIfExported func(*ast.Symbol) *ast.Symbol
+	GetElementAccessExpressionName         func(*ast.ElementAccessExpression) (string, bool)
 }
 
 var _ ReferenceResolver = &referenceResolver{}
@@ -235,4 +237,15 @@ func (r *referenceResolver) GetReferencedValueDeclarations(node *ast.IdentifierN
 		}
 	}
 	return declarations
+}
+
+func (r *referenceResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string {
+	if expression != nil {
+		if r.hooks.GetElementAccessExpressionName != nil {
+			if name, ok := r.hooks.GetElementAccessExpressionName(expression); ok {
+				return name
+			}
+		}
+	}
+	return ""
 }

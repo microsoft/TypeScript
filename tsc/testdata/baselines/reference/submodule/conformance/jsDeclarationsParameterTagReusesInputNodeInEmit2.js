@@ -50,6 +50,13 @@ export {};
 
 
 //// [base.d.ts]
+declare class Base {
+    constructor();
+}
+declare function BaseFactory(): Base;
+declare namespace BaseFactory {
+    var Base: typeof Base;
+}
 export = BaseFactory;
 //// [file.d.ts]
 export type BaseFactory = typeof import('./base');

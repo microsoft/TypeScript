@@ -10,11 +10,10 @@
  module.exports = MyClass;
  function MyClass() { }
  MyClass.staticMethod = function () { };
-@@= skipped -15, +18 lines =@@
-
+@@= skipped -16, +19 lines =@@
  //// [source.d.ts]
  export = MyClass;
--declare function MyClass(): void;
+ declare function MyClass(): void;
 -declare class MyClass {
 -    method(): void;
 -}
@@ -23,6 +22,12 @@
 -}
 -declare function staticMethod(): void;
 -declare var staticProperty: number;
++declare namespace MyClass {
++    var staticMethod: () => void;
++}
++declare namespace MyClass {
++    var staticProperty: number;
++}
 +export type DoneCB = (failures: number) ;
  /**
   * Callback to be invoked when test execution is complete.

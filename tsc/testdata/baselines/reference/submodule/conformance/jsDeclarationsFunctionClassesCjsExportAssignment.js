@@ -158,6 +158,44 @@ export type State = {
     timer: Timer;
     hook: Hook;
 };
+/**
+ * Imports
+ *
+ * @typedef {import("./timer")} Timer
+ * @typedef {import("./hook")} Hook
+ * @typedef {import("./hook").HookHandler} HookHandler
+ */
+/**
+ * Input type definition
+ *
+ * @typedef {Object} Input
+ * @prop {Timer} timer
+ * @prop {Hook} hook
+ */
+/**
+ * State type definition
+ *
+ * @typedef {Object} State
+ * @prop {Timer} timer
+ * @prop {Hook} hook
+ */
+/**
+ * New `Context`
+ *
+ * @class
+ * @param {Input} input
+ */
+declare function Context(input: Input): any;
+declare namespace Context {
+    var prototype: {
+        /**
+         * @param {Input} input
+         * @param {HookHandler=} handle
+         * @returns {State}
+         */
+        construct(input: Input, handle?: any): State;
+    };
+}
 export = Context;
 //// [hook.d.ts]
 export type HookHandler = (arg: import("./context")) => void;

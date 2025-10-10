@@ -25,14 +25,20 @@
 -export function b(): void;
 -export namespace b {
 -    let cat: string;
--}
++export declare function a(): void;
++export declare function b(): void;
++export declare namespace b {
++    var cat: string;
+ }
 -export function c(): void;
 -export namespace c {
 -    export { Cls };
--}
-+export declare function a(): void;
-+export declare function b(): void;
 +export declare function c(): void;
++export declare namespace c {
++    var Cls: {
++        new (): {};
++    };
+ }
  /**
   * @param {number} a
   * @param {number} b
@@ -59,8 +65,10 @@
 -export function i(): void;
 -export function j(): void;
 -declare class Cls {
--}
 +export declare function f<T>(a: T): T;
++export declare namespace f {
++    var self: typeof f;
+ }
  /**
   * @param {{x: string}} a
   * @param {{y: typeof b}} b
@@ -77,7 +85,7 @@
  /**
   * @param {{x: string}} a
   * @param {{y: typeof b}} b
-@@= skipped -50, +38 lines =@@
+@@= skipped -50, +49 lines =@@
  declare function hh(a: {
      x: string;
  }, b: {

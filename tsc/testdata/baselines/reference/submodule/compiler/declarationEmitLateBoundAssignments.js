@@ -36,3 +36,9 @@ const a = foo[dashStrMem];
 
 //// [declarationEmitLateBoundAssignments.d.ts]
 export declare function foo(): void;
+export declare namespace foo {
+    var bar: number;
+}
+export declare namespace foo {
+    var strMemName: string;
+}

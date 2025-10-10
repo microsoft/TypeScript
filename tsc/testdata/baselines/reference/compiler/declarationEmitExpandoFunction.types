@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/declarationEmitExpandoFunction.ts] ////
+
+=== declarationEmitExpandoFunction.ts ===
+export function A() {
+>A : { (): string; a: typeof C; b: typeof C; }
+
+    return 'A';
+>'A' : "A"
+}
+
+export function B() {
+>B : { (): string; c: typeof C; }
+
+    return 'B';
+>'B' : "B"
+}
+
+export enum C {
+>C : C
+
+    C
+>C : C.C
+}
+
+A.a = C;
+>A.a = C : typeof C
+>A.a : typeof C
+>A : { (): string; a: typeof C; b: typeof C; }
+>a : typeof C
+>C : typeof C
+
+A.b = C;
+>A.b = C : typeof C
+>A.b : typeof C
+>A : { (): string; a: typeof C; b: typeof C; }
+>b : typeof C
+>C : typeof C
+
+B.c = C;
+>B.c = C : typeof C
+>B.c : typeof C
+>B : { (): string; c: typeof C; }
+>c : typeof C
+>C : typeof C
+

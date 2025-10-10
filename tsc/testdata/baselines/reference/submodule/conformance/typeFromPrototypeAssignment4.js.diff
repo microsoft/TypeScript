@@ -14,6 +14,14 @@
 -    "add-on"(): void;
 -    addon(): void;
 -    __underscores__(): void;
--}
++declare namespace Multimap4 {
++    var prototype: {
++        /**
++         * @param {string} key
++         * @returns {number} the value ok
++         */
++        get(key: string): number;
++    };
+ }
 -declare const map4: Multimap4;
 +declare const map4: any;

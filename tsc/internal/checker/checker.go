@@ -4234,7 +4234,7 @@ func (c *Checker) checkBaseTypeAccessibility(t *Type, node *ast.Node) {
 	signatures := c.getSignaturesOfType(t, SignatureKindConstruct)
 	if len(signatures) != 0 {
 		declaration := signatures[0].declaration
-		if declaration != nil && HasModifier(declaration, ast.ModifierFlagsPrivate) {
+		if declaration != nil && ast.HasModifier(declaration, ast.ModifierFlagsPrivate) {
 			typeClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(t.symbol)
 			if !c.isNodeWithinClass(node, typeClassDeclaration) {
 				c.error(node, diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, c.getFullyQualifiedName(t.symbol, nil))
@@ -6489,7 +6489,7 @@ func (c *Checker) checkAliasSymbol(node *ast.Node) {
 					name := node.PropertyNameOrName().Text()
 					c.addTypeOnlyDeclarationRelatedInfo(c.error(node, message, name), core.IfElse(isType, nil, typeOnlyAlias), name)
 				}
-				if isType && node.Kind == ast.KindImportEqualsDeclaration && HasModifier(node, ast.ModifierFlagsExport) {
+				if isType && node.Kind == ast.KindImportEqualsDeclaration && ast.HasModifier(node, ast.ModifierFlagsExport) {
 					c.error(node, diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_0_is_enabled, c.getIsolatedModulesLikeFlagName())
 				}
 			case ast.KindExportSpecifier:
@@ -6777,7 +6777,7 @@ func (c *Checker) checkUnusedClassMembers(node *ast.Node) {
 				break // Already would have reported an error on the getter.
 			}
 			symbol := c.getSymbolOfDeclaration(member)
-			if !c.isReferenced(symbol) && (HasModifier(member, ast.ModifierFlagsPrivate) || member.Name() != nil && ast.IsPrivateIdentifier(member.Name())) && member.Flags&ast.NodeFlagsAmbient == 0 {
+			if !c.isReferenced(symbol) && (ast.HasModifier(member, ast.ModifierFlagsPrivate) || member.Name() != nil && ast.IsPrivateIdentifier(member.Name())) && member.Flags&ast.NodeFlagsAmbient == 0 {
 				c.reportUnused(member, UnusedKindLocal, NewDiagnosticForNode(member.Name(), diagnostics.X_0_is_declared_but_its_value_is_never_read, c.symbolToString(symbol)))
 			}
 		case ast.KindConstructor:
@@ -8337,7 +8337,7 @@ func (c *Checker) resolveNewExpression(node *ast.Node, candidatesOutArray *[]*Si
 		}
 		if expressionType.symbol != nil {
 			valueDecl := ast.GetClassLikeDeclarationOfSymbol(expressionType.symbol)
-			if valueDecl != nil && HasModifier(valueDecl, ast.ModifierFlagsAbstract) {
+			if valueDecl != nil && ast.HasModifier(valueDecl, ast.ModifierFlagsAbstract) {
 				c.error(node, diagnostics.Cannot_create_an_instance_of_an_abstract_class)
 				return c.resolveErrorCall(node)
 			}
@@ -18912,7 +18912,7 @@ func (c *Checker) getIndexInfosOfIndexSymbol(indexSymbol *ast.Symbol, siblingSym
 					}
 					forEachType(c.getTypeFromTypeNode(typeNode), func(keyType *Type) {
 						if c.isValidIndexKeyType(keyType) && findIndexInfo(indexInfos, keyType) == nil {
-							indexInfo := c.newIndexInfo(keyType, valueType, HasModifier(declaration, ast.ModifierFlagsReadonly), declaration, nil)
+							indexInfo := c.newIndexInfo(keyType, valueType, ast.HasModifier(declaration, ast.ModifierFlagsReadonly), declaration, nil)
 							indexInfos = append(indexInfos, indexInfo)
 						}
 					})
@@ -26823,7 +26823,7 @@ func (c *Checker) markPropertyAsReferenced(prop *ast.Symbol, nodeForCheckWriteOn
 	if prop.Flags&ast.SymbolFlagsClassMember == 0 || prop.ValueDeclaration == nil {
 		return
 	}
-	hasPrivateModifier := HasModifier(prop.ValueDeclaration, ast.ModifierFlagsPrivate)
+	hasPrivateModifier := ast.HasModifier(prop.ValueDeclaration, ast.ModifierFlagsPrivate)
 	hasPrivateIdentifier := prop.ValueDeclaration.Name() != nil && ast.IsPrivateIdentifier(prop.ValueDeclaration.Name())
 	if !hasPrivateModifier && !hasPrivateIdentifier {
 		return

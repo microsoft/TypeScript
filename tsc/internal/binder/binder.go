@@ -1018,28 +1018,16 @@ func getInitializerSymbol(symbol *ast.Symbol) *ast.Symbol {
 	case ast.IsVariableDeclaration(declaration) &&
 		(declaration.Parent.Flags&ast.NodeFlagsConst != 0 || ast.IsInJSFile(declaration)):
 		initializer := declaration.Initializer()
-		if isExpandoInitializer(initializer) {
+		if ast.IsExpandoInitializer(initializer) {
 			return initializer.Symbol()
 		}
 	case ast.IsBinaryExpression(declaration) && ast.IsInJSFile(declaration):
 		initializer := declaration.AsBinaryExpression().Right
-		if isExpandoInitializer(initializer) {
+		if ast.IsExpandoInitializer(initializer) {
 			return initializer.Symbol()
 		}
 	}
 	return nil
-}
-
-func isExpandoInitializer(initializer *ast.Node) bool {
-	if initializer == nil {
-		return false
-	}
-	if ast.IsFunctionExpressionOrArrowFunction(initializer) {
-		return true
-	} else if ast.IsInJSFile(initializer) {
-		return ast.IsClassExpression(initializer) || (ast.IsObjectLiteralExpression(initializer) && len(initializer.AsObjectLiteralExpression().Properties.Nodes) == 0)
-	}
-	return false
 }
 
 func (b *Binder) bindThisPropertyAssignment(node *ast.Node) {

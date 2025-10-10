@@ -349,7 +349,7 @@ func getSymbolScope(symbol *ast.Symbol) *ast.Node {
 	// If this is private property or method, the scope is the containing class
 	if symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod) != 0 {
 		privateDeclaration := core.Find(declarations, func(d *ast.Node) bool {
-			return checker.HasModifier(d, ast.ModifierFlagsPrivate) || ast.IsPrivateIdentifierClassElementDeclaration(d)
+			return ast.HasModifier(d, ast.ModifierFlagsPrivate) || ast.IsPrivateIdentifierClassElementDeclaration(d)
 		})
 		if privateDeclaration != nil {
 			return ast.FindAncestorKind(privateDeclaration, ast.KindClassDeclaration)

@@ -45,3 +45,6 @@ if (Math.random()) {
 //// [expandoFunctionBlockShadowing.d.ts]
 export declare function X(): void;
 export declare function Y(): void;
+export declare namespace Y {
+    var test: string;
+}

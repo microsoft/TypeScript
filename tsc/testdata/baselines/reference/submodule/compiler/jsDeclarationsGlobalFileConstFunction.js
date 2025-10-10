@@ -19,11 +19,11 @@ SomeConstructor3.staticMember = "str";
 
 //// [file.d.ts]
 declare const SomeConstructor: () => void;
-declare const SomeConstructor2: {
-    (): void;
-    staticMember: string;
-};
-declare const SomeConstructor3: {
-    (): void;
-    staticMember: string;
-};
+declare function SomeConstructor2(): void;
+declare namespace SomeConstructor2 {
+    var staticMember: string;
+}
+declare function SomeConstructor3(): void;
+declare namespace SomeConstructor3 {
+    var staticMember: string;
+}

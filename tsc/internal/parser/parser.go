@@ -296,7 +296,7 @@ func (p *Parser) lookAhead(callback func(p *Parser) bool) bool {
 
 func (p *Parser) nextToken() ast.Kind {
 	// if the keyword had an escape
-	if isKeyword(p.token) && (p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape()) {
+	if ast.IsKeyword(p.token) && (p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape()) {
 		// issue a parse error for the escape
 		p.parseErrorAtCurrentToken(diagnostics.Keywords_cannot_contain_escape_characters)
 	}
@@ -644,7 +644,7 @@ func (p *Parser) parsingContextErrors(context ParsingContext) {
 	case PCHeritageClauseElement:
 		p.parseErrorAtCurrentToken(diagnostics.Expression_expected)
 	case PCVariableDeclarations:
-		if isKeyword(p.token) {
+		if ast.IsKeyword(p.token) {
 			p.parseErrorAtCurrentToken(diagnostics.X_0_is_not_allowed_as_a_variable_declaration_name, scanner.TokenToString(p.token))
 		} else {
 			p.parseErrorAtCurrentToken(diagnostics.Variable_declaration_expected)
@@ -662,7 +662,7 @@ func (p *Parser) parsingContextErrors(context ParsingContext) {
 	case PCJSDocParameters:
 		p.parseErrorAtCurrentToken(diagnostics.Parameter_declaration_expected)
 	case PCParameters:
-		if isKeyword(p.token) {
+		if ast.IsKeyword(p.token) {
 			p.parseErrorAtCurrentToken(diagnostics.X_0_is_not_allowed_as_a_parameter_name, scanner.TokenToString(p.token))
 		} else {
 			p.parseErrorAtCurrentToken(diagnostics.Parameter_declaration_expected)
@@ -2352,7 +2352,7 @@ func (p *Parser) parseModuleExportName(disallowKeywords bool) (node *ast.Node, n
 	if p.token == ast.KindStringLiteral {
 		return p.parseLiteralExpression(false /*intern*/), nameOk
 	}
-	if disallowKeywords && isKeyword(p.token) && !p.isIdentifier() {
+	if disallowKeywords && ast.IsKeyword(p.token) && !p.isIdentifier() {
 		nameOk = false
 	}
 	return p.parseIdentifierName(), nameOk
@@ -5835,7 +5835,7 @@ func (p *Parser) scanClassMemberStart() bool {
 	// If we were able to get any potential identifier...
 	if idToken != ast.KindUnknown {
 		// If we have a non-keyword identifier, or if we have an accessor, then it's safe to parse.
-		if !isKeyword(idToken) || idToken == ast.KindSetKeyword || idToken == ast.KindGetKeyword {
+		if !ast.IsKeyword(idToken) || idToken == ast.KindSetKeyword || idToken == ast.KindGetKeyword {
 			return true
 		}
 		// If it *is* a keyword, but not an accessor, check a little farther along
@@ -6233,10 +6233,6 @@ func (p *Parser) inAwaitContext() bool {
 
 func (p *Parser) skipRangeTrivia(textRange core.TextRange) core.TextRange {
 	return core.NewTextRange(scanner.SkipTrivia(p.sourceText, textRange.Pos()), textRange.End())
-}
-
-func isKeyword(token ast.Kind) bool {
-	return ast.KindFirstKeyword <= token && token <= ast.KindLastKeyword
 }
 
 func isReservedWord(token ast.Kind) bool {

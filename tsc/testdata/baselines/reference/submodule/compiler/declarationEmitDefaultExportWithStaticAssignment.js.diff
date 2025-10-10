@@ -18,37 +18,38 @@
  Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
  function Example() { }
  Example.Foo = foo_1.Foo;
-@@= skipped -31, +31 lines =@@
- export declare class Foo {
+@@= skipped -32, +32 lines =@@
  }
  //// [index1.d.ts]
--declare function Example(): void;
--declare namespace Example {
--    var Foo: typeof import("./foo").Foo;
--}
+ declare function Example(): void;
++export default Example;
+ declare namespace Example {
+     var Foo: typeof import("./foo").Foo;
+ }
 -export default Example;
-+export default function Example(): void;
  //// [index2.d.ts]
  import { Foo } from './foo';
  export { Foo };
--declare function Example(): void;
--declare namespace Example {
--    var Foo: typeof import("./foo").Foo;
--}
+ declare function Example(): void;
++export default Example;
+ declare namespace Example {
+     var Foo: typeof import("./foo").Foo;
+ }
 -export default Example;
-+export default function Example(): void;
  //// [index3.d.ts]
  export declare class Bar {
  }
--declare function Example(): void;
--declare namespace Example {
--    var Bar: typeof import("./index3").Bar;
--}
+ declare function Example(): void;
++export default Example;
+ declare namespace Example {
+     var Bar: typeof import("./index3").Bar;
+ }
 -export default Example;
-+export default function Example(): void;
  //// [index4.d.ts]
  export declare function C(): any;
--export declare namespace C {
--    var A: () => void;
--    var B: () => void;
--}
+ export declare namespace C {
+     var A: () => void;
++}
++export declare namespace C {
+     var B: () => void;
+ }
