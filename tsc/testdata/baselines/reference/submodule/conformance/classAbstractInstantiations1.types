@@ -17,11 +17,11 @@ abstract class C extends B {}
 >B : B
 
 new A;
->new A : any
+>new A : A
 >A : typeof A
 
 new A(1); // should report 1 error
->new A(1) : any
+>new A(1) : A
 >A : typeof A
 >1 : 1
 
@@ -30,7 +30,7 @@ new B;
 >B : typeof B
 
 new C;
->new C : any
+>new C : C
 >C : typeof C
 
 var a : A;

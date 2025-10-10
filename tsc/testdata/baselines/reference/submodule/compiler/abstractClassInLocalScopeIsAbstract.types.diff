@@ -1,0 +1,11 @@
+--- old.abstractClassInLocalScopeIsAbstract.types
++++ new.abstractClassInLocalScopeIsAbstract.types
+@@= skipped -13, +13 lines =@@
+ >A : A
+
+     new A();
+->new A() : any
++>new A() : A
+ >A : typeof A
+
+     new B();

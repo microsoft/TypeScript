@@ -1,0 +1,11 @@
+--- old.classAbstractConstructorAssignability.types
++++ new.classAbstractConstructorAssignability.types
+@@= skipped -31, +31 lines =@@
+ >AA : typeof A
+
+ new BB;
+->new BB : any
++>new BB : B
+ >BB : typeof B
+
+ new CC;

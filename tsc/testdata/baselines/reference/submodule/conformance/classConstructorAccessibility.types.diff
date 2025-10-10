@@ -1,0 +1,20 @@
+--- old.classConstructorAccessibility.types
++++ new.classConstructorAccessibility.types
+@@= skipped -28, +28 lines =@@
+ >1 : 1
+
+ var d = new D(1); // error
+->d : any
+->new D(1) : any
++>d : D
++>new D(1) : D
+ >D : typeof D
+ >1 : 1
+
+ var e = new E(1); // error
+->e : any
+->new E(1) : any
++>e : E
++>new E(1) : E
+ >E : typeof E
+ >1 : 1

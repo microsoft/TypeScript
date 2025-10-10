@@ -147,8 +147,8 @@ declare class DerivedC extends BaseC {
     static staticBaseInstance(): void;
 }
 declare var ba: BaseA;
-declare var bb: any;
-declare var bc: any;
+declare var bb: BaseB;
+declare var bc: BaseC;
 declare var da: DerivedA;
 declare var db: DerivedB;
 declare var dc: DerivedC;

@@ -1,0 +1,29 @@
+--- old.classAbstractInstantiations2.types
++++ new.classAbstractInstantiations2.types
+@@= skipped -21, +21 lines =@@
+ }
+
+ new B; // error
+->new B : any
++>new B : B
+ >B : typeof B
+
+ var BB: typeof B = B;
+@@= skipped -23, +23 lines =@@
+ >B : typeof B
+
+     new Factory; // error -- Factory is of type typeof B.
+->new Factory : any
++>new Factory : B
+ >Factory : typeof B
+ }
+
+@@= skipped -9, +9 lines =@@
+ >B : typeof B
+
+ new BB; // error -- BB is of type typeof B.
+->new BB : any
++>new BB : B
+ >BB : typeof B
+
+ var x : any = C;

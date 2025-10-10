@@ -1,0 +1,10 @@
+--- old.classAbstractFactoryFunction.types
++++ new.classAbstractFactoryFunction.types
+@@= skipped -23, +23 lines =@@
+ >B : typeof B
+
+     return new B;
+->new B : any
++>new B : B
+ >B : typeof B
+ }

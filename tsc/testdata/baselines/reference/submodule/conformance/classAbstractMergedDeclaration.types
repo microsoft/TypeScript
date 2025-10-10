@@ -53,23 +53,23 @@ declare abstract class DCC2 {}
 >DCC2 : DCC2
 
 new CM;
->new CM : any
+>new CM : CM
 >CM : typeof CM
 
 new MC;
->new MC : any
+>new MC : MC
 >MC : typeof MC
 
 new CI;
->new CI : any
+>new CI : CI
 >CI : typeof CI
 
 new IC;
->new IC : any
+>new IC : IC
 >IC : typeof IC
 
 new CC1;
->new CC1 : any
+>new CC1 : CC1
 >CC1 : typeof CC1
 
 new CC2;
@@ -77,15 +77,15 @@ new CC2;
 >CC2 : typeof CC2
 
 new DCI;
->new DCI : any
+>new DCI : DCI
 >DCI : typeof DCI
 
 new DIC;
->new DIC : any
+>new DIC : DIC
 >DIC : typeof DIC
 
 new DCC1;
->new DCC1 : any
+>new DCC1 : DCC1
 >DCC1 : typeof DCC1
 
 new DCC2;

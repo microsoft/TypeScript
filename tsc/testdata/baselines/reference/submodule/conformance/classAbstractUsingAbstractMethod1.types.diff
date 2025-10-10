@@ -1,0 +1,11 @@
+--- old.classAbstractUsingAbstractMethod1.types
++++ new.classAbstractUsingAbstractMethod1.types
+@@= skipped -38, +38 lines =@@
+ a = new C; // error, cannot instantiate abstract class.
+ >a = new C : any
+ >a : B
+->new C : any
++>new C : C
+ >C : typeof C
+
+ a.foo();

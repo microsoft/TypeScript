@@ -1,0 +1,25 @@
+--- old.classAbstractInstantiations1.types
++++ new.classAbstractInstantiations1.types
+@@= skipped -16, +16 lines =@@
+ >B : B
+
+ new A;
+->new A : any
++>new A : A
+ >A : typeof A
+
+ new A(1); // should report 1 error
+->new A(1) : any
++>new A(1) : A
+ >A : typeof A
+ >1 : 1
+
+@@= skipped -13, +13 lines =@@
+ >B : typeof B
+
+ new C;
+->new C : any
++>new C : C
+ >C : typeof C
+
+ var a : A;

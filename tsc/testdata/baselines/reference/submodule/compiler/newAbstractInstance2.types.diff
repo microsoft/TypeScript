@@ -1,0 +1,9 @@
+--- old.newAbstractInstance2.types
++++ new.newAbstractInstance2.types
+@@= skipped -8, +8 lines =@@
+ >A : typeof A
+
+ new A();
+->new A() : any
++>new A() : A
+ >A : typeof A

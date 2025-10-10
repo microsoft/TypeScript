@@ -25,3 +25,11 @@
  >Empty : typeof Empty
 
      public trigger() {
+ >trigger : () => void
+
+         new Concrete();
+->new Concrete() : any
++>new Concrete() : Concrete
+ >Concrete : typeof Concrete
+     }
+ }

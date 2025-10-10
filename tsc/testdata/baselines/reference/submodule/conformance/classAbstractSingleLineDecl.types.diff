@@ -1,0 +1,11 @@
+--- old.classAbstractSingleLineDecl.types
++++ new.classAbstractSingleLineDecl.types
+@@= skipped -16, +16 lines =@@
+ >C : C
+
+ new A;
+->new A : any
++>new A : A
+ >A : typeof A
+
+ new B;

@@ -7029,7 +7029,9 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 		if isCallChain(expr) {
 			return c.getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr)
 		}
-		return c.getReturnTypeOfSingleNonGenericCallSignature(c.checkNonNullExpression(expr.Expression()))
+		return c.getReturnTypeOfSingleNonGenericSignature(c.checkNonNullExpression(expr.Expression()), SignatureKindCall)
+	case ast.IsNewExpression(expr):
+		return c.getReturnTypeOfSingleNonGenericSignature(c.checkNonNullExpression(expr.Expression()), SignatureKindConstruct)
 	case ast.IsAssertionExpression(expr) && !ast.IsConstTypeReference(expr.Type()):
 		return c.getTypeFromTypeNode(expr.Type())
 	case ast.IsLiteralExpression(node) || ast.IsBooleanLiteral(node):
@@ -7038,8 +7040,8 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 	return nil
 }
 
-func (c *Checker) getReturnTypeOfSingleNonGenericCallSignature(funcType *Type) *Type {
-	signature := c.getSingleCallSignature(funcType)
+func (c *Checker) getReturnTypeOfSingleNonGenericSignature(funcType *Type, kind SignatureKind) *Type {
+	signature := c.getSingleSignature(funcType, kind, true /*allowMembers*/)
 	if signature != nil && len(signature.typeParameters) == 0 {
 		return c.getReturnTypeOfSignature(signature)
 	}
@@ -7049,7 +7051,7 @@ func (c *Checker) getReturnTypeOfSingleNonGenericCallSignature(funcType *Type) *
 func (c *Checker) getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr *ast.Node) *Type {
 	funcType := c.checkExpression(expr.Expression())
 	nonOptionalType := c.getOptionalExpressionType(funcType, expr.Expression())
-	returnType := c.getReturnTypeOfSingleNonGenericCallSignature(funcType)
+	returnType := c.getReturnTypeOfSingleNonGenericSignature(funcType, SignatureKindCall)
 	if returnType != nil {
 		return c.propagateOptionalTypeMarker(returnType, expr, nonOptionalType != funcType)
 	}

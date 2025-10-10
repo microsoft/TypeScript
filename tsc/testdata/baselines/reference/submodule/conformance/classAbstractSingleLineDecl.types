@@ -17,7 +17,7 @@ class C {}
 >C : C
 
 new A;
->new A : any
+>new A : A
 >A : typeof A
 
 new B;

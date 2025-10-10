@@ -24,7 +24,7 @@ function NewB(Factory: typeof B) {
 >B : typeof B
 
     return new B;
->new B : any
+>new B : B
 >B : typeof B
 }
 

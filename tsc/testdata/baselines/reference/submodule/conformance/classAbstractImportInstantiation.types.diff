@@ -1,0 +1,18 @@
+--- old.classAbstractImportInstantiation.types
++++ new.classAbstractImportInstantiation.types
+@@= skipped -7, +7 lines =@@
+ >A : A
+     
+     new A;
+->new A : any
++>new A : A
+ >A : typeof A
+ }
+
+@@= skipped -10, +10 lines =@@
+ >A : myA
+
+ new myA;
+->new myA : any
++>new myA : myA
+ >myA : typeof myA
