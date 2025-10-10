@@ -76,20 +76,14 @@ interface Array<T> {
 }
 
 interface ArrayConstructor {
-    /**
-     * Creates an array from an iterable object.
-     * @param iterable An iterable object to convert to an array.
-     */
-    from<T>(iterable: Iterable<T> | ArrayLike<T>): T[];
-
-    /**
-     * Creates an array from an iterable object.
-     * @param iterable An iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
-     */
-    from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T extends Iterable<unknown>>(iterable: T): T extends Iterable<infer U> ? U[] : never;
+    from<T extends Iterable<unknown>, U>(
+        iterable: T,
+        mapfn: (v: T extends Iterable<infer V> ? V : never, k: number) => U,
+        thisArg?: any
+    ): U[];
 }
+
 
 interface ReadonlyArray<T> {
     /** Iterator of values in the array. */
