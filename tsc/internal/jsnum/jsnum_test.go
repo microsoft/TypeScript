@@ -109,18 +109,18 @@ func TestBitwiseNOT(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		input, want Number
+		got, want Number
 	}{
-		{-2147483649, Number(2147483647).BitwiseNOT()},
-		{-4294967296, Number(0).BitwiseNOT()},
-		{2147483648, Number(-2147483648).BitwiseNOT()},
-		{4294967296, Number(0).BitwiseNOT()},
+		{Number(-2147483649).BitwiseNOT(), Number(2147483647).BitwiseNOT()},
+		{Number(-4294967296).BitwiseNOT(), Number(0).BitwiseNOT()},
+		{Number(2147483648).BitwiseNOT(), Number(-2147483648).BitwiseNOT()},
+		{Number(4294967296).BitwiseNOT(), Number(0).BitwiseNOT()},
 	}
 
 	for _, test := range tests {
-		t.Run(test.input.String(), func(t *testing.T) {
+		t.Run(test.got.String(), func(t *testing.T) {
 			t.Parallel()
-			assertEqualNumber(t, test.input.BitwiseNOT(), test.want)
+			assertEqualNumber(t, test.got, test.want)
 		})
 	}
 }
