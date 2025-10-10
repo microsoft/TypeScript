@@ -1,0 +1,373 @@
+//// [tests/cases/compiler/dependentReturnType13.ts] ////
+
+=== dependentReturnType13.ts ===
+// Restrictions on what kind of union types can be narrowed.
+
+function f1<T extends string | string[]>(param: T):
+>f1 : <T extends string | string[]>(param: T) => T extends string ? 1 : T extends string[] ? 2 : never
+>   : ^ ^^^^^^^^^                 ^^     ^^ ^^^^^                                                     
+>param : T
+>      : ^
+
+    T extends string ? 1 :
+    T extends string[] ? 2 :
+    never {
+    if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
+
+function f2<T extends string | string[] | number[]>(param: T):
+>f2 : <T extends string | string[] | number[]>(param: T) => T extends string ? 1 : T extends string[] | number[] ? 2 : never
+>   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^                                                                
+>param : T
+>      : ^
+
+    T extends string ? 1 :
+    T extends string[] | number[] ? 2 :
+    never {
+    if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[] | number[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
+
+declare function isNumberArray(x: unknown): x is number[];
+>isNumberArray : (x: unknown) => x is number[]
+>              : ^ ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+
+function f3<T extends string | string[] | number[]>(param: T): // Bad.
+>f3 : <T extends string | string[] | number[]>(param: T) => T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never
+>   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^                                                                              
+>param : T
+>      : ^
+
+    T extends string ? 1 :
+    T extends string[] ? 2 :
+    T extends number[] ? 3 :
+    never {
+    if (isNumberArray(param)) {
+>isNumberArray(param) : boolean
+>                     : ^^^^^^^
+>isNumberArray : (x: unknown) => x is number[]
+>              : ^ ^^       ^^^^^             
+>param : string | string[] | number[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
+
+class Dog {
+>Dog : Dog
+>    : ^^^
+
+    bark(): void {}
+>bark : () => void
+>     : ^^^^^^    
+}
+
+class Cat {
+>Cat : Cat
+>    : ^^^
+
+    meow(): void {}
+>meow : () => void
+>     : ^^^^^^    
+
+}
+
+function f4<T extends Cat | Dog>(param: T): // Bad.
+>f4 : <T extends Cat | Dog>(param: T) => T extends Cat ? 1 : T extends Dog ? 2 : never
+>   : ^ ^^^^^^^^^         ^^     ^^ ^^^^^                                             
+>param : T
+>      : ^
+
+    T extends Cat ? 1 :
+    T extends Dog ? 2 :
+    never {
+    if ('bark' in param) {
+>'bark' in param : boolean
+>                : ^^^^^^^
+>'bark' : "bark"
+>       : ^^^^^^
+>param : T
+>      : ^
+
+        const _: Dog = param;
+>_ : Dog
+>  : ^^^
+>param : Dog
+>      : ^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    const _: Cat = param;
+>_ : Cat
+>  : ^^^
+>param : Cat
+>      : ^^^
+
+    return 1;
+>1 : 1
+>  : ^
+}
+
+function f5<T extends string | number | string[]>(param: T):
+>f5 : <T extends string | number | string[]>(param: T) => T extends string ? 1 : T extends number | string[] ? 2 : never
+>   : ^ ^^^^^^^^^                          ^^     ^^ ^^^^^                                                              
+>param : T
+>      : ^
+
+    T extends string ? 1 :
+    T extends number | string[] ? 2 :
+    never {
+    if (Array.isArray(param) || typeof param === "number") {
+>Array.isArray(param) || typeof param === "number" : boolean
+>                                                  : ^^^^^^^
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | number | string[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>typeof param === "number" : boolean
+>                          : ^^^^^^^
+>typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>param : T
+>      : ^
+>"number" : "number"
+>         : ^^^^^^^^
+
+        const _: string[] | number = param;
+>_ : number | string[]
+>  : ^^^^^^^^^^^^^^^^^
+>param : number | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    const _: string = param;
+>_ : string
+>  : ^^^^^^
+>param : string
+>      : ^^^^^^
+
+    return 1;
+>1 : 1
+>  : ^
+}
+
+function f6<T extends string | number[] | string[], U extends boolean>(param: T, other: U):
+>f6 : <T extends string | number[] | string[], U extends boolean>(param: T, other: U) => T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never
+>   : ^ ^^^^^^^^^                            ^^ ^^^^^^^^^       ^^     ^^ ^^     ^^ ^^^^^                                                                                                                                                                                 
+>param : T
+>      : ^
+>other : U
+>      : ^
+
+    T extends number[] ? 2 :
+        U extends true ?
+>true : true
+>     : ^^^^
+
+            T extends string[] ? 3 :
+            T extends string ? 1 :
+            never :
+        U extends false ?
+>false : false
+>      : ^^^^^
+
+            T extends string[] ? 4 :
+            T extends string ? 5 :
+            never :
+        never {
+    if (isNumberArray(param)) {
+>isNumberArray(param) : boolean
+>                     : ^^^^^^^
+>isNumberArray : (x: unknown) => x is number[]
+>              : ^ ^^       ^^^^^             
+>param : string | string[] | number[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    if (other) {
+>other : U
+>      : ^
+
+        if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+            return 3;
+>3 : 3
+>  : ^
+        }
+        return 1;
+>1 : 1
+>  : ^
+    }
+    if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return 4;
+>4 : 4
+>  : ^
+    }
+    return 5;
+>5 : 5
+>  : ^
+}
+
+function f7<T extends string | string[], U extends number | number[]>(param: T, other: U):
+>f7 : <T extends string | string[], U extends number | number[]>(param: T, other: U) => U extends number ? T extends string[] ? 2 : T extends string ? 1 : never : U extends number[] ? T extends string[] ? 4 : T extends string ? 3 : never : never
+>   : ^ ^^^^^^^^^                 ^^ ^^^^^^^^^                 ^^     ^^ ^^     ^^ ^^^^^                                                                                                                                                             
+>param : T
+>      : ^
+>other : U
+>      : ^
+
+    U extends number ?
+        T extends string[] ? 2 :
+        T extends string ? 1 :
+        never :
+    U extends number[] ?
+        T extends string[] ? 4 :
+        T extends string ? 3 :
+        never :
+    never {
+    if (Array.isArray(other)) {
+>Array.isArray(other) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>other : number | number[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+            return 4;
+>4 : 4
+>  : ^
+        }
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (Array.isArray(param)) {
+>Array.isArray(param) : boolean
+>                     : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>param : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
