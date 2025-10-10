@@ -81,6 +81,9 @@ function t6() {
 
 function t7() {
     // error
+    const { a0, b0 } = { a0: 1, b0: 1 };
+
+    // ok 
     const { _a1, _b1 } = { _a1: 1, _b1: 1 };
 
     // ok
@@ -130,9 +133,11 @@ function t6() {
 }
 function t7() {
     // error
-    var _a = { _a1: 1, _b1: 1 }, _a1 = _a._a1, _b1 = _a._b1;
+    var _a = { a0: 1, b0: 1 }, a0 = _a.a0, b0 = _a.b0;
+    // ok 
+    var _b = { _a1: 1, _b1: 1 }, _a1 = _b._a1, _b1 = _b._b1;
     // ok
-    var _b = { a2: 1, b2: 1 }, _a2 = _b.a2, _b2 = _b.b2;
+    var _c = { a2: 1, b2: 1 }, _a2 = _c.a2, _b2 = _c.b2;
     // ok
-    var _c = { _a3: 1, _b3: 1 }, _ignoreA3 = _c._a3, _ignoreB3 = _c._b3;
+    var _d = { _a3: 1, _b3: 1 }, _ignoreA3 = _d._a3, _ignoreB3 = _d._b3;
 }
