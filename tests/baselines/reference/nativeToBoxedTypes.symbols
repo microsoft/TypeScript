@@ -14,7 +14,7 @@ n = N;
 
 var S = new String();
 >S : Symbol(S, Decl(nativeToBoxedTypes.ts, 4, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
 var s = "foge";
 >s : Symbol(s, Decl(nativeToBoxedTypes.ts, 5, 3))
@@ -39,7 +39,7 @@ var sym: symbol;
 
 var Sym: Symbol;
 >Sym : Symbol(Sym, Decl(nativeToBoxedTypes.ts, 13, 3))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 sym = Sym;
 >sym : Symbol(sym, Decl(nativeToBoxedTypes.ts, 12, 3))

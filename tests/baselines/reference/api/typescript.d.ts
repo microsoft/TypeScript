@@ -7016,6 +7016,7 @@ declare namespace ts {
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
+        /** @deprecated */
         baseUrl?: string;
         /** @deprecated */
         charset?: string;

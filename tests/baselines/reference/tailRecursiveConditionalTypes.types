@@ -3,7 +3,7 @@
 === Performance Stats ===
 Type Count: 25,000
 Instantiation count: 25,000
-Symbol count: 50,000
+Symbol count: 100,000
 
 === tailRecursiveConditionalTypes.ts ===
 type Trim<S extends string> =

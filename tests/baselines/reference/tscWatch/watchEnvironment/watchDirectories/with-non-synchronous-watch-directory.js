@@ -30,6 +30,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
 [7m [0m [91m                                           ~~~~~~~~[0m
@@ -38,7 +39,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] Inode:: 116
+//// [/user/username/projects/myproject/src/file1.js] Inode:: 117
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -181,6 +182,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
 [7m [0m [91m                                           ~~~~~~~~[0m
@@ -189,7 +191,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 116
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 117
 
 PolledWatches::
 /user/username/projects/myproject/node_modules:
@@ -284,6 +286,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
 [7m [0m [91m                                           ~~~~~~~~[0m
@@ -340,7 +343,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
-  {"inode":117}
+  {"inode":118}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -368,7 +371,7 @@ exitCode:: ExitStatus.undefined
 Change:: npm install index file in file2
 
 Input::
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 119
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 120
 export const x = 10;
 
 
@@ -398,9 +401,9 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
-  {"inode":117}
-/user/username/projects/myproject/node_modules/file2: *new*
   {"inode":118}
+/user/username/projects/myproject/node_modules/file2: *new*
+  {"inode":119}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -447,6 +450,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
 [7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
 [7m [0m [91m                                           ~~~~~~~~[0m
@@ -455,7 +459,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 116
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 117
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -481,11 +485,11 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
-  {"inode":117}
-/user/username/projects/myproject/node_modules/file2:
   {"inode":118}
-/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+/user/username/projects/myproject/node_modules/file2:
   {"inode":119}
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {"inode":120}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
