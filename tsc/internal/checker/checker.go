@@ -1905,46 +1905,64 @@ func (c *Checker) isBlockScopedNameDeclaredBeforeUse(declaration *ast.Node, usag
 }
 
 func (c *Checker) isUsedInFunctionOrInstanceProperty(usage *ast.Node, declaration *ast.Node, declContainer *ast.Node) bool {
-	for current := usage; current != nil && current != declContainer; current = current.Parent {
+	return ast.FindAncestorOrQuit(usage, func(current *ast.Node) ast.FindAncestorResult {
+		if current == declContainer {
+			return ast.FindAncestorQuit
+		}
 		if ast.IsFunctionLike(current) {
-			return ast.GetImmediatelyInvokedFunctionExpression(current) == nil
+			return ast.ToFindAncestorResult(ast.GetImmediatelyInvokedFunctionExpression(current) == nil)
 		}
 		if ast.IsClassStaticBlockDeclaration(current) {
-			return declaration.Pos() < usage.Pos()
+			return ast.ToFindAncestorResult(declaration.Pos() < usage.Pos())
 		}
-		if current.Parent != nil && ast.IsPropertyDeclaration(current.Parent) && current.Parent.Initializer() == current {
-			if ast.IsStatic(current.Parent) {
-				if ast.IsMethodDeclaration(declaration) {
-					return true
-				}
-				if ast.IsPropertyDeclaration(declaration) && ast.GetContainingClass(usage) == ast.GetContainingClass(declaration) {
-					propName := declaration.Name()
-					if ast.IsIdentifier(propName) || ast.IsPrivateIdentifier(propName) {
-						t := c.getTypeOfSymbol(c.getSymbolOfDeclaration(declaration))
-						staticBlocks := core.Filter(declaration.Parent.Members(), ast.IsClassStaticBlockDeclaration)
-						if c.isPropertyInitializedInStaticBlocks(propName, t, staticBlocks, declaration.Parent.Pos(), current.Pos()) {
-							return true
+
+		if current.Parent != nil && ast.IsPropertyDeclaration(current.Parent) {
+			propertyDeclaration := current.Parent
+			initializerOfProperty := propertyDeclaration.Initializer() == current
+			if initializerOfProperty {
+				if ast.IsStatic(current.Parent) {
+					if ast.IsMethodDeclaration(declaration) {
+						return ast.FindAncestorTrue
+					}
+					if ast.IsPropertyDeclaration(declaration) && ast.GetContainingClass(usage) == ast.GetContainingClass(declaration) {
+						propName := declaration.Name()
+						if ast.IsIdentifier(propName) || ast.IsPrivateIdentifier(propName) {
+							t := c.getTypeOfSymbol(c.getSymbolOfDeclaration(declaration))
+							staticBlocks := core.Filter(declaration.Parent.Members(), ast.IsClassStaticBlockDeclaration)
+							if c.isPropertyInitializedInStaticBlocks(propName, t, staticBlocks, declaration.Parent.Pos(), current.Pos()) {
+								return ast.FindAncestorTrue
+							}
 						}
 					}
-				}
-			} else {
-				isDeclarationInstanceProperty := ast.IsPropertyDeclaration(declaration) && !ast.IsStatic(declaration)
-				if !isDeclarationInstanceProperty || ast.GetContainingClass(usage) != ast.GetContainingClass(declaration) {
-					return true
+				} else {
+					isDeclarationInstanceProperty := ast.IsPropertyDeclaration(declaration) && !ast.IsStatic(declaration)
+					if !isDeclarationInstanceProperty || ast.GetContainingClass(usage) != ast.GetContainingClass(declaration) {
+						return ast.FindAncestorTrue
+					}
 				}
 			}
 		}
-		if current.Parent != nil && ast.IsDecorator(current.Parent) && current.Parent.AsDecorator().Expression == current {
+
+		if current.Parent != nil && ast.IsDecorator(current.Parent) {
 			decorator := current.Parent.AsDecorator()
-			if ast.IsParameter(decorator.Parent) {
-				return c.isUsedInFunctionOrInstanceProperty(decorator.Parent.Parent.Parent, declaration, declContainer)
-			}
-			if ast.IsMethodDeclaration(decorator.Parent) {
-				return c.isUsedInFunctionOrInstanceProperty(decorator.Parent.Parent, declaration, declContainer)
+			if decorator.Expression == current {
+				if ast.IsParameter(decorator.Parent) {
+					if c.isUsedInFunctionOrInstanceProperty(decorator.Parent.Parent.Parent, declaration, declContainer) {
+						return ast.FindAncestorTrue
+					}
+					return ast.FindAncestorQuit
+				}
+				if ast.IsMethodDeclaration(decorator.Parent) {
+					if c.isUsedInFunctionOrInstanceProperty(decorator.Parent.Parent, declaration, declContainer) {
+						return ast.FindAncestorTrue
+					}
+					return ast.FindAncestorQuit
+				}
 			}
 		}
-	}
-	return false
+
+		return ast.FindAncestorFalse
+	}) != nil
 }
 
 func isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration *ast.Node, usage *ast.Node, declContainer *ast.Node) bool {
