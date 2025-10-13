@@ -50,7 +50,7 @@ async function updateUseTsgoSetting(enable: boolean): Promise<void> {
             useTsgo.globalValue !== undefined ? vscode.ConfigurationTarget.Global : undefined;
     }
     // Update the setting and restart the extension host (needed to change the state of the built-in TS extension)
-    await tsConfig.update("experimental.useTsgo", enable, target);
+    await tsConfig.update("experimental.useTsgo", enable, target ?? vscode.ConfigurationTarget.Global);
     await restartExtHostOnChangeIfNeeded();
 }
 
