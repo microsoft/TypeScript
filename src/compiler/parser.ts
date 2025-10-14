@@ -8435,7 +8435,7 @@ namespace Parser {
 
     function tryParseImportAttributes() {
         const currentToken = token();
-        if ((currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
+        if (currentToken === SyntaxKind.WithKeyword || (currentToken === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak())) {
             return parseImportAttributes(currentToken);
         }
     }
