@@ -23178,11 +23178,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // in the process of computing variance information for recursive types and when
                 // comparing 'this' type arguments.
                 const varianceFlags = i < variances.length ? variances[i] : VarianceFlags.Covariant;
+                const s = sources[i];
+                const t = targets[i];
+                // Propagate variance reliability flags
+                if (varianceFlags & (VarianceFlags.Unmeasurable | VarianceFlags.Unreliable)) {
+                    instantiateType(s, varianceFlags & VarianceFlags.Unmeasurable ? reportUnmeasurableMapper : reportUnreliableMapper);
+                }
                 const variance = varianceFlags & VarianceFlags.VarianceMask;
                 // We ignore arguments for independent type parameters (because they're never witnessed).
                 if (variance !== VarianceFlags.Independent) {
-                    const s = sources[i];
-                    const t = targets[i];
                     let related = Ternary.True;
                     if (varianceFlags & VarianceFlags.Unmeasurable) {
                         // Even an `Unmeasurable` variance works out without a structural check if the source and target are _identical_.
