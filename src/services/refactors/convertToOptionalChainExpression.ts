@@ -138,6 +138,11 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
     const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
     if (!expression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
+    // do not offer refactor inside complex expressions like concatenations...
+    if (expression.parent && isBinaryExpression(expression.parent)) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    }
+
     const checker = program.getTypeChecker();
     return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
 }
