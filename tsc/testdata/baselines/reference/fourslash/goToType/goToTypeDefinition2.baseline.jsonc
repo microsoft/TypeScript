@@ -1,0 +1,11 @@
+// === goToType ===
+// === /goToTypeDefinition2_Definition.ts ===
+// interface [|I1|] {
+//     p;
+// }
+// type propertyType = I1;
+// // --- (line: 5) skipped ---
+
+// === /goToTypeDefinition2_Consumption.ts ===
+// var i2: I2;
+// i2.prop/*GOTO TYPE*/erty;

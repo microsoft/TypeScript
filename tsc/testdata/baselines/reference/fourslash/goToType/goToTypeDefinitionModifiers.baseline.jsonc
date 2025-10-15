@@ -1,0 +1,227 @@
+// === goToType ===
+// === /a.ts ===
+// /*GOTO TYPE*/export class [|A|] {
+// 
+//     private z: string;
+// 
+// // --- (line: 5) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class [|A|]/*GOTO TYPE*/ {
+// 
+//     private z: string;
+// 
+// // --- (line: 5) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class A {
+// 
+//     /*GOTO TYPE*/private z: string;
+// 
+//     private y: A;
+// 
+// // --- (line: 7) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class A {
+// 
+//     private z/*GOTO TYPE*/: string;
+// 
+//     private y: A;
+// 
+// // --- (line: 7) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class [|A|] {
+// 
+//     private z: string;
+// 
+//     /*GOTO TYPE*/private y: A;
+// 
+//     readonly x: string;
+// 
+// // --- (line: 9) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class [|A|] {
+// 
+//     private z: string;
+// 
+//     private y/*GOTO TYPE*/: A;
+// 
+//     readonly x: string;
+// 
+// // --- (line: 9) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 3) skipped ---
+// 
+//     private y: A;
+// 
+//     /*GOTO TYPE*/readonly x: string;
+// 
+//     async a() {  }
+// 
+// // --- (line: 11) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 3) skipped ---
+// 
+//     private y: A;
+// 
+//     readonly x/*GOTO TYPE*/: string;
+// 
+//     async a() {  }
+// 
+// // --- (line: 11) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 5) skipped ---
+// 
+//     readonly x: string;
+// 
+//     /*GOTO TYPE*/async a() {  }
+// 
+//     override b() {}
+// 
+// // --- (line: 13) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 5) skipped ---
+// 
+//     readonly x: string;
+// 
+//     async a/*GOTO TYPE*/() {  }
+// 
+//     override b() {}
+// 
+// // --- (line: 13) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     async a() {  }
+// 
+//     /*GOTO TYPE*/override b() {}
+// 
+//     public async c() { }
+// }
+// 
+// export function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     async a() {  }
+// 
+//     override b/*GOTO TYPE*/() {}
+// 
+//     public async c() { }
+// }
+// 
+// export function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     /*GOTO TYPE*/public async c() { }
+// }
+// 
+// export function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     public/*GOTO TYPE*/ async c() { }
+// }
+// 
+// export function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     public as/*GOTO TYPE*/ync c() { }
+// }
+// 
+// export function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     public async c/*GOTO TYPE*/() { }
+// }
+// 
+// export function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 12) skipped ---
+//     public async c() { }
+// }
+// 
+// exp/*GOTO TYPE*/ort function foo() { }
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 12) skipped ---
+//     public async c() { }
+// }
+// 
+// export function foo/*GOTO TYPE*/() { }

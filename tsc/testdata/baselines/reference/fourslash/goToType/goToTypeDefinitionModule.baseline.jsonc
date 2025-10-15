@@ -1,0 +1,23 @@
+// === goToType ===
+// === /module1.ts ===
+// module [|M|] {
+//     export var p;
+// }
+// var m: typeof M;
+
+// === /module3.ts ===
+// /*GOTO TYPE*/M;
+// m;
+
+
+
+// === goToType ===
+// === /module1.ts ===
+// module [|M|] {
+//     export var p;
+// }
+// var m: typeof M;
+
+// === /module3.ts ===
+// M;
+// /*GOTO TYPE*/m;

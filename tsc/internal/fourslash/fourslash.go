@@ -852,6 +852,55 @@ func (f *FourslashTest) VerifyBaselineGoToDefinition(
 	}
 }
 
+func (f *FourslashTest) VerifyBaselineGoToTypeDefinition(
+	t *testing.T,
+	markers ...string,
+) {
+	referenceLocations := f.lookupMarkersOrGetRanges(t, markers)
+
+	for _, markerOrRange := range referenceLocations {
+		// worker in `baselineEachMarkerOrRange`
+		f.GoToMarkerOrRange(t, markerOrRange)
+
+		params := &lsproto.TypeDefinitionParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: ls.FileNameToDocumentURI(f.activeFilename),
+			},
+			Position: f.currentCaretPosition,
+		}
+
+		resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentTypeDefinitionInfo, params)
+		if resMsg == nil {
+			if f.lastKnownMarkerName == nil {
+				t.Fatalf("Nil response received for type definition request at pos %v", f.currentCaretPosition)
+			} else {
+				t.Fatalf("Nil response received for type definition request at marker '%s'", *f.lastKnownMarkerName)
+			}
+		}
+		if !resultOk {
+			if f.lastKnownMarkerName == nil {
+				t.Fatalf("Unexpected type definition response type at pos %v: %T", f.currentCaretPosition, resMsg.AsResponse().Result)
+			} else {
+				t.Fatalf("Unexpected type definition response type at marker '%s': %T", *f.lastKnownMarkerName, resMsg.AsResponse().Result)
+			}
+		}
+
+		var resultAsLocations []lsproto.Location
+		if result.Locations != nil {
+			resultAsLocations = *result.Locations
+		} else if result.Location != nil {
+			resultAsLocations = []lsproto.Location{*result.Location}
+		} else if result.DefinitionLinks != nil {
+			t.Fatalf("Unexpected type definition response type at marker '%s': %T", *f.lastKnownMarkerName, result.DefinitionLinks)
+		}
+
+		f.addResultToBaseline(t, "goToType", f.getBaselineForLocationsWithFileContents(resultAsLocations, baselineFourslashLocationsOptions{
+			marker:     markerOrRange,
+			markerName: "/*GOTO TYPE*/",
+		}))
+	}
+}
+
 func (f *FourslashTest) VerifyBaselineHover(t *testing.T) {
 	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.Hover], bool) {
 		if marker.Name == nil {

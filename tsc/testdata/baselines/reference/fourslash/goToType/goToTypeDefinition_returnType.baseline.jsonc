@@ -1,0 +1,179 @@
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// interface [|I|] { x: number; }
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// // --- (line: 5) skipped ---
+
+// --- (line: 21) skipped ---
+// function f8(j: J): J;
+// function f8(ij: any): any { return ij; }
+// 
+// /*GOTO TYPE*/f0();
+// f1();
+// f2();
+// f3();
+// // --- (line: 29) skipped ---
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// interface I { x: number; }
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// 
+// type T = [|(i: I) => I|];
+// const f1: T = i => ({ x: i.x + 1 });
+// 
+// const f2 = (i: I): I => ({ x: i.x + 1 });
+// // --- (line: 10) skipped ---
+
+// --- (line: 22) skipped ---
+// function f8(ij: any): any { return ij; }
+// 
+// f0();
+// /*GOTO TYPE*/f1();
+// f2();
+// f3();
+// f4();
+// // --- (line: 30) skipped ---
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// interface [|I|] { x: number; }
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// // --- (line: 5) skipped ---
+
+// --- (line: 23) skipped ---
+// 
+// f0();
+// f1();
+// /*GOTO TYPE*/f2();
+// f3();
+// f4();
+// f5();
+// // --- (line: 31) skipped ---
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// --- (line: 7) skipped ---
+// 
+// const f2 = (i: I): I => ({ x: i.x + 1 });
+// 
+// const f3 = (i: I) => ([|{ x: i.x + 1 }|]);
+// 
+// const f4 = (i: I) => i;
+// 
+// // --- (line: 15) skipped ---
+
+// --- (line: 24) skipped ---
+// f0();
+// f1();
+// f2();
+// /*GOTO TYPE*/f3();
+// f4();
+// f5();
+// f6();
+// f7();
+// f8();
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// interface [|I|] { x: number; }
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// // --- (line: 5) skipped ---
+
+// --- (line: 25) skipped ---
+// f1();
+// f2();
+// f3();
+// /*GOTO TYPE*/f4();
+// f5();
+// f6();
+// f7();
+// f8();
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// interface [|I|] { x: number; }
+// interface [|J|] { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// 
+// // --- (line: 6) skipped ---
+
+// --- (line: 26) skipped ---
+// f2();
+// f3();
+// f4();
+// /*GOTO TYPE*/f5();
+// f6();
+// f7();
+// f8();
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// interface [|I|] { x: number; }
+// interface [|J|] { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// 
+// // --- (line: 6) skipped ---
+
+// --- (line: 27) skipped ---
+// f3();
+// f4();
+// f5();
+// /*GOTO TYPE*/f6();
+// f7();
+// f8();
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// --- (line: 28) skipped ---
+// f4();
+// f5();
+// f6();
+// /*GOTO TYPE*/f7();
+// f8();
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_returnType.ts ===
+// --- (line: 17) skipped ---
+// 
+// const f7 = (i: I) => {};
+// 
+// function [|f8|](i: I): I;
+// function [|f8|](j: J): J;
+// function [|f8|](ij: any): any { return ij; }
+// 
+// f0();
+// f1();
+// f2();
+// f3();
+// f4();
+// f5();
+// f6();
+// f7();
+// /*GOTO TYPE*/f8();

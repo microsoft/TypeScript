@@ -1,0 +1,19 @@
+// === goToType ===
+// === /goToTypeDefinition_Pick.ts ===
+// type User = [|{ id: number; name: string; }|];
+// declare const user: Pick<User, "name">
+// /*GOTO TYPE*/user
+// 
+// type PickedUser = Pick<User, "name">
+// declare const user2: PickedUser
+// user2
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_Pick.ts ===
+// --- (line: 3) skipped ---
+// 
+// type PickedUser = Pick<User, "name">
+// declare const user2: PickedUser
+// /*GOTO TYPE*/user2

@@ -1,0 +1,37 @@
+// === goToType ===
+// === /goToTypeDefinition_arrayType.ts ===
+// type User = [|{ name: string }|];
+// declare const users: User[]
+// /*GOTO TYPE*/users
+// 
+// type UsersArr = Array<User>
+// declare const users2: UsersArr
+// // --- (line: 7) skipped ---
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_arrayType.ts ===
+// type User = [|{ name: string }|];
+// declare const users: User[]
+// users
+// 
+// type UsersArr = Array<User>
+// declare const users2: UsersArr
+// /*GOTO TYPE*/users2
+// 
+// class CustomArray<T> extends Array<T> { immutableReverse() { return [...this].reverse() } }
+// declare const users3: CustomArray<User>
+// users3
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_arrayType.ts ===
+// --- (line: 5) skipped ---
+// declare const users2: UsersArr
+// users2
+// 
+// class [|CustomArray|]<T> extends Array<T> { immutableReverse() { return [...this].reverse() } }
+// declare const users3: CustomArray<User>
+// /*GOTO TYPE*/users3

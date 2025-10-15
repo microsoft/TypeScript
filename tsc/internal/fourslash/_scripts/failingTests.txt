@@ -245,6 +245,7 @@ TestJsDocPropertyDescription6
 TestJsDocPropertyDescription7
 TestJsDocPropertyDescription8
 TestJsDocPropertyDescription9
+TestJsDocServices
 TestJsDocTagsWithHyphen
 TestJsQuickInfoGenerallyAcceptableSize
 TestJsRequireQuickInfo

@@ -1,0 +1,19 @@
+// === goToType ===
+// === /goToTypeDefinitionUnionType.ts ===
+// class [|C|] {
+//     p;
+// }
+// 
+// interface [|I|] {
+//     x;
+// }
+// 
+// module M {
+//     export interface [|I|] {
+//         y;
+//     }
+// }
+// 
+// var x: C | I | M.I;
+// 
+// /*GOTO TYPE*/x;

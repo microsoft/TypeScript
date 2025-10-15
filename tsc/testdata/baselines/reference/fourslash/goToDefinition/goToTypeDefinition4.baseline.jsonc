@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /foo.ts ===
+// export type [|T|] = string;
+// export const [|T|] = "";
+
+// === /bar.ts ===
+// import { T } from "./foo";
+// let x: /*GOTO DEF*/T;

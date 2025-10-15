@@ -186,11 +186,14 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                     return [parseBaselineSignatureHelp(callExpression.arguments)];
                 case "baselineGoToDefinition":
                 case "baselineGetDefinitionAtPosition":
-                    // Both of these take the same arguments, but differ in that...
+                case "baselineGoToType":
+                    // Both `baselineGoToDefinition` and `baselineGetDefinitionAtPosition` take the same
+                    // arguments, but differ in that...
                     //  - `verify.baselineGoToDefinition(...)` called getDefinitionAndBoundSpan
                     //  - `verify.baselineGetDefinitionAtPosition(...)` called getDefinitionAtPosition
-                    // LSP doesn't have two separate commands though. It's unclear how we would model bound spans though.
-                    return parseBaselineGoToDefinitionArgs(callExpression.arguments);
+                    // LSP doesn't have two separate commands though.
+                    // It's unclear how we would model bound spans though.
+                    return parseBaselineGoToDefinitionArgs(func.text, callExpression.arguments);
                 case "baselineRename":
                 case "baselineRenameAtRangesWithText":
                     // `verify.baselineRename...(...)`
@@ -817,7 +820,20 @@ function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [V
     }];
 }
 
-function parseBaselineGoToDefinitionArgs(args: readonly ts.Expression[]): [VerifyBaselineGoToDefinitionCmd] | undefined {
+function parseBaselineGoToDefinitionArgs(
+    funcName: "baselineGoToDefinition" | "baselineGoToType" | "baselineGetDefinitionAtPosition",
+    args: readonly ts.Expression[],
+): [VerifyBaselineGoToDefinitionCmd] | undefined {
+    let kind: "verifyBaselineGoToDefinition" | "verifyBaselineGoToType";
+    switch (funcName) {
+        case "baselineGoToDefinition":
+        case "baselineGetDefinitionAtPosition":
+            kind = "verifyBaselineGoToDefinition";
+            break;
+        case "baselineGoToType":
+            kind = "verifyBaselineGoToType";
+            break;
+    }
     const newArgs = [];
     for (const arg of args) {
         let strArg;
@@ -829,19 +845,19 @@ function parseBaselineGoToDefinitionArgs(args: readonly ts.Expression[]): [Verif
         }
         else if (arg.getText() === "...test.ranges()") {
             return [{
-                kind: "verifyBaselineGoToDefinition",
+                kind,
                 markers: [],
                 ranges: true,
             }];
         }
         else {
-            console.error(`Unrecognized argument in verify.baselineGoToDefinition: ${arg.getText()}`);
+            console.error(`Unrecognized argument in verify.${funcName}: ${arg.getText()}`);
             return undefined;
         }
     }
 
     return [{
-        kind: "verifyBaselineGoToDefinition",
+        kind,
         markers: newArgs,
     }];
 }
@@ -1293,7 +1309,7 @@ interface VerifyBaselineFindAllReferencesCmd {
 }
 
 interface VerifyBaselineGoToDefinitionCmd {
-    kind: "verifyBaselineGoToDefinition";
+    kind: "verifyBaselineGoToDefinition" | "verifyBaselineGoToType";
     markers: string[];
     ranges?: boolean;
 }
@@ -1393,11 +1409,20 @@ function generateBaselineDocumentHighlights({ args, preferences }: VerifyBaselin
     return `f.VerifyBaselineDocumentHighlights(t, ${preferences}, ${args.join(", ")})`;
 }
 
-function generateBaselineGoToDefinition({ markers, ranges }: VerifyBaselineGoToDefinitionCmd): string {
-    if (ranges || markers.length === 0) {
-        return `f.VerifyBaselineGoToDefinition(t)`;
+function generateBaselineGoToDefinition({ markers, ranges, kind }: VerifyBaselineGoToDefinitionCmd): string {
+    let goFunc;
+    switch (kind) {
+        case "verifyBaselineGoToDefinition":
+            goFunc = "VerifyBaselineGoToDefinition";
+            break;
+        case "verifyBaselineGoToType":
+            goFunc = "VerifyBaselineGoToTypeDefinition";
+            break;
     }
-    return `f.VerifyBaselineGoToDefinition(t, ${markers.join(", ")})`;
+    if (ranges || markers.length === 0) {
+        return `f.${goFunc}(t)`;
+    }
+    return `f.${goFunc}(t, ${markers.join(", ")})`;
 }
 
 function generateGoToCommand({ funcName, args }: GoToCmd): string {
@@ -1436,6 +1461,7 @@ function generateCmd(cmd: Cmd): string {
         case "verifyBaselineDocumentHighlights":
             return generateBaselineDocumentHighlights(cmd);
         case "verifyBaselineGoToDefinition":
+        case "verifyBaselineGoToType":
             return generateBaselineGoToDefinition(cmd);
         case "verifyBaselineQuickInfo":
             // Quick Info -> Hover

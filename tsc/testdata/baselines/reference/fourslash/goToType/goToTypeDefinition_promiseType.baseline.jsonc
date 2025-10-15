@@ -1,0 +1,19 @@
+// === goToType ===
+// === /goToTypeDefinition_promiseType.ts ===
+// type User = [|{ name: string }|];
+// async function /*GOTO TYPE*/getUser() { return { name: "Bob" } satisfies User as User }
+// 
+// const promisedBob = getUser() 
+// 
+// export {}
+
+
+
+// === goToType ===
+// === /goToTypeDefinition_promiseType.ts ===
+// type User = [|{ name: string }|];
+// async function getUser() { return { name: "Bob" } satisfies User as User }
+// 
+// const /*GOTO TYPE*/promisedBob = getUser() 
+// 
+// export {}

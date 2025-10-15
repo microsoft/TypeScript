@@ -1,0 +1,9 @@
+// === goToType ===
+// === /goToTypeDefinition_Definition.ts ===
+// class [|C|] {
+//     p;
+// }
+// var c: C;
+
+// === /goToTypeDefinition_Consumption.ts ===
+// /*GOTO TYPE*/c = undefined;
