@@ -175,6 +175,36 @@ class MyMap implements Map<string, number> {
 >undefined : undefined
 >          : ^^^^^^^^^
 
+    getOrInsert(key: string, defaultValue: number): number { return Number.NaN; }
+>getOrInsert : (key: string, defaultValue: number) => number
+>            : ^   ^^      ^^            ^^      ^^^^^      
+>key : string
+>    : ^^^^^^
+>defaultValue : number
+>             : ^^^^^^
+>Number.NaN : number
+>           : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+    getOrInsertComputed(key: string, callback: (key: string) => number): number { return Number.NaN; }
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                    : ^   ^^      ^^        ^^                       ^^^^^      
+>key : string
+>    : ^^^^^^
+>callback : (key: string) => number
+>         : ^   ^^      ^^^^^      
+>key : string
+>    : ^^^^^^
+>Number.NaN : number
+>           : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>NaN : number
+>    : ^^^^^^
+
     has(key: string): boolean { return false; }
 >has : (key: string) => boolean
 >    : ^   ^^      ^^^^^       

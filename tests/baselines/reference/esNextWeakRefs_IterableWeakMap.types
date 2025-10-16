@@ -291,6 +291,128 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >      : ^^^^^^^^^^^^^
     }
 
+    getOrInsert(key: K, defaultValue: V): V {
+>getOrInsert : (key: K, defaultValue: V) => V
+>            : ^   ^^ ^^            ^^ ^^^^^ 
+>key : K
+>    : ^
+>defaultValue : V
+>             : ^
+
+        if (!this.has(key)) {
+>!this.has(key) : boolean
+>               : ^^^^^^^
+>this.has(key) : boolean
+>              : ^^^^^^^
+>this.has : (key: K) => boolean
+>         : ^   ^^ ^^^^^       
+>this : this
+>     : ^^^^
+>has : (key: K) => boolean
+>    : ^   ^^ ^^^^^       
+>key : K
+>    : ^
+
+            this.set(key, defaultValue);
+>this.set(key, defaultValue) : this
+>                            : ^^^^
+>this.set : (key: K, value: V) => this
+>         : ^   ^^ ^^     ^^ ^^^^^    
+>this : this
+>     : ^^^^
+>set : (key: K, value: V) => this
+>    : ^   ^^ ^^     ^^ ^^^^^    
+>key : K
+>    : ^
+>defaultValue : V
+>             : ^
+
+            return defaultValue;
+>defaultValue : V
+>             : ^
+        }
+        return this.get(key)!;
+>this.get(key)! : NonNullable<V>
+>               : ^^^^^^^^^^^^^^
+>this.get(key) : V | undefined
+>              : ^^^^^^^^^^^^^
+>this.get : (key: K) => V | undefined
+>         : ^   ^^ ^^^^^             
+>this : this
+>     : ^^^^
+>get : (key: K) => V | undefined
+>    : ^   ^^ ^^^^^             
+>key : K
+>    : ^
+    }
+
+    getOrInsertComputed(key: K, callback: (key: K) => V): V {
+>getOrInsertComputed : (key: K, callback: (key: K) => V) => V
+>                    : ^   ^^ ^^        ^^             ^^^^^ 
+>key : K
+>    : ^
+>callback : (key: K) => V
+>         : ^   ^^ ^^^^^ 
+>key : K
+>    : ^
+
+        if (!this.has(key)) {
+>!this.has(key) : boolean
+>               : ^^^^^^^
+>this.has(key) : boolean
+>              : ^^^^^^^
+>this.has : (key: K) => boolean
+>         : ^   ^^ ^^^^^       
+>this : this
+>     : ^^^^
+>has : (key: K) => boolean
+>    : ^   ^^ ^^^^^       
+>key : K
+>    : ^
+
+            const value = callback(key);
+>value : V
+>      : ^
+>callback(key) : V
+>              : ^
+>callback : (key: K) => V
+>         : ^   ^^ ^^^^^ 
+>key : K
+>    : ^
+
+            this.set(key, value);
+>this.set(key, value) : this
+>                     : ^^^^
+>this.set : (key: K, value: V) => this
+>         : ^   ^^ ^^     ^^ ^^^^^    
+>this : this
+>     : ^^^^
+>set : (key: K, value: V) => this
+>    : ^   ^^ ^^     ^^ ^^^^^    
+>key : K
+>    : ^
+>value : V
+>      : ^
+
+            return value;
+>value : V
+>      : ^
+        }
+        return this.get(key)!;
+>this.get(key)! : NonNullable<V>
+>               : ^^^^^^^^^^^^^^
+>this.get(key) : V | undefined
+>              : ^^^^^^^^^^^^^
+>this.get : (key: K) => V | undefined
+>         : ^   ^^ ^^^^^             
+>this : this
+>     : ^^^^
+>get : (key: K) => V | undefined
+>    : ^   ^^ ^^^^^             
+>key : K
+>    : ^
+    }
+
     delete(key: K): boolean {
 >delete : (key: K) => boolean
 >       : ^   ^^ ^^^^^       
