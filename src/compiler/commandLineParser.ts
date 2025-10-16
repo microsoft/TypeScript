@@ -699,7 +699,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_checkJs_is_set,
     },
     {
         name: "checkJs",
