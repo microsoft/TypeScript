@@ -65,6 +65,10 @@ func getTokenAtPosition(
 	// `left` tracks the lower boundary of the node/token that could be returned,
 	// and is eventually the scanner's start position, if the scanner is used.
 	left := 0
+	// `allowReparsed` is set when we're navigating inside an AsExpression or
+	// SatisfiesExpression, which allows visiting their reparsed children to reach
+	// the actual identifier from JSDoc type assertions.
+	allowReparsed := false
 
 	testNode := func(node *ast.Node) int {
 		if node.Kind != ast.KindEndOfFile && node.End() == position && includePrecedingTokenAtEndPosition != nil {
@@ -74,7 +78,8 @@ func getTokenAtPosition(
 		if node.End() < position || node.Kind != ast.KindEndOfFile && node.End() == position {
 			return -1
 		}
-		if getPosition(node, sourceFile, allowPositionInLeadingTrivia) > position {
+		nodePos := getPosition(node, sourceFile, allowPositionInLeadingTrivia)
+		if nodePos > position {
 			return 1
 		}
 		return 0
@@ -86,18 +91,29 @@ func getTokenAtPosition(
 	visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
 		// We can't abort visiting children, so once a match is found, we set `next`
 		// and do nothing on subsequent visits.
-		if node != nil && node.Flags&ast.NodeFlagsReparsed == 0 && next == nil {
-			switch testNode(node) {
-			case -1:
-				if !ast.IsJSDocKind(node.Kind) {
-					// We can't move the left boundary into or beyond JSDoc,
-					// because we may end up returning the token after this JSDoc,
-					// constructing it with the scanner, and we need to include
-					// all its leading trivia in its position.
-					left = node.End()
+		if node != nil && next == nil {
+			// Skip reparsed nodes unless:
+			// 1. The node itself is AsExpression or SatisfiesExpression, OR
+			// 2. We're already inside an AsExpression or SatisfiesExpression (allowReparsed=true)
+			// These are special cases where reparsed nodes from JSDoc type assertions
+			// should still be navigable to reach identifiers.
+			isSpecialReparsed := node.Flags&ast.NodeFlagsReparsed != 0 &&
+				(node.Kind == ast.KindAsExpression || node.Kind == ast.KindSatisfiesExpression)
+
+			if node.Flags&ast.NodeFlagsReparsed == 0 || isSpecialReparsed || allowReparsed {
+				result := testNode(node)
+				switch result {
+				case -1:
+					if !ast.IsJSDocKind(node.Kind) {
+						// We can't move the left boundary into or beyond JSDoc,
+						// because we may end up returning the token after this JSDoc,
+						// constructing it with the scanner, and we need to include
+						// all its leading trivia in its position.
+						left = node.End()
+					}
+				case 0:
+					next = node
 				}
-			case 0:
-				next = node
 			}
 		}
 		return node
@@ -194,6 +210,11 @@ func getTokenAtPosition(
 		current = next
 		left = current.Pos()
 		next = nil
+		// When navigating into AsExpression or SatisfiesExpression, allow visiting
+		// their reparsed children to reach identifiers from JSDoc type assertions.
+		if current.Kind == ast.KindAsExpression || current.Kind == ast.KindSatisfiesExpression {
+			allowReparsed = true
+		}
 	}
 }
 
