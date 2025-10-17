@@ -25,9 +25,13 @@
 //// export default (class {
 ////   prop = 42;
 //// });
+////
+//// export default (class Cls {
+////   prop = 42;
+//// });
 
 verify.navigationTree({
-  text: '"navigationBarExportAssignment1"',
+  text: '"navigationItemsExportDefaultExpression2"',
   kind: "module",
   childItems: [
     {
@@ -81,6 +85,23 @@ verify.navigationTree({
       childItems: [
         {
           text: "<class>",
+          kind: "class",
+          childItems: [
+            {
+              text: "prop",
+              kind: "property",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      text: "default",
+      kind: "const",
+      kindModifiers: "export",
+      childItems: [
+        {
+          text: "Cls",
           kind: "class",
           childItems: [
             {
