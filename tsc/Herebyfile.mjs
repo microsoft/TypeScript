@@ -1127,7 +1127,7 @@ export const buildNativePreviewPackages = task({
             const readme = [
                 `# \`${npmPackageName}\``,
                 "",
-                `This package provides ${nodeOs}-${nodeArch} support for [${packageJson.name}](https://www.npmjs.com/package/${packageJson.name}).`,
+                `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
             ];
 
             fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
