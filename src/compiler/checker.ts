@@ -28402,6 +28402,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.flags & TypeFlags.Union ? every((type as UnionType).types, f) : f(type);
     }
 
+    function someContainedType(type: Type, f: (t: Type) => boolean): boolean {
+        return type.flags & TypeFlags.UnionOrIntersection ? some((type as UnionOrIntersectionType).types, f) : f(type);
+    }
+
     function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
         return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
     }
@@ -47349,14 +47353,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkBaseTypeAccessibility(type: Type, node: ExpressionWithTypeArguments) {
         const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-        if (signatures.length) {
-            const declaration = signatures[0].declaration;
-            if (declaration && hasEffectiveModifier(declaration, ModifierFlags.Private)) {
-                const typeClassDeclaration = getClassLikeDeclarationOfSymbol(type.symbol)!;
-                if (!isNodeWithinClass(node, typeClassDeclaration)) {
-                    error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(type.symbol));
-                }
-            }
+        const isPrivateAccessOutsideOfClass = some(signatures, (s) =>
+            !!s.declaration && hasEffectiveModifier(s.declaration, ModifierFlags.Private) &&
+            someContainedType(type, (t) => {
+                const typeClassDeclaration = getClassLikeDeclarationOfSymbol(t.symbol);
+                return !!typeClassDeclaration && !isNodeWithinClass(node, typeClassDeclaration);
+            }));
+        if (isPrivateAccessOutsideOfClass) {
+            error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, type.symbol ? getFullyQualifiedName(type.symbol) : typeToString(type));
         }
     }
 

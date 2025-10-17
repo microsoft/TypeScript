@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/extendPrivateConstructorClass2.ts] ////
+
+=== extendPrivateConstructorClass2.ts ===
+class A1 {
+>A1 : A1
+>   : ^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+}
+class B1 {
+>B1 : B1
+>   : ^^
+
+  constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+}
+
+declare const Cls1: typeof A1 & typeof B1;
+>Cls1 : typeof A1 & typeof B1
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>A1 : typeof A1
+>   : ^^^^^^^^^
+>B1 : typeof B1
+>   : ^^^^^^^^^
+
+new Cls1(42); // error
+>new Cls1(42) : any
+>             : ^^^
+>Cls1 : typeof A1 & typeof B1
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+class Derived1 extends Cls1 {} // error
+>Derived1 : Derived1
+>         : ^^^^^^^^
+>Cls1 : A1
+>     : ^^
+
+class A2 {
+>A2 : A2
+>   : ^^
+
+  constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+}
+class B2 {
+>B2 : B2
+>   : ^^
+
+  private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+}
+
+declare const Cls2: typeof A2 & typeof B2;
+>Cls2 : typeof A2 & typeof B2
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>A2 : typeof A2
+>   : ^^^^^^^^^
+>B2 : typeof B2
+>   : ^^^^^^^^^
+
+new Cls2(42); // error
+>new Cls2(42) : B2
+>             : ^^
+>Cls2 : typeof A2 & typeof B2
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+class Derived2 extends Cls2 {} // error
+>Derived2 : Derived2
+>         : ^^^^^^^^
+>Cls2 : A2
+>     : ^^
+
+// https://github.com/microsoft/TypeScript/issues/62614
+declare abstract class j1 {
+>j1 : j1
+>   : ^^
+
+  private constructor(...args: any[]);
+>args : any[]
+>     : ^^^^^
+}
+declare abstract class j2 {
+>j2 : j2
+>   : ^^
+
+  private constructor(...args: any[]);
+>args : any[]
+>     : ^^^^^
+}
+declare const jS: typeof j1 & typeof j2;
+>jS : typeof j1 & typeof j2
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j1 : typeof j1
+>   : ^^^^^^^^^
+>j2 : typeof j2
+>   : ^^^^^^^^^
+
+declare class j0 extends jS {} // error
+>j0 : j0
+>   : ^^
+>jS : j1 & j2
+>   : ^^^^^^^
+
+abstract class j3 {
+>j3 : j3
+>   : ^^
+
+  private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+  method(_any: any) {
+>method : (_any: any) => void
+>       : ^    ^^   ^^^^^^^^^
+>_any : any
+>     : ^^^
+
+    abstract class j4 {
+>j4 : j4
+>   : ^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+    }
+
+    const jS: typeof j3 & typeof j4 = _any;
+>jS : typeof j3 & typeof j4
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j3 : typeof j3
+>   : ^^^^^^^^^
+>j4 : typeof j4
+>   : ^^^^^^^^^
+>_any : any
+>     : ^^^
+
+    declare class j0 extends jS {} // bizarre but ok
+>j0 : j0
+>   : ^^
+>jS : j3
+>   : ^^
+  }
+}
+
