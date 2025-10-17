@@ -40,8 +40,8 @@ abstract class j3 {
   method1() {
     abstract class j4 {
       private constructor(...args: any[]) {}
-      method2(_any: any) {
-        const jS: typeof j3 & typeof j4 = _any;
+      method2() {
+        const jS: typeof j3 & typeof j4 = null!;
 
         // bizarre but ok
         class j0 extends jS {
@@ -55,17 +55,80 @@ abstract class j3 {
 
 abstract class j5 {
   private constructor(...args: any[]) {}
-  method1(_any: any) {
+  method1() {
     abstract class j6 {
       private constructor(...args: any[]) {}
       method2() {}
     }
-    const jS: typeof j5 & typeof j6 = _any;
+    const jS: typeof j5 & typeof j6 = null!;
 
     // bizarre but ok too given the base is a result of a mixin
     class j0 extends jS {
       method1() {}
       method2() {}
     }
+  }
+}
+
+abstract class j7 {
+  private constructor(arg: string) {}
+  method1() {
+    abstract class j8 {
+      private constructor(arg: number) {}
+      method2() {
+        const jS: typeof j7 & typeof j8 = null!;
+
+        // error
+        class j0 extends jS {
+          method1() {}
+          method2() {}
+        }
+      }
+    }
+  }
+}
+
+abstract class j9 {
+  private constructor(arg: string) {}
+  method1() {
+    abstract class j10 {
+      private constructor(arg: number) {}
+      method2() {}
+    }
+    const jS: typeof j9 & typeof j10 = null!;
+
+    // error
+    class j0 extends jS {
+      method1() {}
+      method2() {}
+    }
+  }
+}
+
+abstract class j11 {
+  private constructor(arg: string) {}
+  static {
+    abstract class j12 {
+      private constructor(arg: number) {}
+      static {
+        const jS: typeof j11 & typeof j12 = null!;
+
+        // ok
+        class j0 extends jS {}
+      }
+    }
+  }
+}
+
+abstract class j13 {
+  private constructor(arg: string) {}
+  static {
+    abstract class j14 {
+      private constructor(arg: number) {}
+    }
+    const jS: typeof j13 & typeof j14 = null!;
+
+    // error
+    class j0 extends jS {}
   }
 }

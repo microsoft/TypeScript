@@ -130,21 +130,19 @@ abstract class j3 {
 >args : any[]
 >     : ^^^^^
 
-      method2(_any: any) {
->method2 : (_any: any) => void
->        : ^    ^^   ^^^^^^^^^
->_any : any
->     : ^^^
+      method2() {
+>method2 : () => void
+>        : ^^^^^^^^^^
 
-        const jS: typeof j3 & typeof j4 = _any;
+        const jS: typeof j3 & typeof j4 = null!;
 >jS : typeof j3 & typeof j4
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >j3 : typeof j3
 >   : ^^^^^^^^^
 >j4 : typeof j4
 >   : ^^^^^^^^^
->_any : any
->     : ^^^
+>null! : never
+>      : ^^^^^
 
         // bizarre but ok
         class j0 extends jS {
@@ -174,11 +172,9 @@ abstract class j5 {
 >args : any[]
 >     : ^^^^^
 
-  method1(_any: any) {
->method1 : (_any: any) => void
->        : ^    ^^   ^^^^^^^^^
->_any : any
->     : ^^^
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
 
     abstract class j6 {
 >j6 : j6
@@ -192,15 +188,15 @@ abstract class j5 {
 >method2 : () => void
 >        : ^^^^^^^^^^
     }
-    const jS: typeof j5 & typeof j6 = _any;
+    const jS: typeof j5 & typeof j6 = null!;
 >jS : typeof j5 & typeof j6
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >j5 : typeof j5
 >   : ^^^^^^^^^
 >j6 : typeof j6
 >   : ^^^^^^^^^
->_any : any
->     : ^^^
+>null! : never
+>      : ^^^^^
 
     // bizarre but ok too given the base is a result of a mixin
     class j0 extends jS {
@@ -217,6 +213,187 @@ abstract class j5 {
 >method2 : () => void
 >        : ^^^^^^^^^^
     }
+  }
+}
+
+abstract class j7 {
+>j7 : j7
+>   : ^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    abstract class j8 {
+>j8 : j8
+>   : ^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+      method2() {
+>method2 : () => void
+>        : ^^^^^^^^^^
+
+        const jS: typeof j7 & typeof j8 = null!;
+>jS : typeof j7 & typeof j8
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j7 : typeof j7
+>   : ^^^^^^^^^
+>j8 : typeof j8
+>   : ^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+        // error
+        class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j7
+>   : ^^
+
+          method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+          method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+        }
+      }
+    }
+  }
+}
+
+abstract class j9 {
+>j9 : j9
+>   : ^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    abstract class j10 {
+>j10 : j10
+>    : ^^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+    const jS: typeof j9 & typeof j10 = null!;
+>jS : typeof j9 & typeof j10
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+>j9 : typeof j9
+>   : ^^^^^^^^^
+>j10 : typeof j10
+>    : ^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+    // error
+    class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j9
+>   : ^^
+
+      method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+  }
+}
+
+abstract class j11 {
+>j11 : j11
+>    : ^^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  static {
+    abstract class j12 {
+>j12 : j12
+>    : ^^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+      static {
+        const jS: typeof j11 & typeof j12 = null!;
+>jS : typeof j11 & typeof j12
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>j11 : typeof j11
+>    : ^^^^^^^^^^
+>j12 : typeof j12
+>    : ^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+        // ok
+        class j0 extends jS {}
+>j0 : j0
+>   : ^^
+>jS : j11
+>   : ^^^
+      }
+    }
+  }
+}
+
+abstract class j13 {
+>j13 : j13
+>    : ^^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  static {
+    abstract class j14 {
+>j14 : j14
+>    : ^^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+    }
+    const jS: typeof j13 & typeof j14 = null!;
+>jS : typeof j13 & typeof j14
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>j13 : typeof j13
+>    : ^^^^^^^^^^
+>j14 : typeof j14
+>    : ^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+    // error
+    class j0 extends jS {}
+>j0 : j0
+>   : ^^
+>jS : j13
+>   : ^^^
   }
 }
 
