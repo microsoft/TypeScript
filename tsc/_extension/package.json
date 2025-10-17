@@ -85,6 +85,12 @@
                 "title": "Show LSP Trace",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
+            },
+            {
+                "command": "typescript.native-preview.reportIssue",
+                "title": "Report Issue",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
             }
         ]
     },
