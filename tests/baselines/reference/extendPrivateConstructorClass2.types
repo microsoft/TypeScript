@@ -114,26 +114,29 @@ abstract class j3 {
 >j3 : j3
 >   : ^^
 
-  private constructor(arg: number) {}
->arg : number
->    : ^^^^^^
+  private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
 
-  method(_any: any) {
->method : (_any: any) => void
->       : ^    ^^   ^^^^^^^^^
->_any : any
->     : ^^^
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
 
     abstract class j4 {
 >j4 : j4
 >   : ^^
 
-      private constructor(arg: number) {}
->arg : number
->    : ^^^^^^
-    }
+      private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
 
-    const jS: typeof j3 & typeof j4 = _any;
+      method2(_any: any) {
+>method2 : (_any: any) => void
+>        : ^    ^^   ^^^^^^^^^
+>_any : any
+>     : ^^^
+
+        const jS: typeof j3 & typeof j4 = _any;
 >jS : typeof j3 & typeof j4
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >j3 : typeof j3
@@ -143,11 +146,77 @@ abstract class j3 {
 >_any : any
 >     : ^^^
 
-    declare class j0 extends jS {} // bizarre but ok
+        // bizarre but ok
+        class j0 extends jS {
 >j0 : j0
 >   : ^^
->jS : j3
+>jS : j3 & j4
+>   : ^^^^^^^
+
+          method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+          method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+        }
+      }
+    }
+  }
+}
+
+abstract class j5 {
+>j5 : j5
 >   : ^^
+
+  private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+  method1(_any: any) {
+>method1 : (_any: any) => void
+>        : ^    ^^   ^^^^^^^^^
+>_any : any
+>     : ^^^
+
+    abstract class j6 {
+>j6 : j6
+>   : ^^
+
+      private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+    const jS: typeof j5 & typeof j6 = _any;
+>jS : typeof j5 & typeof j6
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j5 : typeof j5
+>   : ^^^^^^^^^
+>j6 : typeof j6
+>   : ^^^^^^^^^
+>_any : any
+>     : ^^^
+
+    // bizarre but ok too given the base is a result of a mixin
+    class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j5 & j6
+>   : ^^^^^^^
+
+      method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
   }
 }
 

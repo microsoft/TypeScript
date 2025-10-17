@@ -3,12 +3,9 @@ extendPrivateConstructorClass2.ts(11,24): error TS2675: Cannot extend a class 'A
 extendPrivateConstructorClass2.ts(22,1): error TS2673: Constructor of class 'B2' is private and only accessible within the class declaration.
 extendPrivateConstructorClass2.ts(23,24): error TS2675: Cannot extend a class 'B2'. Class constructor is marked as private.
 extendPrivateConstructorClass2.ts(33,26): error TS2675: Cannot extend a class 'j1'. Class constructor is marked as private.
-extendPrivateConstructorClass2.ts(44,5): error TS1184: Modifiers cannot appear here.
-extendPrivateConstructorClass2.ts(44,30): error TS2510: Base constructors must all have the same return type.
-extendPrivateConstructorClass2.ts(44,30): error TS2675: Cannot extend a class 'j4'. Class constructor is marked as private.
 
 
-==== extendPrivateConstructorClass2.ts (8 errors) ====
+==== extendPrivateConstructorClass2.ts (5 errors) ====
     class A1 {
       private constructor(arg: string) {}
     }
@@ -54,21 +51,37 @@ extendPrivateConstructorClass2.ts(44,30): error TS2675: Cannot extend a class 'j
 !!! error TS2675: Cannot extend a class 'j1'. Class constructor is marked as private.
     
     abstract class j3 {
-      private constructor(arg: number) {}
-      method(_any: any) {
+      private constructor(...args: any[]) {}
+      method1() {
         abstract class j4 {
-          private constructor(arg: number) {}
+          private constructor(...args: any[]) {}
+          method2(_any: any) {
+            const jS: typeof j3 & typeof j4 = _any;
+    
+            // bizarre but ok
+            class j0 extends jS {
+              method1() {}
+              method2() {}
+            }
+          }
         }
+      }
+    }
     
-        const jS: typeof j3 & typeof j4 = _any;
+    abstract class j5 {
+      private constructor(...args: any[]) {}
+      method1(_any: any) {
+        abstract class j6 {
+          private constructor(...args: any[]) {}
+          method2() {}
+        }
+        const jS: typeof j5 & typeof j6 = _any;
     
-        declare class j0 extends jS {} // bizarre but ok
-        ~~~~~~~
-!!! error TS1184: Modifiers cannot appear here.
-                                 ~~
-!!! error TS2510: Base constructors must all have the same return type.
-                                 ~~
-!!! error TS2675: Cannot extend a class 'j4'. Class constructor is marked as private.
+        // bizarre but ok too given the base is a result of a mixin
+        class j0 extends jS {
+          method1() {}
+          method2() {}
+        }
       }
     }
     

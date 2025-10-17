@@ -36,14 +36,36 @@ declare const jS: typeof j1 & typeof j2;
 declare class j0 extends jS {} // error
 
 abstract class j3 {
-  private constructor(arg: number) {}
-  method(_any: any) {
+  private constructor(...args: any[]) {}
+  method1() {
     abstract class j4 {
-      private constructor(arg: number) {}
+      private constructor(...args: any[]) {}
+      method2(_any: any) {
+        const jS: typeof j3 & typeof j4 = _any;
+
+        // bizarre but ok
+        class j0 extends jS {
+          method1() {}
+          method2() {}
+        }
+      }
     }
+  }
+}
 
-    const jS: typeof j3 & typeof j4 = _any;
+abstract class j5 {
+  private constructor(...args: any[]) {}
+  method1(_any: any) {
+    abstract class j6 {
+      private constructor(...args: any[]) {}
+      method2() {}
+    }
+    const jS: typeof j5 & typeof j6 = _any;
 
-    declare class j0 extends jS {} // bizarre but ok
+    // bizarre but ok too given the base is a result of a mixin
+    class j0 extends jS {
+      method1() {}
+      method2() {}
+    }
   }
 }
