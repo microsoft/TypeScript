@@ -1512,6 +1512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
     var isInferencePartiallyBlocked = false;
+    var propagateAnyFunctionType = true;
 
     var emptySymbols = createSymbolTable();
     var arrayVariances = [VarianceFlags.Covariant];
@@ -26699,7 +26700,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!couldContainTypeVariables(target) || isNoInferType(target)) {
                 return;
             }
-            if (source === wildcardType || source === blockedStringType || source === anyFunctionType) {
+            if (source === wildcardType || source === blockedStringType || propagateAnyFunctionType && source === anyFunctionType) {
                 // We are inferring from an 'any' type. We want to infer this type for every type parameter
                 // referenced in the target type, so we record it as the propagation type and infer from the
                 // target to itself. Then, as we find candidates we substitute the propagation type.
@@ -26799,7 +26800,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // As a special case, also ignore nonInferrableAnyType, which is a special form of the any type
                     // used as a stand-in for binding elements when they are being inferred.
                     const objectFlags = getObjectFlags(source);
-                    if ((objectFlags & (ObjectFlags.NonInferrableType | ObjectFlags.ContainsAnyFunctionType)) === ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
+                    if ((objectFlags & (ObjectFlags.NonInferrableType | (propagateAnyFunctionType ? ObjectFlags.ContainsAnyFunctionType : 0))) === ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
                         return;
                     }
                     if (!inference.isFixed) {
@@ -26807,7 +26808,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (candidate === blockedStringType) {
                             return;
                         }
-                        if (getObjectFlags(candidate) & ObjectFlags.ContainsAnyFunctionType) {
+                        if (propagateAnyFunctionType && getObjectFlags(candidate) & ObjectFlags.ContainsAnyFunctionType) {
                             // basically it means that 
                             if (!hasInferenceCandidates(inference)) {
                                 inference.seenAnyFunctionType = true;
@@ -36892,7 +36893,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: readonly TypeParameter[], candidate: Signature, args: readonly Expression[], checkMode: CheckMode): Signature {
         const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+        const savePropagateAnyFunctionType = propagateAnyFunctionType;
+        propagateAnyFunctionType = false;
         const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext);
+        propagateAnyFunctionType = savePropagateAnyFunctionType
         return createSignatureInstantiation(candidate, typeArgumentTypes);
     }
 
