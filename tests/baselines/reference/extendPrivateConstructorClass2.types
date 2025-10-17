@@ -66,8 +66,8 @@ declare const Cls2: typeof A2 & typeof B2;
 >   : ^^^^^^^^^
 
 new Cls2(42); // error
->new Cls2(42) : B2
->             : ^^
+>new Cls2(42) : any
+>             : ^^^
 >Cls2 : typeof A2 & typeof B2
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >42 : 42

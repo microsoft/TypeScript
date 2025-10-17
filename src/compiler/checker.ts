@@ -28402,10 +28402,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.flags & TypeFlags.Union ? every((type as UnionType).types, f) : f(type);
     }
 
-    function someContainedType(type: Type, f: (t: Type) => boolean): boolean {
-        return type.flags & TypeFlags.UnionOrIntersection ? some((type as UnionOrIntersectionType).types, f) : f(type);
-    }
-
     function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
         return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
     }
@@ -37060,7 +37056,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // that the user will not add any.
         const constructSignatures = getSignaturesOfType(expressionType, SignatureKind.Construct);
         if (constructSignatures.length) {
-            if (!isConstructorAccessible(node, constructSignatures[0])) {
+            const accessibilityErrorKind = getConstructorAccessibilityError(node, constructSignatures, ModifierFlags.NonPublicAccessibilityModifier);
+            if (accessibilityErrorKind) {
+                if (accessibilityErrorKind & ModifierFlags.Private) {
+                    error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, expressionType.symbol ? getFullyQualifiedName(expressionType.symbol) : typeToString(expressionType));
+                }
+                if (accessibilityErrorKind & ModifierFlags.Protected) {
+                    error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, expressionType.symbol ? getFullyQualifiedName(expressionType.symbol) : typeToString(expressionType));
+                }
                 return resolveErrorCall(node);
             }
             // If the expression is a class of abstract type, or an abstract construct signature,
@@ -37141,41 +37144,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return typeHasProtectedAccessibleBase(target, firstBase as InterfaceType);
     }
 
-    function isConstructorAccessible(node: NewExpression, signature: Signature) {
-        if (!signature || !signature.declaration) {
-            return true;
-        }
+    function getConstructorAccessibilityErrorKind(node: Expression, signatures: readonly Signature[], modifiersMask: ModifierFlags) {
+        for (const signature of signatures) {
+            if (!signature.declaration) {
+                continue;
+            }
+            const declaration = signature.declaration;
+            const modifiers = getSelectedEffectiveModifierFlags(declaration, modifiersMask);
 
-        const declaration = signature.declaration;
-        const modifiers = getSelectedEffectiveModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier);
+            // (1) Public constructors and (2) constructor functions are always accessible.
+            if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
+                continue;
+            }
 
-        // (1) Public constructors and (2) constructor functions are always accessible.
-        if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
-            return true;
-        }
+            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol)!;
 
-        const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol)!;
-        const declaringClass = getDeclaredTypeOfSymbol(declaration.parent.symbol) as InterfaceType;
-
-        // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
-        if (!isNodeWithinClass(node, declaringClassDeclaration)) {
-            const containingClass = getContainingClass(node);
-            if (containingClass && modifiers & ModifierFlags.Protected) {
-                const containingType = getTypeOfNode(containingClass);
-                if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
-                    return true;
+            // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
+            if (!isNodeWithinClass(node, declaringClassDeclaration)) {
+                const containingClass = getContainingClass(node);
+                if (containingClass && modifiers & ModifierFlags.Protected) {
+                    const containingType = getTypeOfNode(containingClass);
+                    if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
+                        continue;
+                    }
                 }
+                return modifiers;
             }
-            if (modifiers & ModifierFlags.Private) {
-                error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
-            }
-            if (modifiers & ModifierFlags.Protected) {
-                error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
-            }
-            return false;
         }
-
-        return true;
+        return ModifierFlags.None;
     }
 
     function invocationErrorDetails(errorTarget: Node, apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain; relatedMessage: DiagnosticMessage | undefined; } {
@@ -47353,13 +47349,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkBaseTypeAccessibility(type: Type, node: ExpressionWithTypeArguments) {
         const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-        const isPrivateAccessOutsideOfClass = some(signatures, (s) =>
-            !!s.declaration && hasEffectiveModifier(s.declaration, ModifierFlags.Private) &&
-            someContainedType(type, (t) => {
-                const typeClassDeclaration = getClassLikeDeclarationOfSymbol(t.symbol);
-                return !!typeClassDeclaration && !isNodeWithinClass(node, typeClassDeclaration);
-            }));
-        if (isPrivateAccessOutsideOfClass) {
+        if (getConstructorAccessibilityErrorKind(node, signatures, ModifierFlags.Private)) {
             error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, type.symbol ? getFullyQualifiedName(type.symbol) : typeToString(type));
         }
     }

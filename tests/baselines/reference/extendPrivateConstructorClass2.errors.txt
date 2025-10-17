@@ -1,5 +1,6 @@
-extendPrivateConstructorClass2.ts(10,1): error TS2673: Constructor of class 'A1' is private and only accessible within the class declaration.
+extendPrivateConstructorClass2.ts(10,1): error TS2673: Constructor of class 'typeof A1 & typeof B1' is private and only accessible within the class declaration.
 extendPrivateConstructorClass2.ts(11,24): error TS2675: Cannot extend a class 'typeof A1 & typeof B1'. Class constructor is marked as private.
+extendPrivateConstructorClass2.ts(22,1): error TS2673: Constructor of class 'typeof A2 & typeof B2' is private and only accessible within the class declaration.
 extendPrivateConstructorClass2.ts(23,24): error TS2675: Cannot extend a class 'typeof A2 & typeof B2'. Class constructor is marked as private.
 extendPrivateConstructorClass2.ts(33,26): error TS2675: Cannot extend a class 'typeof j1 & typeof j2'. Class constructor is marked as private.
 extendPrivateConstructorClass2.ts(44,5): error TS1184: Modifiers cannot appear here.
@@ -7,7 +8,7 @@ extendPrivateConstructorClass2.ts(44,30): error TS2510: Base constructors must a
 extendPrivateConstructorClass2.ts(44,30): error TS2675: Cannot extend a class 'typeof j3 & typeof j4'. Class constructor is marked as private.
 
 
-==== extendPrivateConstructorClass2.ts (7 errors) ====
+==== extendPrivateConstructorClass2.ts (8 errors) ====
     class A1 {
       private constructor(arg: string) {}
     }
@@ -19,7 +20,7 @@ extendPrivateConstructorClass2.ts(44,30): error TS2675: Cannot extend a class 't
     
     new Cls1(42); // error
     ~~~~~~~~~~~~
-!!! error TS2673: Constructor of class 'A1' is private and only accessible within the class declaration.
+!!! error TS2673: Constructor of class 'typeof A1 & typeof B1' is private and only accessible within the class declaration.
     class Derived1 extends Cls1 {} // error
                            ~~~~
 !!! error TS2675: Cannot extend a class 'typeof A1 & typeof B1'. Class constructor is marked as private.
@@ -34,6 +35,8 @@ extendPrivateConstructorClass2.ts(44,30): error TS2675: Cannot extend a class 't
     declare const Cls2: typeof A2 & typeof B2;
     
     new Cls2(42); // error
+    ~~~~~~~~~~~~
+!!! error TS2673: Constructor of class 'typeof A2 & typeof B2' is private and only accessible within the class declaration.
     class Derived2 extends Cls2 {} // error
                            ~~~~
 !!! error TS2675: Cannot extend a class 'typeof A2 & typeof B2'. Class constructor is marked as private.
