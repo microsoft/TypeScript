@@ -1,23 +1,32 @@
+prefixPostfix.js(5,18): error TS1005: '}' expected.
+prefixPostfix.js(11,21): error TS1005: '}' expected.
+prefixPostfix.js(14,21): error TS1005: '}' expected.
 prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
 prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
 prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
 
 
-==== prefixPostfix.js (3 errors) ====
+==== prefixPostfix.js (6 errors) ====
     /**
      * @param {number![]} x - number[]
      * @param {!number[]} y - number[]
      * @param {(number[])!} z - number[]
      * @param {number?[]} a - parse error without parentheses
+                     ~
+!!! error TS1005: '}' expected.
      * @param {?number[]} b - number[] | null
      * @param {(number[])?} c - number[] | null
      * @param {...?number} e - (number | null)[]
      * @param {...number?} f - number[] | null
      * @param {...number!?} g - number[] | null
      * @param {...number?!} h - parse error without parentheses (also nonsensical)
+                        ~
+!!! error TS1005: '}' expected.
      * @param {...number[]} i - number[][]
      * @param {...number![]?} j - number[][] | null
      * @param {...number?[]!} k - parse error without parentheses
+                        ~
+!!! error TS1005: '}' expected.
      * @param {number extends number ? true : false} l - conditional types work
      * @param {[number, number?]} m - [number, (number | undefined)?]
      */

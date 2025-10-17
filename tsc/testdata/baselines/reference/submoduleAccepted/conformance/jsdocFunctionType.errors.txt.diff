@@ -6,25 +6,35 @@
 -
 -
 -==== functions.js (1 errors) ====
++functions.js(2,20): error TS1005: '}' expected.
 +functions.js(3,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++functions.js(3,21): error TS1005: '}' expected.
 +functions.js(5,14): error TS7006: Parameter 'c' implicitly has an 'any' type.
 +functions.js(9,23): error TS7006: Parameter 'n' implicitly has an 'any' type.
++functions.js(12,20): error TS1005: '}' expected.
 +functions.js(13,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++functions.js(13,21): error TS1005: '}' expected.
 +functions.js(15,14): error TS7006: Parameter 'c' implicitly has an 'any' type.
 +functions.js(30,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++functions.js(30,21): error TS1005: '}' expected.
 +functions.js(31,19): error TS7006: Parameter 'ab' implicitly has an 'any' type.
 +functions.js(31,23): error TS7006: Parameter 'onetwo' implicitly has an 'any' type.
++functions.js(48,20): error TS1005: '}' expected.
 +functions.js(49,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
 +functions.js(51,26): error TS7006: Parameter 'dref' implicitly has an 'any' type.
 +
 +
-+==== functions.js (10 errors) ====
++==== functions.js (16 errors) ====
      /**
       * @param {function(this: string, number): number} c is just passing on through
++                       ~
++!!! error TS1005: '}' expected.
       * @return {function(this: string, number): number}
 +                ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                        ~
++!!! error TS1005: '}' expected.
       */
      function id1(c) {
 +                 ~
@@ -38,10 +48,14 @@
      
      /**
       * @param {function(new: { length: number }, number): number} c is just passing on through
++                       ~
++!!! error TS1005: '}' expected.
       * @return {function(new: { length: number }, number): number}
 +                ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                        ~
++!!! error TS1005: '}' expected.
       */
      function id2(c) {
 +                 ~
@@ -49,13 +63,15 @@
          return c
      }
      
-@@= skipped -32, +52 lines =@@
+@@= skipped -32, +66 lines =@@
      z.length;
      
      /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
 +               ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                        ~
++!!! error TS1005: '}' expected.
      var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
 +                      ~~
 +!!! error TS7006: Parameter 'ab' implicitly has an 'any' type.
@@ -64,9 +80,12 @@
      
      
      /** 
-@@= skipped -19, +26 lines =@@
+@@= skipped -18, +27 lines =@@
+     
      /** 
       * @param {function(new: D, number)} dref
++                       ~
++!!! error TS1005: '}' expected.
       * @return {D}
 +                ~
 +!!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
@@ -77,7 +96,7 @@
      var z3 = construct(D);
      z3.length;
      
-@@= skipped -16, +20 lines =@@
+@@= skipped -17, +23 lines =@@
      
      
      var y3 = id2(E);

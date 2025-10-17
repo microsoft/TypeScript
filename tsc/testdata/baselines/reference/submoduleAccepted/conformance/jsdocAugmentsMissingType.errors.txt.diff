@@ -7,15 +7,18 @@
 -
 -
 -==== /a.js (3 errors) ====
++/a.js(2,14): error TS1003: Identifier expected.
 +
 +
-+==== /a.js (1 errors) ====
++==== /a.js (2 errors) ====
      class A { constructor() { this.x = 0; } }
      /** @augments */
                   
 -!!! error TS1003: Identifier expected.
 -                 
  !!! error TS8023: JSDoc '@augments ' does not match the 'extends A' clause.
++                 ~
++!!! error TS1003: Identifier expected.
      class B extends A {
          m() {
              this.x

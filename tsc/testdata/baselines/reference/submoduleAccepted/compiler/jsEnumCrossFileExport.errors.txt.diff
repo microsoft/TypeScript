@@ -2,6 +2,7 @@
 +++ new.jsEnumCrossFileExport.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++enumDef.js(14,21): error TS1003: Identifier expected.
 +enumDef.js(16,18): error TS2339: Property 'Blah' does not exist on type '{ Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }'.
 +index.js(4,17): error TS2503: Cannot find namespace 'Host'.
 +index.js(8,21): error TS2304: Cannot find name 'Host'.
@@ -9,7 +10,7 @@
 +index.js(18,11): error TS2503: Cannot find namespace 'Host'.
 +
 +
-+==== enumDef.js (1 errors) ====
++==== enumDef.js (2 errors) ====
 +    var Host = {};
 +    Host.UserMetrics = {};
 +    /** @enum {number} */
@@ -24,7 +25,10 @@
 +     */
 +    /**
 +     * @typedef {string}
++                        
 +     */
++    
++!!! error TS1003: Identifier expected.
 +    Host.UserMetrics.Blah = {
 +                     ~~~~
 +!!! error TS2339: Property 'Blah' does not exist on type '{ Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }'.

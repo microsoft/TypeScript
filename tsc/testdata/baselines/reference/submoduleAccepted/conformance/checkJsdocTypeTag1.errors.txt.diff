@@ -5,17 +5,29 @@
 -
 -
 -==== 0.js (1 errors) ====
++0.js(12,13): error TS1110: Type expected.
 +0.js(20,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +0.js(24,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++0.js(24,21): error TS1005: '}' expected.
 +0.js(28,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++0.js(28,21): error TS1005: '}' expected.
 +0.js(40,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'props' must be of type 'object', but here has type 'Object'.
 +
 +
-+==== 0.js (4 errors) ====
++==== 0.js (7 errors) ====
      // @ts-check
      /** @type {String} */
      var S = "hello world";
-@@= skipped -21, +24 lines =@@
+@@= skipped -13, +19 lines =@@
+     anyT = "hello";
+     
+     /** @type {?} */
++                ~
++!!! error TS1110: Type expected.
+     var anyT1 = 2;
+     anyT1 = "hi";
+     
+@@= skipped -8, +10 lines =@@
      x(1);
      
      /** @type {function} */
@@ -31,6 +43,8 @@
 +               ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                        ~
++!!! error TS1005: '}' expected.
      const x1 = (a) => a + 1;
      x1(0);
      
@@ -38,10 +52,12 @@
 +               ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                        ~
++!!! error TS1005: '}' expected.
      const x2 = (a) => a + 1;
      x2(0);
      
-@@= skipped -22, +29 lines =@@
+@@= skipped -22, +33 lines =@@
       * @type {Object}
       */
      var props = {};

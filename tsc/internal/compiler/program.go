@@ -1056,6 +1056,12 @@ func (p *Program) getSemanticDiagnosticsForFileNotFilter(ctx context.Context, so
 		})
 	}
 
+	isJS := sourceFile.ScriptKind == core.ScriptKindJS || sourceFile.ScriptKind == core.ScriptKindJSX
+	isCheckJS := isJS && ast.IsCheckJSEnabledForFile(sourceFile, compilerOptions)
+	if isCheckJS {
+		diags = append(diags, sourceFile.JSDocDiagnostics()...)
+	}
+
 	filtered, directivesByLine := p.getDiagnosticsWithPrecedingDirectives(sourceFile, diags)
 	for _, directive := range directivesByLine {
 		// Above we changed all used directive kinds to @ts-ignore, so any @ts-expect-error directives that

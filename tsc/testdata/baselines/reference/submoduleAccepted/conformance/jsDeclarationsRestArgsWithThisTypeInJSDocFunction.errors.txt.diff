@@ -1,0 +1,17 @@
+--- old.jsDeclarationsRestArgsWithThisTypeInJSDocFunction.errors.txt
++++ new.jsDeclarationsRestArgsWithThisTypeInJSDocFunction.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++bug38550.js(3,22): error TS1005: '}' expected.
++
++
++==== bug38550.js (1 errors) ====
++    export class Clazz {
++      /**
++       * @param {function(this:Object, ...*):*} functionDeclaration
++                         ~
++!!! error TS1005: '}' expected.
++       */
++      method(functionDeclaration) {}
++    }
++    

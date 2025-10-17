@@ -2,23 +2,23 @@
 +++ new.jsdocPrefixPostfixParsing.errors.txt
 @@= skipped -0, +0 lines =@@
 -prefixPostfix.js(5,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
--prefixPostfix.js(5,18): error TS1005: '}' expected.
+ prefixPostfix.js(5,18): error TS1005: '}' expected.
 -prefixPostfix.js(8,12): error TS1014: A rest parameter must be last in a parameter list.
 -prefixPostfix.js(9,12): error TS1014: A rest parameter must be last in a parameter list.
 -prefixPostfix.js(10,12): error TS1014: A rest parameter must be last in a parameter list.
 -prefixPostfix.js(11,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
--prefixPostfix.js(11,21): error TS1005: '}' expected.
+ prefixPostfix.js(11,21): error TS1005: '}' expected.
 -prefixPostfix.js(12,12): error TS1014: A rest parameter must be last in a parameter list.
 -prefixPostfix.js(13,12): error TS1014: A rest parameter must be last in a parameter list.
 -prefixPostfix.js(14,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
--prefixPostfix.js(14,21): error TS1005: '}' expected.
+ prefixPostfix.js(14,21): error TS1005: '}' expected.
  prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
  prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
  prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
 
 
 -==== prefixPostfix.js (14 errors) ====
-+==== prefixPostfix.js (3 errors) ====
++==== prefixPostfix.js (6 errors) ====
      /**
       * @param {number![]} x - number[]
       * @param {!number[]} y - number[]
@@ -26,8 +26,8 @@
       * @param {number?[]} a - parse error without parentheses
 -                     
 -!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
--                     ~
--!!! error TS1005: '}' expected.
+                      ~
+ !!! error TS1005: '}' expected.
       * @param {?number[]} b - number[] | null
       * @param {(number[])?} c - number[] | null
       * @param {...?number} e - (number | null)[]
@@ -42,8 +42,8 @@
       * @param {...number?!} h - parse error without parentheses (also nonsensical)
 -                        
 -!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
--                        ~
--!!! error TS1005: '}' expected.
+                         ~
+ !!! error TS1005: '}' expected.
       * @param {...number[]} i - number[][]
 -               ~~~~~~~~~~~
 -!!! error TS1014: A rest parameter must be last in a parameter list.
@@ -53,8 +53,6 @@
       * @param {...number?[]!} k - parse error without parentheses
 -                        
 -!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
--                        ~
--!!! error TS1005: '}' expected.
+                         ~
+ !!! error TS1005: '}' expected.
       * @param {number extends number ? true : false} l - conditional types work
-      * @param {[number, number?]} m - [number, (number | undefined)?]
-      */

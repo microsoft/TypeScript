@@ -1,8 +1,9 @@
 a.js(5,18): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 a.js(5,23): error TS2749: 'foo' refers to a value, but is being used as a type here. Did you mean 'typeof foo'?
+a.js(5,28): error TS1005: ';' expected.
 
 
-==== a.js (2 errors) ====
+==== a.js (3 errors) ====
     /** @type {unique symbol} */
     const foo = Symbol();
     
@@ -12,4 +13,6 @@ a.js(5,23): error TS2749: 'foo' refers to a value, but is being used as a type h
 !!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
                           ~~~
 !!! error TS2749: 'foo' refers to a value, but is being used as a type here. Did you mean 'typeof foo'?
+                               ~~~~~~~
+!!! error TS1005: ';' expected.
     

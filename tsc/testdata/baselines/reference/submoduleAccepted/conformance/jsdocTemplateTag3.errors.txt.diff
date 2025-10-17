@@ -6,18 +6,16 @@
 -a.js(21,3): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
 -  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
 -a.js(24,15): error TS2304: Cannot find name 'NoLongerAllowed'.
--a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
--
--
--==== a.js (5 errors) ====
 +a.js(21,3): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-+
-+
-+==== a.js (3 errors) ====
+ a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
+
+
+-==== a.js (5 errors) ====
++==== a.js (4 errors) ====
      /**
       * @template {{ a: number, b: string }} T,U A Comment
       * @template {{ c: boolean }} V uh ... are comments even supported??
-@@= skipped -32, +29 lines =@@
+@@= skipped -32, +30 lines =@@
      f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
      f({ a: 12  }, undefined, undefined, 101, 'nope');
        ~~~~~~~~~~
@@ -31,8 +29,5 @@
 -                  ~~~~~~~~~~~~~~~
 -!!! error TS2304: Cannot find name 'NoLongerAllowed'.
       * @template T preceding line's syntax is no longer allowed
--     ~
--!!! error TS1069: Unexpected token. A type parameter name was expected without curly braces.
-      * @param {T} x
-      */
-     function g(x) { }
+      ~
+ !!! error TS1069: Unexpected token. A type parameter name was expected without curly braces.

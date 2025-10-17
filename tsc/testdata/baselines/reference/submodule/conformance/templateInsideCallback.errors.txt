@@ -1,11 +1,15 @@
+templateInsideCallback.js(9,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
 templateInsideCallback.js(15,11): error TS2315: Type 'Call' is not generic.
 templateInsideCallback.js(15,16): error TS2304: Cannot find name 'T'.
 templateInsideCallback.js(17,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+templateInsideCallback.js(23,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
 templateInsideCallback.js(29,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
+templateInsideCallback.js(30,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
 templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
+templateInsideCallback.js(38,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
 
 
-==== templateInsideCallback.js (5 errors) ====
+==== templateInsideCallback.js (9 errors) ====
     /**
      * @typedef Oops
      * @template T
@@ -15,6 +19,8 @@ templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns 
     /**
      * @callback Call
      * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
      * @param {T} x
      * @returns {T}
      */
@@ -35,6 +41,8 @@ templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns 
      * @property {Object} oh
      * @property {number} oh.no
      * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
      * @property {string} oh.noooooo
      */
     
@@ -44,6 +52,8 @@ templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns 
         ~~~~~~~~
 !!! error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
      * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
      * @template U
      * @param {T[]} array
      * @param {(x: T) => U[]} iterable
@@ -54,6 +64,8 @@ templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns 
         ~~~~~~~~
 !!! error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
      * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
      * @param {T[][]} array
      * @returns {T[]}
      */

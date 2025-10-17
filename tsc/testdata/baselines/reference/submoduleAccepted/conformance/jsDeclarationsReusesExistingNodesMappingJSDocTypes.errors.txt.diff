@@ -2,13 +2,18 @@
 +++ new.jsDeclarationsReusesExistingNodesMappingJSDocTypes.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++index.js(1,13): error TS1110: Type expected.
 +index.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++index.js(16,20): error TS1005: '}' expected.
 +index.js(19,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++index.js(19,20): error TS1005: '}' expected.
 +index.js(22,12): error TS2315: Type 'Object' is not generic.
 +
 +
-+==== index.js (3 errors) ====
++==== index.js (6 errors) ====
 +    /** @type {?} */
++                ~
++!!! error TS1110: Type expected.
 +    export const a = null;
 +    
 +    /** @type {*} */
@@ -27,12 +32,16 @@
 +               ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                       ~
++!!! error TS1005: '}' expected.
 +    export const f = null;
 +    
 +    /** @type {function(new: object, string, number)} */
 +               ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                       ~
++!!! error TS1005: '}' expected.
 +    export const g = null;
 +    
 +    /** @type {Object.<string, number>} */

@@ -1,13 +1,16 @@
 /a.js(1,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 /a.js(1,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+/a.js(1,20): error TS1005: '}' expected.
 
 
-==== /a.js (2 errors) ====
+==== /a.js (3 errors) ====
     /** @type {function(): number} */
                ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                ~~~~~~~~
 !!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+                       ~
+!!! error TS1005: '}' expected.
     function f() {}
     

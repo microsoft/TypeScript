@@ -1,17 +1,24 @@
 mod1.js(2,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+mod1.js(2,22): error TS1005: '}' expected.
 mod1.js(9,12): error TS2304: Cannot find name 'Type1'.
 mod3.js(4,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+mod3.js(4,22): error TS1005: '}' expected.
 mod3.js(10,12): error TS2304: Cannot find name 'StringOrNumber1'.
 mod4.js(4,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+mod4.js(4,22): error TS1005: '}' expected.
 mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
+mod7.js(5,7): error TS1110: Type expected.
+mod7.js(8,4): error TS1110: Type expected.
 
 
-==== mod1.js (2 errors) ====
+==== mod1.js (3 errors) ====
     /** 
      * @typedef {function(string): boolean}
                  ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+                         ~
+!!! error TS1005: '}' expected.
      * Type1
      */
     
@@ -46,7 +53,7 @@ mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
       return obj.boo ? obj.num : obj.str;
     }
     
-==== mod3.js (2 errors) ====
+==== mod3.js (3 errors) ====
     /**
      * A function whose signature is very long.
      *
@@ -54,6 +61,8 @@ mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
                  ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+                         ~
+!!! error TS1005: '}' expected.
      *     (string|number)} StringOrNumber1
      */
     
@@ -71,7 +80,7 @@ mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
       return func(bool, str, num)
     }
     
-==== mod4.js (2 errors) ====
+==== mod4.js (3 errors) ====
     /**
      * A function whose signature is very long.
      *
@@ -79,6 +88,8 @@ mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
                  ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+                         ~
+!!! error TS1005: '}' expected.
      *    number):
      *    (string|number)} StringOrNumber2
      */
@@ -138,14 +149,18 @@ mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
     }
     
     
-==== mod7.js (0 errors) ====
+==== mod7.js (2 errors) ====
     /** 
        Multiline type expressions in comments without leading * are not supported.
        @typedef {{
          foo:
          *,
+          ~
+!!! error TS1110: Type expected.
          bar:
          *
        }} Type7
+       ~
+!!! error TS1110: Type expected.
      */
     

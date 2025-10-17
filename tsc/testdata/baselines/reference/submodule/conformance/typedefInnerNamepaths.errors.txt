@@ -1,0 +1,19 @@
+bug25104.js(3,19): error TS1005: '}' expected.
+bug25104.js(6,18): error TS1005: '}' expected.
+
+
+==== bug25104.js (2 errors) ====
+    class C {
+        /**
+         * @typedef {C~A} C~B
+                      ~
+!!! error TS1005: '}' expected.
+         * @typedef {object} C~A
+         */
+        /** @param {C~A} o */
+                     ~
+!!! error TS1005: '}' expected.
+        constructor(o) {
+        }
+    }
+    
