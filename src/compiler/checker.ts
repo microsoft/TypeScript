@@ -2145,7 +2145,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var anyFunctionType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
     // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
-    anyFunctionType.objectFlags |= ObjectFlags.NonInferrableType;
+    anyFunctionType.objectFlags |= ObjectFlags.NonInferrableType | ObjectFlags.ContainsAnyFunctionType;
 
     var noConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var circularConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
@@ -26195,7 +26195,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Before we commit to a particular inference (and thus lock out any further inferences),
                     // we infer from any intra-expression inference sites we have collected.
                     inferFromIntraExpressionSites(context);
-                    clearCachedInferences(context.inferences);
+                    clearCachedInferences(context.inferences, true);
                     inference.isFixed = true;
                 }
                 return getInferredType(context, i);
@@ -26212,8 +26212,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function clearCachedInferences(inferences: InferenceInfo[]) {
+    function clearCachedInferences(inferences: InferenceInfo[], clearSeenAnyFunctionType?: boolean) {
         for (const inference of inferences) {
+            if (clearSeenAnyFunctionType && inference.seenAnyFunctionType) {
+                inference.seenAnyFunctionType = false;
+                inference.inferredType = undefined;
+
+            }
             if (!inference.isFixed) {
                 inference.inferredType = undefined;
             }
@@ -26793,7 +26798,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     //
                     // As a special case, also ignore nonInferrableAnyType, which is a special form of the any type
                     // used as a stand-in for binding elements when they are being inferred.
-                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
+                    const objectFlags = getObjectFlags(source);
+                    if ((objectFlags & (ObjectFlags.NonInferrableType | ObjectFlags.ContainsAnyFunctionType)) === ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
                         return;
                     }
                     if (!inference.isFixed) {
@@ -26801,11 +26807,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (candidate === blockedStringType) {
                             return;
                         }
+                        if (objectFlags & ObjectFlags.ContainsAnyFunctionType) {
+                            // basically it means that 
+                            if (!hasInferenceCandidates(inference)) {
+                                inference.seenAnyFunctionType = true;
+                            }
+                            return;
+                        }
                         if (inference.priority === undefined || priority < inference.priority) {
                             inference.candidates = undefined;
                             inference.contraCandidates = undefined;
                             inference.topLevel = true;
                             inference.priority = priority;
+                            inference.seenAnyFunctionType = false;
                         }
                         if (priority === inference.priority) {
                             // We make contravariant inferences only if we are in a pure contravariant position,
@@ -27542,7 +27556,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We use silentNeverType as the wildcard that signals no inferences.
                     inferredType = silentNeverType;
                 }
-                else {
+                else if (inference.seenAnyFunctionType) {
+                    inferredType = wildcardType;
+                } else {
                     // Infer either the default or the empty object type when no inferences were
                     // made. It is important to remember that in this case, inference still
                     // succeeds, meaning there is no error for not having inference candidates. An
@@ -36745,6 +36761,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // round of type inference and applicability checking for this particular candidate.
                     argCheckMode = CheckMode.Normal;
                     if (inferenceContext) {
+                        if (some(inferenceContext.inferences, i => !!i.seenAnyFunctionType)) {
+                            clearCachedInferences(inferenceContext.inferences, true);
+                        }
                         const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a

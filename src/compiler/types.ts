@@ -6531,11 +6531,13 @@ export const enum ObjectFlags {
     /** @internal */
     CouldContainTypeVariables = 1 << 20, // Type could contain a type variable
     SingleSignatureType = 1 << 27, // A single signature type extracted from a potentially broader type
+    /** @internal */
+    ContainsAnyFunctionType = 1 << 28, // pick a better value maybe
     ClassOrInterface = Class | Interface,
     /** @internal */
     RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
     /** @internal */
-    PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+    PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType | ContainsAnyFunctionType,
     /** @internal */
     InstantiatedMapped = Mapped | Instantiated,
     // Object flags that uniquely identify the kind of ObjectType
@@ -7111,6 +7113,7 @@ export interface InferenceInfo {
     topLevel: boolean;                       // True if all inferences are to top level occurrences
     isFixed: boolean;                        // True if inferences are fixed
     impliedArity?: number;
+    seenAnyFunctionType?: boolean
 }
 
 // dprint-ignore
