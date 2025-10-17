@@ -26699,7 +26699,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!couldContainTypeVariables(target) || isNoInferType(target)) {
                 return;
             }
-            if (source === wildcardType || source === blockedStringType) {
+            if (source === wildcardType || source === blockedStringType || source === anyFunctionType) {
                 // We are inferring from an 'any' type. We want to infer this type for every type parameter
                 // referenced in the target type, so we record it as the propagation type and infer from the
                 // target to itself. Then, as we find candidates we substitute the propagation type.
@@ -26807,7 +26807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (candidate === blockedStringType) {
                             return;
                         }
-                        if (objectFlags & ObjectFlags.ContainsAnyFunctionType) {
+                        if (getObjectFlags(candidate) & ObjectFlags.ContainsAnyFunctionType) {
                             // basically it means that 
                             if (!hasInferenceCandidates(inference)) {
                                 inference.seenAnyFunctionType = true;
