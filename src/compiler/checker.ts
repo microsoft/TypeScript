@@ -37056,13 +37056,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // that the user will not add any.
         const constructSignatures = getSignaturesOfType(expressionType, SignatureKind.Construct);
         if (constructSignatures.length) {
-            const accessibilityErrorKind = getConstructorAccessibilityError(node, constructSignatures, ModifierFlags.NonPublicAccessibilityModifier);
-            if (accessibilityErrorKind) {
-                if (accessibilityErrorKind & ModifierFlags.Private) {
-                    error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, expressionType.symbol ? getFullyQualifiedName(expressionType.symbol) : typeToString(expressionType));
+            const accessibilityError = getConstructorAccessibilityError(node, constructSignatures, ModifierFlags.NonPublicAccessibilityModifier);
+            if (accessibilityError) {
+                if (accessibilityError.kind & ModifierFlags.Private) {
+                    error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(accessibilityError.declaringClass));
                 }
-                if (accessibilityErrorKind & ModifierFlags.Protected) {
-                    error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, expressionType.symbol ? getFullyQualifiedName(expressionType.symbol) : typeToString(expressionType));
+                if (accessibilityError.kind & ModifierFlags.Protected) {
+                    error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, typeToString(accessibilityError.declaringClass));
                 }
                 return resolveErrorCall(node);
             }
@@ -37144,7 +37144,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return typeHasProtectedAccessibleBase(target, firstBase as InterfaceType);
     }
 
-    function getConstructorAccessibilityErrorKind(node: Expression, signatures: readonly Signature[], modifiersMask: ModifierFlags) {
+    function getConstructorAccessibilityError(node: Expression, signatures: readonly Signature[], modifiersMask: ModifierFlags) {
         for (const signature of signatures) {
             if (!signature.declaration) {
                 continue;
@@ -37168,10 +37168,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         continue;
                     }
                 }
-                return modifiers;
+                return {
+                    kind: modifiers,
+                    declaringClass: getDeclaredTypeOfSymbol(declaration.parent.symbol),
+                }
             }
         }
-        return ModifierFlags.None;
+        return undefined;
     }
 
     function invocationErrorDetails(errorTarget: Node, apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain; relatedMessage: DiagnosticMessage | undefined; } {
@@ -47349,8 +47352,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkBaseTypeAccessibility(type: Type, node: ExpressionWithTypeArguments) {
         const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-        if (getConstructorAccessibilityErrorKind(node, signatures, ModifierFlags.Private)) {
-            error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, type.symbol ? getFullyQualifiedName(type.symbol) : typeToString(type));
+        const accessibilityError = getConstructorAccessibilityError(node, signatures, ModifierFlags.Private);
+        if (accessibilityError) {
+            error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(accessibilityError.declaringClass.symbol));
         }
     }
 
