@@ -1,0 +1,49 @@
+name: 'VS Code Editor Issue'
+about: 'Issue using tsgo in VS Code'
+title: ''
+labels: 'Domain: Editor'
+assignees: ''
+body:
+  - type: input
+    id: extension_version
+    attributes:
+      label: Extension Version
+      description: The version of the TypeScript (native preview) extension
+      placeholder: '0.20251016.x'
+    validations:
+      required: true
+  - type: input
+    id: vscode_version
+    attributes:
+      label: VS Code Version
+      description: The version of the VS Code you are using
+      placeholder: '1.105.x'
+    validations:
+      required: true
+  - type: input
+    id: os_version
+    attributes:
+      label: Operating system Version
+      description: Your operating system and version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 'Steps to reproduce'
+      description: |
+        Information about how to reproduce the issue and expected behavior
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: bug_info
+    attributes:
+      label: 'Issue'
+      description: |
+        Information about the bug, such as expected vs actual behavior
+    validations:
+      required: true
