@@ -1,10 +1,22 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
-// /*FIND ALL REFS*/var x = 0;
-// var assignmentRightHandSide = x;
-// var assignmentRightHandSide2 = 1 + x;
+// /*FIND ALL REFS*/var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// // --- (line: 5) skipped ---
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
+// 
+// [|x|] == 1;
+// [|x|] <= 1;
+// 
+// var preIncrement = ++[|x|];
+// var postIncrement = [|x|]++;
+// var preDecrement = --[|x|];
+// var postDecrement = [|x|]--;
+// 
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 

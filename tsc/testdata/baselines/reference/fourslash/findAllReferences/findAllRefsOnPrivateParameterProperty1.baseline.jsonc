@@ -1,11 +1,13 @@
 // === findAllReferences ===
 // === /findAllRefsOnPrivateParameterProperty1.ts ===
 // class ABCD {
-//     constructor(private x: number, public y: number, /*FIND ALL REFS*/private z: number) {
+//     constructor(private x: number, public y: number, /*FIND ALL REFS*/private [|z|]: number) {
 //     }
 // 
 //     func() {
-// // --- (line: 6) skipped ---
+//         return this.[|z|];
+//     }
+// }
 
 
 

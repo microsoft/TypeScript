@@ -1,10 +1,10 @@
 // === findAllReferences ===
 // === /a.js ===
 // /** @enum {string} */
-// /*FIND ALL REFS*/const E = { A: "" };
-// E["A"];
+// /*FIND ALL REFS*/const [|E|] = { A: "" };
+// [|E|]["A"];
 // /** @type {E} */
-// const e = E.A;
+// const e = [|E|].A;
 
 
 

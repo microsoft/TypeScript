@@ -611,6 +611,10 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 		}
 	}
 
+	if options.use == referenceUseReferences || options.use == referenceUseRename {
+		node = getAdjustedLocation(node, options.use == referenceUseRename, ast.GetSourceFileOfNode(node))
+	}
+
 	checker, done := program.GetTypeChecker(ctx)
 	defer done()
 

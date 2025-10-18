@@ -1,10 +1,17 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations.ts ===
-// /*FIND ALL REFS*/interface Foo {
+// /*FIND ALL REFS*/interface [|Foo|] {
 // }
 // 
 // module Foo {
 // // --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+// }
+// 
+// var f1: Foo.Bar;
+// var f2: [|Foo|];
+// Foo.bind(this);
 
 
 
@@ -30,11 +37,16 @@
 // interface Foo {
 // }
 // 
-// /*FIND ALL REFS*/module Foo {
+// /*FIND ALL REFS*/module [|Foo|] {
 //     export interface Bar { }
 // }
 // 
-// // --- (line: 8) skipped ---
+// function Foo(): void {
+// }
+// 
+// var f1: [|Foo|].Bar;
+// var f2: Foo;
+// Foo.bind(this);
 
 
 
@@ -62,12 +74,12 @@
 //     export interface Bar { }
 // }
 // 
-// /*FIND ALL REFS*/function Foo(): void {
+// /*FIND ALL REFS*/function [|Foo|](): void {
 // }
 // 
 // var f1: Foo.Bar;
 // var f2: Foo;
-// Foo.bind(this);
+// [|Foo|].bind(this);
 
 
 

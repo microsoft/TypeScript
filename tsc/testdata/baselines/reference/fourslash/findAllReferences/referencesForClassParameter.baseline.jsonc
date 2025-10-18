@@ -5,11 +5,17 @@
 // class p { }
 // 
 // class foo {
-//     constructor (/*FIND ALL REFS*/public p: any) {
+//     constructor (/*FIND ALL REFS*/public [|p|]: any) {
 //     }
 // 
 //     public f(p) {
-// // --- (line: 10) skipped ---
+//         this.[|p|] = p;
+//     }
+// 
+// }
+// 
+// var n = new foo(undefined);
+// n.[|p|] = null;
 
 
 

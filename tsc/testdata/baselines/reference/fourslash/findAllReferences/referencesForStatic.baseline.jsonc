@@ -3,11 +3,29 @@
 // var n = 43;
 // 
 // class foo {
-//     /*FIND ALL REFS*/static n = '';
+//     /*FIND ALL REFS*/static [|n|] = '';
 // 
 //     public bar() {
-//         foo.n = "'";
-// // --- (line: 8) skipped ---
+//         foo.[|n|] = "'";
+//         if(foo.[|n|]) {
+//             var x = foo.[|n|];
+//         }
+//     }
+// }
+// 
+// class foo2 {
+//     private x = foo.[|n|];
+//     constructor() {
+//         foo.[|n|] = x;
+//     }
+// 
+//     function b(n) {
+//         n = foo.[|n|];
+//     }
+// }
+
+// === /referencesOnStatic_2.ts ===
+// var q = foo.[|n|];
 
 
 

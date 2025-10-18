@@ -1,7 +1,11 @@
 // === findAllReferences ===
 // === /a.ts ===
-// /*FIND ALL REFS*/export type T = number;
+// /*FIND ALL REFS*/export type [|T|] = number;
 // export type U = string;
+
+// === /b.ts ===
+// const x: import("./a").[|T|] = 0;
+// const x: import("./a").U = 0;
 
 
 
@@ -19,7 +23,11 @@
 // === findAllReferences ===
 // === /a.ts ===
 // export type T = number;
-// /*FIND ALL REFS*/export type U = string;
+// /*FIND ALL REFS*/export type [|U|] = string;
+
+// === /b.ts ===
+// const x: import("./a").T = 0;
+// const x: import("./a").[|U|] = 0;
 
 
 

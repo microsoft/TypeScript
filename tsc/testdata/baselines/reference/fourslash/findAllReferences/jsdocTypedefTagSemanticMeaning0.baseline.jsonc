@@ -19,9 +19,9 @@
 // === findAllReferences ===
 // === /a.js ===
 // /** @typedef {number} T */
-// /*FIND ALL REFS*/const T = 1;
+// /*FIND ALL REFS*/const [|T|] = 1;
 // /** @type {T} */
-// const n = T;
+// const n = [|T|];
 
 
 

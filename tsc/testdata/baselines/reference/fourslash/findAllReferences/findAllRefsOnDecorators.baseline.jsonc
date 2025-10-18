@@ -1,9 +1,16 @@
 // === findAllReferences ===
 // === /a.ts ===
-// /*FIND ALL REFS*/function decorator(target) {
+// /*FIND ALL REFS*/function [|decorator|](target) {
 //     return target;
 // }
-// decorator();
+// [|decorator|]();
+
+// === /b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
 
 
 

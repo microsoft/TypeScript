@@ -1,10 +1,26 @@
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
-// /*FIND ALL REFS*/var global = 2;
+// /*FIND ALL REFS*/var [|global|] = 2;
 // 
 // class foo {
 //     constructor (public global) { }
-// // --- (line: 5) skipped ---
+//     public f(global) { }
+//     public f2(global) { }
+// }
+// 
+// class bar {
+//     constructor () {
+//         var n = [|global|];
+// 
+//         var f = new foo('');
+//         f.global = '';
+//     }
+// }
+// 
+// var k = [|global|];
+
+// === /referencesForGlobals_2.ts ===
+// var m = [|global|];
 
 
 

@@ -1,6 +1,14 @@
 // === findAllReferences ===
 // === /a.ts ===
-// /*FIND ALL REFS*/var x: number;
+// /*FIND ALL REFS*/var [|x|]: number;
+
+// === /b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
 
 
 

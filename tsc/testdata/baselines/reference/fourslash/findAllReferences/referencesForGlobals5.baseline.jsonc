@@ -4,7 +4,10 @@
 //     export var x;
 // }
 // 
-// /*FIND ALL REFS*/import globalAlias = globalModule;
+// /*FIND ALL REFS*/import [|globalAlias|] = globalModule;
+
+// === /referencesForGlobals_2.ts ===
+// var m = [|globalAlias|];
 
 
 

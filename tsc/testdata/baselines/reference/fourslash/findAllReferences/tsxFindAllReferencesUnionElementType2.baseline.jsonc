@@ -4,8 +4,8 @@
 //     }
 //     private method() { }
 // }
-// /*FIND ALL REFS*/var RCComp = RC1 || RC2;
-// <RCComp />
+// /*FIND ALL REFS*/var [|RCComp|] = RC1 || RC2;
+// <[|RCComp|] />
 
 
 

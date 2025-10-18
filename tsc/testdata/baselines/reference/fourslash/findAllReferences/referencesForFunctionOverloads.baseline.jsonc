@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /referencesForFunctionOverloads.ts ===
-// /*FIND ALL REFS*/function foo(x: string);
-// function foo(x: string, y: number) {
-//     foo('', 43);
+// /*FIND ALL REFS*/function [|foo|](x: string);
+// function [|foo|](x: string, y: number) {
+//     [|foo|]('', 43);
 // }
 
 
@@ -18,9 +18,9 @@
 
 // === findAllReferences ===
 // === /referencesForFunctionOverloads.ts ===
-// function foo(x: string);
-// /*FIND ALL REFS*/function foo(x: string, y: number) {
-//     foo('', 43);
+// function [|foo|](x: string);
+// /*FIND ALL REFS*/function [|foo|](x: string, y: number) {
+//     [|foo|]('', 43);
 // }
 
 

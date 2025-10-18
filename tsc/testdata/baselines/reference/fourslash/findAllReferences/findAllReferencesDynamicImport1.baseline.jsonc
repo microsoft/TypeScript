@@ -18,7 +18,7 @@
 // === /foo.ts ===
 // export function foo() { return "foo"; }
 // import("./foo")
-// /*FIND ALL REFS*/var x = import("./foo")
+// /*FIND ALL REFS*/var [|x|] = import("./foo")
 
 
 

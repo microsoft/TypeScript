@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /referencesForModifiers.ts ===
-// /*FIND ALL REFS*/declare abstract class C1 {
+// /*FIND ALL REFS*/declare abstract class [|C1|] {
 //     static a;
 //     readonly b;
 //     public c;
@@ -10,7 +10,7 @@
 
 // === findAllReferences ===
 // === /referencesForModifiers.ts ===
-// declare /*FIND ALL REFS*/abstract class C1 {
+// declare /*FIND ALL REFS*/abstract class [|C1|] {
 //     static a;
 //     readonly b;
 //     public c;
@@ -21,7 +21,7 @@
 // === findAllReferences ===
 // === /referencesForModifiers.ts ===
 // declare abstract class C1 {
-//     /*FIND ALL REFS*/static a;
+//     /*FIND ALL REFS*/static [|a|];
 //     readonly b;
 //     public c;
 //     protected d;
@@ -33,7 +33,7 @@
 // === /referencesForModifiers.ts ===
 // declare abstract class C1 {
 //     static a;
-//     /*FIND ALL REFS*/readonly b;
+//     /*FIND ALL REFS*/readonly [|b|];
 //     public c;
 //     protected d;
 //     private e;
@@ -46,7 +46,7 @@
 // declare abstract class C1 {
 //     static a;
 //     readonly b;
-//     /*FIND ALL REFS*/public c;
+//     /*FIND ALL REFS*/public [|c|];
 //     protected d;
 //     private e;
 // }
@@ -60,7 +60,7 @@
 //     static a;
 //     readonly b;
 //     public c;
-//     /*FIND ALL REFS*/protected d;
+//     /*FIND ALL REFS*/protected [|d|];
 //     private e;
 // }
 // const enum E {
@@ -75,7 +75,7 @@
 //     readonly b;
 //     public c;
 //     protected d;
-//     /*FIND ALL REFS*/private e;
+//     /*FIND ALL REFS*/private [|e|];
 // }
 // const enum E {
 // }
@@ -90,7 +90,7 @@
 //     protected d;
 //     private e;
 // }
-// /*FIND ALL REFS*/const enum E {
+// /*FIND ALL REFS*/const enum [|E|] {
 // }
 // async function fn() {}
 // export default class C2 {}
@@ -103,7 +103,7 @@
 // }
 // const enum E {
 // }
-// /*FIND ALL REFS*/async function fn() {}
+// /*FIND ALL REFS*/async function [|fn|]() {}
 // export default class C2 {}
 
 
@@ -114,7 +114,7 @@
 // const enum E {
 // }
 // async function fn() {}
-// /*FIND ALL REFS*/export default class C2 {}
+// /*FIND ALL REFS*/export default class [|C2|] {}
 
 
 

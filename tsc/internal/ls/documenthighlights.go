@@ -51,7 +51,7 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 }
 
 func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, position int, node *ast.Node, program *compiler.Program, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
-	options := refOptions{use: referenceUseReferences}
+	options := refOptions{use: referenceUseNone}
 	referenceEntries := l.getReferencedSymbolsForNode(ctx, position, node, program, []*ast.SourceFile{sourceFile}, options, &collections.Set[string]{})
 	if referenceEntries == nil {
 		return nil

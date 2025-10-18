@@ -1,8 +1,11 @@
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
-// /*FIND ALL REFS*/interface globalInterface {
+// /*FIND ALL REFS*/interface [|globalInterface|] {
 //      f();
 // }
+
+// === /referencesForGlobals_2.ts ===
+// var i: [|globalInterface|];
 
 
 

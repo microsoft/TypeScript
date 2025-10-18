@@ -1,11 +1,11 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultExport01.ts ===
-// /*FIND ALL REFS*/export default class DefaultExportedClass {
+// /*FIND ALL REFS*/export default class [|DefaultExportedClass|] {
 // }
 // 
-// var x: DefaultExportedClass;
+// var x: [|DefaultExportedClass|];
 // 
-// var y = new DefaultExportedClass;
+// var y = new [|DefaultExportedClass|];
 
 
 

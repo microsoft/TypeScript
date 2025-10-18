@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfFunction.ts ===
-// /*FIND ALL REFS*/function func(x: number) {
+// /*FIND ALL REFS*/function [|func|](x: number) {
 // }
-// func(x)
+// [|func|](x)
 
 
 

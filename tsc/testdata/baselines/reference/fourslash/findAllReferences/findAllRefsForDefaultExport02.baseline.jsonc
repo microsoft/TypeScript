@@ -1,10 +1,15 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultExport02.ts ===
-// /*FIND ALL REFS*/export default function DefaultExportedFunction() {
-//     return DefaultExportedFunction;
+// /*FIND ALL REFS*/export default function [|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
 // }
 // 
-// // --- (line: 5) skipped ---
+// var x: typeof [|DefaultExportedFunction|];
+// 
+// var y = [|DefaultExportedFunction|]();
+// 
+// namespace DefaultExportedFunction {
+// }
 
 
 
@@ -74,7 +79,7 @@
 // 
 // var y = DefaultExportedFunction();
 // 
-// /*FIND ALL REFS*/namespace DefaultExportedFunction {
+// /*FIND ALL REFS*/namespace [|DefaultExportedFunction|] {
 // }
 
 

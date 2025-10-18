@@ -3,11 +3,15 @@
 // class Foo {
 //     public _bar;
 //     public __bar;
-//     /*FIND ALL REFS*/public ___bar;
+//     /*FIND ALL REFS*/public [|___bar|];
 //     public ____bar;
 // }
 // 
-// // --- (line: 8) skipped ---
+// var x: Foo;
+// x._bar;
+// x.__bar;
+// x.[|___bar|];
+// x.____bar;
 
 
 

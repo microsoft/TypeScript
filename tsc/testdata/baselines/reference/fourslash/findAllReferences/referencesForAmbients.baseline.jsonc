@@ -1,10 +1,15 @@
 // === findAllReferences ===
 // === /referencesForAmbients.ts ===
-// /*FIND ALL REFS*/declare module "foo" {
+// /*FIND ALL REFS*/declare module "[|foo|]" {
 //     var f: number;
 // }
 // 
-// // --- (line: 5) skipped ---
+// declare module "bar" {
+//     export import foo = require("[|foo|]");
+//     var f2: typeof foo.f;
+// }
+// 
+// // --- (line: 10) skipped ---
 
 
 
@@ -26,11 +31,16 @@
 // === findAllReferences ===
 // === /referencesForAmbients.ts ===
 // declare module "foo" {
-//     /*FIND ALL REFS*/var f: number;
+//     /*FIND ALL REFS*/var [|f|]: number;
 // }
 // 
 // declare module "bar" {
-// // --- (line: 6) skipped ---
+//     export import foo = require("foo");
+//     var f2: typeof foo.[|f|];
+// }
+// 
+// declare module "baz" {
+// // --- (line: 11) skipped ---
 
 
 
@@ -56,11 +66,15 @@
 //     var f: number;
 // }
 // 
-// /*FIND ALL REFS*/declare module "bar" {
+// /*FIND ALL REFS*/declare module "[|bar|]" {
 //     export import foo = require("foo");
 //     var f2: typeof foo.f;
 // }
-// // --- (line: 9) skipped ---
+// 
+// declare module "baz" {
+//     import bar = require("[|bar|]");
+//     var f2: typeof bar.foo;
+// }
 
 
 
@@ -89,11 +103,14 @@
 // }
 // 
 // declare module "bar" {
-//     /*FIND ALL REFS*/export import foo = require("foo");
-//     var f2: typeof foo.f;
+//     /*FIND ALL REFS*/export import [|foo|] = require("foo");
+//     var f2: typeof [|foo|].f;
 // }
 // 
-// // --- (line: 10) skipped ---
+// declare module "baz" {
+//     import bar = require("bar");
+//     var f2: typeof bar.[|foo|];
+// }
 
 
 
@@ -170,8 +187,8 @@
 // }
 // 
 // declare module "baz" {
-//     /*FIND ALL REFS*/import bar = require("bar");
-//     var f2: typeof bar.foo;
+//     /*FIND ALL REFS*/import [|bar|] = require("bar");
+//     var f2: typeof [|bar|].foo;
 // }
 
 

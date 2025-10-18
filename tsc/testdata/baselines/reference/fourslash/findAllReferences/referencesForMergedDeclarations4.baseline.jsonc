@@ -1,10 +1,24 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
-// /*FIND ALL REFS*/class testClass {
+// /*FIND ALL REFS*/class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
-// // --- (line: 5) skipped ---
+// 
+// module [|testClass|] {
+//     export interface Bar {
+// 
+//     }
+//     export var s = 0;
+// }
+// 
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -34,16 +48,25 @@
 
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
-// class testClass {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// /*FIND ALL REFS*/module testClass {
+// /*FIND ALL REFS*/module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
-// // --- (line: 10) skipped ---
+//     export var s = 0;
+// }
+// 
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 

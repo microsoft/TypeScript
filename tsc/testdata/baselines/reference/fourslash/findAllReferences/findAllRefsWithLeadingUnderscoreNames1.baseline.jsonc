@@ -1,11 +1,11 @@
 // === findAllReferences ===
 // === /findAllRefsWithLeadingUnderscoreNames1.ts ===
 // class Foo {
-//     /*FIND ALL REFS*/public _bar() { return 0; }
+//     /*FIND ALL REFS*/public [|_bar|]() { return 0; }
 // }
 // 
 // var x: Foo;
-// x._bar;
+// x.[|_bar|];
 
 
 

@@ -1,7 +1,11 @@
 // === findAllReferences ===
 // === /a.ts ===
-// /*FIND ALL REFS*/export type T = 0;
+// /*FIND ALL REFS*/export type [|T|] = 0;
 // export const T = 0;
+
+// === /b.ts ===
+// const x: import("./a").[|T|] = 0;
+// const x: typeof import("./a").T = 0;
 
 
 

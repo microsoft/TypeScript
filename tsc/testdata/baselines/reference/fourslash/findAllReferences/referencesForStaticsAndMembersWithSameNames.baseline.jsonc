@@ -27,11 +27,19 @@
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
-// 			/*FIND ALL REFS*/static bar: Foo;
+// 			/*FIND ALL REFS*/static [|bar|]: Foo;
 // 
 // 			public foo(): void {
 // 			}
 // // --- (line: 9) skipped ---
+
+// --- (line: 18) skipped ---
+// 
+// 		// static function
+// 		MixedStaticsClassTest.Foo.foo();
+// 		MixedStaticsClassTest.Foo.[|bar|];
+// 	}
+// }
 
 
 
@@ -63,11 +71,21 @@
 // 			bar: Foo;
 // 			static bar: Foo;
 // 
-// 			/*FIND ALL REFS*/public foo(): void {
+// 			/*FIND ALL REFS*/public [|foo|](): void {
 // 			}
 // 			public static foo(): void {
 // 			}
-// // --- (line: 11) skipped ---
+// 		}
+// 	}
+// 
+// 	function test() {
+// 		// instance function
+// 		var x = new MixedStaticsClassTest.Foo();
+// 		x.[|foo|]();
+// 		x.bar;
+// 
+// 		// static function
+// // --- (line: 21) skipped ---
 
 
 
@@ -101,11 +119,20 @@
 // 
 // 			public foo(): void {
 // 			}
-// 			/*FIND ALL REFS*/public static foo(): void {
+// 			/*FIND ALL REFS*/public static [|foo|](): void {
 // 			}
 // 		}
 // 	}
 // // --- (line: 13) skipped ---
+
+// --- (line: 17) skipped ---
+// 		x.bar;
+// 
+// 		// static function
+// 		MixedStaticsClassTest.Foo.[|foo|]();
+// 		MixedStaticsClassTest.Foo.bar;
+// 	}
+// }
 
 
 

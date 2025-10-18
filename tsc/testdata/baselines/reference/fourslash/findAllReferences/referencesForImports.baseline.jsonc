@@ -4,8 +4,8 @@
 //     function $(s: string): any;
 //     export = $;
 // }
-// /*FIND ALL REFS*/import $ = require("jquery");
-// $("a");
+// /*FIND ALL REFS*/import [|$|] = require("jquery");
+// [|$|]("a");
 // import $ = require("jquery");
 
 
@@ -40,7 +40,7 @@
 // }
 // import $ = require("jquery");
 // $("a");
-// /*FIND ALL REFS*/import $ = require("jquery");
+// /*FIND ALL REFS*/import [|$|] = require("jquery");
 
 
 

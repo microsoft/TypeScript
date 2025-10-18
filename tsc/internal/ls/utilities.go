@@ -917,7 +917,7 @@ func getAdjustedLocation(node *ast.Node, forRename bool, sourceFile *ast.SourceF
 	// specially by `getSymbolAtLocation`.
 	isModifier := func(node *ast.Node) bool {
 		if ast.IsModifier(node) && (forRename || node.Kind != ast.KindDefaultKeyword) {
-			return ast.CanHaveModifiers(parent) && slices.Contains(parent.Modifiers().NodeList.Nodes, node)
+			return ast.CanHaveModifiers(parent) && parent.Modifiers() != nil && slices.Contains(parent.Modifiers().NodeList.Nodes, node)
 		}
 		switch node.Kind {
 		case ast.KindClassKeyword:
