@@ -37171,7 +37171,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return {
                     kind: modifiers,
                     declaringClass: getDeclaredTypeOfSymbol(declaration.parent.symbol),
-                }
+                };
             }
         }
         return undefined;
