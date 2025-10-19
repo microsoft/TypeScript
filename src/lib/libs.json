@@ -90,6 +90,7 @@
         "esnext.typedarrays",
         "esnext.error",
         "esnext.sharedmemory",
+        "esnext.temporal",
         "decorators",
         "decorators.legacy",
         // Default libraries

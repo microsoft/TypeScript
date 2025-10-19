@@ -105,7 +105,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 124
+//// [/home/user/projects/myproject/src/file.js] Inode:: 125
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -341,7 +341,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 124
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 125
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:

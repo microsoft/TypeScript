@@ -34,7 +34,7 @@ Output::
 
 
 
-//// [/a/username/projects/project/src/file1.js] Inode:: 114
+//// [/a/username/projects/project/src/file1.js] Inode:: 115
 
 
 
@@ -74,7 +74,7 @@ exitCode:: ExitStatus.undefined
 Change:: Rename file1 to file2
 
 Input::
-//// [/a/username/projects/project/src/file2.ts] Inode:: 115
+//// [/a/username/projects/project/src/file2.ts] Inode:: 116
 
 
 //// [/a/username/projects/project/src/file1.ts] deleted
@@ -128,7 +128,7 @@ Output::
 
 
 
-//// [/a/username/projects/project/src/file2.js] Inode:: 116
+//// [/a/username/projects/project/src/file2.js] Inode:: 117
 
 
 
@@ -138,7 +138,7 @@ PolledWatches *deleted*::
 
 FsWatches::
 /a/username/projects/project/src/file2.ts: *new*
-  {"inode":115}
+  {"inode":116}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
 /home/src/tslibs/TS/Lib/lib.d.ts:
