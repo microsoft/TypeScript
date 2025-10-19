@@ -1,0 +1,2333 @@
+//// [tests/cases/compiler/temporal.ts] ////
+
+=== temporal.ts ===
+let timeZoneLike: Temporal.TimeZoneLike;
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeZoneLike : Symbol(Temporal.TimeZoneLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+timeZoneLike = new Temporal.ZonedDateTime(1234567890n, 'UTC');
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+timeZoneLike = Temporal.Now.timeZoneId();
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+>Temporal.Now.timeZoneId : Symbol(Temporal.Now.timeZoneId, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneId : Symbol(Temporal.Now.timeZoneId, Decl(lib.esnext.temporal.d.ts, --, --))
+
+let instant: Temporal.Instant;
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+instant = Temporal.Now.instant();
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal.Now.instant : Symbol(Temporal.Now.instant, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(Temporal.Now.instant, Decl(lib.esnext.temporal.d.ts, --, --))
+
+let plainDate: Temporal.PlainDate;
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainDate = Temporal.Now.plainDateISO();
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.Now.plainDateISO : Symbol(Temporal.Now.plainDateISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateISO : Symbol(Temporal.Now.plainDateISO, Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainDate = Temporal.Now.plainDateISO(timeZoneLike);
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.Now.plainDateISO : Symbol(Temporal.Now.plainDateISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateISO : Symbol(Temporal.Now.plainDateISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+let plainDateTime: Temporal.PlainDateTime;
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainDateTime = Temporal.Now.plainDateTimeISO();
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal.Now.plainDateTimeISO : Symbol(Temporal.Now.plainDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeISO : Symbol(Temporal.Now.plainDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainDateTime = Temporal.Now.plainDateTimeISO(timeZoneLike)
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal.Now.plainDateTimeISO : Symbol(Temporal.Now.plainDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeISO : Symbol(Temporal.Now.plainDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+let plainTime: Temporal.PlainTime;
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainTime : Symbol(Temporal.PlainTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainTime = Temporal.Now.plainTimeISO();
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>Temporal.Now.plainTimeISO : Symbol(Temporal.Now.plainTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeISO : Symbol(Temporal.Now.plainTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainTime = Temporal.Now.plainTimeISO(timeZoneLike);
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>Temporal.Now.plainTimeISO : Symbol(Temporal.Now.plainTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeISO : Symbol(Temporal.Now.plainTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+let zonedDateTime: Temporal.ZonedDateTime;
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+zonedDateTime = Temporal.Now.zonedDateTimeISO();
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal.Now.zonedDateTimeISO : Symbol(Temporal.Now.zonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeISO : Symbol(Temporal.Now.zonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+
+zonedDateTime = Temporal.Now.zonedDateTimeISO(timeZoneLike);
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal.Now.zonedDateTimeISO : Symbol(Temporal.Now.zonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeISO : Symbol(Temporal.Now.zonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+let durationLike: Temporal.DurationLike;
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DurationLike : Symbol(Temporal.DurationLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+durationLike = new Temporal.Duration();
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+durationLike = {
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    years: 1,
+>years : Symbol(years, Decl(temporal.ts, 25, 16))
+
+    months: 2,
+>months : Symbol(months, Decl(temporal.ts, 26, 13))
+
+    weeks: 3,
+>weeks : Symbol(weeks, Decl(temporal.ts, 27, 14))
+
+    days: 4,
+>days : Symbol(days, Decl(temporal.ts, 28, 13))
+
+    hours: 5,
+>hours : Symbol(hours, Decl(temporal.ts, 29, 12))
+
+    minutes: 6,
+>minutes : Symbol(minutes, Decl(temporal.ts, 30, 13))
+
+    seconds: 7,
+>seconds : Symbol(seconds, Decl(temporal.ts, 31, 15))
+
+    milliseconds: 8,
+>milliseconds : Symbol(milliseconds, Decl(temporal.ts, 32, 15))
+
+    microseconds: 9,
+>microseconds : Symbol(microseconds, Decl(temporal.ts, 33, 20))
+
+    nanoseconds: 10,
+>nanoseconds : Symbol(nanoseconds, Decl(temporal.ts, 34, 20))
+
+};
+
+let calendarLike!: Temporal.CalendarLike;
+>calendarLike : Symbol(calendarLike, Decl(temporal.ts, 38, 3))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>CalendarLike : Symbol(Temporal.CalendarLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+declare const anyRoundingUnits: Temporal.DateUnit | Temporal.TimeUnit | undefined;
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DateUnit : Symbol(Temporal.DateUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+declare const calendarName: 'auto' | 'always' | 'never' | 'critical' | undefined;
+>calendarName : Symbol(calendarName, Decl(temporal.ts, 41, 13))
+
+declare const disambiguation: 'compatible' | 'earlier' | 'later' | 'reject' | undefined;
+>disambiguation : Symbol(disambiguation, Decl(temporal.ts, 42, 13))
+
+declare const fractionalSecondDigits: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | undefined;
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 43, 13))
+
+declare const roundingIncrement: number | undefined;
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 44, 13))
+
+declare const roundingMode: 'ceil' | 'floor' | 'expand' | 'trunc' | 'halfCeil' | 'halfFloor' | 'halfExpand' | 'halfTrunc' | 'halfEven' | undefined;
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 45, 13))
+
+declare const overflow: 'constrain' | 'reject' | undefined;
+>overflow : Symbol(overflow, Decl(temporal.ts, 46, 13))
+
+declare const locales: Intl.LocalesArgument | undefined;
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>LocalesArgument : Symbol(Intl.LocalesArgument, Decl(lib.es2020.intl.d.ts, --, --))
+
+declare const toLocaleStringOptions: Intl.DateTimeFormatOptions | undefined;
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>DateTimeFormatOptions : Symbol(Intl.DateTimeFormatOptions, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+{
+    let duration: Temporal.Duration;
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration = new Temporal.Duration();
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration = new Temporal.Duration(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration = Temporal.Duration.from(duration);
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+
+    duration = Temporal.Duration.from(durationLike);
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    Temporal.Duration.compare(duration, durationLike);
+>Temporal.Duration.compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    Temporal.Duration.compare(duration, durationLike, { relativeTo: plainDate });
+>Temporal.Duration.compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 59, 55))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+
+    const {
+        blank,
+>blank : Symbol(blank, Decl(temporal.ts, 61, 11))
+
+        days,
+>days : Symbol(days, Decl(temporal.ts, 62, 14))
+
+        hours,
+>hours : Symbol(hours, Decl(temporal.ts, 63, 13))
+
+        microseconds,
+>microseconds : Symbol(microseconds, Decl(temporal.ts, 64, 14))
+
+        milliseconds,
+>milliseconds : Symbol(milliseconds, Decl(temporal.ts, 65, 21))
+
+        minutes,
+>minutes : Symbol(minutes, Decl(temporal.ts, 66, 21))
+
+        months,
+>months : Symbol(months, Decl(temporal.ts, 67, 16))
+
+        nanoseconds,
+>nanoseconds : Symbol(nanoseconds, Decl(temporal.ts, 68, 15))
+
+        seconds,
+>seconds : Symbol(seconds, Decl(temporal.ts, 69, 20))
+
+        sign,
+>sign : Symbol(sign, Decl(temporal.ts, 70, 16))
+
+        weeks,
+>weeks : Symbol(weeks, Decl(temporal.ts, 71, 13))
+
+        years,
+>years : Symbol(years, Decl(temporal.ts, 72, 14))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 73, 14))
+
+    } = duration;
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+
+    let roundingUnits!: (Temporal.DateUnit & `day${string}`) | Temporal.TimeUnit;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 77, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DateUnit : Symbol(Temporal.DateUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let toStringUnits!: Exclude<Temporal.TimeUnit, `hour${string}` | `minute${string}`> | undefined;
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 78, 7))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.abs();
+>duration.abs : Symbol(Temporal.Duration.abs, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>abs : Symbol(Temporal.Duration.abs, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.add(durationLike);
+>duration.add : Symbol(Temporal.Duration.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>add : Symbol(Temporal.Duration.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    duration.negated();
+>duration.negated : Symbol(Temporal.Duration.negated, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>negated : Symbol(Temporal.Duration.negated, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.round(roundingUnits);
+>duration.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 77, 7))
+
+    duration.round({ smallestUnit: anyRoundingUnits, largestUnit: anyRoundingUnits, relativeTo: plainDateTime, roundingIncrement, roundingMode });
+>duration.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 84, 20))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 84, 52))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 84, 83))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 84, 110))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 84, 129))
+
+    duration.subtract(durationLike);
+>duration.subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    duration.toJSON();
+>duration.toJSON : Symbol(Temporal.Duration.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toJSON : Symbol(Temporal.Duration.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.toLocaleString();
+>duration.toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.toLocaleString(locales);
+>duration.toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    duration.toLocaleString(locales, toLocaleStringOptions);
+>duration.toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    duration.toString();
+>duration.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.toString({});
+>duration.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    duration.toString({ smallestUnit: toStringUnits, fractionalSecondDigits, roundingMode });
+>duration.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 92, 23))
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 78, 7))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 92, 52))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 92, 76))
+
+    duration.total(roundingUnits!);
+>duration.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 77, 7))
+
+    duration.total({ unit: anyRoundingUnits! });
+>duration.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>unit : Symbol(unit, Decl(temporal.ts, 94, 20))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+
+    duration.total({ unit: anyRoundingUnits!, relativeTo: zonedDateTime });
+>duration.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>unit : Symbol(unit, Decl(temporal.ts, 95, 20))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 95, 45))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+
+    duration.with({ days, hours, microseconds, milliseconds, minutes, months, nanoseconds, seconds, weeks, years });
+>duration.with : Symbol(Temporal.Duration.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>duration : Symbol(duration, Decl(temporal.ts, 51, 7))
+>with : Symbol(Temporal.Duration.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>days : Symbol(days, Decl(temporal.ts, 96, 19))
+>hours : Symbol(hours, Decl(temporal.ts, 96, 25))
+>microseconds : Symbol(microseconds, Decl(temporal.ts, 96, 32))
+>milliseconds : Symbol(milliseconds, Decl(temporal.ts, 96, 46))
+>minutes : Symbol(minutes, Decl(temporal.ts, 96, 60))
+>months : Symbol(months, Decl(temporal.ts, 96, 69))
+>nanoseconds : Symbol(nanoseconds, Decl(temporal.ts, 96, 77))
+>seconds : Symbol(seconds, Decl(temporal.ts, 96, 90))
+>weeks : Symbol(weeks, Decl(temporal.ts, 96, 99))
+>years : Symbol(years, Decl(temporal.ts, 96, 106))
+}
+
+{
+    instant = new Temporal.Instant(1234567890n);
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal.Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let instantLike: Temporal.InstantLike;
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>InstantLike : Symbol(Temporal.InstantLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    instantLike = instant;
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+
+    instantLike = '1970-01-01T00:00:00.000Z';
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+
+    instant = Temporal.Instant.from(instant);
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal.Instant.from : Symbol(Temporal.InstantConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.InstantConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+
+    instant = Temporal.Instant.from(instantLike);
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal.Instant.from : Symbol(Temporal.InstantConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.InstantConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+
+    instant = Temporal.Instant.fromEpochMilliseconds(1234567890);
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal.Instant.fromEpochMilliseconds : Symbol(Temporal.InstantConstructor.fromEpochMilliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>fromEpochMilliseconds : Symbol(Temporal.InstantConstructor.fromEpochMilliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    instant = Temporal.Instant.fromEpochNanoseconds(1234567890n);
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>Temporal.Instant.fromEpochNanoseconds : Symbol(Temporal.InstantConstructor.fromEpochNanoseconds, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>fromEpochNanoseconds : Symbol(Temporal.InstantConstructor.fromEpochNanoseconds, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    Temporal.Instant.compare(instant, instantLike);
+>Temporal.Instant.compare : Symbol(Temporal.InstantConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.InstantConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+
+    const {
+        epochMilliseconds,
+>epochMilliseconds : Symbol(epochMilliseconds, Decl(temporal.ts, 113, 11))
+
+        epochNanoseconds,
+>epochNanoseconds : Symbol(epochNanoseconds, Decl(temporal.ts, 114, 26))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 115, 25))
+
+    } = instant;
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+
+    let roundingUnits!: Temporal.TimeUnit | undefined;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let toStringUnits!: Exclude<Temporal.TimeUnit, `hour${string}`> | undefined;
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 120, 7))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    instant.add(durationLike);
+>instant.add : Symbol(Temporal.Instant.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>add : Symbol(Temporal.Instant.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    instant.equals(instantLike);
+>instant.equals : Symbol(Temporal.Instant.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>equals : Symbol(Temporal.Instant.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+
+    instant.round(roundingUnits!);
+>instant.round : Symbol(Temporal.Instant.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>round : Symbol(Temporal.Instant.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+
+    instant.round({ smallestUnit: roundingUnits, roundingIncrement, roundingMode });
+>instant.round : Symbol(Temporal.Instant.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>round : Symbol(Temporal.Instant.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 125, 19))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 125, 48))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 125, 67))
+
+    instant.since(instantLike);
+>instant.since : Symbol(Temporal.Instant.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>since : Symbol(Temporal.Instant.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+
+    instant.since(instantLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>instant.since : Symbol(Temporal.Instant.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>since : Symbol(Temporal.Instant.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 127, 32))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 127, 61))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 127, 89))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 127, 108))
+
+    instant.subtract(durationLike);
+>instant.subtract : Symbol(Temporal.Instant.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>subtract : Symbol(Temporal.Instant.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    instant.toJSON();
+>instant.toJSON : Symbol(Temporal.Instant.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toJSON : Symbol(Temporal.Instant.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    instant.toLocaleString();
+>instant.toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    instant.toLocaleString(locales);
+>instant.toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    instant.toLocaleString(locales, toLocaleStringOptions);
+>instant.toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    instant.toString();
+>instant.toString : Symbol(Temporal.Instant.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toString : Symbol(Temporal.Instant.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    instant.toString({ smallestUnit: toStringUnits, timeZone: timeZoneLike, fractionalSecondDigits, roundingMode });
+>instant.toString : Symbol(Temporal.Instant.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toString : Symbol(Temporal.Instant.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 134, 22))
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 120, 7))
+>timeZone : Symbol(timeZone, Decl(temporal.ts, 134, 51))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 134, 75))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 134, 99))
+
+    instant.toZonedDateTimeISO(timeZoneLike);
+>instant.toZonedDateTimeISO : Symbol(Temporal.Instant.toZonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>toZonedDateTimeISO : Symbol(Temporal.Instant.toZonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+    instant.until(instantLike);
+>instant.until : Symbol(Temporal.Instant.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>until : Symbol(Temporal.Instant.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+
+    instant.until(instantLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>instant.until : Symbol(Temporal.Instant.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporal.ts, 4, 3))
+>until : Symbol(Temporal.Instant.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>instantLike : Symbol(instantLike, Decl(temporal.ts, 102, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 137, 32))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 137, 61))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 119, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 137, 89))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 137, 108))
+}
+
+{
+    plainDate = new Temporal.PlainDate(1970, 1, 1);
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate = new Temporal.PlainDate(1970, 1, 1, 'gregorian');
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let plainDateLike: Temporal.PlainDateLike;
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateLike : Symbol(Temporal.PlainDateLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateLike = plainDate;
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+
+    plainDateLike = plainDateTime;
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+
+    plainDateLike = zonedDateTime;
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+
+    plainDateLike = {
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+
+        day: 1,
+>day : Symbol(day, Decl(temporal.ts, 148, 21))
+
+        month: 1,
+>month : Symbol(month, Decl(temporal.ts, 149, 15))
+
+        year: 1970,
+>year : Symbol(year, Decl(temporal.ts, 150, 17))
+
+    };
+
+    plainDate = Temporal.PlainDate.from(plainDate);
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+
+    plainDate = Temporal.PlainDate.from(plainDateLike);
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+
+    plainDate = Temporal.PlainDate.from(plainDateLike, { overflow });
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>overflow : Symbol(overflow, Decl(temporal.ts, 156, 56))
+
+    Temporal.PlainDate.compare(plainDate, plainDateLike);
+>Temporal.PlainDate.compare : Symbol(Temporal.PlainDateConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.PlainDateConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+
+    const {
+        calendarId,
+>calendarId : Symbol(calendarId, Decl(temporal.ts, 160, 11))
+
+        day,
+>day : Symbol(day, Decl(temporal.ts, 161, 19))
+
+        dayOfWeek,
+>dayOfWeek : Symbol(dayOfWeek, Decl(temporal.ts, 162, 12))
+
+        dayOfYear,
+>dayOfYear : Symbol(dayOfYear, Decl(temporal.ts, 163, 18))
+
+        daysInMonth,
+>daysInMonth : Symbol(daysInMonth, Decl(temporal.ts, 164, 18))
+
+        daysInWeek,
+>daysInWeek : Symbol(daysInWeek, Decl(temporal.ts, 165, 20))
+
+        daysInYear,
+>daysInYear : Symbol(daysInYear, Decl(temporal.ts, 166, 19))
+
+        era,
+>era : Symbol(era, Decl(temporal.ts, 167, 19))
+
+        eraYear,
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 168, 12))
+
+        inLeapYear,
+>inLeapYear : Symbol(inLeapYear, Decl(temporal.ts, 169, 16))
+
+        month,
+>month : Symbol(month, Decl(temporal.ts, 170, 19))
+
+        monthCode,
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 171, 14))
+
+        monthsInYear,
+>monthsInYear : Symbol(monthsInYear, Decl(temporal.ts, 172, 18))
+
+        weekOfYear,
+>weekOfYear : Symbol(weekOfYear, Decl(temporal.ts, 173, 21))
+
+        year,
+>year : Symbol(year, Decl(temporal.ts, 174, 19))
+
+        yearOfWeek,
+>yearOfWeek : Symbol(yearOfWeek, Decl(temporal.ts, 175, 13))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 176, 19))
+
+    } = plainDate;
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+
+    let roundingUnits!: Temporal.DateUnit | undefined;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 180, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DateUnit : Symbol(Temporal.DateUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.add(durationLike);
+>plainDate.add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainDate.add(durationLike, { overflow });
+>plainDate.add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 183, 33))
+
+    plainDate.equals(plainDateLike);
+>plainDate.equals : Symbol(Temporal.PlainDate.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>equals : Symbol(Temporal.PlainDate.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+
+    plainDate.since(plainDateLike);
+>plainDate.since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+
+    plainDate.since(plainDateLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainDate.since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 186, 36))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 180, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 186, 65))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 180, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 186, 93))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 186, 112))
+
+    plainDate.subtract(durationLike);
+>plainDate.subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainDate.subtract(durationLike, { overflow });
+>plainDate.subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 188, 38))
+
+    plainDate.toJSON();
+>plainDate.toJSON : Symbol(Temporal.PlainDate.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toJSON : Symbol(Temporal.PlainDate.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.toLocaleString();
+>plainDate.toLocaleString : Symbol(Temporal.PlainDate.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toLocaleString : Symbol(Temporal.PlainDate.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.toLocaleString(locales);
+>plainDate.toLocaleString : Symbol(Temporal.PlainDate.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toLocaleString : Symbol(Temporal.PlainDate.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    plainDate.toLocaleString(locales, toLocaleStringOptions);
+>plainDate.toLocaleString : Symbol(Temporal.PlainDate.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toLocaleString : Symbol(Temporal.PlainDate.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    plainDate.toPlainDateTime();
+>plainDate.toPlainDateTime : Symbol(Temporal.PlainDate.toPlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toPlainDateTime : Symbol(Temporal.PlainDate.toPlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.toPlainDateTime(plainTime);
+>plainDate.toPlainDateTime : Symbol(Temporal.PlainDate.toPlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toPlainDateTime : Symbol(Temporal.PlainDate.toPlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+
+    plainDate.toPlainMonthDay();
+>plainDate.toPlainMonthDay : Symbol(Temporal.PlainDate.toPlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toPlainMonthDay : Symbol(Temporal.PlainDate.toPlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.toPlainYearMonth();
+>plainDate.toPlainYearMonth : Symbol(Temporal.PlainDate.toPlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toPlainYearMonth : Symbol(Temporal.PlainDate.toPlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.toString();
+>plainDate.toString : Symbol(Temporal.PlainDate.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toString : Symbol(Temporal.PlainDate.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDate.toString({ calendarName });
+>plainDate.toString : Symbol(Temporal.PlainDate.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toString : Symbol(Temporal.PlainDate.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>calendarName : Symbol(calendarName, Decl(temporal.ts, 198, 24))
+
+    plainDate.toZonedDateTime(timeZoneLike);
+>plainDate.toZonedDateTime : Symbol(Temporal.PlainDate.toZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>toZonedDateTime : Symbol(Temporal.PlainDate.toZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+    plainDate.until(plainDateLike);
+>plainDate.until : Symbol(Temporal.PlainDate.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>until : Symbol(Temporal.PlainDate.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+
+    plainDate.until(plainDateLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainDate.until : Symbol(Temporal.PlainDate.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>until : Symbol(Temporal.PlainDate.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateLike : Symbol(plainDateLike, Decl(temporal.ts, 144, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 201, 36))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 180, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 201, 65))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 180, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 201, 93))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 201, 112))
+
+    plainDate.with({ year, era, eraYear, month, monthCode, day });
+>plainDate.with : Symbol(Temporal.PlainDate.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>with : Symbol(Temporal.PlainDate.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 202, 20))
+>era : Symbol(era, Decl(temporal.ts, 202, 26))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 202, 31))
+>month : Symbol(month, Decl(temporal.ts, 202, 40))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 202, 47))
+>day : Symbol(day, Decl(temporal.ts, 202, 58))
+
+    plainDate.with({ year, era, eraYear, month, monthCode, day }, { overflow });
+>plainDate.with : Symbol(Temporal.PlainDate.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>with : Symbol(Temporal.PlainDate.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 203, 20))
+>era : Symbol(era, Decl(temporal.ts, 203, 26))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 203, 31))
+>month : Symbol(month, Decl(temporal.ts, 203, 40))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 203, 47))
+>day : Symbol(day, Decl(temporal.ts, 203, 58))
+>overflow : Symbol(overflow, Decl(temporal.ts, 203, 67))
+
+    plainDate.withCalendar(calendarLike);
+>plainDate.withCalendar : Symbol(Temporal.PlainDate.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+>withCalendar : Symbol(Temporal.PlainDate.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
+>calendarLike : Symbol(calendarLike, Decl(temporal.ts, 38, 3))
+}
+
+{
+    plainDateTime = new Temporal.PlainDateTime(1970, 1, 1);
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal.PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime = new Temporal.PlainDateTime(1970, 1, 1, 0, 0, 0, 0, 0, 0, 'iso8601');
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal.PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let plainDateTimeLike: Temporal.PlainDateTimeLike;
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTimeLike : Symbol(Temporal.PlainDateTimeLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTimeLike = plainDateTime;
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+
+    plainDateTimeLike = plainDate;
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>plainDate : Symbol(plainDate, Decl(temporal.ts, 7, 3))
+
+    plainDateTimeLike = zonedDateTime;
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+
+    plainDateTimeLike = {
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+
+        day: 1,
+>day : Symbol(day, Decl(temporal.ts, 215, 25))
+
+        month: 1,
+>month : Symbol(month, Decl(temporal.ts, 216, 15))
+
+        year: 1970,
+>year : Symbol(year, Decl(temporal.ts, 217, 17))
+
+        hour: 0,
+>hour : Symbol(hour, Decl(temporal.ts, 218, 19))
+
+        minute: 0,
+>minute : Symbol(minute, Decl(temporal.ts, 219, 16))
+
+        second: 0,
+>second : Symbol(second, Decl(temporal.ts, 220, 18))
+
+        millisecond: 0,
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 221, 18))
+
+        microsecond: 0,
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 222, 23))
+
+        nanosecond: 0,
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 223, 23))
+
+    };
+
+    plainDateTime = Temporal.PlainDateTime.from(plainDateTimeLike);
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal.PlainDateTime.from : Symbol(Temporal.PlainDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+
+    plainDateTime = Temporal.PlainDateTime.from(plainDateTimeLike, { overflow });
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>Temporal.PlainDateTime.from : Symbol(Temporal.PlainDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>overflow : Symbol(overflow, Decl(temporal.ts, 228, 68))
+
+    Temporal.PlainDateTime.compare(plainDateTime, plainDateTimeLike);
+>Temporal.PlainDateTime.compare : Symbol(Temporal.PlainDateTimeConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.PlainDateTimeConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+
+    const {
+        calendarId,
+>calendarId : Symbol(calendarId, Decl(temporal.ts, 232, 11))
+
+        day,
+>day : Symbol(day, Decl(temporal.ts, 233, 19))
+
+        dayOfWeek,
+>dayOfWeek : Symbol(dayOfWeek, Decl(temporal.ts, 234, 12))
+
+        dayOfYear,
+>dayOfYear : Symbol(dayOfYear, Decl(temporal.ts, 235, 18))
+
+        daysInMonth,
+>daysInMonth : Symbol(daysInMonth, Decl(temporal.ts, 236, 18))
+
+        daysInWeek,
+>daysInWeek : Symbol(daysInWeek, Decl(temporal.ts, 237, 20))
+
+        daysInYear,
+>daysInYear : Symbol(daysInYear, Decl(temporal.ts, 238, 19))
+
+        era,
+>era : Symbol(era, Decl(temporal.ts, 239, 19))
+
+        eraYear,
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 240, 12))
+
+        hour,
+>hour : Symbol(hour, Decl(temporal.ts, 241, 16))
+
+        inLeapYear,
+>inLeapYear : Symbol(inLeapYear, Decl(temporal.ts, 242, 13))
+
+        microsecond,
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 243, 19))
+
+        millisecond,
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 244, 20))
+
+        minute,
+>minute : Symbol(minute, Decl(temporal.ts, 245, 20))
+
+        month,
+>month : Symbol(month, Decl(temporal.ts, 246, 15))
+
+        monthCode,
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 247, 14))
+
+        monthsInYear,
+>monthsInYear : Symbol(monthsInYear, Decl(temporal.ts, 248, 18))
+
+        nanosecond,
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 249, 21))
+
+        second,
+>second : Symbol(second, Decl(temporal.ts, 250, 19))
+
+        weekOfYear,
+>weekOfYear : Symbol(weekOfYear, Decl(temporal.ts, 251, 15))
+
+        year,
+>year : Symbol(year, Decl(temporal.ts, 252, 19))
+
+        yearOfWeek,
+>yearOfWeek : Symbol(yearOfWeek, Decl(temporal.ts, 253, 13))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 254, 19))
+
+    } = plainDateTime;
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+
+    let roundingUnits!: (Temporal.DateUnit & `day${string}`) | Temporal.TimeUnit | undefined;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 258, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DateUnit : Symbol(Temporal.DateUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let toStringUnits!: Exclude<Temporal.TimeUnit, `hour${string}`> | undefined;
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 259, 7))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.add(durationLike);
+>plainDateTime.add : Symbol(Temporal.PlainDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>add : Symbol(Temporal.PlainDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainDateTime.add(durationLike, { overflow });
+>plainDateTime.add : Symbol(Temporal.PlainDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>add : Symbol(Temporal.PlainDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 262, 37))
+
+    plainDateTime.equals(plainDateTimeLike);
+>plainDateTime.equals : Symbol(Temporal.PlainDateTime.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>equals : Symbol(Temporal.PlainDateTime.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+
+    plainDateTime.round(roundingUnits!);
+>plainDateTime.round : Symbol(Temporal.PlainDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>round : Symbol(Temporal.PlainDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 258, 7))
+
+    plainDateTime.round({ smallestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainDateTime.round : Symbol(Temporal.PlainDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>round : Symbol(Temporal.PlainDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 265, 25))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 258, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 265, 54))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 265, 73))
+
+    plainDateTime.since(plainDateTimeLike);
+>plainDateTime.since : Symbol(Temporal.PlainDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>since : Symbol(Temporal.PlainDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+
+    plainDateTime.since(plainDateTimeLike, { smallestUnit: anyRoundingUnits, largestUnit: anyRoundingUnits, roundingIncrement, roundingMode });
+>plainDateTime.since : Symbol(Temporal.PlainDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>since : Symbol(Temporal.PlainDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 267, 44))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 267, 76))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 267, 107))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 267, 126))
+
+    plainDateTime.subtract(durationLike);
+>plainDateTime.subtract : Symbol(Temporal.PlainDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>subtract : Symbol(Temporal.PlainDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainDateTime.subtract(durationLike, { overflow });
+>plainDateTime.subtract : Symbol(Temporal.PlainDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>subtract : Symbol(Temporal.PlainDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 269, 42))
+
+    plainDateTime.toJSON();
+>plainDateTime.toJSON : Symbol(Temporal.PlainDateTime.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toJSON : Symbol(Temporal.PlainDateTime.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.toLocaleString();
+>plainDateTime.toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.toLocaleString(locales);
+>plainDateTime.toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    plainDateTime.toLocaleString(locales, toLocaleStringOptions);
+>plainDateTime.toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    plainDateTime.toPlainDate();
+>plainDateTime.toPlainDate : Symbol(Temporal.PlainDateTime.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toPlainDate : Symbol(Temporal.PlainDateTime.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.toPlainTime();
+>plainDateTime.toPlainTime : Symbol(Temporal.PlainDateTime.toPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toPlainTime : Symbol(Temporal.PlainDateTime.toPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.toString();
+>plainDateTime.toString : Symbol(Temporal.PlainDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toString : Symbol(Temporal.PlainDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.toString({ smallestUnit: toStringUnits, calendarName, fractionalSecondDigits, roundingMode });
+>plainDateTime.toString : Symbol(Temporal.PlainDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toString : Symbol(Temporal.PlainDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 277, 28))
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 259, 7))
+>calendarName : Symbol(calendarName, Decl(temporal.ts, 277, 57))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 277, 71))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 277, 95))
+
+    plainDateTime.toZonedDateTime(timeZoneLike);
+>plainDateTime.toZonedDateTime : Symbol(Temporal.PlainDateTime.toZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toZonedDateTime : Symbol(Temporal.PlainDateTime.toZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+
+    plainDateTime.toZonedDateTime(timeZoneLike, { disambiguation });
+>plainDateTime.toZonedDateTime : Symbol(Temporal.PlainDateTime.toZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>toZonedDateTime : Symbol(Temporal.PlainDateTime.toZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+>disambiguation : Symbol(disambiguation, Decl(temporal.ts, 279, 49))
+
+    plainDateTime.until(plainDateTimeLike);
+>plainDateTime.until : Symbol(Temporal.PlainDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>until : Symbol(Temporal.PlainDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+
+    plainDateTime.until(plainDateTimeLike, { smallestUnit: anyRoundingUnits, largestUnit: anyRoundingUnits, roundingIncrement, roundingMode });
+>plainDateTime.until : Symbol(Temporal.PlainDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>until : Symbol(Temporal.PlainDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTimeLike : Symbol(plainDateTimeLike, Decl(temporal.ts, 211, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 281, 44))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 281, 76))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 281, 107))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 281, 126))
+
+    plainDateTime.with({ year, era, eraYear, month, monthCode, day, hour, minute, second, millisecond, microsecond, nanosecond });
+>plainDateTime.with : Symbol(Temporal.PlainDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>with : Symbol(Temporal.PlainDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 282, 24))
+>era : Symbol(era, Decl(temporal.ts, 282, 30))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 282, 35))
+>month : Symbol(month, Decl(temporal.ts, 282, 44))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 282, 51))
+>day : Symbol(day, Decl(temporal.ts, 282, 62))
+>hour : Symbol(hour, Decl(temporal.ts, 282, 67))
+>minute : Symbol(minute, Decl(temporal.ts, 282, 73))
+>second : Symbol(second, Decl(temporal.ts, 282, 81))
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 282, 89))
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 282, 102))
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 282, 115))
+
+    plainDateTime.with({ year, era, eraYear, month, monthCode, day, hour, minute, second, millisecond, microsecond, nanosecond }, { overflow });
+>plainDateTime.with : Symbol(Temporal.PlainDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>with : Symbol(Temporal.PlainDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 283, 24))
+>era : Symbol(era, Decl(temporal.ts, 283, 30))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 283, 35))
+>month : Symbol(month, Decl(temporal.ts, 283, 44))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 283, 51))
+>day : Symbol(day, Decl(temporal.ts, 283, 62))
+>hour : Symbol(hour, Decl(temporal.ts, 283, 67))
+>minute : Symbol(minute, Decl(temporal.ts, 283, 73))
+>second : Symbol(second, Decl(temporal.ts, 283, 81))
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 283, 89))
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 283, 102))
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 283, 115))
+>overflow : Symbol(overflow, Decl(temporal.ts, 283, 131))
+
+    plainDateTime.withCalendar(calendarLike);
+>plainDateTime.withCalendar : Symbol(Temporal.PlainDateTime.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>withCalendar : Symbol(Temporal.PlainDateTime.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
+>calendarLike : Symbol(calendarLike, Decl(temporal.ts, 38, 3))
+
+    plainDateTime.withPlainTime();
+>plainDateTime.withPlainTime : Symbol(Temporal.PlainDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>withPlainTime : Symbol(Temporal.PlainDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainDateTime.withPlainTime(plainTime);
+>plainDateTime.withPlainTime : Symbol(Temporal.PlainDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+>withPlainTime : Symbol(Temporal.PlainDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+}
+
+{
+    let plainMonthDay: Temporal.PlainMonthDay;
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainMonthDay = new Temporal.PlainMonthDay(1, 1);
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainMonthDay = new Temporal.PlainMonthDay(1, 1, 'gregorian', 1972);
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let plainMonthDayLike: Temporal.PlainMonthDayLike;
+>plainMonthDayLike : Symbol(plainMonthDayLike, Decl(temporal.ts, 294, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDayLike : Symbol(Temporal.PlainMonthDayLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainMonthDayLike = plainMonthDay;
+>plainMonthDayLike : Symbol(plainMonthDayLike, Decl(temporal.ts, 294, 7))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+
+    plainMonthDayLike = {
+>plainMonthDayLike : Symbol(plainMonthDayLike, Decl(temporal.ts, 294, 7))
+
+        day: 1,
+>day : Symbol(day, Decl(temporal.ts, 296, 25))
+
+        month: 1,
+>month : Symbol(month, Decl(temporal.ts, 297, 15))
+
+        year: 1970,
+>year : Symbol(year, Decl(temporal.ts, 298, 17))
+
+    };
+
+    plainMonthDay = Temporal.PlainMonthDay.from(plainMonthDayLike);
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDayLike : Symbol(plainMonthDayLike, Decl(temporal.ts, 294, 7))
+
+    plainMonthDay = Temporal.PlainMonthDay.from(plainMonthDayLike, { overflow });
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDayLike : Symbol(plainMonthDayLike, Decl(temporal.ts, 294, 7))
+>overflow : Symbol(overflow, Decl(temporal.ts, 303, 68))
+
+    const {
+        calendarId,
+>calendarId : Symbol(calendarId, Decl(temporal.ts, 305, 11))
+
+        day,
+>day : Symbol(day, Decl(temporal.ts, 306, 19))
+
+        monthCode,
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 307, 12))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 308, 18))
+
+    } = plainMonthDay;
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+
+    plainMonthDay.equals(plainMonthDayLike);
+>plainMonthDay.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDayLike : Symbol(plainMonthDayLike, Decl(temporal.ts, 294, 7))
+
+    plainMonthDay.toJSON();
+>plainMonthDay.toJSON : Symbol(Temporal.PlainMonthDay.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toJSON : Symbol(Temporal.PlainMonthDay.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainMonthDay.toLocaleString();
+>plainMonthDay.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainMonthDay.toLocaleString(locales);
+>plainMonthDay.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    plainMonthDay.toLocaleString(locales, toLocaleStringOptions);
+>plainMonthDay.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    plainMonthDay.toPlainDate({ year: 1970 });
+>plainMonthDay.toPlainDate : Symbol(Temporal.PlainMonthDay.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toPlainDate : Symbol(Temporal.PlainMonthDay.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 317, 31))
+
+    plainMonthDay.toString();
+>plainMonthDay.toString : Symbol(Temporal.PlainMonthDay.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toString : Symbol(Temporal.PlainMonthDay.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainMonthDay.toString({ calendarName });
+>plainMonthDay.toString : Symbol(Temporal.PlainMonthDay.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>toString : Symbol(Temporal.PlainMonthDay.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>calendarName : Symbol(calendarName, Decl(temporal.ts, 319, 28))
+
+    plainMonthDay.with({ monthCode, day });
+>plainMonthDay.with : Symbol(Temporal.PlainMonthDay.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainMonthDay : Symbol(plainMonthDay, Decl(temporal.ts, 290, 7))
+>with : Symbol(Temporal.PlainMonthDay.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 320, 24))
+>day : Symbol(day, Decl(temporal.ts, 320, 35))
+}
+
+{
+    plainTime = new Temporal.PlainTime();
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>Temporal.PlainTime : Symbol(Temporal.PlainTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainTime : Symbol(Temporal.PlainTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainTime = new Temporal.PlainTime(1, 2, 3, 4, 5, 6);
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>Temporal.PlainTime : Symbol(Temporal.PlainTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainTime : Symbol(Temporal.PlainTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let plainTimeLike: Temporal.PlainTimeLike;
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainTimeLike : Symbol(Temporal.PlainTimeLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainTimeLike = plainTime;
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+
+    plainTimeLike = plainDateTime;
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+>plainDateTime : Symbol(plainDateTime, Decl(temporal.ts, 11, 3))
+
+    plainTimeLike = zonedDateTime;
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+
+    plainTimeLike = {
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+
+        hour: 1,
+>hour : Symbol(hour, Decl(temporal.ts, 331, 21))
+
+        minute: 2,
+>minute : Symbol(minute, Decl(temporal.ts, 332, 16))
+
+        second: 3,
+>second : Symbol(second, Decl(temporal.ts, 333, 18))
+
+        millisecond: 4,
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 334, 18))
+
+        microsecond: 5,
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 335, 23))
+
+        nanosecond: 6,
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 336, 23))
+
+    };
+
+    const {
+        hour,
+>hour : Symbol(hour, Decl(temporal.ts, 340, 11))
+
+        microsecond,
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 341, 13))
+
+        millisecond,
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 342, 20))
+
+        minute,
+>minute : Symbol(minute, Decl(temporal.ts, 343, 20))
+
+        nanosecond,
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 344, 15))
+
+        second,
+>second : Symbol(second, Decl(temporal.ts, 345, 19))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 346, 15))
+
+    } = plainTime;
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+
+    let roundingUnits!: Temporal.TimeUnit | undefined;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let toStringUnits!: Exclude<Temporal.TimeUnit, `hour${string}`> | undefined;
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 351, 7))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainTime.add(durationLike);
+>plainTime.add : Symbol(Temporal.PlainTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>add : Symbol(Temporal.PlainTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainTime.equals(plainTimeLike);
+>plainTime.equals : Symbol(Temporal.PlainTime.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>equals : Symbol(Temporal.PlainTime.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+
+    plainTime.round(roundingUnits!);
+>plainTime.round : Symbol(Temporal.PlainTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>round : Symbol(Temporal.PlainTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+
+    plainTime.round({ smallestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainTime.round : Symbol(Temporal.PlainTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>round : Symbol(Temporal.PlainTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 356, 21))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 356, 50))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 356, 69))
+
+    plainTime.since(plainTimeLike);
+>plainTime.since : Symbol(Temporal.PlainTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>since : Symbol(Temporal.PlainTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+
+    plainTime.since(plainTimeLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainTime.since : Symbol(Temporal.PlainTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>since : Symbol(Temporal.PlainTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 358, 36))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 358, 65))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 358, 93))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 358, 112))
+
+    plainTime.subtract(durationLike);
+>plainTime.subtract : Symbol(Temporal.PlainTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>subtract : Symbol(Temporal.PlainTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainTime.toJSON();
+>plainTime.toJSON : Symbol(Temporal.PlainTime.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>toJSON : Symbol(Temporal.PlainTime.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainTime.toLocaleString();
+>plainTime.toLocaleString : Symbol(Temporal.PlainTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>toLocaleString : Symbol(Temporal.PlainTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainTime.toLocaleString(locales);
+>plainTime.toLocaleString : Symbol(Temporal.PlainTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>toLocaleString : Symbol(Temporal.PlainTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    plainTime.toLocaleString(locales, toLocaleStringOptions);
+>plainTime.toLocaleString : Symbol(Temporal.PlainTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>toLocaleString : Symbol(Temporal.PlainTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    plainTime.toString();
+>plainTime.toString : Symbol(Temporal.PlainTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>toString : Symbol(Temporal.PlainTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainTime.toString({ smallestUnit: toStringUnits, fractionalSecondDigits, roundingMode });
+>plainTime.toString : Symbol(Temporal.PlainTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>toString : Symbol(Temporal.PlainTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 365, 24))
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 351, 7))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 365, 53))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 365, 77))
+
+    plainTime.until(plainTimeLike);
+>plainTime.until : Symbol(Temporal.PlainTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>until : Symbol(Temporal.PlainTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+
+    plainTime.until(plainTimeLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainTime.until : Symbol(Temporal.PlainTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>until : Symbol(Temporal.PlainTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTimeLike : Symbol(plainTimeLike, Decl(temporal.ts, 327, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 367, 36))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 367, 65))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 350, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 367, 93))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 367, 112))
+
+    plainTime.with({ hour, minute, second, millisecond, microsecond, nanosecond });
+>plainTime.with : Symbol(Temporal.PlainTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+>with : Symbol(Temporal.PlainTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>hour : Symbol(hour, Decl(temporal.ts, 368, 20))
+>minute : Symbol(minute, Decl(temporal.ts, 368, 26))
+>second : Symbol(second, Decl(temporal.ts, 368, 34))
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 368, 42))
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 368, 55))
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 368, 68))
+}
+
+{
+    let plainYearMonth: Temporal.PlainYearMonth;
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonth = new Temporal.PlainYearMonth(1970, 1);
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>Temporal.PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonth = new Temporal.PlainYearMonth(1970, 1, 'gregorian', 1);
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>Temporal.PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let plainYearMonthLike: Temporal.PlainYearMonthLike;
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonthLike : Symbol(Temporal.PlainYearMonthLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonthLike = plainYearMonth;
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+
+    plainYearMonthLike = {
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+
+        month: 1,
+>month : Symbol(month, Decl(temporal.ts, 378, 26))
+
+        year: 1970,
+>year : Symbol(year, Decl(temporal.ts, 379, 17))
+
+    };
+
+    plainYearMonth = Temporal.PlainYearMonth.from(plainYearMonthLike);
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>Temporal.PlainYearMonth.from : Symbol(Temporal.PlainYearMonthConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainYearMonthConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+
+    plainYearMonth = Temporal.PlainYearMonth.from(plainYearMonthLike, { overflow });
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>Temporal.PlainYearMonth.from : Symbol(Temporal.PlainYearMonthConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainYearMonthConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+>overflow : Symbol(overflow, Decl(temporal.ts, 384, 71))
+
+    Temporal.PlainYearMonth.compare(plainYearMonth, plainYearMonthLike);
+>Temporal.PlainYearMonth.compare : Symbol(Temporal.PlainYearMonthConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainYearMonth : Symbol(Temporal.PlainYearMonth, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.PlainYearMonthConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+
+    const {
+        calendarId,
+>calendarId : Symbol(calendarId, Decl(temporal.ts, 388, 11))
+
+        daysInMonth,
+>daysInMonth : Symbol(daysInMonth, Decl(temporal.ts, 389, 19))
+
+        daysInYear,
+>daysInYear : Symbol(daysInYear, Decl(temporal.ts, 390, 20))
+
+        era,
+>era : Symbol(era, Decl(temporal.ts, 391, 19))
+
+        eraYear,
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 392, 12))
+
+        inLeapYear,
+>inLeapYear : Symbol(inLeapYear, Decl(temporal.ts, 393, 16))
+
+        month,
+>month : Symbol(month, Decl(temporal.ts, 394, 19))
+
+        monthCode,
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 395, 14))
+
+        monthsInYear,
+>monthsInYear : Symbol(monthsInYear, Decl(temporal.ts, 396, 18))
+
+        year,
+>year : Symbol(year, Decl(temporal.ts, 397, 21))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 398, 13))
+
+    } = plainYearMonth;
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+
+    let roundingUnits!: (Temporal.DateUnit & (`year${string}` | `month${string}`)) | undefined;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 402, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DateUnit : Symbol(Temporal.DateUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonth.add(durationLike);
+>plainYearMonth.add : Symbol(Temporal.PlainYearMonth.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>add : Symbol(Temporal.PlainYearMonth.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainYearMonth.add(durationLike, { overflow });
+>plainYearMonth.add : Symbol(Temporal.PlainYearMonth.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>add : Symbol(Temporal.PlainYearMonth.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 405, 38))
+
+    plainYearMonth.equals(plainYearMonthLike);
+>plainYearMonth.equals : Symbol(Temporal.PlainYearMonth.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>equals : Symbol(Temporal.PlainYearMonth.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+
+    plainYearMonth.since(plainYearMonthLike);
+>plainYearMonth.since : Symbol(Temporal.PlainYearMonth.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>since : Symbol(Temporal.PlainYearMonth.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+
+    plainYearMonth.since(plainYearMonthLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainYearMonth.since : Symbol(Temporal.PlainYearMonth.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>since : Symbol(Temporal.PlainYearMonth.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 408, 46))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 402, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 408, 75))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 402, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 408, 103))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 408, 122))
+
+    plainYearMonth.subtract(durationLike);
+>plainYearMonth.subtract : Symbol(Temporal.PlainYearMonth.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>subtract : Symbol(Temporal.PlainYearMonth.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    plainYearMonth.subtract(durationLike, { overflow });
+>plainYearMonth.subtract : Symbol(Temporal.PlainYearMonth.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>subtract : Symbol(Temporal.PlainYearMonth.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 410, 43))
+
+    plainYearMonth.toJSON();
+>plainYearMonth.toJSON : Symbol(Temporal.PlainYearMonth.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toJSON : Symbol(Temporal.PlainYearMonth.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonth.toLocaleString();
+>plainYearMonth.toLocaleString : Symbol(Temporal.PlainYearMonth.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toLocaleString : Symbol(Temporal.PlainYearMonth.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonth.toLocaleString(locales);
+>plainYearMonth.toLocaleString : Symbol(Temporal.PlainYearMonth.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toLocaleString : Symbol(Temporal.PlainYearMonth.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    plainYearMonth.toLocaleString(locales, toLocaleStringOptions);
+>plainYearMonth.toLocaleString : Symbol(Temporal.PlainYearMonth.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toLocaleString : Symbol(Temporal.PlainYearMonth.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    plainYearMonth.toPlainDate({ day: 1 });
+>plainYearMonth.toPlainDate : Symbol(Temporal.PlainYearMonth.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toPlainDate : Symbol(Temporal.PlainYearMonth.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+>day : Symbol(day, Decl(temporal.ts, 415, 32))
+
+    plainYearMonth.toString();
+>plainYearMonth.toString : Symbol(Temporal.PlainYearMonth.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toString : Symbol(Temporal.PlainYearMonth.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    plainYearMonth.toString({ calendarName });
+>plainYearMonth.toString : Symbol(Temporal.PlainYearMonth.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>toString : Symbol(Temporal.PlainYearMonth.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>calendarName : Symbol(calendarName, Decl(temporal.ts, 417, 29))
+
+    plainYearMonth.until(plainYearMonthLike);
+>plainYearMonth.until : Symbol(Temporal.PlainYearMonth.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>until : Symbol(Temporal.PlainYearMonth.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+
+    plainYearMonth.until(plainYearMonthLike, { smallestUnit: roundingUnits, largestUnit: roundingUnits, roundingIncrement, roundingMode });
+>plainYearMonth.until : Symbol(Temporal.PlainYearMonth.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>until : Symbol(Temporal.PlainYearMonth.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonthLike : Symbol(plainYearMonthLike, Decl(temporal.ts, 376, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 419, 46))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 402, 7))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 419, 75))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 402, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 419, 103))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 419, 122))
+
+    plainYearMonth.with({ year, era, eraYear, month, monthCode });
+>plainYearMonth.with : Symbol(Temporal.PlainYearMonth.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainYearMonth : Symbol(plainYearMonth, Decl(temporal.ts, 372, 7))
+>with : Symbol(Temporal.PlainYearMonth.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 420, 25))
+>era : Symbol(era, Decl(temporal.ts, 420, 31))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 420, 36))
+>month : Symbol(month, Decl(temporal.ts, 420, 45))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 420, 52))
+}
+
+{
+    zonedDateTime = new Temporal.ZonedDateTime(1234567890n, 'UTC');
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime = new Temporal.ZonedDateTime(1234567890n, 'UTC', 'iso8601');
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let zonedDateTimeLike: Temporal.ZonedDateTimeLike;
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTimeLike : Symbol(Temporal.ZonedDateTimeLike, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTimeLike = zonedDateTime;
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+
+    zonedDateTimeLike = {
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+
+        day: 1,
+>day : Symbol(day, Decl(temporal.ts, 429, 25))
+
+        month: 1,
+>month : Symbol(month, Decl(temporal.ts, 430, 15))
+
+        year: 1,
+>year : Symbol(year, Decl(temporal.ts, 431, 17))
+
+        hour: 0,
+>hour : Symbol(hour, Decl(temporal.ts, 432, 16))
+
+        minute: 0,
+>minute : Symbol(minute, Decl(temporal.ts, 433, 16))
+
+        second: 0,
+>second : Symbol(second, Decl(temporal.ts, 434, 18))
+
+        millisecond: 0,
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 435, 18))
+
+        microsecond: 0,
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 436, 23))
+
+        nanosecond: 0,
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 437, 23))
+
+        timeZone: 'UTC',
+>timeZone : Symbol(timeZone, Decl(temporal.ts, 438, 22))
+
+    };
+
+    let toZonedDateTimeOffset!: 'use' | 'ignore' | 'reject' | 'prefer' | undefined;
+>toZonedDateTimeOffset : Symbol(toZonedDateTimeOffset, Decl(temporal.ts, 442, 7))
+
+    zonedDateTime = Temporal.ZonedDateTime.from(zonedDateTimeLike);
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal.ZonedDateTime.from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+
+    zonedDateTime = Temporal.ZonedDateTime.from(zonedDateTimeLike, { disambiguation, offset: toZonedDateTimeOffset, overflow });
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>Temporal.ZonedDateTime.from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+>disambiguation : Symbol(disambiguation, Decl(temporal.ts, 444, 68))
+>offset : Symbol(offset, Decl(temporal.ts, 444, 84))
+>toZonedDateTimeOffset : Symbol(toZonedDateTimeOffset, Decl(temporal.ts, 442, 7))
+>overflow : Symbol(overflow, Decl(temporal.ts, 444, 115))
+
+    Temporal.ZonedDateTime.compare(zonedDateTime, zonedDateTimeLike);
+>Temporal.ZonedDateTime.compare : Symbol(Temporal.ZonedDateTimeConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>compare : Symbol(Temporal.ZonedDateTimeConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+
+    const {
+        calendarId,
+>calendarId : Symbol(calendarId, Decl(temporal.ts, 448, 11))
+
+        day,
+>day : Symbol(day, Decl(temporal.ts, 449, 19))
+
+        dayOfWeek,
+>dayOfWeek : Symbol(dayOfWeek, Decl(temporal.ts, 450, 12))
+
+        dayOfYear,
+>dayOfYear : Symbol(dayOfYear, Decl(temporal.ts, 451, 18))
+
+        daysInMonth,
+>daysInMonth : Symbol(daysInMonth, Decl(temporal.ts, 452, 18))
+
+        daysInWeek,
+>daysInWeek : Symbol(daysInWeek, Decl(temporal.ts, 453, 20))
+
+        daysInYear,
+>daysInYear : Symbol(daysInYear, Decl(temporal.ts, 454, 19))
+
+        epochMilliseconds,
+>epochMilliseconds : Symbol(epochMilliseconds, Decl(temporal.ts, 455, 19))
+
+        epochNanoseconds,
+>epochNanoseconds : Symbol(epochNanoseconds, Decl(temporal.ts, 456, 26))
+
+        era,
+>era : Symbol(era, Decl(temporal.ts, 457, 25))
+
+        eraYear,
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 458, 12))
+
+        hour,
+>hour : Symbol(hour, Decl(temporal.ts, 459, 16))
+
+        hoursInDay,
+>hoursInDay : Symbol(hoursInDay, Decl(temporal.ts, 460, 13))
+
+        inLeapYear,
+>inLeapYear : Symbol(inLeapYear, Decl(temporal.ts, 461, 19))
+
+        microsecond,
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 462, 19))
+
+        millisecond,
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 463, 20))
+
+        minute,
+>minute : Symbol(minute, Decl(temporal.ts, 464, 20))
+
+        month,
+>month : Symbol(month, Decl(temporal.ts, 465, 15))
+
+        monthCode,
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 466, 14))
+
+        monthsInYear,
+>monthsInYear : Symbol(monthsInYear, Decl(temporal.ts, 467, 18))
+
+        nanosecond,
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 468, 21))
+
+        offset,
+>offset : Symbol(offset, Decl(temporal.ts, 469, 19))
+
+        offsetNanoseconds,
+>offsetNanoseconds : Symbol(offsetNanoseconds, Decl(temporal.ts, 470, 15))
+
+        second,
+>second : Symbol(second, Decl(temporal.ts, 471, 26))
+
+        timeZoneId,
+>timeZoneId : Symbol(timeZoneId, Decl(temporal.ts, 472, 15))
+
+        weekOfYear,
+>weekOfYear : Symbol(weekOfYear, Decl(temporal.ts, 473, 19))
+
+        year,
+>year : Symbol(year, Decl(temporal.ts, 474, 19))
+
+        yearOfWeek,
+>yearOfWeek : Symbol(yearOfWeek, Decl(temporal.ts, 475, 13))
+
+        [Symbol.toStringTag]: toStringTag,
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(temporal.ts, 476, 19))
+
+    } = zonedDateTime;
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+
+    let direction!: 'next' | 'previous';
+>direction : Symbol(direction, Decl(temporal.ts, 480, 7))
+
+    let toStringOffset!: 'auto' | 'never' | undefined;
+>toStringOffset : Symbol(toStringOffset, Decl(temporal.ts, 481, 7))
+
+    let timeZoneName!: 'auto' | 'never' | 'critical' | undefined;
+>timeZoneName : Symbol(timeZoneName, Decl(temporal.ts, 482, 7))
+
+    let roundingUnits!: (Temporal.DateUnit & `day${string}`) | Temporal.TimeUnit | undefined;
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 483, 7))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>DateUnit : Symbol(Temporal.DateUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    let toStringUnits!: Exclude<Temporal.TimeUnit, `hour${string}`> | undefined;
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 484, 7))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>TimeUnit : Symbol(Temporal.TimeUnit, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.add(durationLike);
+>zonedDateTime.add : Symbol(Temporal.ZonedDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>add : Symbol(Temporal.ZonedDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    zonedDateTime.add(durationLike, { overflow });
+>zonedDateTime.add : Symbol(Temporal.ZonedDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>add : Symbol(Temporal.ZonedDateTime.add, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 487, 37))
+
+    zonedDateTime.equals(zonedDateTimeLike);
+>zonedDateTime.equals : Symbol(Temporal.ZonedDateTime.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>equals : Symbol(Temporal.ZonedDateTime.equals, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+
+    zonedDateTime.getTimeZoneTransition(direction);
+>zonedDateTime.getTimeZoneTransition : Symbol(Temporal.ZonedDateTime.getTimeZoneTransition, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>getTimeZoneTransition : Symbol(Temporal.ZonedDateTime.getTimeZoneTransition, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>direction : Symbol(direction, Decl(temporal.ts, 480, 7))
+
+    zonedDateTime.getTimeZoneTransition({ direction });
+>zonedDateTime.getTimeZoneTransition : Symbol(Temporal.ZonedDateTime.getTimeZoneTransition, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>getTimeZoneTransition : Symbol(Temporal.ZonedDateTime.getTimeZoneTransition, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>direction : Symbol(direction, Decl(temporal.ts, 490, 41))
+
+    zonedDateTime.round(roundingUnits!);
+>zonedDateTime.round : Symbol(Temporal.ZonedDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>round : Symbol(Temporal.ZonedDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 483, 7))
+
+    zonedDateTime.round({ smallestUnit: roundingUnits, roundingIncrement, roundingMode });
+>zonedDateTime.round : Symbol(Temporal.ZonedDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>round : Symbol(Temporal.ZonedDateTime.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 492, 25))
+>roundingUnits : Symbol(roundingUnits, Decl(temporal.ts, 483, 7))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 492, 54))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 492, 73))
+
+    zonedDateTime.since(zonedDateTimeLike);
+>zonedDateTime.since : Symbol(Temporal.ZonedDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>since : Symbol(Temporal.ZonedDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+
+    zonedDateTime.since(zonedDateTimeLike, { smallestUnit: anyRoundingUnits, largestUnit: anyRoundingUnits, roundingIncrement, roundingMode });
+>zonedDateTime.since : Symbol(Temporal.ZonedDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>since : Symbol(Temporal.ZonedDateTime.since, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 494, 44))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 494, 76))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 494, 107))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 494, 126))
+
+    zonedDateTime.startOfDay();
+>zonedDateTime.startOfDay : Symbol(Temporal.ZonedDateTime.startOfDay, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>startOfDay : Symbol(Temporal.ZonedDateTime.startOfDay, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.subtract(durationLike);
+>zonedDateTime.subtract : Symbol(Temporal.ZonedDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>subtract : Symbol(Temporal.ZonedDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+
+    zonedDateTime.subtract(durationLike, { overflow });
+>zonedDateTime.subtract : Symbol(Temporal.ZonedDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>subtract : Symbol(Temporal.ZonedDateTime.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
+>durationLike : Symbol(durationLike, Decl(temporal.ts, 23, 3))
+>overflow : Symbol(overflow, Decl(temporal.ts, 497, 42))
+
+    zonedDateTime.toInstant();
+>zonedDateTime.toInstant : Symbol(Temporal.ZonedDateTime.toInstant, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toInstant : Symbol(Temporal.ZonedDateTime.toInstant, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toJSON();
+>zonedDateTime.toJSON : Symbol(Temporal.ZonedDateTime.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toJSON : Symbol(Temporal.ZonedDateTime.toJSON, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toLocaleString();
+>zonedDateTime.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toLocaleString(locales);
+>zonedDateTime.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+
+    zonedDateTime.toLocaleString(locales, toLocaleStringOptions);
+>zonedDateTime.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>locales : Symbol(locales, Decl(temporal.ts, 47, 13))
+>toLocaleStringOptions : Symbol(toLocaleStringOptions, Decl(temporal.ts, 48, 13))
+
+    zonedDateTime.toPlainDate();
+>zonedDateTime.toPlainDate : Symbol(Temporal.ZonedDateTime.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toPlainDate : Symbol(Temporal.ZonedDateTime.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toPlainDateTime();
+>zonedDateTime.toPlainDateTime : Symbol(Temporal.ZonedDateTime.toPlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toPlainDateTime : Symbol(Temporal.ZonedDateTime.toPlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toPlainTime();
+>zonedDateTime.toPlainTime : Symbol(Temporal.ZonedDateTime.toPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toPlainTime : Symbol(Temporal.ZonedDateTime.toPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toString();
+>zonedDateTime.toString : Symbol(Temporal.ZonedDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toString : Symbol(Temporal.ZonedDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.toString({ smallestUnit: toStringUnits, calendarName, timeZoneName, fractionalSecondDigits, offset: toStringOffset, roundingMode });
+>zonedDateTime.toString : Symbol(Temporal.ZonedDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>toString : Symbol(Temporal.ZonedDateTime.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 507, 28))
+>toStringUnits : Symbol(toStringUnits, Decl(temporal.ts, 484, 7))
+>calendarName : Symbol(calendarName, Decl(temporal.ts, 507, 57))
+>timeZoneName : Symbol(timeZoneName, Decl(temporal.ts, 507, 71))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 507, 85))
+>offset : Symbol(offset, Decl(temporal.ts, 507, 109))
+>toStringOffset : Symbol(toStringOffset, Decl(temporal.ts, 481, 7))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 507, 133))
+
+    zonedDateTime.until(zonedDateTimeLike);
+>zonedDateTime.until : Symbol(Temporal.ZonedDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>until : Symbol(Temporal.ZonedDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+
+    zonedDateTime.until(zonedDateTimeLike, { smallestUnit: anyRoundingUnits, largestUnit: anyRoundingUnits, roundingIncrement, roundingMode });
+>zonedDateTime.until : Symbol(Temporal.ZonedDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>until : Symbol(Temporal.ZonedDateTime.until, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeLike : Symbol(zonedDateTimeLike, Decl(temporal.ts, 427, 7))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 509, 44))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 509, 76))
+>anyRoundingUnits : Symbol(anyRoundingUnits, Decl(temporal.ts, 40, 13))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 509, 107))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 509, 126))
+
+    zonedDateTime.with({ year, era, eraYear, month, monthCode, day, hour, minute, second, millisecond, microsecond, nanosecond, offset });
+>zonedDateTime.with : Symbol(Temporal.ZonedDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>with : Symbol(Temporal.ZonedDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 510, 24))
+>era : Symbol(era, Decl(temporal.ts, 510, 30))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 510, 35))
+>month : Symbol(month, Decl(temporal.ts, 510, 44))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 510, 51))
+>day : Symbol(day, Decl(temporal.ts, 510, 62))
+>hour : Symbol(hour, Decl(temporal.ts, 510, 67))
+>minute : Symbol(minute, Decl(temporal.ts, 510, 73))
+>second : Symbol(second, Decl(temporal.ts, 510, 81))
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 510, 89))
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 510, 102))
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 510, 115))
+>offset : Symbol(offset, Decl(temporal.ts, 510, 127))
+
+    zonedDateTime.with({ year, era, eraYear, month, monthCode, day, hour, minute, second, millisecond, microsecond, nanosecond, offset }, { disambiguation, offset: toZonedDateTimeOffset, overflow });
+>zonedDateTime.with : Symbol(Temporal.ZonedDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>with : Symbol(Temporal.ZonedDateTime.with, Decl(lib.esnext.temporal.d.ts, --, --))
+>year : Symbol(year, Decl(temporal.ts, 511, 24))
+>era : Symbol(era, Decl(temporal.ts, 511, 30))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 511, 35))
+>month : Symbol(month, Decl(temporal.ts, 511, 44))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 511, 51))
+>day : Symbol(day, Decl(temporal.ts, 511, 62))
+>hour : Symbol(hour, Decl(temporal.ts, 511, 67))
+>minute : Symbol(minute, Decl(temporal.ts, 511, 73))
+>second : Symbol(second, Decl(temporal.ts, 511, 81))
+>millisecond : Symbol(millisecond, Decl(temporal.ts, 511, 89))
+>microsecond : Symbol(microsecond, Decl(temporal.ts, 511, 102))
+>nanosecond : Symbol(nanosecond, Decl(temporal.ts, 511, 115))
+>offset : Symbol(offset, Decl(temporal.ts, 511, 127))
+>disambiguation : Symbol(disambiguation, Decl(temporal.ts, 511, 139))
+>offset : Symbol(offset, Decl(temporal.ts, 511, 155))
+>toZonedDateTimeOffset : Symbol(toZonedDateTimeOffset, Decl(temporal.ts, 442, 7))
+>overflow : Symbol(overflow, Decl(temporal.ts, 511, 186))
+
+    zonedDateTime.withCalendar(calendarLike);
+>zonedDateTime.withCalendar : Symbol(Temporal.ZonedDateTime.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>withCalendar : Symbol(Temporal.ZonedDateTime.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
+>calendarLike : Symbol(calendarLike, Decl(temporal.ts, 38, 3))
+
+    zonedDateTime.withPlainTime();
+>zonedDateTime.withPlainTime : Symbol(Temporal.ZonedDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>withPlainTime : Symbol(Temporal.ZonedDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zonedDateTime.withPlainTime(plainTime);
+>zonedDateTime.withPlainTime : Symbol(Temporal.ZonedDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>withPlainTime : Symbol(Temporal.ZonedDateTime.withPlainTime, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainTime : Symbol(plainTime, Decl(temporal.ts, 15, 3))
+
+    zonedDateTime.withTimeZone(timeZoneLike);
+>zonedDateTime.withTimeZone : Symbol(Temporal.ZonedDateTime.withTimeZone, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTime : Symbol(zonedDateTime, Decl(temporal.ts, 19, 3))
+>withTimeZone : Symbol(Temporal.ZonedDateTime.withTimeZone, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZoneLike : Symbol(timeZoneLike, Decl(temporal.ts, 0, 3))
+}
+
