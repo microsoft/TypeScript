@@ -1,92 +1,86 @@
-mod.mts(1,16): error TS2664: Invalid module name in augmentation, module 'wat' cannot be found.
-mod.mts(4,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(13,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(18,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(23,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(28,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(33,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(38,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(43,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(48,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(53,26): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+mod.mts(4,8): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(12,20): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(17,20): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(22,20): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(27,20): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(32,20): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(37,20): error TS2837: Import assertion values must be string literal expressions.
+mod.mts(52,18): error TS2858: Import attribute values must be string literal expressions.
 
 
-==== mod.mts (11 errors) ====
-    declare module "wat";
-                   ~~~~~
-!!! error TS2664: Invalid module name in augmentation, module 'wat' cannot be found.
+==== wat.mts (0 errors) ====
+    export const x = 1;
     
+==== mod.mts (8 errors) ====
     // Import type with function expression (should error)
-    type T1 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T1 = typeof import("./wat.mjs", {
       assert: {
         a: (() => {
+           ~~~~~~~~
           console.log("why can you write js here????");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         })(),
+    ~~~~~~~~
+!!! error TS2837: Import assertion values must be string literal expressions.
       }
     });
     
     // Import type with number literal (should error)
-    type T2 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T2 = typeof import("./wat.mjs", {
       assert: { field: 0 }
+                       ~
+!!! error TS2837: Import assertion values must be string literal expressions.
     });
     
     // Import type with template literal (should error)
-    type T3 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T3 = typeof import("./wat.mjs", {
       assert: { field: `a` }
+                       ~~~
+!!! error TS2837: Import assertion values must be string literal expressions.
     });
     
     // Import type with regex (should error)
-    type T4 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T4 = typeof import("./wat.mjs", {
       assert: { field: /a/g }
+                       ~~~~
+!!! error TS2837: Import assertion values must be string literal expressions.
     });
     
     // Import type with array (should error)
-    type T5 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T5 = typeof import("./wat.mjs", {
       assert: { field: ["a"] }
+                       ~~~~~
+!!! error TS2837: Import assertion values must be string literal expressions.
     });
     
     // Import type with object (should error)
-    type T6 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T6 = typeof import("./wat.mjs", {
       assert: { field: { a: 0 } }
+                       ~~~~~~~~
+!!! error TS2837: Import assertion values must be string literal expressions.
     });
     
     // Import type with method call (should error)
-    type T7 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T7 = typeof import("./wat.mjs", {
       assert: { field: 0..toString() }
+                       ~~~~~~~~~~~~~
+!!! error TS2837: Import assertion values must be string literal expressions.
     });
     
     // Import type with valid string literal (should work)
-    type T8 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T8 = typeof import("./wat.mjs", {
       assert: { type: "json" }
     });
     
     // Import type with 'with' keyword and valid string (should work)
-    type T9 = typeof import("wat", {
-                            ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T9 = typeof import("./wat.mjs", {
       with: { type: "json" }
     });
     
     // Import type with 'with' keyword and invalid expression (should error)
-    type T10 = typeof import("wat", {
-                             ~~~~~
-!!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
+    type T10 = typeof import("./wat.mjs", {
       with: { field: 123 }
+                     ~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
     });
     

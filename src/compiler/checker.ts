@@ -19933,6 +19933,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 links.resolvedSymbol = unknownSymbol;
                 return links.resolvedType = errorType;
             }
+            // Validate import attributes
+            if (node.attributes) {
+                const diagnostic = node.attributes.token === SyntaxKind.WithKeyword ? Diagnostics.Import_attribute_values_must_be_string_literal_expressions : Diagnostics.Import_assertion_values_must_be_string_literal_expressions;
+                for (const attr of node.attributes.elements) {
+                    if (!isStringLiteral(attr.value)) {
+                        error(attr.value, diagnostic);
+                    }
+                }
+            }
             const targetMeaning = node.isTypeOf ? SymbolFlags.Value : node.flags & NodeFlags.JSDoc ? SymbolFlags.Value | SymbolFlags.Type : SymbolFlags.Type;
             // TODO: Future work: support unions/generics/whatever via a deferred import-type
             const innerModuleSymbol = resolveExternalModuleName(node, node.argument.literal);
