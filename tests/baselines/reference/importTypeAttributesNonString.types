@@ -14,6 +14,10 @@ type T1 = typeof import("wat", {
     a: (() => {
 >a : any
 >  : ^^^
+>(() => {      console.log("why can you write js here????");    })() : void
+>                                                                    : ^^^^
+>(() => {      console.log("why can you write js here????");    }) : () => void
+>                                                                  : ^^^^^^^^^^
 >() => {      console.log("why can you write js here????");    } : () => void
 >                                                                : ^^^^^^^^^^
 
@@ -30,16 +34,7 @@ type T1 = typeof import("wat", {
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     })(),
->(), : any
->    : ^^^
->() : any
->   : ^^^
-> : any
-> : ^^^
   }
-> : any
-> : ^^^
-
 });
 
 // Import type with number literal (should error)
@@ -72,10 +67,8 @@ type T4 = typeof import("wat", {
   assert: { field: /a/g }
 >field : any
 >      : ^^^
->a : any
->  : ^^^
->g : any
->  : ^^^
+>/a/g : RegExp
+>     : ^^^^^^
 
 });
 
@@ -87,6 +80,10 @@ type T5 = typeof import("wat", {
   assert: { field: ["a"] }
 >field : any
 >      : ^^^
+>["a"] : string[]
+>      : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
 
 });
 
@@ -98,8 +95,12 @@ type T6 = typeof import("wat", {
   assert: { field: { a: 0 } }
 >field : any
 >      : ^^^
->a : any
->  : ^^^
+>{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
 
 });
 
@@ -111,8 +112,14 @@ type T7 = typeof import("wat", {
   assert: { field: 0..toString() }
 >field : any
 >      : ^^^
->toString : any
->         : ^^^
+>0..toString() : string
+>              : ^^^^^^
+>0..toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
+>0. : 0
+>   : ^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 });
 

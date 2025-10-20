@@ -59,11 +59,4 @@ type T10 = typeof import("wat", {
 
 
 //// [mod.mjs]
-() => {
-    console.log("why can you write js here????");
-};
-(),
-;
-;
-;
 export {};

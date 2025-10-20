@@ -18,30 +18,30 @@ import * as thing3 from "./mod.mjs" assert {field: /a/g};
 >       : ^^^^^^^^^^^^^
 >field : any
 >      : ^^^
->a : any
->  : ^^^
->g : any
->  : ^^^
+>/a/g : RegExp
+>     : ^^^^^^
 
 import * as thing4 from "./mod.mjs" assert {field: ["a"]};
->import : any
->       : ^^^
->as : any
->   : ^^^
->from : any
->     : ^^^
->assert : any
->       : ^^^
+>thing4 : typeof thing1
+>       : ^^^^^^^^^^^^^
 >field : any
 >      : ^^^
+>["a"] : string[]
+>      : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
 
 import * as thing5 from "./mod.mjs" assert {field: { a: 0 }};
 >thing5 : typeof thing1
 >       : ^^^^^^^^^^^^^
 >field : any
 >      : ^^^
->a : any
->  : ^^^
+>{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
 
 import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
 >thing6 : typeof thing1
@@ -50,6 +50,12 @@ import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
 >     : ^^^
 >field : any
 >      : ^^^
->toString : any
->         : ^^^
+>0..toString() : string
+>              : ^^^^^^
+>0..toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
+>0. : 0
+>   : ^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 

@@ -52,6 +52,8 @@ type T6 = typeof import("wat", {
 >T6 : Symbol(T6, Decl(mod.mts, 29, 3))
 
   assert: { field: { a: 0 } }
+>a : Symbol(a, Decl(mod.mts, 33, 20))
+
 });
 
 // Import type with method call (should error)
@@ -59,6 +61,9 @@ type T7 = typeof import("wat", {
 >T7 : Symbol(T7, Decl(mod.mts, 34, 3))
 
   assert: { field: 0..toString() }
+>0..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
 });
 
 // Import type with valid string literal (should work)

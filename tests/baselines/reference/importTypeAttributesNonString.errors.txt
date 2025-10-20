@@ -1,37 +1,17 @@
 mod.mts(1,16): error TS2664: Invalid module name in augmentation, module 'wat' cannot be found.
 mod.mts(4,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(6,9): error TS1005: ',' expected.
-mod.mts(8,6): error TS1005: ';' expected.
-mod.mts(8,7): error TS2695: Left side of comma operator is unused and has no side effects.
-mod.mts(8,8): error TS1109: Expression expected.
-mod.mts(9,3): error TS1109: Expression expected.
-mod.mts(10,1): error TS1128: Declaration or statement expected.
-mod.mts(10,2): error TS1128: Declaration or statement expected.
 mod.mts(13,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
 mod.mts(18,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
 mod.mts(23,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(24,21): error TS1005: ',' expected.
-mod.mts(24,22): error TS1005: ':' expected.
-mod.mts(24,23): error TS1005: ',' expected.
-mod.mts(24,25): error TS1005: ':' expected.
-mod.mts(25,2): error TS1005: '}' expected.
 mod.mts(28,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(29,21): error TS1005: ',' expected.
-mod.mts(29,24): error TS1005: ':' expected.
 mod.mts(33,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(34,22): error TS1005: ',' expected.
-mod.mts(35,1): error TS1005: ')' expected.
-mod.mts(35,2): error TS1128: Declaration or statement expected.
 mod.mts(38,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
-mod.mts(39,22): error TS1005: ',' expected.
-mod.mts(39,31): error TS1005: ':' expected.
-mod.mts(39,32): error TS1005: ',' expected.
 mod.mts(43,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
 mod.mts(48,25): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
 mod.mts(53,26): error TS2307: Cannot find module 'wat' or its corresponding type declarations.
 
 
-==== mod.mts (31 errors) ====
+==== mod.mts (11 errors) ====
     declare module "wat";
                    ~~~~~
 !!! error TS2664: Invalid module name in augmentation, module 'wat' cannot be found.
@@ -42,26 +22,10 @@ mod.mts(53,26): error TS2307: Cannot find module 'wat' or its corresponding type
 !!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
       assert: {
         a: (() => {
-            ~
-!!! error TS1005: ',' expected.
-!!! related TS1007 mod.mts:5:11: The parser expected to find a '}' to match the '{' token here.
-!!! related TS1007 mod.mts:4:32: The parser expected to find a '}' to match the '{' token here.
           console.log("why can you write js here????");
         })(),
-         ~
-!!! error TS1005: ';' expected.
-          ~~
-!!! error TS2695: Left side of comma operator is unused and has no side effects.
-           ~
-!!! error TS1109: Expression expected.
       }
-      ~
-!!! error TS1109: Expression expected.
     });
-    ~
-!!! error TS1128: Declaration or statement expected.
-     ~
-!!! error TS1128: Declaration or statement expected.
     
     // Import type with number literal (should error)
     type T2 = typeof import("wat", {
@@ -82,28 +46,13 @@ mod.mts(53,26): error TS2307: Cannot find module 'wat' or its corresponding type
                             ~~~~~
 !!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
       assert: { field: /a/g }
-                        ~
-!!! error TS1005: ',' expected.
-                         ~
-!!! error TS1005: ':' expected.
-                          ~
-!!! error TS1005: ',' expected.
-                            ~
-!!! error TS1005: ':' expected.
     });
-     ~
-!!! error TS1005: '}' expected.
-!!! related TS1007 mod.mts:23:32: The parser expected to find a '}' to match the '{' token here.
     
     // Import type with array (should error)
     type T5 = typeof import("wat", {
                             ~~~~~
 !!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
       assert: { field: ["a"] }
-                        ~~~
-!!! error TS1005: ',' expected.
-                           ~
-!!! error TS1005: ':' expected.
     });
     
     // Import type with object (should error)
@@ -111,25 +60,13 @@ mod.mts(53,26): error TS2307: Cannot find module 'wat' or its corresponding type
                             ~~~~~
 !!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
       assert: { field: { a: 0 } }
-                         ~
-!!! error TS1005: ',' expected.
     });
-    ~
-!!! error TS1005: ')' expected.
-     ~
-!!! error TS1128: Declaration or statement expected.
     
     // Import type with method call (should error)
     type T7 = typeof import("wat", {
                             ~~~~~
 !!! error TS2307: Cannot find module 'wat' or its corresponding type declarations.
       assert: { field: 0..toString() }
-                         ~
-!!! error TS1005: ',' expected.
-                                  ~
-!!! error TS1005: ':' expected.
-                                   ~
-!!! error TS1005: ',' expected.
     });
     
     // Import type with valid string literal (should work)
