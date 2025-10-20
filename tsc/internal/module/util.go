@@ -45,7 +45,7 @@ func ParsePackageName(moduleName string) (packageName, rest string) {
 }
 
 func MangleScopedPackageName(packageName string) string {
-	if packageName[0] == '@' {
+	if len(packageName) > 0 && packageName[0] == '@' {
 		idx := strings.Index(packageName, "/")
 		if idx == -1 {
 			return packageName
