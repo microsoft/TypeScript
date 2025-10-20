@@ -61,6 +61,7 @@ const (
 	TypeSystemPropertyNameResolvedBaseTypes
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
+	TypeSystemPropertyNameAliasTarget
 )
 
 type TypeResolution struct {
@@ -618,7 +619,6 @@ type Checker struct {
 	argumentsSymbol                             *ast.Symbol
 	requireSymbol                               *ast.Symbol
 	unknownSymbol                               *ast.Symbol
-	resolvingSymbol                             *ast.Symbol
 	unresolvedSymbols                           map[string]*ast.Symbol
 	errorTypes                                  map[string]*Type
 	globalThisSymbol                            *ast.Symbol
@@ -915,7 +915,6 @@ func NewChecker(program Program) *Checker {
 	c.argumentsSymbol = c.newSymbol(ast.SymbolFlagsProperty, "arguments")
 	c.requireSymbol = c.newSymbol(ast.SymbolFlagsProperty, "require")
 	c.unknownSymbol = c.newSymbol(ast.SymbolFlagsProperty, "unknown")
-	c.resolvingSymbol = c.newSymbol(ast.SymbolFlagsNone, ast.InternalSymbolNameResolving)
 	c.unresolvedSymbols = make(map[string]*ast.Symbol)
 	c.errorTypes = make(map[string]*Type)
 	c.globalThisSymbol = c.newSymbolEx(ast.SymbolFlagsModule, "globalThis", ast.CheckFlagsReadonly)
@@ -15652,29 +15651,25 @@ func (c *Checker) resolveAlias(symbol *ast.Symbol) *ast.Symbol {
 	}
 	links := c.aliasSymbolLinks.Get(symbol)
 	if links.aliasTarget == nil {
-		links.aliasTarget = c.resolvingSymbol
+		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameAliasTarget) {
+			return c.unknownSymbol
+		}
 		node := c.getDeclarationOfAliasSymbol(symbol)
 		if node == nil {
 			panic("Unexpected nil in resolveAlias for symbol: " + c.symbolToString(symbol))
 		}
-		target := c.getTargetOfAliasDeclaration(node, false /*dontRecursivelyResolve*/)
-		if links.aliasTarget == c.resolvingSymbol {
-			if target == nil {
-				target = c.unknownSymbol
-			}
-			links.aliasTarget = target
-		} else {
+		links.aliasTarget = core.OrElse(c.getTargetOfAliasDeclaration(node, false /*dontRecursivelyResolve*/), c.unknownSymbol)
+		if !c.popTypeResolution() {
 			c.error(node, diagnostics.Circular_definition_of_import_alias_0, c.symbolToString(symbol))
+			links.aliasTarget = c.unknownSymbol
 		}
-	} else if links.aliasTarget == c.resolvingSymbol {
-		links.aliasTarget = c.unknownSymbol
 	}
 	return links.aliasTarget
 }
 
 func (c *Checker) tryResolveAlias(symbol *ast.Symbol) *ast.Symbol {
 	links := c.aliasSymbolLinks.Get(symbol)
-	if links.aliasTarget != c.resolvingSymbol {
+	if links.aliasTarget != nil || c.findResolutionCycleStartIndex(symbol, TypeSystemPropertyNameAliasTarget) < 0 {
 		return c.resolveAlias(symbol)
 	}
 	return nil
@@ -18097,6 +18092,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.nodeLinks.Get(r.target.(*ast.Node)).flags&NodeCheckFlagsInitializerIsUndefinedComputed != 0
 	case TypeSystemPropertyNameWriteType:
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).writeType != nil
+	case TypeSystemPropertyNameAliasTarget:
+		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }

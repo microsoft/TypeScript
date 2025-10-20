@@ -1,0 +1,15 @@
+--- old.circular1.errors.txt
++++ new.circular1.errors.txt
+@@= skipped -0, +0 lines =@@
++/a.ts(1,15): error TS2303: Circular definition of import alias 'A'.
+ /b.ts(1,15): error TS2303: Circular definition of import alias 'A'.
+
+
+-==== /a.ts (0 errors) ====
++==== /a.ts (1 errors) ====
+     export type { A } from './b';
++                  ~
++!!! error TS2303: Circular definition of import alias 'A'.
+     
+ ==== /b.ts (1 errors) ====
+     export type { A } from './a';

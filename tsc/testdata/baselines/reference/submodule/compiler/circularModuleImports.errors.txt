@@ -1,7 +1,8 @@
 circularModuleImports.ts(5,5): error TS2303: Circular definition of import alias 'A'.
+circularModuleImports.ts(7,5): error TS2303: Circular definition of import alias 'B'.
 
 
-==== circularModuleImports.ts (1 errors) ====
+==== circularModuleImports.ts (2 errors) ====
     module M
      
     {
@@ -11,6 +12,8 @@ circularModuleImports.ts(5,5): error TS2303: Circular definition of import alias
 !!! error TS2303: Circular definition of import alias 'A'.
      
         import B = A;
+        ~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'B'.
      
     }
     
