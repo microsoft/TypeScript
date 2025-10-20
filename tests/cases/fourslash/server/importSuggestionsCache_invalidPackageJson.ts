@@ -3,7 +3,7 @@
 // @Filename: /home/src/workspaces/project/jsconfig.json
 ////{
 ////  "compilerOptions": {
-////    "module": "commonjs",
+////    "module": "commonjs"
 ////  },
 ////}
 
