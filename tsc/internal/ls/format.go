@@ -113,7 +113,8 @@ func (l *LanguageService) getFormattingEditsAfterKeystroke(
 ) []core.TextChange {
 	ctx = format.WithFormatCodeSettings(ctx, options, options.NewLineCharacter)
 
-	if isInComment(file, position, nil) == nil {
+	tokenAtPosition := astnav.GetTokenAtPosition(file, position)
+	if isInComment(file, position, tokenAtPosition) == nil {
 		switch key {
 		case "{":
 			return format.FormatOnOpeningCurly(ctx, file, position)
