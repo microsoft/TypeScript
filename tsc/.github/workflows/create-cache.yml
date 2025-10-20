@@ -20,6 +20,8 @@ defaults:
 
 jobs:
   cache:
+    if: github.repository == 'microsoft/typescript-go'
+
     strategy:
       fail-fast: false
       matrix:
