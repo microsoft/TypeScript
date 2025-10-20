@@ -1927,6 +1927,11 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "fromHex",
             ],
         })),
+        Date: new Map(Object.entries({
+            esnext: [
+                "toTemporalInstant",
+            ],
+        })),
     }))
 );
 
