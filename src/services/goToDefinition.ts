@@ -6,6 +6,10 @@ import {
     CallLikeExpression,
     canHaveSymbol,
     concatenate,
+    createGetSourceFile,
+    createLanguageService,
+    createLanguageServiceSourceFile,
+    createSourceFile,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -28,18 +32,31 @@ import {
     getContainingObjectLiteralElement,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
+    getFirstIdentifier,
+    getIdentifierGeneratedImportReference,
     getInvokedExpression,
+    getLanguageVariant,
     getNameFromPropertyName,
     getNameOfDeclaration,
+    getNodeForGeneratedName,
+    getNodeKind,
     getObjectFlags,
+    getOriginalNode,
+    getPositionOfLineAndCharacter,
     getPropertySymbolsFromContextualType,
+    getStartPositionOfRange,
     getTargetLabel,
     getTextOfPropertyName,
+    getTokenAtPosition,
+    getTokenSourceMapRange,
     getTouchingPropertyName,
     getTouchingToken,
     hasEffectiveModifier,
     hasInitializer,
     hasStaticModifier,
+    Identifier,
+    identifierIsThisKeyword,
+    identifierToKeywordKind,
     isAnyImportOrBareOrAccessedRequire,
     isAssignmentDeclaration,
     isAssignmentExpression,
@@ -53,30 +70,44 @@ import {
     isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isConstructorDeclaration,
+    isDeclaration,
     isDeclarationFileName,
     isDefaultClause,
+    isEnumDeclaration,
+    isExportDeclaration,
     isExternalModuleNameRelative,
+    isFunctionDeclaration,
     isFunctionLike,
     isFunctionLikeDeclaration,
     isFunctionTypeNode,
     isIdentifier,
+    isIdentifierOrThisTypeNode,
+    isIdentifierTypePredicate,
+    isIdentifierTypeReference,
+    isImportDeclaration,
     isImportMeta,
     isImportOrExportSpecifier,
+    isInterfaceDeclaration,
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
     isKnownSymbol,
     isModifier,
+    isModuleDeclaration,
     isModuleSpecifierLike,
     isNamedDeclaration,
     isNameOfFunctionDeclaration,
+    isNamespaceImport,
     isNewExpressionTarget,
     isObjectBindingPattern,
+    isPossiblyTypeArgumentPosition,
     isPropertyName,
+    isQualifiedName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
     isSwitchStatement,
     isTypeAliasDeclaration,
+    isTypeDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
     last,
@@ -91,7 +122,9 @@ import {
     Program,
     ResolvedModuleWithFailedLookupLocations,
     resolvePath,
+    scanTokenAtPosition,
     ScriptElementKind,
+    ScriptSnapshot,
     SignatureDeclaration,
     skipAlias,
     skipParentheses,
@@ -103,6 +136,7 @@ import {
     SymbolDisplay,
     SymbolFlags,
     SyntaxKind,
+    sysLog,
     textRangeContainsPositionInclusive,
     TextSpan,
     tryCast,
@@ -112,7 +146,9 @@ import {
     TypeFlags,
     TypeReference,
     unescapeLeadingUnderscores,
+    writeFile,
 } from "./_namespaces/ts.js";
+import { getIdentifierForNode } from "./refactors/helpers.js";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -514,13 +550,16 @@ function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChe
     return undefined;
 }
 
+
+
 /** @internal */
 export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
     const definitions = getDefinitionAtPosition(program, sourceFile, position);
-
     if (!definitions || definitions.length === 0) {
         return undefined;
     }
+
+    const inferredIndex = getInferrableDefinitionIndex(definitions, getTouchingPropertyName(sourceFile, position), program);
 
     // Check if position is on triple slash reference.
     const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
@@ -528,14 +567,53 @@ export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFi
         findReferenceInPosition(sourceFile.libReferenceDirectives, position);
 
     if (comment) {
-        return { definitions, textSpan: createTextSpanFromRange(comment) };
+        return { definitions, inferredIndex, textSpan: createTextSpanFromRange(comment) };
     }
 
     const node = getTouchingPropertyName(sourceFile, position);
     const textSpan = createTextSpan(node.getStart(), node.getWidth());
 
-    return { definitions, textSpan };
+    return { definitions, inferredIndex, textSpan };
 }
+
+function getInferrableDefinitionIndex(definitions: readonly DefinitionInfo[], node: Node, program: Program): number | undefined {
+    const INFERRED_KIND_MAP: Record<number, Set<number>> = {
+        184: new Set<number>([SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration]), //inferrable from a type reference
+        212: new Set<number>([SyntaxKind.ModuleDeclaration, SyntaxKind.VariableDeclaration]), //inferrable from a property access
+    };
+    
+    const mainNodeKindInferrable = INFERRED_KIND_MAP[getUsageNodeKind(node)] ?? new Set();
+    const optionNodes = definitions?.map(def => findNodeFromSpan(program.getSourceFile(def.fileName), def.textSpan)!)
+    const inferredIndices: number[] = [];
+    for (let i = 0; i < optionNodes.length; i++) {
+        if (mainNodeKindInferrable.has(optionNodes[i].parent.kind)) {
+            inferredIndices.push(i);
+        }
+    }
+    return inferredIndices.length === 1 ? inferredIndices[0] : undefined;
+}
+
+function getUsageNodeKind(node: Node): SyntaxKind {
+    return node.parent.kind === SyntaxKind.QualifiedName ? getUsageNodeKind(node.parent) : node.parent.kind;
+}
+
+function findNodeFromSpan(sourceFile: SourceFile | undefined, span: TextSpan): Node | undefined {
+    const { start, length } = span;
+    const end = start + length;
+
+    function visit(node: Node): Node | undefined {
+        const nodeStart = node.getFullStart();
+        const nodeEnd = node.getEnd();
+        if (start >= nodeStart && end <= nodeEnd) {
+            const childMatch = node.forEachChild(visit);
+            return childMatch || node;
+        }
+        return undefined;
+    }
+    return sourceFile ? visit(sourceFile) : undefined;
+}
+
+
 
 // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
 function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {

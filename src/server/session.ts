@@ -1,3 +1,5 @@
+import { readFileSync } from "fs";
+import { getSymbolKind } from "../services/symbolDisplay.js";
 import {
     arrayFrom,
     arrayReverseIterator,
@@ -20,6 +22,7 @@ import {
     concatenate,
     createQueue,
     createSet,
+    createSourceFile,
     createTextSpan,
     createTextSpanFromBounds,
     Debug,
@@ -50,6 +53,7 @@ import {
     forEachNameInAccessChainWalkingLeft,
     FormatCodeSettings,
     formatting,
+    getBaseFileName,
     getDeclarationFromName,
     getDeclarationOfKind,
     getDocumentSpansEqualityComparer,
@@ -59,14 +63,18 @@ import {
     getMappedContextSpan,
     getMappedDocumentSpan,
     getMappedLocation,
+    getNodeKind,
     getNodeModulePathParts,
     getNormalizedAbsolutePath,
+    getOriginalNode,
     getPackageNameFromTypesPackageName,
     getPackageScopeForPath,
     getSnapshotText,
+    getSourceFileOfModule,
     getSupportedCodeFixes,
     getTemporaryModuleResolutionState,
     getTextOfIdentifierOrLiteral,
+    getTokenAtPosition,
     getTouchingPropertyName,
     GoToDefinition,
     HostCancellationToken,
@@ -114,7 +122,9 @@ import {
     removeFileExtension,
     RenameInfo,
     RenameLocation,
+    ScriptElementKind,
     ScriptKind,
+    ScriptTarget,
     SelectionRange,
     SemanticClassificationFormat,
     SignatureHelpItem,
@@ -165,6 +175,7 @@ import {
     LogLevel,
     Msg,
     NormalizedPath,
+    normalizedPathToPath,
     nullTypingsInstaller,
     Project,
     ProjectInfoTelemetryEvent,
@@ -1025,6 +1036,9 @@ export class Session<TMessage = string> implements EventSender {
     /** @internal */
     protected regionDiagLineCountThreshold = 500;
 
+    /** @internal */
+    private recentAttemptedDefinitionInferenceNames: Set<string>;
+
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
@@ -1073,6 +1087,8 @@ export class Session<TMessage = string> implements EventSender {
         this.projectService = new ProjectService(settings);
         this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
         this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
+
+        this.recentAttemptedDefinitionInferenceNames = new Set();
 
         // Make sure to setup handlers to throw error for not allowed commands on syntax server
         switch (this.projectService.serverMode) {
@@ -1634,8 +1650,8 @@ export class Session<TMessage = string> implements EventSender {
     private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
+        
         const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-
         const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
         if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
@@ -1643,6 +1659,16 @@ export class Session<TMessage = string> implements EventSender {
                 definitions: emptyArray,
                 textSpan: undefined!, // TODO: GH#18217
             };
+        }
+
+        if (unmappedDefinitionAndBoundSpan?.inferredIndex != undefined) {
+            const name = unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex].name;
+
+            if (!this.recentAttemptedDefinitionInferenceNames.has(name)) {
+                this.recentAttemptedDefinitionInferenceNames.add(name)
+                setTimeout(() => this.recentAttemptedDefinitionInferenceNames.delete(name), 5000);
+                unmappedDefinitionAndBoundSpan.definitions = [unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex]];
+            }
         }
 
         const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
