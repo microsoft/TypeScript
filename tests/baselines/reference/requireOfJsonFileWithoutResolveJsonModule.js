@@ -13,7 +13,7 @@ if (x) {
 contents Not read
 
 //// [out/b.json]
-({ contents: contents, Not: Not, read: read })
+{ contents, Not, read }
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
