@@ -10,4 +10,5 @@ import * as thing6 from "./mod.mjs" with { type: "json", field: 0..toString() };
 
 
 //// [mod.mjs]
+;
 export {};

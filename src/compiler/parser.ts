@@ -8444,7 +8444,7 @@ namespace Parser {
         const pos = getNodePos();
         const name = tokenIsIdentifierOrKeyword(token()) ? parseIdentifierName() : parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
         parseExpected(SyntaxKind.ColonToken);
-        const value = parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true);
+        const value = parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
         return finishNode(factory.createImportAttribute(name, value), pos);
     }
 

@@ -14,4 +14,5 @@ import * as thing5 from "./mod.mjs" assert {field: { a: 0 }};
 import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
 
 //// [mod.mjs]
+;
 export {};

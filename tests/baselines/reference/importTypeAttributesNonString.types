@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/importTypeAttributesNonString.ts] ////
+
+=== mod.mts ===
+declare module "wat";
+>"wat" : any
+>      : ^^^
+
+// Import type with function expression (should error)
+type T1 = typeof import("wat", {
+>T1 : any
+>   : ^^^
+
+  assert: {
+    a: (() => {
+>a : any
+>  : ^^^
+>() => {      console.log("why can you write js here????");    } : () => void
+>                                                                : ^^^^^^^^^^
+
+      console.log("why can you write js here????");
+>console.log("why can you write js here????") : void
+>                                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"why can you write js here????" : "why can you write js here????"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    })(),
+>(), : any
+>    : ^^^
+>() : any
+>   : ^^^
+> : any
+> : ^^^
+  }
+> : any
+> : ^^^
+
+});
+
+// Import type with number literal (should error)
+type T2 = typeof import("wat", {
+>T2 : any
+>   : ^^^
+
+  assert: { field: 0 }
+>field : any
+>      : ^^^
+
+});
+
+// Import type with template literal (should error)
+type T3 = typeof import("wat", {
+>T3 : any
+>   : ^^^
+
+  assert: { field: `a` }
+>field : any
+>      : ^^^
+
+});
+
+// Import type with regex (should error)
+type T4 = typeof import("wat", {
+>T4 : any
+>   : ^^^
+
+  assert: { field: /a/g }
+>field : any
+>      : ^^^
+>a : any
+>  : ^^^
+>g : any
+>  : ^^^
+
+});
+
+// Import type with array (should error)
+type T5 = typeof import("wat", {
+>T5 : any
+>   : ^^^
+
+  assert: { field: ["a"] }
+>field : any
+>      : ^^^
+
+});
+
+// Import type with object (should error)
+type T6 = typeof import("wat", {
+>T6 : any
+>   : ^^^
+
+  assert: { field: { a: 0 } }
+>field : any
+>      : ^^^
+>a : any
+>  : ^^^
+
+});
+
+// Import type with method call (should error)
+type T7 = typeof import("wat", {
+>T7 : any
+>   : ^^^
+
+  assert: { field: 0..toString() }
+>field : any
+>      : ^^^
+>toString : any
+>         : ^^^
+
+});
+
+// Import type with valid string literal (should work)
+type T8 = typeof import("wat", {
+>T8 : any
+>   : ^^^
+
+  assert: { type: "json" }
+>type : any
+>     : ^^^
+
+});
+
+// Import type with 'with' keyword and valid string (should work)
+type T9 = typeof import("wat", {
+>T9 : any
+>   : ^^^
+
+  with: { type: "json" }
+>type : any
+>     : ^^^
+
+});
+
+// Import type with 'with' keyword and invalid expression (should error)
+type T10 = typeof import("wat", {
+>T10 : any
+>    : ^^^
+
+  with: { field: 123 }
+>field : any
+>      : ^^^
+
+});
+
