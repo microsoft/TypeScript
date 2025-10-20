@@ -6699,6 +6699,10 @@
         "category": "Error",
         "code": 6931
     },
+    "`false`, unless `checkJs` is set": {
+        "category": "Message",
+        "code": 6932
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
