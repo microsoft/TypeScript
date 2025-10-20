@@ -46,7 +46,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const a = () => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(function () { return require("inner"); })).x(); });
 exports.a = a;
-
-
-//// [index.d.ts]
-export declare const a: () => Promise<import("inner/private").Thing>;

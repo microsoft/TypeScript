@@ -1,0 +1,12 @@
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+
+
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+==== file1.ts (0 errors) ====
+    import * as b from './b.json';
+    
+==== b.json (0 errors) ====
+    {
+        "a": true,
+        "b": "hello"
+    }

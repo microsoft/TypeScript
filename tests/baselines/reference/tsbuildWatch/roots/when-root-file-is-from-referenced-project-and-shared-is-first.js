@@ -112,12 +112,13 @@ projects/shared/src/random.ts
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
 
 ======== Resolving module ':shared/myClass.js' from '/home/src/workspaces/solution/projects/server/src/server.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/workspaces/solution/projects/server/src', using this value to resolve non-relative module name ':shared/myClass.js'.
 'paths' option is specified, looking for a pattern to match module name ':shared/myClass.js'.
 Module name ':shared/myClass.js', matched pattern ':shared/*'.
 Trying substitution '../../shared/src/*', candidate module location: '../../shared/src/myClass.js'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
@@ -614,12 +615,13 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
 
 ======== Resolving module ':shared/myClass.js' from '/home/src/workspaces/solution/projects/server/src/server.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/workspaces/solution/projects/server/src', using this value to resolve non-relative module name ':shared/myClass.js'.
 'paths' option is specified, looking for a pattern to match module name ':shared/myClass.js'.
 Module name ':shared/myClass.js', matched pattern ':shared/*'.
 Trying substitution '../../shared/src/*', candidate module location: '../../shared/src/myClass.js'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
@@ -952,12 +954,13 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/server/tsconfig.json'...
 
 ======== Resolving module ':shared/myClass.js' from '/home/src/workspaces/solution/projects/server/src/server.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/workspaces/solution/projects/server/src', using this value to resolve non-relative module name ':shared/myClass.js'.
 'paths' option is specified, looking for a pattern to match module name ':shared/myClass.js'.
 Module name ':shared/myClass.js', matched pattern ':shared/*'.
 Trying substitution '../../shared/src/*', candidate module location: '../../shared/src/myClass.js'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/workspaces/solution/projects/shared/src/myClass.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========

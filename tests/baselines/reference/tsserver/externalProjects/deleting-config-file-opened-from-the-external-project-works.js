@@ -250,7 +250,6 @@ After request
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json 2:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json 2:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json :: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/someuser/projects/project/tsconfig.json Detected file add/remove of non supported extension: /user/someuser/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json :: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
 Before request
 //// [/user/someuser/projects/project/tsconfig.json] deleted

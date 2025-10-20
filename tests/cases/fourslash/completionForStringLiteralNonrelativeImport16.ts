@@ -5,6 +5,7 @@
 // @Filename: tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "resolveJsonModule": false,
 ////         "baseUrl": "./",
 ////         "paths": {
 ////             "module1/path1": ["some/path/whatever.ts"],

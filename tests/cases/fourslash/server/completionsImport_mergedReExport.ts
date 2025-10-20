@@ -35,7 +35,7 @@ verify.completions({
   marker: "",
   includes: [{
     name: "Config",
-    source: "/home/src/workspaces/project/node_modules/@jest/types/index",
+    source: "@jest/types",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions,
   }],

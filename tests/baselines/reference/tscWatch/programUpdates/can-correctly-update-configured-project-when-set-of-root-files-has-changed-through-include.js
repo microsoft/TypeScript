@@ -65,7 +65,8 @@ FsWatchesRecursive::
   {}
 
 Program root files: [
-  "/user/username/projects/myproject/Project/file1.ts"
+  "/user/username/projects/myproject/Project/file1.ts",
+  "/user/username/projects/myproject/Project/tsconfig.json"
 ]
 Program options: {
   "watch": true,
@@ -76,14 +77,17 @@ Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
+/user/username/projects/myproject/Project/tsconfig.json
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
+/user/username/projects/myproject/Project/tsconfig.json
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/project/file1.ts (used version)
+/user/username/projects/myproject/project/tsconfig.json (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -143,7 +147,8 @@ FsWatchesRecursive::
 
 Program root files: [
   "/user/username/projects/myproject/Project/file1.ts",
-  "/user/username/projects/myproject/Project/file2.ts"
+  "/user/username/projects/myproject/Project/file2.ts",
+  "/user/username/projects/myproject/Project/tsconfig.json"
 ]
 Program options: {
   "watch": true,
@@ -155,6 +160,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
 /user/username/projects/myproject/Project/file2.ts
+/user/username/projects/myproject/Project/tsconfig.json
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/Project/file2.ts

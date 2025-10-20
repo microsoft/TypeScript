@@ -4370,8 +4370,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
         }
 
-        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind) && moduleKind !== ModuleKind.Preserve) {
-            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later, "bundler");
+        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind) && moduleKind !== ModuleKind.Preserve && moduleKind !== ModuleKind.CommonJS) {
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later, "bundler");
         }
 
         if (
@@ -4435,10 +4435,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            // While we could do Version.tryParse here to support any version,
-            // for now, only allow "5.0". We aren't planning on deprecating anything
-            // until 6.0.
-            if (ignoreDeprecations === "5.0") {
+            if (ignoreDeprecations === "5.0" || ignoreDeprecations === "6.0") {
                 return new Version(ignoreDeprecations);
             }
             reportInvalidIgnoreDeprecations();
@@ -4524,6 +4521,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             if (options.preserveValueImports) {
                 createDeprecatedDiagnostic("preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+        });
+
+        checkDeprecations("6.0", "7.0", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.moduleResolution === ModuleResolutionKind.Node10) {
+                createDeprecatedDiagnostic("moduleResolution", "node10");
             }
         });
     }
