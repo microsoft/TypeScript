@@ -13,7 +13,7 @@ func TestCompletionsImport_umdDefaultNoCrash2(t *testing.T) {
 	t.Parallel()
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @moduleResolution: node
+	const content = `// @moduleResolution: bundler
 // @allowJs: true
 // @checkJs: true
 // @Filename: /node_modules/dottie/package.json

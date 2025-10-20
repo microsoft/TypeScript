@@ -2326,7 +2326,7 @@ var Compiler_option_0_may_only_be_used_with_build = &Message{code: 5093, categor
 
 var Compiler_option_0_may_not_be_used_with_build = &Message{code: 5094, category: CategoryError, key: "Compiler_option_0_may_not_be_used_with_build_5094", text: "Compiler option '--{0}' may not be used with '--build'."}
 
-var Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later = &Message{code: 5095, category: CategoryError, key: "Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later_5095", text: "Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later."}
+var Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later = &Message{code: 5095, category: CategoryError, key: "Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later_5095", text: "Option '{0}' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later."}
 
 var Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set = &Message{code: 5096, category: CategoryError, key: "Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set_5096", text: "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set."}
 

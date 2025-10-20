@@ -1,8 +1,34 @@
 //// [tests/cases/compiler/module_augmentUninstantiatedModule2.ts] ////
 
-=== module_augmentUninstantiatedModule2.ts ===
+=== app.ts ===
+import ng = require("angular");
+>ng : ng.IAngularStatic
+
+import "./moduleAugmentation";
+
+var x: number = ng.getNumber();
+>x : number
+>ng.getNumber() : number
+>ng.getNumber : () => number
+>ng : ng.IAngularStatic
+>getNumber : () => number
+
+=== moduleAugmentation.ts ===
+import * as ng from "angular"
+>ng : ng.IAngularStatic
+
+declare module "angular" {
+>"angular" : IAngularStatic
+
+    export interface IAngularStatic {
+        getNumber: () => number;
+>getNumber : () => number
+    }
+}
+
+=== node_modules/angular/index.d.ts ===
 declare var ng: ng.IAngularStatic;
->ng : import("module_augmentUninstantiatedModule2").IAngularStatic
+>ng : import("node_modules/angular/index.d.ts").IAngularStatic
 >ng : any
 
 declare module ng {
@@ -19,6 +45,6 @@ declare module ng {
 }
 
 export = ng;
->ng : import("module_augmentUninstantiatedModule2").IAngularStatic
+>ng : import("node_modules/angular/index.d.ts").IAngularStatic
 
 

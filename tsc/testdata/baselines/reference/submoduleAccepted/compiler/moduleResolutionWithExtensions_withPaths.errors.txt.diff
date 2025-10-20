@@ -1,55 +1,34 @@
 --- old.moduleResolutionWithExtensions_withPaths.errors.txt
 +++ new.moduleResolutionWithExtensions_withPaths.errors.txt
 @@= skipped -0, +0 lines =@@
--<no content>
+-/tsconfig.json(7,23): error TS5107: Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-==== /tsconfig.json (1 errors) ====
 +/tsconfig.json(6,3): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
 +  Use '"paths": {"*": ["./*"]}' instead.
 +/tsconfig.json(11,14): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 +
 +
 +==== /tsconfig.json (2 errors) ====
-+    {
-+    	"compilerOptions": {
-+    		"outDir": "lib",
-+    		"target": "ES6",
-+    		"module": "ES6",
-+    		"baseUrl": "/",
+     {
+     	"compilerOptions": {
+     		"outDir": "lib",
+     		"target": "ES6",
+     		"module": "ES6",
+     		"baseUrl": "/",
 +    		~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
 +!!! error TS5102:   Use '"paths": {"*": ["./*"]}' instead.
-+    		"moduleResolution": "Node",
-+    		"noImplicitAny": true,
-+    		"traceResolution": true,
-+    		"paths": {
-+    			"foo/*": ["node_modules/foo/lib/*"]
+     		"moduleResolution": "Node",
+-    		                    ~~~~~~
+-!!! error TS5107: Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+     		"noImplicitAny": true,
+     		"traceResolution": true,
+     		"paths": {
+     			"foo/*": ["node_modules/foo/lib/*"]
 +    			          ~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
-+    		}
-+    	}
-+    }
-+    
-+==== /relative.d.ts (0 errors) ====
-+    export declare function relative(): void;
-+    
-+    
-+==== /test.ts (0 errors) ====
-+    import { test } from "foo/test.js";
-+    import { test as test2 } from "foo/test";
-+    import { relative } from "./relative.js";
-+    import { relative as relative2 } from "./relative";
-+    
-+    
-+    
-+==== /node_modules/foo/lib/test.js (0 errors) ====
-+    export function test() {
-+    	console.log("test");
-+    }
-+    
-+==== /node_modules/foo/lib/test.d.ts (0 errors) ====
-+    export declare function test(): void;
-+    
-+==== /relative.js (0 errors) ====
-+    export function relative() {
-+    	console.log("test");
-+    }
-+    
+     		}
+     	}
+     }

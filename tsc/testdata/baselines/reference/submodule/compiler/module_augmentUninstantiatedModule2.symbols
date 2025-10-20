@@ -1,32 +1,59 @@
 //// [tests/cases/compiler/module_augmentUninstantiatedModule2.ts] ////
 
-=== module_augmentUninstantiatedModule2.ts ===
+=== app.ts ===
+import ng = require("angular");
+>ng : Symbol(ng, Decl(app.ts, 0, 0))
+
+import "./moduleAugmentation";
+
+var x: number = ng.getNumber();
+>x : Symbol(x, Decl(app.ts, 3, 3))
+>ng.getNumber : Symbol(ng.IAngularStatic.getNumber, Decl(moduleAugmentation.ts, 2, 37))
+>ng : Symbol(ng, Decl(app.ts, 0, 0))
+>getNumber : Symbol(ng.IAngularStatic.getNumber, Decl(moduleAugmentation.ts, 2, 37))
+
+=== moduleAugmentation.ts ===
+import * as ng from "angular"
+>ng : Symbol(ng, Decl(moduleAugmentation.ts, 0, 6))
+
+declare module "angular" {
+>"angular" : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
+
+    export interface IAngularStatic {
+>IAngularStatic : Symbol(IAngularStatic, Decl(index.d.ts, 5, 4), Decl(moduleAugmentation.ts, 1, 26))
+
+        getNumber: () => number;
+>getNumber : Symbol(IAngularStatic.getNumber, Decl(moduleAugmentation.ts, 2, 37))
+    }
+}
+
+=== node_modules/angular/index.d.ts ===
 declare var ng: ng.IAngularStatic;
->ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
->ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
->IAngularStatic : Symbol(ng.IAngularStatic, Decl(module_augmentUninstantiatedModule2.ts, 5, 4))
+>ng : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
+>ng : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
+>IAngularStatic : Symbol(ng.IAngularStatic, Decl(index.d.ts, 5, 4), Decl(moduleAugmentation.ts, 1, 26))
 
 declare module ng {
->ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+>ng : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
 
    export interface IModule {
->IModule : Symbol(IModule, Decl(module_augmentUninstantiatedModule2.ts, 2, 19))
+>IModule : Symbol(IModule, Decl(index.d.ts, 2, 19))
 
       name: string;
->name : Symbol(IModule.name, Decl(module_augmentUninstantiatedModule2.ts, 3, 29))
+>name : Symbol(IModule.name, Decl(index.d.ts, 3, 29))
    }
 
    export interface IAngularStatic {
->IAngularStatic : Symbol(IAngularStatic, Decl(module_augmentUninstantiatedModule2.ts, 5, 4))
+>IAngularStatic : Symbol(IAngularStatic, Decl(index.d.ts, 5, 4), Decl(moduleAugmentation.ts, 1, 26))
 
        module: (s: string) => IModule;
->module : Symbol(IAngularStatic.module, Decl(module_augmentUninstantiatedModule2.ts, 7, 36))
->s : Symbol(s, Decl(module_augmentUninstantiatedModule2.ts, 8, 16))
->IModule : Symbol(IModule, Decl(module_augmentUninstantiatedModule2.ts, 2, 19))
+>module : Symbol(IAngularStatic.module, Decl(index.d.ts, 7, 36))
+>s : Symbol(s, Decl(index.d.ts, 8, 16))
+>IModule : Symbol(IModule, Decl(index.d.ts, 2, 19))
    }
 }
 
 export = ng;
->ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+>ng : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
 
 

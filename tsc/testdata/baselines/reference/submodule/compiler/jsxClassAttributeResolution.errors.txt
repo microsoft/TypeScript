@@ -14,7 +14,7 @@ file.tsx(2,19): error TS2322: Type '{}' is not assignable to type 'IntrinsicClas
         "name": "@types/react",
         "version": "0.0.1",
         "main": "",
-        "types": "index.d.ts",
+        "types": "index.d.ts"
     }
 ==== node_modules/@types/react/index.d.ts (0 errors) ====
     interface IntrinsicClassAttributesAlias<T> {

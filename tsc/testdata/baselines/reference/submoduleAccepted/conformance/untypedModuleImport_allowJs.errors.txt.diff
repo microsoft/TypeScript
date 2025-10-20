@@ -1,0 +1,16 @@
+--- old.untypedModuleImport_allowJs.errors.txt
++++ new.untypedModuleImport_allowJs.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.ts(2,5): error TS2339: Property 'bar' does not exist on type 'typeof import("/node_modules/foo/index")'.
+-
+-
+-==== /a.ts (1 errors) ====
+-    import foo from "foo";
+-    foo.bar();
+-        ~~~
+-!!! error TS2339: Property 'bar' does not exist on type 'typeof import("/node_modules/foo/index")'.
+-    
+-==== /node_modules/foo/index.js (0 errors) ====
+-    exports.default = { bar() { return 0; } }
+-    
++<no content>

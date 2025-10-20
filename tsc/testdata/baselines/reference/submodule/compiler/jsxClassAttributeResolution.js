@@ -8,7 +8,7 @@ export const a = <App></App>;
     "name": "@types/react",
     "version": "0.0.1",
     "main": "",
-    "types": "index.d.ts",
+    "types": "index.d.ts"
 }
 //// [index.d.ts]
 interface IntrinsicClassAttributesAlias<T> {

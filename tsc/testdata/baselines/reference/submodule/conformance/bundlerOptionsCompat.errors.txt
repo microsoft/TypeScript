@@ -1,0 +1,16 @@
+/tsconfig.json(4,25): error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
+
+
+==== /tsconfig.json (1 errors) ====
+    {
+      "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "bundler",
+                            ~~~~~~~~~
+!!! error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
+        "noEmit": true
+      }
+    }
+    
+==== /index.ts (0 errors) ====
+    

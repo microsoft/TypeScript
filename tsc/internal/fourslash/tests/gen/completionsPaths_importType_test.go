@@ -14,7 +14,7 @@ func TestCompletionsPaths_importType(t *testing.T) {
 	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @Filename: /ns.ts
 file content not read
 // @Filename: /node_modules/package/index.ts

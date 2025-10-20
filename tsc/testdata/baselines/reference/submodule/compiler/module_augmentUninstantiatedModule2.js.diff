@@ -1,0 +1,10 @@
+--- old.module_augmentUninstantiatedModule2.js
++++ new.module_augmentUninstantiatedModule2.js
+@@= skipped -36, +36 lines =@@
+ //// [app.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var ng = require("angular");
++const ng = require("angular");
+ require("./moduleAugmentation");
+ var x = ng.getNumber();

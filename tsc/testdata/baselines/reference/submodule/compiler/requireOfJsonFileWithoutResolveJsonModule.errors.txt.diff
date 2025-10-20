@@ -1,47 +1,37 @@
 --- old.requireOfJsonFileWithoutResolveJsonModule.errors.txt
 +++ new.requireOfJsonFileWithoutResolveJsonModule.errors.txt
 @@= skipped -0, +0 lines =@@
--file1.ts(1,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
--file1.ts(3,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
--
--
--==== file1.ts (2 errors) ====
-+b.json(1,1): error TS1005: '{' expected.
-+b.json(1,10): error TS1005: ',' expected.
-+b.json(1,14): error TS1005: ',' expected.
-+b.json(1,18): error TS1005: '}' expected.
-+file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{ contents: any; Not: any; read: any; }'.
-+file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
-+file1.ts(6,13): error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
-+
-+
-+==== file1.ts (3 errors) ====
-     import b1 = require('./b.json'); // error
--                        ~~~~~~~~~~
--!!! error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-     let x = b1.a;
-+               ~
-+!!! error TS2339: Property 'a' does not exist on type '{ contents: any; Not: any; read: any; }'.
-     import b2 = require('./b.json'); // error
--                        ~~~~~~~~~~
--!!! error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-     if (x) {
-         let b = b2.b;
-+                   ~
-+!!! error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
-         x = (b1.b === b);
-+                ~
-+!!! error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
+ b.json(1,1): error TS1005: '{' expected.
+-b.json(1,1): error TS1136: Property assignment expected.
+ b.json(1,10): error TS1005: ',' expected.
+-b.json(1,10): error TS1136: Property assignment expected.
+ b.json(1,14): error TS1005: ',' expected.
+-b.json(1,14): error TS1136: Property assignment expected.
+ b.json(1,18): error TS1005: '}' expected.
+ file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{ contents: any; Not: any; read: any; }'.
+ file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
+@@= skipped -24, +21 lines =@@
+ !!! error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
      }
      
--==== b.json (0 errors) ====
+-==== b.json (7 errors) ====
 +==== b.json (4 errors) ====
      contents Not read
-+    ~~~~~~~~
-+!!! error TS1005: '{' expected.
+     ~~~~~~~~
+ !!! error TS1005: '{' expected.
+-    ~~~~~~~~
+-!!! error TS1136: Property assignment expected.
+-             ~~~
+-!!! error TS1005: ',' expected.
+-             ~~~
+-!!! error TS1136: Property assignment expected.
+-                 ~~~~
+-!!! error TS1005: ',' expected.
+-                 ~~~~
+-!!! error TS1136: Property assignment expected.
 +             ~~~
 +!!! error TS1005: ',' expected.
 +                 ~~~~
 +!!! error TS1005: ',' expected.
-+                     
-+!!! error TS1005: '}' expected.
+                      
+ !!! error TS1005: '}' expected.

@@ -18,8 +18,7 @@
 -const a = () => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(function () { return require("inner"); })).x(); });
 +const a = async () => (await Promise.resolve().then(() => require("inner"))).x();
  exports.a = a;
-
-
- //// [index.d.ts]
--export declare const a: () => Promise<import("inner/private").Thing>;
++
++
++//// [index.d.ts]
 +export declare const a: any;

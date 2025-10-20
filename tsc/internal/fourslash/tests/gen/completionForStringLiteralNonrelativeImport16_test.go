@@ -16,6 +16,7 @@ func TestCompletionForStringLiteralNonrelativeImport16(t *testing.T) {
 	const content = `// @Filename: tsconfig.json
 {
     "compilerOptions": {
+        "resolveJsonModule": false,
         "baseUrl": "./",
         "paths": {
             "module1/path1": ["some/path/whatever.ts"],

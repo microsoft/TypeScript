@@ -13,6 +13,7 @@ func TestPathCompletionsTypesVersionsWildcard3(t *testing.T) {
 	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
+// @resolveJsonModule: false
 // @Filename: /node_modules/foo/package.json
 {
   "types": "index.d.ts",

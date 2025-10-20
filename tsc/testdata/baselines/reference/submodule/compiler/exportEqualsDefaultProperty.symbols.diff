@@ -1,9 +1,0 @@
---- old.exportEqualsDefaultProperty.symbols
-+++ new.exportEqualsDefaultProperty.symbols
-@@= skipped -19, +19 lines =@@
- >foo : Symbol(foo, Decl(imp.ts, 0, 6))
-
- foo.toExponential(2);
-->foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
- >foo : Symbol(foo, Decl(imp.ts, 0, 6))
-->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))

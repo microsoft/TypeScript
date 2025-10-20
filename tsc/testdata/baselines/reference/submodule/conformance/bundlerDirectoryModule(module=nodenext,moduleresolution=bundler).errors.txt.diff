@@ -1,11 +1,11 @@
 --- old.bundlerDirectoryModule(module=nodenext,moduleresolution=bundler).errors.txt
 +++ new.bundlerDirectoryModule(module=nodenext,moduleresolution=bundler).errors.txt
 @@= skipped -0, +0 lines =@@
--error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+-error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
  error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
 
 
--!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+-!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
  !!! error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
  ==== /app/test.ts (0 errors) ====
      import { test } from '../lib';

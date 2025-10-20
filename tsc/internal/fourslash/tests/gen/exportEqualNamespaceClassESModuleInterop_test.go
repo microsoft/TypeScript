@@ -13,7 +13,7 @@ func TestExportEqualNamespaceClassESModuleInterop(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @esModuleInterop: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @target: es2015
 // @module: esnext
 // @Filename: /node_modules/@bar/foo/index.d.ts

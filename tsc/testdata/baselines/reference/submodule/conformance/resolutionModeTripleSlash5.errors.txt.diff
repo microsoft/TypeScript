@@ -1,9 +1,7 @@
---- old.resolutionModeTripleSlash4.errors.txt
-+++ new.resolutionModeTripleSlash4.errors.txt
+--- old.resolutionModeTripleSlash5.errors.txt
++++ new.resolutionModeTripleSlash5.errors.txt
 @@= skipped -0, +0 lines =@@
 -/tsconfig.json(4,25): error TS5107: Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
--/app.ts(1,23): error TS2688: Cannot find type definition file for 'foo'.
--/app.ts(2,1): error TS2304: Cannot find name 'MODULE'.
  /app.ts(3,1): error TS2552: Cannot find name 'SCRIPT'. Did you mean 'WScript'?
 
 
@@ -18,16 +16,3 @@
          "noEmit": true,
          "types": []
        }
-     }
-     
--==== /app.ts (3 errors) ====
-+==== /app.ts (1 errors) ====
-     /// <reference types="foo" />
--                          ~~~
--!!! error TS2688: Cannot find type definition file for 'foo'.
-     MODULE; // error
--    ~~~~~~
--!!! error TS2304: Cannot find name 'MODULE'.
-     SCRIPT; // error
-     ~~~~~~
- !!! error TS2552: Cannot find name 'SCRIPT'. Did you mean 'WScript'?
