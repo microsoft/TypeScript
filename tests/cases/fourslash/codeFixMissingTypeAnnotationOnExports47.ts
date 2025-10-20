@@ -9,7 +9,7 @@
 // @filename: node_modules/react/package.json
 ////{
 ////    "name": "react",
-////    "types": "index.d.ts",
+////    "types": "index.d.ts"
 ////}
 
 // @filename: node_modules/react/index.d.ts
