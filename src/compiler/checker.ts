@@ -13716,7 +13716,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr);
+        // Allow entity name expressions (e.g., Type.Foo) or element access expressions (e.g., Type['Foo'])
+        return isEntityNameExpression(expr) || isEntityNameElementAccess(expr);
+    }
+
+    function isEntityNameElementAccess(node: Expression): boolean {
+        // Check if this is an element access expression where the object is an entity name
+        // This allows Type['Foo'] where Type is an identifier or property access
+        if (!isElementAccessExpression(node)) {
+            return false;
+        }
+        return isEntityNameExpression(node.expression);
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
