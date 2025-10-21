@@ -60,6 +60,7 @@ function Foo({ bar }) {
 >div : any
 >    : ^^^
 >bar : any
+>    : ^^^
 >div : any
 >    : ^^^
 }

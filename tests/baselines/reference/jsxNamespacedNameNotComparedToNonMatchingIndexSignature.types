@@ -33,6 +33,8 @@ export const tag = <div ns:thing="a"/>
 >    : ^^^
 >ns:thing : string
 >         : ^^^^^^
->ns : error
->thing : error
+>ns : any
+>   : ^^^
+>thing : any
+>      : ^^^
 
