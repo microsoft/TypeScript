@@ -975,7 +975,7 @@ func getIndentationString(indentation int, options *FormatCodeSettings) string {
 		spaces := indentation - (tabs * options.TabSize)
 		res := strings.Repeat("\t", tabs)
 		if spaces > 0 {
-			res = strings.Repeat(" ", spaces) + res
+			res = res + strings.Repeat(" ", spaces)
 		}
 
 		return res
