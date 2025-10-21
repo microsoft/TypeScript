@@ -279,6 +279,9 @@ export class Verify extends VerifyNegatable {
             return this.state.verifyCompletions(optionsArray[0]);
         }
         for (const options of optionsArray) {
+            if (options.preferences && Object.keys(options).length === 1 && optionsArray.length > 1 && optionsArray.indexOf(options) > 0) {
+                throw new Error("Did you mean to put 'preferences' in the previous 'verify.completions' object argument instead of their own object?");
+            }
             this.state.verifyCompletions(options);
         }
         return {
