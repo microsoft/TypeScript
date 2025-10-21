@@ -51,7 +51,7 @@ func RemoveFileExtension(path string) string {
 		}
 	}
 	// Otherwise just remove single dot extension, if any
-	return path[:len(path)-len(filepath.Ext(path))]
+	return path[:len(path)-len(filepath.Ext(path))] //nolint:forbidigo
 }
 
 func TryGetExtensionFromPath(p string) string {

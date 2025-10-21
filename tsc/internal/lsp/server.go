@@ -5,14 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"os"
-	"os/exec"
-	"os/signal"
 	"runtime/debug"
 	"slices"
 	"sync"
 	"sync/atomic"
-	"syscall"
 	"time"
 
 	"github.com/go-json-experiment/json"
@@ -39,6 +35,7 @@ type ServerOptions struct {
 	DefaultLibraryPath string
 	TypingsLocation    string
 	ParseCache         *project.ParseCache
+	NpmInstall         func(cwd string, args []string) ([]byte, error)
 }
 
 func NewServer(opts *ServerOptions) *Server {
@@ -59,6 +56,7 @@ func NewServer(opts *ServerOptions) *Server {
 		defaultLibraryPath:    opts.DefaultLibraryPath,
 		typingsLocation:       opts.TypingsLocation,
 		parseCache:            opts.ParseCache,
+		npmInstall:            opts.NpmInstall,
 	}
 }
 
@@ -157,6 +155,8 @@ type Server struct {
 	compilerOptionsForInferredProjects *core.CompilerOptions
 	// parseCache can be passed in so separate tests can share ASTs
 	parseCache *project.ParseCache
+
+	npmInstall func(cwd string, args []string) ([]byte, error)
 }
 
 // WatchFiles implements project.Client.
@@ -218,10 +218,7 @@ func (s *Server) RefreshDiagnostics(ctx context.Context) error {
 	return nil
 }
 
-func (s *Server) Run() error {
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
-
+func (s *Server) Run(ctx context.Context) error {
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error { return s.dispatchLoop(ctx) })
 	g.Go(func() error { return s.writeLoop(ctx) })
@@ -877,9 +874,7 @@ func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, opti
 
 // NpmInstall implements ata.NpmExecutor
 func (s *Server) NpmInstall(cwd string, args []string) ([]byte, error) {
-	cmd := exec.Command("npm", args...)
-	cmd.Dir = cwd
-	return cmd.Output()
+	return s.npmInstall(cwd, args)
 }
 
 func isBlockingMethod(method lsproto.Method) bool {

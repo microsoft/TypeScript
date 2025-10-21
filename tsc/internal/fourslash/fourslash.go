@@ -1,6 +1,7 @@
 package fourslash
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"maps"
@@ -164,7 +165,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		defer func() {
 			outputWriter.Close()
 		}()
-		err := server.Run()
+		err := server.Run(context.TODO())
 		if err != nil {
 			t.Error("server error:", err)
 		}

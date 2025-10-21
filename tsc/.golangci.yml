@@ -22,6 +22,7 @@ linters:
     - errname
     - errorlint
     - fatcontext
+    - forbidigo
     - gocheckcompilerdirectives
     - goprintffuncname
     - govet
@@ -70,11 +71,30 @@ linters:
             - pkg: 'encoding/json$'
               desc: 'Use "github.com/go-json-experiment/json" instead.'
 
+    forbidigo:
+      analyze-types: true
+      forbid:
+        - pattern: '.*'
+          msg: tspath should likely be used instead
+          pkg: ^(path|path/filepath)$
+        - pattern: '.*'
+          msg: a host implementation should likely be used instead
+          pkg: ^os/
+        - pattern: 'GOOS'
+          msg: a host implementation should likely be used instead
+          pkg: ^runtime$
+
   exclusions:
     rules:
       - path: internal/fourslash/tests/gen/
         linters:
           - misspell
+      - path: 'internal/(repo|testutil|testrunner|vfs|pprof|execute/tsctests|bundled)|cmd/tsgo'
+        text: should likely be used instead
+      - path: '(.+)_test\.go$'
+        text: should likely be used instead
+      - path: '_tools'
+        text: should likely be used instead
 
     presets:
       - comments
