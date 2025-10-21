@@ -2,9 +2,22 @@
 
 interface DOMTokenList {
     [Symbol.iterator](): ArrayIterator<string>;
+    /**
+     * Returns an iterator allowing to go through all key/value pairs contained in this list.
+     */
+    entries(): ArrayIterator<[number, string]>;
+    /**
+     * Returns an iterator allowing to go through all keys in the list.
+     */
+    keys(): ArrayIterator<number>;
+    /**
+     * Returns an iterator allowing to go through all values in the list.
+     */
+    values(): ArrayIterator<string>;
 }
 
-interface HeadersIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+interface HeadersIterator<T>
+    extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
     [Symbol.iterator](): HeadersIterator<T>;
 }
 
@@ -34,7 +47,10 @@ interface NodeList {
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: Node, index: number, listObj: NodeList) => void, thisArg?: any): void;
+    forEach(
+        callbackfn: (value: Node, index: number, listObj: NodeList) => void,
+        thisArg?: any,
+    ): void;
     /**
      * Returns an list of keys in the list
      */
@@ -59,7 +75,14 @@ interface NodeListOf<TNode extends Node> {
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: TNode, index: number, listObj: NodeListOf<TNode>) => void, thisArg?: any): void;
+    forEach(
+        callbackfn: (
+            value: TNode,
+            index: number,
+            listObj: NodeListOf<TNode>,
+        ) => void,
+        thisArg?: any,
+    ): void;
     /**
      * Returns an list of keys in the list
      */
@@ -80,7 +103,8 @@ interface HTMLCollectionOf<T extends Element> {
     [Symbol.iterator](): ArrayIterator<T>;
 }
 
-interface FormDataIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+interface FormDataIterator<T>
+    extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
     [Symbol.iterator](): FormDataIterator<T>;
 }
 
@@ -101,7 +125,8 @@ interface FormData {
     [Symbol.iterator](): FormDataIterator<string | File>;
 }
 
-interface URLSearchParamsIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+interface URLSearchParamsIterator<T>
+    extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
     [Symbol.iterator](): URLSearchParamsIterator<T>;
 }
 
