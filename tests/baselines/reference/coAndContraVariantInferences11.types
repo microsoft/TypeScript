@@ -1,0 +1,306 @@
+//// [tests/cases/compiler/coAndContraVariantInferences11.ts] ////
+
+=== coAndContraVariantInferences11.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/59656
+
+interface Box<T> {
+  select: <A>(op: (source: T) => A) => A;
+>select : <A>(op: (source: T) => A) => A
+>       : ^ ^^  ^^                ^^^^^ 
+>op : (source: T) => A
+>   : ^      ^^ ^^^^^ 
+>source : T
+>       : ^
+
+  _v: T;
+>_v : T
+>   : ^
+}
+declare function tap<T>(next: (value: T) => void): (source: T) => T;
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>next : (value: T) => void
+>     : ^     ^^ ^^^^^    
+>value : T
+>      : ^
+>source : T
+>       : ^
+
+declare const box1: Box<{
+>box1 : Box<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test1(): {} {
+>test1 : () => {}
+>      : ^^^^^^  
+
+  return box1.select(tap((arg) => {}));
+>box1.select(tap((arg) => {})) : { prop?: string; }
+>                              : ^^^^^^^^^      ^^^
+>box1.select : <A>(op: (source: { prop?: string; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box1 : Box<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop?: string; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop?: string; }) => { prop?: string; }
+>                 : ^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop?: string; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; }
+>    : ^^^^^^^^^      ^^^
+}
+
+declare const box2: Box<{
+>box2 : Box<{ prop: string; }>
+>     : ^^^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+}>;
+function test2(): {} {
+>test2 : () => {}
+>      : ^^^^^^  
+
+  return box2.select(tap((arg) => {}));
+>box2.select(tap((arg) => {})) : { prop: string; }
+>                              : ^^^^^^^^      ^^^
+>box2.select : <A>(op: (source: { prop: string; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box2 : Box<{ prop: string; }>
+>     : ^^^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop: string; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop: string; }) => { prop: string; }
+>                 : ^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop: string; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; }
+>    : ^^^^^^^^      ^^^
+}
+
+declare const box3: Box<{
+>box3 : Box<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test3(): {} {
+>test3 : () => {}
+>      : ^^^^^^  
+
+  return box3.select(tap((arg) => {}));
+>box3.select(tap((arg) => {})) : { prop: string; prop2?: number; }
+>                              : ^^^^^^^^      ^^^^^^^^^^      ^^^
+>box3.select : <A>(op: (source: { prop: string; prop2?: number; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box3 : Box<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop: string; prop2?: number; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop: string; prop2?: number; }) => { prop: string; prop2?: number; }
+>                 : ^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; prop2?: number; }
+>    : ^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const box4: Box<{
+>box4 : Box<{ prop?: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test4(): { prop?: string } {
+>test4 : () => { prop?: string; }
+>      : ^^^^^^                  
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  return box4.select(tap((arg) => {}));
+>box4.select(tap((arg) => {})) : { prop?: string; prop2?: number; }
+>                              : ^^^^^^^^^      ^^^^^^^^^^      ^^^
+>box4.select : <A>(op: (source: { prop?: string; prop2?: number; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box4 : Box<{ prop?: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop?: string; prop2?: number; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop?: string; prop2?: number; }) => { prop?: string; prop2?: number; }
+>                 : ^      ^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop?: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; prop2?: number; }
+>    : ^^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const box5: Box<{
+>box5 : Box<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test5(): { prop: string } {
+>test5 : () => { prop: string; }
+>      : ^^^^^^                 
+>prop : string
+>     : ^^^^^^
+
+  return box5.select(tap((arg) => {}));
+>box5.select(tap((arg) => {})) : { prop: string; prop2?: number; }
+>                              : ^^^^^^^^      ^^^^^^^^^^      ^^^
+>box5.select : <A>(op: (source: { prop: string; prop2?: number; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box5 : Box<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop: string; prop2?: number; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop: string; prop2?: number; }) => { prop: string; prop2?: number; }
+>                 : ^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; prop2?: number; }
+>    : ^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const box6: Box<{
+>box6 : Box<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test6(): { prop2?: number } {
+>test6 : () => { prop2?: number; }
+>      : ^^^^^^                   
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+  return box6.select(tap((arg) => {}));
+>box6.select(tap((arg) => {})) : { prop: string; prop2?: number; }
+>                              : ^^^^^^^^      ^^^^^^^^^^      ^^^
+>box6.select : <A>(op: (source: { prop: string; prop2?: number; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box6 : Box<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop: string; prop2?: number; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop: string; prop2?: number; }) => { prop: string; prop2?: number; }
+>                 : ^      ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; prop2?: number; }
+>    : ^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const box7: Box<{
+>box7 : Box<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test7(): any {
+>test7 : () => any
+>      : ^^^^^^   
+
+  return box7.select(tap((arg) => {}));
+>box7.select(tap((arg) => {})) : { prop?: string; }
+>                              : ^^^^^^^^^      ^^^
+>box7.select : <A>(op: (source: { prop?: string; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box7 : Box<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop?: string; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop?: string; }) => { prop?: string; }
+>                 : ^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop?: string; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; }
+>    : ^^^^^^^^^      ^^^
+}
+
+declare const box8: Box<{
+>box8 : Box<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test8(): unknown {
+>test8 : () => unknown
+>      : ^^^^^^       
+
+  return box8.select(tap((arg) => {}));
+>box8.select(tap((arg) => {})) : { prop?: string; }
+>                              : ^^^^^^^^^      ^^^
+>box8.select : <A>(op: (source: { prop?: string; }) => A) => A
+>            : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>box8 : Box<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^      ^^^^
+>select : <A>(op: (source: { prop?: string; }) => A) => A
+>       : ^ ^^  ^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>tap((arg) => {}) : (source: { prop?: string; }) => { prop?: string; }
+>                 : ^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
+>tap : <T>(next: (value: T) => void) => (source: T) => T
+>    : ^ ^^    ^^                  ^^^^^                
+>(arg) => {} : (arg: { prop?: string; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; }
+>    : ^^^^^^^^^      ^^^
+}
+
