@@ -1,0 +1,342 @@
+//// [tests/cases/compiler/contextualSignatureWithExtraParameters.ts] ////
+
+=== contextualSignatureWithExtraParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/59309
+function f1(
+>f1 : (cb: ((item: number) => void) | ((item: number, extra: string) => void)) => void
+>   : ^  ^^                                                                  ^^^^^^^^^
+
+    cb: ((item: number) => void) | ((item: number, extra: string) => void),
+>cb : ((item: number) => void) | ((item: number, extra: string) => void)
+>   : ^^    ^^      ^^^^^    ^^^^^^    ^^      ^^     ^^      ^^^^^    ^
+>item : number
+>     : ^^^^^^
+>item : number
+>     : ^^^^^^
+>extra : string
+>      : ^^^^^^
+
+  ) {}
+  
+f1((item) => {});
+>f1((item) => {}) : void
+>                 : ^^^^
+>f1 : (cb: ((item: number) => void) | ((item: number, extra: string) => void)) => void
+>   : ^  ^^                                                                  ^^^^^^^^^
+>(item) => {} : (item: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>item : number
+>     : ^^^^^^
+
+function f2<T>(
+>f2 : <T>(arr: T[], cb: ((item: T) => void) | ((item: T, extra: unknown) => void)) => void
+>   : ^ ^^   ^^   ^^  ^^                                                         ^^^^^^^^^
+
+    arr: T[],
+>arr : T[]
+>    : ^^^
+
+    cb: ((item: T) => void) | ((item: T, extra: unknown) => void),
+>cb : ((item: T) => void) | ((item: T, extra: unknown) => void)
+>   : ^^    ^^ ^^^^^    ^^^^^^    ^^ ^^     ^^       ^^^^^    ^
+>item : T
+>     : ^
+>item : T
+>     : ^
+>extra : unknown
+>      : ^^^^^^^
+
+  ) {}
+  
+f2([1, 2, 3], (item) => {});
+>f2([1, 2, 3], (item) => {}) : void
+>                            : ^^^^
+>f2 : <T>(arr: T[], cb: ((item: T) => void) | ((item: T, extra: unknown) => void)) => void
+>   : ^ ^^   ^^   ^^  ^^                                                         ^^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>(item) => {} : (item: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>item : number
+>     : ^^^^^^
+
+export interface AsyncResultCallback<T, E = Error> {
+    (err?: E | null, result?: T): void;
+>err : E | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>result : T | undefined
+>       : ^^^^^^^^^^^^^
+}
+
+export interface AsyncResultIterator<T, R, E = Error> {
+    (item: T, callback: AsyncResultCallback<R, E>): void;
+>item : T
+>     : ^
+>callback : AsyncResultCallback<R, E>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+export interface AsyncResultIteratorPromise<T, R> {
+    (item: T): Promise<R>;
+>item : T
+>     : ^
+}
+
+declare function mapLimit<T, R, E = Error>(
+>mapLimit : <T, R, E = Error>(arr: T[], limit: number, iterator: AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>) => Promise<R[]>
+>         : ^ ^^ ^^ ^^^^^^^^^^   ^^   ^^     ^^      ^^        ^^                                                               ^^^^^            
+
+    arr: T[],
+>arr : T[]
+>    : ^^^
+
+    limit: number,
+>limit : number
+>      : ^^^^^^
+
+    iterator:  AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>,
+>iterator : AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): Promise<R[]>;
+
+mapLimit([1,2,3], 3, async (n) => {
+>mapLimit([1,2,3], 3, async (n) => {    return n ** 2;}) : Promise<number[]>
+>                                                        : ^^^^^^^^^^^^^^^^^
+>mapLimit : <T, R, E = Error>(arr: T[], limit: number, iterator: AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>) => Promise<R[]>
+>         : ^ ^^ ^^ ^^^^^^^^^^   ^^   ^^     ^^      ^^        ^^                                                               ^^^^^            
+>[1,2,3] : number[]
+>        : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>3 : 3
+>  : ^
+>async (n) => {    return n ** 2;} : (n: number) => Promise<number>
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+    return n ** 2;
+>n ** 2 : number
+>       : ^^^^^^
+>n : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+});
+
+function f3(
+>f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                            ^^^^^^^^^
+
+    cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)
+>cb : ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)
+>   : ^^ ^^      ^^ ^^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^        ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : string[]
+>     : ^^^^^^^^
+
+  ) {}
+  
+f3((a) => {});
+>f3((a) => {}) : void
+>              : ^^^^
+>f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                            ^^^^^^^^^
+>(a) => {} : (a: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+f3((a, b) => {});
+>f3((a, b) => {}) : void
+>                 : ^^^^
+>f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                            ^^^^^^^^^
+>(a, b) => {} : (a: string, b: string | undefined) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+function f4(
+>f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+
+    cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)
+>cb : ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)
+>   : ^^ ^^      ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^        ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : string[]
+>     : ^^^^^^^^
+
+  ) {}
+  
+f4((a) => {});
+>f4((a) => {}) : void
+>              : ^^^^
+>f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+>(a) => {} : (a: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+f4((a, b) => {});
+>f4((a, b) => {}) : void
+>                 : ^^^^
+>f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+>(a, b) => {} : (a: string, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+function f5(
+>f5 : (cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+
+    cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)
+>cb : ((a: string, b: string) => void) | ((...rest: string[]) => void)
+>   : ^^ ^^      ^^ ^^      ^^^^^    ^^^^^^^^^    ^^        ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>rest : string[]
+>     : ^^^^^^^^
+
+  ) {}
+  
+f5((a) => {});
+>f5((a) => {}) : void
+>              : ^^^^
+>f5 : (cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+>(a) => {} : (a: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+f5((a, b) => {});
+>f5((a, b) => {}) : void
+>                 : ^^^^
+>f5 : (cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+>(a, b) => {} : (a: string, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+function f6(
+>f6 : (cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+
+  cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)
+>cb : ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)
+>   : ^^ ^^      ^^^^^      ^^^^^^ ^^         ^^^^^                  ^
+>a : string
+>  : ^^^^^^
+>a : "a" | "b"
+>  : ^^^^^^^^^
+
+) {}
+
+f6(async (a) => a);
+>f6(async (a) => a) : void
+>                   : ^^^^
+>f6 : (cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+>async (a) => a : (a: "a" | "b") => Promise<"a" | "b">
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "a" | "b"
+>  : ^^^^^^^^^
+>a : "a" | "b"
+>  : ^^^^^^^^^
+
+function f7(
+>f7 : (cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+
+  cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)
+>cb : ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)
+>   : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^                                ^
+>a : string
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+) {}
+
+f7(function* generator(a) {yield 0});
+>f7(function* generator(a) {yield 0}) : void
+>                                     : ^^^^
+>f7 : (cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+>function* generator(a) {yield 0} : (a: number) => Generator<number, void, unknown>
+>                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>generator : (a: number) => Generator<number, void, unknown>
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>yield 0 : unknown
+>        : ^^^^^^^
+>0 : 0
+>  : ^
+
+function f8(
+>f8 : (cb: ((a: string) => string) | ((a: number) => AsyncGenerator<number, void, unknown>)) => void
+>   : ^  ^^                                                                                ^^^^^^^^^
+
+  cb: ((a: string) => string) | ((a: number) => AsyncGenerator<number, void, unknown>)
+>cb : ((a: string) => string) | ((a: number) => AsyncGenerator<number, void, unknown>)
+>   : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^                                     ^
+>a : string
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+) {}
+
+f8(async function* generator(a) {yield 0});
+>f8(async function* generator(a) {yield 0}) : void
+>                                           : ^^^^
+>f8 : (cb: ((a: string) => string) | ((a: number) => AsyncGenerator<number, void, unknown>)) => void
+>   : ^  ^^                                                                                ^^^^^^^^^
+>async function* generator(a) {yield 0} : (a: number) => AsyncGenerator<number, void, unknown>
+>                                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>generator : (a: number) => AsyncGenerator<number, void, unknown>
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>yield 0 : unknown
+>        : ^^^^^^^
+>0 : 0
+>  : ^
+
+
