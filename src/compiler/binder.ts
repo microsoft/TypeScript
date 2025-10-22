@@ -173,7 +173,6 @@ import {
     isIdentifier,
     isIdentifierName,
     isInJSFile,
-    isInTopLevelContext,
     isJSDocConstructSignature,
     isJSDocEnumTag,
     isJSDocTemplateTag,
@@ -2571,13 +2570,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             ) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, getStrictModeIdentifierMessage(node), declarationNameToString(node)));
             }
-            else if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
-                if (isExternalModule(file) && isInTopLevelContext(node)) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, declarationNameToString(node)));
-                }
-                else if (node.flags & NodeFlags.AwaitContext) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)));
-                }
+            else if (originalKeywordKind === SyntaxKind.AwaitKeyword && (node.flags & NodeFlags.AwaitContext || isExternalModule(file))) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)));
             }
             else if (originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)));

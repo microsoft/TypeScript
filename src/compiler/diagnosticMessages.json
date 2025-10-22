@@ -843,10 +843,6 @@
         "category": "Error",
         "code": 1261
     },
-    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
-        "category": "Error",
-        "code": 1262
-    },
     "Declarations with initializers cannot also have definite assignment assertions.": {
         "category": "Error",
         "code": 1263
