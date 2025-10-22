@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/elementWiseErrorInUnionTarget2.ts] ////
+
+=== elementWiseErrorInUnionTarget2.ts ===
+type SingleOrArray<T> = T | readonly T[];
+>SingleOrArray : Symbol(SingleOrArray, Decl(elementWiseErrorInUnionTarget2.ts, 0, 0))
+>T : Symbol(T, Decl(elementWiseErrorInUnionTarget2.ts, 0, 19))
+>T : Symbol(T, Decl(elementWiseErrorInUnionTarget2.ts, 0, 19))
+>T : Symbol(T, Decl(elementWiseErrorInUnionTarget2.ts, 0, 19))
+
+type ProvidedActor = {
+>ProvidedActor : Symbol(ProvidedActor, Decl(elementWiseErrorInUnionTarget2.ts, 0, 41))
+
+  src: string;
+>src : Symbol(src, Decl(elementWiseErrorInUnionTarget2.ts, 2, 22))
+
+  input?: unknown;
+>input : Symbol(input, Decl(elementWiseErrorInUnionTarget2.ts, 3, 14))
+
+};
+
+type MachineConfig<TActors extends ProvidedActor> = {
+>MachineConfig : Symbol(MachineConfig, Decl(elementWiseErrorInUnionTarget2.ts, 5, 2))
+>TActors : Symbol(TActors, Decl(elementWiseErrorInUnionTarget2.ts, 7, 19))
+>ProvidedActor : Symbol(ProvidedActor, Decl(elementWiseErrorInUnionTarget2.ts, 0, 41))
+
+  invoke?: SingleOrArray<TActors>;
+>invoke : Symbol(invoke, Decl(elementWiseErrorInUnionTarget2.ts, 7, 53))
+>SingleOrArray : Symbol(SingleOrArray, Decl(elementWiseErrorInUnionTarget2.ts, 0, 0))
+>TActors : Symbol(TActors, Decl(elementWiseErrorInUnionTarget2.ts, 7, 19))
+
+};
+
+declare function setup<TActors extends ProvidedActor>(): {
+>setup : Symbol(setup, Decl(elementWiseErrorInUnionTarget2.ts, 9, 2))
+>TActors : Symbol(TActors, Decl(elementWiseErrorInUnionTarget2.ts, 11, 23))
+>ProvidedActor : Symbol(ProvidedActor, Decl(elementWiseErrorInUnionTarget2.ts, 0, 41))
+
+  createMachine: (config: MachineConfig<TActors>) => void;
+>createMachine : Symbol(createMachine, Decl(elementWiseErrorInUnionTarget2.ts, 11, 58))
+>config : Symbol(config, Decl(elementWiseErrorInUnionTarget2.ts, 12, 18))
+>MachineConfig : Symbol(MachineConfig, Decl(elementWiseErrorInUnionTarget2.ts, 5, 2))
+>TActors : Symbol(TActors, Decl(elementWiseErrorInUnionTarget2.ts, 11, 23))
+
+};
+
+setup<{ src: "fetchUser"; input: string }>().createMachine({
+>setup<{ src: "fetchUser"; input: string }>().createMachine : Symbol(createMachine, Decl(elementWiseErrorInUnionTarget2.ts, 11, 58))
+>setup : Symbol(setup, Decl(elementWiseErrorInUnionTarget2.ts, 9, 2))
+>src : Symbol(src, Decl(elementWiseErrorInUnionTarget2.ts, 15, 7))
+>input : Symbol(input, Decl(elementWiseErrorInUnionTarget2.ts, 15, 25))
+>createMachine : Symbol(createMachine, Decl(elementWiseErrorInUnionTarget2.ts, 11, 58))
+
+  invoke: {
+>invoke : Symbol(invoke, Decl(elementWiseErrorInUnionTarget2.ts, 15, 60))
+
+    src: "fetchUser",
+>src : Symbol(src, Decl(elementWiseErrorInUnionTarget2.ts, 16, 11))
+
+    input: 10,
+>input : Symbol(input, Decl(elementWiseErrorInUnionTarget2.ts, 17, 21))
+
+  },
+});
+

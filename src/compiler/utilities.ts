@@ -12386,3 +12386,10 @@ function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node
 function getFirstChild(node: Node): Node | undefined {
     return forEachChild(node, child => child);
 }
+
+/** @internal */
+export function containsNonPublicProperties(props: Symbol[]): boolean {
+    return some(props, p =>
+        !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier) ||
+        !!p.valueDeclaration && isNamedDeclaration(p.valueDeclaration) && isPrivateIdentifier(p.valueDeclaration.name));
+}
