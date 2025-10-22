@@ -1,8 +1,7 @@
 name: 'VS Code Editor Issue'
-about: 'Issue using tsgo in VS Code'
-title: ''
+description: 'Issue using tsgo in VS Code'
 labels: 'Domain: Editor'
-assignees: ''
+assignees: []
 body:
   - type: input
     id: extension_version
