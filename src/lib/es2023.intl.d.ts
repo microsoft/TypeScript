@@ -9,6 +9,10 @@ declare namespace Intl {
         negative: never;
     }
 
+    interface NumberFormatPartTypeRegistry {
+        approximatelySign: never;
+    }
+
     interface NumberFormatOptions {
         roundingPriority?: "auto" | "morePrecision" | "lessPrecision" | undefined;
         roundingIncrement?: 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000 | undefined;
