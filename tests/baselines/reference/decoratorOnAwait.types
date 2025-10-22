@@ -12,6 +12,8 @@ declare function dec<T>(target: T): T;
 >    : ^ ^^      ^^ ^^^^^ 
 
 await 1
+>await 1 : 1
+>        : ^
 >1 : 1
 >  : ^
 

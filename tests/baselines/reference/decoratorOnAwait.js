@@ -8,5 +8,4 @@ await 1
 
 
 //// [decoratorOnAwait.js]
-var ;
-1;
+await 1;
