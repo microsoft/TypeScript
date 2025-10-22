@@ -250,6 +250,20 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 4,
               "offset": 5
             },
@@ -1211,6 +1225,20 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 4,
               "offset": 5
             },
@@ -1791,46 +1819,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/user/username/projects/myproject/own/main.ts Text-2 "import { foo } from 'main';\nfoo;\nexport function bar() {}"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/user/username/projects/myproject/tsconfig.json",
-        "configFile": "/user/username/projects/myproject/tsconfig.json",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 4,
-              "offset": 5
-            },
-            "end": {
-              "line": 4,
-              "offset": 14
-            },
-            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
-            "code": 5101,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 7,
-              "offset": 5
-            },
-            "end": {
-              "line": 9,
-              "offset": 6
-            },
-            "text": "File '/user/username/projects/myproject/tsconfig-src.json' not found.",
-            "code": 6053,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/tsconfig.json"
-          }
-        ]
-      }
-    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -2027,32 +2015,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/user/username/projects/myproject/own/main.ts Text-2 "import { foo } from 'main';\nfoo;\nexport function bar() {}"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/user/username/projects/myproject/tsconfig.json",
-        "configFile": "/user/username/projects/myproject/tsconfig.json",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 4,
-              "offset": 5
-            },
-            "end": {
-              "line": 4,
-              "offset": 14
-            },
-            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
-            "code": 5101,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/tsconfig.json"
-          }
-        ]
-      }
-    }
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -2640,6 +2602,20 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/tsconfig.json",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
           {
             "start": {
               "line": 4,
@@ -3808,6 +3784,20 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/tsconfig.json",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
           {
             "start": {
               "line": 4,

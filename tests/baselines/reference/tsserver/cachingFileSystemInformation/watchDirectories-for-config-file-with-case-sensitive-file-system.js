@@ -287,6 +287,20 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
+              "line": 17,
+              "offset": 5
+            },
+            "end": {
+              "line": 17,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './src/app'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/Users/someuser/work/applications/frontend/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 22,
               "offset": 5
             },
