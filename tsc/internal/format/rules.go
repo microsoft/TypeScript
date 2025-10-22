@@ -9,7 +9,9 @@ import (
 func getAllRules() []ruleSpec {
 	allTokens := make([]ast.Kind, 0, ast.KindLastToken-ast.KindFirstToken+1)
 	for token := ast.KindFirstToken; token <= ast.KindLastToken; token++ {
-		allTokens = append(allTokens, token)
+		if token != ast.KindEndOfFile {
+			allTokens = append(allTokens, token)
+		}
 	}
 
 	anyTokenExcept := func(tokens ...ast.Kind) tokenRange {
