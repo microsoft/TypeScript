@@ -130,6 +130,7 @@ import {
     InternalSymbolName,
     isAliasableExpression,
     isAmbientModule,
+    isAssignmentDeclaration,
     isAssignmentExpression,
     isAssignmentOperator,
     isAssignmentTarget,
@@ -3470,6 +3471,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     return declareSymbol(table, parent, id, flags, excludeFlags);
                 }
             });
+        }
+        if (isPrototypeProperty && namespaceSymbol && namespaceSymbol.valueDeclaration && isAssignmentDeclaration(namespaceSymbol.valueDeclaration)) {
+            //A prototype property assignment to something that looks class-like shouldn't actually count if the class-likeness came from an assignment declaration.
+            //The checker requires an actual class/constructor function to attach the prototype property to.
+            containerIsClass = false;
         }
         if (containerIsClass && namespaceSymbol && namespaceSymbol.valueDeclaration) {
             addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
