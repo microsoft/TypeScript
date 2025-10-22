@@ -1,0 +1,160 @@
+//// [tests/cases/compiler/tupleComplexity.ts] ////
+
+=== tupleComplexity.ts ===
+// Tests for TS2590: "Expression produces a union type that is too complex to represent"
+
+// --- Tuple Unions ---
+
+// Simple union - Should work
+type TupleUnion1 = [string, number] | [boolean, string];
+>TupleUnion1 : TupleUnion1
+>            : ^^^^^^^^^^^
+
+const valid1: TupleUnion1 = ["hello", 42]; // ✅ Should pass
+>valid1 : TupleUnion1
+>       : ^^^^^^^^^^^
+>["hello", 42] : [string, number]
+>              : ^^^^^^^^^^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+const valid2: TupleUnion1 = [true, "world"]; // ✅ Should pass
+>valid2 : TupleUnion1
+>       : ^^^^^^^^^^^
+>[true, "world"] : [true, string]
+>                : ^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>"world" : "world"
+>        : ^^^^^^^
+
+// Extended union - Should trigger TS2590
+type TupleUnion2 = [string, number] | [boolean, string];
+>TupleUnion2 : TupleUnion2
+>            : ^^^^^^^^^^^
+
+type ComplexTuple = [...TupleUnion2, string]; // ❌ Should trigger TS2590
+>ComplexTuple : [string, number, string] | [boolean, string, string]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const invalid: ComplexTuple = ["hello", 42, "world"]; // Should fail with TS2590
+>invalid : [string, number, string] | [boolean, string, string]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["hello", 42, "world"] : [string, number, string]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+>"world" : "world"
+>        : ^^^^^^^
+
+// --- Tuple Concatenations ---
+
+// Manageable concatenation - Should work
+type ConcatTuple<T extends any[], U extends any[]> = [...T, ...U];
+>ConcatTuple : [...T, ...U]
+>            : ^^^^^^^^^^^^
+
+type Result1 = ConcatTuple<[string, number], [boolean]>; // ✅ Should infer [string, number, boolean]
+>Result1 : [string, number, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const concat1: Result1 = ["hello", 42, true]; // ✅ Should pass
+>concat1 : [string, number, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>["hello", 42, true] : [string, number, true]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+>true : true
+>     : ^^^^
+
+// Excessively large concatenation - Should trigger TS2590
+type LargeConcat = ConcatTuple<[...Array<100>], [...Array<100>]>;
+>LargeConcat : 100[]
+>            : ^^^^^
+
+// ❌ Should trigger TS2590 for excessive complexity
+
+// --- Mapped Types on Tuples ---
+
+// Simple mapping - Should work
+type Stringify<T extends any[]> = { [K in keyof T]: string };
+>Stringify : Stringify<T>
+>          : ^^^^^^^^^^^^
+
+type MappedTuple1 = Stringify<[number, boolean]>; // ✅ Should infer [string, string]
+>MappedTuple1 : [string, string]
+>             : ^^^^^^^^^^^^^^^^
+
+const map1: MappedTuple1 = ["42", "true"]; // ✅ Should pass
+>map1 : [string, string]
+>     : ^^^^^^^^^^^^^^^^
+>["42", "true"] : [string, string]
+>               : ^^^^^^^^^^^^^^^^
+>"42" : "42"
+>     : ^^^^
+>"true" : "true"
+>       : ^^^^^^
+
+// --- Nested Tuples ---
+
+// Deeply nested tuple - Should trigger TS2590
+type DeepTuple = [string, [boolean | number, [boolean | number, [boolean | number]]]];
+>DeepTuple : DeepTuple
+>          : ^^^^^^^^^
+
+type Nested = [...DeepTuple, string]; // ❌ Should trigger TS2590
+>Nested : [string, [number | boolean, [number | boolean, [number | boolean]]], string]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const deep: Nested = ["root", [true, [42, [false]]], "leaf"]; // Should fail with TS2590
+>deep : [string, [number | boolean, [number | boolean, [number | boolean]]], string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["root", [true, [42, [false]]], "leaf"] : [string, [true, [number, [false]]], string]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"root" : "root"
+>       : ^^^^^^
+>[true, [42, [false]]] : [true, [number, [false]]]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>[42, [false]] : [number, [false]]
+>              : ^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+>[false] : [false]
+>        : ^^^^^^^
+>false : false
+>      : ^^^^^
+>"leaf" : "leaf"
+>       : ^^^^^^
+
+// --- Invalid Cases ---
+
+// Expected type mismatches (non-TS2590 failures)
+const invalidConcat1: Result1 = ["hello", 42]; // ❌ Error: Missing boolean
+>invalidConcat1 : [string, number, boolean]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>["hello", 42] : [string, number]
+>              : ^^^^^^^^^^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+const invalidMap1: MappedTuple1 = [42, true]; // ❌ Error: Expected strings
+>invalidMap1 : [string, string]
+>            : ^^^^^^^^^^^^^^^^
+>[42, true] : [number, boolean]
+>           : ^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+>true : true
+>     : ^^^^
+
