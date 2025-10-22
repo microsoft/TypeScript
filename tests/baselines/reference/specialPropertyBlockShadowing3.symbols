@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/specialPropertyBlockShadowing3.ts] ////
+
+=== src/index.js ===
+export const x = {};
+>x : Symbol(x, Decl(index.js, 0, 12), Decl(index.js, 0, 20))
+
+x.inner = {};
+>x.inner : Symbol(x.inner, Decl(index.js, 0, 20))
+>x : Symbol(x, Decl(index.js, 0, 12), Decl(index.js, 0, 20))
+>inner : Symbol(x.inner, Decl(index.js, 0, 20))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const x = {};
+>x : Symbol(x, Decl(index.js, 3, 7))
+
+  x.inner = {};
+>x.inner : Symbol(x.inner, Decl(index.js, 3, 15))
+>x : Symbol(x, Decl(index.js, 3, 7))
+>inner : Symbol(x.inner, Decl(index.js, 3, 15))
+
+  x.inner.test = 1;
+>x.inner.test : Symbol(x.inner.test, Decl(index.js, 4, 15))
+>x.inner : Symbol(x.inner, Decl(index.js, 3, 15))
+>x : Symbol(x, Decl(index.js, 3, 7))
+>inner : Symbol(x.inner, Decl(index.js, 3, 15))
+>test : Symbol(x.inner.test, Decl(index.js, 4, 15))
+}
+
+export const y = {};
+>y : Symbol(y, Decl(index.js, 8, 12), Decl(index.js, 8, 20), Decl(index.js, 9, 13))
+
+y.inner = {};
+>y.inner : Symbol(y.inner, Decl(index.js, 8, 20), Decl(index.js, 10, 2))
+>y : Symbol(y, Decl(index.js, 8, 12), Decl(index.js, 8, 20), Decl(index.js, 9, 13))
+>inner : Symbol(y.inner, Decl(index.js, 8, 20), Decl(index.js, 10, 2))
+
+y.inner.test = "foo";
+>y.inner.test : Symbol(y.inner.test, Decl(index.js, 9, 13))
+>y.inner : Symbol(y.inner, Decl(index.js, 8, 20), Decl(index.js, 10, 2))
+>y : Symbol(y, Decl(index.js, 8, 12), Decl(index.js, 8, 20), Decl(index.js, 9, 13))
+>inner : Symbol(y.inner, Decl(index.js, 8, 20), Decl(index.js, 10, 2))
+>test : Symbol(y.inner.test, Decl(index.js, 9, 13))
+
+const aliasTopY = y;
+>aliasTopY : Symbol(aliasTopY, Decl(index.js, 12, 5))
+>y : Symbol(y, Decl(index.js, 8, 12), Decl(index.js, 8, 20), Decl(index.js, 9, 13))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const y = {};
+>y : Symbol(y, Decl(index.js, 14, 7))
+
+  y.inner = {};
+>y.inner : Symbol(y.inner, Decl(index.js, 14, 15))
+>y : Symbol(y, Decl(index.js, 14, 7))
+>inner : Symbol(y.inner, Decl(index.js, 14, 15))
+
+  y.inner.test = 42;
+>y.inner.test : Symbol(y.inner.test, Decl(index.js, 15, 15))
+>y.inner : Symbol(y.inner, Decl(index.js, 14, 15))
+>y : Symbol(y, Decl(index.js, 14, 7))
+>inner : Symbol(y.inner, Decl(index.js, 14, 15))
+>test : Symbol(y.inner.test, Decl(index.js, 15, 15))
+
+  /** @type {{ inner: { test: string } }} */
+  const topYcheck = aliasTopY;
+>topYcheck : Symbol(topYcheck, Decl(index.js, 19, 7))
+>aliasTopY : Symbol(aliasTopY, Decl(index.js, 12, 5))
+
+  /** @type {{ inner: { test: number } }} */
+  const blockYcheck = y;
+>blockYcheck : Symbol(blockYcheck, Decl(index.js, 21, 7))
+>y : Symbol(y, Decl(index.js, 14, 7))
+}
+
