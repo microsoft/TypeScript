@@ -1,0 +1,113 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRestSpread1.ts] ////
+
+=== noInferRestSpread1.ts ===
+declare function call<A extends readonly unknown[]>(
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+  arg: (...args: NoInfer<A>) => void,
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 0, 52))
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 1, 8))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+  ...args: A
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 1, 37))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+): A;
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+const result1 = call((a: number) => {}, 1, 2);
+>result1 : Symbol(result1, Decl(noInferRestSpread1.ts, 5, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 5, 22))
+
+const result2 = call((a: number, b: number) => {}, 1); // error
+>result2 : Symbol(result2, Decl(noInferRestSpread1.ts, 6, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 6, 22))
+>b : Symbol(b, Decl(noInferRestSpread1.ts, 6, 32))
+
+const result3 = call((a) => {}, 1, ''); // test contextual parameters
+>result3 : Symbol(result3, Decl(noInferRestSpread1.ts, 7, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 7, 22))
+
+const result4 = call((a, b) => {}, 1, ''); // test contextual parameters
+>result4 : Symbol(result4, Decl(noInferRestSpread1.ts, 8, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 8, 22))
+>b : Symbol(b, Decl(noInferRestSpread1.ts, 8, 24))
+
+const result5 = call((...args) => {}, 1, ''); // test contextual parameters
+>result5 : Symbol(result5, Decl(noInferRestSpread1.ts, 9, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 9, 22))
+
+const result6 = call((a, ...rest) => {}, 1, ''); // test contextual parameters
+>result6 : Symbol(result6, Decl(noInferRestSpread1.ts, 10, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 10, 22))
+>rest : Symbol(rest, Decl(noInferRestSpread1.ts, 10, 24))
+
+declare function fn1<A extends unknown[]>(
+>fn1 : Symbol(fn1, Decl(noInferRestSpread1.ts, 10, 48))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 12, 21))
+
+  cb: (a: [number, ...NoInfer<A>]) => void,
+>cb : Symbol(cb, Decl(noInferRestSpread1.ts, 12, 42))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 13, 7))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 12, 21))
+
+  args: A,
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 13, 43))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 12, 21))
+
+): A;
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 12, 21))
+
+declare const singleStr: [string];
+>singleStr : Symbol(singleStr, Decl(noInferRestSpread1.ts, 17, 13))
+
+const result7 = fn1((arg) => {
+>result7 : Symbol(result7, Decl(noInferRestSpread1.ts, 19, 5))
+>fn1 : Symbol(fn1, Decl(noInferRestSpread1.ts, 10, 48))
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 19, 21))
+
+  arg.length;
+>arg.length : Symbol(length)
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 19, 21))
+>length : Symbol(length)
+
+}, singleStr);
+>singleStr : Symbol(singleStr, Decl(noInferRestSpread1.ts, 17, 13))
+
+declare const tupleUnion: [string] | [number, boolean];
+>tupleUnion : Symbol(tupleUnion, Decl(noInferRestSpread1.ts, 23, 13))
+
+const result8 = fn1((arg) => {
+>result8 : Symbol(result8, Decl(noInferRestSpread1.ts, 25, 5))
+>fn1 : Symbol(fn1, Decl(noInferRestSpread1.ts, 10, 48))
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 25, 21))
+
+  arg.length;
+>arg.length : Symbol(length)
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 25, 21))
+>length : Symbol(length)
+
+}, tupleUnion);
+>tupleUnion : Symbol(tupleUnion, Decl(noInferRestSpread1.ts, 23, 13))
+
+declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+>fn2 : Symbol(fn2, Decl(noInferRestSpread1.ts, 27, 15))
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 29, 21))
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 29, 27))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+
+fn2((a, ...rest) => {});
+>fn2 : Symbol(fn2, Decl(noInferRestSpread1.ts, 27, 15))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 31, 5))
+>rest : Symbol(rest, Decl(noInferRestSpread1.ts, 31, 7))
+
