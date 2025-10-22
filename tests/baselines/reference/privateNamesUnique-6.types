@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/privateNamesUnique-6.ts] ////
+
+=== privateNamesUnique-6.ts ===
+class A {
+>A : A
+>  : ^
+
+  #foo: number;
+>#foo : number
+>     : ^^^^^^
+}
+
+// error
+const test: A = new (class {
+>test : A
+>     : ^
+>new (class {  #foo: number;})() : (Anonymous class)
+>                                : ^^^^^^^^^^^^^^^^^
+>(class {  #foo: number;}) : typeof (Anonymous class)
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>class {  #foo: number;} : typeof (Anonymous class)
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  #foo: number;
+>#foo : number
+>     : ^^^^^^
+
+})();
+
