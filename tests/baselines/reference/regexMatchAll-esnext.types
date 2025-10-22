@@ -2,12 +2,12 @@
 
 === regexMatchAll-esnext.ts ===
 const matches = /\w/g[Symbol.matchAll]("matchAll");
->matches : RegExpStringIterator<RegExpMatchArray>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/\w/g[Symbol.matchAll]("matchAll") : RegExpStringIterator<RegExpMatchArray>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/\w/g[Symbol.matchAll] : (str: string) => RegExpStringIterator<RegExpMatchArray>
->                       : ^   ^^      ^^^^^                                      
+>matches : RegExpStringIterator<RegExpExecArray>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\w/g[Symbol.matchAll]("matchAll") : RegExpStringIterator<RegExpExecArray>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\w/g[Symbol.matchAll] : (str: string) => RegExpStringIterator<RegExpExecArray>
+>                       : ^   ^^      ^^^^^                                     
 >/\w/g : RegExp
 >      : ^^^^^^
 >Symbol.matchAll : unique symbol
@@ -20,24 +20,24 @@ const matches = /\w/g[Symbol.matchAll]("matchAll");
 >           : ^^^^^^^^^^
 
 const array = [...matches];
->array : RegExpMatchArray[]
->      : ^^^^^^^^^^^^^^^^^^
->[...matches] : RegExpMatchArray[]
->             : ^^^^^^^^^^^^^^^^^^
->...matches : RegExpMatchArray
->           : ^^^^^^^^^^^^^^^^
->matches : RegExpStringIterator<RegExpMatchArray>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array : RegExpExecArray[]
+>      : ^^^^^^^^^^^^^^^^^
+>[...matches] : RegExpExecArray[]
+>             : ^^^^^^^^^^^^^^^^^
+>...matches : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>matches : RegExpStringIterator<RegExpExecArray>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { index, input } = array[0];
 >index : number
 >      : ^^^^^^
 >input : string
 >      : ^^^^^^
->array[0] : RegExpMatchArray
->         : ^^^^^^^^^^^^^^^^
->array : RegExpMatchArray[]
->      : ^^^^^^^^^^^^^^^^^^
+>array[0] : RegExpExecArray
+>         : ^^^^^^^^^^^^^^^
+>array : RegExpExecArray[]
+>      : ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
