@@ -7,6 +7,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"sync"
 	"unicode"
 	"unicode/utf8"
 
@@ -476,6 +477,8 @@ func GetSpellingSuggestion[T any](name string, candidates []T, getName func(T) s
 	maximumLengthDifference := max(2, int(float64(len(name))*0.34))
 	bestDistance := math.Floor(float64(len(name))*0.4) + 1 // If the best result is worse than this, don't bother.
 	runeName := []rune(name)
+	buffers := levenshteinBuffersPool.Get().(*levenshteinBuffers)
+	defer levenshteinBuffersPool.Put(buffers)
 	var bestCandidate T
 	for _, candidate := range candidates {
 		candidateName := getName(candidate)
@@ -490,7 +493,7 @@ func GetSpellingSuggestion[T any](name string, candidates []T, getName func(T) s
 			if len(candidateName) < 3 && !strings.EqualFold(candidateName, name) {
 				continue
 			}
-			distance := levenshteinWithMax(runeName, []rune(candidateName), bestDistance-0.1)
+			distance := levenshteinWithMax(buffers, runeName, []rune(candidateName), bestDistance-0.1)
 			if distance < 0 {
 				continue
 			}
@@ -502,9 +505,25 @@ func GetSpellingSuggestion[T any](name string, candidates []T, getName func(T) s
 	return bestCandidate
 }
 
-func levenshteinWithMax(s1 []rune, s2 []rune, maxValue float64) float64 {
-	previous := make([]float64, len(s2)+1)
-	current := make([]float64, len(s2)+1)
+type levenshteinBuffers struct {
+	previous []float64
+	current  []float64
+}
+
+var levenshteinBuffersPool = sync.Pool{
+	New: func() any {
+		return &levenshteinBuffers{}
+	},
+}
+
+func levenshteinWithMax(buffers *levenshteinBuffers, s1 []rune, s2 []rune, maxValue float64) float64 {
+	bufferSize := len(s2) + 1
+	buffers.previous = slices.Grow(buffers.previous[:0], bufferSize)[:bufferSize]
+	buffers.current = slices.Grow(buffers.current[:0], bufferSize)[:bufferSize]
+
+	previous := buffers.previous
+	current := buffers.current
+
 	big := maxValue + 0.01
 	for i := range previous {
 		previous[i] = float64(i)
