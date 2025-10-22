@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/contextualTypeArrayBindingPatternConsistency.ts] ////
+
+=== contextualTypeArrayBindingPatternConsistency.ts ===
+type DataType = 'a' | 'b';
+>DataType : Symbol(DataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 0))
+
+declare function foo<T extends { dataType: DataType }>(template: T): [T, any, any];
+>foo : Symbol(foo, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 26))
+>T : Symbol(T, Decl(contextualTypeArrayBindingPatternConsistency.ts, 1, 21))
+>dataType : Symbol(dataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 1, 32))
+>DataType : Symbol(DataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 0))
+>template : Symbol(template, Decl(contextualTypeArrayBindingPatternConsistency.ts, 1, 55))
+>T : Symbol(T, Decl(contextualTypeArrayBindingPatternConsistency.ts, 1, 21))
+>T : Symbol(T, Decl(contextualTypeArrayBindingPatternConsistency.ts, 1, 21))
+
+// These should behave identically since they call the same function with the same argument
+// but use different destructuring patterns
+
+// Pattern 1: [, , t] - should not have excess property error  
+const [, , t1] = foo({ dataType: 'a', day: 0 });
+>t1 : Symbol(t1, Decl(contextualTypeArrayBindingPatternConsistency.ts, 7, 10))
+>foo : Symbol(foo, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 26))
+>dataType : Symbol(dataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 7, 22))
+>day : Symbol(day, Decl(contextualTypeArrayBindingPatternConsistency.ts, 7, 37))
+
+// Pattern 2: [, s, ] - should not have excess property error
+const [, s1, ] = foo({ dataType: 'a', day: 0 });
+>s1 : Symbol(s1, Decl(contextualTypeArrayBindingPatternConsistency.ts, 10, 8))
+>foo : Symbol(foo, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 26))
+>dataType : Symbol(dataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 10, 22))
+>day : Symbol(day, Decl(contextualTypeArrayBindingPatternConsistency.ts, 10, 37))
+
+// Both patterns should allow the excess property because they produce consistent contextual types
+// that don't interfere with generic type inference
+
+// Additional test cases to ensure the fix is general
+const [, s2, ] = foo({ dataType: 'b', extra: 'test' }); // [, s, ] pattern with different property  
+>s2 : Symbol(s2, Decl(contextualTypeArrayBindingPatternConsistency.ts, 16, 8))
+>foo : Symbol(foo, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 26))
+>dataType : Symbol(dataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 16, 22))
+>extra : Symbol(extra, Decl(contextualTypeArrayBindingPatternConsistency.ts, 16, 37))
+
+const [, , s3] = foo({ dataType: 'a', another: 1 });    // [, , s] pattern
+>s3 : Symbol(s3, Decl(contextualTypeArrayBindingPatternConsistency.ts, 17, 10))
+>foo : Symbol(foo, Decl(contextualTypeArrayBindingPatternConsistency.ts, 0, 26))
+>dataType : Symbol(dataType, Decl(contextualTypeArrayBindingPatternConsistency.ts, 17, 22))
+>another : Symbol(another, Decl(contextualTypeArrayBindingPatternConsistency.ts, 17, 37))
+
