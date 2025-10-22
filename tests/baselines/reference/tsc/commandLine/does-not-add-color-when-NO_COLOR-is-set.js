@@ -154,7 +154,7 @@ Specify type package names to be included without being referenced in a source f
 --esModuleInterop
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
-default: false
+default: true
 
 You can learn about all of the compiler options at https://aka.ms/tsc
 

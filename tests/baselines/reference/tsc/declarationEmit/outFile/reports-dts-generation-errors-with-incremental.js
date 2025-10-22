@@ -64,10 +64,14 @@ Found 1 error in src/index.ts[90m:2[0m
 
 
 //// [/home/src/workspaces/project/outFile.js]
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define("src/index", ["require", "exports", "ky"], function (require, exports, ky_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.api = void 0;
+    ky_1 = __importDefault(ky_1);
     exports.api = ky_1.default.extend({});
 });
 
