@@ -1,0 +1,44 @@
+unionRelationshipCheckPasses2.ts(10,3): error TS2322: Type '{ type: "A"; value?: never; } | { type: "B"; value: string; }' is not assignable to type 'U'.
+  Type '{ type: "A"; value?: never; }' is not assignable to type 'U'.
+    Type '{ type: "A"; value?: never; }' is not assignable to type '{ type: "A"; value: null; }'.
+      Property 'value' is optional in type '{ type: "A"; value?: never; }' but required in type '{ type: "A"; value: null; }'.
+unionRelationshipCheckPasses2.ts(21,5): error TS2322: Type '{ type: "A"; }' is not assignable to type 'U'.
+  Property 'value' is missing in type '{ type: "A"; }' but required in type '{ type: "A"; value: null; }'.
+
+
+==== unionRelationshipCheckPasses2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61678
+    
+    export type U = { type: "A"; value: null } | { type: "B"; value: string };
+    
+    function call<T>(f: () => T): T {
+      return f();
+    }
+    
+    export function functionCall(): U {
+      return call(() => {  // error
+      ~~~~~~
+!!! error TS2322: Type '{ type: "A"; value?: never; } | { type: "B"; value: string; }' is not assignable to type 'U'.
+!!! error TS2322:   Type '{ type: "A"; value?: never; }' is not assignable to type 'U'.
+!!! error TS2322:     Type '{ type: "A"; value?: never; }' is not assignable to type '{ type: "A"; value: null; }'.
+!!! error TS2322:       Property 'value' is optional in type '{ type: "A"; value?: never; }' but required in type '{ type: "A"; value: null; }'.
+        if (Math.random()) {
+          return { type: "A" };
+        }
+    
+        return { type: "B", value: "test" };
+      });
+    }
+    
+    export function directReturn(): U {
+      if (Math.random()) {
+        return { type: "A" }; // error
+        ~~~~~~
+!!! error TS2322: Type '{ type: "A"; }' is not assignable to type 'U'.
+!!! error TS2322:   Property 'value' is missing in type '{ type: "A"; }' but required in type '{ type: "A"; value: null; }'.
+!!! related TS2728 unionRelationshipCheckPasses2.ts:3:30: 'value' is declared here.
+      }
+    
+      return { type: "B", value: "test" };
+    }
+    
