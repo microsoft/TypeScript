@@ -1,0 +1,137 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals2.ts] ////
+
+=== thisInObjectLiterals2.ts ===
+// https://github.com/microsoft/TypeScript/issues/54723
+
+interface State {
+  value: string;
+>value : string
+>      : ^^^^^^
+
+  matches(value: string): boolean;
+>matches : (value: string) => boolean
+>        : ^     ^^      ^^^^^       
+>value : string
+>      : ^^^^^^
+}
+
+declare function macthesState(state: { value: string }, value: string): boolean;
+>macthesState : (state: { value: string; }, value: string) => boolean
+>             : ^     ^^                  ^^     ^^      ^^^^^       
+>state : { value: string; }
+>      : ^^^^^^^^^      ^^^
+>value : string
+>      : ^^^^^^
+>value : string
+>      : ^^^^^^
+
+declare function isState(state: unknown): state is State;
+>isState : (state: unknown) => state is State
+>        : ^     ^^       ^^^^^              
+>state : unknown
+>      : ^^^^^^^
+
+function test(config: unknown, prevConfig: unknown) {
+>test : (config: unknown, prevConfig: unknown) => unknown
+>     : ^      ^^       ^^          ^^       ^^^^^^^^^^^^
+>config : unknown
+>       : ^^^^^^^
+>prevConfig : unknown
+>           : ^^^^^^^
+
+  if (isState(config)) {
+>isState(config) : boolean
+>                : ^^^^^^^
+>isState : (state: unknown) => state is State
+>        : ^     ^^       ^^^^^              
+>config : unknown
+>       : ^^^^^^^
+
+    return {
+>{      ...config,      matches: isState(prevConfig)        ? prevConfig.matches        : function (value: string) {            return macthesState(this, value);          },    } : { matches: (value: string) => boolean; value: string; }
+>                                                                                                                                                                                  : ^^^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^      ^^^
+
+      ...config,
+>config : State
+>       : ^^^^^
+
+      matches: isState(prevConfig)
+>matches : (value: string) => boolean
+>        : ^     ^^      ^^^^^       
+>isState(prevConfig)        ? prevConfig.matches        : function (value: string) {            return macthesState(this, value);          } : (value: string) => boolean
+>                                                                                                                                            : ^     ^^      ^^^^^       
+>isState(prevConfig) : boolean
+>                    : ^^^^^^^
+>isState : (state: unknown) => state is State
+>        : ^     ^^       ^^^^^              
+>prevConfig : unknown
+>           : ^^^^^^^
+
+        ? prevConfig.matches
+>prevConfig.matches : (value: string) => boolean
+>                   : ^     ^^      ^^^^^       
+>prevConfig : State
+>           : ^^^^^
+>matches : (value: string) => boolean
+>        : ^     ^^      ^^^^^       
+
+        : function (value: string) {
+>function (value: string) {            return macthesState(this, value);          } : (value: string) => boolean
+>                                                                                   : ^     ^^      ^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+
+            return macthesState(this, value);
+>macthesState(this, value) : boolean
+>                          : ^^^^^^^
+>macthesState : (state: { value: string; }, value: string) => boolean
+>             : ^     ^^                  ^^     ^^      ^^^^^       
+>this : { matches: (value: string) => boolean; value: string; }
+>     : ^^^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^      ^^^
+>value : string
+>      : ^^^^^^
+
+          },
+    };
+  }
+
+  return config;
+>config : unknown
+>       : ^^^^^^^
+}
+
+function test2(config: State) {
+>test2 : (config: State) => { matches: (value: string) => boolean; value: string; }
+>      : ^      ^^     ^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>config : State
+>       : ^^^^^
+
+  return {
+>{    ...config,    matches: function (value: string) {      return macthesState(this, value);    },  } : { matches: (value: string) => boolean; value: string; }
+>                                                                                                       : ^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+
+    ...config,
+>config : State
+>       : ^^^^^
+
+    matches: function (value: string) {
+>matches : (value: string) => boolean
+>        : ^     ^^      ^^^^^^^^^^^^
+>function (value: string) {      return macthesState(this, value);    } : (value: string) => boolean
+>                                                                       : ^     ^^      ^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+
+      return macthesState(this, value);
+>macthesState(this, value) : boolean
+>                          : ^^^^^^^
+>macthesState : (state: { value: string; }, value: string) => boolean
+>             : ^     ^^                  ^^     ^^      ^^^^^       
+>this : { matches: (value: string) => boolean; value: string; }
+>     : ^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>value : string
+>      : ^^^^^^
+
+    },
+  };
+}

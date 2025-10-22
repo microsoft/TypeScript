@@ -1,0 +1,88 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals2.ts] ////
+
+=== thisInObjectLiterals2.ts ===
+// https://github.com/microsoft/TypeScript/issues/54723
+
+interface State {
+>State : Symbol(State, Decl(thisInObjectLiterals2.ts, 0, 0))
+
+  value: string;
+>value : Symbol(State.value, Decl(thisInObjectLiterals2.ts, 2, 17))
+
+  matches(value: string): boolean;
+>matches : Symbol(State.matches, Decl(thisInObjectLiterals2.ts, 3, 16))
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 4, 10))
+}
+
+declare function macthesState(state: { value: string }, value: string): boolean;
+>macthesState : Symbol(macthesState, Decl(thisInObjectLiterals2.ts, 5, 1))
+>state : Symbol(state, Decl(thisInObjectLiterals2.ts, 7, 30))
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 7, 38))
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 7, 55))
+
+declare function isState(state: unknown): state is State;
+>isState : Symbol(isState, Decl(thisInObjectLiterals2.ts, 7, 80))
+>state : Symbol(state, Decl(thisInObjectLiterals2.ts, 8, 25))
+>state : Symbol(state, Decl(thisInObjectLiterals2.ts, 8, 25))
+>State : Symbol(State, Decl(thisInObjectLiterals2.ts, 0, 0))
+
+function test(config: unknown, prevConfig: unknown) {
+>test : Symbol(test, Decl(thisInObjectLiterals2.ts, 8, 57))
+>config : Symbol(config, Decl(thisInObjectLiterals2.ts, 10, 14))
+>prevConfig : Symbol(prevConfig, Decl(thisInObjectLiterals2.ts, 10, 30))
+
+  if (isState(config)) {
+>isState : Symbol(isState, Decl(thisInObjectLiterals2.ts, 7, 80))
+>config : Symbol(config, Decl(thisInObjectLiterals2.ts, 10, 14))
+
+    return {
+      ...config,
+>config : Symbol(config, Decl(thisInObjectLiterals2.ts, 10, 14))
+
+      matches: isState(prevConfig)
+>matches : Symbol(matches, Decl(thisInObjectLiterals2.ts, 13, 16))
+>isState : Symbol(isState, Decl(thisInObjectLiterals2.ts, 7, 80))
+>prevConfig : Symbol(prevConfig, Decl(thisInObjectLiterals2.ts, 10, 30))
+
+        ? prevConfig.matches
+>prevConfig.matches : Symbol(State.matches, Decl(thisInObjectLiterals2.ts, 3, 16))
+>prevConfig : Symbol(prevConfig, Decl(thisInObjectLiterals2.ts, 10, 30))
+>matches : Symbol(State.matches, Decl(thisInObjectLiterals2.ts, 3, 16))
+
+        : function (value: string) {
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 16, 20))
+
+            return macthesState(this, value);
+>macthesState : Symbol(macthesState, Decl(thisInObjectLiterals2.ts, 5, 1))
+>this : Symbol(__object, Decl(thisInObjectLiterals2.ts, 12, 10))
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 16, 20))
+
+          },
+    };
+  }
+
+  return config;
+>config : Symbol(config, Decl(thisInObjectLiterals2.ts, 10, 14))
+}
+
+function test2(config: State) {
+>test2 : Symbol(test2, Decl(thisInObjectLiterals2.ts, 23, 1))
+>config : Symbol(config, Decl(thisInObjectLiterals2.ts, 25, 15))
+>State : Symbol(State, Decl(thisInObjectLiterals2.ts, 0, 0))
+
+  return {
+    ...config,
+>config : Symbol(config, Decl(thisInObjectLiterals2.ts, 25, 15))
+
+    matches: function (value: string) {
+>matches : Symbol(matches, Decl(thisInObjectLiterals2.ts, 27, 14))
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 28, 23))
+
+      return macthesState(this, value);
+>macthesState : Symbol(macthesState, Decl(thisInObjectLiterals2.ts, 5, 1))
+>this : Symbol(__object, Decl(thisInObjectLiterals2.ts, 26, 8))
+>value : Symbol(value, Decl(thisInObjectLiterals2.ts, 28, 23))
+
+    },
+  };
+}
