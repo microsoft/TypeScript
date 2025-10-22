@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts] ////
+
+=== mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts ===
+type ExtractEvent<
+>ExtractEvent : ExtractEvent<TEvent, TEventType>
+
+  TEvent extends { type: string },
+>type : string
+
+  TEventType extends TEvent["type"]
+> = TEvent extends {
+  type: TEventType;
+>type : TEventType
+}
+  ? TEvent
+  : never;
+
+type TransitionConfig<TContext, TEvent extends { type: string }> = {
+>TransitionConfig : TransitionConfig<TContext, TEvent>
+>type : string
+
+  actions?: {
+>actions : { type: string; } | undefined
+
+    type: string;
+>type : string
+
+  };
+};
+
+type IntersectedTransitionConfigMap<TContext, TEvent extends { type: string }> = {
+>IntersectedTransitionConfigMap : IntersectedTransitionConfigMap<TContext, TEvent>
+>type : string
+
+  [K in TEvent["type"]]?: TransitionConfig<TContext, ExtractEvent<TEvent, K>>;
+} & {
+  "*": TransitionConfig<TContext, TEvent>;
+>"*" : TransitionConfig<TContext, TEvent>
+
+};
+
+type TransitionConfigMap<TContext, TEvent extends { type: string }> = {
+>TransitionConfigMap : TransitionConfigMap<TContext, TEvent>
+>type : string
+
+  [K in TEvent["type"] | "*"]?: K extends "*"
+    ? TransitionConfig<TContext, TEvent>
+    : TransitionConfig<TContext, ExtractEvent<TEvent, K>>;
+};
+
+export function genericFn<TEvent extends { type: string }>() {
+>genericFn : <TEvent extends { type: string; }>() => void
+>type : string
+
+  const wildcardTransitionConfig = {
+>wildcardTransitionConfig : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+>{    "*": { actions: { type: "someAction" } },  } as const : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+>{    "*": { actions: { type: "someAction" } },  } : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+
+    "*": { actions: { type: "someAction" } },
+>"*" : { readonly actions: { readonly type: "someAction"; }; }
+>{ actions: { type: "someAction" } } : { readonly actions: { readonly type: "someAction"; }; }
+>actions : { readonly type: "someAction"; }
+>{ type: "someAction" } : { readonly type: "someAction"; }
+>type : "someAction"
+>"someAction" : "someAction"
+
+  } as const;
+
+  // this should be assignable, in the same way as the following assignment is OK
+  let test: TransitionConfigMap<
+>test : TransitionConfigMap<{ counter: number; }, { type: TEvent["type"]; }>
+
+    { counter: number },
+>counter : number
+
+    { type: TEvent["type"] }
+>type : TEvent["type"]
+
+  > = {} as typeof wildcardTransitionConfig;
+>{} as typeof wildcardTransitionConfig : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+>{} : {}
+>wildcardTransitionConfig : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+
+  // concrete prop is assignable to the concrete prop of this mapped type
+  test["*"] = {} as typeof wildcardTransitionConfig["*"];
+>test["*"] = {} as typeof wildcardTransitionConfig["*"] : { readonly actions: { readonly type: "someAction"; }; }
+>test["*"] : TransitionConfig<{ counter: number; }, { type: TEvent["type"]; }> | undefined
+>test : TransitionConfigMap<{ counter: number; }, { type: TEvent["type"]; }>
+>"*" : "*"
+>{} as typeof wildcardTransitionConfig["*"] : { readonly actions: { readonly type: "someAction"; }; }
+>{} : {}
+>wildcardTransitionConfig : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+
+  // similar intersected type accepts this concrete object
+  let test2: IntersectedTransitionConfigMap<
+>test2 : IntersectedTransitionConfigMap<{ counter: number; }, { type: TEvent["type"]; }>
+
+    { counter: number },
+>counter : number
+
+    { type: TEvent["type"] }
+>type : TEvent["type"]
+
+  > = {} as typeof wildcardTransitionConfig;
+>{} as typeof wildcardTransitionConfig : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+>{} : {}
+>wildcardTransitionConfig : { readonly "*": { readonly actions: { readonly type: "someAction"; }; }; }
+}
+
