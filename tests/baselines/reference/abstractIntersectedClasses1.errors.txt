@@ -1,0 +1,52 @@
+abstractIntersectedClasses1.ts(17,7): error TS2654: Non-abstract class 'Foo1' is missing implementations for the following members of 'A & B': 'a', 'b'.
+abstractIntersectedClasses1.ts(18,7): error TS2515: Non-abstract class 'Foo2' does not implement inherited abstract member b from class 'A & B'.
+abstractIntersectedClasses1.ts(34,7): error TS2515: Non-abstract class 'Bar1' does not implement inherited abstract member a from class 'A & A2'.
+
+
+==== abstractIntersectedClasses1.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/56738
+    
+    abstract class A {
+      abstract a(): number;
+    }
+    
+    abstract class A2 {
+      abstract a(): number;
+    }
+    
+    abstract class B {
+      abstract b(): number;
+    }
+    
+    declare const Base: abstract new () => A & B;
+    
+    class Foo1 extends Base {} // error
+          ~~~~
+!!! error TS2654: Non-abstract class 'Foo1' is missing implementations for the following members of 'A & B': 'a', 'b'.
+    class Foo2 extends Base { // error
+          ~~~~
+!!! error TS2515: Non-abstract class 'Foo2' does not implement inherited abstract member b from class 'A & B'.
+      a() {
+        return 10;
+      }
+    }
+    class Foo3 extends Base { // ok
+      a() {
+        return 10;
+      }
+      b() {
+        return 42;
+      }
+    }
+    
+    declare const Base2: abstract new () => A & A2;
+    
+    class Bar1 extends Base2 {} // error
+          ~~~~
+!!! error TS2515: Non-abstract class 'Bar1' does not implement inherited abstract member a from class 'A & A2'.
+    class Bar2 extends Base2 { // ok
+      a() {
+        return 100;
+      }
+    }
+    
