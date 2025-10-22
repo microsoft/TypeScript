@@ -1,0 +1,91 @@
+//// [tests/cases/conformance/intl/collatorCompareBoundFunction.ts] ////
+
+=== collatorCompareBoundFunction.ts ===
+const collator = new Intl.Collator();
+>collator : any
+>         : ^^^
+>new Intl.Collator() : any
+>                    : ^^^
+>Intl.Collator : any
+>              : ^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : any
+>         : ^^^
+
+// Should be usable as a function with no dynamic `this`
+const cmp: (a: string, b: string) => number = collator.compare;
+>cmp : (a: string, b: string) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>collator.compare : any
+>                 : ^^^
+>collator : any
+>         : ^^^
+>compare : any
+>        : ^^^
+
+// Function expecting a `this: void` bound compare function
+function useCompare(fn: (this: void, a: string, b: string) => number): number {
+>useCompare : (fn: (this: void, a: string, b: string) => number) => number
+>           : ^  ^^                                            ^^^^^      
+>fn : (this: void, a: string, b: string) => number
+>   : ^    ^^    ^^ ^^      ^^ ^^      ^^^^^      
+>this : void
+>     : ^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+    return fn("a", "b");
+>fn("a", "b") : number
+>             : ^^^^^^
+>fn : (this: void, a: string, b: string) => number
+>   : ^    ^^    ^^ ^^      ^^ ^^      ^^^^^      
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+}
+
+useCompare(collator.compare);
+>useCompare(collator.compare) : number
+>                             : ^^^^^^
+>useCompare : (fn: (this: void, a: string, b: string) => number) => number
+>           : ^  ^^                                            ^^^^^      
+>collator.compare : any
+>                 : ^^^
+>collator : any
+>         : ^^^
+>compare : any
+>        : ^^^
+
+// Should work with Array.prototype.sort
+const sorted = ["z", "ä", "a"].sort(collator.compare);
+>sorted : any
+>       : ^^^
+>["z", "ä", "a"].sort(collator.compare) : any
+>                                       : ^^^
+>["z", "ä", "a"].sort : any
+>                     : ^^^
+>["z", "ä", "a"] : {}
+>                : ^^
+>"z" : "z"
+>    : ^^^
+>"ä" : "ä"
+>    : ^^^
+>"a" : "a"
+>    : ^^^
+>sort : any
+>     : ^^^
+>collator.compare : any
+>                 : ^^^
+>collator : any
+>         : ^^^
+>compare : any
+>        : ^^^
+
