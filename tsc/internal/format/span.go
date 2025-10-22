@@ -1093,6 +1093,9 @@ func (i *dynamicIndenter) getIndentationForComment(kind ast.Kind, tokenIndentati
 	case ast.KindCloseBraceToken, ast.KindCloseBracketToken, ast.KindCloseParenToken:
 		return i.indentation + i.getDelta(container)
 	}
+	if tokenIndentation != -1 {
+		return tokenIndentation
+	}
 	return i.indentation
 }
 
