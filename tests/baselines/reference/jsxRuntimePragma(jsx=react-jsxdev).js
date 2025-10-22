@@ -55,10 +55,10 @@ var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "two.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime automatic */
-var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 32 }, _this); };
+var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 33 }, _this); };
 exports.HelloWorld = HelloWorld;
-exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 20 }, this);
-exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 27 }, this);
+exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 21 }, this);
+exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 28 }, this);
 //// [three.js]
 "use strict";
 var _this = this;
@@ -69,10 +69,10 @@ var _jsxFileName = "three.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
-var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 32 }, _this); };
+var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 33 }, _this); };
 exports.HelloWorld = HelloWorld;
-exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 20 }, this);
-exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 27 }, this);
+exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 21 }, this);
+exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 28 }, this);
 //// [four.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
