@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/noImplicitAnySpreads1.ts] ////
+
+=== noImplicitAnySpreads1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58150#issuecomment-2052517378
+
+function getMore() {
+>getMore : Symbol(getMore, Decl(noImplicitAnySpreads1.ts, 0, 0))
+
+  return {
+    c: "foo",
+>c : Symbol(c, Decl(noImplicitAnySpreads1.ts, 3, 10))
+
+    p: "bar",
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 4, 13))
+
+    s: "baz",
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 5, 13))
+
+  };
+}
+
+const foo = {
+>foo : Symbol(foo, Decl(noImplicitAnySpreads1.ts, 10, 5))
+
+  p: null,
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 10, 13))
+
+  ...getMore(),
+>getMore : Symbol(getMore, Decl(noImplicitAnySpreads1.ts, 0, 0))
+
+};
+
+const bar = {
+>bar : Symbol(bar, Decl(noImplicitAnySpreads1.ts, 15, 5))
+
+  p: null, // no error, this gets overriden
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 15, 13))
+
+  other: null, // error, this does not get overriden
+>other : Symbol(other, Decl(noImplicitAnySpreads1.ts, 16, 10))
+
+  ...getMore(),
+>getMore : Symbol(getMore, Decl(noImplicitAnySpreads1.ts, 0, 0))
+
+};
+
+function doSthWithParams(params: unknown) {
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 19, 2))
+>params : Symbol(params, Decl(noImplicitAnySpreads1.ts, 21, 25))
+
+  return {
+    c: 'foo',
+>c : Symbol(c, Decl(noImplicitAnySpreads1.ts, 22, 10))
+
+    p: 'bar',
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 23, 13))
+
+    s: 'baz',
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 24, 13))
+
+  };
+}
+
+const baz = {
+>baz : Symbol(baz, Decl(noImplicitAnySpreads1.ts, 29, 5))
+
+  p: null,
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 29, 13))
+
+  s: null,
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 30, 10))
+
+  ...doSthWithParams({
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 19, 2))
+
+    p: 'hello',
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 32, 22))
+
+    s: 'world',
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 33, 15))
+
+  }),
+};
+
