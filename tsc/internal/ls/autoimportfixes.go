@@ -1,10 +1,13 @@
 package ls
 
 import (
+	"slices"
+
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 type Import struct {
@@ -81,8 +84,7 @@ func (ct *changeTracker) doAddExistingFix(
 		}
 
 		if len(namedImports) > 0 {
-			// !!! OrganizeImports not yet implemented
-			// specifierComparer, isSorted := OrganizeImports.getNamedImportSpecifierComparerWithDetection(importClause.Parent, preferences, sourceFile);
+			specifierComparer, isSorted := getNamedImportSpecifierComparerWithDetection(importClause.Parent, preferences, sourceFile)
 			newSpecifiers := core.Map(namedImports, func(namedImport *Import) *ast.Node {
 				var identifier *ast.Node
 				if namedImport.propertyName != "" {
@@ -93,7 +95,8 @@ func (ct *changeTracker) doAddExistingFix(
 					identifier,
 					ct.NodeFactory.NewIdentifier(namedImport.name),
 				)
-			}) // !!! sort with specifierComparer
+			})
+			slices.SortFunc(newSpecifiers, specifierComparer)
 
 			// !!! remove imports not implemented
 			// if (removeExistingImportSpecifiers) {
@@ -108,30 +111,41 @@ func (ct *changeTracker) doAddExistingFix(
 			//             append(core.Filter(existingSpecifiers, func (s *ast.ImportSpecifier) bool {return !removeExistingImportSpecifiers.Has(s)}), newSpecifiers...), // !!! sort with specifierComparer
 			//         ),
 			//     );
-			// } else if (len(existingSpecifiers) > 0 && isSorted != false) {
-			// 	!!! OrganizeImports not implemented
-			// 	The sorting preference computed earlier may or may not have validated that these particular
-			// 	import specifiers are sorted. If they aren't, `getImportSpecifierInsertionIndex` will return
-			// 	nonsense. So if there are existing specifiers, even if we know the sorting preference, we
-			// 	need to ensure that the existing specifiers are sorted according to the preference in order
-			// 	to do a sorted insertion.
-			// 	changed to check if existing specifiers are sorted
-			//     if we're promoting the clause from type-only, we need to transform the existing imports before attempting to insert the new named imports
-			//     transformedExistingSpecifiers := existingSpecifiers
-			// 	if promoteFromTypeOnly && existingSpecifiers {
-			// 		transformedExistingSpecifiers = ct.NodeFactory.updateNamedImports(
-			// 			importClause.NamedBindings.AsNamedImports(),
-			// 			core.SameMap(existingSpecifiers, func(e *ast.ImportSpecifier) *ast.ImportSpecifier {
-			// 				return ct.NodeFactory.updateImportSpecifier(e, /*isTypeOnly*/ true, e.propertyName, e.name)
-			// 			}),
-			// 		).elements
-			// 	}
-			//     for _, spec := range newSpecifiers {
-			//         insertionIndex := OrganizeImports.getImportSpecifierInsertionIndex(transformedExistingSpecifiers, spec, specifierComparer);
-			//         ct.insertImportSpecifierAtIndex(sourceFile, spec, importClause.namedBindings as NamedImports, insertionIndex);
-			//     }
-			// } else
-			if len(existingSpecifiers) > 0 {
+			//
+			if len(existingSpecifiers) > 0 && isSorted != core.TSFalse {
+				// 	The sorting preference computed earlier may or may not have validated that these particular
+				// 	import specifiers are sorted. If they aren't, `getImportSpecifierInsertionIndex` will return
+				// 	nonsense. So if there are existing specifiers, even if we know the sorting preference, we
+				// 	need to ensure that the existing specifiers are sorted according to the preference in order
+				// 	to do a sorted insertion.
+				//     if we're promoting the clause from type-only, we need to transform the existing imports before attempting to insert the new named imports
+				//     transformedExistingSpecifiers := existingSpecifiers
+				// 	if promoteFromTypeOnly && existingSpecifiers {
+				// 		transformedExistingSpecifiers = ct.NodeFactory.updateNamedImports(
+				// 			importClause.NamedBindings.AsNamedImports(),
+				// 			core.SameMap(existingSpecifiers, func(e *ast.ImportSpecifier) *ast.ImportSpecifier {
+				// 				return ct.NodeFactory.updateImportSpecifier(e, /*isTypeOnly*/ true, e.propertyName, e.name)
+				// 			}),
+				// 		).elements
+				// 	}
+				for _, spec := range newSpecifiers {
+					insertionIndex := getImportSpecifierInsertionIndex(existingSpecifiers, spec, specifierComparer)
+					ct.insertImportSpecifierAtIndex(sourceFile, spec, importClause.NamedBindings, insertionIndex)
+				}
+			} else if len(existingSpecifiers) > 0 && isSorted.IsTrue() {
+				// Existing specifiers are sorted, so insert each new specifier at the correct position
+				for _, spec := range newSpecifiers {
+					insertionIndex := getImportSpecifierInsertionIndex(existingSpecifiers, spec, specifierComparer)
+					if insertionIndex >= len(existingSpecifiers) {
+						// Insert at the end
+						ct.insertNodeInListAfter(sourceFile, existingSpecifiers[len(existingSpecifiers)-1], spec.AsNode(), existingSpecifiers)
+					} else {
+						// Insert before the element at insertionIndex
+						ct.insertNodeInListAfter(sourceFile, existingSpecifiers[insertionIndex], spec.AsNode(), existingSpecifiers)
+					}
+				}
+			} else if len(existingSpecifiers) > 0 {
+				// Existing specifiers may not be sorted, append to the end
 				for _, spec := range newSpecifiers {
 					ct.insertNodeInListAfter(sourceFile, existingSpecifiers[len(existingSpecifiers)-1], spec.AsNode(), existingSpecifiers)
 				}
@@ -202,10 +216,11 @@ func (ct *changeTracker) insertImports(sourceFile *ast.SourceFile, imports []*as
 	} else {
 		existingImportStatements = core.Filter(sourceFile.Statements.Nodes, ast.IsAnyImportSyntax)
 	}
-	// !!! OrganizeImports
-	//  { comparer, isSorted } := OrganizeImports.getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences);
-	//  sortedNewImports := isArray(imports) ? toSorted(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
-	sortedNewImports := imports
+	comparer, isSorted := getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences)
+	sortedNewImports := slices.Clone(imports)
+	slices.SortFunc(sortedNewImports, func(a, b *ast.Statement) int {
+		return compareImportsOrRequireStatements(a, b, comparer)
+	})
 	// !!! FutureSourceFile
 	// if !isFullSourceFile(sourceFile) {
 	//     for _, newImport := range sortedNewImports {
@@ -216,22 +231,21 @@ func (ct *changeTracker) insertImports(sourceFile *ast.SourceFile, imports []*as
 	// return;
 	// }
 
-	// if len(existingImportStatements) > 0 && isSorted {
-	//     for _, newImport := range sortedNewImports {
-	//         insertionIndex := OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer)
-	//         if insertionIndex == 0 {
-	//             // If the first import is top-of-file, insert after the leading comment which is likely the header.
-	//             options := existingImportStatements[0] == sourceFile.statements[0] ? { leadingTriviaOption: textchanges.LeadingTriviaOption.Exclude } : {};
-	//             ct.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, options);
-	//         } else {
-	//             prevImport := existingImportStatements[insertionIndex - 1]
-	//             ct.insertNodeAfter(sourceFile, prevImport, newImport);
-	//         }
-	//     }
-	// 	return
-	// }
-
-	if len(existingImportStatements) > 0 {
+	if len(existingImportStatements) > 0 && isSorted {
+		// Existing imports are sorted, insert each new import at the correct position
+		for _, newImport := range sortedNewImports {
+			insertionIndex := getImportDeclarationInsertIndex(existingImportStatements, newImport, func(a, b *ast.Statement) stringutil.Comparison {
+				return compareImportsOrRequireStatements(a, b, comparer)
+			})
+			if insertionIndex == 0 {
+				// If the first import is top-of-file, insert after the leading comment which is likely the header
+				ct.insertNodeAt(sourceFile, core.TextPos(astnav.GetStartOfNode(existingImportStatements[0], sourceFile, false)), newImport.AsNode(), changeNodeOptions{})
+			} else {
+				prevImport := existingImportStatements[insertionIndex-1]
+				ct.insertNodeAfter(sourceFile, prevImport.AsNode(), newImport.AsNode())
+			}
+		}
+	} else if len(existingImportStatements) > 0 {
 		ct.insertNodesAfter(sourceFile, existingImportStatements[len(existingImportStatements)-1], sortedNewImports)
 	} else {
 		ct.insertAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween)

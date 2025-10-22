@@ -28,6 +28,33 @@ type DependencyFields struct {
 	OptionalDependencies Expected[map[string]string] `json:"optionalDependencies"`
 }
 
+// HasDependency returns true if the package.json has a dependency with the given name
+// under any of the dependency fields (dependencies, devDependencies, peerDependencies,
+// optionalDependencies).
+func (df *DependencyFields) HasDependency(name string) bool {
+	if deps, ok := df.Dependencies.GetValue(); ok {
+		if _, ok := deps[name]; ok {
+			return true
+		}
+	}
+	if devDeps, ok := df.DevDependencies.GetValue(); ok {
+		if _, ok := devDeps[name]; ok {
+			return true
+		}
+	}
+	if peerDeps, ok := df.PeerDependencies.GetValue(); ok {
+		if _, ok := peerDeps[name]; ok {
+			return true
+		}
+	}
+	if optDeps, ok := df.OptionalDependencies.GetValue(); ok {
+		if _, ok := optDeps[name]; ok {
+			return true
+		}
+	}
+	return false
+}
+
 type Fields struct {
 	HeaderFields
 	PathFields

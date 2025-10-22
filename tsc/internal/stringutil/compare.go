@@ -98,3 +98,23 @@ func CompareStringsCaseInsensitiveThenSensitive(a, b string) Comparison {
 	}
 	return CompareStringsCaseSensitive(a, b)
 }
+
+// CompareStringsCaseInsensitiveEslintCompatible performs a case-insensitive comparison
+// using toLowerCase() instead of toUpperCase() for ESLint compatibility.
+//
+// `CompareStringsCaseInsensitive` transforms letters to uppercase for unicode reasons,
+// while eslint's `sort-imports` rule transforms letters to lowercase. Which one you choose
+// affects the relative order of letters and ASCII characters 91-96, of which `_` is a
+// valid character in an identifier. So if we used `CompareStringsCaseInsensitive` for
+// import sorting, TypeScript and eslint would disagree about the correct case-insensitive
+// sort order for `__String` and `Foo`. Since eslint's whole job is to create consistency
+// by enforcing nitpicky details like this, it makes way more sense for us to just adopt
+// their convention so users can have auto-imports without making eslint angry.
+func CompareStringsCaseInsensitiveEslintCompatible(a, b string) Comparison {
+	if a == b {
+		return ComparisonEqual
+	}
+	a = strings.ToLower(a)
+	b = strings.ToLower(b)
+	return strings.Compare(a, b)
+}

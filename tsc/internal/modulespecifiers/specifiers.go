@@ -793,6 +793,8 @@ func tryDirectoryWithPackageJson(
 		fileName := moduleFileToTry[parts.PackageRootIndex+1:]
 		if fileName == "index.d.ts" || fileName == "index.js" || fileName == "index.ts" || fileName == "index.tsx" {
 			return pkgJsonDirAttemptResult{moduleFileToTry: moduleFileToTry, packageRootPath: packageRootPath}
+		} else {
+			return pkgJsonDirAttemptResult{moduleFileToTry: moduleFileToTry}
 		}
 	}
 
@@ -801,11 +803,7 @@ func tryDirectoryWithPackageJson(
 		importMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
 	}
 
-	var packageJsonContent *packagejson.PackageJson
-	if packageJson != nil {
-		packageJsonContent = packageJson.GetContents()
-	}
-
+	packageJsonContent := packageJson.GetContents()
 	if options.GetResolvePackageJsonImports() {
 		// The package name that we found in node_modules could be different from the package
 		// name in the package.json content via url/filepath dependency specifiers. We need to

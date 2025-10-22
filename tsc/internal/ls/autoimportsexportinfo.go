@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 func (l *LanguageService) getExportInfos(
@@ -31,7 +32,7 @@ func (l *LanguageService) getExportInfos(
 			if moduleCount = moduleCount + 1; moduleCount%100 == 0 && ctx.Err() != nil {
 				return
 			}
-			if moduleFile == nil && moduleSymbol.Name != exportMapKey.AmbientModuleName {
+			if moduleFile == nil && stringutil.StripQuotes(moduleSymbol.Name) != exportMapKey.AmbientModuleName {
 				return
 			}
 			seenExports := collections.Set[string]{}

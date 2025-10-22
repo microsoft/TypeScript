@@ -84,7 +84,7 @@ func (ct *changeTracker) computeNewText(change *trackerEdit, targetSourceFile *a
 	if !(change.options.indentation != nil && *change.options.indentation != 0 || format.GetLineStartPositionForPosition(pos, targetSourceFile) == pos) {
 		noIndent = strings.TrimLeftFunc(text, unicode.IsSpace)
 	}
-	return change.options.prefix + noIndent // !!!  +((!options.suffix || endsWith(noIndent, options.suffix)) ? "" : options.suffix);
+	return change.options.prefix + noIndent + core.IfElse(strings.HasSuffix(noIndent, change.options.suffix), "", change.options.suffix)
 }
 
 /** Note: this may mutate `nodeIn`. */
@@ -121,7 +121,6 @@ func getFormatCodeSettingsForWriting(options *format.FormatCodeSettings, sourceF
 	return options
 }
 
-/** Note: output node may be mutated input node. */
 func (ct *changeTracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node) {
 	nodeIn := node
 	eofToken := ct.Factory.NewToken(ast.KindEndOfFile)
@@ -146,6 +145,7 @@ func (ct *changeTracker) getNonformattedText(node *ast.Node, sourceFile *ast.Sou
 	).Write(nodeIn, sourceFile, writer, nil)
 
 	text := writer.String()
+	text = strings.TrimSuffix(text, ct.newLine) // Newline artifact from printing a SourceFile instead of a node
 
 	nodeOut := writer.AssignPositionsToNode(nodeIn, ct.NodeFactory)
 	var sourceFileLike *ast.Node

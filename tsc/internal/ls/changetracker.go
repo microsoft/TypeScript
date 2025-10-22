@@ -165,6 +165,10 @@ func (ct *changeTracker) insertNodesAfter(sourceFile *ast.SourceFile, after *ast
 	ct.insertNodesAt(sourceFile, endPosition, newNodes, ct.getInsertNodeAfterOptions(sourceFile, after))
 }
 
+func (ct *changeTracker) insertNodeBefore(sourceFile *ast.SourceFile, before *ast.Node, newNode *ast.Node, blankLineBetween bool) {
+	ct.insertNodeAt(sourceFile, core.TextPos(ct.getAdjustedStartPosition(sourceFile, before, leadingTriviaOptionNone, false)), newNode, ct.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween))
+}
+
 func (ct *changeTracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *ast.Node, newNode *ast.Node) core.TextPos {
 	if (needSemicolonBetween(after, newNode)) && (rune(sourceFile.Text()[after.End()-1]) != ';') {
 		// check if previous statement ends with semicolon
@@ -213,10 +217,10 @@ func (ct *changeTracker) insertNodeInListAfter(sourceFile *ast.SourceFile, after
 			// ###b,
 			//   c,
 			nextNode := containingList[index+1]
-			startPos := scanner.SkipTriviaEx(sourceFile.Text(), nextNode.Pos(), &scanner.SkipTriviaOptions{StopAfterLineBreak: true, StopAtComments: false})
+			startPos := scanner.SkipTriviaEx(sourceFile.Text(), nextNode.Pos(), &scanner.SkipTriviaOptions{StopAfterLineBreak: false, StopAtComments: true})
 
 			// write separator and leading trivia of the next element as suffix
-			suffix := scanner.TokenToString(nextToken.Kind) + sourceFile.Text()[nextNode.End():startPos]
+			suffix := scanner.TokenToString(nextToken.Kind) + sourceFile.Text()[nextToken.End():startPos]
 			ct.insertNodeAt(sourceFile, core.TextPos(startPos), newNode, changeNodeOptions{suffix: suffix})
 		}
 		return
@@ -278,6 +282,21 @@ func (ct *changeTracker) insertNodeInListAfter(sourceFile *ast.SourceFile, after
 	)
 }
 
+// insertImportSpecifierAtIndex inserts a new import specifier at the specified index in a NamedImports list
+func (ct *changeTracker) insertImportSpecifierAtIndex(sourceFile *ast.SourceFile, newSpecifier *ast.Node, namedImports *ast.Node, index int) {
+	namedImportsNode := namedImports.AsNamedImports()
+	elements := namedImportsNode.Elements.Nodes
+
+	if index > 0 && len(elements) > index {
+		ct.insertNodeInListAfter(sourceFile, elements[index-1], newSpecifier, elements)
+	} else {
+		// Insert before the first element
+		firstElement := elements[0]
+		multiline := printer.GetLinesBetweenPositions(sourceFile, firstElement.Pos(), namedImports.Parent.Parent.Pos()) != 0
+		ct.insertNodeBefore(sourceFile, firstElement, newSpecifier, multiline)
+	}
+}
+
 func (ct *changeTracker) insertAtTopOfFile(sourceFile *ast.SourceFile, insert []*ast.Statement, blankLineBetween bool) {
 	if len(insert) == 0 {
 		return
@@ -288,7 +307,7 @@ func (ct *changeTracker) insertAtTopOfFile(sourceFile *ast.SourceFile, insert []
 	if pos != 0 {
 		options.prefix = ct.newLine
 	}
-	if !stringutil.IsLineBreak(rune(sourceFile.Text()[pos])) {
+	if len(sourceFile.Text()) == 0 || !stringutil.IsLineBreak(rune(sourceFile.Text()[pos])) {
 		options.suffix = ct.newLine
 	}
 	if blankLineBetween {
@@ -333,4 +352,33 @@ func (ct *changeTracker) getInsertNodeAfterOptions(sourceFile *ast.SourceFile, n
 	}
 
 	return options
+}
+
+func (ct *changeTracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.Node, blankLineBetween bool) changeNodeOptions {
+	if ast.IsStatement(before) || ast.IsClassOrTypeElement(before) {
+		if blankLineBetween {
+			return changeNodeOptions{suffix: ct.newLine + ct.newLine}
+		}
+		return changeNodeOptions{suffix: ct.newLine}
+	} else if before.Kind == ast.KindVariableDeclaration {
+		// insert `x = 1, ` into `const x = 1, y = 2;
+		return changeNodeOptions{suffix: ", "}
+	} else if before.Kind == ast.KindParameter {
+		if inserted.Kind == ast.KindParameter {
+			return changeNodeOptions{suffix: ", "}
+		}
+		return changeNodeOptions{}
+	} else if (before.Kind == ast.KindStringLiteral && before.Parent != nil && before.Parent.Kind == ast.KindImportDeclaration) || before.Kind == ast.KindNamedImports {
+		return changeNodeOptions{suffix: ", "}
+	} else if before.Kind == ast.KindImportSpecifier {
+		suffix := ","
+		if blankLineBetween {
+			suffix += ct.newLine
+		} else {
+			suffix += " "
+		}
+		return changeNodeOptions{suffix: suffix}
+	}
+	// We haven't handled this kind of node yet -- add it
+	panic("unimplemented node type " + before.Kind.String() + " in changeTracker.getOptionsForInsertNodeBefore")
 }

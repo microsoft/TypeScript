@@ -14,6 +14,7 @@ var typeScriptVersion = semver.MustParse(core.Version())
 
 type PackageJson struct {
 	Fields
+	Parseable     bool
 	versionPaths  VersionPaths
 	versionTraces []string
 	once          sync.Once

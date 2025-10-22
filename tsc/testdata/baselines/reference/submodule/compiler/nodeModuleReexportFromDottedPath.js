@@ -29,32 +29,5 @@ exports.default = new EnhancedPrisma();
 
 //// [index.d.ts]
 import { PrismaClient } from "@prisma/client";
-declare const _default: PrismaClient<import(".prisma").PrismaClientOptions>;
+declare const _default: PrismaClient<import(".prisma/client").PrismaClientOptions>;
 export default _default;
-
-
-//// [DtsFileErrors]
-
-
-/index.d.ts(2,45): error TS2307: Cannot find module '.prisma' or its corresponding type declarations.
-
-
-==== /node_modules/.prisma/client/index.d.ts (0 errors) ====
-    export interface PrismaClientOptions {
-      rejectOnNotFound?: any;
-    }
-    
-    export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
-      private fetcher;
-    }
-    
-==== /node_modules/@prisma/client/index.d.ts (0 errors) ====
-    export * from ".prisma/client";
-    
-==== /index.d.ts (1 errors) ====
-    import { PrismaClient } from "@prisma/client";
-    declare const _default: PrismaClient<import(".prisma").PrismaClientOptions>;
-                                                ~~~~~~~~~
-!!! error TS2307: Cannot find module '.prisma' or its corresponding type declarations.
-    export default _default;
-    

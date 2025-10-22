@@ -6,7 +6,7 @@ someVar;
 b/**/
 
 ``````ts
-import { aa, someVar,bb } from "./a.ts";
+import { aa, bb, someVar } from "./a.ts";
 someVar;
 b
 
