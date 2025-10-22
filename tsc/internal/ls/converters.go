@@ -166,6 +166,8 @@ func (c *Converters) LineAndCharacterToPosition(script Script, lineAndCharacter 
 func (c *Converters) PositionToLineAndCharacter(script Script, position core.TextPos) lsproto.Position {
 	// UTF-8 offset to UTF-8/16 0-indexed line and character
 
+	position = min(position, core.TextPos(len(script.Text())))
+
 	lineMap := c.getLineMap(script.FileName())
 
 	line, isLineStart := slices.BinarySearch(lineMap.LineStarts, position)

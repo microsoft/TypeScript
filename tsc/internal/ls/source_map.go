@@ -18,6 +18,12 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 		}
 	}
 	endPos := l.tryGetSourcePosition(fileName, core.TextPos(fileRange.End()))
+	if endPos == nil {
+		endPos = &sourcemap.DocumentPosition{
+			FileName: startPos.FileName,
+			Pos:      startPos.Pos + fileRange.Len(),
+		}
+	}
 	debug.Assert(endPos.FileName == startPos.FileName, "start and end should be in same file")
 	newRange := core.NewTextRange(startPos.Pos, endPos.Pos)
 	lspRange := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
