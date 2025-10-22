@@ -1,0 +1,163 @@
+//// [tests/cases/compiler/returnTypeTopLevelInferenceLiteralDontWiden1.ts] ////
+
+=== returnTypeTopLevelInferenceLiteralDontWiden1.ts ===
+declare function A<T>(value: T): T extends string ? T : never;
+>A : <T>(value: T) => T extends string ? T : never
+>  : ^ ^^     ^^ ^^^^^                            
+>value : T
+>      : ^
+
+const ATest = A("foo");
+>ATest : "foo"
+>      : ^^^^^
+>A("foo") : "foo"
+>         : ^^^^^
+>A : <T>(value: T) => T extends string ? T : never
+>  : ^ ^^     ^^ ^^^^^                            
+>"foo" : "foo"
+>      : ^^^^^
+
+declare function B<T>(value: T): `test_${T & string}`;
+>B : <T>(value: T) => `test_${T & string}`
+>  : ^ ^^     ^^ ^^^^^                    
+>value : T
+>      : ^
+
+const BTest = B("foo");
+>BTest : "test_foo"
+>      : ^^^^^^^^^^
+>B("foo") : "test_foo"
+>         : ^^^^^^^^^^
+>B : <T>(value: T) => `test_${T & string}`
+>  : ^ ^^     ^^ ^^^^^                    
+>"foo" : "foo"
+>      : ^^^^^
+
+declare function C<T>(
+>C : <T>(value: T) => T extends string ? T : T extends number | bigint | boolean | null | undefined ? `test_${T}` : never
+>  : ^ ^^     ^^ ^^^^^                                                                                                   
+
+  value: T,
+>value : T
+>      : ^
+
+): T extends string
+  ? T
+  : T extends number | bigint | boolean | null | undefined
+  ? `test_${T}`
+  : never;
+
+const CTest = C("foo");
+>CTest : "foo"
+>      : ^^^^^
+>C("foo") : "foo"
+>         : ^^^^^
+>C : <T>(value: T) => T extends string ? T : T extends number | bigint | boolean | null | undefined ? `test_${T}` : never
+>  : ^ ^^     ^^ ^^^^^                                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+
+declare function D<T>(value: T): T extends number ? `test_${T}` : T;
+>D : <T>(value: T) => T extends number ? `test_${T}` : T
+>  : ^ ^^     ^^ ^^^^^                                  
+>value : T
+>      : ^
+
+const DTest = D("foo");
+>DTest : "foo"
+>      : ^^^^^
+>D("foo") : "foo"
+>         : ^^^^^
+>D : <T>(value: T) => T extends number ? `test_${T}` : T
+>  : ^ ^^     ^^ ^^^^^                                  
+>"foo" : "foo"
+>      : ^^^^^
+
+declare function E<T>(value: T): T extends string ? `test_${T}` : T;
+>E : <T>(value: T) => T extends string ? `test_${T}` : T
+>  : ^ ^^     ^^ ^^^^^                                  
+>value : T
+>      : ^
+
+const ETest = E("foo");
+>ETest : "test_foo"
+>      : ^^^^^^^^^^
+>E("foo") : "test_foo"
+>         : ^^^^^^^^^^
+>E : <T>(value: T) => T extends string ? `test_${T}` : T
+>  : ^ ^^     ^^ ^^^^^                                  
+>"foo" : "foo"
+>      : ^^^^^
+
+declare function F<T>(value: T): T extends number ? `test_${T}` : [T];
+>F : <T>(value: T) => T extends number ? `test_${T}` : [T]
+>  : ^ ^^     ^^ ^^^^^                                    
+>value : T
+>      : ^
+
+const FTest1 = F("foo");
+>FTest1 : ["foo"]
+>       : ^^^^^^^
+>F("foo") : ["foo"]
+>         : ^^^^^^^
+>F : <T>(value: T) => T extends number ? `test_${T}` : [T]
+>  : ^ ^^     ^^ ^^^^^                                    
+>"foo" : "foo"
+>      : ^^^^^
+
+const FTest2 = F(42);
+>FTest2 : "test_42"
+>       : ^^^^^^^^^
+>F(42) : "test_42"
+>      : ^^^^^^^^^
+>F : <T>(value: T) => T extends number ? `test_${T}` : [T]
+>  : ^ ^^     ^^ ^^^^^                                    
+>42 : 42
+>   : ^^
+
+declare function G<T>(value: T): T extends string ? `test_${T}` : [T];
+>G : <T>(value: T) => T extends string ? `test_${T}` : [T]
+>  : ^ ^^     ^^ ^^^^^                                    
+>value : T
+>      : ^
+
+const GTest1 = G("foo");
+>GTest1 : "test_foo"
+>       : ^^^^^^^^^^
+>G("foo") : "test_foo"
+>         : ^^^^^^^^^^
+>G : <T>(value: T) => T extends string ? `test_${T}` : [T]
+>  : ^ ^^     ^^ ^^^^^                                    
+>"foo" : "foo"
+>      : ^^^^^
+
+const GTest2 = G(42);
+>GTest2 : [42]
+>       : ^^^^
+>G(42) : [42]
+>      : ^^^^
+>G : <T>(value: T) => T extends string ? `test_${T}` : [T]
+>  : ^ ^^     ^^ ^^^^^                                    
+>42 : 42
+>   : ^^
+
+declare function H<T>(
+>H : <T>(value: T) => T extends number ? never : `test_${T & string}`
+>  : ^ ^^     ^^ ^^^^^                                               
+
+  value: T,
+>value : T
+>      : ^
+
+): T extends number ? never : `test_${T & string}`;
+
+const HTest = H("foo");
+>HTest : "test_foo"
+>      : ^^^^^^^^^^
+>H("foo") : "test_foo"
+>         : ^^^^^^^^^^
+>H : <T>(value: T) => T extends number ? never : `test_${T & string}`
+>  : ^ ^^     ^^ ^^^^^                                               
+>"foo" : "foo"
+>      : ^^^^^
+
