@@ -80,6 +80,9 @@ function t6() {
 
 function t7() {
     // error
+    const { a0, b0 } = { a0: 1, b0: 1 };
+
+    // ok 
     const { _a1, _b1 } = { _a1: 1, _b1: 1 };
 
     // ok
