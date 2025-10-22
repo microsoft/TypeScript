@@ -45863,6 +45863,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let allIterationTypes: IterationTypes[] | undefined;
         for (const constituent of (type as UnionType).types) {
+            if (!!(getReducedType(constituent).flags & TypeFlags.Never)) {
+                continue;
+            }
             const errorOutputContainer: ErrorOutputContainer | undefined = errorNode ? { errors: undefined } : undefined;
             const iterationTypes = getIterationTypesOfIterableWorker(constituent, use, errorNode, errorOutputContainer);
             if (iterationTypes === noIterationTypes) {

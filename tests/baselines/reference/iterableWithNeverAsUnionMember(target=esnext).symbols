@@ -25,7 +25,9 @@ for (const elem of x) { // ok
 >x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 4, 11))
 
   elem.toFixed();
+>elem.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >elem : Symbol(elem, Decl(iterableWithNeverAsUnionMember.ts, 7, 10))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 type Shape =

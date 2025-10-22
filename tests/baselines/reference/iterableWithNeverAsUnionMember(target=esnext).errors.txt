@@ -1,10 +1,8 @@
 iterableWithNeverAsUnionMember.ts(2,7): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
-iterableWithNeverAsUnionMember.ts(6,5): error TS2488: Type 'number[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-iterableWithNeverAsUnionMember.ts(20,9): error TS2488: Type '[{ kind: "circle"; radius: number; } & { kind: "circle"; }, (newValue: { kind: "circle"; radius: number; } & { kind: "circle"; }) => void]' must have a '[Symbol.iterator]()' method that returns an iterator.
 iterableWithNeverAsUnionMember.ts(25,7): error TS2488: Type 'T' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== iterableWithNeverAsUnionMember.ts (4 errors) ====
+==== iterableWithNeverAsUnionMember.ts (2 errors) ====
     declare const o1: { a: "foo" } & { a: "bar" };
     const [el1] = o1; // error
           ~~~~~
@@ -13,8 +11,6 @@ iterableWithNeverAsUnionMember.ts(25,7): error TS2488: Type 'T' must have a '[Sy
     // https://github.com/microsoft/TypeScript/issues/62462
     declare var x: number[] | ({ t: "a" } & { t: "b" });
     let [el2] = x; // ok
-        ~~~~~
-!!! error TS2488: Type 'number[]' must have a '[Symbol.iterator]()' method that returns an iterator.
     
     for (const elem of x) { // ok
       elem.toFixed();
@@ -29,8 +25,6 @@ iterableWithNeverAsUnionMember.ts(25,7): error TS2488: Type 'T' must have a '[Sy
     function doStuffWithCircle(arg: Circle | [Circle, (newValue: Circle) => void]) {
       if (Array.isArray(arg)) {
         let [value, setValue] = arg; // ok
-            ~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '[{ kind: "circle"; radius: number; } & { kind: "circle"; }, (newValue: { kind: "circle"; radius: number; } & { kind: "circle"; }) => void]' must have a '[Symbol.iterator]()' method that returns an iterator.
       }
     }
     
