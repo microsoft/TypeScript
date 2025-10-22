@@ -79,6 +79,9 @@ type Session struct {
 	// released from the parseCache.
 	programCounter *programCounter
 
+	// read-only after initialization
+	initialPreferences                 *ls.UserPreferences
+	userPreferences                    *ls.UserPreferences // !!! update to Config
 	compilerOptionsForInferredProjects *core.CompilerOptions
 	typingsInstaller                   *ata.TypingsInstaller
 	backgroundQueue                    *background.Queue
@@ -91,6 +94,9 @@ type Session struct {
 	// snapshot is the current immutable state of all projects.
 	snapshot   *Snapshot
 	snapshotMu sync.RWMutex
+
+	pendingConfigChanges bool
+	configRWMu           sync.Mutex
 
 	// pendingFileChanges are accumulated from textDocument/* events delivered
 	// by the LSP server through DidOpenFile(), DidChangeFile(), etc. They are
@@ -151,6 +157,7 @@ func NewSession(init *SessionInit) *Session {
 			extendedConfigCache,
 			&ConfigFileRegistry{},
 			nil,
+			Config{},
 			toPath,
 		),
 		pendingATAChanges: make(map[tspath.Path]*ATAStateChange),
@@ -177,9 +184,33 @@ func (s *Session) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
 }
 
+// Gets current UserPreferences, always a copy
+func (s *Session) UserPreferences() *ls.UserPreferences {
+	s.configRWMu.Lock()
+	defer s.configRWMu.Unlock()
+	return s.userPreferences.Copy()
+}
+
+// Gets original UserPreferences of the session
+func (s *Session) NewUserPreferences() *ls.UserPreferences {
+	return s.initialPreferences.CopyOrDefault()
+}
+
 // Trace implements module.ResolutionHost
 func (s *Session) Trace(msg string) {
 	panic("ATA module resolution should not use tracing")
+}
+
+func (s *Session) Configure(userPreferences *ls.UserPreferences) {
+	s.configRWMu.Lock()
+	defer s.configRWMu.Unlock()
+	s.pendingConfigChanges = true
+	s.userPreferences = userPreferences
+}
+
+func (s *Session) InitializeWithConfig(userPreferences *ls.UserPreferences) {
+	s.initialPreferences = userPreferences.CopyOrDefault()
+	s.Configure(s.initialPreferences)
 }
 
 func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, version int32, content string, languageKind lsproto.LanguageKind) {
@@ -341,8 +372,8 @@ func (s *Session) Snapshot() (*Snapshot, func()) {
 
 func (s *Session) GetLanguageService(ctx context.Context, uri lsproto.DocumentUri) (*ls.LanguageService, error) {
 	var snapshot *Snapshot
-	fileChanges, overlays, ataChanges := s.flushChanges(ctx)
-	updateSnapshot := !fileChanges.IsEmpty() || len(ataChanges) > 0
+	fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
+	updateSnapshot := !fileChanges.IsEmpty() || len(ataChanges) > 0 || newConfig != nil
 	if updateSnapshot {
 		// If there are pending file changes, we need to update the snapshot.
 		// Sending the requested URI ensures that the project for this URI is loaded.
@@ -350,6 +381,7 @@ func (s *Session) GetLanguageService(ctx context.Context, uri lsproto.DocumentUr
 			reason:        UpdateReasonRequestedLanguageServicePendingChanges,
 			fileChanges:   fileChanges,
 			ataChanges:    ataChanges,
+			newConfig:     newConfig,
 			requestedURIs: []lsproto.DocumentUri{uri},
 		})
 	} else {
@@ -394,6 +426,7 @@ func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 	}
 
 	// Enqueue logging, watch updates, and diagnostic refresh tasks
+	// !!! userPreferences/configuration updates
 	s.backgroundQueue.Enqueue(context.Background(), func(ctx context.Context) {
 		if s.options.LoggingEnabled {
 			s.logger.Write(newSnapshot.builderLogs.String())
@@ -553,7 +586,7 @@ func (s *Session) Close() {
 	s.backgroundQueue.Close()
 }
 
-func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*overlay, map[tspath.Path]*ATAStateChange) {
+func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*overlay, map[tspath.Path]*ATAStateChange, *Config) {
 	s.pendingFileChangesMu.Lock()
 	defer s.pendingFileChangesMu.Unlock()
 	s.pendingATAChangesMu.Lock()
@@ -561,7 +594,16 @@ func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspa
 	pendingATAChanges := s.pendingATAChanges
 	s.pendingATAChanges = make(map[tspath.Path]*ATAStateChange)
 	fileChanges, overlays := s.flushChangesLocked(ctx)
-	return fileChanges, overlays, pendingATAChanges
+	s.configRWMu.Lock()
+	defer s.configRWMu.Unlock()
+	var newConfig *Config
+	if s.pendingConfigChanges {
+		newConfig = &Config{
+			tsUserPreferences: s.userPreferences.Copy(),
+		}
+	}
+	s.pendingConfigChanges = false
+	return fileChanges, overlays, pendingATAChanges, newConfig
 }
 
 // flushChangesLocked should only be called with s.pendingFileChangesMu held.

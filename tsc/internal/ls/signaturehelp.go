@@ -43,7 +43,6 @@ func (l *LanguageService) ProvideSignatureHelp(
 	position lsproto.Position,
 	context *lsproto.SignatureHelpContext,
 	clientOptions *lsproto.SignatureHelpClientCapabilities,
-	preferences *UserPreferences,
 ) (lsproto.SignatureHelpResponse, error) {
 	program, sourceFile := l.getProgramAndFile(documentURI)
 	items := l.GetSignatureHelpItems(
@@ -52,8 +51,7 @@ func (l *LanguageService) ProvideSignatureHelp(
 		program,
 		sourceFile,
 		context,
-		clientOptions,
-		preferences)
+		clientOptions)
 	return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
 }
 
@@ -64,7 +62,6 @@ func (l *LanguageService) GetSignatureHelpItems(
 	sourceFile *ast.SourceFile,
 	context *lsproto.SignatureHelpContext,
 	clientOptions *lsproto.SignatureHelpClientCapabilities,
-	preferences *UserPreferences,
 ) *lsproto.SignatureHelp {
 	typeChecker, done := program.GetTypeCheckerForFile(ctx, sourceFile)
 	defer done()

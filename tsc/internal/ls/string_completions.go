@@ -46,7 +46,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 	position int,
 	contextToken *ast.Node,
 	compilerOptions *core.CompilerOptions,
-	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	// !!! reference comment
@@ -58,8 +57,7 @@ func (l *LanguageService) getStringLiteralCompletions(
 			ctx,
 			file,
 			contextToken,
-			position,
-			preferences)
+			position)
 		return l.convertStringLiteralCompletions(
 			ctx,
 			entries,
@@ -67,7 +65,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 			file,
 			position,
 			compilerOptions,
-			preferences,
 			clientOptions,
 		)
 	}
@@ -81,7 +78,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	file *ast.SourceFile,
 	position int,
 	options *core.CompilerOptions,
-	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	if completion == nil {
@@ -108,7 +104,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			contextToken, /*replacementToken*/
 			position,
 			file,
-			preferences,
 			options,
 			clientOptions,
 		)
@@ -229,7 +224,6 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 	file *ast.SourceFile,
 	node *ast.StringLiteralLike,
 	position int,
-	preferences *UserPreferences,
 ) *stringLiteralCompletions {
 	typeChecker, done := l.GetProgram().GetTypeCheckerForFile(ctx, file)
 	defer done()
@@ -242,7 +236,6 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 				file,
 				node,
 				l.GetProgram(),
-				preferences,
 			)
 		}
 		return fromUnionableLiteralType(grandparent, parent, position, typeChecker)
@@ -323,7 +316,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		//      import x = require("/*completion position*/");
 		//      var y = require("/*completion position*/");
 		//      export * from "/*completion position*/";
-		return getStringLiteralCompletionsFromModuleNames(file, node, l.GetProgram(), preferences)
+		return getStringLiteralCompletionsFromModuleNames(file, node, l.GetProgram())
 	case ast.KindCaseClause:
 		tracker := newCaseClauseTracker(typeChecker, parent.Parent.AsCaseBlock().Clauses.Nodes)
 		contextualTypes := fromContextualType(checker.ContextFlagsCompletions, node, typeChecker)
@@ -527,7 +520,6 @@ func getStringLiteralCompletionsFromModuleNames(
 	file *ast.SourceFile,
 	node *ast.LiteralExpression,
 	program *compiler.Program,
-	preferences *UserPreferences,
 ) *stringLiteralCompletions {
 	// !!! needs `getModeForUsageLocationWorker`
 	return nil
@@ -678,7 +670,6 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 	file *ast.SourceFile,
 	position int,
 	contextToken *ast.Node,
-	preferences *UserPreferences,
 ) *lsproto.CompletionItem {
 	if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
 		return item
@@ -688,7 +679,6 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 		file,
 		contextToken,
 		position,
-		preferences,
 	)
 	if completions == nil {
 		return item

@@ -91,8 +91,8 @@ type changeTracker struct {
 func (ls *LanguageService) newChangeTracker(ctx context.Context) *changeTracker {
 	emitContext := printer.NewEmitContext()
 	newLine := ls.GetProgram().Options().NewLine.GetNewLineCharacter()
-	formatCodeSettings := format.GetDefaultFormatCodeSettings(newLine) // !!! format.GetFormatCodeSettingsFromContext(ctx),
-	ctx = format.WithFormatCodeSettings(ctx, formatCodeSettings, newLine)
+	formatCodeSettings := ls.FormatOptions()
+	ctx = format.WithFormatCodeSettings(ctx, formatCodeSettings, newLine) // !!! formatSettings in context?
 	return &changeTracker{
 		ls:             ls,
 		EmitContext:    emitContext,

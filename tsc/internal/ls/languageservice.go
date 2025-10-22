@@ -3,6 +3,7 @@ package ls
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 )
@@ -28,6 +29,17 @@ func NewLanguageService(
 
 func (l *LanguageService) GetProgram() *compiler.Program {
 	return l.program
+}
+
+func (l *LanguageService) UserPreferences() *UserPreferences {
+	return l.host.UserPreferences()
+}
+
+func (l *LanguageService) FormatOptions() *format.FormatCodeSettings {
+	if formatOptions := l.host.FormatOptions(); formatOptions != nil {
+		return formatOptions
+	}
+	return format.GetDefaultFormatCodeSettings(l.GetProgram().Options().NewLine.GetNewLineCharacter())
 }
 
 func (l *LanguageService) tryGetProgramAndFile(fileName string) (*compiler.Program, *ast.SourceFile) {

@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-func parseTristate(value any) core.Tristate {
+func ParseTristate(value any) core.Tristate {
 	if value == nil {
 		return core.TSUnknown
 	}
@@ -25,7 +25,7 @@ func parseTristate(value any) core.Tristate {
 	}
 }
 
-func parseStringArray(value any) []string {
+func ParseStringArray(value any) []string {
 	if arr, ok := value.([]any); ok {
 		if arr == nil {
 			return nil
@@ -45,14 +45,14 @@ func parseStringMap(value any) *collections.OrderedMap[string, []string] {
 	if m, ok := value.(*collections.OrderedMap[string, any]); ok {
 		result := collections.NewOrderedMapWithSizeHint[string, []string](m.Size())
 		for k, v := range m.Entries() {
-			result.Set(k, parseStringArray(v))
+			result.Set(k, ParseStringArray(v))
 		}
 		return result
 	}
 	return nil
 }
 
-func parseString(value any) string {
+func ParseString(value any) string {
 	if str, ok := value.(string); ok {
 		return str
 	}
@@ -186,119 +186,119 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	}
 	switch key {
 	case "allowJs":
-		allOptions.AllowJs = parseTristate(value)
+		allOptions.AllowJs = ParseTristate(value)
 	case "allowImportingTsExtensions":
-		allOptions.AllowImportingTsExtensions = parseTristate(value)
+		allOptions.AllowImportingTsExtensions = ParseTristate(value)
 	case "allowSyntheticDefaultImports":
-		allOptions.AllowSyntheticDefaultImports = parseTristate(value)
+		allOptions.AllowSyntheticDefaultImports = ParseTristate(value)
 	case "allowNonTsExtensions":
-		allOptions.AllowNonTsExtensions = parseTristate(value)
+		allOptions.AllowNonTsExtensions = ParseTristate(value)
 	case "allowUmdGlobalAccess":
-		allOptions.AllowUmdGlobalAccess = parseTristate(value)
+		allOptions.AllowUmdGlobalAccess = ParseTristate(value)
 	case "allowUnreachableCode":
-		allOptions.AllowUnreachableCode = parseTristate(value)
+		allOptions.AllowUnreachableCode = ParseTristate(value)
 	case "allowUnusedLabels":
-		allOptions.AllowUnusedLabels = parseTristate(value)
+		allOptions.AllowUnusedLabels = ParseTristate(value)
 	case "allowArbitraryExtensions":
-		allOptions.AllowArbitraryExtensions = parseTristate(value)
+		allOptions.AllowArbitraryExtensions = ParseTristate(value)
 	case "alwaysStrict":
-		allOptions.AlwaysStrict = parseTristate(value)
+		allOptions.AlwaysStrict = ParseTristate(value)
 	case "assumeChangesOnlyAffectDirectDependencies":
-		allOptions.AssumeChangesOnlyAffectDirectDependencies = parseTristate(value)
+		allOptions.AssumeChangesOnlyAffectDirectDependencies = ParseTristate(value)
 	case "baseUrl":
-		allOptions.BaseUrl = parseString(value)
+		allOptions.BaseUrl = ParseString(value)
 	case "build":
-		allOptions.Build = parseTristate(value)
+		allOptions.Build = ParseTristate(value)
 	case "checkJs":
-		allOptions.CheckJs = parseTristate(value)
+		allOptions.CheckJs = ParseTristate(value)
 	case "customConditions":
-		allOptions.CustomConditions = parseStringArray(value)
+		allOptions.CustomConditions = ParseStringArray(value)
 	case "composite":
-		allOptions.Composite = parseTristate(value)
+		allOptions.Composite = ParseTristate(value)
 	case "declarationDir":
-		allOptions.DeclarationDir = parseString(value)
+		allOptions.DeclarationDir = ParseString(value)
 	case "diagnostics":
-		allOptions.Diagnostics = parseTristate(value)
+		allOptions.Diagnostics = ParseTristate(value)
 	case "disableSizeLimit":
-		allOptions.DisableSizeLimit = parseTristate(value)
+		allOptions.DisableSizeLimit = ParseTristate(value)
 	case "disableSourceOfProjectReferenceRedirect":
-		allOptions.DisableSourceOfProjectReferenceRedirect = parseTristate(value)
+		allOptions.DisableSourceOfProjectReferenceRedirect = ParseTristate(value)
 	case "disableSolutionSearching":
-		allOptions.DisableSolutionSearching = parseTristate(value)
+		allOptions.DisableSolutionSearching = ParseTristate(value)
 	case "disableReferencedProjectLoad":
-		allOptions.DisableReferencedProjectLoad = parseTristate(value)
+		allOptions.DisableReferencedProjectLoad = ParseTristate(value)
 	case "declarationMap":
-		allOptions.DeclarationMap = parseTristate(value)
+		allOptions.DeclarationMap = ParseTristate(value)
 	case "declaration":
-		allOptions.Declaration = parseTristate(value)
+		allOptions.Declaration = ParseTristate(value)
 	case "downlevelIteration":
-		allOptions.DownlevelIteration = parseTristate(value)
+		allOptions.DownlevelIteration = ParseTristate(value)
 	case "erasableSyntaxOnly":
-		allOptions.ErasableSyntaxOnly = parseTristate(value)
+		allOptions.ErasableSyntaxOnly = ParseTristate(value)
 	case "emitDeclarationOnly":
-		allOptions.EmitDeclarationOnly = parseTristate(value)
+		allOptions.EmitDeclarationOnly = ParseTristate(value)
 	case "extendedDiagnostics":
-		allOptions.ExtendedDiagnostics = parseTristate(value)
+		allOptions.ExtendedDiagnostics = ParseTristate(value)
 	case "emitDecoratorMetadata":
-		allOptions.EmitDecoratorMetadata = parseTristate(value)
+		allOptions.EmitDecoratorMetadata = ParseTristate(value)
 	case "emitBOM":
-		allOptions.EmitBOM = parseTristate(value)
+		allOptions.EmitBOM = ParseTristate(value)
 	case "esModuleInterop":
-		allOptions.ESModuleInterop = parseTristate(value)
+		allOptions.ESModuleInterop = ParseTristate(value)
 	case "exactOptionalPropertyTypes":
-		allOptions.ExactOptionalPropertyTypes = parseTristate(value)
+		allOptions.ExactOptionalPropertyTypes = ParseTristate(value)
 	case "explainFiles":
-		allOptions.ExplainFiles = parseTristate(value)
+		allOptions.ExplainFiles = ParseTristate(value)
 	case "experimentalDecorators":
-		allOptions.ExperimentalDecorators = parseTristate(value)
+		allOptions.ExperimentalDecorators = ParseTristate(value)
 	case "forceConsistentCasingInFileNames":
-		allOptions.ForceConsistentCasingInFileNames = parseTristate(value)
+		allOptions.ForceConsistentCasingInFileNames = ParseTristate(value)
 	case "generateCpuProfile":
-		allOptions.GenerateCpuProfile = parseString(value)
+		allOptions.GenerateCpuProfile = ParseString(value)
 	case "generateTrace":
-		allOptions.GenerateTrace = parseString(value)
+		allOptions.GenerateTrace = ParseString(value)
 	case "isolatedModules":
-		allOptions.IsolatedModules = parseTristate(value)
+		allOptions.IsolatedModules = ParseTristate(value)
 	case "ignoreDeprecations":
-		allOptions.IgnoreDeprecations = parseString(value)
+		allOptions.IgnoreDeprecations = ParseString(value)
 	case "importHelpers":
-		allOptions.ImportHelpers = parseTristate(value)
+		allOptions.ImportHelpers = ParseTristate(value)
 	case "incremental":
-		allOptions.Incremental = parseTristate(value)
+		allOptions.Incremental = ParseTristate(value)
 	case "init":
-		allOptions.Init = parseTristate(value)
+		allOptions.Init = ParseTristate(value)
 	case "inlineSourceMap":
-		allOptions.InlineSourceMap = parseTristate(value)
+		allOptions.InlineSourceMap = ParseTristate(value)
 	case "inlineSources":
-		allOptions.InlineSources = parseTristate(value)
+		allOptions.InlineSources = ParseTristate(value)
 	case "isolatedDeclarations":
-		allOptions.IsolatedDeclarations = parseTristate(value)
+		allOptions.IsolatedDeclarations = ParseTristate(value)
 	case "jsx":
 		allOptions.Jsx = floatOrInt32ToFlag[core.JsxEmit](value)
 	case "jsxFactory":
-		allOptions.JsxFactory = parseString(value)
+		allOptions.JsxFactory = ParseString(value)
 	case "jsxFragmentFactory":
-		allOptions.JsxFragmentFactory = parseString(value)
+		allOptions.JsxFragmentFactory = ParseString(value)
 	case "jsxImportSource":
-		allOptions.JsxImportSource = parseString(value)
+		allOptions.JsxImportSource = ParseString(value)
 	case "lib":
 		if _, ok := value.([]string); ok {
 			allOptions.Lib = value.([]string)
 		} else {
-			allOptions.Lib = parseStringArray(value)
+			allOptions.Lib = ParseStringArray(value)
 		}
 	case "libReplacement":
-		allOptions.LibReplacement = parseTristate(value)
+		allOptions.LibReplacement = ParseTristate(value)
 	case "listEmittedFiles":
-		allOptions.ListEmittedFiles = parseTristate(value)
+		allOptions.ListEmittedFiles = ParseTristate(value)
 	case "listFiles":
-		allOptions.ListFiles = parseTristate(value)
+		allOptions.ListFiles = ParseTristate(value)
 	case "listFilesOnly":
-		allOptions.ListFilesOnly = parseTristate(value)
+		allOptions.ListFilesOnly = ParseTristate(value)
 	case "locale":
-		allOptions.Locale = parseString(value)
+		allOptions.Locale = ParseString(value)
 	case "mapRoot":
-		allOptions.MapRoot = parseString(value)
+		allOptions.MapRoot = ParseString(value)
 	case "module":
 		allOptions.Module = floatOrInt32ToFlag[core.ModuleKind](value)
 	case "moduleDetectionKind":
@@ -306,143 +306,143 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "moduleResolution":
 		allOptions.ModuleResolution = floatOrInt32ToFlag[core.ModuleResolutionKind](value)
 	case "moduleSuffixes":
-		allOptions.ModuleSuffixes = parseStringArray(value)
+		allOptions.ModuleSuffixes = ParseStringArray(value)
 	case "moduleDetection":
 		allOptions.ModuleDetection = floatOrInt32ToFlag[core.ModuleDetectionKind](value)
 	case "noCheck":
-		allOptions.NoCheck = parseTristate(value)
+		allOptions.NoCheck = ParseTristate(value)
 	case "noFallthroughCasesInSwitch":
-		allOptions.NoFallthroughCasesInSwitch = parseTristate(value)
+		allOptions.NoFallthroughCasesInSwitch = ParseTristate(value)
 	case "noEmitForJsFiles":
-		allOptions.NoEmitForJsFiles = parseTristate(value)
+		allOptions.NoEmitForJsFiles = ParseTristate(value)
 	case "noErrorTruncation":
-		allOptions.NoErrorTruncation = parseTristate(value)
+		allOptions.NoErrorTruncation = ParseTristate(value)
 	case "noImplicitAny":
-		allOptions.NoImplicitAny = parseTristate(value)
+		allOptions.NoImplicitAny = ParseTristate(value)
 	case "noImplicitThis":
-		allOptions.NoImplicitThis = parseTristate(value)
+		allOptions.NoImplicitThis = ParseTristate(value)
 	case "noLib":
-		allOptions.NoLib = parseTristate(value)
+		allOptions.NoLib = ParseTristate(value)
 	case "noPropertyAccessFromIndexSignature":
-		allOptions.NoPropertyAccessFromIndexSignature = parseTristate(value)
+		allOptions.NoPropertyAccessFromIndexSignature = ParseTristate(value)
 	case "noUncheckedIndexedAccess":
-		allOptions.NoUncheckedIndexedAccess = parseTristate(value)
+		allOptions.NoUncheckedIndexedAccess = ParseTristate(value)
 	case "noEmitHelpers":
-		allOptions.NoEmitHelpers = parseTristate(value)
+		allOptions.NoEmitHelpers = ParseTristate(value)
 	case "noEmitOnError":
-		allOptions.NoEmitOnError = parseTristate(value)
+		allOptions.NoEmitOnError = ParseTristate(value)
 	case "noImplicitReturns":
-		allOptions.NoImplicitReturns = parseTristate(value)
+		allOptions.NoImplicitReturns = ParseTristate(value)
 	case "noUnusedLocals":
-		allOptions.NoUnusedLocals = parseTristate(value)
+		allOptions.NoUnusedLocals = ParseTristate(value)
 	case "noUnusedParameters":
-		allOptions.NoUnusedParameters = parseTristate(value)
+		allOptions.NoUnusedParameters = ParseTristate(value)
 	case "noImplicitOverride":
-		allOptions.NoImplicitOverride = parseTristate(value)
+		allOptions.NoImplicitOverride = ParseTristate(value)
 	case "noUncheckedSideEffectImports":
-		allOptions.NoUncheckedSideEffectImports = parseTristate(value)
+		allOptions.NoUncheckedSideEffectImports = ParseTristate(value)
 	case "outFile":
-		allOptions.OutFile = parseString(value)
+		allOptions.OutFile = ParseString(value)
 	case "noResolve":
-		allOptions.NoResolve = parseTristate(value)
+		allOptions.NoResolve = ParseTristate(value)
 	case "paths":
 		allOptions.Paths = parseStringMap(value)
 	case "preserveWatchOutput":
-		allOptions.PreserveWatchOutput = parseTristate(value)
+		allOptions.PreserveWatchOutput = ParseTristate(value)
 	case "preserveConstEnums":
-		allOptions.PreserveConstEnums = parseTristate(value)
+		allOptions.PreserveConstEnums = ParseTristate(value)
 	case "preserveSymlinks":
-		allOptions.PreserveSymlinks = parseTristate(value)
+		allOptions.PreserveSymlinks = ParseTristate(value)
 	case "project":
-		allOptions.Project = parseString(value)
+		allOptions.Project = ParseString(value)
 	case "pretty":
-		allOptions.Pretty = parseTristate(value)
+		allOptions.Pretty = ParseTristate(value)
 	case "resolveJsonModule":
-		allOptions.ResolveJsonModule = parseTristate(value)
+		allOptions.ResolveJsonModule = ParseTristate(value)
 	case "resolvePackageJsonExports":
-		allOptions.ResolvePackageJsonExports = parseTristate(value)
+		allOptions.ResolvePackageJsonExports = ParseTristate(value)
 	case "resolvePackageJsonImports":
-		allOptions.ResolvePackageJsonImports = parseTristate(value)
+		allOptions.ResolvePackageJsonImports = ParseTristate(value)
 	case "reactNamespace":
-		allOptions.ReactNamespace = parseString(value)
+		allOptions.ReactNamespace = ParseString(value)
 	case "rewriteRelativeImportExtensions":
-		allOptions.RewriteRelativeImportExtensions = parseTristate(value)
+		allOptions.RewriteRelativeImportExtensions = ParseTristate(value)
 	case "rootDir":
-		allOptions.RootDir = parseString(value)
+		allOptions.RootDir = ParseString(value)
 	case "rootDirs":
-		allOptions.RootDirs = parseStringArray(value)
+		allOptions.RootDirs = ParseStringArray(value)
 	case "removeComments":
-		allOptions.RemoveComments = parseTristate(value)
+		allOptions.RemoveComments = ParseTristate(value)
 	case "strict":
-		allOptions.Strict = parseTristate(value)
+		allOptions.Strict = ParseTristate(value)
 	case "strictBindCallApply":
-		allOptions.StrictBindCallApply = parseTristate(value)
+		allOptions.StrictBindCallApply = ParseTristate(value)
 	case "strictBuiltinIteratorReturn":
-		allOptions.StrictBuiltinIteratorReturn = parseTristate(value)
+		allOptions.StrictBuiltinIteratorReturn = ParseTristate(value)
 	case "strictFunctionTypes":
-		allOptions.StrictFunctionTypes = parseTristate(value)
+		allOptions.StrictFunctionTypes = ParseTristate(value)
 	case "strictNullChecks":
-		allOptions.StrictNullChecks = parseTristate(value)
+		allOptions.StrictNullChecks = ParseTristate(value)
 	case "strictPropertyInitialization":
-		allOptions.StrictPropertyInitialization = parseTristate(value)
+		allOptions.StrictPropertyInitialization = ParseTristate(value)
 	case "skipDefaultLibCheck":
-		allOptions.SkipDefaultLibCheck = parseTristate(value)
+		allOptions.SkipDefaultLibCheck = ParseTristate(value)
 	case "sourceMap":
-		allOptions.SourceMap = parseTristate(value)
+		allOptions.SourceMap = ParseTristate(value)
 	case "sourceRoot":
-		allOptions.SourceRoot = parseString(value)
+		allOptions.SourceRoot = ParseString(value)
 	case "stripInternal":
-		allOptions.StripInternal = parseTristate(value)
+		allOptions.StripInternal = ParseTristate(value)
 	case "suppressOutputPathCheck":
-		allOptions.SuppressOutputPathCheck = parseTristate(value)
+		allOptions.SuppressOutputPathCheck = ParseTristate(value)
 	case "target":
 		allOptions.Target = floatOrInt32ToFlag[core.ScriptTarget](value)
 	case "traceResolution":
-		allOptions.TraceResolution = parseTristate(value)
+		allOptions.TraceResolution = ParseTristate(value)
 	case "tsBuildInfoFile":
-		allOptions.TsBuildInfoFile = parseString(value)
+		allOptions.TsBuildInfoFile = ParseString(value)
 	case "typeRoots":
-		allOptions.TypeRoots = parseStringArray(value)
+		allOptions.TypeRoots = ParseStringArray(value)
 	case "types":
-		allOptions.Types = parseStringArray(value)
+		allOptions.Types = ParseStringArray(value)
 	case "useDefineForClassFields":
-		allOptions.UseDefineForClassFields = parseTristate(value)
+		allOptions.UseDefineForClassFields = ParseTristate(value)
 	case "useUnknownInCatchVariables":
-		allOptions.UseUnknownInCatchVariables = parseTristate(value)
+		allOptions.UseUnknownInCatchVariables = ParseTristate(value)
 	case "verbatimModuleSyntax":
-		allOptions.VerbatimModuleSyntax = parseTristate(value)
+		allOptions.VerbatimModuleSyntax = ParseTristate(value)
 	case "version":
-		allOptions.Version = parseTristate(value)
+		allOptions.Version = ParseTristate(value)
 	case "help":
-		allOptions.Help = parseTristate(value)
+		allOptions.Help = ParseTristate(value)
 	case "all":
-		allOptions.All = parseTristate(value)
+		allOptions.All = ParseTristate(value)
 	case "maxNodeModuleJsDepth":
 		allOptions.MaxNodeModuleJsDepth = parseNumber(value)
 	case "skipLibCheck":
-		allOptions.SkipLibCheck = parseTristate(value)
+		allOptions.SkipLibCheck = ParseTristate(value)
 	case "noEmit":
-		allOptions.NoEmit = parseTristate(value)
+		allOptions.NoEmit = ParseTristate(value)
 	case "showConfig":
-		allOptions.ShowConfig = parseTristate(value)
+		allOptions.ShowConfig = ParseTristate(value)
 	case "configFilePath":
-		allOptions.ConfigFilePath = parseString(value)
+		allOptions.ConfigFilePath = ParseString(value)
 	case "noDtsResolution":
-		allOptions.NoDtsResolution = parseTristate(value)
+		allOptions.NoDtsResolution = ParseTristate(value)
 	case "pathsBasePath":
-		allOptions.PathsBasePath = parseString(value)
+		allOptions.PathsBasePath = ParseString(value)
 	case "outDir":
-		allOptions.OutDir = parseString(value)
+		allOptions.OutDir = ParseString(value)
 	case "newLine":
 		allOptions.NewLine = floatOrInt32ToFlag[core.NewLineKind](value)
 	case "watch":
-		allOptions.Watch = parseTristate(value)
+		allOptions.Watch = ParseTristate(value)
 	case "pprofDir":
-		allOptions.PprofDir = parseString(value)
+		allOptions.PprofDir = ParseString(value)
 	case "singleThreaded":
-		allOptions.SingleThreaded = parseTristate(value)
+		allOptions.SingleThreaded = ParseTristate(value)
 	case "quiet":
-		allOptions.Quiet = parseTristate(value)
+		allOptions.Quiet = ParseTristate(value)
 	default:
 		// different than any key above
 		return false
@@ -477,11 +477,11 @@ func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*
 			allOptions.FallbackPolling = value.(core.PollingKind)
 		}
 	case "synchronousWatchDirectory":
-		allOptions.SyncWatchDir = parseTristate(value)
+		allOptions.SyncWatchDir = ParseTristate(value)
 	case "excludeDirectories":
-		allOptions.ExcludeDir = parseStringArray(value)
+		allOptions.ExcludeDir = ParseStringArray(value)
 	case "excludeFiles":
-		allOptions.ExcludeFiles = parseStringArray(value)
+		allOptions.ExcludeFiles = ParseStringArray(value)
 	}
 	return nil
 }
@@ -495,13 +495,13 @@ func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisitio
 	}
 	switch key {
 	case "enable":
-		allOptions.Enable = parseTristate(value)
+		allOptions.Enable = ParseTristate(value)
 	case "include":
-		allOptions.Include = parseStringArray(value)
+		allOptions.Include = ParseStringArray(value)
 	case "exclude":
-		allOptions.Exclude = parseStringArray(value)
+		allOptions.Exclude = ParseStringArray(value)
 	case "disableFilenameBasedTypeAcquisition":
-		allOptions.DisableFilenameBasedTypeAcquisition = parseTristate(value)
+		allOptions.DisableFilenameBasedTypeAcquisition = ParseTristate(value)
 	}
 	return nil
 }
@@ -519,15 +519,15 @@ func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) []*
 	}
 	switch key {
 	case "clean":
-		allOptions.Clean = parseTristate(value)
+		allOptions.Clean = ParseTristate(value)
 	case "dry":
-		allOptions.Dry = parseTristate(value)
+		allOptions.Dry = ParseTristate(value)
 	case "force":
-		allOptions.Force = parseTristate(value)
+		allOptions.Force = ParseTristate(value)
 	case "stopBuildOnErrors":
-		allOptions.StopBuildOnErrors = parseTristate(value)
+		allOptions.StopBuildOnErrors = ParseTristate(value)
 	case "verbose":
-		allOptions.Verbose = parseTristate(value)
+		allOptions.Verbose = ParseTristate(value)
 	}
 	return nil
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Session) OpenProject(ctx context.Context, configFileName string) (*Project, error) {
-	fileChanges, overlays, ataChanges := s.flushChanges(ctx)
+	fileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
 	newSnapshot := s.UpdateSnapshot(ctx, overlays, SnapshotChange{
 		fileChanges: fileChanges,
 		ataChanges:  ataChanges,

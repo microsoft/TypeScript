@@ -31,12 +31,10 @@ func getImportDeclarationInsertIndex(sortedImports []*ast.Statement, newImport *
 // returns `-1` if `a` is better than `b`
 //
 //	note: this sorts in descending order of preference; different than convention in other cmp-like functions
-func compareModuleSpecifiers(
+func (l *LanguageService) compareModuleSpecifiers(
 	a *ImportFix, // !!! ImportFixWithModuleSpecifier
 	b *ImportFix, // !!! ImportFixWithModuleSpecifier
 	importingFile *ast.SourceFile, // | FutureSourceFile,
-	program *compiler.Program,
-	preferences UserPreferences,
 	allowsImportingSpecifier func(specifier string) bool,
 	toPath func(fileName string) tspath.Path,
 ) int {
@@ -49,10 +47,10 @@ func compareModuleSpecifiers(
 	); comparison != 0 {
 		return comparison
 	}
-	if comparison := compareModuleSpecifierRelativity(a, b, preferences); comparison != 0 {
+	if comparison := compareModuleSpecifierRelativity(a, b, l.UserPreferences()); comparison != 0 {
 		return comparison
 	}
-	if comparison := compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, program); comparison != 0 {
+	if comparison := compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, l.GetProgram()); comparison != 0 {
 		return comparison
 	}
 	if comparison := compareBooleans(isFixPossiblyReExportingImportingFile(a, importingFile.Path(), toPath), isFixPossiblyReExportingImportingFile(b, importingFile.Path(), toPath)); comparison != 0 {
@@ -75,7 +73,7 @@ func compareBooleans(a, b bool) int {
 }
 
 // returns `-1` if `a` is better than `b`
-func compareModuleSpecifierRelativity(a *ImportFix, b *ImportFix, preferences UserPreferences) int {
+func compareModuleSpecifierRelativity(a *ImportFix, b *ImportFix, preferences *UserPreferences) int {
 	switch preferences.ImportModuleSpecifierPreference {
 	case modulespecifiers.ImportModuleSpecifierPreferenceNonRelative, modulespecifiers.ImportModuleSpecifierPreferenceProjectRelative:
 		return compareBooleans(a.moduleSpecifierKind == modulespecifiers.ResultKindRelative, b.moduleSpecifierKind == modulespecifiers.ResultKindRelative)
@@ -292,8 +290,8 @@ func getImportSpecifierInsertionIndex(sortedImports []*ast.Node, newImport *ast.
 }
 
 // getOrganizeImportsStringComparerWithDetection detects the string comparer to use based on existing imports
-func getOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences *UserPreferences) (comparer func(a, b string) int, isSorted bool) {
-	result := detectModuleSpecifierCaseBySort([][]*ast.Statement{originalImportDecls}, getComparers(preferences))
+func (l *LanguageService) getOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement) (comparer func(a, b string) int, isSorted bool) {
+	result := detectModuleSpecifierCaseBySort([][]*ast.Statement{originalImportDecls}, getComparers(l.UserPreferences()))
 	return result.comparer, result.isSorted
 }
 
@@ -373,7 +371,8 @@ func measureSortedness[T any](arr []T, comparer func(a, b T) int) int {
 }
 
 // getNamedImportSpecifierComparerWithDetection detects the appropriate comparer for named imports
-func getNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, preferences *UserPreferences, sourceFile *ast.SourceFile) (specifierComparer func(s1, s2 *ast.Node) int, isSorted core.Tristate) {
+func (l *LanguageService) getNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFile *ast.SourceFile) (specifierComparer func(s1, s2 *ast.Node) int, isSorted core.Tristate) {
+	preferences := l.UserPreferences()
 	specifierComparer = getNamedImportSpecifierComparer(preferences, getComparers(preferences)[0])
 	// Try to detect from the current import declaration
 	if (preferences == nil || preferences.OrganizeImportsIgnoreCase.IsUnknown() || preferences.OrganizeImportsTypeOrder == OrganizeImportsTypeOrderLast) &&

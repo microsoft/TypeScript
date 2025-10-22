@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
@@ -33,6 +34,7 @@ type Snapshot struct {
 	ProjectCollection                  *ProjectCollection
 	ConfigFileRegistry                 *ConfigFileRegistry
 	compilerOptionsForInferredProjects *core.CompilerOptions
+	config                             Config
 
 	builderLogs *logging.LogTree
 	apiError    error
@@ -47,6 +49,7 @@ func NewSnapshot(
 	extendedConfigCache *extendedConfigCache,
 	configFileRegistry *ConfigFileRegistry,
 	compilerOptionsForInferredProjects *core.CompilerOptions,
+	config Config,
 	toPath func(fileName string) tspath.Path,
 ) *Snapshot {
 	s := &Snapshot{
@@ -59,6 +62,7 @@ func NewSnapshot(
 		ConfigFileRegistry:                 configFileRegistry,
 		ProjectCollection:                  &ProjectCollection{toPath: toPath},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
+		config:                             config,
 	}
 	s.converters = ls.NewConverters(s.sessionOptions.PositionEncoding, s.LSPLineMap)
 	s.refCount.Store(1)
@@ -87,6 +91,14 @@ func (s *Snapshot) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
 		return file.ECMALineInfo()
 	}
 	return nil
+}
+
+func (s *Snapshot) UserPreferences() *ls.UserPreferences {
+	return s.config.tsUserPreferences
+}
+
+func (s *Snapshot) FormatOptions() *format.FormatCodeSettings {
+	return s.config.formatOptions
 }
 
 func (s *Snapshot) Converters() *ls.Converters {
@@ -126,9 +138,17 @@ type SnapshotChange struct {
 	// It should only be set the value in the next snapshot should be changed. If nil, the
 	// value from the previous snapshot will be copied to the new snapshot.
 	compilerOptionsForInferredProjects *core.CompilerOptions
+	newConfig                          *Config
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
+}
+
+type Config struct {
+	tsUserPreferences *ls.UserPreferences
+	// jsUserPreferences *ls.UserPreferences
+	formatOptions *format.FormatCodeSettings
+	// tsserverOptions
 }
 
 // ATAStateChange represents a change to a project's ATA state.
@@ -245,6 +265,16 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		}
 	}
 
+	config := s.config
+	if change.newConfig != nil {
+		if change.newConfig.tsUserPreferences != nil {
+			config.tsUserPreferences = change.newConfig.tsUserPreferences.CopyOrDefault()
+		}
+		if change.newConfig.formatOptions != nil {
+			config.formatOptions = change.newConfig.formatOptions
+		}
+	}
+
 	snapshotFS, _ := fs.Finalize()
 	newSnapshot := NewSnapshot(
 		newSnapshotID,
@@ -254,6 +284,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		session.extendedConfigCache,
 		nil,
 		compilerOptionsForInferredProjects,
+		config,
 		s.toPath,
 	)
 	newSnapshot.parentId = s.id

@@ -43,6 +43,7 @@ type FourslashTest struct {
 	scriptInfos map[string]*scriptInfo
 	converters  *ls.Converters
 
+	userPreferences      *ls.UserPreferences
 	currentCaretPosition lsproto.Position
 	lastKnownMarkerName  *string
 	activeFilename       string
@@ -180,14 +181,15 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	})
 
 	f := &FourslashTest{
-		server:      server,
-		in:          inputWriter,
-		out:         outputReader,
-		testData:    &testData,
-		vfs:         fs,
-		scriptInfos: scriptInfos,
-		converters:  converters,
-		baselines:   make(map[string]*strings.Builder),
+		server:          server,
+		in:              inputWriter,
+		out:             outputReader,
+		testData:        &testData,
+		userPreferences: ls.NewDefaultUserPreferences(), // !!! parse default preferences for fourslash case?
+		vfs:             fs,
+		scriptInfos:     scriptInfos,
+		converters:      converters,
+		baselines:       make(map[string]*strings.Builder),
 	}
 
 	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
@@ -257,6 +259,12 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	if capabilitiesWithDefaults.TextDocument.Completion == nil {
 		capabilitiesWithDefaults.TextDocument.Completion = defaultCompletionCapabilities
 	}
+	if capabilitiesWithDefaults.Workspace == nil {
+		capabilitiesWithDefaults.Workspace = &lsproto.WorkspaceClientCapabilities{}
+	}
+	if capabilitiesWithDefaults.Workspace.Configuration == nil {
+		capabilitiesWithDefaults.Workspace.Configuration = ptrTrue
+	}
 	return &capabilitiesWithDefaults
 }
 
@@ -269,6 +277,29 @@ func sendRequest[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.
 	)
 	f.writeMsg(t, req.Message())
 	resp := f.readMsg(t)
+	if resp == nil {
+		return nil, *new(Resp), false
+	}
+
+	// currently, the only request that may be sent by the server during a client request is one `config` request
+	// !!! remove if `config` is handled in initialization and there are no other server-initiated requests
+	if resp.Kind == lsproto.MessageKindRequest {
+		req := resp.AsRequest()
+		switch req.Method {
+		case lsproto.MethodWorkspaceConfiguration:
+			req := lsproto.ResponseMessage{
+				ID:      req.ID,
+				JSONRPC: req.JSONRPC,
+				Result:  []any{f.userPreferences},
+			}
+			f.writeMsg(t, req.Message())
+			resp = f.readMsg(t)
+		default:
+			// other types of requests not yet used in fourslash; implement them if needed
+			t.Fatalf("Unexpected request received: %s", req.Method)
+		}
+	}
+
 	if resp == nil {
 		return nil, *new(Resp), false
 	}
@@ -299,6 +330,21 @@ func (f *FourslashTest) readMsg(t *testing.T) *lsproto.Message {
 	}
 	assert.NilError(t, json.MarshalWrite(io.Discard, msg), "failed to encode message as JSON")
 	return msg
+}
+
+func (f *FourslashTest) Configure(t *testing.T, config *ls.UserPreferences) {
+	f.userPreferences = config
+	sendNotification(t, f, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+		Settings: config,
+	})
+}
+
+func (f *FourslashTest) ConfigureWithReset(t *testing.T, config *ls.UserPreferences) (reset func()) {
+	originalConfig := f.userPreferences.Copy()
+	f.Configure(t, config)
+	return func() {
+		f.Configure(t, originalConfig)
+	}
 }
 
 func (f *FourslashTest) GoToMarkerOrRange(t *testing.T, markerOrRange MarkerOrRange) {
@@ -568,12 +614,16 @@ func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput,
 
 func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *CompletionsExpectedList) *lsproto.CompletionList {
 	prefix := f.getCurrentPositionPrefix()
-	list := f.getCompletions(t)
+	var userPreferences *ls.UserPreferences
+	if expected != nil {
+		userPreferences = expected.UserPreferences
+	}
+	list := f.getCompletions(t, userPreferences)
 	f.verifyCompletionsResult(t, list, expected, prefix)
 	return list
 }
 
-func (f *FourslashTest) getCompletions(t *testing.T) *lsproto.CompletionList {
+func (f *FourslashTest) getCompletions(t *testing.T, userPreferences *ls.UserPreferences) *lsproto.CompletionList {
 	prefix := f.getCurrentPositionPrefix()
 	params := &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
@@ -581,6 +631,10 @@ func (f *FourslashTest) getCompletions(t *testing.T) *lsproto.CompletionList {
 		},
 		Position: f.currentCaretPosition,
 		Context:  &lsproto.CompletionContext{},
+	}
+	if userPreferences != nil {
+		reset := f.ConfigureWithReset(t, userPreferences)
+		defer reset()
 	}
 	resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentCompletionInfo, params)
 	if resMsg == nil {
@@ -867,11 +921,22 @@ type ApplyCodeActionFromCompletionOptions struct {
 	Description     string
 	NewFileContent  *string
 	NewRangeContent *string
+	UserPreferences *ls.UserPreferences
 }
 
 func (f *FourslashTest) VerifyApplyCodeActionFromCompletion(t *testing.T, markerName *string, options *ApplyCodeActionFromCompletionOptions) {
 	f.GoToMarker(t, *markerName)
-	completionsList := f.getCompletions(t)
+	var userPreferences *ls.UserPreferences
+	if options != nil && options.UserPreferences != nil {
+		userPreferences = options.UserPreferences
+	} else {
+		// Default preferences: enables auto-imports
+		userPreferences = ls.NewDefaultUserPreferences()
+	}
+
+	reset := f.ConfigureWithReset(t, userPreferences)
+	defer reset()
+	completionsList := f.getCompletions(t, nil) // Already configured, so we do not need to pass it in again
 	item := core.Find(completionsList.Items, func(item *lsproto.CompletionItem) bool {
 		if item.Label != options.Name || item.Data == nil {
 			return false
@@ -1663,6 +1728,12 @@ func (f *FourslashTest) getCurrentPositionPrefix() string {
 }
 
 func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames []string) {
+	reset := f.ConfigureWithReset(t, &ls.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	})
+	defer reset()
+
 	for _, markerName := range markerNames {
 		f.GoToMarker(t, markerName)
 		params := &lsproto.CompletionParams{
