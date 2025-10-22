@@ -6,8 +6,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 )
 
-var BuildOpts = slices.Concat(commonOptionsWithBuild, optionsForBuild)
-
 var TscBuildOption = CommandLineOption{
 	Name:                     "build",
 	Kind:                     "boolean",
@@ -18,7 +16,7 @@ var TscBuildOption = CommandLineOption{
 	DefaultValueDescription:  false,
 }
 
-var optionsForBuild = []*CommandLineOption{
+var OptionsForBuild = []*CommandLineOption{
 	&TscBuildOption,
 	{
 		Name:                    "verbose",
@@ -59,3 +57,5 @@ var optionsForBuild = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 }
+
+var BuildOpts = slices.Concat(commonOptionsWithBuild, OptionsForBuild)

@@ -5,7 +5,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 )
 
-var optionsForWatch = []*CommandLineOption{
+var OptionsForWatch = []*CommandLineOption{
 	{
 		Name:     "watchInterval",
 		Kind:     CommandLineOptionTypeNumber,
