@@ -1,0 +1,37 @@
+literalIntersectionPropertyName.ts(24,7): error TS2322: Type '{ Foo: {}; }' is not assignable to type 'Provides<TypeID<Foo, "Foo">>'.
+  Types of property 'Foo' are incompatible.
+    Property 'foo' is missing in type '{}' but required in type 'Foo'.
+
+
+==== literalIntersectionPropertyName.ts (1 errors) ====
+    declare const typeKey: unique symbol;
+    
+    type TypeID<Type = unknown, ID extends string = string> = ID & { [typeKey]?: Type };
+    
+    function typeID<Type, ID extends string>(id: ID): TypeID<Type, ID> {
+      return id;
+    }
+    
+    type KeyOf<TID extends TypeID> = TID extends TypeID<any, infer ID> ? ID : never;
+    
+    type TypeOf<TID extends TypeID> = TID extends TypeID<infer Type> ? Type : never;
+    
+    type Provides<P extends TypeID> = { readonly [T in KeyOf<P>]: TypeOf<P> };
+    
+    // ---cut---
+    
+    interface Foo {
+        foo(): void;
+    }
+    
+    const Foo = typeID("Foo") satisfies TypeID<Foo>;
+    //    ^? const Foo: TypeID<Foo, "Foo">
+    
+    const Bar: Provides<typeof Foo> = {
+          ~~~
+!!! error TS2322: Type '{ Foo: {}; }' is not assignable to type 'Provides<TypeID<Foo, "Foo">>'.
+!!! error TS2322:   Types of property 'Foo' are incompatible.
+!!! error TS2322:     Property 'foo' is missing in type '{}' but required in type 'Foo'.
+!!! related TS2728 literalIntersectionPropertyName.ts:18:5: 'foo' is declared here.
+        [Foo]: {}
+    };
