@@ -1,0 +1,141 @@
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// /*FIND ALL REFS*/function [|f|]() {
+//     return 100;
+// }
+// 
+// export default [|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = [|f|]();
+// 
+// namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function /*FIND ALL REFS*/[|f|]() {
+//     return 100;
+// }
+// 
+// export default [|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = [|f|]();
+// 
+// namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function [|f|]() {
+//     return 100;
+// }
+// 
+// /*FIND ALL REFS*/export default [|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = [|f|]();
+// 
+// namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function [|f|]() {
+//     return 100;
+// }
+// 
+// export default /*FIND ALL REFS*/[|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = [|f|]();
+// 
+// namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function [|f|]() {
+//     return 100;
+// }
+// 
+// export default [|f|];
+// 
+// var x: typeof /*FIND ALL REFS*/[|f|];
+// 
+// var y = [|f|]();
+// 
+// namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function [|f|]() {
+//     return 100;
+// }
+// 
+// export default [|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = /*FIND ALL REFS*/[|f|]();
+// 
+// namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function [|f|]() {
+//     return 100;
+// }
+// 
+// export default [|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = [|f|]();
+// 
+// /*FIND ALL REFS*/namespace [|f|] {
+//     var local = 100;
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForDefaultExport03.ts ===
+// function [|f|]() {
+//     return 100;
+// }
+// 
+// export default [|f|];
+// 
+// var x: typeof [|f|];
+// 
+// var y = [|f|]();
+// 
+// namespace /*FIND ALL REFS*/[|f|] {
+//     var local = 100;
+// }
