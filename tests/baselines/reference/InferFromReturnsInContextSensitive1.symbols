@@ -1,0 +1,396 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/InferFromReturnsInContextSensitive1.ts] ////
+
+=== InferFromReturnsInContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60720
+
+type Options<TContext> = {
+>Options : Symbol(Options, Decl(InferFromReturnsInContextSensitive1.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 2, 13))
+
+  onStart?: () => TContext;
+>onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 2, 26))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 2, 13))
+
+  onEnd?: (context: TContext) => void;
+>onEnd : Symbol(onEnd, Decl(InferFromReturnsInContextSensitive1.ts, 3, 27))
+>context : Symbol(context, Decl(InferFromReturnsInContextSensitive1.ts, 4, 11))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 2, 13))
+
+};
+
+function create<TContext>(builder: (arg: boolean) => Options<TContext>) {
+>create : Symbol(create, Decl(InferFromReturnsInContextSensitive1.ts, 5, 2))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 7, 16))
+>builder : Symbol(builder, Decl(InferFromReturnsInContextSensitive1.ts, 7, 26))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 7, 36))
+>Options : Symbol(Options, Decl(InferFromReturnsInContextSensitive1.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 7, 16))
+
+  return builder(true);
+>builder : Symbol(builder, Decl(InferFromReturnsInContextSensitive1.ts, 7, 26))
+}
+
+create((arg) => ({
+>create : Symbol(create, Decl(InferFromReturnsInContextSensitive1.ts, 5, 2))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 11, 8))
+
+  onStart: () => ({ time: new Date() }),
+>onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 11, 18))
+>time : Symbol(time, Decl(InferFromReturnsInContextSensitive1.ts, 12, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  onEnd: (context) => {},
+>onEnd : Symbol(onEnd, Decl(InferFromReturnsInContextSensitive1.ts, 12, 40))
+>context : Symbol(context, Decl(InferFromReturnsInContextSensitive1.ts, 13, 10))
+
+}));
+
+create((arg) => ({
+>create : Symbol(create, Decl(InferFromReturnsInContextSensitive1.ts, 5, 2))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 16, 8))
+
+  onEnd: (context) => {},
+>onEnd : Symbol(onEnd, Decl(InferFromReturnsInContextSensitive1.ts, 16, 18))
+>context : Symbol(context, Decl(InferFromReturnsInContextSensitive1.ts, 17, 10))
+
+  onStart: () => ({ time: new Date() }),
+>onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 17, 25))
+>time : Symbol(time, Decl(InferFromReturnsInContextSensitive1.ts, 18, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+}));
+
+// https://github.com/microsoft/TypeScript/issues/57021
+
+type Schema = Record<string, unknown>;
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 19, 4))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
+>StepFunction : Symbol(StepFunction, Decl(InferFromReturnsInContextSensitive1.ts, 23, 38))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 18))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 19, 4))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 19, 4))
+>anything : Symbol(anything, Decl(InferFromReturnsInContextSensitive1.ts, 25, 54))
+
+  readonly schema: TSchema;
+>schema : Symbol(schema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 77))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 18))
+
+  readonly toAnswers?: (keys: keyof TSchema) => unknown;
+>toAnswers : Symbol(toAnswers, Decl(InferFromReturnsInContextSensitive1.ts, 26, 27))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 27, 24))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 18))
+
+};
+
+function step<TSchema extends Schema = Schema>(
+>step : Symbol(step, Decl(InferFromReturnsInContextSensitive1.ts, 28, 2))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 30, 14))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 19, 4))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 19, 4))
+
+  stepVal: StepFunction<TSchema>,
+>stepVal : Symbol(stepVal, Decl(InferFromReturnsInContextSensitive1.ts, 30, 47))
+>StepFunction : Symbol(StepFunction, Decl(InferFromReturnsInContextSensitive1.ts, 23, 38))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 30, 14))
+
+): StepFunction<TSchema> {
+>StepFunction : Symbol(StepFunction, Decl(InferFromReturnsInContextSensitive1.ts, 23, 38))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 30, 14))
+
+  return stepVal;
+>stepVal : Symbol(stepVal, Decl(InferFromReturnsInContextSensitive1.ts, 30, 47))
+}
+
+const stepResult1 = step((_something) => ({
+>stepResult1 : Symbol(stepResult1, Decl(InferFromReturnsInContextSensitive1.ts, 36, 5))
+>step : Symbol(step, Decl(InferFromReturnsInContextSensitive1.ts, 28, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 36, 26))
+
+  schema: {
+>schema : Symbol(schema, Decl(InferFromReturnsInContextSensitive1.ts, 36, 43))
+
+    attribute: "anything",
+>attribute : Symbol(attribute, Decl(InferFromReturnsInContextSensitive1.ts, 37, 11))
+
+  },
+  toAnswers: (keys) => {
+>toAnswers : Symbol(toAnswers, Decl(InferFromReturnsInContextSensitive1.ts, 39, 4))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 40, 14))
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : Symbol(Test, Decl(InferFromReturnsInContextSensitive1.ts, 40, 24))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 40, 14))
+
+    const test: Test = "true"; // ok
+>test : Symbol(test, Decl(InferFromReturnsInContextSensitive1.ts, 42, 9))
+>Test : Symbol(Test, Decl(InferFromReturnsInContextSensitive1.ts, 40, 24))
+
+    return { test };
+>test : Symbol(test, Decl(InferFromReturnsInContextSensitive1.ts, 43, 12))
+
+  },
+}));
+
+const stepResult2 = step((_something) => ({
+>stepResult2 : Symbol(stepResult2, Decl(InferFromReturnsInContextSensitive1.ts, 47, 5))
+>step : Symbol(step, Decl(InferFromReturnsInContextSensitive1.ts, 28, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 47, 26))
+
+  toAnswers: (keys) => {
+>toAnswers : Symbol(toAnswers, Decl(InferFromReturnsInContextSensitive1.ts, 47, 43))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 48, 14))
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : Symbol(Test, Decl(InferFromReturnsInContextSensitive1.ts, 48, 24))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 48, 14))
+
+    const test: Test = "true"; // ok
+>test : Symbol(test, Decl(InferFromReturnsInContextSensitive1.ts, 50, 9))
+>Test : Symbol(Test, Decl(InferFromReturnsInContextSensitive1.ts, 48, 24))
+
+    return { test };
+>test : Symbol(test, Decl(InferFromReturnsInContextSensitive1.ts, 51, 12))
+
+  },
+  schema: {
+>schema : Symbol(schema, Decl(InferFromReturnsInContextSensitive1.ts, 52, 4))
+
+    attribute: "anything",
+>attribute : Symbol(attribute, Decl(InferFromReturnsInContextSensitive1.ts, 53, 11))
+
+  },
+}));
+
+type Fn1<T, T2> = (anything: unknown) => {
+>Fn1 : Symbol(Fn1, Decl(InferFromReturnsInContextSensitive1.ts, 56, 4))
+>T : Symbol(T, Decl(InferFromReturnsInContextSensitive1.ts, 58, 9))
+>T2 : Symbol(T2, Decl(InferFromReturnsInContextSensitive1.ts, 58, 11))
+>anything : Symbol(anything, Decl(InferFromReturnsInContextSensitive1.ts, 58, 19))
+
+  stuff: T;
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 58, 42))
+>T : Symbol(T, Decl(InferFromReturnsInContextSensitive1.ts, 58, 9))
+
+  consume: (arg: T) => (anything: unknown) => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 59, 11))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 60, 12))
+>T : Symbol(T, Decl(InferFromReturnsInContextSensitive1.ts, 58, 9))
+>anything : Symbol(anything, Decl(InferFromReturnsInContextSensitive1.ts, 60, 24))
+
+    stuff2: T2;
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 60, 47))
+>T2 : Symbol(T2, Decl(InferFromReturnsInContextSensitive1.ts, 58, 11))
+
+    consume2: (arg: T2) => void;
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 61, 15))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 62, 15))
+>T2 : Symbol(T2, Decl(InferFromReturnsInContextSensitive1.ts, 58, 11))
+
+  };
+};
+
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>T : Symbol(T, Decl(InferFromReturnsInContextSensitive1.ts, 66, 23))
+>T2 : Symbol(T2, Decl(InferFromReturnsInContextSensitive1.ts, 66, 25))
+>fn : Symbol(fn, Decl(InferFromReturnsInContextSensitive1.ts, 66, 30))
+>Fn1 : Symbol(Fn1, Decl(InferFromReturnsInContextSensitive1.ts, 56, 4))
+>T : Symbol(T, Decl(InferFromReturnsInContextSensitive1.ts, 66, 23))
+>T2 : Symbol(T2, Decl(InferFromReturnsInContextSensitive1.ts, 66, 25))
+>T : Symbol(T, Decl(InferFromReturnsInContextSensitive1.ts, 66, 23))
+>T2 : Symbol(T2, Decl(InferFromReturnsInContextSensitive1.ts, 66, 25))
+
+const res1 = test1((_something) => ({
+>res1 : Symbol(res1, Decl(InferFromReturnsInContextSensitive1.ts, 68, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 68, 20))
+
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 68, 37))
+
+  consume: (arg) => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 69, 15))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 70, 12))
+
+    return (_something) => ({
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 71, 12))
+
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 71, 29))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 72, 17))
+>arg2 : Symbol(arg2, Decl(InferFromReturnsInContextSensitive1.ts, 73, 17))
+
+    });
+  },
+}));
+
+const res2 = test1((_something) => ({
+>res2 : Symbol(res2, Decl(InferFromReturnsInContextSensitive1.ts, 78, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 78, 20))
+
+  consume: (arg) => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 78, 37))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 79, 12))
+
+    return (_something) => ({
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 80, 12))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 80, 29))
+>arg2 : Symbol(arg2, Decl(InferFromReturnsInContextSensitive1.ts, 81, 17))
+
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 81, 29))
+
+    });
+  },
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 84, 4))
+
+}));
+
+const res3 = test1((_something) => ({
+>res3 : Symbol(res3, Decl(InferFromReturnsInContextSensitive1.ts, 88, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 88, 20))
+
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 88, 37))
+
+  consume: () => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 89, 15))
+
+    return (_something) => ({
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 91, 12))
+
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 91, 29))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 92, 17))
+>arg2 : Symbol(arg2, Decl(InferFromReturnsInContextSensitive1.ts, 93, 17))
+
+    });
+  },
+}));
+
+const res4 = test1((_something) => ({
+>res4 : Symbol(res4, Decl(InferFromReturnsInContextSensitive1.ts, 98, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 98, 20))
+
+  consume: () => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 98, 37))
+
+    return (_something) => ({
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 100, 12))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 100, 29))
+>arg2 : Symbol(arg2, Decl(InferFromReturnsInContextSensitive1.ts, 101, 17))
+
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 101, 29))
+
+    });
+  },
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 104, 4))
+
+}));
+
+const res5 = test1((_something) => ({
+>res5 : Symbol(res5, Decl(InferFromReturnsInContextSensitive1.ts, 108, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 108, 20))
+
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 108, 37))
+
+  consume: () => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 109, 15))
+
+    return () => ({
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 111, 19))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 112, 17))
+>arg2 : Symbol(arg2, Decl(InferFromReturnsInContextSensitive1.ts, 113, 17))
+
+    });
+  },
+}));
+
+const res6 = test1((_something) => ({
+>res6 : Symbol(res6, Decl(InferFromReturnsInContextSensitive1.ts, 118, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 118, 20))
+
+  consume: () => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 118, 37))
+
+    return () => ({
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 120, 19))
+>arg2 : Symbol(arg2, Decl(InferFromReturnsInContextSensitive1.ts, 121, 17))
+
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 121, 29))
+
+    });
+  },
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 124, 4))
+
+}));
+
+const res7 = test1((_something) => ({
+>res7 : Symbol(res7, Decl(InferFromReturnsInContextSensitive1.ts, 128, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 128, 20))
+
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 128, 37))
+
+  consume: () => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 129, 15))
+
+    return () => ({
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 131, 19))
+
+      consume2: () => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 132, 17))
+
+    });
+  },
+}));
+
+const res8 = test1((_something) => ({
+>res8 : Symbol(res8, Decl(InferFromReturnsInContextSensitive1.ts, 138, 5))
+>test1 : Symbol(test1, Decl(InferFromReturnsInContextSensitive1.ts, 64, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 138, 20))
+
+  consume: () => {
+>consume : Symbol(consume, Decl(InferFromReturnsInContextSensitive1.ts, 138, 37))
+
+    return () => ({
+      consume2: () => {},
+>consume2 : Symbol(consume2, Decl(InferFromReturnsInContextSensitive1.ts, 140, 19))
+
+      stuff2: 42,
+>stuff2 : Symbol(stuff2, Decl(InferFromReturnsInContextSensitive1.ts, 141, 25))
+
+    });
+  },
+  stuff: "foo",
+>stuff : Symbol(stuff, Decl(InferFromReturnsInContextSensitive1.ts, 144, 4))
+
+}));
+
