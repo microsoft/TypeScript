@@ -24,5 +24,7 @@ exports.Counter = Counter;
 const react_1 = require("react");
 function Counter({ count = 0 }) {
     const [cnt, setCnt] = null;
-    return (0, react_1.createElement)(react_1.Fragment, null, (0, react_1.createElement)("p", null, cnt), (0, react_1.createElement)("button", { onClick: () => setCnt((prev) => prev + 1), type: "button" }, "Update"));
+    return (0, react_1.createElement)(react_1.Fragment, null,
+        (0, react_1.createElement)("p", null, cnt),
+        (0, react_1.createElement)("button", { onClick: () => setCnt((prev) => prev + 1), type: "button" }, "Update"));
 }

@@ -75,4 +75,11 @@ const React = require("react");
 function MyComponent(props) {
     return React.createElement("div", null);
 }
-let x = (React.createElement("div", null, React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: "hooray" })));
+let x = (React.createElement("div", null,
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: "hooray" })));

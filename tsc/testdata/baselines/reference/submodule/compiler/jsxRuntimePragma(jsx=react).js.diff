@@ -8,11 +8,8 @@
 +const React = require("react");
  const HelloWorld = () => React.createElement("h1", null, "Hello world");
  exports.HelloWorld = HelloWorld;
--exports.frag = React.createElement(React.Fragment, null,
--    React.createElement("div", null));
-+exports.frag = React.createElement(React.Fragment, null, React.createElement("div", null));
- exports.selfClosing = React.createElement("img", { src: "./image.png" });
- //// [two.js]
+ exports.frag = React.createElement(React.Fragment, null,
+@@= skipped -10, +10 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
@@ -46,7 +43,7 @@
  //// [four.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -36, +35 lines =@@
+@@= skipped -26, +26 lines =@@
  /// <reference path="react16.d.ts" />
  /* @jsxRuntime automatic */
  /* @jsxRuntime classic */
@@ -54,9 +51,4 @@
 +const React = require("react");
  const HelloWorld = () => React.createElement("h1", null, "Hello world");
  exports.HelloWorld = HelloWorld;
--exports.frag = React.createElement(React.Fragment, null,
--    React.createElement("div", null));
-+exports.frag = React.createElement(React.Fragment, null, React.createElement("div", null));
- exports.selfClosing = React.createElement("img", { src: "./image.png" });
- //// [index.js]
- "use strict";
+ exports.frag = React.createElement(React.Fragment, null,

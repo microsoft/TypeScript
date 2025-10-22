@@ -8,4 +8,8 @@ declare var h: any;
 
 //// [jsxFactoryAndJsxFragmentFactoryNull.js]
 h(null, null);
-h(null, null, h("span", null, "1"), h(null, null, h("span", null, "2.1"), h("span", null, "2.2")));
+h(null, null,
+    h("span", null, "1"),
+    h(null, null,
+        h("span", null, "2.1"),
+        h("span", null, "2.2")));

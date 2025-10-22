@@ -18,4 +18,6 @@ let Foo = {
     Bar() { }
 };
 let Baz = () => { };
-let x = React.createElement(Foo.Bar, null, "Hello let y = ", React.createElement(Baz, null, "Hello"));
+let x = React.createElement(Foo.Bar, null,
+    "Hello let y = ",
+    React.createElement(Baz, null, "Hello"));

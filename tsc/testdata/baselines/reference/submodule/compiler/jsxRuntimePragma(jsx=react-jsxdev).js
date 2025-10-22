@@ -43,7 +43,8 @@ exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 const React = require("react");
 const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
-exports.frag = React.createElement(React.Fragment, null, React.createElement("div", null));
+exports.frag = React.createElement(React.Fragment, null,
+    React.createElement("div", null));
 exports.selfClosing = React.createElement("img", { src: "./image.png" });
 //// [two.js]
 "use strict";
@@ -78,7 +79,8 @@ exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 const React = require("react");
 const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
-exports.frag = React.createElement(React.Fragment, null, React.createElement("div", null));
+exports.frag = React.createElement(React.Fragment, null,
+    React.createElement("div", null));
 exports.selfClosing = React.createElement("img", { src: "./image.png" });
 //// [index.js]
 "use strict";

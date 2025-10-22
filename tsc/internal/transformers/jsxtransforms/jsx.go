@@ -319,8 +319,9 @@ func (tx *JSXTransformer) convertJsxChildrenToChildrenPropObject(children []*ast
 }
 
 func (tx *JSXTransformer) transformJsxChildToExpression(node *ast.Node) *ast.Node {
+	prev := tx.inJsxChild
 	tx.setInChild(true)
-	defer tx.setInChild(false)
+	defer tx.setInChild(prev)
 	return tx.Visitor().Visit(node)
 }
 
@@ -688,11 +689,15 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.N
 		for _, c := range children.Nodes {
 			res := tx.transformJsxChildToExpression(c)
 			if res != nil {
-				if len(children.Nodes) > 1 {
-					tx.EmitContext().AddEmitFlags(res, printer.EFStartOnNewLine)
-				}
 				newChildren = append(newChildren, res)
 			}
+		}
+	}
+
+	// Add StartOnNewLine flag only if there are multiple actual children (after filtering)
+	if len(newChildren) > 1 {
+		for _, child := range newChildren {
+			tx.EmitContext().AddEmitFlags(child, printer.EFStartOnNewLine)
 		}
 	}
 
@@ -725,11 +730,15 @@ func (tx *JSXTransformer) visitJsxOpeningFragmentCreateElement(fragment *ast.Jsx
 		for _, c := range children.Nodes {
 			res := tx.transformJsxChildToExpression(c)
 			if res != nil {
-				if len(children.Nodes) > 1 {
-					tx.EmitContext().AddEmitFlags(res, printer.EFStartOnNewLine)
-				}
 				newChildren = append(newChildren, res)
 			}
+		}
+	}
+
+	// Add StartOnNewLine flag only if there are multiple actual children (after filtering)
+	if len(newChildren) > 1 {
+		for _, child := range newChildren {
+			tx.EmitContext().AddEmitFlags(child, printer.EFStartOnNewLine)
 		}
 	}
 

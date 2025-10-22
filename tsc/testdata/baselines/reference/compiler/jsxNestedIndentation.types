@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsxNestedIndentation.tsx] ////
+
+=== jsxNestedIndentation.tsx ===
+declare var React: any;
+>React : any
+
+declare function Child(props: { children?: any }): any;
+>Child : (props: { children?: any; }) => any
+>props : { children?: any; }
+>children : any
+
+function Test() {
+>Test : () => any
+
+    return <Child>
+><Child>        <Child>            <Child></Child>        </Child>    </Child> : any
+>Child : (props: { children?: any; }) => any
+
+        <Child>
+><Child>            <Child></Child>        </Child> : any
+>Child : (props: { children?: any; }) => any
+
+            <Child></Child>
+><Child></Child> : any
+>Child : (props: { children?: any; }) => any
+>Child : (props: { children?: any; }) => any
+
+        </Child>
+>Child : (props: { children?: any; }) => any
+
+    </Child>
+>Child : (props: { children?: any; }) => any
+}
+

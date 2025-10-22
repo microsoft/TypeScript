@@ -26,13 +26,3 @@
  class SomeClass {
      f() {
          var rewrites1 = React.createElement("div", null, () => this);
-@@= skipped -21, +21 lines =@@
-     }
- }
- var whitespace1 = React.createElement("div", null, "      ");
--var whitespace2 = React.createElement("div", null,
--    "  ",
--    p,
--    "    ");
-+var whitespace2 = React.createElement("div", null, "  ", p, "    ");
- var whitespace3 = React.createElement("div", null, p);

@@ -28,5 +28,7 @@ console.log(
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 console.log(jsx_runtime_1.jsx("div", { children: jsx_runtime_1.jsx("div", {}) }));
-console.log(jsx_runtime_1.jsxs("div", { children: [jsx_runtime_1.jsx("div", {}), jsx_runtime_1.jsx("div", {})] }));
+console.log(jsx_runtime_1.jsxs("div", { children: [
+        jsx_runtime_1.jsx("div", {}), jsx_runtime_1.jsx("div", {})
+    ] }));
 console.log(jsx_runtime_1.jsx("div", { children: [1, 2].map(i => jsx_runtime_1.jsx("div", { children: i }, i)) }));

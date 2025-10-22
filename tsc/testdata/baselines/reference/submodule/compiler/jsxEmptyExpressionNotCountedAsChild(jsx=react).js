@@ -27,4 +27,5 @@ const React = require("react");
 function Wrapper(props) {
     return React.createElement("div", null, props.children);
 }
-const element = (React.createElement(Wrapper, null, React.createElement("div", null, "Hello")));
+const element = (React.createElement(Wrapper, null,
+    React.createElement("div", null, "Hello")));

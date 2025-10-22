@@ -34,7 +34,9 @@ export const InlineUnicodeChar = () => {
 };
 export const StandaloneUnicodeChar = () => {
     // This should reproduce the issue - unicode character on its own line
-    return (_jsxs("div", { children: [_jsx("span", { children: "\u26A0" }), "\u26A0"] }));
+    return (_jsxs("div", { children: [
+            _jsx("span", { children: "\u26A0" }),
+            "\u26A0"] }));
 };
 export const MultipleUnicodeChars = () => {
     // Test multiple unicode characters

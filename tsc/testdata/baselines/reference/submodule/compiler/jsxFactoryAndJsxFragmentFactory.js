@@ -9,4 +9,8 @@ declare var Frag: any;
 
 //// [jsxFactoryAndJsxFragmentFactory.js]
 h(Frag, null);
-h(Frag, null, h("span", null, "1"), h(Frag, null, h("span", null, "2.1"), h("span", null, "2.2")));
+h(Frag, null,
+    h("span", null, "1"),
+    h(Frag, null,
+        h("span", null, "2.1"),
+        h("span", null, "2.2")));
