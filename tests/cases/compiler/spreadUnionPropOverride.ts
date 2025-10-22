@@ -1,6 +1,6 @@
 // @strict: true
 
-// Repro from #61223
+// Repro from #62655
 type Thing = {
     id: string;
     label: string;

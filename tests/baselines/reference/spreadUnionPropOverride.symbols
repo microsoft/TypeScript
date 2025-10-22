@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/spreadUnionPropOverride.ts] ////
 
 === spreadUnionPropOverride.ts ===
-// Repro from #61223
+// Repro from #62655
 type Thing = {
 >Thing : Symbol(Thing, Decl(spreadUnionPropOverride.ts, 0, 0))
 

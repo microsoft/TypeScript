@@ -4,7 +4,7 @@ spreadUnionPropOverride.ts(63,5): error TS2783: 'name' is specified more than on
 
 
 ==== spreadUnionPropOverride.ts (3 errors) ====
-    // Repro from #61223
+    // Repro from #62655
     type Thing = {
         id: string;
         label: string;
