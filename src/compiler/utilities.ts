@@ -9023,31 +9023,21 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     esModuleInterop: {
-        dependencies: ["module", "target"],
+        dependencies: [],
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.esModuleInterop !== undefined) {
                 return compilerOptions.esModuleInterop;
             }
-            switch (_computedOptions.module.computeValue(compilerOptions)) {
-                case ModuleKind.Node16:
-                case ModuleKind.Node18:
-                case ModuleKind.Node20:
-                case ModuleKind.NodeNext:
-                case ModuleKind.Preserve:
-                    return true;
-            }
-            return false;
+            return true;
         },
     },
     allowSyntheticDefaultImports: {
-        dependencies: ["module", "target", "moduleResolution"],
+        dependencies: [],
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
                 return compilerOptions.allowSyntheticDefaultImports;
             }
-            return _computedOptions.esModuleInterop.computeValue(compilerOptions)
-                || _computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
-                || _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+            return true;
         },
     },
     resolvePackageJsonExports: {

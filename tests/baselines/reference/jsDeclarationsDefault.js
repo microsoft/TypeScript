@@ -68,8 +68,11 @@ exports.Bar = Foo;
 exports.X = Foo;
 //// [index4.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var index3_1 = require("./index3");
+var index3_1 = __importDefault(require("./index3"));
 class Bar extends index3_1.default {
     constructor() {
         super(...arguments);

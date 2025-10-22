@@ -24,8 +24,11 @@ var EnumExample;
 exports.default = EnumExample;
 //// [index.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var EnumExample_1 = require("./EnumExample");
+var EnumExample_1 = __importDefault(require("./EnumExample"));
 exports.default = {
     [EnumExample_1.default.TEST]: {},
 };
