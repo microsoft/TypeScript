@@ -8,7 +8,7 @@ for (let [x = 'a' in {}] in { '': 0 }) console.log(x)
 >'a' in {} : boolean
 >'a' : "a"
 >{} : {}
->{ '': 0 } : { "": number; }
+>{ '': 0 } : { '': number; }
 >'' : number
 >0 : 0
 >console.log(x) : void
@@ -22,7 +22,7 @@ for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
 >'a' in {} : boolean
 >'a' : "a"
 >{} : {}
->{ '': 0 } : { "": number; }
+>{ '': 0 } : { '': number; }
 >'' : number
 >0 : 0
 >console.log(x) : void

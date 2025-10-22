@@ -443,7 +443,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!) : any
 >html : any
 >'a' : "a"
->{ href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') } : { href: string; rel: string; "data-index": string; }
+>{ href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') } : { href: string; rel: string; 'data-index': string; }
 >href : string
 >`#${el.id}` : string
 >el.id : string

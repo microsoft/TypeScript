@@ -36,24 +36,24 @@ module JustStrings {
 >t2 : T2
 
     var a: { '1.': string; bar?: string }
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >'1.' : string
 >bar : string
 
     var b: { '1.0': string; baz?: string }
->b : { "1.0": string; baz?: string; }
+>b : { '1.0': string; baz?: string; }
 >'1.0' : string
 >baz : string
 
     var a2 = { '1.0': '' };
->a2 : { "1.0": string; }
->{ '1.0': '' } : { "1.0": string; }
+>a2 : { '1.0': string; }
+>{ '1.0': '' } : { '1.0': string; }
 >'1.0' : string
 >'' : ""
 
     var b2 = { '1': '' };
->b2 : { "1": string; }
->{ '1': '' } : { "1": string; }
+>b2 : { '1': string; }
+>{ '1': '' } : { '1': string; }
 >'1' : string
 >'' : ""
 
@@ -73,9 +73,9 @@ module JustStrings {
 >s2 : S2
 
     s = a2;
->s = a2 : { "1.0": string; }
+>s = a2 : { '1.0': string; }
 >s : S
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 
     s2 = t2;
 >s2 = t2 : T2
@@ -93,63 +93,63 @@ module JustStrings {
 >t : T
 
     s2 = b;
->s2 = b : { "1.0": string; baz?: string; }
+>s2 = b : { '1.0': string; baz?: string; }
 >s2 : S2
->b : { "1.0": string; baz?: string; }
+>b : { '1.0': string; baz?: string; }
 
     s2 = a2;
->s2 = a2 : { "1.0": string; }
+>s2 = a2 : { '1.0': string; }
 >s2 : S2
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 
     a = b;
->a = b : { "1.0": string; baz?: string; }
->a : { "1.": string; bar?: string; }
->b : { "1.0": string; baz?: string; }
+>a = b : { '1.0': string; baz?: string; }
+>a : { '1.': string; bar?: string; }
+>b : { '1.0': string; baz?: string; }
 
     b = a;
->b = a : { "1.": string; bar?: string; }
->b : { "1.0": string; baz?: string; }
->a : { "1.": string; bar?: string; }
+>b = a : { '1.': string; bar?: string; }
+>b : { '1.0': string; baz?: string; }
+>a : { '1.': string; bar?: string; }
 
     a = s;
 >a = s : S
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >s : S
 
     a = s2;
 >a = s2 : S2
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >s2 : S2
 
     a = a2;
->a = a2 : { "1.0": string; }
->a : { "1.": string; bar?: string; }
->a2 : { "1.0": string; }
+>a = a2 : { '1.0': string; }
+>a : { '1.': string; bar?: string; }
+>a2 : { '1.0': string; }
 
     a2 = b2;
->a2 = b2 : { "1": string; }
->a2 : { "1.0": string; }
->b2 : { "1": string; }
+>a2 = b2 : { '1': string; }
+>a2 : { '1.0': string; }
+>b2 : { '1': string; }
 
     b2 = a2;
->b2 = a2 : { "1.0": string; }
->b2 : { "1": string; }
->a2 : { "1.0": string; }
+>b2 = a2 : { '1.0': string; }
+>b2 : { '1': string; }
+>a2 : { '1.0': string; }
 
     a2 = b; // ok
->a2 = b : { "1.0": string; baz?: string; }
->a2 : { "1.0": string; }
->b : { "1.0": string; baz?: string; }
+>a2 = b : { '1.0': string; baz?: string; }
+>a2 : { '1.0': string; }
+>b : { '1.0': string; baz?: string; }
 
     a2 = t2; // ok
 >a2 = t2 : T2
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 >t2 : T2
 
     a2 = t;
 >a2 = t : T
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 >t : T
 }
 
@@ -185,7 +185,7 @@ module NumbersAndStrings {
 >t2 : T2
 
     var a: { '1.': string; bar?: string }
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >'1.' : string
 >bar : string
 
@@ -195,8 +195,8 @@ module NumbersAndStrings {
 >baz : string
 
     var a2 = { '1.0': '' };
->a2 : { "1.0": string; }
->{ '1.0': '' } : { "1.0": string; }
+>a2 : { '1.0': string; }
+>{ '1.0': '' } : { '1.0': string; }
 >'1.0' : string
 >'' : ""
 
@@ -222,9 +222,9 @@ module NumbersAndStrings {
 >s2 : S2
 
     s = a2; // error
->s = a2 : { "1.0": string; }
+>s = a2 : { '1.0': string; }
 >s : S
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 
     s2 = t2; // ok
 >s2 = t2 : T2
@@ -247,62 +247,62 @@ module NumbersAndStrings {
 >b : { 1: string; baz?: string; }
 
     s2 = a2; // error
->s2 = a2 : { "1.0": string; }
+>s2 = a2 : { '1.0': string; }
 >s2 : S2
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 
     a = b; // error
 >a = b : { 1: string; baz?: string; }
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >b : { 1: string; baz?: string; }
 
     b = a; // error
->b = a : { "1.": string; bar?: string; }
+>b = a : { '1.': string; bar?: string; }
 >b : { 1: string; baz?: string; }
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 
     a = s; // error
 >a = s : S
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >s : S
 
     a = s2; // error
 >a = s2 : S2
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >s2 : S2
 
     a = a2; // error
->a = a2 : { "1.0": string; }
->a : { "1.": string; bar?: string; }
->a2 : { "1.0": string; }
+>a = a2 : { '1.0': string; }
+>a : { '1.': string; bar?: string; }
+>a2 : { '1.0': string; }
 
     a = b2; // error
 >a = b2 : { 1: string; }
->a : { "1.": string; bar?: string; }
+>a : { '1.': string; bar?: string; }
 >b2 : { 1: string; }
 
     a2 = b2; // error
 >a2 = b2 : { 1: string; }
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 >b2 : { 1: string; }
 
     b2 = a2; // error
->b2 = a2 : { "1.0": string; }
+>b2 = a2 : { '1.0': string; }
 >b2 : { 1: string; }
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 
     a2 = b; // error
 >a2 = b : { 1: string; baz?: string; }
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 >b : { 1: string; baz?: string; }
 
     a2 = t2; // error
 >a2 = t2 : T2
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 >t2 : T2
 
     a2 = t; // error
 >a2 = t : T
->a2 : { "1.0": string; }
+>a2 : { '1.0': string; }
 >t : T
 }

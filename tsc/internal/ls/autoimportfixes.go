@@ -265,13 +265,16 @@ func (ct *changeTracker) makeImport(defaultImport *ast.IdentifierNode, namedImpo
 
 func (ct *changeTracker) getNewImports(
 	moduleSpecifier string,
-	// quotePreference quotePreference, // !!! quotePreference
+	quotePreference quotePreference,
 	defaultImport *Import,
 	namedImports []*Import,
 	namespaceLikeImport *Import, // { importKind: ImportKind.CommonJS | ImportKind.Namespace; }
 	compilerOptions *core.CompilerOptions,
 ) []*ast.Statement {
 	moduleSpecifierStringLiteral := ct.NodeFactory.NewStringLiteral(moduleSpecifier)
+	if quotePreference == quotePreferenceSingle {
+		moduleSpecifierStringLiteral.AsStringLiteral().TokenFlags |= ast.TokenFlagsSingleQuote
+	}
 	var statements []*ast.Statement // []AnyImportSyntax
 	if defaultImport != nil || len(namedImports) > 0 {
 		// `verbatimModuleSyntax` should prefer top-level `import type` -

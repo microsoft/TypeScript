@@ -47,8 +47,8 @@ var sameName4a = { get ''() { return ''; }, set ""(n) { var p = n; var p: string
 >p : string
 
 var sameName5a = { get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } };
->sameName5a : { "\t": string; }
->{ get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } } : { "\t": string; }
+>sameName5a : { '\t': string; }
+>{ get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } } : { '\t': string; }
 >'\t' : string
 >'' : ""
 >'\t' : string

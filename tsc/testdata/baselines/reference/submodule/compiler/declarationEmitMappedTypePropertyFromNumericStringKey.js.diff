@@ -1,9 +1,0 @@
---- old.declarationEmitMappedTypePropertyFromNumericStringKey.js
-+++ new.declarationEmitMappedTypePropertyFromNumericStringKey.js
-@@= skipped -11, +11 lines =@@
-
- //// [declarationEmitMappedTypePropertyFromNumericStringKey.d.ts]
- export declare const f: {
--    '0': string | number;
-+    "0": string | number;
- };

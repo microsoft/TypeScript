@@ -2,8 +2,8 @@
 
 === eslint.config.js ===
 const eslintReact = require('./eslint-plugin-react.js');
->eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
->require('./eslint-plugin-react.js') : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
+>eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>require('./eslint-plugin-react.js') : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
 >require : any
 >'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
 
@@ -18,7 +18,7 @@ tseslint.config(eslintReact)
 >tseslint.config : (...configs: import("typescript-eslint").Config[]) => void
 >tseslint : { config: (...configs: import("typescript-eslint").Config[]) => void; }
 >config : (...configs: import("typescript-eslint").Config[]) => void
->eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
+>eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
 
 === eslint-plugin-react.js ===
 const deprecatedRules = {
@@ -31,8 +31,8 @@ const deprecatedRules = {
 }
 
 const allRules = {
->allRules : { "no-unsafe": boolean; }
->{  'no-unsafe': true} : { "no-unsafe": boolean; }
+>allRules : { 'no-unsafe': boolean; }
+>{  'no-unsafe': true} : { 'no-unsafe': boolean; }
 
   'no-unsafe': true
 >'no-unsafe' : boolean
@@ -40,26 +40,26 @@ const allRules = {
 }
 
 module.exports = {
->module.exports = {  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
->module.exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
->module : { "export=": { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }; }
->exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
->{  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
+>module.exports = {  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>module.exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>module : { "export=": { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }; }
+>exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>{  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
 
   plugins: {
->plugins : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }
->{    react: {      deprecatedRules,      rules: allRules,    },  } : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }
+>plugins : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }
+>{    react: {      deprecatedRules,      rules: allRules,    },  } : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }
 
     react: {
->react : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }
->{      deprecatedRules,      rules: allRules,    } : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }
+>react : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }
+>{      deprecatedRules,      rules: allRules,    } : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }
 
       deprecatedRules,
 >deprecatedRules : { "jsx-sort-default-props": boolean; }
 
       rules: allRules,
->rules : { "no-unsafe": boolean; }
->allRules : { "no-unsafe": boolean; }
+>rules : { 'no-unsafe': boolean; }
+>allRules : { 'no-unsafe': boolean; }
 
     },
   },

@@ -1412,7 +1412,7 @@ func (l *LanguageService) codeActionForFixWorker(
 		if fix.useRequire {
 			declarations = changeTracker.getNewRequires(fix.moduleSpecifier, defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
 		} else {
-			declarations = changeTracker.getNewImports(fix.moduleSpecifier, defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
+			declarations = changeTracker.getNewImports(fix.moduleSpecifier, getQuotePreference(sourceFile, l.UserPreferences()), defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
 		}
 
 		changeTracker.insertImports(

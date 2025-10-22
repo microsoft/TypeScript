@@ -1,17 +1,6 @@
 --- old.objectLiteralGettersAndSetters.types
 +++ new.objectLiteralGettersAndSetters.types
-@@= skipped -46, +46 lines =@@
- >p : string
-
- var sameName5a = { get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } };
-->sameName5a : { '\t': string; }
-->{ get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } } : { '\t': string; }
-+>sameName5a : { "\t": string; }
-+>{ get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } } : { "\t": string; }
- >'\t' : string
- >'' : ""
- >'\t' : string
-@@= skipped -117, +117 lines =@@
+@@= skipped -163, +163 lines =@@
  >n : string
 
  var sameType2 = { get x(): Array<number> { return undefined; }, set x(n: number[]) { } };

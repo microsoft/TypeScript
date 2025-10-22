@@ -10,7 +10,7 @@ var a = {}["hello"];
 var b: string = { '': 'foo' }[''];
 >b : string
 >{ '': 'foo' }[''] : string
->{ '': 'foo' } : { "": string; }
+>{ '': 'foo' } : { '': string; }
 >'' : string
 >'foo' : "foo"
 >'' : ""

@@ -61,8 +61,8 @@ function noIndex() { }
 >noIndex : () => void
 
 var obj = {
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
->{    10: 'ten',    x: 'hello',    y: 32,    z: { n: 'world', m: 15, o: () => false },    'literal property': 100} : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>{    10: 'ten',    x: 'hello',    y: 32,    z: { n: 'world', m: 15, o: () => false },    'literal property': 100} : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 
     10: 'ten',
 >10 : string
@@ -107,7 +107,7 @@ var someObject: { name: string };
 obj.y = 4;
 >obj.y = 4 : 4
 >obj.y : number
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >y : number
 >4 : 4
 
@@ -123,7 +123,7 @@ anyVar.x = anyVar.y = obj.x = anyVar.z;
 >y : any
 >obj.x = anyVar.z : any
 >obj.x : string
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >x : string
 >anyVar.z : any
 >anyVar : any
@@ -133,28 +133,28 @@ anyVar.x = anyVar.y = obj.x = anyVar.z;
 var aa = obj.x;
 >aa : string
 >obj.x : string
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >x : string
 
 // Dotted property access of property that exists on value's apparent type
 var bb = obj.hasOwnProperty;
 >bb : (v: PropertyKey) => boolean
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >hasOwnProperty : (v: PropertyKey) => boolean
 
 // Dotted property access of property that doesn't exist on value's apparent type
 var cc = obj.qqq; // error
 >cc : any
 >obj.qqq : any
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >qqq : any
 
 // Bracket notation property access using string literal value on type with property of that literal name
 var dd = obj['literal property'];
 >dd : number
 >obj['literal property'] : number
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >'literal property' : "literal property"
 
 var dd: number;
@@ -164,7 +164,7 @@ var dd: number;
 var ee = obj['wa wa wa wa wa'];
 >ee : any
 >obj['wa wa wa wa wa'] : any
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >'wa wa wa wa wa' : "wa wa wa wa wa"
 
 var ee: any;
@@ -174,7 +174,7 @@ var ee: any;
 var ff = obj['10'];
 >ff : string
 >obj['10'] : string
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >'10' : "10"
 
 var ff: string;
@@ -184,7 +184,7 @@ var ff: string;
 var gg = obj['1'];
 >gg : any
 >obj['1'] : any
->obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; "literal property": number; }
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >'1' : "1"
 
 var gg: any;

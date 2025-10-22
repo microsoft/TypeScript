@@ -468,8 +468,27 @@ const (
 	quotePreferenceDouble
 )
 
-// !!!
-func getQuotePreference(file *ast.SourceFile, preferences *UserPreferences) quotePreference {
+func quotePreferenceFromString(str *ast.StringLiteral) quotePreference {
+	if str.TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+		return quotePreferenceSingle
+	}
+	return quotePreferenceDouble
+}
+
+func getQuotePreference(sourceFile *ast.SourceFile, preferences *UserPreferences) quotePreference {
+	if preferences.QuotePreference != "" && preferences.QuotePreference != "auto" {
+		if preferences.QuotePreference == "single" {
+			return quotePreferenceSingle
+		}
+		return quotePreferenceDouble
+	}
+	// ignore synthetic import added when importHelpers: true
+	firstModuleSpecifier := core.Find(sourceFile.Imports(), func(n *ast.Node) bool {
+		return ast.IsStringLiteral(n) && !ast.NodeIsSynthesized(n.Parent)
+	})
+	if firstModuleSpecifier != nil {
+		return quotePreferenceFromString(firstModuleSpecifier.AsStringLiteral())
+	}
 	return quotePreferenceDouble
 }
 
