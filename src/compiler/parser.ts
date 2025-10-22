@@ -9374,7 +9374,9 @@ namespace Parser {
 
             function tryParseTypeExpression(): JSDocTypeExpression | undefined {
                 skipWhitespaceOrAsterisk();
-                return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
+                if (token() === SyntaxKind.OpenBraceToken && !lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken)) {
+                    return parseJSDocTypeExpression();
+                }
             }
 
             function parseBracketNameInPropertyAndParamTag(): { name: EntityName; isBracketed: boolean; } {
