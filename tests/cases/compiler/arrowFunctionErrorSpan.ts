@@ -51,3 +51,7 @@ f(  // comment 1
 // body is not a block
 f(_ => 1 +
     2);
+
+f((): number => { });
+
+f((): number => '');
