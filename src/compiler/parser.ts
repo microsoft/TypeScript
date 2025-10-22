@@ -7677,7 +7677,9 @@ namespace Parser {
                 flags |= NodeFlags.Using;
                 break;
             case SyntaxKind.AwaitKeyword:
-                Debug.assert(isAwaitUsingDeclaration());
+                if (!isAwaitUsingDeclaration()) {
+                    break;
+                }
                 flags |= NodeFlags.AwaitUsing;
                 nextToken();
                 break;

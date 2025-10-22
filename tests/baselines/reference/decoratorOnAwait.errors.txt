@@ -1,0 +1,11 @@
+decoratorOnAwait.ts(4,7): error TS1134: Variable declaration expected.
+
+
+==== decoratorOnAwait.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    await 1
+          ~
+!!! error TS1134: Variable declaration expected.
+    
