@@ -24,8 +24,8 @@ declare let x2: { [P in string]: Item };
 >   : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x3: { [P in keyof any]: Item };
->x3 : { [x: string]: Item; }
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>x3 : { [x: string]: Item; [x: number]: Item; [x: symbol]: Item; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x4: ItemMap<any>;
 >x4 : ItemMap<any>
@@ -196,4 +196,73 @@ type Evolver<T extends Evolvable<any> = any> = {
 
   [key in keyof Partial<T>]: never;
 };
+
+// https://github.com/microsoft/TypeScript/issues/61203
+type Obj61203 = { [k in keyof any]: number };
+>Obj61203 : Obj61203
+>         : ^^^^^^^^
+
+declare const obj61203: Obj61203;
+>obj61203 : Obj61203
+>         : ^^^^^^^^
+
+declare const key61203: keyof Obj61203;
+>key61203 : string | number | symbol
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+obj61203[key61203]; // ok
+>obj61203[key61203] : number
+>                   : ^^^^^^
+>obj61203 : Obj61203
+>         : ^^^^^^^^
+>key61203 : string | number | symbol
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+// https://github.com/microsoft/TypeScript/issues/61203#issuecomment-2703862148
+type A<T> = { [k in keyof T]: 1 };
+>A : A<T>
+>  : ^^^^
+
+declare function iDontKnow<T>(a: T): [ A<T>, keyof T ];
+>iDontKnow : <T>(a: T) => [A<T>, keyof T]
+>          : ^ ^^ ^^ ^^^^^               
+>a : T
+>  : ^
+
+const something: any = { a: 1, b: 2 };
+>something : any
+>          : ^^^
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const [ o, k ] = iDontKnow(something);
+>o : A<any>
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>iDontKnow(something) : [A<any>, string | number | symbol]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iDontKnow : <T>(a: T) => [A<T>, keyof T]
+>          : ^ ^^ ^^ ^^^^^               
+>something : any
+>          : ^^^
+
+const v = o[k]; // ok
+>v : 1
+>  : ^
+>o[k] : 1
+>     : ^
+>o : A<any>
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
