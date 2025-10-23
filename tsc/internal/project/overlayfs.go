@@ -2,6 +2,7 @@ package project
 
 import (
 	"maps"
+	"strings"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -235,6 +236,10 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		} else {
 			events = &fileEvents{}
 			fileEventMap[uri] = events
+		}
+
+		if !result.IncludesWatchChangeOutsideNodeModules && change.Kind.IsWatchKind() && !strings.Contains(string(uri), "/node_modules/") {
+			result.IncludesWatchChangeOutsideNodeModules = true
 		}
 
 		switch change.Kind {

@@ -6,6 +6,8 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
+const excessiveChangeThreshold = 1000
+
 type FileChangeKind int
 
 const (
@@ -17,6 +19,10 @@ const (
 	FileChangeKindWatchChange
 	FileChangeKindWatchDelete
 )
+
+func (k FileChangeKind) IsWatchKind() bool {
+	return k == FileChangeKindWatchCreate || k == FileChangeKindWatchChange || k == FileChangeKindWatchDelete
+}
 
 type FileChange struct {
 	Kind         FileChangeKind
@@ -38,8 +44,20 @@ type FileChangeSummary struct {
 	Created collections.Set[lsproto.DocumentUri]
 	// Only set when file watching is enabled
 	Deleted collections.Set[lsproto.DocumentUri]
+
+	// IncludesWatchChangeOutsideNodeModules is true if the summary includes a create, change, or delete watch
+	// event of a file outside a node_modules directory.
+	IncludesWatchChangeOutsideNodeModules bool
 }
 
 func (f FileChangeSummary) IsEmpty() bool {
 	return f.Opened == "" && len(f.Closed) == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
+}
+
+func (f FileChangeSummary) HasExcessiveWatchEvents() bool {
+	return f.Created.Len()+f.Deleted.Len()+f.Changed.Len() > excessiveChangeThreshold
+}
+
+func (f FileChangeSummary) HasExcessiveNonCreateWatchEvents() bool {
+	return f.Deleted.Len()+f.Changed.Len() > excessiveChangeThreshold
 }

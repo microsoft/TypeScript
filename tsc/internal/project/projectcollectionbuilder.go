@@ -186,6 +186,18 @@ func (b *projectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 	logChangeFileResult(configChangeResult, configChangeLogger)
 
 	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		// Only consider change/delete; creates are handled by the config file registry
+		if summary.HasExcessiveNonCreateWatchEvents() {
+			entry.Change(func(p *Project) {
+				p.dirty = true
+				p.dirtyFilePath = ""
+				if logger != nil {
+					logger.Logf("Marking project as dirty due to excessive watch changes: %s", p.configFilePath)
+				}
+			})
+			return true
+		}
+
 		// Handle closed and changed files
 		b.markFilesChanged(entry, changedFiles, lsproto.FileChangeTypeChanged, logger)
 		if entry.Value().Kind == KindInferred && len(summary.Closed) > 0 {
@@ -617,7 +629,7 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 			return *fallback
 		}
 	}
-	if ancestorConfigName := b.configFileRegistryBuilder.getAncestorConfigFileName(fileName, path, configFileName, loadKind, logger); ancestorConfigName != "" {
+	if ancestorConfigName := b.configFileRegistryBuilder.getAncestorConfigFileName(fileName, path, configFileName, logger); ancestorConfigName != "" {
 		return b.findOrCreateDefaultConfiguredProjectWorker(
 			fileName,
 			path,
@@ -655,7 +667,7 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectForOpenSc
 		entry, _ := b.configuredProjects.Load(key)
 		return searchResult{project: entry}
 	}
-	if configFileName := b.configFileRegistryBuilder.getConfigFileNameForFile(fileName, path, loadKind, logger); configFileName != "" {
+	if configFileName := b.configFileRegistryBuilder.getConfigFileNameForFile(fileName, path, logger); configFileName != "" {
 		startTime := time.Now()
 		result := b.findOrCreateDefaultConfiguredProjectWorker(
 			fileName,

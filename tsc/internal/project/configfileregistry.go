@@ -19,6 +19,7 @@ type ConfigFileRegistry struct {
 }
 
 type configFileEntry struct {
+	fileName      string
 	pendingReload PendingReload
 	commandLine   *tsoptions.ParsedCommandLine
 	// retainingProjects is the set of projects that have called acquireConfig
@@ -46,6 +47,7 @@ type configFileEntry struct {
 
 func newConfigFileEntry(fileName string) *configFileEntry {
 	return &configFileEntry{
+		fileName:      fileName,
 		pendingReload: PendingReloadFull,
 		rootFilesWatch: NewWatchedFiles(
 			"root files for "+fileName,
@@ -55,8 +57,9 @@ func newConfigFileEntry(fileName string) *configFileEntry {
 	}
 }
 
-func newExtendedConfigFileEntry(extendingConfigPath tspath.Path) *configFileEntry {
+func newExtendedConfigFileEntry(fileName string, extendingConfigPath tspath.Path) *configFileEntry {
 	return &configFileEntry{
+		fileName:         fileName,
 		pendingReload:    PendingReloadFull,
 		retainingConfigs: map[tspath.Path]struct{}{extendingConfigPath: {}},
 	}
@@ -64,6 +67,7 @@ func newExtendedConfigFileEntry(extendingConfigPath tspath.Path) *configFileEntr
 
 func (e *configFileEntry) Clone() *configFileEntry {
 	return &configFileEntry{
+		fileName:      e.fileName,
 		pendingReload: e.pendingReload,
 		commandLine:   e.commandLine,
 		// !!! eagerly cloning these maps makes everything more convenient,

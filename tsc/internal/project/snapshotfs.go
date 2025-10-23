@@ -1,6 +1,7 @@
 package project
 
 import (
+	"strings"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -120,6 +121,42 @@ func (s *snapshotFSBuilder) GetFileByPath(fileName string, path tspath.Path) Fil
 		return nil
 	}
 	return entry.Value()
+}
+
+func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary) bool {
+	for uri := range change.Changed.Keys() {
+		path := s.toPath(uri.FileName())
+		if _, ok := s.diskFiles.Load(path); ok {
+			return true
+		}
+	}
+	for uri := range change.Deleted.Keys() {
+		path := s.toPath(uri.FileName())
+		if _, ok := s.diskFiles.Load(path); ok {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *snapshotFSBuilder) invalidateCache() {
+	s.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+		entry.Change(func(file *diskFile) {
+			file.needsReload = true
+		})
+		return true
+	})
+}
+
+func (s *snapshotFSBuilder) invalidateNodeModulesCache() {
+	s.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+		if strings.Contains(string(entry.Key()), "/node_modules/") {
+			entry.Change(func(file *diskFile) {
+				file.needsReload = true
+			})
+		}
+		return true
+	})
 }
 
 func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) {

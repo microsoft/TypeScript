@@ -194,7 +194,21 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 
 	start := time.Now()
 	fs := newSnapshotFSBuilder(session.fs.fs, overlays, s.fs.diskFiles, session.options.PositionEncoding, s.toPath)
-	fs.markDirtyFiles(change.fileChanges)
+	if change.fileChanges.HasExcessiveWatchEvents() {
+		invalidateStart := time.Now()
+		if !fs.watchChangesOverlapCache(change.fileChanges) {
+			change.fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
+			change.fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
+		} else if change.fileChanges.IncludesWatchChangeOutsideNodeModules {
+			fs.invalidateCache()
+			logger.Logf("Excessive watch changes detected, invalidated file cache in %v", time.Since(invalidateStart))
+		} else {
+			fs.invalidateNodeModulesCache()
+			logger.Logf("npm install detected, invalidated node_modules cache in %v", time.Since(invalidateStart))
+		}
+	} else {
+		fs.markDirtyFiles(change.fileChanges)
+	}
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {

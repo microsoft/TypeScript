@@ -127,6 +127,11 @@ func (m *Map[K, V]) Range(fn func(*MapEntry[K, V]) bool) {
 	}
 }
 
+func (m *Map[K, V]) Clear() {
+	m.dirty = make(map[K]*MapEntry[K, V])
+	m.base = make(map[K]V)
+}
+
 func (m *Map[K, V]) Finalize() (result map[K]V, changed bool) {
 	if len(m.dirty) == 0 {
 		return m.base, false // no changes, return base map
