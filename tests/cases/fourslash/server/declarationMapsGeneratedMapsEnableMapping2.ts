@@ -58,7 +58,7 @@
 //////# sourceMappingURL=index.js.map
 
 // @Filename: /home/src/workspaces/project/dist/index.d.ts.map
-////{"version":3,"file":"index.d.ts","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
+////{"version":3,"file":"index.d.ts","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;QAEK,CAAC;QAEL,CAAC;;QAAD,CAAC;QAFG,CAAC;;CAIpB;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
 
 // @Filename: /home/src/workspaces/project/dist/index.d.ts
 ////export declare class Foo {
