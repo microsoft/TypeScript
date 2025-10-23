@@ -147,7 +147,7 @@ Specify type package names to be included without being referenced in a source f
 [94m--allowJs[39m
 Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
-default: false
+default: `false`, unless `checkJs` is set
 
 [94m--checkJs[39m
 Enable error reporting in type-checked JavaScript files.
@@ -164,7 +164,7 @@ default: 0
 [94m--allowSyntheticDefaultImports[39m
 Allow 'import x from y' when a module doesn't have a default export.
 type: boolean
-default: module === "system" or esModuleInterop
+default: true
 
 [94m--erasableSyntaxOnly[39m
 Do not allow runtime constructs that are not part of ECMAScript.
@@ -174,7 +174,7 @@ default: false
 [94m--esModuleInterop[39m
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
-default: false
+default: true
 
 [94m--forceConsistentCasingInFileNames[39m
 Ensure that casing is correct in imports.

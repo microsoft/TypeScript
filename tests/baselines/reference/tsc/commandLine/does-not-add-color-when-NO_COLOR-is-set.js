@@ -120,7 +120,7 @@ default: undefined
 --allowJs
 Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
-default: false
+default: `false`, unless `checkJs` is set
 
 --checkJs
 Enable error reporting in type-checked JavaScript files.
@@ -154,7 +154,7 @@ Specify type package names to be included without being referenced in a source f
 --esModuleInterop
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
-default: false
+default: true
 
 You can learn about all of the compiler options at https://aka.ms/tsc
 

@@ -699,7 +699,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_checkJs_is_set,
     },
     {
         name: "checkJs",
@@ -1150,7 +1150,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export,
-        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop,
+        defaultValueDescription: true,
     },
     {
         name: "esModuleInterop",
@@ -1161,7 +1161,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "preserveSymlinks",
