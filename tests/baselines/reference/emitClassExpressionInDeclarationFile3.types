@@ -1,11 +1,11 @@
-//// [tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts] ////
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile3.ts] ////
 
-=== emitClassExpressionInDeclarationFile2.ts ===
+=== emitClassExpressionInDeclarationFile3.ts ===
 export var noPrivates = class {
 >noPrivates : typeof noPrivates
 >           : ^^^^^^^^^^^^^^^^^
->class {    static getTags() { }    tags() { }    private static ps = -1    private p = 12} : typeof noPrivates
->                                                                                           : ^^^^^^^^^^^^^^^^^
+>class {    static getTags() { }    tags() { }    static #ps = -1    #p = 12} : typeof noPrivates
+>                                                                             : ^^^^^^^^^^^^^^^^^
 
     static getTags() { }
 >getTags : () => void
@@ -15,22 +15,21 @@ export var noPrivates = class {
 >tags : () => void
 >     : ^^^^^^^^^^
 
-    private static ps = -1
->ps : number
->   : ^^^^^^
+    static #ps = -1
+>#ps : number
+>    : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
 
-    private p = 12
->p : number
->  : ^^^^^^
+    #p = 12
+>#p : number
+>   : ^^^^^^
 >12 : 12
 >   : ^^
 }
 
-// altered repro from #15066 to add private property
 export class FooItem {
 >FooItem : FooItem
 >        : ^^^^^^^
@@ -43,9 +42,9 @@ export class FooItem {
 >name : string
 >     : ^^^^^^
 
-    private property = "capitalism"
->property : string
->         : ^^^^^^
+    #property = "capitalism"
+>#property : string
+>          : ^^^^^^
 >"capitalism" : "capitalism"
 >             : ^^^^^^^^^^^^
 }
@@ -88,34 +87,6 @@ export class Test extends WithTags(FooItem) {}
 >FooItem : typeof FooItem
 >        : ^^^^^^^^^^^^^^
 
-const test = new Test();
->test : Test
->     : ^^^^
->new Test() : Test
->           : ^^^^
->Test : typeof Test
->     : ^^^^^^^^^^^
-
-Test.getTags()
->Test.getTags() : void
->               : ^^^^
->Test.getTags : () => void
->             : ^^^^^^    
->Test : typeof Test
->     : ^^^^^^^^^^^
->getTags : () => void
->        : ^^^^^^    
-
-test.tags();
->test.tags() : void
->            : ^^^^
->test.tags : () => void
->          : ^^^^^^    
->test : Test
->     : ^^^^
->tags : () => void
->     : ^^^^^^    
-
 export class Test2 {
 >Test2 : Test2
 >      : ^^^^^
@@ -123,12 +94,12 @@ export class Test2 {
   nested = class {
 >nested : typeof (Anonymous class)
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^
->class {    private prop = 42;  } : typeof (Anonymous class)
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    #prop = 42;  } : typeof (Anonymous class)
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
-    private prop = 42;
->prop : number
->     : ^^^^^^
+    #prop = 42;
+>#prop : number
+>      : ^^^^^^
 >42 : 42
 >   : ^^
   }

@@ -30,6 +30,12 @@ const test = new Test();
 Test.getTags()
 test.tags();
 
+export class Test2 {
+  nested = class {
+    private prop = 42;
+  }
+}
+
 
 //// [emitClassExpressionInDeclarationFile2.js]
 "use strict";
@@ -54,7 +60,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = exports.FooItem = exports.noPrivates = void 0;
+exports.Test2 = exports.Test = exports.FooItem = exports.noPrivates = void 0;
 exports.WithTags = WithTags;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
@@ -98,3 +104,15 @@ exports.Test = Test;
 var test = new Test();
 Test.getTags();
 test.tags();
+var Test2 = /** @class */ (function () {
+    function Test2() {
+        this.nested = /** @class */ (function () {
+            function class_3() {
+                this.prop = 42;
+            }
+            return class_3;
+        }());
+    }
+    return Test2;
+}());
+exports.Test2 = Test2;
