@@ -2726,7 +2726,8 @@ export function getJSDocCommentRanges(node: Node, text: string): CommentRange[] 
             node.kind === SyntaxKind.ArrowFunction ||
             node.kind === SyntaxKind.ParenthesizedExpression ||
             node.kind === SyntaxKind.VariableDeclaration ||
-            node.kind === SyntaxKind.ExportSpecifier) ?
+            node.kind === SyntaxKind.ExportSpecifier ||
+            node.kind === SyntaxKind.MappedType) ?
         concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
         getLeadingCommentRanges(text, node.pos);
     // True if the comment starts with '/**' but not if it is '/**/'
@@ -4581,6 +4582,7 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
         case SyntaxKind.VariableStatement:
         case SyntaxKind.WhileStatement:
         case SyntaxKind.WithStatement:
+        case SyntaxKind.MappedType:
             return true;
         default:
             return false;
