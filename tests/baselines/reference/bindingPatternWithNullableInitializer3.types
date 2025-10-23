@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/es6/destructuring/bindingPatternWithNullableInitializer3.ts] ////
+
+=== types.d.ts ===
+export declare function focus2({
+>focus2 : ({ emitSynthFocused, }?: { emitSynthFocused: boolean; }) => Promise<void>
+>       : ^                     ^^^                              ^^^^^             
+
+  emitSynthFocused,
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+}?: {
+  emitSynthFocused: boolean;
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+}): Promise<void>;
+
+export declare class View2 {
+>View2 : View2
+>      : ^^^^^
+
+  focus({ emitSynthFocused }?: {
+>focus : ({ emitSynthFocused }?: { emitSynthFocused: boolean; }) => Promise<void>
+>      : ^                    ^^^                              ^^^^^             
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+    emitSynthFocused: boolean;
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+  }): Promise<void>;
+}
+
