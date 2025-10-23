@@ -28,3 +28,6 @@ function doStuffWithCircle(arg: Circle | [Circle, (newValue: Circle) => void]) {
 function f1<T extends { a: "foo" } & { a: "bar" }>(x: T) {
   let [y] = x; // error
 }
+
+declare const o2: ({ a: "foo" } & { a: "bar" }) | ({ b: "qwe" } & { b: "rty" });
+const [el3] = o2; // error

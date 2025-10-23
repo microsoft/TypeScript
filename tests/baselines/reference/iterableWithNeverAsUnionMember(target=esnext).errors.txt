@@ -1,8 +1,9 @@
 iterableWithNeverAsUnionMember.ts(2,7): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
 iterableWithNeverAsUnionMember.ts(25,7): error TS2488: Type 'T' must have a '[Symbol.iterator]()' method that returns an iterator.
+iterableWithNeverAsUnionMember.ts(29,7): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== iterableWithNeverAsUnionMember.ts (2 errors) ====
+==== iterableWithNeverAsUnionMember.ts (3 errors) ====
     declare const o1: { a: "foo" } & { a: "bar" };
     const [el1] = o1; // error
           ~~~~~
@@ -34,3 +35,7 @@ iterableWithNeverAsUnionMember.ts(25,7): error TS2488: Type 'T' must have a '[Sy
 !!! error TS2488: Type 'T' must have a '[Symbol.iterator]()' method that returns an iterator.
     }
     
+    declare const o2: ({ a: "foo" } & { a: "bar" }) | ({ b: "qwe" } & { b: "rty" });
+    const [el3] = o2; // error
+          ~~~~~
+!!! error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.

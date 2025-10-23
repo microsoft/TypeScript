@@ -81,3 +81,14 @@ function f1<T extends { a: "foo" } & { a: "bar" }>(x: T) {
 >x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 23, 51))
 }
 
+declare const o2: ({ a: "foo" } & { a: "bar" }) | ({ b: "qwe" } & { b: "rty" });
+>o2 : Symbol(o2, Decl(iterableWithNeverAsUnionMember.ts, 27, 13))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 27, 20))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 27, 35))
+>b : Symbol(b, Decl(iterableWithNeverAsUnionMember.ts, 27, 52))
+>b : Symbol(b, Decl(iterableWithNeverAsUnionMember.ts, 27, 67))
+
+const [el3] = o2; // error
+>el3 : Symbol(el3, Decl(iterableWithNeverAsUnionMember.ts, 28, 7))
+>o2 : Symbol(o2, Decl(iterableWithNeverAsUnionMember.ts, 27, 13))
+

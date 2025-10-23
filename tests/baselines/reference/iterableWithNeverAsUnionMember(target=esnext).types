@@ -118,3 +118,21 @@ function f1<T extends { a: "foo" } & { a: "bar" }>(x: T) {
 >  : ^
 }
 
+declare const o2: ({ a: "foo" } & { a: "bar" }) | ({ b: "qwe" } & { b: "rty" });
+>o2 : never
+>   : ^^^^^
+>a : "foo"
+>  : ^^^^^
+>a : "bar"
+>  : ^^^^^
+>b : "qwe"
+>  : ^^^^^
+>b : "rty"
+>  : ^^^^^
+
+const [el3] = o2; // error
+>el3 : never
+>    : ^^^^^
+>o2 : never
+>   : ^^^^^
+
