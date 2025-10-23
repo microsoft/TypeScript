@@ -9,7 +9,7 @@
 // | ```tsx
 // | const a: () => number
 // | ```
-// | start https://vscode.dev/ | end
+// | start [end](https://vscode.dev/)
 // | ----------------------------------------------------------------------
 [
   {
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst a: () => number\n```\nstart https://vscode.dev/ | end"
+        "value": "```tsx\nconst a: () => number\n```\nstart [end](https://vscode.dev/)"
       }
     }
   }

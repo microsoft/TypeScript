@@ -8,7 +8,7 @@
 // | ```tsx
 // | (method) I.bar(): void
 // | ```
-// | `I`
+// | [I](file:///jsdocLink4.ts#1,15-1,16)
 // | ----------------------------------------------------------------------
 // }
 // /** {@link I} */
@@ -18,7 +18,7 @@
 // | ```tsx
 // | var n: number
 // | ```
-// | `I`
+// | [I](file:///jsdocLink4.ts#1,15-1,16)
 // | ----------------------------------------------------------------------
 // /**
 //  * A real, very serious {@link I to an interface}. Right there.
@@ -32,9 +32,9 @@
 // | ```tsx
 // | function f(x: any): void
 // | ```
-// | A real, very serious Ito an interface. Right there.
+// | A real, very serious [to an interface](file:///jsdocLink4.ts#1,15-1,16). Right there.
 // | 
-// | *@param* `x` — one Poshere too
+// | *@param* `x` — one [here too](file:///jsdocLink4.ts#14,6-14,9)
 // | ----------------------------------------------------------------------
 // type Pos = [number, number]
 [
@@ -51,7 +51,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.bar(): void\n```\n`I`"
+        "value": "```tsx\n(method) I.bar(): void\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
       }
     }
   },
@@ -68,7 +68,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar n: number\n```\n`I`"
+        "value": "```tsx\nvar n: number\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
       }
     }
   },
@@ -85,7 +85,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f(x: any): void\n```\nA real, very serious Ito an interface. Right there.\n\n*@param* `x` — one Poshere too"
+        "value": "```tsx\nfunction f(x: any): void\n```\nA real, very serious [to an interface](file:///jsdocLink4.ts#1,15-1,16). Right there.\n\n*@param* `x` — one [here too](file:///jsdocLink4.ts#14,6-14,9)"
       }
     }
   }

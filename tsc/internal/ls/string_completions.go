@@ -683,10 +683,10 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 	if completions == nil {
 		return item
 	}
-	return stringLiteralCompletionDetails(item, name, contextToken, completions, file, checker)
+	return l.stringLiteralCompletionDetails(item, name, contextToken, completions, file, checker)
 }
 
-func stringLiteralCompletionDetails(
+func (l *LanguageService) stringLiteralCompletionDetails(
 	item *lsproto.CompletionItem,
 	name string,
 	location *ast.Node,
@@ -706,7 +706,7 @@ func stringLiteralCompletionDetails(
 		properties := completion.fromProperties
 		for _, symbol := range properties.symbols {
 			if symbol.Name == name {
-				return createCompletionDetailsForSymbol(item, symbol, checker, location, nil /*actions*/)
+				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, nil /*actions*/)
 			}
 		}
 	case completion.fromTypes != nil:

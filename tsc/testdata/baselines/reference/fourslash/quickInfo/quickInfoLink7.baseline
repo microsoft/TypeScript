@@ -9,7 +9,7 @@
 // | ```tsx
 // | const B: 456
 // | ```
-// | See |        instead
+// | See | instead
 // | ----------------------------------------------------------------------
 [
   {
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst B: 456\n```\nSee |        instead"
+        "value": "```tsx\nconst B: 456\n```\nSee | instead"
       }
     }
   }

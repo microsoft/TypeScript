@@ -10,7 +10,7 @@
 // | ```tsx
 // | const B: 456
 // | ```
-// | See A|constant A instead
+// | See [constant A](file:///quickInfoLink6.ts#1,7-1,8) instead
 // | ----------------------------------------------------------------------
 [
   {
@@ -26,7 +26,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst B: 456\n```\nSee A|constant A instead"
+        "value": "```tsx\nconst B: 456\n```\nSee [constant A](file:///quickInfoLink6.ts#1,7-1,8) instead"
       }
     }
   }

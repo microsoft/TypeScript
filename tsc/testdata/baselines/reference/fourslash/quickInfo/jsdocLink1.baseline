@@ -16,14 +16,14 @@
 // | ```tsx
 // | function CC(): void
 // | ```
-// | `C`
+// | [C](file:///jsdocLink1.ts#1,7-1,8)
 // | 
-// | *@wat* — Makes a `C`. A default one.
-// | C()
-// | C|postfix text
-// | unformattedpostfix text
+// | *@wat* — Makes a [C](file:///jsdocLink1.ts#1,7-1,8). A default one.
+// | [C()](file:///jsdocLink1.ts#1,7-1,8)
+// | [postfix text](file:///jsdocLink1.ts#1,7-1,8)
+// | unformatted postfix text
 // | 
-// | *@see* — `C` its great
+// | *@see* — [C](file:///jsdocLink1.ts#1,7-1,8) its great
 // | 
 // | ----------------------------------------------------------------------
 // }
@@ -41,7 +41,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction CC(): void\n```\n`C`\n\n*@wat* — Makes a `C`. A default one.\nC()\nC|postfix text\nunformattedpostfix text\n\n*@see* — `C` its great\n"
+        "value": "```tsx\nfunction CC(): void\n```\n[C](file:///jsdocLink1.ts#1,7-1,8)\n\n*@wat* — Makes a [C](file:///jsdocLink1.ts#1,7-1,8). A default one.\n[C()](file:///jsdocLink1.ts#1,7-1,8)\n[postfix text](file:///jsdocLink1.ts#1,7-1,8)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink1.ts#1,7-1,8) its great\n"
       }
     }
   }

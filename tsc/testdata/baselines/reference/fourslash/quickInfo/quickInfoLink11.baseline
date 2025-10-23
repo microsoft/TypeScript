@@ -14,10 +14,10 @@
 // | ```tsx
 // | function f(): void
 // | ```
-// | https://vscode.dev
+// | [https://vscode.dev](https://vscode.dev)
 // | [link text]{https://vscode.dev}
-// | https://vscode.dev|link text
-// | https://vscode.dev link text
+// | [link text](https://vscode.dev)
+// | [link text](https://vscode.dev)
 // | ----------------------------------------------------------------------
 [
   {
@@ -33,7 +33,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f(): void\n```\nhttps://vscode.dev\n[link text]{https://vscode.dev}\nhttps://vscode.dev|link text\nhttps://vscode.dev link text"
+        "value": "```tsx\nfunction f(): void\n```\n[https://vscode.dev](https://vscode.dev)\n[link text]{https://vscode.dev}\n[link text](https://vscode.dev)\n[link text](https://vscode.dev)"
       }
     }
   }

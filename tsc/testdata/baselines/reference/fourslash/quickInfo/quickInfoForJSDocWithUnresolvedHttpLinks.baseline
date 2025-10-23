@@ -9,7 +9,7 @@
 // | ```
 // | 
 // | 
-// | *@see* — https://hva 
+// | *@see* — [https://hva](https://hva) 
 // | ----------------------------------------------------------------------
 // 
 // /** {@link https://hvaD} */
@@ -19,7 +19,7 @@
 // | ```tsx
 // | var see3: boolean
 // | ```
-// | https://hvaD
+// | [https://hvaD](https://hvaD)
 // | ----------------------------------------------------------------------
 [
   {
@@ -35,7 +35,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar see2: boolean\n```\n\n\n*@see* — https://hva "
+        "value": "```tsx\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva) "
       }
     }
   },
@@ -52,7 +52,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar see3: boolean\n```\nhttps://hvaD"
+        "value": "```tsx\nvar see3: boolean\n```\n[https://hvaD](https://hvaD)"
       }
     }
   }

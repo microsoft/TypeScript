@@ -27,7 +27,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
-	quickInfo, documentation := getQuickInfoAndDocumentation(c, node)
+	quickInfo, documentation := l.getQuickInfoAndDocumentation(c, node)
 	if quickInfo == "" {
 		return lsproto.HoverOrNull{}, nil
 	}
@@ -43,11 +43,11 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}, nil
 }
 
-func getQuickInfoAndDocumentation(c *checker.Checker, node *ast.Node) (string, string) {
-	return getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), getNodeForQuickInfo(node))
+func (l *LanguageService) getQuickInfoAndDocumentation(c *checker.Checker, node *ast.Node) (string, string) {
+	return l.getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), getNodeForQuickInfo(node))
 }
 
-func getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, string) {
+func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, string) {
 	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, symbol, node)
 	if quickInfo == "" {
 		return "", ""
@@ -55,7 +55,7 @@ func getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbo
 	var b strings.Builder
 	if declaration != nil {
 		if jsdoc := getJSDocOrTag(declaration); jsdoc != nil && !containsTypedefTag(jsdoc) {
-			writeComments(&b, jsdoc.Comments())
+			l.writeComments(&b, c, jsdoc.Comments())
 			if jsdoc.Kind == ast.KindJSDoc {
 				if tags := jsdoc.AsJSDoc().Tags; tags != nil {
 					for _, tag := range tags.Nodes {
@@ -90,7 +90,7 @@ func getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbo
 									b.WriteString("— ")
 								}
 							}
-							writeComments(&b, comments)
+							l.writeComments(&b, c, comments)
 						}
 					}
 				}
@@ -411,61 +411,90 @@ func writeCode(b *strings.Builder, lang string, code string) {
 	b.WriteByte('\n')
 }
 
-func writeComments(b *strings.Builder, comments []*ast.Node) {
+func (l *LanguageService) writeComments(b *strings.Builder, c *checker.Checker, comments []*ast.Node) {
 	for _, comment := range comments {
 		switch comment.Kind {
 		case ast.KindJSDocText:
 			b.WriteString(comment.Text())
-		case ast.KindJSDocLink:
-			name := comment.Name()
-			text := comment.AsJSDocLink().Text()
-			if name != nil {
-				if text == "" {
-					writeEntityName(b, name)
-				} else {
-					writeEntityNameParts(b, name)
-				}
-			}
-			b.WriteString(text)
+		case ast.KindJSDocLink, ast.KindJSDocLinkPlain:
+			l.writeJSDocLink(b, c, comment, false /*quote*/)
 		case ast.KindJSDocLinkCode:
-			// !!! TODO: This is a temporary placeholder implementation that needs to be updated later
-			name := comment.Name()
-			text := comment.AsJSDocLinkCode().Text()
-			if name != nil {
-				if text == "" {
-					writeEntityName(b, name)
-				} else {
-					writeEntityNameParts(b, name)
-				}
-			}
-			b.WriteString(text)
-		case ast.KindJSDocLinkPlain:
-			// !!! TODO: This is a temporary placeholder implementation that needs to be updated later
-			name := comment.Name()
-			text := comment.AsJSDocLinkPlain().Text()
-			if name != nil {
-				if text == "" {
-					writeEntityName(b, name)
-				} else {
-					writeEntityNameParts(b, name)
-				}
-			}
-			b.WriteString(text)
+			l.writeJSDocLink(b, c, comment, true /*quote*/)
 		}
 	}
+}
+
+func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker, link *ast.Node, quote bool) {
+	name := link.Name()
+	text := strings.Trim(link.Text(), " ")
+	if name == nil {
+		writeQuotedString(b, text, quote)
+		return
+	}
+	if ast.IsIdentifier(name) && (name.Text() == "http" || name.Text() == "https") && strings.HasPrefix(text, "://") {
+		linkText := name.Text() + text
+		linkUri := linkText
+		if commentPos := strings.IndexFunc(linkText, func(ch rune) bool { return ch == ' ' || ch == '|' }); commentPos >= 0 {
+			linkUri = linkText[:commentPos]
+			linkText = trimCommentPrefix(linkText[commentPos:])
+			if linkText == "" {
+				linkText = linkUri
+			}
+		}
+		writeMarkdownLink(b, linkText, linkUri, quote)
+		return
+	}
+	declarations := getDeclarationsFromLocation(c, name)
+	if len(declarations) != 0 {
+		declaration := declarations[0]
+		file := ast.GetSourceFileOfNode(declaration)
+		node := core.OrElse(ast.GetNameOfDeclaration(declaration), declaration)
+		loc := l.getMappedLocation(file.FileName(), createRangeFromNode(node, file))
+		prefixLen := core.IfElse(strings.HasPrefix(text, "()"), 2, 0)
+		linkText := trimCommentPrefix(text[prefixLen:])
+		if linkText == "" {
+			linkText = getEntityNameString(name) + text[:prefixLen]
+		}
+		linkUri := fmt.Sprintf("%s#%d,%d-%d,%d", loc.Uri, loc.Range.Start.Line+1, loc.Range.Start.Character+1, loc.Range.End.Line+1, loc.Range.End.Character+1)
+		writeMarkdownLink(b, linkText, linkUri, quote)
+		return
+	}
+	writeQuotedString(b, getEntityNameString(name)+" "+text, quote)
+}
+
+func trimCommentPrefix(text string) string {
+	return strings.TrimLeft(strings.TrimPrefix(strings.TrimLeft(text, " "), "|"), " ")
+}
+
+func writeMarkdownLink(b *strings.Builder, text string, uri string, quote bool) {
+	b.WriteString("[")
+	writeQuotedString(b, text, quote)
+	b.WriteString("](")
+	b.WriteString(uri)
+	b.WriteString(")")
 }
 
 func writeOptionalEntityName(b *strings.Builder, name *ast.Node) {
 	if name != nil {
 		b.WriteString(" ")
-		writeEntityName(b, name)
+		writeQuotedString(b, getEntityNameString(name), true /*quote*/)
 	}
 }
 
-func writeEntityName(b *strings.Builder, name *ast.Node) {
-	b.WriteString("`")
-	writeEntityNameParts(b, name)
-	b.WriteString("`")
+func writeQuotedString(b *strings.Builder, str string, quote bool) {
+	if quote && !strings.Contains(str, "`") {
+		b.WriteString("`")
+		b.WriteString(str)
+		b.WriteString("`")
+	} else {
+		b.WriteString(str)
+	}
+}
+
+func getEntityNameString(name *ast.Node) string {
+	var b strings.Builder
+	writeEntityNameParts(&b, name)
+	return b.String()
 }
 
 func writeEntityNameParts(b *strings.Builder, node *ast.Node) {
