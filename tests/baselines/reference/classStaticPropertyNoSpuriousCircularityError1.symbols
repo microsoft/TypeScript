@@ -44,3 +44,12 @@ Foo2.foo // number
 >Foo2 : Symbol(Foo2, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 5))
 >foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 23))
 
+const Foo3 = id(class {
+>Foo3 : Symbol(Foo3, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 18, 5))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+  static readonly foo = [42];
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 18, 23))
+
+});
+

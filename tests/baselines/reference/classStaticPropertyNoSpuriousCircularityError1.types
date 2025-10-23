@@ -74,3 +74,23 @@ Foo2.foo // number
 >foo : number
 >    : ^^^^^^
 
+const Foo3 = id(class {
+>Foo3 : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id(class {  static readonly foo = [42];}) : typeof (Anonymous class)
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>class {  static readonly foo = [42];} : typeof (Anonymous class)
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  static readonly foo = [42];
+>foo : number[]
+>    : ^^^^^^^^
+>[42] : number[]
+>     : ^^^^^^^^
+>42 : 42
+>   : ^^
+
+});
+

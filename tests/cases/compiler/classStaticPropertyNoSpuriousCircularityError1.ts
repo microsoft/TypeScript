@@ -18,3 +18,7 @@ const Foo2 = id(class {
 })
 
 Foo2.foo // number
+
+const Foo3 = id(class {
+  static readonly foo = [42];
+});
