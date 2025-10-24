@@ -242,7 +242,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                             ]),
                         ),
                     ],
-                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                    NodeFlags.Const,
                 ),
             );
             importRequireStatements = [importStatement, requireStatement];
@@ -277,7 +277,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                                     createRequireCall(node),
                                 ),
                             ],
-                            /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                            NodeFlags.Const,
                         ),
                     ),
                     node,
@@ -331,7 +331,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     function visitExportDeclaration(node: ExportDeclaration) {
         const updatedModuleSpecifier = rewriteModuleSpecifier(node.moduleSpecifier, compilerOptions);
         if (
-            (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015)
+            compilerOptions.module !== undefined
             || !node.exportClause || !isNamespaceExport(node.exportClause) || !node.moduleSpecifier
         ) {
             // Either ill-formed or don't need to be tranformed.
