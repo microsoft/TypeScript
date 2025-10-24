@@ -47,7 +47,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {Null} */
 // var Nl;
-//     ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var Nl: Null
@@ -74,7 +74,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {Object} */
 // var Obj;
-//     ^
+//     ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var Obj: Object
@@ -83,7 +83,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {Function} */
 // var Func;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var Func: Function
@@ -92,7 +92,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {*} */
 // var AnyType;
-//     ^
+//     ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var AnyType: any
@@ -101,7 +101,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {?} */
 // var QType;
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var QType: any
@@ -110,7 +110,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {String|Number} */
 // var SOrN;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var SOrN: Number | String
@@ -132,6 +132,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar S: String\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
       }
     }
   },
@@ -149,6 +159,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar N: Number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 5
+        }
       }
     }
   },
@@ -166,6 +186,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar B: Boolean\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 5
+        }
       }
     }
   },
@@ -183,6 +213,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar V: Void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 4
+        },
+        "end": {
+          "line": 7,
+          "character": 5
+        }
       }
     }
   },
@@ -200,6 +240,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar U: Undefined\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 4
+        },
+        "end": {
+          "line": 9,
+          "character": 5
+        }
       }
     }
   },
@@ -217,6 +267,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar Nl: Null\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 6
+        }
       }
     }
   },
@@ -234,6 +294,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar A: any[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 5
+        }
       }
     }
   },
@@ -251,6 +321,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar P: Promise<any>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 5
+        }
       }
     }
   },
@@ -268,6 +348,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar Obj: Object\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 7
+        }
       }
     }
   },
@@ -285,6 +375,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar Func: Function\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 4
+        },
+        "end": {
+          "line": 19,
+          "character": 8
+        }
       }
     }
   },
@@ -302,6 +402,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar AnyType: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 4
+        },
+        "end": {
+          "line": 21,
+          "character": 11
+        }
       }
     }
   },
@@ -319,6 +429,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar QType: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 4
+        },
+        "end": {
+          "line": 23,
+          "character": 9
+        }
       }
     }
   },
@@ -336,6 +456,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar SOrN: Number | String\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 4
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
       }
     }
   }

@@ -149,6 +149,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 8
+        },
+        "end": {
+          "line": 5,
+          "character": 9
+        }
       }
     }
   },
@@ -166,6 +176,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 8
+        },
+        "end": {
+          "line": 13,
+          "character": 9
+        }
       }
     }
   },
@@ -183,6 +203,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 8
+        },
+        "end": {
+          "line": 21,
+          "character": 9
+        }
       }
     }
   },
@@ -200,6 +230,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+      },
+      "range": {
+        "start": {
+          "line": 28,
+          "character": 8
+        },
+        "end": {
+          "line": 28,
+          "character": 9
+        }
       }
     }
   },
@@ -217,6 +257,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D\n"
+      },
+      "range": {
+        "start": {
+          "line": 38,
+          "character": 8
+        },
+        "end": {
+          "line": 38,
+          "character": 9
+        }
       }
     }
   },
@@ -234,6 +284,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      },
+      "range": {
+        "start": {
+          "line": 40,
+          "character": 8
+        },
+        "end": {
+          "line": 40,
+          "character": 9
+        }
       }
     }
   },
@@ -251,6 +311,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+      },
+      "range": {
+        "start": {
+          "line": 41,
+          "character": 8
+        },
+        "end": {
+          "line": 41,
+          "character": 9
+        }
       }
     }
   },
@@ -268,6 +338,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      },
+      "range": {
+        "start": {
+          "line": 42,
+          "character": 8
+        },
+        "end": {
+          "line": 42,
+          "character": 9
+        }
       }
     }
   },
@@ -285,6 +365,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D\n"
+      },
+      "range": {
+        "start": {
+          "line": 43,
+          "character": 8
+        },
+        "end": {
+          "line": 43,
+          "character": 9
+        }
       }
     }
   }

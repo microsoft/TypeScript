@@ -11,7 +11,7 @@
 //  * @see {@link C} its great
 //  */
 // function CC() {
-//          ^
+//          ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function CC(): void
@@ -42,6 +42,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction CC(): void\n```\n[C](file:///jsdocLink1.ts#1,7-1,8)\n\n*@wat* — Makes a [C](file:///jsdocLink1.ts#1,7-1,8). A default one.\n[C()](file:///jsdocLink1.ts#1,7-1,8)\n[postfix text](file:///jsdocLink1.ts#1,7-1,8)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink1.ts#1,7-1,8) its great\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 11
+        }
       }
     }
   }

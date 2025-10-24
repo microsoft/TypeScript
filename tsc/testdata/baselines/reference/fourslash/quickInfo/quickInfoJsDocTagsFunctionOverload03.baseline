@@ -1,7 +1,7 @@
 // === QuickInfo ===
 === /quickInfoJsDocTagsFunctionOverload03.ts ===
 // declare function foo(): void;
-//                  ^
+//                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
@@ -15,7 +15,7 @@
 //  * @tag Tag text
 //  */
 // declare function foo(x: number): void
-//                  ^
+//                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
@@ -38,6 +38,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 17
+        },
+        "end": {
+          "line": 0,
+          "character": 20
+        }
       }
     }
   },
@@ -55,6 +65,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 17
+        },
+        "end": {
+          "line": 6,
+          "character": 20
+        }
       }
     }
   }

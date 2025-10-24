@@ -3,7 +3,7 @@
 // /**
 //  * Bar comment
 //  * @typedef {Object} Bar
-//                      ^
+//                      ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type Bar = { baz: string; qux: string; }
@@ -17,7 +17,7 @@
 // /**
 //  * foo comment
 //  * @param {Bar} x - x comment
-//            ^
+//            ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type Bar = { baz: string; qux: string; }
@@ -44,6 +44,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 21
+        },
+        "end": {
+          "line": 2,
+          "character": 24
+        }
       }
     }
   },
@@ -61,6 +71,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 11
+        },
+        "end": {
+          "line": 9,
+          "character": 14
+        }
       }
     }
   }

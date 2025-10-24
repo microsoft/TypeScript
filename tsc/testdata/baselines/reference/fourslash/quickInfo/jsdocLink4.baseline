@@ -3,7 +3,7 @@
 // declare class I {
 //   /** {@link I} */
 //   bar(): void
-//      ^
+//   ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I.bar(): void
@@ -13,7 +13,7 @@
 // }
 // /** {@link I} */
 // var n = 1
-//      ^
+//     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var n: number
@@ -27,7 +27,7 @@
 // function f(x) {
 // }
 // f()
-//  ^
+// ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function f(x: any): void
@@ -52,6 +52,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I.bar(): void\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 2
+        },
+        "end": {
+          "line": 2,
+          "character": 5
+        }
       }
     }
   },
@@ -69,6 +79,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar n: number\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 5
+        }
       }
     }
   },
@@ -86,6 +106,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f(x: any): void\n```\nA real, very serious [to an interface](file:///jsdocLink4.ts#1,15-1,16). Right there.\n\n*@param* `x` — one [here too](file:///jsdocLink4.ts#14,6-14,9)"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 0
+        },
+        "end": {
+          "line": 12,
+          "character": 1
+        }
       }
     }
   }

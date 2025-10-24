@@ -2,7 +2,7 @@
 === /quickInfoDisplayPartsParameters.ts ===
 // /** @return *crunch* */
 // function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
-//          ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
@@ -11,28 +11,28 @@
 // | 
 // | *@return* — *crunch* 
 // | ----------------------------------------------------------------------
-//              ^
+//              ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) param: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                             ^
+//                             ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) optionalParam: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                                                     ^
+//                                                     ^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) paramWithInitializer: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                                                                                        ^
+//                                                                                        ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) restParam: string[]
@@ -40,7 +40,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     param = "Hello";
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) param: string
@@ -48,7 +48,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     optionalParam = "World";
-//     ^
+//     ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) optionalParam: string
@@ -56,7 +56,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     paramWithInitializer = "Hello";
-//     ^
+//     ^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) paramWithInitializer: string
@@ -64,7 +64,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     restParam[0] = "World";
-//     ^
+//     ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) restParam: string[]
@@ -87,6 +87,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
       }
     }
   },
@@ -104,6 +114,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) param: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 13
+        },
+        "end": {
+          "line": 1,
+          "character": 18
+        }
       }
     }
   },
@@ -121,6 +141,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) optionalParam: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 28
+        },
+        "end": {
+          "line": 1,
+          "character": 41
+        }
       }
     }
   },
@@ -138,6 +168,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) paramWithInitializer: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 52
+        },
+        "end": {
+          "line": 1,
+          "character": 72
+        }
       }
     }
   },
@@ -155,6 +195,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) restParam: string[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 87
+        },
+        "end": {
+          "line": 1,
+          "character": 96
+        }
       }
     }
   },
@@ -172,6 +222,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) param: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 9
+        }
       }
     }
   },
@@ -189,6 +249,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) optionalParam: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 17
+        }
       }
     }
   },
@@ -206,6 +276,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) paramWithInitializer: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 4
+        },
+        "end": {
+          "line": 4,
+          "character": 24
+        }
       }
     }
   },
@@ -223,6 +303,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) restParam: string[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 13
+        }
       }
     }
   }

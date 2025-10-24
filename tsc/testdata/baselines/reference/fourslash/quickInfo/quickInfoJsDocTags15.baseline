@@ -3,7 +3,7 @@
 // import * as _a from "./a.js";
 // /**
 //  * @implements {_a.Foo}
-//                       ^
+//                    ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type Foo = { getName: _a.Bar; }
@@ -15,7 +15,7 @@
 // 
 // /**
 //  * @extends {_a.Foo}
-//                    ^
+//                 ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type Foo = { getName: _a.Bar; }
@@ -27,7 +27,7 @@
 // 
 // /**
 //  * @augments {_a.Foo}
-//                     ^
+//                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type Foo = { getName: _a.Bar; }
@@ -51,6 +51,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype Foo = { getName: _a.Bar; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 19
+        },
+        "end": {
+          "line": 2,
+          "character": 22
+        }
       }
     }
   },
@@ -68,6 +78,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype Foo = { getName: _a.Bar; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 16
+        },
+        "end": {
+          "line": 7,
+          "character": 19
+        }
       }
     }
   },
@@ -85,6 +105,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype Foo = { getName: _a.Bar; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 17
+        },
+        "end": {
+          "line": 12,
+          "character": 20
+        }
       }
     }
   }

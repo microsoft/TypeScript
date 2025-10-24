@@ -11,7 +11,7 @@
 // 
 // class B extends A {
 //     override foo() { }
-//              ^
+//              ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) B.foo(): void
@@ -22,7 +22,7 @@
 // 
 // class C extends B {
 //     override foo() { }
-//              ^
+//              ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.foo(): void
@@ -45,6 +45,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) B.foo(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 16
+        }
       }
     }
   },
@@ -62,6 +72,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.foo(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 13
+        },
+        "end": {
+          "line": 14,
+          "character": 16
+        }
       }
     }
   }

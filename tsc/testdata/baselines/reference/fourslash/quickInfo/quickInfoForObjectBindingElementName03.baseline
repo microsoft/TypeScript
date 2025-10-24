@@ -9,7 +9,7 @@
 // 
 // function f({ foo }: Options) {
 //     foo;
-//        ^
+//     ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var foo: string
@@ -32,6 +32,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar foo: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 4
+        },
+        "end": {
+          "line": 8,
+          "character": 7
+        }
       }
     }
   }

@@ -4,7 +4,7 @@
 //   interface IntrinsicElements { [elemName: string]: any; }
 // }
 // <div class="democlass" />;
-//  ^
+//  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | any
@@ -26,6 +26,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 1
+        },
+        "end": {
+          "line": 3,
+          "character": 4
+        }
       }
     }
   }

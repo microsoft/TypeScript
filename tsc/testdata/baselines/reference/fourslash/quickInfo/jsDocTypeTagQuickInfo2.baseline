@@ -47,7 +47,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {null} */
 // var nl;
-//     ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var nl: null
@@ -74,7 +74,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {?number} */
 // var nullable;
-//     ^
+//     ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var nullable: number
@@ -83,7 +83,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {function} */
 // var func;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var func: function
@@ -92,7 +92,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {function (number): number} */
 // var func1;
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var func1: function
@@ -101,7 +101,7 @@
 // | ----------------------------------------------------------------------
 // /** @type {string | number} */
 // var sOrn;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var sOrn: string | number
@@ -123,6 +123,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar s: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
       }
     }
   },
@@ -140,6 +150,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar n: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 5
+        }
       }
     }
   },
@@ -157,6 +177,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar b: boolean\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 5
+        }
       }
     }
   },
@@ -174,6 +204,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar v: void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 4
+        },
+        "end": {
+          "line": 7,
+          "character": 5
+        }
       }
     }
   },
@@ -191,6 +231,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar u: undefined\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 4
+        },
+        "end": {
+          "line": 9,
+          "character": 5
+        }
       }
     }
   },
@@ -208,6 +258,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar nl: null\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 6
+        }
       }
     }
   },
@@ -225,6 +285,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar a: array\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 5
+        }
       }
     }
   },
@@ -242,6 +312,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar p: promise\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 5
+        }
       }
     }
   },
@@ -259,6 +339,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar nullable: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 12
+        }
       }
     }
   },
@@ -276,6 +366,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar func: function\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 4
+        },
+        "end": {
+          "line": 19,
+          "character": 8
+        }
       }
     }
   },
@@ -293,6 +393,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar func1: function\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 4
+        },
+        "end": {
+          "line": 21,
+          "character": 9
+        }
       }
     }
   },
@@ -310,6 +420,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar sOrn: string | number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 4
+        },
+        "end": {
+          "line": 23,
+          "character": 8
+        }
       }
     }
   }

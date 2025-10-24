@@ -1,7 +1,7 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsUsing.ts ===
 // using a = "a";
-//        ^
+//       ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | using a: "a"
@@ -33,6 +33,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nusing a: \"a\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 6
+        },
+        "end": {
+          "line": 0,
+          "character": 7
+        }
       }
     }
   },
@@ -50,6 +60,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nawait using b: { [Symbol.asyncDispose](): Promise<void>; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 16
+        },
+        "end": {
+          "line": 2,
+          "character": 17
+        }
       }
     }
   }

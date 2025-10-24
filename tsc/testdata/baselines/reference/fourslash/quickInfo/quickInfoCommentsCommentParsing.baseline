@@ -5,7 +5,7 @@
 // }
 // 
 // simple( );
-//    ^
+// ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function simple(): void
@@ -19,7 +19,7 @@
 // function multiLine() {
 // }
 // multiLine( );
-//    ^
+// ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function multiLine(): void
@@ -31,7 +31,7 @@
 // function jsDocSingleLine() {
 // }
 // jsDocSingleLine();
-//      ^
+// ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocSingleLine(): void
@@ -46,7 +46,7 @@
 // function jsDocMultiLine() {
 // }
 // jsDocMultiLine();
-//       ^
+// ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMultiLine(): void
@@ -64,7 +64,7 @@
 // function jsDocMultiLineMerge() {
 // }
 // jsDocMultiLineMerge();
-//        ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMultiLineMerge(): void
@@ -78,7 +78,7 @@
 // function jsDocMixedComments1() {
 // }
 // jsDocMixedComments1();
-//         ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMixedComments1(): void
@@ -91,7 +91,7 @@
 // function jsDocMixedComments2() {
 // }
 // jsDocMixedComments2();
-//        ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMixedComments2(): void
@@ -104,7 +104,7 @@
 // function jsDocMixedComments3() {
 // }
 // jsDocMixedComments3();
-//          ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMixedComments3(): void
@@ -118,7 +118,7 @@
 // function jsDocMixedComments4() {
 // }
 // jsDocMixedComments4();
-//           ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMixedComments4(): void
@@ -133,7 +133,7 @@
 // function jsDocMixedComments5() {
 // }
 // jsDocMixedComments5();
-//       ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMixedComments5(): void
@@ -149,7 +149,7 @@
 // function jsDocMixedComments6() {
 // }
 // jsDocMixedComments6();
-//         ^
+// ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocMixedComments6(): void
@@ -161,7 +161,7 @@
 // function noHelpComment1() {
 // }
 // noHelpComment1();
-//      ^
+// ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function noHelpComment1(): void
@@ -173,7 +173,7 @@
 // function noHelpComment2() {
 // }
 // noHelpComment2();
-//        ^
+// ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function noHelpComment2(): void
@@ -184,7 +184,7 @@
 // function noHelpComment3() {
 // }
 // noHelpComment3();
-//        ^
+// ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function noHelpComment3(): void
@@ -215,7 +215,7 @@
 //     return a + b;
 // }
 // sum(10, 20);
-//  ^
+// ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function sum(a: number, b: number): number
@@ -274,7 +274,7 @@
 // | ----------------------------------------------------------------------
 // }
 // multiply(10, 20, 30, 40, 50);
-//     ^
+// ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function multiply(a: number, b: number, c?: number, d?: any, e?: any): void
@@ -322,7 +322,7 @@
 //     return aOrb;
 // }
 // f1(10);
-//  ^
+// ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function f1(a: number): any
@@ -333,7 +333,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // f1("hello");
-//  ^
+// ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function f1(b: string): any
@@ -398,7 +398,7 @@
 // | ----------------------------------------------------------------------
 // }
 // subtract(10,  20,  null,  null,  null, null);
-//     ^
+// ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
@@ -439,7 +439,7 @@
 //     return a * a;
 // }
 // square(10);
-//    ^
+// ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function square(a: number): number
@@ -479,7 +479,7 @@
 // | ----------------------------------------------------------------------
 // }
 // divide(10, 20);
-//    ^
+// ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function divide(a: number, b: number): void
@@ -501,7 +501,7 @@
 // @param		    {string}		bar		is second string
 // */
 // function fooBar(foo: string, bar: string) {
-//                 ^
+//                 ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) foo: string
@@ -509,7 +509,7 @@
 // | is string
 // | 
 // | ----------------------------------------------------------------------
-//                              ^
+//                              ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) bar: string
@@ -520,7 +520,7 @@
 //     return foo + bar;
 // }
 // fooBar("foo","bar");
-//   ^
+// ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function fooBar(foo: string, bar: string): string
@@ -576,7 +576,7 @@
 //     return a + b + c + d;
 // }
 // jsDocParamTest(30, 40, 50, 60);
-//    ^
+// ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocParamTest(a: number, b: number, c: number, d: number): number
@@ -595,7 +595,7 @@
 // function jsDocCommentAlignmentTest1() {
 // }
 // jsDocCommentAlignmentTest1();
-//         ^
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocCommentAlignmentTest1(): void
@@ -609,7 +609,7 @@
 // function jsDocCommentAlignmentTest2() {
 // }
 // jsDocCommentAlignmentTest2();
-//           ^
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocCommentAlignmentTest2(): void
@@ -660,7 +660,7 @@
 // | ----------------------------------------------------------------------
 // }
 // jsDocCommentAlignmentTest3("hello",1, 2);
-//           ^
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function jsDocCommentAlignmentTest3(a: string, b: any, c: any): void
@@ -688,7 +688,7 @@
 // | No quickinfo at /**/.
 // | ----------------------------------------------------------------------
 // class NoQuickInfoClass {
-//             ^
+//       ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class NoQuickInfoClass
@@ -711,6 +711,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction simple(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 0
+        },
+        "end": {
+          "line": 4,
+          "character": 6
+        }
       }
     }
   },
@@ -728,6 +738,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction multiLine(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 0
+        },
+        "end": {
+          "line": 11,
+          "character": 9
+        }
       }
     }
   },
@@ -745,6 +765,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocSingleLine(): void\n```\nthis is eg of single line jsdoc style comment"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 15
+        }
       }
     }
   },
@@ -762,6 +792,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMultiLine(): void\n```\nthis is multiple line jsdoc stule comment\nNew line1\nNew Line2"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 0
+        },
+        "end": {
+          "line": 24,
+          "character": 14
+        }
       }
     }
   },
@@ -779,6 +819,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMultiLineMerge(): void\n```\nAnother this one too"
+      },
+      "range": {
+        "start": {
+          "line": 33,
+          "character": 0
+        },
+        "end": {
+          "line": 33,
+          "character": 19
+        }
       }
     }
   },
@@ -796,6 +846,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMixedComments1(): void\n```\njsdoc comment"
+      },
+      "range": {
+        "start": {
+          "line": 40,
+          "character": 0
+        },
+        "end": {
+          "line": 40,
+          "character": 19
+        }
       }
     }
   },
@@ -813,6 +873,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMixedComments2(): void\n```\nanother jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 46,
+          "character": 0
+        },
+        "end": {
+          "line": 46,
+          "character": 19
+        }
       }
     }
   },
@@ -830,6 +900,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMixedComments3(): void\n```\n* triplestar jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 52,
+          "character": 0
+        },
+        "end": {
+          "line": 52,
+          "character": 19
+        }
       }
     }
   },
@@ -847,6 +927,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMixedComments4(): void\n```\nanother jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 59,
+          "character": 0
+        },
+        "end": {
+          "line": 59,
+          "character": 19
+        }
       }
     }
   },
@@ -864,6 +954,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMixedComments5(): void\n```\nanother jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 67,
+          "character": 0
+        },
+        "end": {
+          "line": 67,
+          "character": 19
+        }
       }
     }
   },
@@ -881,6 +981,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocMixedComments6(): void\n```\njsdoc comment"
+      },
+      "range": {
+        "start": {
+          "line": 76,
+          "character": 0
+        },
+        "end": {
+          "line": 76,
+          "character": 19
+        }
       }
     }
   },
@@ -898,6 +1008,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction noHelpComment1(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 81,
+          "character": 0
+        },
+        "end": {
+          "line": 81,
+          "character": 14
+        }
       }
     }
   },
@@ -915,6 +1035,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction noHelpComment2(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 86,
+          "character": 0
+        },
+        "end": {
+          "line": 86,
+          "character": 14
+        }
       }
     }
   },
@@ -932,6 +1062,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction noHelpComment3(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 90,
+          "character": 0
+        },
+        "end": {
+          "line": 90,
+          "character": 14
+        }
       }
     }
   },
@@ -949,6 +1089,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\nfirst number\n"
+      },
+      "range": {
+        "start": {
+          "line": 95,
+          "character": 13
+        },
+        "end": {
+          "line": 95,
+          "character": 14
+        }
       }
     }
   },
@@ -966,6 +1116,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: number\n```\nsecond number\n"
+      },
+      "range": {
+        "start": {
+          "line": 95,
+          "character": 24
+        },
+        "end": {
+          "line": 95,
+          "character": 25
+        }
       }
     }
   },
@@ -983,6 +1143,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction sum(a: number, b: number): number\n```\nAdds two integers and returns the result\n\n*@param* `a` — first number\n\n\n*@param* `b` — second number\n"
+      },
+      "range": {
+        "start": {
+          "line": 98,
+          "character": 0
+        },
+        "end": {
+          "line": 98,
+          "character": 3
+        }
       }
     }
   },
@@ -1000,6 +1170,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\nfirst number\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 18
+        },
+        "end": {
+          "line": 106,
+          "character": 19
+        }
       }
     }
   },
@@ -1017,6 +1197,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 29
+        },
+        "end": {
+          "line": 106,
+          "character": 30
+        }
       }
     }
   },
@@ -1034,6 +1224,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) c: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 40
+        },
+        "end": {
+          "line": 106,
+          "character": 41
+        }
       }
     }
   },
@@ -1051,6 +1251,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) d: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 52
+        },
+        "end": {
+          "line": 106,
+          "character": 53
+        }
       }
     }
   },
@@ -1068,6 +1278,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) e: any\n```\nLastParam "
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 56
+        },
+        "end": {
+          "line": 106,
+          "character": 57
+        }
       }
     }
   },
@@ -1085,6 +1305,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction multiply(a: number, b: number, c?: number, d?: any, e?: any): void\n```\nThis is multiplication function\n\n*@param* ``\n\n*@param* `a` — first number\n\n\n*@param* `b`\n\n*@param* `c`\n\n*@param* `d`\n\n*@anotherTag*\n\n*@param* `e` — LastParam \n\n*@anotherTag*"
+      },
+      "range": {
+        "start": {
+          "line": 108,
+          "character": 0
+        },
+        "end": {
+          "line": 108,
+          "character": 8
+        }
       }
     }
   },
@@ -1102,6 +1332,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 112,
+          "character": 12
+        },
+        "end": {
+          "line": 112,
+          "character": 13
+        }
       }
     }
   },
@@ -1119,6 +1359,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 113,
+          "character": 12
+        },
+        "end": {
+          "line": 113,
+          "character": 13
+        }
       }
     }
   },
@@ -1136,6 +1386,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f1(a: number): any\n```\nfn f1 with number\n\n*@param* `b` — about b\n"
+      },
+      "range": {
+        "start": {
+          "line": 118,
+          "character": 0
+        },
+        "end": {
+          "line": 118,
+          "character": 2
+        }
       }
     }
   },
@@ -1153,6 +1413,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f1(b: string): any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 119,
+          "character": 0
+        },
+        "end": {
+          "line": 119,
+          "character": 2
+        }
       }
     }
   },
@@ -1170,6 +1440,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 18
+        },
+        "end": {
+          "line": 129,
+          "character": 19
+        }
       }
     }
   },
@@ -1187,6 +1467,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: number\n```\nthis is about b\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 29
+        },
+        "end": {
+          "line": 129,
+          "character": 30
+        }
       }
     }
   },
@@ -1204,6 +1494,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) c: () => string\n```\nthis is optional param c\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 40
+        },
+        "end": {
+          "line": 129,
+          "character": 41
+        }
       }
     }
   },
@@ -1221,6 +1521,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) d: () => string\n```\nthis is optional param d\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 58
+        },
+        "end": {
+          "line": 129,
+          "character": 59
+        }
       }
     }
   },
@@ -1238,6 +1548,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) e: () => string\n```\nthis is optional param e\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 76
+        },
+        "end": {
+          "line": 129,
+          "character": 77
+        }
       }
     }
   },
@@ -1255,6 +1575,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) f: () => string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 94
+        },
+        "end": {
+          "line": 129,
+          "character": 95
+        }
       }
     }
   },
@@ -1272,6 +1602,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void\n```\nThis is subtract function\n\n*@param* ``\n\n*@param* `b` — this is about b\n\n\n*@param* `c` — this is optional param c\n\n\n*@param* `d` — this is optional param d\n\n\n*@param* `e` — this is optional param e\n\n\n*@param* `` — { () => string; } } f this is optional param f\n"
+      },
+      "range": {
+        "start": {
+          "line": 131,
+          "character": 0
+        },
+        "end": {
+          "line": 131,
+          "character": 8
+        }
       }
     }
   },
@@ -1289,6 +1629,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\nthis is input number\n"
+      },
+      "range": {
+        "start": {
+          "line": 137,
+          "character": 16
+        },
+        "end": {
+          "line": 137,
+          "character": 17
+        }
       }
     }
   },
@@ -1306,6 +1656,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction square(a: number): number\n```\nthis is square function\n\n*@paramTag* — { number } a this is input number of paramTag\n\n\n*@param* `a` — this is input number\n\n\n*@returnType* — { number } it is return type\n"
+      },
+      "range": {
+        "start": {
+          "line": 140,
+          "character": 0
+        },
+        "end": {
+          "line": 140,
+          "character": 6
+        }
       }
     }
   },
@@ -1323,6 +1683,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\nthis is a\n"
+      },
+      "range": {
+        "start": {
+          "line": 146,
+          "character": 16
+        },
+        "end": {
+          "line": 146,
+          "character": 17
+        }
       }
     }
   },
@@ -1340,6 +1710,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: number\n```\nthis is b\n"
+      },
+      "range": {
+        "start": {
+          "line": 146,
+          "character": 27
+        },
+        "end": {
+          "line": 146,
+          "character": 28
+        }
       }
     }
   },
@@ -1357,6 +1737,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction divide(a: number, b: number): void\n```\nthis is divide function\n\n*@param* `a` — this is a\n\n\n*@paramTag* — { number } g this is optional param g\n\n\n*@param* `b` — this is b\n"
+      },
+      "range": {
+        "start": {
+          "line": 148,
+          "character": 0
+        },
+        "end": {
+          "line": 148,
+          "character": 6
+        }
       }
     }
   },
@@ -1374,6 +1764,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) foo: string\n```\nis string\n"
+      },
+      "range": {
+        "start": {
+          "line": 154,
+          "character": 16
+        },
+        "end": {
+          "line": 154,
+          "character": 19
+        }
       }
     }
   },
@@ -1391,6 +1791,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) bar: string\n```\nis second string\n"
+      },
+      "range": {
+        "start": {
+          "line": 154,
+          "character": 29
+        },
+        "end": {
+          "line": 154,
+          "character": 32
+        }
       }
     }
   },
@@ -1408,6 +1818,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction fooBar(foo: string, bar: string): string\n```\nFunction returns string concat of foo and bar\n\n*@param* `foo` — is string\n\n\n*@param* `bar` — is second string\n"
+      },
+      "range": {
+        "start": {
+          "line": 157,
+          "character": 0
+        },
+        "end": {
+          "line": 157,
+          "character": 6
+        }
       }
     }
   },
@@ -1425,6 +1845,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: number\n```\nthis is inline comment for a"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 59
+        },
+        "end": {
+          "line": 168,
+          "character": 60
+        }
       }
     }
   },
@@ -1442,6 +1872,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: number\n```\nthis is inline comment for b"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 105
+        },
+        "end": {
+          "line": 168,
+          "character": 106
+        }
       }
     }
   },
@@ -1459,6 +1899,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) c: number\n```\nit is third parameter\n"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 116
+        },
+        "end": {
+          "line": 168,
+          "character": 117
+        }
       }
     }
   },
@@ -1476,6 +1926,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) d: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 127
+        },
+        "end": {
+          "line": 168,
+          "character": 128
+        }
       }
     }
   },
@@ -1493,6 +1953,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocParamTest(a: number, b: number, c: number, d: number): number\n```\nthis is jsdoc style function with param tag as well as inline parameter help\n\n*@param* `a` — it is first parameter\n\n\n*@param* `c` — it is third parameter\n"
+      },
+      "range": {
+        "start": {
+          "line": 171,
+          "character": 0
+        },
+        "end": {
+          "line": 171,
+          "character": 14
+        }
       }
     }
   },
@@ -1510,6 +1980,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocCommentAlignmentTest1(): void\n```\nThis is function comment\nAnd properly aligned comment"
+      },
+      "range": {
+        "start": {
+          "line": 177,
+          "character": 0
+        },
+        "end": {
+          "line": 177,
+          "character": 26
+        }
       }
     }
   },
@@ -1527,6 +2007,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocCommentAlignmentTest2(): void\n```\nThis is function comment\n    And aligned with 4 space char margin"
+      },
+      "range": {
+        "start": {
+          "line": 183,
+          "character": 0
+        },
+        "end": {
+          "line": 183,
+          "character": 26
+        }
       }
     }
   },
@@ -1544,6 +2034,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: string\n```\nthis is info about a\nspanning on two lines and aligned perfectly\n"
+      },
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 36
+        },
+        "end": {
+          "line": 195,
+          "character": 37
+        }
       }
     }
   },
@@ -1561,6 +2061,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: any\n```\nthis is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin\n"
+      },
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 47
+        },
+        "end": {
+          "line": 195,
+          "character": 48
+        }
       }
     }
   },
@@ -1578,6 +2088,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) c: any\n```\nthis is info about b\nnot aligned text about parameter will eat only one space\n"
+      },
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 50
+        },
+        "end": {
+          "line": 195,
+          "character": 51
+        }
       }
     }
   },
@@ -1595,6 +2115,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction jsDocCommentAlignmentTest3(a: string, b: any, c: any): void\n```\nThis is function comment\n    And aligned with 4 space char margin\n\n*@param* `a` — this is info about a\nspanning on two lines and aligned perfectly\n\n\n*@param* `b` — this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin\n\n\n*@param* `c` — this is info about b\nnot aligned text about parameter will eat only one space\n"
+      },
+      "range": {
+        "start": {
+          "line": 197,
+          "character": 0
+        },
+        "end": {
+          "line": 197,
+          "character": 26
+        }
       }
     }
   },
@@ -1624,6 +2154,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass NoQuickInfoClass\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 199,
+          "character": 6
+        },
+        "end": {
+          "line": 199,
+          "character": 22
+        }
       }
     }
   }

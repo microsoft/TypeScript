@@ -26,7 +26,7 @@
 // | ----------------------------------------------------------------------
 //     if (b) {
 //         let b1 = 10;
-//             ^
+//             ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | let b1: number
@@ -148,6 +148,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
       }
     }
   },
@@ -165,6 +175,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet b: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 8
+        },
+        "end": {
+          "line": 2,
+          "character": 9
+        }
       }
     }
   },
@@ -182,6 +202,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 12
+        },
+        "end": {
+          "line": 2,
+          "character": 13
+        }
       }
     }
   },
@@ -199,6 +229,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet b1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 12
+        },
+        "end": {
+          "line": 4,
+          "character": 14
+        }
       }
     }
   },
@@ -216,6 +256,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet c: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 8
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
       }
     }
   },
@@ -233,6 +283,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet d: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 15
+        },
+        "end": {
+          "line": 9,
+          "character": 16
+        }
       }
     }
   },
@@ -250,6 +310,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet e: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 12
+        },
+        "end": {
+          "line": 11,
+          "character": 13
+        }
       }
     }
   },
@@ -267,6 +337,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet f: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 4
+        },
+        "end": {
+          "line": 14,
+          "character": 5
+        }
       }
     }
   },
@@ -284,6 +364,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet g: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 5
+        }
       }
     }
   },
@@ -301,6 +391,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet f: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 8
+        },
+        "end": {
+          "line": 15,
+          "character": 9
+        }
       }
     }
   },
@@ -318,6 +418,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet f: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 1
+        }
       }
     }
   },
@@ -335,6 +445,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 5
+        }
       }
     }
   },
@@ -352,6 +472,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet i: { (a: string): number; (a: number): string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 4
+        },
+        "end": {
+          "line": 18,
+          "character": 5
+        }
       }
     }
   },
@@ -369,6 +499,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 8
+        },
+        "end": {
+          "line": 18,
+          "character": 9
+        }
       }
     }
   },
@@ -386,6 +526,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 0
+        },
+        "end": {
+          "line": 19,
+          "character": 1
+        }
       }
     }
   },
@@ -403,6 +553,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 20,
+          "character": 0
+        },
+        "end": {
+          "line": 20,
+          "character": 1
+        }
       }
     }
   }

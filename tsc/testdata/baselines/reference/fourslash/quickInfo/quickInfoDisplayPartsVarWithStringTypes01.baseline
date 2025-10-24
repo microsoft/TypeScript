@@ -1,7 +1,7 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsVarWithStringTypes01.ts ===
 // let hello: "hello" | 'hello' = "hello";
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | let hello: "hello"
@@ -9,7 +9,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // let world: 'world' = "world";
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | let world: "world"
@@ -17,7 +17,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // let helloOrWorld: "hello" | 'world';
-//     ^
+//     ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | let helloOrWorld: "hello" | "world"
@@ -39,6 +39,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet hello: \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 4
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
       }
     }
   },
@@ -56,6 +66,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet world: \"world\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 9
+        }
       }
     }
   },
@@ -73,6 +93,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nlet helloOrWorld: \"hello\" | \"world\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 16
+        }
       }
     }
   }

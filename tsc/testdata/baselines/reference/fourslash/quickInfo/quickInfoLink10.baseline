@@ -26,6 +26,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst a: () => number\n```\nstart [end](https://vscode.dev/)"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 6
+        },
+        "end": {
+          "line": 3,
+          "character": 7
+        }
       }
     }
   }

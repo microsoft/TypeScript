@@ -35,7 +35,7 @@
 //      * @param {{ tiger: string; lion: string; }} [mySpecificStuff] Description of my specific parameter.
 //      */
 //     public static doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; }): string {
-//                   ^
+//                   ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) SubClass.doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; }): string
@@ -60,7 +60,7 @@
 //      * @returns {void} SubClass.func1.returns
 //      */
 //     public static func1(stuff1: any): void {
-//                   ^
+//                   ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) SubClass.func1(stuff1: any): void
@@ -83,7 +83,7 @@
 //      * text after tag
 //      */
 //     public static readonly someProperty: string = 'specific to this class value'
-//                            ^
+//                            ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) SubClass.someProperty: string
@@ -109,6 +109,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) SubClass.doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; }): string\n```\n\n\n*@inheritDoc*\n\n*@param* `mySpecificStuff` — Description of my specific parameter.\n"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 18
+        },
+        "end": {
+          "line": 34,
+          "character": 35
+        }
       }
     }
   },
@@ -126,6 +136,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) SubClass.func1(stuff1: any): void\n```\n\n\n*@inheritDoc*\n\n*@param* `stuff1` — SubClass.func1.stuff1\n\n\n*@returns* — SubClass.func1.returns\n"
+      },
+      "range": {
+        "start": {
+          "line": 47,
+          "character": 18
+        },
+        "end": {
+          "line": 47,
+          "character": 23
+        }
       }
     }
   },
@@ -143,6 +163,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) SubClass.someProperty: string\n```\ntext over tag\n\n*@inheritDoc* — text after tag\n"
+      },
+      "range": {
+        "start": {
+          "line": 55,
+          "character": 27
+        },
+        "end": {
+          "line": 55,
+          "character": 39
+        }
       }
     }
   }

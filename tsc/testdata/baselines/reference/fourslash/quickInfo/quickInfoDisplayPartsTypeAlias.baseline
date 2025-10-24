@@ -10,7 +10,7 @@
 // | ----------------------------------------------------------------------
 // }
 // type t1 = c;
-//      ^
+//      ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type t1 = c
@@ -25,14 +25,14 @@
 // | 
 // | ----------------------------------------------------------------------
 // var cInstance: t1 = new c();
-//     ^
+//     ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                ^
+//                ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type t1 = c
@@ -61,6 +61,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 6
+        },
+        "end": {
+          "line": 0,
+          "character": 7
+        }
       }
     }
   },
@@ -78,6 +88,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype t1 = c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 5
+        },
+        "end": {
+          "line": 2,
+          "character": 7
+        }
       }
     }
   },
@@ -95,6 +115,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 10
+        },
+        "end": {
+          "line": 2,
+          "character": 11
+        }
       }
     }
   },
@@ -112,6 +142,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 13
+        }
       }
     }
   },
@@ -129,6 +169,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype t1 = c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 15
+        },
+        "end": {
+          "line": 3,
+          "character": 17
+        }
       }
     }
   },
@@ -146,6 +196,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 24
+        },
+        "end": {
+          "line": 3,
+          "character": 25
+        }
       }
     }
   }

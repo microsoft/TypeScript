@@ -2,7 +2,7 @@
 === /quickInfoNestedExportEqualExportDefault.ts ===
 // export = (state, messages) => {
 //    export default {
-//          ^
+//    ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) (Anonymous function).default: {}
@@ -30,6 +30,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) (Anonymous function).default: {}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 3
+        },
+        "end": {
+          "line": 1,
+          "character": 9
+        }
       }
     }
   },

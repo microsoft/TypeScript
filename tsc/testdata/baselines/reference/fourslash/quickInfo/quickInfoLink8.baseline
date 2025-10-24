@@ -27,6 +27,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst B: 456\n```\nSee [constant A](file:///quickInfoLink8.ts#1,7-1,8) instead"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 6
+        },
+        "end": {
+          "line": 4,
+          "character": 7
+        }
       }
     }
   }

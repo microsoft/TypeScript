@@ -102,7 +102,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     method<U>(a: U, b: T): U;
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I.method<U>(a: U, b: T): U
@@ -153,7 +153,7 @@
 // | ----------------------------------------------------------------------
 // }
 // var iVal: I<string>;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
@@ -168,7 +168,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new iVal("hello", "hello");
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
@@ -176,7 +176,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // iVal("hello", "hello");
-// ^
+// ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
@@ -184,14 +184,14 @@
 // | 
 // | ----------------------------------------------------------------------
 // iVal.method("hello", "hello");
-// ^
+// ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//      ^
+//      ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I.method<"hello">(a: "hello", b: string): "hello"
@@ -199,7 +199,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // interface I1<T extends I<string>> {
-//           ^
+//           ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | interface I1<T extends I<string>>
@@ -321,7 +321,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     method<U extends I<string>>(a: U, b: T): U;
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I1.method<U extends I<string>>(a: U, b: T): U
@@ -379,14 +379,14 @@
 // | ----------------------------------------------------------------------
 // }
 // var iVal1: I1<I<string>>;
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal1: I1<I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//            ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | interface I1<T extends I<string>>
@@ -401,21 +401,21 @@
 // | 
 // | ----------------------------------------------------------------------
 // new iVal1(iVal, iVal);
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal1: I1<I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//           ^
+//           ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                 ^
+//                 ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
@@ -423,21 +423,21 @@
 // | 
 // | ----------------------------------------------------------------------
 // iVal1(iVal, iVal);
-// ^
+// ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal1: I1<I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//       ^
+//       ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//             ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
@@ -445,28 +445,28 @@
 // | 
 // | ----------------------------------------------------------------------
 // iVal1.method(iVal, iVal);
-// ^
+// ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal1: I1<I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//       ^
+//       ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I1.method<I<string>>(a: I<string>, b: I<string>): I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//              ^
+//              ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                    ^
+//                    ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iVal: I<string>
@@ -488,6 +488,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
       }
     }
   },
@@ -505,6 +515,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 12
+        },
+        "end": {
+          "line": 0,
+          "character": 13
+        }
       }
     }
   },
@@ -522,6 +542,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
       }
     }
   },
@@ -539,6 +569,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 12
+        },
+        "end": {
+          "line": 1,
+          "character": 13
+        }
       }
     }
   },
@@ -556,6 +596,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 15
+        },
+        "end": {
+          "line": 1,
+          "character": 16
+        }
       }
     }
   },
@@ -573,6 +623,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 18
+        },
+        "end": {
+          "line": 1,
+          "character": 19
+        }
       }
     }
   },
@@ -590,6 +650,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 21
+        },
+        "end": {
+          "line": 1,
+          "character": 22
+        }
       }
     }
   },
@@ -607,6 +677,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 25
+        },
+        "end": {
+          "line": 1,
+          "character": 26
+        }
       }
     }
   },
@@ -624,6 +704,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 5
+        },
+        "end": {
+          "line": 2,
+          "character": 6
+        }
       }
     }
   },
@@ -641,6 +731,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 8
+        },
+        "end": {
+          "line": 2,
+          "character": 9
+        }
       }
     }
   },
@@ -658,6 +758,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 11
+        },
+        "end": {
+          "line": 2,
+          "character": 12
+        }
       }
     }
   },
@@ -675,6 +785,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 14
+        },
+        "end": {
+          "line": 2,
+          "character": 15
+        }
       }
     }
   },
@@ -692,6 +812,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 17
+        },
+        "end": {
+          "line": 2,
+          "character": 18
+        }
       }
     }
   },
@@ -709,6 +839,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 21
+        },
+        "end": {
+          "line": 2,
+          "character": 22
+        }
       }
     }
   },
@@ -726,6 +866,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 10
+        }
       }
     }
   },
@@ -743,6 +893,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 11
+        },
+        "end": {
+          "line": 3,
+          "character": 12
+        }
       }
     }
   },
@@ -760,6 +920,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 15
+        }
       }
     }
   },
@@ -777,6 +947,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 17
+        },
+        "end": {
+          "line": 3,
+          "character": 18
+        }
       }
     }
   },
@@ -794,6 +974,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 20
+        },
+        "end": {
+          "line": 3,
+          "character": 21
+        }
       }
     }
   },
@@ -811,6 +1001,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 23
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
       }
     }
   },
@@ -828,6 +1028,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 27
+        },
+        "end": {
+          "line": 3,
+          "character": 28
+        }
       }
     }
   },
@@ -845,6 +1055,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 8
+        }
       }
     }
   },
@@ -862,6 +1082,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 10
+        },
+        "end": {
+          "line": 5,
+          "character": 11
+        }
       }
     }
   },
@@ -879,6 +1109,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 4
+        },
+        "end": {
+          "line": 6,
+          "character": 8
+        }
       }
     }
   },
@@ -896,6 +1136,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 4
+        }
       }
     }
   },
@@ -913,6 +1163,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 4
+        }
       }
     }
   },
@@ -930,6 +1190,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 5
+        },
+        "end": {
+          "line": 8,
+          "character": 11
+        }
       }
     }
   },
@@ -947,6 +1217,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 10
+        },
+        "end": {
+          "line": 9,
+          "character": 12
+        }
       }
     }
   },
@@ -964,6 +1244,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 13
+        },
+        "end": {
+          "line": 9,
+          "character": 14
+        }
       }
     }
   },
@@ -981,6 +1271,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 23
+        },
+        "end": {
+          "line": 9,
+          "character": 24
+        }
       }
     }
   },
@@ -998,6 +1298,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 10
+        }
       }
     }
   },
@@ -1015,6 +1325,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 19
+        },
+        "end": {
+          "line": 10,
+          "character": 20
+        }
       }
     }
   },
@@ -1032,6 +1352,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 30
+        },
+        "end": {
+          "line": 10,
+          "character": 31
+        }
       }
     }
   },
@@ -1049,6 +1379,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 33
+        },
+        "end": {
+          "line": 10,
+          "character": 34
+        }
       }
     }
   },
@@ -1066,6 +1406,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 36
+        },
+        "end": {
+          "line": 10,
+          "character": 37
+        }
       }
     }
   },
@@ -1083,6 +1433,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 39
+        },
+        "end": {
+          "line": 10,
+          "character": 40
+        }
       }
     }
   },
@@ -1100,6 +1460,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 43
+        },
+        "end": {
+          "line": 10,
+          "character": 44
+        }
       }
     }
   },
@@ -1117,6 +1487,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 5
+        },
+        "end": {
+          "line": 11,
+          "character": 6
+        }
       }
     }
   },
@@ -1134,6 +1514,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 15
+        },
+        "end": {
+          "line": 11,
+          "character": 16
+        }
       }
     }
   },
@@ -1151,6 +1541,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 26
+        },
+        "end": {
+          "line": 11,
+          "character": 27
+        }
       }
     }
   },
@@ -1168,6 +1568,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 29
+        },
+        "end": {
+          "line": 11,
+          "character": 30
+        }
       }
     }
   },
@@ -1185,6 +1595,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 32
+        },
+        "end": {
+          "line": 11,
+          "character": 33
+        }
       }
     }
   },
@@ -1202,6 +1622,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 35
+        },
+        "end": {
+          "line": 11,
+          "character": 36
+        }
       }
     }
   },
@@ -1219,6 +1649,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 39
+        },
+        "end": {
+          "line": 11,
+          "character": 40
+        }
       }
     }
   },
@@ -1236,6 +1676,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 4
+        },
+        "end": {
+          "line": 12,
+          "character": 10
+        }
       }
     }
   },
@@ -1253,6 +1703,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 11
+        },
+        "end": {
+          "line": 12,
+          "character": 12
+        }
       }
     }
   },
@@ -1270,6 +1730,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 21
+        },
+        "end": {
+          "line": 12,
+          "character": 22
+        }
       }
     }
   },
@@ -1287,6 +1757,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 32
+        },
+        "end": {
+          "line": 12,
+          "character": 33
+        }
       }
     }
   },
@@ -1304,6 +1784,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 35
+        },
+        "end": {
+          "line": 12,
+          "character": 36
+        }
       }
     }
   },
@@ -1321,6 +1811,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 38
+        },
+        "end": {
+          "line": 12,
+          "character": 39
+        }
       }
     }
   },
@@ -1338,6 +1838,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 41
+        },
+        "end": {
+          "line": 12,
+          "character": 42
+        }
       }
     }
   },
@@ -1355,6 +1865,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 45
+        },
+        "end": {
+          "line": 12,
+          "character": 46
+        }
       }
     }
   },
@@ -1372,6 +1892,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 4
+        },
+        "end": {
+          "line": 14,
+          "character": 9
+        }
       }
     }
   },
@@ -1389,6 +1919,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I1<T extends I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 11
+        },
+        "end": {
+          "line": 14,
+          "character": 13
+        }
       }
     }
   },
@@ -1406,6 +1946,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface I<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 14
+        },
+        "end": {
+          "line": 14,
+          "character": 15
+        }
       }
     }
   },
@@ -1423,6 +1973,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 9
+        }
       }
     }
   },
@@ -1440,6 +2000,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 10
+        },
+        "end": {
+          "line": 15,
+          "character": 14
+        }
       }
     }
   },
@@ -1457,6 +2027,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 16
+        },
+        "end": {
+          "line": 15,
+          "character": 20
+        }
       }
     }
   },
@@ -1474,6 +2054,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 5
+        }
       }
     }
   },
@@ -1491,6 +2081,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 6
+        },
+        "end": {
+          "line": 16,
+          "character": 10
+        }
       }
     }
   },
@@ -1508,6 +2108,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 12
+        },
+        "end": {
+          "line": 16,
+          "character": 16
+        }
       }
     }
   },
@@ -1525,6 +2135,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 5
+        }
       }
     }
   },
@@ -1542,6 +2162,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I1.method<I<string>>(a: I<string>, b: I<string>): I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 6
+        },
+        "end": {
+          "line": 17,
+          "character": 12
+        }
       }
     }
   },
@@ -1559,6 +2189,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 13
+        },
+        "end": {
+          "line": 17,
+          "character": 17
+        }
       }
     }
   },
@@ -1576,6 +2216,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iVal: I<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 19
+        },
+        "end": {
+          "line": 17,
+          "character": 23
+        }
       }
     }
   }

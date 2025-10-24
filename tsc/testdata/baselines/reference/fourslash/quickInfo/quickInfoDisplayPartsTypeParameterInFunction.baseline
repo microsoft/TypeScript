@@ -1,7 +1,7 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsTypeParameterInFunction.ts ===
 // function foo<U>(a: U) {
-//          ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo<U>(a: U): U
@@ -39,7 +39,7 @@
 // | ----------------------------------------------------------------------
 // }
 // foo("Hello");
-// ^
+// ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo<"Hello">(a: "Hello"): "Hello"
@@ -47,7 +47,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // function foo2<U extends string>(a: U) {
-//          ^
+//          ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo2<U extends string>(a: U): U
@@ -85,7 +85,7 @@
 // | ----------------------------------------------------------------------
 // }
 // foo2("hello");
-// ^
+// ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo2<"hello">(a: "hello"): "hello"
@@ -107,6 +107,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo<U>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
       }
     }
   },
@@ -124,6 +134,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 13
+        },
+        "end": {
+          "line": 0,
+          "character": 14
+        }
       }
     }
   },
@@ -141,6 +161,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 16
+        },
+        "end": {
+          "line": 0,
+          "character": 17
+        }
       }
     }
   },
@@ -158,6 +188,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 19
+        },
+        "end": {
+          "line": 0,
+          "character": 20
+        }
       }
     }
   },
@@ -175,6 +215,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
       }
     }
   },
@@ -192,6 +242,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo<\"Hello\">(a: \"Hello\"): \"Hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 3
+        }
       }
     }
   },
@@ -209,6 +269,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo2<U extends string>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 9
+        },
+        "end": {
+          "line": 4,
+          "character": 13
+        }
       }
     }
   },
@@ -226,6 +296,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 14
+        },
+        "end": {
+          "line": 4,
+          "character": 15
+        }
       }
     }
   },
@@ -243,6 +323,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 32
+        },
+        "end": {
+          "line": 4,
+          "character": 33
+        }
       }
     }
   },
@@ -260,6 +350,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 35
+        },
+        "end": {
+          "line": 4,
+          "character": 36
+        }
       }
     }
   },
@@ -277,6 +377,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 11
+        },
+        "end": {
+          "line": 5,
+          "character": 12
+        }
       }
     }
   },
@@ -294,6 +404,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo2<\"hello\">(a: \"hello\"): \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 4
+        }
       }
     }
   }

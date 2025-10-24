@@ -25,7 +25,7 @@
 // 
 // declare let x: DocumentFilter;
 // x.language
-//   ^
+//   ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) language: string
@@ -47,6 +47,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) language: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 2
+        },
+        "end": {
+          "line": 24,
+          "character": 10
+        }
       }
     }
   }

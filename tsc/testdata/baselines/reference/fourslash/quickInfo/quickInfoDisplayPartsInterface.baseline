@@ -10,7 +10,7 @@
 // | ----------------------------------------------------------------------
 // }
 // var iInstance: i;
-//     ^
+//     ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iInstance: i
@@ -39,6 +39,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface i\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
       }
     }
   },
@@ -56,6 +66,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iInstance: i\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 13
+        }
       }
     }
   },
@@ -73,6 +93,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ninterface i\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 15
+        },
+        "end": {
+          "line": 2,
+          "character": 16
+        }
       }
     }
   }

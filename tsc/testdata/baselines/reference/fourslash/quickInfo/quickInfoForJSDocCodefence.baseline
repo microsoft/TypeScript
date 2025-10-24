@@ -7,7 +7,7 @@
 //  * ```
 //  */
 // function foo() {
-//            ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): string
@@ -29,7 +29,7 @@
 //  * `
 //  */
 // function boo() {
-//            ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function boo(): string
@@ -58,6 +58,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): string\n```\n\n\n*@example*\n```\n1 + 2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 9
+        },
+        "end": {
+          "line": 6,
+          "character": 12
+        }
       }
     }
   },
@@ -75,6 +85,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction boo(): string\n```\n\n\n*@example* — ``\n1 + 2\n`\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 9
+        },
+        "end": {
+          "line": 15,
+          "character": 12
+        }
       }
     }
   }

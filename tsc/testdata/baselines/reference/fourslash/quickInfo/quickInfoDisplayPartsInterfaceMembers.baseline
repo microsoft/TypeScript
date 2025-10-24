@@ -2,7 +2,7 @@
 === /quickInfoDisplayPartsInterfaceMembers.ts ===
 // interface I {
 //     property: string;
-//     ^
+//     ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) I.property: string
@@ -10,7 +10,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     method(): string;
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I.method(): string
@@ -22,28 +22,28 @@
 // }
 // var iInstance: I;
 // iInstance.property = iInstance.method();
-// ^
+// ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iInstance: I
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//           ^
+//           ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) I.property: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                      ^
+//                      ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iInstance: I
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                                ^
+//                                ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) I.method(): string
@@ -51,7 +51,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // iInstance();
-// ^
+// ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iInstance: I
@@ -59,14 +59,14 @@
 // | 
 // | ----------------------------------------------------------------------
 // var anotherInstance = new iInstance();
-//     ^
+//     ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var anotherInstance: I
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                           ^
+//                           ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var iInstance: I
@@ -88,6 +88,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) I.property: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
       }
     }
   },
@@ -105,6 +115,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I.method(): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 10
+        }
       }
     }
   },
@@ -122,6 +142,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 9
+        }
       }
     }
   },
@@ -139,6 +169,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) I.property: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 10
+        },
+        "end": {
+          "line": 7,
+          "character": 18
+        }
       }
     }
   },
@@ -156,6 +196,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 21
+        },
+        "end": {
+          "line": 7,
+          "character": 30
+        }
       }
     }
   },
@@ -173,6 +223,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) I.method(): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 31
+        },
+        "end": {
+          "line": 7,
+          "character": 37
+        }
       }
     }
   },
@@ -190,6 +250,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
       }
     }
   },
@@ -207,6 +277,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar anotherInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 4
+        },
+        "end": {
+          "line": 9,
+          "character": 19
+        }
       }
     }
   },
@@ -224,6 +304,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar iInstance: I\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 26
+        },
+        "end": {
+          "line": 9,
+          "character": 35
+        }
       }
     }
   }

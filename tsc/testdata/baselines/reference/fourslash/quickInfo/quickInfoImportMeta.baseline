@@ -7,7 +7,7 @@
 // | ----------------------------------------------------------------------
 // | No quickinfo at /*1*/.
 // | ----------------------------------------------------------------------
-//          ^
+// ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) ImportMetaExpression.meta: ImportMeta
@@ -41,6 +41,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) ImportMetaExpression.meta: ImportMeta\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 0
+        },
+        "end": {
+          "line": 2,
+          "character": 11
+        }
       }
     }
   }

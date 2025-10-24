@@ -76,6 +76,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 21
+        },
+        "end": {
+          "line": 0,
+          "character": 22
+        }
       }
     }
   },

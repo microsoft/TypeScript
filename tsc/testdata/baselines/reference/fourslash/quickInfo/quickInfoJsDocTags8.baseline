@@ -9,7 +9,7 @@
 //  * @template {Foo} T
 //  */
 // const foo = t => t.y;
-//       ^
+//       ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | const foo: (t: T) => number
@@ -33,6 +33,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst foo: (t: T) => number\n```\n\n\n*@template* `T`"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 6
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
       }
     }
   }

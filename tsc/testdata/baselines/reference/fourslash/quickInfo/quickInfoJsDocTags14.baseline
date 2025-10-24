@@ -10,7 +10,7 @@
 //  * @returns {number}
 //  */
 // function fn(options, callback = null) { }
-//          ^
+//          ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function fn(options: any, callback?: any): void
@@ -40,6 +40,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction fn(options: any, callback?: any): void\n```\n\n\n*@param* `options` — the args object\n\n\n*@param* `callback` — the callback function\n\n\n*@returns*"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 9
+        },
+        "end": {
+          "line": 9,
+          "character": 11
+        }
       }
     }
   }

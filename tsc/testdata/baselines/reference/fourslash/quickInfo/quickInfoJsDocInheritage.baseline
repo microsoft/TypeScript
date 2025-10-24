@@ -26,7 +26,7 @@
 // // method for function signature
 // class C implements A, B {
 //     foo1: number = 1;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) C.foo1: number
@@ -34,7 +34,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     foo2(q: string) { return 1 }
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.foo2(q: string): number
@@ -47,7 +47,7 @@
 // // property for function signature
 // class D implements A, B {
 //     foo1: number = 1;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) D.foo1: number
@@ -55,7 +55,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     foo2 = (q: string) => { return 1 }
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) D.foo2: (q: string) => number
@@ -65,7 +65,7 @@
 // }
 // 
 // new C().foo1;
-//         ^
+//         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) C.foo1: number
@@ -73,7 +73,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new C().foo2;
-//         ^
+//         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.foo2(q: string): number
@@ -81,7 +81,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new D().foo1;
-//         ^
+//         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) D.foo1: number
@@ -89,7 +89,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new D().foo2;
-//         ^
+//         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) D.foo2: (q: string) => number
@@ -115,7 +115,7 @@
 // // property override method
 // class Drived1 extends Base1 implements A {
 //     foo1: number = 1;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived1.foo1: number
@@ -123,7 +123,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     foo2(para1: string) { return 1 };
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Drived1.foo2(para1: string): number
@@ -136,7 +136,7 @@
 // // method override method
 // class Drived2 extends Base1 implements B {
 //     foo1: number = 1;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived2.foo1: number
@@ -144,7 +144,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     foo2 = (para1: string) => { return 1; };
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived2.foo2: (para1: string) => number
@@ -170,7 +170,7 @@
 // // property override method
 // class Drived3 extends Base2 implements A {
 //     foo1: number = 1;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived3.foo1: number
@@ -178,7 +178,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     foo2(para1: string) { return 1 };
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Drived3.foo2(para1: string): number
@@ -191,7 +191,7 @@
 // // method override method
 // class Drived4 extends Base2 implements B {
 //     foo1: number = 1;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived4.foo1: number
@@ -199,7 +199,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     foo2 = (para1: string) => { return 1; };
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived4.foo2: (para1: string) => number
@@ -209,7 +209,7 @@
 // }
 // 
 // new Drived1().foo1;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived1.foo1: number
@@ -217,7 +217,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived1().foo2;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Drived1.foo2(para1: string): number
@@ -225,7 +225,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived2().foo1;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived2.foo1: number
@@ -233,7 +233,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived2().foo2;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived2.foo2: (para1: string) => number
@@ -241,7 +241,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived3().foo1;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived3.foo1: number
@@ -249,7 +249,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived3().foo2;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Drived3.foo2(para1: string): number
@@ -257,7 +257,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived4().foo1;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived4.foo1: number
@@ -265,7 +265,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // new Drived4().foo2;
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Drived4.foo2: (para1: string) => number
@@ -287,6 +287,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) C.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 4
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
       }
     }
   },
@@ -304,6 +314,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.foo2(q: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 26,
+          "character": 4
+        },
+        "end": {
+          "line": 26,
+          "character": 8
+        }
       }
     }
   },
@@ -321,6 +341,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) D.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 32,
+          "character": 4
+        },
+        "end": {
+          "line": 32,
+          "character": 8
+        }
       }
     }
   },
@@ -338,6 +368,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) D.foo2: (q: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 33,
+          "character": 4
+        },
+        "end": {
+          "line": 33,
+          "character": 8
+        }
       }
     }
   },
@@ -355,6 +395,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) C.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 36,
+          "character": 8
+        },
+        "end": {
+          "line": 36,
+          "character": 12
+        }
       }
     }
   },
@@ -372,6 +422,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.foo2(q: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 37,
+          "character": 8
+        },
+        "end": {
+          "line": 37,
+          "character": 12
+        }
       }
     }
   },
@@ -389,6 +449,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) D.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 38,
+          "character": 8
+        },
+        "end": {
+          "line": 38,
+          "character": 12
+        }
       }
     }
   },
@@ -406,6 +476,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) D.foo2: (q: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 39,
+          "character": 8
+        },
+        "end": {
+          "line": 39,
+          "character": 12
+        }
       }
     }
   },
@@ -423,6 +503,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived1.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 58,
+          "character": 4
+        },
+        "end": {
+          "line": 58,
+          "character": 8
+        }
       }
     }
   },
@@ -440,6 +530,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Drived1.foo2(para1: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 59,
+          "character": 4
+        },
+        "end": {
+          "line": 59,
+          "character": 8
+        }
       }
     }
   },
@@ -457,6 +557,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived2.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 65,
+          "character": 4
+        },
+        "end": {
+          "line": 65,
+          "character": 8
+        }
       }
     }
   },
@@ -474,6 +584,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived2.foo2: (para1: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 66,
+          "character": 4
+        },
+        "end": {
+          "line": 66,
+          "character": 8
+        }
       }
     }
   },
@@ -491,6 +611,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived3.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 85,
+          "character": 4
+        },
+        "end": {
+          "line": 85,
+          "character": 8
+        }
       }
     }
   },
@@ -508,6 +638,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Drived3.foo2(para1: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 86,
+          "character": 4
+        },
+        "end": {
+          "line": 86,
+          "character": 8
+        }
       }
     }
   },
@@ -525,6 +665,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived4.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 92,
+          "character": 4
+        },
+        "end": {
+          "line": 92,
+          "character": 8
+        }
       }
     }
   },
@@ -542,6 +692,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived4.foo2: (para1: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 93,
+          "character": 4
+        },
+        "end": {
+          "line": 93,
+          "character": 8
+        }
       }
     }
   },
@@ -559,6 +719,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived1.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 96,
+          "character": 14
+        },
+        "end": {
+          "line": 96,
+          "character": 18
+        }
       }
     }
   },
@@ -576,6 +746,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Drived1.foo2(para1: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 97,
+          "character": 14
+        },
+        "end": {
+          "line": 97,
+          "character": 18
+        }
       }
     }
   },
@@ -593,6 +773,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived2.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 98,
+          "character": 14
+        },
+        "end": {
+          "line": 98,
+          "character": 18
+        }
       }
     }
   },
@@ -610,6 +800,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived2.foo2: (para1: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 99,
+          "character": 14
+        },
+        "end": {
+          "line": 99,
+          "character": 18
+        }
       }
     }
   },
@@ -627,6 +827,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived3.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 100,
+          "character": 14
+        },
+        "end": {
+          "line": 100,
+          "character": 18
+        }
       }
     }
   },
@@ -644,6 +854,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Drived3.foo2(para1: string): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 101,
+          "character": 14
+        },
+        "end": {
+          "line": 101,
+          "character": 18
+        }
       }
     }
   },
@@ -661,6 +881,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived4.foo1: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 102,
+          "character": 14
+        },
+        "end": {
+          "line": 102,
+          "character": 18
+        }
       }
     }
   },
@@ -678,6 +908,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Drived4.foo2: (para1: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 103,
+          "character": 14
+        },
+        "end": {
+          "line": 103,
+          "character": 18
+        }
       }
     }
   }

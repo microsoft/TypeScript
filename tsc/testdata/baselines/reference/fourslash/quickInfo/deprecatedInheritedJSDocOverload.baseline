@@ -23,7 +23,7 @@
 // }
 // declare const a: ThingWithDeprecations<void>
 // a.subscribe(() => {
-//            ^
+//   ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) ThingWithDeprecations.subscribe(observer?: PartialObserver<void>): Subscription
@@ -47,6 +47,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) ThingWithDeprecations.subscribe(observer?: PartialObserver<void>): Subscription\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 22,
+          "character": 2
+        },
+        "end": {
+          "line": 22,
+          "character": 11
+        }
       }
     }
   }

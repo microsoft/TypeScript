@@ -18,7 +18,7 @@
 // 
 // const { isBaz: isBar } = f();
 // isBar;
-//      ^
+// ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | const isBar: boolean
@@ -40,6 +40,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst isBar: boolean\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 5
+        }
       }
     }
   }

@@ -26,6 +26,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst a: 1\n```\n\n\n*@satisfies* — comment "
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 6
+        },
+        "end": {
+          "line": 1,
+          "character": 7
+        }
       }
     }
   }

@@ -34,6 +34,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f(): void\n```\n[https://vscode.dev](https://vscode.dev)\n[link text]{https://vscode.dev}\n[link text](https://vscode.dev)\n[link text](https://vscode.dev)"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 1
+        }
       }
     }
   }

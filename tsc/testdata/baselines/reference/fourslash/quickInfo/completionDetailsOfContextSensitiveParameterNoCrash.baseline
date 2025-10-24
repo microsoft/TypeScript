@@ -83,7 +83,7 @@
 //         ...args
 //     ): StylingFunction => {
 //         return curry(getStylingByKeys, 2)(mergedStyling, ...args);
-//                                                             ^
+//                                                             ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) args: []
@@ -108,6 +108,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) args: []\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 82,
+          "character": 60
+        },
+        "end": {
+          "line": 82,
+          "character": 64
+        }
       }
     }
   }

@@ -27,10 +27,13 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
-	quickInfo, documentation := l.getQuickInfoAndDocumentation(c, node)
+	rangeNode := getNodeForQuickInfo(node)
+	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), rangeNode)
 	if quickInfo == "" {
 		return lsproto.HoverOrNull{}, nil
 	}
+	hoverRange := l.getRangeOfNode(rangeNode, nil, nil)
+
 	return lsproto.HoverOrNull{
 		Hover: &lsproto.Hover{
 			Contents: lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{
@@ -39,12 +42,9 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 					Value: formatQuickInfo(quickInfo) + documentation,
 				},
 			},
+			Range: hoverRange,
 		},
 	}, nil
-}
-
-func (l *LanguageService) getQuickInfoAndDocumentation(c *checker.Checker, node *ast.Node) (string, string) {
-	return l.getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), getNodeForQuickInfo(node))
 }
 
 func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, string) {

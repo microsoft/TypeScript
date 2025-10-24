@@ -5,7 +5,7 @@
 // 	"\u007f" = 127,
 // }
 // Foo["\t"]
-//     ^
+//      ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (enum member) typeof Foo["\t"] = 9
@@ -13,7 +13,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // Foo["\u007f"]
-//     ^
+//      ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (enum member) typeof Foo[""] = 127
@@ -35,6 +35,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(enum member) typeof Foo[\"\\t\"] = 9\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 5
+        },
+        "end": {
+          "line": 4,
+          "character": 7
+        }
       }
     }
   },
@@ -52,6 +62,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(enum member) typeof Foo[\"\"] = 127\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 5
+        },
+        "end": {
+          "line": 5,
+          "character": 11
+        }
       }
     }
   }

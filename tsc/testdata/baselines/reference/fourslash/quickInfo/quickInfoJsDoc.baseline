@@ -39,7 +39,7 @@
 // 
 //     get a() {
 //         this.field;
-//                   ^
+//              ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) C.field: string
@@ -49,7 +49,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         this.getter;
-//                    ^
+//              ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (accessor) C.getter: void
@@ -59,7 +59,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         this.m;
-//               ^
+//              ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.m(): void
@@ -69,7 +69,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         foo;
-//            ^
+//         ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var foo: string
@@ -79,7 +79,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         C/;
-//          ^
+//         ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class C
@@ -99,7 +99,7 @@
 // 
 //     set a(value: number) {
 //         this.field;
-//                   ^
+//              ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) C.field: string
@@ -109,7 +109,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         this.getter;
-//                    ^
+//              ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (accessor) C.getter: void
@@ -119,7 +119,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         this.m;
-//               ^
+//              ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.m(): void
@@ -129,7 +129,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         foo;
-//            ^
+//         ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var foo: string
@@ -139,7 +139,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         C;
-//          ^
+//         ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class C
@@ -149,7 +149,7 @@
 // | *@deprecated*
 // | ----------------------------------------------------------------------
 //         fn();
-//           ^
+//         ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function fn(): void
@@ -175,6 +175,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 38,
+          "character": 13
+        },
+        "end": {
+          "line": 38,
+          "character": 18
+        }
       }
     }
   },
@@ -192,6 +202,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 39,
+          "character": 13
+        },
+        "end": {
+          "line": 39,
+          "character": 19
+        }
       }
     }
   },
@@ -209,6 +229,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 40,
+          "character": 13
+        },
+        "end": {
+          "line": 40,
+          "character": 14
+        }
       }
     }
   },
@@ -226,6 +256,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar foo: string\n```\nA constant\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 41,
+          "character": 8
+        },
+        "end": {
+          "line": 41,
+          "character": 11
+        }
       }
     }
   },
@@ -243,6 +283,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass C\n```\nA class\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 42,
+          "character": 8
+        },
+        "end": {
+          "line": 42,
+          "character": 9
+        }
       }
     }
   },
@@ -272,6 +322,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 49,
+          "character": 13
+        },
+        "end": {
+          "line": 49,
+          "character": 18
+        }
       }
     }
   },
@@ -289,6 +349,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 50,
+          "character": 13
+        },
+        "end": {
+          "line": 50,
+          "character": 19
+        }
       }
     }
   },
@@ -306,6 +376,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 51,
+          "character": 13
+        },
+        "end": {
+          "line": 51,
+          "character": 14
+        }
       }
     }
   },
@@ -323,6 +403,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar foo: string\n```\nA constant\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 52,
+          "character": 8
+        },
+        "end": {
+          "line": 52,
+          "character": 11
+        }
       }
     }
   },
@@ -340,6 +430,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass C\n```\nA class\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 53,
+          "character": 8
+        },
+        "end": {
+          "line": 53,
+          "character": 9
+        }
       }
     }
   },
@@ -357,6 +457,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction fn(): void\n```\nA function\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 54,
+          "character": 8
+        },
+        "end": {
+          "line": 54,
+          "character": 10
+        }
       }
     }
   }

@@ -7,7 +7,7 @@
 //  * }
 //  */
 // function foo() {
-//            ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): string
@@ -28,7 +28,7 @@
 //  }
 //  */
 // function foo2() {
-//            ^
+//          ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo2(): string
@@ -49,7 +49,7 @@
 //  *      b
 //  */
 // function moo() {
-//           ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function moo(): string
@@ -71,7 +71,7 @@
 //  *      b
 //  */
 // function boo() {
-//           ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function boo(): string
@@ -94,7 +94,7 @@
 //  *                b
 //  */
 // function goo() {
-//            ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function goo(): string
@@ -125,6 +125,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): string\n```\n\n\n*@example* — if (true) {\n    foo()\n}\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 9
+        },
+        "end": {
+          "line": 6,
+          "character": 12
+        }
       }
     }
   },
@@ -142,6 +152,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo2(): string\n```\n\n\n*@example* — {\n    foo()\n}\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 9
+        },
+        "end": {
+          "line": 15,
+          "character": 13
+        }
       }
     }
   },
@@ -159,6 +179,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction moo(): string\n```\n\n\n*@example* —   x y\n  12345\n     b\n"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 9
+        },
+        "end": {
+          "line": 24,
+          "character": 12
+        }
       }
     }
   },
@@ -176,6 +206,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example* —   x y\n  12345\n     b\n"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 9
+        },
+        "end": {
+          "line": 34,
+          "character": 12
+        }
       }
     }
   },
@@ -193,6 +233,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example* — x y\n12345\n   b\n"
+      },
+      "range": {
+        "start": {
+          "line": 43,
+          "character": 9
+        },
+        "end": {
+          "line": 43,
+          "character": 12
+        }
       }
     }
   }

@@ -10,7 +10,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     private Infinity() { }
-//             ^
+//             ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.Infinity(): void
@@ -18,7 +18,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     protected NaN() { }
-//               ^
+//               ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.NaN(): void
@@ -26,7 +26,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     static "stringLiteralName"() { }
-//            ^
+//             ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C["stringLiteralName"](): void
@@ -43,7 +43,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         this["1"]();
-//              ^
+//               ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C[1](): void
@@ -51,7 +51,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         this.Infinity();
-//              ^
+//              ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.Infinity(): void
@@ -59,7 +59,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         this["Infinity"]();
-//              ^
+//               ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.Infinity(): void
@@ -67,7 +67,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         this.NaN();
-//              ^
+//              ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C.NaN(): void
@@ -75,7 +75,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         C.stringLiteralName();
-//           ^
+//           ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) C["stringLiteralName"](): void
@@ -98,6 +98,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C[1](): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
       }
     }
   },
@@ -115,6 +125,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.Infinity(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 12
+        },
+        "end": {
+          "line": 2,
+          "character": 20
+        }
       }
     }
   },
@@ -132,6 +152,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.NaN(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 17
+        }
       }
     }
   },
@@ -149,6 +179,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C[\"stringLiteralName\"](): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 12
+        },
+        "end": {
+          "line": 4,
+          "character": 29
+        }
       }
     }
   },
@@ -166,6 +206,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C[1](): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 13
+        },
+        "end": {
+          "line": 6,
+          "character": 14
+        }
       }
     }
   },
@@ -183,6 +233,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C[1](): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 14
+        },
+        "end": {
+          "line": 7,
+          "character": 15
+        }
       }
     }
   },
@@ -200,6 +260,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.Infinity(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 13
+        },
+        "end": {
+          "line": 8,
+          "character": 21
+        }
       }
     }
   },
@@ -217,6 +287,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.Infinity(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 14
+        },
+        "end": {
+          "line": 9,
+          "character": 22
+        }
       }
     }
   },
@@ -234,6 +314,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C.NaN(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 16
+        }
       }
     }
   },
@@ -251,6 +341,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) C[\"stringLiteralName\"](): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 10
+        },
+        "end": {
+          "line": 11,
+          "character": 27
+        }
       }
     }
   }

@@ -9,7 +9,7 @@
 // | No quickinfo at /*1*/.
 // | ----------------------------------------------------------------------
 //         type Z = typeof this.num;
-//                           ^
+//                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | any
@@ -19,7 +19,7 @@
 //     },
 //     g(this: number) {
 //         type X = typeof this;
-//                           ^
+//                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) this: number
@@ -32,7 +32,7 @@
 //     num = 0;
 //     f() {
 //         type Y = typeof this;
-//                           ^
+//                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | this
@@ -40,7 +40,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         type Z = typeof this.num;
-//                           ^
+//                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | this
@@ -50,7 +50,7 @@
 //     }
 //     g(this: number) {
 //         type X = typeof this;
-//                           ^
+//                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) this: number
@@ -86,6 +86,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 24
+        },
+        "end": {
+          "line": 4,
+          "character": 28
+        }
       }
     }
   },
@@ -103,6 +113,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) this: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 24
+        },
+        "end": {
+          "line": 7,
+          "character": 28
+        }
       }
     }
   },
@@ -120,6 +140,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nthis\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 24
+        },
+        "end": {
+          "line": 13,
+          "character": 28
+        }
       }
     }
   },
@@ -137,6 +167,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nthis\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 24
+        },
+        "end": {
+          "line": 14,
+          "character": 28
+        }
       }
     }
   },
@@ -154,6 +194,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) this: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 24
+        },
+        "end": {
+          "line": 17,
+          "character": 28
+        }
       }
     }
   }

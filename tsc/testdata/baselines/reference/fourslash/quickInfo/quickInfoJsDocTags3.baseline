@@ -14,7 +14,7 @@
 // 
 // class Bar implements Foo {
 //     method(): void {
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Bar.method(): void
@@ -39,6 +39,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Bar.method(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 10
+        }
       }
     }
   }

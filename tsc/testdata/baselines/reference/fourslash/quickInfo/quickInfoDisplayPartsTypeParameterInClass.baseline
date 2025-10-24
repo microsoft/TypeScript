@@ -16,7 +16,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     constructor(a: T) {
-//     ^
+//     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor c<T>(a: T): c<T>
@@ -39,7 +39,7 @@
 // | ----------------------------------------------------------------------
 //     }
 //     method<U>(a: U, b: T) {
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) c.method<U>(a: U, b: T): U
@@ -92,7 +92,7 @@
 //     }
 // }
 // var cInstance = new c("Hello");
-//     ^
+//     ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c<string>
@@ -107,7 +107,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // var cVal = c;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cVal: typeof c
@@ -122,14 +122,14 @@
 // | 
 // | ----------------------------------------------------------------------
 // cInstance.method("hello", "cello");
-// ^
+// ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//           ^
+//           ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) c.method<"hello">(a: "hello", b: string): "hello"
@@ -137,7 +137,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // class c2<T extends c<string>> {
-//       ^
+//       ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c2<T extends c<string>>
@@ -159,7 +159,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     constructor(a: T) {
-//     ^
+//     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor c2<T extends c<string>>(a: T): c2<T>
@@ -182,7 +182,7 @@
 // | ----------------------------------------------------------------------
 //     }
 //     method<U extends c<string>>(a: U, b: T) {
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) c2.method<U extends c<string>>(a: U, b: T): U
@@ -242,21 +242,21 @@
 //     }
 // }
 // var cInstance1 = new c2(cInstance);
-//     ^
+//     ^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance1: c2<c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                      ^
+//                      ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor c2<c<string>>(a: c<string>): c2<c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                         ^
+//                         ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c<string>
@@ -264,14 +264,14 @@
 // | 
 // | ----------------------------------------------------------------------
 // var cVal2 = c2;
-//     ^
+//     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cVal2: typeof c2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//             ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c2<T extends c<string>>
@@ -279,28 +279,28 @@
 // | 
 // | ----------------------------------------------------------------------
 // cInstance1.method(cInstance, cInstance);
-// ^
+// ^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance1: c2<c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//            ^
+//            ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) c2.method<c<string>>(a: c<string>, b: c<string>): c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                   ^
+//                   ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                              ^
+//                              ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c<string>
@@ -322,6 +322,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 6
+        },
+        "end": {
+          "line": 0,
+          "character": 7
+        }
       }
     }
   },
@@ -339,6 +349,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 8
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
       }
     }
   },
@@ -356,6 +376,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c<T>(a: T): c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 15
+        }
       }
     }
   },
@@ -373,6 +403,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 16
+        },
+        "end": {
+          "line": 1,
+          "character": 17
+        }
       }
     }
   },
@@ -390,6 +430,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 19
+        },
+        "end": {
+          "line": 1,
+          "character": 20
+        }
       }
     }
   },
@@ -407,6 +457,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) c.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 10
+        }
       }
     }
   },
@@ -424,6 +484,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 11
+        },
+        "end": {
+          "line": 3,
+          "character": 12
+        }
       }
     }
   },
@@ -441,6 +511,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 15
+        }
       }
     }
   },
@@ -458,6 +538,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 17
+        },
+        "end": {
+          "line": 3,
+          "character": 18
+        }
       }
     }
   },
@@ -475,6 +565,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 20
+        },
+        "end": {
+          "line": 3,
+          "character": 21
+        }
       }
     }
   },
@@ -492,6 +592,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 23
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
       }
     }
   },
@@ -509,6 +619,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 15
+        },
+        "end": {
+          "line": 4,
+          "character": 16
+        }
       }
     }
   },
@@ -526,6 +646,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 4
+        },
+        "end": {
+          "line": 7,
+          "character": 13
+        }
       }
     }
   },
@@ -543,6 +673,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c<string>(a: string): c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 20
+        },
+        "end": {
+          "line": 7,
+          "character": 21
+        }
       }
     }
   },
@@ -560,6 +700,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cVal: typeof c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 4
+        },
+        "end": {
+          "line": 8,
+          "character": 8
+        }
       }
     }
   },
@@ -577,6 +727,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 11
+        },
+        "end": {
+          "line": 8,
+          "character": 12
+        }
       }
     }
   },
@@ -594,6 +754,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 0
+        },
+        "end": {
+          "line": 9,
+          "character": 9
+        }
       }
     }
   },
@@ -611,6 +781,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) c.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 10
+        },
+        "end": {
+          "line": 9,
+          "character": 16
+        }
       }
     }
   },
@@ -628,6 +808,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 6
+        },
+        "end": {
+          "line": 10,
+          "character": 8
+        }
       }
     }
   },
@@ -645,6 +835,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 10
+        }
       }
     }
   },
@@ -662,6 +862,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 19
+        },
+        "end": {
+          "line": 10,
+          "character": 20
+        }
       }
     }
   },
@@ -679,6 +889,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c2<T extends c<string>>(a: T): c2<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 15
+        }
       }
     }
   },
@@ -696,6 +916,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 16
+        },
+        "end": {
+          "line": 11,
+          "character": 17
+        }
       }
     }
   },
@@ -713,6 +943,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 19
+        },
+        "end": {
+          "line": 11,
+          "character": 20
+        }
       }
     }
   },
@@ -730,6 +970,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 10
+        }
       }
     }
   },
@@ -747,6 +997,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 11
+        },
+        "end": {
+          "line": 13,
+          "character": 12
+        }
       }
     }
   },
@@ -764,6 +1024,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 21
+        },
+        "end": {
+          "line": 13,
+          "character": 22
+        }
       }
     }
   },
@@ -781,6 +1051,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 32
+        },
+        "end": {
+          "line": 13,
+          "character": 33
+        }
       }
     }
   },
@@ -798,6 +1078,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) U extends c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 35
+        },
+        "end": {
+          "line": 13,
+          "character": 36
+        }
       }
     }
   },
@@ -815,6 +1105,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 38
+        },
+        "end": {
+          "line": 13,
+          "character": 39
+        }
       }
     }
   },
@@ -832,6 +1132,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 41
+        },
+        "end": {
+          "line": 13,
+          "character": 42
+        }
       }
     }
   },
@@ -849,6 +1159,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 15
+        },
+        "end": {
+          "line": 14,
+          "character": 16
+        }
       }
     }
   },
@@ -866,6 +1186,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance1: c2<c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 14
+        }
       }
     }
   },
@@ -883,6 +1213,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c2<c<string>>(a: c<string>): c2<c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 21
+        },
+        "end": {
+          "line": 17,
+          "character": 23
+        }
       }
     }
   },
@@ -900,6 +1240,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 24
+        },
+        "end": {
+          "line": 17,
+          "character": 33
+        }
       }
     }
   },
@@ -917,6 +1267,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cVal2: typeof c2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 4
+        },
+        "end": {
+          "line": 18,
+          "character": 9
+        }
       }
     }
   },
@@ -934,6 +1294,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 12
+        },
+        "end": {
+          "line": 18,
+          "character": 14
+        }
       }
     }
   },
@@ -951,6 +1321,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance1: c2<c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 0
+        },
+        "end": {
+          "line": 19,
+          "character": 10
+        }
       }
     }
   },
@@ -968,6 +1348,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) c2.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 11
+        },
+        "end": {
+          "line": 19,
+          "character": 17
+        }
       }
     }
   },
@@ -985,6 +1375,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 18
+        },
+        "end": {
+          "line": 19,
+          "character": 27
+        }
       }
     }
   },
@@ -1002,6 +1402,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 29
+        },
+        "end": {
+          "line": 19,
+          "character": 38
+        }
       }
     }
   }

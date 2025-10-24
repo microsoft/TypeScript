@@ -3,7 +3,7 @@
 // /** @type {unique symbol} */
 // const foo = Symbol();
 // foo
-//    ^
+// ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | const foo: typeof foo
@@ -25,6 +25,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst foo: typeof foo\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 0
+        },
+        "end": {
+          "line": 2,
+          "character": 3
+        }
       }
     }
   }

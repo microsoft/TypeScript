@@ -10,7 +10,7 @@
 // 
 // var x = new C();
 // x.m();
-//  ^
+// ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var x: any
@@ -32,6 +32,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar x: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 0
+        },
+        "end": {
+          "line": 9,
+          "character": 1
+        }
       }
     }
   }

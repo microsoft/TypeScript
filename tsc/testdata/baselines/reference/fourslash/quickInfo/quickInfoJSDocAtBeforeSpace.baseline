@@ -59,6 +59,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f(): void\n```\n\n\n*@return* — Don't @ me\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 9
+        },
+        "end": {
+          "line": 3,
+          "character": 10
+        }
       }
     }
   },
@@ -76,6 +86,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction g(): void\n```\n\n\n*@return* — One final @\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 9
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
       }
     }
   },
@@ -93,6 +113,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction h(): void\n```\n\n\n*@return* — An @\nBut another line\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 9
+        },
+        "end": {
+          "line": 12,
+          "character": 10
+        }
       }
     }
   }

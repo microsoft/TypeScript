@@ -50,7 +50,7 @@
 //     newMethod() {}
 // }
 // var foo = new Foo(4);
-//               ^
+//               ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor Foo(value: number): Foo
@@ -65,7 +65,7 @@
 // | No quickinfo at /*10*/.
 // | ----------------------------------------------------------------------
 // Foo.method1();
-// ^
+// ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class Foo
@@ -75,7 +75,7 @@
 // | *@mytag* — comment1 comment2
 // | 
 // | ----------------------------------------------------------------------
-//     ^
+//     ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Foo.method1(): void
@@ -90,7 +90,7 @@
 // | No quickinfo at /*11*/.
 // | ----------------------------------------------------------------------
 // foo.method2();
-//     ^
+//     ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Foo.method2(): void
@@ -104,7 +104,7 @@
 // | No quickinfo at /*12*/.
 // | ----------------------------------------------------------------------
 // foo.method3();
-//     ^
+//     ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Foo.method3(): number
@@ -119,7 +119,7 @@
 // | No quickinfo at /*13*/.
 // | ----------------------------------------------------------------------
 // foo.method4();
-//     ^
+//     ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Foo.method4(foo: string): number
@@ -135,7 +135,7 @@
 // | *@mytag*
 // | ----------------------------------------------------------------------
 // foo.property1;
-//     ^
+//     ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Foo.property1: string
@@ -146,7 +146,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // foo.property2;
-//     ^
+//     ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) Foo.property2: number
@@ -165,7 +165,7 @@
 // | *@mytag*
 // | ----------------------------------------------------------------------
 // foo.method5();
-//     ^
+//     ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Foo.method5(): void
@@ -194,6 +194,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor Foo(value: number): Foo\n```\nThis is the constructor.\n\n*@myjsdoctag* — this is a comment\n"
+      },
+      "range": {
+        "start": {
+          "line": 49,
+          "character": 14
+        },
+        "end": {
+          "line": 49,
+          "character": 17
+        }
       }
     }
   },
@@ -223,6 +233,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass Foo\n```\nThis is class Foo.\n\n*@mytag* — comment1 comment2\n"
+      },
+      "range": {
+        "start": {
+          "line": 50,
+          "character": 0
+        },
+        "end": {
+          "line": 50,
+          "character": 3
+        }
       }
     }
   },
@@ -240,6 +260,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Foo.method1(): void\n```\nmethod1 documentation\n\n*@mytag* — comment1 comment2\n"
+      },
+      "range": {
+        "start": {
+          "line": 50,
+          "character": 4
+        },
+        "end": {
+          "line": 50,
+          "character": 11
+        }
       }
     }
   },
@@ -269,6 +299,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Foo.method2(): void\n```\n\n\n*@mytag*"
+      },
+      "range": {
+        "start": {
+          "line": 51,
+          "character": 4
+        },
+        "end": {
+          "line": 51,
+          "character": 11
+        }
       }
     }
   },
@@ -298,6 +338,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Foo.method3(): number\n```\n\n\n*@returns* — a value\n"
+      },
+      "range": {
+        "start": {
+          "line": 52,
+          "character": 4
+        },
+        "end": {
+          "line": 52,
+          "character": 11
+        }
       }
     }
   },
@@ -327,6 +377,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Foo.method4(foo: string): number\n```\n\n\n*@param* `foo` — A value.\n\n\n*@returns* — Another value\n\n\n*@mytag*"
+      },
+      "range": {
+        "start": {
+          "line": 53,
+          "character": 4
+        },
+        "end": {
+          "line": 53,
+          "character": 11
+        }
       }
     }
   },
@@ -344,6 +404,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Foo.property1: string\n```\n\n\n*@mytag* — comment1 comment2\n"
+      },
+      "range": {
+        "start": {
+          "line": 54,
+          "character": 4
+        },
+        "end": {
+          "line": 54,
+          "character": 13
+        }
       }
     }
   },
@@ -361,6 +431,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) Foo.property2: number\n```\n\n\n*@mytag1* — some comments\nsome more comments about mytag1\n\n\n*@mytag2* — here all the comments are on a new line\n\n\n*@mytag3*\n\n*@mytag*"
+      },
+      "range": {
+        "start": {
+          "line": 55,
+          "character": 4
+        },
+        "end": {
+          "line": 55,
+          "character": 13
+        }
       }
     }
   },
@@ -378,6 +458,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Foo.method5(): void\n```\n\n\n*@mytag*"
+      },
+      "range": {
+        "start": {
+          "line": 56,
+          "character": 4
+        },
+        "end": {
+          "line": 56,
+          "character": 11
+        }
       }
     }
   },

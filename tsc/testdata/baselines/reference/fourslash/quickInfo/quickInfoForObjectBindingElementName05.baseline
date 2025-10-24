@@ -12,7 +12,7 @@
 // 
 // function f({ a }: A | B) {
 //     a;
-//      ^
+//     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var a: string | number
@@ -35,6 +35,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar a: string | number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 5
+        }
       }
     }
   }

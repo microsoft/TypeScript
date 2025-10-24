@@ -39,6 +39,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f(options: any, callback?: any): void\n```\n\n\n*@param* `options` — the args object\n\n\n*@param* `callback` — the callback function\n\n\n*@returns*"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 9
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
       }
     }
   }

@@ -9,7 +9,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     var namespaceElemWithoutExport = 10;
-//         ^
+//         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var namespaceElemWithoutExport: number
@@ -17,7 +17,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     export var namespaceElemWithExport = 10;
-//                ^
+//                ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var namespaceElemWithExport: number
@@ -56,7 +56,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // namespace m1.m2 {
-//           ^
+//           ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | namespace m1
@@ -68,7 +68,7 @@
 // | No quickinfo at /*9*/.
 // | ----------------------------------------------------------------------
 //     var namespaceElemWithoutExport = 10;
-//         ^
+//         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var namespaceElemWithoutExport: number
@@ -76,7 +76,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     export var namespaceElemWithExport = 10;
-//                ^
+//                ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var namespaceElemWithExport: number
@@ -92,14 +92,14 @@
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//         ^
+//         ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | namespace m1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//            ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | namespace m1.m2
@@ -114,14 +114,14 @@
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//               ^
+//               ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | namespace m1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//                  ^
+//                  ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | namespace m1.m2
@@ -143,6 +143,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
       }
     }
   },
@@ -160,6 +170,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar namespaceElemWithoutExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 8
+        },
+        "end": {
+          "line": 1,
+          "character": 34
+        }
       }
     }
   },
@@ -177,6 +197,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar namespaceElemWithExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 15
+        },
+        "end": {
+          "line": 2,
+          "character": 38
+        }
       }
     }
   },
@@ -194,6 +224,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar a: typeof m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 4
+        },
+        "end": {
+          "line": 4,
+          "character": 5
+        }
       }
     }
   },
@@ -211,6 +251,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 8
+        },
+        "end": {
+          "line": 4,
+          "character": 9
+        }
       }
     }
   },
@@ -228,6 +278,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar b: typeof m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 4
+        },
+        "end": {
+          "line": 5,
+          "character": 5
+        }
       }
     }
   },
@@ -245,6 +305,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 14
+        },
+        "end": {
+          "line": 5,
+          "character": 15
+        }
       }
     }
   },
@@ -262,6 +332,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 10
+        },
+        "end": {
+          "line": 6,
+          "character": 12
+        }
       }
     }
   },
@@ -291,6 +371,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar namespaceElemWithoutExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 8
+        },
+        "end": {
+          "line": 7,
+          "character": 34
+        }
       }
     }
   },
@@ -308,6 +398,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar namespaceElemWithExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 15
+        },
+        "end": {
+          "line": 8,
+          "character": 38
+        }
       }
     }
   },
@@ -325,6 +425,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar x: typeof m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 4
+        },
+        "end": {
+          "line": 10,
+          "character": 5
+        }
       }
     }
   },
@@ -342,6 +452,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 8
+        },
+        "end": {
+          "line": 10,
+          "character": 10
+        }
       }
     }
   },
@@ -359,6 +479,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 11
+        },
+        "end": {
+          "line": 10,
+          "character": 13
+        }
       }
     }
   },
@@ -376,6 +506,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar y: typeof m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 5
+        }
       }
     }
   },
@@ -393,6 +533,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 14
+        },
+        "end": {
+          "line": 11,
+          "character": 16
+        }
       }
     }
   },
@@ -410,6 +560,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nnamespace m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 17
+        },
+        "end": {
+          "line": 11,
+          "character": 19
+        }
       }
     }
   }

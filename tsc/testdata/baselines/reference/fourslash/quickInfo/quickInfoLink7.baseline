@@ -26,6 +26,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst B: 456\n```\nSee | instead"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 6
+        },
+        "end": {
+          "line": 3,
+          "character": 7
+        }
       }
     }
   }

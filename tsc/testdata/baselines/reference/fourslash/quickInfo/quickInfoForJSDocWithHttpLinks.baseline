@@ -1,7 +1,7 @@
 // === QuickInfo ===
 === /quickInfoForJSDocWithHttpLinks.js ===
 // /** @typedef {number} https://wat */
-//                       ^
+//                       ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type https = number
@@ -12,7 +12,7 @@
 // /**
 // * @typedef {Object} Oops
 // * @property {number} https://wass
-//                      ^
+//                      ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) https: number
@@ -23,7 +23,7 @@
 // 
 // 
 // /** @callback http://vad */
-//               ^
+//               ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type http = () => any
@@ -33,7 +33,7 @@
 // 
 // /** @see https://hvad */
 // var see1 = true
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var see1: boolean
@@ -45,7 +45,7 @@
 // 
 // /** @see {@link https://hva} */
 // var see2 = true
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var see2: boolean
@@ -57,7 +57,7 @@
 // 
 // /** {@link https://hvaD} */
 // var see3 = true
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var see3: boolean
@@ -79,6 +79,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype https = number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 22
+        },
+        "end": {
+          "line": 0,
+          "character": 27
+        }
       }
     }
   },
@@ -96,6 +106,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) https: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 21
+        },
+        "end": {
+          "line": 4,
+          "character": 26
+        }
       }
     }
   },
@@ -113,6 +133,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype http = () => any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 14
+        },
+        "end": {
+          "line": 8,
+          "character": 18
+        }
       }
     }
   },
@@ -130,6 +160,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar see1: boolean\n```\n\n\n*@see* `https` — ://hvad "
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 8
+        }
       }
     }
   },
@@ -147,6 +187,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva) "
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 4
+        },
+        "end": {
+          "line": 14,
+          "character": 8
+        }
       }
     }
   },
@@ -164,6 +214,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar see3: boolean\n```\n[https://hvaD](https://hvaD)"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 8
+        }
       }
     }
   }

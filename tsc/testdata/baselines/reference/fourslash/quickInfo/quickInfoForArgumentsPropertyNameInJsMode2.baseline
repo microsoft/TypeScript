@@ -34,6 +34,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f(x: any): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 10
+        }
       }
     }
   },
@@ -51,6 +61,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction f(x: any): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 0
+        },
+        "end": {
+          "line": 4,
+          "character": 1
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
 === /quickInfoDisplayPartsClassProperty.ts ===
 // class c {
 //     public publicProperty: string;
-//            ^
+//            ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.publicProperty: string
@@ -10,7 +10,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     private privateProperty: string;
-//             ^
+//             ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.privateProperty: string
@@ -18,7 +18,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     protected protectedProperty: string;
-//               ^
+//               ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.protectedProperty: string
@@ -26,7 +26,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     static staticProperty: string;
-//            ^
+//            ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.staticProperty: string
@@ -34,7 +34,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     private static privateStaticProperty: string;
-//                    ^
+//                    ^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.privateStaticProperty: string
@@ -42,7 +42,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //     protected static protectedStaticProperty: string;
-//                      ^
+//                      ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.protectedStaticProperty: string
@@ -51,7 +51,7 @@
 // | ----------------------------------------------------------------------
 //     method() {
 //         this.publicProperty;
-//              ^
+//              ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.publicProperty: string
@@ -59,7 +59,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         this.privateProperty;
-//              ^
+//              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.privateProperty: string
@@ -67,7 +67,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         this.protectedProperty;
-//              ^
+//              ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.protectedProperty: string
@@ -75,7 +75,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         c.staticProperty;
-//           ^
+//           ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.staticProperty: string
@@ -83,7 +83,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         c.privateStaticProperty;
-//           ^
+//           ^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.privateStaticProperty: string
@@ -91,7 +91,7 @@
 // | 
 // | ----------------------------------------------------------------------
 //         c.protectedStaticProperty;
-//           ^
+//           ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.protectedStaticProperty: string
@@ -102,14 +102,14 @@
 // }
 // var cInstance = new c();
 // cInstance.publicProperty;
-// ^
+// ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var cInstance: c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//           ^
+//           ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.publicProperty: string
@@ -124,7 +124,7 @@
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//   ^
+//   ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) c.staticProperty: string
@@ -146,6 +146,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.publicProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 25
+        }
       }
     }
   },
@@ -163,6 +173,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.privateProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 12
+        },
+        "end": {
+          "line": 2,
+          "character": 27
+        }
       }
     }
   },
@@ -180,6 +200,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.protectedProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 31
+        }
       }
     }
   },
@@ -197,6 +227,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.staticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 11
+        },
+        "end": {
+          "line": 4,
+          "character": 25
+        }
       }
     }
   },
@@ -214,6 +254,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.privateStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 19
+        },
+        "end": {
+          "line": 5,
+          "character": 40
+        }
       }
     }
   },
@@ -231,6 +281,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.protectedStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 21
+        },
+        "end": {
+          "line": 6,
+          "character": 44
+        }
       }
     }
   },
@@ -248,6 +308,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.publicProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 13
+        },
+        "end": {
+          "line": 8,
+          "character": 27
+        }
       }
     }
   },
@@ -265,6 +335,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.privateProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 13
+        },
+        "end": {
+          "line": 9,
+          "character": 28
+        }
       }
     }
   },
@@ -282,6 +362,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.protectedProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 30
+        }
       }
     }
   },
@@ -299,6 +389,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.staticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 10
+        },
+        "end": {
+          "line": 11,
+          "character": 24
+        }
       }
     }
   },
@@ -316,6 +416,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.privateStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 10
+        },
+        "end": {
+          "line": 12,
+          "character": 31
+        }
       }
     }
   },
@@ -333,6 +443,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.protectedStaticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 10
+        },
+        "end": {
+          "line": 13,
+          "character": 33
+        }
       }
     }
   },
@@ -350,6 +470,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar cInstance: c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 9
+        }
       }
     }
   },
@@ -367,6 +497,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.publicProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 10
+        },
+        "end": {
+          "line": 17,
+          "character": 24
+        }
       }
     }
   },
@@ -384,6 +524,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 0
+        },
+        "end": {
+          "line": 18,
+          "character": 1
+        }
       }
     }
   },
@@ -401,6 +551,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) c.staticProperty: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 2
+        },
+        "end": {
+          "line": 18,
+          "character": 16
+        }
       }
     }
   }

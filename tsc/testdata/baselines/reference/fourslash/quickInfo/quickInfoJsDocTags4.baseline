@@ -16,7 +16,7 @@
 // 
 // class Bar extends Foo {
 //     method(x: number, y: number): number {
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Bar.method(x: number, y: number): number
@@ -42,6 +42,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Bar.method(x: number, y: number): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 4
+        },
+        "end": {
+          "line": 15,
+          "character": 10
+        }
       }
     }
   }

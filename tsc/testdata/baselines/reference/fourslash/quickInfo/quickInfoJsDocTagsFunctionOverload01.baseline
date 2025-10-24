@@ -4,7 +4,7 @@
 //  * Doc foo
 //  */
 // declare function foo(): void;
-//                  ^
+//                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
@@ -18,7 +18,7 @@
 //  * @tag Tag text
 //  */
 // declare function foo(x: number): void
-//                  ^
+//                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
@@ -41,6 +41,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\nDoc foo"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 17
+        },
+        "end": {
+          "line": 3,
+          "character": 20
+        }
       }
     }
   },
@@ -58,6 +68,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\nDoc foo"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 17
+        },
+        "end": {
+          "line": 9,
+          "character": 20
+        }
       }
     }
   }

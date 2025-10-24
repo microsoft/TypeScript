@@ -17,7 +17,7 @@
 // class Bar extends Foo {
 //     /** @inheritDoc */
 //     method(x, y) {
-//     ^
+//     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) Bar.method(x: any, y: any): number
@@ -45,6 +45,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) Bar.method(x: any, y: any): number\n```\n\n\n*@inheritDoc*"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 4
+        },
+        "end": {
+          "line": 16,
+          "character": 10
+        }
       }
     }
   }

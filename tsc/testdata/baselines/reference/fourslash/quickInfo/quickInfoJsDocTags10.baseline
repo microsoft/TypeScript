@@ -6,7 +6,7 @@
 //  * @template T1,T2 Comment Text
 //  */
 // const foo = (a, b) => {};
-//       ^
+//       ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | const foo: <T1, T2>(a: T1, b: any) => void
@@ -35,6 +35,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconst foo: <T1, T2>(a: T1, b: any) => void\n```\n\n\n*@param* `a`\n\n*@param* `a`\n\n*@template* `T1`, `T2` — Comment Text\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 6
+        },
+        "end": {
+          "line": 5,
+          "character": 9
+        }
       }
     }
   }

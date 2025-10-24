@@ -38,6 +38,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) A\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 30
+        },
+        "end": {
+          "line": 0,
+          "character": 31
+        }
       }
     }
   },
@@ -55,6 +65,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) A\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 59
+        },
+        "end": {
+          "line": 0,
+          "character": 60
+        }
       }
     }
   },
@@ -72,6 +92,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) A\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 74
+        },
+        "end": {
+          "line": 1,
+          "character": 75
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
 === /quickInfoCommentsClass.ts ===
 // /** This is class c2 without constructor*/
 // class c2 {
-//        ^
+//       ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c2
@@ -11,14 +11,14 @@
 // | ----------------------------------------------------------------------
 // }
 // var i2 = new c2();
-//      ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i2: c2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//               ^
+//              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c2
@@ -26,14 +26,14 @@
 // | This is class c2 without constructor
 // | ----------------------------------------------------------------------
 // var i2_c = c2;
-//       ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i2_c: typeof c2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c2
@@ -41,7 +41,7 @@
 // | This is class c2 without constructor
 // | ----------------------------------------------------------------------
 // class c3 {
-//        ^
+//       ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c3
@@ -53,14 +53,14 @@
 //     }
 // }
 // var i3 = new c3();
-//      ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i3: c3
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//               ^
+//              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor c3(): c3
@@ -68,14 +68,14 @@
 // | Constructor comment
 // | ----------------------------------------------------------------------
 // var i3_c = c3;
-//       ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i3_c: typeof c3
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c3
@@ -84,7 +84,7 @@
 // | ----------------------------------------------------------------------
 // /** Class comment*/
 // class c4 {
-//        ^
+//       ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c4
@@ -96,14 +96,14 @@
 //     }
 // }
 // var i4 = new c4();
-//      ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i4: c4
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//               ^
+//              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor c4(): c4
@@ -111,14 +111,14 @@
 // | Constructor comment
 // | ----------------------------------------------------------------------
 // var i4_c = c4;
-//       ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i4_c: typeof c4
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c4
@@ -127,7 +127,7 @@
 // | ----------------------------------------------------------------------
 // /** Class with statics*/
 // class c5 {
-//        ^
+//       ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c5
@@ -137,14 +137,14 @@
 //     static s1: number;
 // }
 // var i5 = new c5();
-//      ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i5: c5
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//               ^
+//              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c5
@@ -152,14 +152,14 @@
 // | Class with statics
 // | ----------------------------------------------------------------------
 // var i5_c = c5;
-//        ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i5_c: typeof c5
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c5
@@ -168,7 +168,7 @@
 // | ----------------------------------------------------------------------
 // /** class with statics and constructor*/
 // class c6 {
-//        ^
+//       ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c6
@@ -182,14 +182,14 @@
 //     }
 // }
 // var i6 = new c6();
-//      ^
+//     ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i6: c6
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//               ^
+//              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor c6(): c6
@@ -197,14 +197,14 @@
 // | constructor comment
 // | ----------------------------------------------------------------------
 // var i6_c = c6;
-//       ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | var i6_c: typeof c6
 // | ```
 // | 
 // | ----------------------------------------------------------------------
-//             ^
+//            ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | class c6
@@ -232,7 +232,7 @@
 //     }
 // }
 // var myVar = new m.m2.c1();
-//                       ^
+//                      ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | constructor m.m2.c1(): m.m2.c1
@@ -254,6 +254,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c2\n```\nThis is class c2 without constructor"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 6
+        },
+        "end": {
+          "line": 1,
+          "character": 8
+        }
       }
     }
   },
@@ -271,6 +281,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i2: c2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 6
+        }
       }
     }
   },
@@ -288,6 +308,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c2\n```\nThis is class c2 without constructor"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 13
+        },
+        "end": {
+          "line": 3,
+          "character": 15
+        }
       }
     }
   },
@@ -305,6 +335,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i2_c: typeof c2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 4
+        },
+        "end": {
+          "line": 4,
+          "character": 8
+        }
       }
     }
   },
@@ -322,6 +362,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c2\n```\nThis is class c2 without constructor"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 11
+        },
+        "end": {
+          "line": 4,
+          "character": 13
+        }
       }
     }
   },
@@ -339,6 +389,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 6
+        },
+        "end": {
+          "line": 5,
+          "character": 8
+        }
       }
     }
   },
@@ -356,6 +416,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i3: c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 4
+        },
+        "end": {
+          "line": 10,
+          "character": 6
+        }
       }
     }
   },
@@ -373,6 +443,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c3(): c3\n```\nConstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 15
+        }
       }
     }
   },
@@ -390,6 +470,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i3_c: typeof c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 8
+        }
       }
     }
   },
@@ -407,6 +497,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c3\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 11
+        },
+        "end": {
+          "line": 11,
+          "character": 13
+        }
       }
     }
   },
@@ -424,6 +524,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c4\n```\nClass comment"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 6
+        },
+        "end": {
+          "line": 13,
+          "character": 8
+        }
       }
     }
   },
@@ -441,6 +551,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i4: c4\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 4
+        },
+        "end": {
+          "line": 18,
+          "character": 6
+        }
       }
     }
   },
@@ -458,6 +578,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c4(): c4\n```\nConstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 13
+        },
+        "end": {
+          "line": 18,
+          "character": 15
+        }
       }
     }
   },
@@ -475,6 +605,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i4_c: typeof c4\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 4
+        },
+        "end": {
+          "line": 19,
+          "character": 8
+        }
       }
     }
   },
@@ -492,6 +632,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c4\n```\nClass comment"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 11
+        },
+        "end": {
+          "line": 19,
+          "character": 13
+        }
       }
     }
   },
@@ -509,6 +659,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c5\n```\nClass with statics"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 6
+        },
+        "end": {
+          "line": 21,
+          "character": 8
+        }
       }
     }
   },
@@ -526,6 +686,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i5: c5\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 4
+        },
+        "end": {
+          "line": 24,
+          "character": 6
+        }
       }
     }
   },
@@ -543,6 +713,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c5\n```\nClass with statics"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 13
+        },
+        "end": {
+          "line": 24,
+          "character": 15
+        }
       }
     }
   },
@@ -560,6 +740,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i5_c: typeof c5\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 4
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
       }
     }
   },
@@ -577,6 +767,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c5\n```\nClass with statics"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 11
+        },
+        "end": {
+          "line": 25,
+          "character": 13
+        }
       }
     }
   },
@@ -594,6 +794,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c6\n```\nclass with statics and constructor"
+      },
+      "range": {
+        "start": {
+          "line": 27,
+          "character": 6
+        },
+        "end": {
+          "line": 27,
+          "character": 8
+        }
       }
     }
   },
@@ -611,6 +821,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i6: c6\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 4
+        },
+        "end": {
+          "line": 34,
+          "character": 6
+        }
       }
     }
   },
@@ -628,6 +848,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor c6(): c6\n```\nconstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 34,
+          "character": 13
+        },
+        "end": {
+          "line": 34,
+          "character": 15
+        }
       }
     }
   },
@@ -645,6 +875,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar i6_c: typeof c6\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 35,
+          "character": 4
+        },
+        "end": {
+          "line": 35,
+          "character": 8
+        }
       }
     }
   },
@@ -662,6 +902,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nclass c6\n```\nclass with statics and constructor"
+      },
+      "range": {
+        "start": {
+          "line": 35,
+          "character": 11
+        },
+        "end": {
+          "line": 35,
+          "character": 13
+        }
       }
     }
   },
@@ -679,6 +929,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nconstructor m.m2.c1(): m.m2.c1\n```\nconstructor comment"
+      },
+      "range": {
+        "start": {
+          "line": 56,
+          "character": 21
+        },
+        "end": {
+          "line": 56,
+          "character": 23
+        }
       }
     }
   }

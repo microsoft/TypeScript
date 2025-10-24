@@ -14,7 +14,7 @@
 //      * SubClass.prop
 //      */
 //     prop: string | undefined;
-//     ^
+//     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (property) SubClass.prop: string
@@ -40,6 +40,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(property) SubClass.prop: string\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 8
+        }
       }
     }
   }

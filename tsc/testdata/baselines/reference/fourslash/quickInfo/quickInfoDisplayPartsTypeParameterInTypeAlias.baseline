@@ -1,7 +1,7 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsTypeParameterInTypeAlias.ts ===
 // type List<T> = T[]
-//      ^
+//      ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type List<T> = T[]
@@ -23,7 +23,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // type List2<T extends string> = T[];
-//      ^
+//      ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | type List2<T extends string> = T[]
@@ -59,6 +59,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype List<T> = T[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 5
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
       }
     }
   },
@@ -76,6 +86,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 10
+        },
+        "end": {
+          "line": 0,
+          "character": 11
+        }
       }
     }
   },
@@ -93,6 +113,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 15
+        },
+        "end": {
+          "line": 0,
+          "character": 16
+        }
       }
     }
   },
@@ -110,6 +140,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\ntype List2<T extends string> = T[]\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 5
+        },
+        "end": {
+          "line": 1,
+          "character": 10
+        }
       }
     }
   },
@@ -127,6 +167,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
       }
     }
   },
@@ -144,6 +194,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(type parameter) T extends string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 31
+        },
+        "end": {
+          "line": 1,
+          "character": 32
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
 === /quickInfoCommentsFunctionDeclaration.ts ===
 // /** This comment should appear for foo*/
 // function foo() {
-//           ^
+//          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
@@ -11,7 +11,7 @@
 // | ----------------------------------------------------------------------
 // }
 // foo();
-//  ^
+// ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
@@ -20,7 +20,7 @@
 // | ----------------------------------------------------------------------
 // /** This is comment for function signature*/
 // function fooWithParameters(/** this is comment about a*/a: string,
-//            ^
+//          ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function fooWithParameters(a: string, b: number): void
@@ -39,7 +39,7 @@
 // | ----------------------------------------------------------------------
 // }
 // fooWithParameters("a",10);
-//             ^
+// ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function fooWithParameters(a: string, b: number): void
@@ -67,6 +67,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): void\n```\nThis comment should appear for foo"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
       }
     }
   },
@@ -84,6 +94,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction foo(): void\n```\nThis comment should appear for foo"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 3
+        }
       }
     }
   },
@@ -101,6 +121,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction fooWithParameters(a: string, b: number): void\n```\nThis is comment for function signature"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 9
+        },
+        "end": {
+          "line": 5,
+          "character": 26
+        }
       }
     }
   },
@@ -118,6 +148,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nvar d: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 8
+        },
+        "end": {
+          "line": 8,
+          "character": 9
+        }
       }
     }
   },
@@ -135,6 +175,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\nfunction fooWithParameters(a: string, b: number): void\n```\nThis is comment for function signature"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 0
+        },
+        "end": {
+          "line": 10,
+          "character": 17
+        }
       }
     }
   }

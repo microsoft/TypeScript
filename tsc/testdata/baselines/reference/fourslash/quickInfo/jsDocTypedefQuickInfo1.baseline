@@ -10,7 +10,7 @@
 //  * @param {Opts} opts
 //  */
 // function foo(opts) {
-//              ^
+//              ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) opts: Opts
@@ -30,7 +30,7 @@
 //  * @param {Opts1} opts
 //  */
 // function foo1(opts1) {
-//               ^
+//               ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (parameter) opts1: any
@@ -55,6 +55,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) opts: Opts\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 13
+        },
+        "end": {
+          "line": 9,
+          "character": 17
+        }
       }
     }
   },
@@ -72,6 +82,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(parameter) opts1: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 22,
+          "character": 14
+        },
+        "end": {
+          "line": 22,
+          "character": 19
+        }
       }
     }
   }

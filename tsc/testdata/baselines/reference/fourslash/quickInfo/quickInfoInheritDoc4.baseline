@@ -7,7 +7,7 @@
 //      * @inheritdoc
 //      */
 //     static value() {
-//            ^
+//            ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | (method) B.value(): any
@@ -34,6 +34,16 @@
       "contents": {
         "kind": "markdown",
         "value": "```tsx\n(method) B.value(): any\n```\n\n\n*@inheritdoc*"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 11
+        },
+        "end": {
+          "line": 6,
+          "character": 16
+        }
       }
     }
   }
