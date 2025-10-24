@@ -158,21 +158,18 @@ class NoBase {
         super.hasOwnProperty('');
     }
 }
-let SomeBase = (() => {
-    class SomeBase {
-        constructor() {
-            this.privateMember = 0;
-            this.publicMember = 0;
-        }
-        privateFunc() { }
-        publicFunc() { }
-        static privateStaticFunc() { }
-        static publicStaticFunc() { }
+class SomeBase {
+    constructor() {
+        this.privateMember = 0;
+        this.publicMember = 0;
     }
-    SomeBase.privateStaticMember = 0;
-    SomeBase.publicStaticMember = 0;
-    return SomeBase;
-})();
+    privateFunc() { }
+    publicFunc() { }
+    static privateStaticFunc() { }
+    static publicStaticFunc() { }
+}
+SomeBase.privateStaticMember = 0;
+SomeBase.publicStaticMember = 0;
 //super.publicInstanceMemberNotFunction in constructor of derived class
 //super.publicInstanceMemberNotFunction in instance member function of derived class
 //super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class

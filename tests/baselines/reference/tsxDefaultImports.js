@@ -20,12 +20,9 @@ var SomeEnum;
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
 })(SomeEnum || (SomeEnum = {}));
-let SomeClass = (() => {
-    class SomeClass {
-    }
-    SomeClass.E = SomeEnum;
-    return SomeClass;
-})();
+class SomeClass {
+}
+SomeClass.E = SomeEnum;
 exports.default = SomeClass;
 //// [b.js]
 "use strict";

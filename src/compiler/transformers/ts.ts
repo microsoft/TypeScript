@@ -50,7 +50,6 @@ import {
     getEffectiveBaseTypeNode,
     getEmitFlags,
     getEmitModuleKind,
-    getEmitScriptTarget,
     getFirstConstructorWithBody,
     getInitializedVariables,
     getIsolatedModules,
@@ -160,7 +159,6 @@ import {
     PropertyName,
     removeAllComments,
     SatisfiesExpression,
-    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setConstantValue,
@@ -244,7 +242,6 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
     const legacyDecorators = !!compilerOptions.experimentalDecorators;
     const typeSerializer = compilerOptions.emitDecoratorMetadata ? createRuntimeTypeSerializer(context) : undefined;
@@ -879,8 +876,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         const facts = getClassFacts(node);
-        const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
-            !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
+        const promoteToIIFE = false;
 
         if (
             !isClassLikeDeclarationWithTypeScriptSyntax(node) &&

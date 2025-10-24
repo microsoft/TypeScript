@@ -203,21 +203,15 @@ exports.ExtendsStatics = exports.HasStatics = exports.VariableBase = exports.O =
 class A {
 }
 exports.A = A;
-let B = (() => {
-    class B {
-    }
-    B.cat = "cat";
-    return B;
-})();
+class B {
+}
 exports.B = B;
-let C = (() => {
-    class C {
-    }
-    C.Cls = class {
-    };
-    return C;
-})();
+B.cat = "cat";
+class C {
+}
 exports.C = C;
+C.Cls = class {
+};
 class D {
     /**
      * @param {number} a
@@ -229,52 +223,49 @@ exports.D = D;
 /**
  * @template T,U
  */
-let E = (() => {
-    class E {
-        /**
-         * @return {U}
-         */
-        get f1() { return /** @type {*} */ (null); }
-        /**
-         * @param {U} _p
-         */
-        set f1(_p) { }
-        /**
-         * @return {U}
-         */
-        get f2() { return /** @type {*} */ (null); }
-        /**
-         * @param {U} _p
-         */
-        set f3(_p) { }
-        /**
-         * @param {T} a
-         * @param {U} b
-         */
-        constructor(a, b) {
-            this.initializedField = 12;
-        }
-        /**
-         * @return {string}
-         */
-        static get s1() { return ""; }
-        /**
-         * @param {string} _p
-         */
-        static set s1(_p) { }
-        /**
-         * @return {string}
-         */
-        static get s2() { return ""; }
-        /**
-         * @param {string} _p
-         */
-        static set s3(_p) { }
+class E {
+    /**
+     * @return {U}
+     */
+    get f1() { return /** @type {*} */ (null); }
+    /**
+     * @param {U} _p
+     */
+    set f1(_p) { }
+    /**
+     * @return {U}
+     */
+    get f2() { return /** @type {*} */ (null); }
+    /**
+     * @param {U} _p
+     */
+    set f3(_p) { }
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
+    constructor(a, b) {
+        this.initializedField = 12;
     }
-    E.staticInitializedField = 12;
-    return E;
-})();
+    /**
+     * @return {string}
+     */
+    static get s1() { return ""; }
+    /**
+     * @param {string} _p
+     */
+    static set s1(_p) { }
+    /**
+     * @return {string}
+     */
+    static get s2() { return ""; }
+    /**
+     * @param {string} _p
+     */
+    static set s3(_p) { }
+}
 exports.E = E;
+E.staticInitializedField = 12;
 /**
  * @template T,U
  */

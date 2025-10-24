@@ -40,17 +40,14 @@ const db = require("./db");
 function someDecorator(target) {
     return target;
 }
-let MyClass = (() => {
-    let MyClass = class MyClass {
-        constructor(db) {
-            this.db = db;
-            this.db.doSomething();
-        }
-    };
-    exports.MyClass = MyClass = __decorate([
-        someDecorator,
-        __metadata("design:paramtypes", [db.db])
-    ], MyClass);
-    return MyClass;
-})();
+let MyClass = class MyClass {
+    constructor(db) {
+        this.db = db;
+        this.db.doSomething();
+    }
+};
 exports.MyClass = MyClass;
+exports.MyClass = MyClass = __decorate([
+    someDecorator,
+    __metadata("design:paramtypes", [db.db])
+], MyClass);

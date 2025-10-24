@@ -68,15 +68,12 @@ function f1(x) {
 }
 class C1 {
 }
-let C2 = (() => {
-    class C2 {
-        static foo(x) {
-            return undefined;
-        }
+class C2 {
+    static foo(x) {
+        return undefined;
     }
-    C2.y = undefined;
-    return C2;
-})();
+}
+C2.y = undefined;
 var N1;
 (function (N1) {
     N1.y = this;

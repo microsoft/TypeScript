@@ -10,12 +10,9 @@ void def;
 //// [code.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    class C {
-    }
-    C.x = 0;
-    return C;
-})();
+class C {
+}
+C.x = 0;
 ;
 exports.default = C.x;
 //// [usage.js]

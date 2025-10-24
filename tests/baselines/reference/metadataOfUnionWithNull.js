@@ -57,56 +57,53 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 function PropDeco(target, propKey) { }
 class A {
 }
-let B = (() => {
-    class B {
-    }
-    __decorate([
-        PropDeco,
-        __metadata("design:type", String)
-    ], B.prototype, "x", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", Boolean)
-    ], B.prototype, "y", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", String)
-    ], B.prototype, "z", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", void 0)
-    ], B.prototype, "a", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", void 0)
-    ], B.prototype, "b", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", void 0)
-    ], B.prototype, "c", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", void 0)
-    ], B.prototype, "d", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
-    ], B.prototype, "e", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", Object)
-    ], B.prototype, "f", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", A)
-    ], B.prototype, "g", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", B)
-    ], B.prototype, "h", void 0);
-    __decorate([
-        PropDeco,
-        __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
-    ], B.prototype, "j", void 0);
-    return B;
-})();
+class B {
+}
+__decorate([
+    PropDeco,
+    __metadata("design:type", String)
+], B.prototype, "x", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", Boolean)
+], B.prototype, "y", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", String)
+], B.prototype, "z", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", void 0)
+], B.prototype, "a", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", void 0)
+], B.prototype, "b", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", void 0)
+], B.prototype, "c", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", void 0)
+], B.prototype, "d", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+], B.prototype, "e", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", Object)
+], B.prototype, "f", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", A)
+], B.prototype, "g", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", B)
+], B.prototype, "h", void 0);
+__decorate([
+    PropDeco,
+    __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+], B.prototype, "j", void 0);

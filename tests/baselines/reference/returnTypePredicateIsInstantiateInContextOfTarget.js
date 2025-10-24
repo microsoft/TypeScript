@@ -21,16 +21,13 @@ const TestRender = () => <TestComponent />;
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 const React = require("react");
-let TestComponent = (() => {
-    class TestComponent extends React.Component {
-        // Type guard is defined as a static class property
-        static isAny(obj) {
-            return true;
-        }
+class TestComponent extends React.Component {
+    // Type guard is defined as a static class property
+    static isAny(obj) {
+        return true;
     }
-    TestComponent.defaultProps = {
-        isAny: TestComponent.isAny
-    };
-    return TestComponent;
-})();
+}
+TestComponent.defaultProps = {
+    isAny: TestComponent.isAny
+};
 const TestRender = () => React.createElement(TestComponent, null);

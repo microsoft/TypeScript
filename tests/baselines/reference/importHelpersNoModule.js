@@ -36,22 +36,19 @@ exports.A = A;
 class B extends A {
 }
 exports.B = B;
-let C = (() => {
-    let C = class C {
-        method(x) {
-        }
-    };
-    tslib_1.__decorate([
-        tslib_1.__param(0, dec),
-        tslib_1.__metadata("design:type", Function),
-        tslib_1.__metadata("design:paramtypes", [Number]),
-        tslib_1.__metadata("design:returntype", void 0)
-    ], C.prototype, "method", null);
-    C = tslib_1.__decorate([
-        dec
-    ], C);
-    return C;
-})();
+let C = class C {
+    method(x) {
+    }
+};
+tslib_1.__decorate([
+    tslib_1.__param(0, dec),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Number]),
+    tslib_1.__metadata("design:returntype", void 0)
+], C.prototype, "method", null);
+C = tslib_1.__decorate([
+    dec
+], C);
 //// [script.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -69,19 +66,16 @@ class A {
 }
 class B extends A {
 }
-let C = (() => {
-    let C = class C {
-        method(x) {
-        }
-    };
-    __decorate([
-        __param(0, dec),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Number]),
-        __metadata("design:returntype", void 0)
-    ], C.prototype, "method", null);
-    C = __decorate([
-        dec
-    ], C);
-    return C;
-})();
+let C = class C {
+    method(x) {
+    }
+};
+__decorate([
+    __param(0, dec),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], C.prototype, "method", null);
+C = __decorate([
+    dec
+], C);

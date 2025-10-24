@@ -14,22 +14,15 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers3.js]
-let C = (() => {
-    var _a;
-    class C {
-    }
-    _a = C;
-    C.a = 1;
-    C.b = _a.a + 1;
-    return C;
-})();
-let D = (() => {
-    var _a;
-    class D extends C {
-    }
-    _a = D;
-    D.c = 2;
-    D.d = _a.c + 1;
-    D.e = super.a + _a.c + 1;
-    return D;
-})();
+var _a, _b, _c;
+class C {
+}
+_a = C;
+C.a = 1;
+C.b = _a.a + 1;
+class D extends (_c = C) {
+}
+_b = D;
+D.c = 2;
+D.d = _b.c + 1;
+D.e = Reflect.get(_c, "a", _b) + _b.c + 1;

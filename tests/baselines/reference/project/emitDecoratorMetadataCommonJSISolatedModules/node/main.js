@@ -8,20 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass1 = void 0;
 const ng = require("angular2/core");
-let MyClass1 = (() => {
-    var _a;
-    let MyClass1 = class MyClass1 {
-        constructor(_elementRef) {
-            this._elementRef = _elementRef;
-        }
-    };
-    exports.MyClass1 = MyClass1 = __decorate([
-        foo,
-        __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
-    ], MyClass1);
-    return MyClass1;
-})();
+let MyClass1 = class MyClass1 {
+    constructor(_elementRef) {
+        this._elementRef = _elementRef;
+    }
+};
 exports.MyClass1 = MyClass1;
+exports.MyClass1 = MyClass1 = __decorate([
+    foo,
+    __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
+], MyClass1);

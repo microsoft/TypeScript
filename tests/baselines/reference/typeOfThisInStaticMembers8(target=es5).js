@@ -21,31 +21,28 @@ class C {
 
 
 //// [typeOfThisInStaticMembers8.js]
-let C = (() => {
-    var _a;
-    class C {
+var _a;
+class C {
+}
+_a = C;
+C.f = 1;
+C.arrowFunctionBoundary = () => _a.f + 1;
+C.functionExprBoundary = function () { return this.f + 2; };
+C.classExprBoundary = class {
+    constructor() {
+        this.a = this.f + 3;
     }
-    _a = C;
-    C.f = 1;
-    C.arrowFunctionBoundary = () => _a.f + 1;
-    C.functionExprBoundary = function () { return this.f + 2; };
-    C.classExprBoundary = class {
+};
+C.functionAndClassDeclBoundary = (() => {
+    function foo() {
+        return this.f + 4;
+    }
+    class CC {
         constructor() {
-            this.a = this.f + 3;
+            this.a = this.f + 5;
         }
-    };
-    C.functionAndClassDeclBoundary = (() => {
-        function foo() {
-            return this.f + 4;
+        method() {
+            return this.f + 6;
         }
-        class CC {
-            constructor() {
-                this.a = this.f + 5;
-            }
-            method() {
-                return this.f + 6;
-            }
-        }
-    })();
-    return C;
+    }
 })();

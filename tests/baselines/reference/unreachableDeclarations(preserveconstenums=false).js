@@ -131,12 +131,9 @@ function func4() {
     function aFunc() {
         console.log(ClassA.Value);
     }
-    let ClassA = (() => {
-        class ClassA {
-        }
-        ClassA.Value = 1234;
-        return ClassA;
-    })();
+    class ClassA {
+    }
+    ClassA.Value = 1234;
 }
 function func5() {
     aFunc();

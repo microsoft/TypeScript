@@ -20,14 +20,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = (() => {
-                let C = class C {
-                };
-                C = __decorate([
-                    dec
-                ], C);
-                return C;
-            })();
+            C = class C {
+            };
+            C = __decorate([
+                dec
+            ], C);
             exports_1("default", C);
             env_1 = { stack: [], error: void 0, hasError: false };
             try {

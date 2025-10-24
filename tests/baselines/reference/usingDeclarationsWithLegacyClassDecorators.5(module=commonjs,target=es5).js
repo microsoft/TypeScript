@@ -21,14 +21,11 @@ var before, C;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    exports.C = C = (() => {
-        let C = class C {
-        };
-        exports.C = C = __decorate([
-            dec
-        ], C);
-        return C;
-    })();
+    exports.C = C = class C {
+    };
+    exports.C = C = __decorate([
+        dec
+    ], C);
 }
 catch (e_1) {
     env_1.error = e_1;

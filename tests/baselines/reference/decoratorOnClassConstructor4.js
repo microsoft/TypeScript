@@ -26,29 +26,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let A = (() => {
-    let A = class A {
-    };
-    A = __decorate([
-        dec
-    ], A);
-    return A;
-})();
-let B = (() => {
-    let B = class B {
-        constructor(x) { }
-    };
-    B = __decorate([
-        dec,
-        __metadata("design:paramtypes", [Number])
-    ], B);
-    return B;
-})();
-let C = (() => {
-    let C = class C extends A {
-    };
-    C = __decorate([
-        dec
-    ], C);
-    return C;
-})();
+let A = class A {
+};
+A = __decorate([
+    dec
+], A);
+let B = class B {
+    constructor(x) { }
+};
+B = __decorate([
+    dec,
+    __metadata("design:paramtypes", [Number])
+], B);
+let C = class C extends A {
+};
+C = __decorate([
+    dec
+], C);
