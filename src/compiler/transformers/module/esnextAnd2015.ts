@@ -18,7 +18,6 @@ import {
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
-    getEmitScriptTarget,
     getExternalHelpersModuleName,
     getExternalModuleNameLiteral,
     getIsolatedModules,
@@ -46,7 +45,6 @@ import {
     NodeId,
     rangeContainsRange,
     rewriteModuleSpecifier,
-    ScriptTarget,
     setOriginalNode,
     setTextRange,
     shouldRewriteModuleSpecifier,
@@ -72,7 +70,6 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     const host = context.getEmitHost();
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
     const previousOnEmitNode = context.onEmitNode;
     const previousOnSubstituteNode = context.onSubstituteNode;
     context.onEmitNode = onEmitNode;
