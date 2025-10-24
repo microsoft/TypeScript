@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 //@module: amd
 module M {
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+//@module: amd
+namespace M {
+=======
+//@module: commonjs
+namespace M {
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
     export interface E { }
     interface I { }
 }

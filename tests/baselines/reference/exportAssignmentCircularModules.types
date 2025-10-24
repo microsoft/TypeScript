@@ -11,7 +11,9 @@ module Foo {
 
 	export var x = foo0.x;
 >x : any
+>  : ^^^
 >foo0.x : any
+>       : ^^^
 >foo0 : typeof foo0
 >     : ^^^^^^^^^^^
 >x : any
@@ -32,7 +34,9 @@ module Foo {
 
 	export var x = foo1.x;
 >x : any
+>  : ^^^
 >foo1.x : any
+>       : ^^^
 >foo1 : typeof foo1
 >     : ^^^^^^^^^^^
 >x : any
@@ -53,7 +57,9 @@ module Foo {
 
 	export var x = foo2.x;
 >x : any
+>  : ^^^
 >foo2.x : any
+>       : ^^^
 >foo2 : typeof foo2
 >     : ^^^^^^^^^^^
 >x : any

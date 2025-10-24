@@ -137,6 +137,7 @@ export module TopLevelModule1 {
 >d1 : InterfaceX
 >   : ^^^^^^^^^^
 >d1.XisIn1_1_1() : any
+>                : ^^^
 >d1.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d1 : InterfaceX
@@ -150,6 +151,7 @@ export module TopLevelModule1 {
 >SubSubModule1 : any
 >              : ^^^
 >d2.XisIn1_1_1() : any
+>                : ^^^
 >d2.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d2 : InterfaceX
@@ -300,6 +302,7 @@ export module TopLevelModule1 {
 >d1 : InterfaceX
 >   : ^^^^^^^^^^
 >d1.XisIn1_1_1() : any
+>                : ^^^
 >d1.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d1 : InterfaceX
@@ -313,6 +316,7 @@ export module TopLevelModule1 {
 >SubSubModule1 : any
 >              : ^^^
 >d2.XisIn1_1_1() : any
+>                : ^^^
 >d2.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d2 : InterfaceX
@@ -375,6 +379,7 @@ export module TopLevelModule1 {
 >d1 : InterfaceX
 >   : ^^^^^^^^^^
 >d1.XisIn1_1_1() : any
+>                : ^^^
 >d1.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d1 : InterfaceX
@@ -467,6 +472,7 @@ export module TopLevelModule1 {
 >SubSubModule1 : any
 >              : ^^^
 >d2.XisIn1_1_1() : any
+>                : ^^^
 >d2.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d2 : SubSubModule1.InterfaceX

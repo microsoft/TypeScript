@@ -19,9 +19,12 @@ import Route = ReactRouter.Route;
 >      : ^^^
 
 var routes1 = <Route />;
->routes1 : error
-><Route /> : error
+>routes1 : any
+>        : ^^^
+><Route /> : any
+>          : ^^^
 >Route : any
+>      : ^^^
 
 module M {
 >M : typeof M
@@ -29,6 +32,7 @@ module M {
 
 	export var X: any;
 >X : any
+>  : ^^^
 }
 module M {
 >M : typeof M
@@ -36,10 +40,14 @@ module M {
 
 	// Should emit 'M.X' in both opening and closing tags
 	var y = <X></X>;
->y : error
-><X></X> : error
+>y : any
+>  : ^^^
+><X></X> : any
+>        : ^^^
 >X : any
+>  : ^^^
 >X : any
+>  : ^^^
 }
 
 === react.d.ts ===
@@ -49,6 +57,7 @@ declare module 'react' {
 
 	var x: any;
 >x : any
+>  : ^^^
 
 	export = x;
 >x : any
@@ -61,6 +70,7 @@ declare module ReactRouter {
 
 	var Route: any;
 >Route : any
+>      : ^^^
 
 	interface Thing { }
 }

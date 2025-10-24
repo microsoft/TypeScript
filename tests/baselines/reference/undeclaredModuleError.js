@@ -18,6 +18,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 }
 
 //// [undeclaredModuleError.js]
+<<<<<<< HEAD
 define(["require", "exports", "fs"], function (require, exports, fs) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -30,7 +31,43 @@ define(["require", "exports", "fs"], function (require, exports, fs) {
                 files.forEach((file) => {
                     var fullPath = join(IDoNotExist);
                 });
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+define(["require", "exports", "fs"], function (require, exports, fs) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    function readdir(path, accept, callback) { }
+    function join() {
+        var paths = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            paths[_i] = arguments[_i];
+        }
+    }
+    function instrumentFile(covFileDir, covFileName, originalFilePath) {
+        fs.readFile(originalFilePath, function () {
+            readdir(covFileDir, function () {
+            }, function (error, files) {
+                files.forEach(function (file) {
+                    var fullPath = join(IDoNotExist);
+                });
+=======
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fs = require("fs");
+function readdir(path, accept, callback) { }
+function join() {
+    var paths = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        paths[_i] = arguments[_i];
+    }
+}
+function instrumentFile(covFileDir, covFileName, originalFilePath) {
+    fs.readFile(originalFilePath, function () {
+        readdir(covFileDir, function () {
+        }, function (error, files) {
+            files.forEach(function (file) {
+                var fullPath = join(IDoNotExist);
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
             });
         });
-    }
-});
+    });
+}

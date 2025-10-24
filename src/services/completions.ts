@@ -482,7 +482,7 @@ export const enum SymbolOriginInfoKind {
     ComputedPropertyName = 1 << 9,
 
     SymbolMemberNoExport = SymbolMember,
-    SymbolMemberExport   = SymbolMember | Export,
+    SymbolMemberExport   = SymbolMember | ResolvedExport,
 }
 
 /** @internal */
@@ -536,7 +536,7 @@ function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolO
 }
 
 function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoResolvedExport {
-    return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
+    return !!(origin && origin.kind & SymbolOriginInfoKind.ResolvedExport);
 }
 
 function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
@@ -2621,11 +2621,11 @@ function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion
 }
 
 function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-    if (originIsExport(origin)) {
-        return stripQuotes(origin.moduleSymbol.name);
-    }
     if (originIsResolvedExport(origin)) {
         return origin.moduleSpecifier;
+    }
+    if (originIsExport(origin)) {
+        return stripQuotes(origin.moduleSymbol.name);
     }
     if (origin?.kind === SymbolOriginInfoKind.ThisType) {
         return CompletionSource.ThisProperty;

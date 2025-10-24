@@ -17,19 +17,32 @@ export = ClassB;
 //// [recursiveExportAssignmentAndFindAliasedType2_moduleA.ts]
 /// <reference path="recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts"/>
 import moduleC = require("moduleC");
-import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+import ClassB = require("./recursiveExportAssignmentAndFindAliasedType2_moduleB");
 export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType2_moduleB.js]
+<<<<<<< HEAD
 define(["require", "exports"], function (require, exports) {
     "use strict";
     class ClassB {
-    }
-    return ClassB;
-});
-//// [recursiveExportAssignmentAndFindAliasedType2_moduleA.js]
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-});
+    var ClassB = /** @class */ (function () {
+        function ClassB() {
+        }
+        return ClassB;
+    }());
+=======
+"use strict";
+var ClassB = /** @class */ (function () {
+    function ClassB() {
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    }
+    return ClassB;
+}());
+module.exports = ClassB;
+//// [recursiveExportAssignmentAndFindAliasedType2_moduleA.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;

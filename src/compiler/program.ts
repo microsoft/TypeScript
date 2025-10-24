@@ -4528,6 +4528,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             if (options.moduleResolution === ModuleResolutionKind.Node10) {
                 createDeprecatedDiagnostic("moduleResolution", "node10");
             }
+            if (options.moduleResolution === ModuleResolutionKind.Classic) {
+                createDeprecatedDiagnostic("moduleResolution", "classic");
+            }
+            if (options.module === ModuleKind.None || options.module === ModuleKind.AMD || options.module === ModuleKind.UMD || options.module === ModuleKind.System) {
+                createDeprecatedDiagnostic("module", ModuleKind[options.module]);
+            }
         });
     }
 

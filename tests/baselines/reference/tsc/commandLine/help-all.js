@@ -82,13 +82,13 @@ Conditions to set in addition to the resolver-specific defaults when resolving i
 
 [94m--module, -m[39m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
+one of: commonjs, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
 default: undefined
 
 [94m--moduleResolution[39m
 Specify how TypeScript looks up a file from a given module specifier.
-one of: classic, node10, node16, nodenext, bundler
-default: module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`
+one of: node16, nodenext, bundler
+default: `nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.
 
 [94m--moduleSuffixes[39m
 List of file name suffixes to search when resolving a module.

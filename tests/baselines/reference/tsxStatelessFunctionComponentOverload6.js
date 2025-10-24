@@ -60,6 +60,7 @@ const b12 = <MainButton data-format="Hello world" />
 
 
 //// [file.jsx]
+<<<<<<< HEAD
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -78,7 +79,45 @@ define(["require", "exports", "react"], function (require, exports, React) {
             return this._buildMainLink(props);
         }
         return this._buildMainButton(props);
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+define(["require", "exports", "react"], function (require, exports, React) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MainButton = MainButton;
+    var obj = {
+        children: "hi",
+        to: "boo"
+    };
+    var obj1;
+    var obj2 = {
+        onClick: function () { }
+    };
+    function MainButton(props) {
+        var linkProps = props;
+        if (linkProps.to) {
+            return this._buildMainLink(props);
+        }
+        return this._buildMainButton(props);
+=======
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MainButton = MainButton;
+var React = require("react");
+var obj = {
+    children: "hi",
+    to: "boo"
+};
+var obj1;
+var obj2 = {
+    onClick: function () { }
+};
+function MainButton(props) {
+    var linkProps = props;
+    if (linkProps.to) {
+        return this._buildMainLink(props);
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
     }
+<<<<<<< HEAD
     // OK
     const b0 = <MainButton to='/some/path'>GO</MainButton>;
     const b1 = <MainButton onClick={(e) => { }}>Hello world</MainButton>;
@@ -94,3 +133,37 @@ define(["require", "exports", "react"], function (require, exports, React) {
     const b11 = <MainButton onClick={(e) => { }} className="hello" data-format>Hello world</MainButton>;
     const b12 = <MainButton data-format="Hello world"/>;
 });
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    // OK
+    var b0 = <MainButton to='/some/path'>GO</MainButton>;
+    var b1 = <MainButton onClick={function (e) { }}>Hello world</MainButton>;
+    var b2 = <MainButton {...obj}/>;
+    var b3 = <MainButton {...{ to: 10000 }} {...obj}/>;
+    var b4 = <MainButton {...obj1}/>; // any; just pick the first overload
+    var b5 = <MainButton {...obj1} to="/to/somewhere"/>; // should pick the second overload
+    var b6 = <MainButton {...obj2}/>;
+    var b7 = <MainButton {...{ onClick: function () { console.log("hi"); } }}/>;
+    var b8 = <MainButton {...{ onClick: function () { } }}/>; // OK; method declaration get retained (See GitHub #13365)
+    var b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
+    var b10 = <MainButton to='/some/path' children="hi"></MainButton>;
+    var b11 = <MainButton onClick={function (e) { }} className="hello" data-format>Hello world</MainButton>;
+    var b12 = <MainButton data-format="Hello world"/>;
+});
+=======
+    return this._buildMainButton(props);
+}
+// OK
+var b0 = <MainButton to='/some/path'>GO</MainButton>;
+var b1 = <MainButton onClick={function (e) { }}>Hello world</MainButton>;
+var b2 = <MainButton {...obj}/>;
+var b3 = <MainButton {...{ to: 10000 }} {...obj}/>;
+var b4 = <MainButton {...obj1}/>; // any; just pick the first overload
+var b5 = <MainButton {...obj1} to="/to/somewhere"/>; // should pick the second overload
+var b6 = <MainButton {...obj2}/>;
+var b7 = <MainButton {...{ onClick: function () { console.log("hi"); } }}/>;
+var b8 = <MainButton {...{ onClick: function () { } }}/>; // OK; method declaration get retained (See GitHub #13365)
+var b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
+var b10 = <MainButton to='/some/path' children="hi"></MainButton>;
+var b11 = <MainButton onClick={function (e) { }} className="hello" data-format>Hello world</MainButton>;
+var b12 = <MainButton data-format="Hello world"/>;
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))

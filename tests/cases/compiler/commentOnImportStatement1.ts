@@ -1,4 +1,4 @@
-// @module: amd
+// @module: commonjs
 // @removeComments: false
 /* Copyright */
 

@@ -68,6 +68,7 @@ interface D { }
 export interface D { }
 
 //// [duplicateSymbolsExportMatching.js]
+<<<<<<< HEAD
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -104,3 +105,82 @@ define(["require", "exports"], function (require, exports) {
         })(C = M.C || (M.C = {}));
     })(M || (M = {}));
 });
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    // Should report error only once for instantiated module
+    var M;
+    (function (M) {
+        var inst;
+        (function (inst) {
+            var t;
+        })(inst || (inst = {}));
+        (function (inst) {
+            var t;
+        })(inst = M.inst || (M.inst = {}));
+    })(M || (M = {}));
+    // Variables of the same / different type
+    var M2;
+    (function (M2) {
+        var v;
+        var w;
+    })(M2 || (M2 = {}));
+    (function (M) {
+        var F;
+        (function (F) {
+            var t;
+        })(F || (F = {}));
+        function F() { } // Only one error for duplicate identifier (don't consider visibility)
+        M.F = F;
+    })(M || (M = {}));
+    (function (M) {
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
+        (function (C) {
+            var t;
+        })(C = M.C || (M.C = {}));
+    })(M || (M = {}));
+});
+=======
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// Should report error only once for instantiated module
+var M;
+(function (M) {
+    var inst;
+    (function (inst) {
+        var t;
+    })(inst || (inst = {}));
+    (function (inst) {
+        var t;
+    })(inst = M.inst || (M.inst = {}));
+})(M || (M = {}));
+// Variables of the same / different type
+var M2;
+(function (M2) {
+    var v;
+    var w;
+})(M2 || (M2 = {}));
+(function (M) {
+    var F;
+    (function (F) {
+        var t;
+    })(F || (F = {}));
+    function F() { } // Only one error for duplicate identifier (don't consider visibility)
+    M.F = F;
+})(M || (M = {}));
+(function (M) {
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    (function (C) {
+        var t;
+    })(C = M.C || (M.C = {}));
+})(M || (M = {}));
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))

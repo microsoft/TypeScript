@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 //@module: amd
 export module TypeScript.Strasse.Street {
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+//@module: amd
+export namespace TypeScript.Strasse.Street {
+=======
+//@module: commonjs
+export namespace TypeScript.Strasse.Street {
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 	export class Rue {
 		public address:string;
 	}	

@@ -40,6 +40,7 @@ const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" |
 
 
 //// [file.jsx]
+<<<<<<< HEAD
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -52,7 +53,33 @@ define(["require", "exports", "react"], function (require, exports, React) {
             return this._buildMainLink(props);
         }
         return this._buildMainButton(props);
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+define(["require", "exports", "react"], function (require, exports, React) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MainButton = MainButton;
+    exports.NoOverload = NoOverload;
+    exports.NoOverload1 = NoOverload1;
+    function MainButton(props) {
+        var linkProps = props;
+        if (linkProps.goTo) {
+            return this._buildMainLink(props);
+        }
+        return this._buildMainButton(props);
+=======
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MainButton = MainButton;
+exports.NoOverload = NoOverload;
+exports.NoOverload1 = NoOverload1;
+var React = require("react");
+function MainButton(props) {
+    var linkProps = props;
+    if (linkProps.goTo) {
+        return this._buildMainLink(props);
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
     }
+<<<<<<< HEAD
     const b0 = <MainButton {...{ onClick: (k) => { console.log(k); } }} extra/>; // k has type "left" | "right"
     const b2 = <MainButton onClick={(k) => { console.log(k); }} extra/>; // k has type "left" | "right"
     const b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
@@ -62,3 +89,25 @@ define(["require", "exports", "react"], function (require, exports, React) {
     function NoOverload1(linkProps) { return undefined; }
     const d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"
 });
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    var b0 = <MainButton {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type "left" | "right"
+    var b2 = <MainButton onClick={function (k) { console.log(k); }} extra/>; // k has type "left" | "right"
+    var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
+    var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
+    function NoOverload(buttonProps) { return undefined; }
+    var c1 = <NoOverload {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type any
+    function NoOverload1(linkProps) { return undefined; }
+    var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"
+});
+=======
+    return this._buildMainButton(props);
+}
+var b0 = <MainButton {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type "left" | "right"
+var b2 = <MainButton onClick={function (k) { console.log(k); }} extra/>; // k has type "left" | "right"
+var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
+var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
+function NoOverload(buttonProps) { return undefined; }
+var c1 = <NoOverload {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type any
+function NoOverload1(linkProps) { return undefined; }
+var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))

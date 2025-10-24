@@ -53,6 +53,7 @@ IncrementalBuild:
 7:: With declaration and declarationMap noEmit
 Clean build will have declaration and declarationMap
 Incremental build will have previous buildInfo so will have declaration and declarationMap
+<<<<<<< HEAD
 TsBuild info text without affectedFilesPendingEmit:: /home/src/projects/outfile.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
@@ -103,3 +104,57 @@ IncrementalBuild:
   },
   "version": "FakeTSVersion"
 }
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+TsBuild info text without affectedFilesPendingEmit:: /home/src/projects/outfile.tsbuildinfo.readable.baseline.txt::
+CleanBuild:
+{
+  "fileInfos": {
+    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9483521475-export const a = class { public p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./project/a.ts"
+    ],
+    [
+      3,
+      "./project/b.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "declarationMap": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "version": "FakeTSVersion"
+}
+IncrementalBuild:
+{
+  "fileInfos": {
+    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9483521475-export const a = class { public p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./project/a.ts"
+    ],
+    [
+      3,
+      "./project/b.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "version": "FakeTSVersion"
+}
+=======
+*** Supplied discrepancy explanation but didnt find any difference
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))

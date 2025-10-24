@@ -684,6 +684,7 @@ export declare module eaM {
 }
 
 //// [giant.js]
+<<<<<<< HEAD
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -703,6 +704,95 @@ define(["require", "exports"], function (require, exports) {
         MAX DEPTH 3 LEVELS
     */
     const p = "propName";
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.eM = exports.eC = exports.eV = void 0;
+    exports.eF = eF;
+    /*
+        Prefixes
+        p -> public
+        r -> private
+        i -> import
+        e -> export
+        a -> ambient
+        t -> static
+        s -> set
+        g -> get
+    
+        MAX DEPTH 3 LEVELS
+    */
+    var p = "propName";
+=======
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.eM = exports.eC = exports.eV = void 0;
+exports.eF = eF;
+/*
+    Prefixes
+    p -> public
+    r -> private
+    i -> import
+    e -> export
+    a -> ambient
+    t -> static
+    s -> set
+    g -> get
+
+    MAX DEPTH 3 LEVELS
+*/
+var p = "propName";
+var V;
+function F() { }
+;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.pF = function () { };
+    C.prototype.rF = function () { };
+    C.prototype.pgF = function () { };
+    Object.defineProperty(C.prototype, "pgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.psF = function (param) { };
+    Object.defineProperty(C.prototype, "psF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.rgF = function () { };
+    Object.defineProperty(C.prototype, "rgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.rsF = function (param) { };
+    Object.defineProperty(C.prototype, "rsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    C.tF = function () { };
+    C.tsF = function (param) { };
+    Object.defineProperty(C, "tsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    C.tgF = function () { };
+    Object.defineProperty(C, "tgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
+var M;
+(function (M_1) {
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
     var V;
     function F() { }
     ;
@@ -725,10 +815,11 @@ define(["require", "exports"], function (require, exports) {
         static get tgF() { }
     }
     var M;
-    (function (M_1) {
+    (function (M) {
         var V;
         function F() { }
         ;
+<<<<<<< HEAD
         class C {
             constructor() { }
             pF() { }
@@ -770,9 +861,94 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
         })(M || (M = {}));
-        function eF() { }
-        M_1.eF = eF;
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            C.prototype.pF = function () { };
+            C.prototype.rF = function () { };
+            C.prototype.pgF = function () { };
+            Object.defineProperty(C.prototype, "pgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            C.prototype.psF = function (param) { };
+            Object.defineProperty(C.prototype, "psF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            C.prototype.rgF = function () { };
+            Object.defineProperty(C.prototype, "rgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            C.prototype.rsF = function (param) { };
+            Object.defineProperty(C.prototype, "rsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            C.tF = function () { };
+            C.tsF = function (param) { };
+            Object.defineProperty(C, "tsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            C.tgF = function () { };
+            Object.defineProperty(C, "tgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            return C;
+        }());
+        var M;
+        (function (M) {
+            var V;
+            function F() { }
+            ;
+            var C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
+            ;
+            ;
+            ;
+            function eF() { }
+            M.eF = eF;
+            ;
+            var eC = /** @class */ (function () {
+                function eC() {
+                }
+                return eC;
+            }());
+            M.eC = eC;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+        })(M || (M = {}));
+=======
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         ;
+        ;
+        ;
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+        function eF() { }
+        M.eF = eF;
+        ;
+<<<<<<< HEAD
         class eC {
             constructor() { }
             pF() { }
@@ -815,10 +991,100 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
         })(eM = M_1.eM || (M_1.eM = {}));
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            eC.prototype.pF = function () { };
+            eC.prototype.rF = function () { };
+            eC.prototype.pgF = function () { };
+            Object.defineProperty(eC.prototype, "pgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.prototype.psF = function (param) { };
+            Object.defineProperty(eC.prototype, "psF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.prototype.rgF = function () { };
+            Object.defineProperty(eC.prototype, "rgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.prototype.rsF = function (param) { };
+            Object.defineProperty(eC.prototype, "rsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.tF = function () { };
+            eC.tsF = function (param) { };
+            Object.defineProperty(eC, "tsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.tgF = function () { };
+            Object.defineProperty(eC, "tgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            return eC;
+        }());
+        M_1.eC = eC;
+        var eM;
+        (function (eM) {
+            var V;
+            function F() { }
+            ;
+            var C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
+            ;
+            ;
+            ;
+            function eF() { }
+            eM.eF = eF;
+            ;
+            var eC = /** @class */ (function () {
+                function eC() {
+                }
+                return eC;
+            }());
+            eM.eC = eC;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+        })(eM = M_1.eM || (M_1.eM = {}));
+=======
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
+        M.eC = eC;
+        ;
+        ;
+        ;
+        ;
+        ;
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
         ;
     })(M || (M = {}));
     function eF() { }
+    M_1.eF = eF;
     ;
+<<<<<<< HEAD
     class eC {
         constructor() { }
         pF() { }
@@ -838,11 +1104,105 @@ define(["require", "exports"], function (require, exports) {
         static get tgF() { }
     }
     exports.eC = eC;
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    var eC = /** @class */ (function () {
+        function eC() {
+        }
+        eC.prototype.pF = function () { };
+        eC.prototype.rF = function () { };
+        eC.prototype.pgF = function () { };
+        Object.defineProperty(eC.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.psF = function (param) { };
+        Object.defineProperty(eC.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rgF = function () { };
+        Object.defineProperty(eC.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rsF = function (param) { };
+        Object.defineProperty(eC.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tF = function () { };
+        eC.tsF = function (param) { };
+        Object.defineProperty(eC, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tgF = function () { };
+        Object.defineProperty(eC, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return eC;
+    }());
+    exports.eC = eC;
+=======
+    var eC = /** @class */ (function () {
+        function eC() {
+        }
+        eC.prototype.pF = function () { };
+        eC.prototype.rF = function () { };
+        eC.prototype.pgF = function () { };
+        Object.defineProperty(eC.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.psF = function (param) { };
+        Object.defineProperty(eC.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rgF = function () { };
+        Object.defineProperty(eC.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rsF = function (param) { };
+        Object.defineProperty(eC.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tF = function () { };
+        eC.tsF = function (param) { };
+        Object.defineProperty(eC, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tgF = function () { };
+        Object.defineProperty(eC, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return eC;
+    }());
+    M_1.eC = eC;
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
     var eM;
-    (function (eM_1) {
+    (function (eM) {
         var V;
         function F() { }
         ;
+<<<<<<< HEAD
         class C {
             constructor() { }
             pF() { }
@@ -884,9 +1244,94 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
         })(M || (M = {}));
-        function eF() { }
-        eM_1.eF = eF;
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            C.prototype.pF = function () { };
+            C.prototype.rF = function () { };
+            C.prototype.pgF = function () { };
+            Object.defineProperty(C.prototype, "pgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            C.prototype.psF = function (param) { };
+            Object.defineProperty(C.prototype, "psF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            C.prototype.rgF = function () { };
+            Object.defineProperty(C.prototype, "rgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            C.prototype.rsF = function (param) { };
+            Object.defineProperty(C.prototype, "rsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            C.tF = function () { };
+            C.tsF = function (param) { };
+            Object.defineProperty(C, "tsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            C.tgF = function () { };
+            Object.defineProperty(C, "tgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            return C;
+        }());
+        var M;
+        (function (M) {
+            var V;
+            function F() { }
+            ;
+            var C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
+            ;
+            ;
+            ;
+            function eF() { }
+            M.eF = eF;
+            ;
+            var eC = /** @class */ (function () {
+                function eC() {
+                }
+                return eC;
+            }());
+            M.eC = eC;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+        })(M || (M = {}));
+=======
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         ;
+        ;
+        ;
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+        function eF() { }
+        eM.eF = eF;
+        ;
+<<<<<<< HEAD
         class eC {
             constructor() { }
             pF() { }
@@ -929,10 +1374,303 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
         })(eM = eM_1.eM || (eM_1.eM = {}));
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            eC.prototype.pF = function () { };
+            eC.prototype.rF = function () { };
+            eC.prototype.pgF = function () { };
+            Object.defineProperty(eC.prototype, "pgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.prototype.psF = function (param) { };
+            Object.defineProperty(eC.prototype, "psF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.prototype.rgF = function () { };
+            Object.defineProperty(eC.prototype, "rgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.prototype.rsF = function (param) { };
+            Object.defineProperty(eC.prototype, "rsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.tF = function () { };
+            eC.tsF = function (param) { };
+            Object.defineProperty(eC, "tsF", {
+                set: function (param) { },
+                enumerable: false,
+                configurable: true
+            });
+            eC.tgF = function () { };
+            Object.defineProperty(eC, "tgF", {
+                get: function () { },
+                enumerable: false,
+                configurable: true
+            });
+            return eC;
+        }());
+        eM_1.eC = eC;
+        var eM;
+        (function (eM) {
+            var V;
+            function F() { }
+            ;
+            var C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
+            ;
+            ;
+            ;
+            function eF() { }
+            eM.eF = eF;
+            ;
+            var eC = /** @class */ (function () {
+                function eC() {
+                }
+                return eC;
+            }());
+            eM.eC = eC;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+        })(eM = eM_1.eM || (eM_1.eM = {}));
+=======
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
+        eM.eC = eC;
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
         ;
-    })(eM || (exports.eM = eM = {}));
+        ;
+        ;
+        ;
+        ;
+        ;
+    })(eM = M_1.eM || (M_1.eM = {}));
     ;
-});
+})(M || (M = {}));
+function eF() { }
+;
+var eC = /** @class */ (function () {
+    function eC() {
+    }
+    eC.prototype.pF = function () { };
+    eC.prototype.rF = function () { };
+    eC.prototype.pgF = function () { };
+    Object.defineProperty(eC.prototype, "pgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.prototype.psF = function (param) { };
+    Object.defineProperty(eC.prototype, "psF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.prototype.rgF = function () { };
+    Object.defineProperty(eC.prototype, "rgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.prototype.rsF = function (param) { };
+    Object.defineProperty(eC.prototype, "rsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.tF = function () { };
+    eC.tsF = function (param) { };
+    Object.defineProperty(eC, "tsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.tgF = function () { };
+    Object.defineProperty(eC, "tgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    return eC;
+}());
+exports.eC = eC;
+var eM;
+(function (eM_1) {
+    var V;
+    function F() { }
+    ;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.pF = function () { };
+        C.prototype.rF = function () { };
+        C.prototype.pgF = function () { };
+        Object.defineProperty(C.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.psF = function (param) { };
+        Object.defineProperty(C.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.rgF = function () { };
+        Object.defineProperty(C.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.rsF = function (param) { };
+        Object.defineProperty(C.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.tF = function () { };
+        C.tsF = function (param) { };
+        Object.defineProperty(C, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.tgF = function () { };
+        Object.defineProperty(C, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return C;
+    }());
+    var M;
+    (function (M) {
+        var V;
+        function F() { }
+        ;
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
+        ;
+        ;
+        ;
+        function eF() { }
+        M.eF = eF;
+        ;
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
+        M.eC = eC;
+        ;
+        ;
+        ;
+        ;
+        ;
+        ;
+    })(M || (M = {}));
+    function eF() { }
+    eM_1.eF = eF;
+    ;
+    var eC = /** @class */ (function () {
+        function eC() {
+        }
+        eC.prototype.pF = function () { };
+        eC.prototype.rF = function () { };
+        eC.prototype.pgF = function () { };
+        Object.defineProperty(eC.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.psF = function (param) { };
+        Object.defineProperty(eC.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rgF = function () { };
+        Object.defineProperty(eC.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rsF = function (param) { };
+        Object.defineProperty(eC.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tF = function () { };
+        eC.tsF = function (param) { };
+        Object.defineProperty(eC, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tgF = function () { };
+        Object.defineProperty(eC, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return eC;
+    }());
+    eM_1.eC = eC;
+    var eM;
+    (function (eM) {
+        var V;
+        function F() { }
+        ;
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
+        ;
+        ;
+        ;
+        function eF() { }
+        eM.eF = eF;
+        ;
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
+        eM.eC = eC;
+        ;
+        ;
+        ;
+        ;
+        ;
+        ;
+    })(eM = eM_1.eM || (eM_1.eM = {}));
+    ;
+})(eM || (exports.eM = eM = {}));
+;
 
 
 //// [giant.d.ts]

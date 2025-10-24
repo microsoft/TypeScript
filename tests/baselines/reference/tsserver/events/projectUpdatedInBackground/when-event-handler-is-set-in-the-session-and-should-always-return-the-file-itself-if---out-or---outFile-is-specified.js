@@ -142,7 +142,22 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "CustomHandler::configFileDiag",
       "body": {
         "configFileName": "/users/username/projects/project/tsconfig.json",
-        "diagnostics": [],
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 23
+            },
+            "text": "Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/users/username/projects/project/tsconfig.json"
+          }
+        ],
         "triggerFile": "/users/username/projects/project/file1Consumer1.ts"
       }
     }
