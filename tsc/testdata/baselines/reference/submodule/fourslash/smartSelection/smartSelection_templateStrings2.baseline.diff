@@ -1,0 +1,9 @@
+--- old.smartSelection_templateStrings2.baseline
++++ new.smartSelection_templateStrings2.baseline
+@@= skipped -0, +0 lines =@@
+ // === Smart Selection ===
+ `a ${b} /**/c`
+
+- a ${b} c 
++     b} c`
+ `a ${b} c`

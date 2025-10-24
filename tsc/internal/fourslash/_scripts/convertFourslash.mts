@@ -190,6 +190,8 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                     return parseBaselineQuickInfo(callExpression.arguments);
                 case "baselineSignatureHelp":
                     return [parseBaselineSignatureHelp(callExpression.arguments)];
+                case "baselineSmartSelection":
+                    return [parseBaselineSmartSelection(callExpression.arguments)];
                 case "baselineGoToDefinition":
                 case "baselineGetDefinitionAtPosition":
                 case "baselineGoToType":
@@ -1422,6 +1424,16 @@ function parseBaselineSignatureHelp(args: ts.NodeArray<ts.Expression>): Cmd {
     };
 }
 
+function parseBaselineSmartSelection(args: ts.NodeArray<ts.Expression>): Cmd {
+    if (args.length !== 0) {
+        // All calls are currently empty!
+        throw new Error("Expected no arguments in verify.baselineSmartSelection");
+    }
+    return {
+        kind: "verifyBaselineSmartSelection",
+    };
+}
+
 function parseKind(expr: ts.Expression): string | undefined {
     if (!ts.isStringLiteral(expr)) {
         console.error(`Expected string literal for kind, got ${expr.getText()}`);
@@ -1591,6 +1603,10 @@ interface VerifyBaselineSignatureHelpCmd {
     kind: "verifyBaselineSignatureHelp";
 }
 
+interface VerifyBaselineSmartSelection {
+    kind: "verifyBaselineSmartSelection";
+}
+
 interface VerifyBaselineRenameCmd {
     kind: "verifyBaselineRename" | "verifyBaselineRenameAtRangesWithText";
     args: string[];
@@ -1635,6 +1651,7 @@ type Cmd =
     | VerifyBaselineGoToDefinitionCmd
     | VerifyBaselineQuickInfoCmd
     | VerifyBaselineSignatureHelpCmd
+    | VerifyBaselineSmartSelection
     | GoToCmd
     | EditCmd
     | VerifyQuickInfoCmd
@@ -1754,6 +1771,8 @@ function generateCmd(cmd: Cmd): string {
             return `f.VerifyBaselineHover(t)`;
         case "verifyBaselineSignatureHelp":
             return `f.VerifyBaselineSignatureHelp(t)`;
+        case "verifyBaselineSmartSelection":
+            return `f.VerifyBaselineSelectionRanges(t)`;
         case "goTo":
             return generateGoToCommand(cmd);
         case "edit":

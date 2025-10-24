@@ -1,0 +1,54 @@
+--- old.smartSelection_JSDocTags11.baseline
++++ new.smartSelection_JSDocTags11.baseline
+@@= skipped -4, +4 lines =@@
+   /**/readonly status: number;
+ };
+
+-
+-  readonly                
+-
+-
+-  readonly status         
+-
+-
+-  readonly status: number;
+-
+-
+-  /** comment */
+-  readonly status: number;
+-
+-
+-            ↲
+-••/** comment */
++  readonly                ↲
+   readonly status: number;↲
+-
+
+            {
+   /** comment */
+@@= skipped -43, +27 lines =@@
+   readonly /**/status: number;
+ };
+
+-
+-           status         
+-
+-
+-  readonly status         
+-
+-
+-  readonly status: number;
+-
+-
+-  /** comment */
+-  readonly status: number;
+-
+-
+-            ↲
+-••/** comment */
++           status         ↲
+   readonly status: number;↲
+-
+
+            {
+   /** comment */

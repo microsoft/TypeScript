@@ -1,0 +1,22 @@
+--- old.smartSelection_JSDoc.baseline
++++ new.smartSelection_JSDoc.baseline
+@@= skipped -6, +6 lines =@@
+   return x * x;
+ }
+
+-
+-         square     
+-
+-
+-function square(x) {
+-  return x * x;
+-}
+-
+-/**
+- * @param {number} x The number to square
+- */
++         square     ↲
++
+ function square(x) {
+   return x * x;
+ }

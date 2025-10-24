@@ -1,0 +1,8 @@
+--- old.smartSelection_behindCaret.baseline
++++ new.smartSelection_behindCaret.baseline
+@@= skipped -0, +0 lines =@@
+ // === Smart Selection ===
+ let/**/ x: string
+
+-let          
+ let x: string

@@ -1,0 +1,5 @@
+// === Smart Selection ===
+class C {}
+/**/
+
+class C {}↲

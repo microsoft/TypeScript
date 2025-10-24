@@ -1,0 +1,128 @@
+--- old.smartSelection_objectTypes.baseline
++++ new.smartSelection_objectTypes.baseline
+@@= skipped -4, +4 lines =@@
+   meh
+ }
+
+-
+-  foo          
+-
+-
+-  foo?         
+-
++  foo          ↲
++  foo?: string;↲
+
+   foo?: string;
+-
+-
+-          ↲
+-••foo?: string;
+   readonly bar: { x: number };
+   meh↲
+-
+
+          {
+   foo?: string;
+@@= skipped -36, +27 lines =@@
+   meh
+ }
+
+-
+-  readonly                    
+-
+-
+-  readonly bar                
+-
+-
+-  readonly bar: { x: number };
+-
+-
+-          ↲
+-••foo?: string;
++  readonly                    ↲
++  readonly bar: { x: number };↲
++
++  foo?: string;
+   readonly bar: { x: number };
+   meh↲
+-
+
+          {
+   foo?: string;
+@@= skipped -36, +27 lines =@@
+   meh
+ }
+
+-
+-           bar                
+-
+-
+-  readonly bar                
+-
+-
+-  readonly bar: { x: number };
+-
+-
+-          ↲
+-••foo?: string;
++           bar                ↲
++  readonly bar: { x: number };↲
++
++  foo?: string;
+   readonly bar: { x: number };
+   meh↲
+-
+
+          {
+   foo?: string;
+@@= skipped -36, +27 lines =@@
+   meh
+ }
+
+-
+-                     number   
+-
+-
+-                  x: number   
+-
+-
+-                { x: number } 
+-
+-
+-  readonly bar: { x: number };
+-
+-
+-          ↲
+-••foo?: string;
++                     number   ↲
++                  x: number   ↲
++                { x: number } ↲
++  readonly bar: { x: number };↲
++
++  foo?: string;
+   readonly bar: { x: number };
+   meh↲
+-
+
+          {
+   foo?: string;
+@@= skipped -39, +29 lines =@@
+   /**/meh
+ }
+
+-
+-  meh
+-
+-
+-          ↲
+-••foo?: string;
++  meh↲
++
++  foo?: string;
+   readonly bar: { x: number };
+   meh↲
+-
+
+          {
+   foo?: string;

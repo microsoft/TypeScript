@@ -1,0 +1,124 @@
+--- old.smartSelection_simple1.baseline
++++ new.smartSelection_simple1.baseline
+@@= skipped -7, +7 lines =@@
+   }
+ }
+
+-
+-          a         
+-
+-
+-          a === b   
+-
++          a         ↲
++          a === b   ↲
+
+       if (a === b) {
+           return true;
+-      }
+-
+-
+-             ↲
+-••••••if (a === b) {
++      }↲
++
++      if (a === b) {
+           return true;
+       }
+       return false;↲
+-•• 
+-
+
+             {
+       if (a === b) {
+           return true;
+       }
+       return false;
+-  }
+-
++  }↲
+
+   bar(a, b) {
+       if (a === b) {
+           return true;
+       }
+       return false;
+-  }
+-
+-
+-           ↲
+-••bar(a, b) {
+-      if (a === b) {
+-          return true;
+-      }
+-      return false;
+   }↲
+-
+
+ class Foo {
+   bar(a, b) {
+@@= skipped -65, +46 lines =@@
+   }
+ }
+
+-
+-                 true 
+-
+-
+-          return true;
+-
+-
+-                    ↲
+-••••••••••return true;↲
+-•••••• 
+-
+-
+-      if (a === b) {
+-          return true;
+-      }
+-
+-
+-             ↲
+-••••••if (a === b) {
++                 true ↲
++          return true;↲
++
++      if (a === b) {
++          return true;
++      }↲
++
++      if (a === b) {
+           return true;
+       }
+       return false;↲
+-•• 
+-
+
+             {
+       if (a === b) {
+           return true;
+       }
+       return false;
+-  }
+-
++  }↲
+
+   bar(a, b) {
+       if (a === b) {
+           return true;
+       }
+       return false;
+-  }
+-
+-
+-           ↲
+-••bar(a, b) {
+-      if (a === b) {
+-          return true;
+-      }
+-      return false;
+   }↲
+-
+
+ class Foo {
+   bar(a, b) {

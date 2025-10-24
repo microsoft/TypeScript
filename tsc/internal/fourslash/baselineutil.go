@@ -47,7 +47,7 @@ func getBaselineFileName(t *testing.T, command string) string {
 
 func getBaselineExtension(command string) string {
 	switch command {
-	case "QuickInfo", "SignatureHelp":
+	case "QuickInfo", "SignatureHelp", "Smart Selection":
 		return "baseline"
 	case "Auto Imports":
 		return "baseline.md"
@@ -61,6 +61,11 @@ func getBaselineExtension(command string) string {
 func getBaselineOptions(command string) baseline.Options {
 	subfolder := "fourslash/" + normalizeCommandName(command)
 	switch command {
+	case "Smart Selection":
+		return baseline.Options{
+			Subfolder:   subfolder,
+			IsSubmodule: true,
+		}
 	case "findRenameLocations":
 		return baseline.Options{
 			Subfolder:   subfolder,

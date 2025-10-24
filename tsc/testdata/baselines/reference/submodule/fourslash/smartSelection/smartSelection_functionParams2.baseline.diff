@@ -1,0 +1,21 @@
+--- old.smartSelection_functionParams2.baseline
++++ new.smartSelection_functionParams2.baseline
+@@= skipped -3, +3 lines =@@
+   /**/b
+ ) {}
+
+-
+-  b
+-
+-
+-           ↲
+-••a,
+-  b↲
+-
++  b↲
++
++  a,
++  b↲
+
+ function f(
+   a,

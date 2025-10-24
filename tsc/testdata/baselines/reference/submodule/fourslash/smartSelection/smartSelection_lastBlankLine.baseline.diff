@@ -1,0 +1,8 @@
+--- old.smartSelection_lastBlankLine.baseline
++++ new.smartSelection_lastBlankLine.baseline
+@@= skipped -1, +1 lines =@@
+ class C {}
+ /**/
+
+-
+ class C {}↲

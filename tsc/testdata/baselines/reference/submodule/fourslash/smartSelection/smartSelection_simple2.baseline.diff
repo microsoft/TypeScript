@@ -1,0 +1,61 @@
+--- old.smartSelection_simple2.baseline
++++ new.smartSelection_simple2.baseline
+@@= skipped -5, +5 lines =@@
+   bar(): void
+ }
+
+-
+-       host                                   
+-
+-
+-       host: number                           
+-
+-
+-       host: number, data: any                
+-
+-
+-  open(host: number, data: any): Promise<any>;
+-
+-
+-                           ↲
+-••_serviceBrand: any;
+-
++       host                                   ↲
++       host: number                           ↲
++       host: number, data: any                ↲
++  open(host: number, data: any): Promise<any>;↲
++
++  _serviceBrand: any;
+   open(host: number, data: any): Promise<any>;
+   bar(): void↲
+
+-
+ export interface IService {
+   _serviceBrand: any;
+-
+   open(host: number, data: any): Promise<any>;
+   bar(): void
+ }
+@@= skipped -37, +25 lines =@@
+ }
+
+
+-         void
+-
+-
+-  bar(): void
+-
+-
+-                           ↲
+-••_serviceBrand: any;
+-
+-  open(host: number, data: any): Promise<any>;
+-  bar(): void↲
+-
+-
+ export interface IService {
+   _serviceBrand: any;
+-
+   open(host: number, data: any): Promise<any>;
+   bar(): void
+ }

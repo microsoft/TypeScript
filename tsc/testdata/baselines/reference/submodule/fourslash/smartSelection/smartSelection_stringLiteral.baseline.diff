@@ -1,0 +1,12 @@
+--- old.smartSelection_stringLiteral.baseline
++++ new.smartSelection_stringLiteral.baseline
+@@= skipped -1, +1 lines =@@
+ const a = 'a';
+ const b = /**/'b';
+
+-
+           'b' 
+-
+ const b = 'b';
+
+ const a = 'a';

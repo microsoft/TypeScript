@@ -1,0 +1,29 @@
+--- old.smartSelection_JSDocTags6.baseline
++++ new.smartSelection_JSDocTags6.baseline
+@@= skipped -7, +7 lines =@@
+     return x;
+ }
+
+-
+-           T   
+-
++           T   ↲
+
+    @param {T} x
++ *•           ↲
+
++   @template T
++ * @param {T} x
++ * @return {T}↲
++•  ↲
+
+ /**
+  * @template T
+  * @param {T} x
+  * @return {T}
+- */
+-
++ */↲
+
+ /**
+  * @template T

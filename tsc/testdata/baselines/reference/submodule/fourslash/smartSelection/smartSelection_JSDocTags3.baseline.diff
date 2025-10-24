@@ -1,0 +1,25 @@
+--- old.smartSelection_JSDocTags3.baseline
++++ new.smartSelection_JSDocTags3.baseline
+@@= skipped -3, +3 lines =@@
+  */
+ function foo(x) {}
+
+-
+-           string   
+-
+-
+-   @param {string} x
+-
++           string   ↲
++
++   @param {string} x↲
++•  ↲
+
+ /**
+  * @param {string} x
+- */
+-
++ */↲
+
+ /**
+  * @param {string} x

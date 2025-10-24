@@ -1,0 +1,34 @@
+// === Smart Selection ===
+/**
+ * @template T
+ * @param {/**/T} x
+ * @return {T}
+ */
+function foo(x) {
+    return x;
+}
+
+           T   ↲
+
+   @param {T} x
+ *•           ↲
+
+   @template T
+ * @param {T} x
+ * @return {T}↲
+•  ↲
+
+/**
+ * @template T
+ * @param {T} x
+ * @return {T}
+ */↲
+
+/**
+ * @template T
+ * @param {T} x
+ * @return {T}
+ */
+function foo(x) {
+    return x;
+}

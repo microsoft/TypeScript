@@ -1,0 +1,15 @@
+// === Smart Selection ===
+function f(
+  a,
+  /**/b
+) {}
+
+  b↲
+
+  a,
+  b↲
+
+function f(
+  a,
+  b
+) {}

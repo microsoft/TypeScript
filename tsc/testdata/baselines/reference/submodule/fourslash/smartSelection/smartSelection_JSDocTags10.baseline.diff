@@ -1,0 +1,31 @@
+--- old.smartSelection_JSDocTags10.baseline
++++ new.smartSelection_JSDocTags10.baseline
+@@= skipped -5, +5 lines =@@
+ class A extends B {
+ }
+
+-
+-             Set    
+-
+-
+-             Set<T> 
+-
+-
+-   @extends {Set<T>}
+-
++             Set    ↲
++             Set<T> ↲
++   @extends {Set<T>}↲
++
++   @template T
++ * @extends {Set<T>}↲
+
+ /**
+  * @template T
+  * @extends {Set<T>}
+- */
+-
++ */↲
+
+ /**
+  * @template T

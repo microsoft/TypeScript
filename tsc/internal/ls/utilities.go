@@ -1678,6 +1678,13 @@ func getChildrenFromNonJSDocNode(node *ast.Node, sourceFile *ast.SourceFile) []*
 		childNodes = append(childNodes, child)
 		return false
 	})
+
+	// If the node has no children, don't scan for tokens.
+	// This prevents creating tokens for leaf nodes' own text.
+	if len(childNodes) == 0 {
+		return nil
+	}
+
 	var children []*ast.Node
 	pos := node.Pos()
 	for _, child := range childNodes {

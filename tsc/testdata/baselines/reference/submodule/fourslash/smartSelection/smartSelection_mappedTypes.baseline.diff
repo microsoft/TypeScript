@@ -1,0 +1,67 @@
+--- old.smartSelection_mappedTypes.baseline
++++ new.smartSelection_mappedTypes.baseline
+@@= skipped -1, +1 lines =@@
+ type M = { /**/-readonly [K in keyof any]-?: any };
+
+            -                                   
+-           -readonly                           
+-           -readonly [K in keyof any]-?        
+-           -readonly [K in keyof any]-?: any   
+          { -readonly [K in keyof any]-?: any } 
+ type M = { -readonly [K in keyof any]-?: any };
+
+@@= skipped -10, +7 lines =@@
+
+ type M = { -re/**/adonly [K in keyof any]-?: any };
+
+-            readonly                           
+-           -readonly                           
+-           -readonly [K in keyof any]-?        
+-           -readonly [K in keyof any]-?: any   
+          { -readonly [K in keyof any]-?: any } 
+ type M = { -readonly [K in keyof any]-?: any };
+
+@@= skipped -11, +7 lines =@@
+
+ type M = { -readonly /**/[K in keyof any]-?: any };
+
+-                     [                         
+-                     [K in keyof any]          
+-           -readonly [K in keyof any]-?        
+-           -readonly [K in keyof any]-?: any   
+          { -readonly [K in keyof any]-?: any } 
+ type M = { -readonly [K in keyof any]-?: any };
+
+@@= skipped -11, +7 lines =@@
+
+ type M = { -readonly [K in ke/**/yof any]-?: any };
+
+-                           keyof               
+                            keyof any           
+                       K in keyof any           
+-                     [K in keyof any]          
+-           -readonly [K in keyof any]-?        
+-           -readonly [K in keyof any]-?: any   
+          { -readonly [K in keyof any]-?: any } 
+ type M = { -readonly [K in keyof any]-?: any };
+
+@@= skipped -14, +10 lines =@@
+ type M = { -readonly [K in keyof any]/**/-?: any };
+
+                                      -         
+-                                     -?        
+-           -readonly [K in keyof any]-?        
+-           -readonly [K in keyof any]-?: any   
+          { -readonly [K in keyof any]-?: any } 
+ type M = { -readonly [K in keyof any]-?: any };
+
+@@= skipped -10, +7 lines =@@
+
+ type M = { -readonly [K in keyof any]-/**/?: any };
+
+-                                      ?        
+-                                     -?        
+-           -readonly [K in keyof any]-?        
+-           -readonly [K in keyof any]-?: any   
+          { -readonly [K in keyof any]-?: any } 
+ type M = { -readonly [K in keyof any]-?: any };

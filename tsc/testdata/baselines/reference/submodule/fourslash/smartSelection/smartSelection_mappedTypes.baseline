@@ -1,0 +1,44 @@
+// === Smart Selection ===
+type M = { /**/-readonly [K in keyof any]-?: any };
+
+           -                                   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -re/**/adonly [K in keyof any]-?: any };
+
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly /**/[K in keyof any]-?: any };
+
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly [K in ke/**/yof any]-?: any };
+
+                           keyof any           
+                      K in keyof any           
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly [K in keyof any]/**/-?: any };
+
+                                     -         
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly [K in keyof any]-/**/?: any };
+
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };

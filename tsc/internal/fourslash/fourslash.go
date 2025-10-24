@@ -1294,6 +1294,149 @@ func (f *FourslashTest) VerifyBaselineSignatureHelp(t *testing.T) {
 	}
 }
 
+func (f *FourslashTest) VerifyBaselineSelectionRanges(t *testing.T) {
+	markers := f.Markers()
+	var result strings.Builder
+	newLine := "\n"
+
+	for i, marker := range markers {
+		if i > 0 {
+			result.WriteString(newLine + strings.Repeat("=", 80) + newLine + newLine)
+		}
+
+		script := f.getScriptInfo(marker.FileName())
+		fileContent := script.content
+
+		// Add the marker position indicator
+		markerPos := marker.Position
+		baselineContent := fileContent[:markerPos] + "/**/" + fileContent[markerPos:] + newLine
+		result.WriteString(baselineContent)
+
+		// Get selection ranges at this marker
+		params := &lsproto.SelectionRangeParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: ls.FileNameToDocumentURI(marker.FileName()),
+			},
+			Positions: []lsproto.Position{marker.LSPosition},
+		}
+
+		resMsg, selectionRangeResult, resultOk := sendRequest(t, f, lsproto.TextDocumentSelectionRangeInfo, params)
+		markerNameStr := *core.OrElse(marker.Name, ptrTo("(unnamed)"))
+		if resMsg == nil {
+			t.Fatalf("Nil response received for selection range request at marker '%s'", markerNameStr)
+		}
+		if !resultOk {
+			if resMsg.AsResponse().Error != nil {
+				t.Fatalf("Error response for selection range request at marker '%s': %v", markerNameStr, resMsg.AsResponse().Error)
+			}
+			t.Fatalf("Unexpected selection range response type at marker '%s': %T", markerNameStr, resMsg.AsResponse().Result)
+		}
+
+		if selectionRangeResult.SelectionRanges == nil || len(*selectionRangeResult.SelectionRanges) == 0 {
+			result.WriteString("No selection ranges available\n")
+			continue
+		}
+
+		selectionRange := (*selectionRangeResult.SelectionRanges)[0]
+
+		// Add blank line after source code section
+		result.WriteString(newLine)
+
+		// Walk through the selection range chain
+		for selectionRange != nil {
+			start := int(f.converters.LineAndCharacterToPosition(script, selectionRange.Range.Start))
+			end := int(f.converters.LineAndCharacterToPosition(script, selectionRange.Range.End))
+
+			// Create a masked version of the file showing only this range
+			runes := []rune(fileContent)
+			masked := make([]rune, len(runes))
+			for i, ch := range runes {
+				if i >= start && i < end {
+					// Keep characters in the selection range
+					if ch == ' ' {
+						masked[i] = '•'
+					} else if ch == '\n' || ch == '\r' {
+						masked[i] = ch // Keep line breaks as-is, will add arrow later
+					} else {
+						masked[i] = ch
+					}
+				} else {
+					// Replace characters outside the range
+					if ch == '\n' || ch == '\r' {
+						masked[i] = ch
+					} else {
+						masked[i] = ' '
+					}
+				}
+			}
+
+			maskedStr := string(masked)
+
+			// Add line break arrows
+			maskedStr = strings.ReplaceAll(maskedStr, "\n", "↲\n")
+			maskedStr = strings.ReplaceAll(maskedStr, "\r", "↲\r")
+
+			// Remove blank lines
+			lines := strings.Split(maskedStr, "\n")
+			var nonBlankLines []string
+			for _, line := range lines {
+				trimmed := strings.TrimSpace(line)
+				if trimmed != "" && trimmed != "↲" {
+					nonBlankLines = append(nonBlankLines, line)
+				}
+			}
+			maskedStr = strings.Join(nonBlankLines, "\n")
+
+			// Find leading and trailing width of non-whitespace characters
+			maskedRunes := []rune(maskedStr)
+			isRealCharacter := func(ch rune) bool {
+				return ch != '•' && ch != '↲' && !stringutil.IsWhiteSpaceLike(ch)
+			}
+
+			leadingWidth := -1
+			for i, ch := range maskedRunes {
+				if isRealCharacter(ch) {
+					leadingWidth = i
+					break
+				}
+			}
+
+			trailingWidth := -1
+			for j := len(maskedRunes) - 1; j >= 0; j-- {
+				if isRealCharacter(maskedRunes[j]) {
+					trailingWidth = j
+					break
+				}
+			}
+
+			if leadingWidth != -1 && trailingWidth != -1 && leadingWidth <= trailingWidth {
+				// Clean up middle section
+				prefix := string(maskedRunes[:leadingWidth])
+				middle := string(maskedRunes[leadingWidth : trailingWidth+1])
+				suffix := string(maskedRunes[trailingWidth+1:])
+
+				middle = strings.ReplaceAll(middle, "•", " ")
+				middle = strings.ReplaceAll(middle, "↲", "")
+
+				maskedStr = prefix + middle + suffix
+			}
+
+			// Add blank line before multi-line ranges
+			if strings.Contains(maskedStr, "\n") {
+				result.WriteString(newLine)
+			}
+
+			result.WriteString(maskedStr)
+			if !strings.HasSuffix(maskedStr, "\n") {
+				result.WriteString(newLine)
+			}
+
+			selectionRange = selectionRange.Parent
+		}
+	}
+	f.addResultToBaseline(t, "Smart Selection", strings.TrimSuffix(result.String(), "\n"))
+}
+
 func (f *FourslashTest) VerifyBaselineDocumentHighlights(
 	t *testing.T,
 	preferences *ls.UserPreferences,

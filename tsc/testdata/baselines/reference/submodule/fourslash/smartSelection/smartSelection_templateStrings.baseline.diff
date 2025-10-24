@@ -1,0 +1,38 @@
+--- old.smartSelection_templateStrings.baseline
++++ new.smartSelection_templateStrings.baseline
+@@= skipped -3, +3 lines =@@
+ } d`
+
+
+- a b ${
+-  'c'
+-} d 
+-
+ `a b ${
+   'c'
+ } d`
+@@= skipped -14, +10 lines =@@
+   '/**/c'
+ } d`
+
+-
+-   c 
+-
+-
+-  'c'
+-
+-
+-     ${
+-  'c'
+-}   
+-
+- a b ${
+-  'c'
+-} d 
++  'c'↲
++
++  'c'
++} d`
+
+ `a b ${
+   'c'

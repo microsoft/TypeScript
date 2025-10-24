@@ -1,0 +1,10 @@
+--- old.smartSelection_punctuationPriority.baseline
++++ new.smartSelection_punctuationPriority.baseline
+@@= skipped -0, +0 lines =@@
+ // === Smart Selection ===
+ console/**/.log();
+
+-console       
+ console.log   
+ console.log() 
+ console.log();

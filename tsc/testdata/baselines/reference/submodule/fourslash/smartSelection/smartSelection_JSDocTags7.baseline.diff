@@ -1,0 +1,30 @@
+--- old.smartSelection_JSDocTags7.baseline
++++ new.smartSelection_JSDocTags7.baseline
+@@= skipped -5, +5 lines =@@
+ function Foo(data) {
+ }
+
+-
+-           number      
+-
+-
+-   @param {number} data
+-
++           number      ↲
++
++   @param {number} data↲
++•  ↲
++
++   @constructor
++ * @param {number} data↲
++•  ↲
+
+ /**
+  * @constructor
+  * @param {number} data
+- */
+-
++ */↲
+
+ /**
+  * @constructor

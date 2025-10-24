@@ -8706,6 +8706,10 @@ func (node *TemplateHead) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewTemplateHead(node.Text, node.RawText, node.TemplateFlags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func IsTemplateHead(node *Node) bool {
+	return node.Kind == KindTemplateHead
+}
+
 // TemplateMiddle
 
 type TemplateMiddle struct {
@@ -8726,6 +8730,10 @@ func (node *TemplateMiddle) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewTemplateMiddle(node.Text, node.RawText, node.TemplateFlags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func IsTemplateMiddle(node *Node) bool {
+	return node.Kind == KindTemplateMiddle
+}
+
 // TemplateTail
 
 type TemplateTail struct {
@@ -8744,6 +8752,10 @@ func (f *NodeFactory) NewTemplateTail(text string, rawText string, templateFlags
 
 func (node *TemplateTail) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewTemplateTail(node.Text, node.RawText, node.TemplateFlags), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsTemplateTail(node *Node) bool {
+	return node.Kind == KindTemplateTail
 }
 
 // TemplateLiteralTypeNode
@@ -9633,6 +9645,10 @@ func (node *JSDocTypeExpression) VisitEachChild(v *NodeVisitor) *Node {
 
 func (node *JSDocTypeExpression) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocTypeExpression(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsJSDocTypeExpression(node *Node) bool {
+	return node.Kind == KindJSDocTypeExpression
 }
 
 // JSDocNonNullableType
@@ -10563,6 +10579,10 @@ func (node *JSDocTypeLiteral) VisitEachChild(v *NodeVisitor) *Node {
 
 func (node *JSDocTypeLiteral) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocTypeLiteral(node.JSDocPropertyTags, node.IsArrayType), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsJSDocTypeLiteral(node *Node) bool {
+	return node.Kind == KindJSDocTypeLiteral
 }
 
 // JSDocSignature

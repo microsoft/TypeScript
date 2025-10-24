@@ -1,0 +1,11 @@
+--- old.smartSelection_functionParams1.baseline
++++ new.smartSelection_functionParams1.baseline
+@@= skipped -18, +18 lines =@@
+ function f(p, q?, /**/...r: any[] = []) {}
+
+                   ...                 
+-                  ...r                
+-                  ...r: any[]         
+                   ...r: any[] = []    
+            p, q?, ...r: any[] = []    
+ function f(p, q?, ...r: any[] = []) {}

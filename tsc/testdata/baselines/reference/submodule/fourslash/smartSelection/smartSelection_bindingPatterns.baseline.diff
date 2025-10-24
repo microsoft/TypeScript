@@ -1,0 +1,10 @@
+--- old.smartSelection_bindingPatterns.baseline
++++ new.smartSelection_bindingPatterns.baseline
+@@= skipped -20, +20 lines =@@
+ const { x, y: a, .../**/zs = {} } = {};
+
+                     zs             
+-                 ...zs             
+                  ...zs = {}        
+         x, y: a, ...zs = {}        
+       { x, y: a, ...zs = {} }      
