@@ -5,7 +5,6 @@ function f(_arguments) {
 >f : (_arguments: any) => void
 >  : ^          ^^^^^^^^^^^^^^
 >_arguments : any
->           : ^^^
 
     var a = () => () => arguments;
 >a : () => () => IArguments

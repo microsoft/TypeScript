@@ -1,10 +1,8 @@
 emitArrowFunctionWhenUsingArguments01.ts(2,15): error TS2304: Cannot find name 'arguments'.
-emitArrowFunctionWhenUsingArguments01.ts(7,19): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
-emitArrowFunctionWhenUsingArguments01.ts(13,13): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
 emitArrowFunctionWhenUsingArguments01.ts(19,15): error TS2304: Cannot find name 'arguments'.
 
 
-==== emitArrowFunctionWhenUsingArguments01.ts (4 errors) ====
+==== emitArrowFunctionWhenUsingArguments01.ts (2 errors) ====
     var a = () => {
         var arg = arguments[0];  // error
                   ~~~~~~~~~
@@ -14,16 +12,12 @@ emitArrowFunctionWhenUsingArguments01.ts(19,15): error TS2304: Cannot find name 
     var b = function () {
         var a = () => {
             var arg = arguments[0];  // error
-                      ~~~~~~~~~
-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
         }
     }
     
     function baz() {
     	() => {
     		var arg = arguments[0];
-    		          ~~~~~~~~~
-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
     	}
     }
     
