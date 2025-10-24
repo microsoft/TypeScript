@@ -33197,10 +33197,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
-        if (languageVersion < LanguageFeatureMinimumTarget.SpreadElements) {
-            checkExternalEmitHelpers(node, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
-        }
-
         const arrayOrIterableType = checkExpression(node.expression, checkMode);
         return checkIteratedTypeOrElementType(IterationUse.Spread, arrayOrIterableType, undefinedType, node.expression);
     }
@@ -33236,9 +33232,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (let i = 0; i < elementCount; i++) {
             const e = elements[i];
             if (e.kind === SyntaxKind.SpreadElement) {
-                if (languageVersion < LanguageFeatureMinimumTarget.SpreadElements) {
-                    checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
-                }
                 const spreadType = checkExpression((e as SpreadElement).expression, checkMode, forceTuple);
                 if (isArrayLikeType(spreadType)) {
                     elementTypes.push(spreadType);
@@ -33527,9 +33520,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
-                if (languageVersion < LanguageFeatureMinimumTarget.ObjectAssign) {
-                    checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
-                }
                 if (propertiesArray.length > 0) {
                     spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                     propertiesArray = [];
@@ -37957,9 +37947,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
         if (!checkGrammarTaggedTemplateChain(node)) checkGrammarTypeArguments(node, node.typeArguments);
-        if (languageVersion < LanguageFeatureMinimumTarget.TaggedTemplates) {
-            checkExternalEmitHelpers(node, ExternalEmitHelpers.MakeTemplateObject);
-        }
         const signature = getResolvedSignature(node);
         checkDeprecatedSignature(signature, node);
         return getReturnTypeOfSignature(signature);
@@ -40183,9 +40170,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
         const elements = node.elements;
-        if (languageVersion < LanguageFeatureMinimumTarget.DestructuringAssignment && compilerOptions.downlevelIteration) {
-            checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
-        }
         // This elementType will be used if the specific property corresponding to this index is not
         // present (aka the tuple element property). This call also checks that the parentType is in
         // fact an iterable or array (depending on target language).
@@ -41126,11 +41110,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isAsync && languageVersion < LanguageFeatureMinimumTarget.AsyncGenerators) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegatorIncludes);
             }
-
-            // Generator functions prior to ES2015 require the __values helper
-            if (!isAsync && languageVersion < LanguageFeatureMinimumTarget.Generators && compilerOptions.downlevelIteration) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
-            }
         }
 
         // There is no point in doing an assignability check if the function
@@ -42067,12 +42046,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Async functions prior to ES2017 require the __awaiter helper
             if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async && languageVersion < LanguageFeatureMinimumTarget.AsyncFunctions) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
-            }
-
-            // Generator functions, Async functions, and Async Generator functions prior to
-            // ES2015 require the __generator helper
-            if ((functionFlags & FunctionFlags.AsyncGenerator) !== FunctionFlags.Normal && languageVersion < LanguageFeatureMinimumTarget.Generators) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
             }
         }
 
@@ -44946,10 +44919,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // For a binding pattern, check contained binding elements
         if (isBindingPattern(node.name)) {
-            if (node.name.kind === SyntaxKind.ArrayBindingPattern && languageVersion < LanguageFeatureMinimumTarget.BindingPatterns && compilerOptions.downlevelIteration) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
-            }
-
             forEach(node.name.elements, checkSourceElement);
         }
         // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
@@ -45398,10 +45367,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                 }
             }
-        }
-        else if (compilerOptions.downlevelIteration && languageVersion < LanguageFeatureMinimumTarget.ForOf) {
-            // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
-            checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
         }
 
         // Check the LHS and RHS
@@ -46954,9 +46919,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const baseTypeNode = getEffectiveBaseTypeNode(node);
         if (baseTypeNode) {
             forEach(baseTypeNode.typeArguments, checkSourceElement);
-            if (languageVersion < LanguageFeatureMinimumTarget.Classes) {
-                checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
-            }
             // check both @extends and extends if both are specified.
             const extendsNode = getClassExtendsHeritageElement(node);
             if (extendsNode && extendsNode !== baseTypeNode) {
