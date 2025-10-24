@@ -10,8 +10,8 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 // https://github.com/microsoft/TypeScript/issues/36295
-((b = (_a = class {
+((b) => { var _a; if (b === void 0) { b = (_a = class {
     },
     __setFunctionName(_a, "b"),
     _a.x = 1,
-    _a)) => { var _a; })();
+    _a); } })();

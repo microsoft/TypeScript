@@ -12,8 +12,8 @@ var a = () => {
 >    : ^^^
 >arguments[0] : any
 >             : ^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>arguments : any
+>          : ^^^
 >0 : 0
 >  : ^
 }
@@ -81,8 +81,8 @@ foo(() => {
 >    : ^^^
 >arguments[0] : any
 >             : ^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>arguments : any
+>          : ^^^
 >0 : 0
 >  : ^
 
