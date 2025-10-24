@@ -82,7 +82,6 @@ export = Timer;
 module.exports = Timer;
 //// [context.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Imports
  *
@@ -90,6 +89,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @typedef {import("./hook")} Hook
  * @typedef {import("./hook").HookHandler} HookHandler
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Input type definition
  *
@@ -147,6 +147,13 @@ module.exports = Hook;
 //// [timer.d.ts]
 export = Timer;
 //// [context.d.ts]
+/**
+ * Imports
+ *
+ * @typedef {import("./timer")} Timer
+ * @typedef {import("./hook")} Hook
+ * @typedef {import("./hook").HookHandler} HookHandler
+ */
 export type Timer = import("./timer");
 export type Hook = import("./hook");
 export type HookHandler = import("./hook").HookHandler;
@@ -158,13 +165,6 @@ export type State = {
     timer: Timer;
     hook: Hook;
 };
-/**
- * Imports
- *
- * @typedef {import("./timer")} Timer
- * @typedef {import("./hook")} Hook
- * @typedef {import("./hook").HookHandler} HookHandler
- */
 /**
  * Input type definition
  *

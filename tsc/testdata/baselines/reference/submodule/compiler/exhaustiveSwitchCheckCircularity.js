@@ -40,6 +40,7 @@ function functionC(): void {
 
 
 //// [exhaustiveSwitchCheckCircularity.js]
+// Repro from #47539
 function f() {
     let foo = "aaa";
     while (true) {

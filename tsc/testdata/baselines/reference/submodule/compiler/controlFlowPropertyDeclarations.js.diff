@@ -1,14 +1,6 @@
 --- old.controlFlowPropertyDeclarations.js
 +++ new.controlFlowPropertyDeclarations.js
-@@= skipped -151, +151 lines =@@
-
- //// [controlFlowPropertyDeclarations.js]
- "use strict";
--// Repro from ##8913
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.StyleParser = exports.HTMLtoJSX = void 0;
- var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
-@@= skipped -87, +86 lines =@@
+@@= skipped -238, +238 lines =@@
      return /^\d+px$/.test(value);
  }
  class HTMLtoJSX {

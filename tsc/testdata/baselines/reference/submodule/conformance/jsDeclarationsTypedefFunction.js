@@ -35,6 +35,11 @@ export {};
 
 
 //// [foo.d.ts]
+/**
+ * @typedef {{
+ *   [id: string]: [Function, Function];
+ * }} ResolveRejectMap
+ */
 export type ResolveRejectMap = {
     [id: string]: [Function, Function];
 };

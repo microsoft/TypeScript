@@ -111,6 +111,7 @@ s2 = s1;
 
 
 //// [covariantCallbacks.js]
+// Test that callback parameters are related covariantly
 ;
 function f1(a, b) {
     a = b;

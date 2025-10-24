@@ -27,11 +27,11 @@ export const main = () => {
 
 //// [assertionTypePredicates2.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
 /**
  * @typedef {{ x: number }} A
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.main = void 0;
 /**
  * @typedef { A & { y: number } } B
  */

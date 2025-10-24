@@ -26,6 +26,7 @@ function g(x) {
 }
 
 //// [assignmentToReferenceTypes.js]
+// Should all be allowed
 M = null;
 class C {
 }

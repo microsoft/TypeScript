@@ -5,4 +5,4 @@
 
  //// [nonNullableAndObjectIntersections.js]
 -"use strict";
--// These should all resolve to never
+ // These should all resolve to never

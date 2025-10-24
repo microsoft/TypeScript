@@ -75,6 +75,7 @@ test = { foo: true, bar: { foo: true, bar: true, boo: true } }
 
 //// [excessPropertyChecksWithNestedIntersections.js]
 "use strict";
+// https://github.com/Microsoft/TypeScript/issues/13813
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.myInstance = exports.photo = exports.obj = void 0;
 let a = { a: { x: 'hello' } }; // ok

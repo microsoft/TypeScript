@@ -5,6 +5,6 @@
 
  //// [unmatchedParameterPositions.js]
 -"use strict";
--// Repros from #40251
+ // Repros from #40251
  let t1 = s;
  let t2 = s;

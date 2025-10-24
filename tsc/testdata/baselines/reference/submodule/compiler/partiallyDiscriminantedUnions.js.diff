@@ -1,14 +1,6 @@
 --- old.partiallyDiscriminantedUnions.js
 +++ new.partiallyDiscriminantedUnions.js
-@@= skipped -48, +48 lines =@@
- }
-
- //// [partiallyDiscriminantedUnions.js]
--// Repro from #10586
- const ab = {};
- if (ab.type === 'a') {
-     if (ab.subtype === 2) {
-@@= skipped -9, +8 lines =@@
+@@= skipped -57, +57 lines =@@
  }
  // Repro from #11185
  class Square {

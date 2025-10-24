@@ -1,14 +1,6 @@
 --- old.stringLiteralTypeIsSubtypeOfString.js
 +++ new.stringLiteralTypeIsSubtypeOfString.js
-@@= skipped -103, +103 lines =@@
-
-
- //// [stringLiteralTypeIsSubtypeOfString.js]
--// string literal types are subtypes of string, any
- function f1(x) { }
- function f2(x) { }
- function f3(x) { }
-@@= skipped -29, +28 lines =@@
+@@= skipped -132, +132 lines =@@
      toUpperCase() { return null; }
      toLocaleUpperCase() { return null; }
      trim() { return null; }

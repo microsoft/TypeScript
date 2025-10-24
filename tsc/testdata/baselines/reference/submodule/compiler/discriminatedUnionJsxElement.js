@@ -25,6 +25,7 @@ function ListItem(_data: IListItemData) {
 
 
 //// [discriminatedUnionJsxElement.jsx]
+// Repro from #46021
 function Menu(data) {
     var _a;
     const listItemVariant = (_a = data.menuItemsVariant) !== null && _a !== void 0 ? _a : ListItemVariant.OneLine;

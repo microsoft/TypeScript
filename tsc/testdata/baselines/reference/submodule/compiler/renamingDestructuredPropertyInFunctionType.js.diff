@@ -1,14 +1,6 @@
 --- old.renamingDestructuredPropertyInFunctionType.js
 +++ new.renamingDestructuredPropertyInFunctionType.js
-@@= skipped -68, +68 lines =@@
- function f12({ a: string = "" }: O): typeof string { return "a"; }
-
- //// [renamingDestructuredPropertyInFunctionType.js]
--// GH#37454, GH#41044
- // Below are OK but renaming should be removed from declaration emit
- function f1({ a: string }) { }
- const f2 = function ({ a: string }) { };
-@@= skipped -102, +101 lines =@@
+@@= skipped -170, +170 lines =@@
  declare function f1({ a: string }: O): void;
  declare const f2: ({ a: string }: O) => void;
  declare const f3: ({ a: string, b, c }: O) => void;

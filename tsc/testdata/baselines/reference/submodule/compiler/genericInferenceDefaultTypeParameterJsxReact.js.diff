@@ -1,15 +1,8 @@
 --- old.genericInferenceDefaultTypeParameterJsxReact.js
 +++ new.genericInferenceDefaultTypeParameterJsxReact.js
-@@= skipped -17, +17 lines =@@
-
- //// [genericInferenceDefaultTypeParameterJsxReact.js]
- "use strict";
--/// <reference path="react16.d.ts" />
- var __importDefault = (this && this.__importDefault) || function (mod) {
-     return (mod && mod.__esModule) ? mod : { "default": mod };
+@@= skipped -23, +23 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
-+/// <reference path="react16.d.ts" />
  // Repro from #50858
 -var react_1 = __importDefault(require("react"));
 +const react_1 = __importDefault(require("react"));

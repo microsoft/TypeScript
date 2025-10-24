@@ -17,6 +17,7 @@ function run(options: { something?(b?: string): void }) {
 
 
 //// [unionReductionMutualSubtypes.js]
+// Repro from #35414
 const k = { something() { } };
 function run(options) {
     var _a;

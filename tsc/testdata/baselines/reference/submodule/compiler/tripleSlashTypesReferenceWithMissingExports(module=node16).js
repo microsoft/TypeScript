@@ -15,6 +15,6 @@ const a: GlobalThing = { a: 0 };
 
 //// [usage.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const a = { a: 0 };

@@ -33,6 +33,7 @@ new C<string>().f();
 
 
 //// [noAsConstNameLookup.js]
+// Repros from #44292
 export class FeatureRunner {
     cleaners = [];
     async runFeature() {

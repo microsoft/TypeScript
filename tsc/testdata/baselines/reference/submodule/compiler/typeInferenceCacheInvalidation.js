@@ -25,6 +25,7 @@ example(42, (foo, bar) => ({
 
 
 //// [typeInferenceCacheInvalidation.js]
+// Repro from #32230
 example(42, (foo, bar) => ({
     t: () => {
         let s = bar;

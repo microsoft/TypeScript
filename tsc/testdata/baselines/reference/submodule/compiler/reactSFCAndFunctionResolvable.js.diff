@@ -1,13 +1,10 @@
 --- old.reactSFCAndFunctionResolvable.js
 +++ new.reactSFCAndFunctionResolvable.js
-@@= skipped -28, +28 lines =@@
-
- //// [reactSFCAndFunctionResolvable.js]
+@@= skipped -30, +30 lines =@@
  "use strict";
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
-+/// <reference path="react16.d.ts" />
 +const React = require("react");
  const RandomComponent = () => {
      const Component = condition1

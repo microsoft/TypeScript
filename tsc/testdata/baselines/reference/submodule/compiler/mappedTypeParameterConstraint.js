@@ -10,6 +10,7 @@ function foo<U>(arg: U): MyMap<U> {
 
 
 //// [mappedTypeParameterConstraint.js]
+// Repro for #27596
 function foo(arg) {
     return arg;
 }

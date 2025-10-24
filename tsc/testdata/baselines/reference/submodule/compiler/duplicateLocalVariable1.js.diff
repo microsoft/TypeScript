@@ -1,12 +1,6 @@
 --- old.duplicateLocalVariable1.js
 +++ new.duplicateLocalVariable1.js
-@@= skipped -346, +346 lines =@@
-
- //// [duplicateLocalVariable1.js]
- "use strict";
--//import FileManager = require('filemanager');
--//import App = require('app');
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -352, +352 lines =@@
  exports.tests = exports.TestRunner = exports.TestCase = void 0;
  var TestFileDir = ".\\TempTestFiles";
  class TestCase {
@@ -16,7 +10,7 @@
      constructor(name, test, errorMessageRegEx) {
          this.name = name;
          this.test = test;
-@@= skipped -14, +15 lines =@@
+@@= skipped -8, +11 lines =@@
  }
  exports.TestCase = TestCase;
  class TestRunner {

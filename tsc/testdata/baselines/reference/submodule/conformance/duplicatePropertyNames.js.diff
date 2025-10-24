@@ -1,10 +1,8 @@
 --- old.duplicatePropertyNames.js
 +++ new.duplicatePropertyNames.js
-@@= skipped -50, +50 lines =@@
-
-
+@@= skipped -52, +52 lines =@@
  //// [duplicatePropertyNames.js]
--// duplicate property names are an error in all types
+ // duplicate property names are an error in all types
  class C {
 -    constructor() {
 -        this.baz = () => { };

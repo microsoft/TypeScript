@@ -10,6 +10,7 @@ export const title: string
 
 //// [labeledStatementExportDeclarationNoCrash1.js]
 "use strict";
+// https://github.com/microsoft/TypeScript/issues/59372
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.box = void 0;
 subTitle: export const title;

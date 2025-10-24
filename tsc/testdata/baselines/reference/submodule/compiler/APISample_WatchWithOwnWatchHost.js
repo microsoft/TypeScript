@@ -65,6 +65,10 @@ watchMain();
 
 //// [APISample_WatchWithOwnWatchHost.js]
 "use strict";
+/*
+ * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files
+ *       Please log a "breaking change" issue for any API breaking change affecting this issue
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts = require("typescript");
 function watchMain() {

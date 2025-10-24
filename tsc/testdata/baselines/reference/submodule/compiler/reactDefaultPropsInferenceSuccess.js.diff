@@ -1,11 +1,6 @@
 --- old.reactDefaultPropsInferenceSuccess.js
 +++ new.reactDefaultPropsInferenceSuccess.js
-@@= skipped -71, +71 lines =@@
-
- //// [reactDefaultPropsInferenceSuccess.js]
- "use strict";
--/// <reference path="react16.d.ts" />
- var __importDefault = (this && this.__importDefault) || function (mod) {
+@@= skipped -76, +76 lines =@@
      return (mod && mod.__esModule) ? mod : { "default": mod };
  };
  Object.defineProperty(exports, "__esModule", { value: true });
@@ -17,7 +12,6 @@
 -        }
 -    }
 -    FieldFeedback.defaultProps = {
-+/// <reference path="react16.d.ts" />
 +const react_1 = __importDefault(require("react"));
 +class FieldFeedback extends react_1.default.Component {
 +    static defaultProps = {

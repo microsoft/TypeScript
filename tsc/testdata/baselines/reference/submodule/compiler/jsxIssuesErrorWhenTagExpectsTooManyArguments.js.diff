@@ -1,13 +1,10 @@
 --- old.jsxIssuesErrorWhenTagExpectsTooManyArguments.js
 +++ new.jsxIssuesErrorWhenTagExpectsTooManyArguments.js
-@@= skipped -27, +27 lines =@@
-
- //// [jsxIssuesErrorWhenTagExpectsTooManyArguments.js]
+@@= skipped -29, +29 lines =@@
  "use strict";
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
-+/// <reference path="react16.d.ts" />
 +const React = require("react");
  function MyComp4(props, context, bad, verybad) {
      return React.createElement("div", null);

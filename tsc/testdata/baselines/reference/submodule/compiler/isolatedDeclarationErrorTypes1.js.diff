@@ -1,14 +1,6 @@
 --- old.isolatedDeclarationErrorTypes1.js
 +++ new.isolatedDeclarationErrorTypes1.js
-@@= skipped -11, +11 lines =@@
-
- //// [isolatedDeclarationErrorTypes1.js]
- "use strict";
--// https://github.com/microsoft/TypeScript/issues/60192
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.foo3 = exports.foo2 = exports.foo1 = void 0;
- const foo1 = (type) => { };
-@@= skipped -12, +11 lines =@@
+@@= skipped -23, +23 lines =@@
 
 
  //// [isolatedDeclarationErrorTypes1.d.ts]

@@ -33,6 +33,7 @@ let n: number = f(2).a;
 
 
 //// [indirectTypeParameterReferences.js]
+// Repro from #19043
 const flowtypes = (b) => {
     const combined = (fn) => null;
     const literal = (fn) => null;

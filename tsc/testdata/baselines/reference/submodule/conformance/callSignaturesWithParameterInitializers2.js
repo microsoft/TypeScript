@@ -28,6 +28,8 @@ b.foo();
 b.foo(1);
 
 //// [callSignaturesWithParameterInitializers2.js]
+// Optional parameters allow initializers only in implementation signatures
+// All the below declarations are errors
 function foo(x = 1) { }
 foo(1);
 foo();

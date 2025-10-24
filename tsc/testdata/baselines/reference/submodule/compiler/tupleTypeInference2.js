@@ -27,6 +27,7 @@ h2([[]] as [void[]]); // T: void
 
 
 //// [tupleTypeInference2.js]
+// Repro from #22564
 f([undefined, '']); // T: never
 f([undefined, '']); // T: void
 g([[]]); // U: {}

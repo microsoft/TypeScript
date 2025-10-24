@@ -179,6 +179,7 @@ type Test2 = Result2<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
 
 
 //// [mappedTypeAsClauses.js]
+// Mapped type 'as N' clauses
 const e1 = {
     foo: "hello"
 };

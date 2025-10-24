@@ -5,10 +5,11 @@
 
  //// [module.js]
 +"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
++Object.defineProperty(exports, "__esModule", { value: true });
  /**
   * @typedef TaskGroup
+  * @property {TaskGroupIds} id
 @@= skipped -27, +29 lines =@@
      taskNameToGroup,
  };
@@ -28,6 +29,7 @@
 
  //// [module.d.ts]
 -export type TaskGroupIds = "parseHTML" | "styleLayout";
++/** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
 +export type TaskGroupIds = 'parseHTML' | 'styleLayout';
  export type TaskGroup = {
      id: TaskGroupIds;

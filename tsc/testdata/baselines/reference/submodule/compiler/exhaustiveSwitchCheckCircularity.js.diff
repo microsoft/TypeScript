@@ -5,7 +5,6 @@
 
  //// [exhaustiveSwitchCheckCircularity.js]
 -"use strict";
--// Repro from #47539
+ // Repro from #47539
  function f() {
      let foo = "aaa";
-     while (true) {

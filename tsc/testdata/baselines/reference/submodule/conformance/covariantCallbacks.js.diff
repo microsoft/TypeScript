@@ -5,7 +5,6 @@
 
  //// [covariantCallbacks.js]
 -"use strict";
--// Test that callback parameters are related covariantly
+ // Test that callback parameters are related covariantly
  ;
  function f1(a, b) {
-     a = b;

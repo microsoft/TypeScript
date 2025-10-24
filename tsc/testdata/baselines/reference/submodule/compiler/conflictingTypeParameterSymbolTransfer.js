@@ -38,9 +38,9 @@ class Item<data> extends BaseClass {
 
 //// [conflictingTypeParameterSymbolTransfer.js]
 "use strict";
+// @strict
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C2 = void 0;
-// @strict
 // Via #56620
 class Base {
 }

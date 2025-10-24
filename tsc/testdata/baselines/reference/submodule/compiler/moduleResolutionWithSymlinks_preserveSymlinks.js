@@ -21,9 +21,9 @@ x = new C2();
 
 //// [app.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // We shouldn't resolve symlinks for references either. See the trace.
 /// <reference types="linked" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const linked_1 = require("linked");
 const linked2_1 = require("linked2");
 let x = new linked_1.C();

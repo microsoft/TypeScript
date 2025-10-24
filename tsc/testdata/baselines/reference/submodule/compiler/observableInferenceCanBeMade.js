@@ -24,6 +24,7 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 
 
 //// [observableInferenceCanBeMade.js]
+// Repro from #33131
 function asObservable(input) {
     return typeof input === 'string' ? of(input) : from(input);
 }

@@ -88,6 +88,7 @@ function f2(x: A | B) {
 }
 
 //// [narrowingByDiscriminantInLoop.js]
+// Repro from #9977
 function insertInterface(callbackType) {
     for (const memberType of callbackType.members) {
         if (memberType.type === "const") {

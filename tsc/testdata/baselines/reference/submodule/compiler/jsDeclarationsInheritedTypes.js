@@ -36,6 +36,10 @@ class C3 extends C1 {
 
 
 //// [a.d.ts]
+/**
+ * @typedef A
+ * @property {string} a
+ */
 export type A = {
     a: string;
 };

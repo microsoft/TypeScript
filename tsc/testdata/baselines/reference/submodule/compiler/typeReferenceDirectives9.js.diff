@@ -9,9 +9,8 @@
  exports.Cls = Cls;
  //// [mod1.js]
  "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference types="lib" />
--Object.defineProperty(exports, "__esModule", { value: true });
+ Object.defineProperty(exports, "__esModule", { value: true });
 -var main_1 = require("./main");
 +const main_1 = require("./main");
  main_1.Cls.prototype.foo = function () { return undefined; };

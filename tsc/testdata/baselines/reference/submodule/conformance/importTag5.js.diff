@@ -1,14 +1,11 @@
 --- old.importTag5.js
 +++ new.importTag5.js
-@@= skipped -22, +22 lines =@@
-     a: number;
- }
- //// [foo.d.ts]
-+import type { Foo } from "./types";
+@@= skipped -25, +25 lines =@@
  /**
   * @import { Foo } from "./types"
   */
-@@= skipped -7, +8 lines =@@
++import type { Foo } from "./types";
+ /**
   * @param { Foo } foo
   */
  declare function f(foo: Foo): void;

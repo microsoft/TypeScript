@@ -41,6 +41,8 @@ x.foo2().x2;
 
 //// [main.js]
 "use strict";
+/// <reference path="O.d.ts" />
+/// <reference path="O2.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 require("Map");
 let x;

@@ -1,17 +1,14 @@
 --- old.jsDeclarationsInterfaces.js
 +++ new.jsDeclarationsInterfaces.js
-@@= skipped -122, +122 lines =@@
-
- //// [index.js]
- "use strict";
--// Pretty much all of this should be an error, (since interfaces are forbidden in js),
--// but we should be able to synthesize declarations from the symbols regardless
+@@= skipped -125, +125 lines =@@
+ // Pretty much all of this should be an error, (since interfaces are forbidden in js),
+ // but we should be able to synthesize declarations from the symbols regardless
  Object.defineProperty(exports, "__esModule", { value: true });
 +exports.JJ = exports.II = exports.H = exports.G = void 0;
 
 
  //// [index.d.ts]
-@@= skipped -12, +11 lines =@@
+@@= skipped -9, +10 lines =@@
      cat: string;
  }
  export interface C<T, U> {

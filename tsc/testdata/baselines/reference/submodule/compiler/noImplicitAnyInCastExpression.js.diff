@@ -1,10 +1,8 @@
 --- old.noImplicitAnyInCastExpression.js
 +++ new.noImplicitAnyInCastExpression.js
-@@= skipped -17, +17 lines =@@
- (<IFoo>{ c: null });
-
+@@= skipped -19, +19 lines =@@
  //// [noImplicitAnyInCastExpression.js]
--// verify no noImplictAny errors reported with cast expression
+ // verify no noImplictAny errors reported with cast expression
  // Expr type not assignable to target type
 -({ a: null });
 +(({ a: null }));

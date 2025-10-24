@@ -79,6 +79,7 @@ interface I2<T extends Date> {
 }
 
 //// [typeParametersAreIdenticalToThemselves.js]
+// type parameters from the same declaration are identical to themself
 function foo1(x) { }
 function foo2(x) { }
 function foo3(x, y) {

@@ -1,14 +1,6 @@
 --- old.instantiateContextualTypes.js
 +++ new.instantiateContextualTypes.js
-@@= skipped -186, +186 lines =@@
-
-
- //// [instantiateContextualTypes.js]
--// #6611
- function fn(values, value) {
- }
- fn(handlers, value => alert(value));
-@@= skipped -22, +21 lines =@@
+@@= skipped -208, +208 lines =@@
  })(N1 || (N1 = {}));
  passContentsToFunc(outerBoxOfString, box => box.value);
  class Interesting {

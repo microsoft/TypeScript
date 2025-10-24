@@ -1,13 +1,9 @@
 --- old.jsDeclarationsInheritedTypes.js
 +++ new.jsDeclarationsInheritedTypes.js
-@@= skipped -35, +35 lines =@@
-
-
- //// [a.d.ts]
--/**
-- * @typedef A
-- * @property {string} a
-- */
+@@= skipped -39, +39 lines =@@
+  * @typedef A
+  * @property {string} a
+  */
 -/**
 - * @typedef B
 - * @property {number} b

@@ -25,6 +25,7 @@ export function y(arg: Type): void {
 
 //// [typePredicateInLoop.js]
 "use strict";
+// Repro from #12101
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = y;
 const guard = (arg) => arg.type === 1;

@@ -1,11 +1,6 @@
 --- old.destructuringParameterDeclaration5.js
 +++ new.destructuringParameterDeclaration5.js
-@@= skipped -52, +52 lines =@@
- d3({ y: "world" });
-
- //// [destructuringParameterDeclaration5.js]
--// Parameter Declaration with generic
- class Class {
+@@= skipped -57, +57 lines =@@
      constructor() { }
  }
  class SubClass extends Class {

@@ -5,7 +5,6 @@
 
  //// [varianceAnnotationValidation.js]
 -"use strict";
--// Repro from #49607
+ // Repro from #49607
  ;
  class Dog {
-     run() { }

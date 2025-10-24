@@ -97,6 +97,7 @@ a = b;
 
 
 //// [unionAndIntersectionInference3.js]
+// Repro from #30720
 concatMaybe([1, 2, 3], 4);
 // Repros from #32247
 const g = async (com) => {

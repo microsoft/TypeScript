@@ -12,6 +12,7 @@ export const foo3 = (type: Unresolved): void => {};
 
 //// [isolatedDeclarationErrorTypes1.js]
 "use strict";
+// https://github.com/microsoft/TypeScript/issues/60192
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo3 = exports.foo2 = exports.foo1 = void 0;
 const foo1 = (type) => { };

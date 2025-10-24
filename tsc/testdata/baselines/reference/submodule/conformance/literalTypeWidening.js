@@ -148,6 +148,7 @@ const b: E.A = a;
 
 //// [literalTypeWidening.js]
 "use strict";
+// Widening vs. non-widening literal types
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -174,7 +175,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.langCodes = void 0;
 exports.Set = Set;
 exports.keys = keys;
-// Widening vs. non-widening literal types
 function f1() {
     const c1 = "hello"; // Widening type "hello"
     let v1 = c1; // Type string

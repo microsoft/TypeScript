@@ -8,11 +8,18 @@
  module.exports = Timer;
  //// [context.js]
 +"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  /**
   * Imports
   *
-@@= skipped -45, +48 lines =@@
+@@= skipped -9, +11 lines =@@
+  * @typedef {import("./hook")} Hook
+  * @typedef {import("./hook").HookHandler} HookHandler
+  */
++Object.defineProperty(exports, "__esModule", { value: true });
+ /**
+  * Input type definition
+  *
+@@= skipped -36, +37 lines =@@
          return input;
      }
  };
@@ -47,6 +54,13 @@
 -}
  //// [context.d.ts]
 -export = Context;
+ /**
+  * Imports
+  *
+@@= skipped -25, +14 lines =@@
+  * @typedef {import("./hook")} Hook
+  * @typedef {import("./hook").HookHandler} HookHandler
+  */
 +export type Timer = import("./timer");
 +export type Hook = import("./hook");
 +export type HookHandler = import("./hook").HookHandler;
@@ -59,9 +73,9 @@
 +    hook: Hook;
 +};
  /**
-  * Imports
+  * Input type definition
   *
-@@= skipped -45, +45 lines =@@
+@@= skipped -20, +31 lines =@@
   * @class
   * @param {Input} input
   */

@@ -1,10 +1,7 @@
 --- old.optionalParamArgsTest.js
 +++ new.optionalParamArgsTest.js
-@@= skipped -125, +125 lines =@@
-
-
- //// [optionalParamArgsTest.js]
--// Optional parameter and default argument tests
+@@= skipped -128, +128 lines =@@
+ // Optional parameter and default argument tests
  // test basic configurations
  class C1 {
 -    constructor(v = 1, p = 0) {

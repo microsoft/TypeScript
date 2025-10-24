@@ -5,5 +5,5 @@
 
  //// [getParameterNameAtPosition.js]
 -"use strict";
--// Repro from #30171
+ // Repro from #30171
  cases(fn(opts => { }));

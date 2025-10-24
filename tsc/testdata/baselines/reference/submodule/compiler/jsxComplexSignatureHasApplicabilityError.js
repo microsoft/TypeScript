@@ -612,6 +612,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
 
 //// [jsxComplexSignatureHasApplicabilityError.js]
 "use strict";
+/// <reference path="react16.d.ts" />
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -625,7 +626,6 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReactSingleSelect = createReactSingleSelect;
-/// <reference path="react16.d.ts" />
 const React = require("react");
 function createReactSingleSelect(WrappedComponent) {
     return (props) => {

@@ -29,13 +29,13 @@ var see3 = true
 
 //// [linkTagEmit1.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @typedef {number} N */
 /**
  * @typedef {Object} D1
  * @property {1} e Just link to {@link NS.R} this time
  * @property {1} m Wyatt Earp loved {@link N integers} I bet.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @typedef {number} Z @see N {@link N} */
 /**
  * @param {number} integer {@link Z}
@@ -49,6 +49,12 @@ var see3 = true;
 
 
 //// [linkTagEmit1.d.ts]
+/** @typedef {number} N */
+/**
+ * @typedef {Object} D1
+ * @property {1} e Just link to {@link NS.R} this time
+ * @property {1} m Wyatt Earp loved {@link N integers} I bet.
+ */
 export type N = number;
 export type D1 = {
     e: 1;

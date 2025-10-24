@@ -9,5 +9,4 @@
 -Object.defineProperty(exports, "__esModule", { value: true });
  //// [idx.test.js]
  "use strict";
--/// <reference path="./idx" />
- Object.defineProperty(exports, "__esModule", { value: true });
+ /// <reference path="./idx" />

@@ -36,11 +36,11 @@ getStuff().exportedDirectly;
 
 //// [spreadExpressionContextualTypeWithNamespace_0.js]
 "use strict";
+// Repro from #44179 with some modification
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = exports.klass = void 0;
 exports.func = func;
 exports.exportedDirectly = exportedDirectly;
-// Repro from #44179 with some modification
 function func() { }
 class klass {
 }

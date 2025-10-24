@@ -88,6 +88,7 @@ throw new D<number>();
 
 
 //// [throwStatements.js]
+// all legal
 class C {
     id;
 }

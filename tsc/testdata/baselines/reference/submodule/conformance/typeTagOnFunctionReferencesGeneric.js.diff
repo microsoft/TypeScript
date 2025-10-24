@@ -1,28 +1,13 @@
 --- old.typeTagOnFunctionReferencesGeneric.js
 +++ new.typeTagOnFunctionReferencesGeneric.js
-@@= skipped -19, +19 lines =@@
-
- //// [typeTagOnFunctionReferencesGeneric.js]
- "use strict";
--/**
-- * @typedef {<T>(m : T) => T} IFn
-- */
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.inJs = inJs;
-+/**
-+ * @typedef {<T>(m : T) => T} IFn
-+ */
- /**@type {IFn}*/
- function inJs(l) {
-     return l;
-@@= skipped -18, +18 lines =@@
+@@= skipped -37, +37 lines =@@
 
 
  //// [typeTagOnFunctionReferencesGeneric.d.ts]
 -export function inJs<T>(m: T): T;
- export type IFn = <T>(m: T) => T;
 +/**
 + * @typedef {<T>(m : T) => T} IFn
 + */
+ export type IFn = <T>(m: T) => T;
 +/**@type {IFn}*/
 +export declare function inJs<T>(l: T): T;

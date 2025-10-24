@@ -5,7 +5,6 @@
 
  //// [mappedTypeIndexedAccess.js]
 -"use strict";
--// Repro from #15756
+ // Repro from #15756
  // Error expected here
  let pair1 = {
-     key: "foo",

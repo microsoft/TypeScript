@@ -96,6 +96,7 @@ export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
 
 //// [recursiveMappedTypes.js]
 "use strict";
+// Recursive mapped types simply appear empty
 Object.defineProperty(exports, "__esModule", { value: true });
 function foo(arg) {
     return arg;

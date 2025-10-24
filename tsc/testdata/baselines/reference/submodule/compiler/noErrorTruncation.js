@@ -19,4 +19,5 @@ const x: SomeLongOptionA
 
 
 //// [noErrorTruncation.js]
+// @noErrorTruncation
 const x = 42;

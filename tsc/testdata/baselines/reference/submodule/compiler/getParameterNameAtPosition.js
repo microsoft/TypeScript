@@ -13,4 +13,5 @@ cases(fn(opts => { }));
 
 
 //// [getParameterNameAtPosition.js]
+// Repro from #30171
 cases(fn(opts => { }));

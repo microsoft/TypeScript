@@ -74,10 +74,10 @@ export class CC extends Y {
 
 //// [index.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CC = exports.BB = exports.AA = exports.Z = exports.Y = exports.X = exports.W = exports.V = exports.U = exports.T = exports.S = exports.R = exports.Q = exports.P = exports.O = exports.N = exports.M = void 0;
 // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CC = exports.BB = exports.AA = exports.Z = exports.Y = exports.X = exports.W = exports.V = exports.U = exports.T = exports.S = exports.R = exports.Q = exports.P = exports.O = exports.N = exports.M = void 0;
 class M {
     field;
 }

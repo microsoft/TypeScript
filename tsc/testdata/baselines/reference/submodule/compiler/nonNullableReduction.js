@@ -21,6 +21,7 @@ function f2<T, U extends null | undefined>(x: T | U) {
 
 
 //// [nonNullableReduction.js]
+// Repros from #43425
 function test(f1, f2) {
     f1 === null || f1 === void 0 ? void 0 : f1("hello");
     f2 === null || f2 === void 0 ? void 0 : f2("hello");

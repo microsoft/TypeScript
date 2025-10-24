@@ -42,6 +42,9 @@ export function fnWithPartialAnnotationOnDefaultparam(x = /** @type {P} */(somet
 
 
 //// [input.d.ts]
+/**
+ * @typedef {{ } & { name?: string }} P
+ */
 export type P = {} & {
     name?: string;
 };

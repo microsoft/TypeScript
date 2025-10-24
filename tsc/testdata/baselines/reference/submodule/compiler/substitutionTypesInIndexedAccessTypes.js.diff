@@ -5,7 +5,6 @@
 
  //// [substitutionTypesInIndexedAccessTypes.js]
 -"use strict";
--// Repro from #31086
+ // Repro from #31086
  const boundaryResult = withBoundary({
      select: true,
- });

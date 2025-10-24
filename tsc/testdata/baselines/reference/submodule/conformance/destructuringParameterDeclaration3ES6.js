@@ -48,6 +48,8 @@ foo1(1, 2, 3, E1.a, E.b);
 
 
 //// [destructuringParameterDeclaration3ES6.js]
+// If the parameter is a rest parameter, the parameter type is any[]
+// A type annotation for a rest parameter must denote an array type.
 function a1(...x) { }
 function a2(...a) { }
 function a3(...a) { }

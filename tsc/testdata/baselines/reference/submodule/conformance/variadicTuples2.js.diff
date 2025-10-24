@@ -5,7 +5,6 @@
 
  //// [variadicTuples2.js]
 -"use strict";
--// Declarations
+ // Declarations
  tt1 = [5];
  tt1 = ['abc', 5];
- tt1 = ['abc', 'def', 5];

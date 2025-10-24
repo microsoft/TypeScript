@@ -123,6 +123,8 @@ export interface CC extends Y {
 
 //// [index.js]
 "use strict";
+// Pretty much all of this should be an error, (since interfaces are forbidden in js),
+// but we should be able to synthesize declarations from the symbols regardless
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JJ = exports.II = exports.H = exports.G = void 0;
 

@@ -16,8 +16,8 @@ module.exports.A.B = {
 
 //// [index.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="node" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const Something = require("fs").Something;
 export var A = {};
 module.exports.A = {};

@@ -1,10 +1,6 @@
 --- old.indexedAccessTypeConstraints.js
 +++ new.indexedAccessTypeConstraints.js
-@@= skipped -38, +38 lines =@@
-
- //// [indexedAccessTypeConstraints.js]
- "use strict";
--// Repro from #14557
+@@= skipped -42, +42 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Bar = exports.Foo = void 0;
  class Parent {

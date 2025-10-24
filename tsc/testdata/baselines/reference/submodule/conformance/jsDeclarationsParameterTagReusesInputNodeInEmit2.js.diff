@@ -30,7 +30,7 @@
 +}
 +export = BaseFactory;
  //// [file.d.ts]
--/** @typedef {typeof import('./base')} BaseFactory */
+ /** @typedef {typeof import('./base')} BaseFactory */
 -/**
 - *
 - * @param {InstanceType<BaseFactory["Base"]>} base

@@ -85,6 +85,7 @@ class OkClass2<T> {
 
 
 //// [noInfer.js]
+// NoInfer<T> is erased for primitives
 foo1('foo', 'foo'); // ok
 foo1('foo', 'bar'); // error
 foo2('foo', ['bar']); // error

@@ -23,8 +23,8 @@ function test(param) {
 
 //// [emitEndOfFileJSDocComments2.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @typedef {number} A */
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * JSDoc comment for function
  * @param {string} param - A string parameter

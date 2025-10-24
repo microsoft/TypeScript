@@ -126,6 +126,7 @@ fnOpt2(1, [2, 3], [1], true);
 
 
 //// [optionalParamArgsTest.js]
+// Optional parameter and default argument tests
 // test basic configurations
 class C1 {
     constructor(v = 1, p = 0) { }

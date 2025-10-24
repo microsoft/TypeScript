@@ -1,10 +1,7 @@
 --- old.declarationEmitMappedTypePreservesTypeParameterConstraint.js
 +++ new.declarationEmitMappedTypePreservesTypeParameterConstraint.js
-@@= skipped -61, +61 lines =@@
-
- //// [declarationEmitMappedTypePreservesTypeParameterConstraint.js]
- "use strict";
--// repro from https://github.com/microsoft/TypeScript/issues/54560
+@@= skipped -64, +64 lines =@@
+ // repro from https://github.com/microsoft/TypeScript/issues/54560
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.entriesOf = exports.buildSchema = void 0;
 -const buildSchema = (version) => ({});
@@ -12,7 +9,7 @@
  exports.buildSchema = buildSchema;
  const entriesOf = (o) => Object.entries(o);
  exports.entriesOf = entriesOf;
-@@= skipped -31, +30 lines =@@
+@@= skipped -28, +28 lines =@@
  export declare type ZodRawShape = {
      [k: string]: ZodTypeAny;
  };

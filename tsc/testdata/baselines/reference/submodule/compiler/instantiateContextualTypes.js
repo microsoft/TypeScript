@@ -187,6 +187,7 @@ assignPartial(obj, { foo(...args) {} });  // args has type [string]
 
 
 //// [instantiateContextualTypes.js]
+// #6611
 function fn(values, value) {
 }
 fn(handlers, value => alert(value));

@@ -28,6 +28,7 @@ let z5: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E) & (E.D | E.E |
 
 
 //// [intersectionOfUnionOfUnitTypes.js]
+// @strict
 let x0; // 'a' | 'b' | 'c'
 let x1; // 'b' | 'c'
 let x2; // 'c'

@@ -22,6 +22,7 @@ foo({
 
 
 //// [mappedTypeInferenceErrors.js]
+// Repro from #19316
 foo({
     props: { x: 10, y: 20 },
     computed: {

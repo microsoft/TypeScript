@@ -23,6 +23,7 @@ function callN<T extends A | B>(p: T) {
 }
 
 //// [functionCallOnConstrainedTypeVariable.js]
+// Repro from #20196
 function call0(p) {
     p.a("s"); // Error
 }

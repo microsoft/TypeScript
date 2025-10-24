@@ -13,6 +13,7 @@ f({ x: (() => 1)(), ...{ y: 1 } })``;
 
 
 //// [taggedTemplateStringsWithCurriedFunction.js]
+// Originated from #38558
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -24,7 +25,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-// Originated from #38558
 const f = _ => (..._) => "";
 f(__assign({ x: 0 })) ``;
 f(__assign({ x: 0 })) `x`;

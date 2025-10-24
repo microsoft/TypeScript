@@ -1,13 +1,7 @@
 --- old.tsNoCheckForTypescriptComments2.js
 +++ new.tsNoCheckForTypescriptComments2.js
-@@= skipped -15, +15 lines =@@
-
- //// [file.js]
- "use strict";
--// @ts-nocheck: additional comments
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -20, +20 lines =@@
  exports.Bet = exports.a = void 0;
-+// @ts-nocheck: additional comments
  exports.a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
  class Bet {
 -    constructor() {

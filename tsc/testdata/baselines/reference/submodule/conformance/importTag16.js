@@ -22,8 +22,8 @@ export default interface Foo {
 export interface I {
 }
 //// [b.d.ts]
-import type Foo, { I } from "./a";
 /** @import Foo, { I } from "./a" */
+import type Foo, { I } from "./a";
 /**
  * @param {Foo} a
  * @param {I} b
@@ -34,7 +34,7 @@ export declare function foo(a: Foo, b: I): void;
 //// [DtsFileErrors]
 
 
-b.d.ts(1,8): error TS1363: A type-only import can specify a default import or named bindings, but not both.
+b.d.ts(2,8): error TS1363: A type-only import can specify a default import or named bindings, but not both.
 
 
 ==== a.d.ts (0 errors) ====
@@ -44,10 +44,10 @@ b.d.ts(1,8): error TS1363: A type-only import can specify a default import or na
     }
     
 ==== b.d.ts (1 errors) ====
+    /** @import Foo, { I } from "./a" */
     import type Foo, { I } from "./a";
            ~~~~~~~~~~~~~~~
 !!! error TS1363: A type-only import can specify a default import or named bindings, but not both.
-    /** @import Foo, { I } from "./a" */
     /**
      * @param {Foo} a
      * @param {I} b

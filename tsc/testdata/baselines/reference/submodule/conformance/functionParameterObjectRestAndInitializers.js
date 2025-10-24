@@ -13,6 +13,7 @@ function g({a, ...x}, b = ({a}, b = a) => {}) {
 
 
 //// [functionParameterObjectRestAndInitializers.js]
+// https://github.com/microsoft/TypeScript/issues/47079
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -24,7 +25,6 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-// https://github.com/microsoft/TypeScript/issues/47079
 function f(_a, b) {
     var { a } = _a, x = __rest(_a, ["a"]);
     if (b === void 0) { b = a; }

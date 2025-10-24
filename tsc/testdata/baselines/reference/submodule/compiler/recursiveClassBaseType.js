@@ -24,6 +24,7 @@ class Derived1 extends class extends Base1 {
 
 
 //// [recursiveClassBaseType.js]
+// Repro from #44281
 class C extends Base({ x: p(() => []) }) {
 }
 // Repro from #44359

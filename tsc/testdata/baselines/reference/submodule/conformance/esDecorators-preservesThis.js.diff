@@ -1,10 +1,9 @@
 --- old.esDecorators-preservesThis.js
 +++ new.esDecorators-preservesThis.js
-@@= skipped -39, +39 lines =@@
-
+@@= skipped -40, +40 lines =@@
 
  //// [esDecorators-preservesThis.js]
--// https://github.com/microsoft/TypeScript/issues/53752
+ // https://github.com/microsoft/TypeScript/issues/53752
 -var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
 -    var useValue = arguments.length > 2;
 -    for (var i = 0; i < initializers.length; i++) {

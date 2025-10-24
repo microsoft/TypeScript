@@ -10,6 +10,7 @@ interface JSONSchema4 {
 
 
 //// [conditionalTypesASI.js]
+// Repro from #21637
 
 
 //// [conditionalTypesASI.d.ts]

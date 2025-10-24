@@ -123,6 +123,12 @@ function getSomeOtherTags(node: ts.Node) {
 
 //// [APISample_jsdoc.js]
 "use strict";
+/*
+ * Note: This test is a public API sample. The original sources can be found
+ *       at: https://github.com/YousefED/typescript-json-schema
+ *           https://github.com/vega/ts-json-schema-generator
+ *       Please log a "breaking change" issue for any API breaking change affecting this issue
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts = require("typescript");
 // excerpted from https://github.com/YousefED/typescript-json-schema

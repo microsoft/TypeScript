@@ -28,6 +28,7 @@ foo(gK);
 
 //// [recursiveTupleTypeInference.js]
 "use strict";
+// Repro from #37475
 Object.defineProperty(exports, "__esModule", { value: true });
 const gK = { b: ["number", "null"] };
 function foo(g) {

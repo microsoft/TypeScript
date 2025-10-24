@@ -51,6 +51,7 @@ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 
 
 //// [accessorsOverrideProperty9.js]
+// #41347, based on microsoft/rushstack
 // Base class
 class ApiItem {
     get members() {

@@ -13,6 +13,7 @@ export async function test() {
 
 
 //// [awaitUsingDeclarationsInForOf.5.js]
+// https://github.com/microsoft/TypeScript/pull/55558#issuecomment-1817595357
 for (await using  of x)
     ;
 export async function test() {

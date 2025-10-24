@@ -19,6 +19,7 @@ value?.foo("a");
 
 
 //// [callChainInference.js]
+// Repro from #42404
 if (value) {
     value === null || value === void 0 ? void 0 : value.foo("a");
 }

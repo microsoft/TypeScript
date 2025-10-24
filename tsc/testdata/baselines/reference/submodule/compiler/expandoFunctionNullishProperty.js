@@ -38,6 +38,7 @@ export function testUndefined(): TestUndefined {
 
 
 //// [expandoFunctionNullishProperty.js]
+// mentioned in https://github.com/microsoft/TypeScript/issues/54220
 export function testNull() {
     function inner() { }
     inner.prop = null;

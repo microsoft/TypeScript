@@ -79,6 +79,8 @@ const c1: C<unknown, string> = new C<unknown, number>();  // Error
 
 
 //// [varianceMeasurement.js]
+// The type below should be invariant in T but is measured as covariant because
+// we don't analyze recursive references.
 const f11 = f10;
 const f12 = f10;
 const f21 = f20;

@@ -1,12 +1,8 @@
 --- old.ignoredJsxAttributes.js
 +++ new.ignoredJsxAttributes.js
-@@= skipped -24, +24 lines =@@
-
- //// [ignoredJsxAttributes.js]
- "use strict";
--/// <reference path="react16.d.ts" />
+@@= skipped -27, +27 lines =@@
+ /// <reference path="react16.d.ts" />
  Object.defineProperty(exports, "__esModule", { value: true });
-+/// <reference path="react16.d.ts" />
  // Repro from #44797
 -var React = require("react");
 +const React = require("react");

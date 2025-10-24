@@ -22,6 +22,7 @@ var g = tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }`
 var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 
 //// [parenthesizedContexualTyping3.js]
+// Contextual typing for parenthesized substitution expressions in tagged templates.
 function tempFun(tempStrs, g, x) {
     return g(x);
 }

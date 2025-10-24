@@ -1,13 +1,10 @@
 --- old.jsxIntrinsicUnions.js
 +++ new.jsxIntrinsicUnions.js
-@@= skipped -11, +11 lines =@@
-
- //// [jsxIntrinsicUnions.js]
+@@= skipped -13, +13 lines =@@
  "use strict";
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
-+/// <reference path="react16.d.ts" />
 +const React = require("react");
  const El = Math.random() ? 'h1' : 'h2';
  const tag = React.createElement(El, { className: "ok", key: "key" }, "Title");

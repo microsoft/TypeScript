@@ -19,6 +19,7 @@ fn(MySubClass);
 
 
 //// [mappedTypePartialConstraints.js]
+// Repro from #16985
 class MyClass {
     doIt(data) { }
 }

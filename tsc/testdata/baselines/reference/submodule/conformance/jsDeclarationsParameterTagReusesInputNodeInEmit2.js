@@ -59,4 +59,5 @@ declare namespace BaseFactory {
 }
 export = BaseFactory;
 //// [file.d.ts]
+/** @typedef {typeof import('./base')} BaseFactory */
 export type BaseFactory = typeof import('./base');

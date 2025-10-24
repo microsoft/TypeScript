@@ -26,6 +26,7 @@ const b: string = a;
 
 //// [inferTypes2.js]
 "use strict";
+// Repros from #22755
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = bar;
 exports.bar2 = bar2;

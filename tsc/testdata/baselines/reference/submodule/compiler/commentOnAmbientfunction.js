@@ -17,5 +17,9 @@ declare function bar();
 declare function foobar(a: typeof foo): typeof bar;
 
 //// [a.js]
+/*!=========
+    Keep this pinned comment
+   =========
+*/
 //// [b.js]
 ///<reference path="a.ts"/>

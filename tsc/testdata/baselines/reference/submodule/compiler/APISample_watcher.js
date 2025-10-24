@@ -121,6 +121,11 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
 
 //// [APISample_watcher.js]
 "use strict";
+/*
+ * Note: This test is a public API sample. The sample sources can be found
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+ *       Please log a "breaking change" issue for any API breaking change affecting this issue
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts = require("typescript");
 function watch(rootFileNames, options) {

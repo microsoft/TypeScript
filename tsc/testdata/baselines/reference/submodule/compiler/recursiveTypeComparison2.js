@@ -33,4 +33,5 @@ declare module Bacon {
 var stuck: Bacon.Bus<number> = new Bacon.Bus();
 
 //// [recursiveTypeComparison2.js]
+// Before fix this would cause compiler to hang (#1170)
 var stuck = new Bacon.Bus();

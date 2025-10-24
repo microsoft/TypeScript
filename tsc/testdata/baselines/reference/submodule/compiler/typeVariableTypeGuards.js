@@ -93,6 +93,7 @@ function f6<T extends string | (new () => {})>(a: T) {
 
 
 //// [typeVariableTypeGuards.js]
+// Repro from #14091
 class A {
     props;
     constructor(props) {

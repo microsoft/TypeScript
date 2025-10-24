@@ -1,10 +1,8 @@
 --- old.subtypesOfAny.js
 +++ new.subtypesOfAny.js
-@@= skipped -135, +135 lines =@@
- }
-
+@@= skipped -137, +137 lines =@@
  //// [subtypesOfAny.js]
--// every type is a subtype of any, no errors expected
+ // every type is a subtype of any, no errors expected
  class A {
 +    foo;
  }
@@ -13,7 +11,7 @@
  }
  var E;
  (function (E) {
-@@= skipped -14, +15 lines =@@
+@@= skipped -12, +14 lines =@@
      f.bar = 1;
  })(f || (f = {}));
  class c {

@@ -5,7 +5,6 @@
 
  //// [tupleTypeInference2.js]
 -"use strict";
--// Repro from #22564
+ // Repro from #22564
  f([undefined, '']); // T: never
  f([undefined, '']); // T: void
- g([[]]); // U: {}

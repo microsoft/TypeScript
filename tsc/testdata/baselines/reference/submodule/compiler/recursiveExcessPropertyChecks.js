@@ -17,6 +17,7 @@ getMaxId(nodes);
 
 
 //// [recursiveExcessPropertyChecks.js]
+// Repro from #35804
 function getMaxId(items) {
 }
 const nodes = [];

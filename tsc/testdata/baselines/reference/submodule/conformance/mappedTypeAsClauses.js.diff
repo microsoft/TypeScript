@@ -5,7 +5,6 @@
 
  //// [mappedTypeAsClauses.js]
 -"use strict";
--// Mapped type 'as N' clauses
+ // Mapped type 'as N' clauses
  const e1 = {
      foo: "hello"
- };

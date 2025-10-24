@@ -25,6 +25,7 @@ function foo(things: Val[]): void {
 }
 
 //// [controlFlowDestructuringLoop.js]
+// Repro from #28758
 function isNumVal(x) {
     return typeof x.val === 'number';
 }

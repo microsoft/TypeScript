@@ -1,11 +1,6 @@
 --- old.objectTypeWithStringIndexerHidingObjectIndexer.js
 +++ new.objectTypeWithStringIndexerHidingObjectIndexer.js
-@@= skipped -33, +33 lines =@@
-
-
- //// [objectTypeWithStringIndexerHidingObjectIndexer.js]
--// object types can define string indexers that are more specific than the default 'any' that would be returned
--// no errors expected below 
+@@= skipped -38, +38 lines =@@
  var o = {};
  var r = o['']; // should be Object
  class C {

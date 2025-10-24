@@ -23,10 +23,10 @@ export interface Foo {
     a: number;
 }
 //// [foo.d.ts]
-import type { Foo } from "./types";
 /**
  * @import { Foo } from "./types"
  */
+import type { Foo } from "./types";
 /**
  * @param { Foo } foo
  */

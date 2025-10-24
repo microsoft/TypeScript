@@ -70,11 +70,11 @@ function f3(a, b) {}
 
 //// [file.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {A} */ // ok, default for `T` in `A` is `string`
 const aDefault1 = [""];
 /** @type {A} */ // error: `number` is not assignable to string`
@@ -130,6 +130,10 @@ function f3(a, b) { }
 
 
 //// [file.d.ts]
+/**
+ * @template {string | number} [T=string] - ok: defaults are permitted
+ * @typedef {[T]} A
+ */
 export type A<T extends string | number = string> = [T];
 export type B<T, U = T> = [T, U];
 export type C<T extends string | number = > = [T];

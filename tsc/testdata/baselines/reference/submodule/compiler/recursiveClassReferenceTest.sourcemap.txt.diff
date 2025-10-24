@@ -1,41 +1,16 @@
 --- old.recursiveClassReferenceTest.sourcemap.txt
 +++ new.recursiveClassReferenceTest.sourcemap.txt
-@@= skipped -7, +7 lines =@@
- emittedFile:recursiveClassReferenceTest.js
- sourceFile:recursiveClassReferenceTest.ts
- -------------------------------------------------------------------
-->>>// Scenario 1: Test reqursive function call with "this" parameter
--1 >
--2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--3 >                                                                 ^^^^^^^^^^->
--1 >
--2 >// Scenario 1: Test reqursive function call with "this" parameter
--1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
--2 >Emitted(1, 66) Source(1, 66) + SourceIndex(0)
-----
-->>>// Scenario 2: Test recursive function call with cast and "this" parameter
--1->
--2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1->
--  >
--2 >// Scenario 2: Test recursive function call with cast and "this" parameter
--1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
--2 >Emitted(2, 75) Source(2, 75) + SourceIndex(0)
-----
- >>>var Sample;
+@@= skipped -29, +29 lines =@@
  1 >
  2 >^^^^
  3 >    ^^^^^^
 -4 >          ^
 -5 >           ^^^^^^^^^^->
--1 >
 +4 >          ^^^^^^^^^^^->
-+1 >// Scenario 1: Test reqursive function call with "this" parameter
-+  >// Scenario 2: Test recursive function call with cast and "this" parameter
+ 1 >
    >
    >
-   >
-@@= skipped -56, +38 lines =@@
+@@= skipped -34, +33 lines =@@
    >
    >
  2 >module 
@@ -51,10 +26,6 @@
 -  >          		}
 -  >          	}
 -  >          }
--1 >Emitted(3, 1) Source(32, 1) + SourceIndex(0)
--2 >Emitted(3, 5) Source(32, 8) + SourceIndex(0)
--3 >Emitted(3, 11) Source(32, 14) + SourceIndex(0)
--4 >Emitted(3, 12) Source(42, 2) + SourceIndex(0)
 +3 >    Sample.Actions.Thing.Find {
 +  >    	export class StartFindAction implements Sample.Thing.IAction {
 +  >    		
@@ -66,9 +37,11 @@
 +  >    		}
 +  >    	}
 +  >    }
-+1 >Emitted(1, 1) Source(32, 1) + SourceIndex(0)
-+2 >Emitted(1, 5) Source(32, 8) + SourceIndex(0)
-+3 >Emitted(1, 11) Source(42, 2) + SourceIndex(0)
+ 1 >Emitted(3, 1) Source(32, 1) + SourceIndex(0)
+ 2 >Emitted(3, 5) Source(32, 8) + SourceIndex(0)
+-3 >Emitted(3, 11) Source(32, 14) + SourceIndex(0)
+-4 >Emitted(3, 12) Source(42, 2) + SourceIndex(0)
++3 >Emitted(3, 11) Source(42, 2) + SourceIndex(0)
  ---
  >>>(function (Sample) {
  1->
@@ -78,14 +51,11 @@
  1->
  2 >module 
  3 >           Sample
--1->Emitted(4, 1) Source(32, 1) + SourceIndex(0)
--2 >Emitted(4, 12) Source(32, 8) + SourceIndex(0)
--3 >Emitted(4, 18) Source(32, 14) + SourceIndex(0)
 +4 >                 
-+1->Emitted(2, 1) Source(32, 1) + SourceIndex(0)
-+2 >Emitted(2, 12) Source(32, 8) + SourceIndex(0)
-+3 >Emitted(2, 18) Source(32, 14) + SourceIndex(0)
-+4 >Emitted(2, 20) Source(6, 1) + SourceIndex(0)
+ 1->Emitted(4, 1) Source(32, 1) + SourceIndex(0)
+ 2 >Emitted(4, 12) Source(32, 8) + SourceIndex(0)
+ 3 >Emitted(4, 18) Source(32, 14) + SourceIndex(0)
++4 >Emitted(4, 20) Source(6, 1) + SourceIndex(0)
  ---
 ->>>    var Actions;
 +>>>    let Actions;
@@ -136,10 +106,6 @@
 -  >               		}
 -  >               	}
 -  >               }
--1 >Emitted(5, 5) Source(32, 15) + SourceIndex(0)
--2 >Emitted(5, 9) Source(32, 15) + SourceIndex(0)
--3 >Emitted(5, 16) Source(32, 22) + SourceIndex(0)
--4 >Emitted(5, 17) Source(42, 2) + SourceIndex(0)
 +3 >        Actions.Thing.Find {
 +  >        	export class StartFindAction implements Sample.Thing.IAction {
 +  >        		
@@ -151,9 +117,11 @@
 +  >        		}
 +  >        	}
 +  >        }
-+1 >Emitted(3, 5) Source(32, 15) + SourceIndex(0)
-+2 >Emitted(3, 9) Source(32, 15) + SourceIndex(0)
-+3 >Emitted(3, 16) Source(42, 2) + SourceIndex(0)
+ 1 >Emitted(5, 5) Source(32, 15) + SourceIndex(0)
+ 2 >Emitted(5, 9) Source(32, 15) + SourceIndex(0)
+-3 >Emitted(5, 16) Source(32, 22) + SourceIndex(0)
+-4 >Emitted(5, 17) Source(42, 2) + SourceIndex(0)
++3 >Emitted(5, 16) Source(42, 2) + SourceIndex(0)
  ---
  >>>    (function (Actions) {
  1->^^^^
@@ -163,14 +131,11 @@
  1->
  2 >    
  3 >               Actions
--1->Emitted(6, 5) Source(32, 15) + SourceIndex(0)
--2 >Emitted(6, 16) Source(32, 15) + SourceIndex(0)
--3 >Emitted(6, 23) Source(32, 22) + SourceIndex(0)
 +4 >                      
-+1->Emitted(4, 5) Source(32, 15) + SourceIndex(0)
-+2 >Emitted(4, 16) Source(32, 15) + SourceIndex(0)
-+3 >Emitted(4, 23) Source(32, 22) + SourceIndex(0)
-+4 >Emitted(4, 25) Source(6, 1) + SourceIndex(0)
+ 1->Emitted(6, 5) Source(32, 15) + SourceIndex(0)
+ 2 >Emitted(6, 16) Source(32, 15) + SourceIndex(0)
+ 3 >Emitted(6, 23) Source(32, 22) + SourceIndex(0)
++4 >Emitted(6, 25) Source(6, 1) + SourceIndex(0)
  ---
 ->>>        var Thing;
 +>>>        let Thing;
@@ -221,10 +186,6 @@
 -  >                 		}
 -  >                 	}
 -  >                 }
--1 >Emitted(7, 9) Source(32, 23) + SourceIndex(0)
--2 >Emitted(7, 13) Source(32, 23) + SourceIndex(0)
--3 >Emitted(7, 18) Source(32, 28) + SourceIndex(0)
--4 >Emitted(7, 19) Source(42, 2) + SourceIndex(0)
 +3 >            Thing.Find {
 +  >            	export class StartFindAction implements Sample.Thing.IAction {
 +  >            		
@@ -236,9 +197,11 @@
 +  >            		}
 +  >            	}
 +  >            }
-+1 >Emitted(5, 9) Source(32, 23) + SourceIndex(0)
-+2 >Emitted(5, 13) Source(32, 23) + SourceIndex(0)
-+3 >Emitted(5, 18) Source(42, 2) + SourceIndex(0)
+ 1 >Emitted(7, 9) Source(32, 23) + SourceIndex(0)
+ 2 >Emitted(7, 13) Source(32, 23) + SourceIndex(0)
+-3 >Emitted(7, 18) Source(32, 28) + SourceIndex(0)
+-4 >Emitted(7, 19) Source(42, 2) + SourceIndex(0)
++3 >Emitted(7, 18) Source(42, 2) + SourceIndex(0)
  ---
  >>>        (function (Thing_1) {
  1->^^^^^^^^
@@ -248,14 +211,11 @@
  1->
  2 >        
  3 >                   Thing
--1->Emitted(8, 9) Source(32, 23) + SourceIndex(0)
--2 >Emitted(8, 20) Source(32, 23) + SourceIndex(0)
--3 >Emitted(8, 27) Source(32, 28) + SourceIndex(0)
 +4 >                          
-+1->Emitted(6, 9) Source(32, 23) + SourceIndex(0)
-+2 >Emitted(6, 20) Source(32, 23) + SourceIndex(0)
-+3 >Emitted(6, 27) Source(32, 28) + SourceIndex(0)
-+4 >Emitted(6, 29) Source(6, 1) + SourceIndex(0)
+ 1->Emitted(8, 9) Source(32, 23) + SourceIndex(0)
+ 2 >Emitted(8, 20) Source(32, 23) + SourceIndex(0)
+ 3 >Emitted(8, 27) Source(32, 28) + SourceIndex(0)
++4 >Emitted(8, 29) Source(6, 1) + SourceIndex(0)
  ---
 ->>>            var Find;
 +>>>            let Find;
@@ -306,10 +266,6 @@
 -  >                    		}
 -  >                    	}
 -  >                    }
--1 >Emitted(9, 13) Source(32, 29) + SourceIndex(0)
--2 >Emitted(9, 17) Source(32, 29) + SourceIndex(0)
--3 >Emitted(9, 21) Source(32, 33) + SourceIndex(0)
--4 >Emitted(9, 22) Source(42, 2) + SourceIndex(0)
 +3 >                Find {
 +  >                	export class StartFindAction implements Sample.Thing.IAction {
 +  >                		
@@ -321,9 +277,11 @@
 +  >                		}
 +  >                	}
 +  >                }
-+1 >Emitted(7, 13) Source(32, 29) + SourceIndex(0)
-+2 >Emitted(7, 17) Source(32, 29) + SourceIndex(0)
-+3 >Emitted(7, 21) Source(42, 2) + SourceIndex(0)
+ 1 >Emitted(9, 13) Source(32, 29) + SourceIndex(0)
+ 2 >Emitted(9, 17) Source(32, 29) + SourceIndex(0)
+-3 >Emitted(9, 21) Source(32, 33) + SourceIndex(0)
+-4 >Emitted(9, 22) Source(42, 2) + SourceIndex(0)
++3 >Emitted(9, 21) Source(42, 2) + SourceIndex(0)
  ---
  >>>            (function (Find) {
  1->^^^^^^^^^^^^
@@ -335,14 +293,11 @@
  1->
  2 >            
  3 >                       Find
--1->Emitted(10, 13) Source(32, 29) + SourceIndex(0)
--2 >Emitted(10, 24) Source(32, 29) + SourceIndex(0)
--3 >Emitted(10, 28) Source(32, 33) + SourceIndex(0)
 +4 >                            
-+1->Emitted(8, 13) Source(32, 29) + SourceIndex(0)
-+2 >Emitted(8, 24) Source(32, 29) + SourceIndex(0)
-+3 >Emitted(8, 28) Source(32, 33) + SourceIndex(0)
-+4 >Emitted(8, 30) Source(32, 34) + SourceIndex(0)
+ 1->Emitted(10, 13) Source(32, 29) + SourceIndex(0)
+ 2 >Emitted(10, 24) Source(32, 29) + SourceIndex(0)
+ 3 >Emitted(10, 28) Source(32, 33) + SourceIndex(0)
++4 >Emitted(10, 30) Source(32, 34) + SourceIndex(0)
  ---
  >>>                class StartFindAction {
  1->^^^^^^^^^^^^^^^^
@@ -354,13 +309,7 @@
    >	
  2 >                export class 
  3 >                      StartFindAction
--1->Emitted(11, 17) Source(33, 2) + SourceIndex(0)
--2 >Emitted(11, 23) Source(33, 15) + SourceIndex(0)
--3 >Emitted(11, 38) Source(33, 30) + SourceIndex(0)
-+1->Emitted(9, 17) Source(33, 2) + SourceIndex(0)
-+2 >Emitted(9, 23) Source(33, 15) + SourceIndex(0)
-+3 >Emitted(9, 38) Source(33, 30) + SourceIndex(0)
- ---
+@@= skipped -153, +232 lines =@@
  >>>                    getId() { return "yo"; }
  1->^^^^^^^^^^^^^^^^^^^^
  2 >                    ^^^^^
@@ -387,14 +336,6 @@
 -6 >                                         ;
 -7 >                                           
 -8 >                                           }
--1->Emitted(12, 21) Source(35, 10) + SourceIndex(0)
--2 >Emitted(12, 26) Source(35, 15) + SourceIndex(0)
--3 >Emitted(12, 31) Source(35, 20) + SourceIndex(0)
--4 >Emitted(12, 38) Source(35, 27) + SourceIndex(0)
--5 >Emitted(12, 42) Source(35, 31) + SourceIndex(0)
--6 >Emitted(12, 43) Source(35, 32) + SourceIndex(0)
--7 >Emitted(12, 44) Source(35, 33) + SourceIndex(0)
--8 >Emitted(12, 45) Source(35, 34) + SourceIndex(0)
 +3 >                         () 
 +4 >                            { 
 +5 >                              return 
@@ -402,15 +343,21 @@
 +7 >                                         ;
 +8 >                                          
 +9 >                                            }
-+1->Emitted(10, 21) Source(35, 10) + SourceIndex(0)
-+2 >Emitted(10, 26) Source(35, 15) + SourceIndex(0)
-+3 >Emitted(10, 29) Source(35, 18) + SourceIndex(0)
-+4 >Emitted(10, 31) Source(35, 20) + SourceIndex(0)
-+5 >Emitted(10, 38) Source(35, 27) + SourceIndex(0)
-+6 >Emitted(10, 42) Source(35, 31) + SourceIndex(0)
-+7 >Emitted(10, 43) Source(35, 32) + SourceIndex(0)
-+8 >Emitted(10, 44) Source(35, 32) + SourceIndex(0)
-+9 >Emitted(10, 45) Source(35, 34) + SourceIndex(0)
+ 1->Emitted(12, 21) Source(35, 10) + SourceIndex(0)
+ 2 >Emitted(12, 26) Source(35, 15) + SourceIndex(0)
+-3 >Emitted(12, 31) Source(35, 20) + SourceIndex(0)
+-4 >Emitted(12, 38) Source(35, 27) + SourceIndex(0)
+-5 >Emitted(12, 42) Source(35, 31) + SourceIndex(0)
+-6 >Emitted(12, 43) Source(35, 32) + SourceIndex(0)
+-7 >Emitted(12, 44) Source(35, 33) + SourceIndex(0)
+-8 >Emitted(12, 45) Source(35, 34) + SourceIndex(0)
++3 >Emitted(12, 29) Source(35, 18) + SourceIndex(0)
++4 >Emitted(12, 31) Source(35, 20) + SourceIndex(0)
++5 >Emitted(12, 38) Source(35, 27) + SourceIndex(0)
++6 >Emitted(12, 42) Source(35, 31) + SourceIndex(0)
++7 >Emitted(12, 43) Source(35, 32) + SourceIndex(0)
++8 >Emitted(12, 44) Source(35, 32) + SourceIndex(0)
++9 >Emitted(12, 45) Source(35, 34) + SourceIndex(0)
  ---
  >>>                    run(Thing) {
  1 >^^^^^^^^^^^^^^^^^^^^
@@ -426,16 +373,12 @@
  2 >                    run
  3 >                       (
  4 >                        Thing:Sample.Thing.ICodeThing
--1 >Emitted(13, 21) Source(37, 10) + SourceIndex(0)
--2 >Emitted(13, 24) Source(37, 13) + SourceIndex(0)
--3 >Emitted(13, 25) Source(37, 14) + SourceIndex(0)
--4 >Emitted(13, 30) Source(37, 43) + SourceIndex(0)
 +5 >                             ):boolean 
-+1 >Emitted(11, 21) Source(37, 10) + SourceIndex(0)
-+2 >Emitted(11, 24) Source(37, 13) + SourceIndex(0)
-+3 >Emitted(11, 25) Source(37, 14) + SourceIndex(0)
-+4 >Emitted(11, 30) Source(37, 43) + SourceIndex(0)
-+5 >Emitted(11, 32) Source(37, 53) + SourceIndex(0)
+ 1 >Emitted(13, 21) Source(37, 10) + SourceIndex(0)
+ 2 >Emitted(13, 24) Source(37, 13) + SourceIndex(0)
+ 3 >Emitted(13, 25) Source(37, 14) + SourceIndex(0)
+ 4 >Emitted(13, 30) Source(37, 43) + SourceIndex(0)
++5 >Emitted(13, 32) Source(37, 53) + SourceIndex(0)
  ---
  >>>                        return true;
  1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -447,37 +390,20 @@
    >
    >			
  2 >                        return 
- 3 >                               true
- 4 >                                   ;
--1->Emitted(14, 25) Source(39, 4) + SourceIndex(0)
--2 >Emitted(14, 32) Source(39, 11) + SourceIndex(0)
--3 >Emitted(14, 36) Source(39, 15) + SourceIndex(0)
--4 >Emitted(14, 37) Source(39, 16) + SourceIndex(0)
-+1->Emitted(12, 25) Source(39, 4) + SourceIndex(0)
-+2 >Emitted(12, 32) Source(39, 11) + SourceIndex(0)
-+3 >Emitted(12, 36) Source(39, 15) + SourceIndex(0)
-+4 >Emitted(12, 37) Source(39, 16) + SourceIndex(0)
- ---
- >>>                    }
+@@= skipped -62, +68 lines =@@
  1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^
  1 >
 -  >		
 -2 >                    }
 -1 >Emitted(15, 21) Source(40, 3) + SourceIndex(0)
--2 >Emitted(15, 22) Source(40, 4) + SourceIndex(0)
 +2 >                    
 +  >                    		}
-+1 >Emitted(13, 21) Source(39, 16) + SourceIndex(0)
-+2 >Emitted(13, 22) Source(40, 4) + SourceIndex(0)
++1 >Emitted(15, 21) Source(39, 16) + SourceIndex(0)
+ 2 >Emitted(15, 22) Source(40, 4) + SourceIndex(0)
  ---
  >>>                }
- 1 >^^^^^^^^^^^^^^^^^
- 2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
-   >	}
--1 >Emitted(16, 18) Source(41, 3) + SourceIndex(0)
-+1 >Emitted(14, 18) Source(41, 3) + SourceIndex(0)
+@@= skipped -14, +14 lines =@@
  ---
  >>>                Find.StartFindAction = StartFindAction;
  1->^^^^^^^^^^^^^^^^
@@ -499,21 +425,20 @@
    >                                    		
    >                                    		public getId() { return "yo"; }
    >                                    		
-@@= skipped -244, +331 lines =@@
+@@= skipped -15, +17 lines =@@
    >                                    			return true;
    >                                    		}
    >                                    	}
 -4 >                                                      
--1->Emitted(17, 17) Source(33, 15) + SourceIndex(0)
++5 >                                                      
+ 1->Emitted(17, 17) Source(33, 15) + SourceIndex(0)
 -2 >Emitted(17, 37) Source(33, 30) + SourceIndex(0)
 -3 >Emitted(17, 55) Source(41, 3) + SourceIndex(0)
 -4 >Emitted(17, 56) Source(41, 3) + SourceIndex(0)
-+5 >                                                      
-+1->Emitted(15, 17) Source(33, 15) + SourceIndex(0)
-+2 >Emitted(15, 22) Source(33, 15) + SourceIndex(0)
-+3 >Emitted(15, 37) Source(33, 30) + SourceIndex(0)
-+4 >Emitted(15, 55) Source(41, 3) + SourceIndex(0)
-+5 >Emitted(15, 56) Source(41, 3) + SourceIndex(0)
++2 >Emitted(17, 22) Source(33, 15) + SourceIndex(0)
++3 >Emitted(17, 37) Source(33, 30) + SourceIndex(0)
++4 >Emitted(17, 55) Source(41, 3) + SourceIndex(0)
++5 >Emitted(17, 56) Source(41, 3) + SourceIndex(0)
  ---
  >>>            })(Find = Thing_1.Find || (Thing_1.Find = {}));
  1->^^^^^^^^^^^^
@@ -557,25 +482,21 @@
    >                                                   	}
    >                                                   }
 -1->Emitted(18, 13) Source(42, 1) + SourceIndex(0)
--2 >Emitted(18, 14) Source(42, 2) + SourceIndex(0)
--3 >Emitted(18, 16) Source(32, 29) + SourceIndex(0)
--4 >Emitted(18, 20) Source(32, 33) + SourceIndex(0)
--5 >Emitted(18, 23) Source(32, 29) + SourceIndex(0)
++1->Emitted(18, 13) Source(41, 3) + SourceIndex(0)
+ 2 >Emitted(18, 14) Source(42, 2) + SourceIndex(0)
+ 3 >Emitted(18, 16) Source(32, 29) + SourceIndex(0)
+ 4 >Emitted(18, 20) Source(32, 33) + SourceIndex(0)
+ 5 >Emitted(18, 23) Source(32, 29) + SourceIndex(0)
 -6 >Emitted(18, 35) Source(32, 33) + SourceIndex(0)
 -7 >Emitted(18, 40) Source(32, 29) + SourceIndex(0)
 -8 >Emitted(18, 52) Source(32, 33) + SourceIndex(0)
 -9 >Emitted(18, 60) Source(42, 2) + SourceIndex(0)
-+1->Emitted(16, 13) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(16, 14) Source(42, 2) + SourceIndex(0)
-+3 >Emitted(16, 16) Source(32, 29) + SourceIndex(0)
-+4 >Emitted(16, 20) Source(32, 33) + SourceIndex(0)
-+5 >Emitted(16, 23) Source(32, 29) + SourceIndex(0)
-+6 >Emitted(16, 31) Source(32, 29) + SourceIndex(0)
-+7 >Emitted(16, 35) Source(32, 33) + SourceIndex(0)
-+8 >Emitted(16, 40) Source(32, 29) + SourceIndex(0)
-+9 >Emitted(16, 48) Source(32, 29) + SourceIndex(0)
-+10>Emitted(16, 52) Source(32, 33) + SourceIndex(0)
-+11>Emitted(16, 60) Source(42, 2) + SourceIndex(0)
++6 >Emitted(18, 31) Source(32, 29) + SourceIndex(0)
++7 >Emitted(18, 35) Source(32, 33) + SourceIndex(0)
++8 >Emitted(18, 40) Source(32, 29) + SourceIndex(0)
++9 >Emitted(18, 48) Source(32, 29) + SourceIndex(0)
++10>Emitted(18, 52) Source(32, 33) + SourceIndex(0)
++11>Emitted(18, 60) Source(42, 2) + SourceIndex(0)
  ---
  >>>        })(Thing = Actions.Thing || (Actions.Thing = {}));
  1 >^^^^^^^^
@@ -666,18 +587,18 @@
 -7 >Emitted(19, 38) Source(32, 23) + SourceIndex(0)
 -8 >Emitted(19, 51) Source(32, 28) + SourceIndex(0)
 -9 >Emitted(19, 59) Source(42, 2) + SourceIndex(0)
-+1 >Emitted(17, 9) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(17, 10) Source(42, 1) + SourceIndex(0)
-+3 >Emitted(17, 10) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(17, 12) Source(32, 23) + SourceIndex(0)
-+5 >Emitted(17, 17) Source(32, 28) + SourceIndex(0)
-+6 >Emitted(17, 20) Source(32, 23) + SourceIndex(0)
-+7 >Emitted(17, 28) Source(32, 23) + SourceIndex(0)
-+8 >Emitted(17, 33) Source(32, 28) + SourceIndex(0)
-+9 >Emitted(17, 38) Source(32, 23) + SourceIndex(0)
-+10>Emitted(17, 46) Source(32, 23) + SourceIndex(0)
-+11>Emitted(17, 51) Source(32, 28) + SourceIndex(0)
-+12>Emitted(17, 59) Source(42, 2) + SourceIndex(0)
++1 >Emitted(19, 9) Source(41, 3) + SourceIndex(0)
++2 >Emitted(19, 10) Source(42, 1) + SourceIndex(0)
++3 >Emitted(19, 10) Source(1, 1) + SourceIndex(0)
++4 >Emitted(19, 12) Source(32, 23) + SourceIndex(0)
++5 >Emitted(19, 17) Source(32, 28) + SourceIndex(0)
++6 >Emitted(19, 20) Source(32, 23) + SourceIndex(0)
++7 >Emitted(19, 28) Source(32, 23) + SourceIndex(0)
++8 >Emitted(19, 33) Source(32, 28) + SourceIndex(0)
++9 >Emitted(19, 38) Source(32, 23) + SourceIndex(0)
++10>Emitted(19, 46) Source(32, 23) + SourceIndex(0)
++11>Emitted(19, 51) Source(32, 28) + SourceIndex(0)
++12>Emitted(19, 59) Source(42, 2) + SourceIndex(0)
  ---
  >>>    })(Actions = Sample.Actions || (Sample.Actions = {}));
  1->^^^^
@@ -766,18 +687,18 @@
 -7 >Emitted(20, 37) Source(32, 15) + SourceIndex(0)
 -8 >Emitted(20, 51) Source(32, 22) + SourceIndex(0)
 -9 >Emitted(20, 59) Source(42, 2) + SourceIndex(0)
-+1->Emitted(18, 5) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(18, 6) Source(42, 1) + SourceIndex(0)
-+3 >Emitted(18, 6) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(18, 8) Source(32, 15) + SourceIndex(0)
-+5 >Emitted(18, 15) Source(32, 22) + SourceIndex(0)
-+6 >Emitted(18, 18) Source(32, 15) + SourceIndex(0)
-+7 >Emitted(18, 25) Source(32, 15) + SourceIndex(0)
-+8 >Emitted(18, 32) Source(32, 22) + SourceIndex(0)
-+9 >Emitted(18, 37) Source(32, 15) + SourceIndex(0)
-+10>Emitted(18, 44) Source(32, 15) + SourceIndex(0)
-+11>Emitted(18, 51) Source(32, 22) + SourceIndex(0)
-+12>Emitted(18, 59) Source(42, 2) + SourceIndex(0)
++1->Emitted(20, 5) Source(41, 3) + SourceIndex(0)
++2 >Emitted(20, 6) Source(42, 1) + SourceIndex(0)
++3 >Emitted(20, 6) Source(1, 1) + SourceIndex(0)
++4 >Emitted(20, 8) Source(32, 15) + SourceIndex(0)
++5 >Emitted(20, 15) Source(32, 22) + SourceIndex(0)
++6 >Emitted(20, 18) Source(32, 15) + SourceIndex(0)
++7 >Emitted(20, 25) Source(32, 15) + SourceIndex(0)
++8 >Emitted(20, 32) Source(32, 22) + SourceIndex(0)
++9 >Emitted(20, 37) Source(32, 15) + SourceIndex(0)
++10>Emitted(20, 44) Source(32, 15) + SourceIndex(0)
++11>Emitted(20, 51) Source(32, 22) + SourceIndex(0)
++12>Emitted(20, 59) Source(42, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
@@ -852,14 +773,14 @@
 -5 >Emitted(21, 15) Source(32, 8) + SourceIndex(0)
 -6 >Emitted(21, 21) Source(32, 14) + SourceIndex(0)
 -7 >Emitted(21, 29) Source(42, 2) + SourceIndex(0)
-+1 >Emitted(19, 1) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(19, 2) Source(42, 1) + SourceIndex(0)
-+3 >Emitted(19, 2) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(19, 4) Source(32, 8) + SourceIndex(0)
-+5 >Emitted(19, 10) Source(32, 14) + SourceIndex(0)
-+6 >Emitted(19, 15) Source(32, 8) + SourceIndex(0)
-+7 >Emitted(19, 21) Source(32, 14) + SourceIndex(0)
-+8 >Emitted(19, 29) Source(42, 2) + SourceIndex(0)
++1 >Emitted(21, 1) Source(41, 3) + SourceIndex(0)
++2 >Emitted(21, 2) Source(42, 1) + SourceIndex(0)
++3 >Emitted(21, 2) Source(1, 1) + SourceIndex(0)
++4 >Emitted(21, 4) Source(32, 8) + SourceIndex(0)
++5 >Emitted(21, 10) Source(32, 14) + SourceIndex(0)
++6 >Emitted(21, 15) Source(32, 8) + SourceIndex(0)
++7 >Emitted(21, 21) Source(32, 14) + SourceIndex(0)
++8 >Emitted(21, 29) Source(42, 2) + SourceIndex(0)
  ---
  >>>(function (Sample) {
  1 >
@@ -871,14 +792,11 @@
    >
  2 >module 
  3 >           Sample
--1 >Emitted(22, 1) Source(44, 1) + SourceIndex(0)
--2 >Emitted(22, 12) Source(44, 8) + SourceIndex(0)
--3 >Emitted(22, 18) Source(44, 14) + SourceIndex(0)
 +4 >                 
-+1 >Emitted(20, 1) Source(44, 1) + SourceIndex(0)
-+2 >Emitted(20, 12) Source(44, 8) + SourceIndex(0)
-+3 >Emitted(20, 18) Source(44, 14) + SourceIndex(0)
-+4 >Emitted(20, 20) Source(6, 1) + SourceIndex(0)
+ 1 >Emitted(22, 1) Source(44, 1) + SourceIndex(0)
+ 2 >Emitted(22, 12) Source(44, 8) + SourceIndex(0)
+ 3 >Emitted(22, 18) Source(44, 14) + SourceIndex(0)
++4 >Emitted(22, 20) Source(6, 1) + SourceIndex(0)
  ---
 ->>>    var Thing;
 +>>>    let Thing;
@@ -951,10 +869,6 @@
 -  >             
 -  >             	}
 -  >             }
--1 >Emitted(23, 5) Source(44, 15) + SourceIndex(0)
--2 >Emitted(23, 9) Source(44, 15) + SourceIndex(0)
--3 >Emitted(23, 14) Source(44, 20) + SourceIndex(0)
--4 >Emitted(23, 15) Source(64, 2) + SourceIndex(0)
 +3 >        Thing.Widgets {
 +  >        	export class FindWidget implements Sample.Thing.IWidget {
 +  >        
@@ -976,9 +890,11 @@
 +  >        
 +  >        	}
 +  >        }
-+1 >Emitted(21, 5) Source(44, 15) + SourceIndex(0)
-+2 >Emitted(21, 9) Source(44, 15) + SourceIndex(0)
-+3 >Emitted(21, 14) Source(64, 2) + SourceIndex(0)
+ 1 >Emitted(23, 5) Source(44, 15) + SourceIndex(0)
+ 2 >Emitted(23, 9) Source(44, 15) + SourceIndex(0)
+-3 >Emitted(23, 14) Source(44, 20) + SourceIndex(0)
+-4 >Emitted(23, 15) Source(64, 2) + SourceIndex(0)
++3 >Emitted(23, 14) Source(64, 2) + SourceIndex(0)
  ---
  >>>    (function (Thing) {
  1->^^^^
@@ -989,14 +905,11 @@
  1->
  2 >    
  3 >               Thing
--1->Emitted(24, 5) Source(44, 15) + SourceIndex(0)
--2 >Emitted(24, 16) Source(44, 15) + SourceIndex(0)
--3 >Emitted(24, 21) Source(44, 20) + SourceIndex(0)
 +4 >                    
-+1->Emitted(22, 5) Source(44, 15) + SourceIndex(0)
-+2 >Emitted(22, 16) Source(44, 15) + SourceIndex(0)
-+3 >Emitted(22, 21) Source(44, 20) + SourceIndex(0)
-+4 >Emitted(22, 23) Source(6, 1) + SourceIndex(0)
+ 1->Emitted(24, 5) Source(44, 15) + SourceIndex(0)
+ 2 >Emitted(24, 16) Source(44, 15) + SourceIndex(0)
+ 3 >Emitted(24, 21) Source(44, 20) + SourceIndex(0)
++4 >Emitted(24, 23) Source(6, 1) + SourceIndex(0)
  ---
 ->>>        var Widgets;
 -1->^^^^^^^^
@@ -1071,9 +984,6 @@
 -  >                   	}
 -  >                   }
 -1->Emitted(25, 9) Source(44, 21) + SourceIndex(0)
--2 >Emitted(25, 13) Source(44, 21) + SourceIndex(0)
--3 >Emitted(25, 20) Source(44, 28) + SourceIndex(0)
--4 >Emitted(25, 21) Source(64, 2) + SourceIndex(0)
 +3 >            Widgets {
 +  >            	export class FindWidget implements Sample.Thing.IWidget {
 +  >            
@@ -1095,9 +1005,11 @@
 +  >            
 +  >            	}
 +  >            }
-+1 >Emitted(23, 9) Source(44, 21) + SourceIndex(0)
-+2 >Emitted(23, 13) Source(44, 21) + SourceIndex(0)
-+3 >Emitted(23, 20) Source(64, 2) + SourceIndex(0)
++1 >Emitted(25, 9) Source(44, 21) + SourceIndex(0)
+ 2 >Emitted(25, 13) Source(44, 21) + SourceIndex(0)
+-3 >Emitted(25, 20) Source(44, 28) + SourceIndex(0)
+-4 >Emitted(25, 21) Source(64, 2) + SourceIndex(0)
++3 >Emitted(25, 20) Source(64, 2) + SourceIndex(0)
  ---
  >>>        (function (Widgets) {
  1->^^^^^^^^
@@ -1109,14 +1021,11 @@
  1->
  2 >        
  3 >                   Widgets
--1->Emitted(26, 9) Source(44, 21) + SourceIndex(0)
--2 >Emitted(26, 20) Source(44, 21) + SourceIndex(0)
--3 >Emitted(26, 27) Source(44, 28) + SourceIndex(0)
 +4 >                           
-+1->Emitted(24, 9) Source(44, 21) + SourceIndex(0)
-+2 >Emitted(24, 20) Source(44, 21) + SourceIndex(0)
-+3 >Emitted(24, 27) Source(44, 28) + SourceIndex(0)
-+4 >Emitted(24, 29) Source(44, 29) + SourceIndex(0)
+ 1->Emitted(26, 9) Source(44, 21) + SourceIndex(0)
+ 2 >Emitted(26, 20) Source(44, 21) + SourceIndex(0)
+ 3 >Emitted(26, 27) Source(44, 28) + SourceIndex(0)
++4 >Emitted(26, 29) Source(44, 29) + SourceIndex(0)
  ---
  >>>            class FindWidget {
  1->^^^^^^^^^^^^
@@ -1128,13 +1037,10 @@
    >	
  2 >            export class 
  3 >                  FindWidget
--1->Emitted(27, 13) Source(45, 2) + SourceIndex(0)
--2 >Emitted(27, 19) Source(45, 15) + SourceIndex(0)
--3 >Emitted(27, 29) Source(45, 25) + SourceIndex(0)
-+1->Emitted(25, 13) Source(45, 2) + SourceIndex(0)
-+2 >Emitted(25, 19) Source(45, 15) + SourceIndex(0)
-+3 >Emitted(25, 29) Source(45, 25) + SourceIndex(0)
-+---
+@@= skipped -128, +206 lines =@@
+ 2 >Emitted(27, 19) Source(45, 15) + SourceIndex(0)
+ 3 >Emitted(27, 29) Source(45, 25) + SourceIndex(0)
+ ---
 +>>>                codeThing;
 +1 >^^^^^^^^^^^^^^^^
 +2 >                ^^^^^^^^^
@@ -1146,9 +1052,9 @@
 +  >		private domNode:any = null;
 +  >		constructor(private 
 +2 >                codeThing
-+1 >Emitted(26, 17) Source(50, 23) + SourceIndex(0)
-+2 >Emitted(26, 26) Source(50, 32) + SourceIndex(0)
- ---
++1 >Emitted(28, 17) Source(50, 23) + SourceIndex(0)
++2 >Emitted(28, 26) Source(50, 32) + SourceIndex(0)
++---
  >>>                gar(runner) { if (true) {
  1->^^^^^^^^^^^^^^^^
  2 >                ^^^
@@ -1192,20 +1098,20 @@
 +8 >                                  true
 +9 >                                      ) 
 +10>                                        {
-+1->Emitted(27, 17) Source(47, 10) + SourceIndex(0)
-+2 >Emitted(27, 20) Source(47, 13) + SourceIndex(0)
-+3 >Emitted(27, 21) Source(47, 14) + SourceIndex(0)
-+4 >Emitted(27, 27) Source(47, 55) + SourceIndex(0)
-+5 >Emitted(27, 29) Source(47, 57) + SourceIndex(0)
-+6 >Emitted(27, 31) Source(47, 59) + SourceIndex(0)
-+7 >Emitted(27, 35) Source(47, 63) + SourceIndex(0)
-+8 >Emitted(27, 39) Source(47, 67) + SourceIndex(0)
-+9 >Emitted(27, 41) Source(47, 69) + SourceIndex(0)
-+10>Emitted(27, 42) Source(47, 70) + SourceIndex(0)
++1->Emitted(29, 17) Source(47, 10) + SourceIndex(0)
++2 >Emitted(29, 20) Source(47, 13) + SourceIndex(0)
++3 >Emitted(29, 21) Source(47, 14) + SourceIndex(0)
++4 >Emitted(29, 27) Source(47, 55) + SourceIndex(0)
++5 >Emitted(29, 29) Source(47, 57) + SourceIndex(0)
++6 >Emitted(29, 31) Source(47, 59) + SourceIndex(0)
++7 >Emitted(29, 35) Source(47, 63) + SourceIndex(0)
++8 >Emitted(29, 39) Source(47, 67) + SourceIndex(0)
++9 >Emitted(29, 41) Source(47, 69) + SourceIndex(0)
++10>Emitted(29, 42) Source(47, 70) + SourceIndex(0)
  ---
  >>>                    return runner(this);
  1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -174, +267 lines =@@
+@@= skipped -46, +61 lines =@@
  5 >                                  this
  6 >                                      )
  7 >                                       ;
@@ -1216,13 +1122,13 @@
 -5 >Emitted(29, 39) Source(47, 88) + SourceIndex(0)
 -6 >Emitted(29, 40) Source(47, 89) + SourceIndex(0)
 -7 >Emitted(29, 41) Source(47, 90) + SourceIndex(0)
-+1 >Emitted(28, 21) Source(47, 70) + SourceIndex(0)
-+2 >Emitted(28, 28) Source(47, 77) + SourceIndex(0)
-+3 >Emitted(28, 34) Source(47, 83) + SourceIndex(0)
-+4 >Emitted(28, 35) Source(47, 84) + SourceIndex(0)
-+5 >Emitted(28, 39) Source(47, 88) + SourceIndex(0)
-+6 >Emitted(28, 40) Source(47, 89) + SourceIndex(0)
-+7 >Emitted(28, 41) Source(47, 90) + SourceIndex(0)
++1 >Emitted(30, 21) Source(47, 70) + SourceIndex(0)
++2 >Emitted(30, 28) Source(47, 77) + SourceIndex(0)
++3 >Emitted(30, 34) Source(47, 83) + SourceIndex(0)
++4 >Emitted(30, 35) Source(47, 84) + SourceIndex(0)
++5 >Emitted(30, 39) Source(47, 88) + SourceIndex(0)
++6 >Emitted(30, 40) Source(47, 89) + SourceIndex(0)
++7 >Emitted(30, 41) Source(47, 90) + SourceIndex(0)
  ---
  >>>                } }
  1 >^^^^^^^^^^^^^^^^
@@ -1239,10 +1145,10 @@
 -2 >Emitted(30, 18) Source(47, 91) + SourceIndex(0)
 -3 >Emitted(30, 19) Source(47, 91) + SourceIndex(0)
 -4 >Emitted(30, 20) Source(47, 92) + SourceIndex(0)
-+1 >Emitted(29, 17) Source(47, 90) + SourceIndex(0)
-+2 >Emitted(29, 18) Source(47, 91) + SourceIndex(0)
-+3 >Emitted(29, 19) Source(47, 91) + SourceIndex(0)
-+4 >Emitted(29, 20) Source(47, 92) + SourceIndex(0)
++1 >Emitted(31, 17) Source(47, 90) + SourceIndex(0)
++2 >Emitted(31, 18) Source(47, 91) + SourceIndex(0)
++3 >Emitted(31, 19) Source(47, 91) + SourceIndex(0)
++4 >Emitted(31, 20) Source(47, 92) + SourceIndex(0)
 +---
 +>>>                domNode = null;
 +1->^^^^^^^^^^^^^^^^
@@ -1258,11 +1164,11 @@
 +3 >                       :any = 
 +4 >                          null
 +5 >                              ;
-+1->Emitted(30, 17) Source(49, 11) + SourceIndex(0)
-+2 >Emitted(30, 24) Source(49, 18) + SourceIndex(0)
-+3 >Emitted(30, 27) Source(49, 25) + SourceIndex(0)
-+4 >Emitted(30, 31) Source(49, 29) + SourceIndex(0)
-+5 >Emitted(30, 32) Source(49, 30) + SourceIndex(0)
++1->Emitted(32, 17) Source(49, 11) + SourceIndex(0)
++2 >Emitted(32, 24) Source(49, 18) + SourceIndex(0)
++3 >Emitted(32, 27) Source(49, 25) + SourceIndex(0)
++4 >Emitted(32, 31) Source(49, 29) + SourceIndex(0)
++5 >Emitted(32, 32) Source(49, 30) + SourceIndex(0)
  ---
  >>>                constructor(codeThing) {
  1->^^^^^^^^^^^^^^^^
@@ -1277,11 +1183,14 @@
    >		
  2 >                constructor(private 
  3 >                            codeThing: Sample.Thing.ICodeThing
+-1->Emitted(31, 17) Source(50, 3) + SourceIndex(0)
+-2 >Emitted(31, 29) Source(50, 23) + SourceIndex(0)
+-3 >Emitted(31, 38) Source(50, 57) + SourceIndex(0)
 +4 >                                     ) 
- 1->Emitted(31, 17) Source(50, 3) + SourceIndex(0)
- 2 >Emitted(31, 29) Source(50, 23) + SourceIndex(0)
- 3 >Emitted(31, 38) Source(50, 57) + SourceIndex(0)
-+4 >Emitted(31, 40) Source(50, 59) + SourceIndex(0)
++1->Emitted(33, 17) Source(50, 3) + SourceIndex(0)
++2 >Emitted(33, 29) Source(50, 23) + SourceIndex(0)
++3 >Emitted(33, 38) Source(50, 57) + SourceIndex(0)
++4 >Emitted(33, 40) Source(50, 59) + SourceIndex(0)
  ---
  >>>                    this.codeThing = codeThing;
 -1->^^^^^^^^^^^^^^^^^^^^
@@ -1319,8 +1228,8 @@
 -4 >Emitted(33, 40) Source(49, 29) + SourceIndex(0)
 -5 >Emitted(33, 41) Source(49, 30) + SourceIndex(0)
 +2 >                                     codeThing
-+1->Emitted(32, 38) Source(50, 23) + SourceIndex(0)
-+2 >Emitted(32, 47) Source(50, 32) + SourceIndex(0)
++1->Emitted(34, 38) Source(50, 23) + SourceIndex(0)
++2 >Emitted(34, 47) Source(50, 32) + SourceIndex(0)
  ---
  >>>                    // scenario 1
  1 >^^^^^^^^^^^^^^^^^^^^
@@ -1333,8 +1242,8 @@
  2 >                    // scenario 1
 -1 >Emitted(34, 21) Source(51, 7) + SourceIndex(0)
 -2 >Emitted(34, 34) Source(51, 20) + SourceIndex(0)
-+1 >Emitted(33, 21) Source(51, 7) + SourceIndex(0)
-+2 >Emitted(33, 34) Source(51, 20) + SourceIndex(0)
++1 >Emitted(35, 21) Source(51, 7) + SourceIndex(0)
++2 >Emitted(35, 34) Source(51, 20) + SourceIndex(0)
  ---
  >>>                    codeThing.addWidget("addWidget", this);
  1->^^^^^^^^^^^^^^^^^^^^
@@ -1352,16 +1261,16 @@
 -8 >Emitted(35, 58) Source(52, 44) + SourceIndex(0)
 -9 >Emitted(35, 59) Source(52, 45) + SourceIndex(0)
 -10>Emitted(35, 60) Source(52, 46) + SourceIndex(0)
-+1->Emitted(34, 21) Source(52, 7) + SourceIndex(0)
-+2 >Emitted(34, 30) Source(52, 16) + SourceIndex(0)
-+3 >Emitted(34, 31) Source(52, 17) + SourceIndex(0)
-+4 >Emitted(34, 40) Source(52, 26) + SourceIndex(0)
-+5 >Emitted(34, 41) Source(52, 27) + SourceIndex(0)
-+6 >Emitted(34, 52) Source(52, 38) + SourceIndex(0)
-+7 >Emitted(34, 54) Source(52, 40) + SourceIndex(0)
-+8 >Emitted(34, 58) Source(52, 44) + SourceIndex(0)
-+9 >Emitted(34, 59) Source(52, 45) + SourceIndex(0)
-+10>Emitted(34, 60) Source(52, 46) + SourceIndex(0)
++1->Emitted(36, 21) Source(52, 7) + SourceIndex(0)
++2 >Emitted(36, 30) Source(52, 16) + SourceIndex(0)
++3 >Emitted(36, 31) Source(52, 17) + SourceIndex(0)
++4 >Emitted(36, 40) Source(52, 26) + SourceIndex(0)
++5 >Emitted(36, 41) Source(52, 27) + SourceIndex(0)
++6 >Emitted(36, 52) Source(52, 38) + SourceIndex(0)
++7 >Emitted(36, 54) Source(52, 40) + SourceIndex(0)
++8 >Emitted(36, 58) Source(52, 44) + SourceIndex(0)
++9 >Emitted(36, 59) Source(52, 45) + SourceIndex(0)
++10>Emitted(36, 60) Source(52, 46) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^
@@ -1374,8 +1283,8 @@
 -2 >Emitted(36, 18) Source(53, 4) + SourceIndex(0)
 +2 >                
 +  >                		}
-+1 >Emitted(35, 17) Source(52, 46) + SourceIndex(0)
-+2 >Emitted(35, 18) Source(53, 4) + SourceIndex(0)
++1 >Emitted(37, 17) Source(52, 46) + SourceIndex(0)
++2 >Emitted(37, 18) Source(53, 4) + SourceIndex(0)
  ---
  >>>                getDomNode() {
  1->^^^^^^^^^^^^^^^^
@@ -1390,9 +1299,9 @@
 -1->Emitted(37, 17) Source(55, 10) + SourceIndex(0)
 -2 >Emitted(37, 27) Source(55, 20) + SourceIndex(0)
 +3 >                          () 
-+1->Emitted(36, 17) Source(55, 10) + SourceIndex(0)
-+2 >Emitted(36, 27) Source(55, 20) + SourceIndex(0)
-+3 >Emitted(36, 30) Source(55, 23) + SourceIndex(0)
++1->Emitted(38, 17) Source(55, 10) + SourceIndex(0)
++2 >Emitted(38, 27) Source(55, 20) + SourceIndex(0)
++3 >Emitted(38, 30) Source(55, 23) + SourceIndex(0)
  ---
  >>>                    return domNode;
  1->^^^^^^^^^^^^^^^^^^^^
@@ -1409,10 +1318,10 @@
 -2 >Emitted(38, 28) Source(56, 11) + SourceIndex(0)
 -3 >Emitted(38, 35) Source(56, 18) + SourceIndex(0)
 -4 >Emitted(38, 36) Source(56, 19) + SourceIndex(0)
-+1->Emitted(37, 21) Source(56, 4) + SourceIndex(0)
-+2 >Emitted(37, 28) Source(56, 11) + SourceIndex(0)
-+3 >Emitted(37, 35) Source(56, 18) + SourceIndex(0)
-+4 >Emitted(37, 36) Source(56, 19) + SourceIndex(0)
++1->Emitted(39, 21) Source(56, 4) + SourceIndex(0)
++2 >Emitted(39, 28) Source(56, 11) + SourceIndex(0)
++3 >Emitted(39, 35) Source(56, 18) + SourceIndex(0)
++4 >Emitted(39, 36) Source(56, 19) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^
@@ -1425,8 +1334,8 @@
 -2 >Emitted(39, 18) Source(57, 4) + SourceIndex(0)
 +2 >                
 +  >                		}
-+1 >Emitted(38, 17) Source(56, 19) + SourceIndex(0)
-+2 >Emitted(38, 18) Source(57, 4) + SourceIndex(0)
++1 >Emitted(40, 17) Source(56, 19) + SourceIndex(0)
++2 >Emitted(40, 18) Source(57, 4) + SourceIndex(0)
  ---
  >>>                destroy() {
  1->^^^^^^^^^^^^^^^^
@@ -1439,9 +1348,9 @@
 -1->Emitted(40, 17) Source(59, 10) + SourceIndex(0)
 -2 >Emitted(40, 24) Source(59, 17) + SourceIndex(0)
 +3 >                       () 
-+1->Emitted(39, 17) Source(59, 10) + SourceIndex(0)
-+2 >Emitted(39, 24) Source(59, 17) + SourceIndex(0)
-+3 >Emitted(39, 27) Source(59, 20) + SourceIndex(0)
++1->Emitted(41, 17) Source(59, 10) + SourceIndex(0)
++2 >Emitted(41, 24) Source(59, 17) + SourceIndex(0)
++3 >Emitted(41, 27) Source(59, 20) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^
@@ -1456,8 +1365,8 @@
 +2 >                
 +  >                
 +  >                		}
-+1 >Emitted(40, 17) Source(59, 21) + SourceIndex(0)
-+2 >Emitted(40, 18) Source(61, 4) + SourceIndex(0)
++1 >Emitted(42, 17) Source(59, 21) + SourceIndex(0)
++2 >Emitted(42, 18) Source(61, 4) + SourceIndex(0)
  ---
  >>>            }
  1 >^^^^^^^^^^^^^
@@ -1466,7 +1375,7 @@
    >
    >	}
 -1 >Emitted(42, 14) Source(63, 3) + SourceIndex(0)
-+1 >Emitted(41, 14) Source(63, 3) + SourceIndex(0)
++1 >Emitted(43, 14) Source(63, 3) + SourceIndex(0)
  ---
  >>>            Widgets.FindWidget = FindWidget;
  1->^^^^^^^^^^^^
@@ -1498,11 +1407,11 @@
 -3 >Emitted(43, 44) Source(63, 3) + SourceIndex(0)
 -4 >Emitted(43, 45) Source(63, 3) + SourceIndex(0)
 +5 >                                           
-+1->Emitted(42, 13) Source(45, 15) + SourceIndex(0)
-+2 >Emitted(42, 21) Source(45, 15) + SourceIndex(0)
-+3 >Emitted(42, 31) Source(45, 25) + SourceIndex(0)
-+4 >Emitted(42, 44) Source(63, 3) + SourceIndex(0)
-+5 >Emitted(42, 45) Source(63, 3) + SourceIndex(0)
++1->Emitted(44, 13) Source(45, 15) + SourceIndex(0)
++2 >Emitted(44, 21) Source(45, 15) + SourceIndex(0)
++3 >Emitted(44, 31) Source(45, 25) + SourceIndex(0)
++4 >Emitted(44, 44) Source(63, 3) + SourceIndex(0)
++5 >Emitted(44, 45) Source(63, 3) + SourceIndex(0)
  ---
  >>>        })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
  1->^^^^^^^^
@@ -1554,17 +1463,17 @@
 -7 >Emitted(44, 40) Source(44, 21) + SourceIndex(0)
 -8 >Emitted(44, 53) Source(44, 28) + SourceIndex(0)
 -9 >Emitted(44, 61) Source(64, 2) + SourceIndex(0)
-+1->Emitted(43, 9) Source(63, 3) + SourceIndex(0)
-+2 >Emitted(43, 10) Source(64, 2) + SourceIndex(0)
-+3 >Emitted(43, 12) Source(44, 21) + SourceIndex(0)
-+4 >Emitted(43, 19) Source(44, 28) + SourceIndex(0)
-+5 >Emitted(43, 22) Source(44, 21) + SourceIndex(0)
-+6 >Emitted(43, 28) Source(44, 21) + SourceIndex(0)
-+7 >Emitted(43, 35) Source(44, 28) + SourceIndex(0)
-+8 >Emitted(43, 40) Source(44, 21) + SourceIndex(0)
-+9 >Emitted(43, 46) Source(44, 21) + SourceIndex(0)
-+10>Emitted(43, 53) Source(44, 28) + SourceIndex(0)
-+11>Emitted(43, 61) Source(64, 2) + SourceIndex(0)
++1->Emitted(45, 9) Source(63, 3) + SourceIndex(0)
++2 >Emitted(45, 10) Source(64, 2) + SourceIndex(0)
++3 >Emitted(45, 12) Source(44, 21) + SourceIndex(0)
++4 >Emitted(45, 19) Source(44, 28) + SourceIndex(0)
++5 >Emitted(45, 22) Source(44, 21) + SourceIndex(0)
++6 >Emitted(45, 28) Source(44, 21) + SourceIndex(0)
++7 >Emitted(45, 35) Source(44, 28) + SourceIndex(0)
++8 >Emitted(45, 40) Source(44, 21) + SourceIndex(0)
++9 >Emitted(45, 46) Source(44, 21) + SourceIndex(0)
++10>Emitted(45, 53) Source(44, 28) + SourceIndex(0)
++11>Emitted(45, 61) Source(64, 2) + SourceIndex(0)
  ---
  >>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
  1 >^^^^
@@ -1665,18 +1574,18 @@
 -7 >Emitted(45, 33) Source(44, 15) + SourceIndex(0)
 -8 >Emitted(45, 45) Source(44, 20) + SourceIndex(0)
 -9 >Emitted(45, 53) Source(64, 2) + SourceIndex(0)
-+1 >Emitted(44, 5) Source(63, 3) + SourceIndex(0)
-+2 >Emitted(44, 6) Source(64, 1) + SourceIndex(0)
-+3 >Emitted(44, 6) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(44, 8) Source(44, 15) + SourceIndex(0)
-+5 >Emitted(44, 13) Source(44, 20) + SourceIndex(0)
-+6 >Emitted(44, 16) Source(44, 15) + SourceIndex(0)
-+7 >Emitted(44, 23) Source(44, 15) + SourceIndex(0)
-+8 >Emitted(44, 28) Source(44, 20) + SourceIndex(0)
-+9 >Emitted(44, 33) Source(44, 15) + SourceIndex(0)
-+10>Emitted(44, 40) Source(44, 15) + SourceIndex(0)
-+11>Emitted(44, 45) Source(44, 20) + SourceIndex(0)
-+12>Emitted(44, 53) Source(64, 2) + SourceIndex(0)
++1 >Emitted(46, 5) Source(63, 3) + SourceIndex(0)
++2 >Emitted(46, 6) Source(64, 1) + SourceIndex(0)
++3 >Emitted(46, 6) Source(1, 1) + SourceIndex(0)
++4 >Emitted(46, 8) Source(44, 15) + SourceIndex(0)
++5 >Emitted(46, 13) Source(44, 20) + SourceIndex(0)
++6 >Emitted(46, 16) Source(44, 15) + SourceIndex(0)
++7 >Emitted(46, 23) Source(44, 15) + SourceIndex(0)
++8 >Emitted(46, 28) Source(44, 20) + SourceIndex(0)
++9 >Emitted(46, 33) Source(44, 15) + SourceIndex(0)
++10>Emitted(46, 40) Source(44, 15) + SourceIndex(0)
++11>Emitted(46, 45) Source(44, 20) + SourceIndex(0)
++12>Emitted(46, 53) Source(64, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
@@ -1763,14 +1672,14 @@
 -5 >Emitted(46, 15) Source(44, 8) + SourceIndex(0)
 -6 >Emitted(46, 21) Source(44, 14) + SourceIndex(0)
 -7 >Emitted(46, 29) Source(64, 2) + SourceIndex(0)
-+1 >Emitted(45, 1) Source(63, 3) + SourceIndex(0)
-+2 >Emitted(45, 2) Source(64, 1) + SourceIndex(0)
-+3 >Emitted(45, 2) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(45, 4) Source(44, 8) + SourceIndex(0)
-+5 >Emitted(45, 10) Source(44, 14) + SourceIndex(0)
-+6 >Emitted(45, 15) Source(44, 8) + SourceIndex(0)
-+7 >Emitted(45, 21) Source(44, 14) + SourceIndex(0)
-+8 >Emitted(45, 29) Source(64, 2) + SourceIndex(0)
++1 >Emitted(47, 1) Source(63, 3) + SourceIndex(0)
++2 >Emitted(47, 2) Source(64, 1) + SourceIndex(0)
++3 >Emitted(47, 2) Source(1, 1) + SourceIndex(0)
++4 >Emitted(47, 4) Source(44, 8) + SourceIndex(0)
++5 >Emitted(47, 10) Source(44, 14) + SourceIndex(0)
++6 >Emitted(47, 15) Source(44, 8) + SourceIndex(0)
++7 >Emitted(47, 21) Source(44, 14) + SourceIndex(0)
++8 >Emitted(47, 29) Source(64, 2) + SourceIndex(0)
  ---
  >>>class AbstractMode {
  1 >
@@ -1781,9 +1690,9 @@
 -1 >Emitted(47, 1) Source(67, 1) + SourceIndex(0)
 -2 >Emitted(47, 7) Source(67, 7) + SourceIndex(0)
 -3 >Emitted(47, 19) Source(67, 19) + SourceIndex(0)
-+1 >Emitted(46, 1) Source(67, 1) + SourceIndex(0)
-+2 >Emitted(46, 7) Source(67, 7) + SourceIndex(0)
-+3 >Emitted(46, 19) Source(67, 19) + SourceIndex(0)
++1 >Emitted(48, 1) Source(67, 1) + SourceIndex(0)
++2 >Emitted(48, 7) Source(67, 7) + SourceIndex(0)
++3 >Emitted(48, 19) Source(67, 19) + SourceIndex(0)
  ---
  >>>    getInitialState() { return null; }
  1->^^^^
@@ -1824,22 +1733,22 @@
 +7 >                                   ;
 +8 >                                    
 +9 >                                     }
-+1->Emitted(47, 5) Source(67, 46) + SourceIndex(0)
-+2 >Emitted(47, 20) Source(67, 61) + SourceIndex(0)
-+3 >Emitted(47, 23) Source(67, 72) + SourceIndex(0)
-+4 >Emitted(47, 25) Source(67, 74) + SourceIndex(0)
-+5 >Emitted(47, 32) Source(67, 81) + SourceIndex(0)
-+6 >Emitted(47, 36) Source(67, 85) + SourceIndex(0)
-+7 >Emitted(47, 37) Source(67, 86) + SourceIndex(0)
-+8 >Emitted(47, 38) Source(67, 86) + SourceIndex(0)
-+9 >Emitted(47, 39) Source(67, 87) + SourceIndex(0)
++1->Emitted(49, 5) Source(67, 46) + SourceIndex(0)
++2 >Emitted(49, 20) Source(67, 61) + SourceIndex(0)
++3 >Emitted(49, 23) Source(67, 72) + SourceIndex(0)
++4 >Emitted(49, 25) Source(67, 74) + SourceIndex(0)
++5 >Emitted(49, 32) Source(67, 81) + SourceIndex(0)
++6 >Emitted(49, 36) Source(67, 85) + SourceIndex(0)
++7 >Emitted(49, 37) Source(67, 86) + SourceIndex(0)
++8 >Emitted(49, 38) Source(67, 86) + SourceIndex(0)
++9 >Emitted(49, 39) Source(67, 87) + SourceIndex(0)
  ---
  >>>}
  1 >^
  2 > ^^^^^^^^^^^^^^^^^^^^->
  1 > }
 -1 >Emitted(49, 2) Source(67, 89) + SourceIndex(0)
-+1 >Emitted(48, 2) Source(67, 89) + SourceIndex(0)
++1 >Emitted(50, 2) Source(67, 89) + SourceIndex(0)
  ---
  >>>(function (Sample) {
  1->
@@ -1857,10 +1766,10 @@
 -2 >Emitted(50, 12) Source(76, 8) + SourceIndex(0)
 -3 >Emitted(50, 18) Source(76, 14) + SourceIndex(0)
 +4 >                 
-+1->Emitted(49, 1) Source(76, 1) + SourceIndex(0)
-+2 >Emitted(49, 12) Source(76, 8) + SourceIndex(0)
-+3 >Emitted(49, 18) Source(76, 14) + SourceIndex(0)
-+4 >Emitted(49, 20) Source(6, 1) + SourceIndex(0)
++1->Emitted(51, 1) Source(76, 1) + SourceIndex(0)
++2 >Emitted(51, 12) Source(76, 8) + SourceIndex(0)
++3 >Emitted(51, 18) Source(76, 14) + SourceIndex(0)
++4 >Emitted(51, 20) Source(6, 1) + SourceIndex(0)
  ---
 ->>>    var Thing;
 +>>>    let Thing;
@@ -1998,9 +1907,9 @@
 +  >        
 +  >        	}
 +  >        }
-+1 >Emitted(50, 5) Source(76, 15) + SourceIndex(0)
-+2 >Emitted(50, 9) Source(76, 15) + SourceIndex(0)
-+3 >Emitted(50, 14) Source(100, 2) + SourceIndex(0)
++1 >Emitted(52, 5) Source(76, 15) + SourceIndex(0)
++2 >Emitted(52, 9) Source(76, 15) + SourceIndex(0)
++3 >Emitted(52, 14) Source(100, 2) + SourceIndex(0)
  ---
  >>>    (function (Thing) {
  1->^^^^
@@ -2016,10 +1925,10 @@
 -2 >Emitted(52, 16) Source(76, 15) + SourceIndex(0)
 -3 >Emitted(52, 21) Source(76, 20) + SourceIndex(0)
 +4 >                    
-+1->Emitted(51, 5) Source(76, 15) + SourceIndex(0)
-+2 >Emitted(51, 16) Source(76, 15) + SourceIndex(0)
-+3 >Emitted(51, 21) Source(76, 20) + SourceIndex(0)
-+4 >Emitted(51, 23) Source(6, 1) + SourceIndex(0)
++1->Emitted(53, 5) Source(76, 15) + SourceIndex(0)
++2 >Emitted(53, 16) Source(76, 15) + SourceIndex(0)
++3 >Emitted(53, 21) Source(76, 20) + SourceIndex(0)
++4 >Emitted(53, 23) Source(6, 1) + SourceIndex(0)
  ---
 ->>>        var Languages;
 +>>>        let Languages;
@@ -2157,9 +2066,9 @@
 +  >            
 +  >            	}
 +  >            }
-+1->Emitted(52, 9) Source(76, 21) + SourceIndex(0)
-+2 >Emitted(52, 13) Source(76, 21) + SourceIndex(0)
-+3 >Emitted(52, 22) Source(100, 2) + SourceIndex(0)
++1->Emitted(54, 9) Source(76, 21) + SourceIndex(0)
++2 >Emitted(54, 13) Source(76, 21) + SourceIndex(0)
++3 >Emitted(54, 22) Source(100, 2) + SourceIndex(0)
  ---
  >>>        (function (Languages) {
  1->^^^^^^^^
@@ -2173,10 +2082,10 @@
 -2 >Emitted(54, 20) Source(76, 21) + SourceIndex(0)
 -3 >Emitted(54, 29) Source(76, 30) + SourceIndex(0)
 +4 >                            
-+1->Emitted(53, 9) Source(76, 21) + SourceIndex(0)
-+2 >Emitted(53, 20) Source(76, 21) + SourceIndex(0)
-+3 >Emitted(53, 29) Source(76, 30) + SourceIndex(0)
-+4 >Emitted(53, 31) Source(6, 1) + SourceIndex(0)
++1->Emitted(55, 9) Source(76, 21) + SourceIndex(0)
++2 >Emitted(55, 20) Source(76, 21) + SourceIndex(0)
++3 >Emitted(55, 29) Source(76, 30) + SourceIndex(0)
++4 >Emitted(55, 31) Source(6, 1) + SourceIndex(0)
  ---
 ->>>            var PlainText;
 +>>>            let PlainText;
@@ -2314,9 +2223,9 @@
 +  >                
 +  >                	}
 +  >                }
-+1 >Emitted(54, 13) Source(76, 31) + SourceIndex(0)
-+2 >Emitted(54, 17) Source(76, 31) + SourceIndex(0)
-+3 >Emitted(54, 26) Source(100, 2) + SourceIndex(0)
++1 >Emitted(56, 13) Source(76, 31) + SourceIndex(0)
++2 >Emitted(56, 17) Source(76, 31) + SourceIndex(0)
++3 >Emitted(56, 26) Source(100, 2) + SourceIndex(0)
  ---
  >>>            (function (PlainText) {
  1->^^^^^^^^^^^^
@@ -2330,10 +2239,10 @@
 -2 >Emitted(56, 24) Source(76, 31) + SourceIndex(0)
 -3 >Emitted(56, 33) Source(76, 40) + SourceIndex(0)
 +4 >                                 
-+1->Emitted(55, 13) Source(76, 31) + SourceIndex(0)
-+2 >Emitted(55, 24) Source(76, 31) + SourceIndex(0)
-+3 >Emitted(55, 33) Source(76, 40) + SourceIndex(0)
-+4 >Emitted(55, 35) Source(76, 41) + SourceIndex(0)
++1->Emitted(57, 13) Source(76, 31) + SourceIndex(0)
++2 >Emitted(57, 24) Source(76, 31) + SourceIndex(0)
++3 >Emitted(57, 33) Source(76, 40) + SourceIndex(0)
++4 >Emitted(57, 35) Source(76, 41) + SourceIndex(0)
  ---
  >>>                class State {
  1 >^^^^^^^^^^^^^^^^
@@ -2349,9 +2258,9 @@
 -1 >Emitted(57, 17) Source(78, 2) + SourceIndex(0)
 -2 >Emitted(57, 23) Source(78, 15) + SourceIndex(0)
 -3 >Emitted(57, 28) Source(78, 20) + SourceIndex(0)
-+1 >Emitted(56, 17) Source(78, 2) + SourceIndex(0)
-+2 >Emitted(56, 23) Source(78, 15) + SourceIndex(0)
-+3 >Emitted(56, 28) Source(78, 20) + SourceIndex(0)
++1 >Emitted(58, 17) Source(78, 2) + SourceIndex(0)
++2 >Emitted(58, 23) Source(78, 15) + SourceIndex(0)
++3 >Emitted(58, 28) Source(78, 20) + SourceIndex(0)
 +---
 +>>>                    mode;
 +1 >^^^^^^^^^^^^^^^^^^^^
@@ -2360,8 +2269,8 @@
 +1 > implements IState {		
 +  >        constructor(private 
 +2 >                    mode
-+1 >Emitted(57, 21) Source(79, 29) + SourceIndex(0)
-+2 >Emitted(57, 25) Source(79, 33) + SourceIndex(0)
++1 >Emitted(59, 21) Source(79, 29) + SourceIndex(0)
++2 >Emitted(59, 25) Source(79, 33) + SourceIndex(0)
  ---
  >>>                    constructor(mode) {
  1->^^^^^^^^^^^^^^^^^^^^
@@ -2375,11 +2284,14 @@
 +1->
  2 >                    constructor(private 
  3 >                                mode: IMode
+-1->Emitted(58, 21) Source(79, 9) + SourceIndex(0)
+-2 >Emitted(58, 33) Source(79, 29) + SourceIndex(0)
+-3 >Emitted(58, 37) Source(79, 40) + SourceIndex(0)
 +4 >                                    ) 
- 1->Emitted(58, 21) Source(79, 9) + SourceIndex(0)
- 2 >Emitted(58, 33) Source(79, 29) + SourceIndex(0)
- 3 >Emitted(58, 37) Source(79, 40) + SourceIndex(0)
-+4 >Emitted(58, 39) Source(79, 42) + SourceIndex(0)
++1->Emitted(60, 21) Source(79, 9) + SourceIndex(0)
++2 >Emitted(60, 33) Source(79, 29) + SourceIndex(0)
++3 >Emitted(60, 37) Source(79, 40) + SourceIndex(0)
++4 >Emitted(60, 39) Source(79, 42) + SourceIndex(0)
  ---
  >>>                        this.mode = mode;
 -1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2400,8 +2312,8 @@
 -4 >Emitted(59, 41) Source(79, 33) + SourceIndex(0)
 -5 >Emitted(59, 42) Source(79, 40) + SourceIndex(0)
 +2 >                                    mode
-+1->Emitted(59, 37) Source(79, 29) + SourceIndex(0)
-+2 >Emitted(59, 41) Source(79, 33) + SourceIndex(0)
++1->Emitted(61, 37) Source(79, 29) + SourceIndex(0)
++2 >Emitted(61, 41) Source(79, 33) + SourceIndex(0)
  ---
  >>>                    }
  1 >^^^^^^^^^^^^^^^^^^^^
@@ -2410,10 +2322,11 @@
 -1 >) { 
 -2 >                    }
 -1 >Emitted(60, 21) Source(79, 44) + SourceIndex(0)
+-2 >Emitted(60, 22) Source(79, 45) + SourceIndex(0)
 +1 >: IMode) {
 +2 >                     }
-+1 >Emitted(60, 21) Source(79, 43) + SourceIndex(0)
- 2 >Emitted(60, 22) Source(79, 45) + SourceIndex(0)
++1 >Emitted(62, 21) Source(79, 43) + SourceIndex(0)
++2 >Emitted(62, 22) Source(79, 45) + SourceIndex(0)
  ---
  >>>                    clone() {
  1->^^^^^^^^^^^^^^^^^^^^
@@ -2424,10 +2337,12 @@
  1->
    >		public 
  2 >                    clone
+-1->Emitted(61, 21) Source(80, 10) + SourceIndex(0)
+-2 >Emitted(61, 26) Source(80, 15) + SourceIndex(0)
 +3 >                         ():IState 
- 1->Emitted(61, 21) Source(80, 10) + SourceIndex(0)
- 2 >Emitted(61, 26) Source(80, 15) + SourceIndex(0)
-+3 >Emitted(61, 29) Source(80, 25) + SourceIndex(0)
++1->Emitted(63, 21) Source(80, 10) + SourceIndex(0)
++2 >Emitted(63, 26) Source(80, 15) + SourceIndex(0)
++3 >Emitted(63, 29) Source(80, 25) + SourceIndex(0)
  ---
  >>>                        return this;
  1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2439,20 +2354,32 @@
    >			
  2 >                        return 
  3 >                               this
-@@= skipped -238, +455 lines =@@
+ 4 >                                   ;
+-1->Emitted(62, 25) Source(81, 4) + SourceIndex(0)
+-2 >Emitted(62, 32) Source(81, 11) + SourceIndex(0)
+-3 >Emitted(62, 36) Source(81, 15) + SourceIndex(0)
+-4 >Emitted(62, 37) Source(81, 16) + SourceIndex(0)
++1->Emitted(64, 25) Source(81, 4) + SourceIndex(0)
++2 >Emitted(64, 32) Source(81, 11) + SourceIndex(0)
++3 >Emitted(64, 36) Source(81, 15) + SourceIndex(0)
++4 >Emitted(64, 37) Source(81, 16) + SourceIndex(0)
+ ---
+ >>>                    }
+ 1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^
  3 >                     ^^^^^^^^^^^^^^^->
  1 >
 -  >		
 -2 >                    }
 -1 >Emitted(63, 21) Source(82, 3) + SourceIndex(0)
+-2 >Emitted(63, 22) Source(82, 4) + SourceIndex(0)
 +2 >                    
 +  >                    		}
-+1 >Emitted(63, 21) Source(81, 16) + SourceIndex(0)
- 2 >Emitted(63, 22) Source(82, 4) + SourceIndex(0)
++1 >Emitted(65, 21) Source(81, 16) + SourceIndex(0)
++2 >Emitted(65, 22) Source(82, 4) + SourceIndex(0)
  ---
  >>>                    equals(other) {
-@@= skipped -10, +10 lines =@@
+ 1->^^^^^^^^^^^^^^^^^^^^
  2 >                    ^^^^^^
  3 >                          ^
  4 >                           ^^^^^
@@ -2465,16 +2392,20 @@
  2 >                    equals
  3 >                          (
  4 >                           other:IState
+-1->Emitted(64, 21) Source(84, 10) + SourceIndex(0)
+-2 >Emitted(64, 27) Source(84, 16) + SourceIndex(0)
+-3 >Emitted(64, 28) Source(84, 17) + SourceIndex(0)
+-4 >Emitted(64, 33) Source(84, 29) + SourceIndex(0)
 +5 >                                ):boolean 
- 1->Emitted(64, 21) Source(84, 10) + SourceIndex(0)
- 2 >Emitted(64, 27) Source(84, 16) + SourceIndex(0)
- 3 >Emitted(64, 28) Source(84, 17) + SourceIndex(0)
- 4 >Emitted(64, 33) Source(84, 29) + SourceIndex(0)
-+5 >Emitted(64, 35) Source(84, 39) + SourceIndex(0)
++1->Emitted(66, 21) Source(84, 10) + SourceIndex(0)
++2 >Emitted(66, 27) Source(84, 16) + SourceIndex(0)
++3 >Emitted(66, 28) Source(84, 17) + SourceIndex(0)
++4 >Emitted(66, 33) Source(84, 29) + SourceIndex(0)
++5 >Emitted(66, 35) Source(84, 39) + SourceIndex(0)
  ---
  >>>                        return this === other;
  1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -19, +22 lines =@@
+@@= skipped -267, +487 lines =@@
  4 >                                   ^^^^^
  5 >                                        ^^^^^
  6 >                                             ^
@@ -2483,17 +2414,35 @@
    >			
  2 >                        return 
  3 >                               this
-@@= skipped -19, +19 lines =@@
+ 4 >                                    === 
+ 5 >                                        other
+ 6 >                                             ;
+-1->Emitted(65, 25) Source(85, 4) + SourceIndex(0)
+-2 >Emitted(65, 32) Source(85, 11) + SourceIndex(0)
+-3 >Emitted(65, 36) Source(85, 15) + SourceIndex(0)
+-4 >Emitted(65, 41) Source(85, 20) + SourceIndex(0)
+-5 >Emitted(65, 46) Source(85, 25) + SourceIndex(0)
+-6 >Emitted(65, 47) Source(85, 26) + SourceIndex(0)
++1->Emitted(67, 25) Source(85, 4) + SourceIndex(0)
++2 >Emitted(67, 32) Source(85, 11) + SourceIndex(0)
++3 >Emitted(67, 36) Source(85, 15) + SourceIndex(0)
++4 >Emitted(67, 41) Source(85, 20) + SourceIndex(0)
++5 >Emitted(67, 46) Source(85, 25) + SourceIndex(0)
++6 >Emitted(67, 47) Source(85, 26) + SourceIndex(0)
+ ---
+ >>>                    }
+ 1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^
  3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
  1 >
 -  >		
 -2 >                    }
 -1 >Emitted(66, 21) Source(86, 3) + SourceIndex(0)
+-2 >Emitted(66, 22) Source(86, 4) + SourceIndex(0)
 +2 >                    
 +  >                    		}
-+1 >Emitted(66, 21) Source(85, 26) + SourceIndex(0)
- 2 >Emitted(66, 22) Source(86, 4) + SourceIndex(0)
++1 >Emitted(68, 21) Source(85, 26) + SourceIndex(0)
++2 >Emitted(68, 22) Source(86, 4) + SourceIndex(0)
  ---
  >>>                    getMode() { return mode; }
  1->^^^^^^^^^^^^^^^^^^^^
@@ -2521,6 +2470,14 @@
 -6 >                                           ;
 -7 >                                             
 -8 >                                             }
+-1->Emitted(67, 21) Source(88, 10) + SourceIndex(0)
+-2 >Emitted(67, 28) Source(88, 17) + SourceIndex(0)
+-3 >Emitted(67, 33) Source(88, 29) + SourceIndex(0)
+-4 >Emitted(67, 40) Source(88, 36) + SourceIndex(0)
+-5 >Emitted(67, 44) Source(88, 40) + SourceIndex(0)
+-6 >Emitted(67, 45) Source(88, 41) + SourceIndex(0)
+-7 >Emitted(67, 46) Source(88, 42) + SourceIndex(0)
+-8 >Emitted(67, 47) Source(88, 43) + SourceIndex(0)
 +3 >                           (): IMode 
 +4 >                              { 
 +5 >                                return 
@@ -2528,25 +2485,23 @@
 +7 >                                           ;
 +8 >                                            
 +9 >                                              }
- 1->Emitted(67, 21) Source(88, 10) + SourceIndex(0)
- 2 >Emitted(67, 28) Source(88, 17) + SourceIndex(0)
--3 >Emitted(67, 33) Source(88, 29) + SourceIndex(0)
--4 >Emitted(67, 40) Source(88, 36) + SourceIndex(0)
--5 >Emitted(67, 44) Source(88, 40) + SourceIndex(0)
--6 >Emitted(67, 45) Source(88, 41) + SourceIndex(0)
--7 >Emitted(67, 46) Source(88, 42) + SourceIndex(0)
--8 >Emitted(67, 47) Source(88, 43) + SourceIndex(0)
-+3 >Emitted(67, 31) Source(88, 27) + SourceIndex(0)
-+4 >Emitted(67, 33) Source(88, 29) + SourceIndex(0)
-+5 >Emitted(67, 40) Source(88, 36) + SourceIndex(0)
-+6 >Emitted(67, 44) Source(88, 40) + SourceIndex(0)
-+7 >Emitted(67, 45) Source(88, 41) + SourceIndex(0)
-+8 >Emitted(67, 46) Source(88, 41) + SourceIndex(0)
-+9 >Emitted(67, 47) Source(88, 43) + SourceIndex(0)
++1->Emitted(69, 21) Source(88, 10) + SourceIndex(0)
++2 >Emitted(69, 28) Source(88, 17) + SourceIndex(0)
++3 >Emitted(69, 31) Source(88, 27) + SourceIndex(0)
++4 >Emitted(69, 33) Source(88, 29) + SourceIndex(0)
++5 >Emitted(69, 40) Source(88, 36) + SourceIndex(0)
++6 >Emitted(69, 44) Source(88, 40) + SourceIndex(0)
++7 >Emitted(69, 45) Source(88, 41) + SourceIndex(0)
++8 >Emitted(69, 46) Source(88, 41) + SourceIndex(0)
++9 >Emitted(69, 47) Source(88, 43) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^^
-@@= skipped -42, +45 lines =@@
+ 2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+   >	}
+-1 >Emitted(68, 18) Source(89, 3) + SourceIndex(0)
++1 >Emitted(70, 18) Source(89, 3) + SourceIndex(0)
  ---
  >>>                PlainText.State = State;
  1->^^^^^^^^^^^^^^^^
@@ -2568,24 +2523,50 @@
    >                                       constructor(private mode: IMode) { }
    >                               		public clone():IState {
    >                               			return this;
-@@= skipped -18, +20 lines =@@
+@@= skipped -79, +84 lines =@@
    >                               		
    >                               		public getMode(): IMode { return mode; }
    >                               	}
 -4 >                                       
-+5 >                                       
- 1->Emitted(69, 17) Source(78, 15) + SourceIndex(0)
+-1->Emitted(69, 17) Source(78, 15) + SourceIndex(0)
 -2 >Emitted(69, 32) Source(78, 20) + SourceIndex(0)
 -3 >Emitted(69, 40) Source(89, 3) + SourceIndex(0)
 -4 >Emitted(69, 41) Source(89, 3) + SourceIndex(0)
-+2 >Emitted(69, 27) Source(78, 15) + SourceIndex(0)
-+3 >Emitted(69, 32) Source(78, 20) + SourceIndex(0)
-+4 >Emitted(69, 40) Source(89, 3) + SourceIndex(0)
-+5 >Emitted(69, 41) Source(89, 3) + SourceIndex(0)
++5 >                                       
++1->Emitted(71, 17) Source(78, 15) + SourceIndex(0)
++2 >Emitted(71, 27) Source(78, 15) + SourceIndex(0)
++3 >Emitted(71, 32) Source(78, 20) + SourceIndex(0)
++4 >Emitted(71, 40) Source(89, 3) + SourceIndex(0)
++5 >Emitted(71, 41) Source(89, 3) + SourceIndex(0)
  ---
  >>>                class Mode extends AbstractMode {
  1->^^^^^^^^^^^^^^^^
-@@= skipped -39, +40 lines =@@
+@@= skipped -19, +20 lines =@@
+ 3 >                      Mode 
+ 4 >                          extends 
+ 5 >                                   AbstractMode
+-1->Emitted(70, 17) Source(91, 2) + SourceIndex(0)
+-2 >Emitted(70, 23) Source(91, 15) + SourceIndex(0)
+-3 >Emitted(70, 27) Source(91, 20) + SourceIndex(0)
+-4 >Emitted(70, 36) Source(91, 28) + SourceIndex(0)
+-5 >Emitted(70, 48) Source(91, 40) + SourceIndex(0)
++1->Emitted(72, 17) Source(91, 2) + SourceIndex(0)
++2 >Emitted(72, 23) Source(91, 15) + SourceIndex(0)
++3 >Emitted(72, 27) Source(91, 20) + SourceIndex(0)
++4 >Emitted(72, 36) Source(91, 28) + SourceIndex(0)
++5 >Emitted(72, 48) Source(91, 40) + SourceIndex(0)
+ ---
+ >>>                    // scenario 2
+ 1 >^^^^^^^^^^^^^^^^^^^^
+@@= skipped -14, +14 lines =@@
+   >
+   >		
+ 2 >                    // scenario 2
+-1 >Emitted(71, 21) Source(93, 3) + SourceIndex(0)
+-2 >Emitted(71, 34) Source(93, 16) + SourceIndex(0)
++1 >Emitted(73, 21) Source(93, 3) + SourceIndex(0)
++2 >Emitted(73, 34) Source(93, 16) + SourceIndex(0)
+ ---
  >>>                    getInitialState() {
  1->^^^^^^^^^^^^^^^^^^^^
  2 >                    ^^^^^^^^^^^^^^^
@@ -2595,14 +2576,16 @@
  1->
    >		public 
  2 >                    getInitialState
+-1->Emitted(72, 21) Source(94, 10) + SourceIndex(0)
+-2 >Emitted(72, 36) Source(94, 25) + SourceIndex(0)
 +3 >                                   (): IState 
- 1->Emitted(72, 21) Source(94, 10) + SourceIndex(0)
- 2 >Emitted(72, 36) Source(94, 25) + SourceIndex(0)
-+3 >Emitted(72, 39) Source(94, 36) + SourceIndex(0)
++1->Emitted(74, 21) Source(94, 10) + SourceIndex(0)
++2 >Emitted(74, 36) Source(94, 25) + SourceIndex(0)
++3 >Emitted(74, 39) Source(94, 36) + SourceIndex(0)
  ---
  >>>                        return new State(self);
  1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -16, +19 lines =@@
+@@= skipped -22, +25 lines =@@
  6 >                                         ^^^^
  7 >                                             ^
  8 >                                              ^
@@ -2611,20 +2594,48 @@
    >			
  2 >                        return 
  3 >                               new 
-@@= skipped -22, +22 lines =@@
+@@= skipped -9, +9 lines =@@
+ 6 >                                         self
+ 7 >                                             )
+ 8 >                                              ;
+-1->Emitted(73, 25) Source(95, 4) + SourceIndex(0)
+-2 >Emitted(73, 32) Source(95, 11) + SourceIndex(0)
+-3 >Emitted(73, 36) Source(95, 15) + SourceIndex(0)
+-4 >Emitted(73, 41) Source(95, 20) + SourceIndex(0)
+-5 >Emitted(73, 42) Source(95, 21) + SourceIndex(0)
+-6 >Emitted(73, 46) Source(95, 25) + SourceIndex(0)
+-7 >Emitted(73, 47) Source(95, 26) + SourceIndex(0)
+-8 >Emitted(73, 48) Source(95, 27) + SourceIndex(0)
++1->Emitted(75, 25) Source(95, 4) + SourceIndex(0)
++2 >Emitted(75, 32) Source(95, 11) + SourceIndex(0)
++3 >Emitted(75, 36) Source(95, 15) + SourceIndex(0)
++4 >Emitted(75, 41) Source(95, 20) + SourceIndex(0)
++5 >Emitted(75, 42) Source(95, 21) + SourceIndex(0)
++6 >Emitted(75, 46) Source(95, 25) + SourceIndex(0)
++7 >Emitted(75, 47) Source(95, 26) + SourceIndex(0)
++8 >Emitted(75, 48) Source(95, 27) + SourceIndex(0)
+ ---
+ >>>                    }
  1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^
  1 >
 -  >		
 -2 >                    }
 -1 >Emitted(74, 21) Source(96, 3) + SourceIndex(0)
+-2 >Emitted(74, 22) Source(96, 4) + SourceIndex(0)
 +2 >                    
 +  >                    		}
-+1 >Emitted(74, 21) Source(95, 27) + SourceIndex(0)
- 2 >Emitted(74, 22) Source(96, 4) + SourceIndex(0)
++1 >Emitted(76, 21) Source(95, 27) + SourceIndex(0)
++2 >Emitted(76, 22) Source(96, 4) + SourceIndex(0)
  ---
  >>>                }
-@@= skipped -16, +16 lines =@@
+ 1 >^^^^^^^^^^^^^^^^^
+@@= skipped -25, +25 lines =@@
+   >
+   >
+   >	}
+-1 >Emitted(75, 18) Source(99, 3) + SourceIndex(0)
++1 >Emitted(77, 18) Source(99, 3) + SourceIndex(0)
  ---
  >>>                PlainText.Mode = Mode;
  1->^^^^^^^^^^^^^^^^
@@ -2646,20 +2657,21 @@
    >                              
    >                              		// scenario 2
    >                              		public getInitialState(): IState {
-@@= skipped -15, +17 lines =@@
+@@= skipped -19, +21 lines =@@
    >                              
    >                              
    >                              	}
 -4 >                                     
-+5 >                                     
- 1->Emitted(76, 17) Source(91, 15) + SourceIndex(0)
+-1->Emitted(76, 17) Source(91, 15) + SourceIndex(0)
 -2 >Emitted(76, 31) Source(91, 19) + SourceIndex(0)
 -3 >Emitted(76, 38) Source(99, 3) + SourceIndex(0)
 -4 >Emitted(76, 39) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(76, 27) Source(91, 15) + SourceIndex(0)
-+3 >Emitted(76, 31) Source(91, 19) + SourceIndex(0)
-+4 >Emitted(76, 38) Source(99, 3) + SourceIndex(0)
-+5 >Emitted(76, 39) Source(99, 3) + SourceIndex(0)
++5 >                                     
++1->Emitted(78, 17) Source(91, 15) + SourceIndex(0)
++2 >Emitted(78, 27) Source(91, 15) + SourceIndex(0)
++3 >Emitted(78, 31) Source(91, 19) + SourceIndex(0)
++4 >Emitted(78, 38) Source(99, 3) + SourceIndex(0)
++5 >Emitted(78, 39) Source(99, 3) + SourceIndex(0)
  ---
  >>>            })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
  1->^^^^^^^^^^^^
@@ -2703,21 +2715,25 @@
    >                                                                      	}
    >                                                                      }
 -1->Emitted(77, 13) Source(100, 1) + SourceIndex(0)
-+1->Emitted(77, 13) Source(99, 3) + SourceIndex(0)
- 2 >Emitted(77, 14) Source(100, 2) + SourceIndex(0)
- 3 >Emitted(77, 16) Source(76, 31) + SourceIndex(0)
- 4 >Emitted(77, 25) Source(76, 40) + SourceIndex(0)
- 5 >Emitted(77, 28) Source(76, 31) + SourceIndex(0)
+-2 >Emitted(77, 14) Source(100, 2) + SourceIndex(0)
+-3 >Emitted(77, 16) Source(76, 31) + SourceIndex(0)
+-4 >Emitted(77, 25) Source(76, 40) + SourceIndex(0)
+-5 >Emitted(77, 28) Source(76, 31) + SourceIndex(0)
 -6 >Emitted(77, 47) Source(76, 40) + SourceIndex(0)
 -7 >Emitted(77, 52) Source(76, 31) + SourceIndex(0)
 -8 >Emitted(77, 71) Source(76, 40) + SourceIndex(0)
 -9 >Emitted(77, 79) Source(100, 2) + SourceIndex(0)
-+6 >Emitted(77, 38) Source(76, 31) + SourceIndex(0)
-+7 >Emitted(77, 47) Source(76, 40) + SourceIndex(0)
-+8 >Emitted(77, 52) Source(76, 31) + SourceIndex(0)
-+9 >Emitted(77, 62) Source(76, 31) + SourceIndex(0)
-+10>Emitted(77, 71) Source(76, 40) + SourceIndex(0)
-+11>Emitted(77, 79) Source(100, 2) + SourceIndex(0)
++1->Emitted(79, 13) Source(99, 3) + SourceIndex(0)
++2 >Emitted(79, 14) Source(100, 2) + SourceIndex(0)
++3 >Emitted(79, 16) Source(76, 31) + SourceIndex(0)
++4 >Emitted(79, 25) Source(76, 40) + SourceIndex(0)
++5 >Emitted(79, 28) Source(76, 31) + SourceIndex(0)
++6 >Emitted(79, 38) Source(76, 31) + SourceIndex(0)
++7 >Emitted(79, 47) Source(76, 40) + SourceIndex(0)
++8 >Emitted(79, 52) Source(76, 31) + SourceIndex(0)
++9 >Emitted(79, 62) Source(76, 31) + SourceIndex(0)
++10>Emitted(79, 71) Source(76, 40) + SourceIndex(0)
++11>Emitted(79, 79) Source(100, 2) + SourceIndex(0)
  ---
  >>>        })(Languages = Thing.Languages || (Thing.Languages = {}));
  1 >^^^^^^^^
@@ -2850,18 +2866,18 @@
 -7 >Emitted(78, 44) Source(76, 21) + SourceIndex(0)
 -8 >Emitted(78, 59) Source(76, 30) + SourceIndex(0)
 -9 >Emitted(78, 67) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(78, 9) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(78, 10) Source(100, 1) + SourceIndex(0)
-+3 >Emitted(78, 10) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(78, 12) Source(76, 21) + SourceIndex(0)
-+5 >Emitted(78, 21) Source(76, 30) + SourceIndex(0)
-+6 >Emitted(78, 24) Source(76, 21) + SourceIndex(0)
-+7 >Emitted(78, 30) Source(76, 21) + SourceIndex(0)
-+8 >Emitted(78, 39) Source(76, 30) + SourceIndex(0)
-+9 >Emitted(78, 44) Source(76, 21) + SourceIndex(0)
-+10>Emitted(78, 50) Source(76, 21) + SourceIndex(0)
-+11>Emitted(78, 59) Source(76, 30) + SourceIndex(0)
-+12>Emitted(78, 67) Source(100, 2) + SourceIndex(0)
++1 >Emitted(80, 9) Source(99, 3) + SourceIndex(0)
++2 >Emitted(80, 10) Source(100, 1) + SourceIndex(0)
++3 >Emitted(80, 10) Source(1, 1) + SourceIndex(0)
++4 >Emitted(80, 12) Source(76, 21) + SourceIndex(0)
++5 >Emitted(80, 21) Source(76, 30) + SourceIndex(0)
++6 >Emitted(80, 24) Source(76, 21) + SourceIndex(0)
++7 >Emitted(80, 30) Source(76, 21) + SourceIndex(0)
++8 >Emitted(80, 39) Source(76, 30) + SourceIndex(0)
++9 >Emitted(80, 44) Source(76, 21) + SourceIndex(0)
++10>Emitted(80, 50) Source(76, 21) + SourceIndex(0)
++11>Emitted(80, 59) Source(76, 30) + SourceIndex(0)
++12>Emitted(80, 67) Source(100, 2) + SourceIndex(0)
  ---
  >>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
  1 >^^^^
@@ -2994,18 +3010,18 @@
 -7 >Emitted(79, 33) Source(76, 15) + SourceIndex(0)
 -8 >Emitted(79, 45) Source(76, 20) + SourceIndex(0)
 -9 >Emitted(79, 53) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(79, 5) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(79, 6) Source(100, 1) + SourceIndex(0)
-+3 >Emitted(79, 6) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(79, 8) Source(76, 15) + SourceIndex(0)
-+5 >Emitted(79, 13) Source(76, 20) + SourceIndex(0)
-+6 >Emitted(79, 16) Source(76, 15) + SourceIndex(0)
-+7 >Emitted(79, 23) Source(76, 15) + SourceIndex(0)
-+8 >Emitted(79, 28) Source(76, 20) + SourceIndex(0)
-+9 >Emitted(79, 33) Source(76, 15) + SourceIndex(0)
-+10>Emitted(79, 40) Source(76, 15) + SourceIndex(0)
-+11>Emitted(79, 45) Source(76, 20) + SourceIndex(0)
-+12>Emitted(79, 53) Source(100, 2) + SourceIndex(0)
++1 >Emitted(81, 5) Source(99, 3) + SourceIndex(0)
++2 >Emitted(81, 6) Source(100, 1) + SourceIndex(0)
++3 >Emitted(81, 6) Source(1, 1) + SourceIndex(0)
++4 >Emitted(81, 8) Source(76, 15) + SourceIndex(0)
++5 >Emitted(81, 13) Source(76, 20) + SourceIndex(0)
++6 >Emitted(81, 16) Source(76, 15) + SourceIndex(0)
++7 >Emitted(81, 23) Source(76, 15) + SourceIndex(0)
++8 >Emitted(81, 28) Source(76, 20) + SourceIndex(0)
++9 >Emitted(81, 33) Source(76, 15) + SourceIndex(0)
++10>Emitted(81, 40) Source(76, 15) + SourceIndex(0)
++11>Emitted(81, 45) Source(76, 20) + SourceIndex(0)
++12>Emitted(81, 53) Source(100, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
@@ -3126,13 +3142,13 @@
 -5 >Emitted(80, 15) Source(76, 8) + SourceIndex(0)
 -6 >Emitted(80, 21) Source(76, 14) + SourceIndex(0)
 -7 >Emitted(80, 29) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(80, 1) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(80, 2) Source(100, 1) + SourceIndex(0)
-+3 >Emitted(80, 2) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(80, 4) Source(76, 8) + SourceIndex(0)
-+5 >Emitted(80, 10) Source(76, 14) + SourceIndex(0)
-+6 >Emitted(80, 15) Source(76, 8) + SourceIndex(0)
-+7 >Emitted(80, 21) Source(76, 14) + SourceIndex(0)
-+8 >Emitted(80, 29) Source(100, 2) + SourceIndex(0)
++1 >Emitted(82, 1) Source(99, 3) + SourceIndex(0)
++2 >Emitted(82, 2) Source(100, 1) + SourceIndex(0)
++3 >Emitted(82, 2) Source(1, 1) + SourceIndex(0)
++4 >Emitted(82, 4) Source(76, 8) + SourceIndex(0)
++5 >Emitted(82, 10) Source(76, 14) + SourceIndex(0)
++6 >Emitted(82, 15) Source(76, 8) + SourceIndex(0)
++7 >Emitted(82, 21) Source(76, 14) + SourceIndex(0)
++8 >Emitted(82, 29) Source(100, 2) + SourceIndex(0)
  ---
  >>>//# sourceMappingURL=recursiveClassReferenceTest.js.map

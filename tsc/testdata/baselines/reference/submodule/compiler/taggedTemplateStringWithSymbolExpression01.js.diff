@@ -1,9 +1,0 @@
---- old.taggedTemplateStringWithSymbolExpression01.js
-+++ new.taggedTemplateStringWithSymbolExpression01.js
-@@= skipped -9, +9 lines =@@
-
-
- //// [taggedTemplateStringWithSymbolExpression01.js]
--// taggedTemplateStringWithSymbolExpression01.ts
- let x;
- let result = foo `${x}`;

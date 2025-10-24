@@ -12,9 +12,9 @@ Adapter.asyncMethod = function() {}
 
 //// [a.js]
 "use strict";
+// this is a javascript file...
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Adapter = void 0;
-// this is a javascript file...
 exports.Adapter = {};
 exports.Adapter.prop = {};
 // comment this out, and it works

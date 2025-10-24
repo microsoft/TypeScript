@@ -17,8 +17,8 @@ function f(a) {}
 export interface I {
 }
 //// [1.d.ts]
-import type { I } from './0';
 /** @import { I } from './0' with { type: "json" } */
 /** @import * as foo from './0' with { type: "json" } */
+import type { I } from './0';
 /** @param {I} a */
 declare function f(a: I): void;

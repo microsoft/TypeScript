@@ -40,6 +40,7 @@ export function assertNodeProperty<
 
 //// [intersectionsOfLargeUnions2.js]
 "use strict";
+// Repro from #24233
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assertIsElement = assertIsElement;
 exports.assertNodeTagName = assertNodeTagName;

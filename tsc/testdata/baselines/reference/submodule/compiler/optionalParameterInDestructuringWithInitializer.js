@@ -62,6 +62,7 @@ performFoo2();
 
 
 //// [optionalParameterInDestructuringWithInitializer.js]
+// https://github.com/Microsoft/TypeScript/issues/17080
 function func1({ a, b } = { a: 1, b: 2 }) {
     f(a, b);
     // error

@@ -81,6 +81,7 @@ module M {
 }
 
 //// [mergeThreeInterfaces.js]
+// interfaces with the same root module should merge
 var a;
 var r1 = a.foo;
 var r2 = a.bar;

@@ -14,4 +14,5 @@ let x = a.equalsShallow(b);
 
 
 //// [bivariantInferences.js]
+// Repro from #27337
 let x = a.equalsShallow(b);

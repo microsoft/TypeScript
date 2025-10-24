@@ -152,6 +152,7 @@ export class StyleParser {
 
 //// [controlFlowPropertyDeclarations.js]
 "use strict";
+// Repro from ##8913
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StyleParser = exports.HTMLtoJSX = void 0;
 var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');

@@ -1,13 +1,10 @@
 --- old.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=commonjs).js
 +++ new.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=commonjs).js
-@@= skipped -9, +9 lines =@@
-
- //// [exportNonInitializedVariablesInIfThenStatementNoCrash1.js]
+@@= skipped -11, +11 lines =@@
  "use strict";
--// https://github.com/microsoft/TypeScript/issues/59373
+ // https://github.com/microsoft/TypeScript/issues/59373
  Object.defineProperty(exports, "__esModule", { value: true });
 -if (true) { }
-+// https://github.com/microsoft/TypeScript/issues/59373
 +if (true)
 +    export const cssExports;
  exports.default = exports.cssExports;

@@ -28,6 +28,7 @@ x.foo().x;
 
 //// [main.js]
 "use strict";
+/// <reference path="O.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 let x;
 x.foo().x;

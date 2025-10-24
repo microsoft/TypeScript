@@ -11,6 +11,7 @@ const result = getInterfaceFromString({ type: 'two' });
 
 
 //// [primitiveUnionDetection.js]
+// Repro from #46624
 const result = getInterfaceFromString({ type: 'two' });
 
 

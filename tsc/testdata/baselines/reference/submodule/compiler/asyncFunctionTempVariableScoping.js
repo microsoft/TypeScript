@@ -6,6 +6,7 @@
 async ({ foo, bar, ...rest }) => bar(await foo);
 
 //// [asyncFunctionTempVariableScoping.js]
+// https://github.com/Microsoft/TypeScript/issues/19187
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -17,7 +18,6 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-// https://github.com/Microsoft/TypeScript/issues/19187
 async (_a) => {
     var { foo, bar } = _a, rest = __rest(_a, ["foo", "bar"]);
     return bar(await foo);

@@ -53,6 +53,7 @@ d3({ y: 1 });
 d3({ y: "world" });
 
 //// [destructuringParameterDeclaration5.js]
+// Parameter Declaration with generic
 class Class {
     constructor() { }
 }

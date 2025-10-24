@@ -59,6 +59,8 @@ var b2 = {
 }
 
 //// [restParametersOfNonArrayTypes2.js]
+// Rest parameters must be an array type if they have a type annotation, 
+// user defined subtypes of array do not count, all of these are errors
 function foo(...x) { }
 var f = function foo(...x) { };
 var f2 = (...x, ...y) => { };

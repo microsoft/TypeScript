@@ -39,6 +39,11 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 
 //// [parenthesizedContexualTyping2.js]
+// These tests ensure that in cases where it may *appear* that a value has a type,
+// they actually are properly being contextually typed. The way we test this is
+// that we invoke contextually typed arguments with type arguments.
+// Since 'any' cannot be invoked with type arguments, we should get errors
+// back if contextual typing is not taking effect.
 function fun(...rest) {
     return undefined;
 }

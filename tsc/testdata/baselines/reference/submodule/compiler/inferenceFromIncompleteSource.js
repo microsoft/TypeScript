@@ -15,4 +15,5 @@ Component({items: [{name:' string'}], itemKey: 'name' });
 
 
 //// [inferenceFromIncompleteSource.js]
+// Repro from #42030
 Component({ items: [{ name: ' string' }], itemKey: 'name' });

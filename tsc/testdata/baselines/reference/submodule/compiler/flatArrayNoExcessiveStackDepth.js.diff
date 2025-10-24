@@ -5,7 +5,6 @@
 
  //// [flatArrayNoExcessiveStackDepth.js]
 -"use strict";
--// Repro from #43493
+ // Repro from #43493
  const bar = foo.flatMap(bar => bar);
  // Repros from comments in #43249
- const repro_43249 = (value) => {

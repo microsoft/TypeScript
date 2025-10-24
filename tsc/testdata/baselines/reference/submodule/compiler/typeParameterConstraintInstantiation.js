@@ -12,5 +12,6 @@ var a = m.map((x: string) => x);  // string[]
 
 
 //// [typeParameterConstraintInstantiation.js]
+// Check that type parameter constraints are properly instantiated
 var m;
 var a = m.map((x) => x); // string[]

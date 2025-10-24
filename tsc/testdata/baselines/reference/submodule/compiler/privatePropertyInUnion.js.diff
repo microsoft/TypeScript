@@ -5,7 +5,7 @@
 
  //// [privatePropertyInUnion.js]
 -"use strict";
--// Repro from #38236
+ // Repro from #38236
  class SyncableObject {
 +    foo;
  }

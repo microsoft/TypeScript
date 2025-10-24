@@ -5,8 +5,6 @@
 
  //// [varianceMeasurement.js]
 -"use strict";
--// The type below should be invariant in T but is measured as covariant because
--// we don't analyze recursive references.
+ // The type below should be invariant in T but is measured as covariant because
+ // we don't analyze recursive references.
  const f11 = f10;
- const f12 = f10;
- const f21 = f20;

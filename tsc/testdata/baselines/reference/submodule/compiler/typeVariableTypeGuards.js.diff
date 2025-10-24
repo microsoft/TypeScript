@@ -5,13 +5,13 @@
 
  //// [typeVariableTypeGuards.js]
 -"use strict";
--// Repro from #14091
+ // Repro from #14091
  class A {
 +    props;
      constructor(props) {
          this.props = props;
      }
-@@= skipped -11, +10 lines =@@
+@@= skipped -11, +11 lines =@@
      }
  }
  class Monkey {

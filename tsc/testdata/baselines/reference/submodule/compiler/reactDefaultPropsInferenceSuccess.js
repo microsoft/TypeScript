@@ -72,11 +72,11 @@ const Test5 = () => <FieldFeedback2 />;
 
 //// [reactDefaultPropsInferenceSuccess.js]
 "use strict";
+/// <reference path="react16.d.ts" />
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
 const react_1 = __importDefault(require("react"));
 class FieldFeedback extends react_1.default.Component {
     static defaultProps = {

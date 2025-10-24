@@ -5,7 +5,6 @@
 
  //// [indexedAccessNormalization.js]
 -"use strict";
--// Repro from from #43152
+ // Repro from from #43152
  function f1(mymap, k) {
      const elemofM = mymap[k];
-     g(elemofM);

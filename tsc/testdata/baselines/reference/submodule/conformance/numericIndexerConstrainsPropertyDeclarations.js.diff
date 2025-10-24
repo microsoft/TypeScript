@@ -1,10 +1,7 @@
 --- old.numericIndexerConstrainsPropertyDeclarations.js
 +++ new.numericIndexerConstrainsPropertyDeclarations.js
-@@= skipped -99, +99 lines =@@
- }
-
- //// [numericIndexerConstrainsPropertyDeclarations.js]
--// String indexer types constrain the types of named properties in their containing type
+@@= skipped -102, +102 lines =@@
+ // String indexer types constrain the types of named properties in their containing type
  class C {
      constructor() { } // ok
 +    a; // ok
@@ -20,7 +17,7 @@
      get X() {
          return '';
      }
-@@= skipped -10, +19 lines =@@
+@@= skipped -7, +17 lines =@@
      foo() {
          return '';
      }

@@ -46,6 +46,7 @@ function foo15(x: I2<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithCallSignaturesDifferingParamCounts2.js]
+// object types are identical structurally
 var a;
 function foo2(x) { }
 function foo3(x) { }

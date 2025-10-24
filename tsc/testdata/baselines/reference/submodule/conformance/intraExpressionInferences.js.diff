@@ -5,11 +5,10 @@
 
  //// [intraExpressionInferences.js]
 -"use strict";
--// Repros from #47599
+ // Repros from #47599
  var __assign = (this && this.__assign) || function () {
      __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -71, +69 lines =@@
+@@= skipped -71, +70 lines =@@
  });
  // Repro from #41712
  class Wrapper {

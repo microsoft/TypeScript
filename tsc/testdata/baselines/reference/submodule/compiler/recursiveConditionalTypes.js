@@ -174,6 +174,7 @@ function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
 
 
 //// [recursiveConditionalTypes.js]
+// Awaiting promises
 function f11(tx, ta, ux, ua) {
     ta = ua;
     ua = ta; // Error

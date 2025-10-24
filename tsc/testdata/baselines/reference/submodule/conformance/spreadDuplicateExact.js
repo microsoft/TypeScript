@@ -22,6 +22,7 @@ let d2 = { a: 123, ...(t ? d : {}) };  // string | number | undefined
 
 
 //// [spreadDuplicateExact.js]
+// Repro from #44438
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

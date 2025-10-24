@@ -186,6 +186,7 @@ function oops<T extends unknown>(arg: T): {} {
 
 
 //// [unknownType1.js]
+// In an intersection everything absorbs unknown
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

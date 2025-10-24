@@ -41,8 +41,8 @@ class Cls {
 exports.Cls = Cls;
 //// [mod1.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="lib" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const main_1 = require("./main");
 main_1.Cls.prototype.foo = function () { return undefined; };
 //// [mod2.js]

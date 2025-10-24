@@ -1,10 +1,8 @@
 --- old.throwStatements.js
 +++ new.throwStatements.js
-@@= skipped -87, +87 lines =@@
-
-
+@@= skipped -89, +89 lines =@@
  //// [throwStatements.js]
--// all legal
+ // all legal
  class C {
 +    id;
  }

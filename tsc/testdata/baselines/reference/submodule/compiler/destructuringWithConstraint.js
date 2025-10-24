@@ -14,6 +14,7 @@ function foo<P extends Props>(props: Readonly<P>) {
 
 
 //// [destructuringWithConstraint.js]
+// Repro from #22823
 function foo(props) {
     let { foo = false } = props;
     if (foo === true) { }

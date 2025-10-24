@@ -5,7 +5,6 @@
 
  //// [genericRestTypes.js]
 -"use strict";
--// Repro from #25793
+ // Repro from #25793
  function assignmentWithComplexRest() {
      const fn1 = (x, ..._) => x;
-     const fn2 = fn1;

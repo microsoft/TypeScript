@@ -43,6 +43,7 @@ module Generics {
 }
 
 //// [assignmentCompatWithNumericIndexer3.js]
+// Derived type indexer must be subtype of base type indexer
 class A {
 }
 var a;

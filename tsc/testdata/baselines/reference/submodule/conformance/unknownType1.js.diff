@@ -5,11 +5,10 @@
 
  //// [unknownType1.js]
 -"use strict";
--// In an intersection everything absorbs unknown
+ // In an intersection everything absorbs unknown
  var __assign = (this && this.__assign) || function () {
      __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -109, +107 lines =@@
+@@= skipped -109, +108 lines =@@
  }
  // Class properties of type unknown don't need definite assignment
  class C1 {

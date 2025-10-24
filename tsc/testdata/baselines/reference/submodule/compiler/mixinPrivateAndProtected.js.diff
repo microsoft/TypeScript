@@ -1,10 +1,8 @@
 --- old.mixinPrivateAndProtected.js
 +++ new.mixinPrivateAndProtected.js
-@@= skipped -91, +91 lines =@@
-
-
+@@= skipped -93, +93 lines =@@
  //// [mixinPrivateAndProtected.js]
--// Repro from #13830
+ // Repro from #13830
  class A {
 -    constructor() {
 -        this.pb = 2;
@@ -48,7 +46,7 @@
      };
  }
  const AB2C = mixC(AB2), ABC = mixC(AB);
-@@= skipped -51, +39 lines =@@
+@@= skipped -49, +38 lines =@@
  ab2c.pvt.toFixed(); // Error
  // Repro from #13924
  class Person {

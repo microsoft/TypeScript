@@ -40,6 +40,7 @@ class D extends DecoratorProvider {
 
 
 //// [esDecorators-preservesThis.js]
+// https://github.com/microsoft/TypeScript/issues/53752
 // preserve `this` for access
 class C {
     @instance.decorate

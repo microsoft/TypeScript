@@ -1,14 +1,6 @@
 --- old.deeplyNestedCheck.js
 +++ new.deeplyNestedCheck.js
-@@= skipped -56, +56 lines =@@
-
-
- //// [deeplyNestedCheck.js]
--// Repro from #14794
- const x = {
-     b: [
-         {
-@@= skipped -13, +12 lines =@@
+@@= skipped -69, +69 lines =@@
                                      {
                                          g: {
                                              h: [

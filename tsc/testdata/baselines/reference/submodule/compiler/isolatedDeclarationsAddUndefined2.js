@@ -28,12 +28,12 @@ export function test3(x?: Unresolved): void {}
 
 //// [isolatedDeclarationsAddUndefined2.js]
 "use strict";
+// https://github.com/microsoft/TypeScript/issues/60123
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar4 = exports.Bar3 = exports.Bar2 = exports.Bar = void 0;
 exports.test1 = test1;
 exports.test2 = test2;
 exports.test3 = test3;
-// https://github.com/microsoft/TypeScript/issues/60123
 class Bar {
     x;
     constructor(x) {

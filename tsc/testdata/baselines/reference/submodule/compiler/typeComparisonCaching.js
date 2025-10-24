@@ -31,6 +31,7 @@ c = d; // Should not be allowed
 
 
 //// [typeComparisonCaching.js]
+// Check that we only cache results of type comparisons that are free of assumptions
 var a;
 var b;
 var c;

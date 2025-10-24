@@ -23,6 +23,7 @@ function test<P>(wrappedProps: P) {
 
 //// [tsxNotUsingApparentTypeOfSFC.js]
 "use strict";
+/// <reference path="react16.d.ts" />
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -38,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
 const react_1 = __importDefault(require("react"));
 function test(wrappedProps) {
     let MySFC = function (props) {

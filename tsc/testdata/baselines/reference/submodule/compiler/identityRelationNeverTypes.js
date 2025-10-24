@@ -21,6 +21,7 @@ function f1(state: State<{ foo: number }>) {
 
 
 //// [identityRelationNeverTypes.js]
+// Repro from #47996
 function f1(state) {
     if (state.matches('a') && state.matches('a.b')) {
         state; // never

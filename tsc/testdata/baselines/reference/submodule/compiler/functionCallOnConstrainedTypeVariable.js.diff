@@ -5,7 +5,6 @@
 
  //// [functionCallOnConstrainedTypeVariable.js]
 -"use strict";
--// Repro from #20196
+ // Repro from #20196
  function call0(p) {
      p.a("s"); // Error
- }

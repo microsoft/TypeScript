@@ -24,6 +24,7 @@ function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
 
 
 //// [indexedAccessNormalization.js]
+// Repro from from #43152
 function f1(mymap, k) {
     const elemofM = mymap[k];
     g(elemofM);

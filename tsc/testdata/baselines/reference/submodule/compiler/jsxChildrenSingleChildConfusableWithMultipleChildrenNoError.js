@@ -28,9 +28,9 @@ export class App extends React.Component<{}> {
 
 //// [jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.js]
 "use strict";
+/// <reference path="react16.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-/// <reference path="react16.d.ts" />
 const React = require("react");
 function TabLayout(props) {
     return React.createElement("div", null);

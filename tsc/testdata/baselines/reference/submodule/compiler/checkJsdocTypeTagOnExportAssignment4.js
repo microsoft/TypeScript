@@ -15,9 +15,9 @@ export default "";
 //// [checkJsdocTypeTagOnExportAssignment4.js]
 //// [a.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {number} Foo
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
 exports.default = "";

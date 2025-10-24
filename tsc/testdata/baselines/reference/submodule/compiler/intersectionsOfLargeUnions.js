@@ -30,11 +30,11 @@ export function assertNodeProperty<
 
 //// [intersectionsOfLargeUnions.js]
 "use strict";
+// Repro from #23977
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assertIsElement = assertIsElement;
 exports.assertNodeTagName = assertNodeTagName;
 exports.assertNodeProperty = assertNodeProperty;
-// Repro from #23977
 function assertIsElement(node) {
     let nodeType = node === null ? null : node.nodeType;
     return nodeType === 1;

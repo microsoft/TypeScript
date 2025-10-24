@@ -9,5 +9,6 @@ q("x");
 
 
 //// [freshLiteralTypesInIntersections.js]
+// Repro from #19657
 const q = func("x", ["x"]);
 q("x");

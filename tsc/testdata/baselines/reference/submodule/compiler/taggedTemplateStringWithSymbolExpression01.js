@@ -10,5 +10,6 @@ let result: number = foo`${x}`;
 
 
 //// [taggedTemplateStringWithSymbolExpression01.js]
+// taggedTemplateStringWithSymbolExpression01.ts
 let x;
 let result = foo `${x}`;

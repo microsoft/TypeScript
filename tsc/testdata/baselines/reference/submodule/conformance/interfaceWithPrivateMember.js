@@ -16,4 +16,5 @@ var x: {
 }
 
 //// [interfaceWithPrivateMember.js]
+// interfaces do not permit private members, these are errors
 var x;

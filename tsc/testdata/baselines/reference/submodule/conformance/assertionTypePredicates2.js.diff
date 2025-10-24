@@ -1,22 +1,6 @@
 --- old.assertionTypePredicates2.js
 +++ new.assertionTypePredicates2.js
-@@= skipped -26, +26 lines =@@
-
- //// [assertionTypePredicates2.js]
- "use strict";
--/**
-- * @typedef {{ x: number }} A
-- */
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.main = void 0;
- /**
-+ * @typedef {{ x: number }} A
-+ */
-+/**
-  * @typedef { A & { y: number } } B
-  */
- /**
-@@= skipped -13, +13 lines =@@
+@@= skipped -39, +39 lines =@@
   * @returns { asserts a is B }
   */
  const foo = (a) => {

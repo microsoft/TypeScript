@@ -1,14 +1,6 @@
 --- old.es6ExportEqualsInterop.js
 +++ new.es6ExportEqualsInterop.js
-@@= skipped -207, +207 lines =@@
-
- //// [main.js]
- "use strict";
--/// <reference path="modules.d.ts"/>
- var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-     if (k2 === undefined) k2 = k;
-     var desc = Object.getOwnPropertyDescriptor(m, k);
-@@= skipped -17, +16 lines =@@
+@@= skipped -224, +224 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.a0 = exports.a9 = exports.a8 = exports.a7 = exports.a6 = exports.a5 = exports.a4 = exports.a3 = exports.a2 = exports.a1 = void 0;

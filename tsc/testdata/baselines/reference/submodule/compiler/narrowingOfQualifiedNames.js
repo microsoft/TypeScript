@@ -89,6 +89,7 @@ function handleDogWorking(pet: Pet) {
 }
 
 //// [narrowingOfQualifiedNames.js]
+// Repro from #43411
 function init(properties) {
     if (properties.foo) {
         properties.foo; // type is { aaa: string; bbb: string; }

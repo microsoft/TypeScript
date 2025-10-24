@@ -19,12 +19,12 @@ export default {
 //// [checkJsdocTypeTagOnExportAssignment8.js]
 //// [a.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef Foo
  * @property {string} a
  * @property {'b'} b
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
 exports.default = {
     a: 'a',

@@ -5,11 +5,10 @@
 
  //// [overrideBaseIntersectionMethod.js]
 -"use strict";
--// Repro from #14615
+ // Repro from #14615
  const WithLocation = (Base) => class extends Base {
      getLocation() {
-         const [x, y] = super.getLocation();
-@@= skipped -9, +7 lines =@@
+@@= skipped -9, +8 lines =@@
      }
  };
  class Point {

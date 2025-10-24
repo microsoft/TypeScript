@@ -143,6 +143,7 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 
 
 //// [variadicTuples2.js]
+// Declarations
 tt1 = [5];
 tt1 = ['abc', 5];
 tt1 = ['abc', 'def', 5];

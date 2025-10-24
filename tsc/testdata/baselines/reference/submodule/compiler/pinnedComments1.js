@@ -12,5 +12,9 @@ class C {
 }
 
 //// [pinnedComments1.js]
+/*!=========
+    Keep this pinned comment
+   =========
+*/
 class C {
 }

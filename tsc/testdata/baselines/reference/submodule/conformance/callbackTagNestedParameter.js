@@ -22,6 +22,13 @@ function eachPerson(callback) {
 
 
 //// [cb_nested.d.ts]
+/**
+ * @callback WorksWithPeopleCallback
+ * @param {Object} person
+ * @param {string} person.name
+ * @param {number} [person.age]
+ * @returns {void}
+ */
 export type WorksWithPeopleCallback = (person: {
     name: string;
     age?: number;

@@ -10,3 +10,4 @@ type WithSpec<T extends number> = T
 type R = WithSpec<Spec> // should not error
 
 //// [conditionalTypeAnyUnion.js]
+// repro from #52568

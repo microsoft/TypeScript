@@ -23,5 +23,9 @@ declare enum E {
 }
 
 //// [a.js]
+/*!=========
+    Keep this pinned comment
+   =========
+*/
 //// [b.js]
 ///<reference path="a.ts"/>

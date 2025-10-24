@@ -32,6 +32,7 @@ class Hola {
 
 
 //// [test1.js]
+/*! Copyright 2015 MyCompany Inc. */
 class Hello {
 }
 //// [test2.js]
@@ -43,6 +44,7 @@ class Hola {
 
 
 //// [test1.d.ts]
+/*! Copyright 2015 MyCompany Inc. */
 declare class Hello {
 }
 //// [test2.d.ts]

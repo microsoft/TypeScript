@@ -1,9 +1,0 @@
---- old.instantiatedTypeAliasDisplay.js
-+++ new.instantiatedTypeAliasDisplay.js
-@@= skipped -17, +17 lines =@@
- const x2 = f2({}, {}, {}, {});  // Z<{}, string[]>
-
- //// [instantiatedTypeAliasDisplay.js]
--// Repros from #12066
- const x1 = f1(); // Z<string, number>
- const x2 = f2({}, {}, {}, {}); // Z<{}, string[]>

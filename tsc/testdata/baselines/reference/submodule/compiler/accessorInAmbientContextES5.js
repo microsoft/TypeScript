@@ -29,6 +29,7 @@ class RegularClass {
 }
 
 //// [accessorInAmbientContextES5.js]
+// Should allow accessor in ambient contexts even when targeting ES5
 // Regular class should still error when targeting ES5
 class RegularClass {
     accessor shouldError; // Should still error

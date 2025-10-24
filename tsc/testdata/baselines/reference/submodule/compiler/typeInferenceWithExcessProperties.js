@@ -34,6 +34,7 @@ parrot({
 
 
 //// [typeInferenceWithExcessProperties.js]
+// Repro from #17041
 function parrot(obj) {
     return obj;
 }

@@ -5,6 +5,5 @@
 
  //// [primitiveUnionDetection.js]
 -"use strict";
--// Repro from #46624
+ // Repro from #46624
  const result = getInterfaceFromString({ type: 'two' });
-

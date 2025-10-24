@@ -1,14 +1,6 @@
 --- old.conflictingTypeParameterSymbolTransfer.js
 +++ new.conflictingTypeParameterSymbolTransfer.js
-@@= skipped -37, +37 lines =@@
-
- //// [conflictingTypeParameterSymbolTransfer.js]
- "use strict";
--// @strict
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.C2 = void 0;
-+// @strict
- // Via #56620
+@@= skipped -44, +44 lines =@@
  class Base {
  }
  class C2 extends Base {
@@ -16,7 +8,7 @@
      constructor(T) {
          super();
          // Should not error
-@@= skipped -20, +21 lines =@@
+@@= skipped -13, +14 lines =@@
  class Leg {
  }
  class Foo extends Leg {

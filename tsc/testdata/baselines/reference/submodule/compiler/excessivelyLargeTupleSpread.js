@@ -42,6 +42,7 @@ const a14 = [...a13, ...a13] as const; // 2^14 > 10,000
 
 
 //// [excessivelyLargeTupleSpread.js]
+// #41771
 const a0 = [0];
 const a1 = [...a0, ...a0];
 const a2 = [...a1, ...a1];

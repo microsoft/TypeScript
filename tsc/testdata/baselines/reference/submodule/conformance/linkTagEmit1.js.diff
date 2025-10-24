@@ -5,20 +5,20 @@
 
  //// [linkTagEmit1.js]
 +"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  /** @typedef {number} N */
  /**
   * @typedef {Object} D1
-@@= skipped -19, +21 lines =@@
-
-
- //// [linkTagEmit1.d.ts]
--/** @typedef {number} N */
--/**
-- * @typedef {Object} D1
-- * @property {1} e Just link to {@link NS.R} this time
-- * @property {1} m Wyatt Earp loved {@link N integers} I bet.
-- */
+  * @property {1} e Just link to {@link NS.R} this time
+  * @property {1} m Wyatt Earp loved {@link N integers} I bet.
+  */
++Object.defineProperty(exports, "__esModule", { value: true });
+ /** @typedef {number} Z @see N {@link N} */
+ /**
+  * @param {number} integer {@link Z}
+@@= skipped -25, +27 lines =@@
+  * @property {1} e Just link to {@link NS.R} this time
+  * @property {1} m Wyatt Earp loved {@link N integers} I bet.
+  */
 -/** @typedef {number} Z @see N {@link N} */
 -/**
 - * @param {number} integer {@link Z}

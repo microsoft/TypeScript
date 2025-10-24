@@ -41,6 +41,7 @@ m.child; // ok
 
 
 //// [inferTypeParameterConstraints.js]
+// Repro from #42636
 // https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
 class BaseClass {
     fake() {

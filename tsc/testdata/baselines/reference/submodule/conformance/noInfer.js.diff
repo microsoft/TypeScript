@@ -5,11 +5,10 @@
 
  //// [noInfer.js]
 -"use strict";
--// NoInfer<T> is erased for primitives
+ // NoInfer<T> is erased for primitives
  foo1('foo', 'foo'); // ok
  foo1('foo', 'bar'); // error
- foo2('foo', ['bar']); // error
-@@= skipped -20, +18 lines =@@
+@@= skipped -20, +19 lines =@@
  doWork(comp, {}); // error
  const mutate1 = mutate((a, b) => b);
  class OkClass {

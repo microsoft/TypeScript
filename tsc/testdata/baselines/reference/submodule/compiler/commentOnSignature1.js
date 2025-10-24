@@ -38,6 +38,10 @@ function foo2(a: any): void {
 }
 
 //// [a.js]
+/*!=================
+    Keep this pinned
+   =================
+*/
 function foo(a) {
 }
 class c {

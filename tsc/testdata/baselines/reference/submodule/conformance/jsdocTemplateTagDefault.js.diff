@@ -5,15 +5,18 @@
 
  //// [file.js]
 +"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  /**
   * @template {string | number} [T=string] - ok: defaults are permitted
   * @typedef {[T]} A
-@@= skipped -59, +61 lines =@@
-
+  */
++Object.defineProperty(exports, "__esModule", { value: true });
+ /** @type {A} */ // ok, default for `T` in `A` is `string`
+ const aDefault1 = [""];
+ /** @type {A} */ // error: `number` is not assignable to string`
+@@= skipped -60, +62 lines =@@
 
  //// [file.d.ts]
--/**
+ /**
 - * @template T
 - * @template [U=T] - ok: default can reference earlier type parameter
 - * @typedef {[T, U]} B
@@ -58,9 +61,9 @@
 - */
 -declare function f3<T = U, U = T>(a: T, b: U): void;
 -/**
-- * @template {string | number} [T=string] - ok: defaults are permitted
-- * @typedef {[T]} A
-- */
+  * @template {string | number} [T=string] - ok: defaults are permitted
+  * @typedef {[T]} A
+  */
 -/** @type {A} */ declare const aDefault1: A;
 -/** @type {A} */ declare const aDefault2: A;
 -/** @type {A<string>} */ declare const aString: A<string>;

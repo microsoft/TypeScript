@@ -20,12 +20,12 @@ a;
 //// [checkJsdocTypeTagOnExportAssignment1.js]
 //// [a.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {Object} Foo
  * @property {boolean} a
  * @property {boolean} b
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
 exports.default = { c: false };
 //// [b.js]

@@ -43,6 +43,7 @@ module Generics {
 
 
 //// [subtypingWithStringIndexer.js]
+// Derived type indexer must be subtype of base type indexer
 class A {
 }
 class B extends A {

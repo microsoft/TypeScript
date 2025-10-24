@@ -58,6 +58,10 @@ watchMain();
 
 //// [APISample_WatchWithDefaults.js]
 "use strict";
+/*
+ * Note: This test is a public API sample. This uses default sys interface without having to pass anything
+ *       Please log a "breaking change" issue for any API breaking change affecting this issue
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts = require("typescript");
 function watchMain() {

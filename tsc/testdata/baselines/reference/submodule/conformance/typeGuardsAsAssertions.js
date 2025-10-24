@@ -130,11 +130,11 @@ function f7() {
 
 //// [typeGuardsAsAssertions.js]
 "use strict";
+// Repro from #8513
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.none = void 0;
 exports.isSome = isSome;
 exports.fn = fn;
-// Repro from #8513
 let cond;
 exports.none = { none: '' };
 function isSome(value) {

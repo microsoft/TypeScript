@@ -40,6 +40,8 @@ var j = <C>null;
 var k = <M.E>null;
 
 //// [genericTypeReferenceWithoutTypeArgument2.js]
+// it is an error to use a generic type without type arguments
+// all of these are errors 
 var c;
 var a;
 var b;

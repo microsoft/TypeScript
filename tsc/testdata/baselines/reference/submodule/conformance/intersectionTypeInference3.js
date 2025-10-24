@@ -21,5 +21,6 @@ const c2: ReadonlyArray<A> = from();
 
 
 //// [intersectionTypeInference3.js]
+// Repro from #19682
 const c1 = Array.from(a).concat(Array.from(b));
 const c2 = from();

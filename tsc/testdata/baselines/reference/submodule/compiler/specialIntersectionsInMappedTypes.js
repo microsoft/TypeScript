@@ -18,6 +18,7 @@ a.other.length;  // Error expected here
 
 
 //// [specialIntersectionsInMappedTypes.js]
+// Repro from #50683
 const a = {
     left: "align-left",
     center: "align-center",

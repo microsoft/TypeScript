@@ -1,13 +1,9 @@
 --- old.moduleResolutionWithSymlinks_preserveSymlinks.js
 +++ new.moduleResolutionWithSymlinks_preserveSymlinks.js
-@@= skipped -20, +20 lines =@@
-
- //// [app.js]
- "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -23, +23 lines =@@
  // We shouldn't resolve symlinks for references either. See the trace.
  /// <reference types="linked" />
--Object.defineProperty(exports, "__esModule", { value: true });
+ Object.defineProperty(exports, "__esModule", { value: true });
 -var linked_1 = require("linked");
 -var linked2_1 = require("linked2");
 +const linked_1 = require("linked");

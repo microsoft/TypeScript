@@ -1,16 +1,9 @@
 --- old.callbackTagNestedParameter.js
 +++ new.callbackTagNestedParameter.js
-@@= skipped -21, +21 lines =@@
-
-
- //// [cb_nested.d.ts]
--/**
-- * @callback WorksWithPeopleCallback
-- * @param {Object} person
-- * @param {string} person.name
-- * @param {number} [person.age]
-- * @returns {void}
-- */
+@@= skipped -28, +28 lines =@@
+  * @param {number} [person.age]
+  * @returns {void}
+  */
 -/**
 - * For each person, calls your callback.
 - * @param {WorksWithPeopleCallback} callback

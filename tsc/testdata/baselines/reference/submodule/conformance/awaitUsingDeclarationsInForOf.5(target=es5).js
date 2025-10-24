@@ -13,6 +13,7 @@ export async function test() {
 
 
 //// [awaitUsingDeclarationsInForOf.5.js]
+// https://github.com/microsoft/TypeScript/pull/55558#issuecomment-1817595357
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");

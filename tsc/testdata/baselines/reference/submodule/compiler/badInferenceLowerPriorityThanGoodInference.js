@@ -26,6 +26,7 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 
 
 //// [badInferenceLowerPriorityThanGoodInference.js]
+// Repro from #13118
 const result = canYouInferThis(() => ({
     a: { BLAH: 33 },
     b: x => { }

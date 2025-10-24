@@ -48,6 +48,11 @@ compile(process.argv.slice(2), {
 
 //// [APISample_compile.js]
 "use strict";
+/*
+ * Note: This test is a public API sample. The sample sources can be found
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
+ *       Please log a "breaking change" issue for any API breaking change affecting this issue
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compile = compile;
 const ts = require("typescript");

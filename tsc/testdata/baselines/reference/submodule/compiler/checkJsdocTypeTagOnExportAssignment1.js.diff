@@ -1,18 +1,6 @@
 --- old.checkJsdocTypeTagOnExportAssignment1.js
 +++ new.checkJsdocTypeTagOnExportAssignment1.js
-@@= skipped -19, +19 lines =@@
- //// [checkJsdocTypeTagOnExportAssignment1.js]
- //// [a.js]
- "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- /**
-  * @typedef {Object} Foo
-  * @property {boolean} a
-  * @property {boolean} b
-  */
--Object.defineProperty(exports, "__esModule", { value: true });
- /** @type {Foo} */
- exports.default = { c: false };
+@@= skipped -30, +30 lines =@@
  //// [b.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

@@ -20,5 +20,9 @@ module ElidedModule3 {
 }
 
 //// [a.js]
+/*!=================
+    Keep this pinned
+   =================
+*/
 //// [b.js]
 ///<reference path="a.ts"/>

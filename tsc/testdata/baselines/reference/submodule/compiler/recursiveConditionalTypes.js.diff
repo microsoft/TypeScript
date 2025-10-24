@@ -5,7 +5,6 @@
 
  //// [recursiveConditionalTypes.js]
 -"use strict";
--// Awaiting promises
+ // Awaiting promises
  function f11(tx, ta, ux, ua) {
      ta = ua;
-     ua = ta; // Error

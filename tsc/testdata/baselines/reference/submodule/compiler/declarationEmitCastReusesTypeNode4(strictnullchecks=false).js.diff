@@ -5,6 +5,9 @@
 
  //// [input.d.ts]
 -export function fn(p?: P): void;
++/**
++ * @typedef {{ } & { name?: string }} P
++ */
 +export type P = {} & {
 +    name?: string;
 +};

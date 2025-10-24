@@ -1,16 +1,10 @@
 --- old.checkJsxChildrenCanBeTupleType.js
 +++ new.checkJsxChildrenCanBeTupleType.js
-@@= skipped -24, +24 lines =@@
-
- //// [checkJsxChildrenCanBeTupleType.js]
- "use strict";
--/// <reference path="react16.d.ts" />
- var __importDefault = (this && this.__importDefault) || function (mod) {
+@@= skipped -29, +29 lines =@@
      return (mod && mod.__esModule) ? mod : { "default": mod };
  };
  Object.defineProperty(exports, "__esModule", { value: true });
 -var react_1 = __importDefault(require("react"));
-+/// <reference path="react16.d.ts" />
 +const react_1 = __importDefault(require("react"));
  class ResizablePanel extends react_1.default.Component {
  }

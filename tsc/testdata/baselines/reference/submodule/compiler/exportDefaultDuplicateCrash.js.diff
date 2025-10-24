@@ -1,14 +1,8 @@
 --- old.exportDefaultDuplicateCrash.js
 +++ new.exportDefaultDuplicateCrash.js
-@@= skipped -9, +9 lines =@@
-
- //// [exportDefaultDuplicateCrash.js]
- "use strict";
--// #38214
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -14, +14 lines =@@
  exports.default = void 0;
  exports.default = default_1;
-+// #38214
  function default_1() { }
 -var hi_1 = require("./hi");
 +const hi_1 = require("./hi");

@@ -10,3 +10,4 @@ type Promised = PromisedTuple<[1, 2, 3]>
 
 
 //// [recursiveResolveTypeMembers.js]
+// Repro from #25291

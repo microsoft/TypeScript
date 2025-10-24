@@ -1,19 +1,10 @@
 --- old.reactTagNameComponentWithPropsNoOOM2.js
 +++ new.reactTagNameComponentWithPropsNoOOM2.js
-@@= skipped -14, +14 lines =@@
-
- //// [reactTagNameComponentWithPropsNoOOM2.js]
- "use strict";
--/// <reference path="react16.d.ts" />
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -13, +12 lines =@@
+@@= skipped -27, +27 lines =@@
      return __assign.apply(this, arguments);
  };
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
-+/// <reference path="react16.d.ts" />
 +const React = require("react");
  const classes = "";
  const rest = {};

@@ -131,6 +131,7 @@ inferMappedReadonly({
 
 //// [reverseMappedPartiallyInferableTypes.js]
 "use strict";
+// Repro from #30505
 Object.defineProperty(exports, "__esModule", { value: true });
 const r = extend({
     props: {

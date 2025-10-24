@@ -21,11 +21,11 @@ export function foo(a) {}
 export interface Foo {
 }
 //// [b.d.ts]
-import type { Foo } from "./a";
 /**
  * @import { Foo }
  * from "./a"
  */
+import type { Foo } from "./a";
 /**
  * @param {Foo} a
  */

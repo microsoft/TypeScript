@@ -8,11 +8,10 @@
 
 
  //// [foo.d.ts]
--/**
-- * @typedef {{
-- *   [id: string]: [Function, Function];
-- * }} ResolveRejectMap
-- */
+@@= skipped -8, +9 lines =@@
+  *   [id: string]: [Function, Function];
+  * }} ResolveRejectMap
+  */
 -declare let id: number;
 -/**
 - * @param {ResolveRejectMap} handlers

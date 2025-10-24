@@ -5,17 +5,17 @@
 
  //// [bug39372.js]
 +"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  /** @typedef {ReadonlyArray<Json>} JsonArray */
  /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
  /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
-@@= skipped -26, +28 lines =@@
-
-
- //// [bug39372.d.ts]
--/** @typedef {ReadonlyArray<Json>} JsonArray */
--/** @typedef {{ readonly [key: string]: Json }} JsonRecord */
--/** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
++Object.defineProperty(exports, "__esModule", { value: true });
+ /**
+  * @template T
+  * @typedef {{
+@@= skipped -29, +31 lines =@@
+ /** @typedef {ReadonlyArray<Json>} JsonArray */
+ /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
+ /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
 -/**
 - * @template T
 - * @typedef {{

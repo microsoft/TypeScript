@@ -9,5 +9,6 @@ let f2: Foo<"false", {}>;
 
 
 //// [limitDeepInstantiations.js]
+// Repro from #14837
 let f1;
 let f2;

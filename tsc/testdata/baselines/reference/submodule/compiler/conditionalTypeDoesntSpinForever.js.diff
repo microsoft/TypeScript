@@ -1,13 +1,11 @@
 --- old.conditionalTypeDoesntSpinForever.js
 +++ new.conditionalTypeDoesntSpinForever.js
-@@= skipped -120, +120 lines =@@
-   const PubSubRecordType = buildPubSubRecordType({});
-
+@@= skipped -122, +122 lines =@@
  //// [conditionalTypeDoesntSpinForever.js]
-+export { PubSubRecordIsStoredInRedisAsA };
  // A *self-contained* demonstration of the problem follows...
  // Test this by running `tsc --target es6` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.
 -export var PubSubRecordIsStoredInRedisAsA;
++export { PubSubRecordIsStoredInRedisAsA };
 +var PubSubRecordIsStoredInRedisAsA;
  (function (PubSubRecordIsStoredInRedisAsA) {
      PubSubRecordIsStoredInRedisAsA["redisHash"] = "redisHash";

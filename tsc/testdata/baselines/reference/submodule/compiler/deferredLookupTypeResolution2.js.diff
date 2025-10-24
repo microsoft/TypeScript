@@ -5,7 +5,5 @@
 
  //// [deferredLookupTypeResolution2.js]
 -"use strict";
--// Repro from #17456
+ // Repro from #17456
 
-
- //// [deferredLookupTypeResolution2.d.ts]

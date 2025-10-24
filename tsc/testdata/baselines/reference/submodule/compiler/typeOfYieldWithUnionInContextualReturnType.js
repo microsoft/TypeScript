@@ -43,6 +43,7 @@ const looserAsyncFactory: SequenceFactory = async function* (){
 
 
 //// [typeOfYieldWithUnionInContextualReturnType.js]
+// https://github.com/microsoft/TypeScript/issues/42439
 const syncFactory = function* () {
     let name = "";
     while (!name) {

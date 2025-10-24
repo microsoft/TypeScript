@@ -1,10 +1,6 @@
 --- old.typeOfYieldWithUnionInContextualReturnType.js
 +++ new.typeOfYieldWithUnionInContextualReturnType.js
-@@= skipped -42, +42 lines =@@
-
-
- //// [typeOfYieldWithUnionInContextualReturnType.js]
--// https://github.com/microsoft/TypeScript/issues/42439
+@@= skipped -46, +46 lines =@@
  const syncFactory = function* () {
      let name = "";
      while (!name) {

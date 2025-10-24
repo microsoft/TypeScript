@@ -5,7 +5,6 @@
 
  //// [contextuallyTypedBooleanLiterals.js]
 -"use strict";
--// Repro from #48363
+ // Repro from #48363
  const bn1 = box(0); // Box<number>
  const bn2 = box(0); // Ok
- const bb1 = box(false); // Box<boolean>

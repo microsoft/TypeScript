@@ -8,4 +8,5 @@ import foo = require('./foo');
 
 //// [commentOnImportStatement3.js]
 "use strict";
+/* copyright */
 Object.defineProperty(exports, "__esModule", { value: true });

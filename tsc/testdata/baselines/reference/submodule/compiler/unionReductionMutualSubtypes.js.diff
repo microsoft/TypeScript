@@ -5,7 +5,6 @@
 
  //// [unionReductionMutualSubtypes.js]
 -"use strict";
--// Repro from #35414
+ // Repro from #35414
  const k = { something() { } };
  function run(options) {
-     var _a;

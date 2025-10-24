@@ -14,11 +14,11 @@ module.exports = function loader(options) {}
 
 //// [index.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef Options
  * @property {string} opt
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @param {Options} options
  */
@@ -34,6 +34,10 @@ module.exports = function loader(options) { };
 
 
 //// [index.d.ts]
+/**
+ * @typedef Options
+ * @property {string} opt
+ */
 export type Options = {
     opt: string;
 };

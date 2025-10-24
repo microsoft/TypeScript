@@ -1,18 +1,9 @@
 --- old.tsxReactPropsInferenceSucceedsOnIntersections.js
 +++ new.tsxReactPropsInferenceSucceedsOnIntersections.js
-@@= skipped -19, +19 lines =@@
-
- //// [tsxReactPropsInferenceSucceedsOnIntersections.js]
- "use strict";
--/// <reference path="react16.d.ts" />
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -16, +15 lines =@@
+@@= skipped -35, +35 lines =@@
      return (mod && mod.__esModule) ? mod : { "default": mod };
  };
  Object.defineProperty(exports, "__esModule", { value: true });
 -var react_1 = __importDefault(require("react"));
-+/// <reference path="react16.d.ts" />
 +const react_1 = __importDefault(require("react"));
  const CustomButton = props => react_1.default.createElement(Button, __assign({}, props));

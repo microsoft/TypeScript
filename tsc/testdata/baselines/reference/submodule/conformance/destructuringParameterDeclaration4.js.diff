@@ -1,15 +1,6 @@
 --- old.destructuringParameterDeclaration4.js
 +++ new.destructuringParameterDeclaration4.js
-@@= skipped -39, +39 lines =@@
-
-
- //// [destructuringParameterDeclaration4.js]
--// If the parameter is a rest parameter, the parameter type is any[]
--// A type annotation for a rest parameter must denote an array type.
- function a0(...x) { } // Error, rest parameter must be array type
- function a1(...x) { }
- function a2(...a) { } // Error, rest parameter must be array type
-@@= skipped -16, +14 lines =@@
+@@= skipped -55, +55 lines =@@
  a6([1, 2, "string"]); // Error, parameter type is number[]
  var temp = [1, 2, 3];
  class C {

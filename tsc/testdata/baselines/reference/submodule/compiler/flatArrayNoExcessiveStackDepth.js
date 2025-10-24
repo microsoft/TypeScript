@@ -25,6 +25,7 @@ function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) 
 
 
 //// [flatArrayNoExcessiveStackDepth.js]
+// Repro from #43493
 const bar = foo.flatMap(bar => bar);
 // Repros from comments in #43249
 const repro_43249 = (value) => {

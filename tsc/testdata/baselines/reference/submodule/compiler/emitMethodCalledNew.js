@@ -16,9 +16,9 @@ export const c = {
 
 //// [emitMethodCalledNew.js]
 "use strict";
+// https://github.com/microsoft/TypeScript/issues/55075
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.b = exports.a = void 0;
-// https://github.com/microsoft/TypeScript/issues/55075
 exports.a = {
     new(x) { return x + 1; }
 };

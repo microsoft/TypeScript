@@ -39,6 +39,7 @@ function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 
 //// [indexedAccessTypeConstraints.js]
 "use strict";
+// Repro from #14557
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.Foo = void 0;
 class Parent {
