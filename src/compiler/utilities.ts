@@ -9015,27 +9015,22 @@ const _computedOptions = createComputedCompilerOptions({
     moduleResolution: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): ModuleResolutionKind => {
-            let moduleResolution = compilerOptions.moduleResolution;
-            if (moduleResolution === undefined) {
-                switch (_computedOptions.module.computeValue(compilerOptions)) {
-                    case ModuleKind.Node16:
-                    case ModuleKind.Node18:
-                    case ModuleKind.Node20:
-                        moduleResolution = ModuleResolutionKind.Node16;
-                        break;
-                    case ModuleKind.NodeNext:
-                        moduleResolution = ModuleResolutionKind.NodeNext;
-                        break;
-                    case ModuleKind.CommonJS:
-                    case ModuleKind.Preserve:
-                        moduleResolution = ModuleResolutionKind.Bundler;
-                        break;
-                    default:
-                        moduleResolution = ModuleResolutionKind.Classic;
-                        break;
-                }
+            if (compilerOptions.moduleResolution !== undefined) {
+                return compilerOptions.moduleResolution;
             }
-            return moduleResolution;
+            const moduleKind = _computedOptions.module.computeValue(compilerOptions);
+            switch (moduleKind) {
+                case ModuleKind.AMD:
+                case ModuleKind.UMD:
+                case ModuleKind.System:
+                    return ModuleResolutionKind.Classic;
+                case ModuleKind.NodeNext:
+                    return ModuleResolutionKind.NodeNext;
+            }
+            if (ModuleKind.Node16 <= moduleKind && moduleKind < ModuleKind.NodeNext) {
+                return ModuleResolutionKind.Node16;
+            }
+            return ModuleResolutionKind.Bundler;
         },
     },
     moduleDetection: {
@@ -9075,7 +9070,7 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     resolvePackageJsonExports: {
-        dependencies: ["moduleResolution"],
+        dependencies: ["moduleResolution", "module", "target"],
         computeValue: (compilerOptions): boolean => {
             const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
@@ -9094,7 +9089,7 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     resolvePackageJsonImports: {
-        dependencies: ["moduleResolution", "resolvePackageJsonExports"],
+        dependencies: ["moduleResolution", "resolvePackageJsonExports", "module", "target"],
         computeValue: (compilerOptions): boolean => {
             const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {

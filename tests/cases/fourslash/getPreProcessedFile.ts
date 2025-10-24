@@ -1,5 +1,4 @@
 /// <reference path="fourslash.ts" />
-// @ModuleResolution: classic
 
 // @Filename: refFile1.ts
 //// class D { }
@@ -12,10 +11,10 @@
 //// ///<reference path="refFile1.ts" />
 //// ///<reference path = "/*1*/NotExistRef.ts/*2*/" />
 //// /*3*////<reference path "invalidRefFile1.ts" />/*4*/
-//// import ref2 = require("refFile2");
-//// import noExistref2 = require(/*5*/"NotExistRefFile2"/*6*/);
-//// import invalidRef1  /*7*/require/*8*/("refFile2");
-//// import invalidRef2 = /*9*/requi/*10*/(/*10A*/"refFile2");
+//// import ref2 = require("./refFile2");
+//// import noExistref2 = require(/*5*/"./NotExistRefFile2"/*6*/);
+//// import invalidRef1  /*7*/require/*8*/("./refFile2");
+//// import invalidRef2 = /*9*/requi/*10*/(/*10A*/"./refFile2");
 //// var obj: /*11*/C/*12*/;
 //// var obj1: D;
 //// var obj2: ref2.E;
