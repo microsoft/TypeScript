@@ -46,7 +46,7 @@ let C = (() => {
             super();
         }
     };
-    C = __decorate([
+    exports.C = C = __decorate([
         __param(0, _0_2.foo)
     ], C);
     return C;

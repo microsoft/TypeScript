@@ -18,7 +18,7 @@ let MyClass1 = (() => {
             this._elementRef = _elementRef;
         }
     };
-    MyClass1 = __decorate([
+    exports.MyClass1 = MyClass1 = __decorate([
         foo,
         __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
     ], MyClass1);

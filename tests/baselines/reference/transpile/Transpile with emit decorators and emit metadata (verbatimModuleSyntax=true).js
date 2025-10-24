@@ -13,7 +13,7 @@ let MyClass = (() => {
             this.db.doSomething();
         }
     };
-    MyClass = __decorate([
+    exports.MyClass = MyClass = __decorate([
         someDecorator,
         __metadata("design:paramtypes", [typeof (_a = typeof db_1.db !== "undefined" && db_1.db) === "function" ? _a : Object])
     ], MyClass);

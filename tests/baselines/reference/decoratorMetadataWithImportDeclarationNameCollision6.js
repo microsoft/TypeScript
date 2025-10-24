@@ -46,7 +46,7 @@ let MyClass = (() => {
             this.db.doSomething();
         }
     };
-    MyClass = __decorate([
+    exports.MyClass = MyClass = __decorate([
         someDecorator,
         __metadata("design:paramtypes", [db_1.default])
     ], MyClass);

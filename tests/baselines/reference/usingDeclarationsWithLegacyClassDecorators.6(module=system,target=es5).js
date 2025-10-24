@@ -27,9 +27,9 @@ System.register([], function (exports_1, context_1) {
                 exports_1("D", C = (() => {
                     let C = class C {
                     };
-                    C = __decorate([
+                    exports_1("D", C = __decorate([
                         dec
-                    ], C);
+                    ], C));
                     return C;
                 })());
             }

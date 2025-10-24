@@ -21,7 +21,7 @@ exports.C = void 0;
 let C = (() => {
     let C = class C {
     };
-    C = __decorate([
+    exports.C = C = __decorate([
         dec
     ], C);
     return C;

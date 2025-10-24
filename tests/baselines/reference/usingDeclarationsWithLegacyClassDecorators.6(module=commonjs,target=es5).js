@@ -24,7 +24,7 @@ try {
     exports.D = C = (() => {
         let C = class C {
         };
-        C = __decorate([
+        exports.D = C = __decorate([
             dec
         ], C);
         return C;
