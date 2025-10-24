@@ -11,16 +11,16 @@ export var a = 10;
 import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
 >defaultBinding : any
 >               : ^^^
->nameSpaceBinding : typeof nameSpaceBinding
->                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>nameSpaceBinding : any
+>                 : ^^^
 
 var x: number = nameSpaceBinding.a;
 >x : number
 >  : ^^^^^^
->nameSpaceBinding.a : number
->                   : ^^^^^^
->nameSpaceBinding : typeof nameSpaceBinding
->                 : ^^^^^^^^^^^^^^^^^^^^^^^
->a : number
->  : ^^^^^^
+>nameSpaceBinding.a : any
+>                   : ^^^
+>nameSpaceBinding : any
+>                 : ^^^
+>a : any
+>  : ^^^
 

@@ -1,9 +1,11 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(9,14): error TS2786: 'Foo' cannot be used as a JSX component.
   Its return type 'undefined' is not a valid JSX element.
 file.tsx(10,12): error TS2786: 'Greet' cannot be used as a JSX component.
   Its return type 'undefined' is not a valid JSX element.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (2 errors) ====
     import React = require('react');
     

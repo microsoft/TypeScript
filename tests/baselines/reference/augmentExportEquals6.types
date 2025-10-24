@@ -17,6 +17,7 @@ namespace foo {
 >B : typeof B
 >  : ^^^^^^^^
 >a : any
+>  : ^^^
 }
 export = foo;
 >foo : import("file1.ts")

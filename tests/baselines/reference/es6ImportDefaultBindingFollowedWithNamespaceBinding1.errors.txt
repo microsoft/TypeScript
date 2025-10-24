@@ -1,0 +1,12 @@
+es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts(1,52): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamespaceBinding_0' or its corresponding type declarations.
+
+
+==== es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts (0 errors) ====
+    var a = 10;
+    export default a;
+    
+==== es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts (1 errors) ====
+    import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamespaceBinding_0' or its corresponding type declarations.
+    var x: number = defaultBinding;

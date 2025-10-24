@@ -1,4 +1,5 @@
 b.ts(1,8): error TS18058: Default imports are not allowed in a deferred import.
+b.ts(1,23): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 
 
 ==== a.ts (0 errors) ====
@@ -6,9 +7,11 @@ b.ts(1,8): error TS18058: Default imports are not allowed in a deferred import.
         console.log("foo from a");
     }
     
-==== b.ts (1 errors) ====
+==== b.ts (2 errors) ====
     import defer foo from "a";
            ~~~~~~~~~
 !!! error TS18058: Default imports are not allowed in a deferred import.
+                          ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
     
     foo();

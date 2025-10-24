@@ -42,7 +42,22 @@ Output::
     [7m [0m [96m      ~~~~~~~~~~~~~~~~~[0m
     File is entry point of type library specified here.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+
+[7m3[0m     "module": "none",
+[7m [0m [91m    ~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "module": "none",
+[7m [0m [91m              ~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
 
 
 
@@ -136,22 +151,22 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 2
-11: timerToInvalidateFailedLookupResolutions *new*
-12: timerToUpdateProgram *new*
+12: timerToInvalidateFailedLookupResolutions *new*
+13: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 2
-11: timerToInvalidateFailedLookupResolutions
-12: timerToUpdateProgram
+12: timerToInvalidateFailedLookupResolutions
+13: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
-12: timerToUpdateProgram *deleted*
-13: timerToUpdateProgram *new*
+13: timerToUpdateProgram *deleted*
+14: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-13: timerToUpdateProgram
+14: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -159,7 +174,22 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+
+[7m3[0m     "module": "none",
+[7m [0m [91m    ~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "module": "none",
+[7m [0m [91m              ~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -207,10 +237,7 @@ Program files::
 /user/username/projects/myproject/lib/app.ts
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)

@@ -195,7 +195,50 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/projects/project2/class2.ts",
         "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 21
+            },
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project2/tsconfig.json ProjectRootPath: undefined:: Result: undefined
@@ -329,6 +372,48 @@ Info seq  [hh:mm:ss:mss] event:
                 "code": 1413
               }
             ]
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 21
+            },
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
           }
         ]
       }
@@ -485,7 +570,50 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
         "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 21
+            },
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -677,6 +805,48 @@ Info seq  [hh:mm:ss:mss] event:
                 "code": 1413
               }
             ]
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 21
+            },
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
           }
         ]
       }
@@ -794,7 +964,50 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
         "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 21
+            },
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*

@@ -1,0 +1,35 @@
+client.ts(1,19): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(2,25): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(3,44): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(4,32): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(5,19): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+
+
+==== server.ts (0 errors) ====
+    export class c {
+    }
+    export interface i {
+    }
+    export namespace m {
+        export var x = 10;
+    }
+    export var x = 10;
+    export namespace uninstantiated {
+    }
+    
+==== client.ts (5 errors) ====
+    export { c } from "server";
+                      ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export { c as c2 } from "server";
+                            ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export { i, m as instantiatedModule } from "server";
+                                               ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export { uninstantiated } from "server";
+                                   ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export { x } from "server";
+                      ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.

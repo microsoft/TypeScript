@@ -1,3 +1,4 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(24,20): error TS1005: '{' expected.
@@ -231,6 +232,7 @@ giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== giant.ts (231 errors) ====
     /*
         Prefixes

@@ -7,6 +7,7 @@ class a {
 
     public c;
 >c : any
+>  : ^^^
 }
 export = a;
 >a : a

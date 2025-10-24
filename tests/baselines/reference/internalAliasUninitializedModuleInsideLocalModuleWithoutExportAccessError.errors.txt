@@ -1,6 +1,8 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts(16,17): error TS2694: Namespace '"internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
     export namespace a {
         export namespace b {

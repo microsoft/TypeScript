@@ -229,7 +229,23 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/a/index.ts",
         "configFile": "/home/src/workspaces/project/a/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error"
+          },
+          {
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error"
+          },
+          {
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
@@ -594,7 +610,23 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/b/index.ts",
         "configFile": "/home/src/workspaces/project/b/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error"
+          },
+          {
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error"
+          },
+          {
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/b/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/b/tsconfig.json
@@ -654,7 +686,23 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/c/index.ts",
         "configFile": "/home/src/workspaces/project/c/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
+            "code": 5071,
+            "category": "error"
+          },
+          {
+            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            "code": 5095,
+            "category": "error"
+          },
+          {
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/c/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/c/tsconfig.json

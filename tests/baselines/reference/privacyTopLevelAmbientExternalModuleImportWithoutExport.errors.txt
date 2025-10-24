@@ -1,7 +1,9 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(15,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(17,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (2 errors) ====
     ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
     ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>

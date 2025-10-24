@@ -1,0 +1,29 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== collisionExportsRequireAndAmbientVar_externalmodule.ts (0 errors) ====
+    export declare var exports: number;
+    export declare var require: string;
+    declare namespace m1 {
+        var exports: string;
+        var require: number;
+    }
+    namespace m2 {
+        export declare var exports: number;
+        export declare var require: string;
+        var a = 10;
+    }
+    
+==== collisionExportsRequireAndAmbientVar_globalFile.ts (0 errors) ====
+    declare var exports: number;
+    declare var require: string;
+    declare namespace m3 {
+        var exports: string;
+        var require: number;
+    }
+    namespace m4 {
+        export declare var exports: string;
+        export declare var require: number;
+        var a = 10;
+    }
