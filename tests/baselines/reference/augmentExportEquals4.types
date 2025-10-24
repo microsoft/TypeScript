@@ -43,7 +43,6 @@ declare module "./file1" {
 
     interface A { a }
 >a : any
->  : ^^^
 
     let b: number;
 >b : number

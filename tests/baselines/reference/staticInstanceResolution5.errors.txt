@@ -1,12 +1,10 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 staticInstanceResolution5_1.ts(4,14): error TS2709: Cannot use namespace 'WinJS' as a type.
 staticInstanceResolution5_1.ts(5,23): error TS2709: Cannot use namespace 'WinJS' as a type.
 staticInstanceResolution5_1.ts(6,16): error TS2709: Cannot use namespace 'WinJS' as a type.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== staticInstanceResolution5_1.ts (3 errors) ====
-    import WinJS = require('staticInstanceResolution5_0');
+    import WinJS = require('./staticInstanceResolution5_0');
     
     // these 3 should be errors
     var x = (w1: WinJS) => { };

@@ -1,4 +1,3 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 duplicateSymbolsExportMatching.ts(24,15): error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
 duplicateSymbolsExportMatching.ts(25,22): error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
 duplicateSymbolsExportMatching.ts(26,22): error TS2395: Individual declarations in merged declaration 'E' must be all exported or all local.
@@ -19,7 +18,6 @@ duplicateSymbolsExportMatching.ts(64,11): error TS2395: Individual declarations 
 duplicateSymbolsExportMatching.ts(65,18): error TS2395: Individual declarations in merged declaration 'D' must be all exported or all local.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== duplicateSymbolsExportMatching.ts (18 errors) ====
     namespace M {
         export interface E { }

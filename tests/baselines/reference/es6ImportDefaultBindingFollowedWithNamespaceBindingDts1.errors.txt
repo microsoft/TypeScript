@@ -7,5 +7,5 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     export default a;
     
 ==== client.ts (0 errors) ====
-    import defaultBinding, * as nameSpaceBinding from "server";
+    import defaultBinding, * as nameSpaceBinding from "./server";
     export var x = new defaultBinding();

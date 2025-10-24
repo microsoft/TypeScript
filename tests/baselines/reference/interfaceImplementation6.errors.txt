@@ -1,11 +1,9 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 interfaceImplementation6.ts(9,7): error TS2420: Class 'C2' incorrectly implements interface 'I1'.
   Property 'item' is private in type 'C2' but not in type 'I1'.
 interfaceImplementation6.ts(13,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
   Property 'item' is missing in type 'C3' but required in type 'I1'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== interfaceImplementation6.ts (2 errors) ====
     interface I1 {
         item:number;

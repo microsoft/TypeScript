@@ -6587,10 +6587,7 @@
         "category": "Message",
         "code": 6903
     },
-    "module === \"system\" or esModuleInterop": {
-        "category": "Message",
-        "code": 6904
-    },
+
     "`false`, unless `strict` is set": {
         "category": "Message",
         "code": 6905

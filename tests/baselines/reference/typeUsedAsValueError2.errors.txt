@@ -1,12 +1,10 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 world.ts(4,1): error TS2693: 'HelloInterface' only refers to a type, but is being used as a value here.
 world.ts(5,1): error TS2708: Cannot use namespace 'HelloNamespace' as a value.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== world.ts (2 errors) ====
-    import HelloInterface = require("helloInterface");
-    import HelloNamespace = require("helloNamespace");
+    import HelloInterface = require("./helloInterface");
+    import HelloNamespace = require("./helloNamespace");
     
     HelloInterface.world;
     ~~~~~~~~~~~~~~

@@ -1,12 +1,8 @@
 a.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-a.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
 asyncawait.ts(2,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 c.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-c.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
 d.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-d.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
 e.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-e.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
 
 
 ==== asyncawait.ts (1 errors) ====
@@ -15,40 +11,32 @@ e.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding t
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     
-==== a.ts (2 errors) ====
-    import { async, await } from 'asyncawait';
+==== a.ts (1 errors) ====
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-                                 ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
     export default async(() => await(Promise.resolve(1)));
     
 ==== b.ts (0 errors) ====
     export default async () => { return 0; };
     
-==== c.ts (2 errors) ====
-    import { async, await } from 'asyncawait';
+==== c.ts (1 errors) ====
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-                                 ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
     export default async<number>();
     
-==== d.ts (2 errors) ====
-    import { async, await } from 'asyncawait';
+==== d.ts (1 errors) ====
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-                                 ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
     
     export default async;
     
-==== e.ts (2 errors) ====
-    import { async, await } from 'asyncawait';
+==== e.ts (1 errors) ====
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-                                 ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
     
     export default async
     

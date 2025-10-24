@@ -1,14 +1,9 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-blockScopedFunctionDeclarationInStrictModule.ts(2,14): error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.
 blockScopedFunctionDeclarationInStrictModule.ts(6,10): error TS2304: Cannot find name 'foo'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== blockScopedFunctionDeclarationInStrictModule.ts (2 errors) ====
+==== blockScopedFunctionDeclarationInStrictModule.ts (1 errors) ====
     if (true) {
         function foo() { }
-                 ~~~
-!!! error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.
         foo(); // ok
     }
     

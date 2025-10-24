@@ -1,4 +1,3 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 importDeclWithClassModifiers.ts(5,8): error TS1044: 'public' modifier cannot appear on a module or namespace element.
 importDeclWithClassModifiers.ts(5,26): error TS2708: Cannot use namespace 'x' as a value.
 importDeclWithClassModifiers.ts(5,28): error TS2694: Namespace 'x' has no exported member 'c'.
@@ -10,7 +9,6 @@ importDeclWithClassModifiers.ts(7,26): error TS2708: Cannot use namespace 'x' as
 importDeclWithClassModifiers.ts(7,28): error TS2694: Namespace 'x' has no exported member 'c'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== importDeclWithClassModifiers.ts (9 errors) ====
     namespace x {
         interface c {

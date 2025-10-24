@@ -1,18 +1,16 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== server.ts (0 errors) ====
     var a = 10;
     export default a;
     
 ==== client.ts (2 errors) ====
-    export import defaultBinding from "server";
+    export import defaultBinding from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x = defaultBinding;
-    export import defaultBinding2 from "server"; // non referenced
+    export import defaultBinding2 from "./server"; // non referenced
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.

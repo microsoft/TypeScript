@@ -1,8 +1,6 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 foo_0.ts(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== foo_0.ts (1 errors) ====
     export enum E1 {
     	A,B,C

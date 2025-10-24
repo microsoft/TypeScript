@@ -1,12 +1,10 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-badExternalModuleReference.ts(1,21): error TS2792: Cannot find module 'garbage'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+badExternalModuleReference.ts(1,21): error TS2307: Cannot find module 'garbage' or its corresponding type declarations.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== badExternalModuleReference.ts (1 errors) ====
     import a1 = require("garbage");
                         ~~~~~~~~~
-!!! error TS2792: Cannot find module 'garbage'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'garbage' or its corresponding type declarations.
     export declare var a: {
         test1: a1.connectModule;
         (): a1.connectExport;

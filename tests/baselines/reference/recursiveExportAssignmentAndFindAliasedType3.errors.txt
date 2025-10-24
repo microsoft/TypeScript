@@ -1,12 +1,10 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts(2,5): error TS2303: Circular definition of import alias 'self'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== recursiveExportAssignmentAndFindAliasedType3_moduleA.ts (0 errors) ====
     /// <reference path="recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts"/>
     import moduleC = require("moduleC");
-    import ClassB = require("recursiveExportAssignmentAndFindAliasedType3_moduleB");
+    import ClassB = require("./recursiveExportAssignmentAndFindAliasedType3_moduleB");
     export var b: ClassB; // This should result in type ClassB
 ==== recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts (1 errors) ====
     declare module "moduleC" {

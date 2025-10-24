@@ -1,4 +1,3 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 constDeclarations_access_2.ts(4,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations_access_2.ts(5,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations_access_2.ts(6,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
@@ -19,10 +18,9 @@ constDeclarations_access_2.ts(22,7): error TS2540: Cannot assign to 'x' because 
 constDeclarations_access_2.ts(24,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== constDeclarations_access_2.ts (18 errors) ====
     ///<reference path='constDeclarations_access_1.ts'/>
-    import m = require('constDeclarations_access_1');
+    import m = require('./constDeclarations_access_1');
     // Errors
     m.x = 1;
       ~

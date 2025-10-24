@@ -24,25 +24,23 @@ let a: x.A;
 let b = x.b;
 
 //// [file1.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var foo = /** @class */ (function () {
-        function foo() {
-        }
-        return foo;
-    }());
-    (function (foo) {
-        foo.v = 1;
-    })(foo || (foo = {}));
+"use strict";
+var foo = /** @class */ (function () {
+    function foo() {
+    }
     return foo;
-});
+}());
+(function (foo) {
+    foo.v = 1;
+})(foo || (foo = {}));
+module.exports = foo;
 //// [file2.js]
-define(["require", "exports", "./file1"], function (require, exports, x) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    x.b = 1;
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var x = require("./file1");
+x.b = 1;
 //// [file3.js]
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -76,10 +74,8 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    x = __importStar(x);
-    var a;
-    var b = x.b;
-});
+Object.defineProperty(exports, "__esModule", { value: true });
+var x = __importStar(require("./file1"));
+require("./file2");
+var a;
+var b = x.b;

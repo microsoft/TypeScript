@@ -1,4 +1,3 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 client.ts(2,1): error TS1191: An import declaration cannot have modifiers.
 client.ts(3,12): error TS2323: Cannot redeclare exported variable 'x1'.
@@ -13,7 +12,6 @@ client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
 client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== server.ts (0 errors) ====
     export var a = 10;
     export var x = a;
@@ -21,22 +19,22 @@ client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
     export default {};
     
 ==== client.ts (12 errors) ====
-    export import defaultBinding1, { } from "server";
+    export import defaultBinding1, { } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
-    export import defaultBinding2, { a } from "server";
+    export import defaultBinding2, { a } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x1: number = a;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
-    export import defaultBinding3, { a as b } from "server";
+    export import defaultBinding3, { a as b } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x1: number = b;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
-    export import defaultBinding4, { x, a as y } from "server";
+    export import defaultBinding4, { x, a as y } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x1: number = x;
@@ -45,13 +43,13 @@ client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
     export var x1: number = y;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
-    export import defaultBinding5, { x as z,  } from "server";
+    export import defaultBinding5, { x as z,  } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x1: number = z;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
-    export import defaultBinding6, { m,  } from "server";
+    export import defaultBinding6, { m,  } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x1: number = m;

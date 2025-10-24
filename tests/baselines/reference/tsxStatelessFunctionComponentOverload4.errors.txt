@@ -1,4 +1,3 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(12,22): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
@@ -79,7 +78,6 @@ file.tsx(36,13): error TS2769: No overload matches this call.
     Type 'string' is not assignable to type 'boolean'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (11 errors) ====
     import React = require('react')
     declare function OneThing(): JSX.Element;

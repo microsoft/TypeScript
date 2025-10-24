@@ -1,5 +1,4 @@
 a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-b.ts(1,20): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 
 
 ==== a.ts (1 errors) ====
@@ -8,8 +7,6 @@ b.ts(1,20): error TS2307: Cannot find module 'a' or its corresponding type decla
     ~~~~~~~~~~~
 !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== b.ts (1 errors) ====
-    import * as a from "a";
-                       ~~~
-!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+==== b.ts (0 errors) ====
+    import * as a from "./a";
     

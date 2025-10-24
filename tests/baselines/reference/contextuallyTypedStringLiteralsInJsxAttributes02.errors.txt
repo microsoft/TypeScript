@@ -1,4 +1,3 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(27,64): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
@@ -33,7 +32,6 @@ file.tsx(36,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assi
   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (6 errors) ====
     import React = require('react')
     

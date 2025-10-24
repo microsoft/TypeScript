@@ -1,9 +1,7 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ambientExternalModuleInsideNonAmbientExternalModule.ts(1,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 ambientExternalModuleInsideNonAmbientExternalModule.ts(1,23): error TS2664: Invalid module name in augmentation, module 'M' cannot be found.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== ambientExternalModuleInsideNonAmbientExternalModule.ts (2 errors) ====
     export declare module "M" { }
     ~~~~~~

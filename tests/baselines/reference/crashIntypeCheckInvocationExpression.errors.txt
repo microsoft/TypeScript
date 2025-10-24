@@ -1,11 +1,9 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 crashIntypeCheckInvocationExpression.ts(6,28): error TS2304: Cannot find name 'task'.
 crashIntypeCheckInvocationExpression.ts(8,18): error TS2304: Cannot find name 'path'.
 crashIntypeCheckInvocationExpression.ts(9,19): error TS2347: Untyped function calls may not accept type arguments.
 crashIntypeCheckInvocationExpression.ts(10,50): error TS2304: Cannot find name 'moduleType'.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== crashIntypeCheckInvocationExpression.ts (4 errors) ====
     var nake;
     function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {

@@ -1,8 +1,6 @@
-error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-copyrightWithNewLine1.ts(5,24): error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+copyrightWithNewLine1.ts(5,24): error TS2307: Cannot find module './greeter' or its corresponding type declarations.
 
 
-!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== copyrightWithNewLine1.ts (1 errors) ====
     /*****************************
     * (c) Copyright - Important
@@ -10,7 +8,7 @@ copyrightWithNewLine1.ts(5,24): error TS2792: Cannot find module './greeter'. Di
     
     import model = require("./greeter")
                            ~~~~~~~~~~~
-!!! error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module './greeter' or its corresponding type declarations.
     var el = document.getElementById('content');
     var greeter = new model.Greeter(el);
     /** things */

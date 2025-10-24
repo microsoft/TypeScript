@@ -20,18 +20,17 @@ import {MyClass} from './file1';
 
 
 //// [file1.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.MyClass = void 0;
-    var MyClass = /** @class */ (function () {
-        function MyClass() {
-        }
-        return MyClass;
-    }());
-    exports.MyClass = MyClass;
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyClass = void 0;
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    return MyClass;
+}());
+exports.MyClass = MyClass;
 //// [file2.js]
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -65,9 +64,8 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    React = __importStar(React);
-    React.createElement(file1_1.MyClass, null);
-});
+Object.defineProperty(exports, "__esModule", { value: true });
+// Should not elide React import
+var React = __importStar(require("react"));
+var file1_1 = require("./file1");
+React.createElement(file1_1.MyClass, null);

@@ -5,7 +5,10 @@ var a = 10;
 export = a;
 
 //// [client.ts]
-import a = require("server");
+import a = require("./server");
 
+//// [server.js]
+var a = 10;
+export {};
 //// [client.js]
 export {};
