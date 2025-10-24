@@ -1414,6 +1414,21 @@ function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: 
 }
 
 /** @returns `Comparison.LessThan` if `a` is better than `b`. */
+
+/** Heuristic approach: Prioritize local/relative imports over node_modules imports. */
+function compareLocalVsExternal(
+    a: ImportFixWithModuleSpecifier,
+    b: ImportFixWithModuleSpecifier
+): Comparison {
+    const aIsExternal = a.moduleSpecifierKind === "node_modules";
+    const bIsExternal = b.moduleSpecifierKind === "node_modules";
+    if (!aIsExternal && bIsExternal) return Comparison.LessThan;
+    if (aIsExternal && !bIsExternal) return Comparison.GreaterThan;
+    return Comparison.EqualTo;
+}
+
+/** @returns `Comparison.LessThan` if `a` is better than `b`. */
+
 function compareModuleSpecifiers(
     a: ImportFixWithModuleSpecifier,
     b: ImportFixWithModuleSpecifier,
@@ -1424,6 +1439,13 @@ function compareModuleSpecifiers(
     toPath: (fileName: string) => Path,
 ): Comparison {
     if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
+        // STEP 2: ADD THE COMPARISON LOGIC HERE (INSIDE THE FUNCTION) ✅
+        const localVsExternalComparison = compareLocalVsExternal(a, b);
+        if (localVsExternalComparison !== Comparison.EqualTo) {
+            return localVsExternalComparison;
+        }
+        
+        // Continue with existing logic
         return compareBooleans(
             b.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(b.moduleSpecifier),
             a.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(a.moduleSpecifier),
@@ -1438,6 +1460,7 @@ function compareModuleSpecifiers(
     }
     return Comparison.EqualTo;
 }
+
 
 function compareModuleSpecifierRelativity(a: ImportFixWithModuleSpecifier, b: ImportFixWithModuleSpecifier, preferences: UserPreferences): Comparison {
     if (preferences.importModuleSpecifierPreference === "non-relative" || preferences.importModuleSpecifierPreference === "project-relative") {
