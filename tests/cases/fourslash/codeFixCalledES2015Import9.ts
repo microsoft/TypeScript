@@ -11,7 +11,7 @@
 
 goTo.file(1);
 verify.codeFix({
-    description: `Convert to default import`,
+    description: `Replace import with 'import foo from "./foo";'.`,
     newRangeContent: `import foo from "./foo";`,
     index: 0,
 });
