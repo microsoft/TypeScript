@@ -48,14 +48,14 @@ function Foo() { return 10; }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
-var f1_1 = require("./f1");
+const f1_1 = require("./f1");
 exports.y = (0, f1_1.Foo)();
 
 
 //// [/home/src/projects/a/b/f3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var f2_1 = require("./f2");
+const f2_1 = require("./f2");
 let x = f2_1.y;
 
 

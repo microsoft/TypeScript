@@ -33,12 +33,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
-var types = require("./b");
+const types = require("./b");
 exports.default = types;
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
+const c_1 = require("./c");
 new c_1.default.A();
 new c_1.default.B();
 const a = {};

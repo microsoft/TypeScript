@@ -27,5 +27,5 @@ let foo: Foo = a.foo;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = require("a");
+const a = require("a");
 let foo = a.foo;

@@ -165,7 +165,7 @@ export default interface Animal {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDog = void 0;
-var dog_1 = require("./dog");
+const dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
@@ -180,7 +180,7 @@ export { createDog, Dog };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDog = createDog;
-var utilities_1 = require("../core/utilities");
+const utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
         size: "medium",

@@ -22,7 +22,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 function MyComp2(props) {
     return null;
 }

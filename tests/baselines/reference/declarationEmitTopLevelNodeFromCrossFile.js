@@ -25,7 +25,7 @@ exports.fn = { o: (a) => { } };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.m = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.m = {
     /**
     * leading doc for prop

@@ -29,7 +29,7 @@ export const result = <MyComponent x="yes" y={{
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
-var React = require("react");
+const React = require("react");
 function MyComponent(_props) {
     return React.createElement("span", null, "my component");
 }
@@ -37,8 +37,8 @@ function MyComponent(_props) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.result = void 0;
-var React = require("react");
-var my_component_1 = require("./my-component");
+const React = require("react");
+const my_component_1 = require("./my-component");
 exports.result = React.createElement(my_component_1.MyComponent, { x: "yes", y: {
         value: 42
     } });

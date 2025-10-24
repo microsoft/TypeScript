@@ -48,7 +48,7 @@ exports.C = C;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
+const b_1 = require("./b");
 let _ = new A(); // Error
 let __ = new B(); // Error
 let ___ = new b_1.C(); // Ok

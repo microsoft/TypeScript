@@ -23,7 +23,7 @@ export const b = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.b = {
     f: () => {
         class A {
@@ -37,7 +37,7 @@ exports.b = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.a = {
     f: () => {
         class A {

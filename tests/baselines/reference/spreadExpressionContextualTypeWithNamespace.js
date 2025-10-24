@@ -62,7 +62,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var stuff = require("./spreadExpressionContextualTypeWithNamespace_0");
+const stuff = require("./spreadExpressionContextualTypeWithNamespace_0");
 stuff.func;
 stuff.klass;
 stuff.obj;

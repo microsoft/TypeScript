@@ -30,6 +30,6 @@ exports.Drink = require("./constants");
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var drink_1 = require("./drink");
+const drink_1 = require("./drink");
 // 'Drink' only refers to a type, but is being used as a value here
 const x = drink_1.Drink.TEA;

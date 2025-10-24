@@ -36,7 +36,7 @@ var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
 //// [file4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var file3 = require("./file3");
+const file3 = require("./file3");
 var t1 = v1;
 var t2 = v2;
 var t3 = file3.v3;

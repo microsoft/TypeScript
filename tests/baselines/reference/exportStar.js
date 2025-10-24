@@ -73,7 +73,7 @@ __exportStar(require("./t3"), exports);
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var t4_1 = require("./t4");
+const t4_1 = require("./t4");
 t4_1.default;
 t4_1.x;
 t4_1.y;

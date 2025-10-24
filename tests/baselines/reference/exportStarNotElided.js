@@ -45,5 +45,5 @@ exports.aliased = require("./data1");
 //// [data1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _1 = require("./");
+const _1 = require("./");
 (0, _1.register)("ok");

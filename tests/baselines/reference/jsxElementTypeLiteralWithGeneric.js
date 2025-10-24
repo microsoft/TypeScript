@@ -28,7 +28,7 @@ let c = <ruhroh />;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 // should be fine - `ElementType` accepts `div`
 let a = React.createElement("div", null);
 // Should be an error.

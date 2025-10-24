@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a2 = exports.instance1 = exports.c1 = exports.a1 = void 0;
 exports.f1 = f1;
-var m1 = require("m1");
+const m1 = require("m1");
 exports.a1 = 10;
 class c1 {
 }

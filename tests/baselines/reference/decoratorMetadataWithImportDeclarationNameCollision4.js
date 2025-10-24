@@ -36,7 +36,7 @@ exports.db = db;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-var db_1 = require("./db"); // error no default export
+const db_1 = require("./db"); // error no default export
 function someDecorator(target) {
     return target;
 }

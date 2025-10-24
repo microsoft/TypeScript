@@ -112,7 +112,7 @@ export declare function child2(): void;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.child = child;
-var child2_1 = require("../child/child2");
+const child2_1 = require("../child/child2");
 function child() {
     (0, child2_1.child2)();
 }
@@ -191,7 +191,7 @@ export declare function child(): void;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = main;
-var child_1 = require("../child/child");
+const child_1 = require("../child/child");
 function main() {
     (0, child_1.child)();
 }

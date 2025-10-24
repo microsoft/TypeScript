@@ -13,6 +13,6 @@ class C extends Component { }
 //// [crash.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var first_1 = require("./first");
+const first_1 = require("./first");
 class C extends first_1.Component {
 }

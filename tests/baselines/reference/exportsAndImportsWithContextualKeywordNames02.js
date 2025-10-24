@@ -26,7 +26,7 @@ exports.as = as;
 //// [t2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var as = require("./t1");
+const as = require("./t1");
 var x = as.as;
 var y = as.return;
 //// [t3.js]

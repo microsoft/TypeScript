@@ -22,7 +22,7 @@ export class Text extends React.Component<{}, {}> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Text = void 0;
-var React = require("react");
+const React = require("react");
 class Text extends React.Component {
     constructor() {
         super(...arguments);

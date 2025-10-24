@@ -73,8 +73,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassA = void 0;
-var aux_1 = require("./aux");
-var aux1_1 = require("./aux1");
+const aux_1 = require("./aux");
+const aux1_1 = require("./aux1");
 function annotation() {
     return (target) => { };
 }

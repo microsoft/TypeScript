@@ -22,6 +22,6 @@ exports.x = 0;
 //// [/src/bin/app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var abc_1 = require("./shared/abc");
-var abc_2 = require("./shared2/abc");
+const abc_1 = require("./shared/abc");
+const abc_2 = require("./shared2/abc");
 abc_1.x + abc_2.x;

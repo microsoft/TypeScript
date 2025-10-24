@@ -41,7 +41,7 @@ let c = <PartRCComp data-extra="hello" />
 //// [file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class RC1 extends React.Component {
     render() {
         return null;

@@ -47,7 +47,7 @@ var E2;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var keys = require("./a");
+const keys = require("./a");
 const t1 = {
     [keys.n]: 1,
     [keys.n]: 1, // duplicate

@@ -25,8 +25,7 @@ foo1.b;
 export const a = 1;
 export const b = 2;
 //// [1.js]
-import * as default_1 from './0';
-export default default_1;
+export * as default from './0';
 //// [11.js]
 import * as ns from './0';
 export default ns;

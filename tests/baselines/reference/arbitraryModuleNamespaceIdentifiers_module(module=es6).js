@@ -42,8 +42,7 @@ export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_module";
 import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_module";
 if (valueY !== "someValue")
     throw "should be someValue";
-import * as _a from "./arbitraryModuleNamespaceIdentifiers_module";
-export { _a as "<Z>" };
+export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_module";
 import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_module";
 if (valueZ["<X>"] !== "someValue")
     throw "should be someValue";

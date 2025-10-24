@@ -21,7 +21,7 @@ function f1() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f2;
-var m1_1 = require("./m1");
+const m1_1 = require("./m1");
 function f2() {
     (0, m1_1.default)();
 }

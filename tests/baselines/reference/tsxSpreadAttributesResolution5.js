@@ -38,7 +38,7 @@ let e = <EmptyProp {...o} />;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class Poisoned extends React.Component {
     render() {
         return <div>Hello</div>;

@@ -17,5 +17,5 @@ module.exports = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tsConstants = void 0;
-var tsConstants = require("../lib/constants");
+const tsConstants = require("../lib/constants");
 exports.tsConstants = tsConstants;

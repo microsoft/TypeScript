@@ -27,7 +27,7 @@ function has(a) { return true; }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hello = hello;
-var c_1 = require("./c");
+const c_1 = require("./c");
 function hello() { }
 if ((0, c_1.has)('ember-debug')) {
     (0, c_1.default)('ember-debug');
@@ -35,5 +35,5 @@ if ((0, c_1.has)('ember-debug')) {
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var m_1 = require("./m");
+const m_1 = require("./m");
 (0, m_1.hello)();

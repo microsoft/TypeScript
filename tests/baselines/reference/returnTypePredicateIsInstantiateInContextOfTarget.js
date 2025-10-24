@@ -20,7 +20,7 @@ const TestRender = () => <TestComponent />;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 let TestComponent = (() => {
     class TestComponent extends React.Component {
         // Type guard is defined as a static class property

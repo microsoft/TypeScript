@@ -139,8 +139,8 @@ export { default as bar } from './bar';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
-var bundling_1 = require("./bundling");
-const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(function () { return require('./lazyIndex'); }));
+const bundling_1 = require("./bundling");
+const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(() => require('./lazyIndex')));
 exports.lazyBar = new bundling_1.LazyAction(lazyModule, m => m.bar);
 
 

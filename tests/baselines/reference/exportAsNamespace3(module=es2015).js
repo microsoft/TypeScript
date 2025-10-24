@@ -22,8 +22,7 @@ foo.ns.b;
 export const a = 1;
 export const b = 2;
 //// [1.js]
-import * as ns_1 from './0';
-export { ns_1 as ns };
+export * as ns from './0';
 ns.a;
 ns.b;
 let ns = { a: 1, b: 2 };

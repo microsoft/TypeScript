@@ -113,7 +113,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var react_1 = __importDefault(require("react"));
+const react_1 = __importDefault(require("react"));
 // Simple calls from real usecases
 function test1() {
     function test(t) {

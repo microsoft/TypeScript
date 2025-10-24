@@ -33,7 +33,7 @@ export const a = pkg.invoke();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-var pkg = require("package-b");
+const pkg = require("package-b");
 exports.a = pkg.invoke();
 
 

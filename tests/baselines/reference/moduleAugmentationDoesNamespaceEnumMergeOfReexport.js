@@ -51,6 +51,6 @@ __exportStar(require("./file"), exports);
 //// [augment.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ns = require("./reexport");
+const ns = require("./reexport");
 const g = ns.Root.A;
 f.x;

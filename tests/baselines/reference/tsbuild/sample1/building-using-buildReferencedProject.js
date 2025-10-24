@@ -217,18 +217,18 @@ export declare function multiply(a: number, b: number): number;
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AACA,0CAEC;AAHD,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AACA,0CAEC;AAHD,mCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,6CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 exports.getSecondsInDay = getSecondsInDay;
-var c = require("../core/index");
+const c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
 }
-var mod = require("../core/anotherModule");
+const mod = require("../core/anotherModule");
 exports.m = mod;
 //# sourceMappingURL=index.js.map
 

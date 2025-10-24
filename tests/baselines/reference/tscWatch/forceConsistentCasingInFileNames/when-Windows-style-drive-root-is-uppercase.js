@@ -65,8 +65,8 @@ exports.b = 2;
 //// [C:/workspaces/solution/project/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("C:/workspaces/solution/project/a");
-var a_2 = require("c:/workspaces/solution/project/a");
+const a_1 = require("C:/workspaces/solution/project/a");
+const a_2 = require("c:/workspaces/solution/project/a");
 a_1.a;
 a_2.b;
 

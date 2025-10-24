@@ -14,5 +14,5 @@ export class Foo {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.x = new b_1.default.Foo();

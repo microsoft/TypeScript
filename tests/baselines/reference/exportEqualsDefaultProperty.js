@@ -23,5 +23,5 @@ module.exports = x;
 //// [imp.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var exp_1 = require("./exp");
+const exp_1 = require("./exp");
 exp_1.default.toExponential(2);

@@ -24,5 +24,5 @@ declare global {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FooComponent = void 0;
-var React = require("react");
+const React = require("react");
 exports.FooComponent = <div></div>;

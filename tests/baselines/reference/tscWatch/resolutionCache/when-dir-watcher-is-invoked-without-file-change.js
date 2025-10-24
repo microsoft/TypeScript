@@ -78,7 +78,7 @@ exports.y = 10;
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var generated_1 = require("./app/services/generated");
+const generated_1 = require("./app/services/generated");
 const x = generated_1.y;
 
 

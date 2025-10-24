@@ -181,7 +181,7 @@ function Foo() { }
 //// [/home/src/projects/a/b/file1Consumer3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var moduleFile1_1 = require("./moduleFile1");
+const moduleFile1_1 = require("./moduleFile1");
 let y = (0, moduleFile1_1.Foo)();
 
 

@@ -27,9 +27,9 @@ if (b1) x = b1;
 //// [x.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
-var b0 = require("./b");
-var b1 = require("./b");
+const a_1 = require("./a");
+const b0 = require("./b");
+const b1 = require("./b");
 let x;
 if (a_1.default)
     x = a_1.default;

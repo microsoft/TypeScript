@@ -17,6 +17,6 @@ class A {
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var types = require("./a");
+const types = require("./a");
 types.A;
 const { A } = types;

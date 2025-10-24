@@ -28,7 +28,7 @@ let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
 /// <reference path="react16.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 // Repro from #44797
-var React = require("react");
+const React = require("react");
 let props = {
     foo: "",
     "data-yadda": 42, // Error

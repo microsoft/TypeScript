@@ -16,7 +16,7 @@ function Test<T extends 'button' | 'a'>(el: T) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 function SomeComponent(props) {
     // Just so the return value is RectElement, the rendered element doesnt matter
     return React.createElement("div", null);

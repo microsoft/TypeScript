@@ -45,7 +45,7 @@ exports.x = 1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
-var tslib_1 = require("tslib");
+const tslib_1 = require("tslib");
 tslib_1.__exportStar(require("./other"), exports);
 class A {
 }

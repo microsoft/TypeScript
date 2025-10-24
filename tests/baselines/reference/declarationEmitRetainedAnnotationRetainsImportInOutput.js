@@ -13,7 +13,7 @@ export const run = <E>(i: () => E.Whatever<E>): E.Whatever<E> => E.something(i);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
-var E = require("whatever");
+const E = require("whatever");
 const run = (i) => E.something(i);
 exports.run = run;
 

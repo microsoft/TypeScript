@@ -22,7 +22,7 @@ export const MyComp = Ctor.extends({foo: "bar"});
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComp = void 0;
-var ns = require("mod");
+const ns = require("mod");
 const Ctor = ns.default;
 exports.MyComp = Ctor.extends({ foo: "bar" });
 

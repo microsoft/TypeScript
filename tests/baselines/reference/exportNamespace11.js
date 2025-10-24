@@ -23,5 +23,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var intermediate = require("./intermediate");
+const intermediate = require("./intermediate");
 const ghost = new intermediate.Ghost();

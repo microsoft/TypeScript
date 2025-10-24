@@ -35,13 +35,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Debug = void 0;
-var Debug = require("../debug");
+const Debug = require("../debug");
 exports.Debug = Debug;
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("./_namespaces/ts");
-var ts_1 = require("./_namespaces/ts");
+const ts = require("./_namespaces/ts");
+const ts_1 = require("./_namespaces/ts");
 ts.Debug.assert(true);
 ts_1.Debug.assert(true);
 //// [ts.js]
@@ -65,7 +65,7 @@ __exportStar(require("../../core/_namespaces/ts"), exports);
 //// [bar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("./_namespaces/ts");
-var ts_1 = require("./_namespaces/ts");
+const ts = require("./_namespaces/ts");
+const ts_1 = require("./_namespaces/ts");
 ts.Debug.assert(true);
 ts_1.Debug.assert(true);

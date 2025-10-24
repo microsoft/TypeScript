@@ -23,7 +23,7 @@ const element = (
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 function Wrapper(props) {
     return React.createElement("div", null, props.children);
 }

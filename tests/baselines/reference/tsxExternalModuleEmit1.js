@@ -34,7 +34,7 @@ export class Button extends React.Component<any, any> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Button = void 0;
-var React = require("react");
+const React = require("react");
 class Button extends React.Component {
     render() {
         return <button>Some button</button>;
@@ -45,9 +45,9 @@ exports.Button = Button;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-var React = require("react");
+const React = require("react");
 // Should see var button_1 = require('./button') here
-var button_1 = require("./button");
+const button_1 = require("./button");
 class App extends React.Component {
     render() {
         return <button_1.Button />;

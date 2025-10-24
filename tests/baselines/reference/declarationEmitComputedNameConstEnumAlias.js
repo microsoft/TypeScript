@@ -25,7 +25,7 @@ exports.default = EnumExample;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var EnumExample_1 = require("./EnumExample");
+const EnumExample_1 = require("./EnumExample");
 exports.default = {
     [EnumExample_1.default.TEST]: {},
 };

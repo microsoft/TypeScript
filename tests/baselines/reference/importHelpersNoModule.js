@@ -29,7 +29,7 @@ class C {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
-var tslib_1 = require("tslib");
+const tslib_1 = require("tslib");
 class A {
 }
 exports.A = A;

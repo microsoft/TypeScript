@@ -35,7 +35,7 @@ const l = <div<number>/>; // existing type argument with no internal issues
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 // opening + closing
 const a = React.createElement("div", null); // empty type args
 const b = React.createElement("div", null); // trailing comma type args

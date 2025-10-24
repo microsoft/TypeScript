@@ -61,12 +61,12 @@ exports.default = "foo".length;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
-var foobar_1 = require("foobar");
+const foobar_1 = require("foobar");
 var X = foobar_1.default.X;
-var foobarx_1 = require("foobarx");
+const foobarx_1 = require("foobarx");
 const x = X;
 const x2 = foobarx_1.default;
-var a_1 = require("./a");
+const a_1 = require("./a");
 const b = new a_1.default(a_1.default.b);
-var b_1 = require("./b");
+const b_1 = require("./b");
 b_1.default + 1;

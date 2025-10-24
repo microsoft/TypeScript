@@ -100,8 +100,8 @@ exports.b = 2;
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var xY_1 = require("./xY");
-var link_1 = require("./link");
+const xY_1 = require("./xY");
+const link_1 = require("./link");
 xY_1.a;
 link_1.b;
 

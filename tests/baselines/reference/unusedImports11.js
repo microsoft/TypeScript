@@ -28,10 +28,10 @@ exports.default = Member;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var b_2 = require("./b");
-var ns = require("./b");
-var r = require("./b");
+const b_1 = require("./b");
+const b_2 = require("./b");
+const ns = require("./b");
+const r = require("./b");
 new b_1.Member();
 new b_2.default();
 new b_2.Member();

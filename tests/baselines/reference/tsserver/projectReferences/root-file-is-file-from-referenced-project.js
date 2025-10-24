@@ -93,7 +93,7 @@ export declare function evaluateKeyboardEvent(): void;
 //// [/user/username/projects/project/out/input/keyboard.test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var keyboard_1 = require("common/input/keyboard");
+const keyboard_1 = require("common/input/keyboard");
 function testEvaluateKeyboardEvent() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
 }
@@ -176,7 +176,7 @@ export {};
 //// [/user/username/projects/project/out/terminal.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var keyboard_1 = require("common/input/keyboard");
+const keyboard_1 = require("common/input/keyboard");
 function foo() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
 }

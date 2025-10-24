@@ -23,5 +23,5 @@ function add(a, b) {
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var example = require("./example");
+const example = require("./example");
 test(example, "default");

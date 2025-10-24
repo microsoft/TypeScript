@@ -20,7 +20,7 @@ exports.default = c;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var server_1 = require("./server");
+const server_1 = require("./server");
 exports.x = new server_1.default();
 
 

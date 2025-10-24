@@ -26,7 +26,7 @@ export namespace Something {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Something = void 0;
 exports.make = make;
-var me = require("./this");
+const me = require("./this");
 function make(x) {
     return null;
 }

@@ -74,7 +74,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var types = __importStar(require("./a"));
+const types = __importStar(require("./a"));
 exports.default = types;
 //// [d.js]
 "use strict";
@@ -83,7 +83,7 @@ new types.A(); // Error
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var types = require("./b");
+const types = require("./b");
 new types.A(); // Error
 //// [f.js]
 "use strict";
@@ -121,7 +121,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var types = __importStar(require("./b"));
+const types = __importStar(require("./b"));
 new types.default.A(); // Error
 //// [g.js]
 "use strict";

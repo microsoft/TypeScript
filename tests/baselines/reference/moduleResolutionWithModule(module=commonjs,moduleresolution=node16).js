@@ -15,5 +15,5 @@ p.thing();
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var p = require("pkg");
+const p = require("pkg");
 p.thing();

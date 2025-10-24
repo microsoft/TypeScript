@@ -25,7 +25,7 @@ exports.default = (suit, rank) => ({ suit, rank });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyCard = void 0;
-let lazyCard = () => Promise.resolve().then(function () { return require('./Card'); }).then(a => a.default);
+let lazyCard = () => Promise.resolve().then(() => require('./Card')).then(a => a.default);
 exports.lazyCard = lazyCard;
 
 

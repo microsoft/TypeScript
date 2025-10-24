@@ -46,7 +46,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.spread = void 0;
-var bug_1 = require("./bug");
+const bug_1 = require("./bug");
 exports.spread = __assign({}, (0, bug_1.createInstance)());
 
 

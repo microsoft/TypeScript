@@ -19,7 +19,7 @@ export function b(text: string) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = b;
-var a_1 = require("@ts-bug/a");
+const a_1 = require("@ts-bug/a");
 function b(text) {
     return (0, a_1.a)(text);
 }

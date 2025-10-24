@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass1 = void 0;
-var ng = require("angular2/core");
+const ng = require("angular2/core");
 let MyClass1 = (() => {
     var _a;
     let MyClass1 = class MyClass1 {

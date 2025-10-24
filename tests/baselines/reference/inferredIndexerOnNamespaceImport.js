@@ -22,7 +22,7 @@ exports.y = 5;
 //// [bar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo");
+const foo = require("./foo");
 function f(map) {
     // ...
 }

@@ -20,7 +20,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Repro = Repro;
 /// <reference path="react16.d.ts" />
 const Select = (p) => <p></p>;
-var react_1 = __importDefault(require("react"));
+const react_1 = __importDefault(require("react"));
 function Repro({ SelectProps = {} }) {
     return (<Select value={'test'} {...SelectProps}/>);
 }

@@ -33,7 +33,7 @@ function fooFunc() { }
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = require("./foo");
+const Foo = require("./foo");
 function check(x) {
     switch (x) {
         case Foo.ConstFooEnum.Some:

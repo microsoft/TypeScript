@@ -71,7 +71,7 @@ exports.texts.push("100");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
-var React = require("react");
+const React = require("react");
 function MyComponent(props) {
     return React.createElement("div", null);
 }

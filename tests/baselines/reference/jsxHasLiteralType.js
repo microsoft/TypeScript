@@ -13,7 +13,7 @@ const m = <MyComponent x="a"/>
 //// [jsxHasLiteralType.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class MyComponent extends React.Component {
 }
 const m = React.createElement(MyComponent, { x: "a" });

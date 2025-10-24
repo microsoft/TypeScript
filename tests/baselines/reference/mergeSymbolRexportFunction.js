@@ -19,5 +19,5 @@ export declare function Row(): void;
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _1 = require(".");
+const _1 = require(".");
 (0, _1.Row)();

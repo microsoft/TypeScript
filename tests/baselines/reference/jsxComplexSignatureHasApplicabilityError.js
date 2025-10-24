@@ -626,7 +626,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReactSingleSelect = createReactSingleSelect;
-var React = require("react");
+const React = require("react");
 function createReactSingleSelect(WrappedComponent) {
     return (props) => {
         return (React.createElement(ReactSelectClass, __assign({}, props, { multi: false, autosize: false, value: props.value, onChange: (value) => {

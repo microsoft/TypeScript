@@ -31,5 +31,5 @@ exports.default = { a: 1, b: 1, c: 1 };
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 a_1.default;

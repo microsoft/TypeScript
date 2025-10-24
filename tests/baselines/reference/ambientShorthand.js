@@ -17,7 +17,7 @@ foo(bar, baz, boom);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path="declarations.d.ts"/>
-var jquery_1 = require("jquery");
-var baz = require("fs");
-var boom = require("jquery");
+const jquery_1 = require("jquery");
+const baz = require("fs");
+const boom = require("jquery");
 (0, jquery_1.default)(jquery_1.bar, baz, boom);

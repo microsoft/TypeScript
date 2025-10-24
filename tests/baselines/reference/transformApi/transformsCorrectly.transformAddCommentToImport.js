@@ -16,7 +16,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = exports.Y = exports.X = void 0;
 /*comment*/
-var somewhere_1 = require("somewhere");
+const somewhere_1 = require("somewhere");
 Object.defineProperty(exports, "Value", { enumerable: true, get: function () { return somewhere_1.Value; } });
 /*comment*/
 var somewhere_2 = require("somewhere");

@@ -36,7 +36,7 @@ exports.Foo = Foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.c = exports.x = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return a_1.Foo; } });
 const c = new a_1.Foo();
 exports.c = c;

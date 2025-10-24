@@ -17,6 +17,6 @@ let x = Test; // emit test_1.default
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="component.d.ts" />
-var Test_1 = require("Test");
+const Test_1 = require("Test");
 let x = Test_1.default; // emit test_1.default
 <anything attr={Test_1.default}/>; // ?

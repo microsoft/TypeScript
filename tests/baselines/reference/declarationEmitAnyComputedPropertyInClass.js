@@ -15,7 +15,7 @@ export class C {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var abcdefgh_1 = require("abcdefgh");
+const abcdefgh_1 = require("abcdefgh");
 class C {
     [abcdefgh_1.default.someKey]() { }
     ;

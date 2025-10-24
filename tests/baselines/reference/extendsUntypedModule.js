@@ -16,7 +16,7 @@ export class A extends Foo { }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var foo_1 = require("foo");
+const foo_1 = require("foo");
 class A extends foo_1.default {
 }
 exports.A = A;

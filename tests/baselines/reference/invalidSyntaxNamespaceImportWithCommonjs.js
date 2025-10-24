@@ -16,6 +16,6 @@ exports.C = C;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var from = require();
+const from = require();
 from;
 "./0";

@@ -20,5 +20,5 @@ Object.defineProperty(exports, "x", { enumerable: true, get: function () { retur
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var file3_1 = require("./project/file3");
+const file3_1 = require("./project/file3");
 use(file3_1.x.toFixed());

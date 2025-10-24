@@ -127,7 +127,7 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
+const ts = require("typescript");
 function watch(rootFileNames, options) {
     const files = {};
     // initialize the list of files
