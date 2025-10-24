@@ -71,22 +71,12 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_mod
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-[96mproject2/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
-
-[7m2[0m   "compilerOptions": {
-[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
-
-[96mproject2/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
-
-[7m3[0m     "module": "none",
-[7m [0m [91m    ~~~~~~~~[0m
-
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
@@ -276,22 +266,12 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
     [7m [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
-[96mproject2/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
-
-[7m2[0m   "compilerOptions": {
-[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
-
-[96mproject2/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
-
-[7m3[0m     "module": "none",
-[7m [0m [91m    ~~~~~~~~[0m
-
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -416,22 +396,12 @@ CreatingProgramWith::
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[96mproject2/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
-
-[7m2[0m   "compilerOptions": {
-[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
-
-[96mproject2/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
-
-[7m3[0m     "module": "none",
-[7m [0m [91m    ~~~~~~~~[0m
-
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -642,22 +612,12 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
     [7m [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
-[96mproject2/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
-
-[7m2[0m   "compilerOptions": {
-[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
-
-[96mproject2/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
-
-[7m3[0m     "module": "none",
-[7m [0m [91m    ~~~~~~~~[0m
-
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -858,22 +818,12 @@ CreatingProgramWith::
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[96mproject2/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5095: [0mOption 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
-
-[7m2[0m   "compilerOptions": {
-[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
-
-[96mproject2/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5071: [0mOption '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
-
-[7m3[0m     "module": "none",
-[7m [0m [91m    ~~~~~~~~[0m
-
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

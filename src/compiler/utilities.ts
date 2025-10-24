@@ -9020,6 +9020,7 @@ const _computedOptions = createComputedCompilerOptions({
             }
             const moduleKind = _computedOptions.module.computeValue(compilerOptions);
             switch (moduleKind) {
+                case ModuleKind.None:
                 case ModuleKind.AMD:
                 case ModuleKind.UMD:
                 case ModuleKind.System:

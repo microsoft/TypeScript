@@ -198,34 +198,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 2,
-              "offset": 3
-            },
-            "end": {
-              "line": 2,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 3,
-              "offset": 5
-            },
-            "end": {
-              "line": 3,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
               "line": 3,
               "offset": 15
             },
@@ -417,34 +389,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 2,
-              "offset": 3
-            },
-            "end": {
-              "line": 2,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project1/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 3,
-              "offset": 5
-            },
-            "end": {
-              "line": 3,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project1/tsconfig.json"
-          },
-          {
-            "start": {
               "line": 3,
               "offset": 15
             },
@@ -617,34 +561,6 @@ Info seq  [hh:mm:ss:mss] event:
                 "code": 1413
               }
             ]
-          },
-          {
-            "start": {
-              "line": 2,
-              "offset": 3
-            },
-            "end": {
-              "line": 2,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 3,
-              "offset": 5
-            },
-            "end": {
-              "line": 3,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
           },
           {
             "start": {
@@ -887,34 +803,6 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
         "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
         "diagnostics": [
-          {
-            "start": {
-              "line": 2,
-              "offset": 3
-            },
-            "end": {
-              "line": 2,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 3,
-              "offset": 5
-            },
-            "end": {
-              "line": 3,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
           {
             "start": {
               "line": 3,
@@ -1165,34 +1053,6 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 2,
-              "offset": 3
-            },
-            "end": {
-              "line": 2,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 3,
-              "offset": 5
-            },
-            "end": {
-              "line": 3,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
               "line": 3,
               "offset": 15
             },
@@ -1350,34 +1210,6 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
         "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
         "diagnostics": [
-          {
-            "start": {
-              "line": 2,
-              "offset": 3
-            },
-            "end": {
-              "line": 2,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 3,
-              "offset": 5
-            },
-            "end": {
-              "line": 3,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
-          },
           {
             "start": {
               "line": 3,

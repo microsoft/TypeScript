@@ -169,34 +169,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 3,
-              "offset": 3
-            },
-            "end": {
-              "line": 3,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 5,
-              "offset": 5
-            },
-            "end": {
-              "line": 5,
-              "offset": 13
-            },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/tsconfig.json"
-          },
-          {
-            "start": {
               "line": 5,
               "offset": 15
             },

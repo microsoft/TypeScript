@@ -349,34 +349,6 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 8,
               "offset": 20
             },
-            "text": "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.",
-            "code": 5071,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/SiblingClass/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 8,
-              "offset": 3
-            },
-            "end": {
-              "line": 8,
-              "offset": 20
-            },
-            "text": "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-            "code": 5095,
-            "category": "error",
-            "fileName": "/user/username/projects/myproject/SiblingClass/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 8,
-              "offset": 3
-            },
-            "end": {
-              "line": 8,
-              "offset": 20
-            },
             "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
             "code": 5107,
             "category": "error",
