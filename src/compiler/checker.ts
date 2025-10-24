@@ -30780,7 +30780,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-
     /**
      * This function marks the type used for metadata decorator as referenced if it is import
      * from external module.
