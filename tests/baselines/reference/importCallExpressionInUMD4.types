@@ -28,6 +28,7 @@ export function backup() { return "backup"; }
 === 2.ts ===
 declare var console: any;
 >console : any
+>        : ^^^
 
 class C {
 >C : C
@@ -73,7 +74,9 @@ class C {
 
             console.log(Zero.foo());
 >console.log(Zero.foo()) : any
+>                        : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -91,15 +94,19 @@ class C {
 >async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        } : (err: any) => Promise<void>
 >                                                                                                                                     : ^   ^^^^^^^^^^^^^^^^^^^^^^^
 >err : any
+>    : ^^^
 
             console.log(err);
 >console.log(err) : any
+>                 : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
 >    : ^^^
 >err : any
+>    : ^^^
 
             let one = await import("./1");
 >one : typeof import("1")
@@ -113,7 +120,9 @@ class C {
 
             console.log(one.backup());
 >console.log(one.backup()) : any
+>                          : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -175,7 +184,9 @@ export class D {
 
             console.log(Zero.foo());
 >console.log(Zero.foo()) : any
+>                        : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -193,15 +204,19 @@ export class D {
 >async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        } : (err: any) => Promise<void>
 >                                                                                                                                     : ^   ^^^^^^^^^^^^^^^^^^^^^^^
 >err : any
+>    : ^^^
 
             console.log(err);
 >console.log(err) : any
+>                 : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
 >    : ^^^
 >err : any
+>    : ^^^
 
             let one = await import("./1");
 >one : typeof import("1")
@@ -215,7 +230,9 @@ export class D {
 
             console.log(one.backup());
 >console.log(one.backup()) : any
+>                          : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any

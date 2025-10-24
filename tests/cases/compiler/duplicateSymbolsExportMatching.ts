@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 namespace M {
     export interface E { }
     interface I { }

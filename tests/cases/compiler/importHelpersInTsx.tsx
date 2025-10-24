@@ -1,7 +1,6 @@
 // @importHelpers: true
 // @target: es5
 // @module: commonjs
-// @moduleResolution: classic
 // @jsx: react
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
@@ -15,7 +14,7 @@ declare var React: any;
 declare var o: any;
 const x = <span {...o} />
 
-// @filename: tslib.d.ts
+// @filename: node_modules/tslib/index.d.ts
 export declare function __extends(d: Function, b: Function): void;
 export declare function __assign(t: any, ...sources: any[]): any;
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;

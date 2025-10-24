@@ -38,6 +38,14 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -70,7 +78,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -106,8 +114,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 842
+  "size": 883
 }
 
 
@@ -131,16 +161,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
-/home/src/workspaces/project/c.ts
-/home/src/workspaces/project/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with sourceMap
 
@@ -148,6 +173,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --sourceMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -180,7 +213,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 //# sourceMappingURL=outFile.js.map
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js","sourceMap":true},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js","sourceMap":true},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -217,8 +250,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "outFile": "./outFile.js",
     "sourceMap": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 859
+  "size": 900
 }
 
 //// [/home/src/workspaces/outFile.js.map]
@@ -246,11 +301,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: should re-emit only js so they dont contain sourcemap
 
@@ -258,6 +313,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -290,7 +353,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -326,8 +389,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 842
+  "size": 883
 }
 
 
@@ -351,11 +436,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with declaration, emit Dts and should not emit js
 
@@ -363,10 +448,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --declaration
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -403,8 +496,30 @@ Output::
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 861
+  "size": 902
 }
 
 //// [/home/src/workspaces/outFile.d.ts]
@@ -444,11 +559,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with declaration and declarationMap
 
@@ -456,10 +571,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --declaration --declarationMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -497,8 +620,30 @@ Output::
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 883
+  "size": 924
 }
 
 //// [/home/src/workspaces/outFile.d.ts]
@@ -542,11 +687,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -554,6 +699,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 
@@ -577,11 +730,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: local change
 
@@ -592,6 +745,14 @@ export const a = 10;const aLocal = 100;
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -624,7 +785,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -660,8 +821,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 843
+  "size": 884
 }
 
 
@@ -685,16 +868,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
-/home/src/workspaces/project/c.ts
-/home/src/workspaces/project/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with declaration and declarationMap
 
@@ -702,10 +880,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --declaration --declarationMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -743,8 +929,30 @@ Output::
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 884
+  "size": 925
 }
 
 //// [/home/src/workspaces/outFile.d.ts] file written with same contents
@@ -772,11 +980,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -784,6 +992,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 
@@ -807,11 +1023,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with inlineSourceMap
 
@@ -819,6 +1035,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --inlineSourceMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -851,7 +1075,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0RmlsZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInByb2plY3QvYS50cyIsInByb2plY3QvYi50cyIsInByb2plY3QvYy50cyIsInByb2plY3QvZC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0lBQWEsUUFBQSxDQUFDLEdBQUcsRUFBRSxDQUFDO0lBQUEsSUFBTSxNQUFNLEdBQUcsR0FBRyxDQUFDOzs7Ozs7SUNBMUIsUUFBQSxDQUFDLEdBQUcsRUFBRSxDQUFDO0lBQUEsSUFBTSxNQUFNLEdBQUcsRUFBRSxDQUFDOzs7Ozs7SUNBRCxRQUFBLENBQUMsR0FBRyxLQUFDLENBQUM7Ozs7OztJQ0FOLFFBQUEsQ0FBQyxHQUFHLEtBQUMsQ0FBQyJ9
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"inlineSourceMap":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"inlineSourceMap":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -888,8 +1112,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 866
+  "size": 907
 }
 
 
@@ -914,11 +1160,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with sourceMap
 
@@ -926,6 +1172,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --sourceMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -958,7 +1212,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 //# sourceMappingURL=outFile.js.map
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js","sourceMap":true},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js","sourceMap":true},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -995,8 +1249,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "outFile": "./outFile.js",
     "sourceMap": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 860
+  "size": 901
 }
 
 //// [/home/src/workspaces/outFile.js.map]
@@ -1024,11 +1300,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: emit js files
 
@@ -1036,6 +1312,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -1068,7 +1352,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -1104,8 +1388,30 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 843
+  "size": 884
 }
 
 
@@ -1129,11 +1435,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with declaration and declarationMap
 
@@ -1141,10 +1447,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --declaration --declarationMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -1182,8 +1496,30 @@ Output::
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 884
+  "size": 925
 }
 
 //// [/home/src/workspaces/outFile.d.ts] file written with same contents
@@ -1211,11 +1547,11 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: with declaration and declarationMap, should not re-emit
 
@@ -1223,6 +1559,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --declaration --declarationMap
 Output::
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:5[0m
+
 
 
 
@@ -1248,8 +1592,8 @@ Program files::
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
