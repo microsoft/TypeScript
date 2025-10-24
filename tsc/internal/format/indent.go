@@ -127,7 +127,7 @@ func getActualIndentationForNode(current *ast.Node, parent *ast.Node, cuurentLin
 }
 
 func isArgumentAndStartLineOverlapsExpressionBeingCalled(parent *ast.Node, child *ast.Node, childStartLine int, sourceFile *ast.SourceFile) bool {
-	if !(ast.IsCallExpression(child) && slices.Contains(parent.AsCallExpression().Arguments.Nodes, child)) {
+	if !(ast.IsCallExpression(parent) && slices.Contains(parent.AsCallExpression().Arguments.Nodes, child)) {
 		return false
 	}
 	expressionOfCallExpressionEnd := parent.Expression().End()
