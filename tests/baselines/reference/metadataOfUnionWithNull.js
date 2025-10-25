@@ -90,7 +90,7 @@ let B = (() => {
     ], B.prototype, "d", void 0);
     __decorate([
         PropDeco,
-        __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+        __metadata("design:type", Symbol)
     ], B.prototype, "e", void 0);
     __decorate([
         PropDeco,
@@ -106,7 +106,7 @@ let B = (() => {
     ], B.prototype, "h", void 0);
     __decorate([
         PropDeco,
-        __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+        __metadata("design:type", Symbol)
     ], B.prototype, "j", void 0);
     return B;
 })();
