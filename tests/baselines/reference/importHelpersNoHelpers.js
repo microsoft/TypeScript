@@ -67,7 +67,7 @@ C = tslib_1.__decorate([
     dec
 ], C);
 const o = { a: 1 };
-const y = tslib_1.__assign({}, o);
+const y = Object.assign({}, o);
 const x = tslib_1.__rest(y, []);
 //// [script.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

@@ -23,25 +23,14 @@ var o5 = { ...nullUnion, ...nullUnion };
 
 
 //// [spreadUnion2.js]
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var o1;
-var o1 = __assign({}, undefinedUnion);
+var o1 = Object.assign({}, undefinedUnion);
 var o2;
-var o2 = __assign({}, nullUnion);
+var o2 = Object.assign({}, nullUnion);
 var o3;
-var o3 = __assign(__assign({}, undefinedUnion), nullUnion);
-var o3 = __assign(__assign({}, nullUnion), undefinedUnion);
+var o3 = Object.assign(Object.assign({}, undefinedUnion), nullUnion);
+var o3 = Object.assign(Object.assign({}, nullUnion), undefinedUnion);
 var o4;
-var o4 = __assign(__assign({}, undefinedUnion), undefinedUnion);
+var o4 = Object.assign(Object.assign({}, undefinedUnion), undefinedUnion);
 var o5;
-var o5 = __assign(__assign({}, nullUnion), nullUnion);
+var o5 = Object.assign(Object.assign({}, nullUnion), nullUnion);
