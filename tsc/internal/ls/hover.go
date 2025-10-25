@@ -108,6 +108,10 @@ func formatQuickInfo(quickInfo string) string {
 }
 
 func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, *ast.Node) {
+	container := getContainerNode(node)
+	if node.Kind == ast.KindThisKeyword && ast.IsInExpressionContext(node) {
+		return c.TypeToStringEx(c.GetTypeAtLocation(node), container, typeFormatFlags), nil
+	}
 	isAlias := symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0
 	if isAlias {
 		symbol = c.GetAliasedSymbol(symbol)
@@ -129,7 +133,6 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		// If the symbol has a type meaning and we're in a type context, remove value-only meanings
 		flags &^= ast.SymbolFlagsVariable | ast.SymbolFlagsFunction
 	}
-	container := getContainerNode(node)
 	var b strings.Builder
 	if isAlias {
 		b.WriteString("(alias) ")
