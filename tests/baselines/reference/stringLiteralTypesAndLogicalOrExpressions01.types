@@ -30,7 +30,7 @@ let c: "foo" = b;
 let d = b || "bar";
 >d : string
 >  : ^^^^^^
->b || "bar" : "foo" | "bar"
+>b || "bar" : "bar" | "foo"
 >           : ^^^^^^^^^^^^^
 >b : "foo"
 >  : ^^^^^
@@ -38,7 +38,7 @@ let d = b || "bar";
 >      : ^^^^^
 
 let e: "foo" | "bar" = d;
->e : "foo" | "bar"
+>e : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >d : string
 >  : ^^^^^^

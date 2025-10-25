@@ -14,7 +14,7 @@ inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2322: Type 'string | number 
   Type 'string' is not assignable to type 'object'.
 inDoesNotOperateOnPrimitiveTypes.ts(36,14): error TS2322: Type 'T' is not assignable to type 'object'.
 inDoesNotOperateOnPrimitiveTypes.ts(41,12): error TS2322: Type 'T' is not assignable to type 'object'.
-  Type 'object | "hello"' is not assignable to type 'object'.
+  Type '"hello" | object' is not assignable to type 'object'.
     Type 'string' is not assignable to type 'object'.
 inDoesNotOperateOnPrimitiveTypes.ts(53,14): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.
@@ -92,7 +92,7 @@ inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: Type 'T & (0 | 1 | 2)'
       "key" in thing; // Ok (because narrowing is impossible)
                ~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! error TS2322:   Type 'object | "hello"' is not assignable to type 'object'.
+!!! error TS2322:   Type '"hello" | object' is not assignable to type 'object'.
 !!! error TS2322:     Type 'string' is not assignable to type 'object'.
     }
     

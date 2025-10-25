@@ -173,7 +173,7 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 >    : ^^^^    ^^     ^^^^^    
 >"Matching" : "Matching"
 >           : ^^^^^^^^^^
->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
+>filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return (up: U): up is Filter<U, Q> => !!up;
@@ -191,7 +191,7 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 
 /** All valid filter queries (every update key except update_id) */
 export type FilterQuery = keyof Omit<Update, "update_id">;
->FilterQuery : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost"
+>FilterQuery : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /** Narrow down an update object based on a filter query */
@@ -312,7 +312,7 @@ class EventHub<U extends Update> {
 >       : ^^^^^^
 >"handlers for" : "handlers for"
 >               : ^^^^^^^^^^^^^^
->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
+>filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return new EventHub<Filter<U, Q>>();

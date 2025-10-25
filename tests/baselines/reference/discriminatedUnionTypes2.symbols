@@ -126,9 +126,9 @@ function f15(x: Result<number>) {
 >Result : Symbol(Result, Decl(discriminatedUnionTypes2.ts, 33, 1))
 
     if (!x.error) {
->x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
+>x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18), Decl(discriminatedUnionTypes2.ts, 35, 52))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
->error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18), Decl(discriminatedUnionTypes2.ts, 35, 52))
 
         x.value;
 >x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))

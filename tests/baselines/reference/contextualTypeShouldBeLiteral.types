@@ -21,7 +21,7 @@ interface Y {
 >     : ^^^
 
     value: 'none' | 'done';
->value : "none" | "done"
+>value : "done" | "none"
 >      : ^^^^^^^^^^^^^^^
 
     method(): void;
@@ -72,11 +72,11 @@ foo({
 >     : ^^^
 
         this.value;
->this.value : "none" | "done"
+>this.value : "done" | "none"
 >           : ^^^^^^^^^^^^^^^
 >this : Y
 >     : ^
->value : "none" | "done"
+>value : "done" | "none"
 >      : ^^^^^^^^^^^^^^^
     }
 });
@@ -101,7 +101,7 @@ interface Y2 {
 >      : ^^^
 
     value: 'none' | 'done';
->value : "none" | "done"
+>value : "done" | "none"
 >      : ^^^^^^^^^^^^^^^
 
     method(): void;

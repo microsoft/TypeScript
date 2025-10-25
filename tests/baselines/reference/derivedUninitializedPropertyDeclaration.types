@@ -208,7 +208,7 @@ class K extends J {
 >  : ^^^^^^^^^
 
     r!: 4 | 5 // error, from class
->r : 5 | 4
+>r : 4 | 5
 >  : ^^^^^
 }
 

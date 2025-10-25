@@ -12,9 +12,9 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
 >    : ^^^^^^^^^^^
 
     const obj = {} as Record<keyof Shape | "knownLiteralKey", number>;
->obj : Record<keyof Shape | "knownLiteralKey", number>
+>obj : Record<"knownLiteralKey" | keyof Shape, number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{} as Record<keyof Shape | "knownLiteralKey", number> : Record<keyof Shape | "knownLiteralKey", number>
+>{} as Record<keyof Shape | "knownLiteralKey", number> : Record<"knownLiteralKey" | keyof Shape, number>
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
@@ -24,7 +24,7 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
 >                        : ^
 >obj.knownLiteralKey : number
 >                    : ^^^^^^
->obj : Record<keyof Shape | "knownLiteralKey", number>
+>obj : Record<"knownLiteralKey" | keyof Shape, number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >knownLiteralKey : number
 >                : ^^^^^^
@@ -34,9 +34,9 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
     obj[key] = 2;
 >obj[key] = 2 : 2
 >             : ^
->obj[key] : Record<keyof Shape | "knownLiteralKey", number>[keyof Shape]
+>obj[key] : Record<"knownLiteralKey" | keyof Shape, number>[keyof Shape]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : Record<keyof Shape | "knownLiteralKey", number>
+>obj : Record<"knownLiteralKey" | keyof Shape, number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : keyof Shape
 >    : ^^^^^^^^^^^
@@ -48,7 +48,7 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
 >                          : ^
 >obj.unknownLiteralKey : any
 >                      : ^^^
->obj : Record<keyof Shape | "knownLiteralKey", number>
+>obj : Record<"knownLiteralKey" | keyof Shape, number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unknownLiteralKey : any
 >                  : ^^^
@@ -60,7 +60,7 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
 >                      : ^
 >obj['' as string] : any
 >                  : ^^^
->obj : Record<keyof Shape | "knownLiteralKey", number>
+>obj : Record<"knownLiteralKey" | keyof Shape, number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' as string : string
 >             : ^^^^^^

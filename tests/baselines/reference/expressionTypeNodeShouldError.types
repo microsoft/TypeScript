@@ -31,7 +31,7 @@ class C {
         const x: "".typeof(this.foo);
 >x : ""
 >  : ^^
->typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(this.foo) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.foo) : () => void
 >           : ^^^^^^^^^^
@@ -61,7 +61,7 @@ const nodes = document.getElementsByTagName("li");
 type ItemType = "".typeof(nodes.item(0));
 >ItemType : ""
 >         : ^^
->typeof(nodes.item(0)) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(nodes.item(0)) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(nodes.item(0)) : HTMLLIElement
 >                : ^^^^^^^^^^^^^
@@ -96,7 +96,7 @@ class C2 {
         const x: 3.141592.typeof(this.foo);
 >x : 3.141592
 >  : ^^^^^^^^
->typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(this.foo) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.foo) : () => void
 >           : ^^^^^^^^^^
@@ -126,7 +126,7 @@ const nodes2 = document.getElementsByTagName("li");
 type ItemType2 = 4..typeof(nodes.item(0));
 >ItemType2 : 4
 >          : ^
->typeof(nodes.item(0)) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(nodes.item(0)) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(nodes.item(0)) : HTMLLIElement
 >                : ^^^^^^^^^^^^^
@@ -163,7 +163,7 @@ class C3 {
 >  : ^^^^^
 >false : false
 >      : ^^^^^
->typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(this.foo) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.foo) : () => void
 >           : ^^^^^^^^^^
@@ -195,7 +195,7 @@ type ItemType3 = true.typeof(nodes.item(0));
 >          : ^^^^
 >true : true
 >     : ^^^^
->typeof(nodes.item(0)) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(nodes.item(0)) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(nodes.item(0)) : HTMLLIElement
 >                : ^^^^^^^^^^^^^

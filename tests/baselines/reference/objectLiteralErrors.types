@@ -498,9 +498,9 @@ var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
 >  : ^
 
 var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
->f17 : { readonly a: number; readonly b: number; }
+>f17 : { readonly b: number; readonly a: number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a: 0, get b() { return 1; }, get a() { return 0; } } : { readonly a: number; readonly b: number; }
+>{ a: 0, get b() { return 1; }, get a() { return 0; } } : { readonly b: number; readonly a: number; }
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^

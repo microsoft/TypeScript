@@ -97,11 +97,11 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 
 interface tup {
     0: number[]|string[];
->0 : number[] | string[]
+>0 : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
     1: number[]|string[];
->1 : number[] | string[]
+>1 : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 }
 interface myArray extends Array<Number> { }
@@ -111,7 +111,7 @@ var c0: tup = [...temp2];                         // Error
 >   : ^^^
 >[...temp2] : [number[], string[]]
 >           : ^^^^^^^^^^^^^^^^^^^^
->...temp2 : number[] | string[]
+>...temp2 : string[] | number[]
 >         : ^^^^^^^^^^^^^^^^^^^
 >temp2 : [number[], string[]]
 >      : ^^^^^^^^^^^^^^^^^^^^

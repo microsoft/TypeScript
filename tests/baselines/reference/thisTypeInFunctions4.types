@@ -29,7 +29,7 @@ declare function callsCallback(cb: (name: string)=>void)
 function problemFunction(this: CorrectObject | WrongObject): void {
 >problemFunction : (this: CorrectObject | WrongObject) => void
 >                : ^    ^^                           ^^^^^    
->this : WrongObject | CorrectObject
+>this : CorrectObject | WrongObject
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     //check type
@@ -40,7 +40,7 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >                : ^^^^^^^
 >isCorrect : (obj: any) => obj is CorrectObject
 >          : ^   ^^   ^^^^^                    
->this : WrongObject | CorrectObject
+>this : CorrectObject | WrongObject
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     callsCallback((name)=>{

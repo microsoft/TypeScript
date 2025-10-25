@@ -20,7 +20,7 @@ declare const a: { error: { prop: string }, result: undefined } | { error: undef
 if (typeof a.error === 'undefined') {
 >typeof a.error === 'undefined' : boolean
 >                               : ^^^^^^^
->typeof a.error : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a.error : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.error : { prop: string; }
 >        : ^^^^^^^^      ^^^
@@ -60,7 +60,7 @@ else {
 if (typeof a.error !== 'undefined') {
 >typeof a.error !== 'undefined' : boolean
 >                               : ^^^^^^^
->typeof a.error : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a.error : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.error : { prop: string; }
 >        : ^^^^^^^^      ^^^

@@ -14,7 +14,7 @@ function f1() {
     if (typeof a !== 'boolean') {
 >typeof a !== 'boolean' : boolean
 >                       : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ function f1() {
             if (typeof a === 'string') {
 >typeof a === 'string' : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -105,7 +105,7 @@ function f2() {
     if (typeof a === 'string') {
 >typeof a === 'string' : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -123,7 +123,7 @@ function f2() {
             if (typeof a === 'string') {
 >typeof a === 'string' : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^

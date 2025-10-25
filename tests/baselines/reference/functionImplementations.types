@@ -556,7 +556,7 @@ var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base | AnotherClass
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => AnotherClass | Base
 >                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
@@ -578,7 +578,7 @@ var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base | AnotherClass
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => AnotherClass | Base
 >                                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^

@@ -6,7 +6,7 @@ declare let a: number | string;
 >  : ^^^^^^^^^^^^^^^
 
 declare let b: PromiseLike<number> | PromiseLike<string>;
->b : PromiseLike<number> | PromiseLike<string>
+>b : PromiseLike<string> | PromiseLike<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let c: PromiseLike<number | string>;
@@ -38,7 +38,7 @@ async function f() {
 >        : ^^^^^^^^^^^^^^^
 >await b : string | number
 >        : ^^^^^^^^^^^^^^^
->b : PromiseLike<number> | PromiseLike<string>
+>b : PromiseLike<string> | PromiseLike<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	let await_c = await c;

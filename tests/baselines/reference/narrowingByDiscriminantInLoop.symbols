@@ -56,9 +56,9 @@ function insertInterface(callbackType: InterfaceType) {
 >members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 
         if (memberType.type === "const") {
->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
             memberType.idlType;  // string
 >memberType.idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
@@ -98,9 +98,9 @@ function insertInterface2(callbackType: InterfaceType) {
 >members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 
         if (memberType.type === "operation") {
->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 35, 14))
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
             memberType.idlType.origin;  // string
 >memberType.idlType.origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
@@ -118,9 +118,9 @@ function foo(memberType: IDLMemberTypes) {
 >IDLMemberTypes : Symbol(IDLMemberTypes, Decl(narrowingByDiscriminantInLoop.ts, 0, 0))
 
     if (memberType.type === "const") {
->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 42, 13))
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
         memberType.idlType;  // string
 >memberType.idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))

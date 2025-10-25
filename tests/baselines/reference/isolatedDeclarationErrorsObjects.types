@@ -330,9 +330,9 @@ const part = { a: 1 };
 >  : ^
 
 export const oWithSpread = {
->oWithSpread : { c: number; part: { a: number; }; a: number; b: number; }
+>oWithSpread : { a: number; b: number; c: number; part: { a: number; }; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    b: 1,    ...part,    c: 1,    part,} : { c: number; part: { a: number; }; a: number; b: number; }
+>{    b: 1,    ...part,    c: 1,    part,} : { a: number; b: number; c: number; part: { a: number; }; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b: 1,

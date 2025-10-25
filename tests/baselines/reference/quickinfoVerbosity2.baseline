@@ -8,17 +8,17 @@
 // const both: BothType = 1;
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | const both: (number | (string | {})) | (boolean | (symbol | (() => void)))
+// | const both: (boolean | (symbol | (() => void))) | (number | (string | {}))
 // | (verbosity level: 3)
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | const both: (number | Str) | (boolean | Sym)
+// | const both: (boolean | Sym) | (number | Str)
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | const both: FooType | BarType
+// | const both: BarType | FooType
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //       ^^^^
@@ -107,7 +107,7 @@
           "kind": "space"
         },
         {
-          "text": "FooType",
+          "text": "BarType",
           "kind": "aliasName"
         },
         {
@@ -123,7 +123,7 @@
           "kind": "space"
         },
         {
-          "text": "BarType",
+          "text": "FooType",
           "kind": "aliasName"
         }
       ],
@@ -171,7 +171,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "number",
+          "text": "boolean",
           "kind": "keyword"
         },
         {
@@ -187,7 +187,7 @@
           "kind": "space"
         },
         {
-          "text": "Str",
+          "text": "Sym",
           "kind": "aliasName"
         },
         {
@@ -211,7 +211,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "boolean",
+          "text": "number",
           "kind": "keyword"
         },
         {
@@ -227,7 +227,7 @@
           "kind": "space"
         },
         {
-          "text": "Sym",
+          "text": "Str",
           "kind": "aliasName"
         },
         {
@@ -268,74 +268,6 @@
         },
         {
           "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
           "kind": "punctuation"
         },
         {
@@ -412,6 +344,74 @@
         },
         {
           "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
           "kind": "punctuation"
         },
         {

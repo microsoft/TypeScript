@@ -912,9 +912,9 @@ function f20<T extends Number>(x: T) {
 >  : ^
 
     var r19 = true ? new Object() : x; // ok
->r19 : Object | T
+>r19 : T | Object
 >    : ^^^^^^^^^^
->true ? new Object() : x : Object | T
+>true ? new Object() : x : T | Object
 >                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -926,9 +926,9 @@ function f20<T extends Number>(x: T) {
 >  : ^
 
     var r19 = true ? x : new Object(); // ok
->r19 : Object | T
+>r19 : T | Object
 >    : ^^^^^^^^^^
->true ? x : new Object() : Object | T
+>true ? x : new Object() : T | Object
 >                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
