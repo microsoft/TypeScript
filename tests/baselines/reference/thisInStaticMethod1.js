@@ -10,13 +10,10 @@ class foo {
 var x = foo.bar();
 
 //// [thisInStaticMethod1.js]
-let foo = (() => {
-    class foo {
-        static bar() {
-            return this.x;
-        }
+class foo {
+    static bar() {
+        return this.x;
     }
-    foo.x = 3;
-    return foo;
-})();
+}
+foo.x = 3;
 var x = foo.bar();

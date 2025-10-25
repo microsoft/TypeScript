@@ -11,15 +11,9 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers6.js]
-let C = (() => {
-    class C {
-    }
-    C.f = 1;
-    return C;
-})();
-let D = (() => {
-    class D extends C {
-    }
-    D.c = super();
-    return D;
-})();
+class C {
+}
+C.f = 1;
+class D extends C {
+}
+D.c = super();

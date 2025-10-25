@@ -86,12 +86,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-let B = (() => {
-    class B {
-    }
-    B.a = 1;
-    return B;
-})();
+var _a;
+class B {
+}
+B.a = 1;
 class C extends B {
 }
 (() => {
@@ -148,18 +146,14 @@ function foo1() {
         }
     })();
 }
-let foo2 = (() => {
-    var _a;
-    class foo2 {
-    }
-    _a = foo2;
-    (() => {
+class foo2 {
+}
+_a = foo2;
+(() => {
+    _a.b; // should error
+    let b; // ok
+    if (1) {
         _a.b; // should error
-        let b; // ok
-        if (1) {
-            _a.b; // should error
-        }
-    })();
-    foo2.b = 1;
-    return foo2;
+    }
 })();
+foo2.b = 1;

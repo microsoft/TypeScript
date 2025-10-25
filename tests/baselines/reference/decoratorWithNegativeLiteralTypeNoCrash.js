@@ -17,16 +17,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let A = (() => {
-    class A {
-        constructor() {
-            this.field1 = -1;
-        }
+class A {
+    constructor() {
+        this.field1 = -1;
     }
-    __decorate([
-        decorator,
-        __metadata("design:type", Number)
-    ], A.prototype, "field1", void 0);
-    return A;
-})();
+}
+__decorate([
+    decorator,
+    __metadata("design:type", Number)
+], A.prototype, "field1", void 0);
 function decorator(target, field) { }

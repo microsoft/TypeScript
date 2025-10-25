@@ -13,14 +13,11 @@ using after = null;
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.7.js]
-let C = (() => {
-    let C = class C {
-    };
-    C = __decorate([
-        dec
-    ], C);
-    return C;
-})();
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
 var after;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {

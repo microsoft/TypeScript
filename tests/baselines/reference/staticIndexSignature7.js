@@ -13,12 +13,9 @@ class Y {
 
 //// [staticIndexSignature7.js]
 "use strict";
-let X = (() => {
-    class X {
-    }
-    X.x = 12; // Should error, incompatible with index signature
-    return X;
-})();
+class X {
+}
+X.x = 12; // Should error, incompatible with index signature
 class Y {
     static foo() { } // should error, incompatible with index signature
 }

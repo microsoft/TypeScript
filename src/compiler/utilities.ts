@@ -7830,7 +7830,7 @@ export function moveRangePastModifiers(node: Node): TextRange {
  * @param pos The start position.
  * @param token The token.
  *
- * @internal
+ * @internal @knipignore
  */
 export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
     return createRange(pos, pos + tokenToString(token)!.length);
@@ -10565,7 +10565,7 @@ export function setTextRangePos<T extends ReadonlyTextRange>(range: T, pos: numb
 /**
  * Bypasses immutability and directly sets the `end` property of a `TextRange` or `Node`.
  *
- * @internal
+ * @internal @knipignore
  */
 export function setTextRangeEnd<T extends ReadonlyTextRange>(range: T, end: number): T {
     (range as TextRange).end = end;

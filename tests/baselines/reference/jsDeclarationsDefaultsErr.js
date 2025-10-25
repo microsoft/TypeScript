@@ -31,15 +31,12 @@ export {x as default};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and alias (should error, see #32367)
-let Cls = (() => {
-    class Cls {
-        constructor() {
-            this.x = 12;
-        }
+class Cls {
+    constructor() {
+        this.x = 12;
     }
-    Cls.y = "ok";
-    return Cls;
-})();
+}
+Cls.y = "ok";
 exports.default = Cls;
 /**
  * @typedef {string | number} default

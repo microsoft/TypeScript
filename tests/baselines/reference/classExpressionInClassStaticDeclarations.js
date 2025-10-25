@@ -6,13 +6,10 @@ class C {
 }
 
 //// [classExpressionInClassStaticDeclarations.js]
-let C = (() => {
-    class C {
-    }
-    C.D = class extends C {
-    };
-    return C;
-})();
+class C {
+}
+C.D = class extends C {
+};
 
 
 //// [classExpressionInClassStaticDeclarations.d.ts]

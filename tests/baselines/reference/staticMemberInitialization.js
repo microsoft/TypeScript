@@ -9,11 +9,8 @@ var c = new C();
 var r = C.x;
 
 //// [staticMemberInitialization.js]
-let C = (() => {
-    class C {
-    }
-    C.x = 1;
-    return C;
-})();
+class C {
+}
+C.x = 1;
 var c = new C();
 var r = C.x;

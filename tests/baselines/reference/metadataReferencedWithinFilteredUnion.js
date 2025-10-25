@@ -39,17 +39,14 @@ exports.Class2 = void 0;
 const Class1_1 = require("./Class1");
 function decorate(target, propertyKey) {
 }
-let Class2 = (() => {
-    class Class2 {
-        get prop() {
-            return undefined;
-        }
+class Class2 {
+    get prop() {
+        return undefined;
     }
-    __decorate([
-        decorate,
-        __metadata("design:type", Class1_1.Class1),
-        __metadata("design:paramtypes", [])
-    ], Class2.prototype, "prop", null);
-    return Class2;
-})();
+}
 exports.Class2 = Class2;
+__decorate([
+    decorate,
+    __metadata("design:type", Class1_1.Class1),
+    __metadata("design:paramtypes", [])
+], Class2.prototype, "prop", null);

@@ -98,41 +98,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const t1 = __importStar(require("./type1"));
 const class3_1 = require("./class3");
-let HelloWorld = (() => {
-    class HelloWorld {
-        handleEvent1(event) { } // Error
-        handleEvent2(event) { } // Ok
-        handleEvent3(event) { return undefined; } // Ok, Error
-    }
-    __decorate([
-        EventListener('1'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], HelloWorld.prototype, "handleEvent1", null);
-    __decorate([
-        EventListener('2'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], HelloWorld.prototype, "handleEvent2", null);
-    __decorate([
-        EventListener('1'),
-        __metadata("design:type", Object)
-    ], HelloWorld.prototype, "p1", void 0);
-    __decorate([
-        EventListener('1'),
-        __metadata("design:type", Object)
-    ], HelloWorld.prototype, "p1_ns", void 0);
-    __decorate([
-        EventListener('2'),
-        __metadata("design:type", Object)
-    ], HelloWorld.prototype, "p2", void 0);
-    __decorate([
-        EventListener('3'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [class3_1.C3]),
-        __metadata("design:returntype", Object)
-    ], HelloWorld.prototype, "handleEvent3", null);
-    return HelloWorld;
-})();
+class HelloWorld {
+    handleEvent1(event) { } // Error
+    handleEvent2(event) { } // Ok
+    handleEvent3(event) { return undefined; } // Ok, Error
+}
+__decorate([
+    EventListener('1'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], HelloWorld.prototype, "handleEvent1", null);
+__decorate([
+    EventListener('2'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], HelloWorld.prototype, "handleEvent2", null);
+__decorate([
+    EventListener('1'),
+    __metadata("design:type", Object)
+], HelloWorld.prototype, "p1", void 0);
+__decorate([
+    EventListener('1'),
+    __metadata("design:type", Object)
+], HelloWorld.prototype, "p1_ns", void 0);
+__decorate([
+    EventListener('2'),
+    __metadata("design:type", Object)
+], HelloWorld.prototype, "p2", void 0);
+__decorate([
+    EventListener('3'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [class3_1.C3]),
+    __metadata("design:returntype", Object)
+], HelloWorld.prototype, "handleEvent3", null);
