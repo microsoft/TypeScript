@@ -166,6 +166,12 @@ DirectoryWatcher:: Triggered with /home/src/projects/myproject/outDir :: WatchIn
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/outDir :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/projects/myproject/decls :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/decls :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+[96mtsconfig.json[0m:[93m3[0m:[93m3[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -176,7 +182,7 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Wild card directory
@@ -294,12 +300,7 @@ Program files::
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/projects/myproject/types/sometype.ts
-/home/src/projects/myproject/main.ts
-/home/src/projects/myproject/root2/other/sometype2/index.d.ts
-/home/src/projects/myproject/src/secondary.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -396,6 +397,12 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+[96mtsconfig.json[0m:[93m3[0m:[93m3[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -406,7 +413,7 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -486,7 +493,7 @@ Program files::
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

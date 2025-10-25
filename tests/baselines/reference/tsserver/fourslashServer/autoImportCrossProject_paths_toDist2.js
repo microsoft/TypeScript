@@ -316,7 +316,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 4,
               "offset": 31
             },
-            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
             "code": 5107,
             "category": "error",
             "fileName": "/home/src/workspaces/project/web/tsconfig.json"

@@ -27,15 +27,13 @@ export class MyComponent {
 
 
 //// [file.jsx]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.MyComponent = void 0;
-    class MyComponent {
-        render() {
-        }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyComponent = void 0;
+class MyComponent {
+    render() {
     }
-    exports.MyComponent = MyComponent;
-    <MyComponent foo="bar"/>; // ok  
-    <MyComponent foo={0}/>; // should be an error
-});
+}
+exports.MyComponent = MyComponent;
+<MyComponent foo="bar"/>; // ok  
+<MyComponent foo={0}/>; // should be an error

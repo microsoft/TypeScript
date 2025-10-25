@@ -156,6 +156,20 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 21
+            },
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/a/b/projects/myproject/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 4,
               "offset": 5
             },

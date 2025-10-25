@@ -27,7 +27,6 @@ CleanBuild:
   },
   "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
   "latestChangedDtsFile": "FakeFileName",
-  "errors": true,
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -54,6 +53,5 @@ IncrementalBuild:
   },
   "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
   "latestChangedDtsFile": "FakeFileName",
-  "errors": true,
   "version": "FakeTSVersion"
 }

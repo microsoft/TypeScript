@@ -1,6 +1,8 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(13,24): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (1 errors) ====
     import React = require('react')
     

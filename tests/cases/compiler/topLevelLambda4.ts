@@ -1,2 +1,2 @@
-//@module: amd
+//@module: esnext
 export var x = () => this.window;

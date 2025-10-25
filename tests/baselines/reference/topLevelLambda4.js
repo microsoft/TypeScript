@@ -4,10 +4,4 @@
 export var x = () => this.window;
 
 //// [topLevelLambda4.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.x = void 0;
-    var x = () => this.window;
-    exports.x = x;
-});
+export var x = () => this.window;

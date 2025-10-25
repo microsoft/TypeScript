@@ -58,36 +58,34 @@ interface I2 extends I1 { item:string; }
 
 
 //// [interfaceDeclaration3.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.M2 = void 0;
-    var M1;
-    (function (M1) {
-        class C1 {
-        }
-        class C2 {
-        }
-        class C3 {
-        }
-        class C4 {
-        }
-        class C5 {
-        }
-    })(M1 || (M1 = {}));
-    var M2;
-    (function (M2) {
-        class C1 {
-        }
-        class C2 {
-        }
-        class C3 {
-        }
-    })(M2 || (exports.M2 = M2 = {}));
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.M2 = void 0;
+var M1;
+(function (M1) {
     class C1 {
     }
     class C2 {
     }
     class C3 {
     }
-});
+    class C4 {
+    }
+    class C5 {
+    }
+})(M1 || (M1 = {}));
+var M2;
+(function (M2) {
+    class C1 {
+    }
+    class C2 {
+    }
+    class C3 {
+    }
+})(M2 || (exports.M2 = M2 = {}));
+class C1 {
+}
+class C2 {
+}
+class C3 {
+}

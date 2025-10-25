@@ -9,6 +9,7 @@ var n: number = modM.x;
 >n : number
 >  : ^^^^^^
 >modM.x : any
+>       : ^^^
 >modM : typeof modM
 >     : ^^^^^^^^^^^
 >x : any
@@ -21,6 +22,7 @@ module M {
 
 	export var x;
 >x : any
+>  : ^^^
 }
 
 export = M;

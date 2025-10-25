@@ -74,9 +74,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
 
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because output file 'project2/outFile.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -88,7 +98,7 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
@@ -108,7 +118,7 @@ declare module "d" {
 
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,8 +156,30 @@ declare module "d" {
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 918
+  "size": 959
 }
 
 //// [/home/src/workspaces/solution/project2/outFile.d.ts]
@@ -250,12 +282,7 @@ Program files::
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -285,7 +312,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -297,11 +324,23 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is up to date because newest input 'project1/src/d.ts' is older than output 'project1/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -313,10 +352,37 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
+
+Program root files: [
+  "/home/src/workspaces/solution/project1/src/a.ts",
+  "/home/src/workspaces/solution/project1/src/b.ts",
+  "/home/src/workspaces/solution/project1/src/c.ts",
+  "/home/src/workspaces/solution/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/home/src/workspaces/solution/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/solution/project1/src/a.ts
+/home/src/workspaces/solution/project1/src/b.ts
+/home/src/workspaces/solution/project1/src/c.ts
+/home/src/workspaces/solution/project1/src/d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 Program root files: [
   "/home/src/workspaces/solution/project2/src/e.ts",
@@ -359,13 +425,23 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because output 'project1/outFile.tsbuildinfo' is older than input 'project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -377,13 +453,13 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
 //// [/home/src/workspaces/solution/project1/outFile.d.ts] file written with same contents
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -421,8 +497,30 @@ Found 1 error.
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 932
+  "size": 973
 }
 
 
@@ -449,12 +547,7 @@ Program files::
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -484,7 +577,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: emit js files
 
@@ -496,13 +589,23 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -514,12 +617,12 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -557,8 +660,30 @@ Found 1 error.
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 933
+  "size": 974
 }
 
 //// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo]
@@ -700,7 +825,7 @@ Program files::
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -730,7 +855,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -742,11 +867,23 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is up to date because newest input 'project1/src/a.ts' is older than output 'project1/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -758,10 +895,37 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
+
+Program root files: [
+  "/home/src/workspaces/solution/project1/src/a.ts",
+  "/home/src/workspaces/solution/project1/src/b.ts",
+  "/home/src/workspaces/solution/project1/src/c.ts",
+  "/home/src/workspaces/solution/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/home/src/workspaces/solution/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/solution/project1/src/a.ts
+/home/src/workspaces/solution/project1/src/b.ts
+/home/src/workspaces/solution/project1/src/c.ts
+/home/src/workspaces/solution/project1/src/d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 Program root files: [
   "/home/src/workspaces/solution/project2/src/e.ts",
@@ -801,11 +965,23 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is up to date because newest input 'project1/src/a.ts' is older than output 'project1/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -817,10 +993,37 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
+
+Program root files: [
+  "/home/src/workspaces/solution/project1/src/a.ts",
+  "/home/src/workspaces/solution/project1/src/b.ts",
+  "/home/src/workspaces/solution/project1/src/c.ts",
+  "/home/src/workspaces/solution/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/home/src/workspaces/solution/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/solution/project1/src/a.ts
+/home/src/workspaces/solution/project1/src/b.ts
+/home/src/workspaces/solution/project1/src/c.ts
+/home/src/workspaces/solution/project1/src/d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 Program root files: [
   "/home/src/workspaces/solution/project2/src/e.ts",
@@ -863,13 +1066,23 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because output 'project1/outFile.tsbuildinfo' is older than input 'project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -881,13 +1094,13 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 
 
 //// [/home/src/workspaces/solution/project1/outFile.d.ts] file written with same contents
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","2355059555-export const b = 10;const bLocal = 10;const blocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","2355059555-export const b = 10;const bLocal = 10;const blocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -925,8 +1138,30 @@ Found 1 error.
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/b.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/c.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./src/d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 950
+  "size": 991
 }
 
 //// [/home/src/workspaces/solution/project1/outFile.js]
@@ -984,12 +1219,7 @@ Program files::
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -1019,4 +1249,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

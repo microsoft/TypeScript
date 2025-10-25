@@ -7331,6 +7331,7 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory; }, low
 }
 
 export enum ModuleResolutionKind {
+    /** @deprecated */
     Classic = 1,
     /**
      * @deprecated
@@ -7418,6 +7419,7 @@ export interface CompilerOptions {
     allowUnreachableCode?: boolean;
     allowUnusedLabels?: boolean;
     alwaysStrict?: boolean; // Always combine with strict property
+    /** @deprecated */
     baseUrl?: string;
     /**
      * An error if set - this should only go through the -b pipeline and not actually be observed
@@ -7593,10 +7595,14 @@ export interface TypeAcquisition {
 }
 
 export enum ModuleKind {
+    /** @deprecated */
     None = 0,
     CommonJS = 1,
+    /** @deprecated */
     AMD = 2,
+    /** @deprecated */
     UMD = 3,
+    /** @deprecated */
     System = 4,
 
     // NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.

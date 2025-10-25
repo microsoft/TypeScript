@@ -4717,6 +4717,10 @@
         "category": "Error",
         "code": 5110
     },
+    "Visit https://aka.ms/ts6 for migration information.": {
+        "category": "Message",
+        "code": 5111
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -6603,7 +6607,7 @@
         "category": "Message",
         "code": 6909
     },
-    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+    "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
         "category": "Message",
         "code": 69010
     },

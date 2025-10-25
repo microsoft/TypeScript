@@ -18,19 +18,18 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 }
 
 //// [undeclaredModuleError.js]
-define(["require", "exports", "fs"], function (require, exports, fs) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    function readdir(path, accept, callback) { }
-    function join(...paths) { }
-    function instrumentFile(covFileDir, covFileName, originalFilePath) {
-        fs.readFile(originalFilePath, () => {
-            readdir(covFileDir, () => {
-            }, (error, files) => {
-                files.forEach((file) => {
-                    var fullPath = join(IDoNotExist);
-                });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fs = require("fs");
+function readdir(path, accept, callback) { }
+function join(...paths) { }
+function instrumentFile(covFileDir, covFileName, originalFilePath) {
+    fs.readFile(originalFilePath, () => {
+        readdir(covFileDir, () => {
+        }, (error, files) => {
+            files.forEach((file) => {
+                var fullPath = join(IDoNotExist);
             });
         });
-    }
-});
+    });
+}

@@ -82,13 +82,13 @@ Conditions to set in addition to the resolver-specific defaults when resolving i
 
 [94m--module, -m[39m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
+one of: commonjs, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
 default: undefined
 
 [94m--moduleResolution[39m
 Specify how TypeScript looks up a file from a given module specifier.
-one of: classic, node10, node16, nodenext, bundler
-default: module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`
+one of: node16, nodenext, bundler
+default: `nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.
 
 [94m--moduleSuffixes[39m
 List of file name suffixes to search when resolving a module.
@@ -165,7 +165,7 @@ default: 0
 [94m--allowSyntheticDefaultImports[39m
 Allow 'import x from y' when a module doesn't have a default export.
 type: boolean
-default: module === "system" or esModuleInterop
+default: true
 
 [94m--erasableSyntaxOnly[39m
 Do not allow runtime constructs that are not part of ECMAScript.
@@ -175,7 +175,7 @@ default: false
 [94m--esModuleInterop[39m
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
-default: false
+default: true
 
 [94m--forceConsistentCasingInFileNames[39m
 Ensure that casing is correct in imports.

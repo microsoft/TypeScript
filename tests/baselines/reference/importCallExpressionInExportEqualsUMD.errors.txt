@@ -1,0 +1,11 @@
+error TS5107: Option 'module=UMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=UMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== something.ts (0 errors) ====
+    export = 42;
+    
+==== index.ts (0 errors) ====
+    export = async function() {
+        const something = await import("./something");
+    };

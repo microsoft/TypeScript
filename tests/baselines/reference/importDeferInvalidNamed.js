@@ -6,7 +6,7 @@ export function foo() {
 }
 
 //// [b.ts]
-import defer { foo } from "a";
+import defer { foo } from "./a";
 
 foo();
 
@@ -15,5 +15,5 @@ export function foo() {
     console.log("foo from a");
 }
 //// [b.js]
-import defer { foo } from "a";
+import defer { foo } from "./a";
 foo();

@@ -30,6 +30,7 @@ export declare function __assign(t: any, ...sources: any[]): any;
 >__assign : (t: any, ...sources: any[]) => any
 >         : ^ ^^   ^^^^^       ^^     ^^^^^   
 >t : any
+>  : ^^^
 >sources : any[]
 >        : ^^^^^
 
@@ -39,9 +40,11 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 >decorators : Function[]
 >           : ^^^^^^^^^^
 >target : any
+>       : ^^^
 >key : string | symbol
 >    : ^^^^^^^^^^^^^^^
 >desc : any
+>     : ^^^
 
 export declare function __param(paramIndex: number, decorator: Function): Function;
 >__param : (paramIndex: number, decorator: Function) => Function
@@ -55,13 +58,17 @@ export declare function __metadata(metadataKey: any, metadataValue: any): Functi
 >__metadata : (metadataKey: any, metadataValue: any) => Function
 >           : ^           ^^   ^^             ^^   ^^^^^        
 >metadataKey : any
+>            : ^^^
 >metadataValue : any
+>              : ^^^
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
 >          : ^       ^^   ^^          ^^   ^^ ^^        ^^         ^^        ^^^^^   
 >thisArg : any
+>        : ^^^
 >_arguments : any
+>           : ^^^
 >P : Function
 >  : ^^^^^^^^
 >generator : Function

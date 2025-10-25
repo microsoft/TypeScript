@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 export declare function exports(): number;
 
 export declare function require(): string[];

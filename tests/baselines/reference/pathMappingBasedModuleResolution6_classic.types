@@ -13,6 +13,7 @@ declare function use(x: string);
 
 use(x.toExponential());
 >use(x.toExponential()) : any
+>                       : ^^^
 >use : (x: string) => any
 >    : ^ ^^      ^^^^^^^^
 >x.toExponential() : string

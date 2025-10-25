@@ -50,10 +50,15 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -140,10 +145,15 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -191,6 +201,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -208,20 +226,8 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/home/src/workspaces/outFile.tsbuildinfo]
-{"root":["./project/a.ts","./project/b.ts"],"checkPending":true,"version":"FakeTSVersion"}
-
-//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./project/a.ts",
-    "./project/b.ts"
-  ],
-  "checkPending": true,
-  "version": "FakeTSVersion",
-  "size": 90
-}
-
+//// [/home/src/workspaces/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/outFile.d.ts]
 declare module "a" {
     export const a = "hello";
@@ -254,7 +260,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -285,11 +291,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"root":["./project/a.ts","./project/b.ts"],"version":"FakeTSVersion"}
+{"root":["./project/a.ts","./project/b.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -297,8 +311,9 @@ Output::
     "./project/a.ts",
     "./project/b.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 70
+  "size": 84
 }
 
 //// [/home/src/workspaces/outFile.d.ts] file written with same contents
@@ -320,14 +335,11 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: No Change run with checking
 
@@ -338,12 +350,47 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output '../outFile.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error.
 
 
 
+//// [/home/src/workspaces/outFile.js] file written with same contents
+//// [/home/src/workspaces/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/workspaces/outFile.d.ts] file written with same contents
 
-exitCode:: ExitStatus.Success
+Program root files: [
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/home/src/workspaces/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -387,10 +434,15 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -494,10 +546,15 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -535,10 +592,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -560,6 +614,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -578,7 +640,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"root":["./project/a.ts","./project/b.ts"],"checkPending":true,"version":"FakeTSVersion"}
+{"root":["./project/a.ts","./project/b.ts"],"errors":true,"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -586,9 +648,10 @@ define("b", ["require", "exports"], function (require, exports) {
     "./project/a.ts",
     "./project/b.ts"
   ],
+  "errors": true,
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 90
+  "size": 104
 }
 
 //// [/home/src/workspaces/outFile.d.ts] file written with same contents
@@ -615,7 +678,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: No Change run with checking
 
@@ -630,11 +693,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"root":["./project/a.ts","./project/b.ts"],"version":"FakeTSVersion"}
+{"root":["./project/a.ts","./project/b.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -642,8 +713,9 @@ Output::
     "./project/a.ts",
     "./project/b.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 70
+  "size": 84
 }
 
 //// [/home/src/workspaces/outFile.d.ts] file written with same contents
@@ -665,14 +737,11 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: Add file with error
 
@@ -686,14 +755,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../outFile.tsbuildinfo' is older than input 'c.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 
 Found 1 error.
@@ -768,11 +837,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
-/home/src/workspaces/project/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -804,10 +869,15 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -897,6 +967,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -920,21 +998,8 @@ define("c", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/home/src/workspaces/outFile.tsbuildinfo]
-{"root":["./project/a.ts","./project/b.ts","./project/c.ts"],"checkPending":true,"version":"FakeTSVersion"}
-
-//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./project/a.ts",
-    "./project/b.ts",
-    "./project/c.ts"
-  ],
-  "checkPending": true,
-  "version": "FakeTSVersion",
-  "size": 107
-}
-
+//// [/home/src/workspaces/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/outFile.d.ts] file written with same contents
 
 Program root files: [
@@ -961,7 +1026,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: No Change run with checking
 
@@ -976,10 +1041,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 
 Found 1 error.
@@ -1023,11 +1088,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
-/home/src/workspaces/project/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -1062,10 +1123,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 
 Found 1 error.
@@ -1096,11 +1157,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
-/home/src/workspaces/project/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

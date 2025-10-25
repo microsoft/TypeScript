@@ -32,13 +32,13 @@ verify.completions({
   includes: [{
     name: "PackageDependency",
     hasAction: true,
-    source: "/home/src/workspaces/project/node_modules/package-dependency/index",
+    source: "package-dependency",
     sortText: completion.SortText.AutoImportSuggestions,
     isPackageJsonImport: true
   }, {
     name: "CommonDependency",
     hasAction: true,
-    source: "/home/src/workspaces/project/node_modules/common-dependency/index",
+    source: "common-dependency",
     sortText: completion.SortText.AutoImportSuggestions,
     isPackageJsonImport: true
   }],

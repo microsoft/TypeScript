@@ -5,4 +5,4 @@ export function foo() {
 }
 
 // @filename: b.ts
-import type defer * as ns1 from "a";
+import type defer * as ns1 from "./a";

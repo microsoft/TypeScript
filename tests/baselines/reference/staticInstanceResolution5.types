@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/staticInstanceResolution5.ts] ////
 
 === staticInstanceResolution5_1.ts ===
-import WinJS = require('staticInstanceResolution5_0');
+import WinJS = require('./staticInstanceResolution5_0');
 >WinJS : typeof WinJS
 >      : ^^^^^^^^^^^^
 

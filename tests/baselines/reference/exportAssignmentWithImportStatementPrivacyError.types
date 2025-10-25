@@ -5,8 +5,11 @@ module m2 {
     export interface connectModule {
         (res, req, next): void;
 >res : any
+>    : ^^^
 >req : any
+>    : ^^^
 >next : any
+>     : ^^^
     }
     export interface connectExport {
         use: (mod: connectModule) => connectExport;

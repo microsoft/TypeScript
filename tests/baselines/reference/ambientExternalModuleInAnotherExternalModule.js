@@ -13,10 +13,10 @@ import ext = require("ext");
 var x = ext;
 
 //// [ambientExternalModuleInAnotherExternalModule.js]
-define(["require", "exports", "ext"], function (require, exports, ext) {
-    "use strict";
-    class D {
-    }
-    var x = ext;
-    return D;
-});
+"use strict";
+class D {
+}
+// Cannot resolve this ext module reference
+var ext = require("ext");
+var x = ext;
+module.exports = D;

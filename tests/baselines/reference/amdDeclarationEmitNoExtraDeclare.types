@@ -50,6 +50,7 @@ export function Configurable<T extends Constructor<{}>>(base: T): T {
 >super : T
 >      : ^
 >...args : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
         }

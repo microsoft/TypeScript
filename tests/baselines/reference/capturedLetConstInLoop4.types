@@ -26,30 +26,38 @@ export function exportedFoo() {
 >v0 + v00 : string
 >         : ^^^^^^
 >v0 : any
+>   : ^^^
 >v00 : string
 >    : ^^^^^^
 >v1 : number
 >   : ^^^^^^
 >v2 : any
+>   : ^^^
 >v3 : any
+>   : ^^^
 >v4 : number
 >   : ^^^^^^
 >v5 : number
 >   : ^^^^^^
 >v6 : any
+>   : ^^^
 >v7 : any
+>   : ^^^
 >v8 : number
 >   : ^^^^^^
 }
 
 for (let x of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
     var v0 = x;
 >v0 : any
+>   : ^^^
 >x : any
+>  : ^^^
 
     (function() { return x + v0});
 >(function() { return x + v0}) : () => any
@@ -57,8 +65,11 @@ for (let x of []) {
 >function() { return x + v0} : () => any
 >                            : ^^^^^^^^^
 >x + v0 : any
+>       : ^^^
 >x : any
+>  : ^^^
 >v0 : any
+>   : ^^^
 
     (() => x);    
 >(() => x) : () => any
@@ -66,6 +77,7 @@ for (let x of []) {
 >() => x : () => any
 >        : ^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x in []) {
@@ -154,10 +166,13 @@ while (1 === 1) {
 
     let x;
 >x : any
+>  : ^^^
 
     var v2 = x;
 >v2 : any
+>   : ^^^
 >x : any
+>  : ^^^
 
     (function() { return x + v2});
 >(function() { return x + v2}) : () => any
@@ -165,8 +180,11 @@ while (1 === 1) {
 >function() { return x + v2} : () => any
 >                            : ^^^^^^^^^
 >x + v2 : any
+>       : ^^^
 >x : any
+>  : ^^^
 >v2 : any
+>   : ^^^
 
     (() => x);
 >(() => x) : () => any
@@ -174,15 +192,19 @@ while (1 === 1) {
 >() => x : () => any
 >        : ^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 do {
     let x;
 >x : any
+>  : ^^^
 
     var v3 = x;
 >v3 : any
+>   : ^^^
 >x : any
+>  : ^^^
 
     (function() { return x + v3});
 >(function() { return x + v3}) : () => any
@@ -190,8 +212,11 @@ do {
 >function() { return x + v3} : () => any
 >                            : ^^^^^^^^^
 >x + v3 : any
+>       : ^^^
 >x : any
+>  : ^^^
 >v3 : any
+>   : ^^^
 
     (() => x);
 >(() => x) : () => any
@@ -199,6 +224,7 @@ do {
 >() => x : () => any
 >        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
 } while (1 === 1)
 >1 === 1 : boolean
@@ -322,11 +348,15 @@ while (1 === 1) {
 
     let x, y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     var v6 = x;
 >v6 : any
+>   : ^^^
 >x : any
+>  : ^^^
 
     (function() { return x + y + v6});
 >(function() { return x + y + v6}) : () => any
@@ -334,10 +364,15 @@ while (1 === 1) {
 >function() { return x + y + v6} : () => any
 >                                : ^^^^^^^^^
 >x + y + v6 : any
+>           : ^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >v6 : any
+>   : ^^^
 
     (() => x + y);
 >(() => x + y) : () => any
@@ -345,18 +380,25 @@ while (1 === 1) {
 >() => x + y : () => any
 >            : ^^^^^^^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 do {
     let x, y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     var v7 = x;
 >v7 : any
+>   : ^^^
 >x : any
+>  : ^^^
 
     (function() { return x + y + v7});
 >(function() { return x + y + v7}) : () => any
@@ -364,10 +406,15 @@ do {
 >function() { return x + y + v7} : () => any
 >                                : ^^^^^^^^^
 >x + y + v7 : any
+>           : ^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >v7 : any
+>   : ^^^
 
     (() => x + y);
 >(() => x + y) : () => any
@@ -375,8 +422,11 @@ do {
 >() => x + y : () => any
 >            : ^^^^^^^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 } while (1 === 1)
 >1 === 1 : boolean
@@ -468,6 +518,7 @@ export function exportedFoo2() {
 >v0_c + v00_c : string
 >             : ^^^^^^
 >v0_c : any
+>     : ^^^
 >v00_c : string
 >      : ^^^^^^
 >v1_c : number
@@ -490,12 +541,15 @@ export function exportedFoo2() {
 
 for (const x of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
     var v0_c = x;
 >v0_c : any
+>     : ^^^
 >x : any
+>  : ^^^
 
     (function() { return x + v0_c});
 >(function() { return x + v0_c}) : () => any
@@ -503,8 +557,11 @@ for (const x of []) {
 >function() { return x + v0_c} : () => any
 >                              : ^^^^^^^^^
 >x + v0_c : any
+>         : ^^^
 >x : any
+>  : ^^^
 >v0_c : any
+>     : ^^^
 
     (() => x);    
 >(() => x) : () => any
@@ -512,6 +569,7 @@ for (const x of []) {
 >() => x : () => any
 >        : ^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (const x in []) {

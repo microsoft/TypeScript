@@ -125,10 +125,13 @@ export declare class LazyAction<TAction extends (...args: any[]) => any, TModule
 
 //// [/home/src/workspaces/project/obj/lazyIndex.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 var bar_1 = require("./bar");
-Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return __importDefault(bar_1).default; } });
 
 
 //// [/home/src/workspaces/project/obj/lazyIndex.d.ts]
@@ -137,10 +140,43 @@ export { default as bar } from './bar';
 
 //// [/home/src/workspaces/project/obj/index.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
 var bundling_1 = require("./bundling");
-const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(function () { return require('./lazyIndex'); }));
+const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(function () { return __importStar(require('./lazyIndex')); }));
 exports.lazyBar = new bundling_1.LazyAction(lazyModule, m => m.bar);
 
 

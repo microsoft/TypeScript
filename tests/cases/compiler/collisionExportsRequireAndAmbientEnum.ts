@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 //@filename: collisionExportsRequireAndAmbientEnum_externalmodule.ts
 export declare enum require {
     _thisVal1,

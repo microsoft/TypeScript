@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 interface I1 {
     item:number;
 }

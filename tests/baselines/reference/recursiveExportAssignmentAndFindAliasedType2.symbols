@@ -5,7 +5,7 @@
 import moduleC = require("moduleC");
 >moduleC : Symbol(moduleC, Decl(recursiveExportAssignmentAndFindAliasedType2_moduleA.ts, 0, 0))
 
-import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+import ClassB = require("./recursiveExportAssignmentAndFindAliasedType2_moduleB");
 >ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType2_moduleA.ts, 1, 36))
 
 export var b: ClassB; // This should result in type ClassB
