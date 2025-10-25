@@ -21,23 +21,28 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
-function foo(y = (_a = class {
-        get [x]() { return x; }
-        constructor() { x; }
-        [z]() { return z; }
-    },
-    __setFunctionName(_a, "y"),
-    _a.c = x,
-    _a), x = 1, z = 2) {
+function foo(y, x, z) {
     var _a;
+    if (y === void 0) { y = (_a = class {
+            get [x]() { return x; }
+            constructor() { x; }
+            [z]() { return z; }
+        },
+        __setFunctionName(_a, "y"),
+        _a.c = x,
+        _a); }
+    if (x === void 0) { x = 1; }
+    if (z === void 0) { z = 2; }
     y.c;
 }
-function foo2(y = (_a = class {
-        constructor() {
-            this[_b] = x;
-        }
-    },
-    _b = x,
-    _a), x = 1) {
-    var _b, _a;
+function foo2(y, x) {
+    var _a, _b;
+    if (y === void 0) { y = (_b = class {
+            constructor() {
+                this[_a] = x;
+            }
+        },
+        _a = x,
+        _b); }
+    if (x === void 0) { x = 1; }
 }
