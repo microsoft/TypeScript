@@ -24,6 +24,7 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 >isAny : <T>(obj: any) => obj is T
 >      : ^ ^^   ^^   ^^^^^        
 >obj : any
+>    : ^^^
 
     static defaultProps = {
 >defaultProps : { isAny: <T>(obj: any) => obj is T; }
@@ -47,6 +48,7 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 >isAny : <T>(obj: any) => obj is T
 >      : ^ ^^   ^^   ^^^^^        
 >obj : any
+>    : ^^^
 
         return true;
 >true : true
