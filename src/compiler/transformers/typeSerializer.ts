@@ -314,7 +314,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return getGlobalConstructor("BigInt", ScriptTarget.ES2020);
 
             case SyntaxKind.SymbolKeyword:
-                return getGlobalConstructor("Symbol", ScriptTarget.ES2015);
+                return factory.createIdentifier("Symbol");
 
             case SyntaxKind.TypeReference:
                 return serializeTypeReferenceNode(node as TypeReferenceNode);
@@ -528,7 +528,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Array");
 
             case TypeReferenceSerializationKind.ESSymbolType:
-                return getGlobalConstructor("Symbol", ScriptTarget.ES2015);
+                return factory.createIdentifier("Symbol");
 
             case TypeReferenceSerializationKind.TypeWithCallSignature:
                 return factory.createIdentifier("Function");
