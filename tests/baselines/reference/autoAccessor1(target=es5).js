@@ -9,9 +9,6 @@ class C1 {
 }
 
 
-
-
-!!!! File autoAccessor1.js missing from original emit, but present in noCheck emit
 //// [autoAccessor1.js]
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

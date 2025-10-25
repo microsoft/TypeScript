@@ -295,7 +295,6 @@ import {
     getEmitStandardClassFields,
     getEnclosingBlockScopeContainer,
     getEnclosingContainer,
-    getEntityNameFromTypeNode,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxAttributeName,
@@ -566,7 +565,6 @@ import {
     isForInOrOfStatement,
     isForInStatement,
     isForOfStatement,
-    isForStatement,
     isFunctionDeclaration,
     isFunctionExpression,
     isFunctionExpressionOrArrowFunction,
@@ -2271,7 +2269,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalPromiseType: GenericType | undefined;
     var deferredGlobalPromiseLikeType: GenericType | undefined;
     var deferredGlobalPromiseConstructorSymbol: Symbol | undefined;
-    var deferredGlobalPromiseConstructorLikeType: ObjectType | undefined;
     var deferredGlobalIterableType: GenericType | undefined;
     var deferredGlobalIteratorType: GenericType | undefined;
     var deferredGlobalIterableIteratorType: GenericType | undefined;
@@ -12349,6 +12346,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const lastElement = lastOrUndefined(elements);
         const restElement = lastElement && lastElement.kind === SyntaxKind.BindingElement && lastElement.dotDotDotToken ? lastElement : undefined;
         if (elements.length === 0 || elements.length === 1 && restElement) {
+            // TODO: remove ScriptTarget.ES2015
             return languageVersion >= ScriptTarget.ES2015 ? createIterableType(anyType) : anyArrayType;
         }
         const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
@@ -17491,10 +17489,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
         return deferredGlobalPromiseConstructorSymbol ||= getGlobalValueSymbol("Promise" as __String, reportErrors);
-    }
-
-    function getGlobalPromiseConstructorLikeType(reportErrors: boolean) {
-        return (deferredGlobalPromiseConstructorLikeType ||= getGlobalType("PromiseConstructorLike" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
     }
 
     function getGlobalAsyncIterableType(reportErrors: boolean) {
@@ -30451,7 +30445,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case ReferenceHint.Jsx:
                 return markJsxAliasReferenced(location as JsxOpeningLikeElement | JsxOpeningFragment);
             case ReferenceHint.AsyncFunction:
-                return markAsyncFunctionAliasReferenced(location as FunctionLikeDeclaration | MethodSignature);
+                // TODO: remove case
+                return;
             case ReferenceHint.ExportImportEquals:
                 return markImportEqualsAliasReferenced(location as ImportEqualsDeclaration);
             case ReferenceHint.ExportSpecifier:
@@ -30492,10 +30487,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isExportSpecifier(location)) {
                     return markExportSpecifierAliasReferenced(location);
-                }
-                if (isFunctionLikeDeclaration(location) || isMethodSignature(location)) {
-                    markAsyncFunctionAliasReferenced(location);
-                    // Might be decorated, fall through to decorator final case
                 }
                 if (!compilerOptions.emitDecoratorMetadata) {
                     return;
@@ -30622,15 +30613,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return;
-    }
-
-    function markAsyncFunctionAliasReferenced(location: FunctionLikeDeclaration | MethodSignature) {
-        if (languageVersion < ScriptTarget.ES2015) {
-            if (getFunctionFlags(location) & FunctionFlags.Async) {
-                const returnTypeNode = getEffectiveReturnTypeNode(location);
-                markTypeNodeAsReferenced(returnTypeNode);
-            }
-        }
     }
 
     function markImportEqualsAliasReferenced(location: ImportEqualsDeclaration) {
@@ -30799,14 +30781,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * If a TypeNode can be resolved to a value symbol imported from an external module, it is
-     * marked as referenced to prevent import elision.
-     */
-    function markTypeNodeAsReferenced(node: TypeNode | undefined) {
-        markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node), /*forDecoratorMetadata*/ false);
-    }
-
-    /**
      * This function marks the type used for metadata decorator as referenced if it is import
      * from external module.
      * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
@@ -30930,15 +30904,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             let container = getContainingFunction(node);
             if (container) {
-                if (languageVersion < ScriptTarget.ES2015) {
-                    if (container.kind === SyntaxKind.ArrowFunction) {
-                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES5_Consider_using_a_standard_function_expression);
-                    }
-                    else if (hasSyntacticModifier(container, ModifierFlags.Async)) {
-                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES5_Consider_using_a_standard_function_or_method);
-                    }
-                }
-
                 getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                 while (container && isArrowFunction(container)) {
                     container = getContainingFunction(container);
@@ -30974,8 +30939,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-
-        checkNestedBlockScopedBinding(node, symbol);
     }
 
     function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
@@ -31153,114 +31116,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
-        return !!findAncestor(node, n =>
-            n === threshold ? "quit" : isFunctionLike(n) || (
-                n.parent && isPropertyDeclaration(n.parent) && !hasStaticModifier(n.parent) && n.parent.initializer === n
-            ));
-    }
-
-    function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
-        return findAncestor(node, n => n === container ? "quit" : n === container.initializer || n === container.condition || n === container.incrementor || n === container.statement);
-    }
-
     function getEnclosingIterationStatement(node: Node): Node | undefined {
         return findAncestor(node, n => (!n || nodeStartsNewLexicalEnvironment(n)) ? "quit" : isIterationStatement(n, /*lookInLabeledStatements*/ false));
-    }
-
-    function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
-        if (
-            languageVersion >= ScriptTarget.ES2015 ||
-            (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
-            !symbol.valueDeclaration ||
-            isSourceFile(symbol.valueDeclaration) ||
-            symbol.valueDeclaration.parent.kind === SyntaxKind.CatchClause
-        ) {
-            return;
-        }
-
-        // 1. walk from the use site up to the declaration and check
-        // if there is anything function like between declaration and use-site (is binding/class is captured in function).
-        // 2. walk from the declaration up to the boundary of lexical environment and check
-        // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
-
-        const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
-        const isCaptured = isInsideFunctionOrInstancePropertyInitializer(node, container);
-
-        const enclosingIterationStatement = getEnclosingIterationStatement(container);
-        if (enclosingIterationStatement) {
-            if (isCaptured) {
-                // mark iteration statement as containing block-scoped binding captured in some function
-                let capturesBlockScopeBindingInLoopBody = true;
-                if (isForStatement(container)) {
-                    const varDeclList = getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
-                    if (varDeclList && varDeclList.parent === container) {
-                        const part = getPartOfForStatementContainingNode(node.parent, container);
-                        if (part) {
-                            const links = getNodeLinks(part);
-                            links.flags |= NodeCheckFlags.ContainsCapturedBlockScopeBinding;
-
-                            const capturedBindings = links.capturedBlockScopeBindings || (links.capturedBlockScopeBindings = []);
-                            pushIfUnique(capturedBindings, symbol);
-
-                            if (part === container.initializer) {
-                                capturesBlockScopeBindingInLoopBody = false; // Initializer is outside of loop body
-                            }
-                        }
-                    }
-                }
-                if (capturesBlockScopeBindingInLoopBody) {
-                    getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
-                }
-            }
-
-            // mark variables that are declared in loop initializer and reassigned inside the body of ForStatement.
-            // if body of ForStatement will be converted to function then we'll need a extra machinery to propagate reassigned values back.
-            if (isForStatement(container)) {
-                const varDeclList = getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
-                if (varDeclList && varDeclList.parent === container && isAssignedInBodyOfForStatement(node, container)) {
-                    getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.NeedsLoopOutParameter;
-                }
-            }
-
-            // set 'declared inside loop' bit on the block-scoped binding
-            getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
-        }
-
-        if (isCaptured) {
-            getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
-        }
     }
 
     function isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement) {
         const links = getNodeLinks(node);
         return !!links && contains(links.capturedBlockScopeBindings, getSymbolOfDeclaration(decl));
-    }
-
-    function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {
-        // skip parenthesized nodes
-        let current: Node = node;
-        while (current.parent.kind === SyntaxKind.ParenthesizedExpression) {
-            current = current.parent;
-        }
-
-        // check if node is used as LHS in some assignment expression
-        let isAssigned = false;
-        if (isAssignmentTarget(current)) {
-            isAssigned = true;
-        }
-        else if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
-            const expr = current.parent as PrefixUnaryExpression | PostfixUnaryExpression;
-            isAssigned = expr.operator === SyntaxKind.PlusPlusToken || expr.operator === SyntaxKind.MinusMinusToken;
-        }
-
-        if (!isAssigned) {
-            return false;
-        }
-
-        // at this point we know that node is the target of assignment
-        // now check that modification happens inside the statement part of the ForStatement
-        return !!findAncestor(current, n => n === container ? "quit" : n === container.statement);
     }
 
     function captureLexicalThis(node: Node, container: Node): void {
@@ -31316,7 +31178,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkThisExpression(node: Node): Type {
-        const isNodeInTypeQuery = isInTypeQuery(node);
         // Stop at the first arrow function so that we can
         // tell whether 'this' needs to be captured.
         let container = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ true);
@@ -31358,11 +31219,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     break;
             }
-        }
-
-        // When targeting es6, mark that we'll need to capture `this` in its lexically bound scope.
-        if (!isNodeInTypeQuery && capturedByArrowFunction && languageVersion < ScriptTarget.ES2015) {
-            captureLexicalThis(node, container);
         }
 
         const type = tryGetThisTypeAt(node, /*includeGlobalThis*/ true, container);
@@ -31532,7 +31388,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const immediateContainer = getSuperContainer(node, /*stopOnFunctions*/ true);
         let container = immediateContainer;
-        let needToCaptureLexicalThis = false;
         let inAsyncFunction = false;
 
         // adjust the container reference in case if super is used inside arrow functions with arbitrarily deep nesting
@@ -31540,7 +31395,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             while (container && container.kind === SyntaxKind.ArrowFunction) {
                 if (hasSyntacticModifier(container, ModifierFlags.Async)) inAsyncFunction = true;
                 container = getSuperContainer(container, /*stopOnFunctions*/ true);
-                needToCaptureLexicalThis = languageVersion < ScriptTarget.ES2015;
             }
             if (container && hasSyntacticModifier(container, ModifierFlags.Async)) inAsyncFunction = true;
         }
@@ -31577,7 +31431,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             nodeCheckFlag = NodeCheckFlags.SuperStatic;
             if (
                 !isCallExpression &&
-                languageVersion >= ScriptTarget.ES2015 && languageVersion <= ScriptTarget.ES2021 &&
+                languageVersion <= ScriptTarget.ES2021 &&
                 (isPropertyDeclaration(container) || isClassStaticBlockDeclaration(container))
             ) {
                 // for `super.x` or `super[x]` in a static initializer, mark all enclosing
@@ -31664,22 +31518,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        if (needToCaptureLexicalThis) {
-            // call expressions are allowed only in constructors so they should always capture correct 'this'
-            // super property access expressions can also appear in arrow functions -
-            // in this case they should also use correct lexical this
-            captureLexicalThis(node.parent, container);
-        }
-
         if (container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-            if (languageVersion < ScriptTarget.ES2015) {
-                error(node, Diagnostics.super_is_only_allowed_in_members_of_object_literal_expressions_when_option_target_is_ES2015_or_higher);
-                return errorType;
-            }
-            else {
-                // for object literal assume that type of 'super' is 'any'
-                return anyType;
-            }
+            // for object literal assume that type of 'super' is 'any'
+            return anyType;
         }
 
         // at this point the only legal case for parent is ClassLikeDeclaration
@@ -34384,14 +34225,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // - In a static member function or static member accessor
             //   where this references the constructor function object of a derived class,
             //   a super property access is permitted and must specify a public static member function of the base class.
-            if (languageVersion < ScriptTarget.ES2015) {
-                if (symbolHasNonMethodDeclaration(prop)) {
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                    }
-                    return false;
-                }
-            }
             if (flags & ModifierFlags.Abstract) {
                 // A method cannot be accessed in a super property access if the method is abstract.
                 // This error could mask a private property access error. But, a member
@@ -42062,8 +41895,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         addLazyDiagnostic(checkSignatureDeclarationDiagnostics);
 
         function checkSignatureDeclarationDiagnostics() {
-            checkCollisionWithArgumentsInGeneratedCode(node);
-
             let returnTypeNode = getEffectiveReturnTypeNode(node);
             let returnTypeErrorLocation = returnTypeNode;
 
@@ -43661,64 +43492,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //  }
         //
         const returnType = getTypeFromTypeNode(returnTypeNode);
-        if (languageVersion >= ScriptTarget.ES2015) {
-            if (isErrorType(returnType)) {
-                return;
-            }
-            const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
-            if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
-                // The promise type was not a valid type reference to the global promise type, so we
-                // report an error and return the unknown type.
-                reportErrorForInvalidReturnType(Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0, returnTypeNode, returnTypeErrorLocation, typeToString(getAwaitedTypeNoAlias(returnType) || voidType));
-                return;
-            }
+        if (isErrorType(returnType)) {
+            return;
         }
-        else {
-            // Always mark the type node as referenced if it points to a value
-            markLinkedReferences(node, ReferenceHint.AsyncFunction);
-            if (isErrorType(returnType)) {
-                return;
-            }
-
-            const promiseConstructorName = getEntityNameFromTypeNode(returnTypeNode);
-            if (promiseConstructorName === undefined) {
-                reportErrorForInvalidReturnType(Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, returnTypeNode, returnTypeErrorLocation, typeToString(returnType));
-                return;
-            }
-
-            const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
-            const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : errorType;
-            if (isErrorType(promiseConstructorType)) {
-                if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.escapedText === "Promise" && getTargetType(returnType) === getGlobalPromiseType(/*reportErrors*/ false)) {
-                    error(returnTypeErrorLocation, Diagnostics.An_async_function_or_method_in_ES5_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
-                }
-                else {
-                    reportErrorForInvalidReturnType(Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, returnTypeNode, returnTypeErrorLocation, entityNameToString(promiseConstructorName));
-                }
-                return;
-            }
-
-            const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType(/*reportErrors*/ true);
-            if (globalPromiseConstructorLikeType === emptyObjectType) {
-                // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
-                // compatibility with __awaiter.
-                reportErrorForInvalidReturnType(Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, returnTypeNode, returnTypeErrorLocation, entityNameToString(promiseConstructorName));
-                return;
-            }
-
-            const headMessage = Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_because_it_does_not_refer_to_a_Promise_compatible_constructor_value;
-            const errorInfo = () => returnTypeNode === returnTypeErrorLocation ? undefined : chainDiagnosticMessages(/*details*/ undefined, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
-            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, returnTypeErrorLocation, headMessage, errorInfo)) {
-                return;
-            }
-
-            // Verify there is no local declaration that could collide with the promise constructor.
-            const rootName = promiseConstructorName && getFirstIdentifier(promiseConstructorName);
-            const collidingSymbol = getSymbol(node.locals!, rootName.escapedText, SymbolFlags.Value);
-            if (collidingSymbol) {
-                error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, idText(rootName), entityNameToString(promiseConstructorName));
-                return;
-            }
+        const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
+        if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
+            // The promise type was not a valid type reference to the global promise type, so we
+            // report an error and return the unknown type.
+            reportErrorForInvalidReturnType(Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0, returnTypeNode, returnTypeErrorLocation, typeToString(getAwaitedTypeNoAlias(returnType) || voidType));
+            return;
         }
 
         checkAwaitedType(returnType, /*withAlias*/ false, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
@@ -44578,19 +44360,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
-        // no rest parameters \ declaration context \ overload - no codegen impact
-        if (languageVersion >= ScriptTarget.ES2015 || !hasRestParameter(node) || node.flags & NodeFlags.Ambient || nodeIsMissing((node as FunctionLikeDeclaration).body)) {
-            return;
-        }
-
-        forEach(node.parameters, p => {
-            if (p.name && !isBindingPattern(p.name) && p.name.escapedText === argumentsSymbol.escapedName) {
-                errorSkippedOn("noEmit", p, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters);
-            }
-        });
-    }
-
     /**
      * Checks whether an {@link Identifier}, in the context of another {@link Node}, would collide with a runtime value
      * of {@link name} in an outer scope. This is used to check for collisions for downlevel transformations that
@@ -44728,7 +44497,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function recordPotentialCollisionWithReflectInGeneratedCode(node: Node, name: Identifier | undefined): void {
         if (
-            name && languageVersion >= ScriptTarget.ES2015 && languageVersion <= ScriptTarget.ES2021
+            name && languageVersion <= ScriptTarget.ES2021
             && needCollisionCheckForIdentifier(node, name, "Reflect")
         ) {
             potentialReflectCollisions.push(node);
@@ -45490,6 +45259,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
+        // TODO: remove ScriptTarget.ES2015
         const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
@@ -46645,7 +46415,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function checkClassNameCollisionWithObject(name: Identifier): void {
         if (
-            languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
+            name.escapedText === "Object"
             && host.getEmitModuleFormatOfFile(getSourceFileOfNode(name)) < ModuleKind.ES2015
         ) {
             error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
@@ -52565,9 +52335,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarAccessor(accessor: AccessorDeclaration): boolean {
         if (!(accessor.flags & NodeFlags.Ambient) && (accessor.parent.kind !== SyntaxKind.TypeLiteral) && (accessor.parent.kind !== SyntaxKind.InterfaceDeclaration)) {
-            if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(accessor.name)) {
-                return grammarErrorOnNode(accessor.name, Diagnostics.Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher);
-            }
             if (accessor.body === undefined && !hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
                 return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
             }
@@ -52709,9 +52476,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isClassLike(node.parent)) {
-            if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(node.name)) {
-                return grammarErrorOnNode(node.name, Diagnostics.Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher);
-            }
             // Technically, computed properties in ambient contexts is disallowed
             // for property declarations and accessors too, not just methods.
             // However, property declarations disallow computed names in general,
@@ -53101,12 +52865,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_have_a_simple_literal_type_or_a_unique_symbol_type)) {
                 return true;
-            }
-            if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(node.name)) {
-                return grammarErrorOnNode(node.name, Diagnostics.Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher);
-            }
-            if (languageVersion < ScriptTarget.ES2015 && isAutoAccessorPropertyDeclaration(node) && !(node.flags & NodeFlags.Ambient)) {
-                return grammarErrorOnNode(node.name, Diagnostics.Properties_with_the_accessor_modifier_are_only_available_when_targeting_ECMAScript_2015_and_higher);
             }
             if (isAutoAccessorPropertyDeclaration(node) && checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_accessor_property_cannot_be_declared_optional)) {
                 return true;
