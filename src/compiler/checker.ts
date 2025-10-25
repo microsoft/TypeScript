@@ -30514,9 +30514,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isComputedPropertyName(parent)) {
                 // Found a computed property name, now check if it's for an abstract member
                 const memberParent = parent.parent;
-                if ((isMethodDeclaration(memberParent) || isMethodSignature(memberParent) ||
-                     isPropertyDeclaration(memberParent) || isPropertySignature(memberParent)) &&
-                    hasSyntacticModifier(memberParent, ModifierFlags.Abstract)) {
+                if (
+                    (isMethodDeclaration(memberParent) || isMethodSignature(memberParent) ||
+                        isPropertyDeclaration(memberParent) || isPropertySignature(memberParent)) &&
+                    hasSyntacticModifier(memberParent, ModifierFlags.Abstract)
+                ) {
                     return true;
                 }
                 // If we found a computed property name but it's not for an abstract member, stop searching
