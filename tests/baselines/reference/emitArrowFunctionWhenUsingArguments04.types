@@ -7,13 +7,11 @@ function f() {
 
     var arguments;
 >arguments : any
->          : ^^^
 
     var a = () => arguments;
->a : () => IArguments
->  : ^^^^^^^^^^^^^^^^
->() => arguments : () => IArguments
->                : ^^^^^^^^^^^^^^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>a : () => any
+>  : ^^^^^^^^^
+>() => arguments : () => any
+>                : ^^^^^^^^^
+>arguments : any
 }
