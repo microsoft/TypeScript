@@ -8979,6 +8979,7 @@ const _computedOptions = createComputedCompilerOptions({
         computeValue: (compilerOptions): ModuleKind => {
             return typeof compilerOptions.module === "number" ?
                 compilerOptions.module :
+                // TODO: remove ScriptTarget.ES2015
                 _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
         },
     },
@@ -11655,13 +11656,6 @@ export function createNameResolver({
                         }
                     }
                     break;
-                case SyntaxKind.ArrowFunction:
-                    // when targeting ES6 or higher there is no 'arguments' in an arrow function
-                    // for lower compile targets the resolved symbol is used to emit an error
-                    if (getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015) {
-                        break;
-                    }
-                    // falls through
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
@@ -11835,14 +11829,12 @@ export function createNameResolver({
             // - optional chaining pre-es2020
             // - nullish coalesce pre-es2020
             // - spread assignment in binding pattern pre-es2017
-            if (target >= ScriptTarget.ES2015) {
-                let declarationRequiresScopeChange = getRequiresScopeChangeCache(functionLocation);
-                if (declarationRequiresScopeChange === undefined) {
-                    declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
-                    setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange);
-                }
-                return !declarationRequiresScopeChange;
+            let declarationRequiresScopeChange = getRequiresScopeChangeCache(functionLocation);
+            if (declarationRequiresScopeChange === undefined) {
+                declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
+                setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange);
             }
+            return !declarationRequiresScopeChange;
         }
         return false;
 

@@ -3,5 +3,4 @@
 === emitArrowFunctionWhenUsingArguments02.ts ===
 var a = () => arguments;
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments02.ts, 0, 3))
->arguments : Symbol(arguments)
 
