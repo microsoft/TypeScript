@@ -1,0 +1,19 @@
+// === Syntax and Semantic Diagnostics ===
+Syntactic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences4.ts':
+
+
+==== /tests/cases/fourslash/server/src/libs/utils/helper.ts (0 errors) ====
+    export function helper() { return 42; }
+==== /tests/cases/fourslash/server/src/apps/main/index.ts (0 errors) ====
+    import { helper } from "../../libs/utils/helper.ts";
+
+Semantic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences4.ts':
+/tests/cases/fourslash/server/src/apps/main/index.ts(1,24): error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
+
+
+==== /tests/cases/fourslash/server/src/libs/utils/helper.ts (0 errors) ====
+    export function helper() { return 42; }
+==== /tests/cases/fourslash/server/src/apps/main/index.ts (1 errors) ====
+    import { helper } from "../../libs/utils/helper.ts";
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
