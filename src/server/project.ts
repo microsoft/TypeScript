@@ -2106,8 +2106,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // Search any globally-specified probe paths, then our peer node_modules
         return [
             ...this.projectService.pluginProbeLocations,
-            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
+            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/
+            // later we will append node_modules back on to resolve the plugin location
+            combinePaths(this.projectService.getExecutingFilePath(), "../../../.."),
         ];
     }
 
@@ -3204,3 +3205,4 @@ export function isBackgroundProject(project: Project): project is AutoImportProv
 export function isProjectDeferredClose(project: Project): project is ConfiguredProject {
     return isConfiguredProject(project) && !!project.deferredClose;
 }
+
