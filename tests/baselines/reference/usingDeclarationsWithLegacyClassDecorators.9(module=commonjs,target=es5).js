@@ -15,14 +15,11 @@ using after = null;
 //// [usingDeclarationsWithLegacyClassDecorators.9.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    let C = class C {
-    };
-    C = __decorate([
-        dec
-    ], C);
-    return C;
-})();
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
 exports.default = C;
 var after;
 const env_1 = { stack: [], error: void 0, hasError: false };

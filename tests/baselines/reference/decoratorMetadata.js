@@ -37,23 +37,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const service_1 = require("./service");
-let MyComponent = (() => {
-    let MyComponent = class MyComponent {
-        constructor(Service) {
-            this.Service = Service;
-        }
-        method(x) {
-        }
-    };
-    __decorate([
-        decorator,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], MyComponent.prototype, "method", null);
-    MyComponent = __decorate([
-        decorator,
-        __metadata("design:paramtypes", [service_1.default])
-    ], MyComponent);
-    return MyComponent;
-})();
+let MyComponent = class MyComponent {
+    constructor(Service) {
+        this.Service = Service;
+    }
+    method(x) {
+    }
+};
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MyComponent.prototype, "method", null);
+MyComponent = __decorate([
+    decorator,
+    __metadata("design:paramtypes", [service_1.default])
+], MyComponent);

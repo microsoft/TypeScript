@@ -24,12 +24,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 class C {
     method() { }
 }
-let C2 = (() => {
-    class C2 {
-        method(allowed) { }
-    }
-    __decorate([
-        __param(0, dec)
-    ], C2.prototype, "method", null);
-    return C2;
-})();
+class C2 {
+    method(allowed) { }
+}
+__decorate([
+    __param(0, dec)
+], C2.prototype, "method", null);

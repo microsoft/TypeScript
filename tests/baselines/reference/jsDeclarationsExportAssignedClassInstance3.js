@@ -11,15 +11,12 @@ module.exports = new Foo();
 module.exports.additional = 20;
 
 //// [index.js]
-let Foo = (() => {
-    class Foo {
-        constructor() {
-            this.member = 10;
-        }
+class Foo {
+    constructor() {
+        this.member = 10;
     }
-    Foo.stat = 10;
-    return Foo;
-})();
+}
+Foo.stat = 10;
 module.exports = new Foo();
 module.exports.additional = 20;
 

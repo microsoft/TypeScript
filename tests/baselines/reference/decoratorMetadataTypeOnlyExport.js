@@ -33,13 +33,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Decorator = () => undefined;
-let Bar = (() => {
-    let Bar = class Bar {
-        constructor(par) { }
-    };
-    Bar = __decorate([
-        Decorator,
-        __metadata("design:paramtypes", [Function])
-    ], Bar);
-    return Bar;
-})();
+let Bar = class Bar {
+    constructor(par) { }
+};
+Bar = __decorate([
+    Decorator,
+    __metadata("design:paramtypes", [Function])
+], Bar);

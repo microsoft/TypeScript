@@ -70,19 +70,16 @@ class B {
 }
 
 //// [thisInPropertyBoundDeclarations.js]
-let Bug = (() => {
-    class Bug {
-        foo(name) {
-            this.name = name;
-        }
+class Bug {
+    foo(name) {
+        this.name = name;
     }
-    Bug.func = [
-        (that, name) => {
-            that.foo(name);
-        }
-    ];
-    return Bug;
-})();
+}
+Bug.func = [
+    (that, name) => {
+        that.foo(name);
+    }
+];
 // Valid use of this in a property bound decl
 class A {
     constructor() {

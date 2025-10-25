@@ -53,18 +53,15 @@ function f(b) {
         new Foo();
     }
     else {
-        let Foo = (() => {
-            class Foo {
-                static x() {
-                    new Foo();
-                }
-                m() {
-                    new Foo();
-                }
+        class Foo {
+            static x() {
+                new Foo();
             }
-            Foo.y = new Foo();
-            return Foo;
-        })();
+            m() {
+                new Foo();
+            }
+        }
+        Foo.y = new Foo();
         new Foo();
     }
 }

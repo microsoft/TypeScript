@@ -504,143 +504,131 @@ exports.default = default_1;
 ;
 //// [locals.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = [
-        (() => {
-            var Reflect; // collision (es2015-es2021 only)
-            super.w();
-        })(),
-        (() => {
-            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-            super.w();
-        })(),
-        (() => {
-            var [Reflect] = [null]; // collision (es2015-es2021 only)
-            super.w();
-        })(),
-        (() => {
-            class Reflect {
-            } // collision (es2015-es2021 only)
-            super.w();
-        })(),
-        (() => {
-            function Reflect() { } // collision (es2015-es2021 only)
-            super.w();
-        })(),
-        (() => {
-            let Reflect;
-            (function (Reflect) {
-            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-            super.w();
-        })(),
-        (() => {
-            super.w();
-        })(),
-        (() => {
-            super.w();
-        })(),
-        (() => {
-            ; // no collision
-            super.w();
-        })(),
-        (() => {
-            (class Reflect {
-            }); // no collision
-            super.w();
-        })(),
-        (() => {
-            (function Reflect() { }); // no collision
-            super.w();
-        })(),
-    ];
-    (() => {
-        var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-        super.w();
-    })();
-    (() => {
-        var [Reflect] = [null]; // collision (es2015-es2021 only)
-        super.w();
-    })();
+class C extends B {
+}
+_a = C;
+C._ = [
     (() => {
         var Reflect; // collision (es2015-es2021 only)
         super.w();
-    })();
+    })(),
+    (() => {
+        var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+        super.w();
+    })(),
+    (() => {
+        var [Reflect] = [null]; // collision (es2015-es2021 only)
+        super.w();
+    })(),
     (() => {
         class Reflect {
         } // collision (es2015-es2021 only)
         super.w();
-    })();
+    })(),
     (() => {
         function Reflect() { } // collision (es2015-es2021 only)
         super.w();
-    })();
+    })(),
     (() => {
         let Reflect;
         (function (Reflect) {
         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
         super.w();
-    })();
+    })(),
     (() => {
         super.w();
-    })();
+    })(),
     (() => {
         super.w();
-    })();
+    })(),
     (() => {
+        ; // no collision
         super.w();
-    })();
+    })(),
     (() => {
         (class Reflect {
         }); // no collision
         super.w();
-    })();
+    })(),
     (() => {
         (function Reflect() { }); // no collision
         super.w();
-    })();
-    return C;
+    })(),
+];
+(() => {
+    var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+    super.w();
+})();
+(() => {
+    var [Reflect] = [null]; // collision (es2015-es2021 only)
+    super.w();
+})();
+(() => {
+    var Reflect; // collision (es2015-es2021 only)
+    super.w();
+})();
+(() => {
+    class Reflect {
+    } // collision (es2015-es2021 only)
+    super.w();
+})();
+(() => {
+    function Reflect() { } // collision (es2015-es2021 only)
+    super.w();
+})();
+(() => {
+    let Reflect;
+    (function (Reflect) {
+    })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+    super.w();
+})();
+(() => {
+    super.w();
+})();
+(() => {
+    super.w();
+})();
+(() => {
+    super.w();
+})();
+(() => {
+    (class Reflect {
+    }); // no collision
+    super.w();
+})();
+(() => {
+    (function Reflect() { }); // no collision
+    super.w();
 })();
 //// [varInContainingScopeStaticField1.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect = null; // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [varInContainingScopeStaticField2.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [varInContainingScopeStaticField3.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var [Reflect] = [null]; // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [varInContainingScopeStaticBlock1.js]
 "use strict";
 var _a;
@@ -676,17 +664,14 @@ _a = C;
 })();
 //// [classDeclInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 class Reflect {
 } // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [classDeclInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -701,16 +686,13 @@ _a = C;
 })();
 //// [funcDeclInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 function Reflect() { } // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [funcDeclInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -724,15 +706,12 @@ _a = C;
 })();
 //// [valueNamespaceInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [valueNamespaceInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -745,18 +724,15 @@ _a = C;
 })();
 //// [enumInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
 })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [enumInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -772,15 +748,12 @@ _a = C;
 })();
 //// [constEnumInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [constEnumInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -793,15 +766,12 @@ _a = C;
 })();
 //// [namespaceImportInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [namespaceImportInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -814,15 +784,12 @@ _a = C;
 })();
 //// [namedImportInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [namedImportInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -835,15 +802,12 @@ _a = C;
 })();
 //// [namedImportOfInterfaceInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [namedImportOfInterfaceInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -856,15 +820,12 @@ _a = C;
 })();
 //// [namedImportOfUninstantiatedNamespaceInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [namedImportOfUninstantiatedNamespaceInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -877,15 +838,12 @@ _a = C;
 })();
 //// [namedImportOfConstEnumInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [namedImportOfConstEnumInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -898,15 +856,12 @@ _a = C;
 })();
 //// [typeOnlyNamedImportInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [typeOnlyNamedImportInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -919,15 +874,12 @@ _a = C;
 })();
 //// [defaultImportInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [defaultImportInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -940,15 +892,12 @@ _a = C;
 })();
 //// [typeOnlyDefaultImportInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [typeOnlyDefaultImportInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -961,15 +910,12 @@ _a = C;
 })();
 //// [typeInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [typeInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -982,16 +928,13 @@ _a = C;
 })();
 //// [interfaceInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 ; // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [interfaceInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -1005,16 +948,13 @@ _a = C;
 })();
 //// [uninstantiatedNamespaceInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 ; // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [uninstantiatedNamespaceInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -1028,17 +968,14 @@ _a = C;
 })();
 //// [classExprInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 (class Reflect {
 }); // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [classExprInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -1058,14 +995,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 (_a = class Reflect {
     },
     (() => {
-        let C = (() => {
-            var _b;
-            class C extends B {
-            }
-            _b = C;
-            C._ = super.w();
-            return C;
-        })();
+        var _b;
+        class C extends B {
+        }
+        _b = C;
+        C._ = super.w();
     })(),
     _a);
 //// [inContainingClassExprStaticBlock.js]
@@ -1086,16 +1020,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
     _a);
 //// [funcExprInContainingScopeStaticField.js]
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 (function Reflect() { }); // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
-})();
+class C extends B {
+}
+_a = C;
+C._ = super.w();
 //// [funcExprInContainingScopeStaticBlock.js]
 "use strict";
 var _a;
@@ -1111,14 +1042,11 @@ _a = C;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 (function Reflect() {
-    let C = (() => {
-        var _a;
-        class C extends B {
-        }
-        _a = C;
-        C._ = super.w();
-        return C;
-    })();
+    var _a;
+    class C extends B {
+    }
+    _a = C;
+    C._ = super.w();
 });
 //// [inContainingFuncExprStaticBlock.js]
 "use strict";

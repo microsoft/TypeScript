@@ -13,13 +13,10 @@ class Derived extends Base {
 //// [privateStaticMemberAccessibility.js]
 class Base {
 }
-let Derived = (() => {
-    class Derived extends Base {
-        constructor() {
-            super(...arguments);
-            this.bing = () => Base.foo; // error
-        }
+class Derived extends Base {
+    constructor() {
+        super(...arguments);
+        this.bing = () => Base.foo; // error
     }
-    Derived.bar = Base.foo; // error
-    return Derived;
-})();
+}
+Derived.bar = Base.foo; // error

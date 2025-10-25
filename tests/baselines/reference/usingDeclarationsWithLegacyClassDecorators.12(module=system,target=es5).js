@@ -22,15 +22,12 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = (() => {
-                let C = class C {
-                };
-                C = __decorate([
-                    dec
-                ], C);
-                return C;
-            })();
+            C = class C {
+            };
             exports_1("D", C);
+            C = __decorate([
+                dec
+            ], C);
             env_1 = { stack: [], error: void 0, hasError: false };
             try {
                 after = __addDisposableResource(env_1, null, false);

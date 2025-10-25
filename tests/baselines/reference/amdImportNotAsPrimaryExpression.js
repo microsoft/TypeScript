@@ -36,16 +36,13 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.E1 = exports.C1 = void 0;
-    let C1 = (() => {
-        class C1 {
-            constructor() {
-                this.m1 = 42;
-            }
+    class C1 {
+        constructor() {
+            this.m1 = 42;
         }
-        C1.s1 = true;
-        return C1;
-    })();
+    }
     exports.C1 = C1;
+    C1.s1 = true;
     var E1;
     (function (E1) {
         E1[E1["A"] = 0] = "A";

@@ -38,13 +38,10 @@ const auxiliry_1 = require("./auxiliry");
 function annotation() {
     return (target) => { };
 }
-let ClassA = (() => {
-    class ClassA {
-    }
-    __decorate([
-        annotation(),
-        __metadata("design:type", auxiliry_1.SomeClass)
-    ], ClassA.prototype, "array", void 0);
-    return ClassA;
-})();
+class ClassA {
+}
 exports.ClassA = ClassA;
+__decorate([
+    annotation(),
+    __metadata("design:type", auxiliry_1.SomeClass)
+], ClassA.prototype, "array", void 0);

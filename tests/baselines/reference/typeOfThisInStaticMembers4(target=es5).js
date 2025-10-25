@@ -14,47 +14,40 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers4.js]
-let C = (() => {
-    var _a;
-    class C {
-    }
-    _a = C;
-    Object.defineProperty(C, "a", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: 1
-    });
-    Object.defineProperty(C, "b", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: _a.a + 1
-    });
-    return C;
-})();
-let D = (() => {
-    var _a;
-    class D extends C {
-    }
-    _a = D;
-    Object.defineProperty(D, "c", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: 2
-    });
-    Object.defineProperty(D, "d", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: _a.c + 1
-    });
-    Object.defineProperty(D, "e", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: super.a + _a.c + 1
-    });
-    return D;
-})();
+var _a, _b;
+class C {
+}
+_a = C;
+Object.defineProperty(C, "a", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: 1
+});
+Object.defineProperty(C, "b", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: _a.a + 1
+});
+class D extends C {
+}
+_b = D;
+Object.defineProperty(D, "c", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: 2
+});
+Object.defineProperty(D, "d", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: _b.c + 1
+});
+Object.defineProperty(D, "e", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: super.a + _b.c + 1
+});

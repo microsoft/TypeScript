@@ -31,24 +31,21 @@ class P {
     x() { }
     static y() { }
 }
-let Q = (() => {
-    class Q extends P {
-        // Super is not allowed in constructor args
-        constructor(z = super., zz = super., zzz = () => super.) {
-            super();
-            this.z = z;
-            this.xx = super.;
-        }
-        foo(zz = super.) {
-            super.x();
-            super.y(); // error
-        }
-        static bar(zz = super.) {
-            super.x(); // error
-            super.y();
-        }
+class Q extends P {
+    // Super is not allowed in constructor args
+    constructor(z = super., zz = super., zzz = () => super.) {
+        super();
+        this.z = z;
+        this.xx = super.;
     }
-    Q.yy = super. // error for static initializer accessing super
-    ; // error for static initializer accessing super
-    return Q;
-})();
+    foo(zz = super.) {
+        super.x();
+        super.y(); // error
+    }
+    static bar(zz = super.) {
+        super.x(); // error
+        super.y();
+    }
+}
+Q.yy = super. // error for static initializer accessing super
+; // error for static initializer accessing super

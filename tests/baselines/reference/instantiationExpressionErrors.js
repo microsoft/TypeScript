@@ -156,13 +156,10 @@ let x13 = (f);
 bar();
 let x14 = (f);
 void bar();
-let C1 = (() => {
-    class C1 {
-    }
-    C1.specialFoo = (f);
-    C1.bar = 123;
-    return C1;
-})();
+class C1 {
+}
+C1.specialFoo = (f);
+C1.bar = 123;
 class C2 {
     constructor() {
         this.specialFoo = (f);

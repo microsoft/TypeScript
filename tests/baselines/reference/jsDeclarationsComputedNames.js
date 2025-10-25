@@ -41,26 +41,23 @@ module.exports = {
 };
 //// [index2.js]
 "use strict";
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
 const TopLevelSym = Symbol();
 const InnerSym = Symbol();
-let MyClass = (() => {
-    var _a, _b;
-    class MyClass {
-        /**
-         * @param {typeof TopLevelSym | typeof InnerSym} _p
-         */
-        constructor(_p = InnerSym) {
-            this[_b] = "ok";
-            // switch on _p
-        }
+class MyClass {
+    /**
+     * @param {typeof TopLevelSym | typeof InnerSym} _p
+     */
+    constructor(_p = InnerSym) {
+        this[_b] = "ok";
+        // switch on _p
     }
-    _a = TopLevelSym, _b = InnerSym;
-    MyClass[_a] = 12;
-    return MyClass;
-})();
+}
 exports.MyClass = MyClass;
+_a = TopLevelSym, _b = InnerSym;
+MyClass[_a] = 12;
 
 
 //// [index.d.ts]

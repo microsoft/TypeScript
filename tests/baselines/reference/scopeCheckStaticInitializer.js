@@ -18,22 +18,16 @@ class After {
 
 
 //// [scopeCheckStaticInitializer.js]
-let X = (() => {
-    class X {
-        static method() { }
-    }
-    X.illegalBeforeProperty = X.data;
-    X.okBeforeMethod = X.method;
-    X.illegal2 = After.data;
-    X.illegal3 = After.method;
-    X.data = 13;
-    return X;
-})();
-let After = (() => {
-    class After {
-        static method() { }
-        ;
-    }
-    After.data = 12;
-    return After;
-})();
+class X {
+    static method() { }
+}
+X.illegalBeforeProperty = X.data;
+X.okBeforeMethod = X.method;
+X.illegal2 = After.data;
+X.illegal3 = After.method;
+X.data = 13;
+class After {
+    static method() { }
+    ;
+}
+After.data = 12;

@@ -22,20 +22,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let X = (() => {
-    class X {
-    }
-    __decorate([
-        decorator(),
-        __metadata("design:type", String)
-    ], X.prototype, "a", void 0);
-    __decorate([
-        decorator(),
-        __metadata("design:type", String)
-    ], X.prototype, "b", void 0);
-    __decorate([
-        decorator(),
-        __metadata("design:type", Object)
-    ], X.prototype, "c", void 0);
-    return X;
-})();
+class X {
+}
+__decorate([
+    decorator(),
+    __metadata("design:type", String)
+], X.prototype, "a", void 0);
+__decorate([
+    decorator(),
+    __metadata("design:type", String)
+], X.prototype, "b", void 0);
+__decorate([
+    decorator(),
+    __metadata("design:type", Object)
+], X.prototype, "c", void 0);

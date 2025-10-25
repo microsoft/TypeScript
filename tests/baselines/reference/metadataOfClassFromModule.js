@@ -30,14 +30,11 @@ var MyModule;
     class Leg {
     }
     MyModule.Leg = Leg;
-    let Person = (() => {
-        class Person {
-        }
-        __decorate([
-            inject,
-            __metadata("design:type", Leg)
-        ], Person.prototype, "leftLeg", void 0);
-        return Person;
-    })();
+    class Person {
+    }
+    __decorate([
+        inject,
+        __metadata("design:type", Leg)
+    ], Person.prototype, "leftLeg", void 0);
     MyModule.Person = Person;
 })(MyModule || (MyModule = {}));

@@ -19,24 +19,18 @@ class C extends B {
 
 
 //// [classStaticBlock5.js]
-let B = (() => {
-    class B {
-    }
-    B.a = 1;
-    B.b = 2;
-    return B;
-})();
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C.b = 3;
-    C.c = super.a;
-    (() => {
-        _a.b;
-        super.b;
-        super.a;
-    })();
-    return C;
+var _a;
+class B {
+}
+B.a = 1;
+B.b = 2;
+class C extends B {
+}
+_a = C;
+C.b = 3;
+C.c = super.a;
+(() => {
+    _a.b;
+    super.b;
+    super.a;
 })();

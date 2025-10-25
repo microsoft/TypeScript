@@ -22,20 +22,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var B_1;
 class A {
 }
 // https://github.com/Microsoft/TypeScript/issues/16417
-let B = (() => {
-    var B_1;
-    let B = B_1 = class B extends A {
-        m() {
-            return B_1.x;
-        }
-    };
-    B.x = 1;
-    B.y = B_1.x;
-    B = B_1 = __decorate([
-        dec
-    ], B);
-    return B;
-})();
+let B = B_1 = class B extends A {
+    m() {
+        return B_1.x;
+    }
+};
+B.x = 1;
+B.y = B_1.x;
+B = B_1 = __decorate([
+    dec
+], B);

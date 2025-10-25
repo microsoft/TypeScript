@@ -2292,81 +2292,78 @@ var Harness;
         }
     }
     Harness.emitLog = emitLog;
-    let Runnable = (() => {
-        class Runnable {
-            constructor(description, block) {
-                this.description = description;
-                this.block = block;
-                // The error, if any, that occurred when running 'block'
-                this.error = null;
-                // Whether or not this object has any failures (including in its descendants)
-                this.passed = null;
-                // A list of bugs impacting this object
-                this.bugs = [];
-                // A list of all our child Runnables
-                this.children = [];
-            }
-            addChild(child) {
-                this.children.push(child);
-            }
-            /** Call function fn, which may take a done function and may possibly execute
-             *  asynchronously, calling done when finished. Returns true or false depending
-             *  on whether the function was asynchronous or not.
-             */
-            call(fn, done) {
-                var isAsync = true;
-                try {
-                    if (fn.length === 0) {
-                        // No async.
-                        fn();
-                        done();
-                        return false;
-                    }
-                    else {
-                        // Possibly async
-                        Runnable.pushGlobalErrorHandler(done);
-                        fn(function () {
-                            isAsync = false; // If we execute synchronously, this will get called before the return below.
-                            Runnable.popGlobalErrorHandler();
-                            done();
-                        });
-                        return isAsync;
-                    }
-                }
-                catch (e) {
-                    done(e);
+    class Runnable {
+        constructor(description, block) {
+            this.description = description;
+            this.block = block;
+            // The error, if any, that occurred when running 'block'
+            this.error = null;
+            // Whether or not this object has any failures (including in its descendants)
+            this.passed = null;
+            // A list of bugs impacting this object
+            this.bugs = [];
+            // A list of all our child Runnables
+            this.children = [];
+        }
+        addChild(child) {
+            this.children.push(child);
+        }
+        /** Call function fn, which may take a done function and may possibly execute
+         *  asynchronously, calling done when finished. Returns true or false depending
+         *  on whether the function was asynchronous or not.
+         */
+        call(fn, done) {
+            var isAsync = true;
+            try {
+                if (fn.length === 0) {
+                    // No async.
+                    fn();
+                    done();
                     return false;
                 }
-            }
-            run(done) { }
-            runBlock(done) {
-                return this.call(this.block, done);
-            }
-            runChild(index, done) {
-                return this.call(((done) => this.children[index].run(done)), done);
-            }
-            static pushGlobalErrorHandler(done) {
-                errorHandlerStack.push(function (e) {
-                    done(e);
-                });
-            }
-            static popGlobalErrorHandler() {
-                errorHandlerStack.pop();
-            }
-            static handleError(e) {
-                if (errorHandlerStack.length === 0) {
-                    IO.printLine('Global error: ' + e);
-                }
                 else {
-                    errorHandlerStack[errorHandlerStack.length - 1](e);
+                    // Possibly async
+                    Runnable.pushGlobalErrorHandler(done);
+                    fn(function () {
+                        isAsync = false; // If we execute synchronously, this will get called before the return below.
+                        Runnable.popGlobalErrorHandler();
+                        done();
+                    });
+                    return isAsync;
                 }
+            }
+            catch (e) {
+                done(e);
+                return false;
             }
         }
-        // The current stack of Runnable objects
-        Runnable.currentStack = [];
-        Runnable.errorHandlerStack = [];
-        return Runnable;
-    })();
+        run(done) { }
+        runBlock(done) {
+            return this.call(this.block, done);
+        }
+        runChild(index, done) {
+            return this.call(((done) => this.children[index].run(done)), done);
+        }
+        static pushGlobalErrorHandler(done) {
+            errorHandlerStack.push(function (e) {
+                done(e);
+            });
+        }
+        static popGlobalErrorHandler() {
+            errorHandlerStack.pop();
+        }
+        static handleError(e) {
+            if (errorHandlerStack.length === 0) {
+                IO.printLine('Global error: ' + e);
+            }
+            else {
+                errorHandlerStack[errorHandlerStack.length - 1](e);
+            }
+        }
+    }
+    // The current stack of Runnable objects
+    Runnable.currentStack = [];
+    Runnable.errorHandlerStack = [];
     Harness.Runnable = Runnable;
     class TestCase extends Runnable {
         constructor(description, block) {

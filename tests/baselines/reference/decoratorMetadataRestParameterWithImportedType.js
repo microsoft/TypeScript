@@ -81,24 +81,21 @@ function annotation() {
 function annotation1() {
     return (target) => { };
 }
-let ClassA = (() => {
-    let ClassA = class ClassA {
-        constructor(...init) {
-            this.array = init;
-        }
-        foo(...args) {
-        }
-    };
-    __decorate([
-        annotation1(),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [aux1_1.SomeClass1]),
-        __metadata("design:returntype", void 0)
-    ], ClassA.prototype, "foo", null);
-    ClassA = __decorate([
-        annotation(),
-        __metadata("design:paramtypes", [aux_1.SomeClass])
-    ], ClassA);
-    return ClassA;
-})();
+let ClassA = class ClassA {
+    constructor(...init) {
+        this.array = init;
+    }
+    foo(...args) {
+    }
+};
 exports.ClassA = ClassA;
+__decorate([
+    annotation1(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [aux1_1.SomeClass1]),
+    __metadata("design:returntype", void 0)
+], ClassA.prototype, "foo", null);
+ClassA = __decorate([
+    annotation(),
+    __metadata("design:paramtypes", [aux_1.SomeClass])
+], ClassA);
