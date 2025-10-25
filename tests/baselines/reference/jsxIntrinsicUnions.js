@@ -47,6 +47,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 const El = Math.random() ? 'h1' : 'h2';
 const tag = React.createElement(El, { className: "ok", key: "key" }, "Title");

@@ -95,7 +95,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var stuff = __importStar(require("./spreadExpressionContextualTypeWithNamespace_0"));
+const stuff = __importStar(require("./spreadExpressionContextualTypeWithNamespace_0"));
 stuff.func;
 stuff.klass;
 stuff.obj;

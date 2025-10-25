@@ -24,6 +24,6 @@ m1.f();
 })(function (require, exports, b, c) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var m1 = require("m2");
+    const m1 = require("m2");
     m1.f();
 });

@@ -55,5 +55,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var ph = __importStar(require("fake:thing"));
+const ph = __importStar(require("fake:thing"));
 console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE);

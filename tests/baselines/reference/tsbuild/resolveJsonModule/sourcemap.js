@@ -84,7 +84,7 @@ Found 1 error.
 
 
 //// [/home/src/workspaces/solution/project/dist/src/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
 
 //// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
@@ -92,7 +92,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var hello_json_1 = __importDefault(require("./hello.json"));
+const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 

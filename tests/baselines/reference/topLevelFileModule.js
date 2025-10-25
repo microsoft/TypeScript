@@ -19,6 +19,6 @@ exports.x = void 0;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./vs/foo_0");
-var fum = require("./vs/fum");
+const foo = require("./vs/foo_0");
+const fum = require("./vs/fum");
 var z = foo.x + fum.y;

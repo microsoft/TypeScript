@@ -68,7 +68,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var B = __importStar(require("./b"));
+const B = __importStar(require("./b"));
 exports.B = B;
 const x = { x: "" };
 B.zzz;
@@ -108,9 +108,9 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 const x = { x: "" };
 a_1.B.zzz;
-var OriginalB = __importStar(require("./b"));
+const OriginalB = __importStar(require("./b"));
 OriginalB.zzz;
 const y = x;

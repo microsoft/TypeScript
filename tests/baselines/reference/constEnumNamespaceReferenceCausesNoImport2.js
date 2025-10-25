@@ -70,7 +70,7 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var Foo = __importStar(require("./foo"));
+const Foo = __importStar(require("./foo"));
 module.exports = Foo.ConstEnumOnlyModule;
 //// [index.js]
 "use strict";

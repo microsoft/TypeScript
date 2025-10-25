@@ -60,7 +60,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 function myHigherOrderComponent(Inner) {
     return class OuterComponent extends React.Component {
         render() {

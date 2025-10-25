@@ -33,7 +33,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mod_1 = __importDefault(require("mod"));
+const mod_1 = __importDefault(require("mod"));
 // Should see mod_1['default'] in emit here
 React.createElement(Foo, { handler: mod_1.default });
 // Should see mod_1['default'] in emit here

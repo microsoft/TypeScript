@@ -63,6 +63,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // Should not elide React import
-var React = __importStar(require("react"));
-var file1_1 = require("./file1");
+const React = __importStar(require("react"));
+const file1_1 = require("./file1");
 React.createElement(file1_1.MyClass, null);

@@ -160,7 +160,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 let Component;
 const RenderElement = ({ title }) => React.createElement("div", null, title);
 Component = RenderElement;

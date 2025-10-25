@@ -79,33 +79,33 @@ exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
 exports.fn = fn;
 function fn() {
     return __awaiter(this, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(function () { return __importStar(require('./test')); }); // ONE
+        const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // ONE
     });
 }
 class cl1 {
     m() {
         return __awaiter(this, void 0, void 0, function* () {
-            const req = yield Promise.resolve().then(function () { return __importStar(require('./test')); }); // TWO
+            const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // TWO
         });
     }
 }
 exports.cl1 = cl1;
 exports.obj = {
     m: () => __awaiter(void 0, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(function () { return __importStar(require('./test')); }); // THREE
+        const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // THREE
     })
 };
 class cl2 {
     constructor() {
         this.p = {
             m: () => __awaiter(this, void 0, void 0, function* () {
-                const req = yield Promise.resolve().then(function () { return __importStar(require('./test')); }); // FOUR
+                const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FOUR
             })
         };
     }
 }
 exports.cl2 = cl2;
 const l = () => __awaiter(void 0, void 0, void 0, function* () {
-    const req = yield Promise.resolve().then(function () { return __importStar(require('./test')); }); // FIVE
+    const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FIVE
 });
 exports.l = l;

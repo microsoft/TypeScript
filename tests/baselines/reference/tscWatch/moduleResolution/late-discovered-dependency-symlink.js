@@ -184,7 +184,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-var pkg = __importStar(require("package-b"));
+const pkg = __importStar(require("package-b"));
 exports.a = pkg.invoke();
 
 
@@ -362,7 +362,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aa = void 0;
-var pkg = __importStar(require("package-b"));
+const pkg = __importStar(require("package-b"));
 exports.aa = pkg.invoke();
 
 

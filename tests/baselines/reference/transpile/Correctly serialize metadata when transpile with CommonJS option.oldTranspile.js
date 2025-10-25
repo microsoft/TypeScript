@@ -42,7 +42,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ng = __importStar(require("angular2/core"));
+const ng = __importStar(require("angular2/core"));
 let MyClass1 = (() => {
     var _a;
     let MyClass1 = class MyClass1 {

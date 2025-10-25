@@ -56,5 +56,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var MyLib = __importStar(require("./library"));
+const MyLib = __importStar(require("./library"));
 const content = MyLib.createElement("my-element", null);

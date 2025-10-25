@@ -60,7 +60,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 // should be fine - `ElementType` accepts `div`
 let a = React.createElement("div", null);
 // should be an error - `ElementType` does not accept `span`

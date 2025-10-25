@@ -68,7 +68,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // https://github.com/Microsoft/TypeScript/issues/11177
-var Bluebird = __importStar(require("bluebird"));
+const Bluebird = __importStar(require("bluebird"));
 function a() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

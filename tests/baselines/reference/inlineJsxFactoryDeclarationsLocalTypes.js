@@ -92,7 +92,7 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
-var renderer2_1 = require("./renderer2");
+const renderer2_1 = require("./renderer2");
 const MySFC = (props) => (0, renderer2_1.predom)("p", null,
     props.x,
     " + ",
@@ -157,8 +157,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
-var renderer_1 = require("./renderer");
-var component_1 = __importStar(require("./component"));
+const renderer_1 = require("./renderer");
+const component_1 = __importStar(require("./component"));
 let elem = component_1.default;
 elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
 const DOMSFC = (props) => (0, renderer_1.dom)("p", null,

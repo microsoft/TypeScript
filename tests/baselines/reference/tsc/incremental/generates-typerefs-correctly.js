@@ -126,8 +126,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bug = void 0;
-var B = __importStar(require("./box.js"));
-var W = __importStar(require("./wrap.js"));
+const B = __importStar(require("./box.js"));
+const W = __importStar(require("./wrap.js"));
 /**
  * @template {object} C
  * @param {C} source
@@ -301,8 +301,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.something = exports.bug = void 0;
-var B = __importStar(require("./box.js"));
-var W = __importStar(require("./wrap.js"));
+const B = __importStar(require("./box.js"));
+const W = __importStar(require("./wrap.js"));
 /**
  * @template {object} C
  * @param {C} source

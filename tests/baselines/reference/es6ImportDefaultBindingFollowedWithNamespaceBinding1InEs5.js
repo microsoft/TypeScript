@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"));
+const es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1.default;
 
 

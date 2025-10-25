@@ -33,8 +33,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var _1 = __importDefault(require("."));
-var _2 = __importDefault(require("./"));
+const _1 = __importDefault(require("."));
+const _2 = __importDefault(require("./"));
 _1.default.a;
 _2.default.aIndex;
 //// [test.js]
@@ -43,7 +43,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var __1 = __importDefault(require(".."));
-var __2 = __importDefault(require("../"));
+const __1 = __importDefault(require(".."));
+const __2 = __importDefault(require("../"));
 __1.default.a;
 __2.default.aIndex;

@@ -20,7 +20,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 //// [undeclaredModuleError.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
+const fs = require("fs");
 function readdir(path, accept, callback) { }
 function join(...paths) { }
 function instrumentFile(covFileDir, covFileName, originalFilePath) {

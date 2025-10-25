@@ -109,5 +109,5 @@ exports.NS = exports.C = void 0;
 var exportValue_1 = require("./exportValue");
 Object.defineProperty(exports, "C", { enumerable: true, get: function () { return exportValue_1.C; } });
 // OK, even though the namespace it exports is only types.
-var NS = __importStar(require("./exportT"));
+const NS = __importStar(require("./exportT"));
 exports.NS = NS;

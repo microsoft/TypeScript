@@ -67,7 +67,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Button = void 0;
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 class Button extends React.Component {
     render() {
         return <button>Some button</button>;
@@ -111,9 +111,9 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 // Should see var button_1 = require('./button') here
-var button_1 = require("./button");
+const button_1 = require("./button");
 class App extends React.Component {
     render() {
         return <button_1.Button />;

@@ -42,5 +42,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 exports.x = void 0;
-Promise.resolve().then(function () { return __importStar(require("./a")); });
+Promise.resolve().then(() => __importStar(require("./a")));
 module.exports = exports.x;

@@ -97,7 +97,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 //// [/user/username/projects/myproject/lib/app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts_types_1 = require("@myapp/ts-types");
+const ts_types_1 = require("@myapp/ts-types");
 const x = ts_types_1.myapp;
 
 

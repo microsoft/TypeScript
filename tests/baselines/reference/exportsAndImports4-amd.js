@@ -98,7 +98,7 @@ define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], f
     c.default;
     Object.defineProperty(exports, "d", { enumerable: true, get: function () { return t1_2.default; } });
     t1_2.default;
-    var e2 = t1_3;
+    const e2 = t1_3;
     exports.e1 = t1_3.default;
     exports.e2 = e2;
     t1_3.default;

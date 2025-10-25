@@ -92,7 +92,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // all mutations below are illegal and should be fixed
-var stuff = __importStar(require("./f1"));
+const stuff = __importStar(require("./f1"));
 var n = 'baz';
 stuff.x = 0;
 stuff['x'] = 1;

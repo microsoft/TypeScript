@@ -19,11 +19,11 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleD.js]
 "use strict";
-var self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleC");
+const self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleC");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleC.js]
 "use strict";
-var self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleD");
+const self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleD");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleB.js]
 "use strict";

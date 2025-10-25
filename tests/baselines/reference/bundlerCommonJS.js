@@ -34,12 +34,12 @@ import { x } from "pkg"; // Error
 //// [requires.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pkg = require("pkg");
+const pkg = require("pkg");
 pkg.x;
 //// [imports.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pkg_1 = require("pkg");
+const pkg_1 = require("pkg");
 pkg_1.x;
 //// [real-imports.mjs]
 export {};

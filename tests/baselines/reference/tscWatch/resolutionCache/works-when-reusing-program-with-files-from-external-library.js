@@ -56,14 +56,14 @@ Output::
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module1 = require("module1");
+const module1 = require("module1");
 module1("hello");
 
 
 //// [/a/b/projects/myProject/dist/file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module11 = require("module1");
+const module11 = require("module1");
 module11("hello");
 
 
@@ -171,7 +171,7 @@ Output::
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module1 = require("module1");
+const module1 = require("module1");
 module1("hello");
 ;
 

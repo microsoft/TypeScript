@@ -90,7 +90,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var X = __importStar(require("./exportStarFromEmptyModule_module3"));
+const X = __importStar(require("./exportStarFromEmptyModule_module3"));
 var s;
 X.A.q;
 X.A.r; // Error

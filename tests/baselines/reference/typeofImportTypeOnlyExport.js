@@ -33,7 +33,7 @@ exports.classMap = (0, exports.directive)(ClassMapDirective);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var lit_js_1 = require("./lit.js");
+const lit_js_1 = require("./lit.js");
 exports.c = (0, lit_js_1.classMap)();
 
 

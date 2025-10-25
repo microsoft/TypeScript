@@ -43,12 +43,12 @@ var Observable;
 //// [map.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var observable_1 = require("./observable");
+const observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var observable_1 = require("./observable");
+const observable_1 = require("./observable");
 require("./map");
 let x;
 let y = x.map(x => x + 1);

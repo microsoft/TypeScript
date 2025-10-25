@@ -68,7 +68,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 // opening + closing
 const a = React.createElement("div", null); // empty type args
 const b = React.createElement("div", null); // trailing comma type args

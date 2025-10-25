@@ -80,7 +80,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var keys = __importStar(require("./a"));
+const keys = __importStar(require("./a"));
 const t1 = {
     [keys.n]: 1,
     [keys.n]: 1, // duplicate

@@ -61,7 +61,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 const classes = "";
 const rest = {};
 const children = [];

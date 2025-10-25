@@ -96,8 +96,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var t1 = __importStar(require("./type1"));
-var class3_1 = require("./class3");
+const t1 = __importStar(require("./type1"));
+const class3_1 = require("./class3");
 let HelloWorld = (() => {
     class HelloWorld {
         handleEvent1(event) { } // Error

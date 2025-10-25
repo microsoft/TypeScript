@@ -66,7 +66,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 const myHoc = (ComposedComponent) => {
     const WrapperComponent = null;
     const props = null;

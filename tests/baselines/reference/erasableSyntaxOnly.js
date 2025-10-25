@@ -168,7 +168,7 @@ class {
 };
 //// [commonjs.cjs]
 "use strict";
-var foo = require("./other.cjs");
+const foo = require("./other.cjs");
 module.exports = foo;
 //// [esm.mjs]
 const foo = 1234;

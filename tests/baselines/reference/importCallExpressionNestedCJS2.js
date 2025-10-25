@@ -57,6 +57,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function foo() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield Promise.resolve("".concat((yield Promise.resolve().then(function () { return __importStar(require("./foo")); })).default)).then(function (s) { return __importStar(require(s)); });
+        return yield Promise.resolve(`${(yield Promise.resolve().then(() => __importStar(require("./foo")))).default}`).then(s => __importStar(require(s)));
     });
 }

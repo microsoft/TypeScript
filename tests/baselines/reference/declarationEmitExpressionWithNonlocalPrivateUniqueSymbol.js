@@ -16,7 +16,7 @@ exports.A = 0;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A1 = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.A1 = a_1.A;
 
 

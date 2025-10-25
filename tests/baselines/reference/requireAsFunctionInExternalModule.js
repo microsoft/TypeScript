@@ -60,7 +60,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hello = hello;
-var c_1 = __importStar(require("./c"));
+const c_1 = __importStar(require("./c"));
 function hello() { }
 if ((0, c_1.has)('ember-debug')) {
     (0, c_1.default)('ember-debug');
@@ -68,5 +68,5 @@ if ((0, c_1.has)('ember-debug')) {
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var m_1 = require("./m");
+const m_1 = require("./m");
 (0, m_1.hello)();

@@ -58,7 +58,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyCard = void 0;
-let lazyCard = () => Promise.resolve().then(function () { return __importStar(require('./Card')); }).then(a => a.default);
+let lazyCard = () => Promise.resolve().then(() => __importStar(require('./Card'))).then(a => a.default);
 exports.lazyCard = lazyCard;
 
 

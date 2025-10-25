@@ -91,7 +91,7 @@ watchMain();
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
+const ts = require("typescript");
 const formatHost = {
     getCanonicalFileName: path => path,
     getCurrentDirectory: ts.sys.getCurrentDirectory,

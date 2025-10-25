@@ -17,6 +17,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
 // GH #38532
-var blah_1 = __importDefault(require("blah"));
+const blah_1 = __importDefault(require("blah"));
 function Foo() { }
 blah_1.default.bar = () => { };

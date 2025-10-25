@@ -77,5 +77,5 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-const a = () => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(function () { return __importStar(require("inner")); })).x(); });
+const a = () => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(() => __importStar(require("inner")))).x(); });
 exports.a = a;

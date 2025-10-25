@@ -23,7 +23,7 @@ export const works2 = fn<MakeItWork>(x => x);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.works2 = exports.works1 = exports.fail2 = exports.fail1 = void 0;
-var module_1 = require("module");
+const module_1 = require("module");
 exports.fail1 = (0, module_1.fn)((x) => x);
 exports.fail2 = (0, module_1.fn)(function (x) {
     return x;

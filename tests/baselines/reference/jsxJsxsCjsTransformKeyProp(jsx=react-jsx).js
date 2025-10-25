@@ -23,8 +23,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = require("react");
+const jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 };
 const a = (0, jsx_runtime_1.jsx)("div", __assign({}, props, { children: "text" }), "foo");

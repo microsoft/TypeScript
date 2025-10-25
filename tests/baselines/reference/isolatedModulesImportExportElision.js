@@ -51,9 +51,9 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = exports.c1 = void 0;
-var module_1 = require("module");
-var module_2 = require("module");
-var ns = __importStar(require("module"));
+const module_1 = require("module");
+const module_2 = require("module");
+const ns = __importStar(require("module"));
 class C extends module_2.c2.C {
 }
 let x = new module_1.c();

@@ -59,7 +59,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var as = __importStar(require("./t1"));
+const as = __importStar(require("./t1"));
 var x = as.as;
 var y = as.return;
 //// [t3.js]

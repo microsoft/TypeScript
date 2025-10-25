@@ -135,7 +135,7 @@ export declare function fn5(): void;
 //// [/user/username/projects/myproject/main/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fns_1 = require("../decls/fns");
+const fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
 (0, fns_1.fn3)();

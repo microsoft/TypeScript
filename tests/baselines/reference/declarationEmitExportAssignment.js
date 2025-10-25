@@ -18,7 +18,7 @@ function foo() { }
 function bar() { }
 //// [index.js]
 "use strict";
-var utils_1 = require("./utils");
+const utils_1 = require("./utils");
 module.exports = utils_1.foo;
 
 

@@ -114,7 +114,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.delint = delint;
-var ts = __importStar(require("typescript"));
+const ts = __importStar(require("typescript"));
 function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {

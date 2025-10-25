@@ -63,7 +63,7 @@ const b12 = <MainButton data-format="Hello world" />
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
-var React = require("react");
+const React = require("react");
 let obj = {
     children: "hi",
     to: "boo"

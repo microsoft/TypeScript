@@ -47,7 +47,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // not _actually_ making react available in this test to regression test #22948
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 const Test123 = () => <div />;
 function testComponent(props) {
     return <Test123 {...props}/>;

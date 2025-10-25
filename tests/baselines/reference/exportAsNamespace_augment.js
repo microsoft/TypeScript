@@ -60,6 +60,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var a2 = __importStar(require("./a"));
+const a2 = __importStar(require("./a"));
 a.x + a.y + a.z + a.conflict;
 a2.x + a2.y + a2.z + a2.conflict;

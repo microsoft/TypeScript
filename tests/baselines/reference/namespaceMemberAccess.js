@@ -50,6 +50,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var types = __importStar(require("./a"));
+const types = __importStar(require("./a"));
 types.A;
 const { A } = types;

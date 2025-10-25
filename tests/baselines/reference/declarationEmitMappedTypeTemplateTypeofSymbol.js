@@ -55,11 +55,11 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.timestamp = void 0;
-var x = __importStar(require("./a"));
+const x = __importStar(require("./a"));
 exports.timestamp = x.now();
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.timestamp = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.timestamp = (0, a_1.now)();

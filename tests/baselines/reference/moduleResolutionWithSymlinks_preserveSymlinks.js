@@ -24,8 +24,8 @@ x = new C2();
 // We shouldn't resolve symlinks for references either. See the trace.
 /// <reference types="linked" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var linked_1 = require("linked");
-var linked2_1 = require("linked2");
+const linked_1 = require("linked");
+const linked2_1 = require("linked2");
 let x = new linked_1.C();
 // Should fail. We no longer resolve any symlinks.
 x = new linked2_1.C();

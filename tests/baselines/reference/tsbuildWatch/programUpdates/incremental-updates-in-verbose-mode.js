@@ -227,7 +227,7 @@ export declare function multiply(a: number, b: number): number;
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,iDAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,2DAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -267,11 +267,11 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 exports.getSecondsInDay = getSecondsInDay;
-var c = __importStar(require("../core/index"));
+const c = __importStar(require("../core/index"));
 function getSecondsInDay() {
     return c.multiply(10, 15);
 }
-var mod = __importStar(require("../core/anotherModule"));
+const mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 //# sourceMappingURL=index.js.map
 
@@ -385,11 +385,11 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
-var c = __importStar(require("../core/index"));
-var logic = __importStar(require("../logic/index"));
+const c = __importStar(require("../core/index"));
+const logic = __importStar(require("../logic/index"));
 c.leftPad("", 10);
 logic.getSecondsInDay();
-var mod = __importStar(require("../core/anotherModule"));
+const mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 
 
@@ -642,7 +642,7 @@ Output::
 
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAS,MAAM,KAAK,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,iDAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,2DAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAS,MAAM,KAAK,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -682,11 +682,11 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 exports.getSecondsInDay = getSecondsInDay;
-var c = __importStar(require("../core/index"));
+const c = __importStar(require("../core/index"));
 function getSecondsInDay() {
     return c.multiply(10, 15);
 }
-var mod = __importStar(require("../core/anotherModule"));
+const mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 function someFn() { }
 //# sourceMappingURL=index.js.map
@@ -822,7 +822,7 @@ Output::
 
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAID,wBAA4B;AAP5B,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAgB,MAAM,KAAK,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAID,wBAA4B;AAP5B,iDAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,2DAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAgB,MAAM,KAAK,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -863,11 +863,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 exports.getSecondsInDay = getSecondsInDay;
 exports.someFn = someFn;
-var c = __importStar(require("../core/index"));
+const c = __importStar(require("../core/index"));
 function getSecondsInDay() {
     return c.multiply(10, 15);
 }
-var mod = __importStar(require("../core/anotherModule"));
+const mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 function someFn() { }
 //# sourceMappingURL=index.js.map

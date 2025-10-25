@@ -102,8 +102,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" preserve="true" />
-var react_1 = __importDefault(require("react"));
-var prop_types_1 = __importDefault(require("prop-types"));
+const react_1 = __importDefault(require("react"));
+const prop_types_1 = __importDefault(require("prop-types"));
 const TabbedShowLayout = ({}) => {
     return (react_1.default.createElement("div", null));
 };
@@ -120,7 +120,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __importDefault(require("react"));
+const react_1 = __importDefault(require("react"));
 /**
  * @type {React.SFC}
  */
@@ -137,7 +137,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __importDefault(require("react"));
+const react_1 = __importDefault(require("react"));
 /**
  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
  */
@@ -154,7 +154,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __importDefault(require("react"));
+const react_1 = __importDefault(require("react"));
 const TabbedShowLayout = (/** @type {{className: string}}*/ prop) => {
     return (react_1.default.createElement("div", { className: prop.className, key: "" }, "ok"));
 };
@@ -168,8 +168,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __importDefault(require("react"));
-var prop_types_1 = __importDefault(require("prop-types"));
+const react_1 = __importDefault(require("react"));
+const prop_types_1 = __importDefault(require("prop-types"));
 function Tree({ allowDropOnRoot }) {
     return react_1.default.createElement("div", null);
 }

@@ -29,7 +29,7 @@ exports.x = Symbol();
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 class C {
     constructor() {
         this[_a] = 1;
@@ -42,8 +42,8 @@ _a = a_1.x;
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-var a_1 = require("./a");
-var b_1 = require("./b");
+const a_1 = require("./a");
+const b_1 = require("./b");
 class D extends b_1.C {
     constructor() {
         super(...arguments);

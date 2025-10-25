@@ -61,7 +61,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // Repro from #44797
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 let props = {
     foo: "",
     "data-yadda": 42, // Error

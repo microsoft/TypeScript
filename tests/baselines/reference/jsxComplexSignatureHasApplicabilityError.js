@@ -659,7 +659,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReactSingleSelect = createReactSingleSelect;
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 function createReactSingleSelect(WrappedComponent) {
     return (props) => {
         return (React.createElement(ReactSelectClass, __assign({}, props, { multi: false, autosize: false, value: props.value, onChange: (value) => {

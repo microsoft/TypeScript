@@ -23,8 +23,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var preact_1 = require("preact");
-var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
+const preact_1 = require("preact");
+const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 const _jsxFileName = "jsxJsxsCjsTransformKeyPropCustomImport.tsx";
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 };

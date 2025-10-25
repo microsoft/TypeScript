@@ -46,7 +46,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 class MyComponent extends React.Component {
 }
 const m = React.createElement(MyComponent, { x: "a" });
