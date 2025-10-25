@@ -389,7 +389,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     // We don't need to transform `super` property access when target <= ES5 because
     // the es2015 transformation handles those.
-    const shouldTransformSuperInStaticInitializers = shouldTransformThisInStaticInitializers && languageVersion >= ScriptTarget.ES2015;
+    const shouldTransformSuperInStaticInitializers = shouldTransformThisInStaticInitializers;
 
     const shouldTransformAnything = shouldTransformInitializers ||
         shouldTransformPrivateElementsOrClassStaticBlocks ||

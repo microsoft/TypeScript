@@ -19,18 +19,18 @@ class C extends B {
 
 
 //// [classStaticBlock5.js]
-var _a;
+var _a, _b;
 class B {
 }
 B.a = 1;
 B.b = 2;
-class C extends B {
+class C extends (_b = B) {
 }
 _a = C;
 C.b = 3;
-C.c = super.a;
+C.c = Reflect.get(_b, "a", _a);
 (() => {
     _a.b;
-    super.b;
-    super.a;
+    Reflect.get(_b, "b", _a);
+    Reflect.get(_b, "a", _a);
 })();
