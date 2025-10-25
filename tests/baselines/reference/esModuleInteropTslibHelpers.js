@@ -23,8 +23,8 @@ export { Bar }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var tslib_1 = require("tslib");
-var path_1 = tslib_1.__importDefault(require("path"));
+const tslib_1 = require("tslib");
+const path_1 = tslib_1.__importDefault(require("path"));
 path_1.default.resolve("", "../");
 class Foo {
 }
@@ -33,8 +33,8 @@ exports.Foo = Foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo2 = void 0;
-var tslib_1 = require("tslib");
-var path = tslib_1.__importStar(require("path"));
+const tslib_1 = require("tslib");
+const path = tslib_1.__importStar(require("path"));
 path.resolve("", "../");
 class Foo2 {
 }
@@ -43,8 +43,8 @@ exports.Foo2 = Foo2;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo3 = void 0;
-var tslib_1 = require("tslib");
-var path_1 = tslib_1.__importDefault(require("path"));
+const tslib_1 = require("tslib");
+const path_1 = tslib_1.__importDefault(require("path"));
 (0, path_1.default)("", "../");
 class Foo3 {
 }
@@ -53,7 +53,7 @@ exports.Foo3 = Foo3;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
-var tslib_1 = require("tslib");
-var path_1 = tslib_1.__importStar(require("path"));
+const tslib_1 = require("tslib");
+const path_1 = tslib_1.__importStar(require("path"));
 Object.defineProperty(exports, "Bar", { enumerable: true, get: function () { return path_1.Bar; } });
 (0, path_1.default)("", "../");

@@ -171,8 +171,8 @@ exports.createExportedWidget2 = createExportedWidget2;
 exports.createExportedWidget3 = createExportedWidget3;
 exports.createExportedWidget4 = createExportedWidget4;
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
-var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
-var Widgets1 = require("GlobalWidgets");
+const Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
+const Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
 }
@@ -189,7 +189,7 @@ function createExportedWidget4() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicClassWithPrivateModuleGetAccessorTypes = exports.publicClassWithWithPrivateGetAccessorTypes = void 0;
-var exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
+const exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 class publicClassWithWithPrivateGetAccessorTypes {
     static get myPublicStaticMethod() {
         return exporter.createExportedWidget1();

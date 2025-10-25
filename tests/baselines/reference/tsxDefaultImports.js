@@ -20,15 +20,12 @@ var SomeEnum;
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
 })(SomeEnum || (SomeEnum = {}));
-let SomeClass = (() => {
-    class SomeClass {
-    }
-    SomeClass.E = SomeEnum;
-    return SomeClass;
-})();
+class SomeClass {
+}
+SomeClass.E = SomeEnum;
 exports.default = SomeClass;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 let a = a_1.default.E.one;

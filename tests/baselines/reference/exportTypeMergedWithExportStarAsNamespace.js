@@ -28,5 +28,5 @@ exports.Something = require("./Something");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.myValue = void 0;
-var prelude_1 = require("./prelude");
+const prelude_1 = require("./prelude");
 exports.myValue = prelude_1.Something.of("abc");

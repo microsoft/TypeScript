@@ -22,11 +22,11 @@ export const timestamp = now();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.timestamp = void 0;
-var x = require("./a");
+const x = require("./a");
 exports.timestamp = x.now();
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.timestamp = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.timestamp = (0, a_1.now)();

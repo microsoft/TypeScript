@@ -106,13 +106,11 @@ function f4(arguments: any, ...rest) { // error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
 >   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : any
->          : ^^^
 >rest : any[]
 >     : ^^^^^
 
     var arguments: any; // No error
 >arguments : any
->          : ^^^
 }
 function f42(i: number, ...arguments); // no codegen no error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
@@ -134,7 +132,6 @@ function f42(i: any, ...arguments) { // error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
 >    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : any
->  : ^^^
 >arguments : any[]
 >          : ^^^^^
 
@@ -158,11 +155,9 @@ function f4NoError(arguments: any) { // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
 >          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : any
->          : ^^^
 
     var arguments: any; // No error
 >arguments : any
->          : ^^^
 }
 
 declare function f5(arguments: number, ...rest); // no codegen no error

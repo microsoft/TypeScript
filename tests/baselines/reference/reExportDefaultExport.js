@@ -23,7 +23,7 @@ function f() {
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1_1 = require("./m1");
-var m1_2 = require("./m1");
+const m1_1 = require("./m1");
+const m1_2 = require("./m1");
 (0, m1_2.f)();
 (0, m1_1.default)();

@@ -44,7 +44,7 @@ function UserName1() {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class FetchUser extends React.Component {
     render() {
         return this.state

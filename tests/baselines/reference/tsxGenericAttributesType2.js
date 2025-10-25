@@ -10,7 +10,7 @@ const decorator4 = function <T extends { x: number }>(Component: React.Stateless
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 const decorator4 = function (Component) {
     return (props) => <Component {...props} y={"blah"}></Component>;
 };

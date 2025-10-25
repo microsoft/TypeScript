@@ -12,7 +12,7 @@ export default {
 //// [QSpinner.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var QSpinner_1 = require("./QSpinner");
+const QSpinner_1 = require("./QSpinner");
 exports.default = {
     mixins: [QSpinner_1.default],
     name: 'QSpinner'

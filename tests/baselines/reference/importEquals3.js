@@ -38,6 +38,6 @@ exports.x = x;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b = require("./b");
+const b = require("./b");
 var x = b.x;
 console.log(x);

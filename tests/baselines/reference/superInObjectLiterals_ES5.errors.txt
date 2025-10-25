@@ -1,17 +1,11 @@
-superInObjectLiterals_ES5.ts(7,9): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
-superInObjectLiterals_ES5.ts(10,9): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
-superInObjectLiterals_ES5.ts(14,9): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
 superInObjectLiterals_ES5.ts(17,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 superInObjectLiterals_ES5.ts(20,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 superInObjectLiterals_ES5.ts(23,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-superInObjectLiterals_ES5.ts(39,17): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
-superInObjectLiterals_ES5.ts(42,17): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
-superInObjectLiterals_ES5.ts(46,17): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
 superInObjectLiterals_ES5.ts(49,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 superInObjectLiterals_ES5.ts(52,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 
-==== superInObjectLiterals_ES5.ts (11 errors) ====
+==== superInObjectLiterals_ES5.ts (5 errors) ====
     var obj = {
         __proto__: {
             method() {
@@ -19,19 +13,13 @@ superInObjectLiterals_ES5.ts(52,17): error TS2660: 'super' can only be reference
         },
         method() {
             super.method();
-            ~~~~~
-!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
         },
         get prop() {
             super.method();
-            ~~~~~
-!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
             return 10;
         },
         set prop(value) {
             super.method();
-            ~~~~~
-!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
         },
         p1: function () {
             super.method();
@@ -63,19 +51,13 @@ superInObjectLiterals_ES5.ts(52,17): error TS2660: 'super' can only be reference
                 },
                 method() {
                     super.method();
-                    ~~~~~
-!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
                 },
                 get prop() {
                     super.method();
-                    ~~~~~
-!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
                     return 10;
                 },
                 set prop(value) {
                     super.method();
-                    ~~~~~
-!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
                 },
                 p1: function () {
                     super.method();

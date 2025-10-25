@@ -300,9 +300,7 @@ const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
 const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, typeof LanguageFeatureMinimumTarget[LanugageFeatures]>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
     [RegularExpressionFlags.DotAll, LanguageFeatureMinimumTarget.RegularExpressionFlagsDotAll],
-    [RegularExpressionFlags.Unicode, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicode],
     [RegularExpressionFlags.UnicodeSets, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicodeSets],
-    [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
 
 /**

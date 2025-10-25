@@ -40,7 +40,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime classic */
-var React = require("react");
+const React = require("react");
 const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
 exports.frag = React.createElement(React.Fragment, null,
@@ -50,7 +50,7 @@ exports.selfClosing = React.createElement("img", { src: "./image.png" });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "two.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime automatic */
@@ -62,7 +62,7 @@ exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "three.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime classic */
@@ -78,7 +78,7 @@ exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
-var React = require("react");
+const React = require("react");
 const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
 exports.frag = React.createElement(React.Fragment, null,

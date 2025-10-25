@@ -149,17 +149,6 @@ const b: E.A = a;
 //// [literalTypeWidening.js]
 "use strict";
 // Widening vs. non-widening literal types
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -271,7 +260,7 @@ const arr = exports.langCodes.map(code => ({ code }));
 // Repro from #29081
 function test(obj) {
     let { a } = obj, rest = __rest(obj, ["a"]);
-    return __assign({ a: 'hello' }, rest);
+    return Object.assign({ a: 'hello' }, rest);
 }
 var E;
 (function (E) {

@@ -55,7 +55,7 @@ compile(process.argv.slice(2), {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compile = compile;
-var ts = require("typescript");
+const ts = require("typescript");
 function compile(fileNames, options) {
     var program = ts.createProgram(fileNames, options);
     var emitResult = program.emit();

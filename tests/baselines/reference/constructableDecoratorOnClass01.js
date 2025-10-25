@@ -18,11 +18,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 class CtorDtor {
 }
-let C = (() => {
-    let C = class C {
-    };
-    C = __decorate([
-        CtorDtor
-    ], C);
-    return C;
-})();
+let C = class C {
+};
+C = __decorate([
+    CtorDtor
+], C);

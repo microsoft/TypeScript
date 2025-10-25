@@ -31,7 +31,7 @@ ns.b;
 //// [2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./1");
+const foo = require("./1");
 foo.ns.a;
 foo.ns.b;
 

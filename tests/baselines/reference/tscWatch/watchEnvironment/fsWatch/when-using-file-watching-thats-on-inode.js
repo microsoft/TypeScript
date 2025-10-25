@@ -61,7 +61,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 //// [/user/username/projects/myproject/main.js] Inode:: 113
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo_1 = require("./foo");
+const foo_1 = require("./foo");
 (0, foo_1.foo)();
 
 

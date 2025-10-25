@@ -190,8 +190,8 @@ exports.createExportedWidget2 = createExportedWidget2;
 exports.createExportedWidget3 = createExportedWidget3;
 exports.createExportedWidget4 = createExportedWidget4;
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
-var Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
-var Widgets1 = require("GlobalWidgets");
+const Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+const Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
 }
@@ -212,7 +212,7 @@ exports.publicFunctionWithPrivateParmeterTypes = publicFunctionWithPrivateParmet
 exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParmeterTypes1;
 exports.publicFunctionWithPrivateModuleParameterTypes = publicFunctionWithPrivateModuleParameterTypes;
 exports.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
+const exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 class publicClassWithWithPrivateParmeterTypes {
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
     }

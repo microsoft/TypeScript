@@ -65,12 +65,12 @@ booleanLiteral = g[0];
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b = require("./b.json");
-var c = require("./c.json");
-var d = require("./d.json");
-var e = require("./e.json");
-var f = require("./f.json");
-var g = require("./g.json");
+const b = require("./b.json");
+const c = require("./c.json");
+const d = require("./d.json");
+const e = require("./e.json");
+const f = require("./f.json");
+const g = require("./g.json");
 let booleanLiteral, nullLiteral;
 let stringLiteral;
 let numberLiteral;

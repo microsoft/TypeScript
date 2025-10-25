@@ -20,7 +20,7 @@ export const Hoc = <Tag extends Tags>(
 /// <reference path="react16.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hoc = void 0;
-var React = require("react");
+const React = require("react");
 const Hoc = (TagElement) => {
     const Component = () => React.createElement(TagElement, null);
     return Component;

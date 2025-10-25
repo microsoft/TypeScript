@@ -42,20 +42,17 @@ var dist = p.getDist();
 var Shapes;
 (function (Shapes) {
     // Class
-    let Point = (() => {
-        class Point {
-            // Constructor
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-            }
-            // Instance member
-            getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    class Point {
+        // Constructor
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
         }
-        // Static member
-        Point.origin = new Point(0, 0);
-        return Point;
-    })();
+        // Instance member
+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    }
+    // Static member
+    Point.origin = new Point(0, 0);
     Shapes.Point = Point;
     // Variable comment after class
     var a = 10;

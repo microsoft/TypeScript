@@ -47,7 +47,7 @@ Object.defineProperty(exports, "X", { enumerable: true, get: function () { retur
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
+const b_1 = require("./b");
 let _ = new A(); // Error
 let __ = new C(); // Error
 let ___ = new b_1.X(); // Ok
@@ -72,7 +72,7 @@ __exportStar(require("./a"), exports);
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var d_1 = require("./d");
+const d_1 = require("./d");
 let _ = new d_1.A(); // Ok
 let __ = new d_1.B(); // Ok
 let ___ = new d_1.X(); // Ok

@@ -67,9 +67,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var other_js_1 = require("./other.js");
-var other = __importStar(require("./other.js"));
-var other_js_2 = __importDefault(require("./other.js"));
+const other_js_1 = require("./other.js");
+const other = __importStar(require("./other.js"));
+const other_js_2 = __importDefault(require("./other.js"));
 const x = new other_js_1.Foo();
 const y = other.Foo();
 const z = new other_js_2.default();

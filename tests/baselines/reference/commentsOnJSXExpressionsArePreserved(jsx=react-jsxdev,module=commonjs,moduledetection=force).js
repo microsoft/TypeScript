@@ -25,7 +25,7 @@ class Component {
 //// [commentsOnJSXExpressionsArePreserved.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
 class Component {
     render() {

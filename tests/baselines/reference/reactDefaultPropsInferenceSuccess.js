@@ -77,49 +77,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __importDefault(require("react"));
-let FieldFeedback = (() => {
-    class FieldFeedback extends react_1.default.Component {
-        render() {
-            return react_1.default.createElement("div", null, "Hello");
-        }
+const react_1 = __importDefault(require("react"));
+class FieldFeedback extends react_1.default.Component {
+    render() {
+        return react_1.default.createElement("div", null, "Hello");
     }
-    FieldFeedback.defaultProps = {
-        when: () => true
-    };
-    return FieldFeedback;
-})();
+}
+FieldFeedback.defaultProps = {
+    when: () => true
+};
 // OK
 const Test1 = () => react_1.default.createElement(FieldFeedback, { when: value => !!value });
 // Error: Void not assignable to boolean
 const Test2 = () => react_1.default.createElement(FieldFeedback, { when: value => console.log(value) });
-let FieldFeedbackBeta = (() => {
-    class FieldFeedbackBeta extends react_1.default.Component {
-        render() {
-            return react_1.default.createElement("div", null, "Hello");
-        }
+class FieldFeedbackBeta extends react_1.default.Component {
+    render() {
+        return react_1.default.createElement("div", null, "Hello");
     }
-    FieldFeedbackBeta.defaultProps = {
-        when: () => true
-    };
-    return FieldFeedbackBeta;
-})();
+}
+FieldFeedbackBeta.defaultProps = {
+    when: () => true
+};
 // OK
 const Test1a = () => react_1.default.createElement(FieldFeedbackBeta, { when: value => !!value, error: true }, "Hah");
 // Error: Void not assignable to boolean
 const Test2a = () => react_1.default.createElement(FieldFeedbackBeta, { when: value => console.log(value), error: true }, "Hah");
-let FieldFeedback2 = (() => {
-    class FieldFeedback2 extends FieldFeedback {
-        render() {
-            this.props.when("now"); // OK, always defined
-            return react_1.default.createElement("div", null, "Hello");
-        }
+class FieldFeedback2 extends FieldFeedback {
+    render() {
+        this.props.when("now"); // OK, always defined
+        return react_1.default.createElement("div", null, "Hello");
     }
-    FieldFeedback2.defaultProps = {
-        when: () => true
-    };
-    return FieldFeedback2;
-})();
+}
+FieldFeedback2.defaultProps = {
+    when: () => true
+};
 // OK
 const Test3 = () => react_1.default.createElement(FieldFeedback2, { when: value => !!value });
 // Error: Void not assignable to boolean

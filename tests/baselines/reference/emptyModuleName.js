@@ -8,6 +8,6 @@ class B extends A {
 //// [emptyModuleName.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = require("");
+const A = require("");
 class B extends A {
 }

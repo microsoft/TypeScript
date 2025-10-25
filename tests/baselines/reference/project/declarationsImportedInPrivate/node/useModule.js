@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usePrivate_m4_m1 = void 0;
 // only used privately no need to emit
-var private_m4 = require("private_m4");
+const private_m4 = require("private_m4");
 var usePrivate_m4_m1;
 (function (usePrivate_m4_m1) {
     var x3 = private_m4.x;

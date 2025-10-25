@@ -18,7 +18,7 @@ class MyFoo extends Foo {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var somelib_1 = require("./somelib");
+const somelib_1 = require("./somelib");
 class MyFoo extends somelib_1.Foo {
     constructor() {
         super();

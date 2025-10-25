@@ -37,18 +37,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var _0_1 = require("./0");
-var _0_2 = require("./0");
+const _0_1 = require("./0");
+const _0_2 = require("./0");
 /* Comment on the Class Declaration */
-let C = (() => {
-    let C = class C extends _0_1.base {
-        constructor(prop) {
-            super();
-        }
-    };
-    C = __decorate([
-        __param(0, _0_2.foo)
-    ], C);
-    return C;
-})();
+let C = class C extends _0_1.base {
+    constructor(prop) {
+        super();
+    }
+};
 exports.C = C;
+exports.C = C = __decorate([
+    __param(0, _0_2.foo)
+], C);

@@ -11,11 +11,8 @@ class C
 
 
 //// [staticClassProps.js]
-let C = (() => {
-    class C {
-        foo() {
-        }
+class C {
+    foo() {
     }
-    C.z = 1;
-    return C;
-})();
+}
+C.z = 1;

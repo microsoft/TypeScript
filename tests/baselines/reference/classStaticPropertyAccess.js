@@ -19,15 +19,12 @@ A.a
 
 //// [classStaticPropertyAccess.js]
 "use strict";
-let A = (() => {
-    class A {
-        static "\""() { }
-    }
-    A.x = 1;
-    A.y = 1;
-    A._b = 2;
-    return A;
-})();
+class A {
+    static "\""() { }
+}
+A.x = 1;
+A.y = 1;
+A._b = 2;
 const a = new A();
 a["\""]; // Error
 a['y']; // Error

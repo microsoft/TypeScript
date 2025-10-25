@@ -29,7 +29,7 @@ let y2 = <TextComponent {...textPropsTrue} />
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class TextComponent extends React.Component {
     render() {
         return <span>Some Text..</span>;

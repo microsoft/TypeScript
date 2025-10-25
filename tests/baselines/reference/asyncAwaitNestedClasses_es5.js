@@ -18,24 +18,21 @@ class A {
 A.B.C.func();
 
 //// [asyncAwaitNestedClasses_es5.js]
+var _a;
 // https://github.com/Microsoft/TypeScript/issues/20744
-let A = (() => {
-    var _a;
-    class A {
-    }
-    A.B = (_a = class B {
-            static func2() {
-                return new Promise((resolve) => { resolve(null); });
-            }
-        },
-        _a.C = class C {
-            static func() {
-                return __awaiter(this, void 0, void 0, function* () {
-                    yield _a.func2();
-                });
-            }
-        },
-        _a);
-    return A;
-})();
+class A {
+}
+A.B = (_a = class B {
+        static func2() {
+            return new Promise((resolve) => { resolve(null); });
+        }
+    },
+    _a.C = class C {
+        static func() {
+            return __awaiter(this, void 0, void 0, function* () {
+                yield _a.func2();
+            });
+        }
+    },
+    _a);
 A.B.C.func();

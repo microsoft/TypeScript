@@ -45,20 +45,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var yoha_1 = require("./yoha");
+const yoha_1 = require("./yoha");
 function foo(...args) { }
-let Bar = (() => {
-    class Bar {
-        yoha(yoha, bar) { }
-    }
-    __decorate([
-        __param(0, foo),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, yoha_1.Yoha]),
-        __metadata("design:returntype", void 0)
-    ], Bar.prototype, "yoha", null);
-    return Bar;
-})();
+class Bar {
+    yoha(yoha, bar) { }
+}
+__decorate([
+    __param(0, foo),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, yoha_1.Yoha]),
+    __metadata("design:returntype", void 0)
+], Bar.prototype, "yoha", null);
 //// [index2.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -74,17 +71,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var yoha_1 = require("./yoha");
+const yoha_1 = require("./yoha");
 function foo(...args) { }
-let Bar = (() => {
-    class Bar {
-        yoha(yoha, ...bar) { }
-    }
-    __decorate([
-        __param(0, foo),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, yoha_1.Yoha]),
-        __metadata("design:returntype", void 0)
-    ], Bar.prototype, "yoha", null);
-    return Bar;
-})();
+class Bar {
+    yoha(yoha, ...bar) { }
+}
+__decorate([
+    __param(0, foo),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, yoha_1.Yoha]),
+    __metadata("design:returntype", void 0)
+], Bar.prototype, "yoha", null);

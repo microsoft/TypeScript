@@ -37,14 +37,14 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-var Backbone = require("./aliasUsageInIndexerOfClass_backbone");
+const Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInIndexerOfClass_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
+const moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
 class N {
     constructor() {
         this.x = moduleA;

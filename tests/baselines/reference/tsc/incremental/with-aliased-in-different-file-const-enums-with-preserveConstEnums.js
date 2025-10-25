@@ -45,7 +45,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return b_1.A; } });
 let b = 1 /* A.ONE */;
 
@@ -152,7 +152,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return b_1.A; } });
 let b = 2 /* A.ONE */;
 
@@ -259,7 +259,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return b_1.A; } });
 let b = 3 /* A.ONE */;
 

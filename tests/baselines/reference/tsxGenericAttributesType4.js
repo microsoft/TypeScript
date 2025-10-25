@@ -17,7 +17,7 @@ class B<U> extends React.Component<U, {}> {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class B1 extends React.Component {
     render() {
         return <div>hi</div>;

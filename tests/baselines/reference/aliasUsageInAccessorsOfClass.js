@@ -38,14 +38,14 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-var Backbone = require("./aliasUsage1_backbone");
+const Backbone = require("./aliasUsage1_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsage1_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var moduleA = require("./aliasUsage1_moduleA");
+const moduleA = require("./aliasUsage1_moduleA");
 class C2 {
     get A() {
         return this.x;

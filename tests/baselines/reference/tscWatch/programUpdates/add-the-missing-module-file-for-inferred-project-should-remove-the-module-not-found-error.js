@@ -36,7 +36,7 @@ Output::
 //// [/users/username/projects/project/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var T = require("./moduleFile");
+const T = require("./moduleFile");
 T.bar();
 
 

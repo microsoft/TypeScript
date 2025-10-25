@@ -25,25 +25,22 @@ class C extends B {
 }
 
 //// [thisAndSuperInStaticMembers4.js]
-let C = (() => {
-    var _a;
-    class C extends B {
-        constructor() {
-            super(...arguments);
-            // these should be unaffected
-            this.x = 1;
-            this.y = this.x;
-            this.z = super.f();
-        }
+var _a, _b;
+class C extends (_b = B) {
+    constructor() {
+        super(...arguments);
+        // these should be unaffected
+        this.x = 1;
+        this.y = this.x;
+        this.z = super.f();
     }
-    _a = C;
-    C.x = undefined;
-    C.y1 = _a.x;
-    C.y2 = _a.x();
-    C.y3 = _a === null || _a === void 0 ? void 0 : _a.x();
-    C.y4 = _a[("x")]();
-    C.y5 = _a === null || _a === void 0 ? void 0 : _a[("x")]();
-    C.z3 = super.f();
-    C.z4 = super["f"]();
-    return C;
-})();
+}
+_a = C;
+C.x = undefined;
+C.y1 = _a.x;
+C.y2 = _a.x();
+C.y3 = _a === null || _a === void 0 ? void 0 : _a.x();
+C.y4 = _a[("x")]();
+C.y5 = _a === null || _a === void 0 ? void 0 : _a[("x")]();
+C.z3 = Reflect.get(_b, "f", _a).call(_a);
+C.z4 = Reflect.get(_b, "f", _a).call(_a);

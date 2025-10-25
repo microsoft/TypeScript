@@ -194,7 +194,7 @@ plugin-one/index.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.actions = void 0;
-var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
+const typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
 const action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
 const featureOne = action("feature-one");
 exports.actions = { featureOne };

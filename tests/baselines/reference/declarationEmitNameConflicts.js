@@ -62,7 +62,7 @@ module.exports = f;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
-var im = require("./declarationEmit_nameConflicts_1");
+const im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
     function f() { }

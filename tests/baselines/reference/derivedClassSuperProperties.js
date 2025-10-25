@@ -486,46 +486,37 @@ class DerivedWithArrowFunctionParameter extends Base {
 }
 class DerivedWithDecoratorOnClass extends Base {
     constructor() {
-        let InnerClass = (() => {
-            let InnerClass = class InnerClass {
-            };
-            InnerClass = __decorate([
-                decorate(this)
-            ], InnerClass);
-            return InnerClass;
-        })();
+        let InnerClass = class InnerClass {
+        };
+        InnerClass = __decorate([
+            decorate(this)
+        ], InnerClass);
         super();
         this.prop = true;
     }
 }
 class DerivedWithDecoratorOnClassMethod extends Base {
     constructor() {
-        let InnerClass = (() => {
-            class InnerClass {
-                innerMethod() { }
-            }
-            __decorate([
-                decorate(this)
-            ], InnerClass.prototype, "innerMethod", null);
-            return InnerClass;
-        })();
+        class InnerClass {
+            innerMethod() { }
+        }
+        __decorate([
+            decorate(this)
+        ], InnerClass.prototype, "innerMethod", null);
         super();
         this.prop = true;
     }
 }
 class DerivedWithDecoratorOnClassProperty extends Base {
     constructor() {
-        let InnerClass = (() => {
-            class InnerClass {
-                constructor() {
-                    this.innerProp = true;
-                }
+        class InnerClass {
+            constructor() {
+                this.innerProp = true;
             }
-            __decorate([
-                decorate(this)
-            ], InnerClass.prototype, "innerProp", void 0);
-            return InnerClass;
-        })();
+        }
+        __decorate([
+            decorate(this)
+        ], InnerClass.prototype, "innerProp", void 0);
         super();
         this.prop = true;
     }

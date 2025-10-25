@@ -60,7 +60,7 @@ __exportStar(require("./b"), exports); // Collision error
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
+const c_1 = require("./c");
 let _ = new A(); // Error
 let __ = new c_1.B(); // Ok
 let ___ = new c_1.C(); // Ok

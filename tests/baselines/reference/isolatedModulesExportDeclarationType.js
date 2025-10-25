@@ -41,5 +41,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-expect-error
-var doesntexist_1 = require("./doesntexist");
+const doesntexist_1 = require("./doesntexist");
 exports.default = doesntexist_1.default;

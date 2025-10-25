@@ -2,8 +2,8 @@
 
 === emitArrowFunctionWhenUsingArguments16.ts ===
 function f() {
->f : () => () => any
->  : ^^^^^^^^^^^^^^^
+>f : () => () => string
+>  : ^^^^^^^^^^^^^^^^^^
 
     var arguments = "hello";
 >arguments : string
@@ -22,12 +22,12 @@ function f() {
 >       : ^^^^^^      
 
         return () => arguments[0];
->() => arguments[0] : () => any
->                   : ^^^^^^^^^
->arguments[0] : any
->             : ^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>() => arguments[0] : () => string
+>                   : ^^^^^^^^^^^^
+>arguments[0] : string
+>             : ^^^^^^
+>arguments : string
+>          : ^^^^^^
 >0 : 0
 >  : ^
     }

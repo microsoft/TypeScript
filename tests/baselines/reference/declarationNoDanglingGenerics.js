@@ -56,14 +56,11 @@ function ClassFactory(kind) {
         _a.THE_KIND = kind,
         _a;
 }
-let Kinds = (() => {
-    class Kinds {
-    }
-    Kinds.A = "A";
-    Kinds.B = "B";
-    Kinds.C = "C";
-    return Kinds;
-})();
+class Kinds {
+}
+Kinds.A = "A";
+Kinds.B = "B";
+Kinds.C = "C";
 class AKind extends ClassFactory(Kinds.A) {
 }
 exports.AKind = AKind;

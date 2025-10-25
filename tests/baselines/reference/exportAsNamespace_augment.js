@@ -27,6 +27,6 @@ a2.x + a2.y + a2.z + a2.conflict;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a2 = require("./a");
+const a2 = require("./a");
 a.x + a.y + a.z + a.conflict;
 a2.x + a2.y + a2.z + a2.conflict;

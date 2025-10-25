@@ -147,7 +147,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = f;
-var a_1 = require("./a");
+const a_1 = require("./a");
 function f(p) { return p; }
 
 

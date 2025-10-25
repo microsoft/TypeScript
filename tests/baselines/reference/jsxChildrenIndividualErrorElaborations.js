@@ -85,7 +85,7 @@ exports.Blah = Blah;
 exports.Blah2 = Blah2;
 exports.Blah3 = Blah3;
 /// <reference path="react16.d.ts" />
-var React = require("react");
+const React = require("react");
 function Blah(props) {
     return React.createElement(React.Fragment, null);
 }

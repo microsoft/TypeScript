@@ -33,7 +33,7 @@ exports.default = Decl;
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1_1 = require("m1");
+const m1_1 = require("m1");
 (0, m1_1.default)();
 var x;
 var y;

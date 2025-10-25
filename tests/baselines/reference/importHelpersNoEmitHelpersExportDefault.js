@@ -23,7 +23,7 @@ exports.default = {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var tslib_1 = require("tslib");
+const tslib_1 = require("tslib");
 // https://github.com/microsoft/TypeScript/issues/40328
 var other_1 = require("./other");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return tslib_1.__importDefault(other_1).default; } });
@@ -31,6 +31,6 @@ Object.defineProperty(exports, "A", { enumerable: true, get: function () { retur
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
-var tslib_1 = require("tslib");
+const tslib_1 = require("tslib");
 var other_1 = require("./other");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return tslib_1.__importDefault(other_1).default; } });

@@ -35,8 +35,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = foo;
-var op_1 = __importDefault(require("./op"));
-var po_1 = require("./po");
+const op_1 = __importDefault(require("./op"));
+const po_1 = require("./po");
 function foo() {
     return {
         [op_1.default.or]: [],

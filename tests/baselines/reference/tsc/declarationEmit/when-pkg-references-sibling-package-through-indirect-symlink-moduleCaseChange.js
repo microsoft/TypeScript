@@ -111,7 +111,7 @@ Found 1 error in pkg3/src/keys.ts[90m:2[0m
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADMIN = void 0;
-var pkg2_1 = require("@raymondfeng/pkg2");
+const pkg2_1 = require("@raymondfeng/pkg2");
 exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 
 

@@ -43,7 +43,7 @@ function fn5() {
     return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn6() {
-    return __awaiter(this, void 0, Thenable, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn7() {
     return __awaiter(this, void 0, void 0, function* () { return; });

@@ -12,9 +12,9 @@ for (let i = 0; i < 3; i++) {
 arr.forEach(C => console.log(C.y()));
 
 //// [classExpressionWithStaticProperties3.js]
+var _a;
 const arr = [];
 for (let i = 0; i < 3; i++) {
-    let _a;
     arr.push((_a = class C {
         },
         _a.x = i,

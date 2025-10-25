@@ -31,19 +31,16 @@ class D extends C {
 
 //// [classWithProtectedProperty.js]
 // accessing any protected outside the class is an error
-let C = (() => {
-    class C {
-        constructor() {
-            this.a = '';
-            this.b = '';
-            this.d = () => '';
-        }
-        c() { return ''; }
-        static f() { return ''; }
+class C {
+    constructor() {
+        this.a = '';
+        this.b = '';
+        this.d = () => '';
     }
-    C.g = () => '';
-    return C;
-})();
+    c() { return ''; }
+    static f() { return ''; }
+}
+C.g = () => '';
 class D extends C {
     method() {
         // No errors

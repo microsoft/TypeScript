@@ -25,5 +25,5 @@ exports.default = R = {
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1_1 = require("./m1");
+const m1_1 = require("./m1");
 const { ___, ___hello, _hi } = m1_1.default;

@@ -31,7 +31,7 @@ let x1 = <OverWriteAttr {...obj1} {...obj3}  />
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 const obj = {};
 const obj1 = {
     x: 2

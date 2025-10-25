@@ -43,7 +43,7 @@ __exportStar(require("jquery"), exports);
 //// [reExportUser.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var reExportX_1 = require("./reExportX");
-var $ = require("./reExportAll");
+const reExportX_1 = require("./reExportX");
+const $ = require("./reExportAll");
 // '$' is not callable, it is an object.
 (0, reExportX_1.x)($);

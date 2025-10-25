@@ -94,23 +94,20 @@ class Bar {
     constructor(n) { }
 }
 // new-style class
-let Foo = (() => {
-    class Foo extends Bar {
-        bar() { return 0; }
-        boo(x) { return x; }
-        constructor(x, y, z = 0) {
-            super(x);
-            this.y = y;
-            this.z = z;
-            this.gar = 0;
-            this.zoo = "zoo";
-            this.x = x;
-            this.gar = 5;
-        }
+class Foo extends Bar {
+    bar() { return 0; }
+    boo(x) { return x; }
+    constructor(x, y, z = 0) {
+        super(x);
+        this.y = y;
+        this.z = z;
+        this.gar = 0;
+        this.zoo = "zoo";
+        this.x = x;
+        this.gar = 5;
     }
-    Foo.statVal = 0;
-    return Foo;
-})();
+}
+Foo.statVal = 0;
 var f = new Foo();
 //class GetSetMonster {
 //  // attack(target) {

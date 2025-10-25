@@ -12,5 +12,5 @@ export default val;
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var data_json_1 = require("./data.json");
+const data_json_1 = require("./data.json");
 let x = data_json_1.default;

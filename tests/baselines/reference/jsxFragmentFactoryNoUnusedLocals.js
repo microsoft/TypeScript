@@ -21,7 +21,7 @@ export function Counter({ count = 0 }: CounterProps) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Counter = Counter;
 /// <reference path="react16.d.ts" />
-var react_1 = require("react");
+const react_1 = require("react");
 function Counter({ count = 0 }) {
     const [cnt, setCnt] = null;
     return (0, react_1.createElement)(react_1.Fragment, null,

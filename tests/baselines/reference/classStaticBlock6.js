@@ -86,14 +86,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-let B = (() => {
-    class B {
-    }
-    B.a = 1;
-    return B;
-})();
-class C extends B {
+var _a, _b, _c;
+class B {
 }
+B.a = 1;
+class C extends (_b = B) {
+}
+_a = C;
 (() => {
     let await = 1;
     let arguments = 1;
@@ -109,8 +108,10 @@ class C extends B {
 })();
 class CC {
     constructor() {
-        class C extends B {
+        var _d, _e;
+        class C extends (_e = B) {
         }
+        _d = C;
         (() => {
             class CC extends B {
                 constructor() {
@@ -148,18 +149,14 @@ function foo1() {
         }
     })();
 }
-let foo2 = (() => {
-    var _a;
-    class foo2 {
+class foo2 {
+}
+_c = foo2;
+(() => {
+    _c.b; // should error
+    let b; // ok
+    if (1) {
+        _c.b; // should error
     }
-    _a = foo2;
-    (() => {
-        _a.b; // should error
-        let b; // ok
-        if (1) {
-            _a.b; // should error
-        }
-    })();
-    foo2.b = 1;
-    return foo2;
 })();
+foo2.b = 1;

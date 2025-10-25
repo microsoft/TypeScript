@@ -34,7 +34,7 @@ function ChildComponent({ property1 }: AnotherComponentProps) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Component;
-var React = require("react");
+const React = require("react");
 function Component(props) {
     let condition1;
     if (condition1) {

@@ -59,7 +59,7 @@ exports.x = 1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // all mutations below are illegal and should be fixed
-var stuff = require("./f1");
+const stuff = require("./f1");
 var n = 'baz';
 stuff.x = 0;
 stuff['x'] = 1;

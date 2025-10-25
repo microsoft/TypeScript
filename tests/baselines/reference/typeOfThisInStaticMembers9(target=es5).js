@@ -24,34 +24,30 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers9.js]
-let C = (() => {
+var _a, _b;
+class C {
+}
+C.f = 1;
+class D extends (_b = C) {
+}
+_a = D;
+D.arrowFunctionBoundary = () => Reflect.get(_b, "f", _a) + 1;
+D.functionExprBoundary = function () { return super.f + 2; };
+D.classExprBoundary = class {
+    constructor() {
+        this.a = super.f + 3;
+    }
+};
+D.functionAndClassDeclBoundary = (() => {
+    function foo() {
+        return super.f + 4;
+    }
     class C {
-    }
-    C.f = 1;
-    return C;
-})();
-let D = (() => {
-    class D extends C {
-    }
-    D.arrowFunctionBoundary = () => super.f + 1;
-    D.functionExprBoundary = function () { return super.f + 2; };
-    D.classExprBoundary = class {
         constructor() {
-            this.a = super.f + 3;
+            this.a = super.f + 5;
         }
-    };
-    D.functionAndClassDeclBoundary = (() => {
-        function foo() {
-            return super.f + 4;
+        method() {
+            return super.f + 6;
         }
-        class C {
-            constructor() {
-                this.a = super.f + 5;
-            }
-            method() {
-                return super.f + 6;
-            }
-        }
-    })();
-    return D;
+    }
 })();

@@ -149,8 +149,8 @@ export declare function foo(): void;
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("b");
-var bar_1 = require("b/lib/bar");
+const b_1 = require("b");
+const bar_1 = require("b/lib/bar");
 (0, b_1.foo)();
 (0, bar_1.bar)();
 

@@ -23,6 +23,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var types = require("./types");
+const types = require("./types");
 console.log(c); // Fails as expected, import is still allowed though.
 console.log(types.c); // Expected an error here.
