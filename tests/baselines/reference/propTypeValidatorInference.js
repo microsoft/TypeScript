@@ -92,7 +92,7 @@ const x: true = (null as any as ExtractPropsMatch);
 //// [file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var PropTypes = require("prop-types");
+const PropTypes = require("prop-types");
 const innerProps = {
     foo: PropTypes.string.isRequired,
     bar: PropTypes.bool,

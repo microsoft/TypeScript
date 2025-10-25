@@ -53,10 +53,10 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var a = __importStar(require("./a"));
+const a = __importStar(require("./a"));
 module.exports = a;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = require("./b");
+const a = require("./b");
 new a.A(); // Error

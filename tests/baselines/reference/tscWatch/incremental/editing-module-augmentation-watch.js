@@ -45,7 +45,7 @@ Output::
 //// [/users/username/projects/project/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var classnames_1 = require("classnames");
+const classnames_1 = require("classnames");
 (0, classnames_1.default)().foo;
 
 

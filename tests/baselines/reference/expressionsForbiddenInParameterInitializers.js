@@ -23,7 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
 exports.foo2 = foo2;
 function foo(_a) {
-    return __awaiter(this, arguments, void 0, function* ({ foo = yield Promise.resolve().then(function () { return require("./bar"); }) }) {
+    return __awaiter(this, arguments, void 0, function* ({ foo = yield Promise.resolve().then(() => require("./bar")) }) {
     });
 }
 function* foo2({ foo = yield "a" }) {

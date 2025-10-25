@@ -93,8 +93,8 @@ export type Wrap<C> = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bug = void 0;
-var B = require("./box.js");
-var W = require("./wrap.js");
+const B = require("./box.js");
+const W = require("./wrap.js");
 /**
  * @template {object} C
  * @param {C} source
@@ -235,8 +235,8 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.something = exports.bug = void 0;
-var B = require("./box.js");
-var W = require("./wrap.js");
+const B = require("./box.js");
+const W = require("./wrap.js");
 /**
  * @template {object} C
  * @param {C} source

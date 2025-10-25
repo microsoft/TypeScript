@@ -30,5 +30,5 @@ const o: Foo = a.o;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = require("a");
+const a = require("a");
 const o = a.o;

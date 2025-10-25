@@ -37,7 +37,7 @@ function test2() {
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var file1_1 = require("./file1");
+const file1_1 = require("./file1");
 var x = new file1_1.Calculator();
 x.handleChar();
 (0, file1_1.test2)();

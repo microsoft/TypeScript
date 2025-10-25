@@ -29,7 +29,7 @@ export class TypedFoo extends MyFoo {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyFoo = void 0;
-var library_1 = require("./library");
+const library_1 = require("./library");
 class MyFoo extends library_1.Foo {
 }
 exports.MyFoo = MyFoo;
@@ -37,7 +37,7 @@ exports.MyFoo = MyFoo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TypedFoo = void 0;
-var component_1 = require("./component");
+const component_1 = require("./component");
 class TypedFoo extends component_1.MyFoo {
     constructor() {
         super({ x: "string", y: 42 }, { value: undefined });

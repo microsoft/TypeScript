@@ -48,7 +48,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsx_runtime_1 = require("react/jsx-runtime");
+const jsx_runtime_1 = require("react/jsx-runtime");
 function Todo(prop) {
     return (0, jsx_runtime_1.jsx)("div", { children: prop.key.toString() + prop.todo });
 }

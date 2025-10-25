@@ -35,8 +35,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var _0_ts_1 = require("./0.ts");
-var _0_ts_2 = require("./0.ts");
+const _0_ts_1 = require("./0.ts");
+const _0_ts_2 = require("./0.ts");
 let C = (() => {
     let C = class C extends _0_ts_1.base {
         constructor(prop) {

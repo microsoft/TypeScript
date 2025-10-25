@@ -27,17 +27,17 @@ exports.default = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1.default;
-var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2.default;
-var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3.default;
-var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4.default;
-var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5.default;
-var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6.default;
 
 

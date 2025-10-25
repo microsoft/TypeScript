@@ -57,7 +57,7 @@ exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var X = require("./exportStarFromEmptyModule_module3");
+const X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
 X.A.r; // Error

@@ -36,7 +36,7 @@ exports.db = db;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-var db = require("./db");
+const db = require("./db");
 function someDecorator(target) {
     return target;
 }

@@ -17,7 +17,7 @@ var SFCComp = SFC1 || SFC2;
 //// [file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 function SFC1(prop) {
     return React.createElement("div", null, "hello");
 }

@@ -28,7 +28,7 @@ exports.vextend = extend;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-var func_1 = require("./func");
+const func_1 = require("./func");
 // hover on vextend
 exports.a = (0, func_1.vextend)({
     watch: {

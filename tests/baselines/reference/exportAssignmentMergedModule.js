@@ -48,7 +48,7 @@ module.exports = Foo;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo_0");
+const foo = require("./foo_0");
 var a = foo.a();
 if (!!foo.b) {
     foo.Test.answer = foo.c(42);

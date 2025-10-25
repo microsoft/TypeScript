@@ -35,14 +35,14 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-var Backbone = require("./aliasUsageInGenericFunction_backbone");
+const Backbone = require("./aliasUsageInGenericFunction_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInGenericFunction_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var moduleA = require("./aliasUsageInGenericFunction_moduleA");
+const moduleA = require("./aliasUsageInGenericFunction_moduleA");
 function foo(x) {
     return x;
 }

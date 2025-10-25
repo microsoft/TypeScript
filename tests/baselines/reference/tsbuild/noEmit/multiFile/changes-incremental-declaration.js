@@ -92,7 +92,7 @@ export declare class classC {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indirectClass = void 0;
-var class_1 = require("./class");
+const class_1 = require("./class");
 class indirectClass {
     constructor() {
         this.classC = new class_1.classC();
@@ -111,7 +111,7 @@ export declare class indirectClass {
 //// [/home/src/workspaces/project/src/directUse.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var indirectClass_1 = require("./indirectClass");
+const indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 
@@ -122,7 +122,7 @@ export {};
 //// [/home/src/workspaces/project/src/indirectUse.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var indirectClass_1 = require("./indirectClass");
+const indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 

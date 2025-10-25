@@ -43,7 +43,7 @@ exports.Foo = Foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Example;
-var foo_1 = require("./foo");
+const foo_1 = require("./foo");
 function Example() { }
 Example.Foo = foo_1.Foo;
 //// [index2.js]
@@ -51,7 +51,7 @@ Example.Foo = foo_1.Foo;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 exports.default = Example;
-var foo_1 = require("./foo");
+const foo_1 = require("./foo");
 Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
 function Example() { }
 Example.Foo = foo_1.Foo;

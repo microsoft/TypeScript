@@ -123,7 +123,7 @@ export {};
 //// [/user/username/projects/sample1/App/app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var library_1 = require("../Library/library");
+const library_1 = require("../Library/library");
 (0, library_1.createSomeObject)().message;
 
 

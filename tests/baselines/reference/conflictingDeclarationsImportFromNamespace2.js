@@ -33,6 +33,6 @@ export const pick = () => pick();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pick = void 0;
-var pick = require("lodash/pick");
+const pick = require("lodash/pick");
 const pick = () => (0, exports.pick)();
 exports.pick = pick;

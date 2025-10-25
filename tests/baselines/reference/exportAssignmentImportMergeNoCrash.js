@@ -21,5 +21,5 @@ exports.default = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Obj = void 0;
-var assignment_1 = require("./assignment");
+const assignment_1 = require("./assignment");
 exports.Obj = void exports.Obj;

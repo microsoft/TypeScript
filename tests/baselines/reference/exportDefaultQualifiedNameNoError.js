@@ -21,5 +21,5 @@ exports.default = C.x;
 //// [usage.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var code_1 = require("./code");
+const code_1 = require("./code");
 void code_1.default;

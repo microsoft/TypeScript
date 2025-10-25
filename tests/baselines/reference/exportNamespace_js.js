@@ -24,7 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
+const b_1 = require("./b");
 A;
 
 

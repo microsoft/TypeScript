@@ -45,7 +45,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var yoha_1 = require("./yoha");
+const yoha_1 = require("./yoha");
 function foo(...args) { }
 let Bar = (() => {
     class Bar {
@@ -74,7 +74,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var yoha_1 = require("./yoha");
+const yoha_1 = require("./yoha");
 function foo(...args) { }
 let Bar = (() => {
     class Bar {

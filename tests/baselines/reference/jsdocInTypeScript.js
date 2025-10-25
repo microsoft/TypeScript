@@ -91,4 +91,4 @@ var E = {};
 E[""];
 // make sure import types in JSDoc are not resolved
 /** @type {import("should-not-be-resolved").Type} */
-var v = Promise.resolve("".concat(String())).then(function (s) { return require(s); });
+var v = Promise.resolve(`${String()}`).then(s => require(s));

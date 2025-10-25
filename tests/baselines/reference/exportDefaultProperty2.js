@@ -24,5 +24,5 @@ exports.default = C.B;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 const x = { c: a_1.default };

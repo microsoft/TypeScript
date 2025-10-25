@@ -1033,7 +1033,7 @@ const bLocal = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.c = a_1.a;
 
 
@@ -1041,7 +1041,7 @@ exports.c = a_1.a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.d = b_1.b;
 
 
@@ -1056,7 +1056,7 @@ exports.e = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
-var a_1 = require("../../project1/src/a");
+const a_1 = require("../../project1/src/a");
 exports.f = a_1.a;
 
 
@@ -1064,7 +1064,7 @@ exports.f = a_1.a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.g = void 0;
-var b_1 = require("../../project1/src/b");
+const b_1 = require("../../project1/src/b");
 exports.g = b_1.b;
 
 

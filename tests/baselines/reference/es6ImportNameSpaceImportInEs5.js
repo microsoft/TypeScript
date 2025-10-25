@@ -17,7 +17,7 @@ exports.a = 10;
 //// [es6ImportNameSpaceImportInEs5_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
+const nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
 var x = nameSpaceBinding.a;
 
 

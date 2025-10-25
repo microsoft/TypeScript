@@ -24,7 +24,7 @@ new B().a.toExponential();
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 class C extends a_1.default {
 }
 new C().a.toExponential();

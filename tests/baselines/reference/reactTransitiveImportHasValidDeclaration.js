@@ -37,7 +37,7 @@ export default Form
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_emotion_1 = require("react-emotion");
+const react_emotion_1 = require("react-emotion");
 const Form = (0, react_emotion_1.default)('div')({ color: "red" });
 exports.default = Form;
 

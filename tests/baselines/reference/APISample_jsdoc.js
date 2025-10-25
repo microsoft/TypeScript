@@ -130,7 +130,7 @@ function getSomeOtherTags(node: ts.Node) {
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
+const ts = require("typescript");
 // excerpted from https://github.com/YousefED/typescript-json-schema
 // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
 function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {

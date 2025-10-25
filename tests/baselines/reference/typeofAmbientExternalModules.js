@@ -35,8 +35,8 @@ module.exports = D;
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='typeofAmbientExternalModules_0.ts'/>
 ///<reference path='typeofAmbientExternalModules_1.ts'/>
-var ext = require("./typeofAmbientExternalModules_0");
-var exp = require("./typeofAmbientExternalModules_1");
+const ext = require("./typeofAmbientExternalModules_0");
+const exp = require("./typeofAmbientExternalModules_1");
 var y1 = ext;
 y1 = exp;
 var y2 = exp;

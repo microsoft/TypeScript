@@ -34,7 +34,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var test_1 = require("./test");
+const test_1 = require("./test");
 // Should emit test_1.React.createElement
 //  and React.__spread
 var foo;

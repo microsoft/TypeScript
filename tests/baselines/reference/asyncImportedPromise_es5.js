@@ -28,7 +28,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var task_1 = require("./task");
+const task_1 = require("./task");
 class Test {
     example() {
         return __awaiter(this, void 0, task_1.Task, function* () { return; });

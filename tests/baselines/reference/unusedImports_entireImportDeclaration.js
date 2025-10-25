@@ -27,9 +27,9 @@ exports.default = 0;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 a_1.default;
-var a_2 = require("./a");
+const a_2 = require("./a");
 a_2.default;
-var ns3 = require("./a");
+const ns3 = require("./a");
 ns3;

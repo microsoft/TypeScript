@@ -16,7 +16,7 @@ exports.a = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var nameSpaceBinding = require("./server");
+const nameSpaceBinding = require("./server");
 exports.x = nameSpaceBinding.a;
 
 

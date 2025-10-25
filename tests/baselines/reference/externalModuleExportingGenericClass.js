@@ -22,7 +22,7 @@ module.exports = C;
 //// [externalModuleExportingGenericClass_file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = require("./externalModuleExportingGenericClass_file0");
+const a = require("./externalModuleExportingGenericClass_file0");
 var v; // this should report error
 var v2 = (new a()).foo;
 var v3 = (new a()).foo;

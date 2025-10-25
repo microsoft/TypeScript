@@ -50,7 +50,7 @@ export declare function __makeTemplateObject(cooked: string[], raw: string[]): T
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.result = exports.B = exports.A = void 0;
-var tslib_1 = require("tslib");
+const tslib_1 = require("tslib");
 class A {
 }
 exports.A = A;

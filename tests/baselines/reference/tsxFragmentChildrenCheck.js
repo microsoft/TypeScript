@@ -38,8 +38,8 @@ function MyComponent(props) {
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var my_component_1 = require("./my-component");
+const React = require("react");
+const my_component_1 = require("./my-component");
 const MY_STRING = 'Ceci n\'est pas une string.';
 const MY_CLASSNAME = 'jeclass';
 class RenderString extends React.PureComponent {

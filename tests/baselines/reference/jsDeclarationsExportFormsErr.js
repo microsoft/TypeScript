@@ -30,12 +30,12 @@ class Foo {
 exports.Foo = Foo;
 //// [bar.js]
 "use strict";
-var ns = require("./cls");
+const ns = require("./cls");
 module.exports = ns;
 //// [bin.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ns = require("./cls");
+const ns = require("./cls");
 module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
 //// [globalNs.js]
 "use strict";

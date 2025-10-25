@@ -142,7 +142,7 @@ project/main/index.ts
 //// [/home/src/workspaces/solution/project/main/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo_json_1 = require("../strings/foo.json");
+const foo_json_1 = require("../strings/foo.json");
 console.log(foo_json_1.foo);
 
 

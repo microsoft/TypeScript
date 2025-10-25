@@ -27,7 +27,7 @@ exports.default = createExperiment({
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
-var other2 = require("./other");
+const other2 = require("./other");
 exports.obj = {
     [other2.default.name]: 1
 };

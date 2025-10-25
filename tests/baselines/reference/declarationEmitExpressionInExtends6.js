@@ -22,7 +22,7 @@ exports.Foo = Foo;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = require("./a");
+const A = require("./a");
 const { Foo } = A;
 class default_1 extends Foo {
 }

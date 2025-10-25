@@ -14,10 +14,10 @@ f(a, "");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var x = require("something");
+const x = require("something");
 exports.x = x;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = require("./a");
+const a = require("./a");
 f(a, "");

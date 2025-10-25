@@ -52,7 +52,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;
-var fs = __importStar(require("./fs"));
+const fs = __importStar(require("./fs"));
 fs;
 __exportStar(require("./fs"), exports);
 var fs_1 = require("./fs");

@@ -15,6 +15,6 @@ const X: Invalid1 = 1;
 //// [file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 const X = 1;
 React.createElement(X, null);

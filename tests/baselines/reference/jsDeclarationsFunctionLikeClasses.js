@@ -43,7 +43,7 @@ function Point(x, y) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.magnitude = magnitude;
-var source_1 = require("./source");
+const source_1 = require("./source");
 /**
  * @param {Point} p
  */

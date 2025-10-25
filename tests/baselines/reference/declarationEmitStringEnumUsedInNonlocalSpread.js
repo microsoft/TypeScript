@@ -59,7 +59,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var class_1 = require("./class");
+const class_1 = require("./class");
 class B extends class_1.A {
     getA() {
         return __assign(__assign({}, super.getA()), { a: '123' });

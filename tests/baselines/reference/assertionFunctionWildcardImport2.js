@@ -32,7 +32,7 @@ function isNonNullable(obj) {
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var asserts = require("./asserts");
+const asserts = require("./asserts");
 function test(obj) {
     asserts.isNonNullable(obj);
     obj.trim();

@@ -36,7 +36,7 @@ exports.q = {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var items_1 = require("./items");
+const items_1 = require("./items");
 function nFoo(x) { }
 nFoo(items_1.q); // for comparison
 nFoo(items_1.default);

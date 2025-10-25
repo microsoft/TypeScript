@@ -37,7 +37,7 @@ var ConstEnumOnlyModule;
 })(ConstEnumOnlyModule || (exports.ConstEnumOnlyModule = ConstEnumOnlyModule = {}));
 //// [reexport.js]
 "use strict";
-var Foo = require("./foo");
+const Foo = require("./foo");
 module.exports = Foo.ConstEnumOnlyModule;
 //// [index.js]
 "use strict";

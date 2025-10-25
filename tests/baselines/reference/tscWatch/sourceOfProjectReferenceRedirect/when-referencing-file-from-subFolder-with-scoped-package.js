@@ -75,8 +75,8 @@ Output::
 //// [/user/username/projects/myproject/packages/A/lib/test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo_1 = require("@issue/b/lib/foo");
-var foo_2 = require("@issue/b/lib/bar/foo");
+const foo_1 = require("@issue/b/lib/foo");
+const foo_2 = require("@issue/b/lib/bar/foo");
 (0, foo_1.foo)();
 (0, foo_2.bar)();
 

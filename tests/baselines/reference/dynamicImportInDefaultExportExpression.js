@@ -12,6 +12,6 @@ export default {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     getInstance: function () {
-        return Promise.resolve().then(function () { return require('./foo2'); });
+        return Promise.resolve().then(() => require('./foo2'));
     }
 };

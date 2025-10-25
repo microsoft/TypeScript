@@ -35,8 +35,8 @@ function getNotification() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationScenario = void 0;
-var index_1 = require("search/lib/index");
-var NotificationAPIUtils_1 = require("../API/NotificationAPIUtils");
+const index_1 = require("search/lib/index");
+const NotificationAPIUtils_1 = require("../API/NotificationAPIUtils");
 exports.NotificationScenario = (0, index_1.test)(NotificationAPIUtils_1.getNotification);
 
 

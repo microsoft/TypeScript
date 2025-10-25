@@ -209,7 +209,7 @@ export type Nominal<T, Name> = T & {
 //// [/home/src/workspaces/lib/sub-project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var nominal_1 = require("../common/nominal");
+const nominal_1 = require("../common/nominal");
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
@@ -301,7 +301,7 @@ import { Nominal } from '../common/nominal';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = getVar;
-var index_1 = require("../sub-project/index");
+const index_1 = require("../sub-project/index");
 const variable = {
     key: /** @type {MyNominal} */ ('value'),
 };

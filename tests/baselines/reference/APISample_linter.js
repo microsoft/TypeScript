@@ -81,7 +81,7 @@ fileNames.forEach(fileName => {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.delint = delint;
-var ts = require("typescript");
+const ts = require("typescript");
 function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
