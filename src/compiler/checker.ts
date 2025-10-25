@@ -30498,8 +30498,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function markIdentifierAliasReferenced(location: Identifier) {
         const symbol = getResolvedSymbol(location);
         if (symbol && symbol !== argumentsSymbol && symbol !== unknownSymbol && !isThisInTypeQuery(location)) {
+            // Check if this identifier is in a computed property name of an abstract method/property
+            // If so, we should not mark it as referenced since abstract members are not emitted
+            if (isIdentifierInAbstractMemberComputedPropertyName(location)) {
+                return;
+            }
             markAliasReferenced(symbol, location);
         }
+    }
+
+    function isIdentifierInAbstractMemberComputedPropertyName(node: Identifier): boolean {
+        // Walk up the AST to see if this identifier is within a computed property name
+        let parent = node.parent;
+        while (parent) {
+            if (isComputedPropertyName(parent)) {
+                // Found a computed property name, now check if it's for an abstract member
+                const memberParent = parent.parent;
+                if ((isMethodDeclaration(memberParent) || isMethodSignature(memberParent) ||
+                     isPropertyDeclaration(memberParent) || isPropertySignature(memberParent)) &&
+                    hasSyntacticModifier(memberParent, ModifierFlags.Abstract)) {
+                    return true;
+                }
+                // If we found a computed property name but it's not for an abstract member, stop searching
+                return false;
+            }
+            parent = parent.parent;
+        }
+        return false;
     }
 
     function markPropertyAliasReferenced(location: PropertyAccessExpression | QualifiedName, propSymbol?: Symbol, parentType?: Type) {
