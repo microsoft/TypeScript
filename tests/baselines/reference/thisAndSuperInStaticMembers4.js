@@ -25,8 +25,8 @@ class C extends B {
 }
 
 //// [thisAndSuperInStaticMembers4.js]
-var _a;
-class C extends B {
+var _a, _b;
+class C extends (_b = B) {
     constructor() {
         super(...arguments);
         // these should be unaffected
@@ -42,5 +42,5 @@ C.y2 = _a.x();
 C.y3 = _a === null || _a === void 0 ? void 0 : _a.x();
 C.y4 = _a[("x")]();
 C.y5 = _a === null || _a === void 0 ? void 0 : _a[("x")]();
-C.z3 = super.f();
-C.z4 = super["f"]();
+C.z3 = Reflect.get(_b, "f", _a).call(_a);
+C.z4 = Reflect.get(_b, "f", _a).call(_a);

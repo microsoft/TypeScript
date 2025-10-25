@@ -14,7 +14,7 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers4.js]
-var _a, _b;
+var _a, _b, _c;
 class C {
 }
 _a = C;
@@ -30,7 +30,7 @@ Object.defineProperty(C, "b", {
     writable: true,
     value: _a.a + 1
 });
-class D extends C {
+class D extends (_c = C) {
 }
 _b = D;
 Object.defineProperty(D, "c", {
@@ -49,5 +49,5 @@ Object.defineProperty(D, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: super.a + _b.c + 1
+    value: Reflect.get(_c, "a", _b) + _b.c + 1
 });

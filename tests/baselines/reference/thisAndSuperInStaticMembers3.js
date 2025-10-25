@@ -25,8 +25,8 @@ class C extends B {
 }
 
 //// [thisAndSuperInStaticMembers3.js]
-var _a;
-class C extends B {
+var _a, _b;
+class C extends (_b = B) {
     constructor() {
         super(...arguments);
         // these should be unaffected
@@ -91,11 +91,11 @@ Object.defineProperty(C, "z3", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: super.f()
+    value: Reflect.get(_b, "f", _a).call(_a)
 });
 Object.defineProperty(C, "z4", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: super["f"]()
+    value: Reflect.get(_b, "f", _a).call(_a)
 });

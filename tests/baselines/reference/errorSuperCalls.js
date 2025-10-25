@@ -77,6 +77,7 @@ class OtherDerived extends OtherBase {
 
 
 //// [errorSuperCalls.js]
+var _a;
 //super call in class constructor with no base type
 class NoBase {
     constructor() {
@@ -109,6 +110,7 @@ class NoBase {
         super();
     }
 }
+_a = NoBase;
 //super call in static class member initializer with no base type
 NoBase.k = super();
 class Base {
