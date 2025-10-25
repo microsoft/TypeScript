@@ -65,7 +65,7 @@ function f1() {
     return __awaiter(this, void 0, void 0, function* () { });
 }
 function f3() {
-    return __awaiter(this, void 0, MyPromise, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 }
 let f4 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
@@ -74,15 +74,15 @@ let f5 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
 };
 let f6 = function () {
-    return __awaiter(this, void 0, MyPromise, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 };
 let f7 = () => __awaiter(this, void 0, void 0, function* () { });
 let f8 = () => __awaiter(this, void 0, void 0, function* () { });
-let f9 = () => __awaiter(this, void 0, MyPromise, function* () { });
+let f9 = () => __awaiter(this, void 0, void 0, function* () { });
 let f10 = () => __awaiter(this, void 0, void 0, function* () { return p; });
 let f11 = () => __awaiter(this, void 0, void 0, function* () { return mp; });
 let f12 = () => __awaiter(this, void 0, void 0, function* () { return mp; });
-let f13 = () => __awaiter(this, void 0, MyPromise, function* () { return p; });
+let f13 = () => __awaiter(this, void 0, void 0, function* () { return p; });
 let o = {
     m1() {
         return __awaiter(this, void 0, void 0, function* () { });
@@ -91,7 +91,7 @@ let o = {
         return __awaiter(this, void 0, void 0, function* () { });
     },
     m3() {
-        return __awaiter(this, void 0, MyPromise, function* () { });
+        return __awaiter(this, void 0, void 0, function* () { });
     }
 };
 class C {
@@ -102,7 +102,7 @@ class C {
         return __awaiter(this, void 0, void 0, function* () { });
     }
     m3() {
-        return __awaiter(this, void 0, MyPromise, function* () { });
+        return __awaiter(this, void 0, void 0, function* () { });
     }
     static m4() {
         return __awaiter(this, void 0, void 0, function* () { });
@@ -111,7 +111,7 @@ class C {
         return __awaiter(this, void 0, void 0, function* () { });
     }
     static m6() {
-        return __awaiter(this, void 0, MyPromise, function* () { });
+        return __awaiter(this, void 0, void 0, function* () { });
     }
 }
 var M;
