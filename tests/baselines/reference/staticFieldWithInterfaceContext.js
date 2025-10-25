@@ -49,11 +49,11 @@ let c2 = (_b = class {
     _b[_c] = { a: "a" },
     _b);
 c[ex] = { a: "a" };
-function f(c = (_r = class {
+function f(c) { var _r; if (c === void 0) { c = (_r = class {
     },
     __setFunctionName(_r, "c"),
     _r.x = { a: "a" },
-    _r)) { var _r; }
+    _r); } }
 let { c: c3 } = { c: (_d = class {
         },
         __setFunctionName(_d, "c"),
