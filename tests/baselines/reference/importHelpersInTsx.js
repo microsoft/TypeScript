@@ -23,18 +23,6 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-const tslib_1 = require("tslib");
-exports.x = React.createElement("span", tslib_1.__assign({}, o));
+exports.x = React.createElement("span", Object.assign({}, o));
 //// [script.js]
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-const x = React.createElement("span", __assign({}, o));
+const x = React.createElement("span", Object.assign({}, o));

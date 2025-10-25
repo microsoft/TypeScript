@@ -43,8 +43,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-const tslib_1 = require("tslib");
-exports.x = tslib_1.__assign({});
+exports.x = Object.assign({});
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
