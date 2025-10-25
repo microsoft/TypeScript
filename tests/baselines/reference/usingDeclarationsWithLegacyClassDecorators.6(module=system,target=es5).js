@@ -26,9 +26,9 @@ System.register([], function (exports_1, context_1) {
                 before = __addDisposableResource(env_1, null, false);
                 exports_1("D", C = class C {
                 });
-                C = __decorate([
+                exports_1("D", C = __decorate([
                     dec
-                ], C);
+                ], C));
             }
             catch (e_1) {
                 env_1.error = e_1;

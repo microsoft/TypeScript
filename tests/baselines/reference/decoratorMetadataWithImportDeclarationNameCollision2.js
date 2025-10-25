@@ -47,7 +47,7 @@ let MyClass = class MyClass {
     }
 };
 exports.MyClass = MyClass;
-MyClass = __decorate([
+exports.MyClass = MyClass = __decorate([
     someDecorator,
     __metadata("design:paramtypes", [db_1.db])
 ], MyClass);

@@ -46,6 +46,6 @@ let C = class C extends _0_1.base {
     }
 };
 exports.C = C;
-C = __decorate([
+exports.C = C = __decorate([
     __param(0, _0_2.foo)
 ], C);

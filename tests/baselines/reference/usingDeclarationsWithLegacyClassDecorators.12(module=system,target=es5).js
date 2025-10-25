@@ -25,9 +25,9 @@ System.register([], function (exports_1, context_1) {
             C = class C {
             };
             exports_1("D", C);
-            C = __decorate([
+            exports_1("D", C = __decorate([
                 dec
-            ], C);
+            ], C));
             env_1 = { stack: [], error: void 0, hasError: false };
             try {
                 after = __addDisposableResource(env_1, null, false);

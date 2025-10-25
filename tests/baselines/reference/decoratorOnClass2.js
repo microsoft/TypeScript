@@ -20,6 +20,6 @@ exports.C = void 0;
 let C = class C {
 };
 exports.C = C;
-C = __decorate([
+exports.C = C = __decorate([
     dec
 ], C);
