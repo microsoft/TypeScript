@@ -19,9 +19,7 @@ class C {
 
            await other.apply(this, arguments);
 >await other.apply(this, arguments) : any
->                                   : ^^^
 >other.apply(this, arguments) : any
->                             : ^^^
 >other.apply : (this: Function, thisArg: any, argArray?: any) => any
 >            : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >other : () => void
@@ -29,7 +27,6 @@ class C {
 >apply : (this: Function, thisArg: any, argArray?: any) => any
 >      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >this : any
->     : ^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
       }
