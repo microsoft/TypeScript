@@ -23,7 +23,7 @@ try {
     before = __addDisposableResource(env_1, null, false);
     exports.D = C = class C {
     };
-    C = __decorate([
+    exports.D = C = __decorate([
         dec
     ], C);
 }

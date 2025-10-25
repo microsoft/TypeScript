@@ -47,7 +47,7 @@ let MyClass = class MyClass {
     }
 };
 exports.MyClass = MyClass;
-MyClass = __decorate([
+exports.MyClass = MyClass = __decorate([
     someDecorator,
     __metadata("design:paramtypes", [typeof (_a = typeof db_1.default !== "undefined" && db_1.default.db) === "function" ? _a : Object])
 ], MyClass);
