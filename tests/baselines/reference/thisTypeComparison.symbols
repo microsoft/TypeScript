@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/thisTypeComparison.ts] ////
+
+=== thisTypeComparison.ts ===
+class AA {
+>AA : Symbol(AA, Decl(thisTypeComparison.ts, 0, 0))
+
+    do1() {
+>do1 : Symbol(AA.do1, Decl(thisTypeComparison.ts, 0, 10))
+
+        const b = dd.getB();
+>b : Symbol(b, Decl(thisTypeComparison.ts, 2, 13))
+>dd.getB : Symbol(BB.getB, Decl(thisTypeComparison.ts, 9, 21))
+>dd : Symbol(dd, Decl(thisTypeComparison.ts, 13, 3))
+>getB : Symbol(BB.getB, Decl(thisTypeComparison.ts, 9, 21))
+
+        if (this === b) {
+>this : Symbol(AA, Decl(thisTypeComparison.ts, 0, 0))
+>b : Symbol(b, Decl(thisTypeComparison.ts, 2, 13))
+
+            console.log("this === b");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
+
+class BB extends AA {
+>BB : Symbol(BB, Decl(thisTypeComparison.ts, 7, 1))
+>AA : Symbol(AA, Decl(thisTypeComparison.ts, 0, 0))
+
+    getB(): BB { return this; }
+>getB : Symbol(BB.getB, Decl(thisTypeComparison.ts, 9, 21))
+>BB : Symbol(BB, Decl(thisTypeComparison.ts, 7, 1))
+>this : Symbol(BB, Decl(thisTypeComparison.ts, 7, 1))
+}
+
+let dd = new BB();
+>dd : Symbol(dd, Decl(thisTypeComparison.ts, 13, 3))
+>BB : Symbol(BB, Decl(thisTypeComparison.ts, 7, 1))
+
+dd.do1();
+>dd.do1 : Symbol(AA.do1, Decl(thisTypeComparison.ts, 0, 10))
+>dd : Symbol(dd, Decl(thisTypeComparison.ts, 13, 3))
+>do1 : Symbol(AA.do1, Decl(thisTypeComparison.ts, 0, 10))
+
