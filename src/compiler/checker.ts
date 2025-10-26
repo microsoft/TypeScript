@@ -45964,7 +45964,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            
+
             iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
             if (iterationTypes !== noIterationTypes) {
                 if (use & IterationUse.AllowsAsyncIterablesFlag) {
