@@ -111,7 +111,7 @@ import {
     WriterContextOut,
 } from "./_namespaces/ts.js";
 
-const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope | NodeBuilderFlags.InQuickInfo;
 
 // TODO(drosen): use contextual SemanticMeaning.
 /** @internal */
@@ -496,7 +496,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 typeChecker,
                 location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol),
                 enclosingDeclaration,
-                TypeFormatFlags.InTypeAlias,
+                TypeFormatFlags.InTypeAlias | TypeFormatFlags.InQuickInfo,
                 maximumLength,
                 verbosityLevel,
                 typeWriterOut,

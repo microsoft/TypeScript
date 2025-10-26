@@ -6842,9 +6842,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return factory.createThisTypeNode();
             }
 
-            // When in an object type literal context, expand type aliases to show resolved types
-            // for better clarity in hover information and quick info
-            if (!inTypeAlias && type.aliasSymbol && !(context.flags & NodeBuilderFlags.InObjectTypeLiteral) && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
+            // When generating QuickInfo, expand type aliases to show resolved types
+            // for better clarity in hover information
+            if (!inTypeAlias && type.aliasSymbol && !(context.flags & NodeBuilderFlags.InQuickInfo) && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                 if (!shouldExpandType(type, context, /*isAlias*/ true)) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
@@ -9030,9 +9030,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result;
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
             const decl = declaration ?? symbol.valueDeclaration ?? getDeclarationWithTypeAnnotation(symbol) ?? symbol.declarations?.[0];
-            // When in an object type literal context, prefer the resolved type over the syntactic form
+            // When generating QuickInfo, prefer the resolved type over the syntactic form
             // to ensure indexed access types and generic type aliases are properly resolved
-            if (!canPossiblyExpandType(type, context) && decl && !(context.flags & NodeBuilderFlags.InObjectTypeLiteral)) {
+            if (!canPossiblyExpandType(type, context) && decl && !(context.flags & NodeBuilderFlags.InQuickInfo)) {
                 const restore = addSymbolTypeToContext(context, symbol, type);
                 if (isAccessor(decl)) {
                     result = syntacticNodeBuilder.serializeTypeOfAccessor(decl, symbol, context);
