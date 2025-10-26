@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
-////module TypeModule1 {
+////namespace TypeModule1 {
 ////    export class C1 { }
 ////    export class C2 { }
 ////}
 ////var x: TypeModule1./*namedType*/
-////module TypeModule2 {
+////namespace TypeModule2 {
 ////    export class Test3 {}
 ////}
 ////
 ////TypeModule1./*dottedExpression*/
-////module TypeModule3 {
+////namespace TypeModule3 {
 ////    export class Test3 {}
 ////}
 

@@ -8,7 +8,7 @@
 ////    x;
 ////}
 ////
-////module M {
+////namespace M {
 ////    export interface /*definition2*/I {
 ////        y;
 ////    }

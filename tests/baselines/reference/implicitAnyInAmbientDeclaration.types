@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/implicitAnyInAmbientDeclaration.ts] ////
 
 === implicitAnyInAmbientDeclaration.ts ===
-module Test {
+namespace Test {
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 

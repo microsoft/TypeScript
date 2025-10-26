@@ -1,5 +1,5 @@
 // @module: commonjs
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @target:es2017
 // @strict: true
 // @resolveJsonModule: true

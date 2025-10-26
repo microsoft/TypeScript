@@ -1,10 +1,12 @@
-collisionExportsRequireAndModule_externalmodule.ts(1,15): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+collisionExportsRequireAndModule_externalmodule.ts(1,18): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(10,18): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== collisionExportsRequireAndModule_externalmodule.ts (2 errors) ====
-    export module require {
-                  ~~~~~~~
+    export namespace require {
+                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
         export interface I {
         }
@@ -14,8 +16,8 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
     export function foo(): require.I {
         return null;
     }
-    export module exports {
-                  ~~~~~~~
+    export namespace exports {
+                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
         export interface I {
         }
@@ -25,28 +27,28 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
     export function foo2(): exports.I {
         return null;
     }
-    module m1 {
-        module require {
+    namespace m1 {
+        namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        module exports {
+        namespace exports {
             export interface I {
             }
             export class C {
             }
         }
     }
-    module m2 {
-        export module require {
+    namespace m2 {
+        export namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        export module exports {
+        export namespace exports {
             export interface I {
             }
             export class C {
@@ -55,40 +57,40 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
     }
     
 ==== collisionExportsRequireAndModule_globalFile.ts (0 errors) ====
-    module require {
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
-    module m3 {
-        module require {
+    namespace m3 {
+        namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        module exports {
+        namespace exports {
             export interface I {
             }
             export class C {
             }
         }
     }
-    module m4 {
-        export module require {
+    namespace m4 {
+        export namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        export module exports {
+        export namespace exports {
             export interface I {
             }
             export class C {

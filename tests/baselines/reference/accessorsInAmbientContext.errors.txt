@@ -9,7 +9,7 @@ accessorsInAmbientContext.ts(16,21): error TS1183: An implementation cannot be d
 
 
 ==== accessorsInAmbientContext.ts (8 errors) ====
-    declare module M {
+    declare namespace M {
         class C {
             get X() { return 1; }
                     ~

@@ -94,7 +94,7 @@ var j2: { <T>(x: T): string } = x;
 >T : Symbol(T, Decl(assignAnyToEveryType.ts, 34, 11))
 >x : Symbol(x, Decl(assignAnyToEveryType.ts, 2, 3))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(assignAnyToEveryType.ts, 34, 34))
 
     export var foo = 1;

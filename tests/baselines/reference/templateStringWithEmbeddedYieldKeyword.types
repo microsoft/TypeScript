@@ -2,8 +2,8 @@
 
 === templateStringWithEmbeddedYieldKeyword.ts ===
 function* gen {
->gen : () => {}
->    : ^^^^^^^^
+>gen : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Once this is supported, yield *must* be parenthesized.
     var x = `abc${ yield 10 }def`;

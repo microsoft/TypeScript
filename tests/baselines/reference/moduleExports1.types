@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleExports1.ts] ////
 
 === moduleExports1.ts ===
-export module TypeScript.Strasse.Street {
+export namespace TypeScript.Strasse.Street {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 >Strasse : typeof Strasse

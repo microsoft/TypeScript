@@ -46,7 +46,7 @@ class D extends C implements A { // error
 >  : ^^^^^^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

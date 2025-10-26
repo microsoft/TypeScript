@@ -50,7 +50,7 @@ namespace Test6 {
     }
 }
 
-module Test7 {
+namespace Test7 {
     export let f = () => {
         let x: typeof this.no = 1;
     }

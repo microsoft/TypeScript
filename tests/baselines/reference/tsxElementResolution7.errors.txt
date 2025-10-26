@@ -3,12 +3,12 @@ file.tsx(19,11): error TS2339: Property 'non' does not exist on type 'typeof my'
 
 
 ==== file.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements { }
     }
     
-    module my {
+    namespace my {
         export var div: any;
     }
     // OK
@@ -18,7 +18,7 @@ file.tsx(19,11): error TS2339: Property 'non' does not exist on type 'typeof my'
         ~~~~~
 !!! error TS2339: Property 'other' does not exist on type 'typeof my'.
     
-    module q {
+    namespace q {
         import mine = my;
         // OK
         <mine.div n='x' />;

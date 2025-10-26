@@ -12,7 +12,6 @@ export const y = 10;
 {}
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -39,11 +38,14 @@ CreatingProgramWith::
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/main.ts 250 undefined Source file
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.d.ts' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated.js' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated.jsx' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists - use it as a name resolution result.
 ======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========
@@ -178,13 +180,12 @@ CreatingProgramWith::
   roots: ["/home/src/workspaces/project/src/main.ts"]
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.d.ts' does not exist.
-Directory '/home/src/workspaces/project/src/app/services/generated' does not exist, skipping all lookups in it.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: JavaScript.
 File '/home/src/workspaces/project/src/app/services/generated.js' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.jsx' does not exist.
 Directory '/home/src/workspaces/project/src/app/services/generated' does not exist, skipping all lookups in it.
@@ -300,11 +301,14 @@ CreatingProgramWith::
   roots: ["/home/src/workspaces/project/src/main.ts","/home/src/workspaces/project/src/app/services/generated/index.ts"]
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.d.ts' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated.js' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated.jsx' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists - use it as a name resolution result.
 ======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========

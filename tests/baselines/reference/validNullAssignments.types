@@ -87,7 +87,7 @@ I = null; // error
 >I : any
 >  : ^^^
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >  : ^^^^^^^^
 >x : number

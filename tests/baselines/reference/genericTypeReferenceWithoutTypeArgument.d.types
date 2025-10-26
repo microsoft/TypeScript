@@ -47,7 +47,7 @@ declare class D extends C {}
 >C : typeof C
 >  : ^^^^^^^^
 
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

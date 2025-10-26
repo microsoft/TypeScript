@@ -24,7 +24,7 @@ class C1T5 {
 >  : ^^^^^^
 	    }
 }
-module C2T5 {}
+namespace C2T5 {}
 
 class  bigClass {
 >bigClass : bigClass

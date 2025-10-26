@@ -3,7 +3,7 @@
 ////interface Foo { }
 /////*1*/module /*2*/Foo {
 ////    export interface Bar { }
-////    export module Bar { export interface Baz { } }
+////    export namespace Bar { export interface Baz { } }
 ////    export function Bar() { }
 ////}
 ////

@@ -2,7 +2,7 @@
 
 === moduleElementsInWrongContext.ts ===
 {
-    module M { }
+    namespace M { }
     export namespace N {
         export interface I { }
     }
@@ -65,8 +65,8 @@
 >    : ^^^^^^^^^^
 
     import bar from "ambient";
->bar : any
->    : ^^^
+>bar : typeof Foo
+>    : ^^^^^^^^^^
 
     import { baz } from "ambient";
 >baz : any
