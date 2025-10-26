@@ -23,7 +23,7 @@ verify.completions(
         marker: "1",
         includes: {
             name: "fooBar",
-            source: "/src/foo-bar",
+            source: "./foo-bar",
             sourceDisplay: "./foo-bar",
             text: "(property) default: 0",
             kind: "property",
@@ -36,7 +36,7 @@ verify.completions(
 );
 verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",
-    source: "/src/foo-bar",
+    source: "./foo-bar",
     description: `Add import from "./foo-bar"`,
     newFileContent: `import fooBar from "./foo-bar"
 

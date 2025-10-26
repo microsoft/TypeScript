@@ -8,6 +8,6 @@ export = a;  // Error: export = not allowed in ES6
 >a : Symbol(a, Decl(a.ts, 0, 3))
 
 === b.ts ===
-import * as a from "a";
+import * as a from "./a";
 >a : Symbol(a, Decl(b.ts, 0, 6))
 

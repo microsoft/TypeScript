@@ -152,7 +152,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/solution/projects/project/file1.ts",
         "configFile": "/users/username/solution/projects/project/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 6,
+              "offset": 15
+            },
+            "end": {
+              "line": 6,
+              "offset": 20
+            },
+            "text": "Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/users/username/solution/projects/project/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/users/username/solution/projects/project/tsconfig.json' (Configured)
