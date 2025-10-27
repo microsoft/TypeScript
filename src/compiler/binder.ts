@@ -3432,6 +3432,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
         }
         else if (hasDynamicName(node)) {
+            if (!parentSymbol) {
+                return;
+            }
             bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
             const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
             addLateBoundAssignmentDeclarationToSymbol(node, sym);
