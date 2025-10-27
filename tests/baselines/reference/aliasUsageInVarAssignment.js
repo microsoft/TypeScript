@@ -31,7 +31,7 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-var Backbone = require("./aliasUsageInVarAssignment_backbone");
+const Backbone = require("./aliasUsageInVarAssignment_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;

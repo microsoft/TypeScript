@@ -175,8 +175,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
-var bundling_1 = require("./bundling");
-const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(function () { return __importStar(require('./lazyIndex')); }));
+const bundling_1 = require("./bundling");
+const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(() => __importStar(require('./lazyIndex'))));
 exports.lazyBar = new bundling_1.LazyAction(lazyModule, m => m.bar);
 
 

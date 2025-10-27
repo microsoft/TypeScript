@@ -44,7 +44,7 @@ var Translation;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
-var translation_1 = require("./translation");
+const translation_1 = require("./translation");
 var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
 class Test {
     constructor() {
@@ -58,7 +58,7 @@ exports.Test = Test;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var test_1 = require("./test");
+const test_1 = require("./test");
 new test_1.Test().print();
 
 

@@ -104,7 +104,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 function MyComponent(props) {
     return React.createElement("div", null);
 }

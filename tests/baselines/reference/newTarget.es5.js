@@ -35,17 +35,14 @@ const O = {
 
 
 //// [newTarget.es5.js]
-let A = (() => {
-    class A {
-        constructor() {
-            this.d = function () { return new.target; };
-            const a = new.target;
-            const b = () => new.target;
-        }
+class A {
+    constructor() {
+        this.d = function () { return new.target; };
+        const a = new.target;
+        const b = () => new.target;
     }
-    A.c = function () { return new.target; };
-    return A;
-})();
+}
+A.c = function () { return new.target; };
 class B extends A {
     constructor() {
         super();

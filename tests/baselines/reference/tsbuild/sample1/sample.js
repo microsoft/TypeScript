@@ -222,7 +222,7 @@ export declare function multiply(a: number, b: number): number;
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,iDAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,2DAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -262,11 +262,11 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 exports.getSecondsInDay = getSecondsInDay;
-var c = __importStar(require("../core/index"));
+const c = __importStar(require("../core/index"));
 function getSecondsInDay() {
     return c.multiply(10, 15);
 }
-var mod = __importStar(require("../core/anotherModule"));
+const mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 //# sourceMappingURL=index.js.map
 
@@ -380,11 +380,11 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
-var c = __importStar(require("../core/index"));
-var logic = __importStar(require("../logic/index"));
+const c = __importStar(require("../core/index"));
+const logic = __importStar(require("../logic/index"));
 c.leftPad("", 10);
 logic.getSecondsInDay();
-var mod = __importStar(require("../core/anotherModule"));
+const mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 
 
@@ -672,7 +672,7 @@ sourceFile:index.ts
 >>>exports.getSecondsInDay = getSecondsInDay;
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                          ^^^^^->
+3 >                                          ^^^^^^^->
 1 >import * as c from '../core/index';
   >
 2 >export function getSecondsInDay() {
@@ -681,13 +681,13 @@ sourceFile:index.ts
 1 >Emitted(37, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(37, 43) Source(4, 2) + SourceIndex(0)
 ---
->>>var c = __importStar(require("../core/index"));
+>>>const c = __importStar(require("../core/index"));
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >import * as c from '../core/index';
 1->Emitted(38, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(38, 48) Source(1, 36) + SourceIndex(0)
+2 >Emitted(38, 50) Source(1, 36) + SourceIndex(0)
 ---
 >>>function getSecondsInDay() {
 1 >
@@ -741,21 +741,21 @@ sourceFile:index.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
 1 >Emitted(41, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(41, 2) Source(4, 2) + SourceIndex(0)
 ---
->>>var mod = __importStar(require("../core/anotherModule"));
+>>>const mod = __importStar(require("../core/anotherModule"));
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
 2 >import * as mod from '../core/anotherModule';
 1->Emitted(42, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(42, 58) Source(5, 46) + SourceIndex(0)
+2 >Emitted(42, 60) Source(5, 46) + SourceIndex(0)
 ---
 >>>exports.m = mod;
 1 >

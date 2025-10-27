@@ -9,14 +9,11 @@ export default class C {
 
 
 //// [es6modulekindWithES5Target2.js]
-let C = (() => {
-    class C {
-        constructor() {
-            this.p = 1;
-        }
-        method() { }
+class C {
+    constructor() {
+        this.p = 1;
     }
-    C.s = 0;
-    return C;
-})();
+    method() { }
+}
+C.s = 0;
 export default C;

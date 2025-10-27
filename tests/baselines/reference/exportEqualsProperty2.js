@@ -23,5 +23,5 @@ module.exports = C.B;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var B = require("./a");
+const B = require("./a");
 const x = { c: B };

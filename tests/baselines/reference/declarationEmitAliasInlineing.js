@@ -46,8 +46,8 @@ exports.fnExp = fnExp;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fExp = exports.f = void 0;
-var a_1 = require("./a");
-var aExp_1 = require("./aExp");
+const a_1 = require("./a");
+const aExp_1 = require("./aExp");
 exports.f = a_1.fn;
 exports.fExp = aExp_1.fnExp;
 

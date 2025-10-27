@@ -1,0 +1,34 @@
+functionLikeInParameterInitializer.ts(2,34): error TS2304: Cannot find name 'foo'.
+functionLikeInParameterInitializer.ts(6,44): error TS2304: Cannot find name 'foo'.
+functionLikeInParameterInitializer.ts(11,50): error TS2304: Cannot find name 'foo'.
+functionLikeInParameterInitializer.ts(16,41): error TS2304: Cannot find name 'foo'.
+
+
+==== functionLikeInParameterInitializer.ts (4 errors) ====
+    // error
+    export function bar(func = () => foo) {
+                                     ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        let foo = "in";
+    }
+    // error
+    export function baz1(func = { f() { return foo } }) {
+                                               ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        let foo = "in";
+    }
+    
+    // error
+    export function baz2(func = function () { return foo }) {
+                                                     ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        let foo = "in";
+    }
+    
+    // error
+    export function baz3(func = class { x = foo }) {
+                                            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        let foo = "in";
+    }
+    

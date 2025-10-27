@@ -65,5 +65,5 @@ exports.a = __importStar(require("./b"));
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
+const c_1 = require("./c");
 new c_1.a.A(); // Error

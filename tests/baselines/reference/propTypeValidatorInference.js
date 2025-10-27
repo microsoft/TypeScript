@@ -125,7 +125,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var PropTypes = __importStar(require("prop-types"));
+const PropTypes = __importStar(require("prop-types"));
 const innerProps = {
     foo: PropTypes.string.isRequired,
     bar: PropTypes.bool,

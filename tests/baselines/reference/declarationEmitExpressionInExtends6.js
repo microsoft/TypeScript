@@ -55,7 +55,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = __importStar(require("./a"));
+const A = __importStar(require("./a"));
 const { Foo } = A;
 class default_1 extends Foo {
 }

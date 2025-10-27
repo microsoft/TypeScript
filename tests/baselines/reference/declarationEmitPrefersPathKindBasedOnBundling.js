@@ -29,7 +29,7 @@ function scalar(value) {
 //// [spacing.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var scalar_1 = require("../lib/operators/scalar");
+const scalar_1 = require("../lib/operators/scalar");
 exports.default = {
     get xs() {
         return (0, scalar_1.scalar)("14px");

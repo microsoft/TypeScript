@@ -17,6 +17,6 @@ var x = ext;
 class D {
 }
 // Cannot resolve this ext module reference
-var ext = require("ext");
+const ext = require("ext");
 var x = ext;
 module.exports = D;

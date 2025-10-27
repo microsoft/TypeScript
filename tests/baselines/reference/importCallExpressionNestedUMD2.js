@@ -79,7 +79,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     function foo() {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
-            return yield (_a = (yield __syncRequire ? Promise.resolve().then(function () { return __importStar(require("./foo")); }) : new Promise(function (resolve_1, reject_1) { require(["./foo"], resolve_1, reject_1); }).then(__importStar)).default, __syncRequire ? Promise.resolve().then(function () { return __importStar(require(_a)); }) : new Promise(function (resolve_2, reject_2) { require([_a], resolve_2, reject_2); }).then(__importStar));
+            return yield (_a = (yield __syncRequire ? Promise.resolve().then(() => __importStar(require("./foo"))) : new Promise((resolve_1, reject_1) => { require(["./foo"], resolve_1, reject_1); }).then(__importStar)).default, __syncRequire ? Promise.resolve().then(() => __importStar(require(_a))) : new Promise((resolve_2, reject_2) => { require([_a], resolve_2, reject_2); }).then(__importStar));
         });
     }
 });

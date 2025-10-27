@@ -44,5 +44,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-expect-error
-var doesntexist_1 = __importDefault(require("./doesntexist"));
+const doesntexist_1 = __importDefault(require("./doesntexist"));
 exports.default = doesntexist_1.default;

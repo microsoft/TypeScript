@@ -1,10 +1,9 @@
 functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-functionImplementationErrors.ts(30,17): error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
 functionImplementationErrors.ts(35,17): error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
 functionImplementationErrors.ts(40,1): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
 
 
-==== functionImplementationErrors.ts (4 errors) ====
+==== functionImplementationErrors.ts (3 errors) ====
     // FunctionExpression with no return type annotation with multiple return statements with unrelated types
     var f1 = function () {
         return '';
@@ -37,8 +36,6 @@ functionImplementationErrors.ts(40,1): error TS2839: This condition will always 
     var m;
     // Function signature with parameter initializer referencing in scope local variable
     function f6(n = m) {
-                    ~
-!!! error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
         var m = 4;
     }
     

@@ -34,17 +34,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassA = void 0;
-var auxiliry_1 = require("./auxiliry");
+const auxiliry_1 = require("./auxiliry");
 function annotation() {
     return (target) => { };
 }
-let ClassA = (() => {
-    class ClassA {
-    }
-    __decorate([
-        annotation(),
-        __metadata("design:type", auxiliry_1.SomeClass)
-    ], ClassA.prototype, "array", void 0);
-    return ClassA;
-})();
+class ClassA {
+}
 exports.ClassA = ClassA;
+__decorate([
+    annotation(),
+    __metadata("design:type", auxiliry_1.SomeClass)
+], ClassA.prototype, "array", void 0);

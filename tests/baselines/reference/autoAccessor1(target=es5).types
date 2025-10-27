@@ -7,7 +7,6 @@ class C1 {
 
     accessor a: any;
 >a : any
->  : ^^^
 
     accessor b = 1;
 >b : number
@@ -17,7 +16,6 @@ class C1 {
 
     static accessor c: any;
 >c : any
->  : ^^^
 
     static accessor d = 2;
 >d : number

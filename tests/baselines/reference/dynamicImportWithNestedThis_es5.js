@@ -65,7 +65,7 @@ var __importStar = (this && this.__importStar) || (function () {
         }
         dynamic() {
             var _a;
-            return _a = this._path, __syncRequire ? Promise.resolve().then(function () { return __importStar(require(_a)); }) : new Promise(function (resolve_1, reject_1) { require([_a], resolve_1, reject_1); }).then(__importStar);
+            return _a = this._path, __syncRequire ? Promise.resolve().then(() => __importStar(require(_a))) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); }).then(__importStar);
         }
     }
     const c = new C();

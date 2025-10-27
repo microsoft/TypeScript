@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var reexporter_1 = __importDefault(require("./reexporter"));
+const reexporter_1 = __importDefault(require("./reexporter"));
 class Mine extends reexporter_1.default {
 }
 exports.default = Mine;

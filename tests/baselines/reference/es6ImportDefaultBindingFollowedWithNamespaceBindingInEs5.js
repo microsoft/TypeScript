@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var nameSpaceBinding = __importStar(require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"));
+const nameSpaceBinding = __importStar(require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"));
 var x = nameSpaceBinding.a;
 
 

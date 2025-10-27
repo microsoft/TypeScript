@@ -40,16 +40,13 @@ class E extends A {
 //// [staticPropSuper.js]
 class A {
 }
-let B = (() => {
-    class B extends A {
-        constructor() {
-            var x = 1; // should not error
-            super();
-        }
+class B extends A {
+    constructor() {
+        var x = 1; // should not error
+        super();
     }
-    B.s = 9;
-    return B;
-})();
+}
+B.s = 9;
 class C extends A {
     constructor() {
         this.p = 10;

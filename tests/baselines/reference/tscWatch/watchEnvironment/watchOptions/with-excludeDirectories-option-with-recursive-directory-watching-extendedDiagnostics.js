@@ -82,7 +82,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 //// [/user/username/projects/myproject/src/main.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
+const bar_1 = require("bar");
 (0, bar_1.foo)();
 
 

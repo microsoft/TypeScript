@@ -39,4 +39,4 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 const path = './foo';
-Promise.resolve("".concat(path)).then(function (s) { return __importStar(require(s)); });
+Promise.resolve(`${path}`).then(s => __importStar(require(s)));

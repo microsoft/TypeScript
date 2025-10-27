@@ -14,7 +14,7 @@ export const thing = () => parse();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
-var url_1 = require("url");
+const url_1 = require("url");
 const thing = () => (0, url_1.parse)();
 exports.thing = thing;
 

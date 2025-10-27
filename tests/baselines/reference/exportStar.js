@@ -106,7 +106,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var t4_1 = __importStar(require("./t4"));
+const t4_1 = __importStar(require("./t4"));
 t4_1.default;
 t4_1.x;
 t4_1.y;

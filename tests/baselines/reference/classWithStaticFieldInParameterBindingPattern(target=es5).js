@@ -6,7 +6,7 @@
 
 //// [classWithStaticFieldInParameterBindingPattern.js]
 // https://github.com/microsoft/TypeScript/issues/36295
-(({ [(_a = class {
+((_a) => { var _b; var { [(_b = class {
     },
-    _a.x = 1,
-    _a).x]: b = "" }) => { var _a; })();
+    _b.x = 1,
+    _b).x]: b = "" } = _a; })();

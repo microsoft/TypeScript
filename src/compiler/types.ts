@@ -8429,21 +8429,6 @@ export type EmitHelperUniqueNameCallback = (name: string) => string;
 
 /** @internal */
 export type LanugageFeatures =
-    // ES2015 Features
-    | "Classes"
-    | "ForOf"
-    | "Generators"
-    | "Iteration"
-    | "SpreadElements"
-    | "RestElements"
-    | "TaggedTemplates"
-    | "DestructuringAssignment"
-    | "BindingPatterns"
-    | "ArrowFunctions"
-    | "BlockScopedVariables"
-    | "ObjectAssign"
-    | "RegularExpressionFlagsUnicode"
-    | "RegularExpressionFlagsSticky"
     // ES2016 Features
     | "Exponentiation" // `x ** y`
     // ES2017 Features
@@ -8486,20 +8471,6 @@ export type LanugageFeatures =
  * @internal
  */
 export const LanguageFeatureMinimumTarget: Record<LanugageFeatures, ScriptTarget> = {
-    Classes: ScriptTarget.ES2015,
-    ForOf: ScriptTarget.ES2015,
-    Generators: ScriptTarget.ES2015,
-    Iteration: ScriptTarget.ES2015,
-    SpreadElements: ScriptTarget.ES2015,
-    RestElements: ScriptTarget.ES2015,
-    TaggedTemplates: ScriptTarget.ES2015,
-    DestructuringAssignment: ScriptTarget.ES2015,
-    BindingPatterns: ScriptTarget.ES2015,
-    ArrowFunctions: ScriptTarget.ES2015,
-    BlockScopedVariables: ScriptTarget.ES2015,
-    ObjectAssign: ScriptTarget.ES2015,
-    RegularExpressionFlagsUnicode: ScriptTarget.ES2015,
-    RegularExpressionFlagsSticky: ScriptTarget.ES2015,
     Exponentiation: ScriptTarget.ES2016,
     AsyncFunctions: ScriptTarget.ES2017,
     ForAwaitOf: ScriptTarget.ES2018,

@@ -63,12 +63,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [call.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var unknown_1 = require("unknown");
+const unknown_1 = require("unknown");
 (0, unknown_1.foo)();
 //// [new.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var unkown_1 = require("unkown");
+const unkown_1 = require("unkown");
 new unkown_1.Foo();
 //// [callAny.js]
 g();
@@ -77,7 +77,7 @@ g(); // Should get error for type argument
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var unknown_1 = require("unknown");
+const unknown_1 = require("unknown");
 class C extends unknown_1.A {
     m() {
         super.m(1);

@@ -123,7 +123,7 @@ var myvar2 = new m4.m2.c();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newVar2 = exports.newVar = void 0;
 /**This is on import declaration*/
-var extMod = require("./commentsExternalModules2_0"); // trailing comment 1
+const extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 extMod.m1.fooExport();
 exports.newVar = new extMod.m1.m2.c();
 extMod.m4.fooExport();

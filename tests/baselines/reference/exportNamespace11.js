@@ -56,5 +56,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var intermediate = __importStar(require("./intermediate"));
+const intermediate = __importStar(require("./intermediate"));
 const ghost = new intermediate.Ghost();

@@ -55,7 +55,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Text = void 0;
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 class Text extends React.Component {
     constructor() {
         super(...arguments);

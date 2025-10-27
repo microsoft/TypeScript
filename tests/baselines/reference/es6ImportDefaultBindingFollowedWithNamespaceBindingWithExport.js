@@ -49,7 +49,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var nameSpaceBinding = __importStar(require("./server"));
+const nameSpaceBinding = __importStar(require("./server"));
 exports.x = nameSpaceBinding.a;
 
 

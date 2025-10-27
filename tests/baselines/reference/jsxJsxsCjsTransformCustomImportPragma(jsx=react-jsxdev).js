@@ -25,7 +25,7 @@ export {};
 //// [preact.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
+const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 const _jsxFileName = "preact.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource preact */
@@ -33,7 +33,7 @@ const a = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: 
 //// [react.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "react.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource react */

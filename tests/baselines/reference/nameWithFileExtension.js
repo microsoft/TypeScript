@@ -16,5 +16,5 @@ exports.foo = 42;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo_0.js");
+const foo = require("./foo_0.js");
 var x = foo.foo + 42;

@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var foo_1 = __importDefault(require("foo"));
+const foo_1 = __importDefault(require("foo"));
 class A extends foo_1.default {
 }
 exports.A = A;

@@ -32,7 +32,7 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 class Button extends React.Component {
     render() {
         // Error children are specified twice

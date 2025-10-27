@@ -183,7 +183,7 @@ export * from "./data";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-var public_1 = require("lib2/public");
+const public_1 = require("lib2/public");
 class App {
     constructor() {
         new public_1.Data().test();

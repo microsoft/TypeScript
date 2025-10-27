@@ -19,16 +19,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const dec = (obj, prop) => undefined;
-let Foo = (() => {
-    class Foo {
-    }
-    __decorate([
-        dec,
-        __metadata("design:type", String)
-    ], Foo.prototype, "foo", void 0);
-    __decorate([
-        dec,
-        __metadata("design:type", String)
-    ], Foo.prototype, "bar", void 0);
-    return Foo;
-})();
+class Foo {
+}
+__decorate([
+    dec,
+    __metadata("design:type", String)
+], Foo.prototype, "foo", void 0);
+__decorate([
+    dec,
+    __metadata("design:type", String)
+], Foo.prototype, "bar", void 0);

@@ -9,7 +9,6 @@ function strange(x = a, y = b) {
 >x : Symbol(x, Decl(optionalParamReferencingOtherParams2.ts, 1, 17))
 >a : Symbol(a, Decl(optionalParamReferencingOtherParams2.ts, 0, 3))
 >y : Symbol(y, Decl(optionalParamReferencingOtherParams2.ts, 1, 23))
->b : Symbol(b, Decl(optionalParamReferencingOtherParams2.ts, 2, 7))
 
     var b = "";
 >b : Symbol(b, Decl(optionalParamReferencingOtherParams2.ts, 2, 7))

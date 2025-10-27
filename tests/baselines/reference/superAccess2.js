@@ -27,28 +27,26 @@ class Q extends P {
 }
 
 //// [superAccess2.js]
+var _a, _b;
 class P {
     x() { }
     static y() { }
 }
-let Q = (() => {
-    class Q extends P {
-        // Super is not allowed in constructor args
-        constructor(z = super., zz = super., zzz = () => super.) {
-            super();
-            this.z = z;
-            this.xx = super.;
-        }
-        foo(zz = super.) {
-            super.x();
-            super.y(); // error
-        }
-        static bar(zz = super.) {
-            super.x(); // error
-            super.y();
-        }
+class Q extends (_b = P) {
+    // Super is not allowed in constructor args
+    constructor(z = super., zz = super., zzz = () => super.) {
+        super();
+        this.z = z;
+        this.xx = super.;
     }
-    Q.yy = super. // error for static initializer accessing super
-    ; // error for static initializer accessing super
-    return Q;
-})();
+    foo(zz = super.) {
+        super.x();
+        super.y(); // error
+    }
+    static bar(zz = super.) {
+        super.x(); // error
+        super.y();
+    }
+}
+_a = Q;
+Q.yy = Reflect.get(_b, "", _a); // error for static initializer accessing super

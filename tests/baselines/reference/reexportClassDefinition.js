@@ -24,13 +24,13 @@ class x {
 module.exports = x;
 //// [foo2.js]
 "use strict";
-var foo1 = require("./foo1");
+const foo1 = require("./foo1");
 module.exports = {
     x: foo1
 };
 //// [foo3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo2 = require("./foo2");
+const foo2 = require("./foo2");
 class x extends foo2.x {
 }

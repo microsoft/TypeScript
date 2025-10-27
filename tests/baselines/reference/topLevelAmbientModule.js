@@ -16,5 +16,5 @@ var z = foo.x + 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="foo_0.ts"/>
-var foo = require("foo");
+const foo = require("foo");
 var z = foo.x + 10;

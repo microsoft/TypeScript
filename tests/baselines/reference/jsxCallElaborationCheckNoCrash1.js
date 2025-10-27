@@ -53,7 +53,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hoc = void 0;
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 const Hoc = (TagElement) => {
     const Component = () => React.createElement(TagElement, null);
     return Component;

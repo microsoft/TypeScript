@@ -78,7 +78,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var T = __importStar(require("./moduleFile"));
+const T = __importStar(require("./moduleFile"));
 T.bar();
 
 

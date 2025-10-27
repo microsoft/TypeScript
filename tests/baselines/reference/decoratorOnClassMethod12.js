@@ -23,13 +23,10 @@ var M;
     class S {
         decorator(target, key) { }
     }
-    let C = (() => {
-        class C extends S {
-            method() { }
-        }
-        __decorate([
-            (super.decorator)
-        ], C.prototype, "method", null);
-        return C;
-    })();
+    class C extends S {
+        method() { }
+    }
+    __decorate([
+        (super.decorator)
+    ], C.prototype, "method", null);
 })(M || (M = {}));

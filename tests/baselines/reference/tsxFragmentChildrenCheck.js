@@ -71,8 +71,8 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
-var my_component_1 = require("./my-component");
+const React = __importStar(require("react"));
+const my_component_1 = require("./my-component");
 const MY_STRING = 'Ceci n\'est pas une string.';
 const MY_CLASSNAME = 'jeclass';
 class RenderString extends React.PureComponent {

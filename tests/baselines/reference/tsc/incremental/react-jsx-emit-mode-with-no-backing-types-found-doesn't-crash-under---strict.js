@@ -62,7 +62,7 @@ Found 1 error in src/index.tsx[90m:1[0m
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-var jsx_runtime_1 = require("react/jsx-runtime");
+const jsx_runtime_1 = require("react/jsx-runtime");
 const App = () => (0, jsx_runtime_1.jsx)("div", { propA: true });
 exports.App = App;
 

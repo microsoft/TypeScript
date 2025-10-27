@@ -20,7 +20,7 @@ exports.f = f;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.g = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.g = a_1.f;
 
 

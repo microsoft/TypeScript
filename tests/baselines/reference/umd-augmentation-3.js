@@ -81,7 +81,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="math2d-augment.d.ts" />
-var m = __importStar(require("math2d"));
+const m = __importStar(require("math2d"));
 let v = new m.Vector(3, 2);
 let magnitude = m.getLength(v);
 let p = v.translate(5, 5);

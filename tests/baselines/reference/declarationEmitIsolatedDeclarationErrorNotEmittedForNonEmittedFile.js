@@ -60,7 +60,7 @@ export const publicProcedure = trpc.procedure;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicProcedure = exports.router = exports.middleware = void 0;
-var server_1 = require("@trpc/server");
+const server_1 = require("@trpc/server");
 const trpc = server_1.initTRPC.create();
 exports.middleware = trpc.middleware;
 exports.router = trpc.router;

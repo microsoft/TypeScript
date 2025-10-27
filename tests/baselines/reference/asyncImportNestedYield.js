@@ -54,6 +54,6 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function foo() {
     return __asyncGenerator(this, arguments, function* foo_1() {
-        Promise.resolve("".concat((yield __await(Promise.resolve("".concat(yield yield __await("foo"))).then(function (s) { return __importStar(require(s)); }))).default)).then(function (s) { return __importStar(require(s)); });
+        Promise.resolve(`${(yield __await(Promise.resolve(`${yield yield __await("foo")}`).then(s => __importStar(require(s))))).default}`).then(s => __importStar(require(s)));
     });
 }

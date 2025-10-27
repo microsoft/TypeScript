@@ -30,7 +30,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
-var other_1 = __importDefault(require("./other"));
+const other_1 = __importDefault(require("./other"));
 exports.obj = {
     [other_1.default.name]: 1,
 };

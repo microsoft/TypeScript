@@ -41,7 +41,6 @@ import {
     FunctionLikeDeclaration,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
-    getEmitScriptTarget,
     getFunctionFlags,
     getNodeId,
     hasSyntacticModifier,
@@ -82,7 +81,6 @@ import {
     processTaggedTemplateExpression,
     PropertyAccessExpression,
     ReturnStatement,
-    ScriptTarget,
     SetAccessorDeclaration,
     setEmitFlags,
     setOriginalNode,
@@ -162,7 +160,6 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
 
     const previousOnEmitNode = context.onEmitNode;
     context.onEmitNode = onEmitNode;
@@ -1191,7 +1188,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
-        const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && (resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) || resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAccessInAsync));
+        const emitSuperHelpers = resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) || resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
             const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);

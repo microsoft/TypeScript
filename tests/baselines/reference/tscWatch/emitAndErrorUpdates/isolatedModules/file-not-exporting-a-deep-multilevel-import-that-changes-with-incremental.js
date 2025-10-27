@@ -106,7 +106,7 @@ function getPoint() {
 //// [/user/username/projects/myproject/d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
+const c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
 

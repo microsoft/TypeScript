@@ -126,7 +126,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var foo = __importStar(require("./1"));
+    const foo = __importStar(require("./1"));
     foo.ns.a;
     foo.ns.b;
 });

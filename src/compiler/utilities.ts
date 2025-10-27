@@ -7830,7 +7830,7 @@ export function moveRangePastModifiers(node: Node): TextRange {
  * @param pos The start position.
  * @param token The token.
  *
- * @internal
+ * @internal @knipignore
  */
 export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
     return createRange(pos, pos + tokenToString(token)!.length);
@@ -8979,6 +8979,7 @@ const _computedOptions = createComputedCompilerOptions({
         computeValue: (compilerOptions): ModuleKind => {
             return typeof compilerOptions.module === "number" ?
                 compilerOptions.module :
+                // TODO: remove ScriptTarget.ES2015
                 _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
         },
     },
@@ -10565,7 +10566,7 @@ export function setTextRangePos<T extends ReadonlyTextRange>(range: T, pos: numb
 /**
  * Bypasses immutability and directly sets the `end` property of a `TextRange` or `Node`.
  *
- * @internal
+ * @internal @knipignore
  */
 export function setTextRangeEnd<T extends ReadonlyTextRange>(range: T, end: number): T {
     (range as TextRange).end = end;
@@ -11641,13 +11642,6 @@ export function createNameResolver({
                         }
                     }
                     break;
-                case SyntaxKind.ArrowFunction:
-                    // when targeting ES6 or higher there is no 'arguments' in an arrow function
-                    // for lower compile targets the resolved symbol is used to emit an error
-                    if (getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015) {
-                        break;
-                    }
-                    // falls through
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
@@ -11821,14 +11815,12 @@ export function createNameResolver({
             // - optional chaining pre-es2020
             // - nullish coalesce pre-es2020
             // - spread assignment in binding pattern pre-es2017
-            if (target >= ScriptTarget.ES2015) {
-                let declarationRequiresScopeChange = getRequiresScopeChangeCache(functionLocation);
-                if (declarationRequiresScopeChange === undefined) {
-                    declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
-                    setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange);
-                }
-                return !declarationRequiresScopeChange;
+            let declarationRequiresScopeChange = getRequiresScopeChangeCache(functionLocation);
+            if (declarationRequiresScopeChange === undefined) {
+                declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
+                setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange);
             }
+            return !declarationRequiresScopeChange;
         }
         return false;
 

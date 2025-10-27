@@ -39,24 +39,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var service_1 = __importDefault(require("./service"));
-let MyComponent = (() => {
-    let MyComponent = class MyComponent {
-        constructor(Service) {
-            this.Service = Service;
-        }
-        method(x) {
-        }
-    };
-    __decorate([
-        decorator,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], MyComponent.prototype, "method", null);
-    MyComponent = __decorate([
-        decorator,
-        __metadata("design:paramtypes", [service_1.default])
-    ], MyComponent);
-    return MyComponent;
-})();
+const service_1 = __importDefault(require("./service"));
+let MyComponent = class MyComponent {
+    constructor(Service) {
+        this.Service = Service;
+    }
+    method(x) {
+    }
+};
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MyComponent.prototype, "method", null);
+MyComponent = __decorate([
+    decorator,
+    __metadata("design:paramtypes", [service_1.default])
+], MyComponent);

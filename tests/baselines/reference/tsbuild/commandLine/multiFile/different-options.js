@@ -74,7 +74,7 @@ export declare const b = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.c = a_1.a;
 
 
@@ -86,7 +86,7 @@ export declare const c = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.d = b_1.b;
 
 
@@ -258,7 +258,7 @@ const bLocal = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.c = a_1.a;
 //# sourceMappingURL=c.js.map
 
@@ -266,7 +266,7 @@ exports.c = a_1.a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.d = b_1.b;
 //# sourceMappingURL=d.js.map
 
@@ -371,10 +371,10 @@ exports.d = b_1.b;
 {"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,MAAM,MAAM,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/project/c.js.map]
-{"version":3,"file":"c.js","sourceRoot":"","sources":["c.ts"],"names":[],"mappings":";;;AAAA,yBAAwB;AAAa,QAAA,CAAC,GAAG,KAAC,CAAC"}
+{"version":3,"file":"c.js","sourceRoot":"","sources":["c.ts"],"names":[],"mappings":";;;AAAA,2BAAwB;AAAa,QAAA,CAAC,GAAG,KAAC,CAAC"}
 
 //// [/home/src/workspaces/project/d.js.map]
-{"version":3,"file":"d.js","sourceRoot":"","sources":["d.ts"],"names":[],"mappings":";;;AAAA,yBAAwB;AAAa,QAAA,CAAC,GAAG,KAAC,CAAC"}
+{"version":3,"file":"d.js","sourceRoot":"","sources":["d.ts"],"names":[],"mappings":";;;AAAA,2BAAwB;AAAa,QAAA,CAAC,GAAG,KAAC,CAAC"}
 
 
 Program root files: [
@@ -438,7 +438,7 @@ const bLocal = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.c = a_1.a;
 
 
@@ -446,7 +446,7 @@ exports.c = a_1.a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.d = b_1.b;
 
 
@@ -1147,17 +1147,17 @@ const bLocal = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.c = a_1.a;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEseUJBQXdCO0FBQWEsUUFBQSxDQUFDLEdBQUcsS0FBQyxDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsMkJBQXdCO0FBQWEsUUFBQSxDQUFDLEdBQUcsS0FBQyxDQUFDIn0=
 
 //// [/home/src/workspaces/project/d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.d = b_1.b;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEseUJBQXdCO0FBQWEsUUFBQSxDQUFDLEdBQUcsS0FBQyxDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsMkJBQXdCO0FBQWEsUUFBQSxDQUFDLEdBQUcsS0FBQyxDQUFDIn0=
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
 {"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"composite":true,"inlineSourceMap":true},"referencedMap":[[4,1],[5,2]],"latestChangedDtsFile":"./d.d.ts","version":"FakeTSVersion"}
@@ -1315,7 +1315,7 @@ const bLocal = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.c = a_1.a;
 //# sourceMappingURL=c.js.map
 
@@ -1323,7 +1323,7 @@ exports.c = a_1.a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.d = b_1.b;
 //# sourceMappingURL=d.js.map
 

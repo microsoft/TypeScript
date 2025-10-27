@@ -39,10 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path="declarations.d.ts" />
-var foobarbaz_1 = require("foobarbaz");
+const foobarbaz_1 = require("foobarbaz");
 (0, foobarbaz_1.foo)(foobarbaz_1.baz);
-var foosball_1 = require("foosball");
+const foosball_1 = require("foosball");
 (0, foobarbaz_1.foo)(foosball_1.foos);
 // Works with relative file name
-var file_text_1 = __importDefault(require("./file!text"));
+const file_text_1 = __importDefault(require("./file!text"));
 (0, foobarbaz_1.foo)(file_text_1.default);
