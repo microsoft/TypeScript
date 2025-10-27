@@ -10,13 +10,3 @@
 verify.completions({ marker: "1", exact: ["a"] });
 
 
-/**
- * Manual check:
- * Only 'a' should be suggested because 'z' is already documented.
- * Place cursor after the space in '@param '.
- * @param z
- * @param 
- */
-function foo(z: number, a: number) {}
-
-

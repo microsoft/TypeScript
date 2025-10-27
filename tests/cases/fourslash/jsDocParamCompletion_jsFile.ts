@@ -12,12 +12,3 @@ goTo.file("a.js");
 verify.completions({ marker: "1", exact: ["z", "a"] });
 
 
-/**
- * Manual check (TS file view):
- * Order preserved: 'z' before 'a'.
- * Place cursor after the space in '@param '.
- * @param 
- */
-function foo(z, a) {}
-
-

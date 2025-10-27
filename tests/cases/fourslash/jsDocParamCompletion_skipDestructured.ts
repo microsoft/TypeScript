@@ -9,12 +9,3 @@
 verify.completions({ marker: "1", exact: ["z"] });
 
 
-/**
- * Manual check:
- * Destructured parameter is skipped; only 'z' is suggested.
- * Place cursor after the space in '@param '.
- * @param 
- */
-function foo({ x }: any, z: number) {}
-
-
