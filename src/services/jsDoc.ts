@@ -68,7 +68,6 @@ import {
     length,
     lineBreakPart,
     map,
-    mapDefined,
     MethodDeclaration,
     MethodSignature,
     Node,
@@ -420,19 +419,24 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
     const fn = jsdoc.parent;
     if (!isFunctionLike(fn)) return [];
 
-    return mapDefined(fn.parameters, param => {
-        if (!isIdentifier(param.name)) return undefined;
+    const baseSort = Completions.SortText.LocationPriority;
+    const entries: CompletionEntry[] = [];
+    for (const param of fn.parameters) {
+        if (!isIdentifier(param.name)) continue;
 
         const name = param.name.text;
         if (
             jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
             || nameThusFar !== undefined && !startsWith(name, nameThusFar)
         ) {
-            return undefined;
+            continue;
         }
 
-        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
-    });
+        const index = fn.parameters.indexOf(param);
+        const sortText = baseSort + index.toString().padStart(4, "0");
+        entries.push({ name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText });
+    }
+    return entries;
 }
 
 /** @internal */
