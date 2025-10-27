@@ -6395,6 +6395,7 @@ declare namespace ts {
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
         InInitialEntityName = 16777216,
+        InQuickInfo = 134217728,
     }
     enum TypeFormatFlags {
         None = 0,
@@ -6420,7 +6421,8 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        NodeBuilderFlagsMask = 848330095,
+        InQuickInfo = 134217728,
+        NodeBuilderFlagsMask = 982547823,
     }
     enum SymbolFormatFlags {
         None = 0,

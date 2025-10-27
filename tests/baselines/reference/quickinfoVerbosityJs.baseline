@@ -38,7 +38,9 @@
 // | ----------------------------------------------------------------------
 // | type SomeType2 = {
 // |     prop2: number;
-// |     prop3: SomeType;
+// |     prop3: {
+// |         prop1: string;
+// |     };
 // | }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
@@ -354,8 +356,48 @@
           "kind": "space"
         },
         {
-          "text": "SomeType",
-          "kind": "aliasName"
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "        ",
+          "kind": "space"
+        },
+        {
+          "text": "prop1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -371,7 +413,7 @@
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 0
     }
   },

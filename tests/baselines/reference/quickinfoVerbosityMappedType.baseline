@@ -29,7 +29,7 @@
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | type F<T> = { [K in keyof T as T[K] extends Apple ? never : K]: T[K]; }
+// | type F<T> = { [K in keyof T as T[K] extends number | boolean ? never : K]: T[K]; }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 // const y: { [K in keyof Bar]?: Bar[K] } = { banana: 'hello' };
@@ -52,7 +52,7 @@
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | type G<T> = { [K in keyof T]: T[K] & Apple; }
+// | type G<T> = { [K in keyof T]: T[K] & (number | boolean); }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 
@@ -324,8 +324,24 @@
           "kind": "space"
         },
         {
-          "text": "Apple",
-          "kind": "aliasName"
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
         },
         {
           "text": " ",
@@ -401,7 +417,7 @@
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 0
     }
   },
@@ -880,8 +896,32 @@
           "kind": "space"
         },
         {
-          "text": "Apple",
-          "kind": "aliasName"
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -897,7 +937,7 @@
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 0
     }
   },
