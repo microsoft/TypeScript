@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importAliasWithDottedName.ts] ////
 
 === importAliasWithDottedName.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ module M {
 >1 : 1
 >  : ^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -23,7 +23,7 @@ module M {
     }
 }
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

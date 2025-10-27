@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution7.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }
 
-module my {
+namespace my {
 >my : typeof my
 >   : ^^^^^^^^^
 
@@ -38,7 +38,7 @@ module my {
 >other : any
 >      : ^^^
 
-module q {
+namespace q {
 >q : typeof q
 >  : ^^^^^^^^
 

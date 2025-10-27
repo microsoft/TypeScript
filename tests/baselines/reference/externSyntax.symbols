@@ -4,11 +4,11 @@
 declare var v;
 >v : Symbol(v, Decl(externSyntax.ts, 0, 11))
 
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(externSyntax.ts, 0, 14))
 
     export class D {
->D : Symbol(D, Decl(externSyntax.ts, 1, 18))
+>D : Symbol(D, Decl(externSyntax.ts, 1, 21))
 
         public p;
 >p : Symbol(D.p, Decl(externSyntax.ts, 2, 20))

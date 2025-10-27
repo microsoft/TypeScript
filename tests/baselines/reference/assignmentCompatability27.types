@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignmentCompatability27.ts] ////
 
 === assignmentCompatability27.ts ===
-module __test1__ {
+namespace __test1__ {
 >__test1__ : typeof __test1__
 >          : ^^^^^^^^^^^^^^^^
 
@@ -25,7 +25,7 @@ module __test1__ {
 >obj4 : interfaceWithPublicAndOptional<number, string>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
-module __test2__ {
+namespace __test2__ {
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 

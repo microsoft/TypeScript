@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-////module M {
+////namespace M {
 ////}
-////module N {
+////namespace N {
 ////}
 
 const c = classification("original");
@@ -11,11 +11,11 @@ verifyOperationIsCancelled(() => verify.syntacticClassificationsAre());
 cancellation.resetCancelled();
 
 verify.syntacticClassificationsAre(
-    c.keyword("module"),
+    c.keyword("namespace"),
     c.moduleName("M"),
     c.punctuation("{"),
     c.punctuation("}"),
-    c.keyword("module"),
+    c.keyword("namespace"),
     c.moduleName("N"),
     c.punctuation("{"),
     c.punctuation("}"));

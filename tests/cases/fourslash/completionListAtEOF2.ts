@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////module Shapes {
+////namespace Shapes {
 ////    export class Point {
 ////        constructor(public x: number, public y: number) { }
 ////    }

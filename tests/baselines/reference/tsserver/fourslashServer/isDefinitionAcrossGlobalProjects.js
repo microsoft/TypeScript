@@ -179,12 +179,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
@@ -235,7 +229,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/a/index.ts",
         "configFile": "/home/src/workspaces/project/a/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
@@ -288,15 +288,9 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
 /home/src/workspaces/node_modules/@types: *new*
   {}
-/home/src/workspaces/project/a/node_modules: *new*
-  {}
 /home/src/workspaces/project/a/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules: *new*
   {}
 /home/src/workspaces/project/node_modules/@types: *new*
   {}
@@ -517,16 +511,10 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {} *new*
-/home/src/workspaces/project/a/node_modules:
-  {}
 /home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules:
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
@@ -570,12 +558,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
@@ -618,7 +600,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/b/index.ts",
         "configFile": "/home/src/workspaces/project/b/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/b/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/b/tsconfig.json
@@ -636,12 +624,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
@@ -684,7 +666,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/c/index.ts",
         "configFile": "/home/src/workspaces/project/c/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "text": "Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/c/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/c/tsconfig.json
@@ -828,31 +816,17 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {} *new*
-  {} *new*
 /home/src/workspaces/node_modules/@types:
   {}
   {}
   {} *new*
   {} *new*
-/home/src/workspaces/project/a/node_modules:
-  {}
 /home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules: *new*
   {}
 /home/src/workspaces/project/b/node_modules/@types: *new*
   {}
-/home/src/workspaces/project/c/node_modules: *new*
-  {}
 /home/src/workspaces/project/c/node_modules/@types: *new*
   {}
-/home/src/workspaces/project/node_modules:
-  {}
-  {} *new*
-  {} *new*
 /home/src/workspaces/project/node_modules/@types:
   {}
   {}
@@ -1099,30 +1073,16 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
   {}
   {}
-/home/src/workspaces/project/a/node_modules:
-  {}
 /home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules:
   {}
 /home/src/workspaces/project/b/node_modules/@types:
   {}
-/home/src/workspaces/project/c/node_modules:
-  {}
 /home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules:
-  {}
-  {}
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
@@ -1298,30 +1258,16 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
   {}
   {}
-/home/src/workspaces/project/a/node_modules:
-  {}
 /home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules:
   {}
 /home/src/workspaces/project/b/node_modules/@types:
   {}
-/home/src/workspaces/project/c/node_modules:
-  {}
 /home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules:
-  {}
-  {}
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
@@ -1678,30 +1624,16 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
   {}
   {}
-/home/src/workspaces/project/a/node_modules:
-  {}
 /home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules:
   {}
 /home/src/workspaces/project/b/node_modules/@types:
   {}
-/home/src/workspaces/project/c/node_modules:
-  {}
 /home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules:
-  {}
-  {}
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
@@ -1868,30 +1800,16 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
   {}
   {}
-/home/src/workspaces/project/a/node_modules:
-  {}
 /home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules:
   {}
 /home/src/workspaces/project/b/node_modules/@types:
   {}
-/home/src/workspaces/project/c/node_modules:
-  {}
 /home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules:
-  {}
-  {}
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}

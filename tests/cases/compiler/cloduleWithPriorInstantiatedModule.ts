@@ -1,5 +1,5 @@
 ﻿// Non-ambient & instantiated module.
-module Moclodule {
+namespace Moclodule {
     export interface Someinterface {
         foo(): void;
     }
@@ -10,7 +10,7 @@ class Moclodule {
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
     export class Manager {
     }
 }

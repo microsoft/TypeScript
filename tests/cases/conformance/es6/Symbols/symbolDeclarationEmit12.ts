@@ -1,6 +1,6 @@
 //@target: ES6
 //@declaration: true
-module M {
+namespace M {
     interface I { }
     export class C {
         [Symbol.iterator]: I;

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/moduleAndInterfaceWithSameName.ts] ////
 
 === moduleAndInterfaceWithSameName.ts ===
-module Foo1 {
+namespace Foo1 {
 >Foo1 : typeof Foo1
 >     : ^^^^^^^^^^^
 
-    export module Bar {
+    export namespace Bar {
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
@@ -23,11 +23,11 @@ module Foo1 {
     }
 }
 
-module Foo2 {
+namespace Foo2 {
 >Foo2 : typeof Foo2
 >     : ^^^^^^^^^^^
 
-    module Bar {
+    namespace Bar {
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
@@ -59,11 +59,11 @@ var z2 = Foo2.Bar.y; // Error for using interface name as a value.
 >y : any
 >  : ^^^
 
-module Foo3 {
+namespace Foo3 {
 >Foo3 : typeof Foo3
 >     : ^^^^^^^^^^^
 
-    export module Bar {
+    export namespace Bar {
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 

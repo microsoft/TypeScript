@@ -293,7 +293,7 @@
       "name": "1"
     },
     "item": {
-      "flags": 1,
+      "flags": 9,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -3947,6 +3947,7 @@
           "data": {
             "exportName": "as",
             "exportMapKey": "2 * as ",
+            "moduleSpecifier": "./a",
             "fileName": "/a.ts"
           },
           "displayParts": [
@@ -4199,7 +4200,7 @@
       "name": "2"
     },
     "item": {
-      "flags": 1,
+      "flags": 9,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -7853,6 +7854,7 @@
           "data": {
             "exportName": "as",
             "exportMapKey": "2 * as ",
+            "moduleSpecifier": "./a",
             "fileName": "/a.ts"
           },
           "displayParts": [

@@ -2472,7 +2472,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         ts.server.updateProjectIfDirty(project);
         const program = project.getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFileByPath(appPath)!;
-        const foooResolution = program.getResolvedModule(sourceFile, "fooo", /*mode*/ undefined)!.resolvedModule!;
+        const foooResolution = program.getResolvedModule(sourceFile, "fooo", ts.ModuleKind.CommonJS)!.resolvedModule!;
         project.writeLog(`Resolution from : ${sourceFile.fileName} for "fooo" goes to: ${jsonToReadableText(foooResolution)}`);
         return foooResolution;
     }

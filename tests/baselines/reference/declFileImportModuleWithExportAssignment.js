@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileImportModuleWithExportAssignment.ts] ////
 
 //// [declFileImportModuleWithExportAssignment_0.ts]
-module m2 {
+namespace m2 {
     export interface connectModule {
         (res, req, next): void;
     }
