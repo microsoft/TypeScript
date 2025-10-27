@@ -6587,10 +6587,7 @@
         "category": "Message",
         "code": 6903
     },
-    "module === \"system\" or esModuleInterop": {
-        "category": "Message",
-        "code": 6904
-    },
+
     "`false`, unless `strict` is set": {
         "category": "Message",
         "code": 6905
@@ -6611,7 +6608,7 @@
         "category": "Message",
         "code": 6909
     },
-    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+    "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
         "category": "Message",
         "code": 69010
     },

@@ -1594,7 +1594,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         export const y = 2;
         output.push("after export y");
         `,
-            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.AMD },
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.AMD, ignoreDeprecations: "6.0" },
         );
 
         assert.strictEqual(x, 1);
@@ -1624,7 +1624,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         export const y = 2;
         output.push("after export y");
         `,
-            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System },
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System, ignoreDeprecations: "6.0" },
         );
 
         assert.strictEqual(x, 1);
