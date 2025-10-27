@@ -6,7 +6,7 @@
  * @param {2} a
  */
 export function conflictingParam(a) { return true }
->conflictingParam : (a: 2) => true
+>conflictingParam : (a: 1) => true
 >a : 2
 >true : true
 
@@ -15,7 +15,7 @@ export function conflictingParam(a) { return true }
  * @return {false}
  */
 export function conflictingReturn(b) { return false }
->conflictingReturn : (b: 3) => false
+>conflictingReturn : (b: 3) => true
 >b : 3
 >false : false
 
@@ -26,7 +26,7 @@ export function conflictingReturn(b) { return false }
  * @return {false}
  */
 export function conflictingBoth(d) { return false }
->conflictingBoth : (d: 5) => false
+>conflictingBoth : (c: 4) => true
 >d : 5
 >false : false
 

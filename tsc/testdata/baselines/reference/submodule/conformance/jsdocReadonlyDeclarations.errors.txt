@@ -1,13 +1,12 @@
 error TS5055: Cannot write file 'jsdocReadonlyDeclarations.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-jsdocReadonlyDeclarations.js(14,1): error TS2554: Expected 1 arguments, but got 0.
 
 
 !!! error TS5055: Cannot write file 'jsdocReadonlyDeclarations.js' because it would overwrite input file.
 !!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 !!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-==== jsdocReadonlyDeclarations.js (1 errors) ====
+==== jsdocReadonlyDeclarations.js (0 errors) ====
     class C {
         /** @readonly */
         x = 6
@@ -22,9 +21,6 @@ jsdocReadonlyDeclarations.js(14,1): error TS2554: Expected 1 arguments, but got 
         }
     }
     new C().x
-    ~~~~~~~
-!!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 jsdocReadonlyDeclarations.js:5:17: An argument for 'n' was not provided.
     
     function F() {
         /** @readonly */

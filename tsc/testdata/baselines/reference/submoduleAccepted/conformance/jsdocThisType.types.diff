@@ -1,15 +1,6 @@
 --- old.jsdocThisType.types
 +++ new.jsdocThisType.types
-@@= skipped -24, +24 lines =@@
-
- /** @type {import('./types').M} */
- export function f2() {
-->f2 : (this: import("/types").Foo) => void
-+>f2 : () => void
-
-     this.test();
- >this.test() : any
-@@= skipped -11, +11 lines =@@
+@@= skipped -35, +35 lines =@@
 
  /** @type {(this: import('./types').Foo) => void} */
  export const f3 = function() {
@@ -25,7 +16,7 @@
  /** @type {(this: import('./types').Foo) => void} */
  export function f4() {
 ->f4 : (this: import("./types").Foo) => void
-+>f4 : () => void
++>f4 : (this: import("/types").Foo) => void
 
      this.test();
  >this.test() : any

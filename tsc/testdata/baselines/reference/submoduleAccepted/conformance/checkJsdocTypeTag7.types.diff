@@ -1,9 +1,0 @@
---- old.checkJsdocTypeTag7.types
-+++ new.checkJsdocTypeTag7.types
-@@= skipped -15, +15 lines =@@
-
-     /** @type {(optional?) => void} */
-     methodWithOptionalParameters() {}
-->methodWithOptionalParameters : (optional?: any) => void
-+>methodWithOptionalParameters : () => void
- }
