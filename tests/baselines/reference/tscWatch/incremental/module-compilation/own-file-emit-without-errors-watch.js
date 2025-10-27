@@ -10,7 +10,8 @@ export const y = 20;
 {
   "compilerOptions": {
     "incremental": true,
-    "module": "amd"
+    "module": "amd",
+    "ignoreDeprecations": "6.0"
   }
 }
 
@@ -131,6 +132,7 @@ Program root files: [
 Program options: {
   "incremental": true,
   "module": 2,
+  "ignoreDeprecations": "6.0",
   "watch": true,
   "configFilePath": "/users/username/projects/project/tsconfig.json"
 }
@@ -274,6 +276,7 @@ Program root files: [
 Program options: {
   "incremental": true,
   "module": 2,
+  "ignoreDeprecations": "6.0",
   "watch": true,
   "configFilePath": "/users/username/projects/project/tsconfig.json"
 }

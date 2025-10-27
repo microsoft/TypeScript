@@ -7,6 +7,7 @@ module M {
 
 	export var x;
 >x : any
+>  : ^^^
 }
 
 import M2 = M;

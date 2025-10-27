@@ -27,23 +27,21 @@ export class Test {
 
 
 //// [interfaceImplementation6.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Test = void 0;
-    class C1 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test = void 0;
+class C1 {
+}
+class C2 {
+}
+class C3 {
+    constructor() {
+        var item;
     }
-    class C2 {
+}
+class Test {
+    constructor() {
+        this.pt = { item: 1 };
     }
-    class C3 {
-        constructor() {
-            var item;
-        }
-    }
-    class Test {
-        constructor() {
-            this.pt = { item: 1 };
-        }
-    }
-    exports.Test = Test;
-});
+}
+exports.Test = Test;

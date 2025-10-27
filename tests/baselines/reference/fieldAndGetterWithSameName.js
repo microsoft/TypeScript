@@ -7,12 +7,10 @@ export class C {
 }
 
 //// [fieldAndGetterWithSameName.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.C = void 0;
-    class C {
-        get x() { return 1; }
-    }
-    exports.C = C;
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+class C {
+    get x() { return 1; }
+}
+exports.C = C;

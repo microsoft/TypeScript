@@ -6951,6 +6951,7 @@ declare namespace ts {
         Message = 3,
     }
     enum ModuleResolutionKind {
+        /** @deprecated */
         Classic = 1,
         /**
          * @deprecated
@@ -7023,6 +7024,7 @@ declare namespace ts {
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
+        /** @deprecated */
         baseUrl?: string;
         /** @deprecated */
         charset?: string;
@@ -7153,10 +7155,14 @@ declare namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
     enum ModuleKind {
+        /** @deprecated */
         None = 0,
         CommonJS = 1,
+        /** @deprecated */
         AMD = 2,
+        /** @deprecated */
         UMD = 3,
+        /** @deprecated */
         System = 4,
         ES2015 = 5,
         ES2020 = 6,

@@ -8,7 +8,7 @@ export class Promise {
 }
 
 //// [staticInstanceResolution5_1.ts]
-import WinJS = require('staticInstanceResolution5_0');
+import WinJS = require('./staticInstanceResolution5_0');
 
 // these 3 should be errors
 var x = (w1: WinJS) => { };
@@ -17,23 +17,19 @@ function z(w3: WinJS) { }
 
 
 //// [staticInstanceResolution5_0.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Promise = void 0;
-    class Promise {
-        static timeout(delay) {
-            return null;
-        }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Promise = void 0;
+class Promise {
+    static timeout(delay) {
+        return null;
     }
-    exports.Promise = Promise;
-});
+}
+exports.Promise = Promise;
 //// [staticInstanceResolution5_1.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    // these 3 should be errors
-    var x = (w1) => { };
-    var y = function (w2) { };
-    function z(w3) { }
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// these 3 should be errors
+var x = (w1) => { };
+var y = function (w2) { };
+function z(w3) { }

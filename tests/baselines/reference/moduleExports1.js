@@ -1,7 +1,13 @@
 //// [tests/cases/compiler/moduleExports1.ts] ////
 
 //// [moduleExports1.ts]
+<<<<<<< HEAD
 export module TypeScript.Strasse.Street {
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+export namespace TypeScript.Strasse.Street {
+=======
+export namespace TypeScript.Strasse.Street {
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 	export class Rue {
 		public address:string;
 	}	
@@ -16,25 +22,23 @@ void 0;
 if (!module.exports) module.exports = "";
 
 //// [moduleExports1.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TypeScript = void 0;
-    var TypeScript;
-    (function (TypeScript) {
-        var Strasse;
-        (function (Strasse) {
-            var Street;
-            (function (Street) {
-                class Rue {
-                }
-                Street.Rue = Rue;
-            })(Street = Strasse.Street || (Strasse.Street = {}));
-        })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));
-    })(TypeScript || (exports.TypeScript = TypeScript = {}));
-    var rue = new TypeScript.Strasse.Street.Rue();
-    rue.address = "1 Main Street";
-    void 0;
-    if (!module.exports)
-        module.exports = "";
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TypeScript = void 0;
+var TypeScript;
+(function (TypeScript) {
+    var Strasse;
+    (function (Strasse) {
+        var Street;
+        (function (Street) {
+            class Rue {
+            }
+            Street.Rue = Rue;
+        })(Street = Strasse.Street || (Strasse.Street = {}));
+    })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));
+})(TypeScript || (exports.TypeScript = TypeScript = {}));
+var rue = new TypeScript.Strasse.Street.Rue();
+rue.address = "1 Main Street";
+void 0;
+if (!module.exports)
+    module.exports = "";

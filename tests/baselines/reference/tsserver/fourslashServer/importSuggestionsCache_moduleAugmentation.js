@@ -457,7 +457,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1131,11 +1131,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1144,11 +1151,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1219,7 +1233,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1893,11 +1907,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1906,11 +1927,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -4444,7 +4472,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -5121,11 +5149,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -5134,11 +5169,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -5210,7 +5252,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -5884,11 +5926,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -5897,11 +5946,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },

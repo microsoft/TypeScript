@@ -140,8 +140,8 @@ import * as e from "express";
 >  : ^^^^^^^^
 
 declare module "express" {
->"express" : typeof e
->          : ^^^^^^^^
+>"express" : typeof import("express")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Request {
         id: number;
