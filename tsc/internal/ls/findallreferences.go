@@ -625,7 +625,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 		}
 
 		if moduleSymbol := checker.GetMergedSymbol(resolvedRef.file.Symbol); moduleSymbol != nil {
-			return getReferencedSymbolsForModule(ctx, program, moduleSymbol /*excludeImportTypeOfExportEquals*/, false, sourceFiles, sourceFilesSet)
+			return l.getReferencedSymbolsForModule(ctx, program, moduleSymbol /*excludeImportTypeOfExportEquals*/, false, sourceFiles, sourceFilesSet)
 		}
 
 		// !!! not implemented
@@ -673,7 +673,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 	}
 
 	if symbol.Name == ast.InternalSymbolNameExportEquals {
-		return getReferencedSymbolsForModule(ctx, program, symbol.Parent, false /*excludeImportTypeOfExportEquals*/, sourceFiles, sourceFilesSet)
+		return l.getReferencedSymbolsForModule(ctx, program, symbol.Parent, false /*excludeImportTypeOfExportEquals*/, sourceFiles, sourceFilesSet)
 	}
 
 	moduleReferences := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, symbol, program, sourceFiles, checker, options, sourceFilesSet) // !!! cancellationToken
@@ -700,7 +700,7 @@ func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ct
 	}
 	exportEquals := symbol.Exports[ast.InternalSymbolNameExportEquals]
 	// If exportEquals != nil, we're about to add references to `import("mod")` anyway, so don't double-count them.
-	moduleReferences := getReferencedSymbolsForModule(ctx, program, symbol, exportEquals != nil, sourceFiles, sourceFilesSet)
+	moduleReferences := l.getReferencedSymbolsForModule(ctx, program, symbol, exportEquals != nil, sourceFiles, sourceFilesSet)
 	if exportEquals == nil || !sourceFilesSet.Has(moduleSourceFileName) {
 		return moduleReferences
 	}
@@ -1021,7 +1021,7 @@ func getMergedAliasedSymbolOfNamespaceExportDeclaration(node *ast.Node, symbol *
 	return nil
 }
 
-func getReferencedSymbolsForModule(ctx context.Context, program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	debug.Assert(symbol.ValueDeclaration != nil)
 
 	checker, done := program.GetTypeChecker(ctx)
@@ -1062,10 +1062,11 @@ func getReferencedSymbolsForModule(ctx context.Context, program *compiler.Progra
 			}
 			return newNodeEntry(rangeNode)
 		case ModuleReferenceKindReference:
-			// <reference path> or <reference types>
-			// We can't easily create a proper range entry here without access to LanguageService,
-			// but we can create a node-based entry pointing to the source file which will be resolved later
-			return newNodeEntry(reference.referencingFile.AsNode())
+			return &referenceEntry{
+				kind:      entryKindRange,
+				fileName:  reference.referencingFile.FileName(),
+				textRange: l.createLspRangeFromBounds(reference.ref.Pos(), reference.ref.End(), reference.referencingFile),
+			}
 		}
 		return nil
 	})
