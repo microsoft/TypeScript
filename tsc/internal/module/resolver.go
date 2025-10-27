@@ -231,9 +231,8 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 	}
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 
-	moduleResolution := compilerOptions.ModuleResolution
-	if moduleResolution == core.ModuleResolutionKindUnknown {
-		moduleResolution = compilerOptions.GetModuleResolutionKind()
+	moduleResolution := compilerOptions.GetModuleResolutionKind()
+	if compilerOptions.ModuleResolution != moduleResolution {
 		if traceBuilder != nil {
 			traceBuilder.write(diagnostics.Module_resolution_kind_is_not_specified_using_0.Format(moduleResolution.String()))
 		}

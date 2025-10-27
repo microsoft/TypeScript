@@ -16,8 +16,10 @@
  ;
  exports.default = C.x;
  //// [usage.js]
- "use strict";
+@@= skipped -14, +11 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var code_1 = require("./code");
-+const code_1 = require("./code");
+-var code_1 = __importDefault(require("./code"));
++const code_1 = __importDefault(require("./code"));
  void code_1.default;

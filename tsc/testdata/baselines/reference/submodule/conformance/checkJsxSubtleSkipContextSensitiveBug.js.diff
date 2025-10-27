@@ -1,9 +1,9 @@
 --- old.checkJsxSubtleSkipContextSensitiveBug.js
 +++ new.checkJsxSubtleSkipContextSensitiveBug.js
-@@= skipped -27, +27 lines =@@
-
- //// [checkJsxSubtleSkipContextSensitiveBug.js]
- "use strict";
+@@= skipped -60, +60 lines =@@
+         return result;
+     };
+ })();
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,8 +15,8 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  class AsyncLoader extends React.Component {
      render() { return null; }
  }

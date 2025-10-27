@@ -9,54 +9,54 @@ export default a;
 >a : number
 
 === es6ImportDefaultBindingFollowedWithNamedImport1_1.ts ===
-import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
->defaultBinding1 : any
+import defaultBinding1, { } from "./es6ImportDefaultBindingFollowedWithNamedImport1_0";
+>defaultBinding1 : number
 
 var x1: number = defaultBinding1;
 >x1 : number
->defaultBinding1 : any
+>defaultBinding1 : number
 
-import defaultBinding2, { a } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
->defaultBinding2 : any
+import defaultBinding2, { a } from "./es6ImportDefaultBindingFollowedWithNamedImport1_0";
+>defaultBinding2 : number
 >a : any
 
 var x1: number = defaultBinding2;
 >x1 : number
->defaultBinding2 : any
+>defaultBinding2 : number
 
-import defaultBinding3, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
->defaultBinding3 : any
+import defaultBinding3, { a as b } from "./es6ImportDefaultBindingFollowedWithNamedImport1_0";
+>defaultBinding3 : number
 >a : any
 >b : any
 
 var x1: number = defaultBinding3;
 >x1 : number
->defaultBinding3 : any
+>defaultBinding3 : number
 
-import defaultBinding4, { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
->defaultBinding4 : any
+import defaultBinding4, { x, a as y } from "./es6ImportDefaultBindingFollowedWithNamedImport1_0";
+>defaultBinding4 : number
 >x : any
 >a : any
 >y : any
 
 var x1: number = defaultBinding4;
 >x1 : number
->defaultBinding4 : any
+>defaultBinding4 : number
 
-import defaultBinding5, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
->defaultBinding5 : any
+import defaultBinding5, { x as z,  } from "./es6ImportDefaultBindingFollowedWithNamedImport1_0";
+>defaultBinding5 : number
 >x : any
 >z : any
 
 var x1: number = defaultBinding5;
 >x1 : number
->defaultBinding5 : any
+>defaultBinding5 : number
 
-import defaultBinding6, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
->defaultBinding6 : any
+import defaultBinding6, { m,  } from "./es6ImportDefaultBindingFollowedWithNamedImport1_0";
+>defaultBinding6 : number
 >m : any
 
 var x1: number = defaultBinding6;
 >x1 : number
->defaultBinding6 : any
+>defaultBinding6 : number
 

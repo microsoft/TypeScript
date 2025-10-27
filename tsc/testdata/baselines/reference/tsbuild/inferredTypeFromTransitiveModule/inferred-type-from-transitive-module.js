@@ -124,10 +124,43 @@ export declare const lazyBar: LazyAction<(param: string) => void, typeof import(
 
 //// [/home/src/workspaces/project/obj/index.js] *new* 
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
 const bundling_1 = require("./bundling");
-const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(() => require('./lazyIndex')));
+const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(() => __importStar(require('./lazyIndex'))));
 exports.lazyBar = new bundling_1.LazyAction(lazyModule, m => m.bar);
 
 //// [/home/src/workspaces/project/obj/lazyIndex.d.ts] *new* 
@@ -135,10 +168,13 @@ export { default as bar } from './bar';
 
 //// [/home/src/workspaces/project/obj/lazyIndex.js] *new* 
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 const bar_1 = require("./bar");
-Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return __importDefault(bar_1).default; } });
 
 //// [/home/src/workspaces/project/obj/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":[[2,6]],"fileNames":["lib.d.ts","../bar.ts","../bundling.ts","../global.d.ts","../lazyIndex.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"76a83326d4e197789f8362e994577f53-interface RawAction {\n    (...args: any[]): Promise<any> | void;\n}\ninterface ActionFactory {\n    <T extends RawAction>(target: T): T;\n}\ndeclare function foo<U extends any[] = any[]>(): ActionFactory;\nexport default foo()(function foobar(param: string): void {\n});","signature":"16f73d7e0c200fed165b8fa7d55fefbf-declare const _default: (param: string) => void;\nexport default _default;\n","impliedNodeFormat":1},{"version":"16bf1b870d8b21533eda3b1f1b87cd77-export class LazyModule<TModule> {\n    constructor(private importCallback: () => Promise<TModule>) {}\n}\n\nexport class LazyAction<\n    TAction extends (...args: any[]) => any,\n    TModule\n>  {\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction) {\n    }\n}","signature":"5e4757586f6f5d494b6763f1e808313a-export declare class LazyModule<TModule> {\n    private importCallback;\n    constructor(importCallback: () => Promise<TModule>);\n}\nexport declare class LazyAction<TAction extends (...args: any[]) => any, TModule> {\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction);\n}\n","impliedNodeFormat":1},{"version":"9c9274fd70d574f2b4b68a2891bd4c47-interface PromiseConstructor {\n    new <T>(): Promise<T>;\n}\ndeclare var Promise: PromiseConstructor;\ninterface Promise<T> {\n}","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7c5cf52aadc65791601164da964e3110-export { default as bar } from './bar';","signature":"3a848e147ba2aebbd888c3c7bbab715b-export { default as bar } from './bar';\n","impliedNodeFormat":1},{"version":"d552d2a19fa05b15aa33018233d09810-import { LazyAction, LazyModule } from './bundling';\nconst lazyModule = new LazyModule(() =>\n    import('./lazyIndex')\n);\nexport const lazyBar = new LazyAction(lazyModule, m => m.bar);","signature":"421664a6306d66498ea4a2e3065214b1-import { LazyAction } from './bundling';\nexport declare const lazyBar: LazyAction<(param: string) => void, typeof import(\"./lazyIndex\")>;\n","impliedNodeFormat":1}],"fileIdsList":[[3,5],[2]],"options":{"declaration":true,"outDir":"./","target":1},"referencedMap":[[6,1],[5,2]]}

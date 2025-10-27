@@ -1,11 +1,11 @@
 --- old.umd-augmentation-1.js
 +++ new.umd-augmentation-1.js
-@@= skipped -41, +41 lines =@@
- "use strict";
+@@= skipped -74, +74 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="math2d-augment.d.ts" />
--var m = require("math2d");
-+const m = require("math2d");
+-var m = __importStar(require("math2d"));
++const m = __importStar(require("math2d"));
  let v = new m.Vector(3, 2);
  let magnitude = m.getLength(v);
  let p = v.translate(5, 5);

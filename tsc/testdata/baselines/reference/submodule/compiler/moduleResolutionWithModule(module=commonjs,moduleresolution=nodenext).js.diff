@@ -1,9 +1,9 @@
 --- old.moduleResolutionWithModule(module=commonjs,moduleresolution=nodenext).js
 +++ new.moduleResolutionWithModule(module=commonjs,moduleresolution=nodenext).js
-@@= skipped -14, +14 lines =@@
- //// [index.js]
- "use strict";
+@@= skipped -47, +47 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var p = require("pkg");
-+const p = require("pkg");
+-var p = __importStar(require("pkg"));
++const p = __importStar(require("pkg"));
  p.thing();

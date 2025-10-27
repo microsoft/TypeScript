@@ -13,9 +13,12 @@ export class C {
 
 //// [main.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-const abcdefgh_1 = require("abcdefgh");
+const abcdefgh_1 = __importDefault(require("abcdefgh"));
 class C {
     [abcdefgh_1.default.someKey]() { }
     ;

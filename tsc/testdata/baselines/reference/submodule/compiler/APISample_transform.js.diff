@@ -1,11 +1,11 @@
 --- old.APISample_transform.js
 +++ new.APISample_transform.js
-@@= skipped -31, +31 lines =@@
-  *       Please log a "breaking change" issue for any API breaking change affecting this issue
-  */
+@@= skipped -64, +64 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var ts = require("typescript");
-+const ts = require("typescript");
+-var ts = __importStar(require("typescript"));
++const ts = __importStar(require("typescript"));
  const source = "let x: string  = 'string'";
  let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
  console.log(JSON.stringify(result));

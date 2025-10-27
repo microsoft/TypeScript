@@ -1,8 +1,8 @@
 --- old.dynamicImportTrailingComma.js
 +++ new.dynamicImportTrailingComma.js
-@@= skipped -5, +5 lines =@@
-
- //// [dynamicImportTrailingComma.js]
+@@= skipped -38, +38 lines =@@
+     };
+ })();
  const path = './foo';
--Promise.resolve("".concat(path)).then(function (s) { return require(s); });
-+Promise.resolve(`${path}`).then(s => require(s));
+-Promise.resolve("".concat(path)).then(function (s) { return __importStar(require(s)); });
++Promise.resolve(`${path}`).then(s => __importStar(require(s)));

@@ -1,11 +1,11 @@
 --- old.jsxComplexSignatureHasApplicabilityError.js
 +++ new.jsxComplexSignatureHasApplicabilityError.js
-@@= skipped -625, +625 lines =@@
- };
+@@= skipped -658, +658 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.createReactSingleSelect = createReactSingleSelect;
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  function createReactSingleSelect(WrappedComponent) {
      return (props) => {
          return (React.createElement(ReactSelectClass, __assign({}, props, { multi: false, autosize: false, value: props.value, onChange: (value) => {

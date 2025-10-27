@@ -1,11 +1,11 @@
 --- old.APISample_watcher.js
 +++ new.APISample_watcher.js
-@@= skipped -126, +126 lines =@@
-  *       Please log a "breaking change" issue for any API breaking change affecting this issue
-  */
+@@= skipped -159, +159 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var ts = require("typescript");
-+const ts = require("typescript");
+-var ts = __importStar(require("typescript"));
++const ts = __importStar(require("typescript"));
  function watch(rootFileNames, options) {
      const files = {};
      // initialize the list of files

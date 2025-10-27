@@ -59,13 +59,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "foo".length;
 //// [index.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
-const foobar_1 = require("foobar");
-const foobarx_1 = require("foobarx");
+const foobar_1 = __importDefault(require("foobar"));
+const foobarx_1 = __importDefault(require("foobarx"));
 const x = X;
 const x2 = foobarx_1.default;
-const a_1 = require("./a");
+const a_1 = __importDefault(require("./a"));
 const b = new a_1.default(a_1.default.b);
-const b_1 = require("./b");
+const b_1 = __importDefault(require("./b"));
 b_1.default + 1;

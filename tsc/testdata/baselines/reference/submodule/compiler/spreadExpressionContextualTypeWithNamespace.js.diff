@@ -1,11 +1,11 @@
 --- old.spreadExpressionContextualTypeWithNamespace.js
 +++ new.spreadExpressionContextualTypeWithNamespace.js
-@@= skipped -61, +61 lines =@@
-     return __assign.apply(this, arguments);
- };
+@@= skipped -94, +94 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var stuff = require("./spreadExpressionContextualTypeWithNamespace_0");
-+const stuff = require("./spreadExpressionContextualTypeWithNamespace_0");
+-var stuff = __importStar(require("./spreadExpressionContextualTypeWithNamespace_0"));
++const stuff = __importStar(require("./spreadExpressionContextualTypeWithNamespace_0"));
  stuff.func;
  stuff.klass;
  stuff.obj;

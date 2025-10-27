@@ -1,0 +1,23 @@
+--- old.interfaceImplementation6.js
++++ new.interfaceImplementation6.js
+@@= skipped -30, +30 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Test = void 0;
+ class C1 {
++    item;
+ }
+ class C2 {
++    item;
+ }
+ class C3 {
+     constructor() {
+@@= skipped -9, +11 lines =@@
+     }
+ }
+ class Test {
+-    constructor() {
+-        this.pt = { item: 1 };
+-    }
++    pt = { item: 1 };
+ }
+ exports.Test = Test;

@@ -1,9 +1,9 @@
 --- old.exportAssignmentImportMergeNoCrash.js
 +++ new.exportAssignmentImportMergeNoCrash.js
-@@= skipped -20, +20 lines =@@
- "use strict";
+@@= skipped -23, +23 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Obj = void 0;
--var assignment_1 = require("./assignment");
-+const assignment_1 = require("./assignment");
+-var assignment_1 = __importDefault(require("./assignment"));
++const assignment_1 = __importDefault(require("./assignment"));
  exports.Obj = void exports.Obj;

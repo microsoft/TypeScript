@@ -1,6 +1,6 @@
 --- old.typeAndNamespaceExportMerge.js
 +++ new.typeAndNamespaceExportMerge.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -62, +62 lines =@@
  //// [index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

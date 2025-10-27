@@ -1,11 +1,11 @@
 --- old.symlinkedWorkspaceDependenciesNoDirectLinkGeneratesNonrelativeName.js
 +++ new.symlinkedWorkspaceDependenciesNoDirectLinkGeneratesNonrelativeName.js
-@@= skipped -30, +30 lines =@@
- "use strict";
+@@= skipped -63, +63 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.a = void 0;
--var pkg = require("package-b");
-+const pkg = require("package-b");
+-var pkg = __importStar(require("package-b"));
++const pkg = __importStar(require("package-b"));
  exports.a = pkg.invoke();
 
 

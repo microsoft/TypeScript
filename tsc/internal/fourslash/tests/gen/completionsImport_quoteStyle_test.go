@@ -21,7 +21,7 @@ fo/**/`
 	f.GoToMarker(t, "")
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "foo",
-		Source:      "/a",
+		Source:      "./a",
 		Description: "Add import from \"./a\"",
 		NewFileContent: PtrTo(`import { foo } from './a';
 

@@ -1,11 +1,11 @@
 --- old.inlineJsxFactoryDeclarations.js
 +++ new.inlineJsxFactoryDeclarations.js
-@@= skipped -40, +40 lines =@@
- "use strict";
+@@= skipped -73, +73 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  /** @jsx React.createElement */
--var React = require("./renderer");
-+const React = require("./renderer");
+-var React = __importStar(require("./renderer"));
++const React = __importStar(require("./renderer"));
  React.createElement("h", null);
  //// [other.js]
  "use strict";
@@ -25,14 +25,16 @@
  exports.prerendered2 = (0, renderer_1.otherdom)("h", null);
  //// [reacty.js]
  "use strict";
+@@= skipped -23, +23 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.prerendered3 = void 0;
--var renderer_1 = require("./renderer");
-+const renderer_1 = require("./renderer");
+-var renderer_1 = __importDefault(require("./renderer"));
++const renderer_1 = __importDefault(require("./renderer"));
  exports.prerendered3 = renderer_1.default.createElement("h", null);
  //// [index.js]
  "use strict";
-@@= skipped -40, +40 lines =@@
+@@= skipped -20, +20 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
  /** @jsx dom */

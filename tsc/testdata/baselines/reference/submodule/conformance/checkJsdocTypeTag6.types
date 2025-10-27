@@ -18,7 +18,7 @@ var g = function (prop) {
 
 /** @type {(a: number) => number} */
 function add1(a, b) { return a + b; }
->add1 : (a: number) => number
+>add1 : (a: number, b: any) => number
 >a : number
 >b : any
 >a + b : any
@@ -37,7 +37,7 @@ function add2(a, b) { return a + b; }
 // TODO: Should be an error since signature doesn't match.
 /** @type {(a: number, b: number, c: number) => number} */
 function add3(a, b) { return a + b; }
->add3 : (a: number, b: number, c: number) => number
+>add3 : (a: number, b: number) => number
 >a : number
 >b : number
 >a + b : number
@@ -49,7 +49,7 @@ function add3(a, b) { return a + b; }
 
 /** @type {() => void} */
 function funcWithMoreParameters(more) {} // error
->funcWithMoreParameters : () => void
+>funcWithMoreParameters : (more: any) => void
 >more : any
 
 /** @type {() => void} */

@@ -136,9 +136,9 @@ var moduleResolutionOptionMap = collections.NewOrderedMapFromList([]collections.
 	{Key: "node16", Value: core.ModuleResolutionKindNode16},
 	{Key: "nodenext", Value: core.ModuleResolutionKindNodeNext},
 	{Key: "bundler", Value: core.ModuleResolutionKindBundler},
-	{Key: "node", Value: core.ModuleResolutionKindBundler},    // TODO: remove when node is fully deprecated -- this is helpful for testing porting
-	{Key: "classic", Value: core.ModuleResolutionKindBundler}, // TODO: remove when fully deprecated
-	{Key: "node10", Value: core.ModuleResolutionKindBundler},  // TODO: remove when fully deprecated
+	{Key: "classic", Value: core.ModuleResolutionKindClassic},
+	{Key: "node", Value: core.ModuleResolutionKindNode10},
+	{Key: "node10", Value: core.ModuleResolutionKindNode10},
 })
 
 var targetOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{

@@ -27,9 +27,9 @@ a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
     g() // should error
     ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 a.js:4:13: An argument for 's' was not provided.
+!!! related TS6210 a.js:5:12: An argument for 's' was not provided.
     h()
     ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 a.js:7:14: An argument for 's' was not provided.
+!!! related TS6210 a.js:8:12: An argument for 's' was not provided.
     

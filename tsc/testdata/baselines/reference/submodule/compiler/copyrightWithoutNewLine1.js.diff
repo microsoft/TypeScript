@@ -1,0 +1,11 @@
+--- old.copyrightWithoutNewLine1.js
++++ new.copyrightWithoutNewLine1.js
+@@= skipped -15, +15 lines =@@
+ /*****************************
+ * (c) Copyright - Important
+ ****************************/
+-var model = require("./greeter");
++const model = require("./greeter");
+ var el = document.getElementById('content');
+ var greeter = new model.Greeter(el);
+ /** things */

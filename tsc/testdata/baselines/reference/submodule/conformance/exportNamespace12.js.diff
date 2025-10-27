@@ -1,10 +1,10 @@
 --- old.exportNamespace12.js
 +++ new.exportNamespace12.js
-@@= skipped -22, +22 lines =@@
- //// [main.js]
- "use strict";
+@@= skipped -55, +55 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var types = require("./types");
-+const types = require("./types");
+-var types = __importStar(require("./types"));
++const types = __importStar(require("./types"));
  console.log(c); // Fails as expected, import is still allowed though.
  console.log(types.c); // Expected an error here.

@@ -33,7 +33,7 @@ export = Foo;
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "Foo",
-					InsertText: PtrTo("import * as Foo from \"./foo\";"),
+					InsertText: PtrTo("import Foo from \"./foo\";"),
 					Data: PtrTo(any(&ls.CompletionItemData{
 						AutoImport: &ls.AutoImportData{
 							ModuleSpecifier: "./foo",

@@ -1,9 +1,9 @@
 --- old.importCallExpressionNoModuleKindSpecified.js
 +++ new.importCallExpressionNoModuleKindSpecified.js
-@@= skipped -41, +41 lines =@@
- exports.backup = backup;
- function backup() { return "backup"; }
- //// [2.js]
+@@= skipped -74, +74 lines =@@
+         return result;
+     };
+ })();
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,19 +15,19 @@
 -};
  class C {
 -    constructor() {
--        this.myModule = Promise.resolve().then(function () { return require("./0"); });
+-        this.myModule = Promise.resolve().then(function () { return __importStar(require("./0")); });
 -    }
-+    myModule = Promise.resolve().then(() => require("./0"));
++    myModule = Promise.resolve().then(() => __importStar(require("./0")));
      method() {
--        const loadAsync = Promise.resolve().then(function () { return require("./0"); });
-+        const loadAsync = Promise.resolve().then(() => require("./0"));
+-        const loadAsync = Promise.resolve().then(function () { return __importStar(require("./0")); });
++        const loadAsync = Promise.resolve().then(() => __importStar(require("./0")));
          this.myModule.then(Zero => {
              console.log(Zero.foo());
 -        }, (err) => __awaiter(this, void 0, void 0, function* () {
 +        }, async err => {
              console.log(err);
--            let one = yield Promise.resolve().then(function () { return require("./1"); });
-+            let one = await Promise.resolve().then(() => require("./1"));
+-            let one = yield Promise.resolve().then(function () { return __importStar(require("./1")); });
++            let one = await Promise.resolve().then(() => __importStar(require("./1")));
              console.log(one.backup());
 -        }));
 +        });

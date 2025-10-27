@@ -13,7 +13,7 @@ import * as ns from './b';
 >ns : typeof ns
 
 import r = require("./b");
->r : typeof ns
+>r : typeof r
 
 new Member();
 >new Member() : Member
@@ -36,7 +36,7 @@ new ns.Member();
 new r.Member();
 >new r.Member() : Member
 >r.Member : typeof Member
->r : typeof ns
+>r : typeof r
 >Member : typeof Member
 
 === b.ts ===

@@ -1,14 +1,14 @@
 client.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-client.ts(1,20): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+server.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== client.ts (2 errors) ====
-    import a = require("server");
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==== client.ts (1 errors) ====
+    import a = require("./server");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-                       ~~~~~~~~
-!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
-==== server.ts (0 errors) ====
+==== server.ts (1 errors) ====
     var a = 10;
     export = a;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     

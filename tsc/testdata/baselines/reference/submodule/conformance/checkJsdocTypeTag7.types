@@ -16,6 +16,6 @@ class C {
 
     /** @type {(optional?) => void} */
     methodWithOptionalParameters() {}
->methodWithOptionalParameters : (optional?: any) => void
+>methodWithOptionalParameters : () => void
 }
 

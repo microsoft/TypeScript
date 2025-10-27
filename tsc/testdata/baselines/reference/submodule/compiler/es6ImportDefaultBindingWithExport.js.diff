@@ -1,0 +1,10 @@
+--- old.es6ImportDefaultBindingWithExport.js
++++ new.es6ImportDefaultBindingWithExport.js
+@@= skipped -20, +20 lines =@@
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-var server_1 = __importDefault(require("./server"));
++const server_1 = __importDefault(require("./server"));
+ exports.x = server_1.default;
+

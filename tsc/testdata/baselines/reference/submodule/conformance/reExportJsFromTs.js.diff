@@ -10,10 +10,10 @@
  module.exports = {
      str: 'x',
  };
-@@= skipped -7, +10 lines =@@
- "use strict";
+@@= skipped -40, +43 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.tsConstants = void 0;
--var tsConstants = require("../lib/constants");
-+const tsConstants = require("../lib/constants");
+-var tsConstants = __importStar(require("../lib/constants"));
++const tsConstants = __importStar(require("../lib/constants"));
  exports.tsConstants = tsConstants;

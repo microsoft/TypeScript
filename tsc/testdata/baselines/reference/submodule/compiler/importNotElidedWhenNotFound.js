@@ -21,16 +21,19 @@ class Q extends Z {
 
 //// [importNotElidedWhenNotFound.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const file_1 = require("file");
-const other_file_1 = require("other_file");
+const file_1 = __importDefault(require("file"));
+const other_file_1 = __importDefault(require("other_file"));
 class Y extends other_file_1.default {
     constructor() {
         super(file_1.default);
     }
 }
-const file2_1 = require("file2");
-const file3_1 = require("file3");
+const file2_1 = __importDefault(require("file2"));
+const file3_1 = __importDefault(require("file3"));
 class Q extends other_file_1.default {
     constructor() {
         super(file2_1.default, file3_1.default);

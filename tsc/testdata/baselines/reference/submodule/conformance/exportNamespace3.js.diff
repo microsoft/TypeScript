@@ -1,6 +1,6 @@
 --- old.exportNamespace3.js
 +++ new.exportNamespace3.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -64, +64 lines =@@
  //// [d.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

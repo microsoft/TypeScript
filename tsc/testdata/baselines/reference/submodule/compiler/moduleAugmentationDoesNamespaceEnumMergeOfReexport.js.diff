@@ -1,10 +1,10 @@
 --- old.moduleAugmentationDoesNamespaceEnumMergeOfReexport.js
 +++ new.moduleAugmentationDoesNamespaceEnumMergeOfReexport.js
-@@= skipped -50, +50 lines =@@
- //// [augment.js]
- "use strict";
+@@= skipped -83, +83 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var ns = require("./reexport");
-+const ns = require("./reexport");
+-var ns = __importStar(require("./reexport"));
++const ns = __importStar(require("./reexport"));
  const g = ns.Root.A;
  f.x;

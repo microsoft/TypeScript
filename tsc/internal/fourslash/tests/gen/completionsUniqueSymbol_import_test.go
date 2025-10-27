@@ -45,7 +45,7 @@ i[|./**/|];`
 					InsertText: PtrTo("[publicSym]"),
 					Data: PtrTo(any(&ls.CompletionItemData{
 						AutoImport: &ls.AutoImportData{
-							ModuleSpecifier: "/a",
+							ModuleSpecifier: "./a",
 						},
 					})),
 					SortText:            PtrTo(string(ls.SortTextGlobalsOrKeywords)),
@@ -62,7 +62,7 @@ i[|./**/|];`
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "publicSym",
-		Source:      "/a",
+		Source:      "./a",
 		Description: "Update import from \"./a\"",
 		NewFileContent: PtrTo(`import { i, publicSym } from "./a";
 i.;`),

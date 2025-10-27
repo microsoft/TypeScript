@@ -1,11 +1,11 @@
 --- old.jsxElementTypeLiteralWithGeneric.js
 +++ new.jsxElementTypeLiteralWithGeneric.js
-@@= skipped -27, +27 lines =@@
- "use strict";
+@@= skipped -60, +60 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  // should be fine - `ElementType` accepts `div`
  let a = React.createElement("div", null);
  // Should be an error.

@@ -17,6 +17,9 @@ class C {
 exports.default = C.x;
 //// [usage.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const code_1 = require("./code");
+const code_1 = __importDefault(require("./code"));
 void code_1.default;

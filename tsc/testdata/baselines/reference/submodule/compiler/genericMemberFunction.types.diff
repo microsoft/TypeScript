@@ -1,0 +1,11 @@
+--- old.genericMemberFunction.types
++++ new.genericMemberFunction.types
+@@= skipped -30, +30 lines =@@
+ >BuildResult : BuildResult<A, B, C>
+
+   public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
+->merge : <A, B extends A, C>(other: BuildResult<A, B, C>) => void
++>merge : <A_1, B_1 extends A_1, C_1>(other: BuildResult<A_1, B_1, C_1>) => void
+ >other : BuildResult<A, B, C>
+
+     a.b.c.d.e.f.g = 0;

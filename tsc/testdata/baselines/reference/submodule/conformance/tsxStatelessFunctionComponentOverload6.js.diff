@@ -1,0 +1,11 @@
+--- old.tsxStatelessFunctionComponentOverload6.js
++++ new.tsxStatelessFunctionComponentOverload6.js
+@@= skipped -62, +62 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.MainButton = MainButton;
+-var React = require("react");
++const React = require("react");
+ let obj = {
+     children: "hi",
+     to: "boo"

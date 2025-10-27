@@ -10,7 +10,7 @@ export = lib;
 
 === /node_modules/@types/lib-extender/index.d.ts ===
 import * as lib from "lib";
->lib : () => void
+>lib : { default: () => void; }
 
 declare module "lib" {
 >"lib" : typeof import("lib")

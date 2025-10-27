@@ -8,8 +8,11 @@
  }
  //// [b.js]
  "use strict";
+@@= skipped -37, +38 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var types = require("./a");
-+const types = require("./a");
+-var types = __importStar(require("./a"));
++const types = __importStar(require("./a"));
  types.A;
  const { A } = types;

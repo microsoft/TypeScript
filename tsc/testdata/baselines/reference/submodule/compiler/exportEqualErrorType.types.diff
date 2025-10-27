@@ -1,0 +1,18 @@
+--- old.exportEqualErrorType.types
++++ new.exportEqualErrorType.types
+@@= skipped -31, +31 lines =@@
+     }
+ }
+ var server: {
+->server : { (): server.connectExport; foo: Date; }
++>server : { (): import("exportEqualErrorType_0").connectExport; foo: Date; }
+
+     (): server.connectExport;
+ >server : any
+@@= skipped -10, +10 lines =@@
+
+ };
+ export = server;
+->server : { (): server.connectExport; foo: Date; }
++>server : { (): import("exportEqualErrorType_0").connectExport; foo: Date; }
+  

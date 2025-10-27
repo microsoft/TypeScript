@@ -13,12 +13,12 @@ export function foo() {
 }
 
 === b.ts ===
-import defer type * as ns1 from "a";
+import defer type * as ns1 from "./a";
 >type : any
 >* as : number
 > : any
 >as : any
 >ns1 : any
 >from : any
->"a" : "a"
+>"./a" : "./a"
 

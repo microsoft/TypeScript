@@ -26,18 +26,21 @@ var a = 10;
 exports.default = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1.default;
-const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2.default;
-const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3.default;
-const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4.default;
-const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5.default;
-const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = __importDefault(require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0"));
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6.default;
 
 

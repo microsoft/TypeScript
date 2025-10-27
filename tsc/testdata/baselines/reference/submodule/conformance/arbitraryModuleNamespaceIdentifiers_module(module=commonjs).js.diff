@@ -1,6 +1,6 @@
 --- old.arbitraryModuleNamespaceIdentifiers_module(module=commonjs).js
 +++ new.arbitraryModuleNamespaceIdentifiers_module(module=commonjs).js
-@@= skipped -40, +40 lines =@@
+@@= skipped -73, +73 lines =@@
  const arbitraryModuleNamespaceIdentifiers_module_1 = require("./arbitraryModuleNamespaceIdentifiers_module");
  if (arbitraryModuleNamespaceIdentifiers_module_1["<X>"] !== "someValue")
      throw "should be someValue";

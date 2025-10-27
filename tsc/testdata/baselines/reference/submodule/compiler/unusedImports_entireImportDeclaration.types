@@ -35,15 +35,15 @@ d3;
 
 import d4, * as ns2 from "./a";
 >d4 : 0
->ns2 : typeof ns
+>ns2 : typeof ns2
 
 d4;
 >d4 : 0
 
 import d5, * as ns3 from "./a";
 >d5 : 0
->ns3 : typeof ns
+>ns3 : typeof ns3
 
 ns3;
->ns3 : typeof ns
+>ns3 : typeof ns3
 

@@ -1,6 +1,6 @@
 --- old.isolatedModulesReExportType.js
 +++ new.isolatedModulesReExportType.js
-@@= skipped -72, +72 lines =@@
+@@= skipped -105, +105 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.NS = exports.C = void 0;
  // OK, has a value side
@@ -8,6 +8,6 @@
 +const exportValue_1 = require("./exportValue");
  Object.defineProperty(exports, "C", { enumerable: true, get: function () { return exportValue_1.C; } });
  // OK, even though the namespace it exports is only types.
--var NS = require("./exportT");
-+const NS = require("./exportT");
+-var NS = __importStar(require("./exportT"));
++const NS = __importStar(require("./exportT"));
  exports.NS = NS;

@@ -1,7 +1,0 @@
-error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-==== optionsOutAndNoModuleGen.ts (0 errors) ====
-    export var x = 10;
-    

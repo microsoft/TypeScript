@@ -76,7 +76,7 @@ const result = id`hello world`;
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 
-=== tslib.d.ts ===
+=== node_modules/tslib/index.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function

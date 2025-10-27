@@ -26,7 +26,7 @@ async function f() {
 >f : Symbol(f, Decl(b.ts, 7, 8))
 
     await import("./a", {
->"./a" : Symbol(ns, Decl(a.ts, 0, 0))
+>"./a" : Symbol("a", Decl(a.ts, 0, 0))
 
         with: {
 >with : Symbol(with, Decl(b.ts, 10, 25))

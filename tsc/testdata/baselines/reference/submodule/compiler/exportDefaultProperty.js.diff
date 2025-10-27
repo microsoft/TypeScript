@@ -1,19 +1,19 @@
 --- old.exportDefaultProperty.js
 +++ new.exportDefaultProperty.js
-@@= skipped -60, +60 lines =@@
- "use strict";
+@@= skipped -63, +63 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="declarations.d.ts" />
--var foobar_1 = require("foobar");
+-var foobar_1 = __importDefault(require("foobar"));
 -var X = foobar_1.default.X;
--var foobarx_1 = require("foobarx");
-+const foobar_1 = require("foobar");
-+const foobarx_1 = require("foobarx");
+-var foobarx_1 = __importDefault(require("foobarx"));
++const foobar_1 = __importDefault(require("foobar"));
++const foobarx_1 = __importDefault(require("foobarx"));
  const x = X;
  const x2 = foobarx_1.default;
--var a_1 = require("./a");
-+const a_1 = require("./a");
+-var a_1 = __importDefault(require("./a"));
++const a_1 = __importDefault(require("./a"));
  const b = new a_1.default(a_1.default.b);
--var b_1 = require("./b");
-+const b_1 = require("./b");
+-var b_1 = __importDefault(require("./b"));
++const b_1 = __importDefault(require("./b"));
  b_1.default + 1;

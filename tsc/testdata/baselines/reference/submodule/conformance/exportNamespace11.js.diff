@@ -1,9 +1,9 @@
 --- old.exportNamespace11.js
 +++ new.exportNamespace11.js
-@@= skipped -22, +22 lines =@@
- //// [main.js]
- "use strict";
+@@= skipped -55, +55 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var intermediate = require("./intermediate");
-+const intermediate = require("./intermediate");
+-var intermediate = __importStar(require("./intermediate"));
++const intermediate = __importStar(require("./intermediate"));
  const ghost = new intermediate.Ghost();

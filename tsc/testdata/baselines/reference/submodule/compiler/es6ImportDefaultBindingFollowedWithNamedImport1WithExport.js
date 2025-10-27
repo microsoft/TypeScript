@@ -26,19 +26,22 @@ var a = 10;
 exports.default = a;
 //// [client.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x1 = void 0;
-const server_1 = require("./server");
+const server_1 = __importDefault(require("./server"));
 exports.x1 = server_1.default;
-const server_2 = require("./server");
+const server_2 = __importDefault(require("./server"));
 exports.x1 = server_2.default;
-const server_3 = require("./server");
+const server_3 = __importDefault(require("./server"));
 exports.x1 = server_3.default;
-const server_4 = require("./server");
+const server_4 = __importDefault(require("./server"));
 exports.x1 = server_4.default;
-const server_5 = require("./server");
+const server_5 = __importDefault(require("./server"));
 exports.x1 = server_5.default;
-const server_6 = require("./server");
+const server_6 = __importDefault(require("./server"));
 exports.x1 = server_6.default;
 
 

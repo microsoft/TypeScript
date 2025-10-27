@@ -9,14 +9,17 @@
  module.exports = ns;
  //// [bin.js]
  "use strict";
+@@= skipped -38, +38 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var ns = require("./cls");
-+const ns = require("./cls");
+-var ns = __importStar(require("./cls"));
++const ns = __importStar(require("./cls"));
 +export = ns;
  module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
  //// [globalNs.js]
  "use strict";
-@@= skipped -34, +35 lines =@@
+@@= skipped -29, +30 lines =@@
 
 
  //// [cls.d.ts]

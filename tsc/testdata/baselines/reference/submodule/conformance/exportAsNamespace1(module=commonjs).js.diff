@@ -1,10 +1,10 @@
 --- old.exportAsNamespace1(module=commonjs).js
 +++ new.exportAsNamespace1(module=commonjs).js
-@@= skipped -30, +30 lines =@@
- //// [2.js]
- "use strict";
+@@= skipped -96, +96 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var foo = require("./1");
-+const foo = require("./1");
+-var foo = __importStar(require("./1"));
++const foo = __importStar(require("./1"));
  foo.ns.a;
  foo.ns.b;

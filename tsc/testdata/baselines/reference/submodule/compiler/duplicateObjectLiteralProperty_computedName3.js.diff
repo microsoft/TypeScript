@@ -1,11 +1,11 @@
 --- old.duplicateObjectLiteralProperty_computedName3.js
 +++ new.duplicateObjectLiteralProperty_computedName3.js
-@@= skipped -46, +46 lines =@@
- //// [b.js]
- "use strict";
+@@= skipped -79, +79 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var keys = require("./a");
-+const keys = require("./a");
+-var keys = __importStar(require("./a"));
++const keys = __importStar(require("./a"));
  const t1 = {
      [keys.n]: 1,
      [keys.n]: 1, // duplicate

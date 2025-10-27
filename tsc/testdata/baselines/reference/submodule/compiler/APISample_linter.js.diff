@@ -1,11 +1,11 @@
 --- old.APISample_linter.js
 +++ new.APISample_linter.js
-@@= skipped -80, +80 lines =@@
-  */
+@@= skipped -113, +113 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.delint = delint;
--var ts = require("typescript");
-+const ts = require("typescript");
+-var ts = __importStar(require("typescript"));
++const ts = __importStar(require("typescript"));
  function delint(sourceFile) {
      delintNode(sourceFile);
      function delintNode(node) {

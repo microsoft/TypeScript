@@ -1,7 +1,7 @@
 --- old.reexportMissingDefault6.js
 +++ new.reexportMissingDefault6.js
-@@= skipped -15, +15 lines =@@
- "use strict";
+@@= skipped -18, +18 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.default = exports.b = void 0;
 -var b_1 = require("./b");
@@ -9,4 +9,4 @@
  Object.defineProperty(exports, "b", { enumerable: true, get: function () { return b_1.b; } });
 -var b_2 = require("./b");
 +const b_2 = require("./b");
- Object.defineProperty(exports, "default", { enumerable: true, get: function () { return b_2.default; } });
+ Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(b_2).default; } });

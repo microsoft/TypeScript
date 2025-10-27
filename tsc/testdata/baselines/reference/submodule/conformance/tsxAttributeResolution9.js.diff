@@ -1,0 +1,10 @@
+--- old.tsxAttributeResolution9.js
++++ new.tsxAttributeResolution9.js
+@@= skipped -32, +32 lines =@@
+ class MyComponent {
+     render() {
+     }
++    props;
+ }
+ exports.MyComponent = MyComponent;
+ <MyComponent foo="bar"/>; // ok  

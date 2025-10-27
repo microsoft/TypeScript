@@ -1,11 +1,11 @@
 --- old.declarationEmitComputedNameConstEnumAlias.js
 +++ new.declarationEmitComputedNameConstEnumAlias.js
-@@= skipped -24, +24 lines =@@
- //// [index.js]
- "use strict";
+@@= skipped -27, +27 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var EnumExample_1 = require("./EnumExample");
-+const EnumExample_1 = require("./EnumExample");
+-var EnumExample_1 = __importDefault(require("./EnumExample"));
++const EnumExample_1 = __importDefault(require("./EnumExample"));
  exports.default = {
      [EnumExample_1.default.TEST]: {},
  };

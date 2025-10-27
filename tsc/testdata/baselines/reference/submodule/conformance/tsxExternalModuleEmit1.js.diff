@@ -1,20 +1,20 @@
 --- old.tsxExternalModuleEmit1.js
 +++ new.tsxExternalModuleEmit1.js
-@@= skipped -33, +33 lines =@@
- "use strict";
+@@= skipped -66, +66 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Button = void 0;
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  class Button extends React.Component {
      render() {
          return <button>Some button</button>;
-@@= skipped -11, +11 lines =@@
- "use strict";
+@@= skipped -44, +44 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.App = void 0;
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  // Should see var button_1 = require('./button') here
 -var button_1 = require("./button");
 +const button_1 = require("./button");

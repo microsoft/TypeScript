@@ -1,0 +1,35 @@
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(1,1): error TS1185: Merge conflict marker encountered.
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(3,1): error TS1185: Merge conflict marker encountered.
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(5,1): error TS1185: Merge conflict marker encountered.
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(7,1): error TS1185: Merge conflict marker encountered.
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(17,10): error TS2694: Namespace '"internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
+
+
+==== internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (5 errors) ====
+    <<<<<<< HEAD
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    export module a {
+    ||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    export namespace a {
+    =======
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    export namespace a {
+    >>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+        export interface I {
+        }
+    }
+    
+    export module c {
+        import b = a.I;
+        export var x: b;
+    }
+    
+    var x: c.b;
+             ~
+!!! error TS2694: Namespace '"internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.

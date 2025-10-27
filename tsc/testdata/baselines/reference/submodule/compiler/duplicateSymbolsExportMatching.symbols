@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/duplicateSymbolsExportMatching.ts] ////
+
+=== duplicateSymbolsExportMatching.ts ===
+<<<<<<< HEAD
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 9, 1), Decl(duplicateSymbolsExportMatching.ts, 13, 1), Decl(duplicateSymbolsExportMatching.ts, 33, 1), Decl(duplicateSymbolsExportMatching.ts, 51, 1) ... and 1 more)
+
+||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+namespace M {
+=======
+namespace M {
+>>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    export interface E { }
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 1, 10), Decl(duplicateSymbolsExportMatching.ts, 10, 10))
+
+    interface I { }
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 7, 26))
+}
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 9, 1), Decl(duplicateSymbolsExportMatching.ts, 13, 1), Decl(duplicateSymbolsExportMatching.ts, 33, 1), Decl(duplicateSymbolsExportMatching.ts, 51, 1) ... and 1 more)
+
+    export interface E { } // ok
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 1, 10), Decl(duplicateSymbolsExportMatching.ts, 10, 10))
+
+    interface I { } // ok
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 11, 26))
+}
+
+// Doesn't match export visibility, but it's in a different parent, so it's ok
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 9, 1), Decl(duplicateSymbolsExportMatching.ts, 13, 1), Decl(duplicateSymbolsExportMatching.ts, 33, 1), Decl(duplicateSymbolsExportMatching.ts, 51, 1) ... and 1 more)
+
+    interface E { } // ok
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 16, 10))
+
+    export interface I { } // ok
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 17, 19))
+}
+
+module N {
+>N : Symbol(N, Decl(duplicateSymbolsExportMatching.ts, 19, 1))
+
+    interface I { }
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 21, 10), Decl(duplicateSymbolsExportMatching.ts, 22, 19))
+
+    interface I { } // ok
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 21, 10), Decl(duplicateSymbolsExportMatching.ts, 22, 19))
+
+    export interface E { }
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 23, 19), Decl(duplicateSymbolsExportMatching.ts, 24, 26))
+
+    export interface E { } // ok
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 23, 19), Decl(duplicateSymbolsExportMatching.ts, 24, 26))
+}
+
+module N2 {
+>N2 : Symbol(N2, Decl(duplicateSymbolsExportMatching.ts, 26, 1))
+
+    interface I { }
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 28, 11), Decl(duplicateSymbolsExportMatching.ts, 29, 19))
+
+    export interface I { } // error
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 29, 19))
+
+    export interface E { }
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 30, 26))
+
+    interface E { } // error
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 30, 26), Decl(duplicateSymbolsExportMatching.ts, 31, 26))
+}
+
+// Should report error only once for instantiated module
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 9, 1), Decl(duplicateSymbolsExportMatching.ts, 13, 1), Decl(duplicateSymbolsExportMatching.ts, 33, 1), Decl(duplicateSymbolsExportMatching.ts, 51, 1) ... and 1 more)
+
+    module inst {
+>inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 36, 10), Decl(duplicateSymbolsExportMatching.ts, 39, 5))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 38, 11))
+    }
+    export module inst { // one error
+>inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 39, 5))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 41, 11))
+    }
+}
+
+// Variables of the same / different type
+module M2 {
+>M2 : Symbol(M2, Decl(duplicateSymbolsExportMatching.ts, 43, 1))
+
+    var v: string;
+>v : Symbol(v, Decl(duplicateSymbolsExportMatching.ts, 47, 7), Decl(duplicateSymbolsExportMatching.ts, 48, 14))
+
+    export var v: string; // one error (visibility)
+>v : Symbol(v, Decl(duplicateSymbolsExportMatching.ts, 48, 14))
+
+    var w: number;
+>w : Symbol(w, Decl(duplicateSymbolsExportMatching.ts, 49, 7), Decl(duplicateSymbolsExportMatching.ts, 50, 14))
+
+    export var w: string; // two errors (visibility and type mismatch)
+>w : Symbol(w, Decl(duplicateSymbolsExportMatching.ts, 50, 14))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 9, 1), Decl(duplicateSymbolsExportMatching.ts, 13, 1), Decl(duplicateSymbolsExportMatching.ts, 33, 1), Decl(duplicateSymbolsExportMatching.ts, 51, 1) ... and 1 more)
+
+    module F {
+>F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 56, 5), Decl(duplicateSymbolsExportMatching.ts, 53, 10))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 55, 11))
+    }
+    export function F() { } // Only one error for duplicate identifier (don't consider visibility)
+>F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 56, 5))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 9, 1), Decl(duplicateSymbolsExportMatching.ts, 13, 1), Decl(duplicateSymbolsExportMatching.ts, 33, 1), Decl(duplicateSymbolsExportMatching.ts, 51, 1) ... and 1 more)
+
+    class C { }
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 60, 10), Decl(duplicateSymbolsExportMatching.ts, 61, 15), Decl(duplicateSymbolsExportMatching.ts, 62, 16))
+
+    module C { }
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 60, 10), Decl(duplicateSymbolsExportMatching.ts, 61, 15), Decl(duplicateSymbolsExportMatching.ts, 62, 16))
+
+    export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 62, 16))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 64, 11))
+    }
+}
+
+// Top level
+interface D { }
+>D : Symbol(D, Decl(duplicateSymbolsExportMatching.ts, 66, 1), Decl(duplicateSymbolsExportMatching.ts, 69, 15))
+
+export interface D { }
+>D : Symbol(D, Decl(duplicateSymbolsExportMatching.ts, 69, 15))
+

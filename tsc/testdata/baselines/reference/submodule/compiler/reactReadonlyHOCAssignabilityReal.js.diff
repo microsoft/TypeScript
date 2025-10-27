@@ -1,11 +1,11 @@
 --- old.reactReadonlyHOCAssignabilityReal.js
 +++ new.reactReadonlyHOCAssignabilityReal.js
-@@= skipped -26, +26 lines =@@
- };
+@@= skipped -59, +59 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  function myHigherOrderComponent(Inner) {
      return class OuterComponent extends React.Component {
          render() {

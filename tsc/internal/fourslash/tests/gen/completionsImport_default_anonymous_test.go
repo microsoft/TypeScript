@@ -46,7 +46,7 @@ fooB/*1*/`
 					Label: "fooBar",
 					Data: PtrTo(any(&ls.CompletionItemData{
 						AutoImport: &ls.AutoImportData{
-							ModuleSpecifier: "/src/foo-bar",
+							ModuleSpecifier: "./foo-bar",
 						},
 					})),
 					Detail:              PtrTo("(property) default: 0"),
@@ -59,7 +59,7 @@ fooB/*1*/`
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "fooBar",
-		Source:      "/src/foo-bar",
+		Source:      "./foo-bar",
 		Description: "Add import from \"./foo-bar\"",
 		NewFileContent: PtrTo(`import fooBar from "./foo-bar"
 

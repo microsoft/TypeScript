@@ -1,10 +1,10 @@
 --- old.emptyModuleName.js
 +++ new.emptyModuleName.js
-@@= skipped -7, +7 lines =@@
- //// [emptyModuleName.js]
- "use strict";
+@@= skipped -40, +40 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var A = require("");
-+const A = require("");
+-var A = __importStar(require(""));
++const A = __importStar(require(""));
  class B extends A {
  }

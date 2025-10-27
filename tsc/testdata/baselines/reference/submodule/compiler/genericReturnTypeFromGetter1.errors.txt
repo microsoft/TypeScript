@@ -1,0 +1,14 @@
+genericReturnTypeFromGetter1.ts(5,18): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+
+
+==== genericReturnTypeFromGetter1.ts (1 errors) ====
+    export interface A<T> {
+       new (dbSet: DbSet<T>): T;
+    }
+    export class DbSet<T> {
+        _entityType: A;
+                     ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+      get entityType() { return this._entityType; }  // used to ICE without return type annotation
+    }
+    

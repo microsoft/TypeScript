@@ -114,7 +114,7 @@ tsgo --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 ======== Resolving module '@component-type-checker/sdk' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
-Explicitly specified module resolution kind: 'Bundler'.
+Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/packages/app/package.json'.
@@ -136,7 +136,7 @@ File '/home/src/projects/component-type-checker/packages/app/node_modules/@compo
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk/src/index.ts', result '/home/src/projects/component-type-checker/packages/sdk/src/index.ts'.
 ======== Module name '@component-type-checker/sdk' was successfully resolved to '/home/src/projects/component-type-checker/packages/sdk/src/index.ts' with Package ID '@component-type-checker/sdk1@0.0.2'. ========
 ======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
-Explicitly specified module resolution kind: 'Bundler'.
+Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
@@ -161,7 +161,7 @@ Found peerDependency '@component-type-checker/button' with '0.0.2' version.
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts'.
 ======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components@0.0.1+@component-type-checker/button@0.0.2'. ========
 ======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
-Explicitly specified module resolution kind: 'Bundler'.
+Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
@@ -183,7 +183,7 @@ File '/home/src/projects/component-type-checker/packages/app/node_modules/@compo
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button@0.0.2'. ========
 ======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/sdk/src/index.ts'. ========
-Explicitly specified module resolution kind: 'Bundler'.
+Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/projects/component-type-checker/packages/sdk/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/packages/sdk/package.json'.
@@ -208,7 +208,7 @@ Found peerDependency '@component-type-checker/button' with '0.0.1' version.
 Resolving real path for '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts'.
 ======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components@0.0.1+@component-type-checker/button@0.0.1'. ========
 ======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts'. ========
-Explicitly specified module resolution kind: 'Bundler'.
+Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/package.json'.
@@ -236,7 +236,7 @@ File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-ty
 Resolving real path for '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button@0.0.1'. ========
 ======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts'. ========
-Explicitly specified module resolution kind: 'Bundler'.
+Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/package.json'.

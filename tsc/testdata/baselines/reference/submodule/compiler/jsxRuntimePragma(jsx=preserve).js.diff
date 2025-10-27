@@ -1,20 +1,20 @@
 --- old.jsxRuntimePragma(jsx=preserve).js
 +++ new.jsxRuntimePragma(jsx=preserve).js
-@@= skipped -39, +39 lines =@@
+@@= skipped -72, +72 lines =@@
  exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
  /// <reference path="react16.d.ts" />
  /* @jsxRuntime classic */
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  const HelloWorld = () => <h1>Hello world</h1>;
  exports.HelloWorld = HelloWorld;
  exports.frag = <><div></div></>;
-@@= skipped -33, +33 lines =@@
+@@= skipped -66, +66 lines =@@
  /// <reference path="react16.d.ts" />
  /* @jsxRuntime automatic */
  /* @jsxRuntime classic */
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  const HelloWorld = () => <h1>Hello world</h1>;
  exports.HelloWorld = HelloWorld;
  exports.frag = <><div></div></>;

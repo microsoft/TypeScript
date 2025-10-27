@@ -12,7 +12,7 @@ import (
 
 func TestCompletionsImport_named_exportEqualsNamespace(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: esnext
 // @Filename: /a.d.ts
@@ -35,7 +35,7 @@ f/**/;`
 					Label: "foo",
 					Data: PtrTo(any(&ls.CompletionItemData{
 						AutoImport: &ls.AutoImportData{
-							ModuleSpecifier: "/a",
+							ModuleSpecifier: "./a",
 						},
 					})),
 					Detail:              PtrTo("const N.foo: 0"),
@@ -48,7 +48,7 @@ f/**/;`
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "foo",
-		Source:      "/a",
+		Source:      "./a",
 		Description: "Add import from \"./a\"",
 		NewFileContent: PtrTo(`import { foo } from "./a";
 

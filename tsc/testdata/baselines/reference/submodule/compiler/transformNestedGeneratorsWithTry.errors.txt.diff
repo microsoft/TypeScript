@@ -1,0 +1,39 @@
+--- old.transformNestedGeneratorsWithTry.errors.txt
++++ new.transformNestedGeneratorsWithTry.errors.txt
+@@= skipped -0, +0 lines =@@
+-main.ts(3,21): error TS1055: Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+-  Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' provides no match for the signature 'new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): PromiseLike<T>'.
+-main.ts(5,35): error TS1055: Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+-  Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' provides no match for the signature 'new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): PromiseLike<T>'.
+-
+-
+-==== main.ts (2 errors) ====
+-    // https://github.com/Microsoft/TypeScript/issues/11177
+-    import * as Bluebird from 'bluebird';
+-    async function a(): Bluebird<void> {
+-                        ~~~~~~~~~~~~~~
+-!!! error TS1055: Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+-!!! error TS1055:   Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' provides no match for the signature 'new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): PromiseLike<T>'.
+-!!! related TS7038 main.ts:2:1: Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
+-      try {
+-        const b = async function b(): Bluebird<void> {
+-                                      ~~~~~~~~~~~~~~
+-!!! error TS1055: Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+-!!! error TS1055:   Type '{ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }' provides no match for the signature 'new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): PromiseLike<T>'.
+-!!! related TS7038 main.ts:2:1: Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
+-          try {
+-            await Bluebird.resolve(); // -- remove this and it compiles
+-          } catch (error) { }
+-        };
+-    
+-        await b(); // -- or remove this and it compiles
+-      } catch (error) { }
+-    }
+-    
+-==== bluebird.d.ts (0 errors) ====
+-    declare module "bluebird" {
+-        type Bluebird<T> = Promise<T>;
+-        const Bluebird: typeof Promise;
+-        export = Bluebird;
+-    }
++<no content>

@@ -1,10 +1,10 @@
 --- old.jsxImportInAttribute.js
 +++ new.jsxImportInAttribute.js
-@@= skipped -16, +16 lines =@@
- "use strict";
+@@= skipped -19, +19 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="component.d.ts" />
--var Test_1 = require("Test");
-+const Test_1 = require("Test");
+-var Test_1 = __importDefault(require("Test"));
++const Test_1 = __importDefault(require("Test"));
  let x = Test_1.default; // emit test_1.default
  <anything attr={Test_1.default}/>; // ?

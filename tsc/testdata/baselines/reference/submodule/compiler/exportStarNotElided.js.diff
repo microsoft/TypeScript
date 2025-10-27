@@ -1,6 +1,6 @@
 --- old.exportStarNotElided.js
 +++ new.exportStarNotElided.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -66, +66 lines =@@
  //// [data1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

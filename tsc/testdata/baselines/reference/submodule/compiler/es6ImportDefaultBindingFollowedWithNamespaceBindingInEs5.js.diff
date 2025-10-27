@@ -1,10 +1,10 @@
 --- old.es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.js
 +++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.js
-@@= skipped -14, +14 lines =@@
- //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
- "use strict";
+@@= skipped -47, +47 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var nameSpaceBinding = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
-+const nameSpaceBinding = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
+-var nameSpaceBinding = __importStar(require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"));
++const nameSpaceBinding = __importStar(require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"));
  var x = nameSpaceBinding.a;
 

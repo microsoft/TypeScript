@@ -1,0 +1,11 @@
+--- old.tsxStatelessFunctionComponentOverload4.js
++++ new.tsxStatelessFunctionComponentOverload4.js
+@@= skipped -41, +41 lines =@@
+ //// [file.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
++const React = require("react");
+ let obj = {
+     yy: 10,
+     yy1: "hello"

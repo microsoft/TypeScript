@@ -19101,9 +19101,11 @@ func (c *Checker) getSignaturesOfSymbol(symbol *ast.Symbol) []*Signature {
 		}
 		// If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
 		// Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would suppress checks that the two are compatible.
-		if sig := c.getSignatureOfFullSignatureType(decl); sig != nil {
-			result = append(result, sig)
-			continue
+		if ast.IsFunctionExpressionOrArrowFunction(decl) || ast.IsObjectLiteralMethod(decl) {
+			if sig := c.getSignatureOfFullSignatureType(decl); sig != nil {
+				result = append(result, sig)
+				continue
+			}
 		}
 		result = append(result, c.getSignatureFromDeclaration(decl))
 	}
@@ -19121,14 +19123,6 @@ func (c *Checker) getSignatureFromDeclaration(declaration *ast.Node) *Signature 
 	minArgumentCount := 0
 	hasThisParameter := false
 	iife := ast.GetImmediatelyInvokedFunctionExpression(declaration)
-	isUntypedSignatureInJSFile := iife == nil &&
-		ast.IsInJSFile(declaration) &&
-		(ast.IsFunctionExpression(declaration) || ast.IsArrowFunction(declaration) || ast.IsMethodOrAccessor(declaration) || ast.IsFunctionDeclaration(declaration) || ast.IsConstructorDeclaration(declaration)) &&
-		core.Every(declaration.Parameters(), func(param *ast.Node) bool { return param.Type() == nil }) &&
-		c.getContextualType(declaration, ContextFlagsSignature) == nil
-	if isUntypedSignatureInJSFile {
-		flags |= SignatureFlagsIsUntypedSignatureInJSFile
-	}
 	for i, param := range declaration.Parameters() {
 		paramSymbol := param.Symbol()
 		typeNode := param.Type()
@@ -19349,7 +19343,7 @@ func (c *Checker) getReturnTypeFromAnnotation(declaration *ast.Node) *Type {
 }
 
 func (c *Checker) getSignatureOfFullSignatureType(node *ast.Node) *Signature {
-	if ast.IsInJSFile(node) && (ast.IsFunctionDeclaration(node) || ast.IsMethodDeclaration(node) || ast.IsFunctionExpressionOrArrowFunction(node)) && node.FunctionLikeData().FullSignature != nil {
+	if ast.IsInJSFile(node) && ast.IsFunctionLike(node) && node.FunctionLikeData().FullSignature != nil {
 		return c.getSingleCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature))
 	}
 	return nil

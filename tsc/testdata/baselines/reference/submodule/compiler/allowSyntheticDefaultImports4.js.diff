@@ -1,9 +1,9 @@
 --- old.allowSyntheticDefaultImports4.js
 +++ new.allowSyntheticDefaultImports4.js
-@@= skipped -14, +14 lines =@@
- "use strict";
+@@= skipped -17, +17 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.x = void 0;
--var b_1 = require("./b");
-+const b_1 = require("./b");
+-var b_1 = __importDefault(require("./b"));
++const b_1 = __importDefault(require("./b"));
  exports.x = new b_1.default();

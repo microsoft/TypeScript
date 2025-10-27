@@ -1,11 +1,11 @@
 --- old.declarationEmitMappedTypeDistributivityPreservesConstraints.js
 +++ new.declarationEmitMappedTypeDistributivityPreservesConstraints.js
-@@= skipped -26, +26 lines =@@
- //// [reexport.js]
- "use strict";
+@@= skipped -29, +29 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var types_1 = require("./types");
-+const types_1 = require("./types");
+-var types_1 = __importDefault(require("./types"));
++const types_1 = __importDefault(require("./types"));
  exports.default = { test: types_1.default };
 
 

@@ -8,18 +8,21 @@
  }
  //// [b.js]
  "use strict";
-@@= skipped -8, +9 lines =@@
- "use strict";
+@@= skipped -41, +42 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.default = void 0;
--var types = require("./b");
-+const types = require("./b");
+-var types = __importStar(require("./b"));
++const types = __importStar(require("./b"));
  exports.default = types;
  //// [d.js]
  "use strict";
+@@= skipped -8, +8 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var c_1 = require("./c");
-+const c_1 = require("./c");
+-var c_1 = __importDefault(require("./c"));
++const c_1 = __importDefault(require("./c"));
  new c_1.default.A();
  new c_1.default.B();
  const a = {};

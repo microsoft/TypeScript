@@ -1,6 +1,6 @@
 --- old.exportTypeMergedWithExportStarAsNamespace.js
 +++ new.exportTypeMergedWithExportStarAsNamespace.js
-@@= skipped -27, +27 lines =@@
+@@= skipped -60, +60 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.myValue = void 0;

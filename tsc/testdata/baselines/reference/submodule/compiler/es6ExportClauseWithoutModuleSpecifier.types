@@ -21,21 +21,21 @@ export module uninstantiated {
 }
 
 === client.ts ===
-export { c } from "server";
->c : any
+export { c } from "./server";
+>c : typeof import("server").c
 
-export { c as c2 } from "server";
->c : any
->c2 : any
+export { c as c2 } from "./server";
+>c : typeof import("server").c
+>c2 : typeof import("server").c
 
-export { i, m as instantiatedModule } from "server";
+export { i, m as instantiatedModule } from "./server";
 >i : any
->m : any
->instantiatedModule : any
+>m : typeof import("server").m
+>instantiatedModule : typeof import("server").m
 
-export { uninstantiated } from "server";
+export { uninstantiated } from "./server";
 >uninstantiated : any
 
-export { x } from "server";
->x : any
+export { x } from "./server";
+>x : number
 

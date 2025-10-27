@@ -8,12 +8,12 @@
  }
  exports.default = A;
  class B extends A {
-@@= skipped -8, +9 lines =@@
- //// [b.js]
- "use strict";
+@@= skipped -11, +12 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var a_1 = require("./a");
-+const a_1 = require("./a");
+-var a_1 = __importDefault(require("./a"));
++const a_1 = __importDefault(require("./a"));
  class C extends a_1.default {
  }
  new C().a.toExponential();

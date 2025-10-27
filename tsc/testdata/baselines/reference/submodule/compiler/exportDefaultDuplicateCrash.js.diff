@@ -1,12 +1,12 @@
 --- old.exportDefaultDuplicateCrash.js
 +++ new.exportDefaultDuplicateCrash.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -17, +17 lines =@@
  exports.default = void 0;
  exports.default = default_1;
  function default_1() { }
 -var hi_1 = require("./hi");
 +const hi_1 = require("./hi");
- Object.defineProperty(exports, "default", { enumerable: true, get: function () { return hi_1.default; } });
+ Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(hi_1).default; } });
 -var hi_2 = require("./hi");
 +const hi_2 = require("./hi");
  Object.defineProperty(exports, "default", { enumerable: true, get: function () { return hi_2.aa; } });

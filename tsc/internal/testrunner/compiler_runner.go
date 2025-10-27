@@ -182,9 +182,25 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	payload := makeUnitsFromTest(test.content, test.filename)
 	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)
 
-	switch compilerTest.options.GetEmitModuleKind() {
+	switch compilerTest.options.Module {
 	case core.ModuleKindAMD, core.ModuleKindUMD, core.ModuleKindSystem:
-		t.Skipf("Skipping test %s with unsupported module kind %s", testName, compilerTest.options.GetEmitModuleKind())
+		t.Skipf("Skipping test %s with unsupported module kind %s", testName, compilerTest.options.Module)
+	}
+	switch compilerTest.options.ModuleResolution {
+	case core.ModuleResolutionKindNode10, core.ModuleResolutionKindClassic:
+		t.Skipf("Skipping test %s with unsupported module resolution kind %d", testName, compilerTest.options.ModuleResolution)
+	}
+	if compilerTest.options.ESModuleInterop.IsFalse() {
+		t.Skipf("Skipping test %s with esModuleInterop=false", testName)
+	}
+	if compilerTest.options.AllowSyntheticDefaultImports.IsFalse() {
+		t.Skipf("Skipping test %s with allowSyntheticDefaultImports=false", testName)
+	}
+	if compilerTest.options.BaseUrl != "" {
+		t.Skipf("Skipping test %s with baseUrl set", testName)
+	}
+	if compilerTest.options.OutFile != "" {
+		t.Skipf("Skipping test %s with outFile set", testName)
 	}
 
 	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)

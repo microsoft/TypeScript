@@ -1,11 +1,11 @@
 --- old.defaultDeclarationEmitShadowedNamedCorrectly.js
 +++ new.defaultDeclarationEmitShadowedNamedCorrectly.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -58, +58 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Something = void 0;
  exports.make = make;
--var me = require("./this");
-+const me = require("./this");
+-var me = __importStar(require("./this"));
++const me = __importStar(require("./this"));
  function make(x) {
      return null;
  }

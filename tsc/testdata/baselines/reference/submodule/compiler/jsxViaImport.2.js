@@ -24,9 +24,12 @@ class TestComponent extends React.Component<any, {}> {
 
 //// [consumer.jsx]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="component.d.ts" />
-const BaseComponent_1 = require("BaseComponent");
+const BaseComponent_1 = __importDefault(require("BaseComponent"));
 class TestComponent extends React.Component {
     render() {
         return <BaseComponent_1.default />;

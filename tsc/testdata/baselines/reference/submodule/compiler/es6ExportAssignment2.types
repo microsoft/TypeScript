@@ -9,6 +9,6 @@ export = a;  // Error: export = not allowed in ES6
 >a : number
 
 === b.ts ===
-import * as a from "a";
->a : any
+import * as a from "./a";
+>a : number
 

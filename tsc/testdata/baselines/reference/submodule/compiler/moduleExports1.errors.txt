@@ -1,0 +1,40 @@
+moduleExports1.ts(1,1): error TS1185: Merge conflict marker encountered.
+moduleExports1.ts(3,1): error TS1185: Merge conflict marker encountered.
+moduleExports1.ts(5,1): error TS1185: Merge conflict marker encountered.
+moduleExports1.ts(7,1): error TS1185: Merge conflict marker encountered.
+moduleExports1.ts(19,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+moduleExports1.ts(19,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== moduleExports1.ts (6 errors) ====
+    <<<<<<< HEAD
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    export module TypeScript.Strasse.Street {
+    ||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    export namespace TypeScript.Strasse.Street {
+    =======
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    export namespace TypeScript.Strasse.Street {
+    >>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    	export class Rue {
+    		public address:string;
+    	}	
+    }
+    
+    var rue = new TypeScript.Strasse.Street.Rue();
+    
+    rue.address = "1 Main Street";
+    
+    void 0;
+    
+    if (!module.exports) module.exports = "";
+         ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                         ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

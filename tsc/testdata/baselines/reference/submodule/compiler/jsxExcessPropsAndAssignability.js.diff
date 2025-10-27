@@ -1,11 +1,11 @@
 --- old.jsxExcessPropsAndAssignability.js
 +++ new.jsxExcessPropsAndAssignability.js
-@@= skipped -32, +32 lines =@@
-     return __assign.apply(this, arguments);
- };
+@@= skipped -65, +65 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  const myHoc = (ComposedComponent) => {
      const WrapperComponent = null;
      const props = null;

@@ -1,11 +1,11 @@
 --- old.propTypeValidatorInference.js
 +++ new.propTypeValidatorInference.js
-@@= skipped -91, +91 lines =@@
- //// [file.js]
- "use strict";
+@@= skipped -124, +124 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var PropTypes = require("prop-types");
-+const PropTypes = require("prop-types");
+-var PropTypes = __importStar(require("prop-types"));
++const PropTypes = __importStar(require("prop-types"));
  const innerProps = {
      foo: PropTypes.string.isRequired,
      bar: PropTypes.bool,

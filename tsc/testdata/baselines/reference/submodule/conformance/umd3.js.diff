@@ -1,11 +1,11 @@
 --- old.umd3.js
 +++ new.umd3.js
-@@= skipped -15, +15 lines =@@
- //// [a.js]
- "use strict";
+@@= skipped -48, +48 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var Foo = require("./foo");
-+const Foo = require("./foo");
+-var Foo = __importStar(require("./foo"));
++const Foo = __importStar(require("./foo"));
  Foo.fn();
  let x;
  let y = x.n;

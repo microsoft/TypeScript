@@ -3,11 +3,13 @@
 @@= skipped -0, +0 lines =@@
 -error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
 -error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+-error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 -file1.ts(1,1): error TS1148: Cannot use imports, exports, or module augmentations when '--module' is 'none'.
 -
 -
 -!!! error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
 -!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+-!!! error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 -==== file1.ts (1 errors) ====
 -    import * as b from './b.json';
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

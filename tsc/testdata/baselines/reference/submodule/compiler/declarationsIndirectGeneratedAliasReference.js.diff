@@ -1,10 +1,10 @@
 --- old.declarationsIndirectGeneratedAliasReference.js
 +++ new.declarationsIndirectGeneratedAliasReference.js
-@@= skipped -21, +21 lines =@@
- "use strict";
+@@= skipped -54, +54 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.MyComp = void 0;
--var ns = require("mod");
-+const ns = require("mod");
+-var ns = __importStar(require("mod"));
++const ns = __importStar(require("mod"));
  const Ctor = ns.default;
  exports.MyComp = Ctor.extends({ foo: "bar" });

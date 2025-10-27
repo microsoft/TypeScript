@@ -699,7 +699,7 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsModuleResolution: true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
-		DefaultValueDescription: diagnostics.X_module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
+		DefaultValueDescription: diagnostics.X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	},
 	{
 		Name:                    "baseUrl",

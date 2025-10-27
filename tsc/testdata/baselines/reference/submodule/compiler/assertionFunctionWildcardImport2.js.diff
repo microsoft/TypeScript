@@ -1,11 +1,11 @@
 --- old.assertionFunctionWildcardImport2.js
 +++ new.assertionFunctionWildcardImport2.js
-@@= skipped -31, +31 lines =@@
- //// [test.js]
- "use strict";
+@@= skipped -64, +64 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var asserts = require("./asserts");
-+const asserts = require("./asserts");
+-var asserts = __importStar(require("./asserts"));
++const asserts = __importStar(require("./asserts"));
  function test(obj) {
      asserts.isNonNullable(obj);
      obj.trim();

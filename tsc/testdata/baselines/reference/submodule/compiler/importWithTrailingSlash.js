@@ -29,15 +29,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = { aIndex: 0 };
 //// [test.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require(".");
-const _2 = require("./");
+const _1 = __importDefault(require("."));
+const _2 = __importDefault(require("./"));
 _1.default.a;
 _2.default.aIndex;
 //// [test.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const __1 = require("..");
-const __2 = require("../");
+const __1 = __importDefault(require(".."));
+const __2 = __importDefault(require("../"));
 __1.default.a;
 __2.default.aIndex;

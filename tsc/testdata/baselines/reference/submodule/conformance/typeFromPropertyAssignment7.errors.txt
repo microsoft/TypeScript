@@ -1,0 +1,13 @@
+a.js(5,13): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== a.js (1 errors) ====
+    var obj = {};
+    obj.method = function (hunch) {
+        return true;
+    }
+    var b = obj.method();
+                ~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 a.js:2:24: An argument for 'hunch' was not provided.
+    

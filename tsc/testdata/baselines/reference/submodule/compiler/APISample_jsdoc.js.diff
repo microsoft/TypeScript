@@ -1,11 +1,11 @@
 --- old.APISample_jsdoc.js
 +++ new.APISample_jsdoc.js
-@@= skipped -129, +129 lines =@@
-  *       Please log a "breaking change" issue for any API breaking change affecting this issue
-  */
+@@= skipped -162, +162 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var ts = require("typescript");
-+const ts = require("typescript");
+-var ts = __importStar(require("typescript"));
++const ts = __importStar(require("typescript"));
  // excerpted from https://github.com/YousefED/typescript-json-schema
  // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
  function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {

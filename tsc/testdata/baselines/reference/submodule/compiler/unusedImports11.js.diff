@@ -1,16 +1,16 @@
 --- old.unusedImports11.js
 +++ new.unusedImports11.js
-@@= skipped -27, +27 lines =@@
- //// [a.js]
- "use strict";
+@@= skipped -60, +60 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
 -var b_1 = require("./b");
--var b_2 = require("./b");
--var ns = require("./b");
+-var b_2 = __importStar(require("./b"));
+-var ns = __importStar(require("./b"));
 -var r = require("./b");
 +const b_1 = require("./b");
-+const b_2 = require("./b");
-+const ns = require("./b");
++const b_2 = __importStar(require("./b"));
++const ns = __importStar(require("./b"));
 +const r = require("./b");
  new b_1.Member();
  new b_2.default();

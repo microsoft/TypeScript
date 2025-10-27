@@ -22,7 +22,10 @@ var a = 10;
 exports.default = a;
 //// [es6ImportDefaultBindingMergeErrors_1.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const es6ImportDefaultBindingMergeErrors_0_1 = require("./es6ImportDefaultBindingMergeErrors_0");
+const es6ImportDefaultBindingMergeErrors_0_1 = __importDefault(require("./es6ImportDefaultBindingMergeErrors_0"));
 var x = es6ImportDefaultBindingMergeErrors_0_1.default;
 var defaultBinding2 = "hello world";

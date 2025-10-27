@@ -1,11 +1,11 @@
 --- old.jsxIntrinsicElementsTypeArgumentErrors.js
 +++ new.jsxIntrinsicElementsTypeArgumentErrors.js
-@@= skipped -34, +34 lines =@@
- "use strict";
+@@= skipped -67, +67 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  // opening + closing
  const a = React.createElement("div", null); // empty type args
  const b = React.createElement("div", null); // trailing comma type args

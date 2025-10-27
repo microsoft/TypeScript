@@ -2353,9 +2353,6 @@ func IsArrayLiteralOrObjectLiteralDestructuringPattern(node *Node) bool {
 
 func accessKind(node *Node) AccessKind {
 	parent := node.Parent
-	if parent == nil {
-		return AccessKindRead
-	}
 	switch parent.Kind {
 	case KindParenthesizedExpression:
 		return accessKind(parent)
@@ -2407,9 +2404,8 @@ func accessKind(node *Node) AccessKind {
 			return AccessKindWrite
 		}
 		return AccessKindRead
-	default:
-		return AccessKindRead
 	}
+	return AccessKindRead
 }
 
 func reverseAccessKind(a AccessKind) AccessKind {

@@ -8,8 +8,10 @@
  }
  exports.default = C.B;
  //// [b.js]
- "use strict";
+@@= skipped -8, +9 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var a_1 = require("./a");
-+const a_1 = require("./a");
+-var a_1 = __importDefault(require("./a"));
++const a_1 = __importDefault(require("./a"));
  const x = { c: a_1.default };

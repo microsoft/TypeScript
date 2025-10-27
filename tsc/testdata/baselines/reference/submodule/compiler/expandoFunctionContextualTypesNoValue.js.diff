@@ -1,10 +1,10 @@
 --- old.expandoFunctionContextualTypesNoValue.js
 +++ new.expandoFunctionContextualTypesNoValue.js
-@@= skipped -13, +13 lines =@@
+@@= skipped -16, +16 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Foo = Foo;
  // GH #38532
--var blah_1 = require("blah");
-+const blah_1 = require("blah");
+-var blah_1 = __importDefault(require("blah"));
++const blah_1 = __importDefault(require("blah"));
  function Foo() { }
  blah_1.default.bar = () => { };

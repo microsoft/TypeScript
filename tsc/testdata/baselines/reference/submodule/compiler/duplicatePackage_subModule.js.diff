@@ -1,9 +1,9 @@
 --- old.duplicatePackage_subModule.js
 +++ new.duplicatePackage_subModule.js
-@@= skipped -29, +29 lines =@@
- //// [index.js]
- "use strict";
+@@= skipped -62, +62 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var a = require("a");
-+const a = require("a");
+-var a = __importStar(require("a"));
++const a = __importStar(require("a"));
  const o = a.o;

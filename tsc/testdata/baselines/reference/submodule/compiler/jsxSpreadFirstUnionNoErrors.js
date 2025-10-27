@@ -31,8 +31,11 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
+const react_1 = __importDefault(require("react"));
 const Info = (props) => props.status === "hidden"
     ? react_1.default.createElement("noscript", null)
     : react_1.default.createElement("div", null, props.content);

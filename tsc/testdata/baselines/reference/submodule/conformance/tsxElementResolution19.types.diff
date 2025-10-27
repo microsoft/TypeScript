@@ -1,0 +1,9 @@
+--- old.tsxElementResolution19.types
++++ new.tsxElementResolution19.types
+@@= skipped -21, +21 lines =@@
+ >MyClass : typeof MyClass
+
+ <MyClass />;
+-><MyClass /> : error
++><MyClass /> : any
+ >MyClass : typeof MyClass

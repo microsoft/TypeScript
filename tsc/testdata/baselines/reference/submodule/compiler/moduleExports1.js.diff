@@ -1,0 +1,17 @@
+--- old.moduleExports1.js
++++ new.moduleExports1.js
+@@= skipped -26, +26 lines =@@
+ exports.TypeScript = void 0;
+ var TypeScript;
+ (function (TypeScript) {
+-    var Strasse;
++    let Strasse;
+     (function (Strasse) {
+-        var Street;
++        let Street;
+         (function (Street) {
+             class Rue {
++                address;
+             }
+             Street.Rue = Rue;
+         })(Street = Strasse.Street || (Strasse.Street = {}));

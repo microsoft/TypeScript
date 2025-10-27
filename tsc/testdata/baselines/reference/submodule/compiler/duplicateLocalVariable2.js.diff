@@ -1,0 +1,12 @@
+--- old.duplicateLocalVariable2.js
++++ new.duplicateLocalVariable2.js
+@@= skipped -38, +38 lines =@@
+
+ //// [duplicateLocalVariable2.js]
+ export class TestCase {
++    name;
++    test;
++    errorMessageRegEx;
+     constructor(name, test, errorMessageRegEx) {
+         this.name = name;
+         this.test = test;

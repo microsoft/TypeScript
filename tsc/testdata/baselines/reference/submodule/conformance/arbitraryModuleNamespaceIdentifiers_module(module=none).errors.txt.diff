@@ -1,6 +1,7 @@
 --- old.arbitraryModuleNamespaceIdentifiers_module(module=none).errors.txt
 +++ new.arbitraryModuleNamespaceIdentifiers_module(module=none).errors.txt
 @@= skipped -0, +0 lines =@@
+-error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 +arbitraryModuleNamespaceIdentifiers_module.ts(4,23): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +arbitraryModuleNamespaceIdentifiers_module.ts(5,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +arbitraryModuleNamespaceIdentifiers_module.ts(8,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
@@ -20,6 +21,7 @@
  arbitraryModuleNamespaceIdentifiers_module.ts(29,7): error TS2322: Type '"expect error about otherType"' is not assignable to type '"otherType"'.
 
 
+-!!! error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 -==== arbitraryModuleNamespaceIdentifiers_module.ts (3 errors) ====
 +==== arbitraryModuleNamespaceIdentifiers_module.ts (17 errors) ====
      const someValue = "someValue";

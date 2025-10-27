@@ -1,0 +1,11 @@
+--- old.contextuallyTypedStringLiteralsInJsxAttributes02.js
++++ new.contextuallyTypedStringLiteralsInJsxAttributes02.js
+@@= skipped -44, +44 lines =@@
+ exports.MainButton = MainButton;
+ exports.NoOverload = NoOverload;
+ exports.NoOverload1 = NoOverload1;
+-var React = require("react");
++const React = require("react");
+ function MainButton(props) {
+     const linkProps = props;
+     if (linkProps.goTo) {

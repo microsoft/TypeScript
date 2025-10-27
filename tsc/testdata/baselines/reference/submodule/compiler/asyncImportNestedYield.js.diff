@@ -1,9 +1,9 @@
 --- old.asyncImportNestedYield.js
 +++ new.asyncImportNestedYield.js
-@@= skipped -5, +5 lines =@@
- }
-
- //// [asyncImportNestedYield.js]
+@@= skipped -38, +38 lines =@@
+         return result;
+     };
+ })();
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -19,8 +19,8 @@
 -};
 -function foo() {
 -    return __asyncGenerator(this, arguments, function* foo_1() {
--        Promise.resolve("".concat((yield __await(Promise.resolve("".concat(yield yield __await("foo"))).then(function (s) { return require(s); }))).default)).then(function (s) { return require(s); });
+-        Promise.resolve("".concat((yield __await(Promise.resolve("".concat(yield yield __await("foo"))).then(function (s) { return __importStar(require(s)); }))).default)).then(function (s) { return __importStar(require(s)); });
 -    });
 +async function* foo() {
-+    Promise.resolve(`${(await Promise.resolve(`${yield "foo"}`).then(s => require(s))).default}`).then(s => require(s));
++    Promise.resolve(`${(await Promise.resolve(`${yield "foo"}`).then(s => __importStar(require(s)))).default}`).then(s => __importStar(require(s)));
  }

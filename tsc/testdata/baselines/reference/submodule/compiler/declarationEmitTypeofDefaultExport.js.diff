@@ -1,10 +1,10 @@
 --- old.declarationEmitTypeofDefaultExport.js
 +++ new.declarationEmitTypeofDefaultExport.js
-@@= skipped -17, +17 lines =@@
- //// [b.js]
- "use strict";
+@@= skipped -50, +50 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var a = require("./a");
-+const a = require("./a");
+-var a = __importStar(require("./a"));
++const a = __importStar(require("./a"));
  exports.default = a.default;
 

@@ -1,11 +1,11 @@
 --- old.requireAsFunctionInExternalModule.js
 +++ new.requireAsFunctionInExternalModule.js
-@@= skipped -26, +26 lines =@@
- "use strict";
+@@= skipped -59, +59 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.hello = hello;
--var c_1 = require("./c");
-+const c_1 = require("./c");
+-var c_1 = __importStar(require("./c"));
++const c_1 = __importStar(require("./c"));
  function hello() { }
  if ((0, c_1.has)('ember-debug')) {
      (0, c_1.default)('ember-debug');

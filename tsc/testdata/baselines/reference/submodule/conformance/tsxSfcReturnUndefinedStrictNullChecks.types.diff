@@ -1,0 +1,19 @@
+--- old.tsxSfcReturnUndefinedStrictNullChecks.types
++++ new.tsxSfcReturnUndefinedStrictNullChecks.types
+@@= skipped -10, +10 lines =@@
+ >undefined : undefined
+
+ function Greet(x: {name?: string}) {
+->Greet : (x: { name?: string; }) => undefined
+->x : { name?: string; }
++>Greet : (x: { name?: string | undefined; }) => undefined
++>x : { name?: string | undefined; }
+ >name : string | undefined
+
+ 	return undefined;
+@@= skipped -17, +17 lines =@@
+ const G = <Greet />;
+ >G : JSX.Element
+ ><Greet /> : JSX.Element
+->Greet : (x: { name?: string; }) => undefined
++>Greet : (x: { name?: string | undefined; }) => undefined

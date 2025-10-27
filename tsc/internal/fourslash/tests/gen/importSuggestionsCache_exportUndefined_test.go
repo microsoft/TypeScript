@@ -12,7 +12,7 @@ import (
 
 func TestImportSuggestionsCache_exportUndefined(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
 { "compilerOptions": { "module": "esnext" } }
@@ -39,7 +39,7 @@ export = x;
 					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 					Data: PtrTo(any(&ls.CompletionItemData{
 						AutoImport: &ls.AutoImportData{
-							ModuleSpecifier: "/home/src/workspaces/project/undefinedAlias",
+							ModuleSpecifier: "./undefinedAlias",
 						},
 					})),
 				},
@@ -60,7 +60,7 @@ export = x;
 					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 					Data: PtrTo(any(&ls.CompletionItemData{
 						AutoImport: &ls.AutoImportData{
-							ModuleSpecifier: "/home/src/workspaces/project/undefinedAlias",
+							ModuleSpecifier: "./undefinedAlias",
 						},
 					})),
 				},

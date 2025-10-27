@@ -1,11 +1,11 @@
 --- old.tsxNoTypeAnnotatedSFC.js
 +++ new.tsxNoTypeAnnotatedSFC.js
-@@= skipped -13, +13 lines =@@
- "use strict";
+@@= skipped -46, +46 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  // not _actually_ making react available in this test to regression test #22948
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  const Test123 = () => <div />;
  function testComponent(props) {
      return <Test123 {...props}/>;

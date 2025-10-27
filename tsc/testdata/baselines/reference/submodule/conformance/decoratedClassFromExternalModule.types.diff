@@ -1,8 +1,0 @@
---- old.decoratedClassFromExternalModule.types
-+++ new.decoratedClassFromExternalModule.types
-@@= skipped -12, +12 lines =@@
-
- === undecorated.ts ===
- import Decorated from 'decorated';
-->Decorated : typeof Decorated
-+>Decorated : any

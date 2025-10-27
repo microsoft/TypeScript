@@ -1,0 +1,10 @@
+--- old.tsxAttributeResolution10.js
++++ new.tsxAttributeResolution10.js
+@@= skipped -36, +36 lines =@@
+ class MyComponent {
+     render() {
+     }
++    props;
+ }
+ exports.MyComponent = MyComponent;
+ // Should be an error

@@ -1,9 +1,0 @@
-error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-==== c.ts (0 errors) ====
-    let foo: typeof C;
-==== b.ts (0 errors) ====
-    class C { }
-    

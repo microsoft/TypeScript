@@ -1,11 +1,11 @@
 --- old.reactTagNameComponentWithPropsNoOOM.js
 +++ new.reactTagNameComponentWithPropsNoOOM.js
-@@= skipped -27, +27 lines =@@
-     return __assign.apply(this, arguments);
- };
+@@= skipped -60, +60 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  const classes = "";
  const rest = {};
  const children = [];

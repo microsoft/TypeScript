@@ -1,11 +1,11 @@
 --- old.declarationEmitWithDefaultAsComputedName.js
 +++ new.declarationEmitWithDefaultAsComputedName.js
-@@= skipped -26, +26 lines =@@
- "use strict";
+@@= skipped -29, +29 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.obj = void 0;
--var other_1 = require("./other");
-+const other_1 = require("./other");
+-var other_1 = __importDefault(require("./other"));
++const other_1 = __importDefault(require("./other"));
  exports.obj = {
      [other_1.default.name]: 1,
  };

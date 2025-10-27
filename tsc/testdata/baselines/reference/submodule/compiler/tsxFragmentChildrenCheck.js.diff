@@ -1,12 +1,12 @@
 --- old.tsxFragmentChildrenCheck.js
 +++ new.tsxFragmentChildrenCheck.js
-@@= skipped -37, +37 lines =@@
- //// [file1.js]
- "use strict";
+@@= skipped -70, +70 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var React = require("react");
+-var React = __importStar(require("react"));
 -var my_component_1 = require("./my-component");
-+const React = require("react");
++const React = __importStar(require("react"));
 +const my_component_1 = require("./my-component");
  const MY_STRING = 'Ceci n\'est pas une string.';
  const MY_CLASSNAME = 'jeclass';

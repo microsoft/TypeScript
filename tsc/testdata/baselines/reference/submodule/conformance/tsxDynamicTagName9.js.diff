@@ -1,11 +1,11 @@
 --- old.tsxDynamicTagName9.js
 +++ new.tsxDynamicTagName9.js
-@@= skipped -21, +21 lines =@@
- "use strict";
+@@= skipped -54, +54 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Text = void 0;
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  class Text extends React.Component {
 -    constructor() {
 -        super(...arguments);

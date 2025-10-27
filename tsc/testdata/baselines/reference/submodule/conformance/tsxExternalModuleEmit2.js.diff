@@ -1,11 +1,11 @@
 --- old.tsxExternalModuleEmit2.js
 +++ new.tsxExternalModuleEmit2.js
-@@= skipped -29, +29 lines =@@
-     return __assign.apply(this, arguments);
+@@= skipped -32, +32 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
  };
  Object.defineProperty(exports, "__esModule", { value: true });
--var mod_1 = require("mod");
-+const mod_1 = require("mod");
+-var mod_1 = __importDefault(require("mod"));
++const mod_1 = __importDefault(require("mod"));
  // Should see mod_1['default'] in emit here
  React.createElement(Foo, { handler: mod_1.default });
  // Should see mod_1['default'] in emit here

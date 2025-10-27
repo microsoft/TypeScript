@@ -1,11 +1,11 @@
 --- old.extendsUntypedModule.js
 +++ new.extendsUntypedModule.js
-@@= skipped -15, +15 lines =@@
- "use strict";
+@@= skipped -18, +18 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.A = void 0;
--var foo_1 = require("foo");
-+const foo_1 = require("foo");
+-var foo_1 = __importDefault(require("foo"));
++const foo_1 = __importDefault(require("foo"));
  class A extends foo_1.default {
  }
  exports.A = A;

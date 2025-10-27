@@ -3,7 +3,7 @@
 === main.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';
->Bluebird : PromiseConstructor
+>Bluebird : { all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }
 
 async function a(): Bluebird<void> {
 >a : () => Bluebird<void>
@@ -19,7 +19,7 @@ async function a(): Bluebird<void> {
 >await Bluebird.resolve() : void
 >Bluebird.resolve() : Promise<void>
 >Bluebird.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->Bluebird : PromiseConstructor
+>Bluebird : { all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
       } catch (error) { }

@@ -60,7 +60,7 @@ fooB/*1*/`
 				}, true),
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("0"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "fooBar",
 		Source:      "./foo-bar",
 		Description: "Add import from \"./foo-bar\"",

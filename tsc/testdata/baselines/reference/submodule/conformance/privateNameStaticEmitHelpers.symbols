@@ -18,25 +18,25 @@ export class S {
 >S : Symbol(S, Decl(main.ts, 0, 0))
 }
 
-=== tslib.d.ts ===
+=== node_modules/tslib/index.d.ts ===
 // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
 export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
->__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, 0, 0))
->T : Symbol(T, Decl(tslib.d.ts, 1, 47))
->V : Symbol(V, Decl(tslib.d.ts, 1, 64))
->receiver : Symbol(receiver, Decl(tslib.d.ts, 1, 68))
->T : Symbol(T, Decl(tslib.d.ts, 1, 47))
->state : Symbol(state, Decl(tslib.d.ts, 1, 80))
->V : Symbol(V, Decl(tslib.d.ts, 1, 64))
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(index.d.ts, 0, 0))
+>T : Symbol(T, Decl(index.d.ts, 1, 47))
+>V : Symbol(V, Decl(index.d.ts, 1, 64))
+>receiver : Symbol(receiver, Decl(index.d.ts, 1, 68))
+>T : Symbol(T, Decl(index.d.ts, 1, 47))
+>state : Symbol(state, Decl(index.d.ts, 1, 80))
+>V : Symbol(V, Decl(index.d.ts, 1, 64))
 
 export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;
->__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, 1, 96))
->T : Symbol(T, Decl(tslib.d.ts, 2, 47))
->V : Symbol(V, Decl(tslib.d.ts, 2, 64))
->receiver : Symbol(receiver, Decl(tslib.d.ts, 2, 68))
->T : Symbol(T, Decl(tslib.d.ts, 2, 47))
->state : Symbol(state, Decl(tslib.d.ts, 2, 80))
->value : Symbol(value, Decl(tslib.d.ts, 2, 92))
->V : Symbol(V, Decl(tslib.d.ts, 2, 64))
->V : Symbol(V, Decl(tslib.d.ts, 2, 64))
+>__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(index.d.ts, 1, 96))
+>T : Symbol(T, Decl(index.d.ts, 2, 47))
+>V : Symbol(V, Decl(index.d.ts, 2, 64))
+>receiver : Symbol(receiver, Decl(index.d.ts, 2, 68))
+>T : Symbol(T, Decl(index.d.ts, 2, 47))
+>state : Symbol(state, Decl(index.d.ts, 2, 80))
+>value : Symbol(value, Decl(index.d.ts, 2, 92))
+>V : Symbol(V, Decl(index.d.ts, 2, 64))
+>V : Symbol(V, Decl(index.d.ts, 2, 64))
 

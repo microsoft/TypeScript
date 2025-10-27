@@ -1,0 +1,23 @@
+--- old.es6ImportDefaultBindingFollowedWithNamedImportWithExport.js
++++ new.es6ImportDefaultBindingFollowedWithNamedImportWithExport.js
+@@= skipped -32, +32 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x1 = void 0;
+-var server_1 = require("./server");
++const server_1 = require("./server");
+ exports.x1 = server_1.a;
+-var server_2 = require("./server");
++const server_2 = require("./server");
+ exports.x1 = server_2.a;
+-var server_3 = require("./server");
++const server_3 = require("./server");
+ exports.x1 = server_3.x;
+ exports.x1 = server_3.a;
+-var server_4 = require("./server");
++const server_4 = require("./server");
+ exports.x1 = server_4.x;
+-var server_5 = require("./server");
++const server_5 = require("./server");
+ exports.x1 = server_5.m;
+

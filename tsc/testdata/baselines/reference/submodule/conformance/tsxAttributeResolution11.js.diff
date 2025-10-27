@@ -1,0 +1,10 @@
+--- old.tsxAttributeResolution11.js
++++ new.tsxAttributeResolution11.js
+@@= skipped -31, +31 lines =@@
+ class MyComponent {
+     render() {
+     }
++    props;
+ }
+ // Should be an OK
+ var x = <MyComponent bar='world'/>;

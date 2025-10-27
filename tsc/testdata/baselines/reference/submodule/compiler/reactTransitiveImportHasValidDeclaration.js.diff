@@ -1,10 +1,10 @@
 --- old.reactTransitiveImportHasValidDeclaration.js
 +++ new.reactTransitiveImportHasValidDeclaration.js
-@@= skipped -36, +36 lines =@@
- //// [index.js]
- "use strict";
+@@= skipped -39, +39 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var react_emotion_1 = require("react-emotion");
-+const react_emotion_1 = require("react-emotion");
+-var react_emotion_1 = __importDefault(require("react-emotion"));
++const react_emotion_1 = __importDefault(require("react-emotion"));
  const Form = (0, react_emotion_1.default)('div')({ color: "red" });
  exports.default = Form;

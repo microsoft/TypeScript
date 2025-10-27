@@ -13,7 +13,7 @@ import * as ns from './b';
 >ns : typeof ns
 
 import r = require("./b");
->r : typeof ns
+>r : typeof r
 
 === b.ts ===
 export class Member {}

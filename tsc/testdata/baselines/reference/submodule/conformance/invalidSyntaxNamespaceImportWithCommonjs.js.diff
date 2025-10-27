@@ -1,10 +1,10 @@
 --- old.invalidSyntaxNamespaceImportWithCommonjs.js
 +++ new.invalidSyntaxNamespaceImportWithCommonjs.js
-@@= skipped -15, +15 lines =@@
- //// [1.js]
- "use strict";
+@@= skipped -48, +48 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var from = require();
-+const from = require();
+-var from = __importStar(require());
++const from = __importStar(require());
  from;
  "./0";

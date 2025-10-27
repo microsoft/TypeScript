@@ -22,6 +22,9 @@ exports.default = R = {
 };
 //// [m2.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const m1_1 = require("./m1");
+const m1_1 = __importDefault(require("./m1"));
 const { __esmodule, __proto__ } = m1_1.default;

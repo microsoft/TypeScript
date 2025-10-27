@@ -1,11 +1,11 @@
 --- old.ignoredJsxAttributes.js
 +++ new.ignoredJsxAttributes.js
-@@= skipped -27, +27 lines =@@
- /// <reference path="react16.d.ts" />
+@@= skipped -60, +60 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  // Repro from #44797
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  let props = {
      foo: "",
      "data-yadda": 42, // Error

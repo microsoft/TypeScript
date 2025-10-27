@@ -1,8 +1,8 @@
 --- old.jsdocInTypeScript.js
 +++ new.jsdocInTypeScript.js
-@@= skipped -60, +60 lines =@@
-
- //// [jsdocInTypeScript.js]
+@@= skipped -93, +93 lines =@@
+     };
+ })();
  class T {
 +    prop;
  }
@@ -21,5 +21,5 @@
  E[""];
  // make sure import types in JSDoc are not resolved
  /** @type {import("should-not-be-resolved").Type} */
--var v = Promise.resolve("".concat(String())).then(function (s) { return require(s); });
-+var v = Promise.resolve(`${String()}`).then(s => require(s));
+-var v = Promise.resolve("".concat(String())).then(function (s) { return __importStar(require(s)); });
++var v = Promise.resolve(`${String()}`).then(s => __importStar(require(s)));

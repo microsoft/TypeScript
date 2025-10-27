@@ -1,0 +1,16 @@
+--- old.recursiveExportAssignmentAndFindAliasedType5.js
++++ new.recursiveExportAssignmentAndFindAliasedType5.js
+@@= skipped -18, +18 lines =@@
+
+ //// [recursiveExportAssignmentAndFindAliasedType5_moduleD.js]
+ "use strict";
+-var self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleC");
++const self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleC");
+ module.exports = self;
+ //// [recursiveExportAssignmentAndFindAliasedType5_moduleC.js]
+ "use strict";
+-var self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleD");
++const self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleD");
+ module.exports = self;
+ //// [recursiveExportAssignmentAndFindAliasedType5_moduleB.js]
+ "use strict";

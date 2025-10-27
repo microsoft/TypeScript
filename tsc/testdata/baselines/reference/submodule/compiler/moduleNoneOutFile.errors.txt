@@ -1,8 +1,0 @@
-error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-==== first.ts (0 errors) ====
-    class Foo {}
-==== second.ts (0 errors) ====
-    class Bar extends Foo {}

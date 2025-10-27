@@ -1,11 +1,11 @@
 --- old.multiline.js
 +++ new.multiline.js
-@@= skipped -70, +70 lines =@@
- "use strict";
+@@= skipped -103, +103 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.MyComponent = MyComponent;
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  function MyComponent(props) {
      return React.createElement("div", null);
  }

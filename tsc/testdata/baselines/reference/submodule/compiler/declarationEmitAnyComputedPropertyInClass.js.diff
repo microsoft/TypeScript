@@ -1,11 +1,11 @@
 --- old.declarationEmitAnyComputedPropertyInClass.js
 +++ new.declarationEmitAnyComputedPropertyInClass.js
-@@= skipped -14, +14 lines =@@
- "use strict";
+@@= skipped -17, +17 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--var abcdefgh_1 = require("abcdefgh");
-+const abcdefgh_1 = require("abcdefgh");
+-var abcdefgh_1 = __importDefault(require("abcdefgh"));
++const abcdefgh_1 = __importDefault(require("abcdefgh"));
  class C {
      [abcdefgh_1.default.someKey]() { }
      ;

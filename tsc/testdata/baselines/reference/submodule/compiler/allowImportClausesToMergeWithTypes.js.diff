@@ -1,22 +1,23 @@
 --- old.allowImportClausesToMergeWithTypes.js
 +++ new.allowImportClausesToMergeWithTypes.js
-@@= skipped -36, +36 lines =@@
- "use strict";
+@@= skipped -39, +39 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.default = void 0;
--var b_1 = require("./b");
-+const b_1 = require("./b");
+-var b_1 = __importDefault(require("./b"));
++const b_1 = __importDefault(require("./b"));
  exports.default = b_1.default;
  const x = { x: "" };
  b_1.default;
- //// [index.js]
- "use strict";
+@@= skipped -10, +10 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var a_1 = require("./a");
-+const a_1 = require("./a");
+-var a_1 = __importDefault(require("./a"));
++const a_1 = __importDefault(require("./a"));
  const x = { x: "" };
  a_1.default;
--var b_1 = require("./b");
-+const b_1 = require("./b");
+-var b_1 = __importDefault(require("./b"));
++const b_1 = __importDefault(require("./b"));
  b_1.default;
  const y = x;

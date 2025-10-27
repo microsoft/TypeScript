@@ -1,11 +1,11 @@
 --- old.jsxEmptyExpressionNotCountedAsChild(jsx=react).js
 +++ new.jsxEmptyExpressionNotCountedAsChild(jsx=react).js
-@@= skipped -22, +22 lines =@@
- "use strict";
+@@= skipped -55, +55 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = require("react");
-+const React = require("react");
+-var React = __importStar(require("react"));
++const React = __importStar(require("react"));
  function Wrapper(props) {
      return React.createElement("div", null, props.children);
  }

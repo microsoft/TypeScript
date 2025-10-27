@@ -1,0 +1,11 @@
+--- old.undeclaredModuleError.js
++++ new.undeclaredModuleError.js
+@@= skipped -19, +19 lines =@@
+ //// [undeclaredModuleError.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var fs = require("fs");
++const fs = require("fs");
+ function readdir(path, accept, callback) { }
+ function join(...paths) { }
+ function instrumentFile(covFileDir, covFileName, originalFilePath) {

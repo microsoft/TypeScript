@@ -1,11 +1,11 @@
 --- old.exportStar.js
 +++ new.exportStar.js
-@@= skipped -72, +72 lines =@@
- //// [main.js]
- "use strict";
+@@= skipped -105, +105 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var t4_1 = require("./t4");
-+const t4_1 = require("./t4");
+-var t4_1 = __importStar(require("./t4"));
++const t4_1 = __importStar(require("./t4"));
  t4_1.default;
  t4_1.x;
  t4_1.y;

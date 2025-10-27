@@ -1,7 +1,7 @@
 --- old.importAssertion2(module=commonjs).js
 +++ new.importAssertion2(module=commonjs).js
-@@= skipped -38, +38 lines =@@
- };
+@@= skipped -60, +60 lines =@@
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.ns = exports.b = exports.a = void 0;
 -var _0_1 = require("./0");

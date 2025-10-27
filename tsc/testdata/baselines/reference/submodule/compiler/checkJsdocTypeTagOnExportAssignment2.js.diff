@@ -1,9 +1,9 @@
 --- old.checkJsdocTypeTagOnExportAssignment2.js
 +++ new.checkJsdocTypeTagOnExportAssignment2.js
-@@= skipped -28, +28 lines =@@
- //// [c.js]
- "use strict";
+@@= skipped -31, +31 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var b_1 = require("./b");
-+const b_1 = require("./b");
+-var b_1 = __importDefault(require("./b"));
++const b_1 = __importDefault(require("./b"));
  b_1.default;

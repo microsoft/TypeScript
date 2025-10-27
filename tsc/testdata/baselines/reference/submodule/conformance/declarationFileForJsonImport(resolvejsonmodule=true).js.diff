@@ -1,9 +1,9 @@
 --- old.declarationFileForJsonImport(resolvejsonmodule=true).js
 +++ new.declarationFileForJsonImport(resolvejsonmodule=true).js
-@@= skipped -11, +11 lines =@@
- //// [main.js]
- "use strict";
+@@= skipped -14, +14 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var data_json_1 = require("./data.json");
-+const data_json_1 = require("./data.json");
+-var data_json_1 = __importDefault(require("./data.json"));
++const data_json_1 = __importDefault(require("./data.json"));
  let x = data_json_1.default;

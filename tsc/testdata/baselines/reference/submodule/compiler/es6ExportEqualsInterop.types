@@ -138,13 +138,13 @@ import * as y7 from "function";
 >y7 : () => any
 
 import * as y8 from "function-module";
->y8 : typeof z8
+>y8 : typeof y8
 
 import * as y9 from "class";
 >y9 : typeof z9
 
 import * as y0 from "class-module";
->y0 : typeof z0
+>y0 : typeof y0
 
 y1.a;
 >y1.a : any
@@ -183,7 +183,7 @@ y7.a;
 
 y8.a;
 >y8.a : number
->y8 : typeof z8
+>y8 : typeof y8
 >a : number
 
 y9.a;
@@ -193,7 +193,7 @@ y9.a;
 
 y0.a;
 >y0.a : number
->y0 : typeof z0
+>y0 : typeof y0
 >a : number
 
 // named import

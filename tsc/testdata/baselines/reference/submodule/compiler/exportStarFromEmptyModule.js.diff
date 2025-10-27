@@ -16,10 +16,12 @@
  }
  exports.A = A;
  //// [exportStarFromEmptyModule_module4.js]
- "use strict";
+@@= skipped -38, +39 lines =@@
+     };
+ })();
  Object.defineProperty(exports, "__esModule", { value: true });
--var X = require("./exportStarFromEmptyModule_module3");
-+const X = require("./exportStarFromEmptyModule_module3");
+-var X = __importStar(require("./exportStarFromEmptyModule_module3"));
++const X = __importStar(require("./exportStarFromEmptyModule_module3"));
  var s;
  X.A.q;
  X.A.r; // Error

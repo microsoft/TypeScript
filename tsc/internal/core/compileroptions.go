@@ -200,26 +200,30 @@ func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 }
 
 func (options *CompilerOptions) GetEmitModuleKind() ModuleKind {
-	if options.Module != ModuleKindNone {
+	switch options.Module {
+	case ModuleKindNone, ModuleKindAMD, ModuleKindUMD, ModuleKindSystem:
+		if options.Target >= ScriptTargetES2015 {
+			return ModuleKindES2015
+		}
+		return ModuleKindCommonJS
+	default:
 		return options.Module
 	}
-	if options.Target >= ScriptTargetES2015 {
-		return ModuleKindES2015
-	}
-	return ModuleKindCommonJS
 }
 
 func (options *CompilerOptions) GetModuleResolutionKind() ModuleResolutionKind {
-	if options.ModuleResolution != ModuleResolutionKindUnknown {
-		return options.ModuleResolution
-	}
-	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNode18, ModuleKindNode20:
-		return ModuleResolutionKindNode16
-	case ModuleKindNodeNext:
-		return ModuleResolutionKindNodeNext
+	switch options.ModuleResolution {
+	case ModuleResolutionKindUnknown, ModuleResolutionKindClassic, ModuleResolutionKindNode10:
+		switch options.GetEmitModuleKind() {
+		case ModuleKindNode16, ModuleKindNode18, ModuleKindNode20:
+			return ModuleResolutionKindNode16
+		case ModuleKindNodeNext:
+			return ModuleResolutionKindNodeNext
+		default:
+			return ModuleResolutionKindBundler
+		}
 	default:
-		return ModuleResolutionKindBundler
+		return options.ModuleResolution
 	}
 }
 
@@ -251,24 +255,14 @@ func (options *CompilerOptions) AllowImportingTsExtensionsFrom(fileName string) 
 	return options.GetAllowImportingTsExtensions() || tspath.IsDeclarationFileName(fileName)
 }
 
+// Deprecated: always returns true
 func (options *CompilerOptions) GetESModuleInterop() bool {
-	if options.ESModuleInterop != TSUnknown {
-		return options.ESModuleInterop == TSTrue
-	}
-	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNode18, ModuleKindNode20, ModuleKindNodeNext, ModuleKindPreserve:
-		return true
-	}
-	return false
+	return true
 }
 
+// Deprecated: always returns true
 func (options *CompilerOptions) GetAllowSyntheticDefaultImports() bool {
-	if options.AllowSyntheticDefaultImports != TSUnknown {
-		return options.AllowSyntheticDefaultImports == TSTrue
-	}
-	return options.GetESModuleInterop() ||
-		options.GetEmitModuleKind() == ModuleKindSystem ||
-		options.GetModuleResolutionKind() == ModuleResolutionKindBundler
+	return true
 }
 
 func (options *CompilerOptions) GetResolveJsonModule() bool {
@@ -401,6 +395,7 @@ const (
 type ModuleKind int32
 
 const (
+	// Deprecated: Do not use outside of options parsing and validation.
 	ModuleKindNone     ModuleKind = 0
 	ModuleKindCommonJS ModuleKind = 1
 	// Deprecated: Do not use outside of options parsing and validation.
@@ -447,6 +442,10 @@ type ModuleResolutionKind int32
 
 const (
 	ModuleResolutionKindUnknown ModuleResolutionKind = 0
+	// Deprecated: Do not use outside of options parsing and validation.
+	ModuleResolutionKindClassic ModuleResolutionKind = 1
+	// Deprecated: Do not use outside of options parsing and validation.
+	ModuleResolutionKindNode10 ModuleResolutionKind = 2
 	// Starting with node16, node's module resolver has significant departures from traditional cjs resolution
 	// to better support ECMAScript modules and their use within node - however more features are still being added.
 	// TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable

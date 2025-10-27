@@ -571,7 +571,7 @@ func IsClassElement(node *Node) bool {
 	return false
 }
 
-func IsMethodOrAccessor(node *Node) bool {
+func isMethodOrAccessor(node *Node) bool {
 	switch node.Kind {
 	case KindMethodDeclaration, KindGetAccessor, KindSetAccessor:
 		return true
@@ -580,7 +580,7 @@ func IsMethodOrAccessor(node *Node) bool {
 }
 
 func IsPrivateIdentifierClassElementDeclaration(node *Node) bool {
-	return (IsPropertyDeclaration(node) || IsMethodOrAccessor(node)) && IsPrivateIdentifier(node.Name())
+	return (IsPropertyDeclaration(node) || isMethodOrAccessor(node)) && IsPrivateIdentifier(node.Name())
 }
 
 func IsObjectLiteralOrClassExpressionMethodOrAccessor(node *Node) bool {

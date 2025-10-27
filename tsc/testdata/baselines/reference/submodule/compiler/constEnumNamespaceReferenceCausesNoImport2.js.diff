@@ -1,11 +1,11 @@
 --- old.constEnumNamespaceReferenceCausesNoImport2.js
 +++ new.constEnumNamespaceReferenceCausesNoImport2.js
-@@= skipped -36, +36 lines =@@
- })(ConstEnumOnlyModule || (exports.ConstEnumOnlyModule = ConstEnumOnlyModule = {}));
- //// [reexport.js]
- "use strict";
--var Foo = require("./foo");
-+const Foo = require("./foo");
+@@= skipped -69, +69 lines =@@
+         return result;
+     };
+ })();
+-var Foo = __importStar(require("./foo"));
++const Foo = __importStar(require("./foo"));
  module.exports = Foo.ConstEnumOnlyModule;
  //// [index.js]
  "use strict";

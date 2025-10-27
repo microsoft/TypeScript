@@ -1,9 +1,9 @@
 --- old.newAbstractInstance2.js
 +++ new.newAbstractInstance2.js
-@@= skipped -16, +16 lines =@@
- //// [b.js]
- "use strict";
+@@= skipped -19, +19 lines =@@
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--var a_1 = require("./a");
-+const a_1 = require("./a");
+-var a_1 = __importDefault(require("./a"));
++const a_1 = __importDefault(require("./a"));
  new a_1.default();

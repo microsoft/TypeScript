@@ -6,13 +6,13 @@ export var a = 10;
 >10 : 10
 
 === es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts ===
-import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
+import defaultBinding, * as nameSpaceBinding  from "./es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
 >defaultBinding : any
->nameSpaceBinding : any
+>nameSpaceBinding : typeof nameSpaceBinding
 
 var x: number = nameSpaceBinding.a;
 >x : number
->nameSpaceBinding.a : any
->nameSpaceBinding : any
->a : any
+>nameSpaceBinding.a : number
+>nameSpaceBinding : typeof nameSpaceBinding
+>a : number
 
