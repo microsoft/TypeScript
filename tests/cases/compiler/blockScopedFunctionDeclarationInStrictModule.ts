@@ -1,5 +1,5 @@
-// @target: esnext
-// @module: commonjs
+// @target: ES5
+// @module: amd
 if (true) {
     function foo() { }
     foo(); // ok

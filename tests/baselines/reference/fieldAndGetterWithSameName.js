@@ -7,17 +7,19 @@ export class C {
 }
 
 //// [fieldAndGetterWithSameName.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
-exports.C = C;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.C = void 0;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        Object.defineProperty(C.prototype, "x", {
+            get: function () { return 1; },
+            enumerable: false,
+            configurable: true
+        });
+        return C;
+    }());
+    exports.C = C;
+});

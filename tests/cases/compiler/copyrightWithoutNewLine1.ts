@@ -1,4 +1,4 @@
-// @module: commonjs
+// @module: amd
 /*****************************
 * (c) Copyright - Important
 ****************************/

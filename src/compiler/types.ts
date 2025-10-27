@@ -7315,7 +7315,6 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory; }, low
 }
 
 export enum ModuleResolutionKind {
-    /** @deprecated */
     Classic = 1,
     /**
      * @deprecated
@@ -7579,14 +7578,10 @@ export interface TypeAcquisition {
 }
 
 export enum ModuleKind {
-    /** @deprecated */
     None = 0,
     CommonJS = 1,
-    /** @deprecated */
     AMD = 2,
-    /** @deprecated */
     UMD = 3,
-    /** @deprecated */
     System = 4,
 
     // NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.

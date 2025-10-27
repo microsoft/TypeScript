@@ -81,11 +81,14 @@ let x: Request;
 const y = x.id;
 
 //// [augmentation.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 //// [consumer.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("./augmentation");
-var x;
-var y = x.id;
+define(["require", "exports", "./augmentation"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var x;
+    var y = x.id;
+});

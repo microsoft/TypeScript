@@ -1,5 +1,5 @@
 // @target: es5
-// @module: esnext
+// @module: amd
 namespace A {
     global {
         interface Array<T> { x }

@@ -58,11 +58,56 @@ interface I2 extends I1 { item:string; }
 
 
 //// [interfaceDeclaration3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.M2 = void 0;
-var M1;
-(function (M1) {
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.M2 = void 0;
+    var M1;
+    (function (M1) {
+        var C1 = /** @class */ (function () {
+            function C1() {
+            }
+            return C1;
+        }());
+        var C2 = /** @class */ (function () {
+            function C2() {
+            }
+            return C2;
+        }());
+        var C3 = /** @class */ (function () {
+            function C3() {
+            }
+            return C3;
+        }());
+        var C4 = /** @class */ (function () {
+            function C4() {
+            }
+            return C4;
+        }());
+        var C5 = /** @class */ (function () {
+            function C5() {
+            }
+            return C5;
+        }());
+    })(M1 || (M1 = {}));
+    var M2;
+    (function (M2) {
+        var C1 = /** @class */ (function () {
+            function C1() {
+            }
+            return C1;
+        }());
+        var C2 = /** @class */ (function () {
+            function C2() {
+            }
+            return C2;
+        }());
+        var C3 = /** @class */ (function () {
+            function C3() {
+            }
+            return C3;
+        }());
+    })(M2 || (exports.M2 = M2 = {}));
     var C1 = /** @class */ (function () {
         function C1() {
         }
@@ -78,47 +123,4 @@ var M1;
         }
         return C3;
     }());
-    var C4 = /** @class */ (function () {
-        function C4() {
-        }
-        return C4;
-    }());
-    var C5 = /** @class */ (function () {
-        function C5() {
-        }
-        return C5;
-    }());
-})(M1 || (M1 = {}));
-var M2;
-(function (M2) {
-    var C1 = /** @class */ (function () {
-        function C1() {
-        }
-        return C1;
-    }());
-    var C2 = /** @class */ (function () {
-        function C2() {
-        }
-        return C2;
-    }());
-    var C3 = /** @class */ (function () {
-        function C3() {
-        }
-        return C3;
-    }());
-})(M2 || (exports.M2 = M2 = {}));
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
+});

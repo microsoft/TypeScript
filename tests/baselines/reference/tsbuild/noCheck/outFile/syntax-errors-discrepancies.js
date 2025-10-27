@@ -8,7 +8,6 @@ CleanBuild:
     "./project/a.ts",
     "./project/b.ts"
   ],
-  "errors": true,
   "checkPending": true,
   "version": "FakeTSVersion"
 }
@@ -18,7 +17,6 @@ IncrementalBuild:
     "./project/a.ts",
     "./project/b.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion"
 }
 15:: no-change-run
@@ -32,7 +30,6 @@ CleanBuild:
     "./project/b.ts",
     "./project/c.ts"
   ],
-  "errors": true,
   "checkPending": true,
   "version": "FakeTSVersion"
 }

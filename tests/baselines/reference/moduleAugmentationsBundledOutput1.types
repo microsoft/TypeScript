@@ -15,11 +15,9 @@ import {Cls} from "./m1";
 >(<any>Cls.prototype).foo = function() { return 1; } : () => number
 >                                                    : ^^^^^^^^^^^^
 >(<any>Cls.prototype).foo : any
->                         : ^^^
 >(<any>Cls.prototype) : any
 >                     : ^^^
 ><any>Cls.prototype : any
->                   : ^^^
 >Cls.prototype : Cls
 >              : ^^^
 >Cls : typeof Cls
@@ -37,11 +35,9 @@ import {Cls} from "./m1";
 >(<any>Cls.prototype).bar = function() { return "1"; } : () => string
 >                                                      : ^^^^^^^^^^^^
 >(<any>Cls.prototype).bar : any
->                         : ^^^
 >(<any>Cls.prototype) : any
 >                     : ^^^
 ><any>Cls.prototype : any
->                   : ^^^
 >Cls.prototype : Cls
 >              : ^^^
 >Cls : typeof Cls
@@ -105,11 +101,9 @@ import {C1, C2} from "./m3";
 >(<any>Cls.prototype).baz1 = function() { return undefined } : () => any
 >                                                            : ^^^^^^^^^
 >(<any>Cls.prototype).baz1 : any
->                          : ^^^
 >(<any>Cls.prototype) : any
 >                     : ^^^
 ><any>Cls.prototype : any
->                   : ^^^
 >Cls.prototype : Cls
 >              : ^^^
 >Cls : typeof Cls
@@ -127,11 +121,9 @@ import {C1, C2} from "./m3";
 >(<any>Cls.prototype).baz2 = function() { return undefined } : () => any
 >                                                            : ^^^^^^^^^
 >(<any>Cls.prototype).baz2 : any
->                          : ^^^
 >(<any>Cls.prototype) : any
 >                     : ^^^
 ><any>Cls.prototype : any
->                   : ^^^
 >Cls.prototype : Cls
 >              : ^^^
 >Cls : typeof Cls

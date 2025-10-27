@@ -14,10 +14,12 @@ export namespace c {
 var x: c.b;
 
 //// [internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-var c;
-(function (c) {
-})(c || (exports.c = c = {}));
-var x;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    var c;
+    (function (c) {
+    })(c || (exports.c = c = {}));
+    var x;
+});

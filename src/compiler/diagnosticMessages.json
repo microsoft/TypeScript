@@ -6587,7 +6587,10 @@
         "category": "Message",
         "code": 6903
     },
-
+    "module === \"system\" or esModuleInterop": {
+        "category": "Message",
+        "code": 6904
+    },
     "`false`, unless `strict` is set": {
         "category": "Message",
         "code": 6905
@@ -6608,7 +6611,7 @@
         "category": "Message",
         "code": 6909
     },
-    "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
+    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
         "category": "Message",
         "code": 69010
     },
@@ -6695,10 +6698,6 @@
     "List of file name suffixes to search when resolving a module.": {
         "category": "Error",
         "code": 6931
-    },
-    "`false`, unless `checkJs` is set": {
-        "category": "Message",
-        "code": 6932
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

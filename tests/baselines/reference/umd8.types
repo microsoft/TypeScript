@@ -7,16 +7,16 @@ import * as ff from './foo';
 >   : ^^^^^^^^^
 
 let y: Foo; // OK in type position
->y : import("foo")
->  : ^^^^^^^^^^^^^
+>y : ff
+>  : ^^
 
 y.foo();
 >y.foo() : number
 >        : ^^^^^^
 >y.foo : () => number
 >      : ^^^^^^      
->y : import("foo")
->  : ^^^^^^^^^^^^^
+>y : ff
+>  : ^^
 >foo : () => number
 >    : ^^^^^^      
 
@@ -29,8 +29,8 @@ let z: Foo.SubThing; // OK in ns position
 let x: any = Foo; // Not OK in value position
 >x : any
 >  : ^^^
->Foo : typeof import("foo")
->    : ^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof ff
+>    : ^^^^^^^^^
 
 === foo.d.ts ===
 declare class Thing {

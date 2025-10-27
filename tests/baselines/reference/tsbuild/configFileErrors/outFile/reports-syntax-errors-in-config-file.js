@@ -37,18 +37,13 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-[96mtsconfig.json[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m   "module": "amd"
-[7m [0m [91m            ~~~~~[0m
-
 [96mtsconfig.json[0m:[93m10[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m10[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
 
 
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -77,7 +72,7 @@ declare module "b" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -106,24 +101,11 @@ declare module "b" {
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ]
-  ],
   "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
   "latestChangedDtsFile": "./outFile.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 903
+  "size": 880
 }
 
 
@@ -150,18 +132,13 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-[96mtsconfig.json[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m6[0m   "module": "amd"
-[7m [0m [91m            ~~~~~[0m
-
 [96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m11[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
 
 
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -177,18 +154,13 @@ export function foo() { }export function fooBar() { }
 
 /home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-[96mtsconfig.json[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m6[0m   "module": "amd"
-[7m [0m [91m            ~~~~~[0m
-
 [96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m11[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
 
 
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -220,7 +192,7 @@ declare module "b" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -250,24 +222,11 @@ declare module "b" {
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ]
-  ],
   "outSignature": "-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
   "latestChangedDtsFile": "./outFile.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 988
+  "size": 965
 }
 
 
@@ -279,18 +238,13 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-[96mtsconfig.json[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m6[0m   "module": "amd"
-[7m [0m [91m            ~~~~~[0m
-
 [96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m11[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
 
 
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -317,15 +271,44 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-[96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m6[0m     "module": "amd"
-[7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+//// [/home/src/workspaces/outFile.tsbuildinfo]
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../tslibs/ts/lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts"
+  ],
+  "fileInfos": {
+    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
+    "./project/b.ts": "1045484683-export function bar() { }"
+  },
+  "root": [
+    [
+      2,
+      "./project/a.ts"
+    ],
+    [
+      3,
+      "./project/b.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "version": "FakeTSVersion",
+  "size": 951
+}
 
 
-
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success

@@ -16,9 +16,11 @@ namespace m2 {
 }
 
 //// [collisionExportsRequireAndAmbientFunction.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var m2;
-(function (m2) {
-    var a = 10;
-})(m2 || (m2 = {}));
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var m2;
+    (function (m2) {
+        var a = 10;
+    })(m2 || (m2 = {}));
+});

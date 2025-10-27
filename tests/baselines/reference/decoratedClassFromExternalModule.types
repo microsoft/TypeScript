@@ -5,7 +5,6 @@ function decorate(target: any) { }
 >decorate : (target: any) => void
 >         : ^      ^^   ^^^^^^^^^
 >target : any
->       : ^^^
 
 @decorate
 >decorate : (target: any) => void
@@ -17,6 +16,6 @@ export default class Decorated { }
 
 === undecorated.ts ===
 import Decorated from 'decorated';
->Decorated : any
->          : ^^^
+>Decorated : typeof Decorated
+>          : ^^^^^^^^^^^^^^^^
 

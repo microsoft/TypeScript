@@ -26,7 +26,7 @@ function verifyIncludes(name: string) {
   verify.completions({
       includes: {
           name,
-          source: "react",
+          source: "/home/src/workspaces/project/node_modules/@types/react/index",
           hasAction: true,
           sortText: completion.SortText.AutoImportSuggestions,
       },

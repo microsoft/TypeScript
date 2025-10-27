@@ -6,8 +6,10 @@ export type callback<T> = () => T;
 export type CallbackArray<T extends callback> = () => T;
 
 //// [typeAliasDeclarationEmit.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 
 
 //// [typeAliasDeclarationEmit.d.ts]

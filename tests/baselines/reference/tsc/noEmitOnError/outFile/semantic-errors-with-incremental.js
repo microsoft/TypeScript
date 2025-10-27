@@ -47,17 +47,9 @@ Output::
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+Found 1 error in src/main.ts[90m:2[0m
 
-
-Found 2 errors in 2 files.
-
-Errors  Files
-     1  src/main.ts[90m:2[0m
-     1  tsconfig.json[90m:4[0m
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
@@ -158,17 +150,9 @@ Output::
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+Found 1 error in src/main.ts[90m:2[0m
 
-
-Found 2 errors in 2 files.
-
-Errors  Files
-     1  src/main.ts[90m:2[0m
-     1  tsconfig.json[90m:4[0m
 
 
 
@@ -207,18 +191,10 @@ const a: string = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
@@ -252,14 +228,26 @@ Found 1 error in tsconfig.json[90m:4[0m
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
-  "pendingEmit": [
-    "Js",
-    false
-  ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 910
+  "size": 876
 }
+
+//// [/user/username/projects/dev-build.js]
+define("shared/types/db", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("src/main", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var a = "hello";
+});
+define("src/other", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    console.log("hi");
+});
+
 
 
 Program root files: [
@@ -289,7 +277,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -297,14 +285,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 
@@ -331,4 +311,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success

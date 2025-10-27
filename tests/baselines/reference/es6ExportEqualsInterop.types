@@ -195,7 +195,7 @@ import * as y7 from "function";
 >   : ^^^^^^^^^
 
 import * as y8 from "function-module";
->y8 : typeof y8
+>y8 : typeof z8
 >   : ^^^^^^^^^
 
 import * as y9 from "class";
@@ -203,7 +203,7 @@ import * as y9 from "class";
 >   : ^^^^^^^^^
 
 import * as y0 from "class-module";
->y0 : typeof y0
+>y0 : typeof z0
 >   : ^^^^^^^^^
 
 y1.a;
@@ -265,7 +265,7 @@ y7.a;
 y8.a;
 >y8.a : number
 >     : ^^^^^^
->y8 : typeof y8
+>y8 : typeof z8
 >   : ^^^^^^^^^
 >a : number
 >  : ^^^^^^
@@ -281,7 +281,7 @@ y9.a;
 y0.a;
 >y0.a : number
 >     : ^^^^^^
->y0 : typeof y0
+>y0 : typeof z0
 >   : ^^^^^^^^^
 >a : number
 >  : ^^^^^^

@@ -1,2 +1,2 @@
-//@module: commonjs
+//@module: amd
 export declare module "M" { }

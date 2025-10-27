@@ -1,4 +1,4 @@
-// @module: commonjs
+// @module: amd
 // @filename: file1.ts
 var x = 1;
 export = x;

@@ -1,5 +1,5 @@
 // @outFile: concat.js
-// @module: esnext
+// @module: amd
 // @moduleResolution: bundler
 // @Filename: A:/bar.ts
 import {z} from "./foo";

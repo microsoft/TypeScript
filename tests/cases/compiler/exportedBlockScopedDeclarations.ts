@@ -1,4 +1,4 @@
-// @module: esnext
+// @module: amd
 const foo = foo; // compile error
 export const bar = bar; // should be compile error
 function f() {

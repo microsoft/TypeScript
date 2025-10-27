@@ -1,6 +1,6 @@
 // @filename: file.tsx
 // @jsx: preserve
-// @module: commonjs
+// @module: amd
 // @noLib: true
 // @strictNullChecks: true
 // @skipLibCheck: true

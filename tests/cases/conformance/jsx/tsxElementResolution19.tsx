@@ -1,5 +1,5 @@
 //@jsx: react
-//@module: commonjs
+//@module: amd
 
 //@filename: react.d.ts
 declare module "react" {

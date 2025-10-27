@@ -25,7 +25,7 @@ autoAccessorDisallowedModifiers.ts(33,1): error TS1275: 'accessor' modifier can 
 autoAccessorDisallowedModifiers.ts(34,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(34,17): error TS2882: Cannot find module or type declarations for side-effect import of 'x'.
 autoAccessorDisallowedModifiers.ts(35,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
-autoAccessorDisallowedModifiers.ts(35,25): error TS2307: Cannot find module 'x' or its corresponding type declarations.
+autoAccessorDisallowedModifiers.ts(35,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 autoAccessorDisallowedModifiers.ts(36,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(37,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
@@ -122,7 +122,7 @@ autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can 
     ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
                             ~~~
-!!! error TS2307: Cannot find module 'x' or its corresponding type declarations.
+!!! error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     accessor export { V1 };
     ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.

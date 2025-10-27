@@ -13,7 +13,6 @@ declare namespace JSX {
 === test.d.ts ===
 export var React;
 >React : any
->      : ^^^
 
 === react-consumer.tsx ===
 // This import should be elided

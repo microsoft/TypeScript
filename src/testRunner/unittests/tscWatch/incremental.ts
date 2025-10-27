@@ -130,7 +130,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
         };
         const config: File = {
             path: configFile.path,
-            content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", ignoreDeprecations: "6.0" } }),
+            content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd" } }),
         };
 
         verifyIncrementalWatchEmit({
@@ -202,7 +202,6 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                     incremental: true,
                     module: ts.ModuleKind.AMD,
                     configFilePath: config.path,
-                    ignoreDeprecations: "6.0",
                 });
 
                 assert.equal(ts.arrayFrom(builderProgram.state.referencedMap!.keys()).length, 0);
@@ -229,7 +228,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [file1, file2, {
                 path: configFile.path,
-                content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js", ignoreDeprecations: "6.0" } }),
+                content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
             }],
             subScenario: "module compilation/with --out",
         });

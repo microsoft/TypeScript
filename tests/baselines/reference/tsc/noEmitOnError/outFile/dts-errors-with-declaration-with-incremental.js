@@ -44,18 +44,23 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m2[0m export const a = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+  [96msrc/main.ts[0m:[93m2[0m:[93m14[0m
+    [7m2[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
-Found 1 error in tsconfig.json[90m:4[0m
+Found 1 error in src/main.ts[90m:2[0m
 
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"emitDiagnosticsPerFile":[[3,[{"start":53,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":53,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
@@ -90,13 +95,35 @@ Found 1 error in tsconfig.json[90m:4[0m
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
-  "pendingEmit": [
-    "Js | Dts",
-    false
+  "emitDiagnosticsPerFile": [
+    [
+      "./noemitonerror/src/main.ts",
+      [
+        {
+          "start": 53,
+          "length": 1,
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "category": 1,
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 53,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
+        }
+      ]
+    ]
   ],
-  "errors": true,
+  "pendingEmit": [
+    "Js | DtsEmit",
+    17
+  ],
   "version": "FakeTSVersion",
-  "size": 945
+  "size": 1234
 }
 
 
@@ -136,13 +163,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m2[0m export const a = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+  [96msrc/main.ts[0m:[93m2[0m:[93m14[0m
+    [7m2[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
-Found 1 error in tsconfig.json[90m:4[0m
+Found 1 error in src/main.ts[90m:2[0m
 
 
 
@@ -184,18 +216,10 @@ export const a = class { p = 10; };
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
@@ -230,14 +254,50 @@ Found 1 error in tsconfig.json[90m:4[0m
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
-  "pendingEmit": [
-    "Js | Dts",
-    false
-  ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 937
+  "size": 903
 }
+
+//// [/user/username/projects/dev-build.js]
+define("shared/types/db", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("src/main", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = void 0;
+    exports.a = /** @class */ (function () {
+        function class_1() {
+            this.p = 10;
+        }
+        return class_1;
+    }());
+});
+define("src/other", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    console.log("hi");
+});
+
+
+//// [/user/username/projects/dev-build.d.ts]
+declare module "shared/types/db" {
+    export interface A {
+        name: string;
+    }
+}
+declare module "src/main" {
+    export const a: {
+        new (): {
+            p: number;
+        };
+    };
+}
+declare module "src/other" {
+    export {};
+}
+
 
 
 Program root files: [
@@ -268,7 +328,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -276,14 +336,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 
@@ -311,4 +363,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success

@@ -23,7 +23,8 @@ test.markerNames().forEach(marker => {
       kind: "var",
       kindModifiers: "declare",
       sortText: completion.SortText.GlobalsOrKeywords
-    }],
+    }]
+  }, {
     preferences: {
       includeInsertTextCompletions: true
     }

@@ -11,8 +11,7 @@ export const y = 20;
   "compilerOptions": {
     "incremental": true,
     "module": "amd",
-    "outFile": "out.js",
-    "ignoreDeprecations": "6.0"
+    "outFile": "out.js"
   }
 }
 
@@ -117,7 +116,6 @@ Program options: {
   "incremental": true,
   "module": 2,
   "outFile": "/users/username/projects/project/out.js",
-  "ignoreDeprecations": "6.0",
   "watch": true,
   "configFilePath": "/users/username/projects/project/tsconfig.json"
 }

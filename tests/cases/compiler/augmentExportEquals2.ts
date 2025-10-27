@@ -1,4 +1,4 @@
-// @module: commonjs
+// @module: amd
 
 // @filename: file1.ts
 function foo() {}

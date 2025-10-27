@@ -3,15 +3,12 @@
 === withExportDecl.ts ===
 var simpleVar;
 >simpleVar : any
->          : ^^^
 
 export var exportedSimpleVar;
 >exportedSimpleVar : any
->                  : ^^^
 
 var anotherVar: any;
 >anotherVar : any
->           : ^^^
 
 var varWithSimpleType: number;
 >varWithSimpleType : number
@@ -71,15 +68,12 @@ export var exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
 
 declare var declaredVar;
 >declaredVar : any
->            : ^^^
 
 declare var declareVar2
 >declareVar2 : any
->            : ^^^
 
 declare var declaredVar;
 >declaredVar : any
->            : ^^^
 
 declare var deckareVarWithType: number;
 >deckareVarWithType : number
@@ -212,7 +206,6 @@ export namespace m3 {
 
 export var eVar1, eVar2 = 10;
 >eVar1 : any
->      : ^^^
 >eVar2 : number
 >      : ^^^^^^
 >10 : 10
@@ -220,7 +213,6 @@ export var eVar1, eVar2 = 10;
 
 var eVar22;
 >eVar22 : any
->       : ^^^
 
 export var eVar3 = 10, eVar4, eVar5;
 >eVar3 : number
@@ -228,7 +220,5 @@ export var eVar3 = 10, eVar4, eVar5;
 >10 : 10
 >   : ^^
 >eVar4 : any
->      : ^^^
 >eVar5 : any
->      : ^^^
 

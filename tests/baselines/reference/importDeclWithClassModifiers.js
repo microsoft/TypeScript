@@ -12,10 +12,12 @@ var b: a;
 
 
 //// [importDeclWithClassModifiers.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = exports.b = exports.a = void 0;
-exports.a = x.c;
-exports.b = x.c;
-exports.c = x.c;
-var b;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = exports.b = exports.a = void 0;
+    exports.a = x.c;
+    exports.b = x.c;
+    exports.c = x.c;
+    var b;
+});

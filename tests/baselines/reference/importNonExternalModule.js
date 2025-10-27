@@ -19,9 +19,10 @@ var foo;
     foo.answer = 42;
 })(foo || (foo = {}));
 //// [foo_1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo_0");
-// Import should fail.  foo_0 not an external module
-if (foo.answer === 42) {
-}
+define(["require", "exports", "./foo_0"], function (require, exports, foo) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    // Import should fail.  foo_0 not an external module
+    if (foo.answer === 42) {
+    }
+});

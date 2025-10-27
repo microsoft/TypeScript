@@ -1,4 +1,3 @@
-error TS5107: Option 'esModuleInterop=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 /importer-cjs.cjs(2,5): error TS2351: This expression is not constructable.
   Type 'String' has no construct signatures.
 /importer-cts.cts(2,5): error TS2351: This expression is not constructable.
@@ -9,7 +8,6 @@ error TS5107: Option 'esModuleInterop=false' is deprecated and will stop functio
 /importer-cts.cts(10,10): error TS2614: Module '"./exporter.mjs"' has no exported member 'Oops'. Did you mean to use 'import Oops from "./exporter.mjs"' instead?
 
 
-!!! error TS5107: Option 'esModuleInterop=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== /importer-cjs.cjs (1 errors) ====
     const Foo = require("./exporter.mjs");
     new Foo();

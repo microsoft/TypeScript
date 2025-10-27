@@ -1,7 +1,7 @@
-error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
 
 
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
 ==== A:/bar.ts (0 errors) ====
     import {z} from "./foo";
     export var x = z + z;

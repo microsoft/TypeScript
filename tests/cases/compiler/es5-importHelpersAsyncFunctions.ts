@@ -2,6 +2,7 @@
 // @importHelpers: true
 // @target: es5
 // @module: commonjs
+// @moduleResolution: classic
 // @filename: external.ts
 export async function foo() {
 }
@@ -10,7 +11,7 @@ export async function foo() {
 async function foo() {
 }
 
-// @filename: node_modules/tslib/index.d.ts
+// @filename: tslib.d.ts
 export declare function __extends(d: Function, b: Function): void;
 export declare function __assign(t: any, ...sources: any[]): any;
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;

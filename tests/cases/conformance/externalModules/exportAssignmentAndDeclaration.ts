@@ -1,4 +1,4 @@
-// @module: commonjs
+// @module: amd
 // @Filename: foo_0.ts
 export enum E1 {
 	A,B,C

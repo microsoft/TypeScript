@@ -10,4 +10,7 @@ export {}
 
 
 //// [moduleAugmentationGlobal8_1.js]
-export {};
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});

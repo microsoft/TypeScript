@@ -1,5 +1,5 @@
 //@jsx: preserve
-//@module: commonjs
+//@module: amd
 
 //@filename: react.d.ts
 declare namespace JSX {

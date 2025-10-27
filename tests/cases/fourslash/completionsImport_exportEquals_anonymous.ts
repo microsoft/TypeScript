@@ -37,7 +37,7 @@ verify.completions(
         preferences
     }
 );
-verify.applyCodeActionFromCompletion("1", {
+verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",
     source: "./foo-bar",
     description: `Add import from "./foo-bar"`,
