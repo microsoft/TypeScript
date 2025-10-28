@@ -60,14 +60,7 @@ export type myTypes = {
     prop2: string;
 };
 export type myTypes = myTypes.typeB | Function;
-/** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
-/**
- * @typedef myTypes.typeB
- * @property {myTypes.typeA}    prop1 - Prop 1.
- * @property {string}           prop2 - Prop 2.
- */
-/** @typedef {myTypes.typeB|Function} myTypes.typeC */
-export var myTypes = myTypes;
+export declare var myTypes: any;
 //// [file2.d.ts]
 export type testFnTypes = boolean | myTypes.typeC;
 /** @typedef {boolean|myTypes.typeC} testFnTypes.input */

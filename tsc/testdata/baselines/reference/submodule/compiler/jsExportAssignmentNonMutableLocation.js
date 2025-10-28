@@ -17,4 +17,4 @@ declare const _default: {
     customSymbol: symbol;
 };
 export = _default;
-export var customSymbol2 = Symbol("custom");
+export declare var customSymbol2: symbol;

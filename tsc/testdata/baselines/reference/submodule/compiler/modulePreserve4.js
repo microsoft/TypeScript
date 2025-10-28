@@ -198,7 +198,7 @@ export {}; // Silly test harness
 
 //// [a.d.ts]
 export declare const x = 0;
-export var y = 0;
+export declare var y: number;
 //// [b.d.ts]
 declare const _default: number;
 export default _default;
@@ -217,8 +217,8 @@ export = _default;
 declare const _default: number;
 export default _default;
 //// [g.d.ts]
-export var default = 0;
-export {};
+declare const _default: number;
+export default _default;
 //// [main1.d.ts]
 export {};
 //// [main2.d.mts]
@@ -226,7 +226,6 @@ export {};
 //// [main3.d.cts]
 export {};
 //// [main4.d.cts]
-export var x = require("./g");
-export {};
+export declare var x: typeof import("./g");
 //// [dummy.d.ts]
 export {};

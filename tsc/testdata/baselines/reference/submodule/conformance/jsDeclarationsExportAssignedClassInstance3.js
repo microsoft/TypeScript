@@ -30,4 +30,4 @@ declare class Foo {
 }
 declare const _default: Foo;
 export = _default;
-export var additional = 20;
+export declare var additional: number;

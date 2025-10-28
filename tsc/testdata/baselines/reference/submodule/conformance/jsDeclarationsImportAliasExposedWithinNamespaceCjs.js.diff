@@ -4,24 +4,18 @@
 
 
  //// [file.d.ts]
+-/**
+- * @namespace myTypes
+- * @global
+- * @type {Object<string,*>}
+- */
+-export const myTypes: {
+-    [x: string]: any;
 +export type myTypes = string | RegExp | Array<string | RegExp>;
 +export type myTypes = {
 +    prop1: myTypes.typeA;
 +    prop2: string;
-+};
-+export type myTypes = myTypes.typeB | Function;
-+/** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
- /**
-- * @namespace myTypes
-- * @global
-- * @type {Object<string,*>}
-+ * @typedef myTypes.typeB
-+ * @property {myTypes.typeA}    prop1 - Prop 1.
-+ * @property {string}           prop2 - Prop 2.
-  */
--export const myTypes: {
--    [x: string]: any;
--};
+ };
 -export namespace myTypes {
 -    type typeA = string | RegExp | Array<string | RegExp>;
 -    type typeB = {
@@ -36,14 +30,14 @@
 -    };
 -    type typeC = myTypes.typeB | Function;
 -}
-+/** @typedef {myTypes.typeB|Function} myTypes.typeC */
-+export var myTypes = myTypes;
++export type myTypes = myTypes.typeB | Function;
++export declare var myTypes: any;
  //// [file2.d.ts]
 +export type testFnTypes = boolean | myTypes.typeC;
  /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
  /**
   * @function testFn
-@@= skipped -30, +23 lines =@@
+@@= skipped -30, +16 lines =@@
   * @param {testFnTypes.input} input - Input.
   * @returns {number|null} Result.
   */

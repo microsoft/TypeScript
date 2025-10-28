@@ -145,31 +145,33 @@ module.exports.j = function j() { };
 
 
 //// [index.d.ts]
-export var a = function a();;
-export var b = function b();;
-export var c = function c();;
+export declare var a: () => void;
+export declare var b: () => void;
+export declare var c: () => void;
+export declare var d: (a: any, b: any) => any;
+export declare var e: (a: any, b: any) => any;
+export declare var f: (a: any) => any;
 /**
- * @param {number} a
- * @param {number} b
- * @return {string}
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
  */
-export var d = function d(a, b);;
+declare function g(a: {
+    x: string;
+}, b: {
+    y: typeof module.exports.b;
+}): any;
+export declare var g: typeof g;
 /**
- * @template T,U
- * @param {T} a
- * @param {U} b
- * @return {T & U}
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
  */
-export var e = function e(a, b);;
-/**
- * @template T
- * @param {T} a
- */
-export var f = function f(a);;
-export var g = g;
-export var h = hh;
-export var i = function i();;
-export var ii = module.exports.i;
-export var jj = module.exports.j;
-export var j = function j();;
-export {};
+declare function hh(a: {
+    x: string;
+}, b: {
+    y: typeof module.exports.b;
+}): any;
+export declare var h: typeof hh;
+export declare var i: () => void;
+export declare var ii: () => void;
+export declare var jj: () => void;
+export declare var j: () => void;

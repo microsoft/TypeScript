@@ -19,8 +19,7 @@
  //// [moduleExportAliasDuplicateAlias.d.ts]
 -export { a as apply };
 -declare function a(): void;
-+export var apply = undefined;
-+export var apply = a;
-+export {};
++export declare var apply: undefined;
++export declare var apply: undefined;
  //// [test.d.ts]
  export {};

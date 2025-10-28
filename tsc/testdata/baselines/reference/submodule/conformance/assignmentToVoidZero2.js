@@ -45,14 +45,13 @@ assignmentToVoidZero2_1.j + assignmentToVoidZero2_1.k;
 
 
 //// [assignmentToVoidZero2.d.ts]
-export var j = 1;
-export var k = void 0;
+export declare var j: number;
+export declare var k: undefined;
 declare namespace o {
     var x: number;
 }
 declare namespace o {
     var y: any;
 }
-export {};
 //// [importer.d.ts]
 export {};

@@ -36,7 +36,8 @@ var diddy = funky(1);
 
 
 //// [commonJSAliasedExport.d.ts]
+declare function funky(declaration: any): boolean;
 export = donkey;
-export var funky = funky;
+export declare var funky: typeof funky;
 //// [bug43713.d.ts]
 export {};

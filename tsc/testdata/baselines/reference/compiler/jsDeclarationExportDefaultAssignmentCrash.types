@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsDeclarationExportDefaultAssignmentCrash.ts] ////
+
+=== index.js ===
+exports.default = () => {
+>exports.default = () => {    return 1234;} : () => number
+>exports.default : () => number
+>exports : typeof import("index")
+>default : () => number
+>() => {    return 1234;} : () => number
+
+    return 1234;
+>1234 : 1234
+}
+

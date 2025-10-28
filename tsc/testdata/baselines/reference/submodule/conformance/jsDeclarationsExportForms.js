@@ -294,11 +294,11 @@ export = _default;
 //// [cjs2.d.ts]
 export = ns;
 //// [cjs3.d.ts]
-export var ns = ns;
-export {};
+declare const ns: typeof ns;
+export declare var ns: typeof ns;
 //// [cjs4.d.ts]
-export var names = ns;
-export {};
+declare const ns: typeof ns;
+export declare var names: typeof ns;
 //// [includeAll.d.ts]
 import "./cjs4";
 import "./cjs3";
@@ -317,9 +317,12 @@ import "./bar2";
 
 out/cjs.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
 out/cjs2.d.ts(1,10): error TS2304: Cannot find name 'ns'.
-out/cjs3.d.ts(1,17): error TS1039: Initializers are not allowed in ambient contexts.
-out/cjs4.d.ts(1,20): error TS1039: Initializers are not allowed in ambient contexts.
-out/cjs4.d.ts(1,20): error TS2304: Cannot find name 'ns'.
+out/cjs3.d.ts(1,15): error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
+out/cjs3.d.ts(1,15): error TS2451: Cannot redeclare block-scoped variable 'ns'.
+out/cjs3.d.ts(2,20): error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
+out/cjs3.d.ts(2,20): error TS2451: Cannot redeclare block-scoped variable 'ns'.
+out/cjs3.d.ts(2,20): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
+out/cjs4.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
 
 
 ==== out/cls.d.ts (0 errors) ====
@@ -366,19 +369,25 @@ out/cjs4.d.ts(1,20): error TS2304: Cannot find name 'ns'.
              ~~
 !!! error TS2304: Cannot find name 'ns'.
     
-==== out/cjs3.d.ts (1 errors) ====
-    export var ns = ns;
-                    ~~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
-    export {};
+==== out/cjs3.d.ts (5 errors) ====
+    declare const ns: typeof ns;
+                  ~~
+!!! error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
+                  ~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
+    export declare var ns: typeof ns;
+                       ~~
+!!! error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
+                       ~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
+                       ~~
+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
     
-==== out/cjs4.d.ts (2 errors) ====
-    export var names = ns;
-                       ~~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
-                       ~~
-!!! error TS2304: Cannot find name 'ns'.
-    export {};
+==== out/cjs4.d.ts (1 errors) ====
+    declare const ns: typeof ns;
+                  ~~
+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
+    export declare var names: typeof ns;
     
 ==== out/includeAll.d.ts (0 errors) ====
     import "./cjs4";

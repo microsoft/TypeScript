@@ -20,7 +20,8 @@
 -export namespace chalk {
 -    let grey: {};
 -}
-+export var chalk = chalk;
-+export {};
++export declare var chalk: {
++    grey: {};
++};
  //// [main.d.ts]
  export {};

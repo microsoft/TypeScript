@@ -21,7 +21,6 @@ exports.y = 2;
 
 
 //// [assignmentToVoidZero1.d.ts]
-export var y = exports.x = void 0;
-export var x = 1;
-export var y = 2;
-export {};
+export declare var y: undefined;
+export declare var x: number;
+export declare var y: undefined;

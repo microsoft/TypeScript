@@ -34,4 +34,4 @@ export default validate;
 declare const m: typeof m;
 declare const _default: typeof m.default;
 export = _default;
-export var memberName = "thing";
+export declare var memberName: string;

@@ -38,4 +38,7 @@
 -    let a: string;
 -    let b: string;
 -}
-+export var Strings = Strings;
++export declare var Strings: {
++    a: string;
++    b: string;
++};

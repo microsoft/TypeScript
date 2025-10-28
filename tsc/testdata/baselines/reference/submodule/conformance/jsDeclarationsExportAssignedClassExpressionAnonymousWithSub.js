@@ -46,6 +46,10 @@ declare const _default: {
     };
 };
 export = _default;
-export var Sub = class {
-    constructor();
+export declare var Sub: {
+    new (): {
+        instance: {
+            t: number;
+        };
+    };
 };

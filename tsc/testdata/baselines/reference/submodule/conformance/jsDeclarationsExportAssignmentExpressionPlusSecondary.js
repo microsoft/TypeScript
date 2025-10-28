@@ -49,4 +49,7 @@ declare const _default: {
     };
 };
 export = _default;
-export var Strings = Strings;
+export declare var Strings: {
+    a: string;
+    b: string;
+};

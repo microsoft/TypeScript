@@ -23,5 +23,4 @@
 -}
 -import Something_1 = require("fs");
 -import Something = Something_1.Something;
-+export var A = {};
-+export {};
++export declare var A: {};

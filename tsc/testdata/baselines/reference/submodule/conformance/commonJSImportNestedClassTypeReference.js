@@ -45,7 +45,10 @@ declare namespace NS {
         };
     };
 }
-export var K = NS.K;
-export {};
+export declare var K: {
+    new (): {
+        values(): /*elided*/ any;
+    };
+};
 //// [main.d.ts]
 export {};

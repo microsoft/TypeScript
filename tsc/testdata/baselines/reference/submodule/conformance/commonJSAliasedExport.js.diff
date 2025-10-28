@@ -16,15 +16,17 @@
  module.exports.funky = funky;
  //// [bug43713.js]
  const { funky } = require('./commonJSAliasedExport');
-@@= skipped -15, +19 lines =@@
+@@= skipped -14, +18 lines =@@
+
 
  //// [commonJSAliasedExport.d.ts]
- export = donkey;
+-export = donkey;
 -declare function donkey(ast: any): any;
 -declare namespace donkey {
 -    export { funky };
 -}
--declare function funky(declaration: any): boolean;
-+export var funky = funky;
+ declare function funky(declaration: any): boolean;
++export = donkey;
++export declare var funky: typeof funky;
  //// [bug43713.d.ts]
  export {};

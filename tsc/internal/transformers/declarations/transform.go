@@ -120,7 +120,8 @@ func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindJSImportDeclaration,
 		ast.KindExportDeclaration,
 		ast.KindJSExportAssignment,
-		ast.KindExportAssignment:
+		ast.KindExportAssignment,
+		ast.KindCommonJSExport:
 		return tx.visitDeclarationStatements(node)
 	// statements we elide
 	case ast.KindBreakStatement,
@@ -924,6 +925,80 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 			tx.rewriteModuleSpecifier(input, input.AsExportDeclaration().ModuleSpecifier),
 			tx.tryGetResolutionModeOverride(input.AsExportDeclaration().Attributes),
 		)
+	case ast.KindCommonJSExport:
+		if ast.IsSourceFile(input.Parent) {
+			tx.resultHasExternalModuleIndicator = true
+		}
+		tx.resultHasScopeMarker = true
+		name := input.AsCommonJSExport().Name()
+		if ast.IsIdentifier(name) {
+			if name.AsIdentifier().Text == "default" {
+				// const _default: Type; export default _default;
+				newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+				tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+					return &SymbolAccessibilityDiagnostic{
+						diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+						errorNode:         input,
+					}
+				}
+				tx.tracker.PushErrorFallbackNode(input)
+				type_ := tx.ensureType(input, false)
+				varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
+				tx.tracker.PopErrorFallbackNode()
+				var modList *ast.ModifierList
+				if tx.needsDeclare {
+					modList = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindDeclareKeyword)})
+				} else {
+					modList = tx.Factory().NewModifierList([]*ast.Node{})
+				}
+				statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.Node{varDecl})))
+
+				assignment := tx.Factory().NewExportAssignment(input.Modifiers(), false, nil, newId)
+				// Remove comments from the export declaration and copy them onto the synthetic _default declaration
+				tx.preserveJsDoc(statement, input)
+				tx.removeAllComments(assignment)
+				return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
+			} else {
+				// export var name: Type
+				tx.tracker.PushErrorFallbackNode(input)
+				type_ := tx.ensureType(input, false)
+				varDecl := tx.Factory().NewVariableDeclaration(name, nil, type_, nil)
+				tx.tracker.PopErrorFallbackNode()
+				var modList *ast.ModifierList
+				if tx.needsDeclare {
+					modList = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindExportKeyword), tx.Factory().NewModifier(ast.KindDeclareKeyword)})
+				} else {
+					modList = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindExportKeyword)})
+				}
+				return tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(ast.NodeFlagsNone, tx.Factory().NewNodeList([]*ast.Node{varDecl})))
+			}
+		} else {
+			// const _exported: Type; export {_exported as "name"};
+			newId := tx.Factory().NewUniqueNameEx("_exported", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+			tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+				return &SymbolAccessibilityDiagnostic{
+					diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+					errorNode:         input,
+				}
+			}
+			tx.tracker.PushErrorFallbackNode(input)
+			type_ := tx.ensureType(input, false)
+			varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
+			tx.tracker.PopErrorFallbackNode()
+			var modList *ast.ModifierList
+			if tx.needsDeclare {
+				modList = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindDeclareKeyword)})
+			} else {
+				modList = tx.Factory().NewModifierList([]*ast.Node{})
+			}
+			statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.Node{varDecl})))
+
+			assignment := tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewExportSpecifier(false, newId, name)})), nil, nil)
+			// Remove comments from the export declaration and copy them onto the synthetic _default declaration
+			tx.preserveJsDoc(statement, input)
+			tx.removeAllComments(assignment)
+			return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
+		}
 	case ast.KindExportAssignment, ast.KindJSExportAssignment:
 		if ast.IsSourceFile(input.Parent) {
 			tx.resultHasExternalModuleIndicator = true

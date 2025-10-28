@@ -41,13 +41,17 @@
 -     * Should be able to export a type alias at the same time.
 -     */
 -    name: string;
+-};
 +    var statische: () => void;
 +}
 +export = Handler;
-+export var Strings = Strings;
++export declare var Strings: {
++    a: string;
++    b: string;
++};
 +export type HandlerOptions = {
 +    name: String;
- };
++};
 +/**
 + * @typedef {Object} HandlerOptions
 + * @property {String} name

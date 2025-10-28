@@ -17,10 +17,12 @@
 
  //// [mod1.d.ts]
 -export class K {
-+export var K = class K {
-     values(): void;
+-    values(): void;
 -}
++export declare var K: {
++    new (): {
++        values(): void;
++    };
 +};
-+export {};
  //// [main.d.ts]
  export {};

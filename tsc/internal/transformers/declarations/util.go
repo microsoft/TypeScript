@@ -64,7 +64,8 @@ func hasInferredType(node *ast.Node) bool {
 		ast.KindPropertyAssignment,
 		ast.KindShorthandPropertyAssignment,
 		ast.KindJSDocParameterTag,
-		ast.KindJSDocPropertyTag:
+		ast.KindJSDocPropertyTag,
+		ast.KindCommonJSExport:
 		return true
 	default:
 		// assertType<never>(node); // !!!

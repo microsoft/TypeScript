@@ -23,11 +23,22 @@
 -export namespace d {
 -    let e: number;
 -}
-+export var a = { x: "x" };
-+export var b = { x: "x" };
-+export var default = { x: "x" };
-+export var c = { x: "x" };
-+export var d = {};
-+export {};
++export declare var a: {
++    x: string;
++};
++declare const _exported: {
++    x: string;
++};
++export { _exported as "b" };
++declare const _exported_1: {
++    x: string;
++};
++export { _exported_1 as "default" };
++declare const _exported_2: {
++    x: string;
++};
++export { _exported_2 as "c" };
++declare const _exported_3: {};
++export { _exported_3 as "d" };
  //// [mod2.d.ts]
  export {};

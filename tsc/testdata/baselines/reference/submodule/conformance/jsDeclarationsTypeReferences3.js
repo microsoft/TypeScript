@@ -27,5 +27,4 @@ module.exports.A.B = {
 
 
 //// [index.d.ts]
-export var A = {};
-export {};
+export declare var A: {};

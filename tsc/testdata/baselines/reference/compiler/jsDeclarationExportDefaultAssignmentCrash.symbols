@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsDeclarationExportDefaultAssignmentCrash.ts] ////
+
+=== index.js ===
+exports.default = () => {
+>exports.default : Symbol(default, Decl(index.js, 0, 0))
+>exports : Symbol("index", Decl(index.js, 0, 0))
+>default : Symbol(default, Decl(index.js, 0, 0))
+
+    return 1234;
+}
+

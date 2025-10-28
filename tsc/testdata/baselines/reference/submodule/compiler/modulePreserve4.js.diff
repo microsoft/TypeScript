@@ -30,7 +30,7 @@
  //// [a.d.ts]
 -export const x: 0;
 +export declare const x = 0;
-+export var y = 0;
++export declare var y: number;
  //// [b.d.ts]
 -declare const _default: 0;
 +declare const _default: number;
@@ -50,18 +50,15 @@
  export default _default;
  //// [g.d.ts]
 -declare const _default: 0;
--export default _default;
-+export var default = 0;
-+export {};
++declare const _default: number;
+ export default _default;
  //// [main1.d.ts]
  export {};
- //// [main2.d.mts]
 @@= skipped -15, +15 lines =@@
  //// [main3.d.cts]
  export {};
  //// [main4.d.cts]
 -export const x: typeof import("./g");
-+export var x = require("./g");
-+export {};
++export declare var x: typeof import("./g");
  //// [dummy.d.ts]
  export {};

@@ -51,4 +51,4 @@ declare const _default: {
     };
 };
 export = _default;
-export var Another = Q;
+export declare var Another: typeof Q;

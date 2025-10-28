@@ -27,11 +27,10 @@
 -export const apply: "ok" | 1 | typeof a | undefined;
 -export { a as apply };
 -declare function a(): void;
-+export var apply = undefined;
-+export var apply = undefined;
-+export var apply = a;
-+export var apply = 'ok';
-+export var apply = 1;
-+export {};
++export declare var apply: undefined;
++export declare var apply: undefined;
++export declare var apply: undefined;
++export declare var apply: undefined;
++export declare var apply: undefined;
  //// [test.d.ts]
  export {};

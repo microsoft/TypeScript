@@ -26,4 +26,7 @@ module.exports.Strings = Strings;
 
 //// [cls.d.ts]
 export = Foo;
-export var Strings = Strings;
+export declare var Strings: {
+    a: string;
+    b: string;
+};
