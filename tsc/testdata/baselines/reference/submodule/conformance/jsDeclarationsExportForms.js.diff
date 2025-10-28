@@ -1,41 +1,6 @@
 --- old.jsDeclarationsExportForms.js
 +++ new.jsDeclarationsExportForms.js
-@@= skipped -110, +110 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Foo = void 0;
--var cls_1 = require("./cls");
-+const cls_1 = require("./cls");
- Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return cls_1.Foo; } });
- //// [bat.js]
- "use strict";
-@@= skipped -38, +38 lines =@@
-     };
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
--var ns = __importStar(require("./cls"));
-+const ns = __importStar(require("./cls"));
- exports.default = ns;
- //// [ban.js]
- "use strict";
-@@= skipped -39, +39 lines =@@
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.ns = void 0;
--var ns = __importStar(require("./cls"));
-+const ns = __importStar(require("./cls"));
- exports.ns = ns;
- //// [bol.js]
- "use strict";
-@@= skipped -39, +39 lines =@@
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.classContainer = void 0;
--var ns = __importStar(require("./cls"));
-+const ns = __importStar(require("./cls"));
- exports.classContainer = ns;
- //// [cjs.js]
- const ns = require("./cls");
+@@= skipped -233, +233 lines =@@
  module.exports = { ns };
  //// [cjs2.js]
  const ns = require("./cls");
@@ -55,7 +20,7 @@
  module.exports.names = ns;
  //// [includeAll.js]
  "use strict";
-@@= skipped -30, +37 lines =@@
+@@= skipped -23, +30 lines =@@
 
 
  //// [cls.d.ts]

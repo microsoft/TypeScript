@@ -45,7 +45,7 @@ var m;
 function f6(n = m) {
 >f6 : Symbol(f6, Decl(functionImplementationErrors.ts, 27, 6))
 >n : Symbol(n, Decl(functionImplementationErrors.ts, 29, 12))
->m : Symbol(m, Decl(functionImplementationErrors.ts, 30, 7))
+>m : Symbol(m, Decl(functionImplementationErrors.ts, 27, 3))
 
     var m = 4;
 >m : Symbol(m, Decl(functionImplementationErrors.ts, 30, 7))

@@ -1,0 +1,33 @@
+// === findAllReferences ===
+// === /b.ts ===
+// import { x } from "/*FIND ALL REFS*/[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("[|../a|]");
+
+// === /d.ts ===
+//  /// <reference path="[|./a.ts|]" />
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import { x } from "[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("/*FIND ALL REFS*/[|../a|]");
+
+// === /d.ts ===
+//  /// <reference path="[|./a.ts|]" />
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import { x } from "[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("[|../a|]");
+
+// === /d.ts ===
+//  /// <reference path="/*FIND ALL REFS*/[|./a.ts|]" />

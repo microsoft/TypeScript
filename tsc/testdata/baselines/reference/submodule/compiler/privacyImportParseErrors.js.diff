@@ -70,16 +70,7 @@
  exports.glo_im1_private_v1_public = glo_im1_private.c1;
  exports.glo_im1_private_v2_public = new glo_im1_private.c1();
  exports.glo_im1_private_v3_public = glo_im1_private.f1;
-@@= skipped -9, +8 lines =@@
- var glo_im1_private_v2_private = new glo_im1_private.c1();
- var glo_im1_private_v3_private = glo_im1_private.f1;
- var glo_im1_private_v4_private = glo_im1_private.f1();
--var glo_im2_private = require("glo_M2_public");
-+const glo_im2_private = require("glo_M2_public");
- exports.glo_im2_private_v1_public = glo_im2_private.c1;
- exports.glo_im2_private_v2_public = new glo_im2_private.c1();
- exports.glo_im2_private_v3_public = glo_im2_private.f1;
-@@= skipped -9, +9 lines =@@
+@@= skipped -18, +17 lines =@@
  var glo_im2_private_v2_private = new glo_im2_private.c1();
  var glo_im2_private_v3_private = glo_im2_private.f1;
  var glo_im2_private_v4_private = glo_im2_private.f1();
@@ -87,16 +78,7 @@
  exports.glo_im3_private_v1_public = glo_im3_private.c1;
  exports.glo_im3_private_v2_public = new glo_im3_private.c1();
  exports.glo_im3_private_v3_public = glo_im3_private.f1;
-@@= skipped -9, +8 lines =@@
- var glo_im3_private_v2_private = new glo_im3_private.c1();
- var glo_im3_private_v3_private = glo_im3_private.f1;
- var glo_im3_private_v4_private = glo_im3_private.f1();
--var glo_im4_private = require("glo_M4_private");
-+const glo_im4_private = require("glo_M4_private");
- exports.glo_im4_private_v1_public = glo_im4_private.c1;
- exports.glo_im4_private_v2_public = new glo_im4_private.c1();
- exports.glo_im4_private_v3_public = glo_im4_private.f1;
-@@= skipped -9, +9 lines =@@
+@@= skipped -18, +17 lines =@@
  var glo_im4_private_v2_private = new glo_im4_private.c1();
  var glo_im4_private_v3_private = glo_im4_private.f1;
  var glo_im4_private_v4_private = glo_im4_private.f1();

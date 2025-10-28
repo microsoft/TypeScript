@@ -1,12 +1,6 @@
 --- old.exportNamespace_js.js
 +++ new.exportNamespace_js.js
-@@= skipped -23, +23 lines =@@
- //// [c.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var b_1 = require("./b");
-+const b_1 = require("./b");
- A;
+@@= skipped -28, +28 lines =@@
 
 
  //// [a.d.ts]

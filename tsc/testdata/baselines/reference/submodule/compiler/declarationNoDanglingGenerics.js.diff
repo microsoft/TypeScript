@@ -13,25 +13,19 @@
 -        },
 -        _a.THE_KIND = kind,
 -        _a;
--}
--let Kinds = (() => {
--    class Kinds {
--    }
--    Kinds.A = "A";
--    Kinds.B = "B";
--    Kinds.C = "C";
--    return Kinds;
--})();
 +    return class {
 +        static THE_KIND = kind;
 +        kind = kind;
 +    };
-+}
-+class Kinds {
+ }
+ class Kinds {
 +    static A = "A";
 +    static B = "B";
 +    static C = "C";
-+}
+ }
+-Kinds.A = "A";
+-Kinds.B = "B";
+-Kinds.C = "C";
  class AKind extends ClassFactory(Kinds.A) {
  }
  exports.AKind = AKind;

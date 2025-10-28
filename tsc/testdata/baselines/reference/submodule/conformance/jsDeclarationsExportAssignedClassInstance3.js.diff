@@ -4,21 +4,16 @@
  module.exports.additional = 20;
 
  //// [index.js]
--let Foo = (() => {
--    class Foo {
--        constructor() {
--            this.member = 10;
--        }
--    }
--    Foo.stat = 10;
--    return Foo;
--})();
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
-+class Foo {
+ class Foo {
+-    constructor() {
+-        this.member = 10;
+-    }
 +    static stat = 10;
 +    member = 10;
-+}
+ }
+-Foo.stat = 10;
 +export = new Foo();
  module.exports = new Foo();
 +export var additional = 20;

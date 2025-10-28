@@ -15,17 +15,11 @@
      class S {
          decorator(target, key) { }
      }
--    let C = (() => {
--        class C extends S {
--            method() { }
--        }
--        __decorate([
--            (super.decorator)
--        ], C.prototype, "method", null);
--        return C;
--    })();
-+    class C extends S {
+     class C extends S {
 +        @(super.decorator)
-+        method() { }
-+    }
+         method() { }
+     }
+-    __decorate([
+-        (super.decorator)
+-    ], C.prototype, "method", null);
  })(M || (M = {}));

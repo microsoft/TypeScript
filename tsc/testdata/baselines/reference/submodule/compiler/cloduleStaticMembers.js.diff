@@ -1,20 +1,14 @@
 --- old.cloduleStaticMembers.js
 +++ new.cloduleStaticMembers.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
 
  //// [cloduleStaticMembers.js]
--let Clod = (() => {
--    class Clod {
--    }
--    Clod.x = 10;
--    Clod.y = 10;
--    return Clod;
--})();
-+class Clod {
+ class Clod {
 +    static x = 10;
 +    static y = 10;
-+}
+ }
+-Clod.x = 10;
+-Clod.y = 10;
  (function (Clod) {
      var p = Clod.x;
      var q = x;

@@ -1,12 +1,10 @@
-superPropertyAccess.ts(21,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(21,15): error TS2855: Class field 'm2' defined by the parent class is not accessible in the child class via super.
 superPropertyAccess.ts(23,15): error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
-superPropertyAccess.ts(25,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-superPropertyAccess.ts(27,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-superPropertyAccess.ts(31,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-superPropertyAccess.ts(33,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(25,24): error TS2855: Class field 'd1' defined by the parent class is not accessible in the child class via super.
+superPropertyAccess.ts(27,24): error TS2855: Class field 'd2' defined by the parent class is not accessible in the child class via super.
 
 
-==== superPropertyAccess.ts (6 errors) ====
+==== superPropertyAccess.ts (4 errors) ====
     class MyBase {
         m1(a: string) { return a; }
         private p1() { }
@@ -29,7 +27,7 @@ superPropertyAccess.ts(33,23): error TS2340: Only public and protected methods o
     
             super.m2.bind(this);                                // Should error, instance property, not a public instance member function
                   ~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'm2' defined by the parent class is not accessible in the child class via super.
     
             super.p1();                                         // Should error, private not public instance member function
                   ~~
@@ -37,20 +35,16 @@ superPropertyAccess.ts(33,23): error TS2340: Only public and protected methods o
     
             var l1 = super.d1;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'd1' defined by the parent class is not accessible in the child class via super.
     
             var l1 = super.d2;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'd2' defined by the parent class is not accessible in the child class via super.
     
             super.m1 = function (a: string) { return ""; };     // Should be allowed, we will not restrict assignment
     
             super.value = 0;                                    // Should error, instance data property not a public instance member function
-                  ~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             
             var z = super.value;                                // Should error, instance data property not a public instance member function
-                          ~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     }

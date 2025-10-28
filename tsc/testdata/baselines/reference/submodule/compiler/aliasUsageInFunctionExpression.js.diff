@@ -8,18 +8,3 @@
  }
  exports.Model = Model;
  //// [aliasUsageInFunctionExpression_moduleA.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.VisualizationModel = void 0;
--var Backbone = require("./aliasUsageInFunctionExpression_backbone");
-+const Backbone = require("./aliasUsageInFunctionExpression_backbone");
- class VisualizationModel extends Backbone.Model {
- }
- exports.VisualizationModel = VisualizationModel;
- //// [aliasUsageInFunctionExpression_main.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var moduleA = require("./aliasUsageInFunctionExpression_moduleA");
-+const moduleA = require("./aliasUsageInFunctionExpression_moduleA");
- var f = (x) => x;
- f = (x) => moduleA;

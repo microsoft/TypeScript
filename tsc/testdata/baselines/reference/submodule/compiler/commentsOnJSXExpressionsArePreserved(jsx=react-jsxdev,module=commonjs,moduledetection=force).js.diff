@@ -1,11 +1,6 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=force).js
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=force).js
-@@= skipped -24, +24 lines =@@
- //// [commentsOnJSXExpressionsArePreserved.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+@@= skipped -28, +28 lines =@@
  const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
  class Component {
      render() {

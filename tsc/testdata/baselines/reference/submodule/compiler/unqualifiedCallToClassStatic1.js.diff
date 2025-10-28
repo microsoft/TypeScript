@@ -1,18 +1,15 @@
 --- old.unqualifiedCallToClassStatic1.js
 +++ new.unqualifiedCallToClassStatic1.js
-@@= skipped -8, +8 lines =@@
- }
+@@= skipped -9, +9 lines =@@
 
  //// [unqualifiedCallToClassStatic1.js]
--let Vector = (() => {
--    class Vector {
--    }
--    Vector.foo = () => {
-+class Vector {
+ class Vector {
 +    static foo = () => {
-         // 'foo' cannot be called in an unqualified manner.
-         foo();
-     };
--    return Vector;
--})();
-+}
++        // 'foo' cannot be called in an unqualified manner.
++        foo();
++    };
+ }
+-Vector.foo = () => {
+-    // 'foo' cannot be called in an unqualified manner.
+-    foo();
+-};

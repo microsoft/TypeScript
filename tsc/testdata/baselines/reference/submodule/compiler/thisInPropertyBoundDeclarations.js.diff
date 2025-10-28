@@ -1,29 +1,24 @@
 --- old.thisInPropertyBoundDeclarations.js
 +++ new.thisInPropertyBoundDeclarations.js
-@@= skipped -69, +69 lines =@@
- }
+@@= skipped -70, +70 lines =@@
 
  //// [thisInPropertyBoundDeclarations.js]
--let Bug = (() => {
--    class Bug {
--        foo(name) {
--            this.name = name;
--        }
--    }
--    Bug.func = [
-+class Bug {
+ class Bug {
 +    name;
 +    static func = [
-         (that, name) => {
-             that.foo(name);
-         }
-     ];
--    return Bug;
--})();
-+    foo(name) {
-+        this.name = name;
-+    }
-+}
++        (that, name) => {
++            that.foo(name);
++        }
++    ];
+     foo(name) {
+         this.name = name;
+     }
+ }
+-Bug.func = [
+-    (that, name) => {
+-        that.foo(name);
+-    }
+-];
  // Valid use of this in a property bound decl
  class A {
 -    constructor() {

@@ -15,17 +15,12 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--let C = (() => {
--    class C {
--    }
--    __decorate([
--        Decorate,
--        __metadata("design:type", Object)
--    ], C.prototype, "member", void 0);
--    return C;
--})();
-+class C {
+ class C {
 +    @Decorate
 +    member;
-+}
+ }
  exports.C = C;
+-__decorate([
+-    Decorate,
+-    __metadata("design:type", Object)
+-], C.prototype, "member", void 0);

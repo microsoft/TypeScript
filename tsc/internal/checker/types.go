@@ -1210,20 +1210,6 @@ const (
 type TypeComparer func(s *Type, t *Type, reportErrors bool) Ternary
 
 type LanguageFeatureMinimumTargetMap struct {
-	Classes                           core.ScriptTarget
-	ForOf                             core.ScriptTarget
-	Generators                        core.ScriptTarget
-	Iteration                         core.ScriptTarget
-	SpreadElements                    core.ScriptTarget
-	RestElements                      core.ScriptTarget
-	TaggedTemplates                   core.ScriptTarget
-	DestructuringAssignment           core.ScriptTarget
-	BindingPatterns                   core.ScriptTarget
-	ArrowFunctions                    core.ScriptTarget
-	BlockScopedVariables              core.ScriptTarget
-	ObjectAssign                      core.ScriptTarget
-	RegularExpressionFlagsUnicode     core.ScriptTarget
-	RegularExpressionFlagsSticky      core.ScriptTarget
 	Exponentiation                    core.ScriptTarget
 	AsyncFunctions                    core.ScriptTarget
 	ForAwaitOf                        core.ScriptTarget
@@ -1247,20 +1233,6 @@ type LanguageFeatureMinimumTargetMap struct {
 }
 
 var LanguageFeatureMinimumTarget = LanguageFeatureMinimumTargetMap{
-	Classes:                           core.ScriptTargetES2015,
-	ForOf:                             core.ScriptTargetES2015,
-	Generators:                        core.ScriptTargetES2015,
-	Iteration:                         core.ScriptTargetES2015,
-	SpreadElements:                    core.ScriptTargetES2015,
-	RestElements:                      core.ScriptTargetES2015,
-	TaggedTemplates:                   core.ScriptTargetES2015,
-	DestructuringAssignment:           core.ScriptTargetES2015,
-	BindingPatterns:                   core.ScriptTargetES2015,
-	ArrowFunctions:                    core.ScriptTargetES2015,
-	BlockScopedVariables:              core.ScriptTargetES2015,
-	ObjectAssign:                      core.ScriptTargetES2015,
-	RegularExpressionFlagsUnicode:     core.ScriptTargetES2015,
-	RegularExpressionFlagsSticky:      core.ScriptTargetES2015,
 	Exponentiation:                    core.ScriptTargetES2016,
 	AsyncFunctions:                    core.ScriptTargetES2017,
 	ForAwaitOf:                        core.ScriptTargetES2018,

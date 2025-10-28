@@ -1,23 +1,19 @@
 --- old.computedPropertyNames12_ES5.js
 +++ new.computedPropertyNames12_ES5.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -18, +18 lines =@@
+ }
+
+ //// [computedPropertyNames12_ES5.js]
+-var _a, _b, _c;
  var s;
  var n;
  var a;
--let C = (() => {
--    var _a, _b, _c;
--    class C {
--        constructor() {
--            this[_a] = n;
--            this[_b] = 2;
--            this[`hello bye`] = 0;
--        }
+ class C {
+-    constructor() {
+-        this[_a] = n;
+-        this[_b] = 2;
+-        this[`hello bye`] = 0;
 -    }
--    _a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
--    C[_c] = 0;
--    return C;
--})();
-+class C {
 +    [s];
 +    [n] = n;
 +    static [s + s];
@@ -29,4 +25,6 @@
 +    static [true];
 +    [`hello bye`] = 0;
 +    static [`hello ${a} bye`] = 0;
-+}
+ }
+-_a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
+-C[_c] = 0;

@@ -16,5 +16,5 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 };
-const a = jsx_runtime_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
-const b = react_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
+const a = jsx_runtime_1.jsx("div", Object.assign({}, props, { children: "text" }), "foo");
+const b = react_1.createElement("div", Object.assign({}, props, { key: "bar" }), "text");

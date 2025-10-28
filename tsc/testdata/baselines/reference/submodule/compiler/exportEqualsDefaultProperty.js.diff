@@ -1,9 +1,0 @@
---- old.exportEqualsDefaultProperty.js
-+++ new.exportEqualsDefaultProperty.js
-@@= skipped -25, +25 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var exp_1 = __importDefault(require("./exp"));
-+const exp_1 = __importDefault(require("./exp"));
- exp_1.default.toExponential(2);

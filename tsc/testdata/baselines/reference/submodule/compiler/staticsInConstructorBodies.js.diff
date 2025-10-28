@@ -1,20 +1,10 @@
 --- old.staticsInConstructorBodies.js
 +++ new.staticsInConstructorBodies.js
-@@= skipped -8, +8 lines =@@
- }
-
- //// [staticsInConstructorBodies.js]
--let C = (() => {
--    class C {
--        constructor() {
--        }
--        static m1() { } // ERROR
-+class C {
-+    constructor() {
+@@= skipped -11, +11 lines =@@
+ class C {
+     constructor() {
      }
--    C.p1 = 0; // ERROR
--    return C;
--})();
 +    static p1 = 0; // ERROR
-+    static m1() { } // ERROR
-+}
+     static m1() { } // ERROR
+ }
+-C.p1 = 0; // ERROR

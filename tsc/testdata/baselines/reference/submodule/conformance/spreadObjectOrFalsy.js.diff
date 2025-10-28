@@ -5,11 +5,11 @@
 
  //// [spreadObjectOrFalsy.js]
 -"use strict";
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -36, +35 lines =@@
-     return __assign({}, z);
+ function f1(a) {
+     return Object.assign({}, a); // Error
+ }
+@@= skipped -25, +24 lines =@@
+     return Object.assign({}, z);
  }
  class Foo {
 +    data;

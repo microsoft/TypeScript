@@ -1,17 +1,11 @@
 --- old.staticMemberInitialization.js
 +++ new.staticMemberInitialization.js
-@@= skipped -8, +8 lines =@@
- var r = C.x;
+@@= skipped -9, +9 lines =@@
 
  //// [staticMemberInitialization.js]
--let C = (() => {
--    class C {
--    }
--    C.x = 1;
--    return C;
--})();
-+class C {
+ class C {
 +    static x = 1;
-+}
+ }
+-C.x = 1;
  var c = new C();
  var r = C.x;

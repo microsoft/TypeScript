@@ -1,11 +1,8 @@
 --- old.jsxInferenceProducesLiteralAsExpected.js
 +++ new.jsxInferenceProducesLiteralAsExpected.js
-@@= skipped -20, +20 lines =@@
- //// [jsxInferenceProducesLiteralAsExpected.js]
- "use strict";
+@@= skipped -22, +22 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
--var React = require("react");
-+const React = require("react");
+ const React = require("react");
  class TestObject {
 -    constructor() {
 -        this.a = '';

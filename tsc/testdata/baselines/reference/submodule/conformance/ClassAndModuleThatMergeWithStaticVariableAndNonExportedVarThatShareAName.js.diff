@@ -1,50 +1,33 @@
 --- old.ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.js
 +++ new.ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.js
-@@= skipped -24, +24 lines =@@
- }
+@@= skipped -25, +25 lines =@@
 
  //// [ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.js]
--let Point = (() => {
--    class Point {
--        constructor(x, y) {
--            this.x = x;
--            this.y = y;
--        }
-+class Point {
+ class Point {
 +    x;
 +    y;
-+    constructor(x, y) {
-+        this.x = x;
-+        this.y = y;
+     constructor(x, y) {
+         this.x = x;
+         this.y = y;
      }
--    Point.Origin = { x: 0, y: 0 };
--    return Point;
--})();
 +    static Origin = { x: 0, y: 0 };
-+}
+ }
+-Point.Origin = { x: 0, y: 0 };
  (function (Point) {
      var Origin = ""; // not an error, since not exported
  })(Point || (Point = {}));
  var A;
  (function (A) {
--    let Point = (() => {
--        class Point {
--            constructor(x, y) {
--                this.x = x;
--                this.y = y;
--            }
-+    class Point {
+     class Point {
 +        x;
 +        y;
-+        constructor(x, y) {
-+            this.x = x;
-+            this.y = y;
+         constructor(x, y) {
+             this.x = x;
+             this.y = y;
          }
--        Point.Origin = { x: 0, y: 0 };
--        return Point;
--    })();
 +        static Origin = { x: 0, y: 0 };
-+    }
+     }
+-    Point.Origin = { x: 0, y: 0 };
      A.Point = Point;
      (function (Point) {
          var Origin = ""; // not an error since not exported

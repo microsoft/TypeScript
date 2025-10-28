@@ -1,22 +1,17 @@
 --- old.classStaticBlock9(target=es5).js
 +++ new.classStaticBlock9(target=es5).js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
 
  //// [classStaticBlock9.js]
--let A = (() => {
--    class A {
--    }
--    A.bar = A.foo + 1;
--    (() => {
-+class A {
+ class A {
 +    static bar = A.foo + 1;
 +    static {
-         A.foo + 2;
--    })();
--    A.foo = 1;
--    return A;
--})();
++        A.foo + 2;
 +    }
 +    static foo = 1;
-+}
+ }
+-A.bar = A.foo + 1;
+-(() => {
+-    A.foo + 2;
+-})();
+-A.foo = 1;

@@ -1,15 +1,6 @@
 --- old.tsxSpreadAttributesResolution5.js
 +++ new.tsxSpreadAttributesResolution5.js
-@@= skipped -37, +37 lines =@@
- //// [file.jsx]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var React = require("react");
-+const React = require("react");
- class Poisoned extends React.Component {
-     render() {
-         return <div>Hello</div>;
-@@= skipped -16, +16 lines =@@
+@@= skipped -53, +53 lines =@@
      render() {
          return <div>Default hi</div>;
      }

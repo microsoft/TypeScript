@@ -2,7 +2,6 @@
 +++ new.errorOnFunctionReturnType.errors.txt
 @@= skipped -0, +0 lines =@@
 -foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
--foo.js(11,12): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +foo.js(6,12): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
  foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
 -foo.js(16,60): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
@@ -18,7 +17,7 @@
 -foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachable end point.
 -
 -
--==== foo.js (10 errors) ====
+-==== foo.js (9 errors) ====
 +foo.js(40,29): error TS2534: A function returning 'never' cannot have a reachable end point.
 +foo.js(45,5): error TS2322: Type '() => void' is not assignable to type 'FunctionReturningNever'.
 +  Type 'void' is not assignable to type 'never'.
@@ -39,13 +38,7 @@
          console.log("Nope");
      }
      
-     /** @type {FunctionReturningPromise} */
--               ~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     async function testPromise2() {
-         return "asd";
-         ~~~~~~
-@@= skipped -32, +30 lines =@@
+@@= skipped -29, +30 lines =@@
      }
      
      var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
@@ -78,7 +71,7 @@
 -    /** @type {FunctionReturningNever} */
                 ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
--!!! related TS1055 foo.js:27:14: Type 'never' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+-!!! related TS1064 foo.js:27:14: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<never>'?
 +!!! error TS2534: A function returning 'never' cannot have a reachable end point.
 +    function testNever1() {
 +    

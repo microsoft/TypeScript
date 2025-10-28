@@ -1,27 +1,19 @@
 --- old.genericClassWithStaticsUsingTypeArguments.js
 +++ new.genericClassWithStaticsUsingTypeArguments.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [genericClassWithStaticsUsingTypeArguments.js]
  // Should be error to use 'T' in all declarations within Foo.
--let Foo = (() => {
--    class Foo {
--        static f(xs) {
--            return xs.reverse();
--        }
-+class Foo {
+ class Foo {
 +    static a = (n) => { };
 +    static b;
 +    static c = [];
 +    static d = false || ((x) => x || undefined)(null);
 +    static e = function (x) { return null; };
-+    static f(xs) {
-+        return xs.reverse();
+     static f(xs) {
+         return xs.reverse();
      }
--    Foo.a = (n) => { };
--    Foo.c = [];
--    Foo.d = false || ((x) => x || undefined)(null);
--    Foo.e = function (x) { return null; };
--    return Foo;
--})();
-+}
+ }
+-Foo.a = (n) => { };
+-Foo.c = [];
+-Foo.d = false || ((x) => x || undefined)(null);
+-Foo.e = function (x) { return null; };

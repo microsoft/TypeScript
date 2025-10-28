@@ -1,9 +1,0 @@
---- old.satisfiesEmit.js
-+++ new.satisfiesEmit.js
-@@= skipped -9, +9 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- // This import should not be elided in the emitted JS
--var a = require("foo");
-+const a = require("foo");
- const p = a;

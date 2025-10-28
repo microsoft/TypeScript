@@ -548,17 +548,7 @@ func (f *NodeFactory) NewDisposeResourcesHelper(envBinding *ast.Expression) *ast
 // !!! ES2018 Helpers
 // Chains a sequence of expressions using the __assign helper or Object.assign if available in the target
 func (f *NodeFactory) NewAssignHelper(attributesSegments []*ast.Expression, scriptTarget core.ScriptTarget) *ast.Expression {
-	if scriptTarget >= core.ScriptTargetES2015 {
-		return f.NewCallExpression(f.NewPropertyAccessExpression(f.NewIdentifier("Object"), nil, f.NewIdentifier("assign"), ast.NodeFlagsNone), nil, nil, f.NewNodeList(attributesSegments), ast.NodeFlagsNone)
-	}
-	f.emitContext.RequestEmitHelper(assignHelper)
-	return f.NewCallExpression(
-		f.NewUnscopedHelperName("__assign"),
-		nil,
-		nil,
-		f.NewNodeList(attributesSegments),
-		ast.NodeFlagsNone,
-	)
+	return f.NewCallExpression(f.NewPropertyAccessExpression(f.NewIdentifier("Object"), nil, f.NewIdentifier("assign"), ast.NodeFlagsNone), nil, nil, f.NewNodeList(attributesSegments), ast.NodeFlagsNone)
 }
 
 // ES2018 Destructuring Helpers

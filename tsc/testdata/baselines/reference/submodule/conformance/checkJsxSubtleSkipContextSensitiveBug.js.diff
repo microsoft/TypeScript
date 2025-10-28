@@ -15,8 +15,7 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = __importStar(require("react"));
-+const React = __importStar(require("react"));
+ const React = __importStar(require("react"));
  class AsyncLoader extends React.Component {
      render() { return null; }
  }

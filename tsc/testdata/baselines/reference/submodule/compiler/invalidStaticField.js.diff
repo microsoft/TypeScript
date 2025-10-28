@@ -1,15 +1,9 @@
 --- old.invalidStaticField.js
 +++ new.invalidStaticField.js
-@@= skipped -7, +7 lines =@@
- class A {
+@@= skipped -8, +8 lines =@@
      foo() { return B.NULL; }
  }
--let B = (() => {
--    class B {
--    }
--    B.NOT_NULL = new B();
--    return B;
--})();
-+class B {
+ class B {
 +    static NOT_NULL = new B();
-+}
+ }
+-B.NOT_NULL = new B();

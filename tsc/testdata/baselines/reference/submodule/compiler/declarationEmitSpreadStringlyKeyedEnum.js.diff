@@ -1,6 +1,6 @@
 --- old.declarationEmitSpreadStringlyKeyedEnum.js
 +++ new.declarationEmitSpreadStringlyKeyedEnum.js
-@@= skipped -43, +43 lines =@@
+@@= skipped -32, +32 lines =@@
  }
  export declare const SpotifyAgeGroupEnum: {
      [x: number]: string;

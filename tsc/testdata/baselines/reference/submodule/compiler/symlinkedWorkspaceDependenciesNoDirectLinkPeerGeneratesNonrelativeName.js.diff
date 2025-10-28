@@ -1,12 +1,6 @@
 --- old.symlinkedWorkspaceDependenciesNoDirectLinkPeerGeneratesNonrelativeName.js
 +++ new.symlinkedWorkspaceDependenciesNoDirectLinkPeerGeneratesNonrelativeName.js
-@@= skipped -65, +65 lines =@@
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.a = void 0;
--var pkg = __importStar(require("package-b"));
-+const pkg = __importStar(require("package-b"));
- exports.a = pkg.invoke();
+@@= skipped -70, +70 lines =@@
 
 
  //// [index.d.ts]

@@ -1,17 +1,6 @@
 --- old.declarationEmitAliasInlineing.js
 +++ new.declarationEmitAliasInlineing.js
-@@= skipped -45, +45 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.fExp = exports.f = void 0;
--var a_1 = require("./a");
--var aExp_1 = require("./aExp");
-+const a_1 = require("./a");
-+const aExp_1 = require("./aExp");
- exports.f = a_1.fn;
- exports.fExp = aExp_1.fnExp;
-
-@@= skipped -11, +11 lines =@@
+@@= skipped -56, +56 lines =@@
      prop: string;
      prop2: string;
  };

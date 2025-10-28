@@ -5817,6 +5817,7 @@ func (c *Checker) getIteratedTypeOrElementType(use IterationUse, inputType *Type
 		}
 		return nil
 	}
+	// TODO: remove ScriptTargetES2015
 	uplevelIteration := c.languageVersion >= core.ScriptTargetES2015
 	downlevelIteration := !uplevelIteration && c.compilerOptions.DownlevelIteration == core.TSTrue
 	possibleOutOfBounds := c.compilerOptions.NoUncheckedIndexedAccess == core.TSTrue && use&IterationUsePossiblyOutOfBounds != 0
@@ -7675,10 +7676,6 @@ func (c *Checker) checkSuperExpression(node *ast.Node) *Type {
 	// 	c.captureLexicalThis(node.Parent, container)
 	// }
 	if container.Parent.Kind == ast.KindObjectLiteralExpression {
-		if c.languageVersion < core.ScriptTargetES2015 {
-			c.error(node, diagnostics.X_super_is_only_allowed_in_members_of_object_literal_expressions_when_option_target_is_ES2015_or_higher)
-			return c.errorType
-		}
 		// for object literal assume that type of 'super' is 'any'
 		return c.anyType
 	}
@@ -11343,14 +11340,6 @@ func (c *Checker) checkPropertyAccessibilityAtLocation(location *ast.Node, isSup
 		// - In a static member function or static member accessor
 		//   where this references the constructor function object of a derived class,
 		//   a super property access is permitted and must specify a public static member function of the base class.
-		if c.languageVersion < core.ScriptTargetES2015 {
-			if c.symbolHasNonMethodDeclaration(prop) {
-				if errorNode != nil {
-					c.error(errorNode, diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword)
-				}
-				return false
-			}
-		}
 		if flags&ast.ModifierFlagsAbstract != 0 {
 			// A method cannot be accessed in a super property access if the method is abstract.
 			// This error could mask a private property access error. But, a member
@@ -17356,6 +17345,7 @@ func (c *Checker) getTypeFromArrayBindingPattern(pattern *ast.Node, includePatte
 		restElement = lastElement
 	}
 	if len(elements) == 0 || len(elements) == 1 && restElement != nil {
+		// TODO: remove ScriptTargetES2015
 		if c.languageVersion >= core.ScriptTargetES2015 {
 			return c.createIterableType(c.anyType)
 		}

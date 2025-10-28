@@ -1,11 +1,7 @@
 --- old.enumNoInitializerFollowsNonLiteralInitializer.js
 +++ new.enumNoInitializerFollowsNonLiteralInitializer.js
-@@= skipped -48, +48 lines =@@
- //// [bad.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var helpers_1 = require("./helpers");
-+const helpers_1 = require("./helpers");
+@@= skipped -51, +51 lines =@@
+ const helpers_1 = require("./helpers");
  var A;
  (function (A) {
 -    A[A["a"] = 2] = "a";
@@ -21,9 +17,8 @@
  })(A || (A = {}));
  //// [good.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var helpers_1 = require("./helpers");
-+const helpers_1 = require("./helpers");
+@@= skipped -12, +13 lines =@@
+ const helpers_1 = require("./helpers");
  var A;
  (function (A) {
 -    A[A["a"] = 2] = "a";

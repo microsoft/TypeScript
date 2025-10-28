@@ -1,5 +1,5 @@
-parserAstSpans1.ts(111,25): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+parserAstSpans1.ts(111,25): error TS2855: Class field 'c2_p1' defined by the parent class is not accessible in the child class via super.
+parserAstSpans1.ts(217,24): error TS2855: Class field 'b' defined by the parent class is not accessible in the child class via super.
 
 
 ==== parserAstSpans1.ts (2 errors) ====
@@ -115,7 +115,7 @@ parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of t
             super(10);
             this.p1 = super.c2_p1;
                             ~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'c2_p1' defined by the parent class is not accessible in the child class via super.
         }
         /** c3 p1*/
         public p1: number;
@@ -223,6 +223,6 @@ parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of t
             super();
             this.d = super.b;
                            ~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'b' defined by the parent class is not accessible in the child class via super.
         }
     }

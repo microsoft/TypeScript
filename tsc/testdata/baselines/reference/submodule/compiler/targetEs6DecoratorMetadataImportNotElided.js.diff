@@ -14,23 +14,15 @@
 -    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 -};
 -import { Input, TemplateRef } from './deps';
--let MyComponent = (() => {
--    class MyComponent {
--        get ref() { return this._ref; }
--        set ref(value) { this._ref = value; }
--    }
--    __decorate([
--        Input(),
--        __metadata("design:type", TemplateRef),
--        __metadata("design:paramtypes", [TemplateRef])
--    ], MyComponent.prototype, "ref", null);
--    return MyComponent;
--})();
--export { MyComponent };
 +import { Input } from './deps';
-+export class MyComponent {
+ export class MyComponent {
 +    _ref;
 +    @Input()
-+    get ref() { return this._ref; }
-+    set ref(value) { this._ref = value; }
-+}
+     get ref() { return this._ref; }
+     set ref(value) { this._ref = value; }
+ }
+-__decorate([
+-    Input(),
+-    __metadata("design:type", TemplateRef),
+-    __metadata("design:paramtypes", [TemplateRef])
+-], MyComponent.prototype, "ref", null);

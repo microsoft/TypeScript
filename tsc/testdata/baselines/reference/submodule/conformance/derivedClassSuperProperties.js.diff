@@ -97,14 +97,11 @@
  class DerivedWithDecoratorOnClass extends Base {
 +    prop = true;
      constructor() {
--        let InnerClass = (() => {
--            let InnerClass = class InnerClass {
--            };
--            InnerClass = __decorate([
--                decorate(this)
--            ], InnerClass);
--            return InnerClass;
--        })();
+-        let InnerClass = class InnerClass {
+-        };
+-        InnerClass = __decorate([
+-            decorate(this)
+-        ], InnerClass);
 +        @decorate(this)
 +        class InnerClass {
 +        }
@@ -115,19 +112,13 @@
  class DerivedWithDecoratorOnClassMethod extends Base {
 +    prop = true;
      constructor() {
--        let InnerClass = (() => {
--            class InnerClass {
--                innerMethod() { }
--            }
--            __decorate([
--                decorate(this)
--            ], InnerClass.prototype, "innerMethod", null);
--            return InnerClass;
--        })();
-+        class InnerClass {
+         class InnerClass {
 +            @decorate(this)
-+            innerMethod() { }
-+        }
+             innerMethod() { }
+         }
+-        __decorate([
+-            decorate(this)
+-        ], InnerClass.prototype, "innerMethod", null);
          super();
 -        this.prop = true;
      }
@@ -135,21 +126,16 @@
  class DerivedWithDecoratorOnClassProperty extends Base {
 +    prop = true;
      constructor() {
--        let InnerClass = (() => {
--            class InnerClass {
--                constructor() {
--                    this.innerProp = true;
--                }
+         class InnerClass {
+-            constructor() {
+-                this.innerProp = true;
 -            }
--            __decorate([
--                decorate(this)
--            ], InnerClass.prototype, "innerProp", void 0);
--            return InnerClass;
--        })();
-+        class InnerClass {
 +            @decorate(this)
 +            innerProp = true;
-+        }
+         }
+-        __decorate([
+-            decorate(this)
+-        ], InnerClass.prototype, "innerProp", void 0);
          super();
 -        this.prop = true;
      }
@@ -297,7 +283,7 @@
      constructor() {
          console.log(new class extends Base {
              constructor() {
-@@= skipped -255, +233 lines =@@
+@@= skipped -246, +233 lines =@@
              }
          }());
          super();

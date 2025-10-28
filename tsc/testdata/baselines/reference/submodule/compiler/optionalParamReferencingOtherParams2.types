@@ -6,16 +6,16 @@ var a = 1;
 >1 : 1
 
 function strange(x = a, y = b) { 
->strange : (x?: number, y?: string) => string
+>strange : (x?: number, y?: any) => any
 >x : number
 >a : number
->y : string
->b : string
+>y : any
+>b : any
 
     var b = "";
 >b : string
 >"" : ""
 
     return y;
->y : string
+>y : any
 }

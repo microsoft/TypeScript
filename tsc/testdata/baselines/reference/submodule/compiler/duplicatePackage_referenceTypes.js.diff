@@ -1,9 +1,0 @@
---- old.duplicatePackage_referenceTypes.js
-+++ new.duplicatePackage_referenceTypes.js
-@@= skipped -59, +59 lines =@@
-     };
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
--var a = __importStar(require("a"));
-+const a = __importStar(require("a"));
- let foo = a.foo;

@@ -1,15 +1,9 @@
 --- old.staticMemberAccessOffDerivedType1.js
 +++ new.staticMemberAccessOffDerivedType1.js
-@@= skipped -16, +16 lines =@@
-         return 2;
+@@= skipped -17, +17 lines =@@
      }
  }
--let P = (() => {
--    class P extends SomeBase {
--    }
--    P.SomeNumber = P.GetNumber();
--    return P;
--})();
-+class P extends SomeBase {
+ class P extends SomeBase {
 +    static SomeNumber = P.GetNumber();
-+}
+ }
+-P.SomeNumber = P.GetNumber();

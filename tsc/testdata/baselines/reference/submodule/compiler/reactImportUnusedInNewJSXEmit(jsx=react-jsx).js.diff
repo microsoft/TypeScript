@@ -1,11 +1,8 @@
 --- old.reactImportUnusedInNewJSXEmit(jsx=react-jsx).js
 +++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsx).js
-@@= skipped -16, +16 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -18, +18 lines =@@
  exports.Foo = Foo;
--var jsx_runtime_1 = require("react/jsx-runtime");
-+const jsx_runtime_1 = require("react/jsx-runtime");
+ const jsx_runtime_1 = require("react/jsx-runtime");
  function Bar() {
 -    return (0, jsx_runtime_1.jsx)("div", {});
 +    return jsx_runtime_1.jsx("div", {});

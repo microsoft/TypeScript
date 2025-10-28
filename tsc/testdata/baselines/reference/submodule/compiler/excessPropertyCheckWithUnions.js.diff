@@ -5,6 +5,6 @@
 
  //// [excessPropertyCheckWithUnions.js]
 -"use strict";
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
+ let wrong = { tag: "T", a1: "extra" };
+ wrong = { tag: "A", d20: 12 };
+ wrong = { tag: "D" };

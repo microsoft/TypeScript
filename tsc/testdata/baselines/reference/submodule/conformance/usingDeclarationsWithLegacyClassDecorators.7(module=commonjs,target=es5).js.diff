@@ -5,14 +5,11 @@
  //// [usingDeclarationsWithLegacyClassDecorators.7.js]
  "use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });
--let C = (() => {
--    let C = class C {
--    };
--    C = __decorate([
--        dec
--    ], C);
--    return C;
--})();
+-let C = class C {
+-};
+-C = __decorate([
+-    dec
+-], C);
  var after;
 +Object.defineProperty(exports, "__esModule", { value: true });
 +@dec

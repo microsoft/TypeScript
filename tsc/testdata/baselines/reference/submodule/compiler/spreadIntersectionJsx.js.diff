@@ -1,7 +1,7 @@
 --- old.spreadIntersectionJsx.js
 +++ new.spreadIntersectionJsx.js
-@@= skipped -21, +21 lines =@@
- };
+@@= skipped -10, +10 lines =@@
+ //// [spreadIntersectionJsx.js]
  const React = null;
  class A {
 +    a;
@@ -10,4 +10,4 @@
 +    c;
  }
  let intersected;
- let element = React.createElement("div", __assign({}, intersected));
+ let element = React.createElement("div", Object.assign({}, intersected));

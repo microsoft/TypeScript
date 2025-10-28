@@ -46,17 +46,6 @@ void p3.result.three;
 "use strict";
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for having too many instances of the same symbol nesting.
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRecFun = exports.updateIfChanged = void 0;
 const updateIfChanged = (t) => {
@@ -73,7 +62,7 @@ exports.updateIfChanged = updateIfChanged;
 const testRecFun = (parent) => {
     return {
         result: parent,
-        deeper: (child) => (0, exports.testRecFun)(__assign(__assign({}, parent), child))
+        deeper: (child) => (0, exports.testRecFun)(Object.assign(Object.assign({}, parent), child))
     };
 };
 exports.testRecFun = testRecFun;

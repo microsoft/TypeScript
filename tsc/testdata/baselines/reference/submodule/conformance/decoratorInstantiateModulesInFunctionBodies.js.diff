@@ -11,26 +11,17 @@
 -    return c > 3 && r && Object.defineProperty(target, key, r), r;
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
--var a_1 = require("./a");
-+const a_1 = require("./a");
+ const a_1 = require("./a");
  function filter(handler) {
-     return function (target, propertyKey) {
-         // ...
+@@= skipped -14, +8 lines =@@
      };
  }
--let Wat = (() => {
--    class Wat {
--        static whatever() {
--            // ...
--        }
-+class Wat {
+ class Wat {
 +    @filter(() => a_1.test == 'abc')
-+    static whatever() {
-+        // ...
+     static whatever() {
+         // ...
      }
--    __decorate([
--        filter(() => a_1.test == 'abc')
--    ], Wat, "whatever", null);
--    return Wat;
--})();
-+}
+ }
+-__decorate([
+-    filter(() => a_1.test == 'abc')
+-], Wat, "whatever", null);

@@ -16,5 +16,5 @@ const jsx_runtime_1 = require("preact/jsx-runtime");
 const preact_1 = require("preact");
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 };
-const a = jsx_runtime_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
-const b = preact_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
+const a = jsx_runtime_1.jsx("div", Object.assign({}, props, { children: "text" }), "foo");
+const b = preact_1.createElement("div", Object.assign({}, props, { key: "bar" }), "text");

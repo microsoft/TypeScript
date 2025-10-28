@@ -13,40 +13,34 @@
 -var __metadata = (this && this.__metadata) || function (k, v) {
 -    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 -};
--let A = (() => {
--    let A = class A {
--        constructor(...args) { }
--        method(...args) { }
--    };
--    __decorate([
--        MyMethodDecorator,
--        __metadata("design:type", Function),
--        __metadata("design:paramtypes", [Object]),
--        __metadata("design:returntype", void 0)
--    ], A.prototype, "method", null);
--    A = __decorate([
--        MyClassDecorator,
--        __metadata("design:paramtypes", [Object])
--    ], A);
--    return A;
--})();
--let B = (() => {
--    let B = class B {
--        constructor(...args) { }
--        method(...args) { }
--    };
--    __decorate([
--        MyMethodDecorator,
--        __metadata("design:type", Function),
--        __metadata("design:paramtypes", [String]),
--        __metadata("design:returntype", void 0)
--    ], B.prototype, "method", null);
--    B = __decorate([
--        MyClassDecorator,
--        __metadata("design:paramtypes", [Number])
--    ], B);
--    return B;
--})();
+-let A = class A {
+-    constructor(...args) { }
+-    method(...args) { }
+-};
+-__decorate([
+-    MyMethodDecorator,
+-    __metadata("design:type", Function),
+-    __metadata("design:paramtypes", [Object]),
+-    __metadata("design:returntype", void 0)
+-], A.prototype, "method", null);
+-A = __decorate([
+-    MyClassDecorator,
+-    __metadata("design:paramtypes", [Object])
+-], A);
+-let B = class B {
+-    constructor(...args) { }
+-    method(...args) { }
+-};
+-__decorate([
+-    MyMethodDecorator,
+-    __metadata("design:type", Function),
+-    __metadata("design:paramtypes", [String]),
+-    __metadata("design:returntype", void 0)
+-], B.prototype, "method", null);
+-B = __decorate([
+-    MyClassDecorator,
+-    __metadata("design:paramtypes", [Number])
+-], B);
 +@MyClassDecorator
 +class A {
 +    constructor(...args) { }

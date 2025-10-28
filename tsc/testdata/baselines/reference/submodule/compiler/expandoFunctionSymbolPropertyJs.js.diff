@@ -1,15 +1,6 @@
 --- old.expandoFunctionSymbolPropertyJs.js
 +++ new.expandoFunctionSymbolPropertyJs.js
-@@= skipped -28, +28 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.test = test;
--var types_1 = require("./types");
-+const types_1 = require("./types");
- /**
-  * @returns {import("./types").TestSymb}
-  */
-@@= skipped -21, +21 lines =@@
+@@= skipped -49, +49 lines =@@
  /**
   * @returns {import("./types").TestSymb}
   */

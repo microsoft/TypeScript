@@ -14,16 +14,11 @@
 -    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 -};
  function PropDeco(target, propKey) { }
--let Foo = (() => {
--    class Foo {
--    }
--    __decorate([
--        PropDeco,
--        __metadata("design:type", String)
--    ], Foo.prototype, "foo", void 0);
--    return Foo;
--})();
-+class Foo {
+ class Foo {
 +    @PropDeco
 +    foo;
-+}
+ }
+-__decorate([
+-    PropDeco,
+-    __metadata("design:type", String)
+-], Foo.prototype, "foo", void 0);

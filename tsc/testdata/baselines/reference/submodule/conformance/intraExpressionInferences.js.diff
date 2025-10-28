@@ -6,9 +6,9 @@
  //// [intraExpressionInferences.js]
 -"use strict";
  // Repros from #47599
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-@@= skipped -71, +70 lines =@@
+ callIt({
+     produce: () => 0,
+@@= skipped -60, +59 lines =@@
  });
  // Repro from #41712
  class Wrapper {

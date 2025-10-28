@@ -14,7 +14,7 @@ function f() {
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
         return () => arguments[0];
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments17.ts, 1, 9), Decl(emitArrowFunctionWhenUsingArguments17.ts, 5, 7))
     }
     var arguments = "world";
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments17.ts, 1, 9), Decl(emitArrowFunctionWhenUsingArguments17.ts, 5, 7))

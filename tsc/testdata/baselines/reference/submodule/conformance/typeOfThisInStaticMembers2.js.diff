@@ -4,25 +4,14 @@
  }
 
  //// [typeOfThisInStaticMembers2.js]
--let C = (() => {
--    var _a;
--    class C {
--    }
--    _a = C;
--    C.foo = _a; // ok
--    return C;
--})();
--let C2 = (() => {
--    var _a;
--    class C2 {
--    }
--    _a = C2;
--    C2.foo = _a; // ok
--    return C2;
--})();
-+class C {
+-var _a, _b;
+ class C {
 +    static foo = this; // ok
-+}
-+class C2 {
+ }
+-_a = C;
+-C.foo = _a; // ok
+ class C2 {
 +    static foo = this; // ok
-+}
+ }
+-_b = C2;
+-C2.foo = _b; // ok

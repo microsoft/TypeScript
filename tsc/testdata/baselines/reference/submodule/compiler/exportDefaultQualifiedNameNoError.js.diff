@@ -1,25 +1,12 @@
 --- old.exportDefaultQualifiedNameNoError.js
 +++ new.exportDefaultQualifiedNameNoError.js
-@@= skipped -9, +9 lines =@@
- //// [code.js]
+@@= skipped -10, +10 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--let C = (() => {
--    class C {
--    }
--    C.x = 0;
--    return C;
--})();
-+class C {
+ class C {
 +    static x = 0;
-+}
+ }
+-C.x = 0;
  ;
  exports.default = C.x;
  //// [usage.js]
-@@= skipped -14, +11 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var code_1 = __importDefault(require("./code"));
-+const code_1 = __importDefault(require("./code"));
- void code_1.default;

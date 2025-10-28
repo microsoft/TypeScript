@@ -1,32 +1,20 @@
 --- old.declFilePrivateStatic.js
 +++ new.declFilePrivateStatic.js
-@@= skipped -15, +15 lines =@@
- }
+@@= skipped -16, +16 lines =@@
 
  //// [declFilePrivateStatic.js]
--let C = (() => {
--    class C {
--        static a() { }
--        static b() { }
--        static get c() { return 1; }
--        static get d() { return 1; }
--        static set e(v) { }
--        static set f(v) { }
--    }
--    C.x = 1;
--    C.y = 1;
--    return C;
--})();
-+class C {
+ class C {
 +    static x = 1;
 +    static y = 1;
-+    static a() { }
-+    static b() { }
-+    static get c() { return 1; }
-+    static get d() { return 1; }
-+    static set e(v) { }
-+    static set f(v) { }
-+}
+     static a() { }
+     static b() { }
+     static get c() { return 1; }
+@@= skipped -7, +9 lines =@@
+     static set e(v) { }
+     static set f(v) { }
+ }
+-C.x = 1;
+-C.y = 1;
 
 
  //// [declFilePrivateStatic.d.ts]

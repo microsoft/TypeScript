@@ -23,29 +23,18 @@ const v_cba = { ...c, ...b, ...a };
 
 
 //// [spreadObjectPermutations.js]
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-const v_a = __assign({}, a);
-const v_b = __assign({}, b);
-const v_c = __assign({}, c);
-const v_ab = __assign(__assign({}, a), b);
-const v_ac = __assign(__assign({}, a), c);
-const v_ba = __assign(__assign({}, b), a);
-const v_bc = __assign(__assign({}, b), c);
-const v_ca = __assign(__assign({}, c), a);
-const v_cb = __assign(__assign({}, c), b);
-const v_abc = __assign(__assign(__assign({}, a), b), c);
-const v_acb = __assign(__assign(__assign({}, a), c), b);
-const v_bac = __assign(__assign(__assign({}, b), a), c);
-const v_bca = __assign(__assign(__assign({}, b), c), a);
-const v_cab = __assign(__assign(__assign({}, c), a), b);
-const v_cba = __assign(__assign(__assign({}, c), b), a);
+const v_a = Object.assign({}, a);
+const v_b = Object.assign({}, b);
+const v_c = Object.assign({}, c);
+const v_ab = Object.assign(Object.assign({}, a), b);
+const v_ac = Object.assign(Object.assign({}, a), c);
+const v_ba = Object.assign(Object.assign({}, b), a);
+const v_bc = Object.assign(Object.assign({}, b), c);
+const v_ca = Object.assign(Object.assign({}, c), a);
+const v_cb = Object.assign(Object.assign({}, c), b);
+const v_abc = Object.assign(Object.assign(Object.assign({}, a), b), c);
+const v_acb = Object.assign(Object.assign(Object.assign({}, a), c), b);
+const v_bac = Object.assign(Object.assign(Object.assign({}, b), a), c);
+const v_bca = Object.assign(Object.assign(Object.assign({}, b), c), a);
+const v_cab = Object.assign(Object.assign(Object.assign({}, c), a), b);
+const v_cba = Object.assign(Object.assign(Object.assign({}, c), b), a);

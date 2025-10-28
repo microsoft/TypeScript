@@ -1,11 +1,7 @@
 --- old.jsxJsxsCjsTransformChildren(jsx=react-jsxdev).js
 +++ new.jsxJsxsCjsTransformChildren(jsx=react-jsxdev).js
-@@= skipped -9, +9 lines =@@
- //// [jsxJsxsCjsTransformChildren.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+@@= skipped -12, +12 lines =@@
+ const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
  const _jsxFileName = "jsxJsxsCjsTransformChildren.tsx";
  /// <reference path="react16.d.ts" />
 -const a = (0, jsx_dev_runtime_1.jsxDEV)("div", { children: "text" }, void 0, false, { fileName: _jsxFileName, lineNumber: 2, columnNumber: 10 }, this);

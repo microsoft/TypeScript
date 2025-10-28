@@ -1,24 +1,18 @@
 --- old.superAccess.js
 +++ new.superAccess.js
-@@= skipped -15, +15 lines =@@
- }
+@@= skipped -16, +16 lines =@@
 
  //// [superAccess.js]
--let MyBase = (() => {
--    class MyBase {
--        constructor() {
--            this.S2 = "test";
--            this.f = () => 5;
--        }
+ class MyBase {
+-    constructor() {
+-        this.S2 = "test";
+-        this.f = () => 5;
 -    }
--    MyBase.S1 = 5;
--    return MyBase;
--})();
-+class MyBase {
 +    static S1 = 5;
 +    S2 = "test";
 +    f = () => 5;
-+}
+ }
+-MyBase.S1 = 5;
  class MyDerived extends MyBase {
      foo() {
          var l3 = super.S1; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword

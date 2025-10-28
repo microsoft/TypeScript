@@ -1,18 +1,12 @@
 --- old.defaultDeclarationEmitNamedCorrectly.js
 +++ new.defaultDeclarationEmitNamedCorrectly.js
-@@= skipped -23, +23 lines =@@
- function make(x) {
+@@= skipped -24, +24 lines =@@
      return null;
  }
--let MyComponent = (() => {
--    class MyComponent {
--    }
--    MyComponent.create = make(MyComponent);
--    return MyComponent;
--})();
-+class MyComponent {
+ class MyComponent {
 +    props;
 +    static create = make(MyComponent);
-+}
+ }
+-MyComponent.create = make(MyComponent);
  exports.default = MyComponent;
 

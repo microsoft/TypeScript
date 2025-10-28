@@ -31,20 +31,9 @@ const { c, d, e, f, g } = {
 
 
 //// [destructuringSpread.js]
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-const { x } = __assign({}, { x: 0 });
-const { y } = __assign({ y: 0 }, {});
-const { z, a, b } = __assign({ z: 0 }, { a: 0, b: 0 });
-const { c, d, e, f, g } = __assign(__assign({}, __assign(__assign({}, __assign({
+const { x } = Object.assign({}, { x: 0 });
+const { y } = Object.assign({ y: 0 }, {});
+const { z, a, b } = Object.assign({ z: 0 }, { a: 0, b: 0 });
+const { c, d, e, f, g } = Object.assign(Object.assign({}, Object.assign(Object.assign({}, Object.assign({
     c: 0,
 }, { d: 0 })), { e: 0 })), { f: 0 });

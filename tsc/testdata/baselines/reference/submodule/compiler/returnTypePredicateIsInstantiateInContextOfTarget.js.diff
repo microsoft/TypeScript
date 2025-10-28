@@ -1,28 +1,18 @@
 --- old.returnTypePredicateIsInstantiateInContextOfTarget.js
 +++ new.returnTypePredicateIsInstantiateInContextOfTarget.js
-@@= skipped -52, +52 lines =@@
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -54, +54 lines =@@
  /// <reference path="react16.d.ts" />
--var React = __importStar(require("react"));
--let TestComponent = (() => {
--    class TestComponent extends React.Component {
--        // Type guard is defined as a static class property
--        static isAny(obj) {
--            return true;
--        }
--    }
--    TestComponent.defaultProps = {
-+const React = __importStar(require("react"));
-+class TestComponent extends React.Component {
+ const React = __importStar(require("react"));
+ class TestComponent extends React.Component {
 +    static defaultProps = {
-         isAny: TestComponent.isAny
-     };
--    return TestComponent;
--})();
-+    // Type guard is defined as a static class property
-+    static isAny(obj) {
-+        return true;
-+    }
-+}
++        isAny: TestComponent.isAny
++    };
+     // Type guard is defined as a static class property
+     static isAny(obj) {
+         return true;
+     }
+ }
+-TestComponent.defaultProps = {
+-    isAny: TestComponent.isAny
+-};
  const TestRender = () => React.createElement(TestComponent, null);

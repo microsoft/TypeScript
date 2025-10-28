@@ -1,20 +1,7 @@
 --- old.jsxRuntimePragma(jsx=react-jsx).js
 +++ new.jsxRuntimePragma(jsx=react-jsx).js
-@@= skipped -72, +72 lines =@@
- exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
- /// <reference path="react16.d.ts" />
- /* @jsxRuntime classic */
--var React = __importStar(require("react"));
-+const React = __importStar(require("react"));
- const HelloWorld = () => React.createElement("h1", null, "Hello world");
- exports.HelloWorld = HelloWorld;
- exports.frag = React.createElement(React.Fragment, null,
-@@= skipped -10, +10 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
--var jsx_runtime_1 = require("react/jsx-runtime");
-+const jsx_runtime_1 = require("react/jsx-runtime");
+@@= skipped -85, +85 lines =@@
+ const jsx_runtime_1 = require("react/jsx-runtime");
  /// <reference path="react16.d.ts" />
  /* @jsxRuntime automatic */
 -const HelloWorld = () => (0, jsx_runtime_1.jsx)("h1", { children: "Hello world" });
@@ -27,9 +14,7 @@
  //// [three.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
- exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
--var jsx_runtime_1 = require("react/jsx-runtime");
-+const jsx_runtime_1 = require("react/jsx-runtime");
+@@= skipped -12, +12 lines =@@
  /// <reference path="react16.d.ts" />
  /* @jsxRuntime classic */
  /* @jsxRuntime automatic */
@@ -43,12 +28,3 @@
  //// [four.js]
  "use strict";
  var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-@@= skipped -59, +59 lines =@@
- /// <reference path="react16.d.ts" />
- /* @jsxRuntime automatic */
- /* @jsxRuntime classic */
--var React = __importStar(require("react"));
-+const React = __importStar(require("react"));
- const HelloWorld = () => React.createElement("h1", null, "Hello world");
- exports.HelloWorld = HelloWorld;
- exports.frag = React.createElement(React.Fragment, null,

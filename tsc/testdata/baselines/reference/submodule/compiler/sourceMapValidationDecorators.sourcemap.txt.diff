@@ -13,295 +13,39 @@
 ->>>var __param = (this && this.__param) || function (paramIndex, decorator) {
 ->>>    return function (target, key) { decorator(target, key, paramIndex); }
 ->>>};
-->>>let Greeter = (() => {
+->>>let Greeter = class Greeter {
 +>>>@ClassDecorator1
  1 >
--2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-2 >^^^^
+-3 >    ^^^^^^^
+-4 >           ^^^
+-5 >              ^^^^^^
+-6 >                    ^^^^^^^
+-7 >                           ^^^^^^^->
 +2 >^
 +3 > ^^^^^^^^^^^^^^^
 +4 >                ^^^^^->
  1 >declare function ClassDecorator1(target: Function): void;
    >declare function ClassDecorator2(x: number): (target: Function) => void;
    >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
-@@= skipped -19, +12 lines =@@
+@@= skipped -24, +12 lines =@@
    >declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
    >declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
    >
 -  >@ClassDecorator1
 -  >@ClassDecorator2(10)
--  >
+   >
+-2 >class 
+-3 >    Greeter
+-4 >           
+-5 >              class 
+-6 >                    Greeter
 -1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
-----
-->>>    let Greeter = class Greeter {
--1->^^^^
--2 >    ^^^^
--3 >        ^^^^^^^
--4 >               ^^^
--5 >                  ^^^^^^
--6 >                        ^^^^^^^
--7 >                               ^^^^^^^->
--1->
--2 >    class 
--3 >        Greeter
--4 >               
--5 >                  class 
--6 >                        Greeter
--1->Emitted(11, 5) Source(10, 1) + SourceIndex(0)
--2 >Emitted(11, 9) Source(10, 7) + SourceIndex(0)
--3 >Emitted(11, 16) Source(10, 14) + SourceIndex(0)
--4 >Emitted(11, 19) Source(10, 1) + SourceIndex(0)
--5 >Emitted(11, 25) Source(10, 7) + SourceIndex(0)
--6 >Emitted(11, 32) Source(10, 14) + SourceIndex(0)
-----
-->>>        constructor(greeting, ...b) {
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^
--3 >                    ^^^^^^^^
--4 >                            ^^
--5 >                              ^^^
--6 >                                 ^
--7 >                                  ^^^^->
--1-> {
--  >    
--2 >        constructor(
--  >              @ParameterDecorator1 
--  >              @ParameterDecorator2(20) 
--  >              public 
--3 >                    greeting: string
--4 >                            , 
--  >                                  
--  >                                  @ParameterDecorator1 
--  >                                  @ParameterDecorator2(30) 
--  >                                  
--5 >                              ...
--6 >                                 b: string[]
--1->Emitted(12, 9) Source(11, 5) + SourceIndex(0)
--2 >Emitted(12, 21) Source(14, 14) + SourceIndex(0)
--3 >Emitted(12, 29) Source(14, 30) + SourceIndex(0)
--4 >Emitted(12, 31) Source(18, 7) + SourceIndex(0)
--5 >Emitted(12, 34) Source(18, 10) + SourceIndex(0)
--6 >Emitted(12, 35) Source(18, 21) + SourceIndex(0)
-----
-->>>            this.greeting = greeting;
--1->^^^^^^^^^^^^
--2 >            ^^^^^^^^^^^^^
--3 >                         ^^^
--4 >                            ^^^^^^^^
--5 >                                    ^
--1->
--2 >            greeting
--3 >                         
--4 >                            greeting
--5 >                                    : string
--1->Emitted(13, 13) Source(14, 14) + SourceIndex(0)
--2 >Emitted(13, 26) Source(14, 22) + SourceIndex(0)
--3 >Emitted(13, 29) Source(14, 14) + SourceIndex(0)
--4 >Emitted(13, 37) Source(14, 22) + SourceIndex(0)
--5 >Emitted(13, 38) Source(14, 30) + SourceIndex(0)
-----
-->>>        }
--1 >^^^^^^^^
--2 >        ^
--3 >         ^^^^^^^^^->
--1 >, 
--  >      
--  >      @ParameterDecorator1 
--  >      @ParameterDecorator2(30) 
--  >      ...b: string[]) {
--  >    
--2 >        }
--1 >Emitted(14, 9) Source(19, 5) + SourceIndex(0)
--2 >Emitted(14, 10) Source(19, 6) + SourceIndex(0)
-----
-->>>        greet() {
--1->^^^^^^^^
--2 >        ^^^^^
--3 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1->
--  >    
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(40)
--  >    
--2 >        greet
--1->Emitted(15, 9) Source(23, 5) + SourceIndex(0)
--2 >Emitted(15, 14) Source(23, 10) + SourceIndex(0)
-----
-->>>            return "<h1>" + this.greeting + "</h1>";
--1->^^^^^^^^^^^^
--2 >            ^^^^^^^
--3 >                   ^^^^^^
--4 >                         ^^^
--5 >                            ^^^^
--6 >                                ^
--7 >                                 ^^^^^^^^
--8 >                                         ^^^
--9 >                                            ^^^^^^^
--10>                                                   ^
--1->() {
--  >        
--2 >            return 
--3 >                   "<h1>"
--4 >                          + 
--5 >                            this
--6 >                                .
--7 >                                 greeting
--8 >                                          + 
--9 >                                            "</h1>"
--10>                                                   ;
--1->Emitted(16, 13) Source(24, 9) + SourceIndex(0)
--2 >Emitted(16, 20) Source(24, 16) + SourceIndex(0)
--3 >Emitted(16, 26) Source(24, 22) + SourceIndex(0)
--4 >Emitted(16, 29) Source(24, 25) + SourceIndex(0)
--5 >Emitted(16, 33) Source(24, 29) + SourceIndex(0)
--6 >Emitted(16, 34) Source(24, 30) + SourceIndex(0)
--7 >Emitted(16, 42) Source(24, 38) + SourceIndex(0)
--8 >Emitted(16, 45) Source(24, 41) + SourceIndex(0)
--9 >Emitted(16, 52) Source(24, 48) + SourceIndex(0)
--10>Emitted(16, 53) Source(24, 49) + SourceIndex(0)
-----
-->>>        }
--1 >^^^^^^^^
--2 >        ^
--3 >         ^^^^^^^->
--1 >
--  >    
--2 >        }
--1 >Emitted(17, 9) Source(25, 5) + SourceIndex(0)
--2 >Emitted(17, 10) Source(25, 6) + SourceIndex(0)
-----
-->>>        fn(x) {
--1->^^^^^^^^
--2 >        ^^
--3 >          ^
--4 >           ^
--5 >            ^^^^^^^^^^^^^^^^^^^^^^->
--1->
--  >
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(50)
--  >    private x: string;
--  >
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(60)
--  >    private static x1: number = 10;
--  >    
--  >    private 
--2 >        fn
--3 >          (
--  >                @ParameterDecorator1 
--  >                @ParameterDecorator2(70) 
--  >                
--4 >           x: number
--1->Emitted(18, 9) Source(35, 13) + SourceIndex(0)
--2 >Emitted(18, 11) Source(35, 15) + SourceIndex(0)
--3 >Emitted(18, 12) Source(38, 7) + SourceIndex(0)
--4 >Emitted(18, 13) Source(38, 16) + SourceIndex(0)
-----
-->>>            return this.greeting;
--1->^^^^^^^^^^^^
--2 >            ^^^^^^^
--3 >                   ^^^^
--4 >                       ^
--5 >                        ^^^^^^^^
--6 >                                ^
--1->) {
--  >        
--2 >            return 
--3 >                   this
--4 >                       .
--5 >                        greeting
--6 >                                ;
--1->Emitted(19, 13) Source(39, 9) + SourceIndex(0)
--2 >Emitted(19, 20) Source(39, 16) + SourceIndex(0)
--3 >Emitted(19, 24) Source(39, 20) + SourceIndex(0)
--4 >Emitted(19, 25) Source(39, 21) + SourceIndex(0)
--5 >Emitted(19, 33) Source(39, 29) + SourceIndex(0)
--6 >Emitted(19, 34) Source(39, 30) + SourceIndex(0)
-----
-->>>        }
--1 >^^^^^^^^
--2 >        ^
--3 >         ^^^^^^^^^^^^^^^^^->
--1 >
--  >    
--2 >        }
--1 >Emitted(20, 9) Source(40, 5) + SourceIndex(0)
--2 >Emitted(20, 10) Source(40, 6) + SourceIndex(0)
-----
-->>>        get greetings() {
--1->^^^^^^^^
--2 >        ^^^^
--3 >            ^^^^^^^^^
--4 >                     ^^^^^^^^^^^^^->
--1->
--  >
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(80)
--  >    
--2 >        get 
--3 >            greetings
--1->Emitted(21, 9) Source(44, 5) + SourceIndex(0)
--2 >Emitted(21, 13) Source(44, 9) + SourceIndex(0)
--3 >Emitted(21, 22) Source(44, 18) + SourceIndex(0)
-----
-->>>            return this.greeting;
--1->^^^^^^^^^^^^
--2 >            ^^^^^^^
--3 >                   ^^^^
--4 >                       ^
--5 >                        ^^^^^^^^
--6 >                                ^
--1->() {
--  >        
--2 >            return 
--3 >                   this
--4 >                       .
--5 >                        greeting
--6 >                                ;
--1->Emitted(22, 13) Source(45, 9) + SourceIndex(0)
--2 >Emitted(22, 20) Source(45, 16) + SourceIndex(0)
--3 >Emitted(22, 24) Source(45, 20) + SourceIndex(0)
--4 >Emitted(22, 25) Source(45, 21) + SourceIndex(0)
--5 >Emitted(22, 33) Source(45, 29) + SourceIndex(0)
--6 >Emitted(22, 34) Source(45, 30) + SourceIndex(0)
-----
-->>>        }
--1 >^^^^^^^^
--2 >        ^
--3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--  >    
--2 >        }
--1 >Emitted(23, 9) Source(46, 5) + SourceIndex(0)
--2 >Emitted(23, 10) Source(46, 6) + SourceIndex(0)
-----
-->>>        set greetings(greetings) {
--1->^^^^^^^^
--2 >        ^^^^
--3 >            ^^^^^^^^^
--4 >                     ^
--5 >                      ^^^^^^^^^
--6 >                               ^^^^^^^^->
--1->
--  >
--  >    
--2 >        set 
--3 >            greetings
--4 >                     (
--  >                           @ParameterDecorator1 
--  >                           @ParameterDecorator2(90) 
--  >                           
--5 >                      greetings: string
--1->Emitted(24, 9) Source(48, 5) + SourceIndex(0)
--2 >Emitted(24, 13) Source(48, 9) + SourceIndex(0)
--3 >Emitted(24, 22) Source(48, 18) + SourceIndex(0)
--4 >Emitted(24, 23) Source(51, 7) + SourceIndex(0)
--5 >Emitted(24, 32) Source(51, 24) + SourceIndex(0)
-----
-->>>            this.greeting = greetings;
--1->^^^^^^^^^^^^
--2 >            ^^^^
-+  >
+-2 >Emitted(10, 5) Source(10, 7) + SourceIndex(0)
+-3 >Emitted(10, 12) Source(10, 14) + SourceIndex(0)
+-4 >Emitted(10, 15) Source(10, 1) + SourceIndex(0)
+-5 >Emitted(10, 21) Source(10, 7) + SourceIndex(0)
+-6 >Emitted(10, 28) Source(10, 14) + SourceIndex(0)
 +2 >@
 +3 > ClassDecorator1
 +1 >Emitted(1, 1) Source(8, 1) + SourceIndex(0)
@@ -311,378 +55,11 @@
 +>>>@ClassDecorator2(10)
 +1->^
 +2 > ^^^^^^^^^^^^^^^
- 3 >                ^
--4 >                 ^^^^^^^^
--5 >                         ^^^
--6 >                            ^^^^^^^^^
--7 >                                     ^
--1->) {
--  >        
--2 >            this
--3 >                .
--4 >                 greeting
--5 >                          = 
--6 >                            greetings
--7 >                                     ;
--1->Emitted(25, 13) Source(52, 9) + SourceIndex(0)
--2 >Emitted(25, 17) Source(52, 13) + SourceIndex(0)
--3 >Emitted(25, 18) Source(52, 14) + SourceIndex(0)
--4 >Emitted(25, 26) Source(52, 22) + SourceIndex(0)
--5 >Emitted(25, 29) Source(52, 25) + SourceIndex(0)
--6 >Emitted(25, 38) Source(52, 34) + SourceIndex(0)
--7 >Emitted(25, 39) Source(52, 35) + SourceIndex(0)
-----
-->>>        }
--1 >^^^^^^^^
--2 >        ^
--1 >
--  >    
--2 >        }
--1 >Emitted(26, 9) Source(53, 5) + SourceIndex(0)
--2 >Emitted(26, 10) Source(53, 6) + SourceIndex(0)
-----
-->>>    };
-->>>    Greeter.x1 = 10;
--1 >^^^^
--2 >    ^^^^^^^^^^
--3 >              ^^^
- 4 >                 ^^
--5 >                   
--6 >                   ^
--1 >
--2 >    x1
--3 >              : number = 
--4 >                 10
--5 >                   
--6 >                   : number = 10;
--1 >Emitted(28, 5) Source(33, 20) + SourceIndex(0)
--2 >Emitted(28, 15) Source(33, 22) + SourceIndex(0)
--3 >Emitted(28, 18) Source(33, 33) + SourceIndex(0)
--4 >Emitted(28, 20) Source(33, 35) + SourceIndex(0)
--5 >Emitted(28, 20) Source(33, 22) + SourceIndex(0)
--6 >Emitted(28, 21) Source(33, 36) + SourceIndex(0)
-----
-->>>    __decorate([
--1 >^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--1 >Emitted(29, 5) Source(23, 5) + SourceIndex(0)
-----
-->>>        PropertyDecorator1,
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^^^^^->
--1->
--2 >        PropertyDecorator1
--1->Emitted(30, 9) Source(21, 6) + SourceIndex(0)
--2 >Emitted(30, 27) Source(21, 24) + SourceIndex(0)
-----
-->>>        PropertyDecorator2(40)
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^
--4 >                           ^^
--5 >                             ^
--6 >                              ^^^^^^^^^^^^->
--1->
--  >    @
--2 >        PropertyDecorator2
--3 >                          (
--4 >                           40
--5 >                             )
--1->Emitted(31, 9) Source(22, 6) + SourceIndex(0)
--2 >Emitted(31, 27) Source(22, 24) + SourceIndex(0)
--3 >Emitted(31, 28) Source(22, 25) + SourceIndex(0)
--4 >Emitted(31, 30) Source(22, 27) + SourceIndex(0)
--5 >Emitted(31, 31) Source(22, 28) + SourceIndex(0)
-----
-->>>    ], Greeter.prototype, "greet", null);
--1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1->
--  >    greet() {
--  >        return "<h1>" + this.greeting + "</h1>";
--  >    }
--1->Emitted(32, 41) Source(25, 6) + SourceIndex(0)
-----
-->>>    __decorate([
--1 >^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--  >
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(50)
--  >    private 
--1 >Emitted(33, 5) Source(29, 13) + SourceIndex(0)
-----
-->>>        PropertyDecorator1,
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^^^^^->
--1->
--2 >        PropertyDecorator1
--1->Emitted(34, 9) Source(27, 6) + SourceIndex(0)
--2 >Emitted(34, 27) Source(27, 24) + SourceIndex(0)
-----
-->>>        PropertyDecorator2(50)
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^
--4 >                           ^^
--5 >                             ^
--6 >                              ^^^^^^^^^^->
--1->
--  >    @
--2 >        PropertyDecorator2
--3 >                          (
--4 >                           50
--5 >                             )
--1->Emitted(35, 9) Source(28, 6) + SourceIndex(0)
--2 >Emitted(35, 27) Source(28, 24) + SourceIndex(0)
--3 >Emitted(35, 28) Source(28, 25) + SourceIndex(0)
--4 >Emitted(35, 30) Source(28, 27) + SourceIndex(0)
--5 >Emitted(35, 31) Source(28, 28) + SourceIndex(0)
-----
-->>>    ], Greeter.prototype, "x", void 0);
--1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1->
--  >    private x: string;
--1->Emitted(36, 39) Source(29, 23) + SourceIndex(0)
-----
-->>>    __decorate([
--1 >^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--  >
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(60)
--  >    private static x1: number = 10;
--  >    
--  >    private 
--1 >Emitted(37, 5) Source(35, 13) + SourceIndex(0)
-----
-->>>        __param(0, ParameterDecorator1),
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^^^^->
--1->fn(
--  >      @
--2 >        
--3 >                   ParameterDecorator1
--4 >                                      
--1->Emitted(38, 9) Source(36, 8) + SourceIndex(0)
--2 >Emitted(38, 20) Source(36, 8) + SourceIndex(0)
--3 >Emitted(38, 39) Source(36, 27) + SourceIndex(0)
--4 >Emitted(38, 40) Source(36, 27) + SourceIndex(0)
-----
-->>>        __param(0, ParameterDecorator2(70))
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^
--6 >                                         ^
--7 >                                          ^
--1-> 
--  >      @
--2 >        
--3 >                   ParameterDecorator2
--4 >                                      (
--5 >                                       70
--6 >                                         )
--7 >                                          
--1->Emitted(39, 9) Source(37, 8) + SourceIndex(0)
--2 >Emitted(39, 20) Source(37, 8) + SourceIndex(0)
--3 >Emitted(39, 39) Source(37, 27) + SourceIndex(0)
--4 >Emitted(39, 40) Source(37, 28) + SourceIndex(0)
--5 >Emitted(39, 42) Source(37, 30) + SourceIndex(0)
--6 >Emitted(39, 43) Source(37, 31) + SourceIndex(0)
--7 >Emitted(39, 44) Source(37, 31) + SourceIndex(0)
-----
-->>>    ], Greeter.prototype, "fn", null);
--1 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1 > 
--  >      x: number) {
--  >        return this.greeting;
--  >    }
--1 >Emitted(40, 38) Source(40, 6) + SourceIndex(0)
-----
-->>>    __decorate([
--1 >^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--  >
--  >    @PropertyDecorator1
--  >    @PropertyDecorator2(80)
--  >    
--1 >Emitted(41, 5) Source(44, 5) + SourceIndex(0)
-----
-->>>        PropertyDecorator1,
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^^^^^^->
--1->
--2 >        PropertyDecorator1
--1->Emitted(42, 9) Source(42, 6) + SourceIndex(0)
--2 >Emitted(42, 27) Source(42, 24) + SourceIndex(0)
-----
-->>>        PropertyDecorator2(80),
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^
--4 >                           ^^
--5 >                             ^
--6 >                              ^^^^^^^^^^^->
--1->
--  >    @
--2 >        PropertyDecorator2
--3 >                          (
--4 >                           80
--5 >                             )
--1->Emitted(43, 9) Source(43, 6) + SourceIndex(0)
--2 >Emitted(43, 27) Source(43, 24) + SourceIndex(0)
--3 >Emitted(43, 28) Source(43, 25) + SourceIndex(0)
--4 >Emitted(43, 30) Source(43, 27) + SourceIndex(0)
--5 >Emitted(43, 31) Source(43, 28) + SourceIndex(0)
-----
-->>>        __param(0, ParameterDecorator1),
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^^^^->
--1->
--  >    get greetings() {
--  >        return this.greeting;
--  >    }
--  >
--  >    set greetings(
--  >      @
--2 >        
--3 >                   ParameterDecorator1
--4 >                                      
--1->Emitted(44, 9) Source(49, 8) + SourceIndex(0)
--2 >Emitted(44, 20) Source(49, 8) + SourceIndex(0)
--3 >Emitted(44, 39) Source(49, 27) + SourceIndex(0)
--4 >Emitted(44, 40) Source(49, 27) + SourceIndex(0)
-----
-->>>        __param(0, ParameterDecorator2(90))
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^
--6 >                                         ^
--7 >                                          ^
--8 >                                           ^^^->
--1-> 
--  >      @
--2 >        
--3 >                   ParameterDecorator2
--4 >                                      (
--5 >                                       90
--6 >                                         )
--7 >                                          
--1->Emitted(45, 9) Source(50, 8) + SourceIndex(0)
--2 >Emitted(45, 20) Source(50, 8) + SourceIndex(0)
--3 >Emitted(45, 39) Source(50, 27) + SourceIndex(0)
--4 >Emitted(45, 40) Source(50, 28) + SourceIndex(0)
--5 >Emitted(45, 42) Source(50, 30) + SourceIndex(0)
--6 >Emitted(45, 43) Source(50, 31) + SourceIndex(0)
--7 >Emitted(45, 44) Source(50, 31) + SourceIndex(0)
-----
-->>>    ], Greeter.prototype, "greetings", null);
--1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1->
--1->Emitted(46, 45) Source(46, 6) + SourceIndex(0)
-----
-->>>    __decorate([
--1 >^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--1 >Emitted(47, 5) Source(33, 20) + SourceIndex(0)
-----
-->>>        PropertyDecorator1,
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^^^^^->
--1->
--2 >        PropertyDecorator1
--1->Emitted(48, 9) Source(31, 6) + SourceIndex(0)
--2 >Emitted(48, 27) Source(31, 24) + SourceIndex(0)
-----
-->>>        PropertyDecorator2(60)
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^^^
--3 >                          ^
--4 >                           ^^
--5 >                             ^
--6 >                              ^->
--1->
--  >    @
--2 >        PropertyDecorator2
--3 >                          (
--4 >                           60
--5 >                             )
--1->Emitted(49, 9) Source(32, 6) + SourceIndex(0)
--2 >Emitted(49, 27) Source(32, 24) + SourceIndex(0)
--3 >Emitted(49, 28) Source(32, 25) + SourceIndex(0)
--4 >Emitted(49, 30) Source(32, 27) + SourceIndex(0)
--5 >Emitted(49, 31) Source(32, 28) + SourceIndex(0)
-----
-->>>    ], Greeter, "x1", void 0);
--1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1->
--  >    private static x1: number = 10;
--1->Emitted(50, 30) Source(33, 36) + SourceIndex(0)
-----
-->>>    Greeter = __decorate([
--1 >^^^^
--2 >    ^^^^^^^
--3 >           ^^^^^^^^^^^^^^->
--1 >
--2 >    Greeter
--1 >Emitted(51, 5) Source(10, 7) + SourceIndex(0)
--2 >Emitted(51, 12) Source(10, 14) + SourceIndex(0)
-----
-->>>        ClassDecorator1,
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^
--3 >                       ^^^^^^->
--1->
--2 >        ClassDecorator1
--1->Emitted(52, 9) Source(8, 2) + SourceIndex(0)
--2 >Emitted(52, 24) Source(8, 17) + SourceIndex(0)
-----
-->>>        ClassDecorator2(10),
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^
--3 >                       ^
--4 >                        ^^
--5 >                          ^
--6 >                           ^^^^^^^^^^^^^^->
++3 >                ^
++4 >                 ^^
 +5 >                   ^
- 1->
-   >@
--2 >        ClassDecorator2
--3 >                       (
--4 >                        10
--5 >                          )
--1->Emitted(53, 9) Source(9, 2) + SourceIndex(0)
--2 >Emitted(53, 24) Source(9, 17) + SourceIndex(0)
--3 >Emitted(53, 25) Source(9, 18) + SourceIndex(0)
--4 >Emitted(53, 27) Source(9, 20) + SourceIndex(0)
--5 >Emitted(53, 28) Source(9, 21) + SourceIndex(0)
-----
-->>>        __param(0, ParameterDecorator1),
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^^^^^->
--1->
--  >class Greeter {
++1->
++  >@
 +2 > ClassDecorator2
 +3 >                (
 +4 >                 10
@@ -708,77 +85,39 @@
 +2 >    ^^^^^^^^
 +3 >            ^^^^^^^^^^^^^^^^^^^^^^->
 +1-> {
-   >    constructor(
--  >      @
--2 >        
--3 >                   ParameterDecorator1
--4 >                                      
--1->Emitted(54, 9) Source(12, 8) + SourceIndex(0)
--2 >Emitted(54, 20) Source(12, 8) + SourceIndex(0)
--3 >Emitted(54, 39) Source(12, 27) + SourceIndex(0)
--4 >Emitted(54, 40) Source(12, 27) + SourceIndex(0)
-----
-->>>        __param(0, ParameterDecorator2(20)),
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^
--6 >                                         ^
--7 >                                          ^
--1-> 
--  >      @
--2 >        
--3 >                   ParameterDecorator2
--4 >                                      (
--5 >                                       20
--6 >                                         )
--7 >                                          
--1->Emitted(55, 9) Source(13, 8) + SourceIndex(0)
--2 >Emitted(55, 20) Source(13, 8) + SourceIndex(0)
--3 >Emitted(55, 39) Source(13, 27) + SourceIndex(0)
--4 >Emitted(55, 40) Source(13, 28) + SourceIndex(0)
--5 >Emitted(55, 42) Source(13, 30) + SourceIndex(0)
--6 >Emitted(55, 43) Source(13, 31) + SourceIndex(0)
--7 >Emitted(55, 44) Source(13, 31) + SourceIndex(0)
-----
-->>>        __param(1, ParameterDecorator1),
--1 >^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^^^^->
--1 > 
--  >      public greeting: string, 
++  >    constructor(
 +  >      @ParameterDecorator1 
 +  >      @ParameterDecorator2(20) 
 +  >      public 
 +2 >    greeting
 +1->Emitted(4, 5) Source(14, 14) + SourceIndex(0)
 +2 >Emitted(4, 13) Source(14, 22) + SourceIndex(0)
-+---
-+>>>    constructor(greeting, ...b) {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^
-+3 >                ^^^^^^^^
-+4 >                        ^^
-+5 >                          ^^^
-+6 >                             ^
+ ---
+ >>>    constructor(greeting, ...b) {
+ 1->^^^^
+@@= skipped -22, +55 lines =@@
+ 4 >                        ^^
+ 5 >                          ^^^
+ 6 >                             ^
+-7 >                              ^^^^->
+-1-> {
+-  >    
 +7 >                              ^^
 +8 >                                ^^->
 +1->
-+2 >    constructor(
-+  >          @ParameterDecorator1 
-+  >          @ParameterDecorator2(20) 
-+  >          public 
-+3 >                greeting: string
-+4 >                        , 
-+  >                              
-+  >                              @ParameterDecorator1 
-+  >                              @ParameterDecorator2(30) 
-+  >                              
-+5 >                          ...
-+6 >                             b: string[]
+ 2 >    constructor(
+   >          @ParameterDecorator1 
+   >          @ParameterDecorator2(20) 
+@@= skipped -15, +15 lines =@@
+   >                              
+ 5 >                          ...
+ 6 >                             b: string[]
+-1->Emitted(11, 5) Source(11, 5) + SourceIndex(0)
+-2 >Emitted(11, 17) Source(14, 14) + SourceIndex(0)
+-3 >Emitted(11, 25) Source(14, 30) + SourceIndex(0)
+-4 >Emitted(11, 27) Source(18, 7) + SourceIndex(0)
+-5 >Emitted(11, 30) Source(18, 10) + SourceIndex(0)
+-6 >Emitted(11, 31) Source(18, 21) + SourceIndex(0)
 +7 >                              ) 
 +1->Emitted(5, 5) Source(11, 5) + SourceIndex(0)
 +2 >Emitted(5, 17) Source(14, 14) + SourceIndex(0)
@@ -787,126 +126,44 @@
 +5 >Emitted(5, 30) Source(18, 10) + SourceIndex(0)
 +6 >Emitted(5, 31) Source(18, 21) + SourceIndex(0)
 +7 >Emitted(5, 33) Source(18, 23) + SourceIndex(0)
-+---
-+>>>        this.greeting = greeting;
+ ---
+ >>>        this.greeting = greeting;
+-1->^^^^^^^^
+-2 >        ^^^^^^^^^^^^^
+-3 >                     ^^^
+-4 >                        ^^^^^^^^
+-5 >                                ^
 +1->^^^^^^^^^^^^^^^^^^^^^^^^
 +2 >                        ^^^^^^^^
-+1->
+ 1->
+-2 >        greeting
+-3 >                     
+-4 >                        greeting
+-5 >                                : string
+-1->Emitted(12, 9) Source(14, 14) + SourceIndex(0)
+-2 >Emitted(12, 22) Source(14, 22) + SourceIndex(0)
+-3 >Emitted(12, 25) Source(14, 14) + SourceIndex(0)
+-4 >Emitted(12, 33) Source(14, 22) + SourceIndex(0)
+-5 >Emitted(12, 34) Source(14, 30) + SourceIndex(0)
 +2 >                        greeting
 +1->Emitted(6, 25) Source(14, 14) + SourceIndex(0)
 +2 >Emitted(6, 33) Source(14, 22) + SourceIndex(0)
-+---
-+>>>    }
-+1 >^^^^
-+2 >    ^
+ ---
+ >>>    }
+ 1 >^^^^
+ 2 >    ^
+-3 >     ^^^^^^^^^->
+-1 >, 
 +3 >     ^^^^^^^^^^^^^^^^^^^->
 +1 >: string, 
    >      
--  >      @
--2 >        
--3 >                   ParameterDecorator1
--4 >                                      
--1 >Emitted(56, 9) Source(16, 8) + SourceIndex(0)
--2 >Emitted(56, 20) Source(16, 8) + SourceIndex(0)
--3 >Emitted(56, 39) Source(16, 27) + SourceIndex(0)
--4 >Emitted(56, 40) Source(16, 27) + SourceIndex(0)
-----
-->>>        __param(1, ParameterDecorator2(30))
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^
--3 >                   ^^^^^^^^^^^^^^^^^^^
--4 >                                      ^
--5 >                                       ^^
--6 >                                         ^
--7 >                                          ^
--1-> 
--  >      @
--2 >        
--3 >                   ParameterDecorator2
--4 >                                      (
--5 >                                       30
--6 >                                         )
--7 >                                          
--1->Emitted(57, 9) Source(17, 8) + SourceIndex(0)
--2 >Emitted(57, 20) Source(17, 8) + SourceIndex(0)
--3 >Emitted(57, 39) Source(17, 27) + SourceIndex(0)
--4 >Emitted(57, 40) Source(17, 28) + SourceIndex(0)
--5 >Emitted(57, 42) Source(17, 30) + SourceIndex(0)
--6 >Emitted(57, 43) Source(17, 31) + SourceIndex(0)
--7 >Emitted(57, 44) Source(17, 31) + SourceIndex(0)
-----
-->>>    ], Greeter);
--1 >^^^^^^^
--2 >       ^^^^^^^
--3 >              ^
--4 >               ^^^^^->
--1 >
--2 >       Greeter
--3 >               {
--  >                  constructor(
--  >                    @ParameterDecorator1 
--  >                    @ParameterDecorator2(20) 
--  >                    public greeting: string, 
--  >                    
--  >                    @ParameterDecorator1 
--  >                    @ParameterDecorator2(30) 
--  >                    ...b: string[]) {
--  >                  }
--  >                  
--  >                  @PropertyDecorator1
--  >                  @PropertyDecorator2(40)
--  >                  greet() {
--  >                      return "<h1>" + this.greeting + "</h1>";
--  >                  }
--  >              
--  >                  @PropertyDecorator1
--  >                  @PropertyDecorator2(50)
--  >                  private x: string;
--  >              
--  >                  @PropertyDecorator1
--  >                  @PropertyDecorator2(60)
--  >                  private static x1: number = 10;
--  >                  
--  >                  private fn(
--  >                    @ParameterDecorator1 
--  >                    @ParameterDecorator2(70) 
--  >                    x: number) {
--  >                      return this.greeting;
--  >                  }
--  >              
--  >                  @PropertyDecorator1
--  >                  @PropertyDecorator2(80)
--  >                  get greetings() {
--  >                      return this.greeting;
--  >                  }
--  >              
--  >                  set greetings(
--  >                    @ParameterDecorator1 
--  >                    @ParameterDecorator2(90) 
--  >                    greetings: string) {
--  >                      this.greeting = greetings;
--  >                  }    
--  >              }
--1 >Emitted(58, 8) Source(10, 7) + SourceIndex(0)
--2 >Emitted(58, 15) Source(10, 14) + SourceIndex(0)
--3 >Emitted(58, 16) Source(54, 2) + SourceIndex(0)
-----
-->>>    return Greeter;
--1->^^^^
--2 >    ^^^^^^^^^^^^^^
--1->
+   >      @ParameterDecorator1 
+   >      @ParameterDecorator2(30) 
+   >      ...b: string[]) {
+-  >    
 -2 >    }
--1->Emitted(59, 5) Source(54, 1) + SourceIndex(0)
--2 >Emitted(59, 19) Source(54, 2) + SourceIndex(0)
-----
-->>>})();
--1 >^^^^^
--2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--1 >Emitted(60, 6) Source(54, 2) + SourceIndex(0)
-+  >      @ParameterDecorator1 
-+  >      @ParameterDecorator2(30) 
-+  >      ...b: string[]) {
+-1 >Emitted(13, 5) Source(19, 5) + SourceIndex(0)
+-2 >Emitted(13, 6) Source(19, 6) + SourceIndex(0)
 +2 >    
 +  >        }
 +1 >Emitted(7, 5) Source(18, 24) + SourceIndex(0)
@@ -943,42 +200,53 @@
 +3 >Emitted(9, 25) Source(22, 25) + SourceIndex(0)
 +4 >Emitted(9, 27) Source(22, 27) + SourceIndex(0)
 +5 >Emitted(9, 28) Source(22, 28) + SourceIndex(0)
-+---
-+>>>    greet() {
+ ---
+ >>>    greet() {
+-1->^^^^
 +1 >^^^^
-+2 >    ^^^^^
+ 2 >    ^^^^^
+-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1->
+-  >    
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(40)
 +3 >         ^^^
 +4 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 +1 >
-+  >    
-+2 >    greet
+   >    
+ 2 >    greet
+-1->Emitted(14, 5) Source(23, 5) + SourceIndex(0)
+-2 >Emitted(14, 10) Source(23, 10) + SourceIndex(0)
 +3 >         () 
 +1 >Emitted(10, 5) Source(23, 5) + SourceIndex(0)
 +2 >Emitted(10, 10) Source(23, 10) + SourceIndex(0)
 +3 >Emitted(10, 13) Source(23, 13) + SourceIndex(0)
-+---
-+>>>        return "<h1>" + this.greeting + "</h1>";
-+1->^^^^^^^^
-+2 >        ^^^^^^^
-+3 >               ^^^^^^
-+4 >                     ^^^
-+5 >                        ^^^^
-+6 >                            ^
-+7 >                             ^^^^^^^^
-+8 >                                     ^^^
-+9 >                                        ^^^^^^^
-+10>                                               ^
+ ---
+ >>>        return "<h1>" + this.greeting + "</h1>";
+ 1->^^^^^^^^
+@@= skipped -62, +87 lines =@@
+ 8 >                                     ^^^
+ 9 >                                        ^^^^^^^
+ 10>                                               ^
+-1->() {
 +1->{
-+  >        
-+2 >        return 
-+3 >               "<h1>"
-+4 >                      + 
-+5 >                        this
-+6 >                            .
-+7 >                             greeting
-+8 >                                      + 
-+9 >                                        "</h1>"
-+10>                                               ;
+   >        
+ 2 >        return 
+ 3 >               "<h1>"
+@@= skipped -11, +11 lines =@@
+ 8 >                                      + 
+ 9 >                                        "</h1>"
+ 10>                                               ;
+-1->Emitted(15, 9) Source(24, 9) + SourceIndex(0)
+-2 >Emitted(15, 16) Source(24, 16) + SourceIndex(0)
+-3 >Emitted(15, 22) Source(24, 22) + SourceIndex(0)
+-4 >Emitted(15, 25) Source(24, 25) + SourceIndex(0)
+-5 >Emitted(15, 29) Source(24, 29) + SourceIndex(0)
+-6 >Emitted(15, 30) Source(24, 30) + SourceIndex(0)
+-7 >Emitted(15, 38) Source(24, 38) + SourceIndex(0)
+-8 >Emitted(15, 41) Source(24, 41) + SourceIndex(0)
+-9 >Emitted(15, 48) Source(24, 48) + SourceIndex(0)
+-10>Emitted(15, 49) Source(24, 49) + SourceIndex(0)
 +1->Emitted(11, 9) Source(24, 9) + SourceIndex(0)
 +2 >Emitted(11, 16) Source(24, 16) + SourceIndex(0)
 +3 >Emitted(11, 22) Source(24, 22) + SourceIndex(0)
@@ -989,10 +257,16 @@
 +8 >Emitted(11, 41) Source(24, 41) + SourceIndex(0)
 +9 >Emitted(11, 48) Source(24, 48) + SourceIndex(0)
 +10>Emitted(11, 49) Source(24, 49) + SourceIndex(0)
-+---
-+>>>    }
-+1 >^^^^
-+2 >    ^
+ ---
+ >>>    }
+ 1 >^^^^
+ 2 >    ^
+-3 >     ^^^^^^^->
+-1 >
+-  >    
+-2 >    }
+-1 >Emitted(16, 5) Source(25, 5) + SourceIndex(0)
+-2 >Emitted(16, 6) Source(25, 6) + SourceIndex(0)
 +3 >     ^^^^^^^^^^^^^^^^^^^->
 +1 >
 +2 >    
@@ -1100,56 +374,77 @@
 +5 >Emitted(18, 17) Source(33, 33) + SourceIndex(0)
 +6 >Emitted(18, 19) Source(33, 35) + SourceIndex(0)
 +7 >Emitted(18, 20) Source(33, 36) + SourceIndex(0)
-+---
-+>>>    fn(x) {
+ ---
+ >>>    fn(x) {
+-1->^^^^
 +1 >^^^^
-+2 >    ^^
-+3 >      ^
-+4 >       ^
+ 2 >    ^^
+ 3 >      ^
+ 4 >       ^
+-5 >        ^^^^^^^^^^^^^^^^^^^^^^->
+-1->
+-  >
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(50)
+-  >    private x: string;
+-  >
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(60)
+-  >    private static x1: number = 10;
 +5 >        ^^
 +6 >          ^^^^^^^^^^^^^^^^^^^^->
 +1 >
-+  >    
-+  >    private 
-+2 >    fn
-+3 >      (
-+  >            @ParameterDecorator1 
-+  >            @ParameterDecorator2(70) 
-+  >            
-+4 >       x: number
+   >    
+   >    private 
+ 2 >    fn
+@@= skipped -44, +138 lines =@@
+   >            @ParameterDecorator2(70) 
+   >            
+ 4 >       x: number
+-1->Emitted(17, 5) Source(35, 13) + SourceIndex(0)
+-2 >Emitted(17, 7) Source(35, 15) + SourceIndex(0)
+-3 >Emitted(17, 8) Source(38, 7) + SourceIndex(0)
+-4 >Emitted(17, 9) Source(38, 16) + SourceIndex(0)
 +5 >        ) 
 +1 >Emitted(19, 5) Source(35, 13) + SourceIndex(0)
 +2 >Emitted(19, 7) Source(35, 15) + SourceIndex(0)
 +3 >Emitted(19, 8) Source(38, 7) + SourceIndex(0)
 +4 >Emitted(19, 9) Source(38, 16) + SourceIndex(0)
 +5 >Emitted(19, 11) Source(38, 18) + SourceIndex(0)
-+---
-+>>>        return this.greeting;
-+1->^^^^^^^^
-+2 >        ^^^^^^^
-+3 >               ^^^^
-+4 >                   ^
-+5 >                    ^^^^^^^^
-+6 >                            ^
+ ---
+ >>>        return this.greeting;
+ 1->^^^^^^^^
+@@= skipped -12, +14 lines =@@
+ 4 >                   ^
+ 5 >                    ^^^^^^^^
+ 6 >                            ^
+-1->) {
 +1->{
-+  >        
-+2 >        return 
-+3 >               this
-+4 >                   .
-+5 >                    greeting
-+6 >                            ;
+   >        
+ 2 >        return 
+ 3 >               this
+ 4 >                   .
+ 5 >                    greeting
+ 6 >                            ;
+-1->Emitted(18, 9) Source(39, 9) + SourceIndex(0)
+-2 >Emitted(18, 16) Source(39, 16) + SourceIndex(0)
+-3 >Emitted(18, 20) Source(39, 20) + SourceIndex(0)
+-4 >Emitted(18, 21) Source(39, 21) + SourceIndex(0)
+-5 >Emitted(18, 29) Source(39, 29) + SourceIndex(0)
+-6 >Emitted(18, 30) Source(39, 30) + SourceIndex(0)
 +1->Emitted(20, 9) Source(39, 9) + SourceIndex(0)
 +2 >Emitted(20, 16) Source(39, 16) + SourceIndex(0)
 +3 >Emitted(20, 20) Source(39, 20) + SourceIndex(0)
 +4 >Emitted(20, 21) Source(39, 21) + SourceIndex(0)
 +5 >Emitted(20, 29) Source(39, 29) + SourceIndex(0)
 +6 >Emitted(20, 30) Source(39, 30) + SourceIndex(0)
-+---
-+>>>    }
-+1 >^^^^
-+2 >    ^
+ ---
+ >>>    }
+ 1 >^^^^
+ 2 >    ^
+-3 >     ^^^^^^^^^^^^^^^^^->
 +3 >     ^^^^^^^^^^^^^^^^^^^->
-+1 >
+ 1 >
 +2 >    
 +  >        }
 +1 >Emitted(21, 5) Source(39, 30) + SourceIndex(0)
@@ -1162,7 +457,10 @@
 +4 >                       ^^^^^->
 +1->
 +  >
-+  >    
+   >    
+-2 >    }
+-1 >Emitted(19, 5) Source(40, 5) + SourceIndex(0)
+-2 >Emitted(19, 6) Source(40, 6) + SourceIndex(0)
 +2 >    @
 +3 >     PropertyDecorator1
 +1->Emitted(22, 5) Source(42, 5) + SourceIndex(0)
@@ -1186,8 +484,22 @@
 +3 >Emitted(23, 25) Source(43, 25) + SourceIndex(0)
 +4 >Emitted(23, 27) Source(43, 27) + SourceIndex(0)
 +5 >Emitted(23, 28) Source(43, 28) + SourceIndex(0)
-+---
-+>>>    get greetings() {
+ ---
+ >>>    get greetings() {
+-1->^^^^
+-2 >    ^^^^
+-3 >        ^^^^^^^^^
+-4 >                 ^^^^^^^^^^^^^->
+-1->
+-  >
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(80)
+-  >    
+-2 >    get 
+-3 >        greetings
+-1->Emitted(20, 5) Source(44, 5) + SourceIndex(0)
+-2 >Emitted(20, 9) Source(44, 9) + SourceIndex(0)
+-3 >Emitted(20, 18) Source(44, 18) + SourceIndex(0)
 +1 >^^^^^^^^
 +2 >        ^^^^^^^^^
 +3 >                 ^^^
@@ -1199,56 +511,69 @@
 +1 >Emitted(24, 9) Source(44, 9) + SourceIndex(0)
 +2 >Emitted(24, 18) Source(44, 18) + SourceIndex(0)
 +3 >Emitted(24, 21) Source(44, 21) + SourceIndex(0)
-+---
-+>>>        return this.greeting;
-+1->^^^^^^^^
-+2 >        ^^^^^^^
-+3 >               ^^^^
-+4 >                   ^
-+5 >                    ^^^^^^^^
-+6 >                            ^
+ ---
+ >>>        return this.greeting;
+ 1->^^^^^^^^
+@@= skipped -47, +76 lines =@@
+ 4 >                   ^
+ 5 >                    ^^^^^^^^
+ 6 >                            ^
+-1->() {
 +1->{
-+  >        
-+2 >        return 
-+3 >               this
-+4 >                   .
-+5 >                    greeting
-+6 >                            ;
+   >        
+ 2 >        return 
+ 3 >               this
+ 4 >                   .
+ 5 >                    greeting
+ 6 >                            ;
+-1->Emitted(21, 9) Source(45, 9) + SourceIndex(0)
+-2 >Emitted(21, 16) Source(45, 16) + SourceIndex(0)
+-3 >Emitted(21, 20) Source(45, 20) + SourceIndex(0)
+-4 >Emitted(21, 21) Source(45, 21) + SourceIndex(0)
+-5 >Emitted(21, 29) Source(45, 29) + SourceIndex(0)
+-6 >Emitted(21, 30) Source(45, 30) + SourceIndex(0)
 +1->Emitted(25, 9) Source(45, 9) + SourceIndex(0)
 +2 >Emitted(25, 16) Source(45, 16) + SourceIndex(0)
 +3 >Emitted(25, 20) Source(45, 20) + SourceIndex(0)
 +4 >Emitted(25, 21) Source(45, 21) + SourceIndex(0)
 +5 >Emitted(25, 29) Source(45, 29) + SourceIndex(0)
 +6 >Emitted(25, 30) Source(45, 30) + SourceIndex(0)
-+---
-+>>>    }
-+1 >^^^^
-+2 >    ^
-+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+1 >
+ ---
+ >>>    }
+ 1 >^^^^
+ 2 >    ^
+ 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(22, 5) Source(46, 5) + SourceIndex(0)
+-2 >Emitted(22, 6) Source(46, 6) + SourceIndex(0)
 +2 >    
 +  >        }
 +1 >Emitted(26, 5) Source(45, 30) + SourceIndex(0)
 +2 >Emitted(26, 6) Source(46, 6) + SourceIndex(0)
-+---
-+>>>    set greetings(greetings) {
-+1->^^^^
-+2 >    ^^^^
-+3 >        ^^^^^^^^^
-+4 >                 ^
-+5 >                  ^^^^^^^^^
+ ---
+ >>>    set greetings(greetings) {
+ 1->^^^^
+@@= skipped -30, +30 lines =@@
+ 3 >        ^^^^^^^^^
+ 4 >                 ^
+ 5 >                  ^^^^^^^^^
+-6 >                           ^^^^^^^^->
 +6 >                           ^^
 +7 >                             ^^^^^^->
-+1->
-+  >
-+  >    
-+2 >    set 
-+3 >        greetings
-+4 >                 (
-+  >                       @ParameterDecorator1 
-+  >                       @ParameterDecorator2(90) 
-+  >                       
-+5 >                  greetings: string
+ 1->
+   >
+   >    
+@@= skipped -11, +12 lines =@@
+   >                       @ParameterDecorator2(90) 
+   >                       
+ 5 >                  greetings: string
+-1->Emitted(23, 5) Source(48, 5) + SourceIndex(0)
+-2 >Emitted(23, 9) Source(48, 9) + SourceIndex(0)
+-3 >Emitted(23, 18) Source(48, 18) + SourceIndex(0)
+-4 >Emitted(23, 19) Source(51, 7) + SourceIndex(0)
+-5 >Emitted(23, 28) Source(51, 24) + SourceIndex(0)
 +6 >                           ) 
 +1->Emitted(27, 5) Source(48, 5) + SourceIndex(0)
 +2 >Emitted(27, 9) Source(48, 9) + SourceIndex(0)
@@ -1256,23 +581,29 @@
 +4 >Emitted(27, 19) Source(51, 7) + SourceIndex(0)
 +5 >Emitted(27, 28) Source(51, 24) + SourceIndex(0)
 +6 >Emitted(27, 30) Source(51, 26) + SourceIndex(0)
-+---
-+>>>        this.greeting = greetings;
-+1->^^^^^^^^
-+2 >        ^^^^
-+3 >            ^
-+4 >             ^^^^^^^^
-+5 >                     ^^^
-+6 >                        ^^^^^^^^^
-+7 >                                 ^
+ ---
+ >>>        this.greeting = greetings;
+ 1->^^^^^^^^
+@@= skipped -14, +16 lines =@@
+ 5 >                     ^^^
+ 6 >                        ^^^^^^^^^
+ 7 >                                 ^
+-1->) {
 +1->{
-+  >        
-+2 >        this
-+3 >            .
-+4 >             greeting
-+5 >                      = 
-+6 >                        greetings
-+7 >                                 ;
+   >        
+ 2 >        this
+ 3 >            .
+@@= skipped -8, +8 lines =@@
+ 5 >                      = 
+ 6 >                        greetings
+ 7 >                                 ;
+-1->Emitted(24, 9) Source(52, 9) + SourceIndex(0)
+-2 >Emitted(24, 13) Source(52, 13) + SourceIndex(0)
+-3 >Emitted(24, 14) Source(52, 14) + SourceIndex(0)
+-4 >Emitted(24, 22) Source(52, 22) + SourceIndex(0)
+-5 >Emitted(24, 25) Source(52, 25) + SourceIndex(0)
+-6 >Emitted(24, 34) Source(52, 34) + SourceIndex(0)
+-7 >Emitted(24, 35) Source(52, 35) + SourceIndex(0)
 +1->Emitted(28, 9) Source(52, 9) + SourceIndex(0)
 +2 >Emitted(28, 13) Source(52, 13) + SourceIndex(0)
 +3 >Emitted(28, 14) Source(52, 14) + SourceIndex(0)
@@ -1280,11 +611,488 @@
 +5 >Emitted(28, 25) Source(52, 25) + SourceIndex(0)
 +6 >Emitted(28, 34) Source(52, 34) + SourceIndex(0)
 +7 >Emitted(28, 35) Source(52, 35) + SourceIndex(0)
-+---
-+>>>    }
-+1 >^^^^
-+2 >    ^
-+1 >
+ ---
+ >>>    }
+ 1 >^^^^
+ 2 >    ^
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(25, 5) Source(53, 5) + SourceIndex(0)
+-2 >Emitted(25, 6) Source(53, 6) + SourceIndex(0)
+----
+->>>};
+->>>Greeter.x1 = 10;
+-1 >
+-2 >^^^^^^^^^^
+-3 >          ^^^
+-4 >             ^^
+-5 >               
+-6 >               ^
+-1 >
+-2 >x1
+-3 >          : number = 
+-4 >             10
+-5 >               
+-6 >               : number = 10;
+-1 >Emitted(27, 1) Source(33, 20) + SourceIndex(0)
+-2 >Emitted(27, 11) Source(33, 22) + SourceIndex(0)
+-3 >Emitted(27, 14) Source(33, 33) + SourceIndex(0)
+-4 >Emitted(27, 16) Source(33, 35) + SourceIndex(0)
+-5 >Emitted(27, 16) Source(33, 22) + SourceIndex(0)
+-6 >Emitted(27, 17) Source(33, 36) + SourceIndex(0)
+----
+->>>__decorate([
+-1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-1 >Emitted(28, 1) Source(23, 5) + SourceIndex(0)
+----
+->>>    PropertyDecorator1,
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^^^^^->
+-1->
+-2 >    PropertyDecorator1
+-1->Emitted(29, 5) Source(21, 6) + SourceIndex(0)
+-2 >Emitted(29, 23) Source(21, 24) + SourceIndex(0)
+----
+->>>    PropertyDecorator2(40)
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^
+-4 >                       ^^
+-5 >                         ^
+-6 >                          ^^^^^^^^^^^^->
+-1->
+-  >    @
+-2 >    PropertyDecorator2
+-3 >                      (
+-4 >                       40
+-5 >                         )
+-1->Emitted(30, 5) Source(22, 6) + SourceIndex(0)
+-2 >Emitted(30, 23) Source(22, 24) + SourceIndex(0)
+-3 >Emitted(30, 24) Source(22, 25) + SourceIndex(0)
+-4 >Emitted(30, 26) Source(22, 27) + SourceIndex(0)
+-5 >Emitted(30, 27) Source(22, 28) + SourceIndex(0)
+----
+->>>], Greeter.prototype, "greet", null);
+-1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1->
+-  >    greet() {
+-  >        return "<h1>" + this.greeting + "</h1>";
+-  >    }
+-1->Emitted(31, 37) Source(25, 6) + SourceIndex(0)
+----
+->>>__decorate([
+-1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-  >
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(50)
+-  >    private 
+-1 >Emitted(32, 1) Source(29, 13) + SourceIndex(0)
+----
+->>>    PropertyDecorator1,
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^^^^^->
+-1->
+-2 >    PropertyDecorator1
+-1->Emitted(33, 5) Source(27, 6) + SourceIndex(0)
+-2 >Emitted(33, 23) Source(27, 24) + SourceIndex(0)
+----
+->>>    PropertyDecorator2(50)
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^
+-4 >                       ^^
+-5 >                         ^
+-6 >                          ^^^^^^^^^^->
+-1->
+-  >    @
+-2 >    PropertyDecorator2
+-3 >                      (
+-4 >                       50
+-5 >                         )
+-1->Emitted(34, 5) Source(28, 6) + SourceIndex(0)
+-2 >Emitted(34, 23) Source(28, 24) + SourceIndex(0)
+-3 >Emitted(34, 24) Source(28, 25) + SourceIndex(0)
+-4 >Emitted(34, 26) Source(28, 27) + SourceIndex(0)
+-5 >Emitted(34, 27) Source(28, 28) + SourceIndex(0)
+----
+->>>], Greeter.prototype, "x", void 0);
+-1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1->
+-  >    private x: string;
+-1->Emitted(35, 35) Source(29, 23) + SourceIndex(0)
+----
+->>>__decorate([
+-1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-  >
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(60)
+-  >    private static x1: number = 10;
+-  >    
+-  >    private 
+-1 >Emitted(36, 1) Source(35, 13) + SourceIndex(0)
+----
+->>>    __param(0, ParameterDecorator1),
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^^^^->
+-1->fn(
+-  >      @
+-2 >    
+-3 >               ParameterDecorator1
+-4 >                                  
+-1->Emitted(37, 5) Source(36, 8) + SourceIndex(0)
+-2 >Emitted(37, 16) Source(36, 8) + SourceIndex(0)
+-3 >Emitted(37, 35) Source(36, 27) + SourceIndex(0)
+-4 >Emitted(37, 36) Source(36, 27) + SourceIndex(0)
+----
+->>>    __param(0, ParameterDecorator2(70))
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^
+-6 >                                     ^
+-7 >                                      ^
+-1-> 
+-  >      @
+-2 >    
+-3 >               ParameterDecorator2
+-4 >                                  (
+-5 >                                   70
+-6 >                                     )
+-7 >                                      
+-1->Emitted(38, 5) Source(37, 8) + SourceIndex(0)
+-2 >Emitted(38, 16) Source(37, 8) + SourceIndex(0)
+-3 >Emitted(38, 35) Source(37, 27) + SourceIndex(0)
+-4 >Emitted(38, 36) Source(37, 28) + SourceIndex(0)
+-5 >Emitted(38, 38) Source(37, 30) + SourceIndex(0)
+-6 >Emitted(38, 39) Source(37, 31) + SourceIndex(0)
+-7 >Emitted(38, 40) Source(37, 31) + SourceIndex(0)
+----
+->>>], Greeter.prototype, "fn", null);
+-1 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1 > 
+-  >      x: number) {
+-  >        return this.greeting;
+-  >    }
+-1 >Emitted(39, 34) Source(40, 6) + SourceIndex(0)
+----
+->>>__decorate([
+-1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-  >
+-  >    @PropertyDecorator1
+-  >    @PropertyDecorator2(80)
+-  >    
+-1 >Emitted(40, 1) Source(44, 5) + SourceIndex(0)
+----
+->>>    PropertyDecorator1,
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^^^^^^->
+-1->
+-2 >    PropertyDecorator1
+-1->Emitted(41, 5) Source(42, 6) + SourceIndex(0)
+-2 >Emitted(41, 23) Source(42, 24) + SourceIndex(0)
+----
+->>>    PropertyDecorator2(80),
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^
+-4 >                       ^^
+-5 >                         ^
+-6 >                          ^^^^^^^^^^^->
+-1->
+-  >    @
+-2 >    PropertyDecorator2
+-3 >                      (
+-4 >                       80
+-5 >                         )
+-1->Emitted(42, 5) Source(43, 6) + SourceIndex(0)
+-2 >Emitted(42, 23) Source(43, 24) + SourceIndex(0)
+-3 >Emitted(42, 24) Source(43, 25) + SourceIndex(0)
+-4 >Emitted(42, 26) Source(43, 27) + SourceIndex(0)
+-5 >Emitted(42, 27) Source(43, 28) + SourceIndex(0)
+----
+->>>    __param(0, ParameterDecorator1),
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^^^^->
+-1->
+-  >    get greetings() {
+-  >        return this.greeting;
+-  >    }
+-  >
+-  >    set greetings(
+-  >      @
+-2 >    
+-3 >               ParameterDecorator1
+-4 >                                  
+-1->Emitted(43, 5) Source(49, 8) + SourceIndex(0)
+-2 >Emitted(43, 16) Source(49, 8) + SourceIndex(0)
+-3 >Emitted(43, 35) Source(49, 27) + SourceIndex(0)
+-4 >Emitted(43, 36) Source(49, 27) + SourceIndex(0)
+----
+->>>    __param(0, ParameterDecorator2(90))
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^
+-6 >                                     ^
+-7 >                                      ^
+-8 >                                       ^^^->
+-1-> 
+-  >      @
+-2 >    
+-3 >               ParameterDecorator2
+-4 >                                  (
+-5 >                                   90
+-6 >                                     )
+-7 >                                      
+-1->Emitted(44, 5) Source(50, 8) + SourceIndex(0)
+-2 >Emitted(44, 16) Source(50, 8) + SourceIndex(0)
+-3 >Emitted(44, 35) Source(50, 27) + SourceIndex(0)
+-4 >Emitted(44, 36) Source(50, 28) + SourceIndex(0)
+-5 >Emitted(44, 38) Source(50, 30) + SourceIndex(0)
+-6 >Emitted(44, 39) Source(50, 31) + SourceIndex(0)
+-7 >Emitted(44, 40) Source(50, 31) + SourceIndex(0)
+----
+->>>], Greeter.prototype, "greetings", null);
+-1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1->
+-1->Emitted(45, 41) Source(46, 6) + SourceIndex(0)
+----
+->>>__decorate([
+-1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-1 >Emitted(46, 1) Source(33, 20) + SourceIndex(0)
+----
+->>>    PropertyDecorator1,
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^^^^^->
+-1->
+-2 >    PropertyDecorator1
+-1->Emitted(47, 5) Source(31, 6) + SourceIndex(0)
+-2 >Emitted(47, 23) Source(31, 24) + SourceIndex(0)
+----
+->>>    PropertyDecorator2(60)
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^
+-3 >                      ^
+-4 >                       ^^
+-5 >                         ^
+-6 >                          ^->
+-1->
+-  >    @
+-2 >    PropertyDecorator2
+-3 >                      (
+-4 >                       60
+-5 >                         )
+-1->Emitted(48, 5) Source(32, 6) + SourceIndex(0)
+-2 >Emitted(48, 23) Source(32, 24) + SourceIndex(0)
+-3 >Emitted(48, 24) Source(32, 25) + SourceIndex(0)
+-4 >Emitted(48, 26) Source(32, 27) + SourceIndex(0)
+-5 >Emitted(48, 27) Source(32, 28) + SourceIndex(0)
+----
+->>>], Greeter, "x1", void 0);
+-1->^^^^^^^^^^^^^^^^^^^^^^^^^
+-1->
+-  >    private static x1: number = 10;
+-1->Emitted(49, 26) Source(33, 36) + SourceIndex(0)
+----
+->>>Greeter = __decorate([
+-1 >
+-2 >^^^^^^^
+-3 >       ^^^^^^^^^^^^^^->
+-1 >
+-2 >Greeter
+-1 >Emitted(50, 1) Source(10, 7) + SourceIndex(0)
+-2 >Emitted(50, 8) Source(10, 14) + SourceIndex(0)
+----
+->>>    ClassDecorator1,
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^
+-3 >                   ^^^^^^->
+-1->
+-2 >    ClassDecorator1
+-1->Emitted(51, 5) Source(8, 2) + SourceIndex(0)
+-2 >Emitted(51, 20) Source(8, 17) + SourceIndex(0)
+----
+->>>    ClassDecorator2(10),
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^
+-3 >                   ^
+-4 >                    ^^
+-5 >                      ^
+-6 >                       ^^^^^^^^^^^^^^->
+-1->
+-  >@
+-2 >    ClassDecorator2
+-3 >                   (
+-4 >                    10
+-5 >                      )
+-1->Emitted(52, 5) Source(9, 2) + SourceIndex(0)
+-2 >Emitted(52, 20) Source(9, 17) + SourceIndex(0)
+-3 >Emitted(52, 21) Source(9, 18) + SourceIndex(0)
+-4 >Emitted(52, 23) Source(9, 20) + SourceIndex(0)
+-5 >Emitted(52, 24) Source(9, 21) + SourceIndex(0)
+----
+->>>    __param(0, ParameterDecorator1),
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^^^^^->
+-1->
+-  >class Greeter {
+-  >    constructor(
+-  >      @
+-2 >    
+-3 >               ParameterDecorator1
+-4 >                                  
+-1->Emitted(53, 5) Source(12, 8) + SourceIndex(0)
+-2 >Emitted(53, 16) Source(12, 8) + SourceIndex(0)
+-3 >Emitted(53, 35) Source(12, 27) + SourceIndex(0)
+-4 >Emitted(53, 36) Source(12, 27) + SourceIndex(0)
+----
+->>>    __param(0, ParameterDecorator2(20)),
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^
+-6 >                                     ^
+-7 >                                      ^
+-1-> 
+-  >      @
+-2 >    
+-3 >               ParameterDecorator2
+-4 >                                  (
+-5 >                                   20
+-6 >                                     )
+-7 >                                      
+-1->Emitted(54, 5) Source(13, 8) + SourceIndex(0)
+-2 >Emitted(54, 16) Source(13, 8) + SourceIndex(0)
+-3 >Emitted(54, 35) Source(13, 27) + SourceIndex(0)
+-4 >Emitted(54, 36) Source(13, 28) + SourceIndex(0)
+-5 >Emitted(54, 38) Source(13, 30) + SourceIndex(0)
+-6 >Emitted(54, 39) Source(13, 31) + SourceIndex(0)
+-7 >Emitted(54, 40) Source(13, 31) + SourceIndex(0)
+----
+->>>    __param(1, ParameterDecorator1),
+-1 >^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^^^^->
+-1 > 
+-  >      public greeting: string, 
+-  >      
+-  >      @
+-2 >    
+-3 >               ParameterDecorator1
+-4 >                                  
+-1 >Emitted(55, 5) Source(16, 8) + SourceIndex(0)
+-2 >Emitted(55, 16) Source(16, 8) + SourceIndex(0)
+-3 >Emitted(55, 35) Source(16, 27) + SourceIndex(0)
+-4 >Emitted(55, 36) Source(16, 27) + SourceIndex(0)
+----
+->>>    __param(1, ParameterDecorator2(30))
+-1->^^^^
+-2 >    ^^^^^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^
+-4 >                                  ^
+-5 >                                   ^^
+-6 >                                     ^
+-7 >                                      ^
+-1-> 
+-  >      @
+-2 >    
+-3 >               ParameterDecorator2
+-4 >                                  (
+-5 >                                   30
+-6 >                                     )
+-7 >                                      
+-1->Emitted(56, 5) Source(17, 8) + SourceIndex(0)
+-2 >Emitted(56, 16) Source(17, 8) + SourceIndex(0)
+-3 >Emitted(56, 35) Source(17, 27) + SourceIndex(0)
+-4 >Emitted(56, 36) Source(17, 28) + SourceIndex(0)
+-5 >Emitted(56, 38) Source(17, 30) + SourceIndex(0)
+-6 >Emitted(56, 39) Source(17, 31) + SourceIndex(0)
+-7 >Emitted(56, 40) Source(17, 31) + SourceIndex(0)
+----
+->>>], Greeter);
+-1 >^^^
+-2 >   ^^^^^^^
+-3 >          ^
+-4 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-2 >   Greeter
+-3 >           {
+-  >              constructor(
+-  >                @ParameterDecorator1 
+-  >                @ParameterDecorator2(20) 
+-  >                public greeting: string, 
+-  >                
+-  >                @ParameterDecorator1 
+-  >                @ParameterDecorator2(30) 
+-  >                ...b: string[]) {
+-  >              }
+-  >              
+-  >              @PropertyDecorator1
+-  >              @PropertyDecorator2(40)
+-  >              greet() {
+-  >                  return "<h1>" + this.greeting + "</h1>";
+-  >              }
+-  >          
+-  >              @PropertyDecorator1
+-  >              @PropertyDecorator2(50)
+-  >              private x: string;
+-  >          
+-  >              @PropertyDecorator1
+-  >              @PropertyDecorator2(60)
+-  >              private static x1: number = 10;
+-  >              
+-  >              private fn(
+-  >                @ParameterDecorator1 
+-  >                @ParameterDecorator2(70) 
+-  >                x: number) {
+-  >                  return this.greeting;
+-  >              }
+-  >          
+-  >              @PropertyDecorator1
+-  >              @PropertyDecorator2(80)
+-  >              get greetings() {
+-  >                  return this.greeting;
+-  >              }
+-  >          
+-  >              set greetings(
+-  >                @ParameterDecorator1 
+-  >                @ParameterDecorator2(90) 
+-  >                greetings: string) {
+-  >                  this.greeting = greetings;
+-  >              }    
+-  >          }
+-1 >Emitted(57, 4) Source(10, 7) + SourceIndex(0)
+-2 >Emitted(57, 11) Source(10, 14) + SourceIndex(0)
+-3 >Emitted(57, 12) Source(54, 2) + SourceIndex(0)
 +2 >    
 +  >        }
 +1 >Emitted(29, 5) Source(52, 35) + SourceIndex(0)

@@ -13,101 +13,61 @@
 -var __metadata = (this && this.__metadata) || function (k, v) {
 -    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 -};
--let A = (() => {
--    class A {
--        get x() { return 0; }
--        set x(value) { }
--    }
--    __decorate([
--        dec,
--        __metadata("design:type", Number),
--        __metadata("design:paramtypes", [Number])
--    ], A.prototype, "x", null);
--    return A;
--})();
--let B = (() => {
--    class B {
--        get x() { return 0; }
--        set x(value) { }
--    }
--    __decorate([
--        dec,
--        __metadata("design:type", Number),
--        __metadata("design:paramtypes", [Number])
--    ], B.prototype, "x", null);
--    return B;
--})();
--let C = (() => {
--    class C {
--        set x(value) { }
--        get x() { return 0; }
--    }
--    __decorate([
--        dec,
--        __metadata("design:type", Number),
--        __metadata("design:paramtypes", [Number])
--    ], C.prototype, "x", null);
--    return C;
--})();
--let D = (() => {
--    class D {
--        set x(value) { }
--        get x() { return 0; }
--    }
--    __decorate([
--        dec,
--        __metadata("design:type", Number),
--        __metadata("design:paramtypes", [Number])
--    ], D.prototype, "x", null);
--    return D;
--})();
--let E = (() => {
--    class E {
--        get x() { return 0; }
--    }
--    __decorate([
--        dec,
--        __metadata("design:type", Object),
--        __metadata("design:paramtypes", [])
--    ], E.prototype, "x", null);
--    return E;
--})();
--let F = (() => {
--    class F {
--        set x(value) { }
--    }
--    __decorate([
--        dec,
--        __metadata("design:type", Number),
--        __metadata("design:paramtypes", [Number])
--    ], F.prototype, "x", null);
--    return F;
--})();
-+class A {
+ class A {
 +    @dec
-+    get x() { return 0; }
-+    set x(value) { }
-+}
-+class B {
-+    get x() { return 0; }
+     get x() { return 0; }
+     set x(value) { }
+ }
+-__decorate([
+-    dec,
+-    __metadata("design:type", Number),
+-    __metadata("design:paramtypes", [Number])
+-], A.prototype, "x", null);
+ class B {
+     get x() { return 0; }
 +    @dec
-+    set x(value) { }
-+}
-+class C {
+     set x(value) { }
+ }
+-__decorate([
+-    dec,
+-    __metadata("design:type", Number),
+-    __metadata("design:paramtypes", [Number])
+-], B.prototype, "x", null);
+ class C {
 +    @dec
-+    set x(value) { }
-+    get x() { return 0; }
-+}
-+class D {
-+    set x(value) { }
+     set x(value) { }
+     get x() { return 0; }
+ }
+-__decorate([
+-    dec,
+-    __metadata("design:type", Number),
+-    __metadata("design:paramtypes", [Number])
+-], C.prototype, "x", null);
+ class D {
+     set x(value) { }
 +    @dec
-+    get x() { return 0; }
-+}
-+class E {
+     get x() { return 0; }
+ }
+-__decorate([
+-    dec,
+-    __metadata("design:type", Number),
+-    __metadata("design:paramtypes", [Number])
+-], D.prototype, "x", null);
+ class E {
 +    @dec
-+    get x() { return 0; }
-+}
-+class F {
+     get x() { return 0; }
+ }
+-__decorate([
+-    dec,
+-    __metadata("design:type", Object),
+-    __metadata("design:paramtypes", [])
+-], E.prototype, "x", null);
+ class F {
 +    @dec
-+    set x(value) { }
-+}
+     set x(value) { }
+ }
+-__decorate([
+-    dec,
+-    __metadata("design:type", Number),
+-    __metadata("design:paramtypes", [Number])
+-], F.prototype, "x", null);

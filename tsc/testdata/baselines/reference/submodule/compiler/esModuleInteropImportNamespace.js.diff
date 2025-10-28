@@ -1,9 +1,0 @@
---- old.esModuleInteropImportNamespace.js
-+++ new.esModuleInteropImportNamespace.js
-@@= skipped -45, +45 lines =@@
-     };
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
--var foo = __importStar(require("./foo"));
-+const foo = __importStar(require("./foo"));
- foo.default;

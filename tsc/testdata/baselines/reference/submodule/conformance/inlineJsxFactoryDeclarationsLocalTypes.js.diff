@@ -1,15 +1,6 @@
 --- old.inlineJsxFactoryDeclarationsLocalTypes.js
 +++ new.inlineJsxFactoryDeclarationsLocalTypes.js
-@@= skipped -91, +91 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.tree = exports.MyClass = exports.MySFC = void 0;
- /** @jsx predom */
--var renderer2_1 = require("./renderer2");
-+const renderer2_1 = require("./renderer2");
- const MySFC = (props) => (0, renderer2_1.predom)("p", null,
-     props.x,
-     " + ",
-@@= skipped -10, +10 lines =@@
+@@= skipped -101, +101 lines =@@
      ...this.props.children);
  exports.MySFC = MySFC;
  class MyClass {
@@ -18,18 +9,7 @@
      constructor(props) {
          this.props = props;
      }
-@@= skipped -55, +57 lines =@@
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
- /** @jsx dom */
--var renderer_1 = require("./renderer");
--var component_1 = __importStar(require("./component"));
-+const renderer_1 = require("./renderer");
-+const component_1 = __importStar(require("./component"));
- let elem = component_1.default;
- elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
- const DOMSFC = (props) => (0, renderer_1.dom)("p", null,
-@@= skipped -12, +12 lines =@@
+@@= skipped -67, +69 lines =@@
      props.x + props.y,
      props.children);
  class DOMClass {

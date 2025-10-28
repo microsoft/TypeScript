@@ -1,9 +1,0 @@
---- old.isolatedModulesExportDeclarationType.js
-+++ new.isolatedModulesExportDeclarationType.js
-@@= skipped -43, +43 lines =@@
- };
- Object.defineProperty(exports, "__esModule", { value: true });
- // @ts-expect-error
--var doesntexist_1 = __importDefault(require("./doesntexist"));
-+const doesntexist_1 = __importDefault(require("./doesntexist"));
- exports.default = doesntexist_1.default;

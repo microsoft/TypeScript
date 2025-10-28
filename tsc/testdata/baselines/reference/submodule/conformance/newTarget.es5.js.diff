@@ -1,27 +1,17 @@
 --- old.newTarget.es5.js
 +++ new.newTarget.es5.js
-@@= skipped -34, +34 lines =@@
-
-
+@@= skipped -36, +36 lines =@@
  //// [newTarget.es5.js]
--let A = (() => {
--    class A {
--        constructor() {
--            this.d = function () { return new.target; };
--            const a = new.target;
--            const b = () => new.target;
--        }
-+class A {
-+    constructor() {
-+        const a = new.target;
-+        const b = () => new.target;
+ class A {
+     constructor() {
+-        this.d = function () { return new.target; };
+         const a = new.target;
+         const b = () => new.target;
      }
--    A.c = function () { return new.target; };
--    return A;
--})();
 +    static c = function () { return new.target; };
 +    d = function () { return new.target; };
-+}
+ }
+-A.c = function () { return new.target; };
  class B extends A {
      constructor() {
          super();

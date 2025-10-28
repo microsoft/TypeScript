@@ -15,24 +15,16 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--var _0_ts_1 = require("./0.ts");
--var _0_ts_2 = require("./0.ts");
--let C = (() => {
--    let C = class C extends _0_ts_1.base {
--        constructor(prop) {
--            super();
--        }
--    };
--    C = __decorate([
--        __param(0, _0_ts_2.foo)
--    ], C);
--    return C;
--})();
-+const _0_ts_1 = require("./0.ts");
-+const _0_ts_2 = require("./0.ts");
+ const _0_ts_1 = require("./0.ts");
+ const _0_ts_2 = require("./0.ts");
+-let C = class C extends _0_ts_1.base {
 +class C extends _0_ts_1.base {
-+    constructor(prop) {
-+        super();
-+    }
+     constructor(prop) {
+         super();
+     }
+-};
 +}
  exports.C = C;
+-exports.C = C = __decorate([
+-    __param(0, _0_ts_2.foo)
+-], C);

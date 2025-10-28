@@ -1,37 +1,19 @@
 --- old.instanceAndStaticDeclarations1.js
 +++ new.instanceAndStaticDeclarations1.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [instanceAndStaticDeclarations1.js]
  // from spec
--let Point = (() => {
--    class Point {
--        constructor(x, y) {
--            this.x = x;
--            this.y = y;
--        }
--        distance(p) {
--            var dx = this.x - p.x;
--            var dy = this.y - p.y;
--            return Math.sqrt(dx * dx + dy * dy);
--        }
--        static distance(p1, p2) { return p1.distance(p2); }
--    }
--    Point.origin = new Point(0, 0);
--    return Point;
--})();
-+class Point {
+ class Point {
 +    x;
 +    y;
-+    constructor(x, y) {
-+        this.x = x;
-+        this.y = y;
-+    }
-+    distance(p) {
-+        var dx = this.x - p.x;
-+        var dy = this.y - p.y;
-+        return Math.sqrt(dx * dx + dy * dy);
-+    }
+     constructor(x, y) {
+         this.x = x;
+         this.y = y;
+@@= skipped -9, +11 lines =@@
+         var dy = this.y - p.y;
+         return Math.sqrt(dx * dx + dy * dy);
+     }
 +    static origin = new Point(0, 0);
-+    static distance(p1, p2) { return p1.distance(p2); }
-+}
+     static distance(p1, p2) { return p1.distance(p2); }
+ }
+-Point.origin = new Point(0, 0);

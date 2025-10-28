@@ -1,5 +1,5 @@
-superInLambdas.ts(47,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-superInLambdas.ts(51,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superInLambdas.ts(47,49): error TS2855: Class field 'name' defined by the parent class is not accessible in the child class via super.
+superInLambdas.ts(51,49): error TS2855: Class field 'name' defined by the parent class is not accessible in the child class via super.
 superInLambdas.ts(61,34): error TS1034: 'super' must be followed by an argument list or member access.
 superInLambdas.ts(65,34): error TS1034: 'super' must be followed by an argument list or member access.
 
@@ -53,13 +53,13 @@ superInLambdas.ts(65,34): error TS1034: 'super' must be followed by an argument 
             // super property in a nested lambda in a constructor 
             var superName = () => () => () => super.name;
                                                     ~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'name' defined by the parent class is not accessible in the child class via super.
         }
         sayHello(): void {
             // super property in a nested lambda in a method
             var superName = () => () => () => super.name;
                                                     ~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'name' defined by the parent class is not accessible in the child class via super.
         }
     }
     

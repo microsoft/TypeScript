@@ -13,6 +13,6 @@ function f() {
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments14.ts, 2, 13))
 
         return () => arguments;
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments14.ts, 2, 13))
     }
 }

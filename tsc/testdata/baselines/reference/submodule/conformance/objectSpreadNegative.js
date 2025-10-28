@@ -78,17 +78,6 @@ spreadObj.a; // error 'a' is not in {}
 
 
 //// [objectSpreadNegative.js]
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 let o = { a: 1, b: 'no' };
 /// private propagates
 class PrivateOptionalX {
@@ -97,42 +86,42 @@ class PrivateOptionalX {
 class PublicX {
     x;
 }
-let o2 = __assign(__assign({}, publicX), privateOptionalX);
+let o2 = Object.assign(Object.assign({}, publicX), privateOptionalX);
 let sn = o2.x; // error, x is private
-let allOptional = __assign(__assign({}, optionalString), optionalNumber);
+let allOptional = Object.assign(Object.assign({}, optionalString), optionalNumber);
 ;
 ;
-let spread = __assign({ b: true }, { s: "foo" });
+let spread = Object.assign({ b: true }, { s: "foo" });
 spread = { s: "foo" }; // error, missing 'b'
 let b = { b: false };
 spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
-let duplicated = __assign(__assign(__assign(__assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' });
-let duplicatedSpread = __assign(__assign({}, o), o);
+let duplicated = Object.assign(Object.assign(Object.assign(Object.assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' });
+let duplicatedSpread = Object.assign(Object.assign({}, o), o);
 // Note: ignore changes the order that properties are printed
-let ignore = __assign({ b: 'ignored' }, o);
+let ignore = Object.assign({ b: 'ignored' }, o);
 let o3 = { a: 1, b: 'no' };
 let o4 = { b: 'yes', c: true };
-let combinedBefore = __assign(__assign({ b: 'ok' }, o3), o4);
-let combinedMid = __assign(__assign(__assign({}, o3), { b: 'ok' }), o4);
-let combinedNested = __assign(__assign(__assign({}, __assign({ a: 4 }, { b: false, c: 'overriden' })), { d: 'actually new' }), { a: 5, d: 'maybe new' });
-let changeTypeBefore = __assign({ a: 'wrong type?' }, o3);
-let computedMiddle = __assign(__assign(__assign({}, o3), { ['in the middle']: 13, b: 'maybe?' }), o4);
+let combinedBefore = Object.assign(Object.assign({ b: 'ok' }, o3), o4);
+let combinedMid = Object.assign(Object.assign(Object.assign({}, o3), { b: 'ok' }), o4);
+let combinedNested = Object.assign(Object.assign(Object.assign({}, Object.assign({ a: 4 }, { b: false, c: 'overriden' })), { d: 'actually new' }), { a: 5, d: 'maybe new' });
+let changeTypeBefore = Object.assign({ a: 'wrong type?' }, o3);
+let computedMiddle = Object.assign(Object.assign(Object.assign({}, o3), { ['in the middle']: 13, b: 'maybe?' }), o4);
 // primitives are not allowed, except for falsy ones
-let spreadNum = __assign({}, 12);
-let spreadSum = __assign({}, 1 + 1);
-let spreadZero = __assign({}, 0);
+let spreadNum = Object.assign({}, 12);
+let spreadSum = Object.assign({}, 1 + 1);
+let spreadZero = Object.assign({}, 0);
 spreadZero.toFixed(); // error, no methods even from a falsy number
-let spreadBool = __assign({}, true);
+let spreadBool = Object.assign({}, true);
 spreadBool.valueOf();
-let spreadStr = __assign({}, 'foo');
+let spreadStr = Object.assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
 // functions are skipped
-let spreadFunc = __assign({}, function () { });
+let spreadFunc = Object.assign({}, function () { });
 spreadFunc(); // error, no call signature
 // write-only properties get skipped
-let setterOnly = __assign({ set b(bad) { } });
+let setterOnly = Object.assign({ set b(bad) { } });
 setterOnly.b = 12; // error, 'b' does not exist
 // methods are skipped because they aren't enumerable
 class C {
@@ -140,9 +129,9 @@ class C {
     m() { }
 }
 let c = new C();
-let spreadC = __assign({}, c);
+let spreadC = Object.assign({}, c);
 spreadC.m(); // error 'm' is not in '{ ... c }'
 // non primitive
 let obj = { a: 123 };
-let spreadObj = __assign({}, obj);
+let spreadObj = Object.assign({}, obj);
 spreadObj.a; // error 'a' is not in {}

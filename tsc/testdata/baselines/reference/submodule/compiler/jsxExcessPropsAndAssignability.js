@@ -21,17 +21,6 @@ const myHoc = <ComposedComponentProps extends any>(
 //// [jsxExcessPropsAndAssignability.js]
 "use strict";
 /// <reference path="react16.d.ts" />
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -70,6 +59,6 @@ const React = __importStar(require("react"));
 const myHoc = (ComposedComponent) => {
     const WrapperComponent = null;
     const props = null;
-    React.createElement(WrapperComponent, __assign({}, props, { myProp: '1000000' }));
-    React.createElement(WrapperComponent, __assign({}, props, { myProp: 1000000 }));
+    React.createElement(WrapperComponent, Object.assign({}, props, { myProp: '1000000' }));
+    React.createElement(WrapperComponent, Object.assign({}, props, { myProp: 1000000 }));
 };

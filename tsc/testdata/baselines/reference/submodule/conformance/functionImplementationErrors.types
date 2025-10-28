@@ -66,9 +66,9 @@ var m;
 
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n = m) {
->f6 : (n?: number) => void
->n : number
->m : number
+>f6 : (n?: any) => void
+>n : any
+>m : any
 
     var m = 4;
 >m : number

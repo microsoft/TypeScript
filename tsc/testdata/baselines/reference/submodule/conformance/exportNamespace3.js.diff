@@ -1,9 +1,0 @@
---- old.exportNamespace3.js
-+++ new.exportNamespace3.js
-@@= skipped -64, +64 lines =@@
- //// [d.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var c_1 = require("./c");
-+const c_1 = require("./c");
- new c_1.a.A(); // Error

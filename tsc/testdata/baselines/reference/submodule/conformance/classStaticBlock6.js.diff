@@ -13,30 +13,13 @@
 -        step((generator = generator.apply(thisArg, _arguments || [])).next());
 -    });
 -};
--let B = (() => {
--    class B {
--    }
--    B.a = 1;
--    return B;
--})();
-+class B {
-+    static a = 1;
-+}
- class C extends B {
-+    static {
-+        let await = 1;
-+        let arguments = 1;
-+        let eval = 1;
-+    }
-+    static {
-+        await ;
-+        if (true) {
-+        }
-+        arguments;
-+        await ;
-+        super();
-+    }
- }
+-var _a, _b, _c;
+ class B {
+-}
+-B.a = 1;
+-class C extends (_b = B) {
+-}
+-_a = C;
 -(() => {
 -    let await = 1;
 -    let arguments = 1;
@@ -50,32 +33,54 @@
 -    yield ;
 -    super();
 -})();
++    static a = 1;
++}
++class C extends B {
++    static {
++        let await = 1;
++        let arguments = 1;
++        let eval = 1;
++    }
++    static {
++        await ;
++        if (true) {
++        }
++        arguments;
++        await ;
++        super();
++    }
++}
  class CC {
      constructor() {
-         class C extends B {
+-        var _d, _e;
+-        class C extends (_e = B) {
 -        }
+-        _d = C;
 -        (() => {
 -            class CC extends B {
 -                constructor() {
 -                    super();
+-                }
+-            }
+-            super();
+-        })();
+-    }
+-}
+-function foo() {
+-    return __awaiter(this, void 0, void 0, function* () {
+         class C extends B {
 +            static {
 +                class CC extends B {
 +                    constructor() {
 +                        super();
 +                    }
-                 }
++                }
 +                super();
-             }
--            super();
--        })();
-+        }
-     }
- }
--function foo() {
--    return __awaiter(this, void 0, void 0, function* () {
--        class C extends B {
--        }
++            }
+         }
 -        (() => {
++    }
++}
 +async function foo() {
 +    class C extends B {
 +        static {
@@ -112,25 +117,22 @@
 -    })();
 +    }
  }
--let foo2 = (() => {
--    var _a;
--    class foo2 {
--    }
--    _a = foo2;
--    (() => {
--        _a.b; // should error
-+class foo2 {
+ class foo2 {
+-}
+-_c = foo2;
+-(() => {
+-    _c.b; // should error
+-    let b; // ok
+-    if (1) {
+-        _c.b; // should error
 +    static {
 +        this.b; // should error
-         let b; // ok
-         if (1) {
--            _a.b; // should error
++        let b; // ok
++        if (1) {
 +            this.b; // should error
-         }
--    })();
--    foo2.b = 1;
--    return foo2;
++        }
+     }
 -})();
-+    }
+-foo2.b = 1;
 +    static b = 1;
 +}

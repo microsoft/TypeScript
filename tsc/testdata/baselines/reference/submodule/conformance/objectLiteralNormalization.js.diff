@@ -5,10 +5,10 @@
 
  //// [objectLiteralNormalization.js]
 -"use strict";
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
-@@= skipped -105, +104 lines =@@
+ // Object literals in unions are normalized upon widening
+ let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
+ a1.a; // number
+@@= skipped -94, +93 lines =@@
      baz?: boolean;
  };
  declare let c1: {

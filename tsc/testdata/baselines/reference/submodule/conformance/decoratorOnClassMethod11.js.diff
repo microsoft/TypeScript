@@ -12,19 +12,12 @@
 -};
  var M;
  (function (M) {
--    let C = (() => {
--        class C {
--            decorator(target, key) { }
--            method() { }
--        }
--        __decorate([
--            (this.decorator)
--        ], C.prototype, "method", null);
--        return C;
--    })();
-+    class C {
-+        decorator(target, key) { }
+     class C {
+         decorator(target, key) { }
 +        @(this.decorator)
-+        method() { }
-+    }
+         method() { }
+     }
+-    __decorate([
+-        (this.decorator)
+-    ], C.prototype, "method", null);
  })(M || (M = {}));

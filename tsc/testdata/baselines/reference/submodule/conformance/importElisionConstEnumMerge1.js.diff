@@ -1,9 +1,0 @@
---- old.importElisionConstEnumMerge1.js
-+++ new.importElisionConstEnumMerge1.js
-@@= skipped -26, +26 lines =@@
- //// [index.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var merge_1 = require("./merge");
-+const merge_1 = require("./merge");
- 1 /* Enum.One */;

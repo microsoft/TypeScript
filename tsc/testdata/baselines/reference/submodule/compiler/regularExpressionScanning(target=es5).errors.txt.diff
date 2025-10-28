@@ -44,7 +44,6 @@
 -regularExpressionScanning.ts(13,48): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
 -regularExpressionScanning.ts(13,53): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 -regularExpressionScanning.ts(13,54): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
--regularExpressionScanning.ts(13,59): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(14,5): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 -regularExpressionScanning.ts(14,14): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 -regularExpressionScanning.ts(14,29): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
@@ -74,7 +73,6 @@
 -regularExpressionScanning.ts(20,62): error TS1529: Unknown Unicode property name or value.
 -regularExpressionScanning.ts(21,28): error TS1529: Unknown Unicode property name or value.
 -regularExpressionScanning.ts(21,62): error TS1529: Unknown Unicode property name or value.
--regularExpressionScanning.ts(21,72): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(22,28): error TS1529: Unknown Unicode property name or value.
 -regularExpressionScanning.ts(22,62): error TS1529: Unknown Unicode property name or value.
 -regularExpressionScanning.ts(22,72): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
@@ -103,7 +101,6 @@
 -regularExpressionScanning.ts(24,57): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
 -regularExpressionScanning.ts(24,62): error TS1527: Expected a Unicode property name or value.
 -regularExpressionScanning.ts(24,66): error TS1527: Expected a Unicode property name or value.
--regularExpressionScanning.ts(24,67): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(25,6): error TS1524: Unknown Unicode property name.
 -regularExpressionScanning.ts(25,31): error TS1523: Expected a Unicode property name.
 -regularExpressionScanning.ts(25,32): error TS1525: Expected a Unicode property value.
@@ -127,7 +124,6 @@
 -regularExpressionScanning.ts(27,19): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
 -regularExpressionScanning.ts(27,34): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
 -regularExpressionScanning.ts(27,47): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
--regularExpressionScanning.ts(27,59): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(28,19): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -regularExpressionScanning.ts(28,31): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -regularExpressionScanning.ts(28,47): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
@@ -138,7 +134,6 @@
 -regularExpressionScanning.ts(31,17): error TS1535: This character cannot be escaped in a regular expression.
 -regularExpressionScanning.ts(31,20): error TS1512: '\c' must be followed by an ASCII letter.
 -regularExpressionScanning.ts(31,23): error TS1535: This character cannot be escaped in a regular expression.
--regularExpressionScanning.ts(31,26): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(33,3): error TS1535: This character cannot be escaped in a regular expression.
 -regularExpressionScanning.ts(33,7): error TS1535: This character cannot be escaped in a regular expression.
 -regularExpressionScanning.ts(33,10): error TS1535: This character cannot be escaped in a regular expression.
@@ -151,7 +146,6 @@
 -regularExpressionScanning.ts(33,42): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
 -regularExpressionScanning.ts(33,43): error TS1535: This character cannot be escaped in a regular expression.
 -regularExpressionScanning.ts(33,45): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
--regularExpressionScanning.ts(33,47): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(34,3): error TS1511: '\q' is only available inside character class.
 -regularExpressionScanning.ts(34,7): error TS1535: This character cannot be escaped in a regular expression.
 -regularExpressionScanning.ts(34,10): error TS1521: '\q' must be followed by string alternatives enclosed in braces.
@@ -181,7 +175,6 @@
 -regularExpressionScanning.ts(37,61): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
 -regularExpressionScanning.ts(37,63): error TS1517: Range out of order in character class.
 -regularExpressionScanning.ts(37,76): error TS1535: This character cannot be escaped in a regular expression.
--regularExpressionScanning.ts(37,87): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -regularExpressionScanning.ts(38,8): error TS1005: '--' expected.
 -regularExpressionScanning.ts(38,9): error TS1520: Expected a class set operand.
 -regularExpressionScanning.ts(38,11): error TS1520: Expected a class set operand.
@@ -229,7 +222,7 @@
 -regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 -
 -
--==== regularExpressionScanning.ts (226 errors) ====
+-==== regularExpressionScanning.ts (219 errors) ====
 -    const regexes: RegExp[] = [
 -    	// Flags
 -    	/foo/visualstudiocode,
@@ -329,8 +322,6 @@
 -!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 -    	                                                    ~~~
 -!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
--    	                                                         ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
 -    	   ~~~~~
 -!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
@@ -397,8 +388,6 @@
 -!!! error TS1529: Unknown Unicode property name or value.
 -    	                                                            ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
--    	                                                                      ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v,
 -    	                          ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
@@ -458,8 +447,6 @@
 -!!! error TS1527: Expected a Unicode property name or value.
 -    	                                                                
 -!!! error TS1527: Expected a Unicode property name or value.
--    	                                                                 ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v,
 -    	    ~~~~~~~~~~~~~~~
 -!!! error TS1524: Unknown Unicode property name.
@@ -509,8 +496,6 @@
 -!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
 -    	                                             ~~~~~~~~~
 -!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
--    	                                                         ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v,
 -    	                 ~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
@@ -535,8 +520,6 @@
 -!!! error TS1512: '\c' must be followed by an ASCII letter.
 -    	                     ~~
 -!!! error TS1535: This character cannot be escaped in a regular expression.
--    	                        ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,
 -    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,
 -    	 ~~
@@ -563,8 +546,6 @@
 -!!! error TS1535: This character cannot be escaped in a regular expression.
 -    	                                           ~
 -!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
--    	                                             ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v,
 -    	 ~~
 -!!! error TS1511: '\q' is only available inside character class.
@@ -627,8 +608,6 @@
 -!!! error TS1517: Range out of order in character class.
 -    	                                                                          ~~
 -!!! error TS1535: This character cannot be escaped in a regular expression.
--    	                                                                                     ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,
 -    	      
 -!!! error TS1005: '--' expected.

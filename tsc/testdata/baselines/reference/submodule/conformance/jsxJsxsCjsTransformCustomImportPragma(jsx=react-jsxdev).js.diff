@@ -1,11 +1,6 @@
 --- old.jsxJsxsCjsTransformCustomImportPragma(jsx=react-jsxdev).js
 +++ new.jsxJsxsCjsTransformCustomImportPragma(jsx=react-jsxdev).js
-@@= skipped -24, +24 lines =@@
- //// [preact.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
-+const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
+@@= skipped -28, +28 lines =@@
  const _jsxFileName = "preact.tsx";
  /// <reference path="react16.d.ts" />
  /* @jsxImportSource preact */
@@ -18,9 +13,7 @@
  //// [react.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
- const _jsxFileName = "react.tsx";
+@@= skipped -9, +13 lines =@@
  /// <reference path="react16.d.ts" />
  /* @jsxImportSource react */
  require("./preact");

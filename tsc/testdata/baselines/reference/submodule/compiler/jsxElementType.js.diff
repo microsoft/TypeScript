@@ -15,11 +15,7 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  /// <reference path="react16.d.ts" />
--var React = __importStar(require("react"));
-+const React = __importStar(require("react"));
- let Component;
- const RenderElement = ({ title }) => React.createElement("div", null, title);
- Component = RenderElement;
+ const React = __importStar(require("react"));
 @@= skipped -34, +25 lines =@@
  React.createElement(RenderArray, { title: "react" });
  React.createElement(RenderArray, { excessProp: true });

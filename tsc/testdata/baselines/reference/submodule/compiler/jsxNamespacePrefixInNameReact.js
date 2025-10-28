@@ -34,17 +34,6 @@ var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
 
 
 //// [jsxNamespacePrefixInNameReact.js]
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var justElement1 = React.createElement("a:element", null);
 var justElement2 = React.createElement("a:element", null);
 var justElement3 = React.createElement("a:element", { attr: "value" });
@@ -65,9 +54,9 @@ var justAttribute3 = React.createElement("element", { "a:attr": "value" }, "text
 var both1 = React.createElement("a:element", { "a:attr": "value" });
 var both2 = React.createElement("a:element", { "k:attr": "value" });
 var both3 = React.createElement("a:element", { "a:attr": "value" }, "text");
-var endOfIdent1 = React.createElement("a:attr", __assign({}, "value"));
+var endOfIdent1 = React.createElement("a:attr", Object.assign({}, "value"));
 var endOfIdent2 = React.createElement("a", { "attr:": "value" });
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
-var beginOfIdent2 = React.createElement("a:attr", __assign({}, "value"));
+var beginOfIdent2 = React.createElement("a:attr", Object.assign({}, "value"));
 var upcaseComponent1 = React.createElement("ns:Upcase", null); // Parsed as intrinsic
 var upcaseComponent2 = React.createElement("Upcase:element", null); // Parsed as instrinsic

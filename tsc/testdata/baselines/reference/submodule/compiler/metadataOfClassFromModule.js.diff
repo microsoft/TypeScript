@@ -16,22 +16,16 @@
  var MyModule;
  (function (MyModule) {
      function inject(target, key) { }
-@@= skipped -16, +7 lines =@@
-     class Leg {
+@@= skipped -17, +8 lines =@@
      }
      MyModule.Leg = Leg;
--    let Person = (() => {
--        class Person {
--        }
--        __decorate([
--            inject,
--            __metadata("design:type", Leg)
--        ], Person.prototype, "leftLeg", void 0);
--        return Person;
--    })();
-+    class Person {
+     class Person {
 +        @inject
 +        leftLeg;
-+    }
+     }
+-    __decorate([
+-        inject,
+-        __metadata("design:type", Leg)
+-    ], Person.prototype, "leftLeg", void 0);
      MyModule.Person = Person;
  })(MyModule || (MyModule = {}));

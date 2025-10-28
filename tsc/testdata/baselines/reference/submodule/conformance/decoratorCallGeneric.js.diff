@@ -11,17 +11,13 @@
 -    return c > 3 && r && Object.defineProperty(target, key, r), r;
 -};
  function dec(c) { }
--let C = (() => {
--    let C = class C {
--        static m() { }
--    };
--    C = __decorate([
--        dec
--    ], C);
--    return C;
--})();
+-let C = class C {
 +@dec
 +class C {
 +    _brand;
-+    static m() { }
+     static m() { }
+-};
+-C = __decorate([
+-    dec
+-], C);
 +}

@@ -16,23 +16,11 @@
      };
  }
  //// [FinalClass.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.MyExtendedClass = void 0;
--var BaseClass_1 = require("./BaseClass");
--var MixinClass_1 = require("./MixinClass");
-+const BaseClass_1 = require("./BaseClass");
-+const MixinClass_1 = require("./MixinClass");
+@@= skipped -9, +10 lines =@@
+ const BaseClass_1 = require("./BaseClass");
+ const MixinClass_1 = require("./MixinClass");
  class MyExtendedClass extends (0, MixinClass_1.MyMixin)(BaseClass_1.MyBaseClass) {
 +    extendedClassProperty;
  }
  exports.MyExtendedClass = MyExtendedClass;
  //// [Main.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var FinalClass_1 = require("./FinalClass");
--var MixinClass_1 = require("./MixinClass");
-+const FinalClass_1 = require("./FinalClass");
-+const MixinClass_1 = require("./MixinClass");
- const myExtendedClass = new FinalClass_1.MyExtendedClass('string');
- const AnotherMixedClass = (0, MixinClass_1.MyMixin)(FinalClass_1.MyExtendedClass);

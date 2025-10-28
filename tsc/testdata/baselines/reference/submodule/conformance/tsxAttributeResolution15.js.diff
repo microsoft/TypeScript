@@ -1,12 +1,6 @@
 --- old.tsxAttributeResolution15.js
 +++ new.tsxAttributeResolution15.js
-@@= skipped -19, +19 lines =@@
- //// [file.jsx]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var React = require("react");
-+const React = require("react");
- class BigGreeter extends React.Component {
+@@= skipped -24, +24 lines =@@
      render() {
          return <div>Default hi</div>;
      }

@@ -49,4 +49,4 @@ function TodoListNoError({ todos }) {
     return jsx_runtime_1.jsxs("div", { children: [...jsx_runtime_1.jsx(Todo, { todo: todos[0].todo }, todos[0].id)] });
 }
 let x;
-jsx_runtime_1.jsx(TodoList, __assign({}, x));
+jsx_runtime_1.jsx(TodoList, Object.assign({}, x));

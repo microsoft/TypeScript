@@ -13,25 +13,18 @@
  // from #2971
  function func(s) {
  }
--let A = (() => {
--    class A {
--        m() {
--        }
-+class A {
+ class A {
+-    m() {
+-    }
+-}
+-__decorate([
+-    ((x, p, d) => {
 +    @((x, p, d) => {
-+        var a = 3;
-+        func(a);
-+        return d;
-+    })
+         var a = 3;
+         func(a);
+         return d;
+     })
+-], A.prototype, "m", null);
 +    m() {
-     }
--    __decorate([
--        ((x, p, d) => {
--            var a = 3;
--            func(a);
--            return d;
--        })
--    ], A.prototype, "m", null);
--    return A;
--})();
++    }
 +}

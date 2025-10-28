@@ -1,9 +1,0 @@
---- old.es6ImportEqualsExportModuleCommonJsError.js
-+++ new.es6ImportEqualsExportModuleCommonJsError.js
-@@= skipped -51, +51 lines =@@
-     };
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
--var a = __importStar(require("./a"));
-+const a = __importStar(require("./a"));
- a;

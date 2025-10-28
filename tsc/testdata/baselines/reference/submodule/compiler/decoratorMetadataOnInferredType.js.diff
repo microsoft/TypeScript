@@ -1,23 +1,17 @@
 --- old.decoratorMetadataOnInferredType.js
 +++ new.decoratorMetadataOnInferredType.js
-@@= skipped -26, +26 lines =@@
- }
+@@= skipped -27, +27 lines =@@
  function decorator(target, propertyKey) {
  }
--let B = (() => {
--    class B {
--        constructor() {
--            this.x = new A();
--        }
+ class B {
+-    constructor() {
+-        this.x = new A();
 -    }
--    __decorate([
--        decorator,
--        __metadata("design:type", Object)
--    ], B.prototype, "x", void 0);
--    return B;
--})();
-+class B {
 +    @decorator
 +    x = new A();
-+}
+ }
  exports.B = B;
+-__decorate([
+-    decorator,
+-    __metadata("design:type", Object)
+-], B.prototype, "x", void 0);

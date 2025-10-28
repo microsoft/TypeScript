@@ -17,5 +17,5 @@ const preact_1 = require("preact");
 const _jsxFileName = "jsxJsxsCjsTransformKeyPropCustomImport.tsx";
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 };
-const a = jsx_dev_runtime_1.jsxDEV("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
-const b = preact_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
+const a = jsx_dev_runtime_1.jsxDEV("div", Object.assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
+const b = preact_1.createElement("div", Object.assign({}, props, { key: "bar" }), "text");

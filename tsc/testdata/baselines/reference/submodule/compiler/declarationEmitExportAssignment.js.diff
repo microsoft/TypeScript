@@ -1,12 +1,10 @@
 --- old.declarationEmitExportAssignment.js
 +++ new.declarationEmitExportAssignment.js
-@@= skipped -17, +17 lines =@@
- function bar() { }
+@@= skipped -18, +18 lines =@@
  //// [index.js]
  "use strict";
--var utils_1 = require("./utils");
+ const utils_1 = require("./utils");
 -module.exports = utils_1.foo;
-+const utils_1 = require("./utils");
 +module.exports = foo;
 
 

@@ -6,14 +6,11 @@
  "use strict";
 +var after;
  Object.defineProperty(exports, "__esModule", { value: true });
--let default_1 = (() => {
--    let default_1 = class {
--    };
--    default_1 = __decorate([
--        dec
--    ], default_1);
--    return default_1;
--})();
+-let default_1 = class {
+-};
+-default_1 = __decorate([
+-    dec
+-], default_1);
 +@dec
 +class default_1 {
 +}

@@ -1,20 +1,14 @@
 --- old.typeOfPrototype.js
 +++ new.typeOfPrototype.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [typeOfPrototype.js]
--let Foo = (() => {
--    class Foo {
--        constructor() {
--            this.bar = 3;
--        }
+ class Foo {
+-    constructor() {
+-        this.bar = 3;
 -    }
--    Foo.bar = '';
--    return Foo;
--})();
-+class Foo {
 +    bar = 3;
 +    static bar = '';
-+}
+ }
+-Foo.bar = '';
  Foo.prototype.bar = undefined; // Should be OK

@@ -5,6 +5,6 @@
 
  //// [objectSpreadRepeatedComplexity.js]
 -"use strict";
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
+ function f(cnd) {
+     // Type is a union of 2^(n-1) members, where n is the number of spread objects
+     return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (cnd[1] &&

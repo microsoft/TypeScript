@@ -12,15 +12,12 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--let C = (() => {
--    let C = class C {
--    };
--    C = __decorate([
--        dec
--    ], C);
--    return C;
--})();
+-let C = class C {
+-};
 +@dec
 +class C {
 +}
  exports.C = C;
+-exports.C = C = __decorate([
+-    dec
+-], C);

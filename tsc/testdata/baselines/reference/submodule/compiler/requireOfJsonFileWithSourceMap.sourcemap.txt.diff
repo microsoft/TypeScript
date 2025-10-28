@@ -1,48 +1,31 @@
 --- old.requireOfJsonFileWithSourceMap.sourcemap.txt
 +++ new.requireOfJsonFileWithSourceMap.sourcemap.txt
-@@= skipped -9, +9 lines =@@
- -------------------------------------------------------------------
- >>>"use strict";
+@@= skipped -11, +11 lines =@@
  >>>Object.defineProperty(exports, "__esModule", { value: true });
-->>>var b1 = require("./b.json");
--1 >
--2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--1 >
--2 >import b1 = require('./b.json');
-+>>>const b1 = require("./b.json");
-+1 >
+ >>>const b1 = require("./b.json");
+ 1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +2 >^^^^^^
 +3 >      ^^
 +4 >        ^^^^^^^^^^^^^^^^^^^^^^^
-+1 >
+ 1 >
+-2 >import b1 = require('./b.json');
 +2 >import 
 +3 >      b1
 +4 >         = require('./b.json');
  1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
--2 >Emitted(3, 30) Source(1, 33) + SourceIndex(0)
+-2 >Emitted(3, 32) Source(1, 33) + SourceIndex(0)
 +2 >Emitted(3, 7) Source(1, 8) + SourceIndex(0)
 +3 >Emitted(3, 9) Source(1, 10) + SourceIndex(0)
 +4 >Emitted(3, 32) Source(1, 33) + SourceIndex(0)
  ---
  >>>let x = b1.a;
  1 >
-@@= skipped -17, +23 lines =@@
- 6 >          ^
- 7 >           ^
- 8 >            ^
--9 >             ^^^^^^^^^^^^^^^^^->
-+9 >             ^^^^^^^^^^^^^^^^^^^->
- 1 >
-   >
- 2 >let 
-@@= skipped -19, +19 lines =@@
- 7 >Emitted(4, 13) Source(2, 13) + SourceIndex(0)
- 8 >Emitted(4, 14) Source(2, 14) + SourceIndex(0)
+@@= skipped -36, +42 lines =@@
  ---
-->>>var b2 = require("./b.json");
-+>>>const b2 = require("./b.json");
+ >>>const b2 = require("./b.json");
  1->
--2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +2 >^^^^^^
 +3 >      ^^
 +4 >        ^^^^^^^^^^^^^^^^^^^^^^^
@@ -53,7 +36,7 @@
 +3 >      b2
 +4 >         = require('./b.json');
  1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
--2 >Emitted(5, 30) Source(3, 33) + SourceIndex(0)
+-2 >Emitted(5, 32) Source(3, 33) + SourceIndex(0)
 +2 >Emitted(5, 7) Source(3, 8) + SourceIndex(0)
 +3 >Emitted(5, 9) Source(3, 10) + SourceIndex(0)
 +4 >Emitted(5, 32) Source(3, 33) + SourceIndex(0)

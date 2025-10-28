@@ -1,9 +1,0 @@
---- old.typeOnlyMerge1.js
-+++ new.typeOnlyMerge1.js
-@@= skipped -25, +25 lines =@@
- //// [c.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var b_1 = require("./b");
-+const b_1 = require("./b");
- b_1.A;

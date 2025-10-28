@@ -29,27 +29,16 @@
          new Foo();
      }
      else {
--        let Foo = (() => {
--            class Foo {
--                static x() {
--                    new Foo();
--                }
--                m() {
--                    new Foo();
--                }
--            }
--            Foo.y = new Foo();
--            return Foo;
--        })();
-+        class Foo {
+         class Foo {
 +            static y = new Foo();
-+            static x() {
-+                new Foo();
-+            }
-+            m() {
-+                new Foo();
-+            }
-+        }
+             static x() {
+                 new Foo();
+             }
+@@= skipped -24, +23 lines =@@
+                 new Foo();
+             }
+         }
+-        Foo.y = new Foo();
          new Foo();
      }
  }

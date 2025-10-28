@@ -3,10 +3,10 @@
 === functionLikeInParameterInitializer.ts ===
 // error
 export function bar(func = () => foo) {
->bar : (func?: () => string) => void
->func : () => string
->() => foo : () => string
->foo : string
+>bar : (func?: () => any) => void
+>func : () => any
+>() => foo : () => any
+>foo : any
 
     let foo = "in";
 >foo : string
@@ -14,11 +14,11 @@ export function bar(func = () => foo) {
 }
 // error
 export function baz1(func = { f() { return foo } }) {
->baz1 : (func?: { f(): string; }) => void
->func : { f(): string; }
->{ f() { return foo } } : { f(): string; }
->f : () => string
->foo : string
+>baz1 : (func?: { f(): any; }) => void
+>func : { f(): any; }
+>{ f() { return foo } } : { f(): any; }
+>f : () => any
+>foo : any
 
     let foo = "in";
 >foo : string
@@ -27,10 +27,10 @@ export function baz1(func = { f() { return foo } }) {
 
 // error
 export function baz2(func = function () { return foo }) {
->baz2 : (func?: () => string) => void
->func : () => string
->function () { return foo } : () => string
->foo : string
+>baz2 : (func?: () => any) => void
+>func : () => any
+>function () { return foo } : () => any
+>foo : any
 
     let foo = "in";
 >foo : string
@@ -42,8 +42,8 @@ export function baz3(func = class { x = foo }) {
 >baz3 : (func?: typeof (Anonymous class)) => void
 >func : typeof (Anonymous class)
 >class { x = foo } : typeof (Anonymous class)
->x : string
->foo : string
+>x : any
+>foo : any
 
     let foo = "in";
 >foo : string

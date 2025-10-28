@@ -4,14 +4,11 @@
 
 
  //// [usingDeclarationsWithLegacyClassDecorators.12.js]
--let C = (() => {
--    let C = class C {
--    };
--    C = __decorate([
--        dec
--    ], C);
--    return C;
--})();
+-let C = class C {
+-};
+-C = __decorate([
+-    dec
+-], C);
 -export { C as D };
  var after;
 +@dec

@@ -27,63 +27,32 @@
          var y = this.s; // Error
          super();
 -        this.s = 9;
--        "use strict";
--    }
--}
--let Bs = (() => {
--    class Bs extends A {
--        constructor() {
--            "use strict"; // No error
--            super();
--        }
--    }
--    Bs.s = 9;
--    return Bs;
--})();
--let Cs = (() => {
--    class Cs extends A {
--        constructor() {
--            super(); // No error
--            "use strict";
--        }
--    }
--    Cs.s = 9;
--    return Cs;
--})();
--let Ds = (() => {
--    class Ds extends A {
--        constructor() {
--            var x = 1; // no Error
--            super();
--            "use strict";
--        }
--    }
--    Ds.s = 9;
--    return Ds;
--})();
-+        "use strict";
-+    }
-+}
-+class Bs extends A {
+         "use strict";
+     }
+ }
+ class Bs extends A {
 +    static s = 9;
-+    constructor() {
+     constructor() {
+         "use strict"; // No error
 +        "use strict"; // No error
-+        "use strict"; // No error
-+        super();
-+    }
-+}
-+class Cs extends A {
+         super();
+     }
+ }
+-Bs.s = 9;
+ class Cs extends A {
 +    static s = 9;
-+    constructor() {
-+        super(); // No error
-+        "use strict";
-+    }
-+}
-+class Ds extends A {
+     constructor() {
+         super(); // No error
+         "use strict";
+     }
+ }
+-Cs.s = 9;
+ class Ds extends A {
 +    static s = 9;
-+    constructor() {
-+        var x = 1; // no Error
-+        super();
-+        "use strict";
-+    }
-+}
+     constructor() {
+         var x = 1; // no Error
+         super();
+         "use strict";
+     }
+ }
+-Ds.s = 9;

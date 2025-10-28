@@ -1,15 +1,9 @@
 --- old.ClassDeclarationWithInvalidConstOnPropertyDeclaration.js
 +++ new.ClassDeclarationWithInvalidConstOnPropertyDeclaration.js
-@@= skipped -5, +5 lines =@@
- }
+@@= skipped -6, +6 lines =@@
 
  //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
--let AtomicNumbers = (() => {
--    class AtomicNumbers {
--    }
--    AtomicNumbers.H = 1;
--    return AtomicNumbers;
--})();
-+class AtomicNumbers {
+ class AtomicNumbers {
 +    static H = 1;
-+}
+ }
+-AtomicNumbers.H = 1;

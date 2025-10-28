@@ -1,21 +1,19 @@
 --- old.thisInArrowFunctionInStaticInitializer1.js
 +++ new.thisInArrowFunctionInStaticInitializer1.js
-@@= skipped -11, +11 lines =@@
+@@= skipped -10, +10 lines =@@
+ }
 
  //// [thisInArrowFunctionInStaticInitializer1.js]
+-var _a;
  function log(a) { }
--let Vector = (() => {
--    var _a;
--    class Vector {
--    }
--    _a = Vector;
--    Vector.foo = () => {
-+class Vector {
+ class Vector {
 +    static foo = () => {
-         // 'this' should be allowed in a static initializer.
--        log(_a);
++        // 'this' should be allowed in a static initializer.
 +        log(this);
-     };
--    return Vector;
--})();
-+}
++    };
+ }
+-_a = Vector;
+-Vector.foo = () => {
+-    // 'this' should be allowed in a static initializer.
+-    log(_a);
+-};

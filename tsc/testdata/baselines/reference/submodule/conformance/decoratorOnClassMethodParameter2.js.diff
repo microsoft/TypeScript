@@ -13,15 +13,9 @@
 -var __param = (this && this.__param) || function (paramIndex, decorator) {
 -    return function (target, key) { decorator(target, key, paramIndex); }
 -};
--let C = (() => {
--    class C {
--        method(p) { }
--    }
--    __decorate([
--        __param(0, dec)
--    ], C.prototype, "method", null);
--    return C;
--})();
-+class C {
-+    method(p) { }
-+}
+ class C {
+     method(p) { }
+ }
+-__decorate([
+-    __param(0, dec)
+-], C.prototype, "method", null);

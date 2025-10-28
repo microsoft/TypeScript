@@ -1,15 +1,6 @@
 --- old.declarationEmitNameConflicts.js
 +++ new.declarationEmitNameConflicts.js
-@@= skipped -61, +61 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.M = void 0;
--var im = require("./declarationEmit_nameConflicts_1");
-+const im = require("./declarationEmit_nameConflicts_1");
- var M;
- (function (M) {
-     function f() { }
-@@= skipped -20, +20 lines =@@
+@@= skipped -81, +81 lines =@@
      M.d = im;
  })(M || (exports.M = M = {}));
  (function (M) {

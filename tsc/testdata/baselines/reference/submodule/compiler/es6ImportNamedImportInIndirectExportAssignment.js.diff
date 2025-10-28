@@ -1,11 +1,9 @@
 --- old.es6ImportNamedImportInIndirectExportAssignment.js
 +++ new.es6ImportNamedImportInIndirectExportAssignment.js
-@@= skipped -22, +22 lines =@@
- })(a || (exports.a = a = {}));
+@@= skipped -23, +23 lines =@@
  //// [es6ImportNamedImportInIndirectExportAssignment_1.js]
  "use strict";
--var es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
+ const es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
 -var x = es6ImportNamedImportInIndirectExportAssignment_0_1.a;
-+const es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
  module.exports = x;
 

@@ -8,7 +8,7 @@ var a = () => {
     var arg = arguments[0];  // error
 >arg : any
 >arguments[0] : any
->arguments : IArguments
+>arguments : any
 >0 : 0
 }
 
@@ -54,7 +54,7 @@ foo(() => {
     var arg = arguments[0];  // error
 >arg : any
 >arguments[0] : any
->arguments : IArguments
+>arguments : any
 >0 : 0
 
 });

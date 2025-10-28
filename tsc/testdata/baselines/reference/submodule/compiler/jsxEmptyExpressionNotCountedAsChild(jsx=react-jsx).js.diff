@@ -1,11 +1,8 @@
 --- old.jsxEmptyExpressionNotCountedAsChild(jsx=react-jsx).js
 +++ new.jsxEmptyExpressionNotCountedAsChild(jsx=react-jsx).js
-@@= skipped -21, +21 lines =@@
- //// [jsxEmptyExpressionNotCountedAsChild.js]
- "use strict";
+@@= skipped -23, +23 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
--var jsx_runtime_1 = require("react/jsx-runtime");
-+const jsx_runtime_1 = require("react/jsx-runtime");
+ const jsx_runtime_1 = require("react/jsx-runtime");
  function Wrapper(props) {
 -    return (0, jsx_runtime_1.jsx)("div", { children: props.children });
 +    return jsx_runtime_1.jsx("div", { children: props.children });

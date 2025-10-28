@@ -6,5 +6,5 @@
  //// [genericIsNeverEmptyObject.js]
 -"use strict";
  // Repro from #29067
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
+ var __rest = (this && this.__rest) || function (s, e) {
+     var t = {};

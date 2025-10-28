@@ -1,26 +1,20 @@
 --- old.declarationEmitPrivateReadonlyLiterals.js
 +++ new.declarationEmitPrivateReadonlyLiterals.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
 
  //// [declarationEmitPrivateReadonlyLiterals.js]
--let Foo = (() => {
--    class Foo {
--        constructor() {
--            this.B = "b";
--            this.D = 42;
--        }
+ class Foo {
+-    constructor() {
+-        this.B = "b";
+-        this.D = 42;
 -    }
--    Foo.A = "a";
--    Foo.C = 42;
--    return Foo;
--})();
-+class Foo {
 +    static A = "a";
 +    B = "b";
 +    static C = 42;
 +    D = 42;
-+}
+ }
+-Foo.A = "a";
+-Foo.C = 42;
 
 
  //// [declarationEmitPrivateReadonlyLiterals.d.ts]

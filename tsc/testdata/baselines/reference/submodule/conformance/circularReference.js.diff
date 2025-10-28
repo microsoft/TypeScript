@@ -1,11 +1,6 @@
 --- old.circularReference.js
 +++ new.circularReference.js
-@@= skipped -36, +36 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.M1 = void 0;
--var foo2 = require("./foo2");
-+const foo2 = require("./foo2");
+@@= skipped -40, +40 lines =@@
  var M1;
  (function (M1) {
      class C1 {
@@ -15,11 +10,6 @@
              this.m1 = new foo2.M1.C1();
              this.m1.y = 10; // OK
 @@= skipped -16, +18 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.M1 = void 0;
--var foo1 = require("./foo1");
-+const foo1 = require("./foo1");
  var M1;
  (function (M1) {
      class C1 {

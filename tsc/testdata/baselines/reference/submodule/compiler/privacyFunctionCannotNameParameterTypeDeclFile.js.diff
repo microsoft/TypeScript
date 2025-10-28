@@ -22,30 +22,16 @@
      }
      SpecializedWidget.Widget2 = Widget2;
      function createWidget2() {
-@@= skipped -18, +16 lines =@@
- exports.createExportedWidget3 = createExportedWidget3;
- exports.createExportedWidget4 = createExportedWidget4;
- ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
--var Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
--var Widgets1 = require("GlobalWidgets");
-+const Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
-+const Widgets1 = require("GlobalWidgets");
- function createExportedWidget1() {
-     return Widgets.createWidget1();
- }
-@@= skipped -22, +22 lines =@@
- exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParmeterTypes1;
- exports.publicFunctionWithPrivateModuleParameterTypes = publicFunctionWithPrivateModuleParameterTypes;
+@@= skipped -42, +40 lines =@@
  exports.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
--var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
-+const exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
+ const exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
  class publicClassWithWithPrivateParmeterTypes {
 +    param1;
 +    param2;
      static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
      }
      static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +17 lines =@@
  }
  exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
  class publicClassWithWithPrivateParmeterTypes1 {

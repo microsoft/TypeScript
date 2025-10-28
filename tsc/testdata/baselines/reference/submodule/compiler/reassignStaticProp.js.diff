@@ -1,16 +1,10 @@
 --- old.reassignStaticProp.js
 +++ new.reassignStaticProp.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
 
  //// [reassignStaticProp.js]
--let foo = (() => {
--    class foo {
--    }
--    foo.bar = 1;
--    return foo;
--})();
-+class foo {
+ class foo {
 +    static bar = 1;
 +    static bar; // errror - duplicate id
-+}
+ }
+-foo.bar = 1;

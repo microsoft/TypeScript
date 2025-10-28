@@ -4,23 +4,21 @@
 
 
  //// [classStaticBlock5.js]
--let B = (() => {
--    class B {
--    }
--    B.a = 1;
--    B.b = 2;
--    return B;
+-var _a, _b;
+ class B {
+-}
+-B.a = 1;
+-B.b = 2;
+-class C extends (_b = B) {
+-}
+-_a = C;
+-C.b = 3;
+-C.c = Reflect.get(_b, "a", _a);
+-(() => {
+-    _a.b;
+-    Reflect.get(_b, "b", _a);
+-    Reflect.get(_b, "a", _a);
 -})();
--let C = (() => {
--    var _a;
--    class C extends B {
--    }
--    _a = C;
--    C.b = 3;
--    C.c = super.a;
--    (() => {
--        _a.b;
-+class B {
 +    static a = 1;
 +    static b = 2;
 +}
@@ -29,10 +27,7 @@
 +    static c = super.a;
 +    static {
 +        this.b;
-         super.b;
-         super.a;
--    })();
--    return C;
--})();
++        super.b;
++        super.a;
 +    }
 +}

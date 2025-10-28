@@ -1,9 +1,0 @@
---- old.requireOfJsonFileNonRelativeWithoutExtensionResolvesToTs.js
-+++ new.requireOfJsonFileNonRelativeWithoutExtensionResolvesToTs.js
-@@= skipped -19, +19 lines =@@
- //// [out/projects/file1.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var f = require("f"); // should work to f.ts
-+const f = require("f"); // should work to f.ts
- let fnumber = f;

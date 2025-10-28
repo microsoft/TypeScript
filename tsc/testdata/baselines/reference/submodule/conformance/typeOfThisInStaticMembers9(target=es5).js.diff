@@ -4,22 +4,33 @@
 
 
  //// [typeOfThisInStaticMembers9.js]
--let C = (() => {
+-var _a, _b;
+ class C {
+-}
+-C.f = 1;
+-class D extends (_b = C) {
+-}
+-_a = D;
+-D.arrowFunctionBoundary = () => Reflect.get(_b, "f", _a) + 1;
+-D.functionExprBoundary = function () { return super.f + 2; };
+-D.classExprBoundary = class {
+-    constructor() {
+-        this.a = super.f + 3;
+-    }
+-};
+-D.functionAndClassDeclBoundary = (() => {
+-    function foo() {
+-        return super.f + 4;
+-    }
 -    class C {
--    }
--    C.f = 1;
--    return C;
--})();
--let D = (() => {
--    class D extends C {
--    }
--    D.arrowFunctionBoundary = () => super.f + 1;
--    D.functionExprBoundary = function () { return super.f + 2; };
--    D.classExprBoundary = class {
 -        constructor() {
--            this.a = super.f + 3;
+-            this.a = super.f + 5;
 -        }
-+class C {
+-        method() {
+-            return super.f + 6;
+-        }
+-    }
+-})();
 +    static f = 1;
 +}
 +class D extends C {
@@ -27,22 +38,16 @@
 +    static functionExprBoundary = function () { return super.f + 2; };
 +    static classExprBoundary = class {
 +        a = super.f + 3;
-     };
--    D.functionAndClassDeclBoundary = (() => {
++    };
 +    static functionAndClassDeclBoundary = (() => {
-         function foo() {
-             return super.f + 4;
-         }
-         class C {
--            constructor() {
--                this.a = super.f + 5;
--            }
++        function foo() {
++            return super.f + 4;
++        }
++        class C {
 +            a = super.f + 5;
-             method() {
-                 return super.f + 6;
-             }
-         }
-     })();
--    return D;
--})();
++            method() {
++                return super.f + 6;
++            }
++        }
++    })();
 +}

@@ -1,15 +1,6 @@
 --- old.declarationEmitReexportedSymlinkReference2.js
 +++ new.declarationEmitReexportedSymlinkReference2.js
-@@= skipped -49, +49 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.ADMIN = void 0;
--var pkg2_1 = require("@raymondfeng/pkg2");
-+const pkg2_1 = require("@raymondfeng/pkg2");
- exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
- //// [index.js]
- "use strict";
-@@= skipped -24, +24 lines =@@
+@@= skipped -73, +73 lines =@@
 
  //// [keys.d.ts]
  import { MetadataAccessor } from "@raymondfeng/pkg2";

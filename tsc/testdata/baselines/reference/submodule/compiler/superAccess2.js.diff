@@ -1,45 +1,30 @@
 --- old.superAccess2.js
 +++ new.superAccess2.js
-@@= skipped -30, +30 lines =@@
+@@= skipped -26, +26 lines =@@
+ }
+
+ //// [superAccess2.js]
+-var _a, _b;
+ class P {
      x() { }
      static y() { }
  }
--let Q = (() => {
--    class Q extends P {
--        // Super is not allowed in constructor args
--        constructor(z = super., zz = super., zzz = () => super.) {
--            super();
--            this.z = z;
--            this.xx = super.;
--        }
--        foo(zz = super.) {
--            super.x();
--            super.y(); // error
--        }
--        static bar(zz = super.) {
--            super.x(); // error
--            super.y();
--        }
--    }
--    Q.yy = super. // error for static initializer accessing super
--    ; // error for static initializer accessing super
--    return Q;
--})();
+-class Q extends (_b = P) {
 +class Q extends P {
 +    z;
 +    xx = super.;
 +    static yy = super.; // error for static initializer accessing super
-+    // Super is not allowed in constructor args
-+    constructor(z = super., zz = super., zzz = () => super.) {
-+        super();
-+        this.z = z;
-+    }
-+    foo(zz = super.) {
-+        super.x();
-+        super.y(); // error
-+    }
-+    static bar(zz = super.) {
-+        super.x(); // error
-+        super.y();
-+    }
-+}
+     // Super is not allowed in constructor args
+     constructor(z = super., zz = super., zzz = () => super.) {
+         super();
+         this.z = z;
+-        this.xx = super.;
+     }
+     foo(zz = super.) {
+         super.x();
+@@= skipped -21, +22 lines =@@
+         super.y();
+     }
+ }
+-_a = Q;
+-Q.yy = Reflect.get(_b, "", _a); // error for static initializer accessing super

@@ -1,22 +1,16 @@
 --- old.jsDeclarationsExportAssignedClassInstance2.js
 +++ new.jsDeclarationsExportAssignedClassInstance2.js
-@@= skipped -8, +8 lines =@@
- module.exports = new Foo();
+@@= skipped -9, +9 lines =@@
 
  //// [index.js]
--let Foo = (() => {
--    class Foo {
--        constructor() {
--            this.member = 10;
--        }
+ class Foo {
+-    constructor() {
+-        this.member = 10;
 -    }
--    Foo.stat = 10;
--    return Foo;
--})();
-+class Foo {
 +    static stat = 10;
 +    member = 10;
-+}
+ }
+-Foo.stat = 10;
 +export = new Foo();
  module.exports = new Foo();
 

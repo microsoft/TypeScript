@@ -1,9 +1,0 @@
---- old.jsxNamespaceReexports.js
-+++ new.jsxNamespaceReexports.js
-@@= skipped -55, +55 lines =@@
-     };
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
--var MyLib = __importStar(require("./library"));
-+const MyLib = __importStar(require("./library"));
- const content = MyLib.createElement("my-element", null);

@@ -1,11 +1,7 @@
 --- old.reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).js
 +++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).js
-@@= skipped -16, +16 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Foo = Foo;
--var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+@@= skipped -19, +19 lines =@@
+ const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
  const _jsxFileName = "index.tsx";
  function Bar() {
 -    return (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 9 }, this);

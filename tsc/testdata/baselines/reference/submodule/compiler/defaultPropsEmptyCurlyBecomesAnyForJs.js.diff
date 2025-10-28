@@ -1,21 +1,10 @@
 --- old.defaultPropsEmptyCurlyBecomesAnyForJs.js
 +++ new.defaultPropsEmptyCurlyBecomesAnyForJs.js
-@@= skipped -28, +28 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -30, +30 lines =@@
  exports.MyFoo = void 0;
--var library_1 = require("./library");
-+const library_1 = require("./library");
+ const library_1 = require("./library");
  class MyFoo extends library_1.Foo {
 +    member;
  }
  exports.MyFoo = MyFoo;
  //// [typed_component.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.TypedFoo = void 0;
--var component_1 = require("./component");
-+const component_1 = require("./component");
- class TypedFoo extends component_1.MyFoo {
-     constructor() {
-         super({ x: "string", y: 42 }, { value: undefined });

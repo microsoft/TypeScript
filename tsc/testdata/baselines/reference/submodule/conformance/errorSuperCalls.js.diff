@@ -1,82 +1,47 @@
 --- old.errorSuperCalls.js
 +++ new.errorSuperCalls.js
-@@= skipped -77, +77 lines =@@
+@@= skipped -76, +76 lines =@@
+
 
  //// [errorSuperCalls.js]
+-var _a;
  //super call in class constructor with no base type
--let NoBase = (() => {
--    class NoBase {
--        constructor() {
--            super();
--            //super call in class member initializer with no base type
--            this.p = super();
--        }
--        //super call in class member function with no base type
--        fn() {
--            super();
--        }
--        //super call in class accessor (get and set) with no base type
--        get foo() {
--            super();
--            return null;
--        }
--        set foo(v) {
--            super();
--        }
--        //super call in static class member function with no base type
--        static fn() {
--            super();
--        }
--        //super call in static class accessor (get and set) with no base type
--        static get q() {
--            super();
--            return null;
--        }
--        static set q(n) {
--            super();
--        }
-+class NoBase {
-+    constructor() {
-+        super();
-+    }
-+    //super call in class member function with no base type
-+    fn() {
-+        super();
-+    }
-+    //super call in class accessor (get and set) with no base type
-+    get foo() {
-+        super();
-+        return null;
-+    }
-+    set foo(v) {
-+        super();
-+    }
+ class NoBase {
+     constructor() {
+         super();
+-        //super call in class member initializer with no base type
+-        this.p = super();
+     }
+     //super call in class member function with no base type
+     fn() {
+@@= skipped -20, +17 lines =@@
+     set foo(v) {
+         super();
+     }
 +    //super call in class member initializer with no base type
 +    p = super();
-+    //super call in static class member function with no base type
-+    static fn() {
-+        super();
+     //super call in static class member function with no base type
+     static fn() {
+         super();
      }
-     //super call in static class member initializer with no base type
--    NoBase.k = super();
--    return NoBase;
--})();
++    //super call in static class member initializer with no base type
 +    static k = super();
-+    //super call in static class accessor (get and set) with no base type
-+    static get q() {
-+        super();
-+        return null;
-+    }
-+    static set q(n) {
-+        super();
-+    }
-+}
+     //super call in static class accessor (get and set) with no base type
+     static get q() {
+         super();
+@@= skipped -13, +17 lines =@@
+         super();
+     }
+ }
+-_a = NoBase;
+-//super call in static class member initializer with no base type
+-NoBase.k = super();
  class Base {
 +    n;
  }
  class Derived extends Base {
      //super call with type arguments 
-@@= skipped -46, +44 lines =@@
+@@= skipped -13, +11 lines =@@
      }
  }
  class OtherBase {

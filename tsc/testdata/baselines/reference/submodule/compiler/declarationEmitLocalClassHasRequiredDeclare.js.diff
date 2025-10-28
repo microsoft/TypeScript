@@ -1,18 +1,13 @@
 --- old.declarationEmitLocalClassHasRequiredDeclare.js
 +++ new.declarationEmitLocalClassHasRequiredDeclare.js
-@@= skipped -22, +22 lines =@@
- exports.Y = exports.A = void 0;
+@@= skipped -23, +23 lines =@@
  class X {
  }
--let A = (() => {
--    class A {
--    }
--    A.X = X;
--    return A;
--})();
-+class A {
+ class A {
 +    static X = X;
-+}
+ }
  exports.A = A;
+-A.X = X;
  class Y {
  }
+ exports.Y = Y;

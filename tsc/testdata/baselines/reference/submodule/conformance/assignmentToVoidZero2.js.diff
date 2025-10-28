@@ -12,13 +12,7 @@
  exports.k = void 0;
  var o = {};
  o.x = 1;
-@@= skipped -15, +19 lines =@@
- //// [importer.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var assignmentToVoidZero2_1 = require("./assignmentToVoidZero2");
-+const assignmentToVoidZero2_1 = require("./assignmentToVoidZero2");
- assignmentToVoidZero2_1.j + assignmentToVoidZero2_1.k;
+@@= skipped -20, +24 lines =@@
 
 
  //// [assignmentToVoidZero2.d.ts]

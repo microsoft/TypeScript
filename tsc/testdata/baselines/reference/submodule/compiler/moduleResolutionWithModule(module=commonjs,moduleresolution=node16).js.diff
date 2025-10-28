@@ -1,9 +1,0 @@
---- old.moduleResolutionWithModule(module=commonjs,moduleresolution=node16).js
-+++ new.moduleResolutionWithModule(module=commonjs,moduleresolution=node16).js
-@@= skipped -47, +47 lines =@@
-     };
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
--var p = __importStar(require("pkg"));
-+const p = __importStar(require("pkg"));
- p.thing();

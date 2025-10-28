@@ -1,55 +1,6 @@
 --- old.jsDeclarationsReactComponents.js
 +++ new.jsDeclarationsReactComponents.js
-@@= skipped -101, +101 lines =@@
- };
- Object.defineProperty(exports, "__esModule", { value: true });
- /// <reference path="react16.d.ts" preserve="true" />
--var react_1 = __importDefault(require("react"));
--var prop_types_1 = __importDefault(require("prop-types"));
-+const react_1 = __importDefault(require("react"));
-+const prop_types_1 = __importDefault(require("prop-types"));
- const TabbedShowLayout = ({}) => {
-     return (react_1.default.createElement("div", null));
- };
-@@= skipped -18, +18 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var react_1 = __importDefault(require("react"));
-+const react_1 = __importDefault(require("react"));
- /**
-  * @type {React.SFC}
-  */
-@@= skipped -17, +17 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var react_1 = __importDefault(require("react"));
-+const react_1 = __importDefault(require("react"));
- /**
-  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
-  */
-@@= skipped -17, +17 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var react_1 = __importDefault(require("react"));
-+const react_1 = __importDefault(require("react"));
- const TabbedShowLayout = (/** @type {{className: string}}*/ prop) => {
-     return (react_1.default.createElement("div", { className: prop.className, key: "" }, "ok"));
- };
-@@= skipped -14, +14 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var react_1 = __importDefault(require("react"));
--var prop_types_1 = __importDefault(require("prop-types"));
-+const react_1 = __importDefault(require("react"));
-+const prop_types_1 = __importDefault(require("prop-types"));
- function Tree({ allowDropOnRoot }) {
-     return react_1.default.createElement("div", null);
- }
-@@= skipped -17, +17 lines =@@
+@@= skipped -184, +184 lines =@@
 
  //// [jsDeclarationsReactComponents1.d.ts]
  /// <reference path="../..react16.d.ts" preserve="true" />

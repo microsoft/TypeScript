@@ -205,13 +205,6 @@ loop:
 					return nil
 				}
 			}
-		case ast.KindArrowFunction:
-			// when targeting ES6 or higher there is no 'arguments' in an arrow function
-			// for lower compile targets the resolved symbol is used to emit an error
-			if r.CompilerOptions.GetEmitScriptTarget() >= core.ScriptTargetES2015 {
-				break
-			}
-			fallthrough
 		case ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindFunctionDeclaration:
 			if meaning&ast.SymbolFlagsVariable != 0 && name == "arguments" {
 				result = r.argumentsSymbol()
@@ -354,21 +347,18 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, loca
 			// - optional chaining pre-es2020
 			// - nullish coalesce pre-es2020
 			// - spread assignment in binding pattern pre-es2017
-			target := r.CompilerOptions.GetEmitScriptTarget()
-			if target >= core.ScriptTargetES2015 {
-				functionLocation := location
-				declarationRequiresScopeChange := core.TSUnknown
-				if r.GetRequiresScopeChangeCache != nil {
-					declarationRequiresScopeChange = r.GetRequiresScopeChangeCache(functionLocation)
-				}
-				if declarationRequiresScopeChange == core.TSUnknown {
-					declarationRequiresScopeChange = core.IfElse(core.Some(functionLocation.Parameters(), r.requiresScopeChange), core.TSTrue, core.TSFalse)
-					if r.SetRequiresScopeChangeCache != nil {
-						r.SetRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
-					}
-				}
-				return declarationRequiresScopeChange != core.TSTrue
+			functionLocation := location
+			declarationRequiresScopeChange := core.TSUnknown
+			if r.GetRequiresScopeChangeCache != nil {
+				declarationRequiresScopeChange = r.GetRequiresScopeChangeCache(functionLocation)
 			}
+			if declarationRequiresScopeChange == core.TSUnknown {
+				declarationRequiresScopeChange = core.IfElse(core.Some(functionLocation.Parameters(), r.requiresScopeChange), core.TSTrue, core.TSFalse)
+				if r.SetRequiresScopeChangeCache != nil {
+					r.SetRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
+				}
+			}
+			return declarationRequiresScopeChange != core.TSTrue
 		}
 	}
 	return false

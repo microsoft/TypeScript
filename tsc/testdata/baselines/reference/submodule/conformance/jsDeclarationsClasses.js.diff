@@ -1,83 +1,27 @@
 --- old.jsDeclarationsClasses.js
 +++ new.jsDeclarationsClasses.js
-@@= skipped -202, +202 lines =@@
- class A {
+@@= skipped -203, +203 lines =@@
  }
  exports.A = A;
--let B = (() => {
--    class B {
--    }
--    B.cat = "cat";
--    return B;
--})();
-+class B {
+ class B {
 +    static cat = "cat";
-+}
+ }
  exports.B = B;
--let C = (() => {
--    class C {
--    }
--    C.Cls = class {
-+class C {
+-B.cat = "cat";
+ class C {
 +    static Cls = class {
-     };
--    return C;
--})();
-+}
++    };
+ }
  exports.C = C;
+-C.Cls = class {
+-};
  class D {
      /**
-@@= skipped -26, +20 lines =@@
- /**
-  * @template T,U
+      * @param {number} a
+@@= skipped -21, +21 lines =@@
   */
--let E = (() => {
--    class E {
--        /**
--         * @return {U}
--         */
--        get f1() { return /** @type {*} */ (null); }
--        /**
--         * @param {U} _p
--         */
--        set f1(_p) { }
--        /**
--         * @return {U}
--         */
--        get f2() { return /** @type {*} */ (null); }
--        /**
--         * @param {U} _p
--         */
--        set f3(_p) { }
--        /**
--         * @param {T} a
--         * @param {U} b
--         */
--        constructor(a, b) {
--            this.initializedField = 12;
--        }
--        /**
--         * @return {string}
--         */
--        static get s1() { return ""; }
--        /**
--         * @param {string} _p
--         */
--        static set s1(_p) { }
--        /**
--         * @return {string}
--         */
--        static get s2() { return ""; }
--        /**
--         * @param {string} _p
--         */
--        static set s3(_p) { }
--    }
--    E.staticInitializedField = 12;
--    return E;
--})();
-+class E {
-+    /**
+ class E {
+     /**
 +     * @type {T & U}
 +     */
 +    field;
@@ -89,25 +33,29 @@
 +    readonlyField;
 +    initializedField = 12;
 +    /**
-+     * @return {U}
-+     */
+      * @return {U}
+      */
+-    get f1() { return /** @type {*} */ (null); }
 +    get f1() { return /** @type {*} */ null; }
-+    /**
-+     * @param {U} _p
-+     */
-+    set f1(_p) { }
-+    /**
-+     * @return {U}
-+     */
+     /**
+      * @param {U} _p
+      */
+@@= skipped -10, +21 lines =@@
+     /**
+      * @return {U}
+      */
+-    get f2() { return /** @type {*} */ (null); }
 +    get f2() { return /** @type {*} */ null; }
-+    /**
-+     * @param {U} _p
-+     */
-+    set f3(_p) { }
-+    /**
-+     * @param {T} a
-+     * @param {U} b
-+     */
+     /**
+      * @param {U} _p
+      */
+@@= skipped -9, +9 lines =@@
+      * @param {T} a
+      * @param {U} b
+      */
+-    constructor(a, b) {
+-        this.initializedField = 12;
+-    }
 +    constructor(a, b) { }
 +    /**
 +     * @type {string}
@@ -120,24 +68,14 @@
 +     */
 +    static staticReadonlyField;
 +    static staticInitializedField = 12;
-+    /**
-+     * @return {string}
-+     */
-+    static get s1() { return ""; }
-+    /**
-+     * @param {string} _p
-+     */
-+    static set s1(_p) { }
-+    /**
-+     * @return {string}
-+     */
-+    static get s2() { return ""; }
-+    /**
-+     * @param {string} _p
-+     */
-+    static set s3(_p) { }
-+}
+     /**
+      * @return {string}
+      */
+@@= skipped -21, +30 lines =@@
+     static set s3(_p) { }
+ }
  exports.E = E;
+-E.staticInitializedField = 12;
  /**
   * @template T,U
   */
@@ -150,7 +88,7 @@
       * @param {T} a
       * @param {U} b
       */
-@@= skipped -123, +143 lines =@@
+@@= skipped -78, +81 lines =@@
      }
  }
  exports.O = O;

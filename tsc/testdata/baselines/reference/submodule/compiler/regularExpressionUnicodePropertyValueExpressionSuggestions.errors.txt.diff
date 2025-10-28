@@ -6,10 +6,9 @@
 -regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,45): error TS1526: Unknown Unicode property value.
 -regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,57): error TS1524: Unknown Unicode property name.
 -regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,93): error TS1526: Unknown Unicode property value.
--regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,102): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -
 -
--==== regularExpressionUnicodePropertyValueExpressionSuggestions.ts (6 errors) ====
+-==== regularExpressionUnicodePropertyValueExpressionSuggestions.ts (5 errors) ====
 -    const regex = /\p{ascii}\p{Sc=Unknown}\p{sc=unknownX}\p{Script_Declensions=Inherited}\p{scx=inherit}/u;
 -                      ~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
@@ -26,7 +25,5 @@
 -                                                                                                ~~~~~~~
 -!!! error TS1526: Unknown Unicode property value.
 -!!! related TS1369: Did you mean 'Inherited'?
--                                                                                                         ~
--!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    
 +<no content>

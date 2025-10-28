@@ -4,83 +4,30 @@
  }
 
  //// [thisAndSuperInStaticMembers3.js]
--let C = (() => {
--    var _a;
--    class C extends B {
--        constructor() {
--            super(...arguments);
--            // these should be unaffected
--            Object.defineProperty(this, "x", {
--                enumerable: true,
--                configurable: true,
--                writable: true,
--                value: 1
--            });
--            Object.defineProperty(this, "y", {
--                enumerable: true,
--                configurable: true,
--                writable: true,
--                value: this.x
--            });
--            Object.defineProperty(this, "z", {
--                enumerable: true,
--                configurable: true,
--                writable: true,
--                value: super.f()
--            });
--        }
+-var _a, _b;
+-class C extends (_b = B) {
+-    constructor() {
+-        super(...arguments);
+-        // these should be unaffected
+-        Object.defineProperty(this, "x", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: 1
+-        });
+-        Object.defineProperty(this, "y", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: this.x
+-        });
+-        Object.defineProperty(this, "z", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: super.f()
+-        });
 -    }
--    _a = C;
--    Object.defineProperty(C, "x", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: undefined
--    });
--    Object.defineProperty(C, "y1", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: _a.x
--    });
--    Object.defineProperty(C, "y2", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: _a.x()
--    });
--    Object.defineProperty(C, "y3", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: _a === null || _a === void 0 ? void 0 : _a.x()
--    });
--    Object.defineProperty(C, "y4", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: _a[("x")]()
--    });
--    Object.defineProperty(C, "y5", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: _a === null || _a === void 0 ? void 0 : _a[("x")]()
--    });
--    Object.defineProperty(C, "z3", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: super.f()
--    });
--    Object.defineProperty(C, "z4", {
--        enumerable: true,
--        configurable: true,
--        writable: true,
--        value: super["f"]()
--    });
--    return C;
--})();
 +class C extends B {
 +    static x = undefined;
 +    static y1 = this.x;
@@ -94,4 +41,53 @@
 +    x = 1;
 +    y = this.x;
 +    z = super.f();
-+}
+ }
+-_a = C;
+-Object.defineProperty(C, "x", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: undefined
+-});
+-Object.defineProperty(C, "y1", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: _a.x
+-});
+-Object.defineProperty(C, "y2", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: _a.x()
+-});
+-Object.defineProperty(C, "y3", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: _a === null || _a === void 0 ? void 0 : _a.x()
+-});
+-Object.defineProperty(C, "y4", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: _a[("x")]()
+-});
+-Object.defineProperty(C, "y5", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: _a === null || _a === void 0 ? void 0 : _a[("x")]()
+-});
+-Object.defineProperty(C, "z3", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: Reflect.get(_b, "f", _a).call(_a)
+-});
+-Object.defineProperty(C, "z4", {
+-    enumerable: true,
+-    configurable: true,
+-    writable: true,
+-    value: Reflect.get(_b, "f", _a).call(_a)
+-});

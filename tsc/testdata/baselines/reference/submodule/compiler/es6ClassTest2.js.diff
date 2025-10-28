@@ -59,25 +59,17 @@
  }
  class SuperParent {
      constructor(a) {
-@@= skipped -24, +23 lines =@@
-         super.c();
+@@= skipped -25, +24 lines =@@
      }
  }
--let Statics = (() => {
--    class Statics {
--        static baz() {
--            return "";
--        }
-+class Statics {
+ class Statics {
 +    static foo = 1;
 +    static bar;
-+    static baz() {
-+        return "";
+     static baz() {
+         return "";
      }
--    Statics.foo = 1;
--    return Statics;
--})();
-+}
+ }
+-Statics.foo = 1;
  var stat = new Statics();
  class ImplementsInterface {
 +    x;
@@ -85,7 +77,7 @@
      constructor() {
          this.x = 1;
          this.z = "foo";
-@@= skipped -19, +19 lines =@@
+@@= skipped -15, +18 lines =@@
  class Visibility {
      foo() { }
      bar() { }

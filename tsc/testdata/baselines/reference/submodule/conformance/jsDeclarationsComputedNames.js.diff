@@ -15,35 +15,29 @@
  module.exports = {
      [TopLevelSym](x = 12) {
          return x;
-@@= skipped -14, +22 lines =@@
+@@= skipped -10, +18 lines =@@
+ };
+ //// [index2.js]
+ "use strict";
+-var _a, _b;
+ Object.defineProperty(exports, "__esModule", { value: true });
  exports.MyClass = void 0;
  const TopLevelSym = Symbol();
  const InnerSym = Symbol();
--let MyClass = (() => {
--    var _a, _b;
--    class MyClass {
--        /**
--         * @param {typeof TopLevelSym | typeof InnerSym} _p
--         */
--        constructor(_p = InnerSym) {
--            this[_b] = "ok";
--            // switch on _p
--        }
-+class MyClass {
+ class MyClass {
 +    static [TopLevelSym] = 12;
 +    [InnerSym] = "ok";
-+    /**
-+     * @param {typeof TopLevelSym | typeof InnerSym} _p
-+     */
-+    constructor(_p = InnerSym) {
-+        // switch on _p
+     /**
+      * @param {typeof TopLevelSym | typeof InnerSym} _p
+      */
+     constructor(_p = InnerSym) {
+-        this[_b] = "ok";
+         // switch on _p
      }
--    _a = TopLevelSym, _b = InnerSym;
--    MyClass[_a] = 12;
--    return MyClass;
--})();
-+}
+ }
  exports.MyClass = MyClass;
+-_a = TopLevelSym, _b = InnerSym;
+-MyClass[_a] = 12;
 
 
  //// [index.d.ts]
@@ -54,7 +48,7 @@
      [TopLevelSym](x?: number): number;
      items: {
          [InnerSym]: (arg?: {
-@@= skipped -27, +24 lines =@@
+@@= skipped -28, +28 lines =@@
          }) => number;
      };
  };

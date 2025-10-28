@@ -1,34 +1,21 @@
 --- old.autolift4.js
 +++ new.autolift4.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
 
  //// [autolift4.js]
--let Point = (() => {
--    class Point {
--        constructor(x, y) {
--            this.x = x;
--            this.y = y;
--        }
--        getDist() {
--            return Math.sqrt(this.x * this.x + this.y * this.y);
--        }
--    }
--    Point.origin = new Point(0, 0);
--    return Point;
--})();
-+class Point {
+ class Point {
 +    x;
 +    y;
-+    constructor(x, y) {
-+        this.x = x;
-+        this.y = y;
-+    }
-+    getDist() {
-+        return Math.sqrt(this.x * this.x + this.y * this.y);
-+    }
+     constructor(x, y) {
+         this.x = x;
+         this.y = y;
+@@= skipped -7, +9 lines =@@
+     getDist() {
+         return Math.sqrt(this.x * this.x + this.y * this.y);
+     }
 +    static origin = new Point(0, 0);
-+}
+ }
+-Point.origin = new Point(0, 0);
  class Point3D extends Point {
 +    z;
      constructor(x, y, z, m) {

@@ -5,6 +5,6 @@
 
  //// [spreadOverwritesPropertyStrict.js]
 -"use strict";
- var __assign = (this && this.__assign) || function () {
-     __assign = Object.assign || function(t) {
-         for (var s, i = 1, n = arguments.length; i < n; i++) {
+ var unused1 = Object.assign({ b: 1 }, ab); // error
+ var unused2 = Object.assign(Object.assign({}, ab), ab); // ok, overwritten error doesn't apply to spreads
+ var unused3 = Object.assign({ b: 1 }, abq); // ok, abq might have b: undefined

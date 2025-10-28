@@ -725,20 +725,10 @@ func (p *Program) verifyCompilerOptions() {
 		createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib")
 	}
 
-	languageVersion := options.GetEmitScriptTarget()
-
-	firstNonAmbientExternalModuleSourceFile := core.Find(p.files, func(f *ast.SourceFile) bool { return ast.IsExternalModule(f) && !f.IsDeclarationFile })
 	if options.IsolatedModules.IsTrue() || options.VerbatimModuleSyntax.IsTrue() {
-		if options.Module == core.ModuleKindNone && languageVersion < core.ScriptTargetES2015 && options.IsolatedModules.IsTrue() {
-			// !!!
-			// createDiagnosticForOptionName(diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target")
-		}
-
 		if options.PreserveConstEnums.IsFalse() {
 			createDiagnosticForOptionName(diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled, core.IfElse(options.VerbatimModuleSyntax.IsTrue(), "verbatimModuleSyntax", "isolatedModules"), "preserveConstEnums")
 		}
-	} else if firstNonAmbientExternalModuleSourceFile != nil && languageVersion < core.ScriptTargetES2015 && options.Module == core.ModuleKindNone {
-		// !!!
 	}
 
 	if options.OutDir != "" ||

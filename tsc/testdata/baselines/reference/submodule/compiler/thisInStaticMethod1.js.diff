@@ -1,21 +1,13 @@
 --- old.thisInStaticMethod1.js
 +++ new.thisInStaticMethod1.js
-@@= skipped -9, +9 lines =@@
- var x = foo.bar();
+@@= skipped -10, +10 lines =@@
 
  //// [thisInStaticMethod1.js]
--let foo = (() => {
--    class foo {
--        static bar() {
--            return this.x;
--        }
-+class foo {
+ class foo {
 +    static x = 3;
-+    static bar() {
-+        return this.x;
+     static bar() {
+         return this.x;
      }
--    foo.x = 3;
--    return foo;
--})();
-+}
+ }
+-foo.x = 3;
  var x = foo.bar();

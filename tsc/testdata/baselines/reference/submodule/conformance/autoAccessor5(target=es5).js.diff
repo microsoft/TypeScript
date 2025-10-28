@@ -15,39 +15,33 @@
 -    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
 -    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 -};
--var _C2__a_accessor_storage, _a;
--let C1 = (() => {
--    var _a, _C1__b_accessor_storage, _C1__c_accessor_storage, _C1__d_accessor_storage, _C1__e_accessor_storage;
--    class C1 {
--        constructor() {
--            _C1__b_accessor_storage.set(this, void 0);
--            _C1__c_accessor_storage.set(this, 1);
--        }
--        get [(_C1__b_accessor_storage = new WeakMap(), _C1__c_accessor_storage = new WeakMap(), "w")]() { return __classPrivateFieldGet(this, _C1__b_accessor_storage, "f"); }
--        set ["w"](value) { __classPrivateFieldSet(this, _C1__b_accessor_storage, value, "f"); }
--        get ["x"]() { return __classPrivateFieldGet(this, _C1__c_accessor_storage, "f"); }
--        set ["x"](value) { __classPrivateFieldSet(this, _C1__c_accessor_storage, value, "f"); }
--        static get ["y"]() { return __classPrivateFieldGet(_a, _a, "f", _C1__d_accessor_storage); }
--        static set ["y"](value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__d_accessor_storage); }
--        static get ["z"]() { return __classPrivateFieldGet(_a, _a, "f", _C1__e_accessor_storage); }
--        static set ["z"](value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__e_accessor_storage); }
+-var _a, _C1__a_accessor_storage, _C1__b_accessor_storage, _C1__c_accessor_storage, _C1__d_accessor_storage, _C2__e_accessor_storage, _b;
+ class C1 {
+-    constructor() {
+-        _C1__a_accessor_storage.set(this, void 0);
+-        _C1__b_accessor_storage.set(this, 1);
 -    }
--    _a = C1;
--    _C1__d_accessor_storage = { value: void 0 };
--    _C1__e_accessor_storage = { value: 2 };
--    return C1;
--})();
-+class C1 {
+-    get [(_C1__a_accessor_storage = new WeakMap(), _C1__b_accessor_storage = new WeakMap(), "w")]() { return __classPrivateFieldGet(this, _C1__a_accessor_storage, "f"); }
+-    set ["w"](value) { __classPrivateFieldSet(this, _C1__a_accessor_storage, value, "f"); }
+-    get ["x"]() { return __classPrivateFieldGet(this, _C1__b_accessor_storage, "f"); }
+-    set ["x"](value) { __classPrivateFieldSet(this, _C1__b_accessor_storage, value, "f"); }
+-    static get ["y"]() { return __classPrivateFieldGet(_a, _a, "f", _C1__c_accessor_storage); }
+-    static set ["y"](value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__c_accessor_storage); }
+-    static get ["z"]() { return __classPrivateFieldGet(_a, _a, "f", _C1__d_accessor_storage); }
+-    static set ["z"](value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__d_accessor_storage); }
 +    accessor ["w"];
 +    accessor ["x"] = 1;
 +    static accessor ["y"];
 +    static accessor ["z"] = 2;
-+}
+ }
+-_a = C1;
+-_C1__c_accessor_storage = { value: void 0 };
+-_C1__d_accessor_storage = { value: 2 };
  class C2 {
 -    constructor() {
--        _C2__a_accessor_storage.set(this, 1);
+-        _C2__e_accessor_storage.set(this, 1);
 -    }
--    get [(_C2__a_accessor_storage = new WeakMap(), _a = f())]() { return __classPrivateFieldGet(this, _C2__a_accessor_storage, "f"); }
--    set [_a](value) { __classPrivateFieldSet(this, _C2__a_accessor_storage, value, "f"); }
+-    get [(_C2__e_accessor_storage = new WeakMap(), _b = f())]() { return __classPrivateFieldGet(this, _C2__e_accessor_storage, "f"); }
+-    set [_b](value) { __classPrivateFieldSet(this, _C2__e_accessor_storage, value, "f"); }
 +    accessor [f()] = 1;
  }

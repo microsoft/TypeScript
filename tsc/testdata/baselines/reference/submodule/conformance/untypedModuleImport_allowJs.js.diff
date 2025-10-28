@@ -1,9 +1,0 @@
---- old.untypedModuleImport_allowJs.js
-+++ new.untypedModuleImport_allowJs.js
-@@= skipped -13, +13 lines =@@
-     return (mod && mod.__esModule) ? mod : { "default": mod };
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--var foo_1 = __importDefault(require("foo"));
-+const foo_1 = __importDefault(require("foo"));
- foo_1.default.bar();

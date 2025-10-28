@@ -36,42 +36,34 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.ClassA = void 0;
--var aux_1 = require("./aux");
--var aux1_1 = require("./aux1");
+-const aux_1 = require("./aux");
+-const aux1_1 = require("./aux1");
  function annotation() {
      return (target) => { };
  }
  function annotation1() {
      return (target) => { };
  }
--let ClassA = (() => {
--    let ClassA = class ClassA {
--        constructor(...init) {
--            this.array = init;
--        }
--        foo(...args) {
--        }
--    };
--    __decorate([
--        annotation1(),
--        __metadata("design:type", Function),
--        __metadata("design:paramtypes", [aux1_1.SomeClass1]),
--        __metadata("design:returntype", void 0)
--    ], ClassA.prototype, "foo", null);
--    ClassA = __decorate([
--        annotation(),
--        __metadata("design:paramtypes", [aux_1.SomeClass])
--    ], ClassA);
--    return ClassA;
--})();
+-let ClassA = class ClassA {
 +@annotation()
 +class ClassA {
 +    array;
-+    constructor(...init) {
-+        this.array = init;
-+    }
+     constructor(...init) {
+         this.array = init;
+     }
 +    @annotation1()
-+    foo(...args) {
-+    }
+     foo(...args) {
+     }
+-};
 +}
  exports.ClassA = ClassA;
+-__decorate([
+-    annotation1(),
+-    __metadata("design:type", Function),
+-    __metadata("design:paramtypes", [aux1_1.SomeClass1]),
+-    __metadata("design:returntype", void 0)
+-], ClassA.prototype, "foo", null);
+-exports.ClassA = ClassA = __decorate([
+-    annotation(),
+-    __metadata("design:paramtypes", [aux_1.SomeClass])
+-], ClassA);

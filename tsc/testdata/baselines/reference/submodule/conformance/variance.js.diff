@@ -8,22 +8,14 @@
  // Test cases for parameter variances affected by conditional types.
  const foo = { prop: true };
  const x = foo;
- const y = foo;
+@@= skipped -8, +7 lines =@@
  const z = x;
  // Repro from #30118
--let Bar = (() => {
--    class Bar {
--        cast(_name) { }
--        pushThis() {
--            Bar.instance.push(this);
--        }
-+class Bar {
+ class Bar {
 +    static instance = [];
-+    cast(_name) { }
-+    pushThis() {
-+        Bar.instance.push(this);
+     cast(_name) { }
+     pushThis() {
+         Bar.instance.push(this);
      }
--    Bar.instance = [];
--    return Bar;
--})();
-+}
+ }
+-Bar.instance = [];

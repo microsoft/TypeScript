@@ -1,13 +1,11 @@
 --- old.jsxNamespaceNoElementChildrenAttributeReactJsx(jsx=react-jsx).js
 +++ new.jsxNamespaceNoElementChildrenAttributeReactJsx(jsx=react-jsx).js
-@@= skipped -24, +24 lines =@@
- //// [test.js]
+@@= skipped -25, +25 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--var jsx_runtime_1 = require("/jsx/jsx-runtime");
+ const jsx_runtime_1 = require("/jsx/jsx-runtime");
 -const Title = (props) => (0, jsx_runtime_1.jsx)("h1", { children: props.children });
 -const element = (0, jsx_runtime_1.jsx)(Title, { children: "Hello, world!" });
-+const jsx_runtime_1 = require("/jsx/jsx-runtime");
 +const Title = (props) => jsx_runtime_1.jsx("h1", { children: props.children });
 +const element = jsx_runtime_1.jsx(Title, { children: "Hello, world!" });
  //// [jsx-dev-runtime.js]

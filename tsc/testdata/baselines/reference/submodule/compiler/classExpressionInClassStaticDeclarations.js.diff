@@ -1,19 +1,14 @@
 --- old.classExpressionInClassStaticDeclarations.js
 +++ new.classExpressionInClassStaticDeclarations.js
-@@= skipped -5, +5 lines =@@
- }
+@@= skipped -6, +6 lines =@@
 
  //// [classExpressionInClassStaticDeclarations.js]
--let C = (() => {
--    class C {
--    }
--    C.D = class extends C {
-+class C {
+ class C {
 +    static D = class extends C {
-     };
--    return C;
--})();
-+}
++    };
+ }
+-C.D = class extends C {
+-};
 
 
  //// [classExpressionInClassStaticDeclarations.d.ts]
