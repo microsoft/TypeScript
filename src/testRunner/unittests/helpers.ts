@@ -106,10 +106,7 @@ function createSourceFileWithText(fileName: string, sourceText: SourceText, targ
 export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean): TestCompilerHost {
     const files = ts.arrayToMap(texts, t => t.name, t => {
         if (oldProgram) {
-            let oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;
-            if (oldFile && oldFile.redirectInfo) {
-                oldFile = oldFile.redirectInfo.unredirected;
-            }
+            const oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;
             if (oldFile && oldFile.sourceText!.getVersion() === t.text.getVersion()) {
                 return oldFile;
             }

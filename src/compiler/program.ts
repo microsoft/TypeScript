@@ -41,7 +41,6 @@ import {
     createModeAwareCache,
     createModeAwareCacheKey,
     createModuleResolutionCache,
-    createMultiMap,
     createProgramDiagnostics,
     CreateProgramOptions,
     createSourceFile,
@@ -238,7 +237,6 @@ import {
     optionDeclarations,
     optionsHaveChanges,
     PackageId,
-    packageIdToPackageName,
     packageIdToString,
     PackageJsonInfoCache,
     ParameterDeclaration,
@@ -246,7 +244,6 @@ import {
     ParsedCommandLine,
     parseIsolatedEntityName,
     parseJsonSourceFileConfigFileContent,
-    parseNodeFactory,
     Path,
     pathContainsNodeModules,
     pathIsAbsolute,
@@ -1688,14 +1685,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         actualResolveLibrary = (libraryName, resolveFrom, options) => resolveLibrary(libraryName, resolveFrom, options, host, libraryResolutionCache);
     }
 
-    // Map from a stringified PackageId to the source file with that id.
-    // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
-    // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
-    const packageIdToSourceFile = new Map<string, SourceFile>();
-    // Maps from a SourceFile's `.path` to the name of the package it was imported with.
-    let sourceFileToPackageName = new Map<Path, string>();
-    // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
-    let redirectTargetsMap = createMultiMap<Path, string>();
     let usesUriStyleNodeCoreModules: boolean | undefined;
 
     /**
@@ -1910,8 +1899,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         getModeForResolutionAtIndex,
         getSourceFileFromReference,
         getLibFileFromReference,
-        sourceFileToPackageName,
-        redirectTargetsMap,
         usesUriStyleNodeCoreModules,
         resolvedModules,
         resolvedTypeReferenceDirectiveNames,
@@ -2379,15 +2366,10 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         }
 
         const oldSourceFiles = oldProgram.getSourceFiles();
-        const enum SeenPackageName {
-            Exists,
-            Modified,
-        }
-        const seenPackageNames = new Map<string, SeenPackageName>();
 
         for (const oldSourceFile of oldSourceFiles) {
             const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
-            let newSourceFile = host.getSourceFileByPath
+            const newSourceFile = host.getSourceFileByPath
                 ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile)
                 : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
@@ -2397,47 +2379,13 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             newSourceFile.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
             newSourceFile.packageJsonScope = sourceFileOptions.packageJsonScope;
 
-            Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
-
-            let fileChanged: boolean;
-            if (oldSourceFile.redirectInfo) {
-                // We got `newSourceFile` by path, so it is actually for the unredirected file.
-                // This lets us know if the unredirected file has changed. If it has we should break the redirect.
-                if (newSourceFile !== oldSourceFile.redirectInfo.unredirected) {
-                    // Underlying file has changed. Might not redirect anymore. Must rebuild program.
-                    return StructureIsReused.Not;
-                }
-                fileChanged = false;
-                newSourceFile = oldSourceFile; // Use the redirect.
-            }
-            else if (oldProgram.redirectTargetsMap.has(oldSourceFile.path)) {
-                // If a redirected-to source file changes, the redirect may be broken.
-                if (newSourceFile !== oldSourceFile) {
-                    return StructureIsReused.Not;
-                }
-                fileChanged = false;
-            }
-            else {
-                fileChanged = newSourceFile !== oldSourceFile;
-            }
+            const fileChanged = newSourceFile !== oldSourceFile;
 
             // Since the project references havent changed, its right to set originalFileName and resolvedPath here
             newSourceFile.path = oldSourceFile.path;
             newSourceFile.originalFileName = oldSourceFile.originalFileName;
             newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
             newSourceFile.fileName = oldSourceFile.fileName;
-
-            const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
-            if (packageName !== undefined) {
-                // If there are 2 different source files for the same package name and at least one of them changes,
-                // they might become redirects. So we must rebuild the program.
-                const prevKind = seenPackageNames.get(packageName);
-                const newKind = fileChanged ? SeenPackageName.Modified : SeenPackageName.Exists;
-                if ((prevKind !== undefined && newKind === SeenPackageName.Modified) || prevKind === SeenPackageName.Modified) {
-                    return StructureIsReused.Not;
-                }
-                seenPackageNames.set(packageName, newKind);
-            }
 
             if (fileChanged) {
                 if (oldSourceFile.impliedNodeFormat !== newSourceFile.impliedNodeFormat) {
@@ -2579,8 +2527,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         automaticTypeDirectiveNames = oldProgram.getAutomaticTypeDirectiveNames();
         automaticTypeDirectiveResolutions = oldProgram.getAutomaticTypeDirectiveResolutions();
 
-        sourceFileToPackageName = oldProgram.sourceFileToPackageName;
-        redirectTargetsMap = oldProgram.redirectTargetsMap;
         usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
         resolvedModules = oldProgram.resolvedModules;
         resolvedTypeReferenceDirectiveNames = oldProgram.resolvedTypeReferenceDirectiveNames;
@@ -2622,7 +2568,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getBuildInfo: () => program.getBuildInfo?.(),
             getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
-            redirectTargetsMap,
             getFileIncludeReasons: program.getFileIncludeReasons,
             createHash: maybeBind(host, host.createHash),
             getModuleResolutionCache: () => program.getModuleResolutionCache(),
@@ -3501,18 +3446,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         }
     }
 
-    function createRedirectedSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
-        const redirect = parseNodeFactory.createRedirectedSourceFile({ redirectTarget, unredirected });
-        redirect.fileName = fileName;
-        redirect.path = path;
-        redirect.resolvedPath = resolvedPath;
-        redirect.originalFileName = originalFileName;
-        redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
-        redirect.packageJsonScope = sourceFileOptions.packageJsonScope;
-        sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
-        return redirect;
-    }
-
     // Get source file from normalized fileName
     function findSourceFile(fileName: string, isDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
         tracing?.push(tracing.Phase.Program, "findSourceFile", {
@@ -3634,26 +3567,6 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             shouldCreateNewSourceFile,
         );
 
-        if (packageId) {
-            const packageIdKey = packageIdToString(packageId);
-            const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
-            if (fileFromPackageId) {
-                // Some other SourceFile already exists with this package name and version.
-                // Instead of creating a duplicate, just redirect to the existing one.
-                const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
-                redirectTargetsMap.add(fileFromPackageId.path, fileName);
-                addFileToFilesByName(dupFile, path, fileName, redirectedPath);
-                addFileIncludeReason(dupFile, reason, /*checkExisting*/ false);
-                sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
-                processingOtherFiles!.push(dupFile);
-                return dupFile;
-            }
-            else if (file) {
-                // This is the first source file to have this packageId.
-                packageIdToSourceFile.set(packageIdKey, file);
-                sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
-            }
-        }
         addFileToFilesByName(file, path, fileName, redirectedPath);
 
         if (file) {

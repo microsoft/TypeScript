@@ -51385,9 +51385,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Initialize global symbol table
         let augmentations: (readonly (StringLiteral | Identifier)[])[] | undefined;
         for (const file of host.getSourceFiles()) {
-            if (file.redirectInfo) {
-                continue;
-            }
             if (!isExternalOrCommonJsModule(file)) {
                 // It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
                 const fileGlobalThisSymbol = file.locals!.get("globalThis" as __String);
@@ -53689,7 +53686,6 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         getSymlinkCache: maybeBind(host, host.getSymlinkCache),
         getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-        redirectTargetsMap: host.redirectTargetsMap,
         getRedirectFromSourceFile: fileName => host.getRedirectFromSourceFile(fileName),
         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
         fileExists: fileName => host.fileExists(fileName),
