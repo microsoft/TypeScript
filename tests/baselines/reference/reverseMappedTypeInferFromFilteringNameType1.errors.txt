@@ -1,0 +1,46 @@
+reverseMappedTypeInferFromFilteringNameType1.ts(34,7): error TS2353: Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; }>'.
+
+
+==== reverseMappedTypeInferFromFilteringNameType1.ts (1 errors) ====
+    declare class User {
+      public name: string;
+      public last: string;
+      public age: number;
+    }
+    
+    type AllowedNeeds<T> = {
+      [K in keyof T as K & keyof User]: T[K];
+    };
+    
+    declare function extend<T>(
+      input: {
+        [K in keyof T]: {
+          needs: AllowedNeeds<T[K]>
+          compute: (x: Pick<User, keyof T[K] & keyof User>) => any;
+        };
+      }
+    ): T
+    
+    const inferred1 = extend({
+      fullName: {
+        needs: {
+          name: true,
+          last: true,
+        },
+        compute: (user) => `${user.name} ${user.last}`,
+      },
+    });
+    
+    const inferred2 = extend({
+      fullName: {
+        needs: {
+          last: true,
+          doesntExist: true // error
+          ~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; }>'.
+!!! related TS6500 reverseMappedTypeInferFromFilteringNameType1.ts:14:7: The expected type comes from property 'needs' which is declared here on type '{ needs: AllowedNeeds<{ last: boolean; }>; compute: (x: Pick<User, "last">) => any; }'
+        },
+        compute: (user) => {},
+      },
+    });
+    
