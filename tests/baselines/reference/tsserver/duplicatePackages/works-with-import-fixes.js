@@ -119,7 +119,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by default include pattern '**/*'
 	b/node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'b/user.ts' with packageId 'foo/index.d.ts@1.2.3'
-	  File redirects to file 'a/node_modules/foo/index.d.ts'
 	b/user.ts
 	  Matched by default include pattern '**/*'
 

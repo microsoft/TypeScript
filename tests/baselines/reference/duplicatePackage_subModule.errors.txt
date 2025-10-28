@@ -1,0 +1,33 @@
+/index.ts(4,7): error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
+  Property 'source' is protected but type 'Foo' is not a class derived from 'Foo'.
+
+
+==== /index.ts (1 errors) ====
+    import Foo from "foo/Foo";
+    import * as a from "a";
+    
+    const o: Foo = a.o;
+          ~
+!!! error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
+!!! error TS2322:   Property 'source' is protected but type 'Foo' is not a class derived from 'Foo'.
+    
+==== /node_modules/a/index.d.ts (0 errors) ====
+    import Foo from "foo/Foo";
+    export const o: Foo;
+    
+==== /node_modules/a/node_modules/foo/Foo.d.ts (0 errors) ====
+    export default class Foo {
+        protected source: boolean;
+    }
+    
+==== /node_modules/a/node_modules/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.2.3" }
+    
+==== /node_modules/foo/Foo.d.ts (0 errors) ====
+    export default class Foo {
+        protected source: boolean;
+    }
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.2.3" }
+    
