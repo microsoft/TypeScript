@@ -1,0 +1,333 @@
+//// [tests/cases/compiler/instantiateContextualTypes2.ts] ////
+
+=== instantiateContextualTypes2.ts ===
+type ContextStates =
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+
+  | {
+      status: "loading";
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 1, 5))
+
+      data: null;
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 2, 24))
+    }
+  | {
+      status: "success";
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 5, 5))
+
+      data: string;
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 6, 24))
+
+    };
+
+declare function createStore<TContext>(
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+
+  context: TContext,
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 10, 39))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+
+  config: {
+>config : Symbol(config, Decl(instantiateContextualTypes2.ts, 11, 20))
+
+    on: Record<string, (ctx: TContext) => TContext>;
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 12, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 13, 24))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+
+  },
+): void;
+
+const store1 = createStore(
+>store1 : Symbol(store1, Decl(instantiateContextualTypes2.ts, 17, 5))
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 18, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 19, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 22, 3))
+
+      fetch: (ctx) => ({
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 23, 9))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 24, 14))
+
+        status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 24, 24))
+
+        data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 25, 26))
+
+      }),
+    },
+  },
+);
+
+const store2 = createStore(
+>store2 : Symbol(store2, Decl(instantiateContextualTypes2.ts, 32, 5))
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 33, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 34, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 37, 3))
+
+      fetch: () => ({
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 38, 9))
+
+        status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 39, 21))
+
+        data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 40, 26))
+
+      }),
+    },
+  },
+);
+
+const store3 = createStore(
+>store3 : Symbol(store3, Decl(instantiateContextualTypes2.ts, 47, 5))
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 48, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 49, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 52, 3))
+
+      fetch: (ctx) => {
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 53, 9))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 54, 14))
+
+        return {
+          status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 55, 16))
+
+          data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 56, 28))
+
+        };
+      },
+    },
+  },
+);
+
+const store4 = createStore(
+>store4 : Symbol(store4, Decl(instantiateContextualTypes2.ts, 64, 5))
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 65, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 66, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 69, 3))
+
+      fetch: () => {
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 70, 9))
+
+        return {
+          status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 72, 16))
+
+          data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 73, 28))
+
+        };
+      },
+    },
+  },
+);
+
+declare function createStore2<TContext>(
+>createStore2 : Symbol(createStore2, Decl(instantiateContextualTypes2.ts, 79, 2))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 81, 30))
+
+  context: TContext,
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 81, 40))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 81, 30))
+
+  config: {
+>config : Symbol(config, Decl(instantiateContextualTypes2.ts, 82, 20))
+
+    on: Record<string, (ctx: TContext) => { context: TContext }>;
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 83, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 84, 24))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 81, 30))
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 84, 43))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 81, 30))
+
+  },
+): void;
+
+const store5 = createStore2(
+>store5 : Symbol(store5, Decl(instantiateContextualTypes2.ts, 88, 5))
+>createStore2 : Symbol(createStore2, Decl(instantiateContextualTypes2.ts, 79, 2))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 89, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 90, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 93, 3))
+
+      fetch: (ctx) => ({
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 94, 9))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 95, 14))
+
+        context: {
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 95, 24))
+
+          status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 96, 18))
+
+          data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 97, 28))
+
+        },
+      }),
+    },
+  },
+);
+
+const store6 = createStore2(
+>store6 : Symbol(store6, Decl(instantiateContextualTypes2.ts, 105, 5))
+>createStore2 : Symbol(createStore2, Decl(instantiateContextualTypes2.ts, 79, 2))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 106, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 107, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 110, 3))
+
+      fetch: () => ({
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 111, 9))
+
+        context: {
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 112, 21))
+
+          status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 113, 18))
+
+          data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 114, 28))
+
+        },
+      }),
+    },
+  },
+);
+
+const store7 = createStore2(
+>store7 : Symbol(store7, Decl(instantiateContextualTypes2.ts, 122, 5))
+>createStore2 : Symbol(createStore2, Decl(instantiateContextualTypes2.ts, 79, 2))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 123, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 124, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 127, 3))
+
+      fetch: (ctx) => {
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 128, 9))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 129, 14))
+
+        return {
+          context: {
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 130, 16))
+
+            status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 131, 20))
+
+            data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 132, 30))
+
+          },
+        };
+      },
+    },
+  },
+);
+
+const store8 = createStore2(
+>store8 : Symbol(store8, Decl(instantiateContextualTypes2.ts, 141, 5))
+>createStore2 : Symbol(createStore2, Decl(instantiateContextualTypes2.ts, 79, 2))
+  {
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 142, 3))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 143, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+  {
+    on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 146, 3))
+
+      fetch: () => {
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 147, 9))
+
+        return {
+          context: {
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 149, 16))
+
+            status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 150, 20))
+
+            data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 151, 30))
+
+          },
+        };
+      },
+    },
+  },
+);
+
