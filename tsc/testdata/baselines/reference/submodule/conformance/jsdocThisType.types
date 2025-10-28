@@ -25,7 +25,7 @@ export const f1 = function() {
 
 /** @type {import('./types').M} */
 export function f2() {
->f2 : () => void
+>f2 : (this: import("/types").Foo) => void
 
     this.test();
 >this.test() : any
@@ -48,7 +48,7 @@ export const f3 = function() {
 
 /** @type {(this: import('./types').Foo) => void} */
 export function f4() {
->f4 : () => void
+>f4 : (this: import("/types").Foo) => void
 
     this.test();
 >this.test() : any

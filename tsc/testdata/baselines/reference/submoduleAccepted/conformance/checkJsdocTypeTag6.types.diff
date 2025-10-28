@@ -1,33 +1,6 @@
 --- old.checkJsdocTypeTag6.types
 +++ new.checkJsdocTypeTag6.types
-@@= skipped -17, +17 lines =@@
-
- /** @type {(a: number) => number} */
- function add1(a, b) { return a + b; }
-->add1 : (a: number) => number
-+>add1 : (a: number, b: any) => number
- >a : number
- >b : any
- >a + b : any
-@@= skipped -19, +19 lines =@@
- // TODO: Should be an error since signature doesn't match.
- /** @type {(a: number, b: number, c: number) => number} */
- function add3(a, b) { return a + b; }
-->add3 : (a: number, b: number, c: number) => number
-+>add3 : (a: number, b: number) => number
- >a : number
- >b : number
- >a + b : number
-@@= skipped -12, +12 lines =@@
-
- /** @type {() => void} */
- function funcWithMoreParameters(more) {} // error
-->funcWithMoreParameters : () => void
-+>funcWithMoreParameters : (more: any) => void
- >more : any
-
- /** @type {() => void} */
-@@= skipped -21, +21 lines =@@
+@@= skipped -69, +69 lines =@@
 
    /** @type {() => void} */
    methodWithMoreParameters(more) {}, // error
