@@ -121,6 +121,7 @@ import {
     getSnapshotText,
     getSourceFileOfNode,
     getSourceMapper,
+    getSyntacticModifierFlags,
     getTokenPosOfNode,
     getTouchingPropertyName,
     getTouchingToken,
@@ -1049,7 +1050,7 @@ function getDocumentationComment(declarations: readonly Declaration[] | undefine
 }
 
 function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-    const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
+    const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor && getSyntacticModifierFlags(declaration) & ModifierFlags.AccessibilityModifier ? declaration.parent.parent : declaration.parent;
     if (!classOrInterfaceDeclaration) return;
 
     const isStaticMember = hasStaticModifier(declaration);
