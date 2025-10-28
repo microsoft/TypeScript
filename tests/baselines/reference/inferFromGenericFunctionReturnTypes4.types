@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes4.ts] ////
+
+=== inferFromGenericFunctionReturnTypes4.ts ===
+// https://github.com/microsoft/TypeScript/issues/58833
+
+interface Config<T> {
+  context: T;
+>context : T
+>        : ^
+
+  invoke: {
+>invoke : { (x: T): void; exec: (x: T) => void; }
+>       : ^^^ ^^ ^^^    ^^^^^^^^              ^^^
+
+    (x: T): void;
+>x : T
+>  : ^
+
+    exec: (x: T) => void;
+>exec : (x: T) => void
+>     : ^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+  };
+}
+
+declare function create<T>(config: Config<T>): void;
+>create : <T>(config: Config<T>) => void
+>       : ^ ^^      ^^         ^^^^^    
+>config : Config<T>
+>       : ^^^^^^^^^
+
+declare function myInvoke<T>(i: { exec: (x: T) => void }): {
+>myInvoke : <T>(i: { exec: (x: T) => void; }) => { (x: T): void; exec: (x: T) => void; }
+>         : ^ ^^ ^^                         ^^^^^                                       
+>i : { exec: (x: T) => void; }
+>  : ^^^^^^^^              ^^^
+>exec : (x: T) => void
+>     : ^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+  (x: T): void;
+>x : T
+>  : ^
+
+  exec: (x: T) => void;
+>exec : (x: T) => void
+>     : ^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+};
+
+create({
+>create({  context: { count: 10 },  invoke: myInvoke({    exec: (x) => {      x.count.toFixed(2);    },  }),}) : void
+>                                                                                                              : ^^^^
+>create : <T>(config: Config<T>) => void
+>       : ^ ^^      ^^         ^^^^^    
+>{  context: { count: 10 },  invoke: myInvoke({    exec: (x) => {      x.count.toFixed(2);    },  }),} : { context: { count: number; }; invoke: { (x: { count: number; }): void; exec: (x: { count: number; }) => void; }; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
+
+  context: { count: 10 },
+>context : { count: number; }
+>        : ^^^^^^^^^^^^^^^^^^
+>{ count: 10 } : { count: number; }
+>              : ^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+>10 : 10
+>   : ^^
+
+  invoke: myInvoke({
+>invoke : { (x: { count: number; }): void; exec: (x: { count: number; }) => void; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>myInvoke({    exec: (x) => {      x.count.toFixed(2);    },  }) : { (x: { count: number; }): void; exec: (x: { count: number; }) => void; }
+>                                                                : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>myInvoke : <T>(i: { exec: (x: T) => void; }) => { (x: T): void; exec: (x: T) => void; }
+>         : ^ ^^ ^^                         ^^^^^                                       
+>{    exec: (x) => {      x.count.toFixed(2);    },  } : { exec: (x: { count: number; }) => void; }
+>                                                      : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    exec: (x) => {
+>exec : (x: { count: number; }) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => {      x.count.toFixed(2);    } : (x: { count: number; }) => void
+>                                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { count: number; }
+>  : ^^^^^^^^^^^^^^^^^^
+
+      x.count.toFixed(2);
+>x.count.toFixed(2) : string
+>                   : ^^^^^^
+>x.count.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
+>x.count : number
+>        : ^^^^^^
+>x : { count: number; }
+>  : ^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+>2 : 2
+>  : ^
+
+    },
+  }),
+});
+
+declare function myInvoke2<T>(i: { exec: (x: T) => void }): {
+>myInvoke2 : <T>(i: { exec: (x: T) => void; }) => { (x: T): void; } & typeof i
+>          : ^ ^^ ^^                         ^^^^^                            
+>i : { exec: (x: T) => void; }
+>  : ^^^^^^^^              ^^^
+>exec : (x: T) => void
+>     : ^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+  (x: T): void;
+>x : T
+>  : ^
+
+} & typeof i;
+>i : { exec: (x: T) => void; }
+>  : ^^^^^^^^              ^^^
+
+create({
+>create({  context: { count: 20 },  invoke: myInvoke2({    exec: (x) => {      x.count.toFixed(2);    },  }),}) : void
+>                                                                                                               : ^^^^
+>create : <T>(config: Config<T>) => void
+>       : ^ ^^      ^^         ^^^^^    
+>{  context: { count: 20 },  invoke: myInvoke2({    exec: (x) => {      x.count.toFixed(2);    },  }),} : { context: { count: number; }; invoke: ((x: { count: number; }) => void) & { exec: (x: { count: number; }) => void; }; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
+
+  context: { count: 20 },
+>context : { count: number; }
+>        : ^^^^^^^^^^^^^^^^^^
+>{ count: 20 } : { count: number; }
+>              : ^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+>20 : 20
+>   : ^^
+
+  invoke: myInvoke2({
+>invoke : ((x: { count: number; }) => void) & { exec: (x: { count: number; }) => void; }
+>       : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>myInvoke2({    exec: (x) => {      x.count.toFixed(2);    },  }) : ((x: { count: number; }) => void) & { exec: (x: { count: number; }) => void; }
+>                                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>myInvoke2 : <T>(i: { exec: (x: T) => void; }) => { (x: T): void; } & typeof i
+>          : ^ ^^ ^^                         ^^^^^                            
+>{    exec: (x) => {      x.count.toFixed(2);    },  } : { exec: (x: { count: number; }) => void; }
+>                                                      : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    exec: (x) => {
+>exec : (x: { count: number; }) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => {      x.count.toFixed(2);    } : (x: { count: number; }) => void
+>                                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { count: number; }
+>  : ^^^^^^^^^^^^^^^^^^
+
+      x.count.toFixed(2);
+>x.count.toFixed(2) : string
+>                   : ^^^^^^
+>x.count.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
+>x.count : number
+>        : ^^^^^^
+>x : { count: number; }
+>  : ^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+>2 : 2
+>  : ^
+
+    },
+  }),
+});
+
