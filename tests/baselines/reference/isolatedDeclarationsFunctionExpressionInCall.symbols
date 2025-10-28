@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/isolatedDeclarationsFunctionExpressionInCall.ts] ////
+
+=== isolatedDeclarationsFunctionExpressionInCall.ts ===
+declare function observer<T>(fn: T): T;
+>observer : Symbol(observer, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 0))
+>T : Symbol(T, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 26))
+>fn : Symbol(fn, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 29))
+>T : Symbol(T, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 26))
+>T : Symbol(T, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 26))
+
+declare function action<T>(fn: T): T;
+>action : Symbol(action, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 39))
+>T : Symbol(T, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 1, 24))
+>fn : Symbol(fn, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 1, 27))
+>T : Symbol(T, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 1, 24))
+>T : Symbol(T, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 1, 24))
+
+export const Component = observer(() => {
+>Component : Symbol(Component, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 3, 12))
+>observer : Symbol(observer, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 0))
+
+  return "hello";
+});
+
+export const thing = action(function () {
+>thing : Symbol(thing, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 7, 12))
+>action : Symbol(action, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 39))
+
+  return Component;
+>Component : Symbol(Component, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 3, 12))
+
+});
+
+export const arrowWithType = observer((): string => {
+>arrowWithType : Symbol(arrowWithType, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 11, 12))
+>observer : Symbol(observer, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 0))
+
+  return "typed";
+});
+
+export const functionWithType = action(function (): typeof Component {
+>functionWithType : Symbol(functionWithType, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 15, 12))
+>action : Symbol(action, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 0, 39))
+>Component : Symbol(Component, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 3, 12))
+
+  return Component;
+>Component : Symbol(Component, Decl(isolatedDeclarationsFunctionExpressionInCall.ts, 3, 12))
+
+});
