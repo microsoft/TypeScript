@@ -1427,8 +1427,6 @@ function compareLocalVsExternal(
     return Comparison.EqualTo;
 }
 
-/** @returns `Comparison.LessThan` if `a` is better than `b`. */
-
 function compareModuleSpecifiers(
     a: ImportFixWithModuleSpecifier,
     b: ImportFixWithModuleSpecifier,
