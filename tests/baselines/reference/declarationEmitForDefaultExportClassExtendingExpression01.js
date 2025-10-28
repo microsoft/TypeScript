@@ -66,7 +66,6 @@ interface Greeter {
 interface GreeterConstructor {
     new (): Greeter;
 }
-declare const default_base: GreeterConstructor;
-export default class extends default_base {
+export default class extends ({} as GreeterConstructor) {
 }
 export {};
