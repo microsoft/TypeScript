@@ -1439,7 +1439,7 @@ function compareModuleSpecifiers(
     toPath: (fileName: string) => Path,
 ): Comparison {
     if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
-        // STEP 2: ADD THE COMPARISON LOGIC HERE (INSIDE THE FUNCTION) ✅
+        
         const localVsExternalComparison = compareLocalVsExternal(a, b);
         if (localVsExternalComparison !== Comparison.EqualTo) {
             return localVsExternalComparison;
