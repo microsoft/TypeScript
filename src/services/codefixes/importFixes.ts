@@ -1414,7 +1414,6 @@ function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: 
 }
 
 /** @returns `Comparison.LessThan` if `a` is better than `b`. */
-
 /** Heuristic approach: Prioritize local/relative imports over node_modules imports. */
 function compareLocalVsExternal(
     a: ImportFixWithModuleSpecifier,
