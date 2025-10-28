@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/usedBeforeAssignedTypeAssertion.ts] ////
+
+=== usedBeforeAssignedTypeAssertion.ts ===
+// Test case for type assertion (angle bracket syntax) - assignment should not error
+function testTypeAssertion() {
+>testTypeAssertion : Symbol(testTypeAssertion, Decl(usedBeforeAssignedTypeAssertion.ts, 0, 0))
+
+    let x: number;
+>x : Symbol(x, Decl(usedBeforeAssignedTypeAssertion.ts, 2, 7))
+
+    (<any>x) = 42; // Should not error - this is an assignment
+>x : Symbol(x, Decl(usedBeforeAssignedTypeAssertion.ts, 2, 7))
+}
+
+// Test case for 'as' expression - assignment should not error 
+function testAsExpression() {
+>testAsExpression : Symbol(testAsExpression, Decl(usedBeforeAssignedTypeAssertion.ts, 4, 1))
+
+    let y: number;
+>y : Symbol(y, Decl(usedBeforeAssignedTypeAssertion.ts, 8, 7))
+
+    (y as any) = 42; // Should not error - this is an assignment
+>y : Symbol(y, Decl(usedBeforeAssignedTypeAssertion.ts, 8, 7))
+}
+
+// Test case for parenthesized expression (should already work)
+function testParentheses() {
+>testParentheses : Symbol(testParentheses, Decl(usedBeforeAssignedTypeAssertion.ts, 10, 1))
+
+    let z: number;
+>z : Symbol(z, Decl(usedBeforeAssignedTypeAssertion.ts, 14, 7))
+
+    (z) = 42; // Should not error - this is an assignment
+>z : Symbol(z, Decl(usedBeforeAssignedTypeAssertion.ts, 14, 7))
+}
+
+// Test case with nested type assertions
+function testNested() {
+>testNested : Symbol(testNested, Decl(usedBeforeAssignedTypeAssertion.ts, 16, 1))
+
+    let nested: any;
+>nested : Symbol(nested, Decl(usedBeforeAssignedTypeAssertion.ts, 20, 7))
+
+    ((nested as any) as unknown) = "test"; // Should not error
+>nested : Symbol(nested, Decl(usedBeforeAssignedTypeAssertion.ts, 20, 7))
+}
+
+// Test case for const assignment via type assertion - should error
+function testConstAssignment() {
+>testConstAssignment : Symbol(testConstAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 22, 1))
+
+    const m = 32;
+>m : Symbol(m, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 9))
+
+    (m as any) = 16; // Should error - cannot assign to const
+>m : Symbol(m, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 9))
+}
+
+// Test case for readonly property assignment via type assertion - should error
+function testReadonlyPropertyAssignment() {
+>testReadonlyPropertyAssignment : Symbol(testReadonlyPropertyAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 28, 1))
+
+    interface ReadonlyInterface {
+>ReadonlyInterface : Symbol(ReadonlyInterface, Decl(usedBeforeAssignedTypeAssertion.ts, 31, 43))
+
+        readonly prop: number;
+>prop : Symbol(ReadonlyInterface.prop, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 33))
+    }
+    
+    let obj: ReadonlyInterface;
+>obj : Symbol(obj, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+>ReadonlyInterface : Symbol(ReadonlyInterface, Decl(usedBeforeAssignedTypeAssertion.ts, 31, 43))
+
+    obj = { prop: 42 };
+>obj : Symbol(obj, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+>prop : Symbol(prop, Decl(usedBeforeAssignedTypeAssertion.ts, 37, 11))
+    
+    // Should error - cannot assign to readonly property, even through type assertion
+    (obj.prop as any) = 100;
+>obj.prop : Symbol(ReadonlyInterface.prop, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 33))
+>obj : Symbol(obj, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+>prop : Symbol(ReadonlyInterface.prop, Decl(usedBeforeAssignedTypeAssertion.ts, 32, 33))
+}
+
+// Test cases that should still produce errors for proper context
+function shouldStillError() {
+>shouldStillError : Symbol(shouldStillError, Decl(usedBeforeAssignedTypeAssertion.ts, 41, 1))
+
+    let uninitialized: number;
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 45, 7))
+
+    return uninitialized; // Should error - never assigned
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 45, 7))
+}
