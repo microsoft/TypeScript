@@ -1,0 +1,41 @@
+noInferRestSpread1.ts(7,22): error TS2345: Argument of type '(a: number, b: number) => void' is not assignable to parameter of type '(args_0: number) => void'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+
+
+==== noInferRestSpread1.ts (1 errors) ====
+    declare function call<A extends readonly unknown[]>(
+      arg: (...args: NoInfer<A>) => void,
+      ...args: A
+    ): A;
+    
+    const result1 = call((a: number) => {}, 1, 2);
+    const result2 = call((a: number, b: number) => {}, 1); // error
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(a: number, b: number) => void' is not assignable to parameter of type '(args_0: number) => void'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
+    const result3 = call((a) => {}, 1, ''); // test contextual parameters
+    const result4 = call((a, b) => {}, 1, ''); // test contextual parameters
+    const result5 = call((...args) => {}, 1, ''); // test contextual parameters
+    const result6 = call((a, ...rest) => {}, 1, ''); // test contextual parameters
+    
+    declare function fn1<A extends unknown[]>(
+      cb: (a: [number, ...NoInfer<A>]) => void,
+      args: A,
+    ): A;
+    
+    declare const singleStr: [string];
+    
+    const result7 = fn1((arg) => {
+      arg.length;
+    }, singleStr);
+    
+    declare const tupleUnion: [string] | [number, boolean];
+    
+    const result8 = fn1((arg) => {
+      arg.length;
+    }, tupleUnion);
+    
+    declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+    
+    fn2((a, ...rest) => {});
+    
