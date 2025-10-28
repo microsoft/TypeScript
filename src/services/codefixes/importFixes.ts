@@ -1442,7 +1442,6 @@ function compareModuleSpecifiers(
         if (localVsExternalComparison !== Comparison.EqualTo) {
             return localVsExternalComparison;
         }
-        
         return compareBooleans(
             b.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(b.moduleSpecifier),
             a.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(a.moduleSpecifier),
