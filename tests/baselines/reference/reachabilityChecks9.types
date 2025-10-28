@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/reachabilityChecks9.ts] ////
+
+=== reachabilityChecks9.ts ===
+// https://github.com/microsoft/TypeScript/issues/61259
+
+const a = (v: 1 | 2) => {
+>a : (v: 1 | 2) => 1 | 2
+>  : ^ ^^     ^^^^^^^^^^
+>(v: 1 | 2) => {  try {    switch (v) {      case 1:        return v;      case 2:        return v;    }  } finally {    console.log("exit");  }} : (v: 1 | 2) => 1 | 2
+>                                                                                                                                                 : ^ ^^     ^^^^^^^^^^
+>v : 1 | 2
+>  : ^^^^^
+
+  try {
+    switch (v) {
+>v : 1 | 2
+>  : ^^^^^
+
+      case 1:
+>1 : 1
+>  : ^
+
+        return v;
+>v : 1
+>  : ^
+
+      case 2:
+>2 : 2
+>  : ^
+
+        return v;
+>v : 2
+>  : ^
+    }
+  } finally {
+    console.log("exit");
+>console.log("exit") : void
+>                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"exit" : "exit"
+>       : ^^^^^^
+  }
+};
+
+const b = (v: number) => {
+>b : (v: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
+>(v: number) => {  try {    switch (v) {      case 1:        return v;      default:        return v;    }  } finally {    console.log("exit");  }} : (v: number) => number
+>                                                                                                                                                   : ^ ^^      ^^^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+  try {
+    switch (v) {
+>v : number
+>  : ^^^^^^
+
+      case 1:
+>1 : 1
+>  : ^
+
+        return v;
+>v : 1
+>  : ^
+
+      default:
+        return v;
+>v : number
+>  : ^^^^^^
+    }
+  } finally {
+    console.log("exit");
+>console.log("exit") : void
+>                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"exit" : "exit"
+>       : ^^^^^^
+  }
+};
+
+const c = (v: 1 | 2) => {
+>c : (v: 1 | 2) => 1 | 2
+>  : ^ ^^     ^^^^^^^^^^
+>(v: 1 | 2) => {  try {    switch (v) {      case 1:        return v;      case 2:        return v;    }  } finally {    if (Math.random()) {      console.log("exit");    }  }} : (v: 1 | 2) => 1 | 2
+>                                                                                                                                                                                : ^ ^^     ^^^^^^^^^^
+>v : 1 | 2
+>  : ^^^^^
+
+  try {
+    switch (v) {
+>v : 1 | 2
+>  : ^^^^^
+
+      case 1:
+>1 : 1
+>  : ^
+
+        return v;
+>v : 1
+>  : ^
+
+      case 2:
+>2 : 2
+>  : ^
+
+        return v;
+>v : 2
+>  : ^
+    }
+  } finally {
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+      console.log("exit");
+>console.log("exit") : void
+>                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"exit" : "exit"
+>       : ^^^^^^
+    }
+  }
+};
+
+const d = (v: number) => {
+>d : (v: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
+>(v: number) => {  try {    switch (v) {      case 1:        return v;      default:        return v;    }  } finally {    if (Math.random()) {      console.log("exit");    }  }} : (v: number) => number
+>                                                                                                                                                                                  : ^ ^^      ^^^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+  try {
+    switch (v) {
+>v : number
+>  : ^^^^^^
+
+      case 1:
+>1 : 1
+>  : ^
+
+        return v;
+>v : 1
+>  : ^
+
+      default:
+        return v;
+>v : number
+>  : ^^^^^^
+    }
+  } finally {
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+      console.log("exit");
+>console.log("exit") : void
+>                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"exit" : "exit"
+>       : ^^^^^^
+    }
+  }
+};
+

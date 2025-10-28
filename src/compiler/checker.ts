@@ -1433,6 +1433,13 @@ const enum IntrinsicTypeKind {
     NoInfer,
 }
 
+const enum SharedFlowNodeCacheFlags {
+    None = 0,
+    Read = 1 << 0,
+    Write = 1 << 1,
+    ReadWrite = Read | Write,
+}
+
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
     Uppercase: IntrinsicTypeKind.Uppercase,
     Lowercase: IntrinsicTypeKind.Lowercase,
@@ -28729,7 +28736,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReachableFlowNode(flow: FlowNode) {
-        const result = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ false);
+        const result = isReachableFlowNodeWorker(flow, SharedFlowNodeCacheFlags.ReadWrite);
         lastFlowNode = flow;
         lastFlowNodeReachable = result;
         return result;
@@ -28743,19 +28750,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
     }
 
-    function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
+    function isReachableFlowNodeWorker(flow: FlowNode, cacheFlags: SharedFlowNodeCacheFlags): boolean {
         while (true) {
             if (flow === lastFlowNode) {
                 return lastFlowNodeReachable;
             }
             const flags = flow.flags;
             if (flags & FlowFlags.Shared) {
-                if (!noCacheCheck) {
+                if (cacheFlags & SharedFlowNodeCacheFlags.Read) {
                     const id = getFlowNodeId(flow);
-                    const reachable = flowNodeReachable[id];
-                    return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true));
+                    let reachable = flowNodeReachable[id];
+                    if (reachable !== undefined) {
+                        return reachable;
+                    }
+                    reachable = isReachableFlowNodeWorker(flow, cacheFlags & ~SharedFlowNodeCacheFlags.Read);
+                    if (cacheFlags & SharedFlowNodeCacheFlags.Write) {
+                        flowNodeReachable[id] = reachable;
+                    }
+                    return reachable;
                 }
-                noCacheCheck = false;
+                cacheFlags |= SharedFlowNodeCacheFlags.Read;
             }
             if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation)) {
                 flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation).antecedent;
@@ -28778,7 +28792,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (flags & FlowFlags.BranchLabel) {
                 // A branching point is reachable if any branch is reachable.
-                return some((flow as FlowLabel).antecedent, f => isReachableFlowNodeWorker(f, /*noCacheCheck*/ false));
+                return some((flow as FlowLabel).antecedent, f => isReachableFlowNodeWorker(f, cacheFlags));
             }
             else if (flags & FlowFlags.LoopLabel) {
                 const antecedents = (flow as FlowLabel).antecedent;
@@ -28803,7 +28817,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const target = (flow as FlowReduceLabel).node.target;
                 const saveAntecedents = target.antecedent;
                 target.antecedent = (flow as FlowReduceLabel).node.antecedents;
-                const result = isReachableFlowNodeWorker((flow as FlowReduceLabel).antecedent, /*noCacheCheck*/ false);
+                const result = isReachableFlowNodeWorker((flow as FlowReduceLabel).antecedent, SharedFlowNodeCacheFlags.None);
                 target.antecedent = saveAntecedents;
                 return result;
             }
@@ -28815,16 +28829,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Return true if the given flow node is preceded by a 'super(...)' call in every possible code path
     // leading to the node.
-    function isPostSuperFlowNode(flow: FlowNode, noCacheCheck: boolean): boolean {
+    function isPostSuperFlowNode(flow: FlowNode, cacheFlags: SharedFlowNodeCacheFlags): boolean {
         while (true) {
             const flags = flow.flags;
             if (flags & FlowFlags.Shared) {
-                if (!noCacheCheck) {
+                if (cacheFlags & SharedFlowNodeCacheFlags.Read) {
                     const id = getFlowNodeId(flow);
-                    const postSuper = flowNodePostSuper[id];
-                    return postSuper !== undefined ? postSuper : (flowNodePostSuper[id] = isPostSuperFlowNode(flow, /*noCacheCheck*/ true));
+                    let postSuper = flowNodePostSuper[id];
+                    if (postSuper !== undefined) {
+                        return postSuper;
+                    }
+                    postSuper = isPostSuperFlowNode(flow, cacheFlags & ~SharedFlowNodeCacheFlags.Read);
+                    if (cacheFlags & SharedFlowNodeCacheFlags.Write) {
+                        flowNodePostSuper[id] = postSuper;
+                    }
+                    return postSuper;
                 }
-                noCacheCheck = false;
+                cacheFlags |= SharedFlowNodeCacheFlags.Read;
             }
             if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.SwitchClause)) {
                 flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause).antecedent;
@@ -28837,7 +28858,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (flags & FlowFlags.BranchLabel) {
                 // A branching point is post-super if every branch is post-super.
-                return every((flow as FlowLabel).antecedent, f => isPostSuperFlowNode(f, /*noCacheCheck*/ false));
+                return every((flow as FlowLabel).antecedent, f => isPostSuperFlowNode(f, cacheFlags));
             }
             else if (flags & FlowFlags.LoopLabel) {
                 // A loop is post-super if the control flow path that leads to the top is post-super.
@@ -28847,7 +28868,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const target = (flow as FlowReduceLabel).node.target;
                 const saveAntecedents = target.antecedent;
                 target.antecedent = (flow as FlowReduceLabel).node.antecedents;
-                const result = isPostSuperFlowNode((flow as FlowReduceLabel).antecedent, /*noCacheCheck*/ false);
+                const result = isPostSuperFlowNode((flow as FlowReduceLabel).antecedent, SharedFlowNodeCacheFlags.None);
                 target.antecedent = saveAntecedents;
                 return result;
             }
@@ -31284,7 +31305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If a containing class does not have extends clause or the class extends null
         // skip checking whether super statement is called before "this" accessing.
         if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
-            if (canHaveFlowNode(node) && node.flowNode && !isPostSuperFlowNode(node.flowNode, /*noCacheCheck*/ false)) {
+            if (canHaveFlowNode(node) && node.flowNode && !isPostSuperFlowNode(node.flowNode, SharedFlowNodeCacheFlags.ReadWrite)) {
                 error(node, diagnosticMessage);
             }
         }
