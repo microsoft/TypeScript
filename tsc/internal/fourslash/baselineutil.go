@@ -13,7 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
-	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
@@ -163,7 +163,7 @@ func (f *FourslashTest) getBaselineForGroupedLocationsWithFileContents(groupedRa
 			return nil
 		}
 
-		fileName := ls.FileNameToDocumentURI(path)
+		fileName := lsconv.FileNameToDocumentURI(path)
 		ranges := groupedRanges.Get(fileName)
 		if len(ranges) == 0 {
 			return nil
@@ -219,7 +219,7 @@ func (f *FourslashTest) getBaselineContentForFile(
 	detailPrefixes := map[*baselineDetail]string{}
 	detailSuffixes := map[*baselineDetail]string{}
 	canDetermineContextIdInline := true
-	uri := ls.FileNameToDocumentURI(fileName)
+	uri := lsconv.FileNameToDocumentURI(fileName)
 
 	if options.marker != nil && options.marker.FileName() == fileName {
 		details = append(details, &baselineDetail{pos: options.marker.LSPos(), positionMarker: options.markerName})
@@ -258,7 +258,7 @@ func (f *FourslashTest) getBaselineContentForFile(
 	}
 
 	slices.SortStableFunc(details, func(d1, d2 *baselineDetail) int {
-		return ls.ComparePositions(d1.pos, d2.pos)
+		return lsproto.ComparePositions(d1.pos, d2.pos)
 	})
 	// !!! if canDetermineContextIdInline
 
@@ -362,20 +362,20 @@ type textWithContext struct {
 	isLibFile  bool
 	fileName   string
 	content    string // content of the original file
-	lineStarts *ls.LSPLineMap
-	converters *ls.Converters
+	lineStarts *lsconv.LSPLineMap
+	converters *lsconv.Converters
 
 	// posLineInfo
 	posInfo  *lsproto.Position
 	lineInfo int
 }
 
-// implements ls.Script
+// implements lsconv.Script
 func (t *textWithContext) FileName() string {
 	return t.fileName
 }
 
-// implements ls.Script
+// implements lsconv.Script
 func (t *textWithContext) Text() string {
 	return t.content
 }
@@ -391,10 +391,10 @@ func newTextWithContext(fileName string, content string) *textWithContext {
 		pos:        lsproto.Position{Line: 0, Character: 0},
 		fileName:   fileName,
 		content:    content,
-		lineStarts: ls.ComputeLSPLineStarts(content),
+		lineStarts: lsconv.ComputeLSPLineStarts(content),
 	}
 
-	t.converters = ls.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *ls.LSPLineMap {
+	t.converters = lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
 		return t.lineStarts
 	})
 	t.readableContents.WriteString("// === " + fileName + " ===")

@@ -1127,3 +1127,7 @@ func getCommonParentsWorker(componentGroups [][]string, minComponents int, optio
 
 	return [][]string{componentGroups[0][:maxDepth]}
 }
+
+func CompareNumberOfDirectorySeparators(path1, path2 string) int {
+	return cmp.Compare(strings.Count(path1, "/"), strings.Count(path2, "/"))
+}

@@ -9,7 +9,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/format"
-	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/project/dirty"
@@ -27,7 +28,7 @@ type Snapshot struct {
 	// so can be a pointer.
 	sessionOptions *SessionOptions
 	toPath         func(fileName string) tspath.Path
-	converters     *ls.Converters
+	converters     *lsconv.Converters
 
 	// Immutable state, cloned between snapshots
 	fs                                 *snapshotFS
@@ -64,7 +65,7 @@ func NewSnapshot(
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		config:                             config,
 	}
-	s.converters = ls.NewConverters(s.sessionOptions.PositionEncoding, s.LSPLineMap)
+	s.converters = lsconv.NewConverters(s.sessionOptions.PositionEncoding, s.LSPLineMap)
 	s.refCount.Store(1)
 	return s
 }
@@ -79,7 +80,7 @@ func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
 
-func (s *Snapshot) LSPLineMap(fileName string) *ls.LSPLineMap {
+func (s *Snapshot) LSPLineMap(fileName string) *lsconv.LSPLineMap {
 	if file := s.fs.GetFile(fileName); file != nil {
 		return file.LSPLineMap()
 	}
@@ -93,7 +94,7 @@ func (s *Snapshot) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
 	return nil
 }
 
-func (s *Snapshot) UserPreferences() *ls.UserPreferences {
+func (s *Snapshot) UserPreferences() *lsutil.UserPreferences {
 	return s.config.tsUserPreferences
 }
 
@@ -101,7 +102,7 @@ func (s *Snapshot) FormatOptions() *format.FormatCodeSettings {
 	return s.config.formatOptions
 }
 
-func (s *Snapshot) Converters() *ls.Converters {
+func (s *Snapshot) Converters() *lsconv.Converters {
 	return s.converters
 }
 
@@ -145,8 +146,8 @@ type SnapshotChange struct {
 }
 
 type Config struct {
-	tsUserPreferences *ls.UserPreferences
-	// jsUserPreferences *ls.UserPreferences
+	tsUserPreferences *lsutil.UserPreferences
+	// jsUserPreferences *lsutil.UserPreferences
 	formatOptions *format.FormatCodeSettings
 	// tsserverOptions
 }

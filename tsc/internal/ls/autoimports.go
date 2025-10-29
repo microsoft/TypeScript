@@ -14,6 +14,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/ls/change"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
@@ -398,7 +400,7 @@ func (l *LanguageService) isImportable(
 	if toFile == nil {
 		moduleName := stringutil.StripQuotes(toModule.Name)
 		if _, ok := core.NodeCoreModules()[moduleName]; ok {
-			if useNodePrefix := shouldUseUriStyleNodeCoreModules(fromFile, l.GetProgram()); useNodePrefix {
+			if useNodePrefix := lsutil.ShouldUseUriStyleNodeCoreModules(fromFile, l.GetProgram()); useNodePrefix {
 				return useNodePrefix == strings.HasPrefix(moduleName, "node:")
 			}
 		}
@@ -499,7 +501,7 @@ func getDefaultLikeExportInfo(moduleSymbol *ast.Symbol, ch *checker.Checker) *Ex
 
 type importSpecifierResolverForCompletions struct {
 	*ast.SourceFile // importingFile
-	*UserPreferences
+	*lsutil.UserPreferences
 	l      *LanguageService
 	filter *packageJsonImportFilter
 }
@@ -567,6 +569,86 @@ func (l *LanguageService) getBestFix(fixes []*ImportFix, sourceFile *ast.SourceF
 	}
 
 	return best
+}
+
+// returns `-1` if `a` is better than `b`
+//
+//	note: this sorts in descending order of preference; different than convention in other cmp-like functions
+func (l *LanguageService) compareModuleSpecifiers(
+	a *ImportFix, // !!! ImportFixWithModuleSpecifier
+	b *ImportFix, // !!! ImportFixWithModuleSpecifier
+	importingFile *ast.SourceFile, // | FutureSourceFile,
+	allowsImportingSpecifier func(specifier string) bool,
+	toPath func(fileName string) tspath.Path,
+) int {
+	if a.kind == ImportFixKindUseNamespace || b.kind == ImportFixKindUseNamespace {
+		return 0
+	}
+	if comparison := core.CompareBooleans(
+		b.moduleSpecifierKind != modulespecifiers.ResultKindNodeModules || allowsImportingSpecifier(b.moduleSpecifier),
+		a.moduleSpecifierKind != modulespecifiers.ResultKindNodeModules || allowsImportingSpecifier(a.moduleSpecifier),
+	); comparison != 0 {
+		return comparison
+	}
+	if comparison := compareModuleSpecifierRelativity(a, b, l.UserPreferences()); comparison != 0 {
+		return comparison
+	}
+	if comparison := compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, l.GetProgram()); comparison != 0 {
+		return comparison
+	}
+	if comparison := core.CompareBooleans(isFixPossiblyReExportingImportingFile(a, importingFile.Path(), toPath), isFixPossiblyReExportingImportingFile(b, importingFile.Path(), toPath)); comparison != 0 {
+		return comparison
+	}
+	if comparison := tspath.CompareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier); comparison != 0 {
+		return comparison
+	}
+	return 0
+}
+
+func compareNodeCoreModuleSpecifiers(a, b string, importingFile *ast.SourceFile, program *compiler.Program) int {
+	if strings.HasPrefix(a, "node:") && !strings.HasPrefix(b, "node:") {
+		if lsutil.ShouldUseUriStyleNodeCoreModules(importingFile, program) {
+			return -1
+		}
+		return 1
+	}
+	if strings.HasPrefix(b, "node:") && !strings.HasPrefix(a, "node:") {
+		if lsutil.ShouldUseUriStyleNodeCoreModules(importingFile, program) {
+			return 1
+		}
+		return -1
+	}
+	return 0
+}
+
+// This is a simple heuristic to try to avoid creating an import cycle with a barrel re-export.
+// E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
+// This can produce false positives or negatives if re-exports cross into sibling directories
+// (e.g. `export * from "../whatever"`) or are not named "index".
+func isFixPossiblyReExportingImportingFile(fix *ImportFix, importingFilePath tspath.Path, toPath func(fileName string) tspath.Path) bool {
+	if fix.isReExport != nil && *(fix.isReExport) &&
+		fix.exportInfo != nil && fix.exportInfo.moduleFileName != "" && isIndexFileName(fix.exportInfo.moduleFileName) {
+		reExportDir := toPath(tspath.GetDirectoryPath(fix.exportInfo.moduleFileName))
+		return strings.HasPrefix(string(importingFilePath), string(reExportDir))
+	}
+	return false
+}
+
+func isIndexFileName(fileName string) bool {
+	fileName = tspath.GetBaseFileName(fileName)
+	if tspath.FileExtensionIsOneOf(fileName, []string{".js", ".jsx", ".d.ts", ".ts", ".tsx"}) {
+		fileName = tspath.RemoveFileExtension(fileName)
+	}
+	return fileName == "index"
+}
+
+// returns `-1` if `a` is better than `b`
+func compareModuleSpecifierRelativity(a *ImportFix, b *ImportFix, preferences *lsutil.UserPreferences) int {
+	switch preferences.ImportModuleSpecifierPreference {
+	case modulespecifiers.ImportModuleSpecifierPreferenceNonRelative, modulespecifiers.ImportModuleSpecifierPreferenceProjectRelative:
+		return core.CompareBooleans(a.moduleSpecifierKind == modulespecifiers.ResultKindRelative, b.moduleSpecifierKind == modulespecifiers.ResultKindRelative)
+	}
+	return 0
 }
 
 func (l *LanguageService) getImportFixes(
@@ -1362,14 +1444,14 @@ func (l *LanguageService) codeActionForFix(
 	fix *ImportFix,
 	includeSymbolNameInDescription bool,
 ) codeAction {
-	tracker := l.newChangeTracker(ctx) // !!! changetracker.with
+	tracker := change.NewTracker(ctx, l.GetProgram().Options(), l.FormatOptions(), l.converters) // !!! changetracker.with
 	diag := l.codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription)
-	changes := tracker.getChanges()[sourceFile.FileName()]
+	changes := tracker.GetChanges()[sourceFile.FileName()]
 	return codeAction{description: diag.Message(), changes: changes}
 }
 
 func (l *LanguageService) codeActionForFixWorker(
-	changeTracker *changeTracker,
+	changeTracker *change.Tracker,
 	sourceFile *ast.SourceFile,
 	symbolName string,
 	fix *ImportFix,
@@ -1377,14 +1459,15 @@ func (l *LanguageService) codeActionForFixWorker(
 ) *diagnostics.Message {
 	switch fix.kind {
 	case ImportFixKindUseNamespace:
-		changeTracker.addNamespaceQualifier(sourceFile, fix.qualification())
+		addNamespaceQualifier(changeTracker, sourceFile, fix.qualification())
 		return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, `${fix.namespacePrefix}.${symbolName}`)
 	case ImportFixKindJsdocTypeImport:
 		// !!! not implemented
 		// changeTracker.addImportType(changeTracker, sourceFile, fix, quotePreference);
 		// return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, getImportTypePrefix(fix.moduleSpecifier, quotePreference) + symbolName);
 	case ImportFixKindAddToExisting:
-		changeTracker.doAddExistingFix(
+		l.doAddExistingFix(
+			changeTracker,
 			sourceFile,
 			fix.importClauseOrBindingPattern,
 			core.IfElse(fix.importKind == ImportKindDefault, &Import{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}, nil),
@@ -1410,18 +1493,19 @@ func (l *LanguageService) codeActionForFixWorker(
 		}
 
 		if fix.useRequire {
-			declarations = changeTracker.getNewRequires(fix.moduleSpecifier, defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
+			declarations = getNewRequires(changeTracker, fix.moduleSpecifier, defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
 		} else {
-			declarations = changeTracker.getNewImports(fix.moduleSpecifier, getQuotePreference(sourceFile, l.UserPreferences()), defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
+			declarations = l.getNewImports(changeTracker, fix.moduleSpecifier, getQuotePreference(sourceFile, l.UserPreferences()), defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
 		}
 
-		changeTracker.insertImports(
+		l.insertImports(
+			changeTracker,
 			sourceFile,
 			declarations,
 			/*blankLineBetween*/ true,
 		)
 		if qualification != nil {
-			changeTracker.addNamespaceQualifier(sourceFile, qualification)
+			addNamespaceQualifier(changeTracker, sourceFile, qualification)
 		}
 		if includeSymbolNameInDescription {
 			return diagnostics.FormatMessage(diagnostics.Import_0_from_1, symbolName, fix.moduleSpecifier)
@@ -1440,14 +1524,15 @@ func (l *LanguageService) codeActionForFixWorker(
 	return nil
 }
 
-func (c *changeTracker) getNewRequires(
+func getNewRequires(
+	changeTracker *change.Tracker,
 	moduleSpecifier string,
 	defaultImport *Import,
 	namedImports []*Import,
 	namespaceLikeImport *Import,
 	compilerOptions *core.CompilerOptions,
 ) []*ast.Statement {
-	quotedModuleSpecifier := c.NodeFactory.NewStringLiteral(moduleSpecifier)
+	quotedModuleSpecifier := changeTracker.NodeFactory.NewStringLiteral(moduleSpecifier)
 	var statements []*ast.Statement
 
 	// const { default: foo, bar, etc } = require('./mod');
@@ -1456,29 +1541,30 @@ func (c *changeTracker) getNewRequires(
 		for _, namedImport := range namedImports {
 			var propertyName *ast.Node
 			if namedImport.propertyName != "" {
-				propertyName = c.NodeFactory.NewIdentifier(namedImport.propertyName)
+				propertyName = changeTracker.NodeFactory.NewIdentifier(namedImport.propertyName)
 			}
-			bindingElements = append(bindingElements, c.NodeFactory.NewBindingElement(
+			bindingElements = append(bindingElements, changeTracker.NodeFactory.NewBindingElement(
 				/*dotDotDotToken*/ nil,
 				propertyName,
-				c.NodeFactory.NewIdentifier(namedImport.name),
+				changeTracker.NodeFactory.NewIdentifier(namedImport.name),
 				/*initializer*/ nil,
 			))
 		}
 		if defaultImport != nil {
 			bindingElements = append([]*ast.Node{
-				c.NodeFactory.NewBindingElement(
+				changeTracker.NodeFactory.NewBindingElement(
 					/*dotDotDotToken*/ nil,
-					c.NodeFactory.NewIdentifier("default"),
-					c.NodeFactory.NewIdentifier(defaultImport.name),
+					changeTracker.NodeFactory.NewIdentifier("default"),
+					changeTracker.NodeFactory.NewIdentifier(defaultImport.name),
 					/*initializer*/ nil,
 				),
 			}, bindingElements...)
 		}
-		declaration := c.createConstEqualsRequireDeclaration(
-			c.NodeFactory.NewBindingPattern(
+		declaration := createConstEqualsRequireDeclaration(
+			changeTracker,
+			changeTracker.NodeFactory.NewBindingPattern(
 				ast.KindObjectBindingPattern,
-				c.NodeFactory.NewNodeList(bindingElements),
+				changeTracker.NodeFactory.NewNodeList(bindingElements),
 			),
 			quotedModuleSpecifier,
 		)
@@ -1487,8 +1573,9 @@ func (c *changeTracker) getNewRequires(
 
 	// const foo = require('./mod');
 	if namespaceLikeImport != nil {
-		declaration := c.createConstEqualsRequireDeclaration(
-			c.NodeFactory.NewIdentifier(namespaceLikeImport.name),
+		declaration := createConstEqualsRequireDeclaration(
+			changeTracker,
+			changeTracker.NodeFactory.NewIdentifier(namespaceLikeImport.name),
 			quotedModuleSpecifier,
 		)
 		statements = append(statements, declaration)
@@ -1498,21 +1585,21 @@ func (c *changeTracker) getNewRequires(
 	return statements
 }
 
-func (c *changeTracker) createConstEqualsRequireDeclaration(name *ast.Node, quotedModuleSpecifier *ast.Node) *ast.Statement {
-	return c.NodeFactory.NewVariableStatement(
+func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name *ast.Node, quotedModuleSpecifier *ast.Node) *ast.Statement {
+	return changeTracker.NodeFactory.NewVariableStatement(
 		/*modifiers*/ nil,
-		c.NodeFactory.NewVariableDeclarationList(
+		changeTracker.NodeFactory.NewVariableDeclarationList(
 			ast.NodeFlagsConst,
-			c.NodeFactory.NewNodeList([]*ast.Node{
-				c.NodeFactory.NewVariableDeclaration(
+			changeTracker.NodeFactory.NewNodeList([]*ast.Node{
+				changeTracker.NodeFactory.NewVariableDeclaration(
 					name,
 					/*exclamationToken*/ nil,
 					/*type*/ nil,
-					c.NodeFactory.NewCallExpression(
-						c.NodeFactory.NewIdentifier("require"),
+					changeTracker.NodeFactory.NewCallExpression(
+						changeTracker.NodeFactory.NewIdentifier("require"),
 						/*questionDotToken*/ nil,
 						/*typeArguments*/ nil,
-						c.NodeFactory.NewNodeList([]*ast.Node{quotedModuleSpecifier}),
+						changeTracker.NodeFactory.NewNodeList([]*ast.Node{quotedModuleSpecifier}),
 						ast.NodeFlagsNone,
 					),
 				),
@@ -1534,4 +1621,8 @@ func getModuleSpecifierText(promotedDeclaration *ast.ImportDeclaration) string {
 		return importEqualsDeclaration.ModuleReference.Text()
 	}
 	return promotedDeclaration.Parent.ModuleSpecifier().Text()
+}
+
+func ptrTo[T any](v T) *T {
+	return &v
 }

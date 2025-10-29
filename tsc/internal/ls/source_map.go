@@ -3,6 +3,7 @@ package ls
 import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -13,7 +14,7 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 	if startPos == nil {
 		lspRange := l.createLspRangeFromRange(fileRange, l.getScript(fileName))
 		return lsproto.Location{
-			Uri:   FileNameToDocumentURI(fileName),
+			Uri:   lsconv.FileNameToDocumentURI(fileName),
 			Range: *lspRange,
 		}
 	}
@@ -28,7 +29,7 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 	newRange := core.NewTextRange(startPos.Pos, endPos.Pos)
 	lspRange := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
 	return lsproto.Location{
-		Uri:   FileNameToDocumentURI(startPos.FileName),
+		Uri:   lsconv.FileNameToDocumentURI(startPos.FileName),
 		Range: *lspRange,
 	}
 }

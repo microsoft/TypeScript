@@ -687,3 +687,13 @@ func DeduplicateSorted[T any](slice []T, isEqual func(a, b T) bool) []T {
 
 	return deduplicated
 }
+
+// CompareBooleans treats true as greater than false.
+func CompareBooleans(a, b bool) int {
+	if a && !b {
+		return -1
+	} else if !a && b {
+		return 1
+	}
+	return 0
+}

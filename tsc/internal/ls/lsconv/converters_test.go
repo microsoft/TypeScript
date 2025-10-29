@@ -1,9 +1,9 @@
-package ls_test
+package lsconv_test
 
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"gotest.tools/v3/assert"
 )
@@ -77,7 +77,7 @@ func TestFileNameToDocumentURI(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.fileName, func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, ls.FileNameToDocumentURI(test.fileName), test.uri)
+			assert.Equal(t, lsconv.FileNameToDocumentURI(test.fileName), test.uri)
 		})
 	}
 }

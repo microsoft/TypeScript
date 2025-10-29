@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/project/background"
@@ -80,8 +81,8 @@ type Session struct {
 	programCounter *programCounter
 
 	// read-only after initialization
-	initialPreferences                 *ls.UserPreferences
-	userPreferences                    *ls.UserPreferences // !!! update to Config
+	initialPreferences                 *lsutil.UserPreferences
+	userPreferences                    *lsutil.UserPreferences // !!! update to Config
 	compilerOptionsForInferredProjects *core.CompilerOptions
 	typingsInstaller                   *ata.TypingsInstaller
 	backgroundQueue                    *background.Queue
@@ -185,14 +186,14 @@ func (s *Session) GetCurrentDirectory() string {
 }
 
 // Gets current UserPreferences, always a copy
-func (s *Session) UserPreferences() *ls.UserPreferences {
+func (s *Session) UserPreferences() *lsutil.UserPreferences {
 	s.configRWMu.Lock()
 	defer s.configRWMu.Unlock()
 	return s.userPreferences.Copy()
 }
 
 // Gets original UserPreferences of the session
-func (s *Session) NewUserPreferences() *ls.UserPreferences {
+func (s *Session) NewUserPreferences() *lsutil.UserPreferences {
 	return s.initialPreferences.CopyOrDefault()
 }
 
@@ -201,14 +202,14 @@ func (s *Session) Trace(msg string) {
 	panic("ATA module resolution should not use tracing")
 }
 
-func (s *Session) Configure(userPreferences *ls.UserPreferences) {
+func (s *Session) Configure(userPreferences *lsutil.UserPreferences) {
 	s.configRWMu.Lock()
 	defer s.configRWMu.Unlock()
 	s.pendingConfigChanges = true
 	s.userPreferences = userPreferences
 }
 
-func (s *Session) InitializeWithConfig(userPreferences *ls.UserPreferences) {
+func (s *Session) InitializeWithConfig(userPreferences *lsutil.UserPreferences) {
 	s.initialPreferences = userPreferences.CopyOrDefault()
 	s.Configure(s.initialPreferences)
 }

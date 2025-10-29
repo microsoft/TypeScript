@@ -3526,6 +3526,10 @@ func IsTypeDeclarationName(name *Node) bool {
 		GetNameOfDeclaration(name.Parent) == name
 }
 
+func IsRightSideOfPropertyAccess(node *Node) bool {
+	return node.Parent.Kind == KindPropertyAccessExpression && node.Parent.Name() == node
+}
+
 func IsRightSideOfQualifiedNameOrPropertyAccess(node *Node) bool {
 	parent := node.Parent
 	switch parent.Kind {

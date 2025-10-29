@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
-	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -26,7 +26,7 @@ a/**/
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
-		UserPreferences: &ls.UserPreferences{
+		UserPreferences: &lsutil.UserPreferences{
 			IncludeCompletionsForModuleExports:    core.TSTrue,
 			IncludeCompletionsForImportStatements: core.TSTrue,
 		},
@@ -41,7 +41,7 @@ a/**/
 	})
 	f.BaselineAutoImportsCompletions(t, []string{""})
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
-		UserPreferences: &ls.UserPreferences{
+		UserPreferences: &lsutil.UserPreferences{
 			// completion autoimport preferences off; this tests if fourslash server communication correctly registers changes in user preferences
 			IncludeCompletionsForModuleExports:    core.TSUnknown,
 			IncludeCompletionsForImportStatements: core.TSUnknown,
@@ -71,7 +71,7 @@ a/**/
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
-		UserPreferences: &ls.UserPreferences{
+		UserPreferences: &lsutil.UserPreferences{
 			IncludeCompletionsForModuleExports:    core.TSTrue,
 			IncludeCompletionsForImportStatements: core.TSTrue,
 		},
@@ -102,7 +102,7 @@ b/**/
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
-		UserPreferences: &ls.UserPreferences{
+		UserPreferences: &lsutil.UserPreferences{
 			IncludeCompletionsForModuleExports:    core.TSTrue,
 			IncludeCompletionsForImportStatements: core.TSTrue,
 		},

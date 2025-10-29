@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
@@ -30,7 +31,7 @@ func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.Do
 	}, nil
 }
 
-func toLSPDiagnostics(converters *Converters, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
+func toLSPDiagnostics(converters *lsconv.Converters, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
 	size := 0
 	for _, diagSlice := range diagnostics {
 		size += len(diagSlice)
@@ -44,7 +45,7 @@ func toLSPDiagnostics(converters *Converters, diagnostics ...[]*ast.Diagnostic) 
 	return lspDiagnostics
 }
 
-func toLSPDiagnostic(converters *Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
+func toLSPDiagnostic(converters *lsconv.Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
 	var severity lsproto.DiagnosticSeverity
 	switch diagnostic.Category() {
 	case diagnostics.CategorySuggestion:
@@ -61,7 +62,7 @@ func toLSPDiagnostic(converters *Converters, diagnostic *ast.Diagnostic) *lsprot
 	for _, related := range diagnostic.RelatedInformation() {
 		relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
 			Location: lsproto.Location{
-				Uri:   FileNameToDocumentURI(related.File().FileName()),
+				Uri:   lsconv.FileNameToDocumentURI(related.File().FileName()),
 				Range: converters.ToLSPRange(related.File(), related.Loc()),
 			},
 			Message: related.Message(),

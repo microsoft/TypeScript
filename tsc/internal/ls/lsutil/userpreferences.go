@@ -1,4 +1,4 @@
-package ls
+package lsutil
 
 import (
 	"slices"

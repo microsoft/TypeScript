@@ -152,7 +152,7 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 // Returns a CallLikeExpression where `node` is the target being invoked.
 func getAncestorCallLikeExpression(node *ast.Node) *ast.Node {
 	target := ast.FindAncestor(node, func(n *ast.Node) bool {
-		return !isRightSideOfPropertyAccess(n)
+		return !ast.IsRightSideOfPropertyAccess(n)
 	})
 	callLike := target.Parent
 	if callLike != nil && ast.IsCallLikeExpression(callLike) && ast.GetInvokedExpression(callLike) == target {

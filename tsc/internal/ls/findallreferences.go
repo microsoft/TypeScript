@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -466,7 +467,7 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 	checker, done := program.GetTypeChecker(ctx)
 	defer done()
 	for _, entry := range entries {
-		uri := FileNameToDocumentURI(l.getFileNameOfEntry(entry))
+		uri := lsconv.FileNameToDocumentURI(l.getFileNameOfEntry(entry))
 		textEdit := &lsproto.TextEdit{
 			Range:   *l.getRangeOfEntry(entry),
 			NewText: l.getTextForRename(node, entry, params.NewName, checker),
@@ -537,7 +538,7 @@ func (l *LanguageService) convertEntriesToLocations(entries []*referenceEntry) [
 	locations := make([]lsproto.Location, len(entries))
 	for i, entry := range entries {
 		locations[i] = lsproto.Location{
-			Uri:   FileNameToDocumentURI(l.getFileNameOfEntry(entry)),
+			Uri:   lsconv.FileNameToDocumentURI(l.getFileNameOfEntry(entry)),
 			Range: *l.getRangeOfEntry(entry),
 		}
 	}
@@ -589,7 +590,7 @@ func (l *LanguageService) mergeReferences(program *compiler.Program, referencesT
 					return cmp.Compare(entry1File, entry2File)
 				}
 
-				return CompareRanges(l.getRangeOfEntry(entry1), l.getRangeOfEntry(entry2))
+				return lsproto.CompareRanges(l.getRangeOfEntry(entry1), l.getRangeOfEntry(entry2))
 			})
 			result[refIndex] = &SymbolAndEntries{
 				definition: reference.definition,
@@ -1358,7 +1359,7 @@ func getReferenceEntriesForShorthandPropertyAssignment(node *ast.Node, checker *
 	shorthandSymbol := checker.GetShorthandAssignmentValueSymbol(refSymbol.ValueDeclaration)
 	if shorthandSymbol != nil && len(shorthandSymbol.Declarations) > 0 {
 		for _, declaration := range shorthandSymbol.Declarations {
-			if getMeaningFromDeclaration(declaration)&ast.SemanticMeaningValue != 0 {
+			if ast.GetMeaningFromDeclaration(declaration)&ast.SemanticMeaningValue != 0 {
 				addReference(declaration)
 			}
 		}
@@ -1366,7 +1367,7 @@ func getReferenceEntriesForShorthandPropertyAssignment(node *ast.Node, checker *
 }
 
 func climbPastPropertyAccess(node *ast.Node) *ast.Node {
-	if isRightSideOfPropertyAccess(node) {
+	if ast.IsRightSideOfPropertyAccess(node) {
 		return node.Parent
 	}
 	return node

@@ -22,8 +22,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/lsutil"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -459,7 +459,7 @@ func (l *LanguageService) getCompletionData(
 	typeChecker *checker.Checker,
 	file *ast.SourceFile,
 	position int,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 ) completionData {
 	inCheckedFile := isCheckedFile(file, l.GetProgram().Options())
 
@@ -1940,7 +1940,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	clientOptions *lsproto.CompletionClientCapabilities,
 ) (uniqueNames collections.Set[string], sortedEntries []*lsproto.CompletionItem) {
 	closestSymbolDeclaration := getClosestSymbolDeclaration(data.contextToken, data.location)
-	useSemicolons := probablyUsesSemicolons(file)
+	useSemicolons := lsutil.ProbablyUsesSemicolons(file)
 	typeChecker, done := l.GetProgram().GetTypeCheckerForFile(ctx, file)
 	defer done()
 	isMemberCompletion := isMemberCompletionKind(data.completionKind)
@@ -2018,7 +2018,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 
 func completionNameForLiteral(
 	file *ast.SourceFile,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 	literal literalValue,
 ) string {
 	switch literal := literal.(type) {
@@ -2035,7 +2035,7 @@ func completionNameForLiteral(
 
 func createCompletionItemForLiteral(
 	file *ast.SourceFile,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 	literal literalValue,
 ) *lsproto.CompletionItem {
 	return &lsproto.CompletionItem{
@@ -2251,13 +2251,13 @@ func (l *LanguageService) createCompletionItem(
 	if data.isJsxIdentifierExpected &&
 		!data.isRightOfOpenTag &&
 		clientSupportsItemSnippet(clientOptions) &&
-		preferences.JsxAttributeCompletionStyle != JsxAttributeCompletionStyleNone &&
+		preferences.JsxAttributeCompletionStyle != lsutil.JsxAttributeCompletionStyleNone &&
 		!(ast.IsJsxAttribute(data.location.Parent) && data.location.Parent.Initializer() != nil) {
-		useBraces := preferences.JsxAttributeCompletionStyle == JsxAttributeCompletionStyleBraces
+		useBraces := preferences.JsxAttributeCompletionStyle == lsutil.JsxAttributeCompletionStyleBraces
 		t := typeChecker.GetTypeOfSymbolAtLocation(symbol, data.location)
 
 		// If is boolean like or undefined, don't return a snippet, we want to return just the completion.
-		if preferences.JsxAttributeCompletionStyle == JsxAttributeCompletionStyleAuto &&
+		if preferences.JsxAttributeCompletionStyle == lsutil.JsxAttributeCompletionStyleAuto &&
 			!t.IsBooleanLike() &&
 			!(t.IsUnion() && core.Some(t.Types(), (*checker.Type).IsBooleanLike)) {
 			if t.IsStringLike() ||
@@ -3152,7 +3152,7 @@ func (l *LanguageService) createRangeFromStringLiteralLikeContent(file *ast.Sour
 	return l.createLspRangeFromBounds(nodeStart+1, replacementEnd, file)
 }
 
-func quotePropertyName(file *ast.SourceFile, preferences *UserPreferences, name string) string {
+func quotePropertyName(file *ast.SourceFile, preferences *lsutil.UserPreferences, name string) string {
 	r, _ := utf8.DecodeRuneInString(name)
 	if unicode.IsDigit(r) {
 		return name
@@ -3292,7 +3292,7 @@ func compareCompletionEntries(entryInSlice *lsproto.CompletionItem, entryToInser
 			sliceEntryData.AutoImport != nil && sliceEntryData.AutoImport.ModuleSpecifier != "" &&
 			insertEntryData.AutoImport != nil && insertEntryData.AutoImport.ModuleSpecifier != "" {
 			// Sort same-named auto-imports by module specifier
-			result = compareNumberOfDirectorySeparators(
+			result = tspath.CompareNumberOfDirectorySeparators(
 				sliceEntryData.AutoImport.ModuleSpecifier,
 				insertEntryData.AutoImport.ModuleSpecifier,
 			)
@@ -5155,7 +5155,7 @@ func (l *LanguageService) getSymbolCompletionFromItemData(
 		}
 	}
 
-	completionData := l.getCompletionData(ctx, ch, file, position, &UserPreferences{IncludeCompletionsForModuleExports: core.TSTrue, IncludeCompletionsForImportStatements: core.TSTrue})
+	completionData := l.getCompletionData(ctx, ch, file, position, &lsutil.UserPreferences{IncludeCompletionsForModuleExports: core.TSTrue, IncludeCompletionsForImportStatements: core.TSTrue})
 	if completionData == nil {
 		return detailsData{}
 	}
@@ -5735,7 +5735,7 @@ func getJSDocParameterCompletions(
 	position int,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 	tagNameOnly bool,
 ) []*lsproto.CompletionItem {
 	currentToken := astnav.GetTokenAtPosition(file, position)
@@ -5877,7 +5877,7 @@ func getJSDocParamAnnotation(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 	tabstopCounter *int,
 ) string {
 	if isSnippet {
@@ -5963,7 +5963,7 @@ func generateJSDocParamTagsForDestructuring(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 ) []string {
 	tabstopCounter := 1
 	if !isJS {
@@ -6003,7 +6003,7 @@ func jsDocParamPatternWorker(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 	counter *int,
 ) []string {
 	if ast.IsObjectBindingPattern(pattern) && dotDotDotToken == nil {
@@ -6072,7 +6072,7 @@ func jsDocParamElementWorker(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *UserPreferences,
+	preferences *lsutil.UserPreferences,
 	counter *int,
 ) []string {
 	if ast.IsIdentifier(element.Name()) { // `{ b }` or `{ b: newB }`

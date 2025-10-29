@@ -1205,7 +1205,7 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
                     preferences.push(`UseAliasesForRename: ${stringToTristate(prop.initializer.getText())}`);
                     break;
                 case "quotePreference":
-                    preferences.push(`QuotePreference: ls.QuotePreference(${prop.initializer.getText()})`);
+                    preferences.push(`QuotePreference: lsutil.QuotePreference(${prop.initializer.getText()})`);
                     break;
             }
         }
@@ -1216,7 +1216,7 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
     if (preferences.length === 0) {
         return "nil /*preferences*/";
     }
-    return `&ls.UserPreferences{${preferences.join(",")}}`;
+    return `&lsutil.UserPreferences{${preferences.join(",")}}`;
 }
 
 function parseBaselineMarkerOrRangeArg(arg: ts.Expression): string | undefined {
@@ -1812,6 +1812,9 @@ function generateGoTest(failingTests: Set<string>, test: GoTest): string {
     }
     if (commands.includes("ls.")) {
         imports.push(`"github.com/microsoft/typescript-go/internal/ls"`);
+    }
+    if (commands.includes("lsutil.")) {
+        imports.push(`"github.com/microsoft/typescript-go/internal/ls/lsutil"`);
     }
     if (commands.includes("lsproto.")) {
         imports.push(`"github.com/microsoft/typescript-go/internal/lsp/lsproto"`);

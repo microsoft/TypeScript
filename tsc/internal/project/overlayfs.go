@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -25,7 +25,7 @@ type FileHandle interface {
 	Version() int32
 	MatchesDiskText() bool
 	IsOverlay() bool
-	LSPLineMap() *ls.LSPLineMap
+	LSPLineMap() *lsconv.LSPLineMap
 	ECMALineInfo() *sourcemap.ECMALineInfo
 	Kind() core.ScriptKind
 }
@@ -36,7 +36,7 @@ type fileBase struct {
 	hash     xxh3.Uint128
 
 	lineMapOnce  sync.Once
-	lineMap      *ls.LSPLineMap
+	lineMap      *lsconv.LSPLineMap
 	lineInfoOnce sync.Once
 	lineInfo     *sourcemap.ECMALineInfo
 }
@@ -53,9 +53,9 @@ func (f *fileBase) Content() string {
 	return f.content
 }
 
-func (f *fileBase) LSPLineMap() *ls.LSPLineMap {
+func (f *fileBase) LSPLineMap() *lsconv.LSPLineMap {
 	f.lineMapOnce.Do(func() {
-		f.lineMap = ls.ComputeLSPLineStarts(f.content)
+		f.lineMap = lsconv.ComputeLSPLineStarts(f.content)
 	})
 	return f.lineMap
 }
@@ -304,7 +304,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 				uri.FileName(),
 				events.openChange.Content,
 				events.openChange.Version,
-				ls.LanguageKindToScriptKind(events.openChange.LanguageKind),
+				lsconv.LanguageKindToScriptKind(events.openChange.LanguageKind),
 			)
 			continue
 		}
@@ -335,7 +335,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 				panic("overlay not found for changed file: " + uri)
 			}
 			for _, change := range events.changes {
-				converters := ls.NewConverters(fs.positionEncoding, func(fileName string) *ls.LSPLineMap {
+				converters := lsconv.NewConverters(fs.positionEncoding, func(fileName string) *lsconv.LSPLineMap {
 					return o.LSPLineMap()
 				})
 				for _, textChange := range change.Changes {

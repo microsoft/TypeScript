@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -195,7 +196,7 @@ type DeclarationInfo struct {
 	matchScore  int
 }
 
-func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *Converters, query string) (lsproto.WorkspaceSymbolResponse, error) {
+func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *lsconv.Converters, query string) (lsproto.WorkspaceSymbolResponse, error) {
 	// Obtain set of non-declaration source files from all active programs.
 	var sourceFiles collections.Set[*ast.SourceFile]
 	for _, program := range programs {
