@@ -1,0 +1,285 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames2.ts] ////
+
+=== controlFlowComputedPropertyNames2.ts ===
+interface Type {
+  kind: number;
+>kind : number
+>     : ^^^^^^
+
+  isIndexType(): this is IndexType;
+>isIndexType : () => this is IndexType
+>            : ^^^^^^                 
+}
+
+interface IndexType extends Type {
+  kind: 1;
+>kind : 1
+>     : ^
+
+  type: Type;
+>type : Type
+>     : ^^^^
+}
+
+function test1(types: Type[]) {
+>test1 : (types: Type[]) => void
+>      : ^     ^^      ^^^^^^^^^
+>types : Type[]
+>      : ^^^^^^
+
+  for (let i = 0; i < types.length; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < types.length : boolean
+>                 : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>types.length : number
+>             : ^^^^^^
+>types : Type[]
+>      : ^^^^^^
+>length : number
+>       : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    const t = types[i].isIndexType() ? types[i].type : types[i]; // ok
+>t : Type
+>  : ^^^^
+>types[i].isIndexType() ? types[i].type : types[i] : Type
+>                                                  : ^^^^
+>types[i].isIndexType() : boolean
+>                       : ^^^^^^^
+>types[i].isIndexType : () => this is IndexType
+>                     : ^^^^^^                 
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>isIndexType : () => this is IndexType
+>            : ^^^^^^                 
+>types[i].type : Type
+>              : ^^^^
+>types[i] : IndexType
+>         : ^^^^^^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>type : Type
+>     : ^^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+  }
+}
+
+function test2(types: Type[]) {
+>test2 : (types: Type[]) => void
+>      : ^     ^^      ^^^^^^^^^
+>types : Type[]
+>      : ^^^^^^
+
+  for (let i = 0; i < types.length; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < types.length : boolean
+>                 : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>types.length : number
+>             : ^^^^^^
+>types : Type[]
+>      : ^^^^^^
+>length : number
+>       : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    i++;
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    const t = types[i].isIndexType() ? types[i].type : types[i]; // error
+>t : any
+>  : ^^^
+>types[i].isIndexType() ? types[i].type : types[i] : any
+>                                                  : ^^^
+>types[i].isIndexType() : boolean
+>                       : ^^^^^^^
+>types[i].isIndexType : () => this is IndexType
+>                     : ^^^^^^                 
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>isIndexType : () => this is IndexType
+>            : ^^^^^^                 
+>types[i].type : any
+>              : ^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>type : any
+>     : ^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+  }
+}
+
+function test3(types: Type[]) {
+>test3 : (types: Type[]) => void
+>      : ^     ^^      ^^^^^^^^^
+>types : Type[]
+>      : ^^^^^^
+
+  for (
+    let i = 0;
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+    i < types.length;
+>i < types.length : boolean
+>                 : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>types.length : number
+>             : ^^^^^^
+>types : Type[]
+>      : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+    types[i].isIndexType() ? types[i].type : types[i], i++ // error
+>types[i].isIndexType() ? types[i].type : types[i], i++ : number
+>                                                       : ^^^^^^
+>types[i].isIndexType() ? types[i].type : types[i] : any
+>                                                  : ^^^
+>types[i].isIndexType() : boolean
+>                       : ^^^^^^^
+>types[i].isIndexType : () => this is IndexType
+>                     : ^^^^^^                 
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>isIndexType : () => this is IndexType
+>            : ^^^^^^                 
+>types[i].type : any
+>              : ^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>type : any
+>     : ^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+  ) {}
+}
+
+function test4(types: Type[]) {
+>test4 : (types: Type[]) => void
+>      : ^     ^^      ^^^^^^^^^
+>types : Type[]
+>      : ^^^^^^
+
+  for (
+    let i = 0;
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+    types[i].isIndexType() ? types[i].type : types[i], i < types.length; // error
+>types[i].isIndexType() ? types[i].type : types[i], i < types.length : boolean
+>                                                                    : ^^^^^^^
+>types[i].isIndexType() ? types[i].type : types[i] : any
+>                                                  : ^^^
+>types[i].isIndexType() : boolean
+>                       : ^^^^^^^
+>types[i].isIndexType : () => this is IndexType
+>                     : ^^^^^^                 
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>isIndexType : () => this is IndexType
+>            : ^^^^^^                 
+>types[i].type : any
+>              : ^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>type : any
+>     : ^^^
+>types[i] : Type
+>         : ^^^^
+>types : Type[]
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>i < types.length : boolean
+>                 : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>types.length : number
+>             : ^^^^^^
+>types : Type[]
+>      : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+    i++
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+  ) {}
+}
+
