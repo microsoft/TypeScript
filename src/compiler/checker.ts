@@ -45924,7 +45924,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let noCache = false;
 
         if (use & IterationUse.AllowsAsyncIterablesFlag) {
-            const iterationTypes = getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
+            let iterationTypes = getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
                 getIterationTypesOfIterableFast(type, asyncIterationTypesResolver);
             if (iterationTypes) {
                 if (iterationTypes === noIterationTypes && errorNode) {
@@ -45936,6 +45936,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getAsyncFromSyncIterationTypes(iterationTypes, errorNode) :
                         iterationTypes;
                 }
+            }
+            iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
+            if (iterationTypes !== noIterationTypes) {
+                return iterationTypes;
             }
         }
 
@@ -45960,17 +45964,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-        }
 
-        if (use & IterationUse.AllowsAsyncIterablesFlag) {
-            const iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
-            if (iterationTypes !== noIterationTypes) {
-                return iterationTypes;
-            }
-        }
-
-        if (use & IterationUse.AllowsSyncIterablesFlag) {
-            let iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
+            iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
             if (iterationTypes !== noIterationTypes) {
                 if (use & IterationUse.AllowsAsyncIterablesFlag) {
                     iterationTypes = getAsyncFromSyncIterationTypes(iterationTypes, errorNode);
