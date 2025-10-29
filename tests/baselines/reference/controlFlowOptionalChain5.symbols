@@ -1,0 +1,369 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain5.ts] ////
+
+=== controlFlowOptionalChain5.ts ===
+// https://github.com/microsoft/TypeScript/issues/60106
+
+declare class A {
+>A : Symbol(A, Decl(controlFlowOptionalChain5.ts, 0, 0))
+
+  IsA(): this is A;
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>A : Symbol(A, Decl(controlFlowOptionalChain5.ts, 0, 0))
+}
+
+declare const patternWithUndefined: A | undefined;
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+>A : Symbol(A, Decl(controlFlowOptionalChain5.ts, 0, 0))
+
+function applyPatternWithUndefined() {
+>applyPatternWithUndefined : Symbol(applyPatternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 50))
+
+  if (patternWithUndefined?.IsA() === false) {
+>patternWithUndefined?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithUndefined; // never
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+
+    return;
+  }
+  patternWithUndefined; // A | undefined
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+}
+
+function applyPatternWithUndefined2() {
+>applyPatternWithUndefined2 : Symbol(applyPatternWithUndefined2, Decl(controlFlowOptionalChain5.ts, 14, 1))
+
+  if (!patternWithUndefined?.IsA()) {
+>patternWithUndefined?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithUndefined; // undefined
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+
+    return;
+  }
+  patternWithUndefined; // A
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+}
+
+function applyPatternWithUndefined3() {
+>applyPatternWithUndefined3 : Symbol(applyPatternWithUndefined3, Decl(controlFlowOptionalChain5.ts, 22, 1))
+
+  if (patternWithUndefined?.IsA() === true) {
+>patternWithUndefined?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithUndefined; // A
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+
+    return;
+  }
+  patternWithUndefined; // undefined
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+}
+
+function applyPatternWithUndefined4() {
+>applyPatternWithUndefined4 : Symbol(applyPatternWithUndefined4, Decl(controlFlowOptionalChain5.ts, 30, 1))
+
+  if (patternWithUndefined?.IsA()) {
+>patternWithUndefined?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithUndefined; // A
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+
+    return;
+  }
+  patternWithUndefined; // undefined
+>patternWithUndefined : Symbol(patternWithUndefined, Decl(controlFlowOptionalChain5.ts, 6, 13))
+}
+
+declare const patternWithNull: A | null;
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+>A : Symbol(A, Decl(controlFlowOptionalChain5.ts, 0, 0))
+
+function applyPatternWithNull() {
+>applyPatternWithNull : Symbol(applyPatternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 40))
+
+  if (patternWithNull?.IsA() === false) {
+>patternWithNull?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithNull; // never
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+
+    return;
+  }
+  patternWithNull; // A | null
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+}
+
+function applyPatternWithNull2() {
+>applyPatternWithNull2 : Symbol(applyPatternWithNull2, Decl(controlFlowOptionalChain5.ts, 48, 1))
+
+  if (!patternWithNull?.IsA()) {
+>patternWithNull?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithNull; // null
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+
+    return;
+  }
+  patternWithNull; // A
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+}
+
+function applyPatternWithNull3() {
+>applyPatternWithNull3 : Symbol(applyPatternWithNull3, Decl(controlFlowOptionalChain5.ts, 56, 1))
+
+  if (patternWithNull?.IsA() === true) {
+>patternWithNull?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithNull; // A
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+
+    return;
+  }
+  patternWithNull; // null
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+}
+
+function applyPatternWithNull4() {
+>applyPatternWithNull4 : Symbol(applyPatternWithNull4, Decl(controlFlowOptionalChain5.ts, 64, 1))
+
+  if (patternWithNull?.IsA()) {
+>patternWithNull?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    patternWithNull; // A
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+
+    return;
+  }
+  patternWithNull; // null
+>patternWithNull : Symbol(patternWithNull, Decl(controlFlowOptionalChain5.ts, 40, 13))
+}
+
+declare const nullablePattern: A | null | undefined;
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+>A : Symbol(A, Decl(controlFlowOptionalChain5.ts, 0, 0))
+
+function applyNullablePattern() {
+>applyNullablePattern : Symbol(applyNullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 52))
+
+  if (nullablePattern?.IsA() === false) {
+>nullablePattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    nullablePattern; // never
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+
+    return;
+  }
+  nullablePattern; // A | null | undefined
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+}
+
+function applyNullablePattern2() {
+>applyNullablePattern2 : Symbol(applyNullablePattern2, Decl(controlFlowOptionalChain5.ts, 82, 1))
+
+  if (!nullablePattern?.IsA()) {
+>nullablePattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    nullablePattern; // null | undefined
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+
+    return;
+  }
+  nullablePattern; // A
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+}
+
+function applyNullablePattern3() {
+>applyNullablePattern3 : Symbol(applyNullablePattern3, Decl(controlFlowOptionalChain5.ts, 90, 1))
+
+  if (nullablePattern?.IsA() === true) {
+>nullablePattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    nullablePattern; // A
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+
+    return;
+  }
+  nullablePattern; // null | undefined
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+}
+
+function applyNullablePattern4() {
+>applyNullablePattern4 : Symbol(applyNullablePattern4, Decl(controlFlowOptionalChain5.ts, 98, 1))
+
+  if (nullablePattern?.IsA()) {
+>nullablePattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    nullablePattern; // A
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+
+    return;
+  }
+  nullablePattern; // null | undefined
+>nullablePattern : Symbol(nullablePattern, Decl(controlFlowOptionalChain5.ts, 74, 13))
+}
+
+declare const pattern: A;
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>A : Symbol(A, Decl(controlFlowOptionalChain5.ts, 0, 0))
+
+function applyPatternInChain() {
+>applyPatternInChain : Symbol(applyPatternInChain, Decl(controlFlowOptionalChain5.ts, 108, 25))
+
+  if (pattern?.IsA() === false) {
+>pattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPatternInChain2() {
+>applyPatternInChain2 : Symbol(applyPatternInChain2, Decl(controlFlowOptionalChain5.ts, 116, 1))
+
+  if (!pattern?.IsA()) {
+>pattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPatternInChain3() {
+>applyPatternInChain3 : Symbol(applyPatternInChain3, Decl(controlFlowOptionalChain5.ts, 124, 1))
+
+  if (pattern?.IsA() === true) {
+>pattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPatternInChain4() {
+>applyPatternInChain4 : Symbol(applyPatternInChain4, Decl(controlFlowOptionalChain5.ts, 132, 1))
+
+  if (pattern?.IsA()) {
+>pattern?.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPattern() {
+>applyPattern : Symbol(applyPattern, Decl(controlFlowOptionalChain5.ts, 140, 1))
+
+  if (pattern.IsA() === false) {
+>pattern.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPattern2() {
+>applyPattern2 : Symbol(applyPattern2, Decl(controlFlowOptionalChain5.ts, 148, 1))
+
+  if (!pattern.IsA()) {
+>pattern.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPattern3() {
+>applyPattern3 : Symbol(applyPattern3, Decl(controlFlowOptionalChain5.ts, 156, 1))
+
+  if (pattern.IsA() === true) {
+>pattern.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
+function applyPattern4() {
+>applyPattern4 : Symbol(applyPattern4, Decl(controlFlowOptionalChain5.ts, 164, 1))
+
+  if (pattern.IsA()) {
+>pattern.IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+>IsA : Symbol(A.IsA, Decl(controlFlowOptionalChain5.ts, 2, 17))
+
+    pattern; // A
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+
+    return;
+  }
+  pattern; // never
+>pattern : Symbol(pattern, Decl(controlFlowOptionalChain5.ts, 108, 13))
+}
+
