@@ -314,11 +314,10 @@ var (
 )
 
 func GetRegexFromPattern(pattern string, useCaseSensitiveFileNames bool) *regexp2.Regexp {
-	flags := regexp2.ECMAScript
+	opts := regexp2.RegexOptions(regexp2.ECMAScript)
 	if !useCaseSensitiveFileNames {
-		flags |= regexp2.IgnoreCase
+		opts |= regexp2.IgnoreCase
 	}
-	opts := regexp2.RegexOptions(flags)
 
 	key := regexp2CacheKey{pattern, opts}
 

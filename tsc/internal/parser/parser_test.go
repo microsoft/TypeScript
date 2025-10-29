@@ -111,11 +111,11 @@ func FuzzParser(f *testing.F) {
 			sourceText, err := os.ReadFile(file.path)
 			assert.NilError(f, err)
 			extension := tspath.TryGetExtensionFromPath(file.path)
-			f.Add(extension, string(sourceText), int(core.ScriptTargetESNext), int(ast.JSDocParsingModeParseAll))
+			f.Add(extension, string(sourceText), int32(core.ScriptTargetESNext), uint8(ast.JSDocParsingModeParseAll))
 		}
 	}
 
-	f.Fuzz(func(t *testing.T, extension string, sourceText string, scriptTarget_ int, jsdocParsingMode_ int) {
+	f.Fuzz(func(t *testing.T, extension string, sourceText string, scriptTarget_ int32, jsdocParsingMode_ uint8) {
 		scriptTarget := core.ScriptTarget(scriptTarget_)
 		jsdocParsingMode := ast.JSDocParsingMode(jsdocParsingMode_)
 

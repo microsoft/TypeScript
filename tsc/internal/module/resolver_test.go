@@ -211,7 +211,7 @@ type rawArgs struct {
 	Name            string                `json:"name"`
 	ContainingFile  string                `json:"containingFile"`
 	CompilerOptions *core.CompilerOptions `json:"compilerOptions"`
-	ResolutionMode  int                   `json:"resolutionMode"`
+	ResolutionMode  core.ModuleKind       `json:"resolutionMode"`
 	RedirectedRef   *struct {
 		SourceFile struct {
 			FileName string `json:"fileName"`
@@ -265,7 +265,7 @@ func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLoca
 
 		errorMessageArgs := []any{call.args.Name, call.args.ContainingFile}
 		if call.call == "resolveModuleName" {
-			resolved, _ := resolver.ResolveModuleName(call.args.Name, call.args.ContainingFile, core.ModuleKind(call.args.ResolutionMode), redirectedReference)
+			resolved, _ := resolver.ResolveModuleName(call.args.Name, call.args.ContainingFile, call.args.ResolutionMode, redirectedReference)
 			assert.Check(t, resolved != nil, "ResolveModuleName should not return nil", errorMessageArgs)
 			if expectedResolvedModule, ok := call.returnValue["resolvedModule"].(map[string]any); ok {
 				assert.Check(t, resolved.IsResolved(), errorMessageArgs)
@@ -277,7 +277,7 @@ func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLoca
 				assert.Check(t, !resolved.IsResolved(), errorMessageArgs)
 			}
 		} else {
-			resolved, _ := resolver.ResolveTypeReferenceDirective(call.args.Name, call.args.ContainingFile, core.ModuleKind(call.args.ResolutionMode), redirectedReference)
+			resolved, _ := resolver.ResolveTypeReferenceDirective(call.args.Name, call.args.ContainingFile, call.args.ResolutionMode, redirectedReference)
 			assert.Check(t, resolved != nil, "ResolveTypeReferenceDirective should not return nil", errorMessageArgs)
 			if expectedResolvedTypeReferenceDirective, ok := call.returnValue["resolvedTypeReferenceDirective"].(map[string]any); ok {
 				assert.Check(t, resolved.IsResolved(), errorMessageArgs)
