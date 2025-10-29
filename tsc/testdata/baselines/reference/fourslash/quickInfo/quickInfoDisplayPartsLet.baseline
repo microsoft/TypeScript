@@ -121,7 +121,7 @@
 // ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | let h: { (a: string): number; (a: number): string; }
+// | let h: (a: number) => string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -129,7 +129,7 @@
 // ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | let h: { (a: string): number; (a: number): string; }
+// | let h: (a: string) => number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -525,7 +525,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nlet h: (a: number) => string\n```\n"
       },
       "range": {
         "start": {
@@ -552,7 +552,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nlet h: (a: string) => number\n```\n"
       },
       "range": {
         "start": {

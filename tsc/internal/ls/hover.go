@@ -129,6 +129,9 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 	}
 	flags := symbol.Flags
+	if flags&ast.SymbolFlagsProperty != 0 && declaration != nil && ast.IsMethodDeclaration(declaration) {
+		flags = ast.SymbolFlagsMethod
+	}
 	if flags&ast.SymbolFlagsType != 0 && (ast.IsPartOfTypeNode(node) || ast.IsTypeDeclarationName(node)) {
 		// If the symbol has a type meaning and we're in a type context, remove value-only meanings
 		flags &^= ast.SymbolFlagsVariable | ast.SymbolFlagsFunction
@@ -165,7 +168,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 		b.WriteString(": ")
-		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbolAtLocation(symbol, node), container, typeFormatFlags))
+		if callNode := getCallOrNewExpression(node); callNode != nil {
+			b.WriteString(c.SignatureToStringEx(c.GetResolvedSignature(callNode), container, typeFormatFlags|checker.TypeFormatFlagsWriteCallStyleSignature|checker.TypeFormatFlagsWriteTypeArgumentsOfSignature|checker.TypeFormatFlagsWriteArrowStyleSignature))
+		} else {
+			b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbolAtLocation(symbol, node), container, typeFormatFlags))
+		}
 	case flags&ast.SymbolFlagsEnumMember != 0:
 		b.WriteString("(enum member) ")
 		t := c.GetTypeOfSymbol(symbol)
@@ -176,22 +183,26 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 	case flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0:
 		signatures := getSignaturesAtLocation(c, symbol, checker.SignatureKindCall, node)
-		if len(signatures) == 1 && signatures[0].Declaration() != nil {
-			declaration = signatures[0].Declaration()
+		if len(signatures) == 1 {
+			if d := signatures[0].Declaration(); d != nil && d.Flags&ast.NodeFlagsJSDoc == 0 {
+				declaration = d
+			}
 		}
-		prefix := core.IfElse(symbol.Flags&ast.SymbolFlagsMethod != 0, "(method) ", "function ")
+		prefix := core.IfElse(flags&ast.SymbolFlagsMethod != 0, "(method) ", "function ")
 		writeSignatures(&b, c, signatures, container, prefix, symbol)
 	case flags&ast.SymbolFlagsConstructor != 0:
 		signatures := getSignaturesAtLocation(c, symbol.Parent, checker.SignatureKindConstruct, node)
-		if len(signatures) == 1 && signatures[0].Declaration() != nil {
-			declaration = signatures[0].Declaration()
+		if len(signatures) == 1 {
+			if d := signatures[0].Declaration(); d != nil && d.Flags&ast.NodeFlagsJSDoc == 0 {
+				declaration = d
+			}
 		}
 		writeSignatures(&b, c, signatures, container, "constructor ", symbol.Parent)
 	case flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
 		if node.Kind == ast.KindThisKeyword || ast.IsThisInTypeQuery(node) {
 			b.WriteString("this")
 		} else {
-			b.WriteString(core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
+			b.WriteString(core.IfElse(flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
 			b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 			params := c.GetDeclaredTypeOfSymbol(symbol).AsInterfaceType().LocalTypeParameters()
 			writeTypeParams(&b, c, params)
@@ -288,7 +299,7 @@ func getCallOrNewExpression(node *ast.Node) *ast.Node {
 	if ast.IsPropertyAccessExpression(node.Parent) && node.Parent.Name() == node {
 		node = node.Parent
 	}
-	if ast.IsCallExpression(node.Parent) || ast.IsNewExpression(node.Parent) {
+	if (ast.IsCallExpression(node.Parent) || ast.IsNewExpression(node.Parent)) && node.Parent.Expression() == node {
 		return node.Parent
 	}
 	return nil

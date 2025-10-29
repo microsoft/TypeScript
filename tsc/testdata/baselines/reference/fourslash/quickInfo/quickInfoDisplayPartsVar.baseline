@@ -101,7 +101,7 @@
 // ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var h: { (a: string): number; (a: number): string; }
+// | var h: (a: number) => string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -109,7 +109,7 @@
 // ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var h: { (a: string): number; (a: number): string; }
+// | var h: (a: string) => number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -451,7 +451,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nvar h: (a: number) => string\n```\n"
       },
       "range": {
         "start": {
@@ -478,7 +478,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nvar h: (a: string) => number\n```\n"
       },
       "range": {
         "start": {

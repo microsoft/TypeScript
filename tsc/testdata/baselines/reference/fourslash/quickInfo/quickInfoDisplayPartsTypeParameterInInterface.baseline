@@ -171,7 +171,7 @@
 //     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var iVal: I<string>
+// | var iVal: <"hello">(a: "hello", b: string) => "hello"
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -179,7 +179,7 @@
 // ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var iVal: I<string>
+// | var iVal: <"hello">(a: "hello", b: string) => "hello"
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -404,7 +404,7 @@
 //     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var iVal1: I1<I<string>>
+// | var iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -426,7 +426,7 @@
 // ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var iVal1: I1<I<string>>
+// | var iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -1108,7 +1108,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```tsx\nvar iVal: <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -1135,7 +1135,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```tsx\nvar iVal: <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -1972,7 +1972,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+        "value": "```tsx\nvar iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2053,7 +2053,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+        "value": "```tsx\nvar iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
       },
       "range": {
         "start": {
