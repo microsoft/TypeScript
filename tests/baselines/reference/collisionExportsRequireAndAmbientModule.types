@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionExportsRequireAndAmbientModule.ts] ////
 
 === collisionExportsRequireAndAmbientModule_externalmodule.ts ===
-export declare module require {
+export declare namespace require {
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
@@ -20,7 +20,7 @@ export function foo(): require.I {
 
     return null;
 }
-export declare module exports {
+export declare namespace exports {
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 
@@ -39,11 +39,11 @@ export function foo2(): exports.I {
 
     return null;
 }
-declare module m1 {
+declare namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
-    module require {
+    namespace require {
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
@@ -54,7 +54,7 @@ declare module m1 {
 >  : ^
         }
     }
-    module exports {
+    namespace exports {
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 
@@ -66,11 +66,11 @@ declare module m1 {
         }
     }
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
-    export declare module require {
+    export declare namespace require {
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
@@ -81,7 +81,7 @@ module m2 {
 >  : ^
         }
     }
-    export declare module exports {
+    export declare namespace exports {
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 
@@ -100,7 +100,7 @@ module m2 {
 }
 
 === collisionExportsRequireAndAmbientModule_globalFile.ts ===
-declare module require {
+declare namespace require {
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
@@ -111,7 +111,7 @@ declare module require {
 >  : ^
     }
 }
-declare module exports {
+declare namespace exports {
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 
@@ -122,11 +122,11 @@ declare module exports {
 >  : ^
     }
 }
-declare module m3 {
+declare namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
-    module require {
+    namespace require {
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
@@ -137,7 +137,7 @@ declare module m3 {
 >  : ^
         }
     }
-    module exports {
+    namespace exports {
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 
@@ -149,11 +149,11 @@ declare module m3 {
         }
     }
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 
-    export declare module require {
+    export declare namespace require {
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
@@ -164,7 +164,7 @@ module m4 {
 >  : ^
         }
     }
-    export declare module exports {
+    export declare namespace exports {
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 

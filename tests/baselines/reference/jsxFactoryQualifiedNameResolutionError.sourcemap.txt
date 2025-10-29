@@ -16,7 +16,7 @@ sourceFile:test.tsx
 2 >^^^^^^
 3 >      ^^^^^^^^^^^^
 4 >                  ^^^^^^^^^^->
-1 >declare module JSX {
+1 >declare namespace JSX {
   >    interface IntrinsicElements {
   >        [s: string]: any;
   >    }

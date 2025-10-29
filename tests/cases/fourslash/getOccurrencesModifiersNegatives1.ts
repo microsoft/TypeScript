@@ -17,7 +17,7 @@
 ////    }
 ////}
 ////
-////module m {
+////namespace m {
 ////    [|{| "count": 0 |}static|] a;
 ////    [|{| "count": 0 |}public|] b;
 ////    [|{| "count": 0 |}private|] c;

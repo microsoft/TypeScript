@@ -2,7 +2,7 @@
 
 === constDeclarations2.ts ===
 // No error
-module M {
+namespace M {
 >M : Symbol(M, Decl(constDeclarations2.ts, 0, 0))
 
     export const c1 = false;

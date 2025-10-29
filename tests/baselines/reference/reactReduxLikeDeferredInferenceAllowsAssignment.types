@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500
+Instantiation count: 1,000
 
 === reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
 declare class Component<P> {

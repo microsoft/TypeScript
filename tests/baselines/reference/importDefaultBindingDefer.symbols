@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/importDefer/importDefaultBindingDefer.ts] ////
+
+=== a.ts ===
+export default function defer() {
+>defer : Symbol(defer, Decl(a.ts, 0, 0))
+
+    console.log("defer from a");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+=== b.ts ===
+import defer from "a";
+>defer : Symbol(defer, Decl(b.ts, 0, 6))
+
+defer();
+>defer : Symbol(defer, Decl(b.ts, 0, 6))
+

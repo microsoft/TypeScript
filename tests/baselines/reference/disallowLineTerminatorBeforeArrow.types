@@ -251,7 +251,7 @@ foo(()
 >false : false
 >      : ^^^^^
 
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

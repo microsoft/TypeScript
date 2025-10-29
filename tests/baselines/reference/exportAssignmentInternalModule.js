@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportAssignmentInternalModule.ts] ////
 
 //// [exportAssignmentInternalModule_A.ts]
-module M {
+namespace M {
 	export var x;
 }
 

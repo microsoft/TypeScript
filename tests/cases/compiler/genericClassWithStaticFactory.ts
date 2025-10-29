@@ -1,4 +1,4 @@
-module Editor {
+namespace Editor {
 
     export class List<T> {
         public next: List<T>;

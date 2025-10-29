@@ -3,7 +3,7 @@ file.tsx(16,7): error TS2322: Type '{ q: string; }' is not assignable to type '{
 
 
 ==== file.tsx (1 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	    div: { n: string; };

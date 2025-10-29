@@ -1,0 +1,15 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== exportEqualCallable_1.ts (0 errors) ====
+    ///<reference path='exportEqualCallable_0.ts'/>
+    import connect = require('exportEqualCallable_0');
+    connect();
+    
+==== exportEqualCallable_0.ts (0 errors) ====
+    var server: {
+        (): any;
+    };
+    export = server;
+    

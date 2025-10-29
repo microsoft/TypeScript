@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 
     export class BlockIntrinsics {
         public prototype = undefined;

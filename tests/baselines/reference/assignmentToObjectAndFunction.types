@@ -39,7 +39,7 @@ function foo() { }
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -60,7 +60,7 @@ function bar() { }
 >bar : typeof bar
 >    : ^^^^^^^^^^
 
-module bar {
+namespace bar {
 >bar : typeof bar
 >    : ^^^^^^^^^^
 
@@ -83,7 +83,7 @@ function bad() { }
 >bad : typeof bad
 >    : ^^^^^^^^^^
 
-module bad {
+namespace bad {
 >bad : typeof bad
 >    : ^^^^^^^^^^
 

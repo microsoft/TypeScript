@@ -122,7 +122,7 @@ foo() ? exprAny1 : exprAny2;
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsObjectType.ts, 9, 3))
 
 new Date() ? exprBoolean1 : exprBoolean2;
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 10, 3))
 
@@ -146,7 +146,7 @@ condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsObjectType.ts, 13, 3))
 
 new Date() ? exprString1 : exprBoolean1; // union
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsObjectType.ts, 6, 3))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 
@@ -239,7 +239,7 @@ var resultIsAny3 = foo() ? exprAny1 : exprAny2;
 
 var resultIsBoolean3 = new Date() ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : Symbol(resultIsBoolean3, Decl(conditionalOperatorConditionIsObjectType.ts, 58, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 10, 3))
 

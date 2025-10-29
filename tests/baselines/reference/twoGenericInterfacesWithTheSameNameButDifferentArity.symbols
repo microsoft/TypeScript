@@ -20,11 +20,11 @@ interface A<T, U> { // error
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 6, 1))
 
     interface A<T> {
->A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 8, 10), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 11, 5))
+>A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 8, 13), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 11, 5))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
 
         x: T;
@@ -33,7 +33,7 @@ module M {
     }
 
     interface A<T, U> { // error
->A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 8, 10), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 11, 5))
+>A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 8, 13), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 11, 5))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 18))
 
@@ -43,11 +43,11 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 16, 1), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 22, 1))
 
     interface A<T> {
->A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 18, 11))
+>A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 18, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 16))
 
         x: T;
@@ -56,11 +56,11 @@ module M2 {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 16, 1), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 22, 1))
 
     interface A<T, U> { // ok, different declaration space than other M2
->A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 24, 11))
+>A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 24, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 16))
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 18))
 
@@ -70,11 +70,11 @@ module M2 {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 28, 1), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 34, 1))
 
     export interface A<T> {
->A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 30, 11), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 36, 11))
+>A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 30, 14), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 36, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
 
         x: T;
@@ -83,11 +83,11 @@ module M3 {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 28, 1), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 34, 1))
 
     export interface A<T, U> { // error
->A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 30, 11), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 36, 11))
+>A : Symbol(A, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 30, 14), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 36, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 25))
 

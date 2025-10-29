@@ -1,13 +1,13 @@
 /// <reference path="fourslash.ts"/>
 
 // @Filename: file1.ts
-////module a {
+////namespace a {
 ////    function foo() {}
 ////}
-////module b {
+////namespace b {
 ////    function foo() {}
 ////}
-////module a {
+////namespace a {
 ////    function bar() {}
 ////}
 
@@ -87,7 +87,7 @@ verify.navigationBar([
 
 // Does not merge unlike declarations.
 // @Filename: file2.ts
-////module a {}
+////namespace a {}
 ////function a() {}
 
 goTo.file("file2.ts");
@@ -136,12 +136,12 @@ verify.navigationBar([
 
 // Merges recursively
 // @Filename: file3.ts
-////module a {
+////namespace a {
 ////    interface A {
 ////        foo: number;
 ////    }
 ////}
-////module a {
+////namespace a {
 ////    interface A {
 ////        bar: number;
 ////    }
@@ -218,8 +218,8 @@ verify.navigationBar([
 // Does not merge 'module A' with 'module A.B'
 
 // @Filename: file4.ts
-////module A { export var x; }
-////module A.B { export var y; }
+////namespace A { export var x; }
+////namespace A.B { export var y; }
 
 goTo.file("file4.ts");
 

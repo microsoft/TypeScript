@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts] ////
 
 === inheritanceOfGenericConstructorMethod2.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -13,7 +13,7 @@ module M {
 >C2 : C2<T>
 >   : ^^^^^
 }
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

@@ -35,7 +35,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
 
 
 ==== genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
-    module m1 {
+    namespace m1 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -48,7 +48,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m2 {
+    namespace m2 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -66,7 +66,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m3 {
+    namespace m3 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -80,7 +80,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m4 {
+    namespace m4 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -105,7 +105,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m5 {
+    namespace m5 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -135,7 +135,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m6 {
+    namespace m6 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;

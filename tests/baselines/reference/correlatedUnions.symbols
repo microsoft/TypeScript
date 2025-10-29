@@ -789,7 +789,7 @@ declare function bar(t: string): void;
 declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
 >makeCompleteLookupMapping : Symbol(makeCompleteLookupMapping, Decl(correlatedUnions.ts, 221, 38))
 >T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
 >T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
 
