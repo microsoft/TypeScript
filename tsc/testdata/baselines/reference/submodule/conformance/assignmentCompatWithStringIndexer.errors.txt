@@ -3,13 +3,13 @@ assignmentCompatWithStringIndexer.ts(15,1): error TS2322: Type 'A' is not assign
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 assignmentCompatWithStringIndexer.ts(19,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
-    Type 'Base' is missing the following properties from type 'Derived2': bar, baz
+    Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 assignmentCompatWithStringIndexer.ts(33,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived; }'.
   'string' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 assignmentCompatWithStringIndexer.ts(41,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
-    Type 'Base' is missing the following properties from type 'Derived2': bar, baz
+    Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 assignmentCompatWithStringIndexer.ts(46,9): error TS2322: Type '{ [x: string]: Derived; }' is not assignable to type 'A<T>'.
   'string' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
@@ -25,7 +25,7 @@ assignmentCompatWithStringIndexer.ts(50,9): error TS2322: Type '{ [x: string]: D
 assignmentCompatWithStringIndexer.ts(51,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived2'.
-      Type 'Base' is missing the following properties from type 'Derived2': bar, baz
+      Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 
 
 ==== assignmentCompatWithStringIndexer.ts (8 errors) ====
@@ -56,7 +56,7 @@ assignmentCompatWithStringIndexer.ts(51,9): error TS2322: Type 'A<T>' is not ass
     ~~
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': bar, baz
+!!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
     module Generics {
         class A<T extends Base> {
@@ -87,7 +87,7 @@ assignmentCompatWithStringIndexer.ts(51,9): error TS2322: Type 'A<T>' is not ass
         ~~
 !!! error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': bar, baz
+!!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
         function foo<T extends Base>() {
             var b3: { [x: string]: Derived; };
@@ -118,6 +118,6 @@ assignmentCompatWithStringIndexer.ts(51,9): error TS2322: Type 'A<T>' is not ass
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived2'.
-!!! error TS2322:       Type 'Base' is missing the following properties from type 'Derived2': bar, baz
+!!! error TS2322:       Type 'Base' is missing the following properties from type 'Derived2': baz, bar
         }
     }

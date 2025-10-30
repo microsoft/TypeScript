@@ -271,7 +271,7 @@ func (c *Checker) getAugmentedPropertiesOfType(t *Type) []*ast.Symbol {
 			}
 		}
 	}
-	return c.getNamedMembers(propsByName)
+	return c.getNamedMembers(propsByName, nil)
 }
 
 func (c *Checker) TryGetMemberInModuleExportsAndProperties(memberName string, moduleSymbol *ast.Symbol) *ast.Symbol {

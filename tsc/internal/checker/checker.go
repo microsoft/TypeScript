@@ -21351,18 +21351,42 @@ func (c *Checker) getDefaultOrUnknownFromTypeParameter(t *Type) *Type {
 	return core.IfElse(result != nil, result, c.unknownType)
 }
 
-func (c *Checker) getNamedMembers(members ast.SymbolTable) []*ast.Symbol {
+func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol) []*ast.Symbol {
 	if len(members) == 0 {
 		return nil
 	}
+	// For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
+	// explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
+	// likely to contain discriminating differences. See for example https://github.com/microsoft/typescript-go/issues/1968.
 	result := make([]*ast.Symbol, 0, len(members))
+	var containedCount int
+	if container != nil && container.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
+		for id, symbol := range members {
+			if c.isNamedMember(symbol, id) && c.isDeclarationContainedBy(symbol, container) {
+				result = append(result, symbol)
+			}
+		}
+		containedCount = len(result)
+	}
 	for id, symbol := range members {
-		if c.isNamedMember(symbol, id) {
+		if c.isNamedMember(symbol, id) && (container == nil || container.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 || !c.isDeclarationContainedBy(symbol, container)) {
 			result = append(result, symbol)
 		}
 	}
-	c.sortSymbols(result)
+	c.sortSymbols(result[:containedCount])
+	c.sortSymbols(result[containedCount:])
 	return result
+}
+
+func (c *Checker) isDeclarationContainedBy(symbol *ast.Symbol, container *ast.Symbol) bool {
+	if declaration := symbol.ValueDeclaration; declaration != nil {
+		for _, d := range container.Declarations {
+			if declaration.Loc.ContainedBy(d.Loc) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (c *Checker) isNamedMember(symbol *ast.Symbol, id string) bool {
@@ -24338,7 +24362,7 @@ func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, cal
 	t.objectFlags |= ObjectFlagsMembersResolved
 	data := t.AsStructuredType()
 	data.members = members
-	data.properties = c.getNamedMembers(members)
+	data.properties = c.getNamedMembers(members, t.symbol)
 	if len(callSignatures) != 0 {
 		if len(constructSignatures) != 0 {
 			data.signatures = core.Concatenate(callSignatures, constructSignatures)

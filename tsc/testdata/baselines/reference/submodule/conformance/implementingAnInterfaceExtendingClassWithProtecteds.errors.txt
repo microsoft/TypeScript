@@ -1,5 +1,5 @@
 implementingAnInterfaceExtendingClassWithProtecteds.ts(9,7): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
-  Type 'Bar' is missing the following properties from type 'I': x, y
+  Type 'Bar' is missing the following properties from type 'I': y, x
 implementingAnInterfaceExtendingClassWithProtecteds.ts(12,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
   Property 'x' is missing in type 'Bar2' but required in type 'I'.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(16,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
@@ -24,7 +24,7 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Clas
     class Bar implements I { // error
           ~~~
 !!! error TS2420: Class 'Bar' incorrectly implements interface 'I'.
-!!! error TS2420:   Type 'Bar' is missing the following properties from type 'I': x, y
+!!! error TS2420:   Type 'Bar' is missing the following properties from type 'I': y, x
     }
     
     class Bar2 implements I { // error
