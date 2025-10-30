@@ -24,7 +24,7 @@ interface Two extends Omit<One, "a"> {
 }
 
 class TwoStore implements Two {
-    b: string;
     c: boolean;
+    b: string;
 }`,
 });
