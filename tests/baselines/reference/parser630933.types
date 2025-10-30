@@ -12,12 +12,12 @@ var b = a.match(/\/ver=([^/]+)/);
 >  : ^^^^^^^^^^^^^^^^
 >a.match(/\/ver=([^/]+)/) : RegExpMatchArray
 >                         : ^^^^^^^^^^^^^^^^
->a.match : (regexp: string | RegExp) => RegExpMatchArray | null
->        : ^      ^^               ^^^^^                       
+>a.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>        : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >a : string
 >  : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/\/ver=([^/]+)/ : RegExp
 >                : ^^^^^^
 

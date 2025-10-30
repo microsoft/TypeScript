@@ -2,7 +2,7 @@ forgottenNew.ts(5,14): error TS2348: Value of type 'typeof NullLogger' is not ca
 
 
 ==== forgottenNew.ts (1 errors) ====
-    module Tools {
+    namespace Tools {
         export class NullLogger { }
     }
     

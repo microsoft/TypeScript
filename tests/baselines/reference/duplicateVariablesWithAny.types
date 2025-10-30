@@ -22,7 +22,7 @@ var y; //error
 >y : string
 >  : ^^^^^^
 
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

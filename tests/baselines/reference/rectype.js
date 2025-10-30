@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/rectype.ts] ////
 
 //// [rectype.ts]
-module M {
+namespace M {
     interface I { (i:I):I; }
 
     export function f(p: I) { return f };

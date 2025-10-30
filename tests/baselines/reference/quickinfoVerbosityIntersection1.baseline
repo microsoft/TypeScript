@@ -1,0 +1,357 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickinfoVerbosityIntersection1.ts ===
+// {
+//     type Foo = { a: "a" | "c" };
+//     type Bar = { a: "a" | "b" };
+//     const obj: Foo & Bar = { a: "a" };
+//           ^^^
+// | ----------------------------------------------------------------------
+// | const obj: {
+// |     a: "a" | "c";
+// | } & {
+// |     a: "a" | "b";
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | const obj: Foo & Bar
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     type Foo = { a: "c" };
+//     type Bar = { a: "b" };
+//     const obj: Foo & Bar = { a: "" };
+//           ^^^
+// | ----------------------------------------------------------------------
+// | const obj: never
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     type Foo = { a: "c" };
+//     type Bar = { a: "b" };
+//     type Never = Foo & Bar;
+//     const obj: Never = { a: "" };
+//           ^^^
+// | ----------------------------------------------------------------------
+// | const obj: never
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityIntersection1.ts",
+      "position": 81,
+      "name": "o1"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 78,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Bar",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityIntersection1.ts",
+      "position": 81,
+      "name": "o1"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 78,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"a\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"c\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"a\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"b\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityIntersection1.ts",
+      "position": 178,
+      "name": "o2"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 175,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "never",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityIntersection1.ts",
+      "position": 302,
+      "name": "o3"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 299,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "never",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 0
+    }
+  }
+]

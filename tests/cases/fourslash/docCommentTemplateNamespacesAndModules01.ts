@@ -5,7 +5,7 @@
 ////}
 ////
 /////*namespaceM*/
-////module m {
+////namespace m {
 ////}
 ////
 /////*ambientModule*/

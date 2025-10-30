@@ -42,8 +42,10 @@ import {
     isBindingPattern,
     isCallExpression,
     isCallSignatureDeclaration,
+    isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorTypeNode,
+    isConstructSignatureDeclaration,
     isEnumMember,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
@@ -580,6 +582,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isTypeParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     visitForDisplayParts(node.name);
                     if (node.constraint) {
@@ -595,6 +598,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isParameter);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     if (node.dotDotDotToken) {
                         parts.push({ text: "..." });
@@ -825,6 +829,15 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(node.type);
                     }
                     break;
+                case SyntaxKind.ConstructSignature:
+                    Debug.assertNode(node, isConstructSignatureDeclaration);
+                    parts.push({ text: "new " });
+                    visitParametersAndTypeParameters(node);
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
                 case SyntaxKind.ArrayBindingPattern:
                     Debug.assertNode(node, isArrayBindingPattern);
                     parts.push({ text: "[" });
@@ -875,6 +888,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.ThisType:
                     Debug.assertNode(node, isThisTypeNode);
                     parts.push({ text: "this" });
+                    break;
+                case SyntaxKind.ComputedPropertyName:
+                    Debug.assertNode(node, isComputedPropertyName);
+                    parts.push({ text: "[" });
+                    visitForDisplayParts(node.expression);
+                    parts.push({ text: "]" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);

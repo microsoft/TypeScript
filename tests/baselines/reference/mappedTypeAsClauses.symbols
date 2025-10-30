@@ -70,7 +70,7 @@ type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))

@@ -358,9 +358,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         const baselines: string[] = [];
         baselineProgram(baselines, initialProgram);
 
-        const afterNpmInstallProgram = updateProgram(initialProgram, rootFiles.map(f => f.name), options, f => {
-            f[1].text = f[1].text.updateReferences(`/// <reference no-default-lib="true"/>`);
-        }, filesAfterNpmInstall);
+        const afterNpmInstallProgram = updateProgram(initialProgram, rootFiles.map(f => f.name), options, ts.noop, filesAfterNpmInstall);
         baselineProgram(baselines, afterNpmInstallProgram);
 
         runBaseline("fetches imports after npm install", baselines);
@@ -400,7 +398,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
             {
                 name: "f1.ts",
                 text: SourceText.New(
-                    `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
+                    `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>`,
                     `import { B } from './b1';${newLine}export let BB = B;`,
                     "declare module './b1' { interface B { y: string; } }",
                 ),

@@ -18,7 +18,6 @@ import { foo } from "./other";
 export function foo(): void;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -46,8 +45,9 @@ CreatingProgramWith::
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 undefined Source file
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
@@ -137,8 +137,9 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
@@ -198,8 +199,9 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
@@ -264,8 +266,9 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/myproject/other.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 undefined Source file

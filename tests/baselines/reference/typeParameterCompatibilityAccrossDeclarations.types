@@ -27,6 +27,7 @@ var a2 = {
 >function (y: any): any { return null; } : (y: any) => any
 >                                        : ^ ^^   ^^^^^   
 >y : any
+>  : ^^^
 }
 export interface I {
    x<T>(y: T): T;
@@ -40,6 +41,7 @@ export interface I2 {
 >x : (y: any) => any
 >  : ^ ^^   ^^^^^   
 >y : any
+>  : ^^^
 }
  
 var i: I;

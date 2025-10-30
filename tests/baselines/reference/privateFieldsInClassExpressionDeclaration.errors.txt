@@ -1,0 +1,31 @@
+privateFieldsInClassExpressionDeclaration.ts(1,14): error TS4094: Property '#context' of exported anonymous class type may not be private or protected.
+privateFieldsInClassExpressionDeclaration.ts(1,14): error TS4094: Property '#method' of exported anonymous class type may not be private or protected.
+privateFieldsInClassExpressionDeclaration.ts(8,14): error TS4094: Property '#instancePrivate' of exported anonymous class type may not be private or protected.
+privateFieldsInClassExpressionDeclaration.ts(8,14): error TS4094: Property '#staticPrivate' of exported anonymous class type may not be private or protected.
+
+
+==== privateFieldsInClassExpressionDeclaration.ts (4 errors) ====
+    export const ClassExpression = class {
+                 ~~~~~~~~~~~~~~~
+!!! error TS4094: Property '#context' of exported anonymous class type may not be private or protected.
+!!! related TS9027 privateFieldsInClassExpressionDeclaration.ts:1:14: Add a type annotation to the variable ClassExpression.
+                 ~~~~~~~~~~~~~~~
+!!! error TS4094: Property '#method' of exported anonymous class type may not be private or protected.
+!!! related TS9027 privateFieldsInClassExpressionDeclaration.ts:1:14: Add a type annotation to the variable ClassExpression.
+        #context = 0;
+        #method() { return 42; }
+        public value = 1;
+    };
+    
+    // Additional test with static private fields
+    export const ClassExpressionStatic = class {
+                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4094: Property '#instancePrivate' of exported anonymous class type may not be private or protected.
+!!! related TS9027 privateFieldsInClassExpressionDeclaration.ts:8:14: Add a type annotation to the variable ClassExpressionStatic.
+                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4094: Property '#staticPrivate' of exported anonymous class type may not be private or protected.
+!!! related TS9027 privateFieldsInClassExpressionDeclaration.ts:8:14: Add a type annotation to the variable ClassExpressionStatic.
+        static #staticPrivate = "hidden";
+        #instancePrivate = true;
+        public exposed = "visible";
+    };

@@ -182,7 +182,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
 !!! related TS6203 witness.ts:107:5: 'propAcc1' was also declared here.
     
     // Property access of module member
-    module M2 {
+    namespace M2 {
         export var x = M2.x;
         var y = x;
         var y: any;

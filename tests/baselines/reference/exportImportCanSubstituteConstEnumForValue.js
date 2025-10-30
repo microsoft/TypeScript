@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts] ////
 
 //// [exportImportCanSubstituteConstEnumForValue.ts]
-module MsPortalFx.ViewModels.Dialogs {
+namespace MsPortalFx.ViewModels.Dialogs {
 
     export const enum DialogResult {
         Abort,
@@ -31,7 +31,7 @@ module MsPortalFx.ViewModels.Dialogs {
 }
 
 
-module MsPortalFx.ViewModels {
+namespace MsPortalFx.ViewModels {
 
     /**
      * For some reason javascript code is emitted for this re-exported const enum.

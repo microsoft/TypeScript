@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/typeResolution.ts] ////
 
 === typeResolution.ts ===
-export module TopLevelModule1 {
+export namespace TopLevelModule1 {
 >TopLevelModule1 : typeof TopLevelModule1
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
-    export module SubModule1 {
+    export namespace SubModule1 {
 >SubModule1 : typeof SubModule1
 >           : ^^^^^^^^^^^^^^^^^
 
-        export module SubSubModule1 {
+        export namespace SubSubModule1 {
 >SubSubModule1 : typeof SubSubModule1
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -137,6 +137,7 @@ export module TopLevelModule1 {
 >d1 : InterfaceX
 >   : ^^^^^^^^^^
 >d1.XisIn1_1_1() : any
+>                : ^^^
 >d1.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d1 : InterfaceX
@@ -150,6 +151,7 @@ export module TopLevelModule1 {
 >SubSubModule1 : any
 >              : ^^^
 >d2.XisIn1_1_1() : any
+>                : ^^^
 >d2.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d2 : InterfaceX
@@ -300,6 +302,7 @@ export module TopLevelModule1 {
 >d1 : InterfaceX
 >   : ^^^^^^^^^^
 >d1.XisIn1_1_1() : any
+>                : ^^^
 >d1.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d1 : InterfaceX
@@ -313,6 +316,7 @@ export module TopLevelModule1 {
 >SubSubModule1 : any
 >              : ^^^
 >d2.XisIn1_1_1() : any
+>                : ^^^
 >d2.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d2 : InterfaceX
@@ -375,6 +379,7 @@ export module TopLevelModule1 {
 >d1 : InterfaceX
 >   : ^^^^^^^^^^
 >d1.XisIn1_1_1() : any
+>                : ^^^
 >d1.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d1 : InterfaceX
@@ -467,6 +472,7 @@ export module TopLevelModule1 {
 >SubSubModule1 : any
 >              : ^^^
 >d2.XisIn1_1_1() : any
+>                : ^^^
 >d2.XisIn1_1_1 : () => any
 >              : ^^^^^^^^^
 >d2 : SubSubModule1.InterfaceX
@@ -478,11 +484,11 @@ export module TopLevelModule1 {
         }
     }
 
-    export module SubModule2 {
+    export namespace SubModule2 {
 >SubModule2 : typeof SubModule2
 >           : ^^^^^^^^^^^^^^^^^
 
-        export module SubSubModule2 {
+        export namespace SubSubModule2 {
 >SubSubModule2 : typeof SubSubModule2
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -532,7 +538,7 @@ export module TopLevelModule1 {
 >       : ^^^^^^^^^
     }
     
-    module NotExportedModule {
+    namespace NotExportedModule {
 >NotExportedModule : typeof NotExportedModule
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -542,11 +548,11 @@ export module TopLevelModule1 {
     }
 }
 
-module TopLevelModule2 {
+namespace TopLevelModule2 {
 >TopLevelModule2 : typeof TopLevelModule2
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
-    export module SubModule3 {
+    export namespace SubModule3 {
 >SubModule3 : typeof SubModule3
 >           : ^^^^^^^^^^^^^^^^^
 

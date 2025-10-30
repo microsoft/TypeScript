@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/inferenceFromGenericClassNoCrash1.ts] ////
+
+=== inferenceFromGenericClassNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61633#issuecomment-2841778576
+
+function RenderFlagsMixin<T extends new (...args: any[]) => object>(Base?: T) {}
+>RenderFlagsMixin : Symbol(RenderFlagsMixin, Decl(inferenceFromGenericClassNoCrash1.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceFromGenericClassNoCrash1.ts, 2, 26))
+>args : Symbol(args, Decl(inferenceFromGenericClassNoCrash1.ts, 2, 41))
+>Base : Symbol(Base, Decl(inferenceFromGenericClassNoCrash1.ts, 2, 68))
+>T : Symbol(T, Decl(inferenceFromGenericClassNoCrash1.ts, 2, 26))
+
+class Container<T> {
+>Container : Symbol(Container, Decl(inferenceFromGenericClassNoCrash1.ts, 2, 80))
+>T : Symbol(T, Decl(inferenceFromGenericClassNoCrash1.ts, 3, 16))
+
+  t: T;
+>t : Symbol(Container.t, Decl(inferenceFromGenericClassNoCrash1.ts, 3, 20))
+>T : Symbol(T, Decl(inferenceFromGenericClassNoCrash1.ts, 3, 16))
+}
+RenderFlagsMixin(Container);
+>RenderFlagsMixin : Symbol(RenderFlagsMixin, Decl(inferenceFromGenericClassNoCrash1.ts, 0, 0))
+>Container : Symbol(Container, Decl(inferenceFromGenericClassNoCrash1.ts, 2, 80))
+

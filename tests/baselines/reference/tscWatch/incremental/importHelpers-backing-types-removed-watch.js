@@ -20,7 +20,6 @@ export const x = {...{}};
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -61,6 +60,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}
@@ -118,6 +121,10 @@ PolledWatches *deleted*::
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
+  {}
 /users/username/projects/project/index.tsx:
   {}
 /users/username/projects/project/node_modules/tslib/index.d.ts:
@@ -158,6 +165,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}

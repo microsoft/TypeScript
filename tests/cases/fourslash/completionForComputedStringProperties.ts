@@ -12,7 +12,7 @@ verify.completions({
     marker: "",
     exact: [
         { name: "p1" },
-        { name: "p2", insertText: '[p2]', replacementSpan: test.ranges()[0] },
+        { name: "p2", insertText: '[p2]', sortText: completion.SortText.GlobalsOrKeywords, replacementSpan: test.ranges()[0] },
     ],
     preferences: { includeInsertTextCompletions: true },
 });

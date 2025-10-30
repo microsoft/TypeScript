@@ -1,0 +1,355 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickinfoVerbosityTypeof.ts ===
+// interface Apple {
+//     color: string;
+//     weight: number;
+// }
+// const a: Apple = { color: "red", weight: 150 };
+// const b: typeof a = { color: "green", weight: 120 };
+//       ^
+// | ----------------------------------------------------------------------
+// | const b: {
+// |     color: string;
+// |     weight: number;
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | const b: Apple
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// class Banana {
+//     length: number;
+//     constructor(length: number) {
+//         this.length = length;
+//     }
+// }
+// const c: typeof Banana = Banana;
+//       ^
+// | ----------------------------------------------------------------------
+// | const c: {
+// |     new (length: number): Banana;
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | const c: typeof Banana
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTypeof.ts",
+      "position": 114,
+      "name": "b"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 113,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Apple",
+          "kind": "interfaceName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTypeof.ts",
+      "position": 114,
+      "name": "b"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 113,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "color",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "weight",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTypeof.ts",
+      "position": 274,
+      "name": "c"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 273,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Banana",
+          "kind": "className"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTypeof.ts",
+      "position": 274,
+      "name": "c"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 273,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "length",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Banana",
+          "kind": "className"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 1
+    }
+  }
+]

@@ -60,7 +60,7 @@ declare module "./observable" {
 >b : number
 >  : ^^^^^^
 
-    module Z {}
+    namespace Z {}
 }
 
 === observable.ts ===

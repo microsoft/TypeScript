@@ -116,7 +116,7 @@ subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Propert
         var r12 = true ? new Foo<V>() : v;
     }
     
-    module M1 {
+    namespace M1 {
         class Base<T> {
             foo: T;
         }
@@ -204,7 +204,7 @@ subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Propert
     }
     
     
-    module M2 {
+    namespace M2 {
         class Base2<T> {
             foo: Foo<T>;
         }
