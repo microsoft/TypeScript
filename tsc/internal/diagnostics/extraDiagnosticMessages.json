@@ -19,10 +19,6 @@
         "category": "Error",
         "code": 8030
     },
-    "A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.": {
-        "category": "Error",
-        "code": 8040
-    },
     "Failed to delete file '{0}'.": {
         "category": "Message",
         "code": 6353

@@ -3257,9 +3257,6 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 		if c.getContextualCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature), node) == nil {
 			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments)
 		}
-		if node.Type() != nil || core.Some(node.Parameters(), func(p *ast.Node) bool { return p.Type() != nil }) {
-			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_may_not_occur_with_a_param_or_returns_tag)
-		}
 	}
 	if node.Type() == nil {
 		// Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -9830,9 +9827,6 @@ func (c *Checker) checkFunctionExpressionOrObjectLiteralMethod(node *ast.Node, c
 		if c.getContextualCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature), node) == nil {
 			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments)
 		}
-		if node.Type() != nil || core.Some(node.Parameters(), func(p *ast.Node) bool { return p.Type() != nil }) {
-			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_may_not_occur_with_a_param_or_returns_tag)
-		}
 	}
 	c.contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node, checkMode)
 	return c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
@@ -11678,12 +11672,11 @@ func (c *Checker) TryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, con
 		container = c.getThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
 	}
 	if ast.IsFunctionLike(container) && (!c.isInParameterInitializerBeforeContainingFunction(node) || ast.GetThisParameter(container) != nil) {
-		thisType := c.getThisTypeOfDeclaration(container)
-		if thisType == nil && ast.IsInJSFile(container) {
-			if sig := c.getSignatureOfFullSignatureType(container); sig != nil {
-				thisType = c.getThisTypeOfSignature(sig)
-			}
+		sig := c.getSignatureOfFullSignatureType(container)
+		if sig == nil {
+			sig = c.getSignatureFromDeclaration(container)
 		}
+		thisType := c.getThisTypeOfSignature(sig)
 		// Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
 		// If this is a function in a JS file, it might be a class method.
 		if thisType == nil {
@@ -11780,10 +11773,6 @@ func (c *Checker) isInParameterInitializerBeforeContainingFunction(node *ast.Nod
 	}
 
 	return false
-}
-
-func (c *Checker) getThisTypeOfDeclaration(declaration *ast.Node) *Type {
-	return c.getThisTypeOfSignature(c.getSignatureFromDeclaration(declaration))
 }
 
 func (c *Checker) checkThisInStaticClassFieldInitializerInDecoratedClass(thisExpression *ast.Node, container *ast.Node) {
@@ -19091,11 +19080,11 @@ func (c *Checker) getSignaturesOfSymbol(symbol *ast.Symbol) []*Signature {
 		}
 		// If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
 		// Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would suppress checks that the two are compatible.
-		if sig := c.getSignatureOfFullSignatureType(decl); sig != nil {
-			result = append(result, sig)
-			continue
+		sig := c.getSignatureOfFullSignatureType(decl)
+		if sig == nil {
+			sig = c.getSignatureFromDeclaration(decl)
 		}
-		result = append(result, c.getSignatureFromDeclaration(decl))
+		result = append(result, sig)
 	}
 	return result
 }
@@ -19177,14 +19166,12 @@ func (c *Checker) getSignatureFromDeclaration(declaration *ast.Node) *Signature 
 }
 
 func (c *Checker) getTypeParametersFromDeclaration(declaration *ast.Node) []*Type {
+	if sig := c.getSignatureOfFullSignatureType(declaration); sig != nil {
+		return sig.TypeParameters()
+	}
 	var result []*Type
 	for _, node := range declaration.TypeParameters() {
 		result = core.AppendIfUnique(result, c.getDeclaredTypeOfTypeParameter(node.Symbol()))
-	}
-	if len(result) == 0 && ast.IsFunctionDeclaration(declaration) {
-		if sig := c.getSignatureOfFullSignatureType(declaration); sig != nil {
-			return sig.TypeParameters()
-		}
 	}
 	return result
 }

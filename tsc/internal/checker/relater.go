@@ -1994,19 +1994,11 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 		default:
 			if sig.declaration != nil {
 				typeNode := sig.declaration.Type()
-				var jsdocTypePredicate *TypePredicate
-				if typeNode == nil {
-					if jsdocSignature := c.getSignatureOfFullSignatureType(sig.declaration); jsdocSignature != nil {
-						jsdocTypePredicate = c.getTypePredicateOfSignature(jsdocSignature)
-					}
-				}
 				switch {
 				case typeNode != nil:
 					if ast.IsTypePredicateNode(typeNode) {
 						sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
 					}
-				case jsdocTypePredicate != nil:
-					sig.resolvedTypePredicate = jsdocTypePredicate
 				case ast.IsFunctionLikeDeclaration(sig.declaration) && (sig.resolvedReturnType == nil || sig.resolvedReturnType.flags&TypeFlagsBoolean != 0) && c.getParameterCount(sig) > 0:
 					sig.resolvedTypePredicate = c.noTypePredicate // avoid infinite loop
 					sig.resolvedTypePredicate = c.getTypePredicateFromBody(sig.declaration)
