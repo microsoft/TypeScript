@@ -5552,23 +5552,63 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (name as string).charCodeAt(2) !== CharacterCodes.hash;
     }
 
-    function getNamedMembers(members: SymbolTable): Symbol[] {
-        let result: Symbol[] | undefined;
+    function getNamedMembers(members: SymbolTable, container: Symbol | undefined): Symbol[] {
+        if (!TSGO_COMPAT) {
+            let result: Symbol[] | undefined;
+            members.forEach((symbol, id) => {
+                if (isNamedMember(symbol, id)) {
+                    (result || (result = [])).push(symbol);
+                }
+            });
+            return result || emptyArray;
+        }
+
+        if (members.size === 0) {
+            return emptyArray;
+        }
+
+        // For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
+        // explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
+        // likely to contain discriminating differences. See for example https://github.com/microsoft/typescript-go/issues/1968.
+        let contained: Symbol[] | undefined;
+        if (container && container.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+            members.forEach((symbol, id) => {
+                if (isNamedMember(symbol, id) && isDeclarationContainedBy(symbol, container)) {
+                    contained = append(contained, symbol);
+                }
+            });
+        }
+
+        let nonContained: Symbol[] | undefined;
         members.forEach((symbol, id) => {
-            if (isNamedMember(symbol, id)) {
-                (result || (result = [])).push(symbol);
+            if (isNamedMember(symbol, id) && (!container || !(container.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !isDeclarationContainedBy(symbol, container))) {
+                nonContained = append(nonContained, symbol);
             }
         });
-        sortSymbolsIfTSGoCompat(result);
-        return result || emptyArray;
+
+        contained?.sort(compareSymbols);
+        nonContained?.sort(compareSymbols);
+        return concatenate(contained, nonContained) || emptyArray;
+
+        function isDeclarationContainedBy(symbol: Symbol, container: Symbol): boolean {
+            const declaration = symbol.valueDeclaration;
+            if (declaration) {
+                return some(container.declarations, d => containedBy(declaration, d));
+            }
+            return false;
+
+            function containedBy(a: Node, b: Node): boolean {
+                return b.pos <= a.pos && b.end >= a.end;
+            }
+        }
     }
 
     function isNamedMember(member: Symbol, escapedName: __String) {
         return !isReservedMemberName(escapedName) && symbolIsValue(member);
     }
 
-    function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
-        const result = getNamedMembers(members);
+    function getNamedOrIndexSignatureMembers(members: SymbolTable, symbol: Symbol): Symbol[] {
+        const result = getNamedMembers(members, symbol);
         const index = getIndexSymbolFromSymbolTable(members);
         return index ? concatenate(result, [index]) : result;
     }
@@ -5581,7 +5621,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         resolved.constructSignatures = constructSignatures;
         resolved.indexInfos = indexInfos;
         // This can loop back to getPropertyOfType() which would crash if `callSignatures` & `constructSignatures` are not initialized.
-        if (members !== emptySymbols) resolved.properties = getNamedMembers(members);
+        if (members !== emptySymbols) resolved.properties = getNamedMembers(members, type.symbol);
         return resolved;
     }
 
@@ -13689,7 +13729,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(type as InterfaceTypeWithDeclaredMembers).declaredProperties) {
             const symbol = type.symbol;
             const members = getMembersOfSymbol(symbol);
-            (type as InterfaceTypeWithDeclaredMembers).declaredProperties = getNamedMembers(members);
+            (type as InterfaceTypeWithDeclaredMembers).declaredProperties = getNamedMembers(members, symbol);
             // Start with signatures at empty array in case of recursive types
             (type as InterfaceTypeWithDeclaredMembers).declaredCallSignatures = emptyArray;
             (type as InterfaceTypeWithDeclaredMembers).declaredConstructSignatures = emptyArray;
@@ -14565,7 +14605,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const classType = getDeclaredTypeOfClassOrInterface(symbol);
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
-                members = createSymbolTable(getNamedOrIndexSignatureMembers(members));
+                members = createSymbolTable(getNamedOrIndexSignatureMembers(members, symbol));
                 addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
             }
             else if (baseConstructorType === anyType) {
@@ -15028,7 +15068,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
             }
-            type.resolvedProperties = getNamedMembers(members);
+            type.resolvedProperties = getNamedMembers(members, type.symbol);
         }
         return type.resolvedProperties;
     }
@@ -50033,7 +50073,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             });
         }
-        return getNamedMembers(propsByName);
+        return getNamedMembers(propsByName, /*container*/ undefined);
     }
 
     function typeHasCallOrConstructSignatures(type: Type): boolean {
