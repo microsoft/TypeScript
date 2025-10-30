@@ -2,6 +2,7 @@ package ls
 
 import (
 	"context"
+	"slices"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -11,7 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
-func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {
+func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri, clientOptions *lsproto.DiagnosticClientCapabilities) (lsproto.DocumentDiagnosticResponse, error) {
 	program, file := l.getProgramAndFile(uri)
 
 	diagnostics := make([][]*ast.Diagnostic, 0, 4)
@@ -26,12 +27,12 @@ func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.Do
 
 	return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
 		FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
-			Items: toLSPDiagnostics(l.converters, diagnostics...),
+			Items: l.toLSPDiagnostics(clientOptions, diagnostics...),
 		},
 	}, nil
 }
 
-func toLSPDiagnostics(converters *lsconv.Converters, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
+func (l *LanguageService) toLSPDiagnostics(clientOptions *lsproto.DiagnosticClientCapabilities, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
 	size := 0
 	for _, diagSlice := range diagnostics {
 		size += len(diagSlice)
@@ -39,13 +40,13 @@ func toLSPDiagnostics(converters *lsconv.Converters, diagnostics ...[]*ast.Diagn
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, size)
 	for _, diagSlice := range diagnostics {
 		for _, diag := range diagSlice {
-			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(converters, diag))
+			lspDiagnostics = append(lspDiagnostics, l.toLSPDiagnostic(clientOptions, diag))
 		}
 	}
 	return lspDiagnostics
 }
 
-func toLSPDiagnostic(converters *lsconv.Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
+func (l *LanguageService) toLSPDiagnostic(clientOptions *lsproto.DiagnosticClientCapabilities, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
 	var severity lsproto.DiagnosticSeverity
 	switch diagnostic.Category() {
 	case diagnostics.CategorySuggestion:
@@ -58,30 +59,33 @@ func toLSPDiagnostic(converters *lsconv.Converters, diagnostic *ast.Diagnostic) 
 		severity = lsproto.DiagnosticSeverityError
 	}
 
-	relatedInformation := make([]*lsproto.DiagnosticRelatedInformation, 0, len(diagnostic.RelatedInformation()))
-	for _, related := range diagnostic.RelatedInformation() {
-		relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
-			Location: lsproto.Location{
-				Uri:   lsconv.FileNameToDocumentURI(related.File().FileName()),
-				Range: converters.ToLSPRange(related.File(), related.Loc()),
-			},
-			Message: related.Message(),
-		})
+	var relatedInformation []*lsproto.DiagnosticRelatedInformation
+	if clientOptions != nil && ptrIsTrue(clientOptions.RelatedInformation) {
+		relatedInformation = make([]*lsproto.DiagnosticRelatedInformation, 0, len(diagnostic.RelatedInformation()))
+		for _, related := range diagnostic.RelatedInformation() {
+			relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
+				Location: lsproto.Location{
+					Uri:   lsconv.FileNameToDocumentURI(related.File().FileName()),
+					Range: l.converters.ToLSPRange(related.File(), related.Loc()),
+				},
+				Message: related.Message(),
+			})
+		}
 	}
 
 	var tags []lsproto.DiagnosticTag
-	if diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated() {
+	if clientOptions != nil && clientOptions.TagSupport != nil && (diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated()) {
 		tags = make([]lsproto.DiagnosticTag, 0, 2)
-		if diagnostic.ReportsUnnecessary() {
+		if diagnostic.ReportsUnnecessary() && slices.Contains(clientOptions.TagSupport.ValueSet, lsproto.DiagnosticTagUnnecessary) {
 			tags = append(tags, lsproto.DiagnosticTagUnnecessary)
 		}
-		if diagnostic.ReportsDeprecated() {
+		if diagnostic.ReportsDeprecated() && slices.Contains(clientOptions.TagSupport.ValueSet, lsproto.DiagnosticTagDeprecated) {
 			tags = append(tags, lsproto.DiagnosticTagDeprecated)
 		}
 	}
 
 	return &lsproto.Diagnostic{
-		Range: converters.ToLSPRange(diagnostic.File(), diagnostic.Loc()),
+		Range: l.converters.ToLSPRange(diagnostic.File(), diagnostic.Loc()),
 		Code: &lsproto.IntegerOrString{
 			Integer: ptrTo(diagnostic.Code()),
 		},

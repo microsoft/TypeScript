@@ -800,7 +800,11 @@ func (s *Server) handleSetTrace(ctx context.Context, params *lsproto.SetTracePar
 }
 
 func (s *Server) handleDocumentDiagnostic(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
-	return ls.ProvideDiagnostics(ctx, params.TextDocument.Uri)
+	var diagnosticClientCapabilities *lsproto.DiagnosticClientCapabilities
+	if s.initializeParams != nil && s.initializeParams.Capabilities != nil && s.initializeParams.Capabilities.TextDocument != nil {
+		diagnosticClientCapabilities = s.initializeParams.Capabilities.TextDocument.Diagnostic
+	}
+	return ls.ProvideDiagnostics(ctx, params.TextDocument.Uri, diagnosticClientCapabilities)
 }
 
 func (s *Server) handleHover(ctx context.Context, ls *ls.LanguageService, params *lsproto.HoverParams) (lsproto.HoverResponse, error) {

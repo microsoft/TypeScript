@@ -261,6 +261,17 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	if capabilitiesWithDefaults.TextDocument.Completion == nil {
 		capabilitiesWithDefaults.TextDocument.Completion = defaultCompletionCapabilities
 	}
+	if capabilitiesWithDefaults.TextDocument.Diagnostic == nil {
+		capabilitiesWithDefaults.TextDocument.Diagnostic = &lsproto.DiagnosticClientCapabilities{
+			RelatedInformation: ptrTrue,
+			TagSupport: &lsproto.ClientDiagnosticsTagOptions{
+				ValueSet: []lsproto.DiagnosticTag{
+					lsproto.DiagnosticTagUnnecessary,
+					lsproto.DiagnosticTagDeprecated,
+				},
+			},
+		}
+	}
 	if capabilitiesWithDefaults.Workspace == nil {
 		capabilitiesWithDefaults.Workspace = &lsproto.WorkspaceClientCapabilities{}
 	}
