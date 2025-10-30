@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasEnum.ts] ////
 
 //// [internalAliasEnum.ts]
-module a {
+namespace a {
     export enum weekend {
         Friday,
         Saturday,
@@ -9,7 +9,7 @@ module a {
     }
 }
 
-module c {
+namespace c {
     import b = a.weekend;
     export var bVal: b = b.Sunday;
 }

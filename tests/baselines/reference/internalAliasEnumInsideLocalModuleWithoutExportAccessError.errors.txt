@@ -2,7 +2,7 @@ internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS23
 
 
 ==== internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
-    export module a {
+    export namespace a {
         export enum weekend {
             Friday,
             Saturday,
@@ -10,7 +10,7 @@ internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS23
         }
     }
     
-    export module c {
+    export namespace c {
         import b = a.weekend;
         export var bVal: b = b.Sunday;
     }

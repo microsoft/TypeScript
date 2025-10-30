@@ -1,6 +1,6 @@
 // adding the var makes this an instantiated module
 
-module M {
+namespace M {
     export interface Point { x: number; y: number }
     export var Point = 1;
 }
@@ -18,7 +18,7 @@ var p1: M.Point;
 
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
-module M2 {
+namespace M2 {
     export class Point {
         x: number;
         y: number;
@@ -42,7 +42,7 @@ var p2: M2.Point;
 var p2 = new m2.Point();
 var p2 = new M2.Point();
 
-module M3 {
+namespace M3 {
     export enum Color { Blue, Red }
 }
 

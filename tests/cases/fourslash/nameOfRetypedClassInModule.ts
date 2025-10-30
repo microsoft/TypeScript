@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-//// module M {
+//// namespace M {
 //// }
 //// 
-//// module M {
+//// namespace M {
 //// 	/*A*/class A {}
 ////    /*B*/export class B {}
 ////    class Check { /*check*/constructor(val) {} }

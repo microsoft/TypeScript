@@ -1,0 +1,11 @@
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== b.d.ts (0 errors) ====
+    declare var b: number;
+    export { b };
+    
+==== a.ts (0 errors) ====
+    export { b } from "./b";
+    export { default as Foo } from "./b";

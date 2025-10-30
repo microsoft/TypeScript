@@ -3,7 +3,7 @@
 //// [binopAssignmentShouldHaveType.ts]
 declare var console;
 "use strict";
-module Test {
+namespace Test {
  export class Bug {
   getName():string {
    return "name";

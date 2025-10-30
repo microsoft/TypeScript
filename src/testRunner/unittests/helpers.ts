@@ -126,7 +126,7 @@ export function createTestCompilerHost(texts: readonly NamedSourceText[], target
         getTrace: () => trace,
         clearTrace: () => trace.length = 0,
         getSourceFile: fileName => filesByPath.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName)),
-        getDefaultLibFileName: () => "lib.d.ts",
+        getDefaultLibFileName: () => "",
         writeFile: ts.notImplemented,
         getCurrentDirectory: () => currentDirectory,
         getDirectories: () => [],

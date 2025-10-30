@@ -1,6 +1,6 @@
 //@declaration: true
-module Outer {
-    module Inner {
+namespace Outer {
+    namespace Inner {
         export var m: typeof Inner;
     }
 

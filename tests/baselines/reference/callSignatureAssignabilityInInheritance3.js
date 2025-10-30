@@ -4,13 +4,13 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases
 
-module Errors {
+namespace Errors {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
     class OtherDerived extends Base { bing: string; }
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
         // base type with non-generic call signatures
         interface A {
             a2: (x: number) => string[];
@@ -94,7 +94,7 @@ module Errors {
         }
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
         // base type has generic call signature
         interface B {
             a2: <T>(x: T) => T[];

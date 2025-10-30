@@ -1,5 +1,5 @@
 
-module M {
+namespace M {
 
    interface I { (i: I): I; }
 

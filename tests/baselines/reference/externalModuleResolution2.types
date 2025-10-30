@@ -14,7 +14,7 @@ x.X // .ts should be picked
 >  : ^^^^^^
 
 === foo.ts ===
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

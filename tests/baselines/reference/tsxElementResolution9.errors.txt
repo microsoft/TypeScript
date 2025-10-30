@@ -22,7 +22,7 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
 
 
 ==== file.tsx (5 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { something; }
     	interface IntrinsicElements { }
     }

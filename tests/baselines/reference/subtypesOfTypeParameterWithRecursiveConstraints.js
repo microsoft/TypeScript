@@ -56,7 +56,7 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
     var r12 = true ? new Foo<V>() : v;
 }
 
-module M1 {
+namespace M1 {
     class Base<T> {
         foo: T;
     }
@@ -108,7 +108,7 @@ module M1 {
 }
 
 
-module M2 {
+namespace M2 {
     class Base2<T> {
         foo: Foo<T>;
     }

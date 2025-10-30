@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithExport.ts] ////
 
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.ts]
-export module a {
+export namespace a {
     export function foo(x: number) {
         return x;
     }

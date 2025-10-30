@@ -58,11 +58,11 @@ class C {
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(typeOfThisInFunctionExpression.ts, 26, 1))
 
     function fn() {
->fn : Symbol(fn, Decl(typeOfThisInFunctionExpression.ts, 28, 10))
+>fn : Symbol(fn, Decl(typeOfThisInFunctionExpression.ts, 28, 13))
 
         var p = this;
 >p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 30, 11), Decl(typeOfThisInFunctionExpression.ts, 31, 11))

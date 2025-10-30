@@ -1,4 +1,4 @@
-declare module M {
+declare namespace M {
   declare class C {
   }
 }

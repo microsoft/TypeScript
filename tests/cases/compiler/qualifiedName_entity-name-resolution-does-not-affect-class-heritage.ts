@@ -1,4 +1,4 @@
-module Alpha {
+namespace Alpha {
     export var x = 100;
 }
 

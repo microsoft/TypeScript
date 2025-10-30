@@ -1197,7 +1197,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -1217,7 +1217,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -1264,7 +1264,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
@@ -1350,7 +1350,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -1370,7 +1370,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -1417,7 +1417,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
@@ -1502,7 +1502,7 @@
 //     return [|{| isWriteAccess: true |}x|]++;
 // }
 // 
-// module modTest {
+// namespace modTest {
 // --- (line: 38) skipped ---
 
   // === Definitions ===
@@ -2080,7 +2080,7 @@
 //     return /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|]++;
 // }
 // 
-// module modTest {
+// namespace modTest {
 // --- (line: 38) skipped ---
 
   // === Definitions ===
@@ -2102,7 +2102,7 @@
   //     return /*FIND ALL REFS*/x++;
   // }
   // 
-  // module modTest {
+  // namespace modTest {
   // --- (line: 38) skipped ---
 
   // === Details ===
@@ -2435,7 +2435,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -2455,7 +2455,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -2502,7 +2502,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
@@ -2598,7 +2598,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -2618,7 +2618,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -2665,7 +2665,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
@@ -3025,7 +3025,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -3045,7 +3045,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = /*FIND ALL REFS*/[|foo|];
 //     }
 // }
@@ -3092,14 +3092,14 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
   // --- (line: 56) skipped ---
   //     }
   // 
-  //     module testMod {
+  //     namespace testMod {
   //         var boo = /*FIND ALL REFS*/foo;
   //     }
   // }
@@ -3316,7 +3316,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -3336,7 +3336,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -3383,7 +3383,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
@@ -4255,7 +4255,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -4275,7 +4275,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -4322,7 +4322,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 
@@ -4418,7 +4418,7 @@
 //     return x++;
 // }|>
 // 
-// module modTest {
+// namespace modTest {
 //     //Declare
 // --- (line: 39) skipped ---
 
@@ -4438,7 +4438,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -4485,7 +4485,7 @@
   //     return x++;
   // }|>
   // 
-  // module modTest {
+  // namespace modTest {
   //     //Declare
   // --- (line: 39) skipped ---
 

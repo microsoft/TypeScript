@@ -9,7 +9,7 @@ interface Window {
 }
 declare var window: Window;
 
-module Foo {
+namespace Foo {
     var x = "test1";
     var y = "test 2\
 isn't this a lot of fun";

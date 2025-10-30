@@ -5,7 +5,7 @@ es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts(1,8): error TS1192: Mod
     export var a = 10;
     
 ==== es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts (1 errors) ====
-    import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
+    import defaultBinding, * as nameSpaceBinding  from "./es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
            ~~~~~~~~~~~~~~
 !!! error TS1192: Module '"es6ImportDefaultBindingFollowedWithNamespaceBinding_0"' has no default export.
     var x: number = nameSpaceBinding.a;

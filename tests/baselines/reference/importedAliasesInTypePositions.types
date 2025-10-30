@@ -21,7 +21,7 @@ import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 >ReferredTo : ReferredTo
 >           : ^^^^^^^^^^
 
-export module ImportingModule {
+export namespace ImportingModule {
 >ImportingModule : typeof ImportingModule
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ export module ImportingModule {
     }
 }
 === file1.ts ===
-export module elaborate.nested.mod.name {
+export namespace elaborate.nested.mod.name {
 >elaborate : typeof elaborate
 >          : ^^^^^^^^^^^^^^^^
 >nested : typeof nested

@@ -111,7 +111,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
     static filter<R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
 }
 
-export declare module Promise {
+export declare namespace Promise {
 	export interface Thenable<R> {
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>;
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>;

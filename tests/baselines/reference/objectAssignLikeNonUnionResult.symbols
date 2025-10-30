@@ -30,7 +30,7 @@ const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
 >assign : Symbol(assign, Decl(objectAssignLikeNonUnionResult.ts, 3, 45))
 >defaultValue : Symbol(defaultValue, Decl(objectAssignLikeNonUnionResult.ts, 3, 5))
 >Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
 >field : Symbol(field, Decl(objectAssignLikeNonUnionResult.ts, 9, 53))
 

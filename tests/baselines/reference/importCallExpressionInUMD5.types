@@ -21,7 +21,9 @@ async function func() {
 
     const packageJson = await import(packageName + '/package.json');
 >packageJson : any
+>            : ^^^
 >await import(packageName + '/package.json') : any
+>                                            : ^^^
 >import(packageName + '/package.json') : Promise<any>
 >                                      : ^^^^^^^^^^^^
 >packageName + '/package.json' : string
