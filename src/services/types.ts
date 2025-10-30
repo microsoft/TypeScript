@@ -41,9 +41,9 @@ import {
     TextRange,
     TextSpan,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Node {
         getSourceFile(): SourceFile;
@@ -73,21 +73,21 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Identifier {
         readonly text: string;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface PrivateIdentifier {
         readonly text: string;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Symbol {
         readonly name: string;
@@ -104,7 +104,7 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Type {
         getFlags(): TypeFlags;
@@ -136,14 +136,14 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface TypeReference {
         typeArguments?: readonly Type[];
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
@@ -156,7 +156,7 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceFile {
         /** @internal */ version: string;
@@ -175,14 +175,14 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
@@ -248,6 +248,7 @@ export interface PreProcessedFileInfo {
     libReferenceDirectives: FileReference[];
     importedFiles: FileReference[];
     ambientExternalModules?: string[];
+    /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
     isLibFile: boolean;
 }
 
@@ -430,8 +431,9 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
-
+    /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 
@@ -443,6 +445,12 @@ export type WithMetadata<T> = T & { metadata?: unknown; };
 export const enum SemanticClassificationFormat {
     Original = "original",
     TwentyTwenty = "2020",
+}
+
+/** @internal */
+export interface RegionDiagnosticsResult {
+    diagnostics: Diagnostic[];
+    spans: TextSpan[];
 }
 
 //
@@ -488,6 +496,12 @@ export interface LanguageService {
      * @param fileName A path to the file you want semantic diagnostics for
      */
     getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+    /**
+     * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
+     * @internal
+     */
+    getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
 
     /**
      * Gets suggestion diagnostics for a specific file. These diagnostics tend to
@@ -568,8 +582,11 @@ export interface LanguageService {
      *
      * @param fileName The path to the file
      * @param position A zero-based index of the character where you want the quick info
+     * @param maximumLength Maximum length of a quickinfo text before it is truncated.
      */
-    getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number): QuickInfo | undefined;
+    /** @internal */
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength: number | undefined, verbosityLevel: number | undefined): QuickInfo | undefined;
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 
@@ -683,7 +700,14 @@ export interface LanguageService {
 
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
+    /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
+
     dispose(): void;
+    preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
+    getPasteEdits(
+        args: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits;
 }
 
 export interface JsxClosingTagInfo {
@@ -704,6 +728,19 @@ export const enum OrganizeImportsMode {
     All = "All",
     SortAndCombine = "SortAndCombine",
     RemoveUnused = "RemoveUnused",
+}
+
+export interface PasteEdits {
+    edits: readonly FileTextChanges[];
+    fixId?: {};
+}
+
+export interface PasteEditsArgs {
+    targetFile: string;
+    pastedText: string[];
+    pasteLocations: TextRange[];
+    copiedFrom: { file: string; range: TextRange[]; } | undefined;
+    preferences: UserPreferences;
 }
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {
@@ -1200,7 +1237,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
 }
 
 /** @internal */
-export const testFormatSettings = getDefaultFormatCodeSettings("\n");
+export const testFormatSettings: FormatCodeSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
     kind: ScriptElementKind;
@@ -1291,6 +1328,7 @@ export interface QuickInfo {
     displayParts?: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
@@ -1407,6 +1445,10 @@ export interface CompletionInfo {
      */
     isIncomplete?: true;
     entries: CompletionEntry[];
+    /**
+     * Default commit characters for the completion entries.
+     */
+    defaultCommitCharacters?: string[];
 }
 
 export interface CompletionEntryDataAutoImport {
@@ -1519,6 +1561,10 @@ export interface CompletionEntry {
      * is an auto-import.
      */
     data?: CompletionEntryData;
+    /**
+     * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+     */
+    commitCharacters?: string[];
 }
 
 export interface CompletionEntryLabelDetails {

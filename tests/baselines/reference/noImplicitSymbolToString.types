@@ -66,7 +66,7 @@ type StringOrSymbol = string | symbol;
 
 function getKey<S extends StringOrSymbol>(key: S) {
 >getKey : <S extends StringOrSymbol>(key: S) => string
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^
 >key : S
 >    : ^
 
@@ -79,7 +79,7 @@ function getKey<S extends StringOrSymbol>(key: S) {
 
 function getKey1<S extends symbol>(key: S) {
 >getKey1 : <S extends symbol>(key: S) => void
->        : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>        : ^ ^^^^^^^^^      ^^   ^^ ^^^^^^^^^
 >key : S
 >    : ^
 
@@ -134,7 +134,7 @@ function getKey1<S extends symbol>(key: S) {
 
 function getKey2<S extends string>(key: S) {
 >getKey2 : <S extends string>(key: S) => void
->        : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>        : ^ ^^^^^^^^^      ^^   ^^ ^^^^^^^^^
 >key : S
 >    : ^
 

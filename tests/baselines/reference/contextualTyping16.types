@@ -15,7 +15,7 @@ var foo: {id:number;} = {id:4}; foo = {id:5};
 >foo = {id:5} : { id: number; }
 >             : ^^^^^^^^^^^^^^^
 >foo : { id: number; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^
 >{id:5} : { id: number; }
 >       : ^^^^^^^^^^^^^^^
 >id : number

@@ -7,7 +7,7 @@ class C<T> {
 
     static s(p: T) { return p; }
 >s : (p: T) => T
->  : ^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >p : T
 >  : ^
 >p : T

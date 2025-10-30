@@ -14,7 +14,7 @@
 // @Filename: /index.ts
 //// writeFile/**/
 
-verify.importFixModuleSpecifiers("", ["node:fs", "node:fs/promises", "fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("", ["node:fs", "node:fs/promises"]);
 
 goTo.file("/other.ts");
 edit.replaceLine(0, "\n");
@@ -26,4 +26,4 @@ goTo.file("/other.ts");
 edit.replaceLine(0, `import "node:fs/promises";\n`);
 
 goTo.file("/index.ts");
-verify.importFixModuleSpecifiers("", ["node:fs", "node:fs/promises", "fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("", ["node:fs", "node:fs/promises"]);

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedLocalVarsOfTheSameName.ts] ////
 
 === part1.ts ===
-export module A {
+export namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -15,13 +15,13 @@ export module A {
 >  : ^^^^^^
     }
 
-    export module Utils {
+    export namespace Utils {
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 
         export function mirror<T extends Point>(p: T) {
 >mirror : <T extends Point>(p: T) => { x: number; y: number; }
->       : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : T
 >  : ^
 
@@ -63,7 +63,7 @@ export module A {
 }
 
 === part2.ts ===
-export module A {
+export namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -82,7 +82,7 @@ export module A {
 >0 : 0
 >  : ^
 
-    export module Utils {
+    export namespace Utils {
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 

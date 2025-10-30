@@ -3,7 +3,7 @@
 === recursiveTypeComparison2.ts ===
 // Before fix this would cause compiler to hang (#1170)
 
-declare module Bacon {
+declare namespace Bacon {
 >Bacon : typeof Bacon
 >      : ^^^^^^^^^^^^
 
@@ -54,7 +54,7 @@ declare module Bacon {
 >initState : U
 >          : ^
 >f : (state: U, event: Event<T>) => StateValue<U, V>
->  : ^     ^^ ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^ ^^     ^^        ^^^^^                
 >state : U
 >      : ^
 >event : Event<T>
@@ -119,9 +119,9 @@ var stuck: Bacon.Bus<number> = new Bacon.Bus();
 >new Bacon.Bus() : Bacon.Bus<number>
 >                : ^^^^^^^^^^^^^^^^^
 >Bacon.Bus : new <T>() => Bacon.Bus<T>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^ ^^^^^^^^^^^^^^^^   
 >Bacon : typeof Bacon
 >      : ^^^^^^^^^^^^
 >Bus : new <T>() => Bacon.Bus<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^ ^^^^^^^^^^^^^^^^   
 

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/declFileGenericType2.ts] ////
 
 === declFileGenericType2.ts ===
-declare module templa.mvc {
+declare namespace templa.mvc {
     interface IModel {
     }
 }
-declare module templa.mvc {
+declare namespace templa.mvc {
     interface IController<ModelType extends templa.mvc.IModel> {
 >templa : any
 >       : ^^^
@@ -13,7 +13,7 @@ declare module templa.mvc {
 >    : ^^^
     }
 }
-declare module templa.mvc {
+declare namespace templa.mvc {
 >templa : typeof templa
 >       : ^^^^^^^^^^^^^
 >mvc : typeof mvc
@@ -30,7 +30,7 @@ declare module templa.mvc {
 >    : ^^^^^^^^^^
     }
 }
-declare module templa.mvc.composite {
+declare namespace templa.mvc.composite {
     interface ICompositeControllerModel extends mvc.IModel {
 >mvc : typeof mvc
 >    : ^^^^^^^^^^
@@ -44,7 +44,7 @@ declare module templa.mvc.composite {
 >    : ^^^
     }
 }
-module templa.dom.mvc {
+namespace templa.dom.mvc {
     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
 >templa : any
 >       : ^^^
@@ -59,7 +59,7 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc {
+namespace templa.dom.mvc {
 >templa : typeof templa
 >       : ^^^^^^^^^^^^^
 >dom : typeof dom
@@ -95,7 +95,7 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc.composite {
+namespace templa.dom.mvc.composite {
 >templa : typeof templa
 >       : ^^^^^^^^^^^^^
 >dom : typeof dom

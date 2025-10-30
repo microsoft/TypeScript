@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/multipleExports.ts] ////
 
 === multipleExports.ts ===
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -22,7 +22,7 @@ const x = 0;
 >0 : 0
 >  : ^
 
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

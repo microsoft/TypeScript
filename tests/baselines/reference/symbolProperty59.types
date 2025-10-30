@@ -5,10 +5,10 @@ interface I {
     [Symbol.keyFor]: string;
 >[Symbol.keyFor] : string
 >                : ^^^^^^
->Symbol.keyFor : (sym: symbol) => string
->              : ^   ^^      ^^^^^^^^^^^
+>Symbol.keyFor : (sym: symbol) => string | undefined
+>              : ^   ^^      ^^^^^                  
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->keyFor : (sym: symbol) => string
->       : ^   ^^      ^^^^^^^^^^^
+>keyFor : (sym: symbol) => string | undefined
+>       : ^   ^^      ^^^^^                  
 }

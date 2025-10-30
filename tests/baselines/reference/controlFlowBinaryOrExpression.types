@@ -98,7 +98,7 @@ if (isNodeList(sourceObj)) {
 >isNodeList(sourceObj) : boolean
 >                      : ^^^^^^^
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->           : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^   ^^^^^                     
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 
@@ -115,7 +115,7 @@ if (isHTMLCollection(sourceObj)) {
 >isHTMLCollection(sourceObj) : boolean
 >                            : ^^^^^^^
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->                 : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^         ^^   ^^^^^                           
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 
@@ -134,15 +134,15 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >isNodeList(sourceObj) : boolean
 >                      : ^^^^^^^
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->           : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^   ^^^^^                     
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 >isHTMLCollection(sourceObj) : boolean
 >                            : ^^^^^^^
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->                 : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^         ^^   ^^^^^                           
 >sourceObj : { a: string; }
->          : ^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^
 
     sourceObj.length;
 >sourceObj.length : number

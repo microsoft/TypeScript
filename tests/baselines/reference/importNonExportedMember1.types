@@ -11,7 +11,7 @@ declare function bar(): any;
 
 export { foo };
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 === b.ts ===
 import { bar } from "./a";

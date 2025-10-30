@@ -12,8 +12,8 @@ x.a ??= true;
 >             : ^^^^^^^
 >x.a : boolean | undefined
 >    : ^^^^^^^^^^^^^^^^^^^
->x : { a?: boolean | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: boolean; }
+>  : ^^^^^^       ^^^
 >a : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 >true : true
@@ -24,8 +24,8 @@ x.a &&= false;
 >              : ^^^^^^^^^^^^^^^^^
 >x.a : boolean | undefined
 >    : ^^^^^^^^^^^^^^^^^^^
->x : { a?: boolean | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: boolean; }
+>  : ^^^^^^       ^^^
 >a : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 >false : false

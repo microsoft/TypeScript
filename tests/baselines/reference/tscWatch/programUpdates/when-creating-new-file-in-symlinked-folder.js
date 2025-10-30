@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/client/folder1/module1.ts]
 export class Module1Class { }
@@ -7,6 +7,7 @@ export class Module1Class { }
 import * as M from "folder1/module1";
 
 //// [/user/username/projects/myproject/client/linktofolder2] symlink(/user/username/projects/myproject/folder2)
+
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
@@ -23,8 +24,7 @@ import * as M from "folder1/module1";
   ]
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -35,9 +35,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p . --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w -p . --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -49,17 +51,18 @@ CreatingProgramWith::
   options: {"baseUrl":"/user/username/projects/myproject/client","paths":{"*":["*"]},"pathsBasePath":"/user/username/projects/myproject","watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/folder1/module1.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/linktofolder2/module2.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/folder1/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder2/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "client",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client 1 undefined Wild card directory
@@ -86,23 +89,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/user/username/projects/myproject/client/folder1/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/client/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/folder2/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/client/folder1/module1.ts: *new*
   {}
@@ -136,17 +129,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/client/folder1/module1.ts
 /user/username/projects/myproject/client/linktofolder2/module2.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/client/folder1/module1.ts
-/user/username/projects/myproject/client/linktofolder2/module2.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/client/folder1/module1.ts (used version)
 /user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
 
@@ -171,6 +161,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
@@ -184,7 +175,13 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/linkto
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.js :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/folder2/module3.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.js :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "baseUrl": "client",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -195,23 +192,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/user/username/projects/myproject/client/folder1/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/client/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/folder2/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/client/folder1/module1.ts:
   {}
@@ -249,13 +236,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/client/folder1/module1.ts
 /user/username/projects/myproject/client/linktofolder2/module2.ts
 /user/username/projects/myproject/client/linktofolder2/module3.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/client/linktofolder2/module3.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/linktofolder2/module3.ts (computed .d.ts)

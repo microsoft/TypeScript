@@ -50,7 +50,7 @@ b ++;
 >       : ^^^^^^
 
 // modules
-module moduleType1 { 
+namespace moduleType1 { 
 >moduleType1 : typeof moduleType1
 >            : ^^^^^^^^^^^^^^^^^^
 

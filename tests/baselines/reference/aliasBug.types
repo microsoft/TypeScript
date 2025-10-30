@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/aliasBug.ts] ////
 
 === aliasBug.ts ===
-module foo {    
+namespace foo {    
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -10,7 +10,7 @@ module foo {
 >        : ^^^^^^^
     }
 
-    export module bar { export module baz {export class boo {}}}
+    export namespace bar { export namespace baz {export class boo {}}}
 >bar : typeof bar
 >    : ^^^^^^^^^^
 >baz : typeof baz

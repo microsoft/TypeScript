@@ -19,45 +19,45 @@ declare var abq: { a: number, b?: number };
 
 var unused1 = { b: 1, ...ab } // error
 >unused1 : { a: number; b: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^
 >{ b: 1, ...ab } : { a: number; b: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^      ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >ab : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 var unused2 = { ...ab, ...ab } // ok, overwritten error doesn't apply to spreads
 >unused2 : { a: number; b: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^
 >{ ...ab, ...ab } : { a: number; b: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^      ^^^^^      ^^^
 >ab : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >ab : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 var unused3 = { b: 1, ...abq } // ok, abq might have b: undefined
 >unused3 : { a: number; b: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^
 >{ b: 1, ...abq } : { a: number; b: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^      ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
->abq : { a: number; b?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>abq : { a: number; b?: number; }
+>    : ^^^^^      ^^^^^^      ^^^
 
 var unused4 = { ...ab, b: 1 } // ok, we don't care that b in ab is overwritten
 >unused4 : { b: number; a: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^      ^^^
 >{ ...ab, b: 1 } : { b: number; a: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^      ^^^
 >ab : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >1 : 1
@@ -65,11 +65,11 @@ var unused4 = { ...ab, b: 1 } // ok, we don't care that b in ab is overwritten
 
 var unused5 = { ...abq, b: 1 } // ok
 >unused5 : { b: number; a: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^      ^^^
 >{ ...abq, b: 1 } : { b: number; a: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->abq : { a: number; b?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^      ^^^
+>abq : { a: number; b?: number; }
+>    : ^^^^^      ^^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >1 : 1
@@ -85,13 +85,13 @@ function g(obj: { x: number | undefined }) {
 
     return { x: 1, ...obj }; // ok, obj might have x: undefined
 >{ x: 1, ...obj } : { x: number | undefined; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^                  ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >obj : { x: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^                  ^^^
 }
 function f(obj: { x: number } | undefined) {
 >f : (obj: { x: number; } | undefined) => { x: number; }
@@ -103,13 +103,13 @@ function f(obj: { x: number } | undefined) {
 
     return { x: 1, ...obj }; // ok, obj might be undefined
 >{ x: 1, ...obj } : { x: number; }
->                 : ^^^^^^^^^^^^^^
+>                 : ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >obj : { x: number; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 }
 function h(obj: { x: number } | { x: string }) {
 >h : (obj: { x: number; } | { x: string; }) => { x: number; } | { x: string; }
@@ -123,13 +123,13 @@ function h(obj: { x: number } | { x: string }) {
 
     return { x: 1, ...obj } // error
 >{ x: 1, ...obj } : { x: number; } | { x: string; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >obj : { x: number; } | { x: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^^^^^^^      ^^^
 }
 function i(b: boolean, t: { command: string, ok: string }) {
 >i : (b: boolean, t: { command: string; ok: string; }) => { command: string; ok?: string | undefined; }
@@ -145,19 +145,19 @@ function i(b: boolean, t: { command: string, ok: string }) {
 
     return { command: "hi", ...(b ? t : {}) } // ok
 >{ command: "hi", ...(b ? t : {}) } : { command: string; ok?: string | undefined; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >command : string
 >        : ^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 >(b ? t : {}) : { command: string; ok: string; } | {}
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^
 >b ? t : {} : { command: string; ok: string; } | {}
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 >t : { command: string; ok: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^      ^^^
 >{} : {}
 >   : ^^
 }
@@ -193,7 +193,7 @@ function k(t: { command: string, ok: string }) {
 
     return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
 >{ command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } : { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
->                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                              : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >command : string
 >        : ^^^^^^
 >"hi" : "hi"
@@ -209,7 +209,7 @@ function k(t: { command: string, ok: string }) {
 >true : true
 >     : ^^^^
 >t : { command: string; ok: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^      ^^^
 }
 
 function l(anyrequired: { a: any }) {
@@ -222,13 +222,13 @@ function l(anyrequired: { a: any }) {
 
     return { a: 'zzz', ...anyrequired } // error
 >{ a: 'zzz', ...anyrequired } : { a: any; }
->                             : ^^^^^^^^^^^
+>                             : ^^^^^   ^^^
 >a : string
 >  : ^^^^^^
 >'zzz' : "zzz"
 >      : ^^^^^
 >anyrequired : { a: any; }
->            : ^^^^^^^^^^^
+>            : ^^^^^   ^^^
 }
 function m(anyoptional: { a?: any }) {
 >m : (anyoptional: { a?: any; }) => { a: any; }
@@ -240,13 +240,13 @@ function m(anyoptional: { a?: any }) {
 
     return { a: 'zzz', ...anyoptional } // ok
 >{ a: 'zzz', ...anyoptional } : { a: any; }
->                             : ^^^^^^^^^^^
+>                             : ^^^^^   ^^^
 >a : string
 >  : ^^^^^^
 >'zzz' : "zzz"
 >      : ^^^^^
 >anyoptional : { a?: any; }
->            : ^^^^^^^^^^^^
+>            : ^^^^^^   ^^^
 }
 
 

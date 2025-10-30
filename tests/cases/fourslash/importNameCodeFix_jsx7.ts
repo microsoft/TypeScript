@@ -3,8 +3,7 @@
 // @jsx: react
 // @module: esnext
 // @esModuleInterop: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /node_modules/react/index.d.ts
 ////// React was not defined
 

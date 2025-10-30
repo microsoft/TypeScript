@@ -7,7 +7,7 @@ class Foo<T> {
 
   public clone<U>() {
 >clone : <U>() => any
->      : ^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^
 
    return null;
    }
@@ -26,9 +26,9 @@ var r = f.clone<Uhhhh>()
 >f.clone<Uhhhh>() : any
 >                 : ^^^
 >f.clone : <U>() => any
->        : ^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^
 >f : Foo<number>
 >  : ^^^^^^^^^^^
 >clone : <U>() => any
->      : ^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^
 

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts] ////
 
 === genericRecursiveImplicitConstructorErrors2.ts ===
-module TypeScript2 {
+namespace TypeScript2 {
 >TypeScript2 : typeof TypeScript2
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ module TypeScript2 {
     // link methods
     public addOutgoingLink<A,B,C>(linkTo: PullSymbol, kind: SymbolLinkKind) {
 >addOutgoingLink : <A, B, C>(linkTo: PullSymbol, kind: SymbolLinkKind) => void
->                : ^^^^^^^^^^      ^^          ^^    ^^              ^^^^^^^^^
+>                : ^ ^^ ^^ ^^      ^^          ^^    ^^              ^^^^^^^^^
 >linkTo : PullSymbol
 >       : ^^^^^^^^^^
 >kind : SymbolLinkKind

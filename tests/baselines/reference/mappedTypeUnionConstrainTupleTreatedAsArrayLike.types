@@ -7,7 +7,7 @@ type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean 
 
 function test1<T extends [number] | [string]>(args: T) {
 >test1 : <T extends [number] | [string]>(args: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                   ^^    ^^ ^^^^^^^^^
 >args : T
 >     : ^
 
@@ -30,7 +30,7 @@ function test1<T extends [number] | [string]>(args: T) {
 
 function test2<T extends [number] | readonly [string]>(args: T) {
 >test2 : <T extends [number] | readonly [string]>(args: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                            ^^    ^^ ^^^^^^^^^
 >args : T
 >     : ^
 

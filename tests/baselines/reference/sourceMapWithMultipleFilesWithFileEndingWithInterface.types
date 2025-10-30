@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapWithMultipleFilesWithFileEndingWithInterface.ts] ////
 
 === a.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -13,8 +13,8 @@ module M {
 }
 interface Navigator {
     getGamepads(func?: any): any;
->getGamepads : { (): Gamepad[]; (func?: any): any; }
->            : ^^^^^^^^^^^^^^^^^^    ^^^   ^^^   ^^^
+>getGamepads : { (): (Gamepad | null)[]; (func?: any): any; }
+>            : ^^^^^^                  ^^^    ^^^   ^^^   ^^^
 >func : any
 
     webkitGetGamepads(func?: any): any
@@ -34,7 +34,7 @@ interface Navigator {
 }
 
 === b.ts ===
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 

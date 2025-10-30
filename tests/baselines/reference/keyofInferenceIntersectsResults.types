@@ -33,7 +33,7 @@ const a = foo<X>('a', 'b'); // compiles cleanly
 >foo<X>('a', 'b') : X
 >                 : ^
 >foo : <T = X>(x: keyof T, y: keyof T) => T
->    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^^
+>    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^ 
 >'a' : "a"
 >    : ^^^
 >'b' : "b"
@@ -45,7 +45,7 @@ const b = foo('a', 'b');    // also clean
 >foo('a', 'b') : { a: any; } & { b: any; }
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T = X>(x: keyof T, y: keyof T) => T
->    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^^
+>    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^ 
 >'a' : "a"
 >    : ^^^
 >'b' : "b"
@@ -57,7 +57,7 @@ const c = bar('a', 'b');    // still clean
 >bar('a', 'b') : { a: any; } & { b: any; }
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : <T>(x: keyof T, y: keyof T) => T
->    : ^ ^^ ^^       ^^ ^^       ^^^^^^
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^ 
 >'a' : "a"
 >    : ^^^
 >'b' : "b"

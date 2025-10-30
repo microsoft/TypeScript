@@ -17,7 +17,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -27,7 +27,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -37,7 +37,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >'hello' : "hello"
@@ -49,7 +49,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -61,7 +61,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >undefined : undefined
@@ -73,7 +73,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
@@ -92,11 +92,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 
     obj = obj;
 >obj = obj : { a?: string; b?: string | undefined; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^      ^^^^^^                  ^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 
     obj.a = obj.a;  // Error
 >obj.a = obj.a : string | undefined
@@ -104,13 +104,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >obj.a : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -120,13 +120,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -136,13 +136,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >'a' : "a"
 >    : ^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 
         obj.a;
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 
@@ -152,13 +152,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
     }
@@ -167,7 +167,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : undefined
 >      : ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : undefined
 >  : ^^^^^^^^^
 
@@ -177,13 +177,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >obj.a : undefined
 >      : ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : undefined
 >  : ^^^^^^^^^
     }
@@ -191,11 +191,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.hasOwnProperty('a') : boolean
 >                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^ ^^           ^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^       
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >'a' : "a"
 >    : ^^^
 
@@ -203,7 +203,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 
@@ -213,13 +213,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
     }
@@ -228,7 +228,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : undefined
 >      : ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : undefined
 >  : ^^^^^^^^^
 
@@ -238,13 +238,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
 >obj.a : undefined
 >      : ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >a : undefined
 >  : ^^^^^^^^^
     }
@@ -254,13 +254,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >'b' : "b"
 >    : ^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 
         obj.b;
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -270,13 +270,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     }
@@ -285,7 +285,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -295,13 +295,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     }
@@ -309,11 +309,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.hasOwnProperty('b') : boolean
 >                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^ ^^           ^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^       
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >'b' : "b"
 >    : ^^^
 
@@ -321,7 +321,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -331,13 +331,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     }
@@ -346,7 +346,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -356,13 +356,13 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     }
@@ -384,7 +384,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >obj.a : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -394,7 +394,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -404,7 +404,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >obj.a : string
 >      : ^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
 >  : ^^^^^^
 >'hello' : "hello"
@@ -416,7 +416,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -428,7 +428,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >obj.a : string
 >      : ^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
 >  : ^^^^^^
 >undefined : undefined
@@ -440,7 +440,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
@@ -751,7 +751,7 @@ const completeProps: Props = { ...defaultProps, ...inputProps };
 >completeProps : Props
 >              : ^^^^^
 >{ ...defaultProps, ...inputProps } : { foo: string; bar: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^      ^^^^^^^      ^^^
 >defaultProps : Pick<Props, "foo">
 >             : ^^^^^^^^^^^^^^^^^^
 >inputProps : InputProps
@@ -821,13 +821,13 @@ const y: { foo: number } = { foo: 123, ...x };
 >foo : number
 >    : ^^^^^^
 >{ foo: 123, ...x } : { foo: number; }
->                   : ^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^      ^^^
 >foo : number
 >    : ^^^^^^
 >123 : 123
 >    : ^^^
 >x : { foo?: number; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 
 // Index signatures and strict optional properties
 
@@ -899,33 +899,33 @@ f11(ox1);  // string
 >f11(ox1) : string
 >         : ^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox1 : { p: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
 f11(ox2);  // string | undefined
 >f11(ox2) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox2 : { p: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^                  ^^^
 
 f11(ox3);  // string
 >f11(ox3) : string
 >         : ^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox3 : { p?: string; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^
 
 f11(ox4);  // string | undefined
 >f11(ox4) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox4 : { p?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  ^^^
 
 declare function f12<T>(x: [T?]): T;
 >f12 : <T>(x: [T?]) => T
@@ -937,7 +937,7 @@ f12(tx1);  // string
 >f12(tx1) : string
 >         : ^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^ ^^ ^^    ^^^^^^
+>    : ^ ^^ ^^    ^^^^^ 
 >tx1 : [string]
 >    : ^^^^^^^^
 
@@ -945,7 +945,7 @@ f12(tx2);  // string | undefined
 >f12(tx2) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^ ^^ ^^    ^^^^^^
+>    : ^ ^^ ^^    ^^^^^ 
 >tx2 : [string | undefined]
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -953,7 +953,7 @@ f12(tx3);  // string
 >f12(tx3) : string
 >         : ^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^ ^^ ^^    ^^^^^^
+>    : ^ ^^ ^^    ^^^^^ 
 >tx3 : [string?]
 >    : ^^^^^^^^^
 
@@ -961,7 +961,7 @@ f12(tx4);  // string | undefined
 >f12(tx4) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^ ^^ ^^    ^^^^^^
+>    : ^ ^^ ^^    ^^^^^ 
 >tx4 : [(string | undefined)?]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -973,41 +973,41 @@ declare function f13<T>(x: Partial<T>): T;
 
 f13(ox1);  // { p: string }
 >f13(ox1) : { p: string; }
->         : ^^^^^^^^^^^^^^
+>         : ^^^^^      ^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox1 : { p: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
 f13(ox2);  // { p: string | undefined }
 >f13(ox2) : { p: string | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^                  ^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox2 : { p: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^                  ^^^
 
 f13(ox3);  // { p: string }
 >f13(ox3) : { p: string; }
->         : ^^^^^^^^^^^^^^
+>         : ^^^^^      ^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox3 : { p?: string; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^
 
 f13(ox4);  // { p: string | undefined }
 >f13(ox4) : { p: string | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^                  ^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >ox4 : { p?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  ^^^
 
 f13(tx1);  // [string]
 >f13(tx1) : [string]
 >         : ^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >tx1 : [string]
 >    : ^^^^^^^^
 
@@ -1015,7 +1015,7 @@ f13(tx2);  // [string | undefined]
 >f13(tx2) : [string | undefined]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >tx2 : [string | undefined]
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -1023,7 +1023,7 @@ f13(tx3);  // [string]
 >f13(tx3) : [string]
 >         : ^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >tx3 : [string?]
 >    : ^^^^^^^^^
 
@@ -1031,7 +1031,7 @@ f13(tx4);  // [string | undefined]
 >f13(tx4) : [string | undefined]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >tx4 : [(string | undefined)?]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1086,7 +1086,7 @@ function aa(input: Bar): void {
 >expectNotUndefined(input.bar) : number
 >                              : ^^^^^^
 >expectNotUndefined : <T>(value: Undefinable<T>) => T
->                   : ^ ^^     ^^              ^^^^^^
+>                   : ^ ^^     ^^              ^^^^^ 
 >input.bar : number | undefined
 >          : ^^^^^^^^^^^^^^^^^^
 >input : Bar
@@ -1098,7 +1098,7 @@ function aa(input: Bar): void {
 >bb(notUndefinedVal) : void
 >                    : ^^^^
 >bb : (input: number) => void
->   : ^     ^^      ^^^^^^^^^
+>   : ^     ^^      ^^^^^    
 >notUndefinedVal : number
 >                : ^^^^^^
 }
@@ -1226,27 +1226,27 @@ declare var e: {a: number, b?: string | undefined }
 
 a = b;
 >a = b : { a: number; b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^
 >a : { [x: string]: string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { a: number; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 
 a = c;
 >a = c : { a: number; b?: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^      ^^^
 >a : { [x: string]: string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : { a: number; b?: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
 a = d;  // Error
 >a = d : { a: number; b: string | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^                  ^^^
 >a : { [x: string]: string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : { a: number; b: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^                  ^^^
 
 a = e;  // Error
 >a = e : string | boolean | undefined

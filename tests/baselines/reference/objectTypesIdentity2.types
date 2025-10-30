@@ -123,9 +123,9 @@ function foo7(x: typeof a); // ok
 >foo7 : { (x: A): any; (x: typeof a): any; }
 >     : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo: RegExp; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >a : { foo: RegExp; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
 function foo7(x: any) { }
 >foo7 : { (x: A): any; (x: typeof a): any; }
@@ -176,9 +176,9 @@ function foo10(x: typeof a); // ok
 >foo10 : { (x: B): any; (x: typeof a): any; }
 >      : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo: RegExp; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >a : { foo: RegExp; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
 function foo10(x: any) { }
 >foo10 : { (x: B): any; (x: typeof a): any; }
@@ -231,9 +231,9 @@ function foo13(x: typeof a); // ok
 >foo13 : { (x: I): any; (x: typeof a): any; }
 >      : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo: RegExp; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >a : { foo: RegExp; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
 function foo13(x: any) { }
 >foo13 : { (x: I): any; (x: typeof a): any; }

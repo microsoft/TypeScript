@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constDeclarations-access3.ts] ////
 
 === constDeclarations-access3.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -306,7 +306,7 @@ M.x.toString();
 >M.x.toString() : string
 >               : ^^^^^^
 >M.x.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >M.x : 0
 >    : ^
 >M : typeof M
@@ -314,5 +314,5 @@ M.x.toString();
 >x : 0
 >  : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 

@@ -2,7 +2,6 @@
 
 // @module: esnext
 // @Filename: foo.ts
-/////// <reference no-default-lib="true"/>
 /////// <reference path='./bar.d.ts' />
 ////im/*1*/port.me/*2*/ta;
 

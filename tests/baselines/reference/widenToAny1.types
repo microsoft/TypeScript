@@ -21,7 +21,7 @@ var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
 >foo1({ x: undefined, y: "def" }) : string
 >                                 : ^^^^^^
 >foo1 : <T>(f1: { x: T; y: T; }) => T
->     : ^ ^^  ^^               ^^^^^^
+>     : ^ ^^  ^^               ^^^^^ 
 >{ x: undefined, y: "def" } : { x: undefined; y: string; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined

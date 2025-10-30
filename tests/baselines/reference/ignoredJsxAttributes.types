@@ -59,7 +59,7 @@ let x1 = <Yadda foo="hello" data-yadda={42}/>;
 ><Yadda foo="hello" data-yadda={42}/> : JSX.Element
 >                                     : ^^^^^^^^^^^
 >Yadda : (props: Props) => JSX.Element
->      : ^     ^^     ^^^^^^^^^^^^^^^^
+>      : ^     ^^     ^^^^^           
 >foo : string
 >    : ^^^^^^
 >data-yadda : number
@@ -73,7 +73,7 @@ let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
 ><Yadda bar="hello" data-yadda={42}/> : JSX.Element
 >                                     : ^^^^^^^^^^^
 >Yadda : (props: Props) => JSX.Element
->      : ^     ^^     ^^^^^^^^^^^^^^^^
+>      : ^     ^^     ^^^^^           
 >bar : string
 >    : ^^^^^^
 >data-yadda : number

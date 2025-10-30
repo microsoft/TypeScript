@@ -21,11 +21,11 @@ for (var x of Object.values(o)) {
 >Object.values(o) : number[]
 >                 : ^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >o : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -42,11 +42,11 @@ var entries = Object.entries(o);
 >Object.entries(o) : [string, number][]
 >                  : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >o : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

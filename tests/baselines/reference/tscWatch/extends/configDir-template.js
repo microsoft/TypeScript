@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/configs/first/tsconfig.json]
 {
@@ -70,8 +70,7 @@ export const x = 10;
 export const k = 10;
 
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -82,9 +81,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --extendedDiagnostics --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -94,44 +95,42 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/myproject/main.ts","/home/src/projects/myproject/src/secondary.ts"]
   options: {"declarationDir":"/home/src/projects/myproject/decls","paths":{"@myscope/*":["/home/src/projects/myproject/types/*"],"other/*":["other/*"]},"baseUrl":"/home/src/projects/myproject","pathsBasePath":"/home/src/projects/configs/second","typeRoots":["/home/src/projects/configs/first/root1","/home/src/projects/myproject/root2","/home/src/projects/configs/first/root3"],"types":[],"declaration":true,"outDir":"/home/src/projects/myproject/outDir","traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/myproject/tsconfig.json"}
+ExcludeWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
+'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
+Module name '@myscope/sometype', matched pattern '@myscope/*'.
+Trying substitution '/home/src/projects/myproject/types/*', candidate module location: '/home/src/projects/myproject/types/sometype'.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
+File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
+======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
+FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/sometype.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/secondary.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
+'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
+Module name 'other/sometype2', matched pattern 'other/*'.
+Trying substitution 'other/*', candidate module location: 'other/sometype2'.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, JavaScript, Declaration, JSON.
+File '/home/src/projects/myproject/src/package.json' does not exist.
 File '/home/src/projects/myproject/package.json' does not exist.
 File '/home/src/projects/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-ExcludeWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
-'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
-Module name '@myscope/sometype', matched pattern '@myscope/*'.
-Trying substitution '/home/src/projects/myproject/types/*', candidate module location: '/home/src/projects/myproject/types/sometype'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
-File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
-======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-File '/home/src/projects/myproject/types/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/sometype.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-File '/home/src/projects/myproject/src/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/secondary.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
-'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
-Module name 'other/sometype2', matched pattern 'other/*'.
-Trying substitution 'other/*', candidate module location: 'other/sometype2'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, Declaration.
-Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
@@ -144,23 +143,14 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/root2/other/package.json' does not exist.
-File '/home/src/projects/myproject/root2/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
@@ -169,14 +159,19 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFile
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
-../../../../a/lib/lib.d.ts
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/myproject/outDir :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/outDir :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/myproject/decls :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/decls :: WatchInfo: /home/src/projects/myproject 0 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+[96mtsconfig.json[0m:[93m3[0m:[93m3[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -186,7 +181,7 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Wild card directory
@@ -235,29 +230,17 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/myproject/other: *new*
   {"pollingInterval":500}
-/home/src/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/sometype2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/types/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects: *new*
   {}
 /home/src/projects/configs/first/tsconfig.json: *new*
   {}
 /home/src/projects/configs/second/tsconfig.json: *new*
+  {}
+/home/src/projects/myproject: *new*
   {}
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts: *new*
   {}
@@ -266,6 +249,8 @@ FsWatches::
 /home/src/projects/myproject/tsconfig.json: *new*
   {}
 /home/src/projects/myproject/types/sometype.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -308,21 +293,16 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/home/src/projects/myproject/types/sometype.ts
-/home/src/projects/myproject/main.ts
-/home/src/projects/myproject/root2/other/sometype2/index.d.ts
-/home/src/projects/myproject/src/secondary.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/myproject/types/sometype.ts (computed .d.ts during emit)
 /home/src/projects/myproject/main.ts (computed .d.ts during emit)
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts (used version)
@@ -360,6 +340,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading config file: /home/src/projects/myproject/tsconfig.json
@@ -369,41 +350,39 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/myproject/main.ts","/home/src/projects/myproject/src/secondary.ts"]
   options: {"declarationDir":"/home/src/projects/myproject/decls","paths":{"@myscope/*":["/home/src/projects/myproject/types/*"],"other/*":["other/*"]},"baseUrl":"/home/src/projects/myproject","pathsBasePath":"/home/src/projects/configs/second","typeRoots":["/home/src/projects/myproject/root2"],"types":[],"declaration":true,"outDir":"/home/src/projects/myproject/outDir","traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/myproject/tsconfig.json"}
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
 'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
 Module name '@myscope/sometype', matched pattern '@myscope/*'.
 Trying substitution '/home/src/projects/myproject/types/*', candidate module location: '/home/src/projects/myproject/types/sometype'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-File '/home/src/projects/myproject/types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
+'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
+Module name 'other/sometype2', matched pattern 'other/*'.
+Trying substitution 'other/*', candidate module location: 'other/sometype2'.
+Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
-'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
-Module name 'other/sometype2', matched pattern 'other/*'.
-Trying substitution 'other/*', candidate module location: 'other/sometype2'.
-Loading module as file / folder, candidate module location '/home/src/projects/myproject/other/sometype2', target file types: TypeScript, Declaration.
-Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Loading module 'other/sometype2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/myproject/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
@@ -415,20 +394,15 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/root2/other/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/root2/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-../../../../a/lib/lib.d.ts
+[96mtsconfig.json[0m:[93m3[0m:[93m3[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -438,7 +412,7 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -448,29 +422,17 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/myproject/other:
   {"pollingInterval":500}
-/home/src/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/sometype2/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/types/package.json:
-  {"pollingInterval":2000}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/projects:
   {}
 /home/src/projects/configs/first/tsconfig.json:
   {}
 /home/src/projects/configs/second/tsconfig.json:
+  {}
+/home/src/projects/myproject:
   {}
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts:
   {}
@@ -479,6 +441,8 @@ FsWatches::
 /home/src/projects/myproject/tsconfig.json:
   {}
 /home/src/projects/myproject/types/sometype.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -522,13 +486,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

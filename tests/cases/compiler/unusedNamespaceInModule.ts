@@ -1,7 +1,7 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
-module A {
+namespace A {
     namespace B { }
     export namespace C {}
 }

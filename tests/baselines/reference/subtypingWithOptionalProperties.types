@@ -20,16 +20,16 @@ function f<T>(a: T) {
 
     return b;
 >b : { s?: number; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^      ^^^
 }
 
 var r = f({ s: new Object() }); // ok
 >r : { s?: number; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^      ^^^
 >f({ s: new Object() }) : { s?: number; }
->                       : ^^^^^^^^^^^^^^^
+>                       : ^^^^^^      ^^^
 >f : <T>(a: T) => { s?: number; }
->  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^^^^      ^^^
 >{ s: new Object() } : { s: Object; }
 >                    : ^^^^^^^^^^^^^^
 >s : Object
@@ -45,19 +45,19 @@ r.s && r.s.toFixed(); // would blow up at runtime
 >r.s : number
 >    : ^^^^^^
 >r : { s?: number; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^      ^^^
 >s : number
 >  : ^^^^^^
 >r.s.toFixed() : string
 >              : ^^^^^^
 >r.s.toFixed : (fractionDigits?: number) => string
->            : ^              ^^^      ^^^^^^^^^^^
+>            : ^              ^^^      ^^^^^      
 >r.s : number
 >    : ^^^^^^
 >r : { s?: number; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^      ^^^
 >s : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 

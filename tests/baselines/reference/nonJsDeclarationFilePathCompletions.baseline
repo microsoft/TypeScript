@@ -1,5 +1,5 @@
 // === Completions ===
-=== /project/usage.ts ===
+=== /home/src/workspaces/project/usage.ts ===
 // import { HtmlModuleThing } from "./";
 //                                    ^
 // | ----------------------------------------------------------------------
@@ -15,7 +15,7 @@
 [
   {
     "marker": {
-      "fileName": "/project/usage.ts",
+      "fileName": "/home/src/workspaces/project/usage.ts",
       "position": 35,
       "name": "1"
     },
@@ -50,12 +50,13 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   },
   {
     "marker": {
-      "fileName": "/project/usage.ts",
+      "fileName": "/home/src/workspaces/project/usage.ts",
       "position": 86,
       "name": "2"
     },
@@ -77,7 +78,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

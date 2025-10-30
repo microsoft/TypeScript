@@ -61,7 +61,7 @@ function f1(b: Bacon) {
 >boxify(b) : Boxified<Bacon>
 >          : ^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^           
 >b : Bacon
 >  : ^^^^^
 
@@ -106,7 +106,7 @@ function f2(bb: Boxified<Bacon>) {
 >unboxify(bb) : Bacon
 >             : ^^^^^
 >unboxify : <T>(obj: Boxified<T>) => T
->         : ^ ^^   ^^           ^^^^^^
+>         : ^ ^^   ^^           ^^^^^ 
 >bb : Boxified<Bacon>
 >   : ^^^^^^^^^^^^^^^
 
@@ -143,7 +143,7 @@ function f3(bb: BoxifiedBacon) {
 >unboxify<Bacon>(bb) : Bacon
 >                    : ^^^^^
 >unboxify : <T>(obj: Boxified<T>) => T
->         : ^ ^^   ^^           ^^^^^^
+>         : ^ ^^   ^^           ^^^^^ 
 >bb : BoxifiedBacon
 >   : ^^^^^^^^^^^^^
 

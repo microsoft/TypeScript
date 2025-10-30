@@ -219,7 +219,7 @@ function check5(obj) {
  */
 function check6(obj) {
 >check6 : (obj: Type6) => any
->       : ^   ^^     ^^^^^^^^
+>       : ^   ^^     ^^^^^   
 >obj : Type6
 >    : ^^^^^
 

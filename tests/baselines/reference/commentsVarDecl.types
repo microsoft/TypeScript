@@ -99,9 +99,9 @@ var z2: /** type comment*/ (x: number) => string;
 
 var x2 = z2;
 >x2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >z2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 var n4: (x: number) => string;
 >n4 : (x: number) => string
@@ -111,9 +111,9 @@ var n4: (x: number) => string;
 
 n4 = z2;
 >n4 = z2 : (x: number) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >n4 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >z2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 

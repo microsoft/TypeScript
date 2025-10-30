@@ -1,7 +1,7 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
 
 function getParsedCommandJson(
     jsonText: string,
@@ -65,12 +65,12 @@ export interface BaselineParseConfigInput {
     skipFs?: boolean;
     header?(baseline: string[]): void;
 }
-export function baselineParseConfig(input: BaselineParseConfigInput) {
+export function baselineParseConfig(input: BaselineParseConfigInput): void {
     if (!input.skipJson) baselineParseConfigWith("with json api", getParsedCommandJson, input);
     baselineParseConfigWith("with jsonSourceFile api", getParsedCommandJsonSourceFile, input);
 }
 
-export function baselineParseConfigHost(baseline: string[], host: fakes.ParseConfigHost) {
+export function baselineParseConfigHost(baseline: string[], host: fakes.ParseConfigHost): void {
     baseline.push("Fs::", vfs.formatPatch(host.sys.vfs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true })!));
 }
 

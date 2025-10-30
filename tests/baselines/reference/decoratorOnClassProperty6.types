@@ -13,7 +13,7 @@ class C {
 
     @dec prop;
 >dec : (target: Function) => void
->    : ^      ^^        ^^^^^^^^^
+>    : ^      ^^        ^^^^^    
 >prop : any
 >     : ^^^
 }

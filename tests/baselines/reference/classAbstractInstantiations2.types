@@ -18,11 +18,11 @@ abstract class B {
 >this.bar() : number
 >           : ^^^^^^
 >this.bar : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >bar : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     abstract bar() : number;
 >bar : () => number
@@ -144,13 +144,13 @@ abstract class G {
 
     abstract qux(x : number) : string;
 >qux : { (x: number): string; (): number; }
->    : ^^^ ^^      ^^^      ^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     abstract qux() : number;
 >qux : { (x: number): string; (): number; }
->    : ^^^ ^^      ^^^^^^^^^^^^^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^^^^      ^^^
 
     y : number;
 >y : number
@@ -166,11 +166,11 @@ abstract class G {
 
     abstract nom(): boolean;
 >nom : { (): boolean; (x: number): boolean; }
->    : ^^^^^^       ^^^ ^^      ^^^^^^^^^^^^^
+>    : ^^^^^^       ^^^ ^^      ^^^       ^^^
 
     nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
 >nom : { (): boolean; (x: number): boolean; }
->    : ^^^^^^^^^^^^^^^^ ^^      ^^^       ^^^
+>    : ^^^^^^       ^^^ ^^      ^^^       ^^^
 >x : number
 >  : ^^^^^^
 }

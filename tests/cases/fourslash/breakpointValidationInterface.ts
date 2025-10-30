@@ -9,7 +9,7 @@
 ////    new (a: string): I;
 ////    [a: number]: number;
 ////}
-////module m {
+////namespace m {
 ////    interface I1 {
 ////        property: string;
 ////        method(): number;

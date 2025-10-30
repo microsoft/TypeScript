@@ -1,0 +1,37 @@
+{
+    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "includeEntryExports": true,
+    "entry": [
+        "Herebyfile.mjs",
+        "src/testRunner/_namespaces/Harness.ts",
+        "src/tsc/tsc.ts",
+        "src/tsserver/server.ts",
+        "src/typescript/typescript.ts",
+        "src/typingsInstaller/nodeTypingsInstaller.ts",
+        "src/watchGuard/watchGuard.ts",
+
+        "src/testRunner/tests.ts",
+        "src/testRunner/_namespaces/Harness.ts",
+
+        // The rest of the entry files, mostly to track used dependencies:
+        ".eslint-plugin-local.cjs",
+        ".gulp.js",
+        "scripts/eslint/{rules,tests}/*.cjs",
+        "scripts/*.{cjs,mjs}"
+    ],
+    "project": [
+        "src/**",
+        "scripts/**",
+        "!src/lib/**/*.d.ts"
+    ],
+    "ignore": [
+        "scripts/failed-tests.d.cts"
+    ],
+    "ignoreDependencies": ["c8", "eslint-formatter-autolinkable-stylish", "mocha-fivemat-progress-reporter", "monocart-coverage-reports"],
+    "ignoreExportsUsedInFile": {
+        "enum": true,
+        "interface": true,
+        "type": true
+    },
+    "mocha": false
+}

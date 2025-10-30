@@ -37,13 +37,13 @@ export function F(x: IA | IAB) {
 
     for (const el of x.arr) {
 >el : { A: number; } | { A: number; B: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >x.arr : { A: number; }[] | { A: number; B: number; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^^^^^^^^      ^^^^^      ^^^^^
 >x : IA | IAB
 >  : ^^^^^^^^
 >arr : { A: number; }[] | { A: number; B: number; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^^^^^^^^^      ^^^^^      ^^^^^
 
         if ('A' in el) { }
 >'A' in el : boolean
@@ -51,7 +51,7 @@ export function F(x: IA | IAB) {
 >'A' : "A"
 >    : ^^^
 >el : { A: number; } | { A: number; B: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 
         if ('B' in el) {
 >'B' in el : boolean
@@ -59,7 +59,7 @@ export function F(x: IA | IAB) {
 >'B' : "B"
 >    : ^^^
 >el : { A: number; } | { A: number; B: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 
             useB(el.B);
 >useB(el.B) : void
@@ -69,7 +69,7 @@ export function F(x: IA | IAB) {
 >el.B : number
 >     : ^^^^^^
 >el : { A: number; B: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >B : number
 >  : ^^^^^^
         }

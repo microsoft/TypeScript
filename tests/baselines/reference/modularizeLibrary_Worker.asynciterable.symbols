@@ -17,9 +17,9 @@ navigator.storage.getDirectory().then(async directory => {
 >directory : Symbol(directory, Decl(modularizeLibrary_Worker.asynciterable.ts, 0, 43))
 
         handle.kind;
->handle.kind : Symbol(FileSystemHandle.kind, Decl(lib.webworker.d.ts, --, --))
+>handle.kind : Symbol(kind, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
 >handle : Symbol(handle, Decl(modularizeLibrary_Worker.asynciterable.ts, 1, 26))
->kind : Symbol(FileSystemHandle.kind, Decl(lib.webworker.d.ts, --, --))
+>kind : Symbol(kind, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
     }
 });
 

@@ -29,16 +29,16 @@ opts.objectRef || opts.getObjectRef();
 >opts.objectRef : A | B
 >               : ^^^^^
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 >objectRef : A | B
 >          : ^^^^^
 >opts.getObjectRef() : any
 >opts.getObjectRef : () => any
->                  : ^^^^^^^^^
+>                  : ^^^^^^   
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 >getObjectRef : () => any
->             : ^^^^^^^^^
+>             : ^^^^^^   
 
 // repro #49643 issuecomment-1174455723
 

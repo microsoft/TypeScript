@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignmentCompatability26.ts] ////
 
 === assignmentCompatability26.ts ===
-module __test1__ {
+namespace __test1__ {
 >__test1__ : typeof __test1__
 >          : ^^^^^^^^^^^^^^^^
 
@@ -25,7 +25,7 @@ module __test1__ {
 >obj4 : interfaceWithPublicAndOptional<number, string>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
-module __test2__ {
+namespace __test2__ {
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 
@@ -37,19 +37,19 @@ module __test2__ {
 
     export var __val__aa = aa;
 >__val__aa : { one: string; }
->          : ^^^^^^^^^^^^^^^^
+>          : ^^^^^^^      ^^^
 >aa : { one: string; }
->   : ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^      ^^^
 }
 __test2__.__val__aa = __test1__.__val__obj4
 >__test2__.__val__aa = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__aa : { one: string; }
->                    : ^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^      ^^^
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 >__val__aa : { one: string; }
->          : ^^^^^^^^^^^^^^^^
+>          : ^^^^^^^      ^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__

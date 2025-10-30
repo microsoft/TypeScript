@@ -33,7 +33,7 @@ interface B extends Entity {
 
 function hasKind(entity: Entity, kind: "A"): entity is A;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
->        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^                ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : "A"
@@ -41,7 +41,7 @@ function hasKind(entity: Entity, kind: "A"): entity is A;
 
 function hasKind(entity: Entity, kind: "B"): entity is B;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
->        : ^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^                ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : "B"
@@ -49,7 +49,7 @@ function hasKind(entity: Entity, kind: "B"): entity is B;
 
 function hasKind(entity: Entity, kind: Kind): entity is Entity;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
->        : ^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^    ^^^                ^^^
+>        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^                ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : Kind
@@ -57,7 +57,7 @@ function hasKind(entity: Entity, kind: Kind): entity is Entity;
 
 function hasKind(entity: Entity, kind: Kind): boolean {
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
->        : ^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^                ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : Kind
@@ -99,7 +99,7 @@ if (hasKind(x, "A")) {
 >hasKind(x, "A") : boolean
 >                : ^^^^^^^
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
->        : ^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^                ^^^
 >x : A
 >  : ^
 >"A" : "A"
@@ -125,7 +125,7 @@ if (!hasKind(x, "B")) {
 >hasKind(x, "B") : boolean
 >                : ^^^^^^^
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
->        : ^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^   ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^   ^^^           ^^^      ^^      ^^    ^^    ^^^                ^^^
 >x : A
 >  : ^
 >"B" : "B"

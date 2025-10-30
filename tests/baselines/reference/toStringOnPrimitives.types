@@ -5,11 +5,11 @@ true.toString()
 >true.toString() : string
 >                : ^^^^^^
 >true.toString : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >true : true
 >     : ^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var aBool = false;
 >aBool : boolean
@@ -21,19 +21,19 @@ aBool.toString();
 >aBool.toString() : string
 >                 : ^^^^^^
 >aBool.toString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >aBool : false
 >      : ^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 1..toString();
 >1..toString() : string
 >              : ^^^^^^
 >1..toString : (radix?: number) => string
->            : ^     ^^^      ^^^^^^^^^^^
+>            : ^     ^^^      ^^^^^      
 >1. : 1
 >   : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 

@@ -38,7 +38,7 @@ class C {
 >getX = (obj: C) => obj.#x : (obj: C) => number
 >                          : ^   ^^ ^^^^^^^^^^^
 >getX : (c: C) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >(obj: C) => obj.#x : (obj: C) => number
 >                   : ^   ^^ ^^^^^^^^^^^
 >obj : C
@@ -52,7 +52,7 @@ class C {
 >getY = (obj: D) => obj.#y : (obj: D) => any
 >                          : ^   ^^ ^^^^^^^^
 >getY : (c: D) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >(obj: D) => obj.#y : (obj: D) => any
 >                   : ^   ^^ ^^^^^^^^
 >obj : D
@@ -86,7 +86,7 @@ class D {
 >getX = (obj: C) => obj.#x : (obj: C) => any
 >                          : ^   ^^ ^^^^^^^^
 >getX : (c: C) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >(obj: C) => obj.#x : (obj: C) => any
 >                   : ^   ^^ ^^^^^^^^
 >obj : C
@@ -100,7 +100,7 @@ class D {
 >getY = (obj: D) => obj.#y : (obj: D) => number
 >                          : ^   ^^ ^^^^^^^^^^^
 >getY : (c: D) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >(obj: D) => obj.#y : (obj: D) => number
 >                   : ^   ^^ ^^^^^^^^^^^
 >obj : D

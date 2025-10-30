@@ -1,20 +1,16 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import {
-    FsContents,
-    getProjectConfigWithNodeNext,
-    libContent,
-} from "./contents";
-import { libFile } from "./virtualFileSystemWithWatch";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getProjectConfigWithNodeNext } from "./contents.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForTransitiveReferencesRefsAdts() {
+export function getFsContentsForTransitiveReferencesRefsAdts(): string {
     return dedent`
         export class X {}
         export class A {}
     `;
 }
 
-export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean) {
+export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -29,7 +25,7 @@ export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolea
     });
 }
 
-export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean) {
+export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -39,8 +35,8 @@ export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolea
     });
 }
 
-export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): FsContents {
-    return {
+export function getSysForTransitiveReferences(withNodeNext?: boolean): TestServerHost {
+    return TestServerHost.createWatchedSystem({
         "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
         "/user/username/projects/transitiveReferences/a.ts": dedent`
             export class A {}
@@ -68,6 +64,5 @@ export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): Fs
             },
             references: [{ path: "tsconfig.b.json" }],
         }),
-        [libFile.path]: libContent,
-    };
+    }, { currentDirectory: "/user/username/projects/transitiveReferences" });
 }

@@ -11,15 +11,15 @@ class a {
 
     get x() {
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         return this.__x;
 >this.__x : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >__x : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
     set x(aValue: () => string) {
 >x : () => string
@@ -29,15 +29,15 @@ class a {
 
         this.__x = aValue;
 >this.__x = aValue : () => string
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 >this.__x : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >__x : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >aValue : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
     }
 }
 

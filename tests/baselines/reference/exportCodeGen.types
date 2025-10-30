@@ -3,7 +3,7 @@
 === exportCodeGen.ts ===
 // should replace all refs to 'x' in the body,
 // with fully qualified
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -28,7 +28,7 @@ module A {
 } 
 
 // should not fully qualify 'x'
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -53,7 +53,7 @@ module B {
 }
 
 // not copied, since not exported
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -68,7 +68,7 @@ module C {
 }
 
 // copies, since exported
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -83,7 +83,7 @@ module D {
 }
 
 // validate all exportable statements
-module E {
+namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -107,7 +107,7 @@ module E {
 >name : string
 >     : ^^^^^^
 
-    export module M {
+    export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -121,7 +121,7 @@ module E {
 
 // validate all exportable statements,
 // which are not exported
-module F {
+namespace F {
 >F : typeof F
 >  : ^^^^^^^^
 
@@ -145,7 +145,7 @@ module F {
 >name : string
 >     : ^^^^^^
 
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

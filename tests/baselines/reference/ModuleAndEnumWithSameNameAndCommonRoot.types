@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndEnumWithSameNameAndCommonRoot.ts] ////
 
 === ModuleAndEnumWithSameNameAndCommonRoot.ts ===
-module enumdule {
+namespace enumdule {
 >enumdule : typeof enumdule
 >         : ^^^^^^^^^^^^^^^
 
@@ -52,7 +52,7 @@ var y: { x: number; y: number };
 
 var y = new enumdule.Point(0, 0);
 >y : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >new enumdule.Point(0, 0) : enumdule.Point
 >                         : ^^^^^^^^^^^^^^
 >enumdule.Point : typeof enumdule.Point

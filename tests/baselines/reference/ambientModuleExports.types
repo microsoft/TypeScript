@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/ambientModuleExports.ts] ////
 
 === ambientModuleExports.ts ===
-declare module Foo {
+declare namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -22,11 +22,11 @@ Foo.a();
 >Foo.a() : void
 >        : ^^^^
 >Foo.a : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >a : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 Foo.b;
 >Foo.b : number
@@ -48,7 +48,7 @@ var c = new Foo.C();
 >C : typeof Foo.C
 >  : ^^^^^^^^^^^^
 
-declare module Foo2 {
+declare namespace Foo2 {
 >Foo2 : typeof Foo2
 >     : ^^^^^^^^^^^
 
@@ -69,11 +69,11 @@ Foo2.a();
 >Foo2.a() : void
 >         : ^^^^
 >Foo2.a : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >Foo2 : typeof Foo2
 >     : ^^^^^^^^^^^
 >a : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 Foo2.b;
 >Foo2.b : number

@@ -40,7 +40,7 @@ x3.a = value;
 >x3.a : string
 >     : ^^^^^^
 >x3 : { a: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 >value : any
@@ -50,7 +50,7 @@ x3['a'] = value;
 >x3['a'] : string
 >        : ^^^^^^
 >x3 : { a: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >'a' : "a"
 >    : ^^^
 >value : any
@@ -86,7 +86,7 @@ function fn2(x4: number) {
 >x3.a : string
 >     : ^^^^^^
 >x3 : { a: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 >value : any
@@ -98,7 +98,7 @@ function fn2(x4: number) {
 >x3['a'] : string
 >        : ^^^^^^
 >x3 : { a: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >'a' : "a"
 >    : ^^^
 >value : any

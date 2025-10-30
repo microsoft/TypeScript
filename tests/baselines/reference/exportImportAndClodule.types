@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportImportAndClodule.ts] ////
 
 === exportImportAndClodule.ts ===
-module K {
+namespace K {
 >K : typeof K
 >  : ^^^^^^^^
 
@@ -13,7 +13,7 @@ module K {
 >name : string
 >     : ^^^^^^
     }
-    export module L {
+    export namespace L {
 >L : typeof L
 >  : ^^^^^^^^
 
@@ -34,7 +34,7 @@ module K {
         }
     }
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -54,7 +54,7 @@ var o: { name: string };
 
 var o = new M.D('Hello');
 >o : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >new M.D('Hello') : K.L
 >                 : ^^^
 >M.D : typeof K.L
@@ -76,7 +76,7 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >M : any
 >  : ^^^
 >D : any

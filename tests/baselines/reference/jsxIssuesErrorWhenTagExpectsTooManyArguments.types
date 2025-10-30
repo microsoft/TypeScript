@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Assignability cache: 2,500
-Type Count: 5,000
+Type Count: 10,000
 Instantiation count: 50,000
 Symbol count: 50,000
 
@@ -128,7 +128,7 @@ const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably
 ><MyTagWithOptionalNonJSXBits x={2} /> : JSX.Element
 >                                      : ^^^^^^^^^^^
 >MyTagWithOptionalNonJSXBits : (props: MyProps, context: any, nonReactArg?: string) => JSX.Element
->                            : ^     ^^       ^^       ^^   ^^           ^^^      ^^^^^^^^^^^^^^^^
+>                            : ^     ^^       ^^       ^^   ^^           ^^^      ^^^^^           
 >x : number
 >  : ^^^^^^
 >2 : 2

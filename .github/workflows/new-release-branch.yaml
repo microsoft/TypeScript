@@ -50,12 +50,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
           fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: 'lts/*'
       - run: |
@@ -68,7 +68,6 @@ jobs:
           sed -i -e 's/"version": ".*"/"version": "${{ inputs.package_version }}"/g' package.json
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' src/compiler/corePublic.ts
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' tests/baselines/reference/api/typescript.d.ts
-          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
           sed -i -e 's/const version\(: string\)\{0,1\} = .*;/const version = "${{ inputs.package_version }}" as string;/g' src/compiler/corePublic.ts
           npm ci
           npm install # update package-lock.json to ensure the version bump is included
@@ -78,7 +77,6 @@ jobs:
           git add package.json package-lock.json
           git add src/compiler/corePublic.ts
           git add tests/baselines/reference/api/typescript.d.ts
-          git add tests/baselines/reference/api/tsserverlibrary.d.ts
           git add --force ./lib
           git config user.email "typescriptbot@microsoft.com"
           git config user.name "TypeScript Bot"

@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/primitiveTypeAsmoduleName.ts] ////
 
 //// [primitiveTypeAsmoduleName.ts]
-module string {}
+namespace string {}
 
 //// [primitiveTypeAsmoduleName.js]

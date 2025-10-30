@@ -1,0 +1,47 @@
+c:/root/tsconfig.json(3,9): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+==== c:/root/tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            ~~~~~~~~~
+!!! error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5101:   Visit https://aka.ms/ts6 for migration information.
+                "paths": {
+                "*": [
+                    "*",
+                    "generated/*"
+                ],
+                    "components/*": [
+                        "shared/components/*"
+                    ]
+            }
+        }
+    }
+==== c:/root/folder1/file1.ts (0 errors) ====
+    import {x} from "folder2/file1"
+    import {y} from "folder3/file2"
+    import {z} from "components/file3"
+    import {z1} from "file4"
+    
+    declare function use(a: any): void;
+    
+    use(x.toExponential());
+    use(y.toExponential());
+    use(z.toExponential());
+    use(z1.toExponential());
+    
+==== c:/root/folder2/file1.ts (0 errors) ====
+    export var x = 1;
+    
+==== c:/root/generated/folder3/file2.ts (0 errors) ====
+    export var y = 1;
+    
+==== c:/root/shared/components/file3/index.d.ts (0 errors) ====
+    export var z: number;
+    
+==== c:/node_modules/file4.ts (0 errors) ====
+    export var z1 = 1;
+    

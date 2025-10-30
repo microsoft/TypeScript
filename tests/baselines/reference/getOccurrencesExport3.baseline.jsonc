@@ -4,7 +4,7 @@
 // declare var x;
 // /*HIGHLIGHTS*/[|{| kind: "none" |}export|] declare var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 7) skipped ---
 
@@ -13,7 +13,7 @@
 // }
 // 
 // declare [|{| kind: "none" |}export|] var v1, v2;
-// declare module dm { }
+// declare namespace dm { }
 // [|{| kind: "none" |}export|] class EC { }
 
 
@@ -24,7 +24,7 @@
 // declare var x;
 // [|{| kind: "none" |}export|] declare var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 7) skipped ---
 
@@ -33,7 +33,7 @@
 // }
 // 
 // declare /*HIGHLIGHTS*/[|{| kind: "none" |}export|] var v1, v2;
-// declare module dm { }
+// declare namespace dm { }
 // [|{| kind: "none" |}export|] class EC { }
 
 
@@ -44,7 +44,7 @@
 // declare var x;
 // [|{| kind: "none" |}export|] declare var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 7) skipped ---
 
@@ -53,5 +53,5 @@
 // }
 // 
 // declare [|{| kind: "none" |}export|] var v1, v2;
-// declare module dm { }
+// declare namespace dm { }
 // /*HIGHLIGHTS*/[|{| kind: "none" |}export|] class EC { }

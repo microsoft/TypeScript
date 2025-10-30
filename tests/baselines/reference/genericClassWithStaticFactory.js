@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericClassWithStaticFactory.ts] ////
 
 //// [genericClassWithStaticFactory.ts]
-module Editor {
+namespace Editor {
 
     export class List<T> {
         public next: List<T>;

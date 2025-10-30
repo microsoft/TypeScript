@@ -44,7 +44,7 @@ function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string
 ><Inner {...this.props} name="Matt"/> : JSX.Element
 >                                     : ^^^^^^^^^^^
 >Inner : React.ComponentClass<P & { name: string; }, any>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this

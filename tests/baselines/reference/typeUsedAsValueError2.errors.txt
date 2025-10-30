@@ -3,8 +3,8 @@ world.ts(5,1): error TS2708: Cannot use namespace 'HelloNamespace' as a value.
 
 
 ==== world.ts (2 errors) ====
-    import HelloInterface = require("helloInterface");
-    import HelloNamespace = require("helloNamespace");
+    import HelloInterface = require("./helloInterface");
+    import HelloNamespace = require("./helloNamespace");
     
     HelloInterface.world;
     ~~~~~~~~~~~~~~

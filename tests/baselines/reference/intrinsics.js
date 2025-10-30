@@ -3,7 +3,7 @@
 //// [intrinsics.ts]
 var hasOwnProperty: hasOwnProperty; // Error
 
-module m1 {
+namespace m1 {
     export var __proto__;
     interface __proto__ {}
 
@@ -34,3 +34,13 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var foo;
+
+
+//// [intrinsics.d.ts]
+declare var hasOwnProperty: hasOwnProperty;
+declare namespace m1 {
+    var __proto__: any;
+}
+declare class Foo<__proto__> {
+}
+declare var foo: (__proto__: number) => void;

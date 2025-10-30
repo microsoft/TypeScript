@@ -68,8 +68,8 @@ function getBreedSizeWithFunction(animal: Animal): string | undefined {
 >                            : ^^^^^^^
 >isNil(animal?.breed?.size) : boolean
 >                           : ^^^^^^^
->isNil : (value: unknown) => value is null | undefined
->      : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isNil : (value: unknown) => value is undefined | null
+>      : ^     ^^       ^^^^^                         
 >animal?.breed?.size : string | undefined
 >                    : ^^^^^^^^^^^^^^^^^^
 >animal?.breed : Breed | undefined

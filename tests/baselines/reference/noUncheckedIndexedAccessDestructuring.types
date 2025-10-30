@@ -22,11 +22,11 @@ s1.toString(); // Should error, s1 possibly undefined
 >s1.toString() : string
 >              : ^^^^^^
 >s1.toString : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >s1 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 // Destructuring a rest element -> do not include undefined
 const [...s2] = strArray;
@@ -39,11 +39,11 @@ s2.push(undefined); // Should error, 'undefined' not part of s2's element type
 >s2.push(undefined) : number
 >                   : ^^^^^^
 >s2.push : (...items: string[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^      
 >s2 : string[]
 >   : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -62,11 +62,11 @@ s3.push(undefined); // Should error, 'undefined' not part of s2's element type
 >s3.push(undefined) : number
 >                   : ^^^^^^
 >s3.push : (...items: string[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^      
 >s3 : string[]
 >   : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -88,11 +88,11 @@ t1.toString(); // Should error, t1 possibly undefined
 >t1.toString() : string
 >              : ^^^^^^
 >t1.toString : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >t1 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 const { ...t2 } = strMap;
 >t2 : { [s: string]: string; }
@@ -104,7 +104,7 @@ t2.z.toString(); // Should error
 >t2.z.toString() : string
 >                : ^^^^^^
 >t2.z.toString : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >t2.z : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >t2 : { [s: string]: string; }
@@ -112,7 +112,7 @@ t2.z.toString(); // Should error
 >z : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 // Test intersections with declared properties
 declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
@@ -133,37 +133,37 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.toFixed(); // Should OK
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
     y.toFixed(); // Should OK
 >y.toFixed() : string
 >            : ^^^^^^
 >y.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
     z.toFixed(); // Should error
 >z.toFixed() : string
 >            : ^^^^^^
 >z.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 }
 
 {
@@ -171,47 +171,47 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >x : number
 >  : ^^^^^^
 >q : { [s: string]: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.toFixed(); // Should OK
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
     q.y.toFixed(); // Should OK
 >q.y.toFixed() : string
 >              : ^^^^^^
 >q.y.toFixed : (fractionDigits?: number) => string
->            : ^              ^^^      ^^^^^^^^^^^
+>            : ^              ^^^      ^^^^^      
 >q.y : number
 >    : ^^^^^^
 >q : { [s: string]: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
     q.z.toFixed(); // Should error
 >q.z.toFixed() : string
 >              : ^^^^^^
 >q.z.toFixed : (fractionDigits?: number) => string
->            : ^              ^^^      ^^^^^^^^^^^
+>            : ^              ^^^      ^^^^^      
 >q.z : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >q : { [s: string]: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 }
 
 {
@@ -219,53 +219,53 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >x : number
 >  : ^^^^^^
 >q : { [s: string]: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.
 >x.    toFixed() : string
 >                : ^^^^^^
 >x.    toFixed : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
     toFixed(); // Should OK
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
     q.
 >q.    y.toFixed() : string
 >                  : ^^^^^^
 >q.    y.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >q.    y : number
 >        : ^^^^^^
 >q : { [s: string]: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     y.toFixed(); // Should OK
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
     q.
 >q.    z.toFixed() : string
 >                  : ^^^^^^
 >q.    z.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >q.    z : number | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 >q : { [s: string]: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     z.toFixed(); // Should error
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 }
 
 
@@ -331,9 +331,9 @@ declare let target_string_arr: string[];
 
     ({ x, y, z } = numMapPoint); // Should OK
 >({ x, y, z } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x, y, z } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x, y, z } : { x: number; y: number; z: number | undefined; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -343,7 +343,7 @@ declare let target_string_arr: string[];
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let q: number;
 >q : number
@@ -351,14 +351,14 @@ declare let target_string_arr: string[];
 
     ({ q } = numMapPoint); // Should error
 >({ q } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ q } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ q } : { q: number; }
 >      : ^^^^^^^^^^^^^^
 >q : number
 >  : ^^^^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

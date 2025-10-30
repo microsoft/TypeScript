@@ -261,7 +261,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
     const bb: 0 = b;
 >bb : 0
@@ -314,7 +314,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
     const bb: 9 = b;
 >bb : 9
@@ -377,7 +377,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
     const bb: 0 | 8 = b;
 >bb : 0 | 8
@@ -438,7 +438,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
     const bb: 0 | 8 = b;
 >bb : 0 | 8
@@ -464,7 +464,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >[{ [(a = 1)]: b } = [9, a] as const] = [] : []
 >                                          : ^^
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
@@ -519,7 +519,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >[{ [a]: b } = [9, a = 0] as const] = [] : []
 >                                        : ^^
 >[{ [a]: b } = [9, a = 0] as const] : [readonly [9, 0]]
@@ -572,7 +572,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
 >                                                         : ^^^^^^^^^^^^^^^^^
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
@@ -635,7 +635,7 @@ declare function f(): void;
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
 >                                                       : ^^^^^^^^^^^^^^^^^
 >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]

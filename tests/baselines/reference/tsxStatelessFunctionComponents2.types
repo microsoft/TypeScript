@@ -19,7 +19,7 @@ function Greet(x: {name?: string}) {
 >div : any
 >    : ^^^
 >x : { name?: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 >div : any
 >    : ^^^
 }
@@ -102,7 +102,7 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >x.greeting.substr(10) : string
 >                      : ^^^^^^
 >x.greeting.substr : (from: number, length?: number) => string
->                  : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>                  : ^    ^^      ^^      ^^^      ^^^^^      
 >x.greeting : string
 >           : ^^^^^^
 >x : BigGreeter
@@ -110,7 +110,7 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >greeting : string
 >         : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >10 : 10
 >   : ^^
 

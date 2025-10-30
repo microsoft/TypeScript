@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/packages/package1/package.json] Inode:: 7
 {
@@ -66,8 +66,8 @@ type MyBarType = BarType;
 
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1) Inode:: 17
-//// [/a/lib/lib.es2016.full.d.ts] Inode:: 20
-/// <reference no-default-lib="true"/>
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 21
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -81,24 +81,33 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 22
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 31
+
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 123
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 23
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 124
 export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 125
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-/a/lib/tsc.js --w -p packages/package2 --extendedDiagnostics
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 126
+{
+  "root": [
+    "./src/index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 53
+}
+
+
+/home/src/tslibs/TS/Lib/tsc.js --w -p packages/package2 --extendedDiagnostics --explainFiles --traceResolution
 Output::
-File '/home/src/projects/project/packages/package1/src/package.json' does not exist.
-Found 'package.json' at '/home/src/projects/project/packages/package1/package.json'.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /home/src/projects/project CaseSensitiveFileNames: false
@@ -106,13 +115,14 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/ts
 Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist.
-Found 'package.json' at '/home/src/projects/project/packages/package2/package.json'.
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src/index.ts 250 undefined Source file
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/project/packages/package2/src/package.json' does not exist.
+Found 'package.json' at '/home/src/projects/project/packages/package2/package.json'.
+Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -132,13 +142,8 @@ File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists -
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
-File '/home/src/projects/project/packages/package1/dist/package.json' does not exist.
-Found 'package.json' at '/home/src/projects/project/packages/package1/package.json'.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
@@ -149,10 +154,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Type roots
@@ -161,18 +164,24 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@t
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
+../../tslibs/TS/Lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package1/dist/index.d.ts
+  Imported via "package1" from file 'packages/package2/src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 25
+//// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 128
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.d.ts] Inode:: 26
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] Inode:: 129
 export {};
 
 
@@ -186,18 +195,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/package1/dist/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/project/packages/package2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts: *new*
-  {"inode":20}
 /home/src/projects/project/node_modules: *new*
   {"inode":16}
 /home/src/projects/project/node_modules/package1: *new*
@@ -205,9 +208,9 @@ FsWatches::
 /home/src/projects/project/packages/package1: *new*
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":21}
+  {"inode":122}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":23}
+  {"inode":124}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"inode":7}
 /home/src/projects/project/packages/package1/src: *new*
@@ -215,7 +218,7 @@ FsWatches::
 /home/src/projects/project/packages/package2: *new*
   {"inode":11}
 /home/src/projects/project/packages/package2/dist: *new*
-  {"inode":24}
+  {"inode":127}
 /home/src/projects/project/packages/package2/package.json: *new*
   {"inode":12}
 /home/src/projects/project/packages/package2/src: *new*
@@ -224,6 +227,8 @@ FsWatches::
   {"inode":15}
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
+  {"inode":31}
 
 Program root files: [
   "/home/src/projects/project/packages/package2/src/index.ts"
@@ -242,34 +247,28 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package1/dist/index.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package1/dist/index.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2016.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts (used version)
 /home/src/projects/project/packages/package1/dist/index.d.ts (used version)
 /home/src/projects/project/packages/package2/src/index.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
 
-Change:: No change
-
-Input::
-
-
-exitCode:: ExitStatus.undefined
-
-Change:: Clean package1 build
+Change:: Clean dependencies build
 
 Input::
 //// [/home/src/projects/project/packages/package1/dist/index.js] deleted
@@ -296,18 +295,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"pollingInterval":250}
-/home/src/projects/project/packages/package1/dist/package.json:
-  {"pollingInterval":2000}
 /home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -321,7 +314,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":127}
 /home/src/projects/project/packages/package2/package.json:
   {"inode":12}
 /home/src/projects/project/packages/package2/src:
@@ -330,12 +323,14 @@ FsWatches::
   {"inode":15}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":31}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":21}
+  {"inode":122}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":23}
+  {"inode":124}
 
 Timeout callback:: count: 2
 1: timerToUpdateProgram *new*
@@ -352,18 +347,14 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
+======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
 File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
-======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -386,8 +377,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'package1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
@@ -396,7 +386,7 @@ File '/home/src/projects/project/node_modules/package1.js' does not exist.
 File '/home/src/projects/project/node_modules/package1.jsx' does not exist.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript, JSON.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/package1/index.js' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.jsx' does not exist.
@@ -404,42 +394,18 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/project/node_modules/package1.ts' does not exist.
-File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' does not have a 'types' field.
-'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
-File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
-File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
-Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'package1' was not resolved. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined File location affecting resolution
 [96mpackages/package2/src/index.ts[0m:[93m1[0m:[93m34[0m - [91merror[0m[90m TS2307: [0mCannot find module 'package1' or its corresponding type declarations.
 
 [7m1[0m import { FooType, BarType } from "package1"
 [7m [0m [91m                                 ~~~~~~~~~~[0m
 
+../../tslibs/TS/Lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 sysLog:: onTimerToUpdateChildWatches:: 3
@@ -453,8 +419,8 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 25
-//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 26
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 128
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 129
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -471,20 +437,14 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"pollingInterval":250}
-/home/src/projects/project/packages/package1/dist/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -498,7 +458,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":127}
 /home/src/projects/project/packages/package2/package.json:
   {"inode":12}
 /home/src/projects/project/packages/package2/src:
@@ -507,6 +467,8 @@ FsWatches::
   {"inode":15}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":31}
 
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *new*
@@ -529,11 +491,12 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -551,6 +514,7 @@ Input::
 Before running Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -563,6 +527,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -570,17 +535,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -604,8 +565,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'package1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
@@ -614,7 +574,7 @@ File '/home/src/projects/project/node_modules/package1.js' does not exist.
 File '/home/src/projects/project/node_modules/package1.jsx' does not exist.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: JavaScript, JSON.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/package1/index.js' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.jsx' does not exist.
@@ -622,43 +582,24 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/project/node_modules/package1.ts' does not exist.
-File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' does not have a 'types' field.
-'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
-File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
-File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
-Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'package1' was not resolved. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 [96mpackages/package2/src/index.ts[0m:[93m1[0m:[93m34[0m - [91merror[0m[90m TS2307: [0mCannot find module 'package1' or its corresponding type declarations.
 
 [7m1[0m import { FooType, BarType } from "package1"
 [7m [0m [91m                                 ~~~~~~~~~~[0m
 
+../../tslibs/TS/Lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
 
 
 Program root files: [
@@ -678,11 +619,12 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -691,26 +633,20 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Build package1
+Change:: Build dependencies
 
 Input::
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 28
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 125
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 126
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 131
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 29
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 132
 export type FooType = "foo";
 export type BarType = "bar";
 
-
-
-Output::
-File '/home/src/projects/project/packages/package1/src/package.json' does not exist.
-Found 'package.json' at '/home/src/projects/project/packages/package1/package.json'.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
 
 
 Timeout callback:: count: 1
@@ -745,12 +681,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -758,7 +690,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":27}
+  {"inode":130}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -766,7 +698,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":127}
 /home/src/projects/project/packages/package2/package.json:
   {"inode":12}
 /home/src/projects/project/packages/package2/src:
@@ -775,6 +707,8 @@ FsWatches::
   {"inode":15}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":31}
 
 Timeout callback:: count: 1
 12: timerToInvalidateFailedLookupResolutions *new*
@@ -782,6 +716,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 12: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -794,6 +729,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 13: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -801,17 +737,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
@@ -831,21 +763,21 @@ File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists -
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
-File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+../../tslibs/TS/Lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package1/dist/index.d.ts
+  Imported via "package1" from file 'packages/package2/src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 25
-//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 26
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 128
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 129
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -856,22 +788,16 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package1/dist/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -879,9 +805,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":27}
+  {"inode":130}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":29}
+  {"inode":132}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -889,7 +815,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":127}
 /home/src/projects/project/packages/package2/package.json:
   {"inode":12}
 /home/src/projects/project/packages/package2/src:
@@ -898,6 +824,8 @@ FsWatches::
   {"inode":15}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":31}
 
 
 Program root files: [
@@ -917,11 +845,12 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package1/dist/index.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 

@@ -4,7 +4,7 @@ import {
     fileExtensionIs,
     Path,
     ResolvedConfigFileName,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export enum UpToDateStatusType {
@@ -20,7 +20,8 @@ export enum UpToDateStatusType {
     ErrorReadingFile,
     OutOfDateWithSelf,
     OutOfDateWithUpstream,
-    OutOfDateBuildInfo,
+    OutOfDateBuildInfoWithPendingEmit,
+    OutOfDateBuildInfoWithErrors,
     OutOfDateOptions,
     OutOfDateRoots,
     UpstreamOutOfDate,
@@ -76,7 +77,10 @@ export namespace Status {
      * We track what the newest input file is.
      */
     export interface UpToDate {
-        type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes | UpToDateStatusType.UpToDateWithInputFileText;
+        type:
+            | UpToDateStatusType.UpToDate
+            | UpToDateStatusType.UpToDateWithUpstreamTypes
+            | UpToDateStatusType.UpToDateWithInputFileText;
         newestInputFileTime?: Date;
         newestInputFileName?: string;
         oldestOutputFileName: string;
@@ -112,7 +116,10 @@ export namespace Status {
      * Buildinfo indicates that build is out of date
      */
     export interface OutOfDateBuildInfo {
-        type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions;
+        type:
+            | UpToDateStatusType.OutOfDateBuildInfoWithPendingEmit
+            | UpToDateStatusType.OutOfDateBuildInfoWithErrors
+            | UpToDateStatusType.OutOfDateOptions;
         buildInfoFile: string;
     }
 

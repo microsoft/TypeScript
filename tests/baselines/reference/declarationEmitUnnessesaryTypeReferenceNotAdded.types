@@ -47,7 +47,7 @@ declare function thing(x: any): thing.ParsedArgs;
 
 export = thing;
 >thing : (x: any) => thing.ParsedArgs
->      : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^^^^                
 
 === /node_modules/@types/process/process.d.ts ===
 declare const thing: any;

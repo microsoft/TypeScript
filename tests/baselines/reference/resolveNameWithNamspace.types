@@ -31,7 +31,7 @@ var myAssert = require('assert')
 >myAssert : any
 >require('assert') : any
 >require : (moduleName: string) => any
->        : ^          ^^      ^^^^^^^^
+>        : ^          ^^      ^^^^^   
 >'assert' : "assert"
 >         : ^^^^^^^^
 

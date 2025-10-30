@@ -22,7 +22,7 @@ class D extends C {
 >  : ^
 }
 
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -51,11 +51,11 @@ class E extends D {
 >this.foo() : number
 >           : ^^^^^^
 >this.foo : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : typeof E
 >     : ^^^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
 }
 

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayAssignmentTest6.ts] ////
 
 //// [arrayAssignmentTest6.ts]
-module Test {
+namespace Test {
     interface IState {
     }
     interface IToken {

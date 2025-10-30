@@ -16,7 +16,7 @@ export default class {
 >method : (p: number) => void
 >       : ^ ^^      ^^^^^^^^^
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^    
 >p : number
 >  : ^^^^^^
 }

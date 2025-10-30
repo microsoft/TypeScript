@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/node/nodeModulesJson.ts] ////
+
+=== /node_modules/not.json/index.d.ts ===
+export function oops(json: string): any;
+>oops : Symbol(oops, Decl(index.d.ts, 0, 0))
+>json : Symbol(json, Decl(index.d.ts, 0, 21))
+
+=== /node_modules/actually-json/index.json ===
+
+{}
+
+=== /node_modules/actually-json/typed.d.json.ts ===
+declare const _default: {};
+>_default : Symbol(_default, Decl(typed.d.json.ts, 0, 13))
+
+export default _default;
+>_default : Symbol(_default, Decl(typed.d.json.ts, 0, 13))
+
+=== /config.json ===
+{
+  "version": 1
+>"version" : Symbol("version", Decl(config.json, 0, 1))
+}
+
+=== /main.mts ===
+import { oops } from "not.json"; // Ok
+>oops : Symbol(oops, Decl(main.mts, 0, 8))
+
+import moreOops from "actually-json"; // Error in nodenext
+>moreOops : Symbol(moreOops, Decl(main.mts, 1, 6))
+
+import typed from "actually-json/typed"; // Error in nodenext
+>typed : Symbol(typed, Decl(main.mts, 2, 6))
+
+import config from "./config.json" with { type: "json" }; // Ok
+>config : Symbol(config, Decl(main.mts, 4, 6))
+
+import { default as config1 } from "./config.json" with { type: "json" }; // Ok
+>default : Symbol(config, Decl(config.json, 0, 0))
+>config1 : Symbol(config1, Decl(main.mts, 5, 8))
+
+import config2 from "./config.json"; // Error in nodenext, no attribute
+>config2 : Symbol(config2, Decl(main.mts, 6, 6))
+
+import type config2Type from "./config.json"; // Ok, type-only
+>config2Type : Symbol(config2Type, Decl(main.mts, 7, 6))
+
+import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
+>config2Type2 : Symbol(config2Type2, Decl(main.mts, 8, 6))
+
+import { version } from "./config.json" with { type: "json" }; // Error, named import
+>version : Symbol(version, Decl(main.mts, 9, 8))
+
+import * as config3 from "./config.json" with { type: "json" };
+>config3 : Symbol(config3, Decl(main.mts, 10, 6))
+
+config3.version; // Error
+>config3 : Symbol(config3, Decl(main.mts, 10, 6))
+
+config3.default; // Ok
+>config3.default : Symbol("/config")
+>config3 : Symbol(config3, Decl(main.mts, 10, 6))
+>default : Symbol("/config")
+
+=== /loosey.cts ===
+import config from "./config.json" with { type: "json" }; // Error
+>config : Symbol(config, Decl(loosey.cts, 0, 6))
+
+import config2 from "./config.json"; // Ok
+>config2 : Symbol(config2, Decl(loosey.cts, 1, 6))
+
+import { version } from "./config.json"; // Ok
+>version : Symbol(version, Decl(loosey.cts, 2, 8))
+
+import * as config3 from "./config.json";
+>config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
+
+config3.version; // Ok
+>config3.version : Symbol(version, Decl(config.json, 0, 1))
+>config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
+>version : Symbol(version, Decl(config.json, 0, 1))
+
+config3.default; // Error
+>config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
+

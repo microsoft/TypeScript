@@ -23,19 +23,19 @@ class C extends B {
 >super.m && super.m() : void | undefined
 >                     : ^^^^^^^^^^^^^^^^
 >super.m : (() => void) | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^    ^^^^^^^^^^^^^
 >super : B
 >      : ^
 >m : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 >super.m() : void
 >          : ^^^^
 >super.m : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >super : B
 >      : ^
 >m : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
 }
 

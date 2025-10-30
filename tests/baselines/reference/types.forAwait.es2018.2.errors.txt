@@ -31,10 +31,12 @@ types.forAwait.es2018.2.ts(16,15): error TS2488: Type 'AsyncIterable<number>' mu
         for (const x of asyncIterable) {
                         ~~~~~~~~~~~~~
 !!! error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2773 types.forAwait.es2018.2.ts:14:21: Did you forget to use 'await'?
         }
         for (y of asyncIterable) {
                   ~~~~~~~~~~~~~
 !!! error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2773 types.forAwait.es2018.2.ts:16:15: Did you forget to use 'await'?
         }
     }
     

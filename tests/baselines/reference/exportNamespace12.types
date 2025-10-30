@@ -13,11 +13,11 @@ console.log(c) // Fails as expected, import is still allowed though.
 >console.log(c) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >c : 10
 >  : ^^
 
@@ -25,11 +25,11 @@ console.log(types.c) // Expected an error here.
 >console.log(types.c) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >types.c : any
 >        : ^^^
 >types : typeof types

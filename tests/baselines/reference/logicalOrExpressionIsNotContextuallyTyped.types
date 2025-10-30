@@ -16,11 +16,11 @@ var a: (a: string) => string;
 // bug 786110
 var r = a || ((a) => a.toLowerCase());
 >r : (a: string) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >a || ((a) => a.toLowerCase()) : (a: string) => string
->                              : ^ ^^      ^^^^^^^^^^^
+>                              : ^ ^^      ^^^^^      
 >a : (a: string) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >((a) => a.toLowerCase()) : (a: string) => string
 >                         : ^ ^^^^^^^^^^^^^^^^^^^
 >(a) => a.toLowerCase() : (a: string) => string
@@ -30,9 +30,9 @@ var r = a || ((a) => a.toLowerCase());
 >a.toLowerCase() : string
 >                : ^^^^^^
 >a.toLowerCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >a : string
 >  : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

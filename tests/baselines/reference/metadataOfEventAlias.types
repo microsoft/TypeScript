@@ -23,7 +23,7 @@ export class SomeClass {
 
     @Input event: Event;
 >Input : (target: any, key: string) => void
->      : ^      ^^   ^^   ^^      ^^^^^^^^^
+>      : ^      ^^   ^^   ^^      ^^^^^    
 >event : Event
 >      : ^^^^^
 }

@@ -19,13 +19,13 @@ const x = {x: 12};
 
 module.exports = x;
 >module.exports = x : { x: number; }
->                   : ^^^^^^^^^^^^^^
+>                   : ^^^^^      ^^^
 >module.exports : { x: number; }
->               : ^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^
 >module : { exports: { x: number; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^      ^^^^^^
 >exports : { x: number; }
->        : ^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^
 >x : Item
 >  : ^^^^
 

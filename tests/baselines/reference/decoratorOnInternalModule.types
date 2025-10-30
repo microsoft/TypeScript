@@ -9,8 +9,8 @@ declare function dec<T>(target: T): T;
 
 @dec
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
-module M {
+namespace M {
     
 }

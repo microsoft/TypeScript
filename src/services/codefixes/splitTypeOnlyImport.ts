@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixContextBase,
     Debug,
     Diagnostics,
@@ -10,12 +15,7 @@ import {
     SourceFile,
     textChanges,
     TextSpan,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
 const fixId = "splitTypeOnlyImport";
@@ -51,7 +51,7 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         factory.updateImportDeclaration(
             importDeclaration,
             importDeclaration.modifiers,
-            factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
+            factory.updateImportClause(importClause, importClause.phaseModifier, importClause.name, /*namedBindings*/ undefined),
             importDeclaration.moduleSpecifier,
             importDeclaration.attributes,
         ),
@@ -62,7 +62,7 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         importDeclaration,
         factory.createImportDeclaration(
             /*modifiers*/ undefined,
-            factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
+            factory.updateImportClause(importClause, importClause.phaseModifier, /*name*/ undefined, importClause.namedBindings),
             importDeclaration.moduleSpecifier,
             importDeclaration.attributes,
         ),

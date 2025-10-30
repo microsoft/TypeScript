@@ -131,11 +131,11 @@ var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >n3 : any
 >   : ^^^
 >nr : { n4: number; }
->   : ^^^^^^^^^^^^^^^
+>   : ^^^^^^      ^^^
 >restrest : { rest: number; restrest: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^^                                                       ^^^^^^^^      ^^^^^^^^^^^^      ^^^
 
 let complex: { x: { ka, ki }, y: number };
 >complex : { x: { ka: any; ki: any; }; y: number; }
@@ -163,13 +163,13 @@ var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >rest : {}
 >     : ^^
 >complex : { x: { ka: any; ki: any; }; y: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^      ^^^   ^^^^^      ^^^
 
 ({x: { ka, ...nested }, y: other, ...rest} = complex);
 >({x: { ka, ...nested }, y: other, ...rest} = complex) : { x: { ka: any; ki: any; }; y: number; }
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^^^^^      ^^^      ^^^   ^^^^^      ^^^
 >{x: { ka, ...nested }, y: other, ...rest} = complex : { x: { ka: any; ki: any; }; y: number; }
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                    : ^^^^^      ^^^      ^^^   ^^^^^      ^^^
 >{x: { ka, ...nested }, y: other, ...rest} : { x: { ki: any; ka: any; }; y: number; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { ki: any; ka: any; }
@@ -187,7 +187,7 @@ var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >rest : {}
 >     : ^^
 >complex : { x: { ka: any; ki: any; }; y: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^      ^^^   ^^^^^      ^^^
 
 var { x, ...fresh } = { x: 1, y: 2 };
 >x : number
@@ -294,7 +294,7 @@ var { removed, ...removableRest } = removable;
 >removed : string
 >        : ^^^^^^
 >removableRest : { remainder: string; }
->              : ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^      ^^^
 >removable : Removable
 >          : ^^^^^^^^^
 
@@ -308,7 +308,7 @@ var { removed, ...removableRest2 } = i;
 >removed : string
 >        : ^^^^^^
 >removableRest2 : { m(): void; remainder: string; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^    ^^^^^^^^^^^^^      ^^^
 >i : I
 >  : ^
 

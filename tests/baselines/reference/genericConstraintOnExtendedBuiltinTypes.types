@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes.ts] ////
 
 === genericConstraintOnExtendedBuiltinTypes.ts ===
-declare module EndGate {
+declare namespace EndGate {
     export interface ICloneable {
         Clone(): any;
 >Clone : () => any
@@ -13,7 +13,7 @@ interface Number extends EndGate.ICloneable { }
 >EndGate : typeof EndGate
 >        : ^^^^^^^^^^^^^^
 
-module EndGate.Tweening {
+namespace EndGate.Tweening {
 >EndGate : typeof EndGate
 >        : ^^^^^^^^^^^^^^
 >Tweening : typeof Tweening
@@ -42,16 +42,16 @@ module EndGate.Tweening {
 >      : ^
 >from.Clone() : any
 >from.Clone : () => any
->           : ^^^^^^^^^
+>           : ^^^^^^   
 >from : T
 >     : ^
 >Clone : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
         }
     }
 }
 
-module EndGate.Tweening {
+namespace EndGate.Tweening {
 >EndGate : typeof EndGate
 >        : ^^^^^^^^^^^^^^
 >Tweening : typeof Tweening

@@ -59,7 +59,7 @@ for (var x in fn()) { }
 >fn() : any
 >     : ^^^
 >fn : () => any
->   : ^^^^^^^^^
+>   : ^^^^^^   
 
 for (var x in /[a-z]/) { }
 >x : string
@@ -350,7 +350,7 @@ for (var x in i[42]) { }
 >   : ^^
 
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

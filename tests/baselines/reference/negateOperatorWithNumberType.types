@@ -36,7 +36,7 @@ class A {
 >1 : 1
 >  : ^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -160,7 +160,7 @@ var ResultIsNumber9 = -foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber10 = -A.foo();
 >ResultIsNumber10 : number
@@ -215,7 +215,7 @@ var ResultIsNumber11 = -(NUMBER - NUMBER);
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 -objA.a;
 >-objA.a : number

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/varBlock.ts] ////
 
 === varBlock.ts ===
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(varBlock.ts, 0, 0))
 
     export var a, b2: number = 10, b;
@@ -10,7 +10,7 @@ module m2 {
 >b : Symbol(b, Decl(varBlock.ts, 2, 34))
 }
 
-declare module m3 {
+declare namespace m3 {
 >m3 : Symbol(m3, Decl(varBlock.ts, 3, 1), Decl(varBlock.ts, 21, 24))
 
     var a, b, c;
@@ -47,7 +47,7 @@ declare var d3, d4 = 10;
 >d3 : Symbol(d3, Decl(varBlock.ts, 21, 11))
 >d4 : Symbol(d4, Decl(varBlock.ts, 21, 15))
 
-module m3 {
+namespace m3 {
 >m3 : Symbol(m3, Decl(varBlock.ts, 3, 1), Decl(varBlock.ts, 21, 24))
 
     declare var d = 10;
@@ -67,7 +67,7 @@ module m3 {
 >d4E : Symbol(d4E, Decl(varBlock.ts, 27, 37))
 }
 
-declare module m4 {
+declare namespace m4 {
 >m4 : Symbol(m4, Decl(varBlock.ts, 28, 1))
 
     var d = 10;

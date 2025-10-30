@@ -14,6 +14,12 @@
 
     MAX DEPTH 3 LEVELS
 */
+const p = "propName";
+>p : "propName"
+>  : ^^^^^^^^^^
+>"propName" : "propName"
+>           : ^^^^^^^^^^
+
 var V;
 >V : any
 >  : ^^^
@@ -177,8 +183,8 @@ interface I {
     [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
     [p1: string];
 >p1 : string
@@ -224,7 +230,7 @@ interface I {
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -232,13 +238,13 @@ interface I {
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -405,8 +411,8 @@ module M {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -452,7 +458,7 @@ module M {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -460,13 +466,13 @@ module M {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
     }
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -483,7 +489,7 @@ module M {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -497,7 +503,7 @@ module M {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -510,7 +516,7 @@ module M {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
 >eV : any
@@ -675,8 +681,8 @@ module M {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -722,7 +728,7 @@ module M {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -730,13 +736,13 @@ module M {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
     }
-    export module eM {
+    export namespace eM {
 >eM : typeof eM
 >   : ^^^^^^^^^
 
@@ -753,7 +759,7 @@ module M {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -767,7 +773,7 @@ module M {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -780,7 +786,7 @@ module M {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
 >eaV : any
@@ -879,7 +885,7 @@ module M {
 >tgF : any
 >    : ^^^
     }
-    export declare module eaM {
+    export declare namespace eaM {
 >eaM : typeof eaM
 >    : ^^^^^^^^^^
 
@@ -896,7 +902,7 @@ module M {
 >  : ^
 
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -910,7 +916,7 @@ module M {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export var eV;
@@ -1076,8 +1082,8 @@ export interface eI {
     [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
     [p1: string];
 >p1 : string
@@ -1123,7 +1129,7 @@ export interface eI {
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1131,13 +1137,13 @@ export interface eI {
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
 }
-export module eM {
+export namespace eM {
 >eM : typeof import("giant").eM
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1304,8 +1310,8 @@ export module eM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -1351,7 +1357,7 @@ export module eM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1359,13 +1365,13 @@ export module eM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
     }
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -1382,7 +1388,7 @@ export module eM {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -1396,7 +1402,7 @@ export module eM {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -1409,7 +1415,7 @@ export module eM {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
 >eV : any
@@ -1574,8 +1580,8 @@ export module eM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -1621,7 +1627,7 @@ export module eM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1629,13 +1635,13 @@ export module eM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
     }
-    export module eM {
+    export namespace eM {
 >eM : typeof eM
 >   : ^^^^^^^^^
 
@@ -1652,7 +1658,7 @@ export module eM {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -1666,7 +1672,7 @@ export module eM {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -1679,7 +1685,7 @@ export module eM {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
 >eaV : any
@@ -1778,7 +1784,7 @@ export module eM {
 >tgF : any
 >    : ^^^
     }
-    export declare module eaM {
+    export declare namespace eaM {
 >eaM : typeof eaM
 >    : ^^^^^^^^^^
 
@@ -1795,7 +1801,7 @@ export module eM {
 >  : ^
 
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -1809,7 +1815,7 @@ export module eM {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export declare var eaV;
@@ -1909,7 +1915,7 @@ export declare class eaC {
 >tgF : any
 >    : ^^^
 }
-export declare module eaM {
+export declare namespace eaM {
 >eaM : typeof eaM
 >    : ^^^^^^^^^^
 
@@ -2008,8 +2014,8 @@ export declare module eaM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -2055,7 +2061,7 @@ export declare module eaM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -2063,13 +2069,13 @@ export declare module eaM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
     }
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -2086,7 +2092,7 @@ export declare module eaM {
 >  : ^
 
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -2100,7 +2106,7 @@ export declare module eaM {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
         export declare var eaV
 >eaV : any
 >    : ^^^
@@ -2113,7 +2119,7 @@ export declare module eaM {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { }
+        export declare namespace eaM { }
     }
     export var eV;
 >eV : any
@@ -2214,8 +2220,8 @@ export declare module eaM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -2261,7 +2267,7 @@ export declare module eaM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -2269,13 +2275,13 @@ export declare module eaM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
 >    : ^^^
     }
-    export module eM {
+    export namespace eM {
 >eM : typeof eM
 >   : ^^^^^^^^^
 
@@ -2291,7 +2297,7 @@ export declare module eaM {
 >C : C
 >  : ^
 
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -2305,6 +2311,6 @@ export declare module eaM {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }

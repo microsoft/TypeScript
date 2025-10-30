@@ -36,7 +36,7 @@ const shallow = type(["ark", "|>", (x) => x.length])
 >type(["ark", "|>", (x) => x.length]) : ["ark", "|>", (x: "ark") => number]
 >                                     : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >type : <def>(def: validateDefinition<def>) => def
->     : ^   ^^   ^^                       ^^^^^^^^
+>     : ^   ^^   ^^                       ^^^^^   
 >["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]
 >                               : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >"ark" : "ark"
@@ -60,7 +60,7 @@ const objectLiteral = type({ a: ["ark", "|>", (x) => x.length] })
 >type({ a: ["ark", "|>", (x) => x.length] }) : { a: ["ark", "|>", (x: "ark") => number]; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >type : <def>(def: validateDefinition<def>) => def
->     : ^   ^^   ^^                       ^^^^^^^^
+>     : ^   ^^   ^^                       ^^^^^   
 >{ a: ["ark", "|>", (x) => x.length] } : { a: ["ark", "|>", (x: "ark") => number]; }
 >                                      : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >a : ["ark", "|>", (x: "ark") => number]
@@ -88,7 +88,7 @@ const nestedTuple = type([["ark", "|>", (x) => x.length]])
 >type([["ark", "|>", (x) => x.length]]) : [["ark", "|>", (x: "ark") => number]]
 >                                       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >type : <def>(def: validateDefinition<def>) => def
->     : ^   ^^   ^^                       ^^^^^^^^
+>     : ^   ^^   ^^                       ^^^^^   
 >[["ark", "|>", (x) => x.length]] : [["ark", "|>", (x: "ark") => number]]
 >                                 : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]

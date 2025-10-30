@@ -362,7 +362,7 @@ function f() { }
 >f : typeof f
 >  : ^^^^^^^^
 
-module f {
+namespace f {
 >f : typeof f
 >  : ^^^^^^^^
 
@@ -404,7 +404,7 @@ class c { baz: string }
 >baz : string
 >    : ^^^^^^
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 
@@ -469,7 +469,7 @@ function f17<T>(x: T) {
 
 function f18<T, U>(x: U) {
 >f18 : <T, U>(x: U) => void
->    : ^^^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^^^^^^^^
 >x : U
 >  : ^
 
