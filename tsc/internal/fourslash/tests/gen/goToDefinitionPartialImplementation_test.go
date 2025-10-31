@@ -26,5 +26,5 @@ module A {
     var x: [|/*Part2Use*/IA|];
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "Part2Use")
+	f.VerifyBaselineGoToDefinition(t, true, "Part2Use")
 }

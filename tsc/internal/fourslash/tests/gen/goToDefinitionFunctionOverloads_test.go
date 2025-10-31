@@ -19,5 +19,5 @@ function /*functionOverloadDefinition*/functionOverload() {}
 [|/*functionOverloadReference2*/functionOverload|]("123");
 [|/*brokenOverload*/functionOverload|]({});`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "functionOverloadReference1", "functionOverloadReference2", "brokenOverload", "functionOverload1")
+	f.VerifyBaselineGoToDefinition(t, true, "functionOverloadReference1", "functionOverloadReference2", "brokenOverload", "functionOverload1")
 }

@@ -21,5 +21,5 @@ func TestImportTypeNodeGoToDefinition(t *testing.T) {
 type A = typeof import([|/*1*/"./ns"|]).[|/*2*/Foo|].[|/*3*/Bar|];
 type B = import([|/*4*/"./ns"|]).[|/*5*/Foo|].[|/*6*/Bar|].[|/*7*/Baz|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1", "2", "3", "4", "5", "6", "7")
+	f.VerifyBaselineGoToDefinition(t, true, "1", "2", "3", "4", "5", "6", "7")
 }

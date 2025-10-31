@@ -4,7 +4,7 @@
 
 // === /b.js ===
 // const f = require("./a");
-// /*GOTO DEF*/f();
+// /*GOTO DEF*/[|f|]();
 
 
 
@@ -14,4 +14,4 @@
 
 // === /bar.ts ===
 // import f = require("./a");
-// /*GOTO DEF*/f();
+// /*GOTO DEF*/[|f|]();

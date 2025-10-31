@@ -19,5 +19,5 @@ import { T } from "./foo";
 let x: [|/*reference*/T|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineGoToTypeDefinition(t, "reference")
-	f.VerifyBaselineGoToDefinition(t, "reference")
+	f.VerifyBaselineGoToDefinition(t, true, "reference")
 }

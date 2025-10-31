@@ -23,5 +23,5 @@ class C {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "constReference", "cbReference", "propReference")
+	f.VerifyBaselineGoToDefinition(t, false, "constReference", "cbReference", "propReference")
 }

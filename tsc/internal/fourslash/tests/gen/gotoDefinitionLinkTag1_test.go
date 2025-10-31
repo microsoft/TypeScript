@@ -36,5 +36,5 @@ function foo(x) { }
 /** {@link /*use7*/[|Foo|] }dd*/
 const f = ""`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use1", "use2", "use3", "use4", "use5", "use6", "use7")
+	f.VerifyBaselineGoToDefinition(t, false, "use1", "use2", "use3", "use4", "use5", "use6", "use7")
 }

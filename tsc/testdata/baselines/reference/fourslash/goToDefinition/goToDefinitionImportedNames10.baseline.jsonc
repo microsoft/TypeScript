@@ -7,4 +7,4 @@
 
 // === /b.js ===
 // const { Class } = require("./a");
-//  /*GOTO DEF*/Class;
+//  /*GOTO DEF*/[|Class|];

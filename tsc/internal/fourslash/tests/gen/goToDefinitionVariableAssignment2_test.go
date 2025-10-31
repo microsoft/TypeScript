@@ -18,5 +18,5 @@ Foo.prototype.bar = function() {}
 new [|Foo/*ref*/|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.GoToFile(t, "foo.ts")
-	f.VerifyBaselineGoToDefinition(t, "ref")
+	f.VerifyBaselineGoToDefinition(t, true, "ref")
 }

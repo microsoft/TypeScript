@@ -30,5 +30,5 @@ class D {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "super", "superExpression", "superBroken")
+	f.VerifyBaselineGoToDefinition(t, true, "super", "superExpression", "superBroken")
 }

@@ -19,5 +19,5 @@ let x: Foo = {
     [|f/*1*/oo|]
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

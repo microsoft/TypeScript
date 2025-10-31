@@ -26,5 +26,5 @@ var x : One | Two;
 x.[|/*propertyReference*/commonProperty|];
 x./*3*/commonFunction;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "propertyReference")
+	f.VerifyBaselineGoToDefinition(t, true, "propertyReference")
 }

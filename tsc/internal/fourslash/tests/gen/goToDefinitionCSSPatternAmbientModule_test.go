@@ -22,5 +22,5 @@ declare module /*2b*/"*.css" {
 // @Filename: index.ts
 import styles from [|/*1*/"./index.css"|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

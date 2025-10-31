@@ -28,5 +28,5 @@ class RC2 extends React.Component<{}, {}> {
 var /*pt1*/RCComp = RC1 || RC2;
 <[|RC/*one*/Comp|] />`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "one")
+	f.VerifyBaselineGoToDefinition(t, true, "one")
 }

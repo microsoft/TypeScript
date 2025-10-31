@@ -28,5 +28,5 @@ const t2 = 1
  */
 const t3 = 1`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use1", "use2", "use3")
+	f.VerifyBaselineGoToDefinition(t, false, "use1", "use2", "use3")
 }

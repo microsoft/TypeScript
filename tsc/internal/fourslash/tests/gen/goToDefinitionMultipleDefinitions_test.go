@@ -36,5 +36,5 @@ module /*moduleDefinition2*/Module {
 // @Filename: e.ts
 [|Modul/*moduleReference*/e|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "interfaceReference", "moduleReference")
+	f.VerifyBaselineGoToDefinition(t, true, "interfaceReference", "moduleReference")
 }

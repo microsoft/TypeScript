@@ -19,5 +19,5 @@ class /*classDefinition*/Class {
 }
 export default Class;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "classAliasDefinition")
+	f.VerifyBaselineGoToDefinition(t, true, "classAliasDefinition")
 }

@@ -32,7 +32,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	if quickInfo == "" {
 		return lsproto.HoverOrNull{}, nil
 	}
-	hoverRange := l.getRangeOfNode(rangeNode, nil, nil)
+	hoverRange := l.getLspRangeOfNode(rangeNode, nil, nil)
 
 	return lsproto.HoverOrNull{
 		Hover: &lsproto.Hover{

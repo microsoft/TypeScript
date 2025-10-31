@@ -22,5 +22,5 @@ class B extends A {
     [|/*1*/override|] m() {}
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

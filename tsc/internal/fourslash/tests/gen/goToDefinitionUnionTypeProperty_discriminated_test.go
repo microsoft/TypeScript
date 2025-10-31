@@ -32,5 +32,5 @@ const u2: U = {
   [|/*propBogus*/prop|]: 0,
 };`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "kind", "prop", "kindBogus", "propBogus")
+	f.VerifyBaselineGoToDefinition(t, true, "kind", "prop", "kindBogus", "propBogus")
 }

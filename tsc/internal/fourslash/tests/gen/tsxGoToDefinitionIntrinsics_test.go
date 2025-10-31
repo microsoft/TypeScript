@@ -26,5 +26,5 @@ var x = <[|di/*ds*/v|] />;
 var y = <[|s/*ss*/pan|] />;
 var z = <div [|na/*ps*/me|]='hello' />;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "ds", "ss", "ps")
+	f.VerifyBaselineGoToDefinition(t, true, "ds", "ss", "ps")
 }

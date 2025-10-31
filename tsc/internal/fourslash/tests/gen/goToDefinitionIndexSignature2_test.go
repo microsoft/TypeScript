@@ -16,5 +16,5 @@ func TestGoToDefinitionIndexSignature2(t *testing.T) {
 const o = {};
 o.[|/*use*/foo|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, true, "use")
 }

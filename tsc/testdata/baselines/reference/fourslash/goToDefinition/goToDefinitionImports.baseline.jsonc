@@ -9,7 +9,7 @@
 // import b = require("./b");
 // f;
 // x;
-// /*GOTO DEF*/a;
+// /*GOTO DEF*/[|a|];
 // b;
 
 
@@ -23,7 +23,7 @@
 // import f, { x } from "./a";
 // import * as a from "./a";
 // import b = require("./b");
-// /*GOTO DEF*/f;
+// /*GOTO DEF*/[|f|];
 // x;
 // a;
 // b;
@@ -40,7 +40,7 @@
 // import * as a from "./a";
 // import b = require("./b");
 // f;
-// /*GOTO DEF*/x;
+// /*GOTO DEF*/[|x|];
 // a;
 // b;
 

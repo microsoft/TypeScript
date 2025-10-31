@@ -26,5 +26,5 @@ import b = require("./b");
 [|/*aUse*/a|];
 [|/*bUse*/b|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "aUse", "fUse", "xUse", "bUse")
+	f.VerifyBaselineGoToDefinition(t, true, "aUse", "fUse", "xUse", "bUse")
 }

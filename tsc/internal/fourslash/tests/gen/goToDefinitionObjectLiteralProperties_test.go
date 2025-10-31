@@ -25,5 +25,5 @@ o./*setterReference*/setter;
 o./*methodReference*/method;
 o./*es6StyleMethodReference*/es6StyleMethod;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "valueReference", "getterReference", "setterReference", "methodReference", "es6StyleMethodReference")
+	f.VerifyBaselineGoToDefinition(t, false, "valueReference", "getterReference", "setterReference", "methodReference", "es6StyleMethodReference")
 }

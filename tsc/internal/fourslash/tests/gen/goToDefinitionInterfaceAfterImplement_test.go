@@ -22,5 +22,5 @@ class iClass implements /*interfaceReference*/sInt {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "interfaceReference")
+	f.VerifyBaselineGoToDefinition(t, false, "interfaceReference")
 }

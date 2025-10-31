@@ -15,5 +15,5 @@ func TestGoToDefinitionYield4(t *testing.T) {
     class C { [/*start*/yield 10]() {} }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "start")
+	f.VerifyBaselineGoToDefinition(t, true, "start")
 }

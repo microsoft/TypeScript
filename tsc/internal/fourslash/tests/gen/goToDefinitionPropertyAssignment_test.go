@@ -18,5 +18,5 @@ Component./*PropertyResult*/displayName = 'Component'
 
 Component.[|/*PropertyClick*/displayName|]`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "FunctionClick", "PropertyClick")
+	f.VerifyBaselineGoToDefinition(t, true, "FunctionClick", "PropertyClick")
 }

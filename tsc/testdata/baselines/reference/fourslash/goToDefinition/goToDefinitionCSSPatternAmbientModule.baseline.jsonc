@@ -6,4 +6,4 @@
 // }
 
 // === /index.ts ===
-// import styles from /*GOTO DEF*/"./index.css";
+// import styles from /*GOTO DEF*/[|"./index.css"|];

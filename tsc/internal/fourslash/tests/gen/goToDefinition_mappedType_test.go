@@ -15,5 +15,5 @@ func TestGoToDefinition_mappedType(t *testing.T) {
 declare const i: { [K in "m"]: I[K] };
 i.[|/*ref*/m|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "ref")
+	f.VerifyBaselineGoToDefinition(t, true, "ref")
 }

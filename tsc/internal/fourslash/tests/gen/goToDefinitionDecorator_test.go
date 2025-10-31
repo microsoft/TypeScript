@@ -25,5 +25,5 @@ function /*decoratorFactoryDefinition*/decoratorFactory(...args) {
     return target => target;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "decoratorUse", "decoratorFactoryUse")
+	f.VerifyBaselineGoToDefinition(t, true, "decoratorUse", "decoratorFactoryUse")
 }

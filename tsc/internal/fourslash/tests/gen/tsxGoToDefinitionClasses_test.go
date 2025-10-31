@@ -26,5 +26,5 @@ var x = <[|My/*c*/Class|] />;
 var y = <MyClass [|f/*p*/oo|]= 'hello' />;
 var z = <[|MyCl/*w*/ass|] wrong= 'hello' />;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "c", "p", "w")
+	f.VerifyBaselineGoToDefinition(t, true, "c", "p", "w")
 }

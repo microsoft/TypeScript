@@ -15,5 +15,5 @@ func TestGoToDefinitionReturn1(t *testing.T) {
     [|/*start*/return|] 10;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "start")
+	f.VerifyBaselineGoToDefinition(t, true, "start")
 }

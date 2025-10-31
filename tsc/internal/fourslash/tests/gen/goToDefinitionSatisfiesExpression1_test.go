@@ -18,5 +18,5 @@ func TestGoToDefinitionSatisfiesExpression1(t *testing.T) {
 //somewhere in app
 STRINGS.[|/*usage*/title|]`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "definition", "usage")
+	f.VerifyBaselineGoToDefinition(t, true, "definition", "usage")
 }

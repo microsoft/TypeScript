@@ -29,5 +29,5 @@ function SFC2(prop: { x: boolean }) {
 var /*def*/SFCComp = SFC1 || SFC2;
 <[|SFC/*one*/Comp|] x />`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "one")
+	f.VerifyBaselineGoToDefinition(t, true, "one")
 }

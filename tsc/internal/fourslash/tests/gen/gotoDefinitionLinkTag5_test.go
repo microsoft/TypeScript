@@ -17,5 +17,5 @@ func TestGotoDefinitionLinkTag5(t *testing.T) {
     [|/*2*/B|]
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, false, "1")
 }

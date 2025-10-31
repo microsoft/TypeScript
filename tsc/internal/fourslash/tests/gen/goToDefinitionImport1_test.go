@@ -16,5 +16,5 @@ func TestGoToDefinitionImport1(t *testing.T) {
 // @Filename: /a.ts
 import { foo } from      [|"./b/*1*/"|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

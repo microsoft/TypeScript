@@ -21,5 +21,5 @@ const f = require("./a");
 import f = require("./a");
 [|/*useTs*/f|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use", "useTs")
+	f.VerifyBaselineGoToDefinition(t, true, "use", "useTs")
 }

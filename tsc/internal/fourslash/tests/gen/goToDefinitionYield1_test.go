@@ -19,5 +19,5 @@ const /*end2*/genFunction = function*() {
     [|/*start2*/yield|] 0;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "start1", "start2")
+	f.VerifyBaselineGoToDefinition(t, true, "start1", "start2")
 }

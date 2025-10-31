@@ -18,5 +18,5 @@ let /*letDef*/y = {
     [|/*letProp*/y|]
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "varProp", "letProp")
+	f.VerifyBaselineGoToDefinition(t, true, "varProp", "letProp")
 }

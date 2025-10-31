@@ -18,5 +18,5 @@ var x = new n.Foo();
 /*2*/class Foo {}
 export var x = 0;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

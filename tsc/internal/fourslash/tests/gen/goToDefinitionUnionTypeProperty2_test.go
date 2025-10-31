@@ -28,5 +28,5 @@ var x : One | Two;
 
 x.common.[|/*propertyReference*/a|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "propertyReference")
+	f.VerifyBaselineGoToDefinition(t, true, "propertyReference")
 }

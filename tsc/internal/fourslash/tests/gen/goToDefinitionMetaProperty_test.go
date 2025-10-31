@@ -18,5 +18,5 @@ function /*functionDefinition*/f() { n/*3*/ew.[|t/*4*/arget|]; }
 im/*5*/port.m;
 class /*classDefinition*/c { constructor() { n/*6*/ew.[|t/*7*/arget|]; } }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1", "2", "3", "4", "5", "6", "7")
+	f.VerifyBaselineGoToDefinition(t, true, "1", "2", "3", "4", "5", "6", "7")
 }

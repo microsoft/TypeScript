@@ -20,5 +20,5 @@ func TestGoToDefinitionClassStaticBlocks(t *testing.T) {
     [|/*classStaticBocks3*/static|] {}
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "classStaticBocks1", "classStaticBocks2", "classStaticBocks3")
+	f.VerifyBaselineGoToDefinition(t, true, "classStaticBocks1", "classStaticBocks2", "classStaticBocks3")
 }

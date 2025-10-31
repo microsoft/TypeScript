@@ -3,7 +3,7 @@
 // class [|c|] { }
 
 // === /Consumption.ts ===
-//  var n = new /*GOTO DEF*/c();
+//  var n = new /*GOTO DEF*/[|c|]();
 //  var n = new c();
 
 
@@ -14,4 +14,4 @@
 
 // === /Consumption.ts ===
 //  var n = new c();
-//  var n = new c/*GOTO DEF*/();
+//  var n = new [|c|]/*GOTO DEF*/();

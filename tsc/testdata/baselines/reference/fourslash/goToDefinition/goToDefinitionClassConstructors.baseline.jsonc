@@ -11,7 +11,7 @@
 
 // === /main.ts ===
 // import { Derived } from './definitions'
-// const derived = new /*GOTO DEF*/Derived(cArg)
+// const derived = new /*GOTO DEF*/[|Derived|](cArg)
 
 
 
@@ -60,4 +60,4 @@
 //     readonly name: string = 'SameFile'
 // }
 // const SameFile = new SameFile(cArg)
-// const wrapper = new /*GOTO DEF*/Base(cArg)
+// const wrapper = new /*GOTO DEF*/[|Base|](cArg)

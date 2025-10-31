@@ -29,5 +29,5 @@ class MyClass {
 var x = <MyClass {...[|n/*src*/n|]}></MyClass>;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "nn")
-	f.VerifyBaselineGoToDefinition(t, "src")
+	f.VerifyBaselineGoToDefinition(t, true, "src")
 }

@@ -5,4 +5,4 @@
 
 // === /bar.ts ===
 // import { T } from "./foo";
-// let x: /*GOTO DEF*/T;
+// let x: /*GOTO DEF*/[|T|];

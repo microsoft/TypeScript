@@ -20,5 +20,5 @@ func TestGoToDefinitionOverloadsInMultiplePropertyAccesses(t *testing.T) {
 }
 A.B.[|/*2*/f|]("");`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "2")
+	f.VerifyBaselineGoToDefinition(t, true, "2")
 }

@@ -17,5 +17,5 @@ var x = new n.Foo();
 // @Filename: a.ts
  /*2*/export class Foo {}`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

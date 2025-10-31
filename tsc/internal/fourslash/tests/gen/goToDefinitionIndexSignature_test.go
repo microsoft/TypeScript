@@ -30,5 +30,5 @@ k.[|/*usea*/a|];
 k.[|/*useb*/b|];
 k.[|/*useab*/ab|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "useI", "useIJ", "usea", "useb", "useab")
+	f.VerifyBaselineGoToDefinition(t, true, "useI", "useIJ", "usea", "useb", "useab")
 }

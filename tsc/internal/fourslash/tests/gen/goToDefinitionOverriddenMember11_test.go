@@ -24,5 +24,5 @@ class Bar extends Foo {
     m() {}
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1", "2", "3", "4", "5")
+	f.VerifyBaselineGoToDefinition(t, true, "1", "2", "3", "4", "5")
 }

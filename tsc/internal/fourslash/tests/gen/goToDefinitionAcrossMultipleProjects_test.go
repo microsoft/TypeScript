@@ -26,5 +26,5 @@ var /*def4*/x: number;
 /// <reference path="d.ts" />
 [|/*use*/x|]++;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, true, "use")
 }

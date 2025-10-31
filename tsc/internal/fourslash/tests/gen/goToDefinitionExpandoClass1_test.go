@@ -23,5 +23,5 @@ Core.Test.prototype.foo = 10
 
 new Core.Tes/*1*/t()`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

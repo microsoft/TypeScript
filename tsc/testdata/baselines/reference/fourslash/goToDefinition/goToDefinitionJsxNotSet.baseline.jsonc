@@ -7,4 +7,4 @@
 
 // === /bar.jsx ===
 // import Foo from './foo';
-// const a = </*GOTO DEF*/Foo />
+// const a = </*GOTO DEF*/[|Foo|] />

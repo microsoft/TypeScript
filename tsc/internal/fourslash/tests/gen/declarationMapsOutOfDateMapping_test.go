@@ -34,5 +34,5 @@ export class /*2*/Foo {
 import { Foo/*1*/ } from "a";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.GoToFile(t, "/home/src/workspaces/project/index.ts")
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, false, "1")
 }

@@ -20,5 +20,5 @@ import /*deg*/g from "./a";
 import { f } from "./a";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineFindAllReferences(t, "def", "deg")
-	f.VerifyBaselineGoToDefinition(t, "ref")
+	f.VerifyBaselineGoToDefinition(t, true, "ref")
 }

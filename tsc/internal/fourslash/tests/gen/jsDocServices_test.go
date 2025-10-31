@@ -26,5 +26,5 @@ function f([|[|/*def*/{| "contextRangeIndex": 1 |}foo|]: I|]) {
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[0], f.Ranges()[2], f.Ranges()[3])
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, f.Ranges()[0], f.Ranges()[2], f.Ranges()[3])
 	f.VerifyBaselineGoToTypeDefinition(t, "use")
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, false, "use")
 }

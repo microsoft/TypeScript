@@ -20,5 +20,5 @@ export type { SyntaxKind }
 import type { SyntaxKind } from './b';
 let kind: [|/*2*/SyntaxKind|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "2")
+	f.VerifyBaselineGoToDefinition(t, true, "2")
 }

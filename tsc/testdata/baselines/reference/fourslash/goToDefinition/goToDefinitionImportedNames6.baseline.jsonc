@@ -10,4 +10,4 @@
 // }|]
 
 // === /b.ts ===
-// import /*GOTO DEF*/alias = require("./a");
+// import /*GOTO DEF*/[|alias|] = require("./a");

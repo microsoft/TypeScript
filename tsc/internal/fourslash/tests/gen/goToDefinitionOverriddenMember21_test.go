@@ -22,5 +22,5 @@ export class B extends A {
   static [|/*1*/override|] readonly [prop] = "B";
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

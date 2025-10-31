@@ -19,5 +19,5 @@ func TestGoToDefinitionObjectBindingElementPropertyName01(t *testing.T) {
 var foo: I;
 var { [|/*use*/property1|]: prop1 } = foo;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, true, "use")
 }

@@ -4,4 +4,4 @@
 
 // === /b.ts ===
 // import g from "./a";
-// /*GOTO DEF*/g();
+// /*GOTO DEF*/[|g|]();

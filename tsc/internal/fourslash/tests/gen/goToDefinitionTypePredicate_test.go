@@ -16,5 +16,5 @@ function f(/*parameterDeclaration*/parameter: any): [|/*parameterName*/parameter
     return typeof parameter === "string";
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "parameterName", "typeReference")
+	f.VerifyBaselineGoToDefinition(t, true, "parameterName", "typeReference")
 }

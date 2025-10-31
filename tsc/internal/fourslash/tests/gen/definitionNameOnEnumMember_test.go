@@ -18,5 +18,5 @@ func TestDefinitionNameOnEnumMember(t *testing.T) {
 }
 var enumMember = e.[|/*1*/thirdMember|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, false, "1")
 }

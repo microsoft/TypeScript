@@ -18,5 +18,5 @@ function f(strs: TemplateStringsArray, x: number | boolean) {}
 [|/*useFNumber*/f|]` + "`" + `${0}` + "`" + `;
 [|/*useFBool*/f|]` + "`" + `${false}` + "`" + `;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "useFNumber", "useFBool")
+	f.VerifyBaselineGoToDefinition(t, true, "useFNumber", "useFBool")
 }

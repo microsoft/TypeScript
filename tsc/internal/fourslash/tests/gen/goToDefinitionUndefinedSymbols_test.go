@@ -16,5 +16,5 @@ var a: some/*undefinedType*/Type;
 var x = {}; x.some/*undefinedProperty*/Property;
 var a: any; a.some/*unkownProperty*/Property;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, f.MarkerNames()...)
+	f.VerifyBaselineGoToDefinition(t, true, f.MarkerNames()...)
 }

@@ -5,4 +5,4 @@
 
 // === /index.js ===
 // const { Util } = require('./reexport');
-// new Util/*GOTO DEF*/()
+// new [|Util|]/*GOTO DEF*/()

@@ -23,5 +23,5 @@ func TestGotoDefinitionSatisfiesTag(t *testing.T) {
 /** @satisfies {/*use*/[|T|]} comment */
 const foo = { a: 1 };`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, false, "use")
 }

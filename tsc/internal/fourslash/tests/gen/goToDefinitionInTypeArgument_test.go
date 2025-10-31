@@ -17,5 +17,5 @@ class /*barDefinition*/Bar { }
 
 var x = new Fo/*fooReference*/o<Ba/*barReference*/r>();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "barReference", "fooReference")
+	f.VerifyBaselineGoToDefinition(t, false, "barReference", "fooReference")
 }

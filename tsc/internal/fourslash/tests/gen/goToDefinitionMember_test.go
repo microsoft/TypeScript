@@ -16,5 +16,5 @@ class A {
     private z/*z*/: string;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "z")
+	f.VerifyBaselineGoToDefinition(t, true, "z")
 }

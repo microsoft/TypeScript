@@ -23,5 +23,5 @@ func TestGoToDefinitionPrivateName(t *testing.T) {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "pnFieldUse", "pnMethodUse", "pnPropUse")
+	f.VerifyBaselineGoToDefinition(t, true, "pnFieldUse", "pnMethodUse", "pnPropUse")
 }

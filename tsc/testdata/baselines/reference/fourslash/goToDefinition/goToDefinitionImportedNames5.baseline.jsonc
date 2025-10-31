@@ -10,4 +10,4 @@
 // }
 
 // === /b.ts ===
-// export {Class as /*GOTO DEF*/ClassAlias} from "./a";
+// export {Class as /*GOTO DEF*/[|ClassAlias|]} from "./a";

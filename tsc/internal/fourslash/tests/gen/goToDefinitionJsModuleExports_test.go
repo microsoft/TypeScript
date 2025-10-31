@@ -18,5 +18,5 @@ x.[|/*ref*/test|]();
 x./*defFn*/test3 = function () { }
 x.[|/*refFn*/test3|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "ref", "refFn")
+	f.VerifyBaselineGoToDefinition(t, true, "ref", "refFn")
 }

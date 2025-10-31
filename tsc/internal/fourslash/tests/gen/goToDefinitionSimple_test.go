@@ -17,5 +17,5 @@ class /*2*/c { }
  var n = new [|/*1*/c|]();
  var n = new [|c/*3*/|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1", "3")
+	f.VerifyBaselineGoToDefinition(t, true, "1", "3")
 }

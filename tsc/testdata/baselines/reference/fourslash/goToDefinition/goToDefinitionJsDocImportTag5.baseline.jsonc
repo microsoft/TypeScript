@@ -8,6 +8,6 @@
 //  */
 // 
 // /**
-//  * @param { A/*GOTO DEF*/ } a
+//  * @param { [|A|]/*GOTO DEF*/ } a
 //  */
 // function f(a) {}

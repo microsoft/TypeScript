@@ -1668,3 +1668,16 @@ func nodeSeenTracker() func(*ast.Node) bool {
 		return seen.AddIfAbsent(node)
 	}
 }
+
+// FindAllReferences.toContextSpan
+func toContextRange(textRange *core.TextRange, contextFile *ast.SourceFile, context *ast.Node) *core.TextRange {
+	if context == nil {
+		return textRange
+	}
+	// !!! isContextWithStartAndEndNode
+	contextRange := getRangeOfNode(context, contextFile, nil /*endNode*/)
+	if contextRange.Pos() != textRange.Pos() || contextRange.End() != textRange.End() {
+		return &contextRange
+	}
+	return nil
+}

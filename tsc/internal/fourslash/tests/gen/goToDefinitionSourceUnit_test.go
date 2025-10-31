@@ -26,5 +26,5 @@ func TestGoToDefinitionSourceUnit(t *testing.T) {
 // @Filename: b.ts
 /*fileB*/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "unknownFile", "knownFile")
+	f.VerifyBaselineGoToDefinition(t, true, "unknownFile", "knownFile")
 }

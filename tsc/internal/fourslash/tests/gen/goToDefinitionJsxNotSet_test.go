@@ -21,5 +21,5 @@ export default Foo;
 import Foo from './foo';
 const a = <[|/*use*/Foo|] />`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, true, "use")
 }

@@ -5,4 +5,4 @@
 // }
 
 // === /b.ts ===
-// export {Foo, Bar} from 'e/*GOTO DEF*/';
+// export {Foo, Bar} from [|'e/*GOTO DEF*/'|];

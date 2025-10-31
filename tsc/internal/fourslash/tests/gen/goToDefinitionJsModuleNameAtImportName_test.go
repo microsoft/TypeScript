@@ -25,5 +25,5 @@ new [|/*importUsage*/BlahModule|].Blah()
 import [|/*importDefTs*/BlahModule|] = require("./foo.js");
 new [|/*importUsageTs*/BlahModule|].Blah()`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "importDef", "importUsage", "importDefTs", "importUsageTs")
+	f.VerifyBaselineGoToDefinition(t, true, "importDef", "importUsage", "importDefTs", "importUsageTs")
 }

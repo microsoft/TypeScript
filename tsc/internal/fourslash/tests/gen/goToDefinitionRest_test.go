@@ -20,5 +20,5 @@ let t: Gen;
 var { x, ...rest } = t;
 rest.[|/*2*/parent|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "2")
+	f.VerifyBaselineGoToDefinition(t, true, "2")
 }

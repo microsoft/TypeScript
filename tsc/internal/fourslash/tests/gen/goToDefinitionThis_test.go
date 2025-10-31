@@ -19,5 +19,5 @@ class /*cls*/C {
     get self(/*getterDecl*/this: number) { return [|/*getterUse*/this|]; }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "fnUse", "clsUse", "getterUse")
+	f.VerifyBaselineGoToDefinition(t, true, "fnUse", "clsUse", "getterUse")
 }

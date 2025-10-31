@@ -25,5 +25,5 @@ class C {
     @[|/*useDecSymbol*/dec|] [s]() {}
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "useDecString", "useDecSymbol")
+	f.VerifyBaselineGoToDefinition(t, true, "useDecString", "useDecSymbol")
 }

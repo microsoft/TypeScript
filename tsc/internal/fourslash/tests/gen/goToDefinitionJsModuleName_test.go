@@ -17,5 +17,5 @@ func TestGoToDefinitionJsModuleName(t *testing.T) {
 // @Filename: bar.js
 var x = require([|/*1*/"./foo"|]);`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

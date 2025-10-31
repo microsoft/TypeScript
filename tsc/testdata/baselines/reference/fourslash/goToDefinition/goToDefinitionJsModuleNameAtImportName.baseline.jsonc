@@ -7,7 +7,7 @@
 //  module.exports.Blah = Blah;|]
 
 // === /bar.js ===
-// const /*GOTO DEF*/BlahModule = require("./foo.js");
+// const /*GOTO DEF*/[|BlahModule|] = require("./foo.js");
 // new BlahModule.Blah()
 
 
@@ -22,7 +22,7 @@
 
 // === /bar.js ===
 // const BlahModule = require("./foo.js");
-// new /*GOTO DEF*/BlahModule.Blah()
+// new /*GOTO DEF*/[|BlahModule|].Blah()
 
 
 
@@ -35,7 +35,7 @@
 //  module.exports.Blah = Blah;|]
 
 // === /barTs.ts ===
-// import /*GOTO DEF*/BlahModule = require("./foo.js");
+// import /*GOTO DEF*/[|BlahModule|] = require("./foo.js");
 // new BlahModule.Blah()
 
 
@@ -50,4 +50,4 @@
 
 // === /barTs.ts ===
 // import BlahModule = require("./foo.js");
-// new /*GOTO DEF*/BlahModule.Blah()
+// new /*GOTO DEF*/[|BlahModule|].Blah()

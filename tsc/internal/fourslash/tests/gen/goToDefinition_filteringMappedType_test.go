@@ -15,5 +15,5 @@ func TestGoToDefinition_filteringMappedType(t *testing.T) {
 const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { a: 0 };
 filtered.[|/*ref*/a|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "ref")
+	f.VerifyBaselineGoToDefinition(t, true, "ref")
 }

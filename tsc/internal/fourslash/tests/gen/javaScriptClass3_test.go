@@ -24,5 +24,5 @@ var x = new Foo();
 x.[|alpha/*src1*/|];
 x.[|beta/*src2*/|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "src1", "src2")
+	f.VerifyBaselineGoToDefinition(t, true, "src1", "src2")
 }

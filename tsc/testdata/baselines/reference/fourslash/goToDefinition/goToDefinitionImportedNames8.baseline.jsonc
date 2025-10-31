@@ -6,4 +6,4 @@
 //  export { Class };
 
 // === /b.js ===
-// import { /*GOTO DEF*/Class } from "./a";
+// import { /*GOTO DEF*/[|Class|] } from "./a";

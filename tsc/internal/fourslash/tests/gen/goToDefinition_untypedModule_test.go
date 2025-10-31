@@ -17,5 +17,5 @@ not read
 import { /*def*/f } from "foo";
 [|/*use*/f|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use")
+	f.VerifyBaselineGoToDefinition(t, true, "use")
 }

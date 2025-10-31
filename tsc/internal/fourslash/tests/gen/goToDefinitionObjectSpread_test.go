@@ -18,5 +18,5 @@ let a2: A2;
 let a12 = { ...a1, ...a2 };
 a12.[|a/*3*/|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "3")
+	f.VerifyBaselineGoToDefinition(t, true, "3")
 }

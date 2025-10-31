@@ -17,5 +17,5 @@ function shadowVariableTestModule() {
     /*shadowVariableReference*/shadowVariable = 1;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "shadowVariableReference")
+	f.VerifyBaselineGoToDefinition(t, false, "shadowVariableReference")
 }

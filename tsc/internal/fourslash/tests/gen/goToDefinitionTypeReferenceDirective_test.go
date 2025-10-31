@@ -18,5 +18,5 @@ func TestGoToDefinitionTypeReferenceDirective(t *testing.T) {
  /// <reference types="[|lib/*1*/|]"/>
  $.x;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

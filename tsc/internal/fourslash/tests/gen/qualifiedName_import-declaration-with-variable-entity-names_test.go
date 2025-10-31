@@ -40,5 +40,5 @@ var x = Alpha.[|{| "name" : "mem" |}x|]`
 		},
 	})
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, "import")
-	f.VerifyBaselineGoToDefinition(t, "import")
+	f.VerifyBaselineGoToDefinition(t, false, "import")
 }

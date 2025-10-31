@@ -5,4 +5,4 @@
 // }
 
 // === /b.ts ===
-// import * from 'e/*GOTO DEF*/';
+// import * from [|'e/*GOTO DEF*/'|];

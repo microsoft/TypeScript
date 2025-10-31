@@ -14,5 +14,5 @@ func TestGoToDefinitionExternalModuleName4(t *testing.T) {
 	const content = `// @Filename: b.ts
 import n = require('unknown/*1*/');`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

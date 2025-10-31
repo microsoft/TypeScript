@@ -21,5 +21,5 @@ let /*symbolDeclaration*/I2: {
 };
 new [|/*invokeExpression2*/I2|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "invokeExpression1", "invokeExpression2")
+	f.VerifyBaselineGoToDefinition(t, true, "invokeExpression1", "invokeExpression2")
 }

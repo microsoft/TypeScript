@@ -22,5 +22,5 @@ func TestGoToDefinitionFunctionOverloadsInClass(t *testing.T) {
     constructor() { }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "staticFunctionOverload", "functionOverload")
+	f.VerifyBaselineGoToDefinition(t, true, "staticFunctionOverload", "functionOverload")
 }

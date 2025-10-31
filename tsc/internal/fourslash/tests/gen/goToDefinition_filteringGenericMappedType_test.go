@@ -33,5 +33,5 @@ const obj2 = omit2(obj, {
 
 obj2.[|/*ref*/id|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "ref")
+	f.VerifyBaselineGoToDefinition(t, true, "ref")
 }

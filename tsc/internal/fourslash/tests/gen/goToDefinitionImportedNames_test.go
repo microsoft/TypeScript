@@ -23,5 +23,5 @@ export interface Interface {
     x;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "classAliasDefinition")
+	f.VerifyBaselineGoToDefinition(t, true, "classAliasDefinition")
 }

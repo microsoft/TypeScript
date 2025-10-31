@@ -15,5 +15,5 @@ func TestGoToDefinitionImplicitConstructor(t *testing.T) {
 }
 var implicitConstructor = new /*constructorReference*/ImplicitConstructor();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "constructorReference")
+	f.VerifyBaselineGoToDefinition(t, false, "constructorReference")
 }

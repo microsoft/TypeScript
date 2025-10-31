@@ -19,5 +19,5 @@ interface Test {
 }
 bar<Test>(({[|pr/*goto*/op2|]})=>{});`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "goto")
+	f.VerifyBaselineGoToDefinition(t, true, "goto")
 }

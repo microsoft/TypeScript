@@ -34,5 +34,5 @@ var x2 = new [|/*xref*/x|]();
 var y1 = new [|/*yref*/y|]();
 var z1 = new [|/*zref*/z|]();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "xusage", "yusage", "zusage", "cref", "xref", "yref", "zref")
+	f.VerifyBaselineGoToDefinition(t, true, "xusage", "yusage", "zusage", "cref", "xref", "yref", "zref")
 }

@@ -15,5 +15,5 @@ func TestGoToDefinitionExpandoElementAccess(t *testing.T) {
 f[/*0*/"x"] = 0;
 f[[|/*1*/"x"|]] = 1;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

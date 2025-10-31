@@ -16,5 +16,5 @@ var s: /*string*/string;
 var b: /*boolean*/boolean;
 var v: /*void*/void;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, f.MarkerNames()...)
+	f.VerifyBaselineGoToDefinition(t, true, f.MarkerNames()...)
 }

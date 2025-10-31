@@ -20,5 +20,5 @@ var numbers: number[];
 
 var x = (strings || numbers).[|/*usage*/specialPop|]()`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "usage")
+	f.VerifyBaselineGoToDefinition(t, true, "usage")
 }

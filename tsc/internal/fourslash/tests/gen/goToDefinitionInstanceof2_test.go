@@ -19,5 +19,5 @@ class C {
 declare var obj: any;
 obj [|/*start*/instanceof|] C;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "start")
+	f.VerifyBaselineGoToDefinition(t, true, "start")
 }

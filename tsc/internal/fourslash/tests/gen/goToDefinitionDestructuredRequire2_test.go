@@ -22,5 +22,5 @@ module.exports = { Util };
 const { Util } = require('./reexport');
 new [|Util/*1*/|]()`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

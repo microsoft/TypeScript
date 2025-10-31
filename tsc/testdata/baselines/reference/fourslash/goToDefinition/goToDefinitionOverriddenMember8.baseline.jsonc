@@ -7,5 +7,5 @@
 // === /b.ts ===
 // import { A } from "./a";
 // class B extends A {
-//     /*GOTO DEF*/override m() {}
+//     /*GOTO DEF*/[|override|] m() {}
 // }

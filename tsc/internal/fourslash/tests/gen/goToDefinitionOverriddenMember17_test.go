@@ -24,5 +24,5 @@ export class MySqlVarBinary extends MySqlColumn {
   static [|/*1*/override|] readonly [entityKind]: string = "MySqlVarBinary";
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

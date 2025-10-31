@@ -21,5 +21,5 @@ func TestGoToDefinitionScriptImport(t *testing.T) {
 import [|/*1*/"./scriptThing"|];
 import [|/*2*/"./stylez.css"|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1", "2")
+	f.VerifyBaselineGoToDefinition(t, true, "1", "2")
 }

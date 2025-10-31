@@ -15,5 +15,5 @@ func TestGoToDefinitionSwitchCase6(t *testing.T) {
 [|/*b*/default|];
 [|/*c*/case|] 42;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "a", "b", "c")
+	f.VerifyBaselineGoToDefinition(t, true, "a", "b", "c")
 }

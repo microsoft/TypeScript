@@ -9,7 +9,7 @@
 // === /buttonClass/Source.ts ===
 // // I cannot F12 navigate to Control
 // //                   vvvvvvv
-// class Button extends /*GOTO DEF*/Control {
+// class Button extends /*GOTO DEF*/[|Control|] {
 //     public myFunction() {
 //         // I cannot F12 navigate to myVar
 //         //              vvvvv
@@ -32,7 +32,7 @@
 //     public myFunction() {
 //         // I cannot F12 navigate to myVar
 //         //              vvvvv
-//         if (typeof this./*GOTO DEF*/myVar === 'boolean') {
+//         if (typeof this./*GOTO DEF*/[|myVar|] === 'boolean') {
 //             this.myVar;
 //         } else {
 //             this.myVar.toLocaleUpperCase();

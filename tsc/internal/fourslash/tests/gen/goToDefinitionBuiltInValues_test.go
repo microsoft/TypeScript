@@ -17,5 +17,5 @@ var a = function() { return /*arguments*/arguments; };
 var t = /*true*/true;
 var f = /*false*/false;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, f.MarkerNames()...)
+	f.VerifyBaselineGoToDefinition(t, true, f.MarkerNames()...)
 }

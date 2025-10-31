@@ -18,5 +18,5 @@ func TestHoverOverComment(t *testing.T) {
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "", "")
 	f.VerifyBaselineFindAllReferences(t, "")
-	f.VerifyBaselineGoToDefinition(t, "")
+	f.VerifyBaselineGoToDefinition(t, false, "")
 }

@@ -6,4 +6,4 @@
 // export default Class;
 
 // === /b.ts ===
-// import /*GOTO DEF*/defaultExport from "./a";
+// import /*GOTO DEF*/[|defaultExport|] from "./a";

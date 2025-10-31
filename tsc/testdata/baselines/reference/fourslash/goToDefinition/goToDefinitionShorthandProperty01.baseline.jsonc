@@ -3,7 +3,7 @@
 // var name = "hello";
 // var id = 100000;
 // declare var id;
-// var obj = {/*GOTO DEF*/name, id};
+// var obj = {/*GOTO DEF*/[|name|], id};
 // obj.name;
 // obj.id;
 

@@ -3,4 +3,4 @@
 // [|export const foo = 1;|]
 
 // === /a.ts ===
-// import { foo } from      "./b/*GOTO DEF*/";
+// import { foo } from      [|"./b/*GOTO DEF*/"|];

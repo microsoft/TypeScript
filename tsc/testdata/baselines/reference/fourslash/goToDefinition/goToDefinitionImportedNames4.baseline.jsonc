@@ -10,4 +10,4 @@
 // }
 
 // === /b.ts ===
-// import {Class as /*GOTO DEF*/ClassAlias} from "./a";
+// import {Class as /*GOTO DEF*/[|ClassAlias|]} from "./a";

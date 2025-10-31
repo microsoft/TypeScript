@@ -21,5 +21,5 @@ class /*classDefinition*/Class {
 const { Class } = require("./a");
  [|/*classAliasDefinition*/Class|];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "classAliasDefinition")
+	f.VerifyBaselineGoToDefinition(t, true, "classAliasDefinition")
 }

@@ -19,5 +19,5 @@ class Bar extends Foo {
 	static [|/*1*/override|] p = '';
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

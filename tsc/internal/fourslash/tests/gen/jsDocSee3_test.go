@@ -19,5 +19,5 @@ func TestJsDocSee3(t *testing.T) {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "use1")
+	f.VerifyBaselineGoToDefinition(t, false, "use1")
 }

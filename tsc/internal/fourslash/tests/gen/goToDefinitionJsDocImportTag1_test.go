@@ -20,5 +20,5 @@ func TestGoToDefinitionJsDocImportTag1(t *testing.T) {
  * @import { A } from      [|"./b/*1*/"|]
  */`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

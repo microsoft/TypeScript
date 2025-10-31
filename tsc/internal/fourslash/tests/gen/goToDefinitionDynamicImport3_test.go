@@ -15,5 +15,5 @@ func TestGoToDefinitionDynamicImport3(t *testing.T) {
 export function /*Destination*/bar() { return "bar"; }
 import('./foo').then(({ [|ba/*1*/r|] }) => undefined);`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "1")
+	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

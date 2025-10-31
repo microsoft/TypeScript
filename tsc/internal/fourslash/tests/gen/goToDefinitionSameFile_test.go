@@ -24,5 +24,5 @@ var foo = new /*localClassReference*/localClass();
 class fooCls implements /*localInterfaceReference*/localInterface { }
 var fooVar = /*localModuleReference*/localModule.foo;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "localVariableReference", "localFunctionReference", "localClassReference", "localInterfaceReference", "localModuleReference")
+	f.VerifyBaselineGoToDefinition(t, false, "localVariableReference", "localFunctionReference", "localClassReference", "localInterfaceReference", "localModuleReference")
 }

@@ -23,5 +23,5 @@ bar(true, {
    [|pr/*p2*/opx|]: 10
 })`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineGoToDefinition(t, "p1", "p2")
+	f.VerifyBaselineGoToDefinition(t, true, "p1", "p2")
 }
