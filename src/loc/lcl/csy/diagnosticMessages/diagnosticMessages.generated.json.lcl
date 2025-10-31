@@ -276,11 +276,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array__1355" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_o_1355" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
+          <Val><![CDATA[A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kontrolní výrazy const se dají použít jen pro odkazy na členy výčtu, řetězec, číslo, logickou hodnotu, pole nebo literály objektů.]]></Val>
+            <Val><![CDATA[Kontrolní výraz „const“ lze použít pouze na odkazy na členy výčtu nebo na řetězce, čísla, logické hodnoty, pole nebo objektové literály.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3374,6 +3374,15 @@
           <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Nepovedlo se najít modul {0} nebo jeho odpovídající deklarace typů.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_or_type_declarations_for_side_effect_import_of_0_2882" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module or type declarations for side-effect import of '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nelze najít deklarace modulu nebo typu pro import vedlejšího efektu {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17472,6 +17481,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Visit https://aka.ms/ts6 for migration information.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informace o migraci najdete na https://aka.ms/ts6.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
@@ -18843,6 +18861,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";false_unless_checkJs_is_set_6932" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`false`, unless `checkJs` is set]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[„false“, pokud není nastavené „checkJs“.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";false_unless_composite_is_set_6906" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[`false`, unless `composite` is set]]></Val>
@@ -18969,24 +18996,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node_69010" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";module_system_or_esModuleInterop_6904" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[module === "system" or esModuleInterop]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[module === "system" or esModuleInterop]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type_7009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['new' expression, whose target lacks a construct signature, implicitly has an 'any' type.]]></Val>
@@ -19001,6 +19010,15 @@
           <Val><![CDATA[`["node_modules", "bower_components", "jspm_packages"]5D;`, plus the value of `outDir` if one is specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[["node_modules", "bower_components", "jspm_packages"]5D; a hodnotu „outDir“, pokud je zadána.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`nodenext`, pokud je `module` nastaveno na `nodenext`; `node16`, pokud je `module` nastaveno na `node16` nebo `node18`; jinak `bundler`.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
