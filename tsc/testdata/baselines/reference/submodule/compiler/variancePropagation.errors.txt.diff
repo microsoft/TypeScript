@@ -1,0 +1,33 @@
+--- old.variancePropagation.errors.txt
++++ new.variancePropagation.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++variancePropagation.ts(13,7): error TS2322: Type 'DerivedTable<{ base: Base; new: New; }>' is not assignable to type 'DerivedTable<{ base: Base; new: New & Base; }>'.
++  Type '{ base: Base; new: New; }' is not assignable to type '{ base: Base; new: New & Base; }'.
++    Types of property 'new' are incompatible.
++      Type 'New' is not assignable to type 'New & Base'.
++        Property 'baseProp' is missing in type 'New' but required in type 'Base'.
++
++
++==== variancePropagation.ts (1 errors) ====
++    // https://github.com/microsoft/TypeScript/issues/62606
++    
++    interface DerivedTable<S extends { base: any; new: any }> {
++        // Error disappears when these property declarations are reversed
++        schema: S["base"] & S["new"]
++        readonlySchema: Readonly<S["base"] & S["new"]>
++    }
++    
++    interface Base { baseProp: number; }
++    interface New  { newProp: boolean; }
++    
++    declare const source: DerivedTable<{ base: Base, new: New }>
++    const destination: DerivedTable<{ base: Base; new: New & Base }> = source; // Error
++          ~~~~~~~~~~~
++!!! error TS2322: Type 'DerivedTable<{ base: Base; new: New; }>' is not assignable to type 'DerivedTable<{ base: Base; new: New & Base; }>'.
++!!! error TS2322:   Type '{ base: Base; new: New; }' is not assignable to type '{ base: Base; new: New & Base; }'.
++!!! error TS2322:     Types of property 'new' are incompatible.
++!!! error TS2322:       Type 'New' is not assignable to type 'New & Base'.
++!!! error TS2322:         Property 'baseProp' is missing in type 'New' but required in type 'Base'.
++!!! related TS2728 variancePropagation.ts:9:18: 'baseProp' is declared here.
++    

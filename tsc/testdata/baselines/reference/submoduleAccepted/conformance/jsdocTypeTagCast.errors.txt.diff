@@ -1,12 +1,6 @@
 --- old.jsdocTypeTagCast.errors.txt
 +++ new.jsdocTypeTagCast.errors.txt
-@@= skipped -1, +1 lines =@@
- b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
- b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
-+  Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
- b.js(51,24): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+@@= skipped -6, +6 lines =@@
    Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
  b.js(52,24): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
    Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
@@ -17,7 +11,7 @@
  b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
  b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
  b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
-@@= skipped -19, +15 lines =@@
+@@= skipped -14, +10 lines =@@
  ==== a.ts (0 errors) ====
      var W: string;
      
@@ -26,16 +20,7 @@
      // @ts-check
      var W = /** @type {string} */(/** @type {*} */ (4));
      
-@@= skipped -58, +58 lines =@@
-     someDerived = /** @type {SomeDerived} */(someOther); // Error
-                              ~~~~~~~~~~~
- !!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
-+!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
-     
-     someOther = /** @type {SomeOther} */(someDerived); // Error
-                            ~~~~~~~~~
-@@= skipped -18, +18 lines =@@
+@@= skipped -76, +76 lines =@@
      someFakeClass = someDerived;
      
      someBase = someFakeClass; // Error
