@@ -1,0 +1,23 @@
+index.ts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(3,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== index.ts (2 errors) ====
+    // These should still error because they are in a TypeScript file
+    import bar = require("./bar.cjs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    import foo = require("./foo.js");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+==== bar.cjs (0 errors) ====
+    module.exports = {
+        a: 1,
+    }
+    
+==== foo.js (0 errors) ====
+    module.exports = {
+        b: 2,
+    }
+    
