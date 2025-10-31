@@ -148,6 +148,7 @@ type CompilerOptions struct {
 	PprofDir       string   `json:"pprofDir,omitzero"`
 	SingleThreaded Tristate `json:"singleThreaded,omitzero"`
 	Quiet          Tristate `json:"quiet,omitzero"`
+	Checkers       *int     `json:"checkers,omitzero"`
 
 	sourceFileAffectingCompilerOptionsOnce sync.Once
 	sourceFileAffectingCompilerOptions     SourceFileAffectingCompilerOptions

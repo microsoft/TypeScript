@@ -443,6 +443,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.SingleThreaded = ParseTristate(value)
 	case "quiet":
 		allOptions.Quiet = ParseTristate(value)
+	case "checkers":
+		allOptions.Checkers = parseNumber(value)
 	default:
 		// different than any key above
 		return false

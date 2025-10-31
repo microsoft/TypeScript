@@ -247,7 +247,13 @@ func (p *Program) initCheckerPool() {
 	if p.opts.CreateCheckerPool != nil {
 		p.checkerPool = p.opts.CreateCheckerPool(p)
 	} else {
-		p.checkerPool = newCheckerPool(core.IfElse(p.SingleThreaded(), 1, 4), p)
+		checkers := 4
+		if p.SingleThreaded() {
+			checkers = 1
+		} else if p.Options().Checkers != nil {
+			checkers = min(max(*p.Options().Checkers, 1), 256)
+		}
+		p.checkerPool = newCheckerPool(checkers, p)
 	}
 }
 

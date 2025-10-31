@@ -11,6 +11,14 @@
         "category": "Message",
         "code": 100002
     },
+    "Set the number of checkers per project.": {
+        "category": "Message",
+        "code": 100003
+    },
+    "4, unless --singleThreaded is passed.": {
+        "category": "Message",
+        "code": 100004
+    },
     "Non-relative paths are not allowed. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090

@@ -126,6 +126,9 @@ Run in single threaded mode.
 [94m--pprofDir[39m
 Generate pprof CPU/memory profiles to the given directory.
 
+[94m--checkers[39m
+Set the number of checkers per project.
+
 [94m--verbose, -v[39m
 Enable verbose logging.
 
