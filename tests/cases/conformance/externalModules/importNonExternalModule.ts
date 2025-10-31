@@ -1,4 +1,4 @@
-// @module: amd
+// @module: commonjs
 // @Filename: foo_0.ts
 namespace foo {
 	export var answer = 42;

@@ -1,0 +1,19 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== ambientExternalModuleMerging_use.ts (0 errors) ====
+    import M = require("M");
+    // Should be strings
+    var x = M.x;
+    var y = M.y;
+    
+==== ambientExternalModuleMerging_declare.ts (0 errors) ====
+    declare module "M" {
+        export var x: string;
+    }
+    
+    // Merge
+    declare module "M" {
+        export var y: string;
+    }

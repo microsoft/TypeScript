@@ -24,6 +24,9 @@ exports.default = R = {
 };
 //// [m2.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1_1 = require("./m1");
+var m1_1 = __importDefault(require("./m1"));
 var ___ = m1_1.default.___, ___hello = m1_1.default.___hello, _hi = m1_1.default._hi;
