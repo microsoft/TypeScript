@@ -190,8 +190,8 @@ test("windows-process-tree", async () => {
 >     : ^^^^^^^^^^^^
 >"windows-process-tree" : "windows-process-tree"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
->async () => {  return new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  });} : () => Promise<void>
->                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^
+>async () => {  return new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  });} : (this: Context) => Promise<void>
+>                                                                                                                                                                                                                   : ^    ^^       ^^^^^^^^^^^^^^^^^^
 
   return new Promise((resolve, reject) => {
 >new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  }) : Promise<void>
