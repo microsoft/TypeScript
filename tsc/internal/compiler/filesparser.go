@@ -21,7 +21,7 @@ type parseTask struct {
 	subTasks                    []*parseTask
 	loaded                      bool
 	isForAutomaticTypeDirective bool
-	includeReason               *fileIncludeReason
+	includeReason               *FileIncludeReason
 
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
@@ -39,7 +39,7 @@ type parseTask struct {
 	fromExternalLibrary bool
 
 	loadedTask        *parseTask
-	allIncludeReasons []*fileIncludeReason
+	allIncludeReasons []*FileIncludeReason
 }
 
 func (t *parseTask) FileName() string {
@@ -92,7 +92,7 @@ func (t *parseTask) load(loader *fileLoader) {
 
 	if compilerOptions.NoLib != core.TSTrue {
 		for index, lib := range file.LibReferenceDirectives {
-			includeReason := &fileIncludeReason{
+			includeReason := &FileIncludeReason{
 				kind: fileIncludeKindLibReferenceDirective,
 				data: &referencedFileData{
 					file:  t.path,
@@ -142,7 +142,7 @@ type resolvedRef struct {
 	increaseDepth         bool
 	elideOnDepth          bool
 	isFromExternalLibrary bool
-	includeReason         *fileIncludeReason
+	includeReason         *FileIncludeReason
 }
 
 func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
@@ -267,14 +267,14 @@ func (w *filesParser) collectWorker(loader *fileLoader, tasks []*parseTask, iter
 	}
 }
 
-func (w *filesParser) addIncludeReason(loader *fileLoader, task *parseTask, reason *fileIncludeReason) {
+func (w *filesParser) addIncludeReason(loader *fileLoader, task *parseTask, reason *FileIncludeReason) {
 	if task.redirectedParseTask != nil {
 		w.addIncludeReason(loader, task.redirectedParseTask, reason)
 	} else if task.loaded {
 		if existing, ok := loader.includeProcessor.fileIncludeReasons[task.path]; ok {
 			loader.includeProcessor.fileIncludeReasons[task.path] = append(existing, reason)
 		} else {
-			loader.includeProcessor.fileIncludeReasons[task.path] = []*fileIncludeReason{reason}
+			loader.includeProcessor.fileIncludeReasons[task.path] = []*FileIncludeReason{reason}
 		}
 	}
 }

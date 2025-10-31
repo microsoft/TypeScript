@@ -8,7 +8,7 @@ import (
 	"runtime/pprof"
 )
 
-type profileSession struct {
+type ProfileSession struct {
 	cpuFilePath string
 	memFilePath string
 	cpuFile     *os.File
@@ -17,7 +17,7 @@ type profileSession struct {
 }
 
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
-func BeginProfiling(profileDir string, logWriter io.Writer) *profileSession {
+func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 	if err := os.MkdirAll(profileDir, 0o755); err != nil {
 		panic(err)
 	}
@@ -39,7 +39,7 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *profileSession {
 		panic(err)
 	}
 
-	return &profileSession{
+	return &ProfileSession{
 		cpuFilePath: cpuProfilePath,
 		memFilePath: memProfilePath,
 		cpuFile:     cpuFile,
@@ -48,7 +48,7 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *profileSession {
 	}
 }
 
-func (p *profileSession) Stop() {
+func (p *ProfileSession) Stop() {
 	pprof.StopCPUProfile()
 	err := pprof.Lookup("allocs").WriteTo(p.memFile, 0)
 	if err != nil {

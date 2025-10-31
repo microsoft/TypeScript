@@ -80,7 +80,7 @@ func toTokenRange(e any) tokenRange {
 	panic("Unknown argument type passed to toTokenRange - only ast.Kind, []ast.Kind, and tokenRange supported")
 }
 
-type contextPredicate = func(ctx *formattingContext) bool
+type contextPredicate = func(ctx *FormattingContext) bool
 
 var anyContext = []contextPredicate{}
 

@@ -89,8 +89,8 @@ func (t *toSnapshot) toBuildInfoDiagnosticsWithFileName(diagnostics []*BuildInfo
 	})
 }
 
-func (t *toSnapshot) toDiagnosticsOrBuildInfoDiagnosticsWithFileName(dig *BuildInfoDiagnosticsOfFile) *diagnosticsOrBuildInfoDiagnosticsWithFileName {
-	return &diagnosticsOrBuildInfoDiagnosticsWithFileName{
+func (t *toSnapshot) toDiagnosticsOrBuildInfoDiagnosticsWithFileName(dig *BuildInfoDiagnosticsOfFile) *DiagnosticsOrBuildInfoDiagnosticsWithFileName {
+	return &DiagnosticsOrBuildInfoDiagnosticsWithFileName{
 		buildInfoDiagnostics: t.toBuildInfoDiagnosticsWithFileName(dig.Diagnostics),
 	}
 }
@@ -135,10 +135,10 @@ func (t *toSnapshot) setChangeFileSet() {
 }
 
 func (t *toSnapshot) setSemanticDiagnostics() {
-	t.snapshot.fileInfos.Range(func(path tspath.Path, info *fileInfo) bool {
+	t.snapshot.fileInfos.Range(func(path tspath.Path, info *FileInfo) bool {
 		// Initialize to have no diagnostics if its not changed file
 		if !t.snapshot.changedFilesSet.Has(path) {
-			t.snapshot.semanticDiagnosticsPerFile.Store(path, &diagnosticsOrBuildInfoDiagnosticsWithFileName{})
+			t.snapshot.semanticDiagnosticsPerFile.Store(path, &DiagnosticsOrBuildInfoDiagnosticsWithFileName{})
 		}
 		return true
 	})

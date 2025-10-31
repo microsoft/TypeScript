@@ -159,7 +159,7 @@ type formatSpanWorker struct {
 	ctx context.Context
 
 	formattingScanner *formattingScanner
-	formattingContext *formattingContext
+	formattingContext *FormattingContext
 
 	edits                  []core.TextChange
 	previousRange          TextRangeWithKind

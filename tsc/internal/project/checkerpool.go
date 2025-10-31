@@ -12,7 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
-type checkerPool struct {
+type CheckerPool struct {
 	maxCheckers int
 	program     *compiler.Program
 
@@ -26,10 +26,10 @@ type checkerPool struct {
 	log                 func(msg string)
 }
 
-var _ compiler.CheckerPool = (*checkerPool)(nil)
+var _ compiler.CheckerPool = (*CheckerPool)(nil)
 
-func newCheckerPool(maxCheckers int, program *compiler.Program, log func(msg string)) *checkerPool {
-	pool := &checkerPool{
+func newCheckerPool(maxCheckers int, program *compiler.Program, log func(msg string)) *CheckerPool {
+	pool := &CheckerPool{
 		program:             program,
 		maxCheckers:         maxCheckers,
 		checkers:            make([]*checker.Checker, maxCheckers),
@@ -42,7 +42,7 @@ func newCheckerPool(maxCheckers int, program *compiler.Program, log func(msg str
 	return pool
 }
 
-func (p *checkerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
+func (p *CheckerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -75,18 +75,18 @@ func (p *checkerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFil
 	return checker, p.createRelease(requestID, index, checker)
 }
 
-func (p *checkerPool) GetChecker(ctx context.Context) (*checker.Checker, func()) {
+func (p *CheckerPool) GetChecker(ctx context.Context) (*checker.Checker, func()) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	checker, index := p.getCheckerLocked(core.GetRequestID(ctx))
 	return checker, p.createRelease(core.GetRequestID(ctx), index, checker)
 }
 
-func (p *checkerPool) Files(checker *checker.Checker) iter.Seq[*ast.SourceFile] {
+func (p *CheckerPool) Files(checker *checker.Checker) iter.Seq[*ast.SourceFile] {
 	panic("unimplemented")
 }
 
-func (p *checkerPool) GetAllCheckers(ctx context.Context) ([]*checker.Checker, func()) {
+func (p *CheckerPool) GetAllCheckers(ctx context.Context) ([]*checker.Checker, func()) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -104,7 +104,7 @@ func (p *checkerPool) GetAllCheckers(ctx context.Context) ([]*checker.Checker, f
 	return []*checker.Checker{c}, release
 }
 
-func (p *checkerPool) getCheckerLocked(requestID string) (*checker.Checker, int) {
+func (p *CheckerPool) getCheckerLocked(requestID string) (*checker.Checker, int) {
 	if checker, index := p.getImmediatelyAvailableChecker(); checker != nil {
 		p.inUse[checker] = true
 		if requestID != "" {
@@ -130,7 +130,7 @@ func (p *checkerPool) getCheckerLocked(requestID string) (*checker.Checker, int)
 	return checker, index
 }
 
-func (p *checkerPool) getRequestCheckerLocked(requestID string) (*checker.Checker, func()) {
+func (p *CheckerPool) getRequestCheckerLocked(requestID string) (*checker.Checker, func()) {
 	if index, ok := p.requestAssociations[requestID]; ok {
 		checker := p.checkers[index]
 		if checker != nil {
@@ -146,7 +146,7 @@ func (p *checkerPool) getRequestCheckerLocked(requestID string) (*checker.Checke
 	return nil, noop
 }
 
-func (p *checkerPool) getImmediatelyAvailableChecker() (*checker.Checker, int) {
+func (p *CheckerPool) getImmediatelyAvailableChecker() (*checker.Checker, int) {
 	for i, checker := range p.checkers {
 		if checker == nil {
 			continue
@@ -159,7 +159,7 @@ func (p *checkerPool) getImmediatelyAvailableChecker() (*checker.Checker, int) {
 	return nil, -1
 }
 
-func (p *checkerPool) waitForAvailableChecker() (*checker.Checker, int) {
+func (p *CheckerPool) waitForAvailableChecker() (*checker.Checker, int) {
 	p.log("checkerpool: Waiting for an available checker")
 	for {
 		p.cond.Wait()
@@ -170,7 +170,7 @@ func (p *checkerPool) waitForAvailableChecker() (*checker.Checker, int) {
 	}
 }
 
-func (p *checkerPool) createRelease(requestId string, index int, checker *checker.Checker) func() {
+func (p *CheckerPool) createRelease(requestId string, index int, checker *checker.Checker) func() {
 	return func() {
 		p.mu.Lock()
 		defer p.mu.Unlock()
@@ -188,7 +188,7 @@ func (p *checkerPool) createRelease(requestId string, index int, checker *checke
 	}
 }
 
-func (p *checkerPool) isFullLocked() bool {
+func (p *CheckerPool) isFullLocked() bool {
 	for _, checker := range p.checkers {
 		if checker == nil {
 			return false
@@ -197,7 +197,7 @@ func (p *checkerPool) isFullLocked() bool {
 	return true
 }
 
-func (p *checkerPool) createCheckerLocked() (*checker.Checker, int) {
+func (p *CheckerPool) createCheckerLocked() (*checker.Checker, int) {
 	for i, existing := range p.checkers {
 		if existing == nil {
 			checker := checker.NewChecker(p.program)
@@ -208,7 +208,7 @@ func (p *checkerPool) createCheckerLocked() (*checker.Checker, int) {
 	panic("called createCheckerLocked when pool is full")
 }
 
-func (p *checkerPool) isRequestCheckerInUse(requestID string) bool {
+func (p *CheckerPool) isRequestCheckerInUse(requestID string) bool {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -221,7 +221,7 @@ func (p *checkerPool) isRequestCheckerInUse(requestID string) bool {
 	return false
 }
 
-func (p *checkerPool) size() int {
+func (p *CheckerPool) size() int {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	size := 0

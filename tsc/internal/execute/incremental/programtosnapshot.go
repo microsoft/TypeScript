@@ -140,7 +140,7 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 				t.snapshot.addFileToAffectedFilesPendingEmit(file.Path(), GetFileEmitKind(t.snapshot.options))
 				signature = version
 			}
-			t.snapshot.fileInfos.Store(file.Path(), &fileInfo{
+			t.snapshot.fileInfos.Store(file.Path(), &FileInfo{
 				version:            version,
 				signature:          signature,
 				affectsGlobalScope: affectsGlobalScope,
@@ -154,7 +154,7 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 func (t *toProgramSnapshot) handleFileDelete() {
 	if t.oldProgram != nil {
 		// If the global file is removed, add all files as changed
-		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *fileInfo) bool {
+		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
 			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
 				if oldInfo.affectsGlobalScope {
 					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {

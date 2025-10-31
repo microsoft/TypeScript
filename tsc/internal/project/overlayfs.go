@@ -111,17 +111,17 @@ func (f *diskFile) Clone() *diskFile {
 	}
 }
 
-var _ FileHandle = (*overlay)(nil)
+var _ FileHandle = (*Overlay)(nil)
 
-type overlay struct {
+type Overlay struct {
 	fileBase
 	version         int32
 	kind            core.ScriptKind
 	matchesDiskText bool
 }
 
-func newOverlay(fileName string, content string, version int32, kind core.ScriptKind) *overlay {
-	return &overlay{
+func newOverlay(fileName string, content string, version int32, kind core.ScriptKind) *Overlay {
+	return &Overlay{
 		fileBase: fileBase{
 			fileName: fileName,
 			content:  content,
@@ -132,21 +132,21 @@ func newOverlay(fileName string, content string, version int32, kind core.Script
 	}
 }
 
-func (o *overlay) Version() int32 {
+func (o *Overlay) Version() int32 {
 	return o.version
 }
 
-func (o *overlay) Text() string {
+func (o *Overlay) Text() string {
 	return o.content
 }
 
 // MatchesDiskText may return false negatives, but never false positives.
-func (o *overlay) MatchesDiskText() bool {
+func (o *Overlay) MatchesDiskText() bool {
 	return o.matchesDiskText
 }
 
 // !!! optimization: incorporate mtime
-func (o *overlay) computeMatchesDiskText(fs vfs.FS) bool {
+func (o *Overlay) computeMatchesDiskText(fs vfs.FS) bool {
 	if isDynamicFileName(o.fileName) {
 		return false
 	}
@@ -157,11 +157,11 @@ func (o *overlay) computeMatchesDiskText(fs vfs.FS) bool {
 	return xxh3.Hash128([]byte(diskContent)) == o.hash
 }
 
-func (o *overlay) IsOverlay() bool {
+func (o *Overlay) IsOverlay() bool {
 	return true
 }
 
-func (o *overlay) Kind() core.ScriptKind {
+func (o *Overlay) Kind() core.ScriptKind {
 	return o.kind
 }
 
@@ -171,10 +171,10 @@ type overlayFS struct {
 	positionEncoding lsproto.PositionEncodingKind
 
 	mu       sync.RWMutex
-	overlays map[tspath.Path]*overlay
+	overlays map[tspath.Path]*Overlay
 }
 
-func newOverlayFS(fs vfs.FS, overlays map[tspath.Path]*overlay, positionEncoding lsproto.PositionEncodingKind, toPath func(string) tspath.Path) *overlayFS {
+func newOverlayFS(fs vfs.FS, overlays map[tspath.Path]*Overlay, positionEncoding lsproto.PositionEncodingKind, toPath func(string) tspath.Path) *overlayFS {
 	return &overlayFS{
 		fs:               fs,
 		positionEncoding: positionEncoding,
@@ -183,7 +183,7 @@ func newOverlayFS(fs vfs.FS, overlays map[tspath.Path]*overlay, positionEncoding
 	}
 }
 
-func (fs *overlayFS) Overlays() map[tspath.Path]*overlay {
+func (fs *overlayFS) Overlays() map[tspath.Path]*Overlay {
 	fs.mu.RLock()
 	defer fs.mu.RUnlock()
 	return fs.overlays
@@ -206,7 +206,7 @@ func (fs *overlayFS) getFile(fileName string) FileHandle {
 	return newDiskFile(fileName, content)
 }
 
-func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, map[tspath.Path]*overlay) {
+func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, map[tspath.Path]*Overlay) {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 

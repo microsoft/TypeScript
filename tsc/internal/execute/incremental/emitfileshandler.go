@@ -145,7 +145,7 @@ func (h *emitFilesHandler) emitFilesIncremental(options compiler.EmitOptions) []
 	}
 
 	// Get updated errors that were not included in affected files emit
-	h.program.snapshot.emitDiagnosticsPerFile.Range(func(path tspath.Path, diagnostics *diagnosticsOrBuildInfoDiagnosticsWithFileName) bool {
+	h.program.snapshot.emitDiagnosticsPerFile.Range(func(path tspath.Path, diagnostics *DiagnosticsOrBuildInfoDiagnosticsWithFileName) bool {
 		if _, ok := h.emitUpdates.Load(path); !ok {
 			affectedFile := h.program.program.GetSourceFileByPath(path)
 			if affectedFile == nil || !h.program.program.SourceFileMayBeEmitted(affectedFile, false) {
@@ -299,7 +299,7 @@ func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 				if update.result != nil {
 					results = append(results, update.result)
 					if len(update.result.Diagnostics) != 0 {
-						h.program.snapshot.emitDiagnosticsPerFile.Store(file.Path(), &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
+						h.program.snapshot.emitDiagnosticsPerFile.Store(file.Path(), &DiagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
 					}
 				}
 			}

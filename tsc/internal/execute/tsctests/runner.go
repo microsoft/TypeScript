@@ -17,7 +17,7 @@ import (
 type tscEdit struct {
 	caption         string
 	commandLineArgs []string
-	edit            func(*testSys)
+	edit            func(*TestSys)
 	expectedDiff    string
 }
 
@@ -40,7 +40,7 @@ type tscInput struct {
 	windowsStyleRoot string
 }
 
-func (test *tscInput) executeCommand(sys *testSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
+func (test *tscInput) executeCommand(sys *TestSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
 	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
 	result := execute.CommandLine(sys, commandLineArgs, sys)
 	switch result.Status {
@@ -85,7 +85,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 		for index, do := range test.edits {
 			sys.clearOutput()
 			wg := core.NewWorkGroup(false)
-			var nonIncrementalSys *testSys
+			var nonIncrementalSys *TestSys
 			commandLineArgs := core.IfElse(do.commandLineArgs == nil, test.commandLineArgs, do.commandLineArgs)
 			wg.Queue(func() {
 				baselineBuilder.WriteString(fmt.Sprintf("\n\nEdit [%d]:: %s\n", index, do.caption))
@@ -133,7 +133,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 	})
 }
 
-func getDiffForIncremental(incrementalSys *testSys, nonIncrementalSys *testSys) string {
+func getDiffForIncremental(incrementalSys *TestSys, nonIncrementalSys *TestSys) string {
 	var diffBuilder strings.Builder
 
 	nonIncrementalOutputs := nonIncrementalSys.fs.writtenFiles.ToSlice()

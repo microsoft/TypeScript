@@ -42,7 +42,7 @@ type configFileEntry struct {
 	// when this is set, no other fields will be used.
 	retainingConfigs map[tspath.Path]struct{}
 	// rootFilesWatch is a watch for the root files of this config file.
-	rootFilesWatch *WatchedFiles[patternsAndIgnored]
+	rootFilesWatch *WatchedFiles[PatternsAndIgnored]
 }
 
 func newConfigFileEntry(fileName string) *configFileEntry {

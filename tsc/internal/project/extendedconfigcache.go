@@ -9,7 +9,7 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
-type extendedConfigCache struct {
+type ExtendedConfigCache struct {
 	entries collections.SyncMap[tspath.Path, *extendedConfigCacheEntry]
 }
 
@@ -20,7 +20,7 @@ type extendedConfigCacheEntry struct {
 	refCount int
 }
 
-func (c *extendedConfigCache) Acquire(fh FileHandle, path tspath.Path, parse func() *tsoptions.ExtendedConfigCacheEntry) *tsoptions.ExtendedConfigCacheEntry {
+func (c *ExtendedConfigCache) Acquire(fh FileHandle, path tspath.Path, parse func() *tsoptions.ExtendedConfigCacheEntry) *tsoptions.ExtendedConfigCacheEntry {
 	entry, loaded := c.loadOrStoreNewLockedEntry(path)
 	defer entry.mu.Unlock()
 	var hash xxh3.Uint128
@@ -35,7 +35,7 @@ func (c *extendedConfigCache) Acquire(fh FileHandle, path tspath.Path, parse fun
 	return entry.entry
 }
 
-func (c *extendedConfigCache) Ref(path tspath.Path) {
+func (c *ExtendedConfigCache) Ref(path tspath.Path) {
 	if entry, ok := c.entries.Load(path); ok {
 		entry.mu.Lock()
 		entry.refCount++
@@ -43,7 +43,7 @@ func (c *extendedConfigCache) Ref(path tspath.Path) {
 	}
 }
 
-func (c *extendedConfigCache) Deref(path tspath.Path) {
+func (c *ExtendedConfigCache) Deref(path tspath.Path) {
 	if entry, ok := c.entries.Load(path); ok {
 		entry.mu.Lock()
 		entry.refCount--
@@ -55,7 +55,7 @@ func (c *extendedConfigCache) Deref(path tspath.Path) {
 	}
 }
 
-func (c *extendedConfigCache) Has(path tspath.Path) bool {
+func (c *ExtendedConfigCache) Has(path tspath.Path) bool {
 	_, ok := c.entries.Load(path)
 	return ok
 }
@@ -63,7 +63,7 @@ func (c *extendedConfigCache) Has(path tspath.Path) bool {
 // loadOrStoreNewLockedEntry loads an existing entry or creates a new one. The returned
 // entry's mutex is locked and its refCount is incremented (or initialized to 1
 // in the case of a new entry).
-func (c *extendedConfigCache) loadOrStoreNewLockedEntry(path tspath.Path) (*extendedConfigCacheEntry, bool) {
+func (c *ExtendedConfigCache) loadOrStoreNewLockedEntry(path tspath.Path) (*extendedConfigCacheEntry, bool) {
 	entry := &extendedConfigCacheEntry{refCount: 1}
 	entry.mu.Lock()
 	if existing, loaded := c.entries.LoadOrStore(path, entry); loaded {

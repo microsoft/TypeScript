@@ -23,13 +23,13 @@ type processingDiagnostic struct {
 	data any
 }
 
-func (d *processingDiagnostic) asFileIncludeReason() *fileIncludeReason {
-	return d.data.(*fileIncludeReason)
+func (d *processingDiagnostic) asFileIncludeReason() *FileIncludeReason {
+	return d.data.(*FileIncludeReason)
 }
 
 type includeExplainingDiagnostic struct {
 	file             tspath.Path
-	diagnosticReason *fileIncludeReason
+	diagnosticReason *FileIncludeReason
 	message          *diagnostics.Message
 	args             []any
 }
@@ -70,13 +70,13 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 	var includeDetails []*ast.Diagnostic
 	var relatedInfo []*ast.Diagnostic
 	var redirectInfo []*ast.Diagnostic
-	var preferredLocation *fileIncludeReason
-	var seenReasons collections.Set[*fileIncludeReason]
+	var preferredLocation *FileIncludeReason
+	var seenReasons collections.Set[*FileIncludeReason]
 	if diag.diagnosticReason.isReferencedFile() && !program.includeProcessor.getReferenceLocation(diag.diagnosticReason, program).isSynthetic {
 		preferredLocation = diag.diagnosticReason
 	}
 
-	processRelatedInfo := func(includeReason *fileIncludeReason) {
+	processRelatedInfo := func(includeReason *FileIncludeReason) {
 		if preferredLocation == nil && includeReason.isReferencedFile() && !program.includeProcessor.getReferenceLocation(includeReason, program).isSynthetic {
 			preferredLocation = includeReason
 		} else {
@@ -86,7 +86,7 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 			}
 		}
 	}
-	processInclude := func(includeReason *fileIncludeReason) {
+	processInclude := func(includeReason *FileIncludeReason) {
 		if !seenReasons.AddIfAbsent(includeReason) {
 			return
 		}

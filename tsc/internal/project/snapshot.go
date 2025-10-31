@@ -31,7 +31,7 @@ type Snapshot struct {
 	converters     *lsconv.Converters
 
 	// Immutable state, cloned between snapshots
-	fs                                 *snapshotFS
+	fs                                 *SnapshotFS
 	ProjectCollection                  *ProjectCollection
 	ConfigFileRegistry                 *ConfigFileRegistry
 	compilerOptionsForInferredProjects *core.CompilerOptions
@@ -44,10 +44,10 @@ type Snapshot struct {
 // NewSnapshot
 func NewSnapshot(
 	id uint64,
-	fs *snapshotFS,
+	fs *SnapshotFS,
 	sessionOptions *SessionOptions,
 	parseCache *ParseCache,
-	extendedConfigCache *extendedConfigCache,
+	extendedConfigCache *ExtendedConfigCache,
 	configFileRegistry *ConfigFileRegistry,
 	compilerOptionsForInferredProjects *core.CompilerOptions,
 	config Config,
@@ -164,7 +164,7 @@ type ATAStateChange struct {
 	Logs                *logging.LogTree
 }
 
-func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays map[tspath.Path]*overlay, session *Session) *Snapshot {
+func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays map[tspath.Path]*Overlay, session *Session) *Snapshot {
 	var logger *logging.LogTree
 
 	// Print in-progress logs immediately if cloning fails

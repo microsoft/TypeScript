@@ -17,6 +17,7 @@ func (f *plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 	return []*analysis.Analyzer{
 		emptyCaseAnalyzer,
 		shadowAnalyzer,
+		unexportedAPIAnalyzer,
 	}, nil
 }
 

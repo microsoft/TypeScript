@@ -92,7 +92,7 @@ type BuildInfoFileInfo struct {
 	fileInfo    *buildInfoFileInfoWithSignature
 }
 
-func newBuildInfoFileInfo(fileInfo *fileInfo) *BuildInfoFileInfo {
+func newBuildInfoFileInfo(fileInfo *FileInfo) *BuildInfoFileInfo {
 	if fileInfo.version == fileInfo.signature {
 		if !fileInfo.affectsGlobalScope && fileInfo.impliedNodeFormat == core.ResolutionModeCommonJS {
 			return &BuildInfoFileInfo{signature: fileInfo.signature}
@@ -113,25 +113,25 @@ func newBuildInfoFileInfo(fileInfo *fileInfo) *BuildInfoFileInfo {
 	}}
 }
 
-func (b *BuildInfoFileInfo) GetFileInfo() *fileInfo {
+func (b *BuildInfoFileInfo) GetFileInfo() *FileInfo {
 	if b == nil {
 		return nil
 	}
 	if b.signature != "" {
-		return &fileInfo{
+		return &FileInfo{
 			version:           b.signature,
 			signature:         b.signature,
 			impliedNodeFormat: core.ResolutionModeCommonJS,
 		}
 	}
 	if b.noSignature != nil {
-		return &fileInfo{
+		return &FileInfo{
 			version:            b.noSignature.Version,
 			affectsGlobalScope: b.noSignature.AffectsGlobalScope,
 			impliedNodeFormat:  b.noSignature.ImpliedNodeFormat,
 		}
 	}
-	return &fileInfo{
+	return &FileInfo{
 		version:            b.fileInfo.Version,
 		signature:          core.IfElse(b.fileInfo.Signature == "", b.fileInfo.Version, b.fileInfo.Signature),
 		affectsGlobalScope: b.fileInfo.AffectsGlobalScope,

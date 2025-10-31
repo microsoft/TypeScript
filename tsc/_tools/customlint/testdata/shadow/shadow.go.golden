@@ -62,6 +62,8 @@
 	type isType int
 	
 	func F5() isType {
+	          ~
+!!! unexportedapi: exported API references unexported identifier isType
 		var isType isType // OK
 		return isType
 	}
@@ -69,6 +71,8 @@
 	type isAlias int
 	
 	func F6() isAlias {
+	          ~
+!!! unexportedapi: exported API references unexported identifier isAlias
 		var isAlias isAlias // OK
 		return isAlias
 	}

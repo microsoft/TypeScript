@@ -65,13 +65,13 @@ func TestBuildCommandLine(t *testing.T) {
 					noChange,
 					{
 						caption: "local change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/a.ts", "const aa = 10;")
 						},
 					},
 					{
 						caption: "non local change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/a.ts", "export const aaa = 10;")
 						},
 					},
@@ -82,26 +82,26 @@ func TestBuildCommandLine(t *testing.T) {
 					noChange,
 					{
 						caption: "js emit with change without emitDeclarationOnly",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/b.ts", "const alocal = 10;")
 						},
 						commandLineArgs: []string{"--b", "project2/src", "--verbose"},
 					},
 					{
 						caption: "local change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/b.ts", "const aaaa = 10;")
 						},
 					},
 					{
 						caption: "non local change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/b.ts", "export const aaaaa = 10;")
 						},
 					},
 					{
 						caption: "js emit with change without emitDeclarationOnly",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/b.ts", "export const a2 = 10;")
 						},
 						commandLineArgs: []string{"--b", "project2/src", "--verbose"},
@@ -117,7 +117,7 @@ func TestBuildCommandLine(t *testing.T) {
 					noChange,
 					{
 						caption: "change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/a.ts", "const aa = 10;")
 						},
 					},
@@ -132,7 +132,7 @@ func TestBuildCommandLine(t *testing.T) {
 					},
 					{
 						caption: "js emit with change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.appendFile("/home/src/workspaces/solution/project1/src/b.ts", "const blocal = 10;")
 						},
 						commandLineArgs: []string{"--b", "project2/src", "--verbose", "--emitDeclarationOnly", "false"},
@@ -179,7 +179,7 @@ func TestBuildCommandLine(t *testing.T) {
 					noChange,
 					{
 						caption: "local change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.replaceFileText("/home/src/workspaces/project/a.ts", "Local = 1", "Local = 10")
 						},
 					},
@@ -220,7 +220,7 @@ func TestBuildCommandLine(t *testing.T) {
 					noChange,
 					{
 						caption: "local change",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.replaceFileText("/home/src/workspaces/project/a.ts", "Local = 1", "Local = 10")
 						},
 					},
@@ -357,20 +357,20 @@ func TestBuildConfigFileErrors(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "reports syntax errors after change to config file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", ",", `, "declaration": true`)
 					},
 				},
 				{
 					caption: "reports syntax errors after change to ts file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/a.ts", "export function fooBar() { }")
 					},
 				},
 				noChange,
 				{
 					caption: "builds after fixing config file errors",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", stringtestutil.Dedent(`
 							{
 								"compilerOptions": {
@@ -410,25 +410,25 @@ func TestBuildConfigFileErrors(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "reports syntax errors after change to config file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", ",", `, "declaration": true`)
 					},
 				},
 				{
 					caption: "reports syntax errors after change to ts file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/a.ts", "export function fooBar() { }")
 					},
 				},
 				{
 					caption: "reports error when there is no change to tsconfig file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", "", "")
 					},
 				},
 				{
 					caption: "builds after fixing config file errors",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", stringtestutil.Dedent(`
 							{
 								"compilerOptions": {
@@ -698,7 +698,7 @@ func TestBuildDemoProject(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Fix error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/demo/core/tsconfig.json", stringtestutil.Dedent(`
 							{
 								"extends": "../tsconfig-base.json",
@@ -724,7 +724,7 @@ func TestBuildDemoProject(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Prepend a line",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.prependFile("/user/username/projects/demo/core/utilities.ts", "\n")
 					},
 				},
@@ -806,7 +806,7 @@ func TestBuildEmitDeclarationOnly(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/src/a.ts", "b: B;", "b: B; foo: any;")
 					},
 				},
@@ -823,7 +823,7 @@ func TestBuildEmitDeclarationOnly(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-doesnt-change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText(
 							"/home/src/workspaces/project/src/a.ts",
 							"export interface A {",
@@ -835,7 +835,7 @@ func TestBuildEmitDeclarationOnly(t *testing.T) {
 				},
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/src/a.ts", "b: B;", "b: B; foo: any;")
 					},
 				},
@@ -887,7 +887,7 @@ func TestBuildFileDelete(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "delete child2 file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/solution/child/child2.ts")
 						sys.removeNoError("/home/src/workspaces/solution/child/child2.js")
 						sys.removeNoError("/home/src/workspaces/solution/child/child2.d.ts")
@@ -919,7 +919,7 @@ func TestBuildFileDelete(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "delete child2 file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/solution/child/child2.ts")
 						sys.removeNoError("/home/src/workspaces/solution/child/child2.js")
 					},
@@ -999,13 +999,13 @@ func TestBuildInferredTypeFromTransitiveModule(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "param: string", "")
 					},
 				},
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "foobar()", "foobar(param: string)")
 					},
 				},
@@ -1018,13 +1018,13 @@ func TestBuildInferredTypeFromTransitiveModule(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "param: string", "")
 					},
 				},
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "foobar()", "foobar(param: string)")
 					},
 				},
@@ -1040,25 +1040,25 @@ func TestBuildInferredTypeFromTransitiveModule(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "param: string", "")
 					},
 				},
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "foobar()", "foobar(param: string)")
 					},
 				},
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/bar.ts", "param: string", "")
 					},
 				},
 				{
 					caption: "Fix Error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/lazyIndex.ts", `bar("hello")`, "bar()")
 					},
 				},
@@ -1295,13 +1295,13 @@ func TestBuildLateBoundSymbol(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-doesnt-change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/src/main.ts", "const x = 10;", "")
 					},
 				},
 				{
 					caption: "incremental-declaration-doesnt-change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/src/main.ts", "const x = 10;")
 					},
 				},
@@ -1675,14 +1675,14 @@ func TestBuildProgramUpdates(t *testing.T) {
 				{
 					caption: "Introduce error",
 					// Change message in library to message2
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileTextAll("/user/username/projects/sample1/Library/library.ts", "message", "message2")
 					},
 				},
 				{
 					caption: "Fix error",
 					// Revert library changes
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileTextAll("/user/username/projects/sample1/Library/library.ts", "message2", "message")
 					},
 				},
@@ -1710,7 +1710,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Fix error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/solution/app/fileWithError.ts", "private p = 12", "")
 					},
 				},
@@ -1738,7 +1738,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Change fileWithoutError",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileTextAll("/user/username/projects/solution/app/fileWithoutError.ts", "myClass", "myClass2")
 					},
 				},
@@ -1766,7 +1766,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Introduce error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/solution/app/fileWithError.ts", stringtestutil.Dedent(`
 							export var myClassWithError = class {
 								tags() { }
@@ -1777,7 +1777,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "Fix error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/solution/app/fileWithError.ts", "private p = 12", "")
 					},
 				},
@@ -1805,7 +1805,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Introduce error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/solution/app/fileWithError.ts", stringtestutil.Dedent(`
 							export var myClassWithError = class {
 								tags() { }
@@ -1816,7 +1816,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "Change fileWithoutError",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileTextAll("/user/username/projects/solution/app/fileWithoutError.ts", "myClass", "myClass2")
 					},
 				},
@@ -1839,7 +1839,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Change tsconfig to set noUnusedParameters to false",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError(
 							`/user/username/projects/myproject/tsconfig.json`,
 							stringtestutil.Dedent(`
@@ -1924,7 +1924,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Modify alpha config",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/alpha.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "compilerOptions": {
@@ -1935,7 +1935,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "change bravo config",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/bravo.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "extends": "./alpha.tsconfig.json",
@@ -1945,7 +1945,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "project 2 extends alpha",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/project2.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "extends": "./alpha.tsconfig.json",
@@ -1954,13 +1954,13 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "update aplha config",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/alpha.tsconfig.json", "{}", false)
 					},
 				},
 				{
 					caption: "Modify extendsConfigFile2",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/extendsConfig2.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "compilerOptions": { "strictNullChecks": true }
@@ -1969,7 +1969,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "Modify project 3",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/project3.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "extends": ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
@@ -1980,7 +1980,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 				},
 				{
 					caption: "Delete extendedConfigFile2 and report error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/user/username/projects/project/extendsConfig2.tsconfig.json")
 					},
 				},
@@ -2038,7 +2038,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Remove project2 from base config",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/project/tsconfig.json", stringtestutil.Dedent(`
 						{
                             "references": [
@@ -2083,7 +2083,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "dts doesnt change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/lib/foo.ts", "const Bar = 10;")
 					},
 				},
@@ -2114,7 +2114,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "dts doesnt change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/lib/foo.ts", "const Bar = 10;")
 					},
 				},
@@ -2167,14 +2167,14 @@ func TestBuildProjectsBuilding(t *testing.T) {
 		edits := []*tscEdit{
 			{
 				caption: "dts doesn't change",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`)
 				},
 			},
 			noChange,
 			{
 				caption: "dts change",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`)
 				},
 			},
@@ -2412,13 +2412,13 @@ func TestBuildReexport(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "Introduce error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", "")
 					},
 				},
 				{
 					caption: "Fix error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: ")
 					},
 				},
@@ -2692,14 +2692,14 @@ func TestBuildRoots(t *testing.T) {
 			noChange,
 			{
 				caption: "edit logging file",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile("/home/src/workspaces/solution/projects/shared/src/logging.ts", "export const x = 10;")
 				},
 			},
 			noChange,
 			{
 				caption: "delete random file",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.removeNoError("/home/src/workspaces/solution/projects/shared/src/random.ts")
 				},
 			},
@@ -2722,7 +2722,7 @@ func TestBuildRoots(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "delete file1",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/file1.ts")
 						sys.removeNoError("/home/src/workspaces/project/file1.js")
 						sys.removeNoError("/home/src/workspaces/project/file1.d.ts")
@@ -2747,7 +2747,7 @@ func TestBuildRoots(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "delete file1",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/file1.ts")
 						sys.removeNoError("/home/src/workspaces/project/file1.js")
 						sys.removeNoError("/home/src/workspaces/project/file1.d.ts")
@@ -2774,7 +2774,7 @@ func TestBuildRoots(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "delete file1",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/file1.ts")
 						sys.removeNoError("/home/src/workspaces/project/file1.js")
 						sys.removeNoError("/home/src/workspaces/project/file1.d.ts")
@@ -2814,7 +2814,7 @@ func TestBuildRoots(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "delete file1",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/file1.ts")
 						sys.removeNoError("/home/src/workspaces/project/file1.js")
 						sys.removeNoError("/home/src/workspaces/project/file1.d.ts")
@@ -2947,7 +2947,7 @@ func TestBuildSample(t *testing.T) {
 					[]*tscEdit{
 						{
 							caption: "fix error",
-							edit: func(sys *testSys) {
+							edit: func(sys *TestSys) {
 								sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "multiply();", "")
 							},
 						},
@@ -2979,7 +2979,7 @@ func TestBuildSample(t *testing.T) {
 					[]*tscEdit{
 						{
 							caption: "fix error",
-							edit: func(sys *testSys) {
+							edit: func(sys *TestSys) {
 								sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "multiply();", "")
 							},
 						},
@@ -2992,7 +2992,7 @@ func TestBuildSample(t *testing.T) {
 		return []*tscEdit{
 			{
 				caption: "incremental-declaration-changes",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile(
 						"/user/username/projects/sample1/core/index.ts",
 						`
@@ -3002,7 +3002,7 @@ export class someClass { }`,
 			},
 			{
 				caption: "incremental-declaration-doesnt-change",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile(
 						"/user/username/projects/sample1/core/index.ts",
 						`
@@ -3017,19 +3017,19 @@ class someClass2 { }`,
 		return []*tscEdit{
 			{
 				caption: "Make change to core",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nexport class someClass { }")
 				},
 			},
 			{
 				caption: "Revert core file",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "\nexport class someClass { }", "")
 				},
 			},
 			{
 				caption: "Make two changes",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nexport class someClass { }")
 					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nexport class someClass2 { }")
 				},
@@ -3040,7 +3040,7 @@ class someClass2 { }`,
 		return []*tscEdit{
 			{
 				caption: "Make local change to core",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nfunction foo() { }")
 				},
 			},
@@ -3050,13 +3050,13 @@ class someClass2 { }`,
 		return []*tscEdit{
 			{
 				caption: "Change to new File and build core",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", `export const newFileConst = 30;`, false)
 				},
 			},
 			{
 				caption: "Change to new File and build core",
-				edit: func(sys *testSys) {
+				edit: func(sys *TestSys) {
 					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", "\nexport class someClass2 { }", false)
 				},
 			},
@@ -3090,20 +3090,20 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "change logic",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/user/username/projects/sample1/logic/index.ts", "\nlet y: string = 10;")
 					},
 				},
 				{
 					caption: "change core",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nlet x: string = 10;")
 					},
 					expectedDiff: expectedDiffWithLogicError,
 				},
 				{
 					caption: "fix error in logic",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/logic/index.ts", "\nlet y: string = 10;", "")
 					},
 				},
@@ -3203,20 +3203,20 @@ class someClass2 { }`,
 				{
 					// Update a file in the leaf node (tests), only it should rebuild the last one
 					caption: "Only builds the leaf node project",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/sample1/tests/index.ts", "const m = 10;", false)
 					},
 				},
 				{
 					// Update a file in the parent (without affecting types), should get fast downstream builds
 					caption: "Detects type-only changes in upstream projects",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "HELLO WORLD", "WELCOME PLANET")
 					},
 				},
 				{
 					caption: "rebuilds when tsconfig changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`)
 					},
 				},
@@ -3230,7 +3230,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "upstream project changes without changing file text",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						err := sys.FS().Chtimes("/user/username/projects/sample1/core/index.ts", time.Time{}, sys.Now())
 						if err != nil {
 							panic(err)
@@ -3247,13 +3247,13 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "Disable declarationMap",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`)
 					},
 				},
 				{
 					caption: "Enable declarationMap",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`)
 					},
 				},
@@ -3294,7 +3294,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "tsbuildinfo written has error",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						// This is to ensure the non incremental doesnt crash - as it wont have tsbuildInfo
 						if !sys.forIncrementalCorrectness {
 							sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string")
@@ -3312,7 +3312,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "convert tsbuildInfo version to something that is say to previous version",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						// This is to ensure the non incremental doesnt crash - as it wont have tsbuildInfo
 						if !sys.forIncrementalCorrectness {
 							sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.tsbuildinfo", fmt.Sprintf(`"version":"%s"`, harnessutil.FakeTSVersion), fmt.Sprintf(`"version":"%s"`, "FakeTsPreviousVersion"))
@@ -3340,7 +3340,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "change extended file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/sample1/tests/tsconfig.base.json", stringtestutil.Dedent(`
 						{
 							"compilerOptions": { }
@@ -3396,7 +3396,7 @@ class someClass2 { }`,
 				[]*tscEdit{
 					{
 						caption: "when logic config changes declaration dir",
-						edit: func(sys *testSys) {
+						edit: func(sys *TestSys) {
 							sys.replaceFileText(
 								"/user/username/projects/sample1/logic/tsconfig.json",
 								`"declaration": true,`,
@@ -3440,7 +3440,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`)
 					},
 				},
@@ -3468,7 +3468,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `esnext`, `es5`)
 					},
 				},
@@ -3490,7 +3490,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `node18`, `nodenext`)
 					},
 				},
@@ -3519,7 +3519,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "incremental-declaration-changes",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`)
 					},
 				},
@@ -3605,7 +3605,7 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "Write logic",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/sample1/logic/tsconfig.json", getLogicConfig(), false)
 					},
 				},
@@ -3622,13 +3622,13 @@ class someClass2 { }`,
 			edits: []*tscEdit{
 				{
 					caption: "Make non dts change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.appendFile("/user/username/projects/sample1/logic/index.ts", "\nfunction someFn() { }")
 					},
 				},
 				{
 					caption: "Make dts change",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/user/username/projects/sample1/logic/index.ts", "\nfunction someFn() { }", "\nexport function someFn() { }")
 					},
 				},
@@ -3643,7 +3643,7 @@ class someClass2 { }`,
 				noChange,
 				{
 					caption: "Add new file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`, false)
 					},
 				},
@@ -3667,7 +3667,7 @@ class someClass2 { }`,
 				noChange,
 				{
 					caption: "Add new file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`, false)
 					},
 				},
@@ -3872,7 +3872,7 @@ func TestBuildSolutionProject(t *testing.T) {
 			edits: []*tscEdit{
 				{
 					caption: "modify project3 file",
-					edit: func(sys *testSys) {
+					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/solution/project3/src/c.ts", "c = ", "cc = ")
 					},
 				},

@@ -58,7 +58,7 @@ type Orchestrator struct {
 	host                *host
 
 	// order generation result
-	tasks  *collections.SyncMap[tspath.Path, *buildTask]
+	tasks  *collections.SyncMap[tspath.Path, *BuildTask]
 	order  []string
 	errors []*ast.Diagnostic
 
@@ -91,12 +91,12 @@ func (o *Orchestrator) Upstream(configName string) []string {
 func (o *Orchestrator) Downstream(configName string) []string {
 	path := o.toPath(configName)
 	task := o.getTask(path)
-	return core.Map(task.downStream, func(t *buildTask) string {
+	return core.Map(task.downStream, func(t *BuildTask) string {
 		return t.config
 	})
 }
 
-func (o *Orchestrator) getTask(path tspath.Path) *buildTask {
+func (o *Orchestrator) getTask(path tspath.Path) *BuildTask {
 	task, ok := o.tasks.Load(path)
 	if !ok {
 		panic("No build task found for " + path)
@@ -104,11 +104,11 @@ func (o *Orchestrator) getTask(path tspath.Path) *buildTask {
 	return task
 }
 
-func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Path, *buildTask], configs []string, wg core.WorkGroup) {
+func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Path, *BuildTask], configs []string, wg core.WorkGroup) {
 	for _, config := range configs {
 		wg.Queue(func() {
 			path := o.toPath(config)
-			var task *buildTask
+			var task *BuildTask
 			var buildInfo *buildInfoEntry
 			if oldTasks != nil {
 				if existing, ok := oldTasks.Load(path); ok {
@@ -121,7 +121,7 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 				}
 			}
 			if task == nil {
-				task = &buildTask{config: config, isInitialCycle: oldTasks == nil}
+				task = &BuildTask{config: config, isInitialCycle: oldTasks == nil}
 				task.pending.Store(true)
 				task.buildInfoEntry = buildInfo
 			}
@@ -139,12 +139,12 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 
 func (o *Orchestrator) setupBuildTask(
 	configName string,
-	downStream *buildTask,
+	downStream *BuildTask,
 	inCircularContext bool,
 	completed *collections.Set[tspath.Path],
 	analyzing *collections.Set[tspath.Path],
 	circularityStack []string,
-) *buildTask {
+) *BuildTask {
 	path := o.toPath(configName)
 	task := o.getTask(path)
 	if !completed.Has(path) {
@@ -185,13 +185,13 @@ func (o *Orchestrator) setupBuildTask(
 
 func (o *Orchestrator) GenerateGraphReusingOldTasks() {
 	tasks := o.tasks
-	o.tasks = &collections.SyncMap[tspath.Path, *buildTask]{}
+	o.tasks = &collections.SyncMap[tspath.Path, *BuildTask]{}
 	o.order = nil
 	o.errors = nil
 	o.GenerateGraph(tasks)
 }
 
-func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.Path, *buildTask]) {
+func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.Path, *BuildTask]) {
 	projects := o.opts.Command.ResolvedProjectPaths()
 	// Parse all config files in parallel
 	wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
@@ -239,7 +239,7 @@ func (o *Orchestrator) updateWatch() {
 	oldCache := o.host.mTimes
 	o.host.mTimes = &collections.SyncMap[tspath.Path, time.Time]{}
 	wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
-	o.tasks.Range(func(path tspath.Path, task *buildTask) bool {
+	o.tasks.Range(func(path tspath.Path, task *BuildTask) bool {
 		wg.Queue(func() {
 			task.updateWatch(o, oldCache)
 		})
@@ -262,7 +262,7 @@ func (o *Orchestrator) DoCycle() {
 	var needsUpdate atomic.Bool
 	mTimes := o.host.mTimes.Clone()
 	wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
-	o.tasks.Range(func(path tspath.Path, task *buildTask) bool {
+	o.tasks.Range(func(path tspath.Path, task *BuildTask) bool {
 		wg.Queue(func() {
 			if updateKind := task.hasUpdate(o, path); updateKind != updateKindNone {
 				needsUpdate.Store(true)
@@ -335,7 +335,7 @@ func (o *Orchestrator) singleThreadedBuildOrClean(buildResult *orchestratorResul
 func (o *Orchestrator) multiThreadedBuildOrClean(buildResult *orchestratorResult) {
 	// Spin off the threads with waiting on upstream to build before actual project build
 	wg := core.NewWorkGroup(false)
-	o.tasks.Range(func(path tspath.Path, task *buildTask) bool {
+	o.tasks.Range(func(path tspath.Path, task *BuildTask) bool {
 		wg.Queue(func() {
 			o.buildOrCleanProject(task, path, buildResult)
 		})
@@ -344,7 +344,7 @@ func (o *Orchestrator) multiThreadedBuildOrClean(buildResult *orchestratorResult
 	wg.RunAndWait()
 }
 
-func (o *Orchestrator) buildOrCleanProject(task *buildTask, path tspath.Path, buildResult *orchestratorResult) {
+func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path, buildResult *orchestratorResult) {
 	task.result = &taskResult{}
 	task.result.reportStatus = o.createBuilderStatusReporter(task)
 	task.result.diagnosticReporter = o.createDiagnosticReporter(task)
@@ -356,18 +356,18 @@ func (o *Orchestrator) buildOrCleanProject(task *buildTask, path tspath.Path, bu
 	task.report(o, path, buildResult)
 }
 
-func (o *Orchestrator) getWriter(task *buildTask) io.Writer {
+func (o *Orchestrator) getWriter(task *BuildTask) io.Writer {
 	if task == nil {
 		return o.opts.Sys.Writer()
 	}
 	return &task.result.builder
 }
 
-func (o *Orchestrator) createBuilderStatusReporter(task *buildTask) tsc.DiagnosticReporter {
+func (o *Orchestrator) createBuilderStatusReporter(task *BuildTask) tsc.DiagnosticReporter {
 	return tsc.CreateBuilderStatusReporter(o.opts.Sys, o.getWriter(task), o.opts.Command.CompilerOptions, o.opts.Testing)
 }
 
-func (o *Orchestrator) createDiagnosticReporter(task *buildTask) tsc.DiagnosticReporter {
+func (o *Orchestrator) createDiagnosticReporter(task *BuildTask) tsc.DiagnosticReporter {
 	return tsc.CreateDiagnosticReporter(o.opts.Sys, o.getWriter(task), o.opts.Command.CompilerOptions)
 }
 
@@ -378,7 +378,7 @@ func NewOrchestrator(opts Options) *Orchestrator {
 			CurrentDirectory:          opts.Sys.GetCurrentDirectory(),
 			UseCaseSensitiveFileNames: opts.Sys.FS().UseCaseSensitiveFileNames(),
 		},
-		tasks: &collections.SyncMap[tspath.Path, *buildTask]{},
+		tasks: &collections.SyncMap[tspath.Path, *BuildTask]{},
 	}
 	orchestrator.host = &host{
 		orchestrator: orchestrator,

@@ -36,7 +36,7 @@ const (
 )
 
 type upstreamTask struct {
-	task     *buildTask
+	task     *BuildTask
 	refIndex int
 }
 type buildInfoEntry struct {
@@ -57,17 +57,17 @@ type taskResult struct {
 	filesToDelete      []string
 }
 
-type buildTask struct {
+type BuildTask struct {
 	config     string
 	resolved   *tsoptions.ParsedCommandLine
 	upStream   []*upstreamTask
-	downStream []*buildTask // Only set and used in watch mode
+	downStream []*BuildTask // Only set and used in watch mode
 	status     *upToDateStatus
 	done       chan struct{}
 
 	// task reporting
 	result       *taskResult
-	prevReporter *buildTask
+	prevReporter *BuildTask
 	reportDone   chan struct{}
 
 	// Watching things
@@ -85,24 +85,24 @@ type buildTask struct {
 	dirty              bool
 }
 
-func (t *buildTask) waitOnUpstream() {
+func (t *BuildTask) waitOnUpstream() {
 	for _, upstream := range t.upStream {
 		<-upstream.task.done
 	}
 }
 
-func (t *buildTask) unblockDownstream() {
+func (t *BuildTask) unblockDownstream() {
 	t.pending.Store(false)
 	t.isInitialCycle = false
 	close(t.done)
 }
 
-func (t *buildTask) reportDiagnostic(err *ast.Diagnostic) {
+func (t *BuildTask) reportDiagnostic(err *ast.Diagnostic) {
 	t.errors = append(t.errors, err)
 	t.result.diagnosticReporter(err)
 }
 
-func (t *buildTask) report(orchestrator *Orchestrator, configPath tspath.Path, buildResult *orchestratorResult) {
+func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, buildResult *orchestratorResult) {
 	if t.prevReporter != nil {
 		<-t.prevReporter.reportDone
 	}
@@ -132,7 +132,7 @@ func (t *buildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 	close(t.reportDone)
 }
 
-func (t *buildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
 	// Wait on upstream tasks to complete
 	t.waitOnUpstream()
 	if t.pending.Load() {
@@ -163,7 +163,7 @@ func (t *buildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
 	t.unblockDownstream()
 }
 
-func (t *buildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Path) {
 	if t.isInitialCycle {
 		return
 	}
@@ -199,7 +199,7 @@ func (t *buildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Pat
 	}
 }
 
-func (t *buildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path) {
 	t.errors = nil
 	if orchestrator.opts.Command.BuildOptions.Verbose.IsTrue() {
 		t.result.reportStatus(ast.NewCompilerDiagnostic(diagnostics.Building_project_0, orchestrator.relativeFileName(t.config)))
@@ -265,7 +265,7 @@ func (t *buildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 	}
 }
 
-func (t *buildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrator) bool {
+func (t *BuildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrator) bool {
 	switch t.status.kind {
 	case upToDateStatusTypeUpToDate:
 		if orchestrator.opts.Command.BuildOptions.Dry.IsTrue() {
@@ -315,7 +315,7 @@ func (t *buildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrato
 	return false
 }
 
-func (t *buildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.Path) *upToDateStatus {
+func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.Path) *upToDateStatus {
 	if t.status != nil {
 		return t.status
 	}
@@ -527,7 +527,7 @@ func (t *buildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 	}
 }
 
-func (t *buildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
+func (t *BuildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
 	if !orchestrator.opts.Command.BuildOptions.Verbose.IsTrue() {
 		return
 	}
@@ -639,11 +639,11 @@ func (t *buildTask) reportUpToDateStatus(orchestrator *Orchestrator) {
 	}
 }
 
-func (t *buildTask) canUpdateJsDtsOutputTimestamps() bool {
+func (t *BuildTask) canUpdateJsDtsOutputTimestamps() bool {
 	return !t.resolved.CompilerOptions().NoEmit.IsTrue() && !t.resolved.CompilerOptions().IsIncremental()
 }
 
-func (t *buildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []string, verboseMessage *diagnostics.Message) {
+func (t *BuildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []string, verboseMessage *diagnostics.Message) {
 	emitted := collections.NewSetFromItems(emittedFiles...)
 	var verboseMessageReported bool
 	buildInfoName := t.resolved.GetBuildInfoFileName()
@@ -678,7 +678,7 @@ func (t *buildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []
 	updateTimeStamp(t.resolved.GetBuildInfoFileName())
 }
 
-func (t *buildTask) cleanProject(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) cleanProject(orchestrator *Orchestrator, path tspath.Path) {
 	if t.resolved == nil {
 		t.reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.File_0_not_found, t.config))
 		t.result.exitStatus = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
@@ -692,7 +692,7 @@ func (t *buildTask) cleanProject(orchestrator *Orchestrator, path tspath.Path) {
 	t.cleanProjectOutput(orchestrator, t.resolved.GetBuildInfoFileName(), inputs)
 }
 
-func (t *buildTask) cleanProjectOutput(orchestrator *Orchestrator, outputFile string, inputs *collections.Set[tspath.Path]) {
+func (t *BuildTask) cleanProjectOutput(orchestrator *Orchestrator, outputFile string, inputs *collections.Set[tspath.Path]) {
 	outputPath := orchestrator.toPath(outputFile)
 	// If output name is same as input file name, do not delete and ignore the error
 	if inputs.Has(outputPath) {
@@ -710,7 +710,7 @@ func (t *buildTask) cleanProjectOutput(orchestrator *Orchestrator, outputFile st
 	}
 }
 
-func (t *buildTask) updateWatch(orchestrator *Orchestrator, oldCache *collections.SyncMap[tspath.Path, time.Time]) {
+func (t *BuildTask) updateWatch(orchestrator *Orchestrator, oldCache *collections.SyncMap[tspath.Path, time.Time]) {
 	t.configTime = orchestrator.host.loadOrStoreMTime(t.config, oldCache, false)
 	if t.resolved != nil {
 		t.extendedConfigTimes = core.Map(t.resolved.ExtendedSourceFiles(), func(p string) time.Time {
@@ -727,18 +727,18 @@ func (t *buildTask) updateWatch(orchestrator *Orchestrator, oldCache *collection
 	}
 }
 
-func (t *buildTask) resetStatus() {
+func (t *BuildTask) resetStatus() {
 	t.status = nil
 	t.pending.Store(true)
 	t.errors = nil
 }
 
-func (t *buildTask) resetConfig(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) resetConfig(orchestrator *Orchestrator, path tspath.Path) {
 	t.dirty = true
 	orchestrator.host.resolvedReferences.delete(path)
 }
 
-func (t *buildTask) hasUpdate(orchestrator *Orchestrator, path tspath.Path) updateKind {
+func (t *BuildTask) hasUpdate(orchestrator *Orchestrator, path tspath.Path) updateKind {
 	var needsConfigUpdate bool
 	var needsUpdate bool
 	if configTime := orchestrator.host.GetMTime(t.config); configTime != t.configTime {
@@ -777,7 +777,7 @@ func (t *buildTask) hasUpdate(orchestrator *Orchestrator, path tspath.Path) upda
 	return core.IfElse(needsConfigUpdate, updateKindConfig, core.IfElse(needsUpdate, updateKindUpdate, updateKindNone))
 }
 
-func (t *buildTask) loadOrStoreBuildInfo(orchestrator *Orchestrator, configPath tspath.Path, buildInfoFileName string) (*incremental.BuildInfo, time.Time) {
+func (t *BuildTask) loadOrStoreBuildInfo(orchestrator *Orchestrator, configPath tspath.Path, buildInfoFileName string) (*incremental.BuildInfo, time.Time) {
 	path := orchestrator.toPath(buildInfoFileName)
 	t.buildInfoEntryMu.Lock()
 	defer t.buildInfoEntryMu.Unlock()
@@ -796,7 +796,7 @@ func (t *buildTask) loadOrStoreBuildInfo(orchestrator *Orchestrator, configPath 
 	return t.buildInfoEntry.buildInfo, mTime
 }
 
-func (t *buildTask) onBuildInfoEmit(orchestrator *Orchestrator, buildInfoFileName string, buildInfo *incremental.BuildInfo, hasChangedDtsFile bool) {
+func (t *BuildTask) onBuildInfoEmit(orchestrator *Orchestrator, buildInfoFileName string, buildInfo *incremental.BuildInfo, hasChangedDtsFile bool) {
 	t.buildInfoEntryMu.Lock()
 	defer t.buildInfoEntryMu.Unlock()
 	var dtsTime *time.Time
@@ -814,14 +814,14 @@ func (t *buildTask) onBuildInfoEmit(orchestrator *Orchestrator, buildInfoFileNam
 	}
 }
 
-func (t *buildTask) hasConflictingBuildInfo(orchestrator *Orchestrator, upstream *buildTask) bool {
+func (t *BuildTask) hasConflictingBuildInfo(orchestrator *Orchestrator, upstream *BuildTask) bool {
 	if t.buildInfoEntry != nil && upstream.buildInfoEntry != nil {
 		return t.buildInfoEntry.path == upstream.buildInfoEntry.path
 	}
 	return false
 }
 
-func (t *buildTask) getLatestChangedDtsMTime(orchestrator *Orchestrator) time.Time {
+func (t *BuildTask) getLatestChangedDtsMTime(orchestrator *Orchestrator) time.Time {
 	t.buildInfoEntryMu.Lock()
 	defer t.buildInfoEntryMu.Unlock()
 	if t.buildInfoEntry.dtsTime != nil {
@@ -837,11 +837,11 @@ func (t *buildTask) getLatestChangedDtsMTime(orchestrator *Orchestrator) time.Ti
 	return dtsTime
 }
 
-func (t *buildTask) storeOutputTimeStamp(orchestrator *Orchestrator) bool {
+func (t *BuildTask) storeOutputTimeStamp(orchestrator *Orchestrator) bool {
 	return orchestrator.opts.Command.CompilerOptions.Watch.IsTrue() && !t.resolved.CompilerOptions().IsIncremental()
 }
 
-func (t *buildTask) writeFile(orchestrator *Orchestrator, fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
+func (t *BuildTask) writeFile(orchestrator *Orchestrator, fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
 	err := orchestrator.host.FS().WriteFile(fileName, text, writeByteOrderMark)
 	if err == nil {
 		if data != nil && data.BuildInfo != nil {

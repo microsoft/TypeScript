@@ -19,7 +19,7 @@ func TestProcessChanges(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 		return newOverlayFS(
 			testFS,
-			make(map[tspath.Path]*overlay),
+			make(map[tspath.Path]*Overlay),
 			lsproto.PositionEncodingKindUTF16,
 			func(fileName string) tspath.Path {
 				return tspath.Path(fileName)

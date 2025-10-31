@@ -164,7 +164,7 @@ func (t *toBuildInfo) toBuildInfoDiagnosticsFromDiagnostics(filePath tspath.Path
 	})
 }
 
-func (t *toBuildInfo) toBuildInfoDiagnosticsOfFile(filePath tspath.Path, diags *diagnosticsOrBuildInfoDiagnosticsWithFileName) *BuildInfoDiagnosticsOfFile {
+func (t *toBuildInfo) toBuildInfoDiagnosticsOfFile(filePath tspath.Path, diags *DiagnosticsOrBuildInfoDiagnosticsWithFileName) *BuildInfoDiagnosticsOfFile {
 	if len(diags.diagnostics) > 0 {
 		return &BuildInfoDiagnosticsOfFile{
 			FileId:      t.toFileId(filePath),

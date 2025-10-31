@@ -69,7 +69,7 @@ func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, pos
 	return highlights
 }
 
-func (l *LanguageService) toDocumentHighlight(entry *referenceEntry) (string, *lsproto.DocumentHighlight) {
+func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *lsproto.DocumentHighlight) {
 	entry = l.resolveEntry(entry)
 
 	kind := lsproto.DocumentHighlightKindRead

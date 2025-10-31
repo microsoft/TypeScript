@@ -84,9 +84,9 @@ func (t *TestClock) SinceStart() time.Duration {
 	return t.Now().Sub(t.start)
 }
 
-func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *testSys {
+func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *TestSys {
 	clock := &TestClock{start: time.Now()}
-	return &testSys{
+	return &TestSys{
 		fs: &testFs{
 			FS: vfstest.FromMapWithClock(files, useCaseSensitiveFileNames, clock),
 		},
@@ -95,7 +95,7 @@ func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *te
 	}
 }
 
-func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *testSys {
+func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	cwd := tscInput.cwd
 	if cwd == "" {
 		cwd = "/home/src/workspaces/project"
@@ -138,7 +138,7 @@ type snapshot struct {
 	defaultLibs *collections.SyncSet[string]
 }
 
-type testSys struct {
+type TestSys struct {
 	currentWrite              *strings.Builder
 	programBaselines          strings.Builder
 	programIncludeBaselines   strings.Builder
@@ -154,31 +154,31 @@ type testSys struct {
 }
 
 var (
-	_ tsc.System             = (*testSys)(nil)
-	_ tsc.CommandLineTesting = (*testSys)(nil)
+	_ tsc.System             = (*TestSys)(nil)
+	_ tsc.CommandLineTesting = (*TestSys)(nil)
 )
 
-func (s *testSys) Now() time.Time {
+func (s *TestSys) Now() time.Time {
 	return s.clock.Now()
 }
 
-func (s *testSys) SinceStart() time.Duration {
+func (s *TestSys) SinceStart() time.Duration {
 	return s.clock.SinceStart()
 }
 
-func (s *testSys) FS() vfs.FS {
+func (s *TestSys) FS() vfs.FS {
 	return s.fs
 }
 
-func (s *testSys) fsFromFileMap() iovfs.FsWithSys {
+func (s *TestSys) fsFromFileMap() iovfs.FsWithSys {
 	return s.fs.FS.(iovfs.FsWithSys)
 }
 
-func (s *testSys) mapFs() *vfstest.MapFS {
+func (s *TestSys) mapFs() *vfstest.MapFS {
 	return s.fsFromFileMap().FSys().(*vfstest.MapFS)
 }
 
-func (s *testSys) ensureLibPathExists(path string) {
+func (s *TestSys) ensureLibPathExists(path string) {
 	path = s.defaultLibraryPath + "/" + path
 	if _, ok := s.fsFromFileMap().ReadFile(path); !ok {
 		if s.fs.defaultLibs == nil {
@@ -192,34 +192,34 @@ func (s *testSys) ensureLibPathExists(path string) {
 	}
 }
 
-func (s *testSys) DefaultLibraryPath() string {
+func (s *TestSys) DefaultLibraryPath() string {
 	return s.defaultLibraryPath
 }
 
-func (s *testSys) GetCurrentDirectory() string {
+func (s *TestSys) GetCurrentDirectory() string {
 	return s.cwd
 }
 
-func (s *testSys) Writer() io.Writer {
+func (s *TestSys) Writer() io.Writer {
 	return s.currentWrite
 }
 
-func (s *testSys) WriteOutputIsTTY() bool {
+func (s *TestSys) WriteOutputIsTTY() bool {
 	return true
 }
 
-func (s *testSys) GetWidthOfTerminal() int {
+func (s *TestSys) GetWidthOfTerminal() int {
 	if widthStr := s.GetEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"); widthStr != "" {
 		return core.Must(strconv.Atoi(widthStr))
 	}
 	return 0
 }
 
-func (s *testSys) GetEnvironmentVariable(name string) string {
+func (s *TestSys) GetEnvironmentVariable(name string) string {
 	return s.env[name]
 }
 
-func (s *testSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time]) {
+func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time]) {
 	if result != nil {
 		for _, file := range result.EmittedFiles {
 			modTime := s.mapFs().GetModTime(file)
@@ -246,39 +246,39 @@ func (s *testSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *colle
 	}
 }
 
-func (s *testSys) OnListFilesStart(w io.Writer) {
+func (s *TestSys) OnListFilesStart(w io.Writer) {
 	fmt.Fprintln(w, listFileStart)
 }
 
-func (s *testSys) OnListFilesEnd(w io.Writer) {
+func (s *TestSys) OnListFilesEnd(w io.Writer) {
 	fmt.Fprintln(w, listFileEnd)
 }
 
-func (s *testSys) OnStatisticsStart(w io.Writer) {
+func (s *TestSys) OnStatisticsStart(w io.Writer) {
 	fmt.Fprintln(w, statisticsStart)
 }
 
-func (s *testSys) OnStatisticsEnd(w io.Writer) {
+func (s *TestSys) OnStatisticsEnd(w io.Writer) {
 	fmt.Fprintln(w, statisticsEnd)
 }
 
-func (s *testSys) OnBuildStatusReportStart(w io.Writer) {
+func (s *TestSys) OnBuildStatusReportStart(w io.Writer) {
 	fmt.Fprintln(w, buildStatusReportStart)
 }
 
-func (s *testSys) OnBuildStatusReportEnd(w io.Writer) {
+func (s *TestSys) OnBuildStatusReportEnd(w io.Writer) {
 	fmt.Fprintln(w, buildStatusReportEnd)
 }
 
-func (s *testSys) OnWatchStatusReportStart() {
+func (s *TestSys) OnWatchStatusReportStart() {
 	fmt.Fprintln(s.Writer(), watchStatusReportStart)
 }
 
-func (s *testSys) OnWatchStatusReportEnd() {
+func (s *TestSys) OnWatchStatusReportEnd() {
 	fmt.Fprintln(s.Writer(), watchStatusReportEnd)
 }
 
-func (s *testSys) GetTrace(w io.Writer) func(str string) {
+func (s *TestSys) GetTrace(w io.Writer) func(str string) {
 	return func(str string) {
 		fmt.Fprintln(w, traceStart)
 		defer fmt.Fprintln(w, traceEnd)
@@ -288,7 +288,7 @@ func (s *testSys) GetTrace(w io.Writer) func(str string) {
 	}
 }
 
-func (s *testSys) writeHeaderToBaseline(builder *strings.Builder, program *incremental.Program) {
+func (s *TestSys) writeHeaderToBaseline(builder *strings.Builder, program *incremental.Program) {
 	if builder.Len() != 0 {
 		builder.WriteString("\n")
 	}
@@ -301,7 +301,7 @@ func (s *testSys) writeHeaderToBaseline(builder *strings.Builder, program *incre
 	}
 }
 
-func (s *testSys) OnProgram(program *incremental.Program) {
+func (s *TestSys) OnProgram(program *incremental.Program) {
 	s.writeHeaderToBaseline(&s.programBaselines, program)
 
 	testingData := program.GetTestingData()
@@ -357,7 +357,7 @@ func (s *testSys) OnProgram(program *incremental.Program) {
 	}
 }
 
-func (s *testSys) baselinePrograms(baseline *strings.Builder, header string) string {
+func (s *TestSys) baselinePrograms(baseline *strings.Builder, header string) string {
 	baseline.WriteString(s.programBaselines.String())
 	s.programBaselines.Reset()
 	var result string
@@ -370,7 +370,7 @@ func (s *testSys) baselinePrograms(baseline *strings.Builder, header string) str
 	return result
 }
 
-func (s *testSys) serializeState(baseline *strings.Builder) {
+func (s *TestSys) serializeState(baseline *strings.Builder) {
 	s.baselineOutput(baseline)
 	s.baselineFSwithDiff(baseline)
 	// todo watch
@@ -399,7 +399,7 @@ var (
 	traceEnd               = "!!! Trace end"
 )
 
-func (s *testSys) baselineOutput(baseline io.Writer) {
+func (s *TestSys) baselineOutput(baseline io.Writer) {
 	fmt.Fprint(baseline, "\nOutput::\n")
 	output := s.getOutput(false)
 	fmt.Fprint(baseline, output)
@@ -484,7 +484,7 @@ func (o *outputSanitizer) addOrSkipLinesForComparing(
 	panic("Expected lineEnd" + lineEnd + " not found after " + lineStart)
 }
 
-func (s *testSys) getOutput(forComparing bool) string {
+func (s *TestSys) getOutput(forComparing bool) string {
 	lines := strings.Split(s.currentWrite.String(), "\n")
 	transformer := &outputSanitizer{
 		forComparing: forComparing,
@@ -494,12 +494,12 @@ func (s *testSys) getOutput(forComparing bool) string {
 	return transformer.transformLines()
 }
 
-func (s *testSys) clearOutput() {
+func (s *TestSys) clearOutput() {
 	s.currentWrite.Reset()
 	s.tracer.Reset()
 }
 
-func (s *testSys) baselineFSwithDiff(baseline io.Writer) {
+func (s *TestSys) baselineFSwithDiff(baseline io.Writer) {
 	// todo: baselines the entire fs, possibly doesn't correctly diff all cases of emitted files, since emit isn't fully implemented and doesn't always emit the same way as strada
 	snap := map[string]*diffEntry{}
 
@@ -549,7 +549,7 @@ func (s *testSys) baselineFSwithDiff(baseline io.Writer) {
 	s.fs.writtenFiles = collections.SyncSet[string]{} // Reset written files after baseline
 }
 
-func (s *testSys) addFsEntryDiff(diffs map[string]string, newDirContent *diffEntry, path string) {
+func (s *TestSys) addFsEntryDiff(diffs map[string]string, newDirContent *diffEntry, path string) {
 	var oldDirContent *diffEntry
 	var defaultLibs *collections.SyncSet[string]
 	if s.serializedDiff != nil {
@@ -579,19 +579,19 @@ func (s *testSys) addFsEntryDiff(diffs map[string]string, newDirContent *diffEnt
 	}
 }
 
-func (s *testSys) writeFileNoError(path string, content string, writeByteOrderMark bool) {
+func (s *TestSys) writeFileNoError(path string, content string, writeByteOrderMark bool) {
 	if err := s.fsFromFileMap().WriteFile(path, content, writeByteOrderMark); err != nil {
 		panic(err)
 	}
 }
 
-func (s *testSys) removeNoError(path string) {
+func (s *TestSys) removeNoError(path string) {
 	if err := s.fsFromFileMap().Remove(path); err != nil {
 		panic(err)
 	}
 }
 
-func (s *testSys) readFileNoError(path string) string {
+func (s *TestSys) readFileNoError(path string) string {
 	content, ok := s.fsFromFileMap().ReadFile(path)
 	if !ok {
 		panic("File not found: " + path)
@@ -599,29 +599,29 @@ func (s *testSys) readFileNoError(path string) string {
 	return content
 }
 
-func (s *testSys) renameFileNoError(oldPath string, newPath string) {
+func (s *TestSys) renameFileNoError(oldPath string, newPath string) {
 	s.writeFileNoError(newPath, s.readFileNoError(oldPath), false)
 	s.removeNoError(oldPath)
 }
 
-func (s *testSys) replaceFileText(path string, oldText string, newText string) {
+func (s *TestSys) replaceFileText(path string, oldText string, newText string) {
 	content := s.readFileNoError(path)
 	content = strings.Replace(content, oldText, newText, 1)
 	s.writeFileNoError(path, content, false)
 }
 
-func (s *testSys) replaceFileTextAll(path string, oldText string, newText string) {
+func (s *TestSys) replaceFileTextAll(path string, oldText string, newText string) {
 	content := s.readFileNoError(path)
 	content = strings.ReplaceAll(content, oldText, newText)
 	s.writeFileNoError(path, content, false)
 }
 
-func (s *testSys) appendFile(path string, text string) {
+func (s *TestSys) appendFile(path string, text string) {
 	content := s.readFileNoError(path)
 	s.writeFileNoError(path, content+text, false)
 }
 
-func (s *testSys) prependFile(path string, text string) {
+func (s *TestSys) prependFile(path string, text string) {
 	content := s.readFileNoError(path)
 	s.writeFileNoError(path, text+content, false)
 }

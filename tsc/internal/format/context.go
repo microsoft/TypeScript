@@ -85,7 +85,7 @@ func GetDefaultFormatCodeSettings(newLineCharacter string) *FormatCodeSettings {
 	}
 }
 
-type formattingContext struct {
+type FormattingContext struct {
 	currentTokenSpan   TextRangeWithKind
 	nextTokenSpan      TextRangeWithKind
 	contextNode        *ast.Node
@@ -105,8 +105,8 @@ type formattingContext struct {
 	scanner *scanner.Scanner
 }
 
-func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options *FormatCodeSettings) *formattingContext {
-	res := &formattingContext{
+func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options *FormatCodeSettings) *FormattingContext {
+	res := &FormattingContext{
 		SourceFile:            file,
 		FormattingRequestKind: kind,
 		Options:               options,
@@ -117,7 +117,7 @@ func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options 
 	return res
 }
 
-func (this *formattingContext) UpdateContext(cur TextRangeWithKind, curParent *ast.Node, next TextRangeWithKind, nextParent *ast.Node, commonParent *ast.Node) {
+func (this *FormattingContext) UpdateContext(cur TextRangeWithKind, curParent *ast.Node, next TextRangeWithKind, nextParent *ast.Node, commonParent *ast.Node) {
 	if curParent == nil {
 		panic("nil current range node parent in update context")
 	}
@@ -141,14 +141,14 @@ func (this *formattingContext) UpdateContext(cur TextRangeWithKind, curParent *a
 	this.nextNodeBlockIsOnOneLine = core.TSUnknown
 }
 
-func (this *formattingContext) rangeIsOnOneLine(node core.TextRange) core.Tristate {
+func (this *FormattingContext) rangeIsOnOneLine(node core.TextRange) core.Tristate {
 	if rangeIsOnOneLine(node, this.SourceFile) {
 		return core.TSTrue
 	}
 	return core.TSFalse
 }
 
-func (this *formattingContext) nodeIsOnOneLine(node *ast.Node) core.Tristate {
+func (this *FormattingContext) nodeIsOnOneLine(node *ast.Node) core.Tristate {
 	return this.rangeIsOnOneLine(withTokenStart(node, this.SourceFile))
 }
 
@@ -157,7 +157,7 @@ func withTokenStart(loc *ast.Node, file *ast.SourceFile) core.TextRange {
 	return core.NewTextRange(startPos, loc.End())
 }
 
-func (this *formattingContext) blockIsOnOneLine(node *ast.Node) core.Tristate {
+func (this *FormattingContext) blockIsOnOneLine(node *ast.Node) core.Tristate {
 	// In strada, this relies on token child manifesting - we just use the scanner here,
 	// so this will have a differing performance profile. Is this OK? Needs profiling to know.
 	this.scanner.ResetPos(node.Pos())
@@ -179,35 +179,35 @@ func (this *formattingContext) blockIsOnOneLine(node *ast.Node) core.Tristate {
 	return core.TSFalse
 }
 
-func (this *formattingContext) ContextNodeAllOnSameLine() bool {
+func (this *FormattingContext) ContextNodeAllOnSameLine() bool {
 	if this.contextNodeAllOnSameLine == core.TSUnknown {
 		this.contextNodeAllOnSameLine = this.nodeIsOnOneLine(this.contextNode)
 	}
 	return this.contextNodeAllOnSameLine == core.TSTrue
 }
 
-func (this *formattingContext) NextNodeAllOnSameLine() bool {
+func (this *FormattingContext) NextNodeAllOnSameLine() bool {
 	if this.nextNodeAllOnSameLine == core.TSUnknown {
 		this.nextNodeAllOnSameLine = this.nodeIsOnOneLine(this.nextTokenParent)
 	}
 	return this.nextNodeAllOnSameLine == core.TSTrue
 }
 
-func (this *formattingContext) TokensAreOnSameLine() bool {
+func (this *FormattingContext) TokensAreOnSameLine() bool {
 	if this.tokensAreOnSameLine == core.TSUnknown {
 		this.tokensAreOnSameLine = this.rangeIsOnOneLine(core.NewTextRange(this.currentTokenSpan.Loc.Pos(), this.nextTokenSpan.Loc.End()))
 	}
 	return this.tokensAreOnSameLine == core.TSTrue
 }
 
-func (this *formattingContext) ContextNodeBlockIsOnOneLine() bool {
+func (this *FormattingContext) ContextNodeBlockIsOnOneLine() bool {
 	if this.contextNodeBlockIsOnOneLine == core.TSUnknown {
 		this.contextNodeBlockIsOnOneLine = this.blockIsOnOneLine(this.contextNode)
 	}
 	return this.contextNodeBlockIsOnOneLine == core.TSTrue
 }
 
-func (this *formattingContext) NextNodeBlockIsOnOneLine() bool {
+func (this *FormattingContext) NextNodeBlockIsOnOneLine() bool {
 	if this.nextNodeBlockIsOnOneLine == core.TSUnknown {
 		this.nextNodeBlockIsOnOneLine = this.blockIsOnOneLine(this.nextTokenParent)
 	}

@@ -24,15 +24,15 @@ type FileMatcherPatterns struct {
 	basePaths               []string
 }
 
-type usage string
+type Usage string
 
 const (
-	usageFiles       usage = "files"
-	usageDirectories usage = "directories"
-	usageExclude     usage = "exclude"
+	usageFiles       Usage = "files"
+	usageDirectories Usage = "directories"
+	usageExclude     Usage = "exclude"
 )
 
-func GetRegularExpressionsForWildcards(specs []string, basePath string, usage usage) []string {
+func GetRegularExpressionsForWildcards(specs []string, basePath string, usage Usage) []string {
 	if len(specs) == 0 {
 		return nil
 	}
@@ -41,7 +41,7 @@ func GetRegularExpressionsForWildcards(specs []string, basePath string, usage us
 	})
 }
 
-func GetRegularExpressionForWildcard(specs []string, basePath string, usage usage) string {
+func GetRegularExpressionForWildcard(specs []string, basePath string, usage Usage) string {
 	patterns := GetRegularExpressionsForWildcards(specs, basePath, usage)
 	if len(patterns) == 0 {
 		return ""
@@ -138,7 +138,7 @@ var excludeMatcher = WildcardMatcher{
 	},
 }
 
-var wildcardMatchers = map[usage]WildcardMatcher{
+var wildcardMatchers = map[Usage]WildcardMatcher{
 	usageFiles:       filesMatcher,
 	usageDirectories: directoriesMatcher,
 	usageExclude:     excludeMatcher,
@@ -147,7 +147,7 @@ var wildcardMatchers = map[usage]WildcardMatcher{
 func GetPatternFromSpec(
 	spec string,
 	basePath string,
-	usage usage,
+	usage Usage,
 ) string {
 	pattern := getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage])
 	if pattern == "" {
@@ -160,7 +160,7 @@ func GetPatternFromSpec(
 func getSubPatternFromSpec(
 	spec string,
 	basePath string,
-	usage usage,
+	usage Usage,
 	matcher WildcardMatcher,
 ) string {
 	matcher = wildcardMatchers[usage]

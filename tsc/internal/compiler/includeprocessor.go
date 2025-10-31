@@ -12,11 +12,11 @@ import (
 )
 
 type includeProcessor struct {
-	fileIncludeReasons    map[tspath.Path][]*fileIncludeReason
+	fileIncludeReasons    map[tspath.Path][]*FileIncludeReason
 	processingDiagnostics []*processingDiagnostic
 
-	reasonToReferenceLocation  collections.SyncMap[*fileIncludeReason, *referenceFileLocation]
-	includeReasonToRelatedInfo collections.SyncMap[*fileIncludeReason, *ast.Diagnostic]
+	reasonToReferenceLocation  collections.SyncMap[*FileIncludeReason, *referenceFileLocation]
+	includeReasonToRelatedInfo collections.SyncMap[*FileIncludeReason, *ast.Diagnostic]
 	redirectAndFileFormat      collections.SyncMap[tspath.Path, []*ast.Diagnostic]
 	computedDiagnostics        *ast.DiagnosticsCollection
 	computedDiagnosticsOnce    sync.Once
@@ -59,7 +59,7 @@ func (i *includeProcessor) addProcessingDiagnostic(d ...*processingDiagnostic) {
 	i.processingDiagnostics = append(i.processingDiagnostics, d...)
 }
 
-func (i *includeProcessor) getReferenceLocation(r *fileIncludeReason, program *Program) *referenceFileLocation {
+func (i *includeProcessor) getReferenceLocation(r *FileIncludeReason, program *Program) *referenceFileLocation {
 	if existing, ok := i.reasonToReferenceLocation.Load(r); ok {
 		return existing
 	}
@@ -84,7 +84,7 @@ func (i *includeProcessor) getCompilerOptionsObjectLiteralSyntax(program *Progra
 	return i.compilerOptionsSyntax
 }
 
-func (i *includeProcessor) getRelatedInfo(r *fileIncludeReason, program *Program) *ast.Diagnostic {
+func (i *includeProcessor) getRelatedInfo(r *FileIncludeReason, program *Program) *ast.Diagnostic {
 	if existing, ok := i.includeReasonToRelatedInfo.Load(r); ok {
 		return existing
 	}

@@ -71,7 +71,7 @@ type CachedSymbolExportInfo struct {
 	isFromPackageJson bool
 }
 
-type exportInfoMap struct {
+type ExportInfoMap struct {
 	exportInfo       collections.OrderedMap[ExportInfoMapKey, []*CachedSymbolExportInfo]
 	symbols          map[int]symbolExportEntry
 	exportInfoId     int
@@ -84,20 +84,20 @@ type exportInfoMap struct {
 	// !!! onFileChanged func(oldSourceFile *ast.SourceFile, newSourceFile *ast.SourceFile, typeAcquisitionEnabled bool) bool
 }
 
-func (e *exportInfoMap) clear() {
+func (e *ExportInfoMap) clear() {
 	e.symbols = map[int]symbolExportEntry{}
 	e.exportInfo = collections.OrderedMap[ExportInfoMapKey, []*CachedSymbolExportInfo]{}
 	e.usableByFileName = ""
 }
 
-func (e *exportInfoMap) get(importingFile tspath.Path, ch *checker.Checker, key ExportInfoMapKey) []*SymbolExportInfo {
+func (e *ExportInfoMap) get(importingFile tspath.Path, ch *checker.Checker, key ExportInfoMapKey) []*SymbolExportInfo {
 	if e.usableByFileName != importingFile {
 		return nil
 	}
 	return core.Map(e.exportInfo.GetOrZero(key), func(info *CachedSymbolExportInfo) *SymbolExportInfo { return e.rehydrateCachedInfo(ch, info) })
 }
 
-func (e *exportInfoMap) add(
+func (e *ExportInfoMap) add(
 	importingFile tspath.Path,
 	symbol *ast.Symbol,
 	symbolTableKey string,
@@ -218,7 +218,7 @@ func (e *exportInfoMap) add(
 	e.exportInfo.Set(key, infos)
 }
 
-func (e *exportInfoMap) search(
+func (e *ExportInfoMap) search(
 	ch *checker.Checker,
 	importingFile tspath.Path,
 	preferCapitalized bool,
@@ -250,7 +250,7 @@ func (e *exportInfoMap) search(
 	return nil
 }
 
-func (e *exportInfoMap) isNotShadowedByDeeperNodeModulesPackage(info *SymbolExportInfo, packageName string) bool {
+func (e *ExportInfoMap) isNotShadowedByDeeperNodeModulesPackage(info *SymbolExportInfo, packageName string) bool {
 	if packageName == "" || info.moduleFileName == "" {
 		return true
 	}
@@ -261,7 +261,7 @@ func (e *exportInfoMap) isNotShadowedByDeeperNodeModulesPackage(info *SymbolExpo
 	return !ok || strings.HasPrefix(info.moduleFileName, packageDeepestNodeModulesPath)
 }
 
-func (e *exportInfoMap) rehydrateCachedInfo(ch *checker.Checker, info *CachedSymbolExportInfo) *SymbolExportInfo {
+func (e *ExportInfoMap) rehydrateCachedInfo(ch *checker.Checker, info *CachedSymbolExportInfo) *SymbolExportInfo {
 	if info.symbol != nil && info.moduleSymbol != nil {
 		return &SymbolExportInfo{
 			symbol:            info.symbol,
@@ -376,8 +376,8 @@ func (l *LanguageService) getImportCompletionAction(
 	return fix.moduleSpecifier, l.codeActionForFix(ctx, sourceFile, symbolName, fix /*includeSymbolNameInDescription*/, false)
 }
 
-func NewExportInfoMap(globalsTypingCacheLocation string) *exportInfoMap {
-	return &exportInfoMap{
+func NewExportInfoMap(globalsTypingCacheLocation string) *ExportInfoMap {
+	return &ExportInfoMap{
 		packages:                   map[string]string{},
 		symbols:                    map[int]symbolExportEntry{},
 		exportInfo:                 collections.OrderedMap[ExportInfoMapKey, []*CachedSymbolExportInfo]{},

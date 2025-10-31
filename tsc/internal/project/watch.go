@@ -30,7 +30,7 @@ type fileSystemWatcherValue struct {
 	id    WatcherID
 }
 
-type patternsAndIgnored struct {
+type PatternsAndIgnored struct {
 	patterns []string
 	ignored  map[string]struct{}
 }
@@ -53,7 +53,7 @@ var watcherID atomic.Uint64
 type WatchedFiles[T any] struct {
 	name                string
 	watchKind           lsproto.WatchKind
-	computeGlobPatterns func(input T) patternsAndIgnored
+	computeGlobPatterns func(input T) PatternsAndIgnored
 
 	mu                  sync.RWMutex
 	input               T
@@ -63,7 +63,7 @@ type WatchedFiles[T any] struct {
 	id                  uint64
 }
 
-func NewWatchedFiles[T any](name string, watchKind lsproto.WatchKind, computeGlobPatterns func(input T) patternsAndIgnored) *WatchedFiles[T] {
+func NewWatchedFiles[T any](name string, watchKind lsproto.WatchKind, computeGlobPatterns func(input T) PatternsAndIgnored) *WatchedFiles[T] {
 	return &WatchedFiles[T]{
 		id:                  watcherID.Add(1),
 		name:                name,
@@ -129,13 +129,13 @@ func (w *WatchedFiles[T]) Clone(input T) *WatchedFiles[T] {
 	}
 }
 
-func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) func(data map[tspath.Path]string) patternsAndIgnored {
+func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) func(data map[tspath.Path]string) PatternsAndIgnored {
 	comparePathsOptions := tspath.ComparePathsOptions{
 		CurrentDirectory:          currentDirectory,
 		UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
 	}
 
-	return func(data map[tspath.Path]string) patternsAndIgnored {
+	return func(data map[tspath.Path]string) PatternsAndIgnored {
 		var ignored map[string]struct{}
 		var seenDirs collections.Set[string]
 		var includeWorkspace, includeRoot, includeLib bool
@@ -196,7 +196,7 @@ func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory st
 			}
 		}
 
-		return patternsAndIgnored{
+		return PatternsAndIgnored{
 			patterns: globs,
 			ignored:  ignored,
 		}
@@ -209,7 +209,7 @@ func getTypingsLocationsGlobs(
 	workspaceDirectory string,
 	currentDirectory string,
 	useCaseSensitiveFileNames bool,
-) patternsAndIgnored {
+) PatternsAndIgnored {
 	var includeTypingsLocation, includeWorkspace bool
 	externalDirectories := make(map[tspath.Path]string)
 	globs := make(map[tspath.Path]string)
@@ -243,7 +243,7 @@ func getTypingsLocationsGlobs(
 	for _, dir := range externalDirectoryParents {
 		globs[tspath.ToPath(dir, currentDirectory, useCaseSensitiveFileNames)] = getRecursiveGlobPattern(dir)
 	}
-	return patternsAndIgnored{
+	return PatternsAndIgnored{
 		patterns: slices.Collect(maps.Values(globs)),
 		ignored:  ignored,
 	}
@@ -315,7 +315,7 @@ func extractLookups[T resolutionWithLookupLocations](
 	}
 }
 
-func getNonRootFileGlobs(workspaceDir string, libDirectory string, sourceFiles []*ast.SourceFile, rootFiles map[tspath.Path]string, comparePathsOptions tspath.ComparePathsOptions) patternsAndIgnored {
+func getNonRootFileGlobs(workspaceDir string, libDirectory string, sourceFiles []*ast.SourceFile, rootFiles map[tspath.Path]string, comparePathsOptions tspath.ComparePathsOptions) PatternsAndIgnored {
 	var globs []string
 	var includeWorkspace, includeLib bool
 	var ignored map[string]struct{}
@@ -350,7 +350,7 @@ func getNonRootFileGlobs(workspaceDir string, libDirectory string, sourceFiles [
 		})...)
 		ignored = ignoredDirs
 	}
-	return patternsAndIgnored{
+	return PatternsAndIgnored{
 		patterns: globs,
 		ignored:  ignored,
 	}
