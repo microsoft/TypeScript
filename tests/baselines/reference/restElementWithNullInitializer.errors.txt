@@ -1,17 +1,23 @@
 restElementWithNullInitializer.ts(1,15): error TS2461: Type 'null' is not an array type.
+restElementWithNullInitializer.ts(1,24): error TS18050: The value 'null' cannot be used here.
 restElementWithNullInitializer.ts(4,15): error TS2461: Type 'undefined' is not an array type.
+restElementWithNullInitializer.ts(4,24): error TS18050: The value 'undefined' cannot be used here.
 restElementWithNullInitializer.ts(7,15): error TS2461: Type '{}' is not an array type.
 
 
-==== restElementWithNullInitializer.ts (3 errors) ====
+==== restElementWithNullInitializer.ts (5 errors) ====
     function foo1([...r] = null) {
                   ~~~~~~
 !!! error TS2461: Type 'null' is not an array type.
+                           ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
     }
     
     function foo2([...r] = undefined) {
                   ~~~~~~
 !!! error TS2461: Type 'undefined' is not an array type.
+                           ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
     }
     
     function foo3([...r] = {}) {
