@@ -45830,20 +45830,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
-        const reducedType = getReducedType(type);
-        if (reducedType === silentNeverType) {
+        type = getReducedType(type);
+        if (type === silentNeverType) {
             return silentNeverIterationTypes;
         }
-        if (isTypeAny(reducedType)) {
+        if (isTypeAny(type)) {
             return anyIterationTypes;
         }
 
-        if (!(reducedType.flags & TypeFlags.Union)) {
+        if (!(type.flags & TypeFlags.Union)) {
             const errorOutputContainer: ErrorOutputContainer | undefined = errorNode ? { errors: undefined, skipLogging: true } : undefined;
-            const iterationTypes = getIterationTypesOfIterableWorker(reducedType, use, errorNode, errorOutputContainer);
+            const iterationTypes = getIterationTypesOfIterableWorker(type, use, errorNode, errorOutputContainer);
             if (iterationTypes === noIterationTypes) {
                 if (errorNode) {
-                    const rootDiag = reportTypeNotIterableError(errorNode, reducedType, !!(use & IterationUse.AllowsAsyncIterablesFlag));
+                    const rootDiag = reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                     if (errorOutputContainer?.errors) {
                         addRelatedInfo(rootDiag, ...errorOutputContainer.errors);
                     }
@@ -45859,21 +45859,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const cacheKey = use & IterationUse.AllowsAsyncIterablesFlag ? "iterationTypesOfAsyncIterable" : "iterationTypesOfIterable";
-        const cachedTypes = getCachedIterationTypes(reducedType, cacheKey);
+        const cachedTypes = getCachedIterationTypes(type, cacheKey);
         if (cachedTypes) return cachedTypes === noIterationTypes ? undefined : cachedTypes;
 
         let allIterationTypes: IterationTypes[] | undefined;
-        for (const constituent of (reducedType as UnionType).types) {
+        for (const constituent of (type as UnionType).types) {
             const errorOutputContainer: ErrorOutputContainer | undefined = errorNode ? { errors: undefined } : undefined;
             const iterationTypes = getIterationTypesOfIterableWorker(constituent, use, errorNode, errorOutputContainer);
             if (iterationTypes === noIterationTypes) {
                 if (errorNode) {
-                    const rootDiag = reportTypeNotIterableError(errorNode, reducedType, !!(use & IterationUse.AllowsAsyncIterablesFlag));
+                    const rootDiag = reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                     if (errorOutputContainer?.errors) {
                         addRelatedInfo(rootDiag, ...errorOutputContainer.errors);
                     }
                 }
-                setCachedIterationTypes(reducedType, cacheKey, noIterationTypes);
+                setCachedIterationTypes(type, cacheKey, noIterationTypes);
                 return undefined;
             }
             else if (errorOutputContainer?.errors?.length) {
@@ -45886,7 +45886,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes) : noIterationTypes;
-        setCachedIterationTypes(reducedType, cacheKey, iterationTypes);
+        setCachedIterationTypes(type, cacheKey, iterationTypes);
         return iterationTypes === noIterationTypes ? undefined : iterationTypes;
     }
 
