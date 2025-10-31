@@ -69,7 +69,7 @@ jobs:
           - os: ubuntu-latest
             name: 'no submodules'
             no-submodules: true
-          - os: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=mariner-2.0']
+          - os: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=azure-linux-3']
             name: 'race mode'
             race: true
             skip: ${{ github.event_name == 'merge_group' }}
