@@ -64,6 +64,20 @@ type Evolver<T extends Evolvable<any> = any> = {
   [key in keyof Partial<T>]: never;
 };
 
+// https://github.com/microsoft/TypeScript/issues/61203
+type Obj61203 = { [k in keyof any]: number };
+declare const obj61203: Obj61203;
+declare const key61203: keyof Obj61203;
+obj61203[key61203]; // ok
+
+
+// https://github.com/microsoft/TypeScript/issues/61203#issuecomment-2703862148
+type A<T> = { [k in keyof T]: 1 };
+declare function iDontKnow<T>(a: T): [ A<T>, keyof T ];
+const something: any = { a: 1, b: 2 };
+const [ o, k ] = iDontKnow(something);
+const v = o[k]; // ok
+
 
 //// [mappedTypeWithAny.js]
 "use strict";
@@ -79,6 +93,10 @@ function bar(arrayish, objectish, indirectArrayish) {
 }
 var abc = stringifyArray(void 0);
 var def = stringifyPair(void 0);
+obj61203[key61203]; // ok
+var something = { a: 1, b: 2 };
+var _a = iDontKnow(something), o = _a[0], k = _a[1];
+var v = o[k]; // ok
 
 
 //// [mappedTypeWithAny.d.ts]
@@ -128,3 +146,15 @@ type Evolvable<E extends Evolver> = {
 type Evolver<T extends Evolvable<any> = any> = {
     [key in keyof Partial<T>]: never;
 };
+type Obj61203 = {
+    [k in keyof any]: number;
+};
+declare const obj61203: Obj61203;
+declare const key61203: keyof Obj61203;
+type A<T> = {
+    [k in keyof T]: 1;
+};
+declare function iDontKnow<T>(a: T): [A<T>, keyof T];
+declare const something: any;
+declare const o: A<any>, k: string | number | symbol;
+declare const v: 1;
