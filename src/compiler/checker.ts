@@ -23190,29 +23190,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // the `-?` modifier in a mapped type (where, no matter how the inputs are related, the outputs still might not be)
                         related = relation === identityRelation ? isRelatedTo(s, t, RecursionFlags.Both, /*reportErrors*/ false) : compareTypesIdentical(s, t);
                     }
-                    else if (variance === VarianceFlags.Covariant) {
-                        related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-                    }
-                    else if (variance === VarianceFlags.Contravariant) {
-                        related = isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-                    }
-                    else if (variance === VarianceFlags.Bivariant) {
-                        // In the bivariant case we first compare contravariantly without reporting
-                        // errors. Then, if that doesn't succeed, we compare covariantly with error
-                        // reporting. Thus, error elaboration will be based on the the covariant check,
-                        // which is generally easier to reason about.
-                        related = isRelatedTo(t, s, RecursionFlags.Both, /*reportErrors*/ false);
-                        if (!related) {
+                    else {
+                        // Propagate unreliable variance flag
+                        if (inVarianceComputation && varianceFlags & VarianceFlags.Unreliable) {
+                            instantiateType(s, reportUnreliableMapper);
+                        }
+                        if (variance === VarianceFlags.Covariant) {
                             related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
                         }
-                    }
-                    else {
-                        // In the invariant case we first compare covariantly, and only when that
-                        // succeeds do we proceed to compare contravariantly. Thus, error elaboration
-                        // will typically be based on the covariant check.
-                        related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-                        if (related) {
-                            related &= isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        else if (variance === VarianceFlags.Contravariant) {
+                            related = isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        }
+                        else if (variance === VarianceFlags.Bivariant) {
+                            // In the bivariant case we first compare contravariantly without reporting
+                            // errors. Then, if that doesn't succeed, we compare covariantly with error
+                            // reporting. Thus, error elaboration will be based on the the covariant check,
+                            // which is generally easier to reason about.
+                            related = isRelatedTo(t, s, RecursionFlags.Both, /*reportErrors*/ false);
+                            if (!related) {
+                                related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            }
+                        }
+                        else {
+                            // In the invariant case we first compare covariantly, and only when that
+                            // succeeds do we proceed to compare contravariantly. Thus, error elaboration
+                            // will typically be based on the covariant check.
+                            related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            if (related) {
+                                related &= isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            }
                         }
                     }
                     if (!related) {
