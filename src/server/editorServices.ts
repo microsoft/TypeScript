@@ -1424,6 +1424,7 @@ export class ProjectService {
     /** @internal */ baseline: (title?: string) => void = noop;
     /** @internal */ verifyDocumentRegistry: typeof noop = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
+    /** @internal */ verifyUnresovedImports: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;
     /** @internal */ canUseWatchEvents: boolean;
 
@@ -1594,12 +1595,7 @@ export class ProjectService {
         switch (response.kind) {
             case ActionSet:
                 // Update the typing files and update the project
-                project.updateTypingFiles(
-                    response.compilerOptions,
-                    response.typeAcquisition,
-                    response.unresolvedImports,
-                    response.typings,
-                );
+                project.updateTypingFiles(response);
                 return;
             case ActionInvalidate:
                 // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
