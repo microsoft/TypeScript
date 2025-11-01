@@ -9,5 +9,4 @@ export var x = 1;
 
 export var y;
 >y : any
->  : ^^^
 

@@ -5,8 +5,8 @@
 // | ----------------------------------------------------------------------
 // | type Node<T> = {
 // |     value: T;
-// |     left: Node<T> | undefined;
-// |     right: Node<T> | undefined;
+// |     left: Node;
+// |     right: Node;
 // | }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
@@ -41,8 +41,8 @@
 // | ----------------------------------------------------------------------
 // | type TreeNode<T> = {
 // |     value: T;
-// |     left: TreeNode<T> | undefined;
-// |     right: TreeNode<T> | undefined;
+// |     left: TreeNode;
+// |     right: TreeNode;
 // |     orange?: {
 // |         name: string;
 // |     };
@@ -53,8 +53,8 @@
 // | ----------------------------------------------------------------------
 // | type TreeNode<T> = {
 // |     value: T;
-// |     left: TreeNode<T> | undefined;
-// |     right: TreeNode<T> | undefined;
+// |     left: TreeNode;
+// |     right: TreeNode;
 // |     orange?: Orange;
 // | }
 // | (verbosity level: 0)
@@ -206,34 +206,6 @@
           "kind": "aliasName"
         },
         {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
-        },
-        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -260,34 +232,6 @@
         {
           "text": "Node",
           "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
         },
         {
           "text": ";",
@@ -630,34 +574,6 @@
           "kind": "aliasName"
         },
         {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
-        },
-        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -684,34 +600,6 @@
         {
           "text": "TreeNode",
           "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
         },
         {
           "text": ";",
@@ -870,34 +758,6 @@
           "kind": "aliasName"
         },
         {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
-        },
-        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -924,34 +784,6 @@
         {
           "text": "TreeNode",
           "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
         },
         {
           "text": ";",

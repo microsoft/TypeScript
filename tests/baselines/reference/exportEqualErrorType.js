@@ -17,17 +17,19 @@ export = server;
  
 //// [exportEqualErrorType_1.ts]
 ///<reference path='exportEqualErrorType_0.ts'/>
-import connect = require('./exportEqualErrorType_0');
+import connect = require('exportEqualErrorType_0');
 connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
 
 
 //// [exportEqualErrorType_0.js]
-"use strict";
-var server;
-module.exports = server;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    var server;
+    return server;
+});
 //// [exportEqualErrorType_1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-///<reference path='exportEqualErrorType_0.ts'/>
-var connect = require("./exportEqualErrorType_0");
-connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
+define(["require", "exports", "exportEqualErrorType_0"], function (require, exports, connect) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
+});

@@ -38,11 +38,13 @@ namespace m4 {
 }
 
 //// [collisionExportsRequireAndAmbientClass_externalmodule.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var m2;
-(function (m2) {
-})(m2 || (m2 = {}));
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var m2;
+    (function (m2) {
+    })(m2 || (m2 = {}));
+});
 //// [collisionExportsRequireAndAmbientClass_globalFile.js]
 var m4;
 (function (m4) {

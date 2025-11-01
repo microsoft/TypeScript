@@ -11,18 +11,20 @@ export class DbSet<T> {
 
 
 //// [genericReturnTypeFromGetter1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DbSet = void 0;
-var DbSet = /** @class */ (function () {
-    function DbSet() {
-    }
-    Object.defineProperty(DbSet.prototype, "entityType", {
-        get: function () { return this._entityType; } // used to ICE without return type annotation
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    return DbSet;
-}());
-exports.DbSet = DbSet;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DbSet = void 0;
+    var DbSet = /** @class */ (function () {
+        function DbSet() {
+        }
+        Object.defineProperty(DbSet.prototype, "entityType", {
+            get: function () { return this._entityType; } // used to ICE without return type annotation
+            ,
+            enumerable: false,
+            configurable: true
+        });
+        return DbSet;
+    }());
+    exports.DbSet = DbSet;
+});

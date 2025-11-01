@@ -1,5 +1,5 @@
 // @target: esnext
-// @module: commonjs
+// @module: system
 
 // @filename: index.ts
 // await disallowed in import=

@@ -12,8 +12,7 @@ class Component {
 >       : ^^^^^^^^^
 
         return <div>
-><div>            {/* missing */}            {null/* preserved */}            {                // ??? 1            }            { // ??? 2            }            {// ??? 3            }            {                // ??? 4            /* ??? 5 */}        </div> : any
->                                                                                                                                                                                                                                                                    : ^^^
+><div>            {/* missing */}            {null/* preserved */}            {                // ??? 1            }            { // ??? 2            }            {// ??? 3            }            {                // ??? 4            /* ??? 5 */}        </div> : error
 >div : any
 >    : ^^^
 

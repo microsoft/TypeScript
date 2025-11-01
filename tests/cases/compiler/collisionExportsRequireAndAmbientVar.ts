@@ -1,4 +1,4 @@
-//@module: commonjs
+//@module: amd
 //@filename: collisionExportsRequireAndAmbientVar_externalmodule.ts
 export declare var exports: number;
 export declare var require: string;

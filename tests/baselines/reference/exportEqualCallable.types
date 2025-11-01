@@ -8,7 +8,6 @@ import connect = require('exportEqualCallable_0');
 
 connect();
 >connect() : any
->          : ^^^
 >connect : () => any
 >        : ^^^^^^   
 

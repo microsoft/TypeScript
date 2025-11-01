@@ -13,13 +13,14 @@ const foo = <Foo />;
 const G = <Greet />;
 
 //// [file.jsx]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var Foo = function (props) { return undefined; };
-function Greet(x) {
-    return undefined;
-}
-// Error
-var foo = <Foo />;
-var G = <Greet />;
+define(["require", "exports", "react"], function (require, exports, React) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var Foo = function (props) { return undefined; };
+    function Greet(x) {
+        return undefined;
+    }
+    // Error
+    var foo = <Foo />;
+    var G = <Greet />;
+});

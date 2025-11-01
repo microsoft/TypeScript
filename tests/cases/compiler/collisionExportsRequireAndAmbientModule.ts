@@ -1,4 +1,4 @@
-//@module: commonjs
+//@module: amd
 //@filename: collisionExportsRequireAndAmbientModule_externalmodule.ts
 export declare namespace require {
     export interface I {

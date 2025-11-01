@@ -7,5 +7,4 @@ export function* foo() {
 
     yield
 >yield : any
->      : ^^^
 }

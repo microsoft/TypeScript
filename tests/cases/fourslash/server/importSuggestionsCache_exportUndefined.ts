@@ -20,7 +20,7 @@ verify.completions({
     name: "x",
      hasAction: true,
      sortText: completion.SortText.AutoImportSuggestions,
-     source: "./undefinedAlias"
+     source: "/home/src/workspaces/project/undefinedAlias"
   }],
   preferences: {
     includeCompletionsForModuleExports: true,
@@ -34,7 +34,7 @@ verify.completions({
     name: "x",
      hasAction: true,
      sortText: completion.SortText.AutoImportSuggestions,
-     source: "./undefinedAlias"
+     source: "/home/src/workspaces/project/undefinedAlias"
   }],
   preferences: {
     includeCompletionsForModuleExports: true,

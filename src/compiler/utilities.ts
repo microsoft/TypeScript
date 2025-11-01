@@ -9015,23 +9015,27 @@ const _computedOptions = createComputedCompilerOptions({
     moduleResolution: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): ModuleResolutionKind => {
-            if (compilerOptions.moduleResolution !== undefined) {
-                return compilerOptions.moduleResolution;
+            let moduleResolution = compilerOptions.moduleResolution;
+            if (moduleResolution === undefined) {
+                switch (_computedOptions.module.computeValue(compilerOptions)) {
+                    case ModuleKind.Node16:
+                    case ModuleKind.Node18:
+                    case ModuleKind.Node20:
+                        moduleResolution = ModuleResolutionKind.Node16;
+                        break;
+                    case ModuleKind.NodeNext:
+                        moduleResolution = ModuleResolutionKind.NodeNext;
+                        break;
+                    case ModuleKind.CommonJS:
+                    case ModuleKind.Preserve:
+                        moduleResolution = ModuleResolutionKind.Bundler;
+                        break;
+                    default:
+                        moduleResolution = ModuleResolutionKind.Classic;
+                        break;
+                }
             }
-            const moduleKind = _computedOptions.module.computeValue(compilerOptions);
-            switch (moduleKind) {
-                case ModuleKind.None:
-                case ModuleKind.AMD:
-                case ModuleKind.UMD:
-                case ModuleKind.System:
-                    return ModuleResolutionKind.Classic;
-                case ModuleKind.NodeNext:
-                    return ModuleResolutionKind.NodeNext;
-            }
-            if (ModuleKind.Node16 <= moduleKind && moduleKind < ModuleKind.NodeNext) {
-                return ModuleResolutionKind.Node16;
-            }
-            return ModuleResolutionKind.Bundler;
+            return moduleResolution;
         },
     },
     moduleDetection: {
@@ -9053,25 +9057,35 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     esModuleInterop: {
-        dependencies: [],
+        dependencies: ["module", "target"],
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.esModuleInterop !== undefined) {
                 return compilerOptions.esModuleInterop;
             }
-            return true;
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
+                case ModuleKind.Node16:
+                case ModuleKind.Node18:
+                case ModuleKind.Node20:
+                case ModuleKind.NodeNext:
+                case ModuleKind.Preserve:
+                    return true;
+            }
+            return false;
         },
     },
     allowSyntheticDefaultImports: {
-        dependencies: [],
+        dependencies: ["module", "target", "moduleResolution"],
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
                 return compilerOptions.allowSyntheticDefaultImports;
             }
-            return true;
+            return _computedOptions.esModuleInterop.computeValue(compilerOptions)
+                || _computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
+                || _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
     },
     resolvePackageJsonExports: {
-        dependencies: ["moduleResolution", "module", "target"],
+        dependencies: ["moduleResolution"],
         computeValue: (compilerOptions): boolean => {
             const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
@@ -9090,7 +9104,7 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     resolvePackageJsonImports: {
-        dependencies: ["moduleResolution", "resolvePackageJsonExports", "module", "target"],
+        dependencies: ["moduleResolution", "resolvePackageJsonExports"],
         computeValue: (compilerOptions): boolean => {
             const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {

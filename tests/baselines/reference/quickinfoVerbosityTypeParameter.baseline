@@ -11,12 +11,12 @@
 // | ----------------------------------------------------------------------
 //     ^
 // | ----------------------------------------------------------------------
-// | (parameter) x: T extends number | Str
+// | (parameter) x: T extends number | (string | {})
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //     ^
 // | ----------------------------------------------------------------------
-// | (parameter) x: T extends FooType
+// | (parameter) x: T extends number | (string | {})
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 // }
@@ -103,12 +103,56 @@
           "kind": "space"
         },
         {
-          "text": "FooType",
-          "kind": "aliasName"
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 0
     }
   },
@@ -187,12 +231,40 @@
           "kind": "space"
         },
         {
-          "text": "Str",
-          "kind": "aliasName"
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 1
     }
   },

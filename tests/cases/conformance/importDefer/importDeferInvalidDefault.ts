@@ -6,6 +6,6 @@ export default function foo() {
 }
 
 // @filename: b.ts
-import defer foo from "./a";
+import defer foo from "a";
 
 foo();

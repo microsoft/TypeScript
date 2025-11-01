@@ -7,7 +7,6 @@ export class A {
 
     constructor(ctor) { }
 >ctor : any
->     : ^^^
 }
 
 export class B extends A {
@@ -26,7 +25,6 @@ export class B extends A {
 
     constructor(element: any, url: string) {
 >element : any
->        : ^^^
 >url : string
 >    : ^^^^^^
 
@@ -36,11 +34,9 @@ export class B extends A {
 >super : typeof A
 >      : ^^^^^^^^
 >element : any
->        : ^^^
 
         this.p1 = element;
 >this.p1 = element : any
->                  : ^^^
 >this.p1 : number
 >        : ^^^^^^
 >this : this
@@ -48,7 +44,6 @@ export class B extends A {
 >p1 : number
 >   : ^^^^^^
 >element : any
->        : ^^^
 
         this.p2 = url;
 >this.p2 = url : string
@@ -89,7 +84,6 @@ var reg: I1;
 
 reg.register(B);
 >reg.register(B) : any
->                : ^^^
 >reg.register : { (inputClass: new (...params: any[]) => A): any; (inputClass: { new (...params: any[]): A; }[]): any; }
 >             : ^^^          ^^                           ^^^^^^^^^          ^^                                ^^^^^^^^^
 >reg : I1

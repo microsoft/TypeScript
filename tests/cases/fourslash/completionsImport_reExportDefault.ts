@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: esnext
+// @moduleResolution: node10
 
 // @Filename: /a/b/impl.ts
 ////export default function foo() {}
@@ -16,10 +17,10 @@ verify.completions({
     exact: completion.globalsPlus([
         {
             name: "foo",
-            source: "./a",
+            source: "/a/b/impl",
             sourceDisplay: "./a",
-            text: "(alias) function foo(): void\nexport foo",
-            kind: "alias",
+            text: "function foo(): void",
+            kind: "function",
             kindModifiers: "export",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
@@ -29,7 +30,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "./a",
+    source: "/a/b/impl",
     description: `Add import from "./a"`,
     newFileContent: `import { foo } from "./a";
 

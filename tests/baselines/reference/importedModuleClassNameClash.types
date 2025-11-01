@@ -4,8 +4,7 @@
 import foo = m1;
 >foo : typeof foo
 >    : ^^^^^^^^^^
->m1 : any
->   : ^^^
+>m1 : error
  
 export namespace m1 { }
  

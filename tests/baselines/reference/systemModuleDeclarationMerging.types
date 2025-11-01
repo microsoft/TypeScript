@@ -9,7 +9,6 @@ export namespace F { var x; }
 >F : typeof F
 >  : ^^^^^^^^
 >x : any
->  : ^^^
 
 export class C {}
 >C : C
@@ -19,7 +18,6 @@ export namespace C { var x; }
 >C : typeof C
 >  : ^^^^^^^^
 >x : any
->  : ^^^
 
 export enum E {}
 >E : E
@@ -29,5 +27,4 @@ export namespace E { var x; }
 >E : typeof E
 >  : ^^^^^^^^
 >x : any
->  : ^^^
 

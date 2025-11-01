@@ -1,4 +1,4 @@
-//@module: commonjs
+//@module: amd
 namespace x {
     interface c {
     }
