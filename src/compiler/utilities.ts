@@ -901,8 +901,7 @@ function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): b
     return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
 
-/** @internal */
-export function packageIdToPackageName({ name, subModuleName }: PackageId): string {
+function packageIdToPackageName({ name, subModuleName }: PackageId): string {
     return subModuleName ? `${name}/${subModuleName}` : name;
 }
 

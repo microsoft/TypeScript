@@ -16,7 +16,6 @@ import {
     Diagnostics,
     DiagnosticWithLocation,
     emptyArray,
-    explainIfFileIsRedirectAndImpliedFormat,
     FileIncludeKind,
     FileIncludeReason,
     fileIncludeReasonToDiagnostics,
@@ -56,7 +55,6 @@ import {
 
 interface FileReasonToChainCache {
     fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
-    redirectInfo: DiagnosticMessageChain[] | undefined;
     details?: DiagnosticMessageChain[];
 }
 
@@ -207,7 +205,6 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
         let relatedInfo: DiagnosticWithLocation[] | undefined;
         let fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
-        let redirectInfo: DiagnosticMessageChain[] | undefined;
         let chain: DiagnosticMessageChain | undefined;
 
         const reasons = file && fileReasons.get(file.path);
@@ -221,11 +218,9 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
             else {
                 reasons?.forEach(processReason);
             }
-            redirectInfo = cachedChain.redirectInfo;
         }
         else {
             reasons?.forEach(processReason);
-            redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file));
         }
 
         if (fileProcessingReason) processReason(fileProcessingReason);
@@ -261,9 +256,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
         if (!chain) {
             if (!fileIncludeReasonDetails) fileIncludeReasonDetails = seenReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
             chain = chainDiagnosticMessages(
-                redirectInfo ?
-                    fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo :
-                    fileIncludeReasonDetails,
+                fileIncludeReasonDetails,
                 diagnostic,
                 ...args || emptyArray,
             );
@@ -285,7 +278,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
                 }
             }
             else {
-                (fileReasonsToChain ??= new Map()).set(file.path, cachedChain = { fileIncludeReasonDetails, redirectInfo });
+                (fileReasonsToChain ??= new Map()).set(file.path, cachedChain = { fileIncludeReasonDetails });
             }
             // If we didnt compute extra file include reason , cache the details to use directly
             if (!cachedChain.details && !processedExtraReason) cachedChain.details = chain.next;

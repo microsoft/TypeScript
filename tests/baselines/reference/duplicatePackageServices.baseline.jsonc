@@ -8,10 +8,6 @@
 //     private x: number;
 // }|>
 
-// === /node_modules/b/index.d.ts ===
-// <|import [|{| defId: 2, isWriteAccess: true |}X|] from "x";|>
-// export const b: [|{| defId: 2 |}X|];
-
   // === Definitions ===
   // === /node_modules/a/index.d.ts ===
   // <|import [|{| defId: 0 |}X|]/*FIND ALL REFS*/ from "x";|>
@@ -21,10 +17,6 @@
   // <|export default class [|{| defId: 1 |}X|] {
   //     private x: number;
   // }|>
-
-  // === /node_modules/b/index.d.ts ===
-  // <|import [|{| defId: 2 |}X|] from "x";|>
-  // export const b: X;
 
   // === Details ===
   [
@@ -99,59 +91,6 @@
      {
       "text": "X",
       "kind": "className"
-     }
-    ]
-   },
-   {
-    "defId": 2,
-    "containerKind": "",
-    "containerName": "",
-    "kind": "alias",
-    "name": "(alias) class X\nimport X",
-    "displayParts": [
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "alias",
-      "kind": "text"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "class",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "X",
-      "kind": "aliasName"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "import",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "X",
-      "kind": "aliasName"
      }
     ]
    }
@@ -169,10 +108,6 @@
 // <|import [|{| defId: 1, isWriteAccess: true |}X|] from "x";|>
 // export function a(x: [|{| defId: 1 |}X|]): void;
 
-// === /node_modules/b/index.d.ts ===
-// <|import [|{| defId: 2, isWriteAccess: true |}X|] from "x";|>
-// export const b: [|{| defId: 2 |}X|];
-
   // === Definitions ===
   // === /node_modules/a/node_modules/x/index.d.ts ===
   // <|export default class /*FIND ALL REFS*/[|{| defId: 0 |}X|] {
@@ -182,10 +117,6 @@
   // === /node_modules/a/index.d.ts ===
   // <|import [|{| defId: 1 |}X|] from "x";|>
   // export function a(x: X): void;
-
-  // === /node_modules/b/index.d.ts ===
-  // <|import [|{| defId: 2 |}X|] from "x";|>
-  // export const b: X;
 
   // === Details ===
   [
@@ -212,59 +143,6 @@
    },
    {
     "defId": 1,
-    "containerKind": "",
-    "containerName": "",
-    "kind": "alias",
-    "name": "(alias) class X\nimport X",
-    "displayParts": [
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "alias",
-      "kind": "text"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "class",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "X",
-      "kind": "aliasName"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "import",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "X",
-      "kind": "aliasName"
-     }
-    ]
-   },
-   {
-    "defId": 2,
     "containerKind": "",
     "containerName": "",
     "kind": "alias",
@@ -325,28 +203,20 @@
 // <|import [|{| defId: 0, isWriteAccess: true, isDefinition: true |}X|]/*FIND ALL REFS*/ from "x";|>
 // export const b: [|{| defId: 0 |}X|];
 
-// === /node_modules/a/node_modules/x/index.d.ts ===
+// === /node_modules/b/node_modules/x/index.d.ts ===
 // <|export default class [|{| defId: 1, isWriteAccess: true |}X|] {
 //     private x: number;
 // }|>
-
-// === /node_modules/a/index.d.ts ===
-// <|import [|{| defId: 2, isWriteAccess: true |}X|] from "x";|>
-// export function a(x: [|{| defId: 2 |}X|]): void;
 
   // === Definitions ===
   // === /node_modules/b/index.d.ts ===
   // <|import [|{| defId: 0 |}X|]/*FIND ALL REFS*/ from "x";|>
   // export const b: X;
 
-  // === /node_modules/a/node_modules/x/index.d.ts ===
+  // === /node_modules/b/node_modules/x/index.d.ts ===
   // <|export default class [|{| defId: 1 |}X|] {
   //     private x: number;
   // }|>
-
-  // === /node_modules/a/index.d.ts ===
-  // <|import [|{| defId: 2 |}X|] from "x";|>
-  // export function a(x: X): void;
 
   // === Details ===
   [
@@ -423,59 +293,6 @@
       "kind": "className"
      }
     ]
-   },
-   {
-    "defId": 2,
-    "containerKind": "",
-    "containerName": "",
-    "kind": "alias",
-    "name": "(alias) class X\nimport X",
-    "displayParts": [
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "alias",
-      "kind": "text"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "class",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "X",
-      "kind": "aliasName"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "import",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "X",
-      "kind": "aliasName"
-     }
-    ]
    }
   ]
 
@@ -506,7 +323,7 @@
 
 
 // === goToDefinition ===
-// === /node_modules/a/node_modules/x/index.d.ts ===
+// === /node_modules/b/node_modules/x/index.d.ts ===
 // <|export default class [|X|] {
 //     private x: number;
 // }|>
@@ -520,7 +337,7 @@
    {
     "kind": "class",
     "name": "X",
-    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "containerName": "\"/node_modules/b/node_modules/x/index\"",
     "isLocal": false,
     "isAmbient": true,
     "unverified": false

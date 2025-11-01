@@ -4302,17 +4302,6 @@ export interface FutureSourceFile {
     readonly imports: readonly never[];
 }
 
-/** @internal */
-export interface RedirectInfo {
-    /** Source file this redirects to. */
-    readonly redirectTarget: SourceFile;
-    /**
-     * Source file for the duplicate package. This will not be used by the Program,
-     * but we need to keep this around so we can watch for changes in underlying.
-     */
-    readonly unredirected: SourceFile;
-}
-
 export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
 
 // Source files are declarations when they are external modules.
@@ -4340,15 +4329,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
      * @internal
      */
     originalFileName: string;
-
-    /**
-     * If two source files are for the same version of the same package, one will redirect to the other.
-     * (See `createRedirectSourceFile` in program.ts.)
-     * The redirect will have this set. The redirected-to source file will be in `redirectTargetsMap`.
-     *
-     * @internal
-     */
-    redirectInfo?: RedirectInfo;
 
     amdDependencies: readonly AmdDependency[];
     moduleName?: string;
@@ -4881,18 +4861,6 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
     /**
-     * Given a source file, get the name of the package it was imported from.
-     *
-     * @internal
-     */
-    sourceFileToPackageName: Map<Path, string>;
-    /**
-     * Set of all source files that some other source file redirects to.
-     *
-     * @internal
-     */
-    redirectTargetsMap: MultiMap<Path, string>;
-    /**
      * Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers
      * (except for those that are not available without the prefix).
      * `false` indicates that an unprefixed builtin module was seen; `undefined` indicates that no
@@ -4949,9 +4917,6 @@ export interface Program extends ScriptReferenceHost {
 /** @internal */
 export interface Program extends TypeCheckerHost, ModuleSpecifierResolutionHost {
 }
-
-/** @internal */
-export type RedirectTargetsMap = ReadonlyMap<Path, readonly string[]>;
 
 export interface ResolvedProjectReference {
     commandLine: ParsedCommandLine;
@@ -5053,8 +5018,6 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
     getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-
-    readonly redirectTargetsMap: RedirectTargetsMap;
 
     typesPackageExists(packageName: string): boolean;
     packageBundlesTypes(packageName: string): boolean;
@@ -8598,7 +8561,6 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     writeFile: WriteFileCallback;
     getBuildInfo(): BuildInfo | undefined;
     getSourceFileFromReference: Program["getSourceFileFromReference"];
-    readonly redirectTargetsMap: RedirectTargetsMap;
     createHash?(data: string): string;
 }
 
@@ -9269,8 +9231,6 @@ export interface NodeFactory {
 
     createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile;
     updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
-
-    /** @internal */ createRedirectedSourceFile(redirectInfo: RedirectInfo): SourceFile;
 
     //
     // Synthetic Nodes
@@ -9978,7 +9938,6 @@ export interface ModuleSpecifierResolutionHost {
     getGlobalTypingsCacheLocation?(): string | undefined;
     getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
-    readonly redirectTargetsMap: RedirectTargetsMap;
     getRedirectFromSourceFile(fileName: string): ResolvedRefAndOutputDts | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;

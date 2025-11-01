@@ -191,7 +191,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Entry point for implicit type library 'react' with packageId '@types/react/index.d.ts@16.9.14'
 	c:/typescript/node_modules/@types/react/index.d.ts
 	  Imported via 'react' from file 'c:/typescript/node_modules/@types/react-router-dom/index.d.ts' with packageId '@types/react/index.d.ts@16.9.14'
-	  File redirects to file '../node_modules/@types/react/index.d.ts'
 	c:/typescript/node_modules/@types/react-router-dom/index.d.ts
 	  Imported via "react-router-dom" from file 'app.js' with packageId '@types/react-router-dom/index.d.ts@5.1.2'
 	app.js
@@ -305,17 +304,21 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
+      "unresolvedImports": [
+        "prop-types"
+      ],
       "projectRootPath": "e:/solution/myproject/src",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["prop-types"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
-      "newTypingNames": [],
+      "newTypingNames": [
+        "prop-types"
+      ],
       "filesToWatch": [
         "e:/solution/myproject/src/bower_components",
         "e:/solution/myproject/src/node_modules"
@@ -334,6 +337,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/mypro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Installing typings ["prop-types"]
+TI:: [hh:mm:ss:mss] 'prop-types':: Entry for package 'prop-types' does not exist in local types registry - skipping...
+TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -351,7 +357,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [],
-      "unresolvedImports": [],
+      "unresolvedImports": [
+        "prop-types"
+      ],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -375,11 +383,12 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [],
-        "unresolvedImports": [],
+        "unresolvedImports": [
+          "prop-types"
+        ],
         "kind": "action::set"
       }
     }
-TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)

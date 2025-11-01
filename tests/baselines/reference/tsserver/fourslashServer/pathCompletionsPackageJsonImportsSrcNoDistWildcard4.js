@@ -160,7 +160,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
-            "text": "File '/home/src/workspaces/project/nope.ts' is not under 'rootDir' '/home/src/workspaces/project/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by default include pattern '**/*'\n  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field \"type\"",
+            "text": "File '/home/src/workspaces/project/nope.ts' is not under 'rootDir' '/home/src/workspaces/project/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by default include pattern '**/*'",
             "code": 6059,
             "category": "error"
           },

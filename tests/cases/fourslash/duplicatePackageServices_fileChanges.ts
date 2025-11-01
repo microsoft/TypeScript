@@ -31,7 +31,7 @@
 ////a(/*error*/b);
 
 goTo.file("/src/a.ts");
-verify.numberOfErrorsInCurrentFile(0);
+verify.numberOfErrorsInCurrentFile(1);
 
 testChangeAndChangeBack("aVersionPatch", "defAX");
 testChangeAndChangeBack("bVersionPatch", "defBX");
@@ -53,5 +53,5 @@ function testChangeAndChangeBack(versionPatch: string, def: string) {
 
     // Back to being identical.
     goTo.file("/src/a.ts");
-    verify.numberOfErrorsInCurrentFile(0);
+    verify.numberOfErrorsInCurrentFile(1);
 }

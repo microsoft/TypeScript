@@ -114,7 +114,7 @@ home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts(3,16): erro
 
 
 
-Program 2 Reused:: Not
+Program 2 Reused:: Completely
 File: /home/src/workspaces/project/node_modules/a/node_modules/x/index.d.ts
 
 
@@ -167,7 +167,7 @@ x: {
     "packageId": {
       "name": "x",
       "subModuleName": "index.d.ts",
-      "version": "1.2.3"
+      "version": "1.2.4"
     },
     "resolvedUsingTsExtension": false
   },
@@ -224,5 +224,7 @@ b: {
 
 MissingPaths:: []
 
+home/src/workspaces/project/a.ts(3,3): error TS2345: Argument of type 'import("/home/src/workspaces/project/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/home/src/workspaces/project/node_modules/a/node_modules/x/index").default'.
+  Types have separate declarations of a private property 'x'.
 
 

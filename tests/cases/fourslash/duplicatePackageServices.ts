@@ -31,6 +31,6 @@
 ////a(/*error*/b);
 
 goTo.file("/src/a.ts");
-verify.numberOfErrorsInCurrentFile(0);
+verify.numberOfErrorsInCurrentFile(1);
 verify.baselineFindAllReferences('useAX', 'defAX', 'useBX');
 verify.baselineGoToDefinition("useAX", "useBX");
