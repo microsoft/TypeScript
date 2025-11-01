@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/abstractMethodComputedPropertyElision.ts] ////
+
+=== sharedSymbol.ts ===
+export const sharedSymbol: unique symbol = Symbol();
+>sharedSymbol : Symbol(sharedSymbol, Decl(sharedSymbol.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+=== AbstractClassWithTypeImports.ts ===
+import type { sharedSymbol } from "./sharedSymbol.js";
+>sharedSymbol : Symbol(sharedSymbol, Decl(AbstractClassWithTypeImports.ts, 0, 13))
+
+export abstract class AbstractClassTypeImport {
+>AbstractClassTypeImport : Symbol(AbstractClassTypeImport, Decl(AbstractClassWithTypeImports.ts, 0, 54))
+
+    public abstract [sharedSymbol]: string;
+>[sharedSymbol] : Symbol(AbstractClassTypeImport[sharedSymbol], Decl(AbstractClassWithTypeImports.ts, 2, 47))
+>sharedSymbol : Symbol(sharedSymbol, Decl(AbstractClassWithTypeImports.ts, 0, 13))
+}
+
+=== AbstractClassNormalImports.ts ===
+import { sharedSymbol } from "./sharedSymbol.js";
+>sharedSymbol : Symbol(sharedSymbol, Decl(AbstractClassNormalImports.ts, 0, 8))
+
+export abstract class AbstractClassNormalImport {
+>AbstractClassNormalImport : Symbol(AbstractClassNormalImport, Decl(AbstractClassNormalImports.ts, 0, 49))
+
+    public abstract [sharedSymbol]: string;
+>[sharedSymbol] : Symbol(AbstractClassNormalImport[sharedSymbol], Decl(AbstractClassNormalImports.ts, 2, 49))
+>sharedSymbol : Symbol(sharedSymbol, Decl(AbstractClassNormalImports.ts, 0, 8))
+}

@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/abstractMethodComputedPropertyElision.ts] ////
+
+=== sharedSymbol.ts ===
+export const sharedSymbol: unique symbol = Symbol();
+>sharedSymbol : unique symbol
+>             : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+=== AbstractClassWithTypeImports.ts ===
+import type { sharedSymbol } from "./sharedSymbol.js";
+>sharedSymbol : any
+>             : ^^^
+
+export abstract class AbstractClassTypeImport {
+>AbstractClassTypeImport : AbstractClassTypeImport
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    public abstract [sharedSymbol]: string;
+>[sharedSymbol] : string
+>               : ^^^^^^
+>sharedSymbol : unique symbol
+>             : ^^^^^^^^^^^^^
+}
+
+=== AbstractClassNormalImports.ts ===
+import { sharedSymbol } from "./sharedSymbol.js";
+>sharedSymbol : unique symbol
+>             : ^^^^^^^^^^^^^
+
+export abstract class AbstractClassNormalImport {
+>AbstractClassNormalImport : AbstractClassNormalImport
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    public abstract [sharedSymbol]: string;
+>[sharedSymbol] : string
+>               : ^^^^^^
+>sharedSymbol : unique symbol
+>             : ^^^^^^^^^^^^^
+}
