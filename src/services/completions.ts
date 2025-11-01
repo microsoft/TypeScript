@@ -5239,7 +5239,7 @@ function getCompletionData(
      * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
      */
     function filterClassMembersList(baseSymbols: readonly Symbol[], existingMembers: readonly ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-        const existingMemberNames = new Set<__String>();
+        const existingMemberNames = new Set(["prototype" as __String]); // always exclude 'prototype' from completions
         for (const m of existingMembers) {
             // Ignore omitted expressions for missing members
             if (
@@ -5274,7 +5274,6 @@ function getCompletionData(
 
         return baseSymbols.filter(propertySymbol =>
             !existingMemberNames.has(propertySymbol.escapedName) &&
-            !!propertySymbol.declarations &&
             !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) &&
             !(propertySymbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(propertySymbol.valueDeclaration))
         );
