@@ -663,9 +663,11 @@ function test5() {
 
             c?: any;
 >c : any
+>  : ^^^
 
             d?: any;
 >d : any
+>  : ^^^
         }
 
         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
@@ -676,6 +678,7 @@ function test5() {
 >React : any
 >      : ^^^
 >null as any : any
+>            : ^^^
 
         const a = <C p={true} />;
 >a : JSX.Element

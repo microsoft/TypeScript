@@ -37,6 +37,7 @@ export function Counter({ count = 0 }: CounterProps) {
 >setCnt : any
 >       : ^^^
 >null as any : any
+>            : ^^^
 
     return <>
 ><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : JSX.Element
@@ -48,6 +49,7 @@ export function Counter({ count = 0 }: CounterProps) {
 >p : any
 >  : ^^^
 >cnt : any
+>    : ^^^
 >p : any
 >  : ^^^
 
@@ -61,12 +63,17 @@ export function Counter({ count = 0 }: CounterProps) {
 >() => setCnt((prev) => prev + 1) : () => any
 >                                 : ^^^^^^^^^
 >setCnt((prev) => prev + 1) : any
+>                           : ^^^
 >setCnt : any
+>       : ^^^
 >(prev) => prev + 1 : (prev: any) => any
 >                   : ^    ^^^^^^^^^^^^^
 >prev : any
+>     : ^^^
 >prev + 1 : any
+>         : ^^^
 >prev : any
+>     : ^^^
 >1 : 1
 >  : ^
 >type : string
