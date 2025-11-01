@@ -1,4 +1,4 @@
-stringLiteralTypesAndLogicalOrExpressions01.ts(7,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+stringLiteralTypesAndLogicalOrExpressions01.ts(7,5): error TS2322: Type 'string' is not assignable to type '"bar" | "foo"'.
 
 
 ==== stringLiteralTypesAndLogicalOrExpressions01.ts (1 errors) ====
@@ -10,5 +10,5 @@ stringLiteralTypesAndLogicalOrExpressions01.ts(7,5): error TS2322: Type 'string'
     let d = b || "bar";
     let e: "foo" | "bar" = d;
         ~
-!!! error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+!!! error TS2322: Type 'string' is not assignable to type '"bar" | "foo"'.
     

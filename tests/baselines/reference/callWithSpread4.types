@@ -38,15 +38,15 @@ declare const pli: {
 >   : ^
 
     (streams: ReadonlyArray<R | W | RW>): Promise<void>;
->streams : readonly (R | W | RW)[]
+>streams : readonly (R | RW | W)[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
 >s1 : R
 >   : ^
->s2 : W | RW
+>s2 : RW | W
 >   : ^^^^^^
->streams : (W | RW)[]
+>streams : (RW | W)[]
 >        : ^^^^^^^^^^
 }
 

@@ -320,13 +320,13 @@ interface Program {
 declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
 >isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
 >                 : ^ ^^^^^^^^^              ^^       ^^           ^^^^^            
->program : Program | T
+>program : T | Program
 >        : ^^^^^^^^^^^
 
 export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >listFiles : <T extends BuilderProgram>(program: Program | T) => void
 >          : ^ ^^^^^^^^^              ^^       ^^           ^^^^^^^^^
->program : Program | T
+>program : T | Program
 >        : ^^^^^^^^^^^
 
     const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
@@ -338,7 +338,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >                          : ^^^^^^^
 >isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
 >                 : ^^^^^^^^^^^^^              ^^       ^^             ^^^^^              
->program : Program | T
+>program : T | Program
 >        : ^^^^^^^^^^^
 >program.getProgram() : Program
 >                     : ^^^^^^^

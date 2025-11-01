@@ -5,6 +5,11 @@ export const versionMajorMinor = "6.0";
 /** The version of the TypeScript compiler release */
 export const version: string = `${versionMajorMinor}.0-dev`;
 
+const tsgoCompatEnv = typeof process !== "undefined" && process.env ? process.env.TSGO_COMPAT : undefined;
+
+/** @internal */
+export const TSGO_COMPAT: boolean = tsgoCompatEnv ? tsgoCompatEnv === "true" : true;
+
 /**
  * Type of objects whose values are all of the same type.
  * The `in` and `for-in` operators can *not* be safely used,

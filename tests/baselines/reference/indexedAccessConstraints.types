@@ -37,7 +37,7 @@ export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKe
     if (typeof fn !== 'function') {
 >typeof fn !== 'function' : boolean
 >                         : ^^^^^^^
->typeof fn : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof fn : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : T[K]
 >   : ^^^^

@@ -5,7 +5,7 @@
 
 interface ZodType {
   optional: "true" | "false";
->optional : "true" | "false"
+>optional : "false" | "true"
 >         : ^^^^^^^^^^^^^^^^
 
   output: any;

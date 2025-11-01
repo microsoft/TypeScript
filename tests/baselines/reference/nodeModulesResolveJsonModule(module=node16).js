@@ -106,15 +106,15 @@ export declare const name2: string;
 //// [index.d.cts]
 export declare const name: string;
 export declare const thing: {
+    name: string;
+    version: string;
+    type: string;
     default: {
         name: string;
         version: string;
         type: string;
         default: string;
     };
-    name: string;
-    version: string;
-    type: string;
 };
 export declare const name2: string;
 //// [index.d.mts]

@@ -148,7 +148,7 @@ function wrappedBaz(): Wrap<'baz'> {
 
 interface FolderContentItem {
     type: 'folder' | 'file';
->type : "folder" | "file"
+>type : "file" | "folder"
 >     : ^^^^^^^^^^^^^^^^^
 }
 
@@ -603,7 +603,7 @@ type Player = {
 >    : ^^^^^^
 
     position: "STRIKER" | "GOALKEEPER",
->position : "STRIKER" | "GOALKEEPER"
+>position : "GOALKEEPER" | "STRIKER"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 };

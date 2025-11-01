@@ -10,9 +10,9 @@ declare const foo: string;
 if ((typeof foo) === "string") {
 >(typeof foo) === "string" : boolean
 >                          : ^^^^^^^
->(typeof foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof foo) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
@@ -32,7 +32,7 @@ if ((typeof foo) === "string") {
 if (typeof foo === ("string")) {
 >typeof foo === ("string") : boolean
 >                          : ^^^^^^^
->typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^

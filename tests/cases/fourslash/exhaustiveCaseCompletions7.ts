@@ -13,13 +13,13 @@ verify.completions(
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case 0: ...",
+                name: "case -1: ...",
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case 0:
-case 1:
-case -1:`,
+`case -1:
+case 0:
+case 1:`,
             },
         ],
         preferences: {

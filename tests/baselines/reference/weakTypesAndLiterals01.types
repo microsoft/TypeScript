@@ -34,9 +34,9 @@ declare let aOrB: "A" | "B";
 >     : ^^^^^^^^^
 
 const f = (arg: LiteralsOrWeakTypes) => {
->f : (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B"
+>f : (arg: LiteralsOrWeakTypes) => "A" | "B" | WeakTypes
 >  : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
->(arg: LiteralsOrWeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B"
+>(arg: LiteralsOrWeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => "A" | "B" | WeakTypes
 >                                                                                                                 : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : LiteralsOrWeakTypes
 >    : ^^^^^^^^^^^^^^^^^^^
@@ -50,12 +50,12 @@ const f = (arg: LiteralsOrWeakTypes) => {
 >    : ^^^
 
         return arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A"
->    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^
     }
     else {
         return arg;
->arg : WeakTypes | "B"
+>arg : "B" | WeakTypes
 >    : ^^^^^^^^^^^^^^^
     }
 }
@@ -104,8 +104,8 @@ const h = (arg: LiteralsOrWeakTypes) => {
 >     : ^^^^^^^^^
 
         return arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A" | "B"
->    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>arg : "A" | "B" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^
     }
     else {
         return arg;

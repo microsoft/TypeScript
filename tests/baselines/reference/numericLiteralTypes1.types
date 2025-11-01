@@ -568,51 +568,51 @@ function f14(x: 0 | 1 | 2, y: string) {
 function f15(x: 0 | false, y: 1 | "one") {
 >f15 : (x: 0 | false, y: 1 | "one") => void
 >    : ^ ^^         ^^ ^^         ^^^^^^^^^
->x : false | 0
+>x : 0 | false
 >  : ^^^^^^^^^
 >false : false
 >      : ^^^^^
->y : 1 | "one"
+>y : "one" | 1
 >  : ^^^^^^^^^
 
     var a = x && y;
->a : false | 0
+>a : 0 | false
 >  : ^^^^^^^^^
->x && y : false | 0
+>x && y : 0 | false
 >       : ^^^^^^^^^
->x : false | 0
+>x : 0 | false
 >  : ^^^^^^^^^
->y : 1 | "one"
+>y : "one" | 1
 >  : ^^^^^^^^^
 
     var b = y && x;
->b : false | 0
+>b : 0 | false
 >  : ^^^^^^^^^
->y && x : false | 0
+>y && x : 0 | false
 >       : ^^^^^^^^^
->y : 1 | "one"
+>y : "one" | 1
 >  : ^^^^^^^^^
->x : false | 0
+>x : 0 | false
 >  : ^^^^^^^^^
 
     var c = x || y;
->c : 1 | "one"
+>c : "one" | 1
 >  : ^^^^^^^^^
->x || y : 1 | "one"
+>x || y : "one" | 1
 >       : ^^^^^^^^^
->x : false | 0
+>x : 0 | false
 >  : ^^^^^^^^^
->y : 1 | "one"
+>y : "one" | 1
 >  : ^^^^^^^^^
 
     var d = y || x;
->d : false | 0 | 1 | "one"
+>d : "one" | 0 | 1 | false
 >  : ^^^^^^^^^^^^^^^^^^^^^
->y || x : false | 0 | 1 | "one"
+>y || x : "one" | 0 | 1 | false
 >       : ^^^^^^^^^^^^^^^^^^^^^
->y : 1 | "one"
+>y : "one" | 1
 >  : ^^^^^^^^^
->x : false | 0
+>x : 0 | false
 >  : ^^^^^^^^^
 
     var e = !x;
@@ -620,7 +620,7 @@ function f15(x: 0 | false, y: 1 | "one") {
 >  : ^^^^^^^
 >!x : true
 >   : ^^^^
->x : false | 0
+>x : 0 | false
 >  : ^^^^^^^^^
 
     var f = !y;
@@ -628,7 +628,7 @@ function f15(x: 0 | false, y: 1 | "one") {
 >  : ^^^^^^^
 >!y : boolean
 >   : ^^^^^^^
->y : 1 | "one"
+>y : "one" | 1
 >  : ^^^^^^^^^
 }
 
