@@ -3,14 +3,12 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +enumDef.js(14,21): error TS1003: Identifier expected.
-+enumDef.js(16,18): error TS2339: Property 'Blah' does not exist on type '{ Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }'.
-+index.js(4,17): error TS2503: Cannot find namespace 'Host'.
-+index.js(8,21): error TS2304: Cannot find name 'Host'.
-+index.js(13,11): error TS2503: Cannot find namespace 'Host'.
-+index.js(18,11): error TS2503: Cannot find namespace 'Host'.
++index.js(4,17): error TS2702: 'Host' only refers to a type, but is being used as a namespace here.
++index.js(13,11): error TS2702: 'Host' only refers to a type, but is being used as a namespace here.
++index.js(18,11): error TS2702: 'Host' only refers to a type, but is being used as a namespace here.
 +
 +
-+==== enumDef.js (2 errors) ====
++==== enumDef.js (1 errors) ====
 +    var Host = {};
 +    Host.UserMetrics = {};
 +    /** @enum {number} */
@@ -30,37 +28,33 @@
 +    
 +!!! error TS1003: Identifier expected.
 +    Host.UserMetrics.Blah = {
-+                     ~~~~
-+!!! error TS2339: Property 'Blah' does not exist on type '{ Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }'.
 +        x: 12
 +    }
-+==== index.js (4 errors) ====
++==== index.js (3 errors) ====
 +    var Other = {};
 +    Other.Cls = class {
 +        /**
 +         * @param {!Host.UserMetrics.Action} p
 +                    ~~~~
-+!!! error TS2503: Cannot find namespace 'Host'.
++!!! error TS2702: 'Host' only refers to a type, but is being used as a namespace here.
 +         */
 +        method(p) {}
 +        usage() {
 +            this.method(Host.UserMetrics.Action.WindowDocked);
-+                        ~~~~
-+!!! error TS2304: Cannot find name 'Host'.
 +        }
 +    }
 +    
 +    /**
 +     * @type {Host.UserMetrics.Bargh}
 +              ~~~~
-+!!! error TS2503: Cannot find namespace 'Host'.
++!!! error TS2702: 'Host' only refers to a type, but is being used as a namespace here.
 +     */
 +    var x = "ok";
 +    
 +    /**
 +     * @type {Host.UserMetrics.Blah}
 +              ~~~~
-+!!! error TS2503: Cannot find namespace 'Host'.
++!!! error TS2702: 'Host' only refers to a type, but is being used as a namespace here.
 +     */
 +    var y = "ok";
 +    

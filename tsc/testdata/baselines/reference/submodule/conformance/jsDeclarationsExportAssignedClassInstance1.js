@@ -8,7 +8,6 @@ module.exports = new Foo();
 //// [index.js]
 class Foo {
 }
-export = new Foo();
 module.exports = new Foo();
 
 

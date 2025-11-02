@@ -144,4 +144,3 @@ function fn() {
     try { }
     catch ( /** @type {object} */{ x }) { } // error in the type
 }
-export {};

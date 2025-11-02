@@ -12,7 +12,6 @@ module.exports = items;
 
 //// [index.js]
 const items = require("./some-mod")();
-export = items;
 module.exports = items;
 
 

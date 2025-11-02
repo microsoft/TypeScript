@@ -69,12 +69,10 @@ function f3(a, b) {}
 
 
 //// [file.js]
-"use strict";
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {A} */ // ok, default for `T` in `A` is `string`
 const aDefault1 = [""];
 /** @type {A} */ // error: `number` is not assignable to string`
@@ -134,9 +132,57 @@ function f3(a, b) { }
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A
  */
-export type A<T extends string | number = string> = [T];
-export type B<T, U = T> = [T, U];
-export type C<T extends string | number = > = [T];
-export type D<T extends string | number = > = [T];
-export type E<T extends string | number = string, U> = [T, U];
-export type G<T = U, U = T> = [T, U];
+type A<T extends string | number = string> = [T];
+/** @type {A} */ declare const aDefault1: A;
+/** @type {A} */ declare const aDefault2: A;
+/** @type {A<string>} */ declare const aString: A<string>;
+/** @type {A<number>} */ declare const aNumber: A<number>;
+type B<T, U = T> = [T, U];
+type C<T extends string | number = > = [T];
+type D<T extends string | number = > = [T];
+type E<T extends string | number = string, U> = [T, U];
+type G<T = U, U = T> = [T, U];
+/**
+ * @template T
+ * @template [U=T] - ok: default can reference earlier type parameter
+ * @typedef {[T, U]} B
+ */
+/**
+ * @template {string | number} [T] - error: default requires an `=type`
+ * @typedef {[T]} C
+ */
+/**
+ * @template {string | number} [T=] - error: default requires a `type`
+ * @typedef {[T]} D
+ */
+/**
+ * @template {string | number} [T=string]
+ * @template U - error: Required type parameters cannot follow optional type parameters
+ * @typedef {[T, U]} E
+ */
+/**
+ * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
+ * @template [U=T]
+ * @typedef {[T, U]} G
+ */
+/**
+ * @template T
+ * @template [U=T] - ok: default can reference earlier type parameter
+ * @param {T} a
+ * @param {U} b
+ */
+declare function f1<T, U = T>(a: T, b: U): void;
+/**
+* @template {string | number} [T=string]
+* @template U - error: Required type parameters cannot follow optional type parameters
+* @param {T} a
+* @param {U} b
+*/
+declare function f2<T extends string | number = string, U>(a: T, b: U): void;
+/**
+ * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
+ * @template [U=T]
+ * @param {T} a
+ * @param {U} b
+ */
+declare function f3<T = U, U = T>(a: T, b: U): void;

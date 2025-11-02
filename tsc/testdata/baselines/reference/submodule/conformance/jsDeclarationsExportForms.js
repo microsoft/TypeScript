@@ -234,7 +234,6 @@ const ns = require("./cls");
 module.exports = { ns };
 //// [cjs2.js]
 const ns = require("./cls");
-export = ns;
 module.exports = ns;
 //// [cjs3.js]
 "use strict";

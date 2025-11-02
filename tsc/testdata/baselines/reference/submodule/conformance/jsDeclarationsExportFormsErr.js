@@ -69,7 +69,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const ns = __importStar(require("./cls"));
-export = ns;
 module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
 //// [globalNs.js]
 "use strict";

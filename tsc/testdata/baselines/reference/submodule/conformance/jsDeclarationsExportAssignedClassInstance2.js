@@ -13,7 +13,6 @@ class Foo {
     static stat = 10;
     member = 10;
 }
-export = new Foo();
 module.exports = new Foo();
 
 

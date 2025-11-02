@@ -35,24 +35,19 @@ module.exports = {
 
 
 //// [conn.js]
-"use strict";
 /**
  * @typedef {string | number} Whatever
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 class Conn {
     constructor() { }
     item = 3;
     method() { }
 }
-export = Conn;
 module.exports = Conn;
 //// [usage.js]
-"use strict";
 /**
  * @typedef {import("./conn")} Conn
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 class Wrap {
     /**
      * @param {Conn} c

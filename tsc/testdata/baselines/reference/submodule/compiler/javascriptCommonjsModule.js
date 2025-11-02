@@ -13,5 +13,4 @@ class Foo {
 }
 class Bar extends Foo {
 }
-export = Bar;
 module.exports = Bar;

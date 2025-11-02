@@ -1,8 +1,0 @@
---- old.importHelpersCommonJSJavaScript(verbatimmodulesyntax=false).js
-+++ new.importHelpersCommonJSJavaScript(verbatimmodulesyntax=false).js
-@@= skipped -48, +48 lines =@@
- }
- class Bar extends Foo {
- }
-+export = Bar;
- module.exports = Bar;

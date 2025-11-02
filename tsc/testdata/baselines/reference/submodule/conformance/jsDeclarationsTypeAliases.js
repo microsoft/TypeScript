@@ -77,8 +77,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @returns {T}
  */
 //// [mixed.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
  */

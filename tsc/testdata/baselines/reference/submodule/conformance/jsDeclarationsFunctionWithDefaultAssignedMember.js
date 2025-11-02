@@ -11,7 +11,6 @@ module.exports = foo;
 function foo() { }
 foo.foo = foo;
 foo.default = foo;
-export = foo;
 module.exports = foo;
 
 

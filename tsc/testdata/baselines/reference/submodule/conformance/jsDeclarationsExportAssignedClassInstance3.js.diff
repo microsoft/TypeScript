@@ -14,7 +14,6 @@
 +    member = 10;
  }
 -Foo.stat = 10;
-+export = new Foo();
  module.exports = new Foo();
 +export var additional = 20;
  module.exports.additional = 20;

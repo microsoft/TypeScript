@@ -1,8 +1,0 @@
---- old.jsdocTypeDefAtStartOfFile.types
-+++ new.jsdocTypeDefAtStartOfFile.types
-@@= skipped -10, +10 lines =@@
-
- /** @type {Third} */
- let c;
-->c : number
-+>c : Third

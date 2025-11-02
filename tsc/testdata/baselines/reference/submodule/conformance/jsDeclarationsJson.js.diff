@@ -1,12 +1,6 @@
 --- old.jsDeclarationsJson.js
 +++ new.jsDeclarationsJson.js
-@@= skipped -21, +21 lines =@@
- }
- //// [index.js]
- const j = require("./obj.json");
-+export = j;
- module.exports = j;
-
+@@= skipped -26, +26 lines =@@
 
  //// [index.d.ts]
  export = j;

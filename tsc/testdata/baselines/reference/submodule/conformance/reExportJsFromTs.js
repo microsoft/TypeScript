@@ -10,9 +10,6 @@ import * as tsConstants from "../lib/constants";
 export { tsConstants };
 
 //// [constants.js]
-export = {
-    str: 'x',
-};
 module.exports = {
     str: 'x',
 };

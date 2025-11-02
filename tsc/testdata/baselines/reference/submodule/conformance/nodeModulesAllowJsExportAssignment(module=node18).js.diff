@@ -7,16 +7,8 @@
 -"use strict";
  // cjs format file
  const a = {};
-+export = a;
  module.exports = a;
- //// [index.js]
- // esm format file
-@@= skipped -12, +12 lines =@@
- // esm format file
- import "fs";
- const a = {};
-+export = a;
- module.exports = a;
+@@= skipped -16, +15 lines =@@
 
 
  //// [index.d.ts]

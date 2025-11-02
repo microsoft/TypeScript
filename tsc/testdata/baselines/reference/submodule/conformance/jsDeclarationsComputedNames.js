@@ -31,14 +31,6 @@ export class MyClass {
 //// [index.js]
 const TopLevelSym = Symbol();
 const InnerSym = Symbol();
-export = {
-    [TopLevelSym](x = 12) {
-        return x;
-    },
-    items: {
-        [InnerSym]: (arg = { x: 12 }) => arg.x
-    }
-};
 module.exports = {
     [TopLevelSym](x = 12) {
         return x;

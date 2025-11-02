@@ -36,7 +36,6 @@ module.exports = a;
 //// [file.js]
 // cjs format file
 const a = {};
-export = a;
 module.exports = a;
 //// [index.js]
 // esm format file
@@ -46,7 +45,6 @@ export {};
 // esm format file
 import "fs";
 const a = {};
-export = a;
 module.exports = a;
 
 

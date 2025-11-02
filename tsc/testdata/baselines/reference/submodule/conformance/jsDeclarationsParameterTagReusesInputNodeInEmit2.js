@@ -34,7 +34,6 @@ const BaseFactory = () => {
     return new Base();
 };
 BaseFactory.Base = Base;
-export = BaseFactory;
 module.exports = BaseFactory;
 //// [file.js]
 /** @typedef {typeof import('./base')} BaseFactory */
@@ -46,7 +45,6 @@ module.exports = BaseFactory;
 const test = (base) => {
     return base;
 };
-export {};
 
 
 //// [base.d.ts]
@@ -60,4 +58,10 @@ declare namespace BaseFactory {
 export = BaseFactory;
 //// [file.d.ts]
 /** @typedef {typeof import('./base')} BaseFactory */
-export type BaseFactory = typeof import('./base');
+type BaseFactory = typeof import('./base');
+/**
+ *
+ * @param {InstanceType<BaseFactory["Base"]>} base
+ * @returns {InstanceType<BaseFactory["Base"]>}
+ */
+declare const test: (base: {}) => {};

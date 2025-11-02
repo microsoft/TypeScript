@@ -19,14 +19,12 @@
 
 
 //// [index.js]
-"use strict";
 /**
  * Options for Foo <------------
  * @typedef {Object} FooOptions
  * @property {boolean} bar - Marvin K Mooney
  * @property {string} baz - Sylvester McMonkey McBean
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Multiline
  * Options
@@ -44,11 +42,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @property {boolean} bar - Marvin K Mooney
  * @property {string} baz - Sylvester McMonkey McBean
  */
-export type FooOptions = {
+type FooOptions = {
     bar: boolean;
     baz: string;
 };
-export type BarOptions = {
+type BarOptions = {
     bar: boolean;
     baz: string;
 };

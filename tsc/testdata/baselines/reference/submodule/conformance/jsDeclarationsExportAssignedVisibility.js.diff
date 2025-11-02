@@ -1,23 +1,6 @@
 --- old.jsDeclarationsExportAssignedVisibility.js
 +++ new.jsDeclarationsExportAssignedVisibility.js
-@@= skipped -17, +17 lines =@@
- module.exports = Container;
-
- //// [obj.js]
-+export = class Obj {
-+    constructor() {
-+        this.x = 12;
-+    }
-+};
- module.exports = class Obj {
-     constructor() {
-         this.x = 12;
-@@= skipped -12, +17 lines =@@
-         this.usage = new Obj();
-     }
- }
-+export = Container;
- module.exports = Container;
+@@= skipped -33, +33 lines =@@
 
 
  //// [obj.d.ts]

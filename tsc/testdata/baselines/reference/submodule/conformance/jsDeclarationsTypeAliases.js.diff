@@ -1,15 +1,6 @@
 --- old.jsDeclarationsTypeAliases.js
 +++ new.jsDeclarationsTypeAliases.js
-@@= skipped -76, +76 lines =@@
-  * @returns {T}
-  */
- //// [mixed.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- /**
-  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
-  */
-@@= skipped -11, +13 lines =@@
+@@= skipped -87, +87 lines =@@
      return { x: "" + x };
  }
  class ExportedThing {

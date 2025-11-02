@@ -19,9 +19,6 @@ export type test = test;
 
 
 //// [test.js]
-export = {
-    message: ""
-};
 module.exports = {
     message: ""
 };

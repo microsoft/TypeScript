@@ -6,8 +6,8 @@
  var Host = {};
 ->Host : typeof Host
 ->{} : {}
-+>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }; }
-+>{} : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }; }
++>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }; }
++>{} : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }; }
 
  Host.UserMetrics = {};
 ->Host.UserMetrics = {} : typeof Host.UserMetrics
@@ -15,11 +15,11 @@
 ->Host : typeof Host
 ->UserMetrics : typeof Host.UserMetrics
 ->{} : {}
-+>Host.UserMetrics = {} : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
-+>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
-+>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }; }
-+>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
-+>{} : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
++>Host.UserMetrics = {} : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
++>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
++>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }; }
++>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
++>{} : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
 
  /** @enum {number} */
  Host.UserMetrics.Action = {
@@ -28,30 +28,26 @@
 ->Host.UserMetrics : typeof Host.UserMetrics
 ->Host : typeof Host
 ->UserMetrics : typeof Host.UserMetrics
-+>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
-+>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }; }
-+>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
++>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
++>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }; }
++>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
  >Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
  >{    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
 
-@@= skipped -45, +45 lines =@@
-  */
+@@= skipped -46, +46 lines =@@
  Host.UserMetrics.Blah = {
  >Host.UserMetrics.Blah = {    x: 12} : { x: number; }
-->Host.UserMetrics.Blah : { x: number; }
+ >Host.UserMetrics.Blah : { x: number; }
 ->Host.UserMetrics : typeof Host.UserMetrics
 ->Host : typeof Host
 ->UserMetrics : typeof Host.UserMetrics
-->Blah : { x: number; }
-+>Host.UserMetrics.Blah : any
-+>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
-+>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }; }
-+>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; }
-+>Blah : any
++>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
++>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }; }
++>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
+ >Blah : { x: number; }
  >{    x: 12} : { x: number; }
 
-     x: 12
-@@= skipped -13, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  }
  === index.js ===
  var Other = {};
@@ -77,28 +73,20 @@
 
      usage() {
  >usage : () => void
-@@= skipped -10, +10 lines =@@
- >this.method : (p: Host.UserMetrics.Action) => void
- >this : this
+@@= skipped -12, +12 lines =@@
  >method : (p: Host.UserMetrics.Action) => void
-->Host.UserMetrics.Action.WindowDocked : number
-->Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+ >Host.UserMetrics.Action.WindowDocked : number
+ >Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
 ->Host.UserMetrics : typeof Host.UserMetrics
 ->Host : typeof Host
 ->UserMetrics : typeof Host.UserMetrics
-->Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
-->WindowDocked : number
-+>Host.UserMetrics.Action.WindowDocked : any
-+>Host.UserMetrics.Action : any
-+>Host.UserMetrics : any
-+>Host : any
-+>UserMetrics : any
-+>Action : any
-+>WindowDocked : any
++>Host.UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
++>Host : { UserMetrics: { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }; }
++>UserMetrics : { Action: { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }; Blah: { x: number; }; }
+ >Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+ >WindowDocked : number
      }
- }
-
-@@= skipped -14, +14 lines =@@
+@@= skipped -12, +12 lines =@@
   * @type {Host.UserMetrics.Bargh}
   */
  var x = "ok";

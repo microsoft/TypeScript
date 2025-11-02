@@ -4,29 +4,33 @@
   * @typedef A
   * @property {string} a
   */
--/**
-- * @typedef B
-- * @property {number} b
-- */
--declare class C1 {
--    /**
--     * @type {A}
--     */
--    value: A;
--}
--declare class C2 extends C1 {
--}
--declare class C3 extends C1 {
--    /**
--     * @type {A & B}
--     */
--    value: A & B;
--}
++type A = {
++    a: string;
++};
++type B = {
++    b: number;
++};
+ /**
+  * @typedef B
+  * @property {number} b
+@@= skipped -11, +17 lines =@@
+     value: A;
+ }
+ declare class C2 extends C1 {
++    /**
++     * @type {A}
++     */
++    value: A;
+ }
+ declare class C3 extends C1 {
+     /**
+@@= skipped -7, +11 lines =@@
+      */
+     value: A & B;
+ }
 -type A = {
-+export type A = {
-     a: string;
- };
+-    a: string;
+-};
 -type B = {
-+export type B = {
-     b: number;
- };
+-    b: number;
+-};

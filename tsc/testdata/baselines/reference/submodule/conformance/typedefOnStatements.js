@@ -82,8 +82,6 @@ function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
 
 
 //// [typedefOnStatements.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @typedef {{a: string}} A */
 ;
 /** @typedef {{ b: string }} B */
@@ -160,54 +158,74 @@ function proof(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q) {
 
 
 //// [typedefOnStatements.d.ts]
-export type A = {
+type A = {
     a: string;
 };
-export type B = {
+type B = {
     b: string;
 };
-export type C = {
+type C = {
     c: string;
 };
-export type D = {
+type D = {
     d: string;
 };
-export type E = {
+type E = {
     e: string;
 };
-export type F = {
+type F = {
     f: string;
 };
-export type G = {
+type G = {
     g: string;
 };
-export type H = {
+type H = {
     h: string;
 };
-export type I = {
+type I = {
     i: string;
 };
-export type J = {
+type J = {
     j: string;
 };
-export type K = {
+type K = {
     k: string;
 };
-export type L = {
+type L = {
     l: string;
 };
-export type M = {
+type M = {
     m: string;
 };
-export type N = {
+type N = {
     n: string;
 };
-export type O = {
+type O = {
     o: string;
 };
-export type P = {
+type P = {
     p: string;
 };
-export type Q = {
+type Q = {
     q: string;
 };
+/**
+ * @param {A} a
+ * @param {B} b
+ * @param {C} c
+ * @param {D} d
+ * @param {E} e
+ * @param {F} f
+ * @param {G} g
+ * @param {H} h
+ * @param {I} i
+ * @param {J} j
+ * @param {K} k
+ * @param {L} l
+ * @param {M} m
+ * @param {N} n
+ * @param {O} o
+ * @param {P} p
+ * @param {Q} q
+ */
+declare function proof(a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K, l: L, m: M, n: N, o: O, p: P, q: Q): void;

@@ -3894,3 +3894,7 @@ func IsExpandoInitializer(initializer *Node) bool {
 func GetContainingFunction(node *Node) *Node {
 	return FindAncestor(node.Parent, IsFunctionLike)
 }
+
+func IsImplicitlyExportedJSTypeAlias(node *Node) bool {
+	return IsJSTypeAliasDeclaration(node) && IsSourceFile(node.Parent) && IsExternalOrCommonJSModule(node.Parent.AsSourceFile())
+}

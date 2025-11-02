@@ -9,10 +9,9 @@
  const Strings = {
      a: "A",
      b: "B"
- };
+@@= skipped -7, +9 lines =@@
  class Foo {
  }
-+export = Foo;
  module.exports = Foo;
 +export var Strings = Strings;
  module.exports.Strings = Strings;

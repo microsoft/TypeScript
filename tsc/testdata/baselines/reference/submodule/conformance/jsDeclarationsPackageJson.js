@@ -71,7 +71,6 @@ module.exports = j;
 }
 //// [index.js]
 const j = require("./package.json");
-export = j;
 module.exports = j;
 
 

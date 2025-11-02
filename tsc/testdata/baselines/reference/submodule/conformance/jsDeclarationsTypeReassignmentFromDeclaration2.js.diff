@@ -1,10 +1,8 @@
 --- old.jsDeclarationsTypeReassignmentFromDeclaration2.js
 +++ new.jsDeclarationsTypeReassignmentFromDeclaration2.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [index.js]
  const items = require("./some-mod")();
-+export = items;
  module.exports = items;
 +
 +

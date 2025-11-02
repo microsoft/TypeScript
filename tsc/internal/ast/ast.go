@@ -2281,6 +2281,7 @@ func declarationIsWriteAccess(decl *Node) bool {
 		KindParameter,
 		KindShorthandPropertyAssignment,
 		KindTypeAliasDeclaration,
+		KindJSTypeAliasDeclaration,
 		KindTypeParameter:
 		return true
 
@@ -5139,7 +5140,7 @@ func (node *ExportAssignment) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *ExportAssignment) computeSubtreeFacts() SubtreeFacts {
-	return propagateModifierListSubtreeFacts(node.modifiers) | propagateSubtreeFacts(node.Type) | propagateSubtreeFacts(node.Expression)
+	return propagateModifierListSubtreeFacts(node.modifiers) | propagateSubtreeFacts(node.Type) | propagateSubtreeFacts(node.Expression) | core.IfElse(node.IsExportEquals, SubtreeContainsTypeScript, SubtreeFactsNone)
 }
 
 func IsExportAssignment(node *Node) bool {

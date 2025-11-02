@@ -18,7 +18,6 @@ const Strings = {
 };
 class Foo {
 }
-export = Foo;
 module.exports = Foo;
 export var Strings = Strings;
 module.exports.Strings = Strings;

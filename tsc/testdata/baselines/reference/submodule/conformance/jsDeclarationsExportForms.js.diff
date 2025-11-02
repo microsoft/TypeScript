@@ -1,10 +1,7 @@
 --- old.jsDeclarationsExportForms.js
 +++ new.jsDeclarationsExportForms.js
-@@= skipped -233, +233 lines =@@
- module.exports = { ns };
- //// [cjs2.js]
+@@= skipped -235, +235 lines =@@
  const ns = require("./cls");
-+export = ns;
  module.exports = ns;
  //// [cjs3.js]
 +"use strict";
@@ -20,7 +17,7 @@
  module.exports.names = ns;
  //// [includeAll.js]
  "use strict";
-@@= skipped -23, +30 lines =@@
+@@= skipped -21, +27 lines =@@
 
 
  //// [cls.d.ts]

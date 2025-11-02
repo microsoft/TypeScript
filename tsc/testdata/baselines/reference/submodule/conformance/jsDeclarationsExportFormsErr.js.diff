@@ -1,14 +1,6 @@
 --- old.jsDeclarationsExportFormsErr.js
 +++ new.jsDeclarationsExportFormsErr.js
-@@= skipped -68, +68 lines =@@
- })();
- Object.defineProperty(exports, "__esModule", { value: true });
- const ns = __importStar(require("./cls"));
-+export = ns;
- module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
- //// [globalNs.js]
- "use strict";
-@@= skipped -28, +29 lines =@@
+@@= skipped -96, +96 lines =@@
 
 
  //// [cls.d.ts]

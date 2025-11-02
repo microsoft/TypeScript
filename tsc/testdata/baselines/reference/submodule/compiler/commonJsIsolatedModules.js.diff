@@ -1,9 +1,0 @@
---- old.commonJsIsolatedModules.js
-+++ new.commonJsIsolatedModules.js
-@@= skipped -5, +5 lines =@@
-
-
- //// [index.js]
-+export = {};
- module.exports = {};
- var x = 1;

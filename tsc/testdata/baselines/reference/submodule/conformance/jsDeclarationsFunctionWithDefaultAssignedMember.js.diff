@@ -1,11 +1,6 @@
 --- old.jsDeclarationsFunctionWithDefaultAssignedMember.js
 +++ new.jsDeclarationsFunctionWithDefaultAssignedMember.js
-@@= skipped -10, +10 lines =@@
- function foo() { }
- foo.foo = foo;
- foo.default = foo;
-+export = foo;
- module.exports = foo;
+@@= skipped -14, +14 lines =@@
 
 
  //// [index.d.ts]

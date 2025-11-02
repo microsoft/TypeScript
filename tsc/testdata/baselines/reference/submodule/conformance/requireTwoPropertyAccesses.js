@@ -12,11 +12,6 @@ console.log(value)
 
 
 //// [mod.js]
-export = {
-    x: {
-        y: "value"
-    }
-};
 module.exports = {
     x: {
         y: "value"

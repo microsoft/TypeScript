@@ -1,5 +1,3 @@
-mod1.js(3,23): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
-mod1.js(4,7): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
 mod1.js(7,9): error TS2339: Property 'Bar' does not exist on type 'typeof import("mod1")'.
 mod1.js(10,1): error TS2300: Duplicate identifier 'export='.
 mod1.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -22,15 +20,11 @@ use.js(4,12): error TS2503: Cannot find namespace 'mod'.
     var bb;
     var bbb = new mod.Baz();
     
-==== mod1.js (8 errors) ====
+==== mod1.js (6 errors) ====
     // error
     
     /** @typedef {number} Foo */
-                          ~~~
-!!! error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
     class Foo { } // should error
-          ~~~
-!!! error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
     
     /** @typedef {number} Bar */
     exports.Bar = class { }

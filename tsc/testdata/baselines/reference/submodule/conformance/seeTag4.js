@@ -14,11 +14,9 @@ let foo;
 
 
 //// [seeTag4.js]
-"use strict";
 /**
  * @typedef {any} A
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @see {@link A}
  * @see {@linkcode A}

@@ -16,7 +16,6 @@ module.exports.Strings = Strings;
 //// [bar.js]
 class Bar {
 }
-export = Bar;
 module.exports = Bar;
 //// [cls.js]
 "use strict";
@@ -28,7 +27,6 @@ const Strings = {
 };
 class Foo extends Bar {
 }
-export = Foo;
 module.exports = Foo;
 export var Strings = Strings;
 module.exports.Strings = Strings;

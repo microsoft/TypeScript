@@ -24,7 +24,7 @@ var insufficient;
 === test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
 >actually : Symbol(actually, Decl(test.ts, 0, 11))
->Everything : Symbol(Everything)
+>Everything : Symbol(Everything, Decl(a.js, 5, 3))
 >a : Symbol(a, Decl(test.ts, 0, 34))
 >c : Symbol(c, Decl(test.ts, 0, 61))
 >d : Symbol(d, Decl(test.ts, 0, 67))

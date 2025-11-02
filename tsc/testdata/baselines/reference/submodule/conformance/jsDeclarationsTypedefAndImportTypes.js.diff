@@ -1,14 +1,8 @@
 --- old.jsDeclarationsTypedefAndImportTypes.js
 +++ new.jsDeclarationsTypedefAndImportTypes.js
-@@= skipped -34, +34 lines =@@
-
-
- //// [conn.js]
-+"use strict";
- /**
+@@= skipped -38, +38 lines =@@
   * @typedef {string | number} Whatever
   */
-+Object.defineProperty(exports, "__esModule", { value: true });
  class Conn {
 -    constructor() {
 -        this.item = 3;
@@ -17,18 +11,8 @@
 +    item = 3;
      method() { }
  }
-+export = Conn;
  module.exports = Conn;
- //// [usage.js]
-+"use strict";
- /**
-  * @typedef {import("./conn")} Conn
-  */
-+Object.defineProperty(exports, "__esModule", { value: true });
- class Wrap {
-     /**
-      * @param {Conn} c
-@@= skipped -30, +34 lines =@@
+@@= skipped -26, +25 lines =@@
 
 
  //// [conn.d.ts]

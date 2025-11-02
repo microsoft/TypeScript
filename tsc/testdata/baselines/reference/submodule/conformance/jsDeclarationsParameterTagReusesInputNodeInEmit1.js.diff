@@ -1,14 +1,6 @@
 --- old.jsDeclarationsParameterTagReusesInputNodeInEmit1.js
 +++ new.jsDeclarationsParameterTagReusesInputNodeInEmit1.js
-@@= skipped -39, +39 lines =@@
-     return new Base();
- };
- BaseFactory.Base = Base;
-+export = BaseFactory;
- module.exports = BaseFactory;
- //// [file.js]
- /** @typedef {import('./base')} BaseFactory */
-@@= skipped -17, +18 lines =@@
+@@= skipped -56, +56 lines =@@
  const test = (base) => {
      return base;
  };

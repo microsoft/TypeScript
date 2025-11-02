@@ -9,17 +9,15 @@
  class Handler {
      static get OPTIONS() {
          return 1;
-@@= skipped -12, +14 lines =@@
-     a: "A",
+@@= skipped -13, +15 lines =@@
      b: "B"
  };
-+export = Handler;
  module.exports = Handler;
 +export var Strings = Strings;
  module.exports.Strings = Strings;
  /**
   * @typedef {Object} HandlerOptions
-@@= skipped -10, +12 lines =@@
+@@= skipped -9, +10 lines =@@
 
 
  //// [source.d.ts]

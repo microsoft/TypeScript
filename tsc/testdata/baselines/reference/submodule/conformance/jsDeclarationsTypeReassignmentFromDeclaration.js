@@ -14,7 +14,6 @@ module.exports = items;
 //// [index.js]
 /** @type {typeof import("/some-mod")} */
 const items = [];
-export = items;
 module.exports = items;
 
 

@@ -19,12 +19,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @param {number} p
  */
-export = function (p) {
-    this.t = 12 + p;
-};
-/**
- * @param {number} p
- */
 module.exports = function (p) {
     this.t = 12 + p;
 };

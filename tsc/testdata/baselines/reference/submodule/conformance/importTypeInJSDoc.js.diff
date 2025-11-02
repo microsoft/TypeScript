@@ -11,4 +11,3 @@
 -const r = /** @type {typeof import("./externs").Bar} */ (r => r);
 +const q = /** @type {import("./externs").Bar} */ { doer: q => q };
 +const r = /** @type {typeof import("./externs").Bar} */ r => r;
-+export {};

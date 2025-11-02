@@ -78,10 +78,8 @@ module.exports = Context;
 function Timer(timeout) {
     this.timeout = timeout;
 }
-export = Timer;
 module.exports = Timer;
 //// [context.js]
-"use strict";
 /**
  * Imports
  *
@@ -89,7 +87,6 @@ module.exports = Timer;
  * @typedef {import("./hook")} Hook
  * @typedef {import("./hook").HookHandler} HookHandler
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Input type definition
  *
@@ -126,11 +123,8 @@ Context.prototype = {
         return input;
     }
 };
-export = Context;
 module.exports = Context;
 //// [hook.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {(arg: import("./context")) => void} HookHandler
  */
@@ -140,7 +134,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function Hook(handle) {
     this.handle = handle;
 }
-export = Hook;
 module.exports = Hook;
 
 

@@ -22,13 +22,6 @@ const Strings = {
     a: "A",
     b: "B"
 };
-export = {
-    thing: "ok",
-    also: "ok",
-    desc: {
-        item: "ok"
-    }
-};
 module.exports = {
     thing: "ok",
     also: "ok",

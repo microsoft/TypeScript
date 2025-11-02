@@ -11,5 +11,5 @@ let b;
 
 /** @type {Third} */
 let c;
->c : Third
+>c : number
 

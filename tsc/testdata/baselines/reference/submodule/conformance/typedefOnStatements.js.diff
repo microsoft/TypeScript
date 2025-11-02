@@ -1,14 +1,14 @@
 --- old.typedefOnStatements.js
 +++ new.typedefOnStatements.js
-@@= skipped -82, +82 lines =@@
+@@= skipped -81, +81 lines =@@
+
 
  //// [typedefOnStatements.js]
- "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
+-"use strict";
  /** @typedef {{a: string}} A */
  ;
  /** @typedef {{ b: string }} B */
-@@= skipped -76, +77 lines =@@
+@@= skipped -77, +76 lines =@@
 
 
  //// [typedefOnStatements.d.ts]
@@ -32,71 +32,30 @@
 - * @param {Q} q
 - */
 -declare function proof(a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K, l: L, m: M, n: N, o: O, p: P, q: Q): void;
--type A = {
-+export type A = {
+ type A = {
      a: string;
  };
--type B = {
-+export type B = {
-     b: string;
- };
--type C = {
-+export type C = {
-     c: string;
- };
--type D = {
-+export type D = {
-     d: string;
- };
--type E = {
-+export type E = {
-     e: string;
- };
--type F = {
-+export type F = {
-     f: string;
- };
--type G = {
-+export type G = {
-     g: string;
- };
--type H = {
-+export type H = {
-     h: string;
- };
--type I = {
-+export type I = {
-     i: string;
- };
--type J = {
-+export type J = {
-     j: string;
- };
--type K = {
-+export type K = {
-     k: string;
- };
--type L = {
-+export type L = {
-     l: string;
- };
--type M = {
-+export type M = {
-     m: string;
- };
--type N = {
-+export type N = {
-     n: string;
- };
--type O = {
-+export type O = {
-     o: string;
- };
--type P = {
-+export type P = {
-     p: string;
- };
--type Q = {
-+export type Q = {
+@@= skipped -71, +51 lines =@@
+ type Q = {
      q: string;
  };
++/**
++ * @param {A} a
++ * @param {B} b
++ * @param {C} c
++ * @param {D} d
++ * @param {E} e
++ * @param {F} f
++ * @param {G} g
++ * @param {H} h
++ * @param {I} i
++ * @param {J} j
++ * @param {K} k
++ * @param {L} l
++ * @param {M} m
++ * @param {N} n
++ * @param {O} o
++ * @param {P} p
++ * @param {Q} q
++ */
++declare function proof(a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K, l: L, m: M, n: N, o: O, p: P, q: Q): void;

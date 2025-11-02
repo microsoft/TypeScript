@@ -137,13 +137,6 @@ declare const _default: {};
 export = _default;
 
 //// [/home/src/workspaces/lib/common/nominal.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * @template T, Name
- * @typedef {T & {[Symbol.species]: Name}} Nominal
- */
-export = {};
 /**
  * @template T, Name
  * @typedef {T & {[Symbol.species]: Name}} Nominal

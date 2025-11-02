@@ -22,7 +22,6 @@ module.exports = j;
 }
 //// [index.js]
 const j = require("./obj.json");
-export = j;
 module.exports = j;
 
 

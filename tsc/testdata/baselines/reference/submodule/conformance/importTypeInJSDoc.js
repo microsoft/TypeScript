@@ -34,4 +34,3 @@ let a = /** @type {Foo} */ undefined;
 a = new Foo({ doer: Foo.Bar });
 const q = /** @type {import("./externs").Bar} */ { doer: q => q };
 const r = /** @type {typeof import("./externs").Bar} */ r => r;
-export {};

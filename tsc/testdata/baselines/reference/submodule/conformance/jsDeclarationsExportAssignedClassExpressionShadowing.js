@@ -24,11 +24,6 @@ class A {
 class Q {
     x = 42;
 }
-export = class Q {
-    constructor() {
-        this.x = new A();
-    }
-};
 module.exports = class Q {
     constructor() {
         this.x = new A();

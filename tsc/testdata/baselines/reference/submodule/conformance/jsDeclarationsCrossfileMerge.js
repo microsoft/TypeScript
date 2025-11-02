@@ -21,7 +21,6 @@ exports.default = validate;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const m = require("./exporter");
-export = m.default;
 module.exports = m.default;
 export var memberName = "thing";
 module.exports.memberName = "thing";

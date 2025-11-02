@@ -18,11 +18,6 @@ class Container {
 module.exports = Container;
 
 //// [obj.js]
-export = class Obj {
-    constructor() {
-        this.x = 12;
-    }
-};
 module.exports = class Obj {
     constructor() {
         this.x = 12;
@@ -35,7 +30,6 @@ class Container {
         this.usage = new Obj();
     }
 }
-export = Container;
 module.exports = Container;
 
 

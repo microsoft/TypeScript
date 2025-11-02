@@ -16,9 +16,6 @@ function foo() {
 //// [index.js]
 // @ts-nocheck
 function foo() {
-    export = exports = function (o) {
-        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
-    };
     module.exports = exports = function (o) {
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
     };

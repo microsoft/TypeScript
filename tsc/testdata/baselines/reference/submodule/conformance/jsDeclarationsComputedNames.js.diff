@@ -1,21 +1,6 @@
 --- old.jsDeclarationsComputedNames.js
 +++ new.jsDeclarationsComputedNames.js
-@@= skipped -30, +30 lines =@@
- //// [index.js]
- const TopLevelSym = Symbol();
- const InnerSym = Symbol();
-+export = {
-+    [TopLevelSym](x = 12) {
-+        return x;
-+    },
-+    items: {
-+        [InnerSym]: (arg = { x: 12 }) => arg.x
-+    }
-+};
- module.exports = {
-     [TopLevelSym](x = 12) {
-         return x;
-@@= skipped -10, +18 lines =@@
+@@= skipped -40, +40 lines =@@
  };
  //// [index2.js]
  "use strict";

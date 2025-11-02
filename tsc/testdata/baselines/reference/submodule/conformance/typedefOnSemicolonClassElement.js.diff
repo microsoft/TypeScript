@@ -19,7 +19,7 @@
  //// [typedefOnSemicolonClassElement.d.ts]
 -export class Preferences {
 +export declare class Preferences {
-+    export type A = string;
++    type A = string;
      /** @type {A} */
 -    a: string;
 +    a: A;
@@ -36,8 +36,8 @@
 +
 +==== dist/typedefOnSemicolonClassElement.d.ts (3 errors) ====
 +    export declare class Preferences {
-+        export type A = string;
-+        ~~~~~~
++        type A = string;
++        ~~~~
 +!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 +        /** @type {A} */
 +        a: A;

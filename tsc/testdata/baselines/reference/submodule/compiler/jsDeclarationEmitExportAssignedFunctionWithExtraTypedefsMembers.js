@@ -18,15 +18,6 @@ module.exports = function loader(options) {}
  * @typedef Options
  * @property {string} opt
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * @param {Options} options
- */
-export = function loader(options) { };
-/**
- * @typedef Options
- * @property {string} opt
- */
 /**
  * @param {Options} options
  */

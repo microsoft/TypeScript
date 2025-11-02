@@ -1,24 +1,19 @@
 --- old.jsDeclarationsTypedefFunction.js
 +++ new.jsDeclarationsTypedefFunction.js
-@@= skipped -30, +30 lines =@@
- const send = handlers => new Promise((resolve, reject) => {
-     handlers[++id] = [resolve, reject];
- });
-+export {};
-
-
- //// [foo.d.ts]
-@@= skipped -8, +9 lines =@@
+@@= skipped -38, +38 lines =@@
   *   [id: string]: [Function, Function];
   * }} ResolveRejectMap
   */
--declare let id: number;
--/**
-- * @param {ResolveRejectMap} handlers
-- * @returns {Promise<any>}
-- */
++type ResolveRejectMap = {
++    [id: string]: [Function, Function];
++};
+ declare let id: number;
+ /**
+  * @param {ResolveRejectMap} handlers
+  * @returns {Promise<any>}
+  */
 -declare function send(handlers: ResolveRejectMap): Promise<any>;
 -type ResolveRejectMap = {
-+export type ResolveRejectMap = {
-     [id: string]: [Function, Function];
- };
+-    [id: string]: [Function, Function];
+-};
++declare const send: (handlers: ResolveRejectMap) => Promise<any>;

@@ -1,12 +1,6 @@
 --- old.jsDeclarationsPackageJson.js
 +++ new.jsDeclarationsPackageJson.js
-@@= skipped -70, +70 lines =@@
- }
- //// [index.js]
- const j = require("./package.json");
-+export = j;
- module.exports = j;
-
+@@= skipped -75, +75 lines =@@
 
  //// [index.d.ts]
  export = j;

@@ -70,17 +70,11 @@ func (p *Parser) reparseTags(parent *ast.Node, jsDoc []*ast.Node) {
 func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node) {
 	switch tag.Kind {
 	case ast.KindJSDocTypedefTag:
-		// !!! Don't mark typedefs as exported if they are not in a module
 		typeExpression := tag.AsJSDocTypedefTag().TypeExpression
 		if typeExpression == nil {
 			break
 		}
-		export := p.factory.NewModifier(ast.KindExportKeyword)
-		export.Loc = tag.Loc
-		export.Flags = p.contextFlags | ast.NodeFlagsReparsed
-		modifiers := p.newModifierList(export.Loc, p.nodeSlicePool.NewSlice1(export))
-
-		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.factory.DeepCloneReparse(tag.AsJSDocTypedefTag().Name()), nil, nil)
+		typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.factory.DeepCloneReparse(tag.AsJSDocTypedefTag().Name()), nil, nil)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
 		var t *ast.Node
 		switch typeExpression.Kind {

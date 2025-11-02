@@ -40,7 +40,6 @@ const BaseFactory = () => {
     return new Base();
 };
 BaseFactory.Base = Base;
-export = BaseFactory;
 module.exports = BaseFactory;
 //// [file.js]
 /** @typedef {import('./base')} BaseFactory */

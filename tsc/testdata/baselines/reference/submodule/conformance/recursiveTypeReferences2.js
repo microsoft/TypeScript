@@ -29,11 +29,9 @@ const p = {};
 
 
 //// [bug39372.js]
-"use strict";
 /** @typedef {ReadonlyArray<Json>} JsonArray */
 /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
 /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @template T
  * @typedef {{
@@ -60,12 +58,12 @@ const p = {};
 /** @typedef {ReadonlyArray<Json>} JsonArray */
 /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
 /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
-export type JsonArray = ReadonlyArray<Json>;
-export type JsonRecord = {
+type JsonArray = ReadonlyArray<Json>;
+type JsonRecord = {
     readonly [key: string]: Json;
 };
-export type Json = boolean | number | string | null | JsonRecord | JsonArray | readonly [];
-export type XMLObject<T> = {
+type Json = boolean | number | string | null | JsonRecord | JsonArray | readonly [];
+type XMLObject<T> = {
     $A: {
         [K in keyof T]?: XMLObject<T[K]>[];
     };
@@ -80,3 +78,25 @@ export type XMLObject<T> = {
 } & {
     [K in keyof T]?: (T[K] extends string ? string : XMLObject<T[K]>);
 };
+/**
+ * @template T
+ * @typedef {{
+  $A: {
+    [K in keyof T]?: XMLObject<T[K]>[]
+  },
+  $O: {
+    [K in keyof T]?: {
+      $$?: Record<string, string>
+    } & (T[K] extends string ? {$:string} : XMLObject<T[K]>)
+  },
+  $$?: Record<string, string>,
+  } & {
+  [K in keyof T]?: (
+    T[K] extends string ? string
+      : XMLObject<T[K]>
+  )
+}} XMLObject<T> */
+/** @type {XMLObject<{foo:string}>} */
+declare const p: XMLObject<{
+    foo: string;
+}>;

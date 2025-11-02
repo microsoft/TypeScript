@@ -40,7 +40,6 @@ const Strings = {
     a: "A",
     b: "B"
 };
-export = Handler;
 module.exports = Handler;
 export var Strings = Strings;
 module.exports.Strings = Strings;
