@@ -621,7 +621,7 @@ func (p *Parser) isInSomeParsingContext() bool {
 	// We should be in at least one parsing context, be it SourceElements while parsing
 	// a SourceFile, or JSDocComment when lazily parsing JSDoc.
 	debug.Assert(p.parsingContexts != 0, "Missing parsing context")
-	for kind := ParsingContext(0); kind < PCCount; kind++ {
+	for kind := range PCCount {
 		if p.parsingContexts&(1<<kind) != 0 {
 			if p.isListElement(kind, true /*inErrorRecovery*/) || p.isListTerminator(kind) {
 				return true

@@ -13,7 +13,7 @@ func TestValidatePackageName(t *testing.T) {
 		t.Parallel()
 		packageName := "a"
 		for range 8 {
-			packageName += packageName
+			packageName += packageName //nolint:perfsprint
 		}
 		status, _, _ := ata.ValidatePackageName(packageName)
 		assert.Equal(t, status, ata.NameTooLong)

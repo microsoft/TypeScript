@@ -1,6 +1,7 @@
 package estransforms
 
 import (
+	"slices"
 	"strconv"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -1030,12 +1031,7 @@ func bindingOrAssignmentElementContainsNonLiteralComputedName(element *ast.Node)
 
 func bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern *ast.Node) bool {
 	elements := ast.GetElementsOfBindingOrAssignmentPattern(pattern)
-	for _, element := range elements {
-		if bindingOrAssignmentElementContainsNonLiteralComputedName(element) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(elements, bindingOrAssignmentElementContainsNonLiteralComputedName)
 }
 
 func getInitializerOfBindingOrAssignmentElement(bindingElement *ast.Node) *ast.Node {

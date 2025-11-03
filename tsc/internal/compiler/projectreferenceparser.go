@@ -1,6 +1,8 @@
 package compiler
 
 import (
+	"maps"
+
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -91,12 +93,8 @@ func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParse
 		if task.resolved == nil || p.loader.projectReferenceFileMapper.opts.Config.ConfigFile == task.resolved.ConfigFile {
 			continue
 		}
-		for key, value := range task.resolved.SourceToProjectReference() {
-			p.loader.projectReferenceFileMapper.sourceToProjectReference[key] = value
-		}
-		for key, value := range task.resolved.OutputDtsToProjectReference() {
-			p.loader.projectReferenceFileMapper.outputDtsToProjectReference[key] = value
-		}
+		maps.Copy(p.loader.projectReferenceFileMapper.sourceToProjectReference, task.resolved.SourceToProjectReference())
+		maps.Copy(p.loader.projectReferenceFileMapper.outputDtsToProjectReference, task.resolved.OutputDtsToProjectReference())
 		if p.loader.projectReferenceFileMapper.opts.canUseProjectReferenceSource() {
 			declDir := task.resolved.CompilerOptions().DeclarationDir
 			if declDir == "" {

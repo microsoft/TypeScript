@@ -612,7 +612,7 @@ func (t *textWithContext) sliceOfContent(start *int, end *int) string {
 	return t.content[*start:*end]
 }
 
-func (t *textWithContext) getIndex(i interface{}) *int {
+func (t *textWithContext) getIndex(i any) *int {
 	switch i := i.(type) {
 	case *int:
 		return i

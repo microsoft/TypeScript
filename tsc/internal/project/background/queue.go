@@ -25,11 +25,9 @@ func (q *Queue) Enqueue(ctx context.Context, fn func(context.Context)) {
 	}
 	q.mu.RUnlock()
 
-	q.wg.Add(1)
-	go func() {
-		defer q.wg.Done()
+	q.wg.Go(func() {
 		fn(ctx)
-	}()
+	})
 }
 
 // Wait waits for all active tasks to complete.

@@ -315,11 +315,9 @@ func runTraceBaseline(t *testing.T, test traceTestCase) {
 
 			var wg sync.WaitGroup
 			for _, call := range test.calls {
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
+				wg.Go(func() {
 					doCall(t, concurrentResolver, call, true /*skipLocations*/)
-				}()
+				})
 			}
 
 			wg.Wait()

@@ -364,7 +364,7 @@ func (p *UserPreferences) Parse(item any) *UserPreferences {
 	return nil
 }
 
-func (p *UserPreferences) parseWorker(config map[string]interface{}) {
+func (p *UserPreferences) parseWorker(config map[string]any) {
 	// Process unstable preferences first so that they do not overwrite stable properties
 	if unstable, ok := config["unstable"]; ok {
 		// unstable properties must be named the same as userPreferences

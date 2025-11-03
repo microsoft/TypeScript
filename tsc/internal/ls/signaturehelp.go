@@ -3,6 +3,7 @@ package ls
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -586,7 +587,7 @@ func isSyntacticOwner(startingToken *ast.Node, node *ast.CallLikeExpression, sou
 	invocationChildren := getChildrenFromNonJSDocNode(node, sourceFile)
 	switch startingToken.Kind {
 	case ast.KindOpenParenToken, ast.KindCommaToken:
-		return containsNode(invocationChildren, startingToken)
+		return slices.Contains(invocationChildren, startingToken)
 	case ast.KindLessThanToken:
 		return containsPrecedingToken(startingToken, sourceFile, node.AsCallExpression().Expression)
 	default:
@@ -1100,15 +1101,6 @@ func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent *ast.Node, sour
 		}
 	}
 	return tokens
-}
-
-func containsNode(nodes []*ast.Node, node *ast.Node) bool {
-	for i := range nodes {
-		if nodes[i] == node {
-			return true
-		}
-	}
-	return false
 }
 
 func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression, argumentIndex int, sourceFile *ast.SourceFile) *argumentListInfo {

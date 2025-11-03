@@ -2409,9 +2409,9 @@ func getFilterText(
 	dotAccessor string,
 ) string {
 	// Private field completion, e.g. label `#bar`.
-	if strings.HasPrefix(label, "#") {
+	if after, ok := strings.CutPrefix(label, "#"); ok {
 		if insertText != "" {
-			if strings.HasPrefix(insertText, "this.#") {
+			if after, ok := strings.CutPrefix(insertText, "this.#"); ok {
 				if wordStart == '#' {
 					// `method() { this.#| }`
 					// `method() { #| }`
@@ -2419,7 +2419,7 @@ func getFilterText(
 				} else {
 					// `method() { this.| }`
 					// `method() { | }`
-					return strings.TrimPrefix(insertText, "this.#")
+					return after
 				}
 			}
 		} else {
@@ -2429,7 +2429,7 @@ func getFilterText(
 			} else {
 				// `method() { this.| }`
 				// `method() { | }`
-				return strings.TrimPrefix(label, "#")
+				return after
 			}
 		}
 	}
@@ -3187,7 +3187,7 @@ func isNamedImportsOrExports(node *ast.Node) bool {
 
 func generateIdentifierForArbitraryString(text string) string {
 	needsUnderscore := false
-	identifier := ""
+	var identifier strings.Builder
 	var ch rune
 	var size int
 
@@ -3202,9 +3202,9 @@ func generateIdentifierForArbitraryString(text string) string {
 		}
 		if size > 0 && validChar {
 			if needsUnderscore {
-				identifier += "_"
+				identifier.WriteRune('_')
 			}
-			identifier += string(ch)
+			identifier.WriteRune(ch)
 			needsUnderscore = false
 		} else {
 			needsUnderscore = true
@@ -3212,15 +3212,16 @@ func generateIdentifierForArbitraryString(text string) string {
 	}
 
 	if needsUnderscore {
-		identifier += "_"
+		identifier.WriteRune('_')
 	}
 
 	// Default to "_" if the provided text was empty
-	if identifier == "" {
+	id := identifier.String()
+	if id == "" {
 		return "_"
 	}
 
-	return identifier
+	return id
 }
 
 // Copied from vscode TS extension.

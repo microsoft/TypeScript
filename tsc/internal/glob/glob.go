@@ -217,7 +217,7 @@ func (g *Glob) Match(input string) bool {
 }
 
 func match(elems []element, input string) (ok bool) {
-	var elem interface{}
+	var elem any
 	for len(elems) > 0 {
 		elem, elems = elems[0], elems[1:]
 		switch elem := elem.(type) {

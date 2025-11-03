@@ -33,6 +33,7 @@ linters:
     - makezero
     - mirror
     - misspell
+    - modernize
     - musttag
     - nakedret
     - nolintlint

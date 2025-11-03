@@ -631,16 +631,22 @@ func getLibraryNameFromLibFileName(libFileName string) string {
 	//                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
 	//                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
 	components := strings.Split(libFileName, ".")
-	var path string
+	var path strings.Builder
+	path.WriteString("@typescript/lib-")
 	if len(components) > 1 {
-		path = components[1]
+		path.WriteString(components[1])
 	}
 	i := 2
 	for i < len(components) && components[i] != "" && components[i] != "d" {
-		path += core.IfElse(i == 2, "/", "-") + components[i]
+		if i == 2 {
+			path.WriteByte('/')
+		} else {
+			path.WriteByte('-')
+		}
+		path.WriteString(components[i])
 		i++
 	}
-	return "@typescript/lib-" + path
+	return path.String()
 }
 
 func getInferredLibraryNameResolveFrom(options *core.CompilerOptions, currentDirectory string, libFileName string) string {

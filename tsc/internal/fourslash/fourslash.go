@@ -847,12 +847,7 @@ func (f *FourslashTest) verifyCompletionsAreExactly(t *testing.T, prefix string,
 func ignorePaths(paths ...string) cmp.Option {
 	return cmp.FilterPath(
 		func(p cmp.Path) bool {
-			for _, path := range paths {
-				if p.Last().String() == path {
-					return true
-				}
-			}
-			return false
+			return slices.Contains(paths, p.Last().String())
 		},
 		cmp.Ignore(),
 	)

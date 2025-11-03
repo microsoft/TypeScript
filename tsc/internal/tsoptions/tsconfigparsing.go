@@ -1288,7 +1288,7 @@ func parseJsonConfigFileContentWorker(
 			projectReferences = []*core.ProjectReference{}
 			for _, reference := range newReferencesOfRaw.sliceValue {
 				for _, ref := range parseProjectReference(reference) {
-					if reflect.TypeOf(ref.Path).Kind() != reflect.String {
+					if ref.Path == "" {
 						if sourceFile == nil {
 							errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string"))
 						}

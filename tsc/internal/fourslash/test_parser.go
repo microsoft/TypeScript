@@ -407,13 +407,13 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 
 func getObjectMarker(fileName string, location *locationInformation, text string) (*Marker, error) {
 	// Attempt to parse the marker value as JSON
-	var v interface{}
+	var v any
 	e := json.Unmarshal([]byte("{ "+text+" }"), &v)
 
 	if e != nil {
 		return nil, reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text "+text)
 	}
-	markerValue, ok := v.(map[string]interface{})
+	markerValue, ok := v.(map[string]any)
 	if !ok || len(markerValue) == 0 {
 		return nil, reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty")
 	}

@@ -544,7 +544,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 		return str
 	}
 	// caching of fs in trace to be replaces with non caching version
-	if str := strings.TrimSuffix(msg, "' does not exist according to earlier cached lookups."); str != msg {
+	if str, ok := strings.CutSuffix(msg, "' does not exist according to earlier cached lookups."); ok {
 		file := strings.TrimPrefix(str, "File '")
 		if usePackageJsonCache {
 			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
@@ -556,7 +556,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 		}
 		return fmt.Sprintf("File '%s' does not exist.", file)
 	}
-	if str := strings.TrimSuffix(msg, "' exists according to earlier cached lookups."); str != msg {
+	if str, ok := strings.CutSuffix(msg, "' exists according to earlier cached lookups."); ok {
 		file := strings.TrimPrefix(str, "File '")
 		if usePackageJsonCache {
 			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
@@ -569,7 +569,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 		return fmt.Sprintf("Found 'package.json' at '%s'.", file)
 	}
 	if usePackageJsonCache {
-		if str := strings.TrimSuffix(msg, "' does not exist."); str != msg {
+		if str, ok := strings.CutSuffix(msg, "' does not exist."); ok {
 			file := strings.TrimPrefix(str, "File '")
 			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
 			if _, has := t.packageJsonCache[filePath]; !has {
@@ -579,7 +579,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 				return fmt.Sprintf("File '%s' does not exist according to earlier cached lookups.", file)
 			}
 		}
-		if str := strings.TrimPrefix(msg, "Found 'package.json' at '"); str != msg {
+		if str, ok := strings.CutPrefix(msg, "Found 'package.json' at '"); ok {
 			file := strings.TrimSuffix(str, "'.")
 			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
 			if _, has := t.packageJsonCache[filePath]; !has {
@@ -1033,7 +1033,7 @@ func splitOptionValues(t *testing.T, value string, option string) []string {
 	star := false
 	var includes []string
 	var excludes []string
-	for _, s := range strings.Split(value, ",") {
+	for s := range strings.SplitSeq(value, ",") {
 		s = strings.TrimSpace(s)
 		if len(s) == 0 {
 			continue

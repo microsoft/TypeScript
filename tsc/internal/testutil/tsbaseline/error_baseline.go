@@ -94,9 +94,9 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 		message := diagnosticwriter.FlattenDiagnosticMessage(diag, harnessNewLine)
 
 		var errLines []string
-		for _, line := range strings.Split(removeTestPathPrefixes(message, false), "\n") {
+		for line := range strings.SplitSeq(removeTestPathPrefixes(message, false), "\n") {
 			line = strings.TrimSuffix(line, "\r")
-			if len(line) < 0 {
+			if len(line) == 0 {
 				continue
 			}
 			out := fmt.Sprintf("!!! %s TS%d: %s", diag.Category().Name(), diag.Code(), line)
