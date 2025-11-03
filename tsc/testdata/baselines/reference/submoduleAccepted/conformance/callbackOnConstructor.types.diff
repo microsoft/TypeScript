@@ -6,15 +6,8 @@
  var ooscope2 = s => s.length > 0
 ->ooscope2 : (name: string) => boolean | number | string | undefined
 ->s => s.length > 0 : (s: string) => string | number | boolean
-->s : string
 +>ooscope2 : ValueGetter_2
-+>s => s.length > 0 : (s: any) => boolean
-+>s : any
++>s => s.length > 0 : (s: string) => boolean
+ >s : string
  >s.length > 0 : boolean
-->s.length : number
-->s : string
-->length : number
-+>s.length : any
-+>s : any
-+>length : any
- >0 : 0
+ >s.length : number

@@ -1,14 +1,20 @@
+bug25104.js(1,7): error TS2300: Duplicate identifier 'C'.
 bug25104.js(3,19): error TS1005: '}' expected.
+bug25104.js(4,26): error TS2300: Duplicate identifier 'C'.
 bug25104.js(6,18): error TS1005: '}' expected.
 
 
-==== bug25104.js (2 errors) ====
+==== bug25104.js (4 errors) ====
     class C {
+          ~
+!!! error TS2300: Duplicate identifier 'C'.
         /**
          * @typedef {C~A} C~B
                       ~
 !!! error TS1005: '}' expected.
          * @typedef {object} C~A
+                             ~
+!!! error TS2300: Duplicate identifier 'C'.
          */
         /** @param {C~A} o */
                      ~

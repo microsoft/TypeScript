@@ -1,7 +1,9 @@
+templateTagOnClasses.js(7,23): error TS2304: Cannot find name 'T'.
+templateTagOnClasses.js(7,29): error TS2304: Cannot find name 'T'.
 templateTagOnClasses.js(25,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
-==== templateTagOnClasses.js (1 errors) ====
+==== templateTagOnClasses.js (3 errors) ====
     /**
      * @template T
      * @typedef {(t: T) => T} Id
@@ -9,6 +11,10 @@ templateTagOnClasses.js(25,1): error TS2322: Type 'boolean' is not assignable to
     /** @template T */
     class Foo {
         /** @typedef {(t: T) => T} Id2 */
+                          ~
+!!! error TS2304: Cannot find name 'T'.
+                                ~
+!!! error TS2304: Cannot find name 'T'.
         /** @param {T} x */
         constructor (x) {
             this.a = x

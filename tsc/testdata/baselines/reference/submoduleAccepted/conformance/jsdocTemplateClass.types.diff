@@ -1,0 +1,20 @@
+--- old.jsdocTemplateClass.types
++++ new.jsdocTemplateClass.types
+@@= skipped -28, +28 lines =@@
+      * @return {T}
+      */
+     foo(x, y, alpha) {
+->foo : (x: T, y: Id<T>, alpha: (t: T) => T) => T
++>foo : (x: T, y: Id<T>, alpha: Id2) => T
+ >x : T
+ >y : Id<T>
+->alpha : (t: T) => T
++>alpha : Id2
+
+         return alpha(y(x))
+ >alpha(y(x)) : T
+->alpha : (t: T) => T
++>alpha : Id2
+ >y(x) : T
+ >y : Id<T>
+ >x : T

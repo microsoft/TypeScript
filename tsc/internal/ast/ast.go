@@ -4845,6 +4845,10 @@ func IsImportDeclaration(node *Node) bool {
 	return node.Kind == KindImportDeclaration
 }
 
+func IsJSImportDeclaration(node *Node) bool {
+	return node.Kind == KindJSImportDeclaration
+}
+
 func IsImportDeclarationOrJSImportDeclaration(node *Node) bool {
 	return node.Kind == KindImportDeclaration || node.Kind == KindJSImportDeclaration
 }

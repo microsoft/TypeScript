@@ -20,11 +20,11 @@ export class Preferences {
 /** @type {ValueGetter_2} */
 var ooscope2 = s => s.length > 0
 >ooscope2 : ValueGetter_2
->s => s.length > 0 : (s: any) => boolean
->s : any
+>s => s.length > 0 : (s: string) => boolean
+>s : string
 >s.length > 0 : boolean
->s.length : any
->s : any
->length : any
+>s.length : number
+>s : string
+>length : number
 >0 : 0
 

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/typedefHoisting.ts] ////
+
+=== x.js ===
+class C {
+>C : C
+
+    /** @import {Bar} from "./y" */
+    /** @typedef {Bar[]} Bars */
+    /** @type {Bars} */
+    foo = ["abc", "def"]
+>foo : Bars
+>["abc", "def"] : string[]
+>"abc" : "abc"
+>"def" : "def"
+
+    bar(/** @type {Bar} */ x) {
+>bar : (x: string) => string
+>x : string
+
+        return x
+>x : string
+    }
+}
+
+=== y.js ===
+
+/** @typedef {string} Bar */
+export {}
+

@@ -20,5 +20,7 @@ export class Preferences {
 var ooscope2 = s => s.length > 0
 >ooscope2 : Symbol(ooscope2, Decl(callbackOnConstructor.js, 12, 3))
 >s : Symbol(s, Decl(callbackOnConstructor.js, 12, 14))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(callbackOnConstructor.js, 12, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
