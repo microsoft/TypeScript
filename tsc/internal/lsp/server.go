@@ -800,11 +800,7 @@ func (s *Server) handleSetTrace(ctx context.Context, params *lsproto.SetTracePar
 }
 
 func (s *Server) handleDocumentDiagnostic(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
-	var diagnosticClientCapabilities *lsproto.DiagnosticClientCapabilities
-	if s.initializeParams != nil && s.initializeParams.Capabilities != nil && s.initializeParams.Capabilities.TextDocument != nil {
-		diagnosticClientCapabilities = s.initializeParams.Capabilities.TextDocument.Diagnostic
-	}
-	return ls.ProvideDiagnostics(ctx, params.TextDocument.Uri, diagnosticClientCapabilities)
+	return ls.ProvideDiagnostics(ctx, params.TextDocument.Uri, getDiagnosticClientCapabilities(s.initializeParams))
 }
 
 func (s *Server) handleHover(ctx context.Context, ls *ls.LanguageService, params *lsproto.HoverParams) (lsproto.HoverResponse, error) {
@@ -1036,4 +1032,29 @@ func getSignatureHelpDocumentationFormat(params *lsproto.InitializeParams) lspro
 	}
 	// Return the first (most preferred) format
 	return formats[0]
+}
+
+func getDiagnosticClientCapabilities(params *lsproto.InitializeParams) *lsproto.DiagnosticClientCapabilities {
+	if params == nil || params.Capabilities == nil || params.Capabilities.TextDocument == nil {
+		return nil
+	}
+
+	var caps lsproto.DiagnosticClientCapabilities
+	if params.Capabilities.TextDocument.Diagnostic != nil {
+		caps = *params.Capabilities.TextDocument.Diagnostic
+	}
+
+	// Some clients claim that push and pull diagnostics have different capabilities,
+	// including vscode-languageclient v9. Work around this by defaulting any missing
+	// pull diagnostic caps with the pull diagnostic equivalents.
+	//
+	// TODO: remove when we upgrade to vscode-languageclient v10, which fixes this issue.
+	if publish := params.Capabilities.TextDocument.PublishDiagnostics; publish != nil {
+		caps.RelatedInformation = core.Coalesce(caps.RelatedInformation, publish.RelatedInformation)
+		caps.TagSupport = core.Coalesce(caps.TagSupport, publish.TagSupport)
+		caps.CodeDescriptionSupport = core.Coalesce(caps.CodeDescriptionSupport, publish.CodeDescriptionSupport)
+		caps.DataSupport = core.Coalesce(caps.DataSupport, publish.DataSupport)
+	}
+
+	return &caps
 }
