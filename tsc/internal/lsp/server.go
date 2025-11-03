@@ -818,6 +818,7 @@ func (s *Server) handleSignatureHelp(ctx context.Context, languageService *ls.La
 		params.Position,
 		params.Context,
 		s.initializeParams.Capabilities.TextDocument.SignatureHelp,
+		getSignatureHelpDocumentationFormat(s.initializeParams),
 	)
 }
 
@@ -1015,6 +1016,21 @@ func getHoverContentFormat(params *lsproto.InitializeParams) lsproto.MarkupKind 
 		return lsproto.MarkupKindPlainText
 	}
 	formats := *params.Capabilities.TextDocument.Hover.ContentFormat
+	if len(formats) == 0 {
+		return lsproto.MarkupKindPlainText
+	}
+	// Return the first (most preferred) format
+	return formats[0]
+}
+
+func getSignatureHelpDocumentationFormat(params *lsproto.InitializeParams) lsproto.MarkupKind {
+	if params == nil || params.Capabilities == nil || params.Capabilities.TextDocument == nil || params.Capabilities.TextDocument.SignatureHelp == nil ||
+		params.Capabilities.TextDocument.SignatureHelp.SignatureInformation == nil ||
+		params.Capabilities.TextDocument.SignatureHelp.SignatureInformation.DocumentationFormat == nil {
+		// Default to plaintext if no preference specified
+		return lsproto.MarkupKindPlainText
+	}
+	formats := *params.Capabilities.TextDocument.SignatureHelp.SignatureInformation.DocumentationFormat
 	if len(formats) == 0 {
 		return lsproto.MarkupKindPlainText
 	}

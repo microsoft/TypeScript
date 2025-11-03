@@ -53,21 +53,36 @@
 //                   ^
 // | ----------------------------------------------------------------------
 // | Foo(**value: number**): Foo
+// | This is the constructor.
+// | 
+// | *@myjsdoctag* — this is a comment
+// | 
 // | ----------------------------------------------------------------------
 // Foo.method1();
 //             ^
 // | ----------------------------------------------------------------------
 // | method1(): void
+// | method1 documentation
+// | 
+// | *@mytag* — comment1 comment2
+// | 
 // | ----------------------------------------------------------------------
 // foo.method2();
 //             ^
 // | ----------------------------------------------------------------------
 // | method2(): void
+// | 
+// | 
+// | *@mytag*
 // | ----------------------------------------------------------------------
 // foo.method3();
 //             ^
 // | ----------------------------------------------------------------------
 // | method3(): number
+// | 
+// | 
+// | *@returns* — a value
+// | 
 // | ----------------------------------------------------------------------
 // foo.method4();
 // foo.property1;
@@ -89,6 +104,10 @@
       "signatures": [
         {
           "label": "Foo(value: number): Foo",
+          "documentation": {
+            "kind": "markdown",
+            "value": "This is the constructor.\n\n*@myjsdoctag* — this is a comment\n"
+          },
           "parameters": [
             {
               "label": "value: number"
@@ -114,6 +133,10 @@
       "signatures": [
         {
           "label": "method1(): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "method1 documentation\n\n*@mytag* — comment1 comment2\n"
+          },
           "parameters": []
         }
       ],
@@ -135,6 +158,10 @@
       "signatures": [
         {
           "label": "method2(): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@mytag*"
+          },
           "parameters": []
         }
       ],
@@ -156,6 +183,10 @@
       "signatures": [
         {
           "label": "method3(): number",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@returns* — a value\n"
+          },
           "parameters": []
         }
       ],

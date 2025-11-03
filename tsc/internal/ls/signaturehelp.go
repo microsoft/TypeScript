@@ -44,6 +44,7 @@ func (l *LanguageService) ProvideSignatureHelp(
 	position lsproto.Position,
 	context *lsproto.SignatureHelpContext,
 	clientOptions *lsproto.SignatureHelpClientCapabilities,
+	docFormat lsproto.MarkupKind,
 ) (lsproto.SignatureHelpResponse, error) {
 	program, sourceFile := l.getProgramAndFile(documentURI)
 	items := l.GetSignatureHelpItems(
@@ -52,7 +53,8 @@ func (l *LanguageService) ProvideSignatureHelp(
 		program,
 		sourceFile,
 		context,
-		clientOptions)
+		clientOptions,
+		docFormat)
 	return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
 }
 
@@ -63,6 +65,7 @@ func (l *LanguageService) GetSignatureHelpItems(
 	sourceFile *ast.SourceFile,
 	context *lsproto.SignatureHelpContext,
 	clientOptions *lsproto.SignatureHelpClientCapabilities,
+	docFormat lsproto.MarkupKind,
 ) *lsproto.SignatureHelp {
 	typeChecker, done := program.GetTypeCheckerForFile(ctx, sourceFile)
 	defer done()
@@ -140,7 +143,7 @@ func (l *LanguageService) GetSignatureHelpItems(
 
 	// return typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
 	if candidateInfo.candidateInfo != nil {
-		return createSignatureHelpItems(candidateInfo.candidateInfo.candidates, candidateInfo.candidateInfo.resolvedSignature, argumentInfo, sourceFile, typeChecker, onlyUseSyntacticOwners, clientOptions)
+		return l.createSignatureHelpItems(candidateInfo.candidateInfo.candidates, candidateInfo.candidateInfo.resolvedSignature, argumentInfo, sourceFile, typeChecker, onlyUseSyntacticOwners, clientOptions, docFormat)
 	}
 	return createTypeHelpItems(candidateInfo.typeInfo, argumentInfo, sourceFile, clientOptions, typeChecker)
 }
@@ -202,7 +205,7 @@ func getTypeHelpItem(symbol *ast.Symbol, typeParameter []*checker.Type, enclosin
 	}
 }
 
-func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature *checker.Signature, argumentInfo *argumentListInfo, sourceFile *ast.SourceFile, c *checker.Checker, useFullPrefix bool, clientOptions *lsproto.SignatureHelpClientCapabilities) *lsproto.SignatureHelp {
+func (l *LanguageService) createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature *checker.Signature, argumentInfo *argumentListInfo, sourceFile *ast.SourceFile, c *checker.Checker, useFullPrefix bool, clientOptions *lsproto.SignatureHelpClientCapabilities, docFormat lsproto.MarkupKind) *lsproto.SignatureHelp {
 	enclosingDeclaration := getEnclosingDeclarationFromInvocation(argumentInfo.invocation)
 	if enclosingDeclaration == nil {
 		return nil
@@ -223,7 +226,7 @@ func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature
 	}
 	items := make([][]signatureInformation, len(candidates))
 	for i, candidateSignature := range candidates {
-		items[i] = getSignatureHelpItem(candidateSignature, argumentInfo.isTypeParameterList, callTargetDisplayParts.String(), enclosingDeclaration, sourceFile, c)
+		items[i] = l.getSignatureHelpItem(candidateSignature, argumentInfo.isTypeParameterList, callTargetDisplayParts.String(), enclosingDeclaration, sourceFile, c, docFormat)
 	}
 
 	selectedItemIndex := 0
@@ -262,9 +265,18 @@ func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature
 		for j, param := range item.Parameters {
 			parameters[j] = param.parameterInfo
 		}
+		var documentation *lsproto.StringOrMarkupContent
+		if item.Documentation != nil {
+			documentation = &lsproto.StringOrMarkupContent{
+				MarkupContent: &lsproto.MarkupContent{
+					Kind:  docFormat,
+					Value: *item.Documentation,
+				},
+			}
+		}
 		signatureInformation[i] = &lsproto.SignatureInformation{
 			Label:         item.Label,
-			Documentation: nil,
+			Documentation: documentation,
 			Parameters:    &parameters,
 		}
 	}
@@ -291,7 +303,7 @@ func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature
 	return help
 }
 
-func getSignatureHelpItem(candidate *checker.Signature, isTypeParameterList bool, callTargetSymbol string, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, c *checker.Checker) []signatureInformation {
+func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isTypeParameterList bool, callTargetSymbol string, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, c *checker.Checker, docFormat lsproto.MarkupKind) []signatureInformation {
 	var infos []*signatureHelpItemInfo
 	if isTypeParameterList {
 		infos = itemInfoForTypeParameters(candidate, c, enclosingDeclaration, sourceFile)
@@ -301,6 +313,15 @@ func getSignatureHelpItem(candidate *checker.Signature, isTypeParameterList bool
 
 	suffixDisplayParts := returnTypeToDisplayParts(candidate, c)
 
+	// Generate documentation from the signature's declaration
+	var documentation *string
+	if declaration := candidate.Declaration(); declaration != nil {
+		doc := l.getDocumentationFromDeclaration(c, declaration, docFormat)
+		if doc != "" {
+			documentation = &doc
+		}
+	}
+
 	result := make([]signatureInformation, len(infos))
 	for i, info := range infos {
 		var display strings.Builder
@@ -309,7 +330,7 @@ func getSignatureHelpItem(candidate *checker.Signature, isTypeParameterList bool
 		display.WriteString(suffixDisplayParts)
 		result[i] = signatureInformation{
 			Label:         display.String(),
-			Documentation: nil,
+			Documentation: documentation,
 			Parameters:    info.parameters,
 			IsVariadic:    info.isVariadic,
 		}

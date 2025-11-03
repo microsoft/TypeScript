@@ -11,18 +11,70 @@
 //    ^
 // | ----------------------------------------------------------------------
 // | f1(**p1: string**, p2: string, p3?: string, p4?: string): void
+// | 
+// | 
+// | *@param* `p1` - A string param
+// | 
+// | 
+// | *@param* `p2` - An optional param
+// | 
+// | 
+// | *@param* `p3` - Another optional param
+// | 
+// | 
+// | *@param* `p4` - An optional param with a default value
+// | 
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
 // | f1(p1: string, **p2: string**, p3?: string, p4?: string): void
+// | 
+// | 
+// | *@param* `p1` - A string param
+// | 
+// | 
+// | *@param* `p2` - An optional param
+// | 
+// | 
+// | *@param* `p3` - Another optional param
+// | 
+// | 
+// | *@param* `p4` - An optional param with a default value
+// | 
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
 // | f1(p1: string, p2: string, **p3?: string**, p4?: string): void
+// | 
+// | 
+// | *@param* `p1` - A string param
+// | 
+// | 
+// | *@param* `p2` - An optional param
+// | 
+// | 
+// | *@param* `p3` - Another optional param
+// | 
+// | 
+// | *@param* `p4` - An optional param with a default value
+// | 
 // | ----------------------------------------------------------------------
 //                         ^
 // | ----------------------------------------------------------------------
 // | f1(p1: string, p2: string, p3?: string, **p4?: string**): void
+// | 
+// | 
+// | *@param* `p1` - A string param
+// | 
+// | 
+// | *@param* `p2` - An optional param
+// | 
+// | 
+// | *@param* `p3` - Another optional param
+// | 
+// | 
+// | *@param* `p4` - An optional param with a default value
+// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -39,6 +91,10 @@
       "signatures": [
         {
           "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@param* `p1` - A string param\n\n\n*@param* `p2` - An optional param\n\n\n*@param* `p3` - Another optional param\n\n\n*@param* `p4` - An optional param with a default value\n"
+          },
           "parameters": [
             {
               "label": "p1: string"
@@ -73,6 +129,10 @@
       "signatures": [
         {
           "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@param* `p1` - A string param\n\n\n*@param* `p2` - An optional param\n\n\n*@param* `p3` - Another optional param\n\n\n*@param* `p4` - An optional param with a default value\n"
+          },
           "parameters": [
             {
               "label": "p1: string"
@@ -107,6 +167,10 @@
       "signatures": [
         {
           "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@param* `p1` - A string param\n\n\n*@param* `p2` - An optional param\n\n\n*@param* `p3` - Another optional param\n\n\n*@param* `p4` - An optional param with a default value\n"
+          },
           "parameters": [
             {
               "label": "p1: string"
@@ -141,6 +205,10 @@
       "signatures": [
         {
           "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@param* `p1` - A string param\n\n\n*@param* `p2` - An optional param\n\n\n*@param* `p3` - Another optional param\n\n\n*@param* `p4` - An optional param with a default value\n"
+          },
           "parameters": [
             {
               "label": "p1: string"

@@ -297,6 +297,18 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	if capabilitiesWithDefaults.TextDocument.Hover == nil {
 		capabilitiesWithDefaults.TextDocument.Hover = defaultHoverCapabilities
 	}
+	if capabilitiesWithDefaults.TextDocument.SignatureHelp == nil {
+		capabilitiesWithDefaults.TextDocument.SignatureHelp = &lsproto.SignatureHelpClientCapabilities{
+			SignatureInformation: &lsproto.ClientSignatureInformationOptions{
+				DocumentationFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
+				ParameterInformation: &lsproto.ClientSignatureParameterInformationOptions{
+					LabelOffsetSupport: ptrTrue,
+				},
+				ActiveParameterSupport: ptrTrue,
+			},
+			ContextSupport: ptrTrue,
+		}
+	}
 	return &capabilitiesWithDefaults
 }
 

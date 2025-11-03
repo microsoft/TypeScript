@@ -59,59 +59,64 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	if quickInfo == "" {
 		return "", ""
 	}
+	return quickInfo, l.getDocumentationFromDeclaration(c, declaration, contentFormat)
+}
+
+func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, declaration *ast.Node, contentFormat lsproto.MarkupKind) string {
+	if declaration == nil {
+		return ""
+	}
 	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 	var b strings.Builder
-	if declaration != nil {
-		if jsdoc := getJSDocOrTag(declaration); jsdoc != nil && !containsTypedefTag(jsdoc) {
-			l.writeComments(&b, c, jsdoc.Comments(), isMarkdown)
-			if jsdoc.Kind == ast.KindJSDoc {
-				if tags := jsdoc.AsJSDoc().Tags; tags != nil {
-					for _, tag := range tags.Nodes {
-						if tag.Kind == ast.KindJSDocTypeTag {
-							continue
+	if jsdoc := getJSDocOrTag(declaration); jsdoc != nil && !containsTypedefTag(jsdoc) {
+		l.writeComments(&b, c, jsdoc.Comments(), isMarkdown)
+		if jsdoc.Kind == ast.KindJSDoc {
+			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+				for _, tag := range tags.Nodes {
+					if tag.Kind == ast.KindJSDocTypeTag {
+						continue
+					}
+					b.WriteString("\n\n")
+					if isMarkdown {
+						b.WriteString("*@")
+						b.WriteString(tag.TagName().Text())
+						b.WriteString("*")
+					} else {
+						b.WriteString("@")
+						b.WriteString(tag.TagName().Text())
+					}
+					switch tag.Kind {
+					case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
+						writeOptionalEntityName(&b, tag.Name())
+					case ast.KindJSDocAugmentsTag:
+						writeOptionalEntityName(&b, tag.AsJSDocAugmentsTag().ClassName)
+					case ast.KindJSDocSeeTag:
+						writeOptionalEntityName(&b, tag.AsJSDocSeeTag().NameExpression)
+					case ast.KindJSDocTemplateTag:
+						for i, tp := range tag.TypeParameters() {
+							if i != 0 {
+								b.WriteString(",")
+							}
+							writeOptionalEntityName(&b, tp.Name())
 						}
-						b.WriteString("\n\n")
-						if isMarkdown {
-							b.WriteString("*@")
-							b.WriteString(tag.TagName().Text())
-							b.WriteString("*")
+					}
+					comments := tag.Comments()
+					if len(comments) != 0 {
+						if commentHasPrefix(comments, "```") {
+							b.WriteString("\n")
 						} else {
-							b.WriteString("@")
-							b.WriteString(tag.TagName().Text())
-						}
-						switch tag.Kind {
-						case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
-							writeOptionalEntityName(&b, tag.Name())
-						case ast.KindJSDocAugmentsTag:
-							writeOptionalEntityName(&b, tag.AsJSDocAugmentsTag().ClassName)
-						case ast.KindJSDocSeeTag:
-							writeOptionalEntityName(&b, tag.AsJSDocSeeTag().NameExpression)
-						case ast.KindJSDocTemplateTag:
-							for i, tp := range tag.TypeParameters() {
-								if i != 0 {
-									b.WriteString(",")
-								}
-								writeOptionalEntityName(&b, tp.Name())
+							b.WriteString(" ")
+							if !commentHasPrefix(comments, "-") {
+								b.WriteString("— ")
 							}
 						}
-						comments := tag.Comments()
-						if len(comments) != 0 {
-							if commentHasPrefix(comments, "```") {
-								b.WriteString("\n")
-							} else {
-								b.WriteString(" ")
-								if !commentHasPrefix(comments, "-") {
-									b.WriteString("— ")
-								}
-							}
-							l.writeComments(&b, c, comments, isMarkdown)
-						}
+						l.writeComments(&b, c, comments, isMarkdown)
 					}
 				}
 			}
 		}
 	}
-	return quickInfo, b.String()
+	return b.String()
 }
 
 func formatQuickInfo(quickInfo string) string {
