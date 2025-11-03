@@ -27,6 +27,7 @@ export var x: b.I;
 
 x.foo();
 >x.foo() : any
+>        : ^^^
 >x.foo : () => any
 >      : ^^^^^^^^^
 >x : b.I

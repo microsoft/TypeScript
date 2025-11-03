@@ -345,7 +345,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 35
             },
-            "text": "Argument for '--moduleResolution' option must be: 'node10', 'classic', 'node16', 'nodenext', 'bundler'.",
+            "text": "Argument for '--moduleResolution' option must be: 'node16', 'nodenext', 'bundler'.",
             "code": 6046,
             "category": "error",
             "fileName": "/user/username/projects/project/jsconfig.json"

@@ -11,6 +11,7 @@ const Foo = (props: any) => null;
 >(props: any) => null : (props: any) => any
 >                     : ^     ^^   ^^^^^^^^
 >props : any
+>      : ^^^
 
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => any

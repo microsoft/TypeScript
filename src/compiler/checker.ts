@@ -23190,29 +23190,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // the `-?` modifier in a mapped type (where, no matter how the inputs are related, the outputs still might not be)
                         related = relation === identityRelation ? isRelatedTo(s, t, RecursionFlags.Both, /*reportErrors*/ false) : compareTypesIdentical(s, t);
                     }
-                    else if (variance === VarianceFlags.Covariant) {
-                        related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-                    }
-                    else if (variance === VarianceFlags.Contravariant) {
-                        related = isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-                    }
-                    else if (variance === VarianceFlags.Bivariant) {
-                        // In the bivariant case we first compare contravariantly without reporting
-                        // errors. Then, if that doesn't succeed, we compare covariantly with error
-                        // reporting. Thus, error elaboration will be based on the the covariant check,
-                        // which is generally easier to reason about.
-                        related = isRelatedTo(t, s, RecursionFlags.Both, /*reportErrors*/ false);
-                        if (!related) {
+                    else {
+                        // Propagate unreliable variance flag
+                        if (inVarianceComputation && varianceFlags & VarianceFlags.Unreliable) {
+                            instantiateType(s, reportUnreliableMapper);
+                        }
+                        if (variance === VarianceFlags.Covariant) {
                             related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
                         }
-                    }
-                    else {
-                        // In the invariant case we first compare covariantly, and only when that
-                        // succeeds do we proceed to compare contravariantly. Thus, error elaboration
-                        // will typically be based on the covariant check.
-                        related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-                        if (related) {
-                            related &= isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        else if (variance === VarianceFlags.Contravariant) {
+                            related = isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        }
+                        else if (variance === VarianceFlags.Bivariant) {
+                            // In the bivariant case we first compare contravariantly without reporting
+                            // errors. Then, if that doesn't succeed, we compare covariantly with error
+                            // reporting. Thus, error elaboration will be based on the the covariant check,
+                            // which is generally easier to reason about.
+                            related = isRelatedTo(t, s, RecursionFlags.Both, /*reportErrors*/ false);
+                            if (!related) {
+                                related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            }
+                        }
+                        else {
+                            // In the invariant case we first compare covariantly, and only when that
+                            // succeeds do we proceed to compare contravariantly. Thus, error elaboration
+                            // will typically be based on the covariant check.
+                            related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            if (related) {
+                                related &= isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            }
                         }
                     }
                     if (!related) {
@@ -29739,7 +29745,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!hasDefaultClause) {
                 return caseType;
             }
-            const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, t.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(t)))));
+            const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, t.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(t)), (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))));
             return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
         }
 
@@ -33858,7 +33864,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
         for (const right of getPropertiesOfType(type)) {
-            if (!(right.flags & SymbolFlags.Optional)) {
+            if (!(right.flags & SymbolFlags.Optional) && !(getCheckFlags(right) & CheckFlags.Partial)) {
                 const left = props.get(right.escapedName);
                 if (left) {
                     const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
@@ -39094,6 +39100,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let fallbackReturnType: Type = voidType;
         if (func.body.kind !== SyntaxKind.Block) { // Async or normal arrow function
             returnType = checkExpressionCached(func.body, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
+            if (isConstContext(func.body)) {
+                returnType = getRegularTypeOfLiteralType(returnType);
+            }
             if (isAsync) {
                 // From within an async function you can return either a non-promise value or a promise. Any
                 // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -39125,7 +39134,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (types.length === 0) {
                 // For an async function, the return type will not be void/undefined, but rather a Promise for void/undefined.
                 const contextualReturnType = getContextualReturnType(func, /*contextFlags*/ undefined);
-                const returnType = contextualReturnType && (unwrapReturnType(contextualReturnType, functionFlags) || voidType).flags & TypeFlags.Undefined ? undefinedType : voidType;
+                const returnType = contextualReturnType && someType(unwrapReturnType(contextualReturnType, functionFlags) || voidType, t => !!(t.flags & TypeFlags.Undefined)) ? undefinedType : voidType;
                 return functionFlags & FunctionFlags.Async ? createPromiseReturnType(func, returnType) : // Async function
                     returnType; // Normal function
             }
@@ -39205,7 +39214,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
-            const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            if (yieldExpression.expression && isConstContext(yieldExpression.expression)) {
+                yieldExpressionType = getRegularTypeOfLiteralType(yieldExpressionType);
+            }
             pushIfUnique(yieldTypes, getYieldedTypeOfYieldExpression(yieldExpression, yieldExpressionType, anyType, isAsync));
             let nextType: Type | undefined;
             if (yieldExpression.asteriskToken) {
@@ -39332,7 +39344,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (type.flags & TypeFlags.Never) {
                     hasReturnOfTypeNever = true;
                 }
-                pushIfUnique(aggregatedTypes, type);
+                pushIfUnique(aggregatedTypes, isConstContext(expr) ? getRegularTypeOfLiteralType(type) : type);
             }
             else {
                 hasReturnWithNoExpression = true;
@@ -45924,7 +45936,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let noCache = false;
 
         if (use & IterationUse.AllowsAsyncIterablesFlag) {
-            const iterationTypes = getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
+            let iterationTypes = getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
                 getIterationTypesOfIterableFast(type, asyncIterationTypesResolver);
             if (iterationTypes) {
                 if (iterationTypes === noIterationTypes && errorNode) {
@@ -45936,6 +45948,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getAsyncFromSyncIterationTypes(iterationTypes, errorNode) :
                         iterationTypes;
                 }
+            }
+            iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
+            if (iterationTypes !== noIterationTypes) {
+                return iterationTypes;
             }
         }
 
@@ -45960,17 +45976,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-        }
 
-        if (use & IterationUse.AllowsAsyncIterablesFlag) {
-            const iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
-            if (iterationTypes !== noIterationTypes) {
-                return iterationTypes;
-            }
-        }
-
-        if (use & IterationUse.AllowsSyncIterablesFlag) {
-            let iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
+            iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode, errorOutputContainer, noCache);
             if (iterationTypes !== noIterationTypes) {
                 if (use & IterationUse.AllowsAsyncIterablesFlag) {
                     iterationTypes = getAsyncFromSyncIterationTypes(iterationTypes, errorNode);
