@@ -808,7 +808,7 @@ func (s *Server) handleDocumentDiagnostic(ctx context.Context, ls *ls.LanguageSe
 }
 
 func (s *Server) handleHover(ctx context.Context, ls *ls.LanguageService, params *lsproto.HoverParams) (lsproto.HoverResponse, error) {
-	return ls.ProvideHover(ctx, params.TextDocument.Uri, params.Position)
+	return ls.ProvideHover(ctx, params.TextDocument.Uri, params.Position, getHoverContentFormat(s.initializeParams))
 }
 
 func (s *Server) handleSignatureHelp(ctx context.Context, languageService *ls.LanguageService, params *lsproto.SignatureHelpParams) (lsproto.SignatureHelpResponse, error) {
@@ -836,7 +836,7 @@ func (s *Server) handleReferences(ctx context.Context, ls *ls.LanguageService, p
 
 func (s *Server) handleImplementations(ctx context.Context, ls *ls.LanguageService, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
 	// goToImplementation
-	return ls.ProvideImplementations(ctx, params)
+	return ls.ProvideImplementations(ctx, params, getImplementationClientSupportsLink(s.initializeParams))
 }
 
 func (s *Server) handleCompletion(ctx context.Context, languageService *ls.LanguageService, params *lsproto.CompletionParams) (lsproto.CompletionResponse, error) {
@@ -903,7 +903,7 @@ func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.Work
 }
 
 func (s *Server) handleDocumentSymbol(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentSymbolParams) (lsproto.DocumentSymbolResponse, error) {
-	return ls.ProvideDocumentSymbols(ctx, params.TextDocument.Uri)
+	return ls.ProvideDocumentSymbols(ctx, params.TextDocument.Uri, getDocumentSymbolClientSupportsHierarchical(s.initializeParams))
 }
 
 func (s *Server) handleRename(ctx context.Context, ls *ls.LanguageService, params *lsproto.RenameParams) (lsproto.RenameResponse, error) {
@@ -991,4 +991,33 @@ func getTypeDefinitionClientSupportsLink(params *lsproto.InitializeParams) bool 
 		return false
 	}
 	return ptrIsTrue(params.Capabilities.TextDocument.TypeDefinition.LinkSupport)
+}
+
+func getImplementationClientSupportsLink(params *lsproto.InitializeParams) bool {
+	if params == nil || params.Capabilities == nil || params.Capabilities.TextDocument == nil ||
+		params.Capabilities.TextDocument.Implementation == nil {
+		return false
+	}
+	return ptrIsTrue(params.Capabilities.TextDocument.Implementation.LinkSupport)
+}
+
+func getDocumentSymbolClientSupportsHierarchical(params *lsproto.InitializeParams) bool {
+	if params == nil || params.Capabilities == nil || params.Capabilities.TextDocument == nil ||
+		params.Capabilities.TextDocument.DocumentSymbol == nil {
+		return false
+	}
+	return ptrIsTrue(params.Capabilities.TextDocument.DocumentSymbol.HierarchicalDocumentSymbolSupport)
+}
+
+func getHoverContentFormat(params *lsproto.InitializeParams) lsproto.MarkupKind {
+	if params == nil || params.Capabilities == nil || params.Capabilities.TextDocument == nil || params.Capabilities.TextDocument.Hover == nil || params.Capabilities.TextDocument.Hover.ContentFormat == nil {
+		// Default to plaintext if no preference specified
+		return lsproto.MarkupKindPlainText
+	}
+	formats := *params.Capabilities.TextDocument.Hover.ContentFormat
+	if len(formats) == 0 {
+		return lsproto.MarkupKindPlainText
+	}
+	// Return the first (most preferred) format
+	return formats[0]
 }

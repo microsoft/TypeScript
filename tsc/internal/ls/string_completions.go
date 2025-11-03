@@ -670,6 +670,7 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 	file *ast.SourceFile,
 	position int,
 	contextToken *ast.Node,
+	docFormat lsproto.MarkupKind,
 ) *lsproto.CompletionItem {
 	if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
 		return item
@@ -683,7 +684,7 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 	if completions == nil {
 		return item
 	}
-	return l.stringLiteralCompletionDetails(item, name, contextToken, completions, file, checker)
+	return l.stringLiteralCompletionDetails(item, name, contextToken, completions, file, checker, docFormat)
 }
 
 func (l *LanguageService) stringLiteralCompletionDetails(
@@ -693,27 +694,28 @@ func (l *LanguageService) stringLiteralCompletionDetails(
 	completion *stringLiteralCompletions,
 	file *ast.SourceFile,
 	checker *checker.Checker,
+	docFormat lsproto.MarkupKind,
 ) *lsproto.CompletionItem {
 	switch {
 	case completion.fromPaths != nil:
 		pathCompletions := completion.fromPaths
 		for _, pathCompletion := range pathCompletions {
 			if pathCompletion.name == name {
-				return createCompletionDetails(item, name, "" /*documentation*/)
+				return createCompletionDetails(item, name, "" /*documentation*/, docFormat)
 			}
 		}
 	case completion.fromProperties != nil:
 		properties := completion.fromProperties
 		for _, symbol := range properties.symbols {
 			if symbol.Name == name {
-				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, nil /*actions*/)
+				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, nil /*actions*/, docFormat)
 			}
 		}
 	case completion.fromTypes != nil:
 		types := completion.fromTypes
 		for _, t := range types.types {
 			if t.AsLiteralType().Value().(string) == name {
-				return createCompletionDetails(item, name, "" /*documentation*/)
+				return createCompletionDetails(item, name, "" /*documentation*/, docFormat)
 			}
 		}
 	}

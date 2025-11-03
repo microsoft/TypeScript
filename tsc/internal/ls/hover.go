@@ -18,7 +18,7 @@ const (
 	typeFormatFlags   = checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope
 )
 
-func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) (lsproto.HoverResponse, error) {
+func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position, contentFormat lsproto.MarkupKind) (lsproto.HoverResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 	node := astnav.GetTouchingPropertyName(file, int(l.converters.LineAndCharacterToPosition(file, position)))
 	if node.Kind == ast.KindSourceFile {
@@ -28,18 +28,25 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
 	rangeNode := getNodeForQuickInfo(node)
-	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), rangeNode)
+	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), rangeNode, contentFormat)
 	if quickInfo == "" {
 		return lsproto.HoverOrNull{}, nil
 	}
 	hoverRange := l.getLspRangeOfNode(rangeNode, nil, nil)
 
+	var content string
+	if contentFormat == lsproto.MarkupKindMarkdown {
+		content = formatQuickInfo(quickInfo) + documentation
+	} else {
+		content = quickInfo + documentation
+	}
+
 	return lsproto.HoverOrNull{
 		Hover: &lsproto.Hover{
 			Contents: lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{
 				MarkupContent: &lsproto.MarkupContent{
-					Kind:  lsproto.MarkupKindMarkdown,
-					Value: formatQuickInfo(quickInfo) + documentation,
+					Kind:  contentFormat,
+					Value: content,
 				},
 			},
 			Range: hoverRange,
@@ -47,24 +54,31 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}, nil
 }
 
-func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, string) {
+func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind) (string, string) {
 	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, symbol, node)
 	if quickInfo == "" {
 		return "", ""
 	}
+	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 	var b strings.Builder
 	if declaration != nil {
 		if jsdoc := getJSDocOrTag(declaration); jsdoc != nil && !containsTypedefTag(jsdoc) {
-			l.writeComments(&b, c, jsdoc.Comments())
+			l.writeComments(&b, c, jsdoc.Comments(), isMarkdown)
 			if jsdoc.Kind == ast.KindJSDoc {
 				if tags := jsdoc.AsJSDoc().Tags; tags != nil {
 					for _, tag := range tags.Nodes {
 						if tag.Kind == ast.KindJSDocTypeTag {
 							continue
 						}
-						b.WriteString("\n\n*@")
-						b.WriteString(tag.TagName().Text())
-						b.WriteString("*")
+						b.WriteString("\n\n")
+						if isMarkdown {
+							b.WriteString("*@")
+							b.WriteString(tag.TagName().Text())
+							b.WriteString("*")
+						} else {
+							b.WriteString("@")
+							b.WriteString(tag.TagName().Text())
+						}
 						switch tag.Kind {
 						case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 							writeOptionalEntityName(&b, tag.Name())
@@ -90,7 +104,7 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 									b.WriteString("— ")
 								}
 							}
-							l.writeComments(&b, c, comments)
+							l.writeComments(&b, c, comments, isMarkdown)
 						}
 					}
 				}
@@ -425,24 +439,24 @@ func writeCode(b *strings.Builder, lang string, code string) {
 	b.WriteByte('\n')
 }
 
-func (l *LanguageService) writeComments(b *strings.Builder, c *checker.Checker, comments []*ast.Node) {
+func (l *LanguageService) writeComments(b *strings.Builder, c *checker.Checker, comments []*ast.Node, isMarkdown bool) {
 	for _, comment := range comments {
 		switch comment.Kind {
 		case ast.KindJSDocText:
 			b.WriteString(comment.Text())
 		case ast.KindJSDocLink, ast.KindJSDocLinkPlain:
-			l.writeJSDocLink(b, c, comment, false /*quote*/)
+			l.writeJSDocLink(b, c, comment, false /*quote*/, isMarkdown)
 		case ast.KindJSDocLinkCode:
-			l.writeJSDocLink(b, c, comment, true /*quote*/)
+			l.writeJSDocLink(b, c, comment, true /*quote*/, isMarkdown)
 		}
 	}
 }
 
-func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker, link *ast.Node, quote bool) {
+func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker, link *ast.Node, quote bool, isMarkdown bool) {
 	name := link.Name()
 	text := strings.Trim(link.Text(), " ")
 	if name == nil {
-		writeQuotedString(b, text, quote)
+		writeQuotedString(b, text, quote && isMarkdown)
 		return
 	}
 	if ast.IsIdentifier(name) && (name.Text() == "http" || name.Text() == "https") && strings.HasPrefix(text, "://") {
@@ -455,7 +469,16 @@ func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker,
 				linkText = linkUri
 			}
 		}
-		writeMarkdownLink(b, linkText, linkUri, quote)
+		if isMarkdown {
+			writeMarkdownLink(b, linkText, linkUri, quote)
+		} else {
+			writeQuotedString(b, linkText, false)
+			if linkText != linkUri {
+				b.WriteString(" (")
+				b.WriteString(linkUri)
+				b.WriteString(")")
+			}
+		}
 		return
 	}
 	declarations := getDeclarationsFromLocation(c, name)
@@ -469,11 +492,15 @@ func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker,
 		if linkText == "" {
 			linkText = getEntityNameString(name) + text[:prefixLen]
 		}
-		linkUri := fmt.Sprintf("%s#%d,%d-%d,%d", loc.Uri, loc.Range.Start.Line+1, loc.Range.Start.Character+1, loc.Range.End.Line+1, loc.Range.End.Character+1)
-		writeMarkdownLink(b, linkText, linkUri, quote)
+		if isMarkdown {
+			linkUri := fmt.Sprintf("%s#%d,%d-%d,%d", loc.Uri, loc.Range.Start.Line+1, loc.Range.Start.Character+1, loc.Range.End.Line+1, loc.Range.End.Character+1)
+			writeMarkdownLink(b, linkText, linkUri, quote)
+		} else {
+			writeQuotedString(b, linkText, false)
+		}
 		return
 	}
-	writeQuotedString(b, getEntityNameString(name)+" "+text, quote)
+	writeQuotedString(b, getEntityNameString(name)+" "+text, quote && isMarkdown)
 }
 
 func trimCommentPrefix(text string) string {

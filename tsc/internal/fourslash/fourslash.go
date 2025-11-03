@@ -240,6 +240,7 @@ var (
 			PreselectSupport:        ptrTrue,
 			LabelDetailsSupport:     ptrTrue,
 			InsertReplaceSupport:    ptrTrue,
+			DocumentationFormat:     &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
 		},
 		CompletionList: &lsproto.CompletionListCapabilities{
 			ItemDefaults: &[]string{"commitCharacters", "editRange"},
@@ -250,6 +251,9 @@ var (
 	}
 	defaultTypeDefinitionCapabilities = &lsproto.TypeDefinitionClientCapabilities{
 		LinkSupport: ptrTrue,
+	}
+	defaultHoverCapabilities = &lsproto.HoverClientCapabilities{
+		ContentFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
 	}
 )
 
@@ -289,6 +293,9 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	}
 	if capabilitiesWithDefaults.TextDocument.TypeDefinition == nil {
 		capabilitiesWithDefaults.TextDocument.TypeDefinition = defaultTypeDefinitionCapabilities
+	}
+	if capabilitiesWithDefaults.TextDocument.Hover == nil {
+		capabilitiesWithDefaults.TextDocument.Hover = defaultHoverCapabilities
 	}
 	return &capabilitiesWithDefaults
 }

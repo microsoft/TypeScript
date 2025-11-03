@@ -430,7 +430,7 @@ func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto
 	return lsproto.LocationsOrNull{Locations: &locations}, nil
 }
 
-func (l *LanguageService) ProvideImplementations(ctx context.Context, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
+func (l *LanguageService) ProvideImplementations(ctx context.Context, params *lsproto.ImplementationParams, clientSupportsLink bool) (lsproto.ImplementationResponse, error) {
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
@@ -452,6 +452,10 @@ func (l *LanguageService) ProvideImplementations(ctx context.Context, params *ls
 		}
 	}
 
+	if clientSupportsLink {
+		links := l.convertEntriesToLocationLinks(entries)
+		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{DefinitionLinks: &links}, nil
+	}
 	locations := l.convertEntriesToLocations(entries)
 	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}, nil
 }
@@ -552,6 +556,44 @@ func (l *LanguageService) convertEntriesToLocations(entries []*ReferenceEntry) [
 		}
 	}
 	return locations
+}
+
+func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntry) []*lsproto.LocationLink {
+	links := make([]*lsproto.LocationLink, len(entries))
+	for i, entry := range entries {
+		var targetSelectionRange, targetRange *lsproto.Range
+
+		// For entries with nodes, compute ranges directly from the node
+		if entry.node != nil {
+			sourceFile := ast.GetSourceFileOfNode(entry.node)
+			entry.fileName = sourceFile.FileName()
+
+			// Get the selection range (the actual reference)
+			selectionTextRange := getRangeOfNode(entry.node, sourceFile, nil /*endNode*/)
+			targetSelectionRange = l.createLspRangeFromRange(selectionTextRange, sourceFile)
+
+			// Get the context range (broader scope including declaration context)
+			contextNode := core.OrElse(getContextNode(entry.node), entry.node)
+			contextTextRange := toContextRange(&selectionTextRange, sourceFile, contextNode)
+			if contextTextRange != nil {
+				targetRange = l.createLspRangeFromRange(*contextTextRange, sourceFile)
+			} else {
+				targetRange = targetSelectionRange
+			}
+		} else {
+			// For range entries, use the pre-computed range
+			l.resolveEntry(entry)
+			targetSelectionRange = entry.textRange
+			targetRange = targetSelectionRange
+		}
+
+		links[i] = &lsproto.LocationLink{
+			TargetUri:            lsconv.FileNameToDocumentURI(entry.fileName),
+			TargetRange:          *targetRange,
+			TargetSelectionRange: *targetSelectionRange,
+		}
+	}
+	return links
 }
 
 func (l *LanguageService) mergeReferences(program *compiler.Program, referencesToMerge ...[]*SymbolAndEntries) []*SymbolAndEntries {
