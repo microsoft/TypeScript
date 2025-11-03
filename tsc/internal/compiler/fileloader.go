@@ -64,7 +64,6 @@ type processedFiles struct {
 	importHelpersImportSpecifiers map[tspath.Path]*ast.Node
 	libFiles                      map[tspath.Path]*LibFile
 	// List of present unsupported extensions
-	unsupportedExtensions                []string
 	sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
 	includeProcessor                     *includeProcessor
 	// if file was included using source file and its output is actually part of program
@@ -152,7 +151,6 @@ func processAllProgramFiles(
 	sourceFileMetaDatas := make(map[tspath.Path]ast.SourceFileMetaData, totalFileCount)
 	var jsxRuntimeImportSpecifiers map[tspath.Path]*jsxRuntimeImportSpecifier
 	var importHelpersImportSpecifiers map[tspath.Path]*ast.Node
-	var unsupportedExtensions []string
 	var sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
 	libFilesMap := make(map[tspath.Path]*LibFile, libFileCount)
 
@@ -217,10 +215,6 @@ func processAllProgramFiles(
 			}
 			importHelpersImportSpecifiers[path] = task.importHelpersImportSpecifier
 		}
-		extension := tspath.TryGetExtensionFromPath(file.FileName())
-		if slices.Contains(tspath.SupportedJSExtensionsFlat, extension) {
-			unsupportedExtensions = core.AppendIfUnique(unsupportedExtensions, extension)
-		}
 		if task.fromExternalLibrary {
 			sourceFilesFoundSearchingNodeModules.Add(path)
 		}
@@ -251,7 +245,6 @@ func processAllProgramFiles(
 		sourceFileMetaDatas:                  sourceFileMetaDatas,
 		jsxRuntimeImportSpecifiers:           jsxRuntimeImportSpecifiers,
 		importHelpersImportSpecifiers:        importHelpersImportSpecifiers,
-		unsupportedExtensions:                unsupportedExtensions,
 		sourceFilesFoundSearchingNodeModules: sourceFilesFoundSearchingNodeModules,
 		libFiles:                             libFilesMap,
 		missingFiles:                         missingFiles,

@@ -1605,12 +1605,6 @@ func (p *Program) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
 	return p.sourceFilesFoundSearchingNodeModules.Has(file.Path())
 }
 
-// UnsupportedExtensions returns a list of all present "unsupported" extensions,
-// e.g. extensions that are not yet supported by the port.
-func (p *Program) UnsupportedExtensions() []string {
-	return p.unsupportedExtensions
-}
-
 func (p *Program) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node) {
 	if result := p.jsxRuntimeImportSpecifiers[path]; result != nil {
 		return result.moduleReference, result.specifier
