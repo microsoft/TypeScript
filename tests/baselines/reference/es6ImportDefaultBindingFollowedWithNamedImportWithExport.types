@@ -24,11 +24,11 @@ export default {};
 >   : ^^
 
 === client.ts ===
-export import defaultBinding1, { } from "server";
+export import defaultBinding1, { } from "./server";
 >defaultBinding1 : {}
 >                : ^^
 
-export import defaultBinding2, { a } from "server";
+export import defaultBinding2, { a } from "./server";
 >defaultBinding2 : {}
 >                : ^^
 >a : number
@@ -40,7 +40,7 @@ export var x1: number = a;
 >a : number
 >  : ^^^^^^
 
-export import defaultBinding3, { a as b } from "server";
+export import defaultBinding3, { a as b } from "./server";
 >defaultBinding3 : {}
 >                : ^^
 >a : number
@@ -54,7 +54,7 @@ export var x1: number = b;
 >b : number
 >  : ^^^^^^
 
-export import defaultBinding4, { x, a as y } from "server";
+export import defaultBinding4, { x, a as y } from "./server";
 >defaultBinding4 : {}
 >                : ^^
 >x : number
@@ -76,7 +76,7 @@ export var x1: number = y;
 >y : number
 >  : ^^^^^^
 
-export import defaultBinding5, { x as z,  } from "server";
+export import defaultBinding5, { x as z,  } from "./server";
 >defaultBinding5 : {}
 >                : ^^
 >x : number
@@ -90,7 +90,7 @@ export var x1: number = z;
 >z : number
 >  : ^^^^^^
 
-export import defaultBinding6, { m,  } from "server";
+export import defaultBinding6, { m,  } from "./server";
 >defaultBinding6 : {}
 >                : ^^
 >m : number

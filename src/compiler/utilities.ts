@@ -1452,6 +1452,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2024: [
                 "waitAsync",
             ],
+            esnext: [
+                "pause",
+            ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
             es2017: [
@@ -1780,6 +1783,12 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "toSpliced",
                 "with",
             ],
+            esnext: [
+                "toBase64",
+                "setFromBase64",
+                "toHex",
+                "setFromHex",
+            ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
             es2022: [
@@ -1906,6 +1915,12 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         Error: new Map(Object.entries({
             es2022: [
                 "cause",
+            ],
+        })),
+        Uint8ArrayConstructor: new Map(Object.entries({
+            esnext: [
+                "fromBase64",
+                "fromHex",
             ],
         })),
     }))
@@ -2648,7 +2663,13 @@ export function isSuperCall(n: Node): n is SuperCall {
 
 /** @internal */
 export function isImportCall(n: Node): n is ImportCall {
-    return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
+    if (n.kind !== SyntaxKind.CallExpression) return false;
+    const e = (n as CallExpression).expression;
+    return e.kind === SyntaxKind.ImportKeyword || (
+        isMetaProperty(e)
+        && e.keywordToken === SyntaxKind.ImportKeyword
+        && e.name.escapedText === "defer"
+    );
 }
 
 /** @internal */
@@ -3599,8 +3620,10 @@ export function isExpressionNode(node: Node): boolean {
         case SyntaxKind.JsxFragment:
         case SyntaxKind.YieldExpression:
         case SyntaxKind.AwaitExpression:
-        case SyntaxKind.MetaProperty:
             return true;
+        case SyntaxKind.MetaProperty:
+            // `import.defer` in `import.defer(...)` is not an expression
+            return !isImportCall(node.parent) || node.parent.expression !== node;
         case SyntaxKind.ExpressionWithTypeArguments:
             return !isHeritageClause(node.parent) && !isJSDocAugmentsTag(node.parent);
         case SyntaxKind.QualifiedName:
@@ -3811,6 +3834,20 @@ export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: No
 /** @internal */
 export function isBindingElementOfBareOrAccessedRequire(node: Node): node is BindingElementOfBareOrAccessedRequire {
     return isBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
+}
+
+/** @internal */
+export function getModuleSpecifierOfBareOrAccessedRequire(node: VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>): StringLiteralLike | undefined {
+    if (isVariableDeclarationInitializedToRequire(node)) {
+        return node.initializer.arguments[0];
+    }
+    if (isVariableDeclarationInitializedToBareOrAccessedRequire(node)) {
+        const leftmost = getLeftmostAccessExpression(node.initializer);
+        if (isRequireCall(leftmost, /*requireStringLiteralLikeArgument*/ true)) {
+            return leftmost.arguments[0];
+        }
+    }
+    return undefined;
 }
 
 function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
@@ -5664,17 +5701,17 @@ export const enum OperatorPrecedence {
     //     CoalesceExpression
     Conditional,
 
+    // LogicalORExpression:
+    //     LogicalANDExpression
+    //     LogicalORExpression `||` LogicalANDExpression
+    LogicalOR,
+
     // CoalesceExpression:
     //     CoalesceExpressionHead `??` BitwiseORExpression
     // CoalesceExpressionHead:
     //     CoalesceExpression
     //     BitwiseORExpression
-    Coalesce = Conditional, // NOTE: This is wrong
-
-    // LogicalORExpression:
-    //     LogicalANDExpression
-    //     LogicalORExpression `||` LogicalANDExpression
-    LogicalOR,
+    Coalesce = LogicalOR,
 
     // LogicalANDExpression:
     //     BitwiseORExpression
@@ -6591,7 +6628,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
     // Any non json file should be emitted
     if (!isJsonSourceFile(sourceFile)) return true;
-    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    if (host.getRedirectFromSourceFile(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
     if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
@@ -7704,9 +7741,18 @@ export function base64decode(host: { base64decode?(input: string): string; } | u
 export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined; } | string): object | undefined {
     const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
     if (!jsonText) return undefined;
-    // gracefully handle if readFile fails or returns not JSON
-    const result = parseConfigFileTextToJson(path, jsonText);
-    return !result.error ? result.config : undefined;
+    // Try strictly parsing first, then fall back to our (slower)
+    // parser that is resilient to comments/trailing commas.
+    // package.json files should never have these, but we
+    // have no way to communicate these issues in the first place.
+    let result = tryParseJson(jsonText);
+    if (result === undefined) {
+        const looseResult = parseConfigFileTextToJson(path, jsonText);
+        if (!looseResult.error) {
+            result = looseResult.config;
+        }
+    }
+    return result;
 }
 
 /** @internal */
@@ -8953,6 +8999,7 @@ const _computedOptions = createComputedCompilerOptions({
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8968,28 +9015,23 @@ const _computedOptions = createComputedCompilerOptions({
     moduleResolution: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): ModuleResolutionKind => {
-            let moduleResolution = compilerOptions.moduleResolution;
-            if (moduleResolution === undefined) {
-                switch (_computedOptions.module.computeValue(compilerOptions)) {
-                    case ModuleKind.CommonJS:
-                        moduleResolution = ModuleResolutionKind.Node10;
-                        break;
-                    case ModuleKind.Node16:
-                    case ModuleKind.Node18:
-                        moduleResolution = ModuleResolutionKind.Node16;
-                        break;
-                    case ModuleKind.NodeNext:
-                        moduleResolution = ModuleResolutionKind.NodeNext;
-                        break;
-                    case ModuleKind.Preserve:
-                        moduleResolution = ModuleResolutionKind.Bundler;
-                        break;
-                    default:
-                        moduleResolution = ModuleResolutionKind.Classic;
-                        break;
-                }
+            if (compilerOptions.moduleResolution !== undefined) {
+                return compilerOptions.moduleResolution;
             }
-            return moduleResolution;
+            const moduleKind = _computedOptions.module.computeValue(compilerOptions);
+            switch (moduleKind) {
+                case ModuleKind.None:
+                case ModuleKind.AMD:
+                case ModuleKind.UMD:
+                case ModuleKind.System:
+                    return ModuleResolutionKind.Classic;
+                case ModuleKind.NodeNext:
+                    return ModuleResolutionKind.NodeNext;
+            }
+            if (ModuleKind.Node16 <= moduleKind && moduleKind < ModuleKind.NodeNext) {
+                return ModuleResolutionKind.Node16;
+            }
+            return ModuleResolutionKind.Bundler;
         },
     },
     moduleDetection: {
@@ -9011,34 +9053,25 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     esModuleInterop: {
-        dependencies: ["module", "target"],
+        dependencies: [],
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.esModuleInterop !== undefined) {
                 return compilerOptions.esModuleInterop;
             }
-            switch (_computedOptions.module.computeValue(compilerOptions)) {
-                case ModuleKind.Node16:
-                case ModuleKind.Node18:
-                case ModuleKind.NodeNext:
-                case ModuleKind.Preserve:
-                    return true;
-            }
-            return false;
+            return true;
         },
     },
     allowSyntheticDefaultImports: {
-        dependencies: ["module", "target", "moduleResolution"],
+        dependencies: [],
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
                 return compilerOptions.allowSyntheticDefaultImports;
             }
-            return _computedOptions.esModuleInterop.computeValue(compilerOptions)
-                || _computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
-                || _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+            return true;
         },
     },
     resolvePackageJsonExports: {
-        dependencies: ["moduleResolution"],
+        dependencies: ["moduleResolution", "module", "target"],
         computeValue: (compilerOptions): boolean => {
             const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
@@ -9057,7 +9090,7 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     resolvePackageJsonImports: {
-        dependencies: ["moduleResolution", "resolvePackageJsonExports"],
+        dependencies: ["moduleResolution", "resolvePackageJsonExports", "module", "target"],
         computeValue: (compilerOptions): boolean => {
             const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
@@ -9080,6 +9113,14 @@ const _computedOptions = createComputedCompilerOptions({
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.resolveJsonModule !== undefined) {
                 return compilerOptions.resolveJsonModule;
+            }
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
+                // TODO in 6.0: uncomment
+                // case ModuleKind.Node16:
+                // case ModuleKind.Node18:
+                case ModuleKind.Node20:
+                case ModuleKind.NodeNext:
+                    return true;
             }
             return _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
@@ -9511,7 +9552,7 @@ const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
 const commonPackageFolders: readonly string[] = ["node_modules", "bower_components", "jspm_packages"];
 
-const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
+const implicitExcludePathRegexPattern = `(?!(?:${commonPackageFolders.join("|")})(?:/|$))`;
 
 /** @internal */
 export interface WildcardMatcher {
@@ -9527,12 +9568,12 @@ const filesMatcher: WildcardMatcher = {
      *  [^./]                   # matches everything up to the first . character (excluding directory separators)
      *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
      */
-    singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
+    singleAsteriskRegexFragment: "(?:[^./]|(?:\\.(?!min\\.js$))?)*",
     /**
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
      */
-    doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+    doubleAsteriskRegexFragment: `(?:/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment),
 };
 
@@ -9542,13 +9583,13 @@ const directoriesMatcher: WildcardMatcher = {
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
      */
-    doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+    doubleAsteriskRegexFragment: `(?:/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment),
 };
 
 const excludeMatcher: WildcardMatcher = {
     singleAsteriskRegexFragment: "[^/]*",
-    doubleAsteriskRegexFragment: "(/.+?)?",
+    doubleAsteriskRegexFragment: "(?:/.+?)?",
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment),
 };
 
@@ -9565,10 +9606,10 @@ export function getRegularExpressionForWildcard(specs: readonly string[] | undef
         return undefined;
     }
 
-    const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+    const pattern = patterns.map(pattern => `(?:${pattern})`).join("|");
     // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-    const terminator = usage === "exclude" ? "($|/)" : "$";
-    return `^(${pattern})${terminator}`;
+    const terminator = usage === "exclude" ? "(?:$|/)" : "$";
+    return `^(?:${pattern})${terminator}`;
 }
 
 /** @internal */
@@ -9593,7 +9634,7 @@ export function isImplicitGlob(lastPathComponent: string): boolean {
 /** @internal */
 export function getPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
     const pattern = spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]);
-    return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
+    return pattern && `^(?:${pattern})${usage === "exclude" ? "(?:$|/)" : "$"}`;
 }
 
 /** @internal */
@@ -9626,7 +9667,7 @@ export function getSubPatternFromSpec(
         }
         else {
             if (usage === "directories") {
-                subpattern += "(";
+                subpattern += "(?:";
                 optionalCount++;
             }
 
@@ -9640,7 +9681,7 @@ export function getSubPatternFromSpec(
                 // appear first in a component. Dotted directories and files can be included explicitly
                 // like so: **/.*/.*
                 if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                    componentPattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                    componentPattern += "(?:[^./]" + singleAsteriskRegexFragment + ")?";
                     component = component.substr(1);
                 }
                 else if (component.charCodeAt(0) === CharacterCodes.question) {
@@ -10296,6 +10337,7 @@ export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: No
 /** @internal */
 export interface HostWithIsSourceOfProjectReferenceRedirect {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    isSourceFileDefaultLibrary(file: SourceFile): boolean;
 }
 /** @internal */
 export function skipTypeChecking(
@@ -10322,10 +10364,9 @@ function skipTypeCheckingWorker(
     ignoreNoCheck: boolean,
 ) {
     // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
-    // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
-    // '/// <reference no-default-lib="true"/>' directive.
+    // If skipDefaultLibCheck is enabled, skip reporting errors if file is a lib.
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
-        options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
+        options.skipDefaultLibCheck && host.isSourceFileDefaultLibrary(sourceFile)) ||
         (!ignoreNoCheck && options.noCheck) ||
         host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
         !canIncludeBindAndCheckDiagnostics(sourceFile, options);
@@ -10939,10 +10980,11 @@ export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration 
         case SyntaxKind.JSDocEnumTag:
             return true;
         case SyntaxKind.ImportClause:
-            return (node as ImportClause).isTypeOnly;
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportSpecifier:
+            return (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ExportSpecifier:
-            return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            return (node as ExportSpecifier).parent.parent.isTypeOnly;
         default:
             return false;
     }
@@ -11994,7 +12036,7 @@ export function isSideEffectImport(node: Node): boolean {
     return !!ancestor && !ancestor.importClause;
 }
 
-// require('module').builtinModules.filter(x => !x.startsWith('_'))
+// require('module').builtinModules.filter(x => !x.match(/^(?:_|node:)/))
 const unprefixedNodeCoreModulesList = [
     "assert",
     "assert/strict",
@@ -12037,7 +12079,6 @@ const unprefixedNodeCoreModulesList = [
     "stream/web",
     "string_decoder",
     "sys",
-    "test/mock_loader",
     "timers",
     "timers/promises",
     "tls",
@@ -12056,11 +12097,10 @@ const unprefixedNodeCoreModulesList = [
 /** @internal */
 export const unprefixedNodeCoreModules: Set<string> = new Set(unprefixedNodeCoreModulesList);
 
-// await fetch('https://nodejs.org/docs/latest/api/all.json').then(r => r.text()).then(t =>
-//   new Set(t.match(/(?<=')node:.+?(?=')/g))
-//     .difference(new Set(require('module').builtinModules.map(x => `node:${x}`))))
+// require('module').builtinModules.filter(x => x.startsWith('node:'))
 /** @internal */
 export const exclusivelyPrefixedNodeCoreModules: Set<string> = new Set([
+    "node:quic",
     "node:sea",
     "node:sqlite",
     "node:test",
@@ -12114,7 +12154,7 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDo
     };
     while (true) {
         const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
-        if (!child) {
+        if (!child || isMetaProperty(child)) {
             return current;
         }
         current = child;
@@ -12141,12 +12181,12 @@ export function getLibFileNameFromLibReference(libReference: FileReference): str
 /** @internal */
 export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-    cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
 ): T | undefined {
     return forEachProjectReference(
         /*projectReferences*/ undefined,
         resolvedProjectReferences,
-        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+        resolvedRef => resolvedRef && cb(resolvedRef),
     );
 }
 

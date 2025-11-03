@@ -1,6 +1,6 @@
 //@module: commonjs
 //@declaration: true
-module Foo {
+namespace Foo {
     export interface A<T> {
     }
 }

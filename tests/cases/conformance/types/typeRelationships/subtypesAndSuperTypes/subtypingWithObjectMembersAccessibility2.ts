@@ -8,7 +8,7 @@ class Derived extends Base {
     bar: string;
 }
 
-module ExplicitPublic {
+namespace ExplicitPublic {
     class A {
         private foo: Base;
     }
@@ -34,7 +34,7 @@ module ExplicitPublic {
     }
 }
 
-module ImplicitPublic {
+namespace ImplicitPublic {
     class A {
         private foo: Base;
     }

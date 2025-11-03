@@ -1534,12 +1534,13 @@ export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier |
 export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ImportSpecifier:
-            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.isTypeOnly;
+            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.NamespaceImport:
-            return (node as NamespaceImport).parent.isTypeOnly;
+            return (node as NamespaceImport).parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportClause:
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportEqualsDeclaration:
-            return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
+            return (node as ImportEqualsDeclaration).isTypeOnly;
     }
     return false;
 }

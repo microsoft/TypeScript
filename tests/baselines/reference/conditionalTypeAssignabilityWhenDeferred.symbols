@@ -109,7 +109,7 @@ function f<T>(t: T) {
 >x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 31, 5))
 >T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 11))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 14))
 

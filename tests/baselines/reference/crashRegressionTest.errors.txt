@@ -2,7 +2,7 @@ crashRegressionTest.ts(16,56): error TS2339: Property '_name' does not exist on 
 
 
 ==== crashRegressionTest.ts (1 errors) ====
-    module MsPortal.Util.TemplateEngine {
+    namespace MsPortal.Util.TemplateEngine {
         "use strict";
      
         interface TemplateKeyValue {

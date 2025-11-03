@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module Test10 {
+////namespace Test10 {
 ////    var x: string[] = [];
 ////    x.forEach(function (y) { y./**/} );
 ////}

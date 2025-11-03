@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts] ////
 
 === parserErrantAccessibilityModifierInModule1.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

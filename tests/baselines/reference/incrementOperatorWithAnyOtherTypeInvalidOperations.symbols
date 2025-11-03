@@ -41,7 +41,7 @@ class A {
 >a : Symbol(a, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 13, 11))
     }
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 16, 1))
 
     export var n: any;

@@ -1,6 +1,6 @@
 // @noimplicitany: true
 
-declare module m {
+declare namespace m {
     var x; // error
     var y: any;
 
@@ -20,7 +20,7 @@ declare module m {
         foo3(x: any): any;
     }
 
-    module n {
+    namespace n {
         var y; // error
     }
 

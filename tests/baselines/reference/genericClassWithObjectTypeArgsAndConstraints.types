@@ -35,7 +35,7 @@ class X<T> {
 >  : ^
 }
 
-module Class {
+namespace Class {
 >Class : typeof Class
 >      : ^^^^^^^^^^^^
 
@@ -179,7 +179,7 @@ module Class {
 >   : ^^^^
 }
 
-module Interface {
+namespace Interface {
 >Interface : typeof Interface
 >          : ^^^^^^^^^^^^^^^^
 

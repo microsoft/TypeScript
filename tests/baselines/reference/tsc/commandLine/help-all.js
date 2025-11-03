@@ -1,7 +1,6 @@
 currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -82,13 +81,13 @@ Conditions to set in addition to the resolver-specific defaults when resolving i
 
 [94m--module, -m[39m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, node18, nodenext, preserve
+one of: commonjs, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
 default: undefined
 
 [94m--moduleResolution[39m
 Specify how TypeScript looks up a file from a given module specifier.
-one of: classic, node10, node16, nodenext, bundler
-default: module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`
+one of: node16, nodenext, bundler
+default: `nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.
 
 [94m--moduleSuffixes[39m
 List of file name suffixes to search when resolving a module.
@@ -101,7 +100,7 @@ default: false
 [94m--noUncheckedSideEffectImports[39m
 Check side effect imports.
 type: boolean
-default: false
+default: true
 
 [94m--paths[39m
 Specify a set of entries that re-map imports to additional lookup locations.
@@ -146,9 +145,9 @@ Specify type package names to be included without being referenced in a source f
 ### JavaScript Support
 
 [94m--allowJs[39m
-Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.
+Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
-default: false
+default: `false`, unless `checkJs` is set
 
 [94m--checkJs[39m
 Enable error reporting in type-checked JavaScript files.
@@ -165,7 +164,7 @@ default: 0
 [94m--allowSyntheticDefaultImports[39m
 Allow 'import x from y' when a module doesn't have a default export.
 type: boolean
-default: module === "system" or esModuleInterop
+default: true
 
 [94m--erasableSyntaxOnly[39m
 Do not allow runtime constructs that are not part of ECMAScript.
@@ -175,7 +174,7 @@ default: false
 [94m--esModuleInterop[39m
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
-default: false
+default: true
 
 [94m--forceConsistentCasingInFileNames[39m
 Ensure that casing is correct in imports.
@@ -575,13 +574,13 @@ default: react
 
 [94m--lib[39m
 Specify a set of bundled library declaration files that describe the target runtime environment.
-one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2022.regexp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024.object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024.string/esnext.string, esnext.array, esnext.collection, esnext.intl, esnext.disposable, esnext.promise, esnext.decorators, esnext.iterator, esnext.float16, decorators, decorators.legacy
+one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2022.regexp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024.object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024.string/esnext.string, esnext.array, esnext.collection, esnext.intl, esnext.disposable, esnext.promise, esnext.decorators, esnext.iterator, esnext.float16, esnext.typedarrays, esnext.error, esnext.sharedmemory, decorators, decorators.legacy
 default: undefined
 
 [94m--libReplacement[39m
 Enable lib replacement.
 type: boolean
-default: true
+default: false
 
 [94m--moduleDetection[39m
 Control what method is used to detect module-format JS files.

@@ -5,7 +5,7 @@ instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expressio
 
 
 ==== instancePropertiesInheritedIntoClassType.ts (2 errors) ====
-    module NonGeneric {
+    namespace NonGeneric {
         class C {
             x: string;
             get y() {
@@ -30,7 +30,7 @@ instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expressio
     
     }
     
-    module Generic {
+    namespace Generic {
         class C<T, U> {
             x: T;
             get y() {

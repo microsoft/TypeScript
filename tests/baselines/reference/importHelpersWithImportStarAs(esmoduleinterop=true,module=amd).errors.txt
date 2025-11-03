@@ -1,0 +1,15 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== a.ts (0 errors) ====
+    export class A { }
+    
+==== b.ts (0 errors) ====
+    import * as a from "./a";
+    export { a };
+    
+==== tslib.d.ts (0 errors) ====
+    declare module "tslib" {
+        function __importStar(m: any): void;
+    }

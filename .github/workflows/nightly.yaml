@@ -21,8 +21,8 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: 'lts/*'
       - run: |
@@ -30,7 +30,7 @@ jobs:
           # corepack enable npm
           npm install -g $(jq -r '.packageManager' < package.json)
           npm --version
-      - name: Setup and publish nightly
+      - name: Setup and test nightly
         run: |
           npm ci
           npx hereby configure-nightly
@@ -42,8 +42,8 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: 'lts/*'
           # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.

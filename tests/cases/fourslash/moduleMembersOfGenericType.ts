@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module M {
+////namespace M {
 ////    export var x = <T>(x: T) => x;
 ////}
 ////var r = M./**/;

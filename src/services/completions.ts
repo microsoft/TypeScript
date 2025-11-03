@@ -256,7 +256,6 @@ import {
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeParameterDeclaration,
-    isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
@@ -482,7 +481,7 @@ export const enum SymbolOriginInfoKind {
     ComputedPropertyName = 1 << 9,
 
     SymbolMemberNoExport = SymbolMember,
-    SymbolMemberExport   = SymbolMember | Export,
+    SymbolMemberExport   = SymbolMember | ResolvedExport,
 }
 
 /** @internal */
@@ -536,7 +535,7 @@ function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolO
 }
 
 function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoResolvedExport {
-    return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
+    return !!(origin && origin.kind & SymbolOriginInfoKind.ResolvedExport);
 }
 
 function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
@@ -2622,11 +2621,11 @@ function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion
 }
 
 function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-    if (originIsExport(origin)) {
-        return stripQuotes(origin.moduleSymbol.name);
-    }
     if (originIsResolvedExport(origin)) {
         return origin.moduleSpecifier;
+    }
+    if (originIsExport(origin)) {
+        return stripQuotes(origin.moduleSymbol.name);
     }
     if (origin?.kind === SymbolOriginInfoKind.ThisType) {
         return CompletionSource.ThisProperty;
@@ -2738,78 +2737,76 @@ export function getCompletionEntriesFromSymbols(
 
     function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextMap: SymbolSortTextMap): boolean {
         let allFlags = symbol.flags;
-        if (!isSourceFile(location)) {
-            // export = /**/ here we want to get all meanings, so any symbol is ok
-            if (isExportAssignment(location.parent)) {
-                return true;
-            }
-            // Filter out variables from their own initializers
-            // `const a = /* no 'a' here */`
-            if (closestSymbolDeclaration && tryCast(closestSymbolDeclaration, isVariableDeclaration)) {
-                if (symbol.valueDeclaration === closestSymbolDeclaration) {
-                    return false;
-                }
-                // const { a } = /* no 'a' here */;
-                if (isBindingPattern(closestSymbolDeclaration.name) && closestSymbolDeclaration.name.elements.some(e => e === symbol.valueDeclaration)) {
-                    return false;
-                }
-            }
-
-            // Filter out current and latter parameters from defaults
-            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
-            // `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
-            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
-            if (closestSymbolDeclaration && symbolDeclaration) {
-                if (isParameter(closestSymbolDeclaration) && isParameter(symbolDeclaration)) {
-                    const parameters = closestSymbolDeclaration.parent.parameters;
-                    if (symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < parameters.end) {
-                        return false;
-                    }
-                }
-                else if (isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) {
-                    if (closestSymbolDeclaration === symbolDeclaration && contextToken?.kind === SyntaxKind.ExtendsKeyword) {
-                        // filter out the directly self-recursive type parameters
-                        // `type A<K extends /* no 'K' here*/> = K`
-                        return false;
-                    }
-                    if (isInTypeParameterDefault(contextToken) && !isInferTypeNode(closestSymbolDeclaration.parent)) {
-                        const typeParameters = closestSymbolDeclaration.parent.typeParameters;
-                        if (typeParameters && symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < typeParameters.end) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            // External modules can have global export declarations that will be
-            // available as global keywords in all scopes. But if the external module
-            // already has an explicit export and user only wants to user explicit
-            // module imports then the global keywords will be filtered out so auto
-            // import suggestions will win in the completion
-            const symbolOrigin = skipAlias(symbol, typeChecker);
-            // We only want to filter out the global keywords
-            // Auto Imports are not available for scripts so this conditional is always false
-            if (
-                !!sourceFile.externalModuleIndicator
-                && !compilerOptions.allowUmdGlobalAccess
-                && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
-                && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
-                    || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)
-            ) {
+        // export = /**/ here we want to get all meanings, so any symbol is ok
+        if (location.parent && isExportAssignment(location.parent)) {
+            return true;
+        }
+        // Filter out variables from their own initializers
+        // `const a = /* no 'a' here */`
+        if (closestSymbolDeclaration && tryCast(closestSymbolDeclaration, isVariableDeclaration)) {
+            if (symbol.valueDeclaration === closestSymbolDeclaration) {
                 return false;
             }
-
-            allFlags |= getCombinedLocalAndExportSymbolFlags(symbolOrigin);
-
-            // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
-            if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
-                return !!(allFlags & SymbolFlags.Namespace);
+            // const { a } = /* no 'a' here */;
+            if (isBindingPattern(closestSymbolDeclaration.name) && closestSymbolDeclaration.name.elements.some(e => e === symbol.valueDeclaration)) {
+                return false;
             }
+        }
 
-            if (isTypeOnlyLocation) {
-                // It's a type, but you can reach it by namespace.type as well
-                return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
+        // Filter out current and latter parameters from defaults
+        // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+        // `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
+        const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+        if (closestSymbolDeclaration && symbolDeclaration) {
+            if (isParameter(closestSymbolDeclaration) && isParameter(symbolDeclaration)) {
+                const parameters = closestSymbolDeclaration.parent.parameters;
+                if (symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < parameters.end) {
+                    return false;
+                }
             }
+            else if (isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) {
+                if (closestSymbolDeclaration === symbolDeclaration && contextToken?.kind === SyntaxKind.ExtendsKeyword) {
+                    // filter out the directly self-recursive type parameters
+                    // `type A<K extends /* no 'K' here*/> = K`
+                    return false;
+                }
+                if (isInTypeParameterDefault(contextToken) && !isInferTypeNode(closestSymbolDeclaration.parent)) {
+                    const typeParameters = closestSymbolDeclaration.parent.typeParameters;
+                    if (typeParameters && symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < typeParameters.end) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // External modules can have global export declarations that will be
+        // available as global keywords in all scopes. But if the external module
+        // already has an explicit export and user only wants to user explicit
+        // module imports then the global keywords will be filtered out so auto
+        // import suggestions will win in the completion
+        const symbolOrigin = skipAlias(symbol, typeChecker);
+        // We only want to filter out the global keywords
+        // Auto Imports are not available for scripts so this conditional is always false
+        if (
+            !!sourceFile.externalModuleIndicator
+            && !compilerOptions.allowUmdGlobalAccess
+            && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
+            && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
+                || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)
+        ) {
+            return false;
+        }
+
+        allFlags |= getCombinedLocalAndExportSymbolFlags(symbolOrigin);
+
+        // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
+        if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
+            return !!(allFlags & SymbolFlags.Namespace);
+        }
+
+        if (isTypeOnlyLocation) {
+            // It's a type, but you can reach it by namespace.type as well
+            return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
         }
 
         // expressions are value space (which includes the value namespaces)
@@ -3628,17 +3625,20 @@ function getCompletionData(
     }
 
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
-    const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
+    const contextualTypeOrConstraint = previousToken && (
+        getContextualType(previousToken, position, sourceFile, typeChecker) ??
+            getConstraintOfTypeArgumentProperty(previousToken, typeChecker)
+    );
 
     // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
     // for strings getStringLiteralCompletions handles completions
     const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
     const literals = !isLiteralExpected ? [] : mapDefined(
-        contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
+        contextualTypeOrConstraint && (contextualTypeOrConstraint.isUnion() ? contextualTypeOrConstraint.types : [contextualTypeOrConstraint]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined,
     );
 
-    const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
+    const recommendedCompletion = previousToken && contextualTypeOrConstraint && getRecommendedCompletion(previousToken, contextualTypeOrConstraint, typeChecker);
     return {
         kind: CompletionDataKind.Data,
         symbols,
@@ -3853,6 +3853,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
+
+                // Symbol completions should have lower priority since they represent computed property access
+                symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
+
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
@@ -4183,10 +4187,6 @@ function getCompletionData(
                         return charactersFuzzyMatchInString(symbolName, lowerCaseTokenText);
                     },
                     (info, symbolName, isFromAmbientModule, exportMapKey) => {
-                        if (detailsEntryId && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name))) {
-                            return;
-                        }
-
                         // Do a relatively cheap check to bail early if all re-exports are non-importable
                         // due to file location or package.json dependency filtering. For non-node16+
                         // module resolution modes, getting past this point guarantees that we'll be
@@ -4213,6 +4213,10 @@ function getCompletionData(
                         let exportInfo: SymbolExportInfo | FutureSymbolExportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
                             ({ exportInfo = info[0], moduleSpecifier } = result);
+                        }
+
+                        if (detailsEntryId && (detailsEntryId.source !== moduleSpecifier && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name)))) {
+                            return;
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
@@ -5764,11 +5768,13 @@ function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
     return undefined;
 }
 
-function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
+/** @internal */
+export function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
     if (!node) return undefined;
 
-    if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
-        return checker.getTypeArgumentConstraint(node);
+    if (isTypeNode(node)) {
+        const constraint = checker.getTypeArgumentConstraint(node);
+        if (constraint) return constraint;
     }
 
     const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
@@ -5777,10 +5783,19 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
             return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
+        case SyntaxKind.ColonToken:
+            if (node.parent.kind === SyntaxKind.PropertySignature) {
+                // The cursor is at a property value location like `Foo<{ x: | }`.
+                // `t` already refers to the appropriate property type.
+                return t;
+            }
+            break;
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
             return t;
+        case SyntaxKind.OpenBracketToken:
+            return checker.getElementTypeOfArrayType(t);
     }
 }
 

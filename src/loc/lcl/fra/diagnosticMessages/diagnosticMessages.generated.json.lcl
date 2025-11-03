@@ -276,11 +276,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array__1355" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_o_1355" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
+          <Val><![CDATA[A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Une assertion 'const' peut uniquement être appliquée aux références à des membres enum, des littéraux de chaînes, des littéraux de nombres, des littéraux de valeurs booléennes, des littéraux de tableaux ou des littéraux d'objets.]]></Val>
+            <Val><![CDATA[Une assertion « const » peut uniquement être appliquée aux références à des membres enum, des littéraux de chaînes, des littéraux de nombres, des littéraux de valeurs booléennes, des littéraux de tableaux ou des littéraux d'objets.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1902,15 +1902,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Autorisez les fichiers JavaScript à faire partie de votre programme. Utilisez l’option « checkJS » pour obtenir des erreurs à partir de ces fichiers.]]></Val>
+            <Val><![CDATA[Autorisez les fichiers JavaScript à faire partie de votre programme. Utilisez l’option « checkJS » pour obtenir des erreurs à partir de ces fichiers.]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3054,6 +3051,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Call_target_does_not_contain_any_signatures_2346" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call target does not contain any signatures.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La cible de l'appel ne contient aucune signature.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert logical AND access chains]]></Val>
@@ -3371,6 +3377,15 @@
           <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Impossible de localiser le module '{0}' ou les déclarations de type correspondantes.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_or_type_declarations_for_side_effect_import_of_0_2882" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module or type declarations for side-effect import of '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Impossible de trouver les déclarations de module ou de type pour l’importation à effet secondaire de « {0} ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4080,11 +4095,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom de la classe ne peut pas être 'Object' quand ES5 est ciblé avec le module {0}.]]></Val>
+            <Val><![CDATA[Le nom de la classe ne peut pas être « Object » quand ES5 et ses versions ultérieures sont ciblées avec le module {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5283,6 +5298,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Default_imports_are_not_allowed_in_a_deferred_import_18058" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Default imports are not allowed in a deferred import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les importations par défaut ne sont pas autorisées dans une importation différée.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Default_library_1424" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default library]]></Val>
@@ -5297,6 +5321,15 @@
           <Val><![CDATA[Default library for target '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Bibliothèque par défaut pour la cible '{0}']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve_18060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les importations différées ne sont prises en charge que lorsque l’indicateur « --module » est défini sur « esnext » ou « preserve ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6017,12 +6050,12 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', 'node20', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les importations dynamiques sont prises en charge uniquement lorsque l’indicateur « --module » est défini sur « es2020 », « es2022 », « esnext », « commonjs », « amd », « system », « umd », « node16 », « node18 » ou « nodenext ».]]></Val>
+            <Val><![CDATA[Les importations dynamiques sont prises en charge uniquement lorsque l’indicateur « --module » est défini sur « es2020 », « es2022 », « esnext », « commonjs », « amd », « system », « umd », « node16 », « node18 », « node20 » ou « nodenext ».]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -6038,27 +6071,39 @@
       </Item>
       <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les importations dynamiques prennent uniquement en charge un deuxième argument lorsque l’option « --module » est définie sur « esnext », « node16 », « node18 », « nodenext » ou « preserve ».]]></Val>
+            <Val><![CDATA[Les importations dynamiques prennent uniquement en charge un deuxième argument lorsque l’option « --module » est définie sur « esnext », « node16 », « node18 », « node20 », « nodenext » ou « preserve ».]]></Val>
+          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.]]></Val>
+          </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_1286" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les importations et exportations ECMAScript ne peuvent pas être écrites dans un fichier CommonJS sous 'verbatimModuleSyntax'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjus_1295" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La syntaxe ESM n’est pas autorisée dans un module CommonJS quand « module » a la valeur « preserve ».]]></Val>
+            <Val><![CDATA[Les importations et exportations ECMAScript ne peuvent pas être écrites dans un fichier CommonJS sous 'verbatimModuleSyntax'. Ajustez le champ 'type' dans le 'package.json' le plus proche pour faire de ce fichier un module ECMAScript, ou ajustez vos paramètres 'verbatimModuleSyntax', 'module' et 'moduleResolution' dans TypeScript.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled_1286" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.]]></Val>
+          <Val><![CDATA[ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La syntaxe ESM n'est pas autorisée dans un module CommonJS lorsque « verbatimModuleSyntax » est activé.]]></Val>
+            <Val><![CDATA[La syntaxe du module ECMAScript n’est pas autorisée dans un module CommonJS quand 'module' est défini sur 'preserve'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6633,6 +6678,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Enum name cannot be '{0}']]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Environment_Settings_6285" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Environment Settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Paramètres d'environnement]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7323,6 +7377,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_Layout_6284" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File Layout]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Disposition de fichier]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_Management_6245" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File Management]]></Val>
@@ -7613,6 +7676,15 @@
           <Val><![CDATA[Fix all with type-only imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Corriger tout avec des importations de type uniquement]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";For_nodejs_Colon_6287" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[For nodejs:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pour nodejs :]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8259,11 +8331,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2821" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext__2821" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les assertions d’importation sont prises en charge uniquement lorsque l’option « --module » est définie sur « esnext », « node18 », « nodenext » ou « preserve ».]]></Val>
+            <Val><![CDATA[Les assertions d’importation sont prises en charge uniquement lorsque l’option « --module » est définie sur « esnext », « node18 », « node20 », « nodenext » ou « preserve ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8313,11 +8385,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2823" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext__2823" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les attributs d’importation sont pris en charge uniquement lorsque l’option « --module » a la valeur « esnext », « node18 », « nodenext » ou « preserve ».]]></Val>
+            <Val><![CDATA[Les attributs d’importation sont pris en charge uniquement lorsque l’option « --module » a la valeur « esnext », « node18 », « node20 », « nodenext » ou « preserve ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9888,6 +9960,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Named_imports_are_not_allowed_in_a_deferred_import_18059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Named imports are not allowed in a deferred import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les importations nommées ne sont pas autorisées dans une importation différée.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0_1544" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
@@ -10494,11 +10575,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[L’option '{0}' ne peut être utilisée que lorsque 'module' a la valeur 'preserve' ou 'es2015' ou version ultérieure.]]></Val>
+            <Val><![CDATA[L’option « {0} » ne peut être utilisée que lorsque « module » a la valeur « preserve », « commonjs » ou « es2015 » ou une version ultérieure.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10682,6 +10763,15 @@
           <Val><![CDATA[Options:]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Options :]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Other_Outputs_6291" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Other Outputs]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Autres sorties]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12165,6 +12255,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Recommended_Options_6294" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recommended Options]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Options recommandées]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Redirect_output_structure_to_the_directory_6006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Redirect output structure to the directory.]]></Val>
@@ -13203,6 +13302,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";See_also_https_Colon_Slash_Slashaka_ms_Slashtsconfig_Slashmodule_6286" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[See also https://aka.ms/tsconfig/module]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Voir aussi https://aka.ms/tsconfig/module]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Selection_is_not_a_valid_statement_or_statements_95155" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Selection is not a valid statement or statements]]></Val>
@@ -13947,6 +14055,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Stricter_Typechecking_Options_6292" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Stricter Typechecking Options]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Options de vérification de type plus strictes]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";String_literal_expected_1141" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[String literal expected.]]></Val>
@@ -13970,6 +14087,15 @@
           <Val><![CDATA[String literal with double quotes expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Littéral de chaîne avec guillemets doubles attendu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Style_Options_6293" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Style Options]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Options de style]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14444,12 +14570,12 @@
       </Item>
       <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La méta-propriété « import.meta » est autorisée uniquement lorsque l’option « --module » est « es2020 », « es2022 », « esnext », « system », « node16 », « node18 » ou « nodenext ».]]></Val>
+            <Val><![CDATA[La méta-propriété « import.meta » est autorisée uniquement lorsque l’option « --module » est « es2020 », « es2022 », « esnext », « system », « node16 », « node18 » ou « node20 » « nodenext ».]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
+            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -15710,24 +15836,24 @@
       </Item>
       <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les expressions « await » de niveau supérieur sont autorisées uniquement lorsque l’option « module » est définie sur « es2022 », « esnext », « system », « node16 », « node18 », « nodenext » ou « preserve », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
+            <Val><![CDATA[Les expressions « await » de niveau supérieur sont autorisées uniquement lorsque l’option « module » est définie sur « es2022 », « esnext », « system », « node16 », « node18 », « node20 », « nodenext » ou « preserve », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les instructions « await using » de niveau supérieur sont autorisées uniquement lorsque l’option « module » a la valeur « es2022 », « esnext », « system », « node16 », « node18 », « nodenext » ou « preserve », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
+            <Val><![CDATA[Les instructions « await using » de niveau supérieur sont autorisées uniquement lorsque l’option « module » a la valeur « es2022 », « esnext », « system », « node16 », « node18 », « node20 », « nodenext » ou « preserve », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -15743,12 +15869,12 @@
       </Item>
       <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les boucles « for await » de niveau supérieur sont autorisées uniquement lorsque l’option « module » a la valeur « es2022 », « esnext », « system », « node16 », « node18 », « nodenext » ou « preserve », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
+            <Val><![CDATA[Les boucles « for await » de niveau supérieur sont autorisées uniquement lorsque l’option « module » a la valeur « es2022 », « esnext », « system », « node16 », « node18 », « node20 », « nodenext » ou « preserve », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -17358,6 +17484,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Visit https://aka.ms/ts6 for migration information.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Visitez https://aka.ms/ts6 pour obtenir des informations sur la migration.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
@@ -17949,6 +18084,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[« {0} » n'est pas une métapropriété valide pour le mot clé « import ». Est-ce qu'il ne s'agit pas plutôt de « meta » ou « defer » ?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_not_allowed_as_a_parameter_name_1390" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not allowed as a parameter name.]]></Val>
@@ -18414,11 +18558,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";arguments_cannot_be_referenced_in_property_initializers_2815" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";and_npm_install_D_types_Slashnode_6290" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['arguments' cannot be referenced in property initializers.]]></Val>
+          <Val><![CDATA[and npm install -D @types/node]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les « arguments » ne peuvent pas être référencés dans les initialiseurs de propriété.]]></Val>
+            <Val><![CDATA[et npm install -D @types/node]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_blocks_2815" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['arguments' cannot be referenced in property initializers or class static initialization blocks.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les « arguments » ne peuvent pas être référencés dans les initialiseurs de propriétés ou les blocs d'initialisation statique de classe.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18476,6 +18629,15 @@
           <Val><![CDATA['await' has no effect on the type of this expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['await' n'a aucun effet sur le type de cette expression.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";await_using_declarations_are_not_allowed_in_ambient_contexts_1546" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['await using' declarations are not allowed in ambient contexts.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les déclarations « await using » ne sont pas autorisées dans les contextes ambiants.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18702,6 +18864,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";false_unless_checkJs_is_set_6932" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`false`, unless `checkJs` is set]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[« false », sauf si « checkJs » est défini]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";false_unless_composite_is_set_6906" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[`false`, unless `composite` is set]]></Val>
@@ -18828,24 +18999,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node_69010" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[module === « AMD » ou « UMD » ou « System » ou « ES6 », puis « Classic », sinon « Node »]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";module_system_or_esModuleInterop_6904" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[module === "system" or esModuleInterop]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[module === « system » ou esModuleInterop]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type_7009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['new' expression, whose target lacks a construct signature, implicitly has an 'any' type.]]></Val>
@@ -18860,6 +19013,15 @@
           <Val><![CDATA[`["node_modules", "bower_components", "jspm_packages"]5D;`, plus the value of `outDir` if one is specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[« [ « node_modules », « bower_components », « jspm_packages »]5D; », plus la valeur de « outDir » si elle est spécifiée.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`nodenext` si `module` est `nodenext` ; `node16` si `module` est `node16` ou `node18` ; sinon, `bundler`.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19331,6 +19493,15 @@
           <Val><![CDATA['use strict' directive used here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[directive 'use strict' utilisée ici.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";using_declarations_are_not_allowed_in_ambient_contexts_1545" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['using' declarations are not allowed in ambient contexts.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les déclarations « using » ne sont pas autorisées dans les contextes ambiants.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

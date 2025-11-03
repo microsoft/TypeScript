@@ -33,13 +33,13 @@ enum E {
 }
 
 // Arrow function as module variable initializer
-module M {
+namespace M {
     export var a = (s) => '';
     var b = (s) => s;
 }
 
 // Repeat above for module members that are functions? (necessary to redo all of them?)
-module M2 {
+namespace M2 {
     // Arrow function used in with statement
     with (window) {
         var p = () => this;
@@ -74,7 +74,7 @@ module M2 {
     }
 
     // Arrow function as module variable initializer
-    module M {
+    namespace M {
         export var a = (s) => '';
         var b = (s) => s;
     }

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxPreserveEmit3.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -13,6 +13,7 @@ declare module JSX {
 === test.d.ts ===
 export var React;
 >React : any
+>      : ^^^
 
 === react-consumer.tsx ===
 // This import should be elided

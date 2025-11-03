@@ -1,5 +1,5 @@
-//@module: amd
-export module TypeScript.Strasse.Street {
+//@module: commonjs
+export namespace TypeScript.Strasse.Street {
 	export class Rue {
 		public address:string;
 	}	

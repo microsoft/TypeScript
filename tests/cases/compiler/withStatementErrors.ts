@@ -12,6 +12,6 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
     
     interface I {} // error
     
-    module M {} // error
+    namespace M {} // error
         
 }
