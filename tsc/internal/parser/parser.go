@@ -3119,9 +3119,9 @@ func (p *Parser) parseTypeParameter() *ast.Node {
 	if p.parseOptional(ast.KindEqualsToken) {
 		defaultType = p.parseType()
 	}
-	result := p.finishNode(p.factory.NewTypeParameterDeclaration(modifiers, name, constraint, defaultType), pos)
+	result := p.factory.NewTypeParameterDeclaration(modifiers, name, constraint, defaultType)
 	result.AsTypeParameter().Expression = expression
-	return result
+	return p.finishNode(result, pos)
 }
 
 func (p *Parser) parseParameters(flags ParseFlags) *ast.NodeList {
