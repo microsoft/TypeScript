@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayBestCommonTypes.ts] ////
 
 === arrayBestCommonTypes.ts ===
-module EmptyTypes {
+namespace EmptyTypes {
 >EmptyTypes : typeof EmptyTypes
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -670,7 +670,7 @@ module EmptyTypes {
     }
 }
 
-module NonEmptyTypes {
+namespace NonEmptyTypes {
 >NonEmptyTypes : typeof NonEmptyTypes
 >              : ^^^^^^^^^^^^^^^^^^^^
 

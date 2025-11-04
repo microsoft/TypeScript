@@ -16,7 +16,7 @@ assignments.ts(31,1): error TS2693: 'I' only refers to a type, but is being used
     //  Assign to a parameter
     //  Assign to an interface
     
-    module M { }
+    namespace M { }
     M = null; // Error
     ~
 !!! error TS2708: Cannot use namespace 'M' as a value.

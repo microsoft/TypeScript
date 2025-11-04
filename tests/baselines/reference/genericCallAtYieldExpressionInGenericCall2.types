@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/genericCallAtYieldExpressionInGenericCall2.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== genericCallAtYieldExpressionInGenericCall2.ts ===
+interface Effect {
+  [Symbol.iterator](): {
+>[Symbol.iterator] : () => { next(...args: ReadonlyArray<any>): IteratorResult<any, any>; }
+>                  : ^^^^^^                                                                
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+
+    next(...args: ReadonlyArray<any>): IteratorResult<any, any>;
+>next : (...args: ReadonlyArray<any>) => IteratorResult<any, any>
+>     : ^^^^    ^^                  ^^^^^                        
+>args : readonly any[]
+>     : ^^^^^^^^^^^^^^
+
+  };
+}
+
+interface Enqueue<A> {
+  offer: (value: A) => Effect;
+>offer : (value: A) => Effect
+>      : ^     ^^ ^^^^^      
+>value : A
+>      : ^
+}
+
+declare const offer: {
+>offer : { <A>(value: A): (self: Enqueue<A>) => Effect; <A>(self: Enqueue<A>, value: A): Effect; }
+>      : ^^^ ^^     ^^ ^^^                            ^^^ ^^    ^^          ^^     ^^ ^^^      ^^^
+
+  <A>(value: A): (self: Enqueue<A>) => Effect;
+>value : A
+>      : ^
+>self : Enqueue<A>
+>     : ^^^^^^^^^^
+
+  <A>(self: Enqueue<A>, value: A): Effect;
+>self : Enqueue<A>
+>     : ^^^^^^^^^^
+>value : A
+>      : ^
+
+};
+
+declare function fn<Eff extends Effect, AEff, Args extends Array<any>>(
+>fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
+>   : ^   ^^^^^^^^^      ^^    ^^    ^^^^^^^^^          ^^    ^^                                            ^^^^^                      
+
+  body: (...args: Args) => Generator<Eff, AEff, any>,
+>body : (...args: Args) => Generator<Eff, AEff, any>
+>     : ^^^^    ^^    ^^^^^                         
+>args : Args
+>     : ^^^^
+
+): (...args: Args) => any;
+>args : Args
+>     : ^^^^
+
+fn(function* <T>(queue: Enqueue<T>, value: T) {
+>fn(function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);}) : <T>(queue: Enqueue<T>, value: T) => any
+>                                                                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
+>   : ^   ^^^^^^^^^      ^^    ^^    ^^^^^^^^^          ^^    ^^                                            ^^^^^                      
+>function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);} : <T>(queue: Enqueue<T>, value: T) => Generator<never, void, never>
+>                                                                           : ^ ^^     ^^          ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>queue : Enqueue<T>
+>      : ^^^^^^^^^^
+>value : T
+>      : ^
+
+  yield* offer(queue, value);
+>yield* offer(queue, value) : any
+>offer(queue, value) : Effect
+>                    : ^^^^^^
+>offer : { <A>(value: A): (self: Enqueue<A>) => Effect; <A>(self: Enqueue<A>, value: A): Effect; }
+>      : ^^^ ^^     ^^ ^^^                            ^^^ ^^    ^^          ^^     ^^ ^^^      ^^^
+>queue : Enqueue<T>
+>      : ^^^^^^^^^^
+>value : T
+>      : ^
+
+});
+
+fn(function* <T>(queue: Enqueue<T>, value: T) {
+>fn(function* <T>(queue: Enqueue<T>, value: T) {  const x = offer(queue, value);  yield* x;}) : <T>(queue: Enqueue<T>, value: T) => any
+>                                                                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
+>   : ^   ^^^^^^^^^      ^^    ^^    ^^^^^^^^^          ^^    ^^                                            ^^^^^                      
+>function* <T>(queue: Enqueue<T>, value: T) {  const x = offer(queue, value);  yield* x;} : <T>(queue: Enqueue<T>, value: T) => Generator<any, void, any>
+>                                                                                         : ^ ^^     ^^          ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>queue : Enqueue<T>
+>      : ^^^^^^^^^^
+>value : T
+>      : ^
+
+  const x = offer(queue, value);
+>x : Effect
+>  : ^^^^^^
+>offer(queue, value) : Effect
+>                    : ^^^^^^
+>offer : { <A>(value: A): (self: Enqueue<A>) => Effect; <A>(self: Enqueue<A>, value: A): Effect; }
+>      : ^^^ ^^     ^^ ^^^                            ^^^ ^^    ^^          ^^     ^^ ^^^      ^^^
+>queue : Enqueue<T>
+>      : ^^^^^^^^^^
+>value : T
+>      : ^
+
+  yield* x;
+>yield* x : any
+>x : Effect
+>  : ^^^^^^
+
+});
+

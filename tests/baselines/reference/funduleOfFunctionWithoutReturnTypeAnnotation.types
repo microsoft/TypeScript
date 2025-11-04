@@ -13,7 +13,7 @@ function fn() {
 >n : number
 >  : ^^^^^^
 }
-module fn {
+namespace fn {
 >fn : typeof fn
 >   : ^^^^^^^^^
 

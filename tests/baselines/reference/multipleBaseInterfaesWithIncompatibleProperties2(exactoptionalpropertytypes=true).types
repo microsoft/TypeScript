@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties2.ts] ////
+
+=== multipleBaseInterfaesWithIncompatibleProperties2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62569
+
+namespace http {
+  export interface TcpSocketConnectOpts {
+    port: number;
+>port : number
+>     : ^^^^^^
+  }
+
+  export interface AgentOptions extends Partial<TcpSocketConnectOpts> {
+    keepAlive?: boolean | undefined;
+>keepAlive : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
+  }
+}
+
+namespace tls {
+  export interface ConnectionOptions {
+    port?: number | undefined;
+>port : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+  }
+}
+
+interface AgentOptions extends http.AgentOptions, tls.ConnectionOptions { // error under exactOptionalPropertyTypes
+>http : any
+>     : ^^^
+>tls : any
+>    : ^^^
+
+  maxCachedSessions?: number | undefined;
+>maxCachedSessions : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+}
+

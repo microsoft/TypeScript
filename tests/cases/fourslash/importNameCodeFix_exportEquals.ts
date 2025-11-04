@@ -1,5 +1,9 @@
 /// <reference path="fourslash.ts" />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 // @Filename: /a.d.ts
 ////declare function a(): void;
 ////declare namespace a {

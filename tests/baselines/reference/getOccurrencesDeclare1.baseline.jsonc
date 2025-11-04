@@ -4,7 +4,7 @@
 //     export interface I1 {
 //     }
 // 
-//     export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] module ma.m1.m2.m3 {
+//     export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] namespace ma.m1.m2.m3 {
 //         interface I2 {
 //         }
 //     }
@@ -27,7 +27,7 @@
 //     export interface I1 {
 //     }
 // 
-//     export [|{| kind: "none" |}declare|] module ma.m1.m2.m3 {
+//     export [|{| kind: "none" |}declare|] namespace ma.m1.m2.m3 {
 //         interface I2 {
 //         }
 //     }
@@ -50,7 +50,7 @@
 //     export interface I1 {
 //     }
 // 
-//     export [|{| kind: "none" |}declare|] module ma.m1.m2.m3 {
+//     export [|{| kind: "none" |}declare|] namespace ma.m1.m2.m3 {
 //         interface I2 {
 //         }
 //     }

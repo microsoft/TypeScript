@@ -65,8 +65,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -131,8 +129,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -225,9 +221,6 @@ watchedDirectories::
   {}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
-  {}
 /home/src/workspaces/node_modules/@types: *new*
   {}
   {}
@@ -353,9 +346,6 @@ watchedDirectories::
   {}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
@@ -457,7 +447,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1131,11 +1121,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1144,11 +1141,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1219,7 +1223,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1893,11 +1897,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1906,11 +1917,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -4444,7 +4462,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -5121,11 +5139,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -5134,11 +5159,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -5210,7 +5242,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -5884,11 +5916,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -5897,11 +5936,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },

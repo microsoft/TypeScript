@@ -1,5 +1,5 @@
-//@module: amd
-module x {
+//@module: commonjs
+namespace x {
     interface c {
     }
 }

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/qualifiedModuleLocals.ts] ////
 
 === qualifiedModuleLocals.ts ===
-module A {
+namespace A {
 >A : Symbol(A, Decl(qualifiedModuleLocals.ts, 0, 0))
 
   function b() {}
->b : Symbol(b, Decl(qualifiedModuleLocals.ts, 0, 10))
+>b : Symbol(b, Decl(qualifiedModuleLocals.ts, 0, 13))
 
   export function a(){  A.b();  } // A.b should be an unresolved symbol error
 >a : Symbol(a, Decl(qualifiedModuleLocals.ts, 2, 17))

@@ -11,7 +11,7 @@ overload1.ts(34,5): error TS2769: No overload matches this call.
 
 
 ==== overload1.ts (6 errors) ====
-    module O {
+    namespace O {
         export class A {
             
         }

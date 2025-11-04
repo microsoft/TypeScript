@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////module SomeModule { export class SomeClass { } }
+////namespace SomeModule { export class SomeClass { } }
 ////export = SomeModule;
 
 // @Filename: b.ts

@@ -2,7 +2,7 @@
 // @module: commonjs
 // @declaration: true
 
-module m {
+namespace m {
     class private1 {
     }
 
@@ -38,7 +38,7 @@ module m {
         return new public1();
     }
 
-    module m2 {
+    namespace m2 {
         export class public2 {
         }
     }

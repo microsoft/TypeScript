@@ -1,5 +1,3 @@
-/// <reference no-default-lib="true"/>
-
 interface Boolean {}
 interface IArguments {}
 interface Function {}

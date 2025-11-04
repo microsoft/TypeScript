@@ -1,5 +1,5 @@
 //@module: commonjs
-module x {
+namespace x {
     interface c {
     }
 }

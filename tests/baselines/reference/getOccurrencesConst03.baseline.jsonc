@@ -1,6 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesConst03.ts ===
-// module m {
+// namespace m {
 //     export const x;
 //     export /*HIGHLIGHTS*/[|{| kind: "none" |}const|] enum E {
 //     }
@@ -23,7 +23,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesConst03.ts ===
-// module m {
+// namespace m {
 //     export /*HIGHLIGHTS*/const x;
 //     export const enum E {
 //     }

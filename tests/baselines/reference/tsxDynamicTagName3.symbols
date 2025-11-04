@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxDynamicTagName3.tsx] ////
 
 === tsxDynamicTagName3.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxDynamicTagName3.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(tsxDynamicTagName3.tsx, 0, 20))
+>Element : Symbol(Element, Decl(tsxDynamicTagName3.tsx, 0, 23))
 
 	interface IntrinsicElements {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxDynamicTagName3.tsx, 1, 22))

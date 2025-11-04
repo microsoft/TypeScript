@@ -25,7 +25,7 @@ var base: Base;
 var derived: Derived;
 var derived2: Derived2;
 
-module Derived {
+namespace Derived {
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
 
@@ -39,7 +39,7 @@ module Derived {
     var q = [[() => derived2], [() => derived]]; // {}[]
 }
 
-module WithContextualType {
+namespace WithContextualType {
     // no errors
     var a: Base[] = [derived, derived2];
     var b: Derived[] = [null];

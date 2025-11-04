@@ -13,6 +13,6 @@ export declare class C { }
 export declare enum E { }
 >E : Symbol(E, Decl(ambientInsideNonAmbientExternalModule.ts, 2, 26))
 
-export declare module M { }
+export declare namespace M { }
 >M : Symbol(M, Decl(ambientInsideNonAmbientExternalModule.ts, 3, 25))
 
