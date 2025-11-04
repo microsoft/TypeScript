@@ -38,6 +38,17 @@ func (c *ExtendedConfigCache) Acquire(fh FileHandle, path tspath.Path, parse fun
 func (c *ExtendedConfigCache) Ref(path tspath.Path) {
 	if entry, ok := c.entries.Load(path); ok {
 		entry.mu.Lock()
+		if entry.refCount <= 0 {
+			// Entry was deleted while we were acquiring the lock
+			newEntry, loaded := c.loadOrStoreNewLockedEntry(path)
+			if !loaded {
+				newEntry.entry = entry.entry
+				newEntry.hash = entry.hash
+			}
+			entry.mu.Unlock()
+			newEntry.mu.Unlock()
+			return
+		}
 		entry.refCount++
 		entry.mu.Unlock()
 	}
@@ -48,10 +59,10 @@ func (c *ExtendedConfigCache) Deref(path tspath.Path) {
 		entry.mu.Lock()
 		entry.refCount--
 		remove := entry.refCount <= 0
-		entry.mu.Unlock()
 		if remove {
 			c.entries.Delete(path)
 		}
+		entry.mu.Unlock()
 	}
 }
 
@@ -68,6 +79,11 @@ func (c *ExtendedConfigCache) loadOrStoreNewLockedEntry(path tspath.Path) (*exte
 	entry.mu.Lock()
 	if existing, loaded := c.entries.LoadOrStore(path, entry); loaded {
 		existing.mu.Lock()
+		if existing.refCount <= 0 {
+			// Entry was deleted while we were acquiring the lock
+			existing.mu.Unlock()
+			return c.loadOrStoreNewLockedEntry(path)
+		}
 		existing.refCount++
 		return existing, true
 	}

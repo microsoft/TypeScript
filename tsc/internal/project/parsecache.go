@@ -63,6 +63,17 @@ func (c *ParseCache) Ref(file *ast.SourceFile) {
 	key := newParseCacheKey(file.ParseOptions(), file.ScriptKind)
 	if entry, ok := c.entries.Load(key); ok {
 		entry.mu.Lock()
+		if entry.refCount <= 0 && !c.Options.DisableDeletion {
+			// Entry was deleted while we were acquiring the lock
+			newEntry, loaded := c.loadOrStoreNewLockedEntry(key)
+			if !loaded {
+				newEntry.sourceFile = entry.sourceFile
+				newEntry.hash = entry.hash
+			}
+			entry.mu.Unlock()
+			newEntry.mu.Unlock()
+			return
+		}
 		entry.refCount++
 		entry.mu.Unlock()
 	} else {
@@ -76,10 +87,10 @@ func (c *ParseCache) Deref(file *ast.SourceFile) {
 		entry.mu.Lock()
 		entry.refCount--
 		remove := entry.refCount <= 0
-		entry.mu.Unlock()
 		if !c.Options.DisableDeletion && remove {
 			c.entries.Delete(key)
 		}
+		entry.mu.Unlock()
 	}
 }
 
@@ -92,6 +103,11 @@ func (c *ParseCache) loadOrStoreNewLockedEntry(key parseCacheKey) (*parseCacheEn
 	existing, loaded := c.entries.LoadOrStore(key, entry)
 	if loaded {
 		existing.mu.Lock()
+		if existing.refCount <= 0 && !c.Options.DisableDeletion {
+			// Existing entry was deleted while we were acquiring the lock
+			existing.mu.Unlock()
+			return c.loadOrStoreNewLockedEntry(key)
+		}
 		existing.refCount++
 		return existing, true
 	}
