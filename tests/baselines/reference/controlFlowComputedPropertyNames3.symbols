@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames3.ts] ////
+
+=== controlFlowComputedPropertyNames3.ts ===
+function goThroughArray() {
+>goThroughArray : Symbol(goThroughArray, Decl(controlFlowComputedPropertyNames3.ts, 0, 0))
+
+  const a: number[] = [1, 2, 3];
+>a : Symbol(a, Decl(controlFlowComputedPropertyNames3.ts, 1, 7))
+
+  for (let i = 0; i < a.length; i++) {
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames3.ts, 2, 10))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames3.ts, 2, 10))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowComputedPropertyNames3.ts, 1, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames3.ts, 2, 10))
+
+    if (typeof a[i] === "number") {
+>a : Symbol(a, Decl(controlFlowComputedPropertyNames3.ts, 1, 7))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames3.ts, 2, 10))
+
+      a[i]++;
+>a : Symbol(a, Decl(controlFlowComputedPropertyNames3.ts, 1, 7))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames3.ts, 2, 10))
+    }
+  }
+}
+
