@@ -1,0 +1,759 @@
+//// [tests/cases/compiler/inferenceContextSensitiveDependentParameters1.ts] ////
+
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 2,500
+
+=== inferenceContextSensitiveDependentParameters1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62204
+
+declare function TestConfig<
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>           : ^^^^^^^       ^^^^^^^^^                              ^^      ^^       ^^    ^^                                                           ^^^^^    
+
+  const TConfig extends { a?: any; b?: any; c?: any },
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : any
+>  : ^^^
+
+>(
+  config: TConfig,
+>config : TConfig
+>       : ^^^^^^^
+
+  test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false,
+>test : Exclude<keyof TConfig, "a" | "b"> extends never ? true : false
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+): void;
+
+TestConfig(
+>TestConfig(  {    a: "hello",    b: function () {      return "123";    },  },  true,) : void
+>                                                                                       : ^^^^
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>           : ^^^^^^^       ^^^^^^^^^                              ^^      ^^       ^^    ^^                                                           ^^^^^    
+  {
+>{    a: "hello",    b: function () {      return "123";    },  } : { a: "hello"; b: () => "123"; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: "hello",
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    b: function () {
+>b : () => "123"
+>  : ^^^^^^^^^^^
+>function () {      return "123";    } : () => "123"
+>                                      : ^^^^^^^^^^^
+
+      return "123";
+>"123" : "123"
+>      : ^^^^^
+
+    },
+  },
+  true,
+>true : true
+>     : ^^^^
+
+);
+
+declare function TestConfig_2<
+>TestConfig_2 : <const TConfig extends { a?: any; b?: (arg: number) => unknown; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>             : ^^^^^^^       ^^^^^^^^^                                                   ^^      ^^       ^^    ^^                                                           ^^^^^    
+
+  const TConfig extends { a?: any; b?: (arg: number) => unknown; c?: any },
+>a : any
+>  : ^^^
+>b : ((arg: number) => unknown) | undefined
+>  : ^^   ^^      ^^^^^       ^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>c : any
+>  : ^^^
+
+>(
+  config: TConfig,
+>config : TConfig
+>       : ^^^^^^^
+
+  test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false,
+>test : Exclude<keyof TConfig, "a" | "b"> extends never ? true : false
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+): void;
+
+TestConfig_2(
+>TestConfig_2(  {    a: "hello",    b: (arg) => {      return "123";    },  },  true,) : void
+>                                                                                      : ^^^^
+>TestConfig_2 : <const TConfig extends { a?: any; b?: (arg: number) => unknown; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
+>             : ^^^^^^^       ^^^^^^^^^                                                   ^^      ^^       ^^    ^^                                                           ^^^^^    
+  {
+>{    a: "hello",    b: (arg) => {      return "123";    },  } : { a: "hello"; b: (arg: number) => string; }
+>                                                              : ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+
+    a: "hello",
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    b: (arg) => {
+>b : (arg: number) => string
+>  : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => {      return "123";    } : (arg: number) => string
+>                                   : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+      return "123";
+>"123" : "123"
+>      : ^^^^^
+
+    },
+  },
+  true,
+>true : true
+>     : ^^^^
+
+);
+
+// https://github.com/microsoft/TypeScript/issues/47599#issuecomment-2919401231
+type KeysMatchingType<T, V> = {
+>KeysMatchingType : KeysMatchingType<T, V>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: T[K] extends V ? K : never;
+}[keyof T];
+type ExtractItems<R, IK extends keyof R> = R[IK] extends readonly (infer T)[]
+>ExtractItems : ExtractItems<R, IK>
+>             : ^^^^^^^^^^^^^^^^^^^
+
+  ? T
+  : never;
+type StreamPaginatedDataProps<R, IK, TK> = {
+>StreamPaginatedDataProps : StreamPaginatedDataProps<R, IK, TK>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  callback: (limit: number, offset: number) => Promise<R>;
+>callback : (limit: number, offset: number) => Promise<R>
+>         : ^     ^^      ^^      ^^      ^^^^^          
+>limit : number
+>      : ^^^^^^
+>offset : number
+>       : ^^^^^^
+
+  responseKeys: { items: IK; total: TK };
+>responseKeys : { items: IK; total: TK; }
+>             : ^^^^^^^^^  ^^^^^^^^^  ^^^
+>items : IK
+>      : ^^
+>total : TK
+>      : ^^
+
+  limit?: number;
+>limit : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function streamPaginatedData<
+>streamPaginatedData : <R, const IK extends KeysMatchingType<R, readonly unknown[]>, const TK extends KeysMatchingType<R, number>>({ callback, responseKeys, limit, }: StreamPaginatedDataProps<R, IK, TK>) => AsyncGenerator<ExtractItems<R, IK>, void, unknown>
+>                    : ^ ^^^^^^^^  ^^^^^^^^^                                       ^^^^^^^^  ^^^^^^^^^                           ^^                                  ^^                                   ^^^^^                                                  
+
+  R,
+  const IK extends KeysMatchingType<R, readonly unknown[]>,
+  const TK extends KeysMatchingType<R, number>,
+>({
+  callback,
+>callback : (limit: number, offset: number) => Promise<R>
+>         : ^     ^^      ^^      ^^      ^^^^^^^^^^^^^^^
+
+  responseKeys,
+>responseKeys : { items: IK; total: TK; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  limit,
+>limit : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}: StreamPaginatedDataProps<R, IK, TK>): AsyncGenerator<
+  ExtractItems<R, IK>,
+  void,
+  unknown
+>;
+
+const sampleData = [
+>sampleData : readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[  { location: { name: "New York" } },  { location: { name: "Tokyo" } },] as const : readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[  { location: { name: "New York" } },  { location: { name: "Tokyo" } },] : readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  { location: { name: "New York" } },
+>{ location: { name: "New York" } } : { readonly location: { readonly name: "New York"; }; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>location : { readonly name: "New York"; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "New York" } : { readonly name: "New York"; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "New York"
+>     : ^^^^^^^^^^
+>"New York" : "New York"
+>           : ^^^^^^^^^^
+
+  { location: { name: "Tokyo" } },
+>{ location: { name: "Tokyo" } } : { readonly location: { readonly name: "Tokyo"; }; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>location : { readonly name: "Tokyo"; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "Tokyo" } : { readonly name: "Tokyo"; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "Tokyo"
+>     : ^^^^^^^
+>"Tokyo" : "Tokyo"
+>        : ^^^^^^^
+
+] as const;
+
+streamPaginatedData({
+>streamPaginatedData({  callback: async (a, b) => ({    someCount: sampleData.length,    abra: sampleData,  }),  responseKeys: { total: "someCount", items: "abra" },}) : AsyncGenerator<{ readonly location: { readonly name: "New York"; }; } | { readonly location: { readonly name: "Tokyo"; }; }, void, unknown>
+>                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>streamPaginatedData : <R, const IK extends KeysMatchingType<R, readonly unknown[]>, const TK extends KeysMatchingType<R, number>>({ callback, responseKeys, limit, }: StreamPaginatedDataProps<R, IK, TK>) => AsyncGenerator<ExtractItems<R, IK>, void, unknown>
+>                    : ^ ^^^^^^^^  ^^^^^^^^^                                       ^^^^^^^^  ^^^^^^^^^                           ^^                                  ^^                                   ^^^^^                                                  
+>{  callback: async (a, b) => ({    someCount: sampleData.length,    abra: sampleData,  }),  responseKeys: { total: "someCount", items: "abra" },} : { callback: (a: number, b: number) => Promise<{ someCount: 2; abra: readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]; }>; responseKeys: { total: "someCount"; items: "abra"; }; }
+>                                                                                                                                                  : ^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  callback: async (a, b) => ({
+>callback : (a: number, b: number) => Promise<{ someCount: 2; abra: readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]; }>
+>         : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async (a, b) => ({    someCount: sampleData.length,    abra: sampleData,  }) : (a: number, b: number) => Promise<{ someCount: 2; abra: readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]; }>
+>                                                                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>({    someCount: sampleData.length,    abra: sampleData,  }) : { someCount: 2; abra: readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    someCount: sampleData.length,    abra: sampleData,  } : { someCount: 2; abra: readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    someCount: sampleData.length,
+>someCount : 2
+>          : ^
+>sampleData.length : 2
+>                  : ^
+>sampleData : readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : 2
+>       : ^
+
+    abra: sampleData,
+>abra : readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>sampleData : readonly [{ readonly location: { readonly name: "New York"; }; }, { readonly location: { readonly name: "Tokyo"; }; }]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  }),
+  responseKeys: { total: "someCount", items: "abra" },
+>responseKeys : { total: "someCount"; items: "abra"; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ total: "someCount", items: "abra" } : { total: "someCount"; items: "abra"; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>total : "someCount"
+>      : ^^^^^^^^^^^
+>"someCount" : "someCount"
+>            : ^^^^^^^^^^^
+>items : "abra"
+>      : ^^^^^^
+>"abra" : "abra"
+>       : ^^^^^^
+
+})
+
+// https://github.com/microsoft/TypeScript/issues/47599#issuecomment-2132658606
+interface Base {
+  x: string;
+>x : string
+>  : ^^^^^^
+}
+interface Foo extends Base {
+  y: number;
+>y : number
+>  : ^^^^^^
+}
+
+type Fn<T> = (t: T) => void;
+>Fn : Fn<T>
+>   : ^^^^^
+>t : T
+>  : ^
+
+declare const FooFn: Fn<Foo>;
+>FooFn : Fn<Foo>
+>      : ^^^^^^^
+
+type Baz = <R extends Base, F extends Fn<R>>(arg: {
+>Baz : Baz
+>    : ^^^
+>arg : { x: (bar: Foo) => R; y?: F[]; }
+>    : ^^^^^               ^^^^^^   ^^^
+
+  x: (bar: Foo) => R;
+>x : (bar: Foo) => R
+>  : ^   ^^   ^^^^^ 
+>bar : Foo
+>    : ^^^
+
+  y?: F[];
+>y : F[] | undefined
+>  : ^^^^^^^^^^^^^^^
+
+}) => R;
+
+declare const baz: Baz;
+>baz : Baz
+>    : ^^^
+
+const R1 = baz({ x: (ctx) => ctx });
+>R1 : Foo
+>   : ^^^
+>baz({ x: (ctx) => ctx }) : Foo
+>                         : ^^^
+>baz : Baz
+>    : ^^^
+>{ x: (ctx) => ctx } : { x: (ctx: Foo) => Foo; }
+>                    : ^^^^^^   ^^^^^^^^^^^^^^^^
+>x : (ctx: Foo) => Foo
+>  : ^   ^^^^^^^^^^^^^
+>(ctx) => ctx : (ctx: Foo) => Foo
+>             : ^   ^^^^^^^^^^^^^
+>ctx : Foo
+>    : ^^^
+>ctx : Foo
+>    : ^^^
+
+const R2 = baz({ x: (ctx) => ctx, y: [FooFn] });
+>R2 : Foo
+>   : ^^^
+>baz({ x: (ctx) => ctx, y: [FooFn] }) : Foo
+>                                     : ^^^
+>baz : Baz
+>    : ^^^
+>{ x: (ctx) => ctx, y: [FooFn] } : { x: (ctx: Foo) => Foo; y: Fn<Foo>[]; }
+>                                : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : (ctx: Foo) => Foo
+>  : ^   ^^^^^^^^^^^^^
+>(ctx) => ctx : (ctx: Foo) => Foo
+>             : ^   ^^^^^^^^^^^^^
+>ctx : Foo
+>    : ^^^
+>ctx : Foo
+>    : ^^^
+>y : Fn<Foo>[]
+>  : ^^^^^^^^^
+>[FooFn] : Fn<Foo>[]
+>        : ^^^^^^^^^
+>FooFn : Fn<Foo>
+>      : ^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/55489
+type NonStringIterable<T> = T extends string
+>NonStringIterable : NonStringIterable<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+  ? never
+  : T extends Iterable<any>
+  ? T
+  : never;
+
+declare function doSomething<T>(value: NonStringIterable<T>): T;
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>value : NonStringIterable<T>
+>      : ^^^^^^^^^^^^^^^^^^^^
+
+const o = { foo() {} };
+>o : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
+>{ foo() {} } : { foo(): void; }
+>             : ^^^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+doSomething("value"); // error
+>doSomething("value") : "value"
+>                     : ^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>"value" : "value"
+>        : ^^^^^^^
+
+doSomething(["v"]);
+>doSomething(["v"]) : string[]
+>                   : ^^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>["v"] : string[]
+>      : ^^^^^^^^
+>"v" : "v"
+>    : ^^^
+
+doSomething([o]);
+>doSomething([o]) : { foo(): void; }[]
+>                 : ^^^^^^^^^^^^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>[o] : { foo(): void; }[]
+>    : ^^^^^^^^^^^^^^^^^^
+>o : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
+
+doSomething([{ foo() {} }]);
+>doSomething([{ foo() {} }]) : { foo(): void; }[]
+>                            : ^^^^^^^^^^^^^^^^^^
+>doSomething : <T>(value: NonStringIterable<T>) => T
+>            : ^ ^^     ^^                    ^^^^^ 
+>[{ foo() {} }] : { foo(): void; }[]
+>               : ^^^^^^^^^^^^^^^^^^
+>{ foo() {} } : { foo(): void; }
+>             : ^^^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/55124
+type Values<T> = T[keyof T];
+>Values : Values<T>
+>       : ^^^^^^^^^
+
+type ExtractFields<Options> = Values<{
+>ExtractFields : ExtractFields<Options>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof Options]: Options[K] extends object ? keyof Options[K] : never;
+}>;
+type SetType<Options> = {
+>SetType : SetType<Options>
+>        : ^^^^^^^^^^^^^^^^
+
+  [key: string]: any;
+>key : string
+>    : ^^^^^^
+
+  target?: ExtractFields<Options>;
+>target : ExtractFields<Options> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function test55124<OptionsData extends SetType<OptionsData>>(
+>test55124 : <OptionsData extends SetType<OptionsData>>(options: OptionsData) => void
+>          : ^           ^^^^^^^^^                    ^^       ^^           ^^^^^    
+
+  options: OptionsData,
+>options : OptionsData
+>        : ^^^^^^^^^^^
+
+): void;
+
+test55124({
+>test55124({  target: "$test4",  data1: {    $test1: 111,    $test2: null,  },  data2: {    $test3: {},    $test4: () => {},    $test5() {},  },}) : void
+>                                                                                                                                                  : ^^^^
+>test55124 : <OptionsData extends SetType<OptionsData>>(options: OptionsData) => void
+>          : ^           ^^^^^^^^^                    ^^       ^^           ^^^^^    
+>{  target: "$test4",  data1: {    $test1: 111,    $test2: null,  },  data2: {    $test3: {},    $test4: () => {},    $test5() {},  },} : { target: "$test4"; data1: { $test1: number; $test2: null; }; data2: { $test3: {}; $test4: () => void; $test5(): void; }; }
+>                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  target: "$test4",
+>target : "$test4"
+>       : ^^^^^^^^
+>"$test4" : "$test4"
+>         : ^^^^^^^^
+
+  data1: {
+>data1 : { $test1: number; $test2: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test1: 111,    $test2: null,  } : { $test1: number; $test2: null; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test1: 111,
+>$test1 : number
+>       : ^^^^^^
+>111 : 111
+>    : ^^^
+
+    $test2: null,
+>$test2 : null
+>       : ^^^^
+
+  },
+  data2: {
+>data2 : { $test3: {}; $test4: () => void; $test5(): void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test3: {},    $test4: () => {},    $test5() {},  } : { $test3: {}; $test4: () => void; $test5(): void; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test3: {},
+>$test3 : {}
+>       : ^^
+>{} : {}
+>   : ^^
+
+    $test4: () => {},
+>$test4 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    $test5() {},
+>$test5 : () => void
+>       : ^^^^^^^^^^
+
+  },
+});
+
+type SetType_2<Options> = {
+>SetType_2 : SetType_2<Options>
+>          : ^^^^^^^^^^^^^^^^^^
+
+  [key: `data${number}`]: Record<string, (arg: number) => void>;
+>key : `data${number}`
+>    : ^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+  target?: ExtractFields<Options>;
+>target : ExtractFields<Options> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function test55124_2<OptionsData extends SetType_2<OptionsData>>(
+>test55124_2 : <OptionsData extends SetType_2<OptionsData>>(options: OptionsData) => void
+>            : ^           ^^^^^^^^^                      ^^       ^^           ^^^^^    
+
+  options: OptionsData,
+>options : OptionsData
+>        : ^^^^^^^^^^^
+
+): void;
+
+test55124_2({
+>test55124_2({  target: "$test4",  data1: {    $test1: () => {},    $test2: () => {},  },  data2: {    $test3: () => {},    $test4: () => {},    $test5: (arg) => {},  },}) : void
+>                                                                                                                                                                           : ^^^^
+>test55124_2 : <OptionsData extends SetType_2<OptionsData>>(options: OptionsData) => void
+>            : ^           ^^^^^^^^^                      ^^       ^^           ^^^^^    
+>{  target: "$test4",  data1: {    $test1: () => {},    $test2: () => {},  },  data2: {    $test3: () => {},    $test4: () => {},    $test5: (arg) => {},  },} : { target: "$test4"; data1: { $test1: () => void; $test2: () => void; }; data2: { $test3: () => void; $test4: () => void; $test5: (arg: number) => void; }; }
+>                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+
+  target: "$test4",
+>target : "$test4"
+>       : ^^^^^^^^
+>"$test4" : "$test4"
+>         : ^^^^^^^^
+
+  data1: {
+>data1 : { $test1: () => void; $test2: () => void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $test1: () => {},    $test2: () => {},  } : { $test1: () => void; $test2: () => void; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $test1: () => {},
+>$test1 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    $test2: () => {},
+>$test2 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+  },
+  data2: {
+>data2 : { $test3: () => void; $test4: () => void; $test5: (arg: number) => void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+>{    $test3: () => {},    $test4: () => {},    $test5: (arg) => {},  } : { $test3: () => void; $test4: () => void; $test5: (arg: number) => void; }
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+
+    $test3: () => {},
+>$test3 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    $test4: () => {},
+>$test4 : () => void
+>       : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    $test5: (arg) => {},
+>$test5 : (arg: number) => void
+>       : ^   ^^^^^^^^^^^^^^^^^
+>(arg) => {} : (arg: number) => void
+>            : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/54438
+interface Entity {
+  id: number;
+>id : number
+>   : ^^^^^^
+
+  name: string;
+>name : string
+>     : ^^^^^^
+}
+
+type Fn54438<T> = (params: Record<string, unknown>) => T[];
+>Fn54438 : Fn54438<T>
+>        : ^^^^^^^^^^
+>params : Record<string, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function test54438<T, K extends keyof T>(fn: Fn54438<T>, key: K): T;
+>test54438 : <T, K extends keyof T>(fn: Fn54438<T>, key: K) => T
+>          : ^ ^^ ^^^^^^^^^       ^^  ^^          ^^   ^^ ^^^^^ 
+>fn : Fn54438<T>
+>   : ^^^^^^^^^^
+>key : K
+>    : ^
+
+test54438(() => [] as Entity[], "id");
+>test54438(() => [] as Entity[], "id") : Entity
+>                                      : ^^^^^^
+>test54438 : <T, K extends keyof T>(fn: Fn54438<T>, key: K) => T
+>          : ^ ^^ ^^^^^^^^^       ^^  ^^          ^^   ^^ ^^^^^ 
+>() => [] as Entity[] : () => Entity[]
+>                     : ^^^^^^        
+>[] as Entity[] : Entity[]
+>               : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>"id" : "id"
+>     : ^^^^
+
+test54438((params: Record<string, unknown>) => [] as Entity[], "name");
+>test54438((params: Record<string, unknown>) => [] as Entity[], "name") : Entity
+>                                                                       : ^^^^^^
+>test54438 : <T, K extends keyof T>(fn: Fn54438<T>, key: K) => T
+>          : ^ ^^ ^^^^^^^^^       ^^  ^^          ^^   ^^ ^^^^^ 
+>(params: Record<string, unknown>) => [] as Entity[] : (params: Record<string, unknown>) => Entity[]
+>                                                    : ^      ^^                       ^^^^^        
+>params : Record<string, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>[] as Entity[] : Entity[]
+>               : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>"name" : "name"
+>       : ^^^^^^
+
+test54438((params: unknown) => [] as Entity[], "id");
+>test54438((params: unknown) => [] as Entity[], "id") : Entity
+>                                                     : ^^^^^^
+>test54438 : <T, K extends keyof T>(fn: Fn54438<T>, key: K) => T
+>          : ^ ^^ ^^^^^^^^^       ^^  ^^          ^^   ^^ ^^^^^ 
+>(params: unknown) => [] as Entity[] : (params: unknown) => Entity[]
+>                                    : ^      ^^       ^^^^^        
+>params : unknown
+>       : ^^^^^^^
+>[] as Entity[] : Entity[]
+>               : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>"id" : "id"
+>     : ^^^^
+
+test54438((params) => [] as Entity[], "id");
+>test54438((params) => [] as Entity[], "id") : Entity
+>                                            : ^^^^^^
+>test54438 : <T, K extends keyof T>(fn: Fn54438<T>, key: K) => T
+>          : ^ ^^ ^^^^^^^^^       ^^  ^^          ^^   ^^ ^^^^^ 
+>(params) => [] as Entity[] : (params: Record<string, unknown>) => Entity[]
+>                           : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>params : Record<string, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>[] as Entity[] : Entity[]
+>               : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>"id" : "id"
+>     : ^^^^
+
+export declare const serve: <Req>(props: {
+>serve : <Req>(props: { bindings: Extract<NoInfer<Req>, string>; fetch: (event: unknown) => Generator<Req>; }) => unknown
+>      : ^   ^^     ^^                                                                                       ^^^^^       
+>props : { bindings: Extract<NoInfer<Req>, string>; fetch: (event: unknown) => Generator<Req>; }
+>      : ^^^^^^^^^^^^                             ^^^^^^^^^                                  ^^^
+
+  bindings: Extract<NoInfer<Req>, string>;
+>bindings : Extract<NoInfer<Req>, string>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  fetch: (event: unknown) => Generator<Req>;
+>fetch : (event: unknown) => Generator<Req>
+>      : ^     ^^       ^^^^^              
+>event : unknown
+>      : ^^^^^^^
+
+}) => unknown;
+
+declare const bar: () => Generator<"SendMessage">;
+>bar : () => Generator<"SendMessage">
+>    : ^^^^^^                        
+
+serve({
+>serve({  bindings: "SendMessage" as const,  fetch: function* (a) {    yield* bar();  },}) : unknown
+>                                                                                          : ^^^^^^^
+>serve : <Req>(props: { bindings: Extract<NoInfer<Req>, string>; fetch: (event: unknown) => Generator<Req>; }) => unknown
+>      : ^   ^^     ^^                                                                                       ^^^^^       
+>{  bindings: "SendMessage" as const,  fetch: function* (a) {    yield* bar();  },} : { bindings: "SendMessage"; fetch: (a: unknown) => Generator<"SendMessage", void, any>; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  bindings: "SendMessage" as const,
+>bindings : "SendMessage"
+>         : ^^^^^^^^^^^^^
+>"SendMessage" as const : "SendMessage"
+>                       : ^^^^^^^^^^^^^
+>"SendMessage" : "SendMessage"
+>              : ^^^^^^^^^^^^^
+
+  fetch: function* (a) {
+>fetch : (a: unknown) => Generator<"SendMessage", void, any>
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* (a) {    yield* bar();  } : (a: unknown) => Generator<"SendMessage", void, any>
+>                                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : unknown
+>  : ^^^^^^^
+
+    yield* bar();
+>yield* bar() : any
+>             : ^^^
+>bar() : Generator<"SendMessage", any, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : () => Generator<"SendMessage">
+>    : ^^^^^^                        
+
+  },
+});
