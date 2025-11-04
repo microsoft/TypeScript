@@ -1,0 +1,639 @@
+//// [tests/cases/compiler/regularExpressionUnicodeSets.ts] ////
+
+=== regularExpressionUnicodeSets.ts ===
+const regexes: RegExp[] = [
+>regexes : RegExp[]
+>        : ^^^^^^^^
+>[	// Single '&' - valid everywhere in class unions since it is not an operator	/[&]/v,	/[?&]/v,	/[&?]/v,	/[?&?]/v,	/[&?&]/v,	/[a&]/v,	/[&a]/v,	/[a&a]/v,	/[&a&]/v,	/[\?&]/v,	/[&\?]/v,	/[\?&\?]/v,	/[&\?&]/v,	/[\-&]/v,	/[&\-]/v,	/[\-&\-]/v,	/[&\-&]/v,	/[\?\&]/v,	/[\&\?]/v,	/[\&\&]/v,	// Single '-' - incomplete character class ranges, which is invalid in Unicode sets mode	/[-]/v,	/[ab&-]/v,	/[a&b&c-]/v,	/[abc-]/v,	/[-abc]/v,	/[-a&bc]/v,	/[-a&b&c]/v,	/[-abc-]/v,	/[-ab-c-]/v,	/[-a-bc-]/v,	/[-a-b-c-]/v,	/[-a-bc-d-]/v,	// Double '--', some of which are class subtractions	/[--\-]/v,	/[--\-&]/v,	/[-\--&]/v,	/[\--\-&]/v,	/[\-\--&]/v,	/[&--\-]/v,	/[&---&]/v,	/[&\---&]/v,	/[&-\--&]/v,	/[&--\-&]/v,	// Double '&&', some of which are class intersections	/[&&\&]/v,	/[&&\&-]/v,	/[&\&&-]/v,	/[\&&\&-]/v,	/[\&\&&-]/v,	/[-&&\&]/v,	/[-&&&-]/v,	/[-\&&&-]/v,	/[-&\&&-]/v,	/[-&&\&-]/v,	// Consecutive '&'s - test whether the recovery is user-friendly	/[&&]/v,	/[&&&]/v,	/[&&&&]/v,	/[&&&&&]/v,	/[&&&&&&]/v,	/[?&+]/v,	/[?&&+]/v,	/[?&&&+]/v,	/[?&&&&+]/v,	/[?&&&&&+]/v,	/[?&&&&&&+]/v,	/[a&&]/v,	/[a&&&]/v,	/[a&&&&]/v,	/[a&&&&&]/v,	/[a&&&&&&]/v,	/[ab&bc]/v,	/[ab&&bc]/v,	/[ab&&&bc]/v,	/[ab&&&&bc]/v,	/[ab&&&&&bc]/v,	/[ab&&&&&&bc]/v,	/[a&&\&]/v,	/[a&&b&]/v,	/[a&&b&c]/v,	/[a&&b\&c]/v,	/[a&\&b\&]/v,	/[a\&&b&c]/v,	// Consecutive '-'s - test whether the recovery is user-friendly	/[--]/v,	/[---]/v,	/[----]/v,	/[-----]/v,	/[------]/v,	/[?-+]/v,	/[?--+]/v,	/[?---+]/v,	/[?----+]/v,	/[?-----+]/v,	/[?------+]/v,	/[a--]/v,	/[a---]/v,	/[a----]/v,	/[a-----]/v,	/[a------]/v,	/[ab-bc]/v,	/[ab--bc]/v,	/[ab---bc]/v,	/[ab----bc]/v,	/[ab-----bc]/v,	/[ab------bc]/v,	/[a--\-]/v,	/[a--b-]/v,	/[a--b-c]/v,	/[a--b\-c]/v,	/[a-\-b\-]/v,	/[a\--b-c]/v,	/[a--&]/v,	/[a--\&]/v,	/[a--b&]/v,	/[a--b&c]/v,	/[a--b\&c]/v,	/[a-\-b\&]/v,	/[a\--b&c]/v,	// Error recovery test with mixed operators	/[a&&-]/v,	/[a&&\-]/v,	/[a&&b-]/v,	/[a&&b-c]/v,	/[a&&b\-c]/v,	/[a&\&b\-]/v,	/[a\&&b-c]/v,	/[a--&b]/v,	/[a--&&b]/v,	/[a--&&&b]/v,	/[a--&&&&b]/v,	/[a---&&b]/v,	/[a----&&b]/v,	/[a&&-b]/v,	/[a&&--b]/v,	/[a&&---b]/v,	/[a&&----b]/v,	/[a&&&--b]/v,	/[a&&&&--b]/v,	/[a-b&c]/v,	/[a-b&&c]/v,	/[a-b&&&c]/v,	/[a-&b]/v,	/[a-&&b]/v,	/[a-&&&b]/v,	/[a&-b]/v,	/[a&--b]/v,	/[a&---b]/v,	// Integrated hybrid tests	/[a--&&--&&--c]/v,	/[a--?&--&b--?&&--&&c]/v,	/[a--b&&c-&b--a-&-]/v,	/[a\--a&-?\&a&&-a--&b\-]/v,	/[a&&--&&--&&c]/v,	/[a&&?-&&-b&&?--&&--c]/v,	/[a&&b--c&-b&&a&-&]/v,	/[a\&&a-&?\-a--&a&&-b\&]/v,	/[a-&&--&&-c]/v,	/[a-?&--&b--?&&--&&c]/v,	/[a-b&&c-&b--a-&-]/v,	/[a-b&-?\&a&&-a--&b\-]/v,] : RegExp[]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^
+
+	// Single '&' - valid everywhere in class unions since it is not an operator
+	/[&]/v,
+>/[&]/v : RegExp
+>       : ^^^^^^
+
+	/[?&]/v,
+>/[?&]/v : RegExp
+>        : ^^^^^^
+
+	/[&?]/v,
+>/[&?]/v : RegExp
+>        : ^^^^^^
+
+	/[?&?]/v,
+>/[?&?]/v : RegExp
+>         : ^^^^^^
+
+	/[&?&]/v,
+>/[&?&]/v : RegExp
+>         : ^^^^^^
+
+	/[a&]/v,
+>/[a&]/v : RegExp
+>        : ^^^^^^
+
+	/[&a]/v,
+>/[&a]/v : RegExp
+>        : ^^^^^^
+
+	/[a&a]/v,
+>/[a&a]/v : RegExp
+>         : ^^^^^^
+
+	/[&a&]/v,
+>/[&a&]/v : RegExp
+>         : ^^^^^^
+
+	/[\?&]/v,
+>/[\?&]/v : RegExp
+>         : ^^^^^^
+
+	/[&\?]/v,
+>/[&\?]/v : RegExp
+>         : ^^^^^^
+
+	/[\?&\?]/v,
+>/[\?&\?]/v : RegExp
+>           : ^^^^^^
+
+	/[&\?&]/v,
+>/[&\?&]/v : RegExp
+>          : ^^^^^^
+
+	/[\-&]/v,
+>/[\-&]/v : RegExp
+>         : ^^^^^^
+
+	/[&\-]/v,
+>/[&\-]/v : RegExp
+>         : ^^^^^^
+
+	/[\-&\-]/v,
+>/[\-&\-]/v : RegExp
+>           : ^^^^^^
+
+	/[&\-&]/v,
+>/[&\-&]/v : RegExp
+>          : ^^^^^^
+
+	/[\?\&]/v,
+>/[\?\&]/v : RegExp
+>          : ^^^^^^
+
+	/[\&\?]/v,
+>/[\&\?]/v : RegExp
+>          : ^^^^^^
+
+	/[\&\&]/v,
+>/[\&\&]/v : RegExp
+>          : ^^^^^^
+
+	// Single '-' - incomplete character class ranges, which is invalid in Unicode sets mode
+	/[-]/v,
+>/[-]/v : RegExp
+>       : ^^^^^^
+
+	/[ab&-]/v,
+>/[ab&-]/v : RegExp
+>          : ^^^^^^
+
+	/[a&b&c-]/v,
+>/[a&b&c-]/v : RegExp
+>            : ^^^^^^
+
+	/[abc-]/v,
+>/[abc-]/v : RegExp
+>          : ^^^^^^
+
+	/[-abc]/v,
+>/[-abc]/v : RegExp
+>          : ^^^^^^
+
+	/[-a&bc]/v,
+>/[-a&bc]/v : RegExp
+>           : ^^^^^^
+
+	/[-a&b&c]/v,
+>/[-a&b&c]/v : RegExp
+>            : ^^^^^^
+
+	/[-abc-]/v,
+>/[-abc-]/v : RegExp
+>           : ^^^^^^
+
+	/[-ab-c-]/v,
+>/[-ab-c-]/v : RegExp
+>            : ^^^^^^
+
+	/[-a-bc-]/v,
+>/[-a-bc-]/v : RegExp
+>            : ^^^^^^
+
+	/[-a-b-c-]/v,
+>/[-a-b-c-]/v : RegExp
+>             : ^^^^^^
+
+	/[-a-bc-d-]/v,
+>/[-a-bc-d-]/v : RegExp
+>              : ^^^^^^
+
+	// Double '--', some of which are class subtractions
+	/[--\-]/v,
+>/[--\-]/v : RegExp
+>          : ^^^^^^
+
+	/[--\-&]/v,
+>/[--\-&]/v : RegExp
+>           : ^^^^^^
+
+	/[-\--&]/v,
+>/[-\--&]/v : RegExp
+>           : ^^^^^^
+
+	/[\--\-&]/v,
+>/[\--\-&]/v : RegExp
+>            : ^^^^^^
+
+	/[\-\--&]/v,
+>/[\-\--&]/v : RegExp
+>            : ^^^^^^
+
+	/[&--\-]/v,
+>/[&--\-]/v : RegExp
+>           : ^^^^^^
+
+	/[&---&]/v,
+>/[&---&]/v : RegExp
+>           : ^^^^^^
+
+	/[&\---&]/v,
+>/[&\---&]/v : RegExp
+>            : ^^^^^^
+
+	/[&-\--&]/v,
+>/[&-\--&]/v : RegExp
+>            : ^^^^^^
+
+	/[&--\-&]/v,
+>/[&--\-&]/v : RegExp
+>            : ^^^^^^
+
+	// Double '&&', some of which are class intersections
+	/[&&\&]/v,
+>/[&&\&]/v : RegExp
+>          : ^^^^^^
+
+	/[&&\&-]/v,
+>/[&&\&-]/v : RegExp
+>           : ^^^^^^
+
+	/[&\&&-]/v,
+>/[&\&&-]/v : RegExp
+>           : ^^^^^^
+
+	/[\&&\&-]/v,
+>/[\&&\&-]/v : RegExp
+>            : ^^^^^^
+
+	/[\&\&&-]/v,
+>/[\&\&&-]/v : RegExp
+>            : ^^^^^^
+
+	/[-&&\&]/v,
+>/[-&&\&]/v : RegExp
+>           : ^^^^^^
+
+	/[-&&&-]/v,
+>/[-&&&-]/v : RegExp
+>           : ^^^^^^
+
+	/[-\&&&-]/v,
+>/[-\&&&-]/v : RegExp
+>            : ^^^^^^
+
+	/[-&\&&-]/v,
+>/[-&\&&-]/v : RegExp
+>            : ^^^^^^
+
+	/[-&&\&-]/v,
+>/[-&&\&-]/v : RegExp
+>            : ^^^^^^
+
+	// Consecutive '&'s - test whether the recovery is user-friendly
+	/[&&]/v,
+>/[&&]/v : RegExp
+>        : ^^^^^^
+
+	/[&&&]/v,
+>/[&&&]/v : RegExp
+>         : ^^^^^^
+
+	/[&&&&]/v,
+>/[&&&&]/v : RegExp
+>          : ^^^^^^
+
+	/[&&&&&]/v,
+>/[&&&&&]/v : RegExp
+>           : ^^^^^^
+
+	/[&&&&&&]/v,
+>/[&&&&&&]/v : RegExp
+>            : ^^^^^^
+
+	/[?&+]/v,
+>/[?&+]/v : RegExp
+>         : ^^^^^^
+
+	/[?&&+]/v,
+>/[?&&+]/v : RegExp
+>          : ^^^^^^
+
+	/[?&&&+]/v,
+>/[?&&&+]/v : RegExp
+>           : ^^^^^^
+
+	/[?&&&&+]/v,
+>/[?&&&&+]/v : RegExp
+>            : ^^^^^^
+
+	/[?&&&&&+]/v,
+>/[?&&&&&+]/v : RegExp
+>             : ^^^^^^
+
+	/[?&&&&&&+]/v,
+>/[?&&&&&&+]/v : RegExp
+>              : ^^^^^^
+
+	/[a&&]/v,
+>/[a&&]/v : RegExp
+>         : ^^^^^^
+
+	/[a&&&]/v,
+>/[a&&&]/v : RegExp
+>          : ^^^^^^
+
+	/[a&&&&]/v,
+>/[a&&&&]/v : RegExp
+>           : ^^^^^^
+
+	/[a&&&&&]/v,
+>/[a&&&&&]/v : RegExp
+>            : ^^^^^^
+
+	/[a&&&&&&]/v,
+>/[a&&&&&&]/v : RegExp
+>             : ^^^^^^
+
+	/[ab&bc]/v,
+>/[ab&bc]/v : RegExp
+>           : ^^^^^^
+
+	/[ab&&bc]/v,
+>/[ab&&bc]/v : RegExp
+>            : ^^^^^^
+
+	/[ab&&&bc]/v,
+>/[ab&&&bc]/v : RegExp
+>             : ^^^^^^
+
+	/[ab&&&&bc]/v,
+>/[ab&&&&bc]/v : RegExp
+>              : ^^^^^^
+
+	/[ab&&&&&bc]/v,
+>/[ab&&&&&bc]/v : RegExp
+>               : ^^^^^^
+
+	/[ab&&&&&&bc]/v,
+>/[ab&&&&&&bc]/v : RegExp
+>                : ^^^^^^
+
+	/[a&&\&]/v,
+>/[a&&\&]/v : RegExp
+>           : ^^^^^^
+
+	/[a&&b&]/v,
+>/[a&&b&]/v : RegExp
+>           : ^^^^^^
+
+	/[a&&b&c]/v,
+>/[a&&b&c]/v : RegExp
+>            : ^^^^^^
+
+	/[a&&b\&c]/v,
+>/[a&&b\&c]/v : RegExp
+>             : ^^^^^^
+
+	/[a&\&b\&]/v,
+>/[a&\&b\&]/v : RegExp
+>             : ^^^^^^
+
+	/[a\&&b&c]/v,
+>/[a\&&b&c]/v : RegExp
+>             : ^^^^^^
+
+	// Consecutive '-'s - test whether the recovery is user-friendly
+	/[--]/v,
+>/[--]/v : RegExp
+>        : ^^^^^^
+
+	/[---]/v,
+>/[---]/v : RegExp
+>         : ^^^^^^
+
+	/[----]/v,
+>/[----]/v : RegExp
+>          : ^^^^^^
+
+	/[-----]/v,
+>/[-----]/v : RegExp
+>           : ^^^^^^
+
+	/[------]/v,
+>/[------]/v : RegExp
+>            : ^^^^^^
+
+	/[?-+]/v,
+>/[?-+]/v : RegExp
+>         : ^^^^^^
+
+	/[?--+]/v,
+>/[?--+]/v : RegExp
+>          : ^^^^^^
+
+	/[?---+]/v,
+>/[?---+]/v : RegExp
+>           : ^^^^^^
+
+	/[?----+]/v,
+>/[?----+]/v : RegExp
+>            : ^^^^^^
+
+	/[?-----+]/v,
+>/[?-----+]/v : RegExp
+>             : ^^^^^^
+
+	/[?------+]/v,
+>/[?------+]/v : RegExp
+>              : ^^^^^^
+
+	/[a--]/v,
+>/[a--]/v : RegExp
+>         : ^^^^^^
+
+	/[a---]/v,
+>/[a---]/v : RegExp
+>          : ^^^^^^
+
+	/[a----]/v,
+>/[a----]/v : RegExp
+>           : ^^^^^^
+
+	/[a-----]/v,
+>/[a-----]/v : RegExp
+>            : ^^^^^^
+
+	/[a------]/v,
+>/[a------]/v : RegExp
+>             : ^^^^^^
+
+	/[ab-bc]/v,
+>/[ab-bc]/v : RegExp
+>           : ^^^^^^
+
+	/[ab--bc]/v,
+>/[ab--bc]/v : RegExp
+>            : ^^^^^^
+
+	/[ab---bc]/v,
+>/[ab---bc]/v : RegExp
+>             : ^^^^^^
+
+	/[ab----bc]/v,
+>/[ab----bc]/v : RegExp
+>              : ^^^^^^
+
+	/[ab-----bc]/v,
+>/[ab-----bc]/v : RegExp
+>               : ^^^^^^
+
+	/[ab------bc]/v,
+>/[ab------bc]/v : RegExp
+>                : ^^^^^^
+
+	/[a--\-]/v,
+>/[a--\-]/v : RegExp
+>           : ^^^^^^
+
+	/[a--b-]/v,
+>/[a--b-]/v : RegExp
+>           : ^^^^^^
+
+	/[a--b-c]/v,
+>/[a--b-c]/v : RegExp
+>            : ^^^^^^
+
+	/[a--b\-c]/v,
+>/[a--b\-c]/v : RegExp
+>             : ^^^^^^
+
+	/[a-\-b\-]/v,
+>/[a-\-b\-]/v : RegExp
+>             : ^^^^^^
+
+	/[a\--b-c]/v,
+>/[a\--b-c]/v : RegExp
+>             : ^^^^^^
+
+	/[a--&]/v,
+>/[a--&]/v : RegExp
+>          : ^^^^^^
+
+	/[a--\&]/v,
+>/[a--\&]/v : RegExp
+>           : ^^^^^^
+
+	/[a--b&]/v,
+>/[a--b&]/v : RegExp
+>           : ^^^^^^
+
+	/[a--b&c]/v,
+>/[a--b&c]/v : RegExp
+>            : ^^^^^^
+
+	/[a--b\&c]/v,
+>/[a--b\&c]/v : RegExp
+>             : ^^^^^^
+
+	/[a-\-b\&]/v,
+>/[a-\-b\&]/v : RegExp
+>             : ^^^^^^
+
+	/[a\--b&c]/v,
+>/[a\--b&c]/v : RegExp
+>             : ^^^^^^
+
+	// Error recovery test with mixed operators
+	/[a&&-]/v,
+>/[a&&-]/v : RegExp
+>          : ^^^^^^
+
+	/[a&&\-]/v,
+>/[a&&\-]/v : RegExp
+>           : ^^^^^^
+
+	/[a&&b-]/v,
+>/[a&&b-]/v : RegExp
+>           : ^^^^^^
+
+	/[a&&b-c]/v,
+>/[a&&b-c]/v : RegExp
+>            : ^^^^^^
+
+	/[a&&b\-c]/v,
+>/[a&&b\-c]/v : RegExp
+>             : ^^^^^^
+
+	/[a&\&b\-]/v,
+>/[a&\&b\-]/v : RegExp
+>             : ^^^^^^
+
+	/[a\&&b-c]/v,
+>/[a\&&b-c]/v : RegExp
+>             : ^^^^^^
+
+	/[a--&b]/v,
+>/[a--&b]/v : RegExp
+>           : ^^^^^^
+
+	/[a--&&b]/v,
+>/[a--&&b]/v : RegExp
+>            : ^^^^^^
+
+	/[a--&&&b]/v,
+>/[a--&&&b]/v : RegExp
+>             : ^^^^^^
+
+	/[a--&&&&b]/v,
+>/[a--&&&&b]/v : RegExp
+>              : ^^^^^^
+
+	/[a---&&b]/v,
+>/[a---&&b]/v : RegExp
+>             : ^^^^^^
+
+	/[a----&&b]/v,
+>/[a----&&b]/v : RegExp
+>              : ^^^^^^
+
+	/[a&&-b]/v,
+>/[a&&-b]/v : RegExp
+>           : ^^^^^^
+
+	/[a&&--b]/v,
+>/[a&&--b]/v : RegExp
+>            : ^^^^^^
+
+	/[a&&---b]/v,
+>/[a&&---b]/v : RegExp
+>             : ^^^^^^
+
+	/[a&&----b]/v,
+>/[a&&----b]/v : RegExp
+>              : ^^^^^^
+
+	/[a&&&--b]/v,
+>/[a&&&--b]/v : RegExp
+>             : ^^^^^^
+
+	/[a&&&&--b]/v,
+>/[a&&&&--b]/v : RegExp
+>              : ^^^^^^
+
+	/[a-b&c]/v,
+>/[a-b&c]/v : RegExp
+>           : ^^^^^^
+
+	/[a-b&&c]/v,
+>/[a-b&&c]/v : RegExp
+>            : ^^^^^^
+
+	/[a-b&&&c]/v,
+>/[a-b&&&c]/v : RegExp
+>             : ^^^^^^
+
+	/[a-&b]/v,
+>/[a-&b]/v : RegExp
+>          : ^^^^^^
+
+	/[a-&&b]/v,
+>/[a-&&b]/v : RegExp
+>           : ^^^^^^
+
+	/[a-&&&b]/v,
+>/[a-&&&b]/v : RegExp
+>            : ^^^^^^
+
+	/[a&-b]/v,
+>/[a&-b]/v : RegExp
+>          : ^^^^^^
+
+	/[a&--b]/v,
+>/[a&--b]/v : RegExp
+>           : ^^^^^^
+
+	/[a&---b]/v,
+>/[a&---b]/v : RegExp
+>            : ^^^^^^
+
+	// Integrated hybrid tests
+	/[a--&&--&&--c]/v,
+>/[a--&&--&&--c]/v : RegExp
+>                  : ^^^^^^
+
+	/[a--?&--&b--?&&--&&c]/v,
+>/[a--?&--&b--?&&--&&c]/v : RegExp
+>                         : ^^^^^^
+
+	/[a--b&&c-&b--a-&-]/v,
+>/[a--b&&c-&b--a-&-]/v : RegExp
+>                      : ^^^^^^
+
+	/[a\--a&-?\&a&&-a--&b\-]/v,
+>/[a\--a&-?\&a&&-a--&b\-]/v : RegExp
+>                           : ^^^^^^
+
+	/[a&&--&&--&&c]/v,
+>/[a&&--&&--&&c]/v : RegExp
+>                  : ^^^^^^
+
+	/[a&&?-&&-b&&?--&&--c]/v,
+>/[a&&?-&&-b&&?--&&--c]/v : RegExp
+>                         : ^^^^^^
+
+	/[a&&b--c&-b&&a&-&]/v,
+>/[a&&b--c&-b&&a&-&]/v : RegExp
+>                      : ^^^^^^
+
+	/[a\&&a-&?\-a--&a&&-b\&]/v,
+>/[a\&&a-&?\-a--&a&&-b\&]/v : RegExp
+>                           : ^^^^^^
+
+	/[a-&&--&&-c]/v,
+>/[a-&&--&&-c]/v : RegExp
+>                : ^^^^^^
+
+	/[a-?&--&b--?&&--&&c]/v,
+>/[a-?&--&b--?&&--&&c]/v : RegExp
+>                        : ^^^^^^
+
+	/[a-b&&c-&b--a-&-]/v,
+>/[a-b&&c-&b--a-&-]/v : RegExp
+>                     : ^^^^^^
+
+	/[a-b&-?\&a&&-a--&b\-]/v,
+>/[a-b&-?\&a&&-a--&b\-]/v : RegExp
+>                         : ^^^^^^
+
+];
+

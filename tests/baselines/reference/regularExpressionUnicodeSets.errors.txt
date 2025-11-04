@@ -1,0 +1,868 @@
+regularExpressionUnicodeSets.ts(27,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(27,5): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(28,8): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(29,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(30,8): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(31,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(32,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(33,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(34,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(34,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(35,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(35,9): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(36,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(36,6): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(36,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(37,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(37,6): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(37,10): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(38,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(38,6): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(38,11): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(41,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(42,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(42,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(43,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(43,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(45,6): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(47,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(47,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(48,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(49,8): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(50,9): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(53,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(54,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(54,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(54,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(55,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(56,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(57,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(58,4): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(59,4): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(59,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(59,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(59,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(60,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(60,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(60,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(61,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(61,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(62,4): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(62,9): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(62,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(65,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(65,6): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(66,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(66,6): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(67,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(67,6): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(67,8): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(68,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(68,6): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(68,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(69,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(69,6): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(69,9): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(73,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(73,8): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(74,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(75,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(76,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(76,10): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(76,11): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(78,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(79,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(80,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(80,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(81,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(81,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(82,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(82,10): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(85,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(86,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(87,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(87,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(88,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(88,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(89,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(89,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(89,10): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(92,8): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(93,8): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(93,9): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(94,8): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(94,10): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(99,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(99,6): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(100,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(100,6): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(101,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(101,6): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(101,8): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(102,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(102,6): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(102,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(103,4): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(103,6): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(103,9): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(105,4): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(107,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(107,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(108,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(109,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(110,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(110,10): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(110,11): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(112,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(113,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(114,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(114,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(115,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(115,10): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(116,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(116,10): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(119,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(120,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(121,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(121,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(122,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(122,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(123,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(123,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(123,10): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(126,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(126,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(127,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(128,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(128,10): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(129,4): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(130,9): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(134,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(135,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(135,9): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(136,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(136,10): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(137,4): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(141,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(143,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(143,9): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(144,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(145,8): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(145,10): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(149,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(150,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(151,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(152,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(152,10): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(152,11): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(153,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(153,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(154,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(154,9): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(156,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(156,8): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(157,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(158,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(158,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(159,7): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(159,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(159,10): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(159,11): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(160,7): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(160,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(161,7): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(161,9): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(164,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(165,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(166,4): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(167,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(168,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(170,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(171,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(174,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(174,11): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(175,8): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(175,12): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(175,16): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(175,20): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(176,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(176,11): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(176,13): error TS1005: '--' expected.
+regularExpressionUnicodeSets.ts(176,17): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(176,19): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(176,20): error TS1520: Expected a class set operand.
+regularExpressionUnicodeSets.ts(177,15): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(177,19): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(178,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(178,11): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(179,8): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(179,11): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(179,12): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(179,16): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(179,20): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(180,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(180,11): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(180,12): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(180,17): error TS1005: '&&' expected.
+regularExpressionUnicodeSets.ts(180,18): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(181,8): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(181,15): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(181,19): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(182,6): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(182,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(182,10): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(183,4): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(183,8): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(183,12): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(183,15): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(183,17): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(183,19): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(184,7): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(184,9): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(184,13): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(184,15): error TS1517: Range out of order in character class.
+regularExpressionUnicodeSets.ts(184,18): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionUnicodeSets.ts(185,13): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionUnicodeSets.ts(185,17): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+
+
+==== regularExpressionUnicodeSets.ts (226 errors) ====
+    const regexes: RegExp[] = [
+    	// Single '&' - valid everywhere in class unions since it is not an operator
+    	/[&]/v,
+    	/[?&]/v,
+    	/[&?]/v,
+    	/[?&?]/v,
+    	/[&?&]/v,
+    	/[a&]/v,
+    	/[&a]/v,
+    	/[a&a]/v,
+    	/[&a&]/v,
+    
+    	/[\?&]/v,
+    	/[&\?]/v,
+    	/[\?&\?]/v,
+    	/[&\?&]/v,
+    	/[\-&]/v,
+    	/[&\-]/v,
+    	/[\-&\-]/v,
+    	/[&\-&]/v,
+    
+    	/[\?\&]/v,
+    	/[\&\?]/v,
+    	/[\&\&]/v,
+    
+    	// Single '-' - incomplete character class ranges, which is invalid in Unicode sets mode
+    	/[-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	   
+!!! error TS1520: Expected a class set operand.
+    	/[ab&-]/v,
+    	      
+!!! error TS1520: Expected a class set operand.
+    	/[a&b&c-]/v,
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[abc-]/v,
+    	      
+!!! error TS1520: Expected a class set operand.
+    	/[-abc]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	/[-a&bc]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	/[-a&b&c]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	/[-abc-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[-ab-c-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	       ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[-a-bc-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[-a-b-c-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	        ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[-a-bc-d-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	         ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    
+    	// Double '--', some of which are class subtractions
+    	/[--\-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	/[--\-&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	      
+!!! error TS1005: '--' expected.
+    	/[-\--&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[\--\-&]/v,
+    	/[\-\--&]/v,
+    	    ~~~~
+!!! error TS1517: Range out of order in character class.
+    	/[&--\-]/v,
+    	/[&---&]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	      
+!!! error TS1005: '--' expected.
+    	/[&\---&]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[&-\--&]/v,
+    	      ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[&--\-&]/v,
+    	       
+!!! error TS1005: '--' expected.
+    
+    	// Double '&&', some of which are class intersections
+    	/[&&\&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	/[&&\&-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	      ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[&\&&-]/v,
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[\&&\&-]/v,
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[\&\&&-]/v,
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[-&&\&]/v,
+    	  ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[-&&&-]/v,
+    	  ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	      ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[-\&&&-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[-&\&&-]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[-&&\&-]/v,
+    	  ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	       ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        
+!!! error TS1520: Expected a class set operand.
+    
+    	// Consecutive '&'s - test whether the recovery is user-friendly
+    	/[&&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    
+!!! error TS1520: Expected a class set operand.
+    	/[&&&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	/[&&&&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    
+!!! error TS1520: Expected a class set operand.
+    	      
+!!! error TS1520: Expected a class set operand.
+    	/[&&&&&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[&&&&&&]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	       ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    
+    	/[?&+]/v,
+    	/[?&&+]/v,
+    	/[?&&&+]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	      
+!!! error TS1005: '&&' expected.
+    	/[?&&&&+]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	/[?&&&&&+]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	/[?&&&&&&+]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	        ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	         
+!!! error TS1005: '&&' expected.
+    
+    	/[a&&]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	/[a&&&]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	/[a&&&&]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[a&&&&&]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[a&&&&&&]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	        ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    
+    	/[ab&bc]/v,
+    	/[ab&&bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab&&&bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab&&&&bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab&&&&&bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab&&&&&&bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    
+    	/[a&&\&]/v,
+    	/[a&&b&]/v,
+    	      
+!!! error TS1005: '&&' expected.
+    	/[a&&b&c]/v,
+    	      
+!!! error TS1005: '&&' expected.
+    	       
+!!! error TS1005: '&&' expected.
+    	/[a&&b\&c]/v,
+    	      
+!!! error TS1005: '&&' expected.
+    	        
+!!! error TS1005: '&&' expected.
+    	/[a&\&b\&]/v,
+    	/[a\&&b&c]/v,
+    
+    	// Consecutive '-'s - test whether the recovery is user-friendly
+    	/[--]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    
+!!! error TS1520: Expected a class set operand.
+    	/[---]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[----]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    
+!!! error TS1520: Expected a class set operand.
+    	      
+!!! error TS1520: Expected a class set operand.
+    	/[-----]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[------]/v,
+    	  
+!!! error TS1520: Expected a class set operand.
+    	    ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	       ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    
+    	/[?-+]/v,
+    	  ~~~
+!!! error TS1517: Range out of order in character class.
+    	/[?--+]/v,
+    	/[?---+]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	      
+!!! error TS1005: '--' expected.
+    	/[?----+]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	/[?-----+]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[?------+]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	        ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	         
+!!! error TS1005: '--' expected.
+    
+    	/[a--]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	/[a---]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[a----]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[a-----]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	        
+!!! error TS1520: Expected a class set operand.
+    	/[a------]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	        ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    
+    	/[ab-bc]/v,
+    	/[ab--bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab---bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab----bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab-----bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[ab------bc]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    
+    	/[a--\-]/v,
+    	/[a--b-]/v,
+    	      ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[a--b-c]/v,
+    	      ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a--b\-c]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	        
+!!! error TS1005: '--' expected.
+    	/[a-\-b\-]/v,
+    	  ~~~~
+!!! error TS1517: Range out of order in character class.
+    	/[a\--b-c]/v,
+    	       ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    
+    	/[a--&]/v,
+    	/[a--\&]/v,
+    	/[a--b&]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	/[a--b&c]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	       
+!!! error TS1005: '--' expected.
+    	/[a--b\&c]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	        
+!!! error TS1005: '--' expected.
+    	/[a-\-b\&]/v,
+    	  ~~~~
+!!! error TS1517: Range out of order in character class.
+    	/[a\--b&c]/v,
+    
+    	// Error recovery test with mixed operators
+    	/[a&&-]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[a&&\-]/v,
+    	/[a&&b-]/v,
+    	      ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	/[a&&b-c]/v,
+    	      ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&b\-c]/v,
+    	      
+!!! error TS1005: '&&' expected.
+    	        
+!!! error TS1005: '&&' expected.
+    	/[a&\&b\-]/v,
+    	/[a\&&b-c]/v,
+    
+    	/[a--&b]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	/[a--&&b]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a--&&&b]/v,
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a--&&&&b]/v,
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	         
+!!! error TS1005: '--' expected.
+    	/[a---&&b]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a----&&b]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	       ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    
+    	/[a&&-b]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	      
+!!! error TS1005: '&&' expected.
+    	/[a&&--b]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&---b]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&----b]/v,
+    	     ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	         
+!!! error TS1005: '&&' expected.
+    	/[a&&&--b]/v,
+    	     ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&&&--b]/v,
+    	     
+!!! error TS1520: Expected a class set operand.
+    	       ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    
+    	/[a-b&c]/v,
+    	/[a-b&&c]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a-b&&&c]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a-&b]/v,
+    	  ~~~
+!!! error TS1517: Range out of order in character class.
+    	/[a-&&b]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a-&&&b]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&-b]/v,
+    	/[a&--b]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&---b]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    
+    	// Integrated hybrid tests
+    	/[a--&&--&&--c]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	         ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a--?&--&b--?&&--&&c]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	          
+!!! error TS1005: '--' expected.
+    	              ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                  ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a--b&&c-&b--a-&-]/v,
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	         ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	           
+!!! error TS1005: '--' expected.
+    	               ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                 ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                  
+!!! error TS1520: Expected a class set operand.
+    	/[a\--a&-?\&a&&-a--&b\-]/v,
+    	             ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                 ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&--&&--&&c]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	         ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&?-&&-b&&?--&&--c]/v,
+    	      ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	         ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	          
+!!! error TS1005: '&&' expected.
+    	              ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                  ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a&&b--c&-b&&a&-&]/v,
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	         
+!!! error TS1005: '&&' expected.
+    	          ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	               
+!!! error TS1005: '&&' expected.
+    	                ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a\&&a-&?\-a--&a&&-b\&]/v,
+    	      ~~~
+!!! error TS1517: Range out of order in character class.
+    	             ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                 ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a-&&--&&-c]/v,
+    	    ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	        ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a-?&--&b--?&&--&&c]/v,
+    	  ~~~
+!!! error TS1517: Range out of order in character class.
+    	      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	          ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	             ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	               ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                 ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	/[a-b&&c-&b--a-&-]/v,
+    	     ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	       ~~~
+!!! error TS1517: Range out of order in character class.
+    	           ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	             ~~~
+!!! error TS1517: Range out of order in character class.
+    	                ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	/[a-b&-?\&a&&-a--&b\-]/v,
+    	           ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	               ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    ];
+    
