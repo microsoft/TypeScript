@@ -17,7 +17,6 @@
 -};
 -var _C2_a_accessor_storage;
  class C1 {
-+    accessor a;
  }
  class C2 extends C1 {
 -    constructor() {

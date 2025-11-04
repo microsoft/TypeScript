@@ -112,11 +112,7 @@
  }
  // No strict initialization checks for abstract members
  class C9 {
-+    a;
-+    b;
-+    c;
-+    d;
- }
+@@= skipped -81, +73 lines =@@
  // Properties with non-undefined types must be assigned before they can be accessed
  // within their constructor
  class C10 {
@@ -157,7 +153,7 @@
      constructor() {
          this[a] = 1;
          this[b] = 1;
-@@= skipped -115, +116 lines =@@
+@@= skipped -34, +39 lines =@@
      E["B"] = "B";
  })(E || (E = {}));
  class C13 {

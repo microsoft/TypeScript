@@ -13,8 +13,6 @@
          // OK, references are to another instance
          other.cb(other.prop);
      }
-+    prop;
-+    cb;
 +    other = this.prop;
 +    fn = () => this.prop;
      method2() {
@@ -29,7 +27,7 @@
          // there is no implementation of 'prop' in any base class
          this.cb(this.prop.toLowerCase());
          this.method(1);
-@@= skipped -17, +21 lines =@@
+@@= skipped -17, +19 lines =@@
      }
  }
  class Implementation extends DerivedAbstractClass {
@@ -42,16 +40,7 @@
          this.cb(this.prop);
      }
      method(n) {
-@@= skipped -19, +19 lines =@@
-     }
- }
- class C1 {
-+    x;
-+    y;
-     constructor() {
-         let self = this; // ok
-         let { x, y: y1 } = this; // error
-@@= skipped -7, +9 lines =@@
+@@= skipped -26, +26 lines =@@
      }
  }
  class C2 {

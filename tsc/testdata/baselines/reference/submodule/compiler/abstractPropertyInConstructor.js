@@ -111,8 +111,6 @@ class AbstractClass {
         // OK, references are to another instance
         other.cb(other.prop);
     }
-    prop;
-    cb;
     other = this.prop;
     fn = () => this.prop;
     method2() {
@@ -151,8 +149,6 @@ class User {
     }
 }
 class C1 {
-    x;
-    y;
     constructor() {
         let self = this; // ok
         let { x, y: y1 } = this; // error

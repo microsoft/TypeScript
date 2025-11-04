@@ -25,9 +25,6 @@ class C extends B {
 
 //// [abstractPropertyBasics.js]
 class B {
-    prop;
-    raw;
-    ro;
 }
 class C extends B {
     get prop() { return "foo"; }

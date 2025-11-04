@@ -47,17 +47,13 @@ abstract class AbstractAccessorMismatch {
 
 //// [abstractPropertyNegative.js]
 class B {
-    prop;
-    ro;
 }
 class C extends B {
     ro = "readonly please";
-    notAllowed;
 }
 let c = new C();
 c.ro = "error: lhs of assignment can't be readonly";
 class WrongTypeProperty {
-    num;
 }
 class WrongTypePropertyImpl extends WrongTypeProperty {
     num = "nope, wrong";

@@ -11,7 +11,6 @@ class B extends A {
 
 //// [accessorsOverrideProperty7.js]
 class A {
-    p = 'yep';
 }
 class B extends A {
     get p() { return 'oh no'; } // error

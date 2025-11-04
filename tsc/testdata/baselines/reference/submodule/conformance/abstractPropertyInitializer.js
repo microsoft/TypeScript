@@ -8,7 +8,6 @@ abstract class C {
 
 //// [abstractPropertyInitializer.js]
 class C {
-    prop = 1;
 }
 
 

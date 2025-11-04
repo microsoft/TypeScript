@@ -1,12 +1,7 @@
 --- old.abstractPropertyBasics.js
 +++ new.abstractPropertyBasics.js
-@@= skipped -24, +24 lines =@@
-
- //// [abstractPropertyBasics.js]
+@@= skipped -26, +26 lines =@@
  class B {
-+    prop;
-+    raw;
-+    ro;
  }
  class C extends B {
 -    constructor() {

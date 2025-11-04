@@ -19,7 +19,6 @@ class C extends A {
 
 //// [abstractProperty.js]
 class A {
-    x;
     foo() {
         console.log(this.x);
     }

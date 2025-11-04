@@ -48,7 +48,6 @@ class C1 {
     accessor d;
     accessor e;
     accessor f;
-    accessor g;
     accessor static h;
     accessor i() { }
     accessor get j() { return false; }

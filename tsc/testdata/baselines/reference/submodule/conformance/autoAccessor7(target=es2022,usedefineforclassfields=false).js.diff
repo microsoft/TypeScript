@@ -1,10 +1,7 @@
 --- old.autoAccessor7(target=es2022,usedefineforclassfields=false).js
 +++ new.autoAccessor7(target=es2022,usedefineforclassfields=false).js
-@@= skipped -15, +15 lines =@@
-
- //// [autoAccessor7.js]
+@@= skipped -17, +17 lines =@@
  class C1 {
-+    accessor a;
  }
  class C2 extends C1 {
 -    #a_accessor_storage = 1;

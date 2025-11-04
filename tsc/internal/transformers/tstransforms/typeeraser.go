@@ -121,7 +121,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		return tx.Factory().UpdateExpressionWithTypeArguments(n, tx.Visitor().VisitNode(n.Expression), nil)
 
 	case ast.KindPropertyDeclaration:
-		if ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) {
+		if ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsAbstract) {
 			// TypeScript `declare` fields are elided
 			return nil
 		}

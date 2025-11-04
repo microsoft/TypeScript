@@ -66,5 +66,4 @@
 -    return __awaiter(this, void 0, void 0, function* () { });
 -};
  class B {
-+    #quux = 3; // Error
  }

@@ -15,10 +15,4 @@ abstract class C {
 //// [esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.js]
 const field3 = "field3";
 class C {
-    @dec(1)
-    accessor field1;
-    @dec(2)
-    accessor ["field2"];
-    @dec(3)
-    accessor [field3];
 }

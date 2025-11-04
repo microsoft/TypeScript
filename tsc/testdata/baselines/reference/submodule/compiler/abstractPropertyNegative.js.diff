@@ -1,11 +1,7 @@
 --- old.abstractPropertyNegative.js
 +++ new.abstractPropertyNegative.js
-@@= skipped -46, +46 lines =@@
-
- //// [abstractPropertyNegative.js]
+@@= skipped -48, +48 lines =@@
  class B {
-+    prop;
-+    ro;
  }
  class C extends B {
 -    constructor() {
@@ -14,12 +10,10 @@
 -    }
 -    get concreteWithNoBody() { }
 +    ro = "readonly please";
-+    notAllowed;
  }
  let c = new C();
  c.ro = "error: lhs of assignment can't be readonly";
  class WrongTypeProperty {
-+    num;
  }
  class WrongTypePropertyImpl extends WrongTypeProperty {
 -    constructor() {
@@ -30,7 +24,7 @@
  }
  class WrongTypeAccessor {
  }
-@@= skipped -24, +21 lines =@@
+@@= skipped -22, +15 lines =@@
      get num() { return "nope, wrong"; }
  }
  class WrongTypeAccessorImpl2 extends WrongTypeAccessor {

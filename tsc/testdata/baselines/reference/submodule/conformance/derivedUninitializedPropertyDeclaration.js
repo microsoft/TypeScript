@@ -120,7 +120,6 @@ class G extends E {
     }
 }
 class H extends E {
-    p1;
 }
 class J {
     r = 5;

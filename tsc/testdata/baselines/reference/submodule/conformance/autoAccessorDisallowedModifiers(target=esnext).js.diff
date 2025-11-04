@@ -1,11 +1,6 @@
 --- old.autoAccessorDisallowedModifiers(target=esnext).js
 +++ new.autoAccessorDisallowedModifiers(target=esnext).js
-@@= skipped -47, +47 lines =@@
-     accessor d;
-     accessor e;
-     accessor f;
-+    accessor g;
-     accessor static h;
+@@= skipped -51, +51 lines =@@
      accessor i() { }
      accessor get j() { return false; }
      accessor set k(v) { }
@@ -14,7 +9,7 @@
      accessor l;
      accessor m;
  }
-@@= skipped -13, +14 lines =@@
+@@= skipped -9, +9 lines =@@
  }
  accessor class C3 {
  }

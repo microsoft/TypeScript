@@ -61,5 +61,4 @@ class A {
     async set #asyncProp(value) { } // Error
 }
 class B {
-    #quux = 3; // Error
 }

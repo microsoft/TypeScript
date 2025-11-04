@@ -17,9 +17,4 @@ abstract class A {
 
 //// [classAbstractProperties.js]
 class A {
-    x;
-    y;
-    z;
-    w;
-    m;
 }

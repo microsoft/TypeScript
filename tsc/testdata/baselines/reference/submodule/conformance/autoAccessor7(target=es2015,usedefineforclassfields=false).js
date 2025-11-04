@@ -16,7 +16,6 @@ class C3 extends C1 {
 
 //// [autoAccessor7.js]
 class C1 {
-    accessor a;
 }
 class C2 extends C1 {
     accessor a = 1;

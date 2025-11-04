@@ -232,10 +232,6 @@ class C8 {
 }
 // No strict initialization checks for abstract members
 class C9 {
-    a;
-    b;
-    c;
-    d;
 }
 // Properties with non-undefined types must be assigned before they can be accessed
 // within their constructor

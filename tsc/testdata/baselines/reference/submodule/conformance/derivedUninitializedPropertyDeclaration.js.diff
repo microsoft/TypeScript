@@ -36,10 +36,8 @@
      constructor() {
          super();
          this.p1 = 'z';
-     }
- }
+@@= skipped -16, +20 lines =@@
  class H extends E {
-+    p1;
  }
  class J {
 -    constructor() {

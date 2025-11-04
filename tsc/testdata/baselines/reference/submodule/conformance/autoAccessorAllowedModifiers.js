@@ -35,7 +35,6 @@ class C1 {
     accessor b;
     accessor c;
     accessor d;
-    accessor e;
     static accessor f;
     static accessor g;
     static accessor h;
