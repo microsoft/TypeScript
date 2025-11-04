@@ -3106,7 +3106,7 @@ export function createScanner(
                 )
             ) {
                 // '-' can't be an operand in a ClassUnion (a class in Unicode sets mode can't start with '-')
-                error(Diagnostics.Expected_a_class_set_operand); // Incomplete_class_set_range_Expected_a_class_set_character
+                error(Diagnostics.Incomplete_character_class_range_Expected_a_class_set_character);
                 mayContainStrings = false;
             }
             else {
@@ -3156,7 +3156,7 @@ export function createScanner(
                         if (isClassContentExit(ch)) {
                             // A class in Unicode sets mode can't end with '-', it must be followed by a class set character
                             pos++;
-                            error(Diagnostics.Expected_a_class_set_operand); // Incomplete_class_set_range_Expected_a_class_set_character
+                            error(Diagnostics.Incomplete_character_class_range_Expected_a_class_set_character);
                             mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
                             return;
                         }
@@ -3305,10 +3305,10 @@ export function createScanner(
                     default:
                         switch (expressionType) {
                             case ClassSetExpressionType.ClassSubtraction:
-                                error(Diagnostics._0_expected, pos, 0, "--"); // missing_0_in_between_class_set_operands_To_form_a_union_of_these_characters_wrap_them_in_a_nested_class_instead
+                                error(Diagnostics.Missing_0_in_between_class_set_operands_To_form_a_union_of_these_characters_wrap_them_in_a_nested_class_instead, pos, 0, "--");
                                 break;
                             case ClassSetExpressionType.ClassIntersection:
-                                error(Diagnostics._0_expected, pos, 0, "&&"); // missing_0_in_between_class_set_operands_To_form_a_union_of_these_characters_wrap_them_in_a_nested_class_instead
+                                error(Diagnostics.Missing_0_in_between_class_set_operands_To_form_a_union_of_these_characters_wrap_them_in_a_nested_class_instead, pos, 0, "&&");
                                 break;
                             default:
                                 break;
