@@ -26218,7 +26218,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (clearSeenAnyFunctionType && inference.seenAnyFunctionType) {
                 inference.seenAnyFunctionType = false;
                 inference.inferredType = undefined;
-
             }
             if (!inference.isFixed) {
                 inference.inferredType = undefined;
@@ -26809,7 +26808,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return;
                         }
                         if (propagateAnyFunctionType && getObjectFlags(candidate) & ObjectFlags.ContainsAnyFunctionType) {
-                            // basically it means that 
+                            // basically it means that
                             if (!hasInferenceCandidates(inference)) {
                                 inference.seenAnyFunctionType = true;
                             }
@@ -27559,7 +27558,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else if (inference.seenAnyFunctionType) {
                     inferredType = wildcardType;
-                } else {
+                }
+                else {
                     // Infer either the default or the empty object type when no inferences were
                     // made. It is important to remember that in this case, inference still
                     // succeeds, meaning there is no error for not having inference candidates. An
@@ -36896,7 +36896,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const savePropagateAnyFunctionType = propagateAnyFunctionType;
         propagateAnyFunctionType = false;
         const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext);
-        propagateAnyFunctionType = savePropagateAnyFunctionType
+        propagateAnyFunctionType = savePropagateAnyFunctionType;
         return createSignatureInstantiation(candidate, typeArgumentTypes);
     }
 
