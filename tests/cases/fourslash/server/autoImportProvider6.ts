@@ -27,7 +27,7 @@ verify.completions({
   includes: [{
     name: "Component",
     hasAction: true,
-    source: "/home/src/workspaces/project/node_modules/@types/react/index",
+    source: "react",
     sortText: completion.SortText.AutoImportSuggestions,
   }],
   preferences: {

@@ -47,7 +47,7 @@ invalidVoidValues.ts(26,5): error TS2322: Type '<T>(a: T) => void' is not assign
     ~
 !!! error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     x = M;
     ~
 !!! error TS2322: Type 'typeof M' is not assignable to type 'void'.

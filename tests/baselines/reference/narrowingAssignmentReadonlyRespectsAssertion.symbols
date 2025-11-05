@@ -10,12 +10,12 @@ interface TestCase<T extends string | number> {
   readonly val1: T | ReadonlyArray<T>;
 >val1 : Symbol(TestCase.val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 47))
 >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
 
   readonly val2: ReadonlyArray<T>;
 >val2 : Symbol(TestCase.val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 3, 38))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
 }
 
@@ -85,7 +85,7 @@ function testFunc() {
 
       if (Array.isArray(val1)) {
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
 

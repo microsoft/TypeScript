@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleVisibilityTest3.ts] ////
 
 === moduleVisibilityTest3.ts ===
-module _modes {
+namespace _modes {
 >_modes : typeof _modes
 >       : ^^^^^^^^^^^^^
 
@@ -18,7 +18,7 @@ module _modes {
 
 //_modes. // produces an internal error - please implement in derived class
 
-module editor {
+namespace editor {
 >editor : typeof editor
 >       : ^^^^^^^^^^^^^
 

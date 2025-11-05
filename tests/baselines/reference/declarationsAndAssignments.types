@@ -777,7 +777,7 @@ f14([2, ["abc", { y: false }]]);  // Error, no x
 >false : false
 >      : ^^^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

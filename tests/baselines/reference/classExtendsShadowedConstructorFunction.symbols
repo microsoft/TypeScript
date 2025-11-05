@@ -5,7 +5,7 @@ class C { foo: string; }
 >C : Symbol(C, Decl(classExtendsShadowedConstructorFunction.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(classExtendsShadowedConstructorFunction.ts, 0, 9))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(classExtendsShadowedConstructorFunction.ts, 0, 24))
 
     var C = 1;

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts] ////
 
 === varNameConflictsWithImportInDifferentPartOfModule.ts ===
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
@@ -17,7 +17,7 @@ module M1 {
 >'' : ""
 >   : ^^
 }
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 

@@ -285,7 +285,7 @@ function f() { }
 >f : typeof f
 >  : ^^^^^^^^
 
-module f {
+namespace f {
 >f : typeof f
 >  : ^^^^^^^^
 
@@ -323,7 +323,7 @@ class CC { baz: string }
 >baz : string
 >    : ^^^^^^
 
-module CC {
+namespace CC {
 >CC : typeof CC
 >   : ^^^^^^^^^
 

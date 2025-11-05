@@ -3,7 +3,7 @@
 class Foo {
     x: Foo.Bar;
 }
-module Foo {
+namespace Foo {
     export interface Bar {
     }
 }

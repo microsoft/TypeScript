@@ -83,8 +83,8 @@ export function flatten<T extends number|TypedArray>(arr: T) {
       arr[1];
 >arr[1] : number
 >       : ^^^^^^
->arr : TypedArray
->    : ^^^^^^^^^^
+>arr : Int32Array<ArrayBuffer> | Uint8Array<ArrayBuffer>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
   }

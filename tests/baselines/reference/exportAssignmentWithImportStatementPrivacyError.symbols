@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/exportAssignmentWithImportStatementPrivacyError.ts] ////
 
 === exportAssignmentWithImportStatementPrivacyError.ts ===
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 0))
 
     export interface connectModule {
->connectModule : Symbol(connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 11))
+>connectModule : Symbol(connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 14))
 
         (res, req, next): void;
 >res : Symbol(res, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 2, 9))
@@ -18,7 +18,7 @@ module m2 {
         use: (mod: connectModule) => connectExport;
 >use : Symbol(connectExport.use, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 4, 36))
 >mod : Symbol(mod, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 5, 14))
->connectModule : Symbol(connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 11))
+>connectModule : Symbol(connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 14))
 >connectExport : Symbol(connectExport, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 3, 5))
 
         listen: (port: number) => void;
@@ -28,7 +28,7 @@ module m2 {
 
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 9, 1))
 
     export var server: {
@@ -41,12 +41,12 @@ module M {
         test1: m2.connectModule;
 >test1 : Symbol(test1, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 13, 29))
 >m2 : Symbol(m2, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 0))
->connectModule : Symbol(m2.connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 11))
+>connectModule : Symbol(m2.connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 14))
 
         test2(): m2.connectModule;
 >test2 : Symbol(test2, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 14, 32))
 >m2 : Symbol(m2, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 0))
->connectModule : Symbol(m2.connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 11))
+>connectModule : Symbol(m2.connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 14))
 
     };
 }

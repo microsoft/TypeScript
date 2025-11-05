@@ -116,12 +116,12 @@ function D() {
 >  : ^^^^^^^^
 
      a = () => arguments  // should error
->a : () => IArguments
->  : ^^^^^^^^^^^^^^^^
->() => arguments : () => IArguments
->                : ^^^^^^^^^^^^^^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>a : () => any
+>  : ^^^^^^^^^
+>() => arguments : () => any
+>                : ^^^^^^^^^
+>arguments : any
+>          : ^^^
   }
 }
 
@@ -142,18 +142,18 @@ function D1() {
 >                                                                                                                                                                                          : ^^^^^^^^^^
 
       arguments;    // should error
->arguments : IArguments
->          : ^^^^^^^^^^
+>arguments : any
+>          : ^^^
 
       const b = () => {
->b : () => IArguments
->  : ^^^^^^^^^^^^^^^^
->() => {        return arguments;     // should error      } : () => IArguments
->                                                            : ^^^^^^^^^^^^^^^^
+>b : () => any
+>  : ^^^^^^^^^
+>() => {        return arguments;     // should error      } : () => any
+>                                                            : ^^^^^^^^^
 
         return arguments;     // should error
->arguments : IArguments
->          : ^^^^^^^^^^
+>arguments : any
+>          : ^^^
       }
 
       function f() {
@@ -210,12 +210,12 @@ function D2() {
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
->Symbol.iterator : any
->                : ^^^
->Symbol : any
->       : ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
       arguments;  // ok
 >arguments : IArguments
@@ -286,16 +286,16 @@ function D5() {
 >  : ^^^^^^^^
 
      a = (() => { return arguments; })()  // should error
->a : IArguments
->  : ^^^^^^^^^^
->(() => { return arguments; })() : IArguments
->                                : ^^^^^^^^^^
->(() => { return arguments; }) : () => IArguments
->                              : ^^^^^^^^^^^^^^^^
->() => { return arguments; } : () => IArguments
->                            : ^^^^^^^^^^^^^^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>a : any
+>  : ^^^
+>(() => { return arguments; })() : any
+>                                : ^^^
+>(() => { return arguments; }) : () => any
+>                              : ^^^^^^^^^
+>() => { return arguments; } : () => any
+>                            : ^^^^^^^^^
+>arguments : any
+>          : ^^^
   }
 }
 
@@ -310,14 +310,14 @@ function D6() {
 >  : ^^^^^^^^
 
      a = (x = arguments) => {}    // should error
->a : (x?: IArguments) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^
->(x = arguments) => {} : (x?: IArguments) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^
->x : IArguments
->  : ^^^^^^^^^^
->arguments : IArguments
->          : ^^^^^^^^^^
+>a : (x?: any) => void
+>  : ^ ^^^^^^^^^^^^^^^
+>(x = arguments) => {} : (x?: any) => void
+>                      : ^ ^^^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>arguments : any
+>          : ^^^
   }
 }
 

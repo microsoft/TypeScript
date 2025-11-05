@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @esModuleInterop: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @target: es2015
 // @module: esnext
 

@@ -299,34 +299,6 @@ declare global {
 
     verifyTsc({
         scenario: "incremental",
-        subScenario: "ts file with no-default-lib that augments the global scope",
-        sys: () =>
-            TestServerHost.createWatchedSystem({
-                "/home/src/workspaces/project/src/main.ts": dedent`
-                    /// <reference no-default-lib="true"/>
-                    /// <reference lib="esnext" />
-
-                    declare global {
-                        interface Test {
-                        }
-                    }
-
-                    export {};
-                `,
-                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        target: "ESNext",
-                        module: "ESNext",
-                        incremental: true,
-                        outDir: "dist",
-                    },
-                }),
-            }),
-        commandLineArgs: ["--rootDir", "src"],
-    });
-
-    verifyTsc({
-        scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file",
         commandLineArgs: ts.emptyArray,
         sys: () =>

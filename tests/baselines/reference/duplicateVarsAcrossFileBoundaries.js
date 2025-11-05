@@ -19,12 +19,12 @@ var y = "";
 var z = 0;
 
 //// [duplicateVarsAcrossFileBoundaries_4.ts]
-module P { }
+namespace P { }
 import p = P;
 var q;
 
 //// [duplicateVarsAcrossFileBoundaries_5.ts]
-module Q { }
+namespace Q { }
 import q = Q;
 var p;
 

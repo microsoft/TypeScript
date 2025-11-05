@@ -1155,7 +1155,7 @@
         "category": "Error",
         "code": 1354
     },
-    "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
+    "A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
         "category": "Error",
         "code": 1355
     },
@@ -4007,6 +4007,10 @@
         "category": "Error",
         "code": 2881
     },
+    "Cannot find module or type declarations for side-effect import of '{0}'.": {
+        "category": "Error",
+        "code": 2882
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4716,6 +4720,10 @@
     "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
         "category": "Error",
         "code": 5110
+    },
+    "Visit https://aka.ms/ts6 for migration information.": {
+        "category": "Message",
+        "code": 5111
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -6579,10 +6587,7 @@
         "category": "Message",
         "code": 6903
     },
-    "module === \"system\" or esModuleInterop": {
-        "category": "Message",
-        "code": 6904
-    },
+
     "`false`, unless `strict` is set": {
         "category": "Message",
         "code": 6905
@@ -6603,7 +6608,7 @@
         "category": "Message",
         "code": 6909
     },
-    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+    "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
         "category": "Message",
         "code": 69010
     },
@@ -6690,6 +6695,10 @@
     "List of file name suffixes to search when resolving a module.": {
         "category": "Error",
         "code": 6931
+    },
+    "`false`, unless `checkJs` is set": {
+        "category": "Message",
+        "code": 6932
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

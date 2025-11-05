@@ -58,7 +58,7 @@ var e = new E(1); // error
 >1 : 1
 >  : ^
 
-module Generic {
+namespace Generic {
 >Generic : typeof Generic
 >        : ^^^^^^^^^^^^^^
 

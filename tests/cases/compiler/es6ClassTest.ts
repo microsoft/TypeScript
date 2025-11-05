@@ -31,7 +31,7 @@ class Foo  extends Bar {
 
 var f = new Foo();
 
-declare module AmbientMod {
+declare namespace AmbientMod {
 	export class Provide {
 		foo:number;
 		zoo:string;

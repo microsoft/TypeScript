@@ -1,5 +1,5 @@
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export class C { }
     }
 }

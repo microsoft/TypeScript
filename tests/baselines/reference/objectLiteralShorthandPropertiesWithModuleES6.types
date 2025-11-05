@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesWithModuleES6.ts] ////
 
 === objectLiteralShorthandPropertiesWithModuleES6.ts ===
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 
@@ -9,7 +9,7 @@ module m {
 >x : any
 }
 
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

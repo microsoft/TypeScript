@@ -2,6 +2,6 @@
 //// 
 
 goTo.bof();
-edit.insert("module M {\n");
+edit.insert("namespace M {\n");
 // indentation on newline after "module {"
 verify.indentationIs(4);

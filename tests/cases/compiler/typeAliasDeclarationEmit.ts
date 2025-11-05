@@ -1,5 +1,5 @@
 // @target: ES5
-// @module: AMD
+// @module: commonjs
 // @declaration: true
 
 export type callback<T> = () => T;
