@@ -1172,7 +1172,7 @@ func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, pro
 			references: references,
 		}}
 	}
-	return nil
+	return []*SymbolAndEntries{}
 }
 
 func getReferenceAtPosition(sourceFile *ast.SourceFile, position int, program *compiler.Program) *refInfo {
