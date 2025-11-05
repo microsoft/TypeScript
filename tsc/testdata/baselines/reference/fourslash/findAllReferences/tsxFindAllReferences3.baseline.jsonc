@@ -9,4 +9,4 @@
 // }
 // 
 // 
-// var x = <MyClass name='hello'/>;
+// var x = <MyClass [|name|]='hello'/>;

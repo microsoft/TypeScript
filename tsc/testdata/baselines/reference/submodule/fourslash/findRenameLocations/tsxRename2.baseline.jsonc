@@ -8,13 +8,21 @@
 //             isOpen?: boolean;
 //         };
 //         span: { n: string; };
-// // --- (line: 9) skipped ---
+//     }
+// }
+// var x = <div [|nameRENAME|]="hello" />;
 
 
 
 // === findRenameLocations ===
 // === /file.tsx ===
-// --- (line: 7) skipped ---
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         div: {
+//             [|nameRENAME|]?: string;
+//             isOpen?: boolean;
+//         };
 //         span: { n: string; };
 //     }
 // }

@@ -8,4 +8,6 @@
 //             isOpen?: boolean;
 //         };
 //         span: { n: string; };
-// // --- (line: 9) skipped ---
+//     }
+// }
+// var x = <div [|name|]="hello" />;

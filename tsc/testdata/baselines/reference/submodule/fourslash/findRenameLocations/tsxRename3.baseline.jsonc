@@ -9,13 +9,18 @@
 // }
 // 
 // 
-// var x = <MyClass name='hello'/>;
+// var x = <MyClass [|nameRENAME|]='hello'/>;
 
 
 
 // === findRenameLocations ===
 // === /file.tsx ===
-// --- (line: 10) skipped ---
+// --- (line: 5) skipped ---
+// }
+// class MyClass {
+//   props: {
+//     [|nameRENAME|]?: string;
+//     size?: number;
 // }
 // 
 // 

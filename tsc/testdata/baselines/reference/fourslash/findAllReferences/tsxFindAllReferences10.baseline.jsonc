@@ -8,4 +8,13 @@
 // }
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
-// // --- (line: 16) skipped ---
+// }
+// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <MainButton [|onClick|]={()=>{}} />;
+// let opt = <MainButton [|onClick|]={()=>{}} ignore-prop />;
+// let opt = <MainButton goTo="goTo" />;
+// let opt = <MainButton wrong />;

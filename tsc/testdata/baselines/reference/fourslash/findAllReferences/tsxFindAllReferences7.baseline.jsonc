@@ -8,4 +8,8 @@
 //     propString: string
 //     optional?: boolean
 // }
-// // --- (line: 12) skipped ---
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt [|propx|]={100} propString />;
+// let opt2 = <Opt [|propx|]={100} optional/>;
+// let opt3 = <Opt wrong />;
