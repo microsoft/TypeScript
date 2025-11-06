@@ -2,9 +2,10 @@ emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'p' of ex
 emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'ps' of exported anonymous class type may not be private or protected.
 emitClassExpressionInDeclarationFile2.ts(16,17): error TS4094: Property 'property' of exported anonymous class type may not be private or protected.
 emitClassExpressionInDeclarationFile2.ts(23,14): error TS4094: Property 'property' of exported anonymous class type may not be private or protected.
+emitClassExpressionInDeclarationFile2.ts(31,3): error TS4094: Property 'prop' of exported anonymous class type may not be private or protected.
 
 
-==== emitClassExpressionInDeclarationFile2.ts (4 errors) ====
+==== emitClassExpressionInDeclarationFile2.ts (5 errors) ====
     export var noPrivates = class {
                ~~~~~~~~~~
 !!! error TS4094: Property 'p' of exported anonymous class type may not be private or protected.
@@ -43,4 +44,12 @@ emitClassExpressionInDeclarationFile2.ts(23,14): error TS4094: Property 'propert
     
     Test.getTags()
     test.tags();
+    
+    export class Test2 {
+      nested = class {
+      ~~~~~~
+!!! error TS4094: Property 'prop' of exported anonymous class type may not be private or protected.
+        private prop = 42;
+      }
+    }
     
