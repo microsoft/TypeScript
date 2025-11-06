@@ -21,6 +21,12 @@ var b = bar(1, "one", g);  // Error, number and string are disjoint types
 var b = bar("one", 1, g);  // Error, number and string are disjoint types
 var b = baz(b, b, g);      // Should be number | string
 
+var one: 1 = 1
+var num: number = 10;
+
+var b = bar(one, num, g);  // ok
+var b = bar(num, one, g);  // ok
+
 var d: number[] | string[];
 var d = foo(h);            // Should be number[] | string[]
 var d = bar(1, "one", h);  // Should be number[] | string[]
