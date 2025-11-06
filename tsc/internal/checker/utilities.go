@@ -189,20 +189,6 @@ func IsInTypeQuery(node *ast.Node) bool {
 	}) != nil
 }
 
-func getNameFromImportDeclaration(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindImportSpecifier:
-		return node.AsImportSpecifier().Name()
-	case ast.KindNamespaceImport:
-		return node.AsNamespaceImport().Name()
-	case ast.KindImportClause:
-		return node.AsImportClause().Name()
-	case ast.KindImportEqualsDeclaration:
-		return node.AsImportEqualsDeclaration().Name()
-	}
-	return nil
-}
-
 func nodeCanBeDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.Node, grandparent *ast.Node) bool {
 	// private names cannot be used with decorators yet
 	if useLegacyDecorators && node.Name() != nil && ast.IsPrivateIdentifier(node.Name()) {
