@@ -100,7 +100,7 @@ d2.default(); // Error
 
 const d3 = await import("./d"); // { default: [Function: default] }
 >d3 : Symbol(d3, Decl(main1.ts, 19, 5))
->"./d" : Symbol("/d", Decl(d.ts, 0, 0))
+>"./d" : Symbol("./d", Decl(d.ts, 0, 0))
 
 d3.default();
 >d3.default : Symbol(default)
@@ -222,7 +222,7 @@ import c1 from "./c"; // { default: [Function: default] }
 const c2 = require("./c"); // { default: [Function: default] }
 >c2 : Symbol(c2, Decl(main3.cjs, 8, 5))
 >require : Symbol(require)
->"./c" : Symbol("/c", Decl(c.ts, 0, 0))
+>"./c" : Symbol("./c", Decl(c.ts, 0, 0))
 
 import d1 from "./d"; // [Function: default]
 >d1 : Symbol(d1, Decl(main3.cjs, 9, 6))
@@ -230,7 +230,7 @@ import d1 from "./d"; // [Function: default]
 const d2 = require("./d"); // [Function: default]
 >d2 : Symbol(d2, Decl(main3.cjs, 10, 5))
 >require : Symbol(require)
->"./d" : Symbol("/d", Decl(d.ts, 0, 0))
+>"./d" : Symbol("./d", Decl(d.ts, 0, 0))
 
 import e1 from "./e.mjs"; // 0
 >e1 : Symbol(e1, Decl(main3.cjs, 11, 6))
@@ -238,7 +238,7 @@ import e1 from "./e.mjs"; // 0
 const e2 = require("./e.mjs"); // 0
 >e2 : Symbol(e2, Decl(main3.cjs, 12, 5))
 >require : Symbol(require)
->"./e.mjs" : Symbol("/e", Decl(e.mts, 0, 0))
+>"./e.mjs" : Symbol("./e.mjs", Decl(e.mts, 0, 0))
 
 import f1 from "./f.cjs"; // 0
 >f1 : Symbol(f1, Decl(main3.cjs, 13, 6))
@@ -262,7 +262,7 @@ exports.x = require("./g");
 >exports : Symbol(x, Decl(main4.cjs, 0, 0))
 >x : Symbol(x, Decl(main4.cjs, 0, 0))
 >require : Symbol(require)
->"./g" : Symbol("/g", Decl(g.js, 0, 0))
+>"./g" : Symbol("./g", Decl(g.js, 0, 0))
 
 === /dummy.ts ===
 

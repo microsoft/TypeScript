@@ -12,14 +12,14 @@ export class Foo {
     copy(other: import("./b").Foo) {
 >copy : (other: import("./b").Foo) => void
 >     : ^     ^^                 ^^^^^^^^^
->other : import("b").Foo
->      : ^^^^^^^^^^^^^^^^^^^^^
+>other : import("./b").Foo
+>      : ^^^^^^^^^^^^^^^^^
 
         other.#x; // error
 >other.#x : any
 >         : ^^^
->other : import("b").Foo
->      : ^^^^^^^^^^^^^^^^^^^^^
+>other : import("./b").Foo
+>      : ^^^^^^^^^^^^^^^^^
     }
 }
     
@@ -65,12 +65,12 @@ const b = new B();
 a.copy(b); // error
 >a.copy(b) : void
 >          : ^^^^
->a.copy : (other: import("b").Foo) => void
->       : ^     ^^                     ^^^^^^^^^
+>a.copy : (other: import("./b").Foo) => void
+>       : ^     ^^                 ^^^^^^^^^
 >a : A
 >  : ^
->copy : (other: import("b").Foo) => void
->     : ^     ^^                     ^^^^^^^^^
+>copy : (other: import("./b").Foo) => void
+>     : ^     ^^                 ^^^^^^^^^
 >b : B
 >  : ^
 

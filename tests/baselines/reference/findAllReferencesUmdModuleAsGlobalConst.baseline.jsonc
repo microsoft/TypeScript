@@ -60,7 +60,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/node_modules/@types/three/index\"",
+    "name": "module \"three\"",
     "displayParts": [
      {
       "text": "module",
@@ -71,7 +71,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/node_modules/@types/three/index\"",
+      "text": "\"three\"",
       "kind": "stringLiteral"
      }
     ]

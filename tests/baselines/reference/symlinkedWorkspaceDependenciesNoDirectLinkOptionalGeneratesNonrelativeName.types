@@ -23,14 +23,14 @@ import * as pkg from "package-b";
 >    : ^^^^^^^^^^
 
 export const a = pkg.invoke();
->a : import("workspace/packageA/index").Foo
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pkg.invoke() : import("workspace/packageA/index").Foo
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pkg.invoke : () => import("workspace/packageA/index").Foo
->           : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>a : import("package-a").Foo
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>pkg.invoke() : import("package-a").Foo
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>pkg.invoke : () => import("package-a").Foo
+>           : ^^^^^^       ^^^^^^^^^^^  ^^^
 >pkg : typeof pkg
 >    : ^^^^^^^^^^
->invoke : () => import("workspace/packageA/index").Foo
->       : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>invoke : () => import("package-a").Foo
+>       : ^^^^^^       ^^^^^^^^^^^  ^^^
 

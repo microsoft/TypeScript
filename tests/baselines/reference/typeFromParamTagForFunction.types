@@ -17,8 +17,8 @@ exports.A = function () {
 >                                          : ^^^^^^^^
 >exports.A : typeof A
 >          : ^^^^^^^^
->exports : typeof import("a-ext")
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a-ext")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >function () {    this.x = 1;} : typeof A
@@ -41,8 +41,8 @@ exports.A = function () {
 const { A } = require("./a-ext");
 >A : typeof A
 >  : ^^^^^^^^
->require("./a-ext") : typeof import("a-ext")
->                   : ^^^^^^^^^^^^^^^^^^^^^^
+>require("./a-ext") : typeof import("./a-ext")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
 >"./a-ext" : "./a-ext"
@@ -67,8 +67,8 @@ exports.B = class {
 >                                                                : ^^^^^^^^
 >exports.B : typeof B
 >          : ^^^^^^^^
->exports : typeof import("b-ext")
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./b-ext")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 >class {    constructor() {        this.x = 1;    }} : typeof B
@@ -92,8 +92,8 @@ exports.B = class {
 const { B } = require("./b-ext");
 >B : typeof B
 >  : ^^^^^^^^
->require("./b-ext") : typeof import("b-ext")
->                   : ^^^^^^^^^^^^^^^^^^^^^^
+>require("./b-ext") : typeof import("./b-ext")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
 >"./b-ext" : "./b-ext"
@@ -133,8 +133,8 @@ export function C() {
 const { C } = require("./c-ext");
 >C : typeof C
 >  : ^^^^^^^^
->require("./c-ext") : typeof import("c-ext")
->                   : ^^^^^^^^^^^^^^^^^^^^^^
+>require("./c-ext") : typeof import("./c-ext")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
 >"./c-ext" : "./c-ext"
@@ -177,8 +177,8 @@ export var D = function() {
 const { D } = require("./d-ext");
 >D : typeof D
 >  : ^^^^^^^^
->require("./d-ext") : typeof import("d-ext")
->                   : ^^^^^^^^^^^^^^^^^^^^^^
+>require("./d-ext") : typeof import("./d-ext")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
 >"./d-ext" : "./d-ext"
@@ -220,8 +220,8 @@ export class E {
 const { E } = require("./e-ext");
 >E : typeof E
 >  : ^^^^^^^^
->require("./e-ext") : typeof import("e-ext")
->                   : ^^^^^^^^^^^^^^^^^^^^^^
+>require("./e-ext") : typeof import("./e-ext")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
 >"./e-ext" : "./e-ext"

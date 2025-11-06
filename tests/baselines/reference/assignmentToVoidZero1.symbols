@@ -4,10 +4,10 @@
 // #38552
 exports.y = exports.x = void 0;
 >exports.y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
->exports : Symbol("assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
+>exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 >y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
 >exports.x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
->exports : Symbol("assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
+>exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 >x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
 
 exports.x = 1;

@@ -5,7 +5,7 @@ const { hardline } = require('./second').nested;
 >hardline : Symbol(hardline, Decl(main.js, 0, 7))
 >require('./second').nested : Symbol(nested, Decl(second.js, 0, 18))
 >require : Symbol(require)
->'./second' : Symbol("second", Decl(second.js, 0, 0))
+>'./second' : Symbol("./second", Decl(second.js, 0, 0))
 >nested : Symbol(nested, Decl(second.js, 0, 18))
 
 hardline
@@ -35,7 +35,7 @@ module.exports = {
   nested: require('./first')
 >nested : Symbol(nested, Decl(second.js, 0, 18))
 >require : Symbol(require)
->'./first' : Symbol("first", Decl(first.js, 0, 0))
+>'./first' : Symbol("./first", Decl(first.js, 0, 0))
 
 };
 

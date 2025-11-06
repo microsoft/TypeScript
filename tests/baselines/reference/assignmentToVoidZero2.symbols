@@ -7,7 +7,7 @@ exports.j = 1;
 >j : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
 
 exports.k = void 0;
->exports : Symbol("assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
+>exports : Symbol("./assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
 
 var o = {}
 >o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))

@@ -19,7 +19,7 @@
     "defId": 0,
     "kind": "class",
     "name": "Derived",
-    "containerName": "\"/tests/cases/fourslash/definitions\"",
+    "containerName": "\"./definitions\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false
@@ -140,7 +140,7 @@
     "defId": 0,
     "kind": "class",
     "name": "Base",
-    "containerName": "\"/tests/cases/fourslash/definitions\"",
+    "containerName": "\"./definitions\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false

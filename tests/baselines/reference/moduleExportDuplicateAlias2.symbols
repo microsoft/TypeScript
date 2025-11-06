@@ -4,7 +4,7 @@
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : Symbol(apply, Decl(test.js, 0, 7))
 >require : Symbol(require)
->'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+>'./moduleExportAliasDuplicateAlias' : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 
 apply()
 >apply : Symbol(apply, Decl(test.js, 0, 7))

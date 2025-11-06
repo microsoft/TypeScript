@@ -11,8 +11,8 @@ exports.x = 0;
 >              : ^
 >exports.x : 0
 >          : ^
->exports : typeof import("/node_modules/foo/index")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("foo")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >x : 0
 >  : ^
 >0 : 0

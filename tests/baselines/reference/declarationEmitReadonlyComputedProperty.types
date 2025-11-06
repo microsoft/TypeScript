@@ -37,8 +37,8 @@ export function createInstance(): Interface {
 
 === index.ts ===
 import { createInstance } from './bug'
->createInstance : () => import("bug").Interface
->               : ^^^^^^       ^^^^^  ^^^^^^^^^
+>createInstance : () => import("./bug").Interface
+>               : ^^^^^^       ^^^^^^^  ^^^^^^^^^
 
 export const spread = {
 >spread : { [SYMBOL]: string; }
@@ -47,8 +47,8 @@ export const spread = {
 >                         : ^^^^^^^^^^^^      ^^^
 
   ...createInstance(),
->createInstance() : import("bug").Interface
->                 : ^^^^^^^^^^^^^^^^^^^^^^^
->createInstance : () => import("bug").Interface
->               : ^^^^^^       ^^^^^  ^^^^^^^^^
+>createInstance() : import("./bug").Interface
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>createInstance : () => import("./bug").Interface
+>               : ^^^^^^       ^^^^^^^  ^^^^^^^^^
 }

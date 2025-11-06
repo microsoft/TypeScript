@@ -99,14 +99,14 @@ export class B extends A {
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
 
             ...super.getA(),
->super.getA() : import("class").ITest
->             : ^^^^^^^^^^^^^^^^^^^^^
->super.getA : () => import("class").ITest
->           : ^^^^^^       ^^^^^^^  ^^^^^
+>super.getA() : import("./class").ITest
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>super.getA : () => import("./class").ITest
+>           : ^^^^^^       ^^^^^^^^^  ^^^^^
 >super : A
 >      : ^
->getA : () => import("class").ITest
->     : ^^^^^^       ^^^^^^^  ^^^^^
+>getA : () => import("./class").ITest
+>     : ^^^^^^       ^^^^^^^^^  ^^^^^
 
             a: '123',
 >a : string

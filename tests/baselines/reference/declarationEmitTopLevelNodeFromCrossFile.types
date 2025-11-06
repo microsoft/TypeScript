@@ -19,8 +19,8 @@ export const fn = { o: (a?: (X | undefined)[]) => {} };
 
 === b.ts ===
 import {fn} from "./a";
->fn : { o: (a?: (import("a").X | undefined)[]) => void; }
->   : ^^^^^^ ^^^        ^^^  ^               ^^^^^^^^^^^^
+>fn : { o: (a?: (import("./a").X | undefined)[]) => void; }
+>   : ^^^^^^ ^^^        ^^^^^  ^               ^^^^^^^^^^^^
 
 export const m = {                        
 >m : { prop: number; }
@@ -40,12 +40,12 @@ export const m = {
 
 
 export const x = { p: fn }; 
->x : { p: { o: (a?: (import("a").X | undefined)[]) => void; }; }
->  : ^^^^^^^^^^^ ^^^        ^^^  ^               ^^^^^^^^^^^^^^^
->{ p: fn } : { p: { o: (a?: (import("a").X | undefined)[]) => void; }; }
->          : ^^^^^^^^^^^ ^^^        ^^^  ^               ^^^^^^^^^^^^^^^
->p : { o: (a?: (import("a").X | undefined)[]) => void; }
->  : ^^^^^^ ^^^        ^^^  ^               ^^^^^^^^^^^^
->fn : { o: (a?: (import("a").X | undefined)[]) => void; }
->   : ^^^^^^ ^^^        ^^^  ^               ^^^^^^^^^^^^
+>x : { p: { o: (a?: (import("./a").X | undefined)[]) => void; }; }
+>  : ^^^^^^^^^^^ ^^^        ^^^^^  ^               ^^^^^^^^^^^^^^^
+>{ p: fn } : { p: { o: (a?: (import("./a").X | undefined)[]) => void; }; }
+>          : ^^^^^^^^^^^ ^^^        ^^^^^  ^               ^^^^^^^^^^^^^^^
+>p : { o: (a?: (import("./a").X | undefined)[]) => void; }
+>  : ^^^^^^ ^^^        ^^^^^  ^               ^^^^^^^^^^^^
+>fn : { o: (a?: (import("./a").X | undefined)[]) => void; }
+>   : ^^^^^^ ^^^        ^^^^^  ^               ^^^^^^^^^^^^
 

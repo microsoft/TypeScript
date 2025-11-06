@@ -12,8 +12,8 @@ exports.y = 1;
 >              : ^
 >exports.y : 1
 >          : ^
->exports : typeof import("/a")
->        : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >y : 1
 >  : ^
 >1 : 1

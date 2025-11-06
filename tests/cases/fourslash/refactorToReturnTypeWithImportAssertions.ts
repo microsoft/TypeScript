@@ -20,7 +20,7 @@ edit.applyRefactor({
     actionName: "Infer function return type",
     actionDescription: "Infer function return type",
     newContent:
-`export function fn(): Promise<typeof import("/tests/cases/fourslash/node_modules/inner/index", { with: { "resolution-mode": "import" } })> {
+`export function fn(): Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })> {
     return import("inner/mjs")
 }`
 });

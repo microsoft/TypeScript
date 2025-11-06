@@ -20,7 +20,7 @@
    {
     "kind": "class",
     "name": "A",
-    "containerName": "\"/a\"",
+    "containerName": "\"./a\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,
@@ -52,7 +52,7 @@
    {
     "kind": "class",
     "name": "A",
-    "containerName": "\"/a\"",
+    "containerName": "\"./a\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,
@@ -387,7 +387,7 @@
    {
     "kind": "function",
     "name": "foo",
-    "containerName": "\"/a\"",
+    "containerName": "\"./a\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,
@@ -410,7 +410,7 @@
    {
     "kind": "function",
     "name": "foo",
-    "containerName": "\"/a\"",
+    "containerName": "\"./a\"",
     "isLocal": false,
     "isAmbient": false
    }

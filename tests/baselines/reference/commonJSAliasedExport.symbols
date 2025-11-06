@@ -4,7 +4,7 @@
 const { funky } = require('./commonJSAliasedExport');
 >funky : Symbol(funky, Decl(bug43713.js, 0, 7))
 >require : Symbol(require)
->'./commonJSAliasedExport' : Symbol("commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
+>'./commonJSAliasedExport' : Symbol("./commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
 
 /** @type {boolean} */
 var diddy

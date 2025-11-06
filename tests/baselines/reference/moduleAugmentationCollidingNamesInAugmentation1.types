@@ -26,8 +26,8 @@ import { Observable } from "./observable"
 >               : ^^^^^^^^^^
 
 declare module "./observable" {
->"./observable" : typeof import("observable")
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./observable" : typeof import("./observable")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface I {x0}
 >x0 : any
@@ -60,8 +60,8 @@ import { Observable } from "./observable"
 >               : ^^^^^^^^^^
 
 declare module "./observable" {
->"./observable" : typeof import("observable")
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./observable" : typeof import("./observable")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface I {x1}
 >x1 : any

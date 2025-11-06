@@ -8,7 +8,7 @@ const {
 
 } = require('./mod1');
 >require : Symbol(require)
->'./mod1' : Symbol("mod1", Decl(mod1.js, 0, 0))
+>'./mod1' : Symbol("./mod1", Decl(mod1.js, 0, 0))
 
 grey
 >grey : Symbol(grey, Decl(main.js, 1, 12))

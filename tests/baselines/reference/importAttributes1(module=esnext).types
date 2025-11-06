@@ -95,18 +95,18 @@ d;
 
 === 3.ts ===
 const a = import('./0')
->a : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0') : Promise<typeof import("0")>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0') : Promise<typeof import("./0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 
 const b = import('./0', { with: { type: "json" } })
->b : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', { with: { type: "json" } }) : Promise<typeof import("0")>
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', { with: { type: "json" } }) : Promise<typeof import("./0")>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >{ with: { type: "json" } } : { with: { type: string; }; }
@@ -121,10 +121,10 @@ const b = import('./0', { with: { type: "json" } })
 >       : ^^^^^^
 
 const c = import('./0', { with: { type: "json", ttype: "typo" } })
->c : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', { with: { type: "json", ttype: "typo" } }) : Promise<typeof import("0")>
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', { with: { type: "json", ttype: "typo" } }) : Promise<typeof import("./0")>
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >{ with: { type: "json", ttype: "typo" } } : { with: { type: string; ttype: string; }; }
@@ -143,10 +143,10 @@ const c = import('./0', { with: { type: "json", ttype: "typo" } })
 >       : ^^^^^^
 
 const d = import('./0', { with: {} })
->d : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', { with: {} }) : Promise<typeof import("0")>
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', { with: {} }) : Promise<typeof import("./0")>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >{ with: {} } : { with: {}; }
@@ -157,10 +157,10 @@ const d = import('./0', { with: {} })
 >   : ^^
 
 const dd = import('./0', {})
->dd : Promise<typeof import("0")>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', {}) : Promise<typeof import("0")>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dd : Promise<typeof import("./0")>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', {}) : Promise<typeof import("./0")>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >{} : {}
@@ -171,10 +171,10 @@ declare function foo(): any;
 >    : ^^^^^^   
 
 const e = import('./0', foo())
->e : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', foo()) : Promise<typeof import("0")>
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', foo()) : Promise<typeof import("./0")>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >foo() : any
@@ -189,10 +189,10 @@ const f = import()
 >         : ^^^^^^^^^^^^
 
 const g = import('./0', {}, {})
->g : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', {}, {}) : Promise<typeof import("0")>
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', {}, {}) : Promise<typeof import("./0")>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >{} : {}
@@ -201,10 +201,10 @@ const g = import('./0', {}, {})
 >   : ^^
 
 const h = import('./0', { with: { type: "json" }},)
->h : Promise<typeof import("0")>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import('./0', { with: { type: "json" }},) : Promise<typeof import("0")>
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>h : Promise<typeof import("./0")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./0', { with: { type: "json" }},) : Promise<typeof import("./0")>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./0' : "./0"
 >      : ^^^^^
 >{ with: { type: "json" }} : { with: { type: string; }; }

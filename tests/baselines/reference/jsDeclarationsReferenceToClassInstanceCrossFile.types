@@ -4,8 +4,8 @@
 const {Render} = require("./index");
 >Render : typeof Render
 >       : ^^^^^^^^^^^^^
->require("./index") : typeof import("index")
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require("./index") : typeof import("./index")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./index" : "./index"
 >          : ^^^^^^^^^
@@ -19,14 +19,14 @@ let render = new Render();
 >       : ^^^^^^^^^^^^^
 
 render.addRectangle();
->render.addRectangle() : import("rectangle").Rectangle
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->render.addRectangle : () => import("rectangle").Rectangle
->                    : ^^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>render.addRectangle() : import("./rectangle").Rectangle
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>render.addRectangle : () => import("./rectangle").Rectangle
+>                    : ^^^^^^       ^^^^^^^^^^^^^  ^^^^^^^^^
 >render : Render
 >       : ^^^^^^
->addRectangle : () => import("rectangle").Rectangle
->             : ^^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>addRectangle : () => import("./rectangle").Rectangle
+>             : ^^^^^^       ^^^^^^^^^^^^^  ^^^^^^^^^
 
 console.log("Objects", render.objects);
 >console.log("Objects", render.objects) : void
@@ -39,12 +39,12 @@ console.log("Objects", render.objects);
 >    : ^^^^    ^^     ^^^^^    
 >"Objects" : "Objects"
 >          : ^^^^^^^^^
->render.objects : import("rectangle").Rectangle[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>render.objects : import("./rectangle").Rectangle[]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >render : Render
 >       : ^^^^^^
->objects : import("rectangle").Rectangle[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>objects : import("./rectangle").Rectangle[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === rectangle.js ===
 class Rectangle {
@@ -84,8 +84,8 @@ module.exports = { Rectangle };
 const {Rectangle} = require('./rectangle');
 >Rectangle : typeof Rectangle
 >          : ^^^^^^^^^^^^^^^^
->require('./rectangle') : typeof import("rectangle")
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./rectangle') : typeof import("./rectangle")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./rectangle' : "./rectangle"
 >              : ^^^^^^^^^^^^^

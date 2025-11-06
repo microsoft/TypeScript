@@ -30,8 +30,8 @@ export interface c {}
 // both types (class is also value, but that doesn't matter)
 interface d {}
 export class d {}
->d : import("mergedDeclarationExports").d
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d : import("./mergedDeclarationExports").d
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // both namespaces
 namespace N { }

@@ -4,7 +4,7 @@
 var mod = require('./mod')
 >mod : Symbol(mod, Decl(npm.js, 0, 3))
 >require : Symbol(require)
->'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
+>'./mod' : Symbol("./mod", Decl(mod.js, 0, 0))
 
 mod() // should be callable from here too
 >mod : Symbol(mod, Decl(npm.js, 0, 3))

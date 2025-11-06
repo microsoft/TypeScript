@@ -6,8 +6,8 @@ const C = require('./ex').C;
 >  : ^^^^^^^^
 >require('./ex').C : typeof C
 >                  : ^^^^^^^^
->require('./ex') : typeof import("ex")
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./ex') : typeof import("./ex")
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./ex' : "./ex"
 >       : ^^^^^^
@@ -19,8 +19,8 @@ const D = require('./ex')?.C;
 >  : ^^^^^^^^
 >require('./ex')?.C : typeof C
 >                   : ^^^^^^^^
->require('./ex') : typeof import("ex")
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./ex') : typeof import("./ex")
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./ex' : "./ex"
 >       : ^^^^^^

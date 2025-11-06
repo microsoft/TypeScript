@@ -47,14 +47,14 @@ import type { funciton as funciton2 } from "./decl"; // ok I guess?
 >          : ^^^
 
 import("./decl"); // error
->import("./decl") : Promise<typeof import("/decl")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./decl") : Promise<typeof import("./decl")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./decl" : "./decl"
 >         : ^^^^^^^^
 
 type T = typeof import("./decl"); // ok
->T : typeof import("/decl")
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>T : typeof import("./decl")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export {}; // error
 export const x = 1; // error
@@ -65,8 +65,8 @@ export const x = 1; // error
 
 export interface I {} // ok
 export type { T }; // ok
->T : typeof import("/decl")
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>T : typeof import("./decl")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export namespace JustTypes {
     export type T = number;

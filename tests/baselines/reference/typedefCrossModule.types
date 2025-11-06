@@ -72,8 +72,8 @@ exports.C = function() {
 >                                        : ^^^^^^^^
 >exports.C : typeof C
 >          : ^^^^^^^^
->exports : typeof import("mod3")
->        : ^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod3")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >function() {    this.p = 1} : typeof C
@@ -94,8 +94,8 @@ exports.C = function() {
 === use.js ===
 /** @type {import('./mod1').Both} */
 var both1 = { type: 'a', x: 1 };
->both1 : import("mod1").Both
->      : ^^^^^^^^^^^^^^^^^^^
+>both1 : import("./mod1").Both
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >{ type: 'a', x: 1 } : { type: "a"; x: 1; }
 >                    : ^^^^^^^^^^^^^^^^^^^^
 >type : "a"
@@ -109,17 +109,17 @@ var both1 = { type: 'a', x: 1 };
 
 /** @type {import('./mod2').Both} */
 var both2 = both1;
->both2 : import("mod2").Both
->      : ^^^^^^^^^^^^^^^^^^^
->both1 : import("mod1").A
->      : ^^^^^^^^^^^^^^^^
+>both2 : import("./mod2").Both
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>both1 : import("./mod1").A
+>      : ^^^^^^^^^^^^^^^^^^
 
 /** @type {import('./mod3').Both} */
 var both3 = both2;
->both3 : import("mod3").Both
->      : ^^^^^^^^^^^^^^^^^^^
->both2 : import("mod2").A
->      : ^^^^^^^^^^^^^^^^
+>both3 : import("./mod3").Both
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>both2 : import("./mod2").A
+>      : ^^^^^^^^^^^^^^^^^^
 
 
 

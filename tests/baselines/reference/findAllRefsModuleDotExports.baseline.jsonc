@@ -49,7 +49,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/b\"",
+    "name": "module \"./b\"",
     "displayParts": [
      {
       "text": "module",
@@ -60,7 +60,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/b\"",
+      "text": "\"./b\"",
       "kind": "stringLiteral"
      }
     ]
@@ -86,7 +86,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/b\"",
+    "name": "module \"./b\"",
     "displayParts": [
      {
       "text": "module",
@@ -97,7 +97,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/b\"",
+      "text": "\"./b\"",
       "kind": "stringLiteral"
      }
     ]

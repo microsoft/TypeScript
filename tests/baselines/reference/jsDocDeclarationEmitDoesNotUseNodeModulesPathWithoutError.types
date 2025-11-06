@@ -2,8 +2,8 @@
 
 === node_modules/@lion/ajax/dist-types/src/index.d.ts ===
 export type LionRequestInit = import('../types/types.js').LionRequestInit;
->LionRequestInit : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>LionRequestInit : import("../types/types.js").LionRequestInit
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/@lion/ajax/dist-types/types/types.d.ts ===
 export interface LionRequestInit {
@@ -26,8 +26,8 @@ export class NewAjax {
     case5_unexpectedlyResolvesPathToNodeModules(init) {}
 >case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
 >                                            : ^    ^^^               ^^^^^^^^^
->init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>init : import("./node_modules/@lion/ajax/dist-types/types/types.js").LionRequestInit | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 /**

@@ -6,7 +6,7 @@ const { Thing, useThing, cbThing } = require("./index");
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
 >cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
 >require : Symbol(require)
->"./index" : Symbol("index", Decl(index.js, 0, 0))
+>"./index" : Symbol("./index", Decl(index.js, 0, 0))
 
 useThing(Thing.a);
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
