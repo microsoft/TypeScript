@@ -14,12 +14,13 @@ import (
 )
 
 type Watcher struct {
-	sys                tsc.System
-	configFileName     string
-	config             *tsoptions.ParsedCommandLine
-	reportDiagnostic   tsc.DiagnosticReporter
-	reportErrorSummary tsc.DiagnosticsReporter
-	testing            tsc.CommandLineTesting
+	sys                            tsc.System
+	configFileName                 string
+	config                         *tsoptions.ParsedCommandLine
+	compilerOptionsFromCommandLine *core.CompilerOptions
+	reportDiagnostic               tsc.DiagnosticReporter
+	reportErrorSummary             tsc.DiagnosticsReporter
+	testing                        tsc.CommandLineTesting
 
 	host           compiler.CompilerHost
 	program        *incremental.Program
@@ -29,13 +30,21 @@ type Watcher struct {
 
 var _ tsc.Watcher = (*Watcher)(nil)
 
-func createWatcher(sys tsc.System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic tsc.DiagnosticReporter, reportErrorSummary tsc.DiagnosticsReporter, testing tsc.CommandLineTesting) *Watcher {
+func createWatcher(
+	sys tsc.System,
+	configParseResult *tsoptions.ParsedCommandLine,
+	compilerOptionsFromCommandLine *core.CompilerOptions,
+	reportDiagnostic tsc.DiagnosticReporter,
+	reportErrorSummary tsc.DiagnosticsReporter,
+	testing tsc.CommandLineTesting,
+) *Watcher {
 	w := &Watcher{
-		sys:                sys,
-		config:             configParseResult,
-		reportDiagnostic:   reportDiagnostic,
-		reportErrorSummary: reportErrorSummary,
-		testing:            testing,
+		sys:                            sys,
+		config:                         configParseResult,
+		compilerOptionsFromCommandLine: compilerOptionsFromCommandLine,
+		reportDiagnostic:               reportDiagnostic,
+		reportErrorSummary:             reportErrorSummary,
+		testing:                        testing,
 		// reportWatchStatus: createWatchStatusReporter(sys, configParseResult.CompilerOptions().Pretty),
 	}
 	if configParseResult.ConfigFile != nil {
@@ -108,7 +117,7 @@ func (w *Watcher) hasErrorsInTsConfig() bool {
 	extendedConfigCache := &tsc.ExtendedConfigCache{}
 	if w.configFileName != "" {
 		// !!! need to check that this merges compileroptions correctly. This differs from non-watch, since we allow overriding of previous options
-		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, &core.CompilerOptions{}, w.sys, extendedConfigCache)
+		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, w.compilerOptionsFromCommandLine, w.sys, extendedConfigCache)
 		if len(errors) > 0 {
 			for _, e := range errors {
 				w.reportDiagnostic(e)

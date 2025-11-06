@@ -193,7 +193,14 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess}
 	}
 	if configForCompilation.CompilerOptions().Watch.IsTrue() {
-		watcher := createWatcher(sys, configForCompilation, reportDiagnostic, reportErrorSummary, testing)
+		watcher := createWatcher(
+			sys,
+			configForCompilation,
+			compilerOptionsFromCommandLine,
+			reportDiagnostic,
+			reportErrorSummary,
+			testing,
+		)
 		watcher.start()
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess, Watcher: watcher}
 	} else if configForCompilation.CompilerOptions().IsIncremental() {
