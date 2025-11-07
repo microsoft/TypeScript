@@ -1,0 +1,108 @@
+--- old.inlayHintsInteractiveFunctionParameterTypes1.baseline
++++ new.inlayHintsInteractiveFunctionParameterTypes1.baseline
+@@= skipped -189, +189 lines =@@
+       "value": "<"
+     },
+     {
+-      "value": "X",
+-      "location": {},
++      "value": "X"
+     },
+     {
+       "value": ", "
+     },
+     {
+-      "value": "Y",
+-      "location": {},
++      "value": "Y"
+     },
+     {
+       "value": ">"
+@@= skipped -23, +21 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "X",
+-      "location": {},
++      "value": "X"
+     },
+     {
+       "value": ")"
+@@= skipped -10, +9 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Y",
+-      "location": {},
++      "value": "Y"
+     },
+     {
+       "value": "; "
+@@= skipped -133, +132 lines =@@
+       "value": "<"
+     },
+     {
+-      "value": "T",
+-      "location": {},
++      "value": "T"
+     },
+     {
+       "value": ">"
+@@= skipped -16, +15 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "T",
+-      "location": {},
++      "value": "T"
+     },
+     {
+       "value": "; "
+@@= skipped -16, +15 lines =@@
+       "value": "<"
+     },
+     {
+-      "value": "X",
+-      "location": {},
++      "value": "X"
+     },
+     {
+       "value": ", "
+     },
+     {
+-      "value": "Y",
+-      "location": {},
++      "value": "Y"
+     },
+     {
+       "value": ">"
+@@= skipped -23, +21 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "X",
+-      "location": {},
++      "value": "X"
+     },
+     {
+       "value": ")"
+@@= skipped -10, +9 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Y",
+-      "location": {},
++      "value": "Y"
+     },
+     {
+       "value": " "
+@@= skipped -46, +45 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Thing",
+-      "location": {},
++      "value": "Thing"
+     }
+   ],
+   "kind": 1,

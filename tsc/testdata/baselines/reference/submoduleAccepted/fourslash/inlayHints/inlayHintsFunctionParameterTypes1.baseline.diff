@@ -1,0 +1,230 @@
+--- old.inlayHintsFunctionParameterTypes1.baseline
++++ new.inlayHintsFunctionParameterTypes1.baseline
+@@= skipped -1, +1 lines =@@
+ const f1: F1 = (a, b) => { }
+                  ^
+ {
+-  "label": ": string",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "string"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ const f1: F1 = (a, b) => { }
+                     ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ const f2: F1 = (a, b: number) => { }
+                  ^
+ {
+-  "label": ": string",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "string"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ foo1((a) => { })
+        ^
+ {
+-  "label": ": string",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "string"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ foo2((a) => { })
+        ^
+ {
+-  "label": ": 2 | 3",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "2"
++    },
++    {
++      "value": " | "
++    },
++    {
++      "value": "3"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +21 lines =@@
+ foo3(a => {
+       ^
+ {
+-  "label": ": (c: (d: 2 | 3) => void) => void",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "("
++    },
++    {
++      "value": "c"
++    },
++    {
++      "value": ": "
++    },
++    {
++      "value": "("
++    },
++    {
++      "value": "d"
++    },
++    {
++      "value": ": "
++    },
++    {
++      "value": "2"
++    },
++    {
++      "value": " | "
++    },
++    {
++      "value": "3"
++    },
++    {
++      "value": ")"
++    },
++    {
++      "value": " => "
++    },
++    {
++      "value": "void"
++    },
++    {
++      "value": ")"
++    },
++    {
++      "value": " => "
++    },
++    {
++      "value": "void"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +57 lines =@@
+     a(d => {})
+        ^
+ {
+-  "label": ": 2 | 3",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "2"
++    },
++    {
++      "value": " | "
++    },
++    {
++      "value": "3"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +21 lines =@@
+ foo4(1, a => { })
+          ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ const foo5: F2 = (a) => { }
+                    ^
+ {
+-  "label": ": { a: number; b: string; }",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "{"
++    },
++    {
++      "value": " "
++    },
++    {
++      "value": "a"
++    },
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    },
++    {
++      "value": "; "
++    },
++    {
++      "value": "b"
++    },
++    {
++      "value": ": "
++    },
++    {
++      "value": "string"
++    },
++    {
++      "value": " "
++    },
++    {
++      "value": "}"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

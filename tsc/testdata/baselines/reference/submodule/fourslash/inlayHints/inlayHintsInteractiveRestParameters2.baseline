@@ -1,0 +1,352 @@
+// === Inlay Hints ===
+    foo(...x, 3);
+        ^
+{
+  "position": {
+    "line": 2,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 13
+          },
+          "end": {
+            "line": 0,
+            "character": 14
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 3);
+              ^
+{
+  "position": {
+    "line": 2,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 36
+          },
+          "end": {
+            "line": 0,
+            "character": 38
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 1, 2, 3);
+              ^
+{
+  "position": {
+    "line": 5,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 13
+          },
+          "end": {
+            "line": 0,
+            "character": 14
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 1, 2, 3);
+                 ^
+{
+  "position": {
+    "line": 5,
+    "character": 17
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 24
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 1, 2, 3);
+                    ^
+{
+  "position": {
+    "line": 5,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 36
+          },
+          "end": {
+            "line": 0,
+            "character": 38
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(1, ...x);
+        ^
+{
+  "position": {
+    "line": 8,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 13
+          },
+          "end": {
+            "line": 0,
+            "character": 14
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(1, ...x);
+           ^
+{
+  "position": {
+    "line": 8,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 24
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 3);
+        ^
+{
+  "position": {
+    "line": 11,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 13
+          },
+          "end": {
+            "line": 0,
+            "character": 14
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 3);
+              ^
+{
+  "position": {
+    "line": 11,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 24
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 3);
+        ^
+{
+  "position": {
+    "line": 14,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 13
+          },
+          "end": {
+            "line": 0,
+            "character": 14
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    foo(...x, 3);
+              ^
+{
+  "position": {
+    "line": 14,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveRestParameters2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 36
+          },
+          "end": {
+            "line": 0,
+            "character": 38
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

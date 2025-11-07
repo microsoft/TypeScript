@@ -1,0 +1,558 @@
+// === Inlay Hints ===
+ const f1: F1 = (a, b) => { }
+                  ^
+{
+  "position": {
+    "line": 1,
+    "character": 18
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const f1: F1 = (a, b) => { }
+                     ^
+{
+  "position": {
+    "line": 1,
+    "character": 21
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const f2: F1 = (a, b: number) => { }
+                  ^
+{
+  "position": {
+    "line": 2,
+    "character": 18
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo1((a) => { })
+        ^
+{
+  "position": {
+    "line": 4,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo2((a) => { })
+        ^
+{
+  "position": {
+    "line": 6,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo3(a => {
+       ^
+{
+  "position": {
+    "line": 8,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "c"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "d"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+     a(d => {})
+        ^
+{
+  "position": {
+    "line": 9,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ foo4(1, a => { })
+          ^
+{
+  "position": {
+    "line": 12,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const foo5: F2 = (a) => { }
+                    ^
+{
+  "position": {
+    "line": 25,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "X"
+    },
+    {
+      "value": ", "
+    },
+    {
+      "value": "Y"
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "x"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "X"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Y"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "i"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "a"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "b"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "readonly"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "c"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "boolean"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "d"
+    },
+    {
+      "value": "?"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "e"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "f"
+    },
+    {
+      "value": "?"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "boolean"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "g"
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "T"
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "T"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "h"
+    },
+    {
+      "value": "?"
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "X"
+    },
+    {
+      "value": ", "
+    },
+    {
+      "value": "Y"
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "x"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "X"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Y"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const foo6: F3 = (a) => { }
+                    ^
+{
+  "position": {
+    "line": 29,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "42"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+foo4(p => {})
+      ^
+{
+  "position": {
+    "line": 32,
+    "character": 6
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Thing"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const foo5: F4 = (a) => { }
+                    ^
+{
+  "position": {
+    "line": 36,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "x"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

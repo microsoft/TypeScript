@@ -1,0 +1,64 @@
+// === Inlay Hints ===
+y.foo(1, 2)
+      ^
+{
+  "position": {
+    "line": 6,
+    "character": 6
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///a.js",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 17
+          },
+          "end": {
+            "line": 3,
+            "character": 18
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+y.foo(1, 2)
+         ^
+{
+  "position": {
+    "line": 6,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///a.js",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 27
+          },
+          "end": {
+            "line": 3,
+            "character": 29
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

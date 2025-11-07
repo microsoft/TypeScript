@@ -1,0 +1,70 @@
+--- old.inlayHintsWithClosures.baseline
++++ new.inlayHintsWithClosures.baseline
+@@= skipped -1, +1 lines =@@
+ foo1(1)(2);
+      ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo1(1)(2);
+         ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+     return a(1) + 2
+              ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo2((c: number) => c + 1);
+      ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }

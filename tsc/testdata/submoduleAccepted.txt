@@ -1,3 +1,25 @@
 # Diff files to instead write to submoduleAccepted as "accepted" changes.
 conformance/node10Alternateresult_noTypes.errors.txt.diff
 conformance/node10AlternateResult_noResolution.errors.txt.diff
+fourslash/inlayHints/inlayHintsInteractiveParameterNamesWithComments.baseline.diff
+fourslash/inlayHints/inlayHintsImportType2.baseline.diff
+fourslash/inlayHints/inlayHintsInteractiveImportType2.baseline.diff
+fourslash/inlayHints/inlayHintsFunctionParameterTypes1.baseline.diff
+fourslash/inlayHints/inlayHintsFunctionParameterTypes3.baseline.diff
+fourslash/inlayHints/inlayHintsInferredTypePredicate1.baseline.diff
+fourslash/inlayHints/inlayHintsInteractiveRestParameters3.baseline.diff
+fourslash/inlayHints/inlayHintsJsDocParameterNames.baseline.diff
+fourslash/inlayHints/inlayHintsMultifile1.baseline.diff
+fourslash/inlayHints/inlayHintsNoHintWhenArgumentMatchesName.baseline.diff
+fourslash/inlayHints/inlayHintsOverloadCall1.baseline.diff
+fourslash/inlayHints/inlayHintsOverloadCall2.baseline.diff
+fourslash/inlayHints/inlayHintsParameterNames.baseline.diff
+fourslash/inlayHints/inlayHintsPropertyDeclarations.baseline.diff
+fourslash/inlayHints/inlayHintsPropertyDeclarations2.baseline.diff
+fourslash/inlayHints/inlayHintsRestParameters1.baseline.diff
+fourslash/inlayHints/inlayHintsRestParameters2.baseline.diff
+fourslash/inlayHints/inlayHintsReturnType.baseline.diff
+fourslash/inlayHints/inlayHintsThisParameter.baseline.diff
+fourslash/inlayHints/inlayHintsVariableTypes1.baseline.diff
+fourslash/inlayHints/inlayHintsVariableTypes2.baseline.diff
+fourslash/inlayHints/inlayHintsWithClosures.baseline.diff

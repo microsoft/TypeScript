@@ -1,0 +1,160 @@
+// === Inlay Hints ===
+foo(a, 2);
+       ^
+{
+  "position": {
+    "line": 2,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsNoHintWhenArgumentMatchesName.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 24
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(v.a, v.a);
+         ^
+{
+  "position": {
+    "line": 4,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsNoHintWhenArgumentMatchesName.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 24
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(v.b, v.b);
+    ^
+{
+  "position": {
+    "line": 5,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsNoHintWhenArgumentMatchesName.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(v.c, v.c);
+    ^
+{
+  "position": {
+    "line": 6,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsNoHintWhenArgumentMatchesName.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(v.c, v.c);
+         ^
+{
+  "position": {
+    "line": 6,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsNoHintWhenArgumentMatchesName.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 24
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

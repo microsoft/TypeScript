@@ -1,0 +1,82 @@
+--- old.inlayHintsThisParameter.baseline
++++ new.inlayHintsThisParameter.baseline
+@@= skipped -1, +1 lines =@@
+ fn(function (this, a, b) { });
+                  ^
+ {
+-  "label": ": any",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "any"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ fn(function (this, a, b) { });
+                     ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ fn(function (this, a, b) { });
+                        ^
+ {
+-  "label": ": string",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "string"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ fn(function (this: I, a, b) { });
+                        ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ fn(function (this: I, a, b) { });
+                           ^
+ {
+-  "label": ": string",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "string"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

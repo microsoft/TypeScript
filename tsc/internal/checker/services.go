@@ -809,3 +809,7 @@ func (c *Checker) getTypeOfAssignmentPattern(expr *ast.Node) *Type {
 	elementType := core.OrElse(c.checkIteratedTypeOrElementType(IterationUseDestructuring, typeOfArrayLiteral, c.undefinedType, expr.Parent), c.errorType)
 	return c.checkArrayLiteralDestructuringElementAssignment(node, typeOfArrayLiteral, slices.Index(node.AsArrayLiteralExpression().Elements.Nodes, expr), elementType, CheckModeNormal)
 }
+
+func (c *Checker) GetSignatureFromDeclaration(node *ast.Node) *Signature {
+	return c.getSignatureFromDeclaration(node)
+}

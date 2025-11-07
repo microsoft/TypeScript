@@ -1,0 +1,128 @@
+// === Inlay Hints ===
+fn(/* nobody knows exactly what this param is */ 42);
+                                                 ^
+{
+  "position": {
+    "line": 1,
+    "character": 49
+  },
+  "label": [
+    {
+      "value": "x",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveParameterNamesWithComments.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 12
+          },
+          "end": {
+            "line": 0,
+            "character": 13
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    1,
+    ^
+{
+  "position": {
+    "line": 24,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "aParameter",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveParameterNamesWithComments.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 14
+          },
+          "end": {
+            "line": 2,
+            "character": 24
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    2,
+    ^
+{
+  "position": {
+    "line": 25,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "bParameter",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveParameterNamesWithComments.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 33
+          },
+          "end": {
+            "line": 2,
+            "character": 44
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    3
+    ^
+{
+  "position": {
+    "line": 29,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "cParameter",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveParameterNamesWithComments.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 53
+          },
+          "end": {
+            "line": 2,
+            "character": 64
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

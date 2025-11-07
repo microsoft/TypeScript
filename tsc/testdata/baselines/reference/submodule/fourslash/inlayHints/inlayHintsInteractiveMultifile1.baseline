@@ -1,0 +1,112 @@
+// === Inlay Hints ===
+async function foo () {
+                     ^
+{
+  "position": {
+    "line": 0,
+    "character": 21
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Promise"
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "Foo"
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+function bar () { return import('./a') }
+               ^
+{
+  "position": {
+    "line": 3,
+    "character": 15
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Promise"
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "typeof "
+    },
+    {
+      "value": "import("
+    },
+    {
+      "value": "'/a'"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+async function main () {
+                      ^
+{
+  "position": {
+    "line": 4,
+    "character": 22
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Promise"
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+    const a = await foo()
+           ^
+{
+  "position": {
+    "line": 5,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Foo"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

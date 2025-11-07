@@ -1,0 +1,34 @@
+--- old.inlayHintsFunctionParameterTypes3.baseline
++++ new.inlayHintsFunctionParameterTypes3.baseline
+@@= skipped -1, +1 lines =@@
+     bar: function (x?): void {
+                      ^
+ {
+-  "label": ": boolean",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "boolean"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+     set foo(value) { this.#value = value; }
+                  ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

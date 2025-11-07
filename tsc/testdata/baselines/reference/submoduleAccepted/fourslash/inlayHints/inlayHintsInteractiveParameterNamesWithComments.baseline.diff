@@ -1,0 +1,41 @@
+--- old.inlayHintsInteractiveParameterNamesWithComments.baseline
++++ new.inlayHintsInteractiveParameterNamesWithComments.baseline
+@@= skipped -14, +14 lines =@@
+   "paddingRight": true
+ }
+
+-    2,
+-    ^
+-{
+-  "label": [
+-    {
+-      "value": "bParameter",
+-      "location": {},
+-    },
+-    {
+-      "value": ":"
+-    }
+-  ],
+-  "kind": 2,
+-  "paddingRight": true
+-}
+-
+-    3
+-    ^
+-{
+-  "label": [
+-    {
+-      "value": "cParameter",
+-      "location": {},
+-    },
+-    {
+-      "value": ":"
+-    }
+-  ],
+-  "kind": 2,
+-  "paddingRight": true
+-}
+-
+     1,
+     ^
+ {

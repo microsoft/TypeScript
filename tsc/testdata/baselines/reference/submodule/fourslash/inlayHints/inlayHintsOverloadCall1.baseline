@@ -1,0 +1,320 @@
+// === Inlay Hints ===
+call(1);
+     ^
+{
+  "position": {
+    "line": 6,
+    "character": 5
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+call(1, 2);
+     ^
+{
+  "position": {
+    "line": 7,
+    "character": 5
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 5
+          },
+          "end": {
+            "line": 2,
+            "character": 6
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+call(1, 2);
+        ^
+{
+  "position": {
+    "line": 7,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 15
+          },
+          "end": {
+            "line": 2,
+            "character": 17
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+new call(1);
+         ^
+{
+  "position": {
+    "line": 8,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 9
+          },
+          "end": {
+            "line": 3,
+            "character": 10
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(1)
+    ^
+{
+  "position": {
+    "line": 12,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "w",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 21
+          },
+          "end": {
+            "line": 9,
+            "character": 22
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(1, 2)
+    ^
+{
+  "position": {
+    "line": 13,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 21
+          },
+          "end": {
+            "line": 10,
+            "character": 22
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(1, 2)
+       ^
+{
+  "position": {
+    "line": 13,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 31
+          },
+          "end": {
+            "line": 10,
+            "character": 33
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+new Class(1)
+          ^
+{
+  "position": {
+    "line": 19,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 16
+          },
+          "end": {
+            "line": 15,
+            "character": 17
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+new Class(1, 2)
+          ^
+{
+  "position": {
+    "line": 20,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 16
+          },
+          "end": {
+            "line": 16,
+            "character": 17
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+new Class(1, 2)
+             ^
+{
+  "position": {
+    "line": 20,
+    "character": 13
+  },
+  "label": [
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall1.ts",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 26
+          },
+          "end": {
+            "line": 16,
+            "character": 28
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

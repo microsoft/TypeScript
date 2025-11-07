@@ -1,0 +1,82 @@
+--- old.inlayHintsReturnType.baseline
++++ new.inlayHintsReturnType.baseline
+@@= skipped -1, +1 lines =@@
+ function foo1 () {
+                 ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+     foo() {
+          ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ const a = () => 1
+             ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ const b = function () { return 1 }
+                      ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+ const c = (b) => 1
+              ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

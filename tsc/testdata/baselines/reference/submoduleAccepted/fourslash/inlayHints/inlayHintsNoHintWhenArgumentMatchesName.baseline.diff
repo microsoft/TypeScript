@@ -1,0 +1,87 @@
+--- old.inlayHintsNoHintWhenArgumentMatchesName.baseline
++++ new.inlayHintsNoHintWhenArgumentMatchesName.baseline
+@@= skipped -1, +1 lines =@@
+ foo(a, 2);
+        ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo(v.a, v.a);
+          ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo(v.b, v.b);
+     ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo(v.c, v.c);
+     ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo(v.c, v.c);
+          ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }

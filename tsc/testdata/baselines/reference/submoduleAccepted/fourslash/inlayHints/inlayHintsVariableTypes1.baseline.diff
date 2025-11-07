@@ -1,0 +1,27 @@
+--- old.inlayHintsVariableTypes1.baseline
++++ new.inlayHintsVariableTypes1.baseline
+@@= skipped -1, +1 lines =@@
+  const m = () => 123;
+         ^
+ {
+-  "label": ": () => number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "("
++    },
++    {
++      "value": ")"
++    },
++    {
++      "value": " => "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

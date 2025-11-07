@@ -1,0 +1,38 @@
+// === Inlay Hints ===
+export function fn(a = a1, b = b1) {}
+                    ^
+{
+  "position": {
+    "line": 2,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "'\\''"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+export function fn(a = a1, b = b1) {}
+                            ^
+{
+  "position": {
+    "line": 2,
+    "character": 28
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "'\\\\'"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

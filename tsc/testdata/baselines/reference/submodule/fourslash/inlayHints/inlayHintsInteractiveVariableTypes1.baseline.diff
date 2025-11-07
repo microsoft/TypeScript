@@ -1,0 +1,42 @@
+--- old.inlayHintsInteractiveVariableTypes1.baseline
++++ new.inlayHintsInteractiveVariableTypes1.baseline
+@@= skipped -72, +72 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Foo",
+-      "location": {},
++      "value": "Foo"
+     },
+     {
+       "value": "[]"
+@@= skipped -13, +12 lines =@@
+       "value": " => "
+     },
+     {
+-      "value": "Foo",
+-      "location": {},
++      "value": "Foo"
+     }
+   ],
+   "kind": 1,
+@@= skipped -49, +48 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Foo",
+-      "location": {},
++      "value": "Foo"
+     },
+     {
+       "value": " "
+@@= skipped -16, +15 lines =@@
+       "value": " => "
+     },
+     {
+-      "value": "Foo",
+-      "location": {},
++      "value": "Foo"
+     }
+   ],
+   "kind": 1,

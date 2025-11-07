@@ -1,0 +1,61 @@
+// === Inlay Hints ===
+const div = getCtor("div");
+         ^
+{
+  "position": {
+    "line": 9,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "new "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "DivElement"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "prototype"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "DivElement"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "undefined"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

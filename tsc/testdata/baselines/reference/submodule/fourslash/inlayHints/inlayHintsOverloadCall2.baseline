@@ -1,0 +1,64 @@
+// === Inlay Hints ===
+    { n: [1, 2, 3] },
+    ^
+{
+  "position": {
+    "line": 12,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "ok_1",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall2.ts",
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 22
+          },
+          "end": {
+            "line": 9,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    {
+    ^
+{
+  "position": {
+    "line": 13,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "ok_2",
+      "location": {
+        "uri": "file:///inlayHintsOverloadCall2.ts",
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 36
+          },
+          "end": {
+            "line": 9,
+            "character": 41
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

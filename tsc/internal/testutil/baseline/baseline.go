@@ -21,6 +21,7 @@ type Options struct {
 	IsSubmodule         bool
 	IsSubmoduleAccepted bool
 	DiffFixupOld        func(string) string
+	DiffFixupNew        func(string) string
 	SkipDiffWithOld     bool
 }
 
@@ -64,7 +65,7 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 		localPath := filepath.Join(localRoot, outRoot, origSubfolder, diffFileName)
 		referencePath := filepath.Join(referenceRoot, outRoot, origSubfolder, diffFileName)
 
-		diff := getBaselineDiff(t, actual, submoduleExpected, fileName, opts.DiffFixupOld)
+		diff := getBaselineDiff(t, actual, submoduleExpected, fileName, opts.DiffFixupOld, opts.DiffFixupNew)
 		writeComparison(t, diff, localPath, referencePath, false)
 	}
 
@@ -113,9 +114,12 @@ func DiffText(oldName string, newName string, expected string, actual string) st
 	})
 }
 
-func getBaselineDiff(t *testing.T, actual string, expected string, fileName string, fixupOld func(string) string) string {
+func getBaselineDiff(t *testing.T, actual string, expected string, fileName string, fixupOld func(string) string, fixupNew func(string) string) string {
 	if fixupOld != nil {
 		expected = fixupOld(expected)
+	}
+	if fixupNew != nil {
+		actual = fixupNew(actual)
 	}
 	if actual == expected {
 		return NoContent

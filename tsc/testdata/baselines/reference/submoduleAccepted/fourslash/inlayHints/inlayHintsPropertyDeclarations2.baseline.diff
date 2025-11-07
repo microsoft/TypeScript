@@ -1,0 +1,40 @@
+--- old.inlayHintsPropertyDeclarations2.baseline
++++ new.inlayHintsPropertyDeclarations2.baseline
+@@= skipped -1, +1 lines =@@
+     accessor a = 1
+               ^
+ {
+-  "label": ": number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +15 lines =@@
+     accessor d;
+               ^
+ {
+-  "label": ": number | null",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    },
++    {
++      "value": " | "
++    },
++    {
++      "value": "null"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

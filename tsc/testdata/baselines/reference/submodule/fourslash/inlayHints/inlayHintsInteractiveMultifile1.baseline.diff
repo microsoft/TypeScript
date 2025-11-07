@@ -1,0 +1,50 @@
+--- old.inlayHintsInteractiveMultifile1.baseline
++++ new.inlayHintsInteractiveMultifile1.baseline
+@@= skipped -6, +6 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Promise",
+-      "location": {},
++      "value": "Promise"
+     },
+     {
+       "value": "<"
+     },
+     {
+-      "value": "Foo",
+-      "location": {},
++      "value": "Foo"
+     },
+     {
+       "value": ">"
+@@= skipped -26, +24 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Promise",
+-      "location": {},
++      "value": "Promise"
+     },
+     {
+       "value": "<"
+@@= skipped -34, +33 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Promise",
+-      "location": {},
++      "value": "Promise"
+     },
+     {
+       "value": "<"
+@@= skipped -25, +24 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "Foo",
+-      "location": {},
++      "value": "Foo"
+     }
+   ],
+   "kind": 1,

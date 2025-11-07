@@ -1,0 +1,12 @@
+--- old.inlayHintsFunctionParameterTypes5.baseline
++++ new.inlayHintsFunctionParameterTypes5.baseline
+@@= skipped -15, +15 lines =@@
+       "value": "["
+     },
+     {
+-      "value": "STATE_SIGNAL",
+-      "location": {},
++      "value": "STATE_SIGNAL"
+     },
+     {
+       "value": "]"

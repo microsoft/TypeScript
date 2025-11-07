@@ -1,0 +1,53 @@
+--- old.inlayHintsInteractiveRestParameters3.baseline
++++ new.inlayHintsInteractiveRestParameters3.baseline
+@@= skipped -1, +1 lines =@@
+ fn(...foo, 3, 4);
+    ^
+ {
+-  "label": "x:",
++  "label": [
++    {
++      "value": "x",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ fn(...foo, 3, 4);
+            ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ fn(...foo, 3, 4);
+               ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }

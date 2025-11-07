@@ -1,0 +1,36 @@
+--- old.inlayHintsOverloadCall2.baseline
++++ new.inlayHintsOverloadCall2.baseline
+@@= skipped -1, +1 lines =@@
+     { n: [1, 2, 3] },
+     ^
+ {
+-  "label": "ok_1:",
++  "label": [
++    {
++      "value": "ok_1",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+     {
+     ^
+ {
+-  "label": "ok_2:",
++  "label": [
++    {
++      "value": "ok_2",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }

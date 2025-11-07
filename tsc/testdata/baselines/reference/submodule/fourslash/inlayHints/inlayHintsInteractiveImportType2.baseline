@@ -1,0 +1,38 @@
+// === Inlay Hints ===
+function bar () { return require('./a').a; }
+               ^
+{
+  "position": {
+    "line": 1,
+    "character": 15
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const d = bar()
+       ^
+{
+  "position": {
+    "line": 3,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

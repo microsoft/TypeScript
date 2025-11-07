@@ -1,0 +1,38 @@
+// === Inlay Hints ===
+    bar: function (x?): void {
+                     ^
+{
+  "position": {
+    "line": 5,
+    "character": 21
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "boolean"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+    set foo(value) { this.#value = value; }
+                 ^
+{
+  "position": {
+    "line": 12,
+    "character": 17
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

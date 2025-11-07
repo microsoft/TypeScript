@@ -1,0 +1,43 @@
+// === Inlay Hints ===
+test((state) => {});
+           ^
+{
+  "position": {
+    "line": 6,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "STATE_SIGNAL"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "unknown"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

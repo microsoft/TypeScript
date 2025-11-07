@@ -19,7 +19,6 @@ func NewDefaultUserPreferences() *UserPreferences {
 		IncludeCompletionsWithSnippetText:  core.TSTrue,
 		DisplayPartsForJSDoc:               true,
 		DisableLineTextInReferences:        true,
-		InteractiveInlayHints:              true,
 	}
 }
 
@@ -142,7 +141,6 @@ type UserPreferences struct {
 	IncludeInlayPropertyDeclarationTypeHints              bool
 	IncludeInlayFunctionLikeReturnTypeHints               bool
 	IncludeInlayEnumMemberValueHints                      bool
-	InteractiveInlayHints                                 bool
 
 	// ------- Misc -------
 
@@ -622,8 +620,6 @@ func (p *UserPreferences) set(name string, value any) {
 		p.IncludeInlayFunctionLikeReturnTypeHints = parseBoolWithDefault(value, false)
 	case "includeinlayenummembervaluehints":
 		p.IncludeInlayEnumMemberValueHints = parseBoolWithDefault(value, false)
-	case "interactiveinlayhints":
-		p.InteractiveInlayHints = parseBoolWithDefault(value, true)
 	case "excludelibrarysymbolsinnavto":
 		p.ExcludeLibrarySymbolsInNavTo = parseBoolWithDefault(value, false)
 	case "disablesuggestions":

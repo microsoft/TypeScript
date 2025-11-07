@@ -1,0 +1,20 @@
+--- old.inlayHintsInteractiveImportType2.baseline
++++ new.inlayHintsInteractiveImportType2.baseline
+@@= skipped -6, +6 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "1"
++      "value": "number"
+     }
+   ],
+   "kind": 1,
+@@= skipped -15, +15 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "1"
++      "value": "number"
+     }
+   ],
+   "kind": 1,

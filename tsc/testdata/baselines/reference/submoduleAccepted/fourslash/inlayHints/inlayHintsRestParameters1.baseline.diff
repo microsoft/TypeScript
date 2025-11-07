@@ -1,0 +1,104 @@
+--- old.inlayHintsRestParameters1.baseline
++++ new.inlayHintsRestParameters1.baseline
+@@= skipped -1, +1 lines =@@
+ foo1(1, 1, 1, 1);
+      ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo1(1, 1, 1, 1);
+         ^
+ {
+-  "label": "...b:",
++  "label": [
++    {
++      "value": "...b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo2(1, 2, 3)
+      ^
+ {
+-  "label": "c:",
++  "label": [
++    {
++      "value": "c",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo2(1, 2, 3)
+         ^
+ {
+-  "label": "a:",
++  "label": [
++    {
++      "value": "a",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo2(1, 2, 3)
+            ^
+ {
+-  "label": "b:",
++  "label": [
++    {
++      "value": "b",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }
+@@= skipped -8, +16 lines =@@
+ foo3(1, 2, 3)
+      ^
+ {
+-  "label": "c:",
++  "label": [
++    {
++      "value": "c",
++      "location": {},
++    },
++    {
++      "value": ":"
++    }
++  ],
+   "kind": 2,
+   "paddingRight": true
+ }

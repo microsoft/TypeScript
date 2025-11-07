@@ -1,0 +1,102 @@
+--- old.inlayHintsVariableTypes2.baseline
++++ new.inlayHintsVariableTypes2.baseline
+@@= skipped -1, +1 lines =@@
+ const array = [1, 2]
+            ^
+ {
+-  "label": ": number[]",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    },
++    {
++      "value": "[]"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +18 lines =@@
+ const a = object;
+        ^
+ {
+-  "label": ": { foo: number; bar: number; }",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "{"
++    },
++    {
++      "value": " "
++    },
++    {
++      "value": "foo"
++    },
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    },
++    {
++      "value": "; "
++    },
++    {
++      "value": "bar"
++    },
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    },
++    {
++      "value": " "
++    },
++    {
++      "value": "}"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +45 lines =@@
+ const b = array;
+        ^
+ {
+-  "label": ": number[]",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "number"
++    },
++    {
++      "value": "[]"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +18 lines =@@
+ const x = foo(1)
+        ^
+ {
+-  "label": ": 1",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "1"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

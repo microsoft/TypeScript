@@ -1,0 +1,24 @@
+--- old.inlayHintsInferredTypePredicate1.baseline
++++ new.inlayHintsInferredTypePredicate1.baseline
+@@= skipped -1, +1 lines =@@
+ function test(x: unknown) {
+                          ^
+ {
+-  "label": ": x is number",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "x"
++    },
++    {
++      "value": " is "
++    },
++    {
++      "value": "number"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

@@ -47,7 +47,7 @@ func getBaselineFileName(t *testing.T, command string) string {
 
 func getBaselineExtension(command string) string {
 	switch command {
-	case "QuickInfo", "SignatureHelp", "Smart Selection":
+	case "QuickInfo", "SignatureHelp", "Smart Selection", "Inlay Hints":
 		return "baseline"
 	case "Auto Imports":
 		return "baseline.md"
@@ -107,6 +107,119 @@ func getBaselineOptions(command string) baseline.Options {
 					}
 				}
 				return strings.Join(commandLines, "\n")
+			},
+		}
+	case "Inlay Hints":
+		return baseline.Options{
+			Subfolder:   subfolder,
+			IsSubmodule: true,
+			DiffFixupOld: func(s string) string {
+				var commandLines []string
+				commandPrefix := regexp.MustCompile(`^// === ([a-z\sA-Z]*) ===`)
+				lines := strings.Split(s, "\n")
+				var isInCommand bool
+				replacer := strings.NewReplacer(
+					`"whitespaceAfter"`, `"paddingRight"`,
+					`"whitespaceBefore"`, `"paddingLeft"`,
+				)
+				hintStart := -1
+				for i := 0; i < len(lines); i++ {
+					line := lines[i]
+					matches := commandPrefix.FindStringSubmatch(line)
+					if len(matches) > 0 {
+						commandName := matches[1]
+						if commandName == command {
+							isInCommand = true
+						} else {
+							isInCommand = false
+						}
+					}
+					if isInCommand {
+						if line == "{" {
+							hintStart = len(commandLines)
+						}
+						if line == "}" && strings.HasSuffix(commandLines[len(commandLines)-1], ",") {
+							commandLines[len(commandLines)-1] = strings.TrimSuffix(commandLines[len(commandLines)-1], ",")
+						}
+						trimmedLine := strings.TrimSpace(line)
+						// Ignore position, already verified via caret.
+						if strings.HasPrefix(trimmedLine, `"position": `) {
+							continue
+						}
+						if strings.HasPrefix(trimmedLine, `"text": `) {
+							if trimmedLine == `"text": "",` {
+								continue
+							}
+							line = strings.Replace(line, `"text":`, `"label":`, 1)
+						}
+						if strings.HasPrefix(trimmedLine, `"kind": `) {
+							switch trimmedLine {
+							case `"kind": "Parameter",`:
+								line = strings.Replace(line, `"kind": "Parameter",`, `"kind": 2,`, 1)
+							case `"kind": "Type",`:
+								line = strings.Replace(line, `"kind": "Type",`, `"kind": 1,`, 1)
+							default:
+								continue
+							}
+						}
+						// Compare only text/value of display parts.
+						// Record the presence of a span but not its details.
+						if strings.HasPrefix(trimmedLine, `"displayParts": `) {
+							var displayPartLines []string
+							displayPartLines = append(displayPartLines, strings.Replace(line, "displayParts", "label", 1))
+							var j int
+							for j = i + 1; j < len(lines); j++ {
+								line := lines[j]
+								trimmedLine := strings.TrimSpace(line)
+								if strings.HasPrefix(trimmedLine, `"text": `) {
+									line = strings.Replace(line, `"text":`, `"value":`, 1)
+								} else if strings.HasPrefix(trimmedLine, `"span": `) {
+									displayPartLines = append(displayPartLines, strings.Replace(line, "span", "location", 1)+"},")
+									j = j + 3
+									continue
+								} else if strings.HasPrefix(trimmedLine, `"file": `) {
+									continue
+								}
+								if trimmedLine == "]" || trimmedLine == "]," {
+									fixedLine := line
+									if trimmedLine == "]" {
+										fixedLine += ","
+									}
+									displayPartLines = append(displayPartLines, fixedLine)
+									break
+								}
+								displayPartLines = append(displayPartLines, line)
+							}
+							// Add display parts at beginning of hint.
+							commandLines = slices.Insert(commandLines, hintStart+1, displayPartLines...)
+							i = j
+							continue
+						}
+
+						fixedLine := replacer.Replace(line)
+						commandLines = append(commandLines, fixedLine)
+					}
+				}
+				return strings.Join(commandLines, "\n")
+			},
+			DiffFixupNew: func(s string) string {
+				lines := strings.Split(s, "\n")
+				var fixedLines []string
+				for i := 0; i < len(lines); i++ {
+					line := lines[i]
+					trimmedLine := strings.TrimSpace(line)
+					if strings.HasPrefix(trimmedLine, `"position": `) {
+						i = i + 3
+						continue
+					}
+					if strings.HasPrefix(trimmedLine, `"location": `) {
+						fixedLines = append(fixedLines, line+"},")
+						i = i + 12
+						continue
+					}
+					fixedLines = append(fixedLines, line)
+				}
+				return strings.Join(fixedLines, "\n")
 			},
 		}
 	default:
@@ -407,7 +520,7 @@ func newTextWithContext(fileName string, content string) *textWithContext {
 
 		readableContents: &strings.Builder{},
 
-		isLibFile:  regexp.MustCompile(`lib.*\.d\.ts$`).MatchString(fileName),
+		isLibFile:  isLibFile(fileName),
 		newContent: &strings.Builder{},
 		pos:        lsproto.Position{Line: 0, Character: 0},
 		fileName:   fileName,

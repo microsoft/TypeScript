@@ -64,3 +64,11 @@ func (t TextRange) Overlaps(t2 TextRange) bool {
 	end := min(t.end, t2.end)
 	return start < end
 }
+
+// Similar to Overlaps, but treats touching ranges as intersecting.
+// For example, [0, 5) intersects [5, 10).
+func (t TextRange) Intersects(t2 TextRange) bool {
+	start := max(t.pos, t2.pos)
+	end := min(t.end, t2.end)
+	return start <= end
+}

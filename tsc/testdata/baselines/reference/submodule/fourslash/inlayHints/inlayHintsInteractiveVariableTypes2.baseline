@@ -1,0 +1,112 @@
+// === Inlay Hints ===
+const array = [1, 2]
+           ^
+{
+  "position": {
+    "line": 1,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "[]"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const a = object;
+       ^
+{
+  "position": {
+    "line": 2,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "foo"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "bar"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const b = array;
+       ^
+{
+  "position": {
+    "line": 5,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "[]"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const x = foo(1)
+       ^
+{
+  "position": {
+    "line": 9,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "1"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

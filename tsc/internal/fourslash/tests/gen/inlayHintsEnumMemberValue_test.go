@@ -1,0 +1,24 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestInlayHintsEnumMemberValue(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `enum E {
+    A,
+    AA,
+    B = 10,
+    BB,
+    C = 'C',
+}`
+	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{IncludeInlayEnumMemberValueHints: true})
+}

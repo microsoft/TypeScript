@@ -715,6 +715,10 @@ func (t *Type) IsIndex() bool {
 	return t.flags&TypeFlagsIndex != 0
 }
 
+func (t *Type) IsTupleType() bool {
+	return isTupleType(t)
+}
+
 // TypeData
 
 type TypeData interface {
@@ -924,6 +928,7 @@ type TupleElementInfo struct {
 }
 
 func (t *TupleElementInfo) TupleElementFlags() ElementFlags { return t.flags }
+func (t *TupleElementInfo) LabeledDeclaration() *ast.Node   { return t.labeledDeclaration }
 
 type TupleType struct {
 	InterfaceType
@@ -942,6 +947,7 @@ func (t *TupleType) ElementFlags() []ElementFlags {
 	}
 	return elementFlags
 }
+func (t *TupleType) ElementInfos() []TupleElementInfo { return t.elementInfos }
 
 // InstantiationExpressionType
 
@@ -1178,6 +1184,10 @@ type TypePredicate struct {
 	parameterIndex int32
 	parameterName  string
 	t              *Type
+}
+
+func (typePredicate *TypePredicate) Type() *Type {
+	return typePredicate.t
 }
 
 // IndexInfo

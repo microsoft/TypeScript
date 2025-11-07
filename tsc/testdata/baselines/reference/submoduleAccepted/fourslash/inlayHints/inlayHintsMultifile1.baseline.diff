@@ -1,0 +1,102 @@
+--- old.inlayHintsMultifile1.baseline
++++ new.inlayHintsMultifile1.baseline
+@@= skipped -1, +1 lines =@@
+ async function foo () {
+                      ^
+ {
+-  "label": ": Promise<Foo>",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "Promise"
++    },
++    {
++      "value": "<"
++    },
++    {
++      "value": "Foo"
++    },
++    {
++      "value": ">"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +24 lines =@@
+ function bar () { return import('./a') }
+                ^
+ {
+-  "label": ": Promise<typeof import(\"/a\")>",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "Promise"
++    },
++    {
++      "value": "<"
++    },
++    {
++      "value": "typeof "
++    },
++    {
++      "value": "import("
++    },
++    {
++      "value": "'/a'"
++    },
++    {
++      "value": ")"
++    },
++    {
++      "value": ">"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +33 lines =@@
+ async function main () {
+                       ^
+ {
+-  "label": ": Promise<void>",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "Promise"
++    },
++    {
++      "value": "<"
++    },
++    {
++      "value": "void"
++    },
++    {
++      "value": ">"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }
+@@= skipped -8, +24 lines =@@
+     const a = await foo()
+            ^
+ {
+-  "label": ": Foo",
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "Foo"
++    }
++  ],
+   "kind": 1,
+   "paddingLeft": true
+ }

@@ -1,0 +1,172 @@
+// === Inlay Hints ===
+ const m = () => 123;
+        ^
+{
+  "position": {
+    "line": 15,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const o = () => -1 as const;
+        ^
+{
+  "position": {
+    "line": 17,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "-"
+    },
+    {
+      "value": "1"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const p = ([a]: Foo[]) => a;
+        ^
+{
+  "position": {
+    "line": 18,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "a"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Foo"
+    },
+    {
+      "value": "[]"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "Foo"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+ const q = ({ a }: { a: Foo }) => a;
+        ^
+{
+  "position": {
+    "line": 19,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "a"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "a"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "Foo"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "Foo"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

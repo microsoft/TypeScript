@@ -1,0 +1,22 @@
+--- old.inlayHintsVariableTypes3.baseline
++++ new.inlayHintsVariableTypes3.baseline
+@@= skipped -24, +24 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "DivElement",
+-      "location": {},
++      "value": "DivElement"
+     },
+     {
+       "value": "; "
+@@= skipped -13, +12 lines =@@
+       "value": ": "
+     },
+     {
+-      "value": "DivElement",
+-      "location": {},
++      "value": "DivElement"
+     },
+     {
+       "value": " "
