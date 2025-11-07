@@ -8332,6 +8332,10 @@
         "category": "Message",
         "code": 95197
     },
+    "A '{0}' declaration cannot be placed within a 'case' or 'default' clause.": {
+        "category": "Error",
+        "code": 95198
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

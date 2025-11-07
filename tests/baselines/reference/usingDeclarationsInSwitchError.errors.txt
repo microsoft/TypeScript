@@ -1,0 +1,181 @@
+usingDeclarationsInSwitchError.ts(3,10): error TS2678: Type '0' is not comparable to type '1'.
+usingDeclarationsInSwitchError.ts(4,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(11,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(22,10): error TS2678: Type '0' is not comparable to type '5'.
+usingDeclarationsInSwitchError.ts(23,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(24,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(30,10): error TS2678: Type '0' is not comparable to type '6'.
+usingDeclarationsInSwitchError.ts(32,18): error TS2678: Type '1' is not comparable to type '7'.
+usingDeclarationsInSwitchError.ts(33,17): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(42,10): error TS2678: Type '0' is not comparable to type '8'.
+usingDeclarationsInSwitchError.ts(43,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+usingDeclarationsInSwitchError.ts(49,10): error TS2678: Type '0' is not comparable to type '9'.
+usingDeclarationsInSwitchError.ts(65,10): error TS2678: Type '0' is not comparable to type '11'.
+usingDeclarationsInSwitchError.ts(75,10): error TS2678: Type '0' is not comparable to type '12'.
+usingDeclarationsInSwitchError.ts(84,10): error TS2678: Type '0' is not comparable to type '13'.
+usingDeclarationsInSwitchError.ts(85,10): error TS2678: Type '1' is not comparable to type '13'.
+usingDeclarationsInSwitchError.ts(86,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(92,10): error TS2678: Type '0' is not comparable to type '14'.
+usingDeclarationsInSwitchError.ts(93,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarationsInSwitchError.ts(94,10): error TS2678: Type '1' is not comparable to type '14'.
+usingDeclarationsInSwitchError.ts(95,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+usingDeclarationsInSwitchError.ts(101,10): error TS2678: Type '0' is not comparable to type '15'.
+usingDeclarationsInSwitchError.ts(104,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+
+
+==== usingDeclarationsInSwitchError.ts (23 errors) ====
+    // Error: using in case clause
+    switch (1) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '1'.
+            using x = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+    }
+    
+    // Error: using in default clause
+    switch (2) {
+        default:
+            using y = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+    }
+    
+    // Error: await using in case clause (top-level of module would need to be async, so wrap minimally)
+    {
+        // Note: await using requires async context, tested separately in async functions
+    }
+    
+    // Error: Multiple using statements in same case
+    switch (5) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '5'.
+            using c = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            using d = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+    }
+    
+    // Error: Nested switch with using
+    switch (6) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '6'.
+            switch (7) {
+                case 1:
+                     ~
+!!! error TS2678: Type '1' is not comparable to type '7'.
+                    using e = { [Symbol.dispose]() {} };
+                    ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+                    break;
+            }
+            break;
+    }
+    
+    // Valid: using before switch statement
+    using beforeSwitch = { [Symbol.dispose]() {} };
+    switch (8) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '8'.
+            console.log("ok");
+            ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+            break;
+    }
+    
+    // Valid: Block-wrapped in case
+    switch (9) {
+        case 0: {
+             ~
+!!! error TS2678: Type '0' is not comparable to type '9'.
+            using valid1 = { [Symbol.dispose]() {} };
+            break;
+        }
+    }
+    
+    // Valid: Block-wrapped in default
+    switch (10) {
+        default: {
+            using valid2 = { [Symbol.dispose]() {} };
+            break;
+        }
+    }
+    
+    // Valid: Nested block in case
+    switch (11) {
+        case 0: {
+             ~
+!!! error TS2678: Type '0' is not comparable to type '11'.
+            {
+                using valid3 = { [Symbol.dispose]() {} };
+            }
+            break;
+        }
+    }
+    
+    // Valid: If statement inside case with block
+    switch (12) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '12'.
+            if (true) {
+                using valid4 = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Error: Fall-through cases
+    switch (13) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '13'.
+        case 1:
+             ~
+!!! error TS2678: Type '1' is not comparable to type '13'.
+            using fallthrough = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+    }
+    
+    // Error: Case with no break
+    switch (14) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '14'.
+            using nobreak = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+        case 1:
+             ~
+!!! error TS2678: Type '1' is not comparable to type '14'.
+            console.log("fallthrough");
+            ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+            break;
+    }
+    
+    // Error: Empty case before default
+    switch (15) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '15'.
+            // empty
+        default:
+            using inDefault = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+    }
+    
+    export {};
+    

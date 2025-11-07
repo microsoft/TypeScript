@@ -1,0 +1,215 @@
+usingDeclarationsInSwitchEdgeCases.ts(3,10): error TS2678: Type '0' is not comparable to type '1'.
+usingDeclarationsInSwitchEdgeCases.ts(16,10): error TS2678: Type '0' is not comparable to type '2'.
+usingDeclarationsInSwitchEdgeCases.ts(25,10): error TS2678: Type '0' is not comparable to type '3'.
+usingDeclarationsInSwitchEdgeCases.ts(35,10): error TS2678: Type '0' is not comparable to type '4'.
+usingDeclarationsInSwitchEdgeCases.ts(45,10): error TS2678: Type '0' is not comparable to type '5'.
+usingDeclarationsInSwitchEdgeCases.ts(54,10): error TS2678: Type '0' is not comparable to type '6'.
+usingDeclarationsInSwitchEdgeCases.ts(63,10): error TS2678: Type '0' is not comparable to type '7'.
+usingDeclarationsInSwitchEdgeCases.ts(72,10): error TS2678: Type '0' is not comparable to type '8'.
+usingDeclarationsInSwitchEdgeCases.ts(81,10): error TS2678: Type '0' is not comparable to type '9'.
+usingDeclarationsInSwitchEdgeCases.ts(96,10): error TS2678: Type '0' is not comparable to type '10'.
+usingDeclarationsInSwitchEdgeCases.ts(107,10): error TS2678: Type '0' is not comparable to type '11'.
+usingDeclarationsInSwitchEdgeCases.ts(117,10): error TS2678: Type '0' is not comparable to type '12'.
+usingDeclarationsInSwitchEdgeCases.ts(127,10): error TS2678: Type '0' is not comparable to type '13'.
+usingDeclarationsInSwitchEdgeCases.ts(137,10): error TS2678: Type '0' is not comparable to type '14'.
+usingDeclarationsInSwitchEdgeCases.ts(148,10): error TS2678: Type '0' is not comparable to type '15'.
+usingDeclarationsInSwitchEdgeCases.ts(158,10): error TS2678: Type '0' is not comparable to type '16'.
+
+
+==== usingDeclarationsInSwitchEdgeCases.ts (16 errors) ====
+    // Valid: Try-catch inside case
+    switch (1) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '1'.
+            try {
+                using inTry = { [Symbol.dispose]() {} };
+            } catch {
+                using inCatch = { [Symbol.dispose]() {} };
+            } finally {
+                using inFinally = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Valid: For loop inside case
+    switch (2) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '2'.
+            for (let i = 0; i < 10; i++) {
+                using inForBody = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Valid: While loop inside case
+    switch (3) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '3'.
+            while (true) {
+                using inWhile = { [Symbol.dispose]() {} };
+                break;
+            }
+            break;
+    }
+    
+    // Valid: Do-while loop inside case
+    switch (4) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '4'.
+            do {
+                using inDoWhile = { [Symbol.dispose]() {} };
+                break;
+            } while (false);
+            break;
+    }
+    
+    // Valid: For-in loop inside case
+    switch (5) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '5'.
+            for (const key in {}) {
+                using inForIn = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Valid: For-of loop inside case
+    switch (6) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '6'.
+            for (const item of []) {
+                using inForOf = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Valid: Function declaration inside case
+    switch (7) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '7'.
+            function foo() {
+                using inFunction = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Valid: Arrow function inside case
+    switch (8) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '8'.
+            const arrow = () => {
+                using inArrow = { [Symbol.dispose]() {} };
+            };
+            break;
+    }
+    
+    // Valid: Class inside case
+    switch (9) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '9'.
+            class C {
+                method() {
+                    using inMethod = { [Symbol.dispose]() {} };
+                }
+    
+                constructor() {
+                    using inConstructor = { [Symbol.dispose]() {} };
+                }
+            }
+            break;
+    }
+    
+    // Valid: Nested function expressions
+    switch (10) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '10'.
+            const outer = function() {
+                const inner = function() {
+                    using deeplyNested = { [Symbol.dispose]() {} };
+                };
+            };
+            break;
+    }
+    
+    // Valid: Generator function inside case
+    switch (11) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '11'.
+            function* gen() {
+                using inGenerator = { [Symbol.dispose]() {} };
+                yield 1;
+            }
+            break;
+    }
+    
+    // Valid: Async function inside case
+    switch (12) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '12'.
+            async function asyncFn() {
+                using inAsync = { [Symbol.dispose]() {} };
+                await Promise.resolve();
+            }
+            break;
+    }
+    
+    // Valid: Async arrow function inside case
+    switch (13) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '13'.
+            const asyncArrow = async () => {
+                using inAsyncArrow = { [Symbol.dispose]() {} };
+                await Promise.resolve();
+            };
+            break;
+    }
+    
+    // Valid: Object method inside case
+    switch (14) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '14'.
+            const obj = {
+                method() {
+                    using inObjectMethod = { [Symbol.dispose]() {} };
+                }
+            };
+            break;
+    }
+    
+    // Valid: Labeled block inside case
+    switch (15) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '15'.
+            label: {
+                using inLabeledBlock = { [Symbol.dispose]() {} };
+            }
+            break;
+    }
+    
+    // Valid: With statement inside case (if not in strict mode)
+    // Note: This would normally require @strict: false but including for completeness
+    switch (16) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '16'.
+            // with ({}) { using inWith = { [Symbol.dispose]() {} }; }
+            break;
+    }
+    
+    export {};
+    

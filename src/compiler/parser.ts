@@ -7678,12 +7678,20 @@ namespace Parser {
                 break;
             case SyntaxKind.UsingKeyword:
                 flags |= NodeFlags.Using;
+                if ((parsingContext & (1 << ParsingContext.SwitchClauseStatements)) &&
+                    !(parsingContext & (1 << ParsingContext.BlockStatements))) {
+                    parseErrorAtCurrentToken(Diagnostics.A_0_declaration_cannot_be_placed_within_a_case_or_default_clause, "using");
+                }
                 break;
             case SyntaxKind.AwaitKeyword:
                 if (!isAwaitUsingDeclaration()) {
                     break;
                 }
                 flags |= NodeFlags.AwaitUsing;
+                if ((parsingContext & (1 << ParsingContext.SwitchClauseStatements)) &&
+                    !(parsingContext & (1 << ParsingContext.BlockStatements))) {
+                    parseErrorAtCurrentToken(Diagnostics.A_0_declaration_cannot_be_placed_within_a_case_or_default_clause, "await using");
+                }
                 nextToken();
                 break;
             default:
