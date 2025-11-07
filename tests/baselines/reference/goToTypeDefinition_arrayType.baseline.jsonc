@@ -229,7 +229,7 @@
    },
    {
     "defId": 1,
-    "kind": "var",
+    "kind": "interface",
     "name": "Array",
     "containerName": "",
     "isLocal": false,
@@ -486,7 +486,7 @@
    },
    {
     "defId": 1,
-    "kind": "var",
+    "kind": "interface",
     "name": "Array",
     "containerName": "",
     "isLocal": false,
