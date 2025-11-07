@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/javascriptDefinePropertyPrototypeBlockShadowing1.ts] ////
+
+=== src/index.js ===
+export function X() {}
+>X : Symbol(X, Decl(index.js, 0, 0))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const X = function() {}
+>X : Symbol(X, Decl(index.js, 2, 7))
+
+  Object.defineProperty(X.prototype, "test", { value: 1 });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>X.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(index.js, 2, 7))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"test" : Symbol(X.test, Decl(index.js, 2, 25))
+>value : Symbol(value, Decl(index.js, 3, 46))
+}
+
+export function Y() {}
+>Y : Symbol(Y, Decl(index.js, 4, 1))
+
+Object.defineProperty(Y.prototype, "test", { value: "foo" });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Y.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Y : Symbol(Y, Decl(index.js, 4, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"test" : Symbol(Y.test, Decl(index.js, 6, 22))
+>value : Symbol(value, Decl(index.js, 7, 44))
+
+const AliasTopY = Y;
+>AliasTopY : Symbol(AliasTopY, Decl(index.js, 8, 5))
+>Y : Symbol(Y, Decl(index.js, 4, 1))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const Y = function Y() {}
+>Y : Symbol(Y, Decl(index.js, 10, 7))
+>Y : Symbol(Y, Decl(index.js, 10, 11))
+
+  Object.defineProperty(Y.prototype, "test", { value: 42 });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Y.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Y : Symbol(Y, Decl(index.js, 10, 7))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"test" : Symbol(Y.test, Decl(index.js, 10, 27))
+>value : Symbol(value, Decl(index.js, 11, 46))
+
+  /** @type {{ test: string }} */
+  const topYcheck = new AliasTopY();
+>topYcheck : Symbol(topYcheck, Decl(index.js, 14, 7))
+>AliasTopY : Symbol(AliasTopY, Decl(index.js, 8, 5))
+
+  /** @type {{ test: number }} */
+  const blockYcheck = new Y();
+>blockYcheck : Symbol(blockYcheck, Decl(index.js, 16, 7))
+>Y : Symbol(Y, Decl(index.js, 10, 7))
+}
+
