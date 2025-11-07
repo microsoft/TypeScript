@@ -16,3 +16,4 @@ type T12 = { a: string } & never;
 
 
 //// [neverUnionIntersection.js]
+"use strict";

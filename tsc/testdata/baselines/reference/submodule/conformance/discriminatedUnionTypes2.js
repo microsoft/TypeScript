@@ -147,6 +147,7 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 
 
 //// [discriminatedUnionTypes2.js]
+"use strict";
 function f10(x) {
     if (x.kind === false) {
         x.a;

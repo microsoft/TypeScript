@@ -30,6 +30,7 @@ const h = DD[42]
 
 
 //// [staticIndexSignature3.js]
+"use strict";
 class B {
 }
 class D extends B {

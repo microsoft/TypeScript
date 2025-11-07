@@ -9,6 +9,7 @@ const a = f(<K extends string>(_: K) => _ => ({}));  // <K extends string>(_: K)
 
 
 //// [genericFunctionsNotContextSensitive.js]
+"use strict";
 // Repro from #37110
 const f = (_) => _;
 const a = f((_) => _ => ({})); // <K extends string>(_: K) => <G>(_: G) => {}

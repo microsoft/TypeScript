@@ -10,6 +10,7 @@ class C {
 
 
 //// [classStaticBlockUseBeforeDef5.js]
+"use strict";
 class C {
     static {
         this.x = 1;

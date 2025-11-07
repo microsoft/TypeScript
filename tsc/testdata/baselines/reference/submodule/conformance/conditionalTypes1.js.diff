@@ -1,14 +1,6 @@
 --- old.conditionalTypes1.js
 +++ new.conditionalTypes1.js
-@@= skipped -363, +363 lines =@@
-
-
- //// [conditionalTypes1.js]
--"use strict";
- function f1(x, y) {
-     x = y;
-     y = x; // Error
-@@= skipped -285, +284 lines =@@
+@@= skipped -648, +648 lines =@@
  type Bar<T> = T extends string ? boolean : number;
  declare const convert: <U>(value: Foo<U>) => Bar<U>;
  type Baz<T> = Foo<T>;

@@ -68,6 +68,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/index.js] *new* 
+"use strict";
 (React.createElement(Component, null,
     React.createElement("div", null),
     React.createElement("div", null)));

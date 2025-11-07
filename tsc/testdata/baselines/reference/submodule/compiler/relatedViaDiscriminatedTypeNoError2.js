@@ -14,5 +14,6 @@ y = x;
 
 
 //// [relatedViaDiscriminatedTypeNoError2.js]
+"use strict";
 x = y;
 y = x;

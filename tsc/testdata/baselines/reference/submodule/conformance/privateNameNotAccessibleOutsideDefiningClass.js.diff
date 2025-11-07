@@ -1,10 +1,9 @@
 --- old.privateNameNotAccessibleOutsideDefiningClass.js
 +++ new.privateNameNotAccessibleOutsideDefiningClass.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [privateNameNotAccessibleOutsideDefiningClass.js]
--"use strict";
+ "use strict";
 -var _A_foo;
  class A {
 -    constructor() {

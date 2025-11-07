@@ -35,3 +35,4 @@ type Bar3<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
 
 
 //// [mappedTypeAndIndexSignatureRelation.js]
+"use strict";

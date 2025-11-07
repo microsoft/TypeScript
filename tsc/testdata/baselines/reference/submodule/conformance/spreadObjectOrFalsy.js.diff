@@ -1,14 +1,6 @@
 --- old.spreadObjectOrFalsy.js
 +++ new.spreadObjectOrFalsy.js
-@@= skipped -53, +53 lines =@@
-
-
- //// [spreadObjectOrFalsy.js]
--"use strict";
- function f1(a) {
-     return Object.assign({}, a); // Error
- }
-@@= skipped -25, +24 lines =@@
+@@= skipped -78, +78 lines =@@
      return Object.assign({}, z);
  }
  class Foo {

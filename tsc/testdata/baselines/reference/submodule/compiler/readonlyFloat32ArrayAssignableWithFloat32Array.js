@@ -15,6 +15,7 @@ function copy(a: Float32Array) {
 }
 
 //// [readonlyFloat32ArrayAssignableWithFloat32Array.js]
+"use strict";
 function update(b) {
     const c = copy(b);
     add(c, c);

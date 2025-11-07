@@ -30,6 +30,7 @@ function f4(...args: readonly string[]) {
 
 
 //// [readonlyRestParameters.js]
+"use strict";
 function f0(a, b) {
     f0(a, b);
     f1(a, b);

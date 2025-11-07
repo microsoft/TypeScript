@@ -18,6 +18,7 @@ if (q.a !== undefined) {
 
 
 //// [intersectionOfUnionNarrowing.js]
+"use strict";
 if (q.a !== undefined) {
     q.a.aProp;
 }

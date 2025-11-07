@@ -8,4 +8,5 @@ wrapResolver(resolver() || []);
 
 
 //// [propagateNonInferrableType.js]
+"use strict";
 wrapResolver(resolver() || []);

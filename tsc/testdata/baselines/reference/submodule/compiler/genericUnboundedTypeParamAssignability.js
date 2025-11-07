@@ -22,6 +22,7 @@ function user<T>(t: T) {
 
 
 //// [genericUnboundedTypeParamAssignability.js]
+"use strict";
 function f1(o) {
     o.toString(); // error
 }

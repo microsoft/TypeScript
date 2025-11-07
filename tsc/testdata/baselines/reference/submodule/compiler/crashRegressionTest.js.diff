@@ -11,13 +11,12 @@
 +        let TemplateEngine;
          (function (TemplateEngine) {
              "use strict";
-+            "use strict";
              class StringTemplate {
 +                _templateStorage;
                  constructor(templateStorage) {
                      this._templateStorage = templateStorage;
                  }
-@@= skipped -14, +16 lines =@@
+@@= skipped -14, +15 lines =@@
                  }
              }
              class TemplateStorage {

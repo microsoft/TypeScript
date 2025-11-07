@@ -1,10 +1,8 @@
 --- old.initializerWithThisPropertyAccess.js
 +++ new.initializerWithThisPropertyAccess.js
-@@= skipped -35, +35 lines =@@
-
-
+@@= skipped -37, +37 lines =@@
  //// [initializerWithThisPropertyAccess.js]
--"use strict";
+ "use strict";
  class A {
 +    a;
 +    b = this.a; // Error
@@ -48,7 +46,7 @@
  }
 
 
-@@= skipped -51, +46 lines =@@
+@@= skipped -49, +45 lines =@@
  }
  declare class Foo {
      private bar;

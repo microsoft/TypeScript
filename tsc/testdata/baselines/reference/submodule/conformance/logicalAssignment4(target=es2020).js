@@ -52,6 +52,7 @@ function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue
 
 
 //// [logicalAssignment4.js]
+"use strict";
 function foo1(results) {
     (results || (results = [])).push(100);
 }

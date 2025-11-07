@@ -18,6 +18,7 @@ const yy: Record<string, A> & Record<string, B> = {
 
 
 //// [excessPropertyCheckIntersectionWithIndexSignature.js]
+"use strict";
 // Repro from #51875
 let x;
 x = { y: { a: 0 } }; // Error

@@ -1,10 +1,8 @@
 --- old.inKeywordAndIntersection.js
 +++ new.inKeywordAndIntersection.js
-@@= skipped -32, +32 lines =@@
-
-
+@@= skipped -34, +34 lines =@@
  //// [inKeywordAndIntersection.js]
--"use strict";
+ "use strict";
  class A {
 -    constructor() {
 -        this.a = 0;

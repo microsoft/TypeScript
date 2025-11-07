@@ -1,9 +1,0 @@
---- old.deferredLookupTypeResolution2.js
-+++ new.deferredLookupTypeResolution2.js
-@@= skipped -24, +24 lines =@@
-
-
- //// [deferredLookupTypeResolution2.js]
--"use strict";
- // Repro from #17456
-

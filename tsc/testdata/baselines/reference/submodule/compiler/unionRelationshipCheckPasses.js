@@ -5,4 +5,5 @@ const item: { foo?: undefined } | { foo: number } = null as any as { foo?: numbe
 
 
 //// [unionRelationshipCheckPasses.js]
+"use strict";
 const item = null;

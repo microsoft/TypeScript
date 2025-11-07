@@ -30,6 +30,7 @@ const x: Observable<boolean> = observable(false);
 
 
 //// [contextuallyTypedBooleanLiterals.js]
+"use strict";
 // Repro from #48363
 const bn1 = box(0); // Box<number>
 const bn2 = box(0); // Ok

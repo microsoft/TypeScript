@@ -48,7 +48,6 @@ class A {
 class B extends A {
     constructor() {
         'inject';
-        'inject';
         super();
         const a = 1;
         const b = 1;

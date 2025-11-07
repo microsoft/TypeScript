@@ -105,6 +105,7 @@ class С4 {
 
 
 //// [index.js]
+"use strict";
 class С1 {
     /** @type {string=} */
     p1 = undefined;

@@ -1,10 +1,9 @@
 --- old.privateNamesAndkeyof.js
 +++ new.privateNamesAndkeyof.js
-@@= skipped -23, +23 lines =@@
-
+@@= skipped -24, +24 lines =@@
 
  //// [privateNamesAndkeyof.js]
--"use strict";
+ "use strict";
 -var _A_instances, _A_fooField, _A_fooMethod, _A_fooProp_get, _A_fooProp_set;
  class A {
 -    constructor() {

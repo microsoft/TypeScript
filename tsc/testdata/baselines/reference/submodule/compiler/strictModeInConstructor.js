@@ -70,7 +70,6 @@ class B extends A {
     s = 9;
     constructor() {
         "use strict"; // No error
-        "use strict"; // No error
         super();
     }
 }
@@ -93,7 +92,6 @@ class D extends A {
 class Bs extends A {
     static s = 9;
     constructor() {
-        "use strict"; // No error
         "use strict"; // No error
         super();
     }

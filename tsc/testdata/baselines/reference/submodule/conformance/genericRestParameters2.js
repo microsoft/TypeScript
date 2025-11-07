@@ -82,6 +82,7 @@ type T12 = P1<(x: number, y: number) => void>;
 
 
 //// [genericRestParameters2.js]
+"use strict";
 f10(42, "hello");
 f10(42, "hello", true);
 f10(42, "hello", true, false);

@@ -29,6 +29,7 @@ function f3(x: 'a' | 'b') {
 
 
 //// [deferredLookupTypeResolution.js]
+"use strict";
 // Repro from #17456
 function f2(a) {
     return f1(a, 'x');

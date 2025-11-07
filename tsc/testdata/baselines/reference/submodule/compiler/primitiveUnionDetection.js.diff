@@ -1,9 +1,0 @@
---- old.primitiveUnionDetection.js
-+++ new.primitiveUnionDetection.js
-@@= skipped -10, +10 lines =@@
-
-
- //// [primitiveUnionDetection.js]
--"use strict";
- // Repro from #46624
- const result = getInterfaceFromString({ type: 'two' });

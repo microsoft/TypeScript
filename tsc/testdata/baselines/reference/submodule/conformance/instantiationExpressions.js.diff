@@ -1,10 +1,7 @@
 --- old.instantiationExpressions.js
 +++ new.instantiationExpressions.js
-@@= skipped -175, +175 lines =@@
-
-
- //// [instantiationExpressions.js]
--"use strict";
+@@= skipped -178, +178 lines =@@
+ "use strict";
  function f1() {
      let f0 = fx; // Error
 -    let f1 = (fx); // { (x: string): string; (x: string, n: number): string; }

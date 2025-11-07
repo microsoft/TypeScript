@@ -1,9 +1,0 @@
---- old.bivariantInferences.js
-+++ new.bivariantInferences.js
-@@= skipped -13, +13 lines =@@
-
-
- //// [bivariantInferences.js]
--"use strict";
- // Repro from #27337
- let x = a.equalsShallow(b);

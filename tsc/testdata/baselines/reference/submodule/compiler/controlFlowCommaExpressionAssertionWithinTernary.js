@@ -10,6 +10,7 @@ function foo2(param: number | null | undefined): number | null {
 }
 
 //// [controlFlowCommaExpressionAssertionWithinTernary.js]
+"use strict";
 function foo2(param) {
     const val = param !== undefined;
     return val ? (assert(param !== undefined), param) : null;

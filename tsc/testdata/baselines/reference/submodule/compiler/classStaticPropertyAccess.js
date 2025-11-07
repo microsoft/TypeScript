@@ -18,6 +18,7 @@ A.a
 
 
 //// [classStaticPropertyAccess.js]
+"use strict";
 class A {
     static "\""() { }
     static x = 1;

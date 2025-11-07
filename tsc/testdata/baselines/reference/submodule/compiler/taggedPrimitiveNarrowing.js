@@ -19,6 +19,7 @@ function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number
 
 
 //// [taggedPrimitiveNarrowing.js]
+"use strict";
 function getHashLength(hash) {
     if (typeof hash !== "string") {
         throw new Error("This doesn't look like a hash");

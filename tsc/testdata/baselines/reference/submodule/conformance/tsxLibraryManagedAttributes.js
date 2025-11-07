@@ -128,6 +128,7 @@ const aa = <JustDefaultPropsWithSpecifiedGeneric />;
 
 
 //// [tsxLibraryManagedAttributes.jsx]
+"use strict";
 class Component extends ReactComponent {
     static propTypes = {
         foo: PropTypes.number,

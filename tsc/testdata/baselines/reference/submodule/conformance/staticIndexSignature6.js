@@ -20,6 +20,7 @@ const c = new C<number>();
 c.foo(1);
 
 //// [staticIndexSignature6.js]
+"use strict";
 function foo() {
     return class {
         foo(v) { return v; }

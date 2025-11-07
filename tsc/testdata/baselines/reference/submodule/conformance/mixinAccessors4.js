@@ -26,6 +26,7 @@ class C extends Mixin(A) {
 
 
 //// [mixinAccessors4.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/44938
 class A {
     constructor(...args) { }

@@ -187,6 +187,7 @@ fn1({ foo: ["hello", 123] }, { foo: [true]});
 
 
 //// [typeParameterConstModifiers.js]
+"use strict";
 const x11 = f1('a');
 const x12 = f1(['a', ['b', 'c']]);
 const x13 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });

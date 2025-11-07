@@ -1,16 +1,14 @@
 --- old.thisConditionalOnMethodReturnOfGenericInstance.js
 +++ new.thisConditionalOnMethodReturnOfGenericInstance.js
-@@= skipped -20, +20 lines =@@
-
-
+@@= skipped -22, +22 lines =@@
  //// [thisConditionalOnMethodReturnOfGenericInstance.js]
--"use strict";
+ "use strict";
  class A {
 +    unmeasurableUsage;
  }
  class B extends A {
      method() {
-@@= skipped -9, +9 lines =@@
+@@= skipped -7, +8 lines =@@
      }
  }
  class C extends B {

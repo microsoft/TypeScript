@@ -10,6 +10,7 @@ if (match !== null) {
 
 
 //// [firstMatchRegExpMatchArray.js]
+"use strict";
 const match = ''.match(/ /);
 if (match !== null) {
     const foo = match[0];

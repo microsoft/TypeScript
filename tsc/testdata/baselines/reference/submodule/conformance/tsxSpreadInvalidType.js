@@ -15,6 +15,7 @@ const f = <div { ...c } />
 
 
 //// [a.jsx]
+"use strict";
 const a = {};
 const b = null;
 const c = undefined;

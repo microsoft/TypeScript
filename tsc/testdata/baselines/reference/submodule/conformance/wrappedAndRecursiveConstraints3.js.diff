@@ -1,9 +1,0 @@
---- old.wrappedAndRecursiveConstraints3.js
-+++ new.wrappedAndRecursiveConstraints3.js
-@@= skipped -30, +30 lines =@@
- var c = new C({ length: 2 });
- var r = c.foo({ length: 3, charAt: (x) => {
-         '';
-+        '';
-     } });
- var r2 = r('');

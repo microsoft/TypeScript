@@ -1,14 +1,6 @@
 --- old.correlatedUnions.js
 +++ new.correlatedUnions.js
-@@= skipped -303, +303 lines =@@
-
-
- //// [correlatedUnions.js]
--"use strict";
- // Various repros from #30581
- function processRecord(rec) {
-     rec.f(rec.v);
-@@= skipped -214, +213 lines =@@
+@@= skipped -517, +517 lines =@@
  declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
  declare const clickEvent: {
      readonly name: "click";

@@ -22,6 +22,7 @@ let d2 = { a: 123, ...(t ? d : {}) };  // string | number
 
 
 //// [spreadDuplicate.js]
+"use strict";
 // Repro from #44438
 let a1 = Object.assign({ a: 123 }, a); // string (Error)
 let b1 = Object.assign({ a: 123 }, b); // string | number

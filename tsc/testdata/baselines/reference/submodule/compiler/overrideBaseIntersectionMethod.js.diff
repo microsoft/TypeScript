@@ -1,14 +1,6 @@
 --- old.overrideBaseIntersectionMethod.js
 +++ new.overrideBaseIntersectionMethod.js
-@@= skipped -32, +32 lines =@@
-
-
- //// [overrideBaseIntersectionMethod.js]
--"use strict";
- // Repro from #14615
- const WithLocation = (Base) => class extends Base {
-     getLocation() {
-@@= skipped -9, +8 lines =@@
+@@= skipped -41, +41 lines =@@
      }
  };
  class Point {

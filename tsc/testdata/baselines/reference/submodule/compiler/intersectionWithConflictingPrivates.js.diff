@@ -1,10 +1,8 @@
 --- old.intersectionWithConflictingPrivates.js
 +++ new.intersectionWithConflictingPrivates.js
-@@= skipped -59, +59 lines =@@
-
-
+@@= skipped -61, +61 lines =@@
  //// [intersectionWithConflictingPrivates.js]
--"use strict";
+ "use strict";
  class A {
 +    x;
 +    y;
@@ -15,7 +13,7 @@
  }
  ab.y = 'hello';
  ab = {};
-@@= skipped -24, +27 lines =@@
+@@= skipped -22, +26 lines =@@
  class ViewRefFileNode extends ViewRefNode {
  }
  class CommitFileNode extends ViewRefFileNode {

@@ -18,6 +18,7 @@ var notOK = 0;
 
 
 //// [typedefScope1.js]
+"use strict";
 function B1() {
     /** @typedef {number} B */
     /** @type {B} */

@@ -12,6 +12,7 @@ let z = x
 z == y // error
 
 //// [index.js]
+"use strict";
 /** @type {unique symbol} */
 const x = Symbol();
 /** @type {unique symbol} */

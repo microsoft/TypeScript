@@ -9,4 +9,5 @@ const {
 
 
 //// [controlFlowInitializedDestructuringVariables.js]
+"use strict";
 const { a = "0", b = +a, } = obj;

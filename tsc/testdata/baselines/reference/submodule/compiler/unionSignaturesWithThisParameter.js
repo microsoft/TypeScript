@@ -15,6 +15,7 @@ function x<T>(ctor: {
 
 
 //// [unionSignaturesWithThisParameter.js]
+"use strict";
 // Repro from #20802
 function x(ctor, t) {
     new ctor(t);

@@ -16,6 +16,7 @@ recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} // OK
 recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} // OK
 
 //// [spreadOfObjectLiteralAssignableToIndexSignature.js]
+"use strict";
 const foo = {}; // OK
 const recordOfRecords = {};
 recordOfRecords.propA = Object.assign({}, (foo !== undefined ? { foo } : {})); // OK

@@ -57,6 +57,7 @@ function grault(id: string) {
 
 
 //// [indexedAccessWithFreshObjectLiteral.js]
+"use strict";
 function foo(id) {
     return {
         a: 1,

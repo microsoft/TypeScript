@@ -37,6 +37,7 @@ function m(anyoptional: { a?: any }) {
 
 
 //// [spreadOverwritesPropertyStrict.js]
+"use strict";
 var unused1 = Object.assign({ b: 1 }, ab); // error
 var unused2 = Object.assign(Object.assign({}, ab), ab); // ok, overwritten error doesn't apply to spreads
 var unused3 = Object.assign({ b: 1 }, abq); // ok, abq might have b: undefined

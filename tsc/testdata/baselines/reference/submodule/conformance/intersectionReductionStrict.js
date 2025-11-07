@@ -101,6 +101,7 @@ const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)):
 
 
 //// [intersectionReductionStrict.js]
+"use strict";
 ab.kind; // Error
 let a = x;
 // Repro from #31663

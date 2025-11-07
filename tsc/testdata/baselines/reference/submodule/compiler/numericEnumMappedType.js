@@ -40,6 +40,7 @@ const x: E.ONE = e;
 
 
 //// [numericEnumMappedType.js]
+"use strict";
 // Repro from #31771
 var E1;
 (function (E1) {

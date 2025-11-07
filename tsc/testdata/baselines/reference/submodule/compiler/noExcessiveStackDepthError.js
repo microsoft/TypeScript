@@ -18,6 +18,7 @@ function foo<Entity>() {
 
 
 //// [noExcessiveStackDepthError.js]
+"use strict";
 // Repro from #46631
 function foo() {
     var x;

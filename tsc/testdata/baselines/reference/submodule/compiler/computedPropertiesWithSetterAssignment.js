@@ -24,6 +24,7 @@ foo[k] = ['foo'];
 
 
 //// [a.js]
+"use strict";
 const k = Symbol();
 foo.k = ['foo'];
 foo['k'] = ['foo'];

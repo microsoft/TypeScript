@@ -10,6 +10,7 @@ class A {
 
 
 //// [privateNamesNoDelete.js]
+"use strict";
 class A {
     #v = 1;
     constructor() {

@@ -18,6 +18,7 @@ function g<
 
 
 //// [contextualTypeOfIndexedAccessParameter.js]
+"use strict";
 f("a", {
     cb: p => p,
 });

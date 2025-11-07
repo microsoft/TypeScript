@@ -1558,10 +1558,10 @@ func (p *Printer) emitFunctionBody(body *ast.Block) {
 
 	if p.shouldEmitBlockFunctionBodyOnSingleLine(body) && statementOffset == 0 && pos == p.writer.GetTextPos() {
 		p.decreaseIndent()
-		p.emitList((*Printer).emitStatement, body.AsNode(), body.Statements, LFSingleLineFunctionBodyStatements)
+		p.emitListRange((*Printer).emitStatement, body.AsNode(), body.Statements, LFSingleLineFunctionBodyStatements, statementOffset, -1)
 		p.increaseIndent()
 	} else {
-		p.emitList((*Printer).emitStatement, body.AsNode(), body.Statements, LFMultiLineFunctionBodyStatements)
+		p.emitListRange((*Printer).emitStatement, body.AsNode(), body.Statements, LFMultiLineFunctionBodyStatements, statementOffset, -1)
 	}
 
 	p.emitDetachedCommentsAfterStatementList(body.AsNode(), body.Statements.Loc, detachedState)

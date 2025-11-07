@@ -11,6 +11,7 @@ if (foo[key]) {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty2.js]
+"use strict";
 const foo = {};
 const key = 'key';
 if (foo[key]) {

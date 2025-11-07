@@ -16,6 +16,7 @@ class Derived extends Base {
 }
 
 //// [superMethodCall.js]
+"use strict";
 class Base {
     method() { }
 }

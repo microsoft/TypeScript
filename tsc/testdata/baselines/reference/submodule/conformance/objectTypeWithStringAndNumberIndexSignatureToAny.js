@@ -96,6 +96,7 @@ function f3(sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: 
 }
 
 //// [objectTypeWithStringAndNumberIndexSignatureToAny.js]
+"use strict";
 // When checking compatibility between two types,
 // TypeScript should not require an index signature if
 // the target side index signature maps to `any` *and*

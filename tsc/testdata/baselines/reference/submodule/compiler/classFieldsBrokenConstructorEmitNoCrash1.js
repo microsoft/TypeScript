@@ -8,6 +8,7 @@ class Test {
 
 
 //// [classFieldsBrokenConstructorEmitNoCrash1.js]
+"use strict";
 class Test {
     prop = 42;
 }

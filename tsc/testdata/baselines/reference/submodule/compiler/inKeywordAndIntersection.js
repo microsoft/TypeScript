@@ -33,6 +33,7 @@ if (instance instanceof ClassOne) {
 
 
 //// [inKeywordAndIntersection.js]
+"use strict";
 class A {
     a = 0;
 }

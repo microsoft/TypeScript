@@ -12,6 +12,7 @@ const i3: Iterable<number> | 1[] = [2];
 
 
 //// [contextualTypeIterableUnions.js]
+"use strict";
 new DMap([["1", 2]]);
 const i1 = [{ a: true }];
 const i2 = [{ b: false }];

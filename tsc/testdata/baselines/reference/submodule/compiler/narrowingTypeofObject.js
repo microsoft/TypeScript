@@ -16,6 +16,7 @@ function f1(x: F & { foo: number }) {
 }
 
 //// [narrowingTypeofObject.js]
+"use strict";
 function test(x) {
     if (typeof x === 'object') {
         x;

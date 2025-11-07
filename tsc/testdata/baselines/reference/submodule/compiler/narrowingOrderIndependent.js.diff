@@ -1,10 +1,7 @@
 --- old.narrowingOrderIndependent.js
 +++ new.narrowingOrderIndependent.js
-@@= skipped -34, +34 lines =@@
-
-
- //// [narrowingOrderIndependent.js]
--"use strict";
+@@= skipped -37, +37 lines =@@
+ "use strict";
  // Repro from #36709
  class A {
 +    stringOrUndefined;

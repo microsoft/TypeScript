@@ -122,6 +122,7 @@ const x = tryCast(types, isNodeArray);  // NodeAray<TypeNode>
 
 
 //// [coAndContraVariantInferences2.js]
+"use strict";
 function f1(a, b) {
     const x1 = cast(a, isC); // cast<A, C>
     const x2 = cast(b, isC); // cast<A, C>

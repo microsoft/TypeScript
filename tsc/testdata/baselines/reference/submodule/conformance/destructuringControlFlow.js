@@ -44,6 +44,7 @@ value.toUpperCase();  // Error
 
 
 //// [destructuringControlFlow.js]
+"use strict";
 function f1(obj) {
     if (obj.a) {
         obj = {};

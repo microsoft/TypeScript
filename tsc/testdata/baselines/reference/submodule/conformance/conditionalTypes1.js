@@ -364,6 +364,7 @@ type Weird2 = (<U extends boolean>(a: U) => U) extends
 
 
 //// [conditionalTypes1.js]
+"use strict";
 function f1(x, y) {
     x = y;
     y = x; // Error

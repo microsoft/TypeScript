@@ -22,6 +22,7 @@ const withoutBoundaryResult = withoutBoundary({
 
 
 //// [substitutionTypesInIndexedAccessTypes.js]
+"use strict";
 // Repro from #31086
 const boundaryResult = withBoundary({
     select: true,

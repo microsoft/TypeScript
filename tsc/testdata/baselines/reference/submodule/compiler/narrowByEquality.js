@@ -76,6 +76,7 @@ if (xUnknown != null) {
 
 
 //// [narrowByEquality.js]
+"use strict";
 if (x == n) {
     x;
 }

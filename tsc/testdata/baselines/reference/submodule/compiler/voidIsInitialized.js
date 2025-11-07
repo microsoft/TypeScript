@@ -14,6 +14,7 @@ if(typeof y !== "undefined") {
 
 
 //// [voidIsInitialized.js]
+"use strict";
 const x = undefined;
 const y = undefined;
 if (typeof x === "undefined") {

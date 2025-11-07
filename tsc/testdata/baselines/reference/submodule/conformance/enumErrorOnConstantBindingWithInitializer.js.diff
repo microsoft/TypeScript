@@ -1,10 +1,6 @@
 --- old.enumErrorOnConstantBindingWithInitializer.js
 +++ new.enumErrorOnConstantBindingWithInitializer.js
-@@= skipped -13, +13 lines =@@
-
-
- //// [enumErrorOnConstantBindingWithInitializer.js]
--"use strict";
+@@= skipped -17, +17 lines =@@
  const { value = "123" } = thing;
  var E;
  (function (E) {

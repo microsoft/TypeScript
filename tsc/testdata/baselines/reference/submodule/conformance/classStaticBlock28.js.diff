@@ -1,10 +1,7 @@
 --- old.classStaticBlock28.js
 +++ new.classStaticBlock28.js
-@@= skipped -11, +11 lines =@@
- console.log(foo)
-
- //// [classStaticBlock28.js]
--"use strict";
+@@= skipped -14, +14 lines =@@
+ "use strict";
  let foo;
  class C {
 +    static {

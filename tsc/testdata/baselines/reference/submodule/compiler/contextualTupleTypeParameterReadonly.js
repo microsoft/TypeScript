@@ -24,6 +24,7 @@ eacher((...args) => {
 
 
 //// [contextualTupleTypeParameterReadonly.js]
+"use strict";
 const cases = [
     [1, '1'],
     [2, '2'],

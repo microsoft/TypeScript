@@ -15,6 +15,7 @@ function fn<T extends Array<unknown> | undefined>(arg: T) {
 
 
 //// [narrowingTypeofUndefined2.js]
+"use strict";
 function fn(arg) {
     if (typeof arg !== "undefined") {
         takeArray(arg);

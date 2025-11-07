@@ -21,6 +21,7 @@ const y = x.method(); // usage flags `method` in `B` as circular and marks `y` a
 
 
 //// [thisConditionalOnMethodReturnOfGenericInstance.js]
+"use strict";
 class A {
     unmeasurableUsage;
 }

@@ -18,6 +18,7 @@ good1({ when: value => false });
 good2({ when: value => false });
 
 //// [conditionalTypeContextualTypeSimplificationsSuceeds.js]
+"use strict";
 function bad(attrs) { }
 function good1(attrs) { }
 function good2(attrs) { }

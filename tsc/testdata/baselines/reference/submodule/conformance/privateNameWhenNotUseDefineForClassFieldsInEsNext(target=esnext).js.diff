@@ -1,10 +1,7 @@
 --- old.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=esnext).js
 +++ new.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=esnext).js
-@@= skipped -53, +53 lines =@@
- }
-
- //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
--"use strict";
+@@= skipped -56, +56 lines =@@
+ "use strict";
  class TestWithStatics {
      #prop = 0;
 -    static { this.dd = new TestWithStatics().#prop; } // OK
@@ -26,7 +23,7 @@
          static M() {
              return class {
                  m() {
-@@= skipped -23, +22 lines =@@
+@@= skipped -20, +20 lines =@@
                  }
              };
          }

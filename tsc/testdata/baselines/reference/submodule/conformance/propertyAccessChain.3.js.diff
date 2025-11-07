@@ -1,14 +1,6 @@
 --- old.propertyAccessChain.3.js
 +++ new.propertyAccessChain.3.js
-@@= skipped -31, +31 lines =@@
-
-
- //// [propertyAccessChain.3.js]
--"use strict";
- var __rest = (this && this.__rest) || function (s, e) {
-     var t = {};
-     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-@@= skipped -12, +11 lines =@@
+@@= skipped -43, +43 lines =@@
          }
      return t;
  };

@@ -9,3 +9,4 @@ type R = Bug<{ a : any } | { b: any }>          // should be "a" | "b"
 
 
 //// [substitutionTypesCompareCorrectlyInRestrictiveInstances.js]
+"use strict";

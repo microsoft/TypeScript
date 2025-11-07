@@ -13,6 +13,7 @@ class Foo {
 
 
 //// [privateNameInInExpressionUnused.js]
+"use strict";
 class Foo {
     #unused; // expect unused error
     #brand; // expect no error

@@ -30,6 +30,7 @@ class A {
 
 
 //// [privateNameAndAny.js]
+"use strict";
 class A {
     #foo = true;
     static #baz = 10;

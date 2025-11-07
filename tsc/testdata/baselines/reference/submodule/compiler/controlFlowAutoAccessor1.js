@@ -61,6 +61,7 @@ Example5.value++;
 
 
 //// [controlFlowAutoAccessor1.js]
+"use strict";
 class Example {
     accessor test;
     constructor(test) {

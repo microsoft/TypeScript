@@ -46,6 +46,7 @@ function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
 
 
 //// [narrowingTypeofDiscriminant.js]
+"use strict";
 function f1(obj) {
     if (typeof obj.kind === "string") {
         obj; // { kind: 'a', data: string }

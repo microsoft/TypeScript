@@ -334,6 +334,7 @@ const distantRes = distant({
 
 
 //// [intraExpressionInferences.js]
+"use strict";
 // Repros from #47599
 callIt({
     produce: () => 0,

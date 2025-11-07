@@ -133,6 +133,7 @@ function level(h: HTMLHeadingElement): number {
 
 
 //// [recursiveTypeReferences1.js]
+"use strict";
 const a0 = 1;
 const a1 = [1, [2, 3], [4, [5, [6, 7]]]];
 const hypertextNode = ["div", { id: "parent" },

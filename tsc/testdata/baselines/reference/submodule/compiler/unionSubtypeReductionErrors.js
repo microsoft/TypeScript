@@ -6013,6 +6013,7 @@ let b = [
 
 
 //// [unionSubtypeReductionErrors.js]
+"use strict";
 let a = [
     0,
     1,

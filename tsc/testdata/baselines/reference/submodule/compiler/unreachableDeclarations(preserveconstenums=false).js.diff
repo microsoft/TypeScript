@@ -1,14 +1,6 @@
 --- old.unreachableDeclarations(preserveconstenums=false).js
 +++ new.unreachableDeclarations(preserveconstenums=false).js
-@@= skipped -88, +88 lines =@@
-
-
- //// [unreachableDeclarations.js]
--"use strict";
- function func1() {
-     aFunc();
-     console.log(EnumA.Value);
-@@= skipped -43, +42 lines =@@
+@@= skipped -131, +131 lines =@@
          console.log(ClassA.Value);
      }
      class ClassA {

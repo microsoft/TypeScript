@@ -24,6 +24,7 @@ Func({
 });
 
 //// [complicatedIndexesOfIntersectionsAreInferencable.js]
+"use strict";
 Func({
     initialValues: {
         foo: ""

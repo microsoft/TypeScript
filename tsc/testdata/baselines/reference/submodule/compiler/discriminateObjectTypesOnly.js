@@ -13,6 +13,7 @@ const l: Thing3 = { toString: undefined }; // error, toFixed isn't null
 
 
 //// [discriminateObjectTypesOnly.js]
+"use strict";
 const k = { toFixed: null }; // OK, satisfies object
 const q = { toFixed: null };
 const h = { toString: null }; // OK, satisfies object

@@ -102,6 +102,7 @@ const funcUnionTupleRest: TupleUnionFunc = (...params) => {
 
 
 //// [restTuplesFromContextualTypes.js]
+"use strict";
 (function (a, b, c) { })(...t1);
 (function (...x) { })(...t1);
 (function (a, ...x) { })(...t1);

@@ -1,14 +1,6 @@
 --- old.typedefOnStatements.js
 +++ new.typedefOnStatements.js
-@@= skipped -81, +81 lines =@@
-
-
- //// [typedefOnStatements.js]
--"use strict";
- /** @typedef {{a: string}} A */
- ;
- /** @typedef {{ b: string }} B */
-@@= skipped -77, +76 lines =@@
+@@= skipped -158, +158 lines =@@
 
 
  //// [typedefOnStatements.d.ts]

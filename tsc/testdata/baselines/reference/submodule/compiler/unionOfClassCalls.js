@@ -80,6 +80,7 @@ a.doThing().then((result: Bar | Baz) => {
 
 
 //// [unionOfClassCalls.js]
+"use strict";
 switch (tmp.get('t')) {
     case 'A': break;
     case 'B': break;

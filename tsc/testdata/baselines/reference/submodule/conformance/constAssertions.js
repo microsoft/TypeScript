@@ -123,6 +123,7 @@ const fooConst54374: Foo54374 = {
 
 
 //// [constAssertions.js]
+"use strict";
 let v1 = 'abc';
 let v2 = `abc`;
 let v3 = 10;

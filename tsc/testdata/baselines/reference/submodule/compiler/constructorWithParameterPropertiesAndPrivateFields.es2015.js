@@ -50,7 +50,6 @@ class B {
     #privateField;
     constructor(arg, exposedField) {
         "prologue";
-        "prologue";
         this.exposedField = exposedField;
         ({ key: this.#privateField } = arg);
     }

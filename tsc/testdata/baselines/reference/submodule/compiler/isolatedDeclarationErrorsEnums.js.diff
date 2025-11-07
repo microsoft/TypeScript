@@ -1,10 +1,7 @@
 --- old.isolatedDeclarationErrorsEnums.js
 +++ new.isolatedDeclarationErrorsEnums.js
-@@= skipped -48, +48 lines =@@
- }
-
- //// [isolatedDeclarationErrorsEnums.js]
--"use strict";
+@@= skipped -51, +51 lines =@@
+ "use strict";
  var E;
  (function (E) {
 -    E[E["A"] = computed(0)] = "A";
@@ -31,7 +28,7 @@
  })(F || (F = {}));
  var Flag;
  (function (Flag) {
-@@= skipped -26, +31 lines =@@
+@@= skipped -23, +29 lines =@@
  var ExtFlags;
  (function (ExtFlags) {
      ExtFlags[ExtFlags["D"] = 2] = "D";

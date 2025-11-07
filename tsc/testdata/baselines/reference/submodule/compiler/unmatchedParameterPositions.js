@@ -9,6 +9,7 @@ let t2: (...args: []) => unknown[] = s;
 
 
 //// [unmatchedParameterPositions.js]
+"use strict";
 // Repros from #40251
 let t1 = s;
 let t2 = s;

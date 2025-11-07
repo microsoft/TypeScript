@@ -19,6 +19,7 @@ class ElemClass<T extends {x: number}> implements JSX.ElementClass {
 const elem = <ElemClass x={12} y={24} />
 
 //// [jsxElementClassTooManyParams.jsx]
+"use strict";
 class ElemClass {
     props;
     constructor(props) {

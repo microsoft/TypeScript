@@ -29,6 +29,7 @@ breaks.foo()
 
 
 //// [silentNeverPropagation.js]
+"use strict";
 // Repro from #45041
 const breaks = convert(createModule({ a: 12 }, { foo() { return true; } }));
 breaks.state.a;

@@ -168,6 +168,7 @@ ff1 = ff4;  // Error
 
 
 //// [genericRestParameters1.js]
+"use strict";
 f1 = f2;
 f2 = f1;
 f1(42, "hello", true);

@@ -27,6 +27,7 @@ function f(x: number | null) {
 
 
 //// [controlFlowNullTypeAndLiteral.js]
+"use strict";
 // Repros from #23771
 const myNull = null;
 const objWithValMaybeNull = { val: 1 };

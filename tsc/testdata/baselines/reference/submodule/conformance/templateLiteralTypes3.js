@@ -206,6 +206,7 @@ function a<T extends {id: string}>() {
 
 
 //// [templateLiteralTypes3.js]
+"use strict";
 // Inference from template literal type to template literal type
 function f1(s, n, b, t) {
     let x1 = foo1('hello'); // Error

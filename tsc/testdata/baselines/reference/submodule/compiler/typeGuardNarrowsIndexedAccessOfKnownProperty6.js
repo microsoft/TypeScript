@@ -24,6 +24,7 @@ if (c[cIndex].x) {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty6.js]
+"use strict";
 const a = {};
 if (a[aIndex] && a[aIndex].x) {
     a[aIndex].x; // number

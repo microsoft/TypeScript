@@ -24,6 +24,7 @@ if (c[cIndex].x) {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty5.js]
+"use strict";
 const a = {};
 const aIndex = "key";
 if (a[aIndex] && a[aIndex].x) {

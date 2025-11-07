@@ -29,6 +29,7 @@ interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} 
 
 
 //// [genericMappedTypeAsClause.js]
+"use strict";
 const foo1 = { aFoo: 'test', bFoo: 42 };
 const foo2 = { bFoo: 'bar' }; // Error
 function f1() {

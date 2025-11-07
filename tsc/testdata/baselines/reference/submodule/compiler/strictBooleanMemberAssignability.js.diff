@@ -1,10 +1,8 @@
 --- old.strictBooleanMemberAssignability.js
 +++ new.strictBooleanMemberAssignability.js
-@@= skipped -8, +8 lines =@@
- }
-
+@@= skipped -10, +10 lines =@@
  //// [strictBooleanMemberAssignability.js]
--"use strict";
+ "use strict";
  class Abc {
 +    def;
      constructor() {

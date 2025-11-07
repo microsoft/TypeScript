@@ -1,10 +1,9 @@
 --- old.privateNamesIncompatibleModifiersJs.js
 +++ new.privateNamesIncompatibleModifiersJs.js
-@@= skipped -61, +61 lines =@@
-
+@@= skipped -62, +62 lines =@@
 
  //// [privateNamesIncompatibleModifiersJs.js]
--"use strict";
+ "use strict";
 -var _A_instances, _A_a, _A_b, _A_c, _A_aMethod, _A_bMethod, _A_cMethod, _A_aProp_get, _A_aProp_set, _A_bProp_get, _A_bProp_set, _A_cProp_get, _A_cProp_set;
  class A {
 -    constructor() {

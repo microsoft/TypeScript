@@ -66,6 +66,7 @@ const [x, y] = ex;
 
 
 //// [unionsOfTupleTypes1.js]
+"use strict";
 function f1(t1, t2, t3, t4, x) {
     let [d10, d11, d12] = t1; // string, number
     let [d20, d21, d22] = t2; // string | boolean, number | undefined

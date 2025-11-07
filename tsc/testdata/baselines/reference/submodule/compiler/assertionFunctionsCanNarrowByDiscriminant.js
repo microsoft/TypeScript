@@ -27,6 +27,7 @@ animalOrUndef.canMeow; // since is cat, should not be an error
 
 
 //// [assertionFunctionsCanNarrowByDiscriminant.js]
+"use strict";
 const animal = { type: 'cat', canMeow: true };
 assertEqual(animal.type, 'cat');
 animal.canMeow; // since is cat, should not be an error

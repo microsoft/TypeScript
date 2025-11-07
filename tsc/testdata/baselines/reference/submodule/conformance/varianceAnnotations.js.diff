@@ -1,14 +1,6 @@
 --- old.varianceAnnotations.js
 +++ new.varianceAnnotations.js
-@@= skipped -177, +177 lines =@@
-
-
- //// [varianceAnnotations.js]
--"use strict";
- super_covariant = sub_covariant;
- sub_covariant = super_covariant; // Error
- super_contravariant = sub_contravariant; // Error
-@@= skipped -8, +7 lines =@@
+@@= skipped -185, +185 lines =@@
  super_invariant = sub_invariant; // Error
  sub_invariant = super_invariant; // Error
  class C {

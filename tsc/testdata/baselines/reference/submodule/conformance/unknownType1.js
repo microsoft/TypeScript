@@ -186,6 +186,7 @@ function oops<T extends unknown>(arg: T): {} {
 
 
 //// [unknownType1.js]
+"use strict";
 // In an intersection everything absorbs unknown
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};

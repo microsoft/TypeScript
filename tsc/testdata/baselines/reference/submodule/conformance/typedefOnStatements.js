@@ -82,6 +82,7 @@ function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
 
 
 //// [typedefOnStatements.js]
+"use strict";
 /** @typedef {{a: string}} A */
 ;
 /** @typedef {{ b: string }} B */

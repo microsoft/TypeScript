@@ -23,5 +23,6 @@ React.foo;
 React.foo;
 export {};
 //// [emits.js]
+"use strict";
 console.log("hello");
 React.foo;

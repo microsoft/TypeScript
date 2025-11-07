@@ -44,6 +44,7 @@ o2?.b()!.toString;
 o2?.b()!.toString!;
 
 //// [callChain.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
 o1 === null || o1 === void 0 ? void 0 : o1();
 o1 === null || o1 === void 0 ? void 0 : o1(1);

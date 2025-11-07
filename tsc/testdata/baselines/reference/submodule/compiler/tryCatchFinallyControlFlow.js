@@ -332,6 +332,7 @@ function f21() {
 
 
 //// [tryCatchFinallyControlFlow.js]
+"use strict";
 // Repro from #34797
 function f1() {
     let a = null;

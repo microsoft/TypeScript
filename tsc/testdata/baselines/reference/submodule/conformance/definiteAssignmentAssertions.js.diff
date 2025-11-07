@@ -1,10 +1,7 @@
 --- old.definiteAssignmentAssertions.js
 +++ new.definiteAssignmentAssertions.js
-@@= skipped -84, +84 lines =@@
-
-
- //// [definiteAssignmentAssertions.js]
--"use strict";
+@@= skipped -87, +87 lines =@@
+ "use strict";
  // Suppress strict property initialization check
  class C1 {
 +    a;

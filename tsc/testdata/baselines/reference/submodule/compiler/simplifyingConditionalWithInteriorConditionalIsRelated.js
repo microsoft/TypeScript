@@ -32,6 +32,7 @@ function f<T>() {
 
 
 //// [simplifyingConditionalWithInteriorConditionalIsRelated.js]
+"use strict";
 function ConditionalOrUndefined() {
     return 0;
 }

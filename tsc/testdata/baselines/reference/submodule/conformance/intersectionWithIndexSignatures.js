@@ -39,6 +39,7 @@ tt = ss;  // Error
 
 
 //// [intersectionWithIndexSignatures.js]
+"use strict";
 ta1 = sa1;
 ta1 = sa2;
 ta2 = sa1;

@@ -30,6 +30,7 @@ both[sym] = 'not ok'
 
 
 //// [unionTypeWithIndexSignature.js]
+"use strict";
 u.foo = 'bye';
 u.baz = 'hi';
 v.foo = false;

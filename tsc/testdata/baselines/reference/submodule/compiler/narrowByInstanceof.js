@@ -73,6 +73,7 @@ function test(o: Person | Car) {
 
 
 //// [narrowByInstanceof.js]
+"use strict";
 function foo(x, A, B, AB) {
     if (x instanceof A) {
         x; // A

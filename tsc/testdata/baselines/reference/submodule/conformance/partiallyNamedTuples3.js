@@ -7,4 +7,5 @@ const output = ((...args) => args)(...tuple);
 
 
 //// [partiallyNamedTuples3.js]
+"use strict";
 const output = ((...args) => args)(...tuple);

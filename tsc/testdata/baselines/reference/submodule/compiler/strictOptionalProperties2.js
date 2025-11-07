@@ -8,6 +8,7 @@ type T2 = [(string | undefined)?] extends [string?] ? true : false;  // false
 
 
 //// [strictOptionalProperties2.js]
+"use strict";
 // Repro from #44567
 
 

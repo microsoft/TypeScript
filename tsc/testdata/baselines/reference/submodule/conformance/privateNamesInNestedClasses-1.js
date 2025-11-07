@@ -29,6 +29,7 @@ new A().method();
 
 
 //// [privateNamesInNestedClasses-1.js]
+"use strict";
 class A {
     #foo = "A's #foo";
     #bar = "A's #bar";

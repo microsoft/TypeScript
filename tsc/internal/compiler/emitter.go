@@ -125,6 +125,8 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 		tx = append(tx, downleveler)
 	}
 
+	tx = append(tx, estransforms.NewUseStrictTransformer(&opts))
+
 	// transform module syntax
 	tx = append(tx, getModuleTransformer(&opts))
 

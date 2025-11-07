@@ -54,6 +54,7 @@ function f7<T extends object>(x: T & {}) {
 
 
 //// [inKeywordAndUnknown.js]
+"use strict";
 // Repro from #50531
 function f(x, y) {
     if (!("a" in x)) {

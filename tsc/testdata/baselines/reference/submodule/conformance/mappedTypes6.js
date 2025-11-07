@@ -128,6 +128,7 @@ x5.b = 1;
 
 
 //// [mappedTypes6.js]
+"use strict";
 function f1(x, y, z) {
     x = x;
     x = y; // Error

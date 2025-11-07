@@ -34,6 +34,7 @@ new Intl.NumberFormat('en-GB').format('+Infinity');
 
 
 //// [intlNumberFormatES2023.js]
+"use strict";
 // New / updated resolved options in ES2023, including type change for useGrouping
 const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, useGrouping } = new Intl.NumberFormat('en-GB').resolvedOptions();
 // Empty options

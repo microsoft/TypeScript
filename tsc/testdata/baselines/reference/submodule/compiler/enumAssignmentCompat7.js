@@ -26,6 +26,7 @@ function overloadingFunction(): second.E {
 }
 
 //// [enumAssignmentCompat7.js]
+"use strict";
 var first;
 (function (first) {
     let E;

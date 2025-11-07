@@ -41,6 +41,7 @@ declare function isPlainObject2<T>(
 
 
 //// [discriminantNarrowingCouldBeCircular.js]
+"use strict";
 const o = {};
 if (o) {
     for (const key in o) {

@@ -1,10 +1,8 @@
 --- old.derivedUninitializedPropertyDeclaration.js
 +++ new.derivedUninitializedPropertyDeclaration.js
-@@= skipped -84, +84 lines =@@
-
-
+@@= skipped -86, +86 lines =@@
  //// [derivedUninitializedPropertyDeclaration.js]
--"use strict";
+ "use strict";
  class A {
 -    constructor() {
 -        this.property = 'x';
@@ -17,7 +15,7 @@
  }
  class BD extends A {
  }
-@@= skipped -19, +17 lines =@@
+@@= skipped -17, +16 lines =@@
  class U {
  }
  class C {

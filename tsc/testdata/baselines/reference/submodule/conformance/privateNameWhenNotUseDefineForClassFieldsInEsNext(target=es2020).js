@@ -54,6 +54,7 @@ class TestNonStatics {
 }
 
 //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
+"use strict";
 class TestWithStatics {
     #prop = 0;
     static dd = new TestWithStatics().#prop; // OK

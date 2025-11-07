@@ -24,6 +24,7 @@ k = "fooProp"; // Error
 
 
 //// [privateNamesAndkeyof.js]
+"use strict";
 class A {
     #fooField = 3;
     #fooMethod() { }

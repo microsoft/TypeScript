@@ -12,3 +12,4 @@ interface Settable {
 
 
 //// [classImplementsMethodWIthTupleArgs.js]
+"use strict";

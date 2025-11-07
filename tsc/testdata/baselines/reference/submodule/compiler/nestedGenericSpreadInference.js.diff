@@ -1,8 +1,0 @@
---- old.nestedGenericSpreadInference.js
-+++ new.nestedGenericSpreadInference.js
-@@= skipped -7, +7 lines =@@
-
-
- //// [nestedGenericSpreadInference.js]
--"use strict";
- const leak = call(wrap((x) => x), 1);

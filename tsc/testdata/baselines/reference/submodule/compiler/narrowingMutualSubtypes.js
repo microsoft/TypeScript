@@ -145,6 +145,7 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 
 
 //// [narrowingMutualSubtypes.js]
+"use strict";
 // Check that `any` is a strict supertype of `unknown`
 const a1a = [ru1, ra1]; // { [x: string]: any }[]
 const a1b = [ra1, ru1]; // { [x: string]: any }[]

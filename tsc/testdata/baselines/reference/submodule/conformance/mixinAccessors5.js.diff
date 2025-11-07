@@ -1,9 +1,0 @@
---- old.mixinAccessors5.js
-+++ new.mixinAccessors5.js
-@@= skipped -25, +25 lines =@@
-   
-
- //// [mixinAccessors5.js]
--"use strict";
- // https://github.com/microsoft/TypeScript/issues/61967
-

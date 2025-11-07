@@ -17,6 +17,7 @@ class Foo {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.js]
+"use strict";
 class Foo {
     x;
     constructor() {

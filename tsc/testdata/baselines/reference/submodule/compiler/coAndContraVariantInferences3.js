@@ -126,6 +126,7 @@ function foo() {
 
 
 //// [coAndContraVariantInferences3.js]
+"use strict";
 ;
 buildOverload("updateImportDeclaration")
     .overload({

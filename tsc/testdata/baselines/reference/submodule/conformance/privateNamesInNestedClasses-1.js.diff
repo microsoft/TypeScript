@@ -1,10 +1,9 @@
 --- old.privateNamesInNestedClasses-1.js
 +++ new.privateNamesInNestedClasses-1.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
 
  //// [privateNamesInNestedClasses-1.js]
--"use strict";
+ "use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
 -    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -42,7 +41,7 @@
          const a = new A();
          new B().bar(a);
          new B().baz(a);
-@@= skipped -36, +23 lines =@@
+@@= skipped -35, +23 lines =@@
          new B().quux(b);
      }
  }

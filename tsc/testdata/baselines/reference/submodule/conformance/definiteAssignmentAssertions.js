@@ -85,6 +85,7 @@ declare namespace foo {
 
 
 //// [definiteAssignmentAssertions.js]
+"use strict";
 // Suppress strict property initialization check
 class C1 {
     a;

@@ -1,8 +1,0 @@
---- old.privateNameNotAllowedOutsideClass.js
-+++ new.privateNameNotAllowedOutsideClass.js
-@@= skipped -4, +4 lines =@@
-
-
- //// [privateNameNotAllowedOutsideClass.js]
--"use strict";
- const #foo = 3;

@@ -23,6 +23,7 @@ declare const n: number;
 
 
 //// [noUncheckedIndexedAccessCompoundAssignments.js]
+"use strict";
 // Each line should have one error
 // for a total of 12 errors
 stringMap.foo++;

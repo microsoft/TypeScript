@@ -19,6 +19,7 @@ const []: {} = {}
 
 
 //// [destructuringAssignabilityCheck.js]
+"use strict";
 const [] = {}; // should be error
 const {} = undefined; // error correctly
 (([]) => 0)({}); // should be error

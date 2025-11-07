@@ -454,6 +454,7 @@ function fx20(value: Either) {
 
 
 //// [unknownControlFlow.js]
+"use strict";
 function f01(u) {
     let x1 = u; // Error
     let x2 = u;

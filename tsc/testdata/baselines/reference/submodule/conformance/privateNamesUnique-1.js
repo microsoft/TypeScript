@@ -13,6 +13,7 @@ const b: A = new B();     // Error: Property #foo is missing
 
 
 //// [privateNamesUnique-1.js]
+"use strict";
 class A {
     #foo;
 }

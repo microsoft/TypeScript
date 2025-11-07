@@ -17,6 +17,7 @@ const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
 
 
 //// [destructuringTuple.js]
+"use strict";
 const [a, b, c, ...rest] = tuple;
 [...receiver] = tuple;
 // Repros from #32140

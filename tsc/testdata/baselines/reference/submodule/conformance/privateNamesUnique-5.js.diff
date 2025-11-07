@@ -1,10 +1,8 @@
 --- old.privateNamesUnique-5.js
 +++ new.privateNamesUnique-5.js
-@@= skipped -15, +15 lines =@@
-
-
+@@= skipped -17, +17 lines =@@
  //// [privateNamesUnique-5.js]
--"use strict";
+ "use strict";
  // same as privateNamesUnique-1, but with an interface
 -var _A_foo, _B_foo;
  class A {

@@ -1,14 +1,6 @@
 --- old.assertionTypePredicates1.js
 +++ new.assertionTypePredicates1.js
-@@= skipped -260, +260 lines =@@
-
-
- //// [assertionTypePredicates1.js]
--"use strict";
- const assert = value => { };
- function f01(x) {
-     if (!!true) {
-@@= skipped -119, +118 lines =@@
+@@= skipped -379, +379 lines =@@
      }
  }
  class Test2 extends Test {

@@ -1,10 +1,8 @@
 --- old.privateIdentifierChain.1.js
 +++ new.privateIdentifierChain.1.js
-@@= skipped -15, +15 lines =@@
-
-
+@@= skipped -17, +17 lines =@@
  //// [privateIdentifierChain.1.js]
--"use strict";
+ "use strict";
  class A {
 +    a;
      #b;

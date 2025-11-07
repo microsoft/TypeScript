@@ -14,6 +14,7 @@ if (m[E.A] !== null) {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty12.js]
+"use strict";
 var E;
 (function (E) {
     E["A"] = "A";

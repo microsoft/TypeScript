@@ -23,6 +23,7 @@ function f2(_: ReadonlyArray<number>): void {}
 
 
 //// [noUnusedLocals_writeOnly.js]
+"use strict";
 function f(x = 0, b = false) {
     // None of these statements read from 'x', so it will be marked unused.
     x = 1;

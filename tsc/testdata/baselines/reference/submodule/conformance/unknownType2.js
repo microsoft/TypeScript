@@ -263,6 +263,7 @@ function notNotEquals(u: unknown)  {
 
 
 //// [unknownType2.js]
+"use strict";
 let validate = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 const u = undefined;
 if (u === 5) {

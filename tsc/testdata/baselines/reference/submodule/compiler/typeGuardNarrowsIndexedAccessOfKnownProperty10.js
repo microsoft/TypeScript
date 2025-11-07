@@ -11,6 +11,7 @@ const bar: { [id: string]: number } = {};
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty10.js]
+"use strict";
 const bar = {};
 (foo) => {
     bar[id]++;

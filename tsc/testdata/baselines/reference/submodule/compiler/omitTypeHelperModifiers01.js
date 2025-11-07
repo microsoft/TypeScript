@@ -24,6 +24,7 @@ function f(x: B) {
 
 
 //// [omitTypeHelperModifiers01.js]
+"use strict";
 function f(x) {
     const b = x.b;
     x.b = "hello";

@@ -87,6 +87,7 @@ call((x: number | void, y: number | void) => 42, 4, 2) // ok
 
 
 //// [callWithMissingVoid.js]
+"use strict";
 // From #4260
 class X {
     f(t) {

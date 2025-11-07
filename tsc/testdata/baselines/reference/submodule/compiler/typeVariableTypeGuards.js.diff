@@ -1,17 +1,14 @@
 --- old.typeVariableTypeGuards.js
 +++ new.typeVariableTypeGuards.js
-@@= skipped -92, +92 lines =@@
-
-
- //// [typeVariableTypeGuards.js]
--"use strict";
+@@= skipped -95, +95 lines =@@
+ "use strict";
  // Repro from #14091
  class A {
 +    props;
      constructor(props) {
          this.props = props;
      }
-@@= skipped -11, +11 lines =@@
+@@= skipped -8, +9 lines =@@
      }
  }
  class Monkey {

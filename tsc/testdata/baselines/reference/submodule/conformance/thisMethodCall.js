@@ -9,6 +9,7 @@ class C {
 }
 
 //// [thisMethodCall.js]
+"use strict";
 class C {
     method() { }
     other() {

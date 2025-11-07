@@ -11,6 +11,5 @@
 -    });
 +async function func() {
 +    "use strict";
-+    "use strict";
 +    var b = await p || a;
  }

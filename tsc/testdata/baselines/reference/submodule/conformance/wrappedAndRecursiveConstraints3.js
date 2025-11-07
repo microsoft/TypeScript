@@ -31,6 +31,5 @@ class C {
 var c = new C({ length: 2 });
 var r = c.foo({ length: 3, charAt: (x) => {
         '';
-        '';
     } });
 var r2 = r('');

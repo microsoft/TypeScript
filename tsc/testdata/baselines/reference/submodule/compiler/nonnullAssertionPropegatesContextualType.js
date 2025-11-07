@@ -4,4 +4,5 @@
 let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error: Element
 
 //// [nonnullAssertionPropegatesContextualType.js]
+"use strict";
 let rect2 = document.querySelector('.svg-rectangle'); // Error: Element

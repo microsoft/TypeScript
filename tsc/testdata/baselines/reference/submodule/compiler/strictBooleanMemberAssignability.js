@@ -9,6 +9,7 @@ class Abc {
 }
 
 //// [strictBooleanMemberAssignability.js]
+"use strict";
 class Abc {
     def;
     constructor() {

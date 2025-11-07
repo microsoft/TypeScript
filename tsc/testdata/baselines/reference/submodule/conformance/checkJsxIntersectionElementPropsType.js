@@ -15,6 +15,7 @@ const y = new C({foobar: "example"});
 const x = <C foobar="example" />
 
 //// [checkJsxIntersectionElementPropsType.jsx]
+"use strict";
 class C extends Component {
 }
 const y = new C({ foobar: "example" });

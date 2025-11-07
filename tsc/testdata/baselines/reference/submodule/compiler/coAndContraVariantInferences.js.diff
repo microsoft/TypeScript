@@ -1,14 +1,6 @@
 --- old.coAndContraVariantInferences.js
 +++ new.coAndContraVariantInferences.js
-@@= skipped -37, +37 lines =@@
-
-
- //// [coAndContraVariantInferences.js]
--"use strict";
- foo(a, fab);
- foo(b, fab);
- const actionA = { payload: 'any-string' };
-@@= skipped -35, +34 lines =@@
+@@= skipped -72, +72 lines =@@
  declare const actionA: Action<"ACTION_A", string>;
  declare const actionB: Action<"ACTION_B", boolean>;
  declare function call<TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any): void;

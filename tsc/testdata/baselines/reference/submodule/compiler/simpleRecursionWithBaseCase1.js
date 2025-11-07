@@ -37,6 +37,7 @@ function fn5() {
 
 
 //// [simpleRecursionWithBaseCase1.js]
+"use strict";
 function fn1(n) {
     if (n === 0) {
         return 3;

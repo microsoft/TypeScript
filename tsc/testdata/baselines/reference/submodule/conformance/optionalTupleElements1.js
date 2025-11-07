@@ -48,6 +48,7 @@ t4 = [];
 
 
 //// [optionalTupleElements1.js]
+"use strict";
 function f1(t1, t2, t3, t4) {
     t1 = t1;
     t1 = t2; // Error

@@ -18,6 +18,7 @@ const obj: {field: Rule} = {
 };
 
 //// [contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.js]
+"use strict";
 const obj = {
     field: {
         validate: (_t, _p, _s) => false,

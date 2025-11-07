@@ -39,6 +39,7 @@ async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
 
 
 //// [generatorReturnContextualType.js]
+"use strict";
 // #35995
 function* f1() {
     return { x: 'x' };

@@ -25,6 +25,7 @@ class CoachMarkAnchorDecorator {
 
 
 //// [thisIndexOnExistingReadonlyFieldIsNotNever.js]
+"use strict";
 class CoachMarkAnchorDecorator {
     decorateComponent(anchor) {
         return class CoachMarkAnchor extends Component {

@@ -30,6 +30,7 @@ const xx: [number, ...number[]] = yy;
 
 
 //// [intersectionsAndOptionalProperties.js]
+"use strict";
 x = y; // Error
 x = z; // Error
 function foo(v) {

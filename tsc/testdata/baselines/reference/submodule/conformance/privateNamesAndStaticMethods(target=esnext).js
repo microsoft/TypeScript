@@ -33,6 +33,7 @@ class B extends A {
 
 
 //// [privateNamesAndStaticMethods.js]
+"use strict";
 class A {
     static #foo(a) { }
     static async #bar(a) { }

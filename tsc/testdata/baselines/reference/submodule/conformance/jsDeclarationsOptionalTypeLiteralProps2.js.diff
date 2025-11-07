@@ -1,14 +1,6 @@
 --- old.jsDeclarationsOptionalTypeLiteralProps2.js
 +++ new.jsDeclarationsOptionalTypeLiteralProps2.js
-@@= skipped -16, +16 lines =@@
-
-
- //// [foo.js]
--"use strict";
- /**
-  * foo
-  *
-@@= skipped -29, +28 lines =@@
+@@= skipped -45, +45 lines =@@
   */
  declare function foo({ a, b, c }: {
      a: number;

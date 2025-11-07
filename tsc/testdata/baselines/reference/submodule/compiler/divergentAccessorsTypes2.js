@@ -14,6 +14,7 @@ s.foo = 42;
 
 
 //// [divergentAccessorsTypes2.js]
+"use strict";
 class Test1 {
     get foo() { return null; }
     set foo(s) {

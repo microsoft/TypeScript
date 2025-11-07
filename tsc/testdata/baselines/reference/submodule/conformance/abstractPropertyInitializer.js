@@ -7,6 +7,7 @@ abstract class C {
 
 
 //// [abstractPropertyInitializer.js]
+"use strict";
 class C {
 }
 

@@ -25,6 +25,7 @@ type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
 
 
 //// [deferredLookupTypeResolution2.js]
+"use strict";
 // Repro from #17456
 
 

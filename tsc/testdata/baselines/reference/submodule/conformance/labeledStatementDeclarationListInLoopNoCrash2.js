@@ -9,6 +9,7 @@ for (let x of []) {
 
 
 //// [labeledStatementDeclarationListInLoopNoCrash2.js]
+"use strict";
 for (let x of []) {
     var v0 = x;
     foo: var y;

@@ -41,6 +41,7 @@ const outsideClass: FuncType = function(val) { // compare to errors only on this
 }
 
 //// [classPropertyErrorOnNameOnly.js]
+"use strict";
 // turn on strictNullChecks
 class Example {
     insideClass = function (val) {

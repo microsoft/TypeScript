@@ -30,6 +30,7 @@ function billOwner(pet: Animal2) {
 
 
 //// [spreadIdenticalTypesRemoved.js]
+"use strict";
 function clonePet(pet, fullCopy) {
     return Object.assign({ name: pet.name, kind: pet.kind }, (fullCopy && pet));
 }

@@ -176,6 +176,7 @@ type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 
 
 //// [instantiationExpressions.js]
+"use strict";
 function f1() {
     let f0 = fx; // Error
     let f1 = fx; // { (x: string): string; (x: string, n: number): string; }

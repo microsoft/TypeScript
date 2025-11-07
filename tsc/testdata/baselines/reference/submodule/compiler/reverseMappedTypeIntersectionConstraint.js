@@ -176,6 +176,7 @@ const config2 = createXMachine({
 
 
 //// [reverseMappedTypeIntersectionConstraint.js]
+"use strict";
 const inferredParams1 = createMachine({
     entry: "foo",
     states: {

@@ -15,6 +15,7 @@ class BufferPool<E extends Enum, M extends TypeMap<E>> {
 
 
 //// [deeplyNestedConstraints.js]
+"use strict";
 // Repro from #41931
 class BufferPool {
     setArray2(_, array) {

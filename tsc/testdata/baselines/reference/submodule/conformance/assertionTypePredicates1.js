@@ -261,6 +261,7 @@ function testFunctionThisParameter2(
 
 
 //// [assertionTypePredicates1.js]
+"use strict";
 const assert = value => { };
 function f01(x) {
     if (!!true) {

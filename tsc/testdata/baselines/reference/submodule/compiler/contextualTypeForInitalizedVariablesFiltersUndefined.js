@@ -12,6 +12,7 @@ function fst({ s } = t) { }
 
 
 //// [contextualTypeForInitalizedVariablesFiltersUndefined.js]
+"use strict";
 const fInferred = ({ a = 0 } = {}) => a;
 // const fInferred: ({ a }?: { a?: number; }) => number
 const fAnnotated = ({ a = 0 } = {}) => a;

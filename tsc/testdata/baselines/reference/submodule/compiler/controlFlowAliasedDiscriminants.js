@@ -117,6 +117,7 @@ function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQu
 
 
 //// [controlFlowAliasedDiscriminants.js]
+"use strict";
 function useQuery() {
     return {
         isSuccess: false,

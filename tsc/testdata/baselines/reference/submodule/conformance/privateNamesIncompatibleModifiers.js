@@ -37,6 +37,7 @@ abstract class B {
 
 
 //// [privateNamesIncompatibleModifiers.js]
+"use strict";
 class A {
     #foo = 3; // Error
     #bar = 3; // Error

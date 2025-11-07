@@ -66,6 +66,7 @@ type Test3 = {
 }
 
 //// [divergentAccessorsTypes1.js]
+"use strict";
 class Test1 {
     get foo() { return ""; }
     set foo(s) {

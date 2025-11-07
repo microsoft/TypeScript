@@ -27,6 +27,7 @@ let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
 let Success = () => <Funk {...attrs2} />
 
 //// [booleanLiteralsContextuallyTypedFromUnion.jsx]
+"use strict";
 const isIt = Math.random() > 0.5;
 const c = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 const cc = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };

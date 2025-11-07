@@ -109,6 +109,7 @@ type T1 = Foo<any>;
 
 
 //// [deeplyNestedConditionalTypes.js]
+"use strict";
 
 
 //// [deeplyNestedConditionalTypes.d.ts]

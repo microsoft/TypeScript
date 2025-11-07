@@ -1,10 +1,8 @@
 --- old.declarationEmitTypeofThisInClass.js
 +++ new.declarationEmitTypeofThisInClass.js
-@@= skipped -6, +6 lines =@@
- }
-
+@@= skipped -8, +8 lines =@@
  //// [declarationEmitTypeofThisInClass.js]
--"use strict";
+ "use strict";
  class Foo {
 +    foo;
 +    bar; //Public property 'bar' of exported class has or is using private name 'this'.(4031)

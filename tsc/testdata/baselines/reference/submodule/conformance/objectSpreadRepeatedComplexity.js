@@ -87,6 +87,7 @@ function f(cnd: Record<number, boolean>){
 }
 
 //// [objectSpreadRepeatedComplexity.js]
+"use strict";
 function f(cnd) {
     // Type is a union of 2^(n-1) members, where n is the number of spread objects
     return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (cnd[1] &&

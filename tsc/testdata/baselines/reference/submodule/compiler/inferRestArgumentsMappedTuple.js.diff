@@ -1,9 +1,0 @@
---- old.inferRestArgumentsMappedTuple.js
-+++ new.inferRestArgumentsMappedTuple.js
-@@= skipped -26, +26 lines =@@
-
-
- //// [inferRestArgumentsMappedTuple.js]
--"use strict";
- const myPrimitiveTupleOld = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
- const myPrimitiveTupleNew = extractPrimitivesNew({ primitive: "" }, { primitive: 0 });

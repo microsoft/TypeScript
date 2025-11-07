@@ -6,6 +6,7 @@ function f() {
 }
 
 //// [alwaysStrictES6.js]
+"use strict";
 function f() {
     var arguments = [];
 }

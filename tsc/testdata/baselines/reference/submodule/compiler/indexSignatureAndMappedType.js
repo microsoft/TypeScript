@@ -36,6 +36,7 @@ interface IEntity<T extends string> extends IBaseEntity {
 
 
 //// [indexSignatureAndMappedType.js]
+"use strict";
 // A mapped type { [P in K]: X }, where K is a generic type, is related to
 // { [key: string]: Y } if X is related to Y.
 function f1(x, y) {

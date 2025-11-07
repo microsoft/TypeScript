@@ -14,6 +14,7 @@ enum E {
 
 
 //// [enumErrorOnConstantBindingWithInitializer.js]
+"use strict";
 const { value = "123" } = thing;
 var E;
 (function (E) {

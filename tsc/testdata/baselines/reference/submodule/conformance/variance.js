@@ -29,6 +29,7 @@ class Bar<T extends string> {
 
 
 //// [variance.js]
+"use strict";
 // Test cases for parameter variances affected by conditional types.
 const foo = { prop: true };
 const x = foo;

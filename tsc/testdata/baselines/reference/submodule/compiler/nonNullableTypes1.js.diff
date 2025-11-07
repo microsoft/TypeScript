@@ -1,14 +1,6 @@
 --- old.nonNullableTypes1.js
 +++ new.nonNullableTypes1.js
-@@= skipped -37, +37 lines =@@
-
-
- //// [nonNullableTypes1.js]
--"use strict";
- function f1(x) {
-     let y = x || "hello"; // NonNullable<T> | string
- }
-@@= skipped -25, +24 lines =@@
+@@= skipped -62, +62 lines =@@
      }
  }
  class A {

@@ -161,6 +161,7 @@ function fn() {
 
 
 //// [divergentAccessorsVisibility1.js]
+"use strict";
 class Base {
     get PublicPublic() { return 0; }
     set PublicPublic(v) { return; }

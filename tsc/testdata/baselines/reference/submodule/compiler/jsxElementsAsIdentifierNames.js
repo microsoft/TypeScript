@@ -18,6 +18,7 @@ function B() {
 
 
 //// [a.js]
+"use strict";
 function A() {
     return React.createElement("package", null);
 }

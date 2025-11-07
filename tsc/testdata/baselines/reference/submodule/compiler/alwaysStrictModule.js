@@ -8,6 +8,7 @@ module M {
 }
 
 //// [alwaysStrictModule.js]
+"use strict";
 var M;
 (function (M) {
     function f() {

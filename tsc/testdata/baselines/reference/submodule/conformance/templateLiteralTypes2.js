@@ -122,6 +122,7 @@ C2(`rotate(${interpolatedStyle.rotate}dig)`);
 
 
 //// [templateLiteralTypes2.js]
+"use strict";
 function ft1(s, n, u, t) {
     const c1 = `abc${s}`;
     const c2 = `abc${n}`;

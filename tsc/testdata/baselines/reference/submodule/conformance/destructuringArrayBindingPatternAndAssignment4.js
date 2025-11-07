@@ -9,5 +9,6 @@ const [value] = data; // Error
 
 
 //// [destructuringArrayBindingPatternAndAssignment4.js]
+"use strict";
 // #35497
 const [value] = data; // Error

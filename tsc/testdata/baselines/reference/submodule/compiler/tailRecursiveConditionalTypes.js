@@ -31,6 +31,7 @@ type T41 = TupleOf<any, number>;
 
 
 //// [tailRecursiveConditionalTypes.js]
+"use strict";
 
 
 //// [tailRecursiveConditionalTypes.d.ts]

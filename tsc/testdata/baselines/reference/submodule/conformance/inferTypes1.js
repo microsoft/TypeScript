@@ -190,6 +190,7 @@ type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 
 
 //// [inferTypes1.js]
+"use strict";
 function f1(s) {
     return { a: 1, b: s };
 }

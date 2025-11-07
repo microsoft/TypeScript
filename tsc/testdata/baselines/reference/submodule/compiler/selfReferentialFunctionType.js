@@ -7,6 +7,7 @@ declare function h<T>(): typeof h<T>;
 
 
 //// [selfReferentialFunctionType.js]
+"use strict";
 
 
 //// [selfReferentialFunctionType.d.ts]

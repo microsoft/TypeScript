@@ -12,8 +12,5 @@
  class B extends A {
 +    x;
      constructor(x) {
-+        "use strict";
-+        'someStringForEgngInject';
          "use strict";
          'someStringForEgngInject';
-         super();

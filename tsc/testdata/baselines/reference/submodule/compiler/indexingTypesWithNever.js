@@ -121,6 +121,7 @@ type Res3 = Example<never>;  // never
 
 
 //// [indexingTypesWithNever.js]
+"use strict";
 // Should be never
 const result3 = genericFn1({ c: "ctest", d: "dtest" });
 // Should be never

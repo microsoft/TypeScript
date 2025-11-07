@@ -25,6 +25,7 @@ const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
 const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
 
 //// [jsxChildrenGenericContextualTypes.jsx]
+"use strict";
 const Elem = (p) => <div></div>;
 Elem({ prop: { a: "x" }, children: i => ({ a: "z" }) });
 const q = <Elem prop={{ a: "x" }} children={i => ({ a: "z" })}/>;

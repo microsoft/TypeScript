@@ -19,6 +19,7 @@ const test: RowRenderer<Entity> = {
 
 
 //// [inferenceUnionOfObjectsMappedContextualType.js]
+"use strict";
 const test = {
     key: 'someDate',
     caption: 'My Date',

@@ -15,6 +15,7 @@ class C {
 
 
 //// [classStaticBlockUseBeforeDef4.js]
+"use strict";
 class C {
     static accessor x;
     static {

@@ -17,6 +17,7 @@ class Bar<T> {
 }
 
 //// [classVarianceCircularity.js]
+"use strict";
 // Issue #52813
 function f() {
     const b = new Bar();

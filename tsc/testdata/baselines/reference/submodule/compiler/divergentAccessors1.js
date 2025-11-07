@@ -27,6 +27,7 @@
 
 
 //// [divergentAccessors1.js]
+"use strict";
 // Accessors in interfaces/types
 {
     const ihgs = null;

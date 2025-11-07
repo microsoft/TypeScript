@@ -24,6 +24,7 @@ e;
 
 
 //// [controlFlowDestructuringVariablesInTryCatch.js]
+"use strict";
 try {
     var a = f1();
     var [b] = f2();

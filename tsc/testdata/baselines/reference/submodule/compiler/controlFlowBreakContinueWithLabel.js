@@ -18,6 +18,7 @@ user;
 
 
 //// [controlFlowBreakContinueWithLabel.js]
+"use strict";
 var User;
 (function (User) {
     User[User["A"] = 0] = "A";

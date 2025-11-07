@@ -1,14 +1,6 @@
 --- old.variadicTuples1.js
 +++ new.variadicTuples1.js
-@@= skipped -425, +425 lines =@@
-
-
- //// [variadicTuples1.js]
--"use strict";
- // Variadics in tuple types
- // Variadics in array literals
- function tup2(t, u) {
-@@= skipped -354, +353 lines =@@
+@@= skipped -779, +779 lines =@@
      y?: number;
      z?: boolean;
  }): void;

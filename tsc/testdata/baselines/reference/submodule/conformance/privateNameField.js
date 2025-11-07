@@ -10,6 +10,7 @@ class A {
 
 
 //// [privateNameField.js]
+"use strict";
 class A {
     #name;
     constructor(name) {

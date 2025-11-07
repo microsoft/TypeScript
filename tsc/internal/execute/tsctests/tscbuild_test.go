@@ -1949,6 +1949,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 						sys.writeFileNoError("/user/username/projects/project/project2.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "extends": "./alpha.tsconfig.json",
+                            "files": ["other.ts"]
                         }`), false)
 					},
 				},

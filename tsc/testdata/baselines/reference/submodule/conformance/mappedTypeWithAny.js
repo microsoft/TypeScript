@@ -66,6 +66,7 @@ type Evolver<T extends Evolvable<any> = any> = {
 
 
 //// [mappedTypeWithAny.js]
+"use strict";
 for (let id in z) {
     let data = z[id];
     let x = data.notAValue; // Error

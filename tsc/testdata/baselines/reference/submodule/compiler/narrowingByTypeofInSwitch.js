@@ -318,6 +318,7 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 
 
 //// [narrowingByTypeofInSwitch.js]
+"use strict";
 function assertNever(x) {
     return x;
 }

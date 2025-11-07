@@ -38,6 +38,7 @@ call(actionB, printFn);
 
 
 //// [coAndContraVariantInferences.js]
+"use strict";
 foo(a, fab);
 foo(b, fab);
 const actionA = { payload: 'any-string' };

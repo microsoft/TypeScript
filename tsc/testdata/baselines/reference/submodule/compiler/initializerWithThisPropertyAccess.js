@@ -36,6 +36,7 @@ class Bar {
 
 
 //// [initializerWithThisPropertyAccess.js]
+"use strict";
 class A {
     a;
     b = this.a; // Error

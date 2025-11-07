@@ -1,10 +1,8 @@
 --- old.privateNameDuplicateField.js
 +++ new.privateNameDuplicateField.js
-@@= skipped -405, +405 lines =@@
-
-
+@@= skipped -407, +407 lines =@@
  //// [privateNameDuplicateField.js]
--"use strict";
+ "use strict";
  function Field() {
 -    var _A_Field_Field_foo, _A_Field_Field_foo_1, _A_Field_Method_instances, _A_Field_Method_foo, _A_Field_Method_foo_1, _A_Field_Getter_instances, _A_Field_Getter_foo, _A_Field_Getter_foo_get, _A_Field_Setter_instances, _A_Field_Setter_foo, _A_Field_Setter_foo_set, _a, _A_Field_StaticField_foo, _A_Field_StaticField_foo_1, _b, _A_Field_StaticMethod_foo, _A_Field_StaticMethod_foo_1, _c, _A_Field_StaticGetter_foo, _A_Field_StaticGetter_foo_get, _d, _A_Field_StaticSetter_foo, _A_Field_StaticSetter_foo_set;
      // Error

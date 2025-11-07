@@ -1,10 +1,7 @@
 --- old.classStaticPropertyAccess.js
 +++ new.classStaticPropertyAccess.js
-@@= skipped -17, +17 lines =@@
-
-
- //// [classStaticPropertyAccess.js]
--"use strict";
+@@= skipped -20, +20 lines =@@
+ "use strict";
  class A {
      static "\""() { }
 +    static x = 1;

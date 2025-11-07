@@ -31,6 +31,7 @@ new AsyncLoader({
 
 
 //// [overloadedConstructorFixesInferencesAppropriately.js]
+"use strict";
 class AsyncLoader {
     constructor(...args) { }
 }

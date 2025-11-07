@@ -571,3 +571,4 @@ declare module "Function/Curry" {
 
 
 //// [ramdaToolsNoInfinite2.js]
+"use strict";

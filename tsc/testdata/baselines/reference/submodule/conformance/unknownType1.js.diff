@@ -1,14 +1,6 @@
 --- old.unknownType1.js
 +++ new.unknownType1.js
-@@= skipped -185, +185 lines =@@
-
-
- //// [unknownType1.js]
--"use strict";
- // In an intersection everything absorbs unknown
- var __rest = (this && this.__rest) || function (s, e) {
-     var t = {};
-@@= skipped -98, +97 lines =@@
+@@= skipped -283, +283 lines =@@
  }
  // Class properties of type unknown don't need definite assignment
  class C1 {

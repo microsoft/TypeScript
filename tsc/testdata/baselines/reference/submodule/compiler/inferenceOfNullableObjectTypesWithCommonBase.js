@@ -36,6 +36,7 @@ equal(v as string & { tag: 'foo' } | undefined, v as string);
 
 
 //// [inferenceOfNullableObjectTypesWithCommonBase.js]
+"use strict";
 function equal(a, b) { }
 let v = null;
 equal(v, v);

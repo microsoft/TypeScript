@@ -18,6 +18,7 @@ class B extends A {
 
 
 //// [privateNamesAndFields.js]
+"use strict";
 class A {
     #foo;
     constructor() {

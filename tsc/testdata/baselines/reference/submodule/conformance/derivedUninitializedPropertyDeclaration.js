@@ -85,6 +85,7 @@ class M extends L {
 
 
 //// [derivedUninitializedPropertyDeclaration.js]
+"use strict";
 class A {
     property = 'x';
     m() { return 1; }

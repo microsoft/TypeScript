@@ -1,14 +1,6 @@
 --- old.restTupleElements1.js
 +++ new.restTupleElements1.js
-@@= skipped -71, +71 lines =@@
-
-
- //// [restTupleElements1.js]
--"use strict";
- assign();
- assign();
- assign();
-@@= skipped -38, +37 lines =@@
+@@= skipped -109, +109 lines =@@
  type T06 = [string, ...string[]];
  type T07 = [...string[], string];
  type T08 = [...string];

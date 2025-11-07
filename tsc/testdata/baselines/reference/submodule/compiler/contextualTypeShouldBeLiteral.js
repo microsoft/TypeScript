@@ -125,6 +125,7 @@ const test: TestGeneric = {
 
 
 //// [contextualTypeShouldBeLiteral.js]
+"use strict";
 function foo(bar) { }
 foo({
     type: 'y',

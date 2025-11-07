@@ -17,6 +17,7 @@ class A1 {
 
 
 //// [privateNameStaticAccessors.js]
+"use strict";
 class A1 {
     static get #prop() { return ""; }
     static set #prop(param) { }

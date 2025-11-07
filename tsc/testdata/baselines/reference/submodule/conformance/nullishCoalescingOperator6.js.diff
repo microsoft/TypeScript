@@ -1,8 +1,0 @@
---- old.nullishCoalescingOperator6.js
-+++ new.nullishCoalescingOperator6.js
-@@= skipped -4, +4 lines =@@
-
-
- //// [nullishCoalescingOperator6.js]
--"use strict";
- function foo(foo, bar = foo !== null && foo !== void 0 ? foo : "bar") { }

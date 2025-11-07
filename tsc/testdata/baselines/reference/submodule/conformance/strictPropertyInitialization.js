@@ -163,6 +163,7 @@ class C13 {
 
 
 //// [strictPropertyInitialization.js]
+"use strict";
 // Properties with non-undefined types require initialization
 class C1 {
     a; // Error

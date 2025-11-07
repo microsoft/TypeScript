@@ -147,6 +147,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/a/src/index.js] *new* 
+"use strict";
 
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["./src/index.ts"]}

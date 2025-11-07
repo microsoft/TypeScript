@@ -76,6 +76,7 @@ g.both
 
 
 //// [typeFromPropertyAssignment36.js]
+"use strict";
 function f(b) {
     function d() {
     }

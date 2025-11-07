@@ -1,10 +1,8 @@
 --- old.assignmentToInstantiationExpression.js
 +++ new.assignmentToInstantiationExpression.js
-@@= skipped -13, +13 lines =@@
-
-
+@@= skipped -15, +15 lines =@@
  //// [assignmentToInstantiationExpression.js]
--"use strict";
+ "use strict";
  let obj = {};
 -(obj.fn) = () => 1234;
 +obj.fn = () => 1234;

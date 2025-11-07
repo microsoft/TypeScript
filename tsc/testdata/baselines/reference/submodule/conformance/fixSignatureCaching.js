@@ -996,7 +996,6 @@ define(function () {
 (function (define, undefined) {
     define(function () {
         'use strict';
-        'use strict';
         var impl = {};
         impl.mobileDetectRules = {
             "phones": {

@@ -16,6 +16,7 @@ if (x = o ?? true) {
 
 
 //// [controlFlowNullishCoalesce.js]
+"use strict";
 // assignments in shortcutting rhs
 let a;
 o !== null && o !== void 0 ? o : (a = 1);

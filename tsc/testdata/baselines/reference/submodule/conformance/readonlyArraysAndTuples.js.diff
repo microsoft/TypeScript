@@ -1,14 +1,6 @@
 --- old.readonlyArraysAndTuples.js
 +++ new.readonlyArraysAndTuples.js
-@@= skipped -39, +39 lines =@@
-
-
- //// [readonlyArraysAndTuples.js]
--"use strict";
- function f1(ma, ra, mt, rt) {
-     ma = ra; // Error
-     ma = mt;
-@@= skipped -33, +32 lines =@@
+@@= skipped -72, +72 lines =@@
  type T21 = readonly [number, number];
  type T30 = readonly string;
  type T31<T> = readonly T;

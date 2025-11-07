@@ -17,6 +17,7 @@ function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 
 
 //// [unionOfEnumInference.js]
+"use strict";
 // Repro from #42932
 var Enum;
 (function (Enum) {

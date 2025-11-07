@@ -1,10 +1,8 @@
 --- old.tsxLibraryManagedAttributes.js
 +++ new.tsxLibraryManagedAttributes.js
-@@= skipped -127, +127 lines =@@
-
-
+@@= skipped -129, +129 lines =@@
  //// [tsxLibraryManagedAttributes.jsx]
--"use strict";
+ "use strict";
  class Component extends ReactComponent {
 +    static propTypes = {
 +        foo: PropTypes.number,
@@ -26,7 +24,7 @@
  const a = <Component foo={12} bar="yes" baz="yeah"/>;
  const b = <Component foo={12}/>; // Error, missing required prop bar
  const c = <Component bar="yes" baz="yeah"/>;
-@@= skipped -18, +17 lines =@@
+@@= skipped -16, +16 lines =@@
  const e = <Component foo={12} bar={null} baz="cool"/>; // bar is nullable/undefinable since it's not marked `isRequired`
  const f = <Component foo={12} bar="yeah" baz={null}/>; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
  class JustPropTypes extends ReactComponent {

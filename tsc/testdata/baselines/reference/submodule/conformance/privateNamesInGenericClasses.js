@@ -30,6 +30,7 @@ b = a;                                    // Error
 
 
 //// [privateNamesInGenericClasses.js]
+"use strict";
 class C {
     #foo;
     #method() { return this.#foo; }

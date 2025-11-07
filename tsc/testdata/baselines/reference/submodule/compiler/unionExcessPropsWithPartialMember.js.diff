@@ -1,8 +1,0 @@
---- old.unionExcessPropsWithPartialMember.js
-+++ new.unionExcessPropsWithPartialMember.js
-@@= skipped -17, +17 lines =@@
-
-
- //// [unionExcessPropsWithPartialMember.js]
--"use strict";
- ab = Object.assign(Object.assign({}, a), { y: null }); // Should be allowed, since `y` is missing on `A`

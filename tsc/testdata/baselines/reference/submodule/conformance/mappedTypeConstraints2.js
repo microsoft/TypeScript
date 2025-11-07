@@ -87,6 +87,7 @@ function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnde
 
 
 //// [mappedTypeConstraints2.js]
+"use strict";
 function f1(obj, key) {
     const x = obj[key];
 }

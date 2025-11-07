@@ -56,3 +56,4 @@ type TestBit<A extends Bit, B extends Bit> = AndBit<
 type TestBitRes = TestBit<1, 1>; 
 
 //// [deferredConditionalTypes.js]
+"use strict";

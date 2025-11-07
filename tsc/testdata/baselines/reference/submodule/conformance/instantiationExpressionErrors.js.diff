@@ -1,10 +1,9 @@
 --- old.instantiationExpressionErrors.js
 +++ new.instantiationExpressionErrors.js
-@@= skipped -106, +106 lines =@@
-
+@@= skipped -107, +107 lines =@@
 
  //// [instantiationExpressionErrors.js]
--"use strict";
+ "use strict";
 -var _a, _b, _c;
 +var _a, _b;
 +var _c;
@@ -41,7 +40,7 @@
  // Parsed as function call, even though this differs from JavaScript
  const x1 = f(true);
  // Parsed as relational expressions
-@@= skipped -29, +29 lines =@@
+@@= skipped -28, +29 lines =@@
  const r2 = f < true > +1;
  const r3 = f < true > -1;
  // All of the following are parsed as instantiation expressions

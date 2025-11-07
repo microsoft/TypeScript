@@ -14,6 +14,7 @@ function fx1(x: Variants) {
 
 
 //// [narrowingUnionToNeverAssigment.js]
+"use strict";
 function fx1(x) {
     if (x === "a" || x === "b") {
     }

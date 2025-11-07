@@ -468,6 +468,7 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
 
 
 //// [dependentDestructuredVariables.js]
+"use strict";
 function f10({ kind, payload }) {
     if (kind === 'A') {
         payload.toFixed();

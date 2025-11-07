@@ -19,6 +19,7 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 
 
 //// [strictTypeofUnionNarrowing.js]
+"use strict";
 function stringify1(anything) {
     return typeof anything === "string" ? anything.toUpperCase() : "";
 }

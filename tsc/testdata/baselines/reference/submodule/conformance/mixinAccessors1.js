@@ -24,6 +24,7 @@ class MyClass extends mixin(BaseClass) {
 }
 
 //// [mixinAccessors1.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/58790
 function mixin(superclass) {
     return class extends superclass {

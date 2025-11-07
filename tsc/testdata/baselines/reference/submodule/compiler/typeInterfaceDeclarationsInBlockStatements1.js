@@ -34,6 +34,7 @@ function f4() {
 
 
 //// [typeInterfaceDeclarationsInBlockStatements1.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/60175
 function f1() {
     if (true)

@@ -6,6 +6,7 @@ function f() {
 }
 
 //// [alwaysStrict.js]
+"use strict";
 function f() {
     var arguments = [];
 }

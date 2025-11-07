@@ -15,6 +15,7 @@ class C1 {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty9.js]
+"use strict";
 class C1 {
     a = "a"; // ok
     b = "b"; // ok

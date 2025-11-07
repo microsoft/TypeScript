@@ -19,6 +19,7 @@ class A {
 
 
 //// [privateNamesInNestedClasses-2.js]
+"use strict";
 class A {
     static #x = 5;
     constructor() {

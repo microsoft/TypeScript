@@ -1,8 +1,0 @@
---- old.partiallyNamedTuples3.js
-+++ new.partiallyNamedTuples3.js
-@@= skipped -6, +6 lines =@@
-
-
- //// [partiallyNamedTuples3.js]
--"use strict";
- const output = ((...args) => args)(...tuple);

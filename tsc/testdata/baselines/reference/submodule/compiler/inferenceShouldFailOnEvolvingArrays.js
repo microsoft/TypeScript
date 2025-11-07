@@ -21,6 +21,7 @@ zz.push(logLength(42));  // no error; T is inferred as `any`
 zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
 
 //// [inferenceShouldFailOnEvolvingArrays.js]
+"use strict";
 // repro from https://github.com/Microsoft/TypeScript/issues/25675
 // The type of `arg` blocks inference but simplifies to T.
 function logLength(arg) {

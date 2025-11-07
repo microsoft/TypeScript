@@ -1,11 +1,6 @@
 --- old.inferTypes1.js
 +++ new.inferTypes1.js
-@@= skipped -189, +189 lines =@@
-
-
- //// [inferTypes1.js]
--"use strict";
- function f1(s) {
+@@= skipped -194, +194 lines =@@
      return { a: 1, b: s };
  }
  class C {

@@ -53,6 +53,7 @@ let e4 = f({ a: 2 }, data);
 
 
 //// [objectLiteralNormalization.js]
+"use strict";
 // Object literals in unions are normalized upon widening
 let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
 a1.a; // number

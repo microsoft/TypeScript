@@ -1,8 +1,0 @@
---- old.wrappedAndRecursiveConstraints4.js
-+++ new.wrappedAndRecursiveConstraints4.js
-@@= skipped -28, +28 lines =@@
- var r = c.foo('');
- var r2 = r({ length: 3, charAt: (x) => {
-         '';
-+        '';
-     } }); // error

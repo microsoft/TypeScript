@@ -426,6 +426,7 @@ type AnyArr = [...any];
 
 
 //// [variadicTuples1.js]
+"use strict";
 // Variadics in tuple types
 // Variadics in array literals
 function tup2(t, u) {

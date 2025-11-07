@@ -27,5 +27,6 @@ React.createRef;
 React.createRef;
 export {};
 //// [emits.js]
+"use strict";
 console.log("hello");
 React.createRef;

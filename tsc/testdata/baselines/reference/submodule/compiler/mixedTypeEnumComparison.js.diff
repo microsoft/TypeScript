@@ -1,14 +1,6 @@
 --- old.mixedTypeEnumComparison.js
 +++ new.mixedTypeEnumComparison.js
-@@= skipped -41, +41 lines =@@
-
-
- //// [mixedTypeEnumComparison.js]
--"use strict";
- if (someNumber > 25 /* E.N2 */) {
-     someNumber = 25 /* E.N2 */;
- }
-@@= skipped -14, +13 lines =@@
+@@= skipped -55, +55 lines =@@
  (function (E2) {
      E2["S1"] = "foo";
      E2[E2["N1"] = 1000] = "N1";

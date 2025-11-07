@@ -27,6 +27,7 @@ class Foo2 {
 
 
 //// [privateNamesAssertion.js]
+"use strict";
 class Foo {
     #p1 = (v) => {
         if (typeof v !== "string") {

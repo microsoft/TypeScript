@@ -1,14 +1,6 @@
 --- old.intraExpressionInferences.js
 +++ new.intraExpressionInferences.js
-@@= skipped -333, +333 lines =@@
-
-
- //// [intraExpressionInferences.js]
--"use strict";
- // Repros from #47599
- callIt({
-     produce: () => 0,
-@@= skipped -60, +59 lines =@@
+@@= skipped -393, +393 lines =@@
  });
  // Repro from #41712
  class Wrapper {

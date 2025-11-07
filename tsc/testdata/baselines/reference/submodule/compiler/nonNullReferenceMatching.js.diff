@@ -1,10 +1,8 @@
 --- old.nonNullReferenceMatching.js
 +++ new.nonNullReferenceMatching.js
-@@= skipped -35, +35 lines =@@
- }
-
+@@= skipped -37, +37 lines =@@
  //// [nonNullReferenceMatching.js]
--"use strict";
+ "use strict";
  class Component {
 -    constructor() {
 -        this.thumbYElementRef = (ref) => {

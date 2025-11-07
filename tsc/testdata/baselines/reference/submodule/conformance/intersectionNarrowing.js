@@ -41,6 +41,7 @@ function f5<T extends string | number>(x: T & number) {
 
 
 //// [intersectionNarrowing.js]
+"use strict";
 // Repros from #43130
 function f1(x) {
     if (x) {

@@ -8,6 +8,7 @@ const f: FuncOrGeneratorFunc = function*() {
 }
 
 //// [contextualTypeOnYield1.js]
+"use strict";
 const f = function* () {
     yield (num) => console.log(num); // `num` should be inferred to have type `number`.
 };

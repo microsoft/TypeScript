@@ -248,6 +248,7 @@ type Huh = Wat<"y">;  // true
 
 
 //// [conditionalTypes2.js]
+"use strict";
 function f1(a, b) {
     a = b;
     b = a; // Error

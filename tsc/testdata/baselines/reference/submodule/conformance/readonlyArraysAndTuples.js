@@ -40,6 +40,7 @@ delete v[0 + 1]; // Error
 
 
 //// [readonlyArraysAndTuples.js]
+"use strict";
 function f1(ma, ra, mt, rt) {
     ma = ra; // Error
     ma = mt;

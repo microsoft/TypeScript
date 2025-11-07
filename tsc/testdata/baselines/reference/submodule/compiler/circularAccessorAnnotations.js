@@ -29,6 +29,7 @@ type T3 = {
 
 
 //// [circularAccessorAnnotations.js]
+"use strict";
 
 
 //// [circularAccessorAnnotations.d.ts]

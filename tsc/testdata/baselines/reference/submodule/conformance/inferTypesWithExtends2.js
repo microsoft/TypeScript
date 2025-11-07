@@ -12,3 +12,4 @@ type X2<T> =
     never;
 
 //// [inferTypesWithExtends2.js]
+"use strict";

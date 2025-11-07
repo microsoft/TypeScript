@@ -17,6 +17,7 @@ const b = (
 );
 
 //// [other.js]
+"use strict";
 /// <reference path="react18/react18.d.ts" />
 /// <reference path="react18/global.d.ts" />
 const b = (React.createElement(Foo, null,

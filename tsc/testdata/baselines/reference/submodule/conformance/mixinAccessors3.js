@@ -22,6 +22,7 @@ class MyClass extends mixin(BaseClass) {
 
 
 //// [mixinAccessors3.js]
+"use strict";
 function mixin(superclass) {
     return class extends superclass {
         get name() {

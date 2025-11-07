@@ -88,6 +88,7 @@ function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number
 
 
 //// [genericRestParameters3.js]
+"use strict";
 f1("foo", "abc");
 f1("foo", 10, true);
 f1("foo", ...t1);

@@ -12,8 +12,6 @@
  class B extends A {
 +    blub = 12;
      constructor() {
-+        "use strict";
-+        'someStringForEgngInject';
          "use strict";
          'someStringForEgngInject';
          super();

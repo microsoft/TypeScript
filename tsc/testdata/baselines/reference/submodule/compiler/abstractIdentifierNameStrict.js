@@ -12,6 +12,5 @@ function foo() {
 var abstract = true;
 function foo() {
     "use strict";
-    "use strict";
     var abstract = true;
 }

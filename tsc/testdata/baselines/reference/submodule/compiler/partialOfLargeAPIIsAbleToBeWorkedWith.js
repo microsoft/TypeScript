@@ -74,6 +74,7 @@ for (const k of keys) {
 
 
 //// [partialOfLargeAPIIsAbleToBeWorkedWith.js]
+"use strict";
 const obj = {};
 for (const k of keys) {
     obj[k] = () => "12"; // shouldn't cause a complexity error

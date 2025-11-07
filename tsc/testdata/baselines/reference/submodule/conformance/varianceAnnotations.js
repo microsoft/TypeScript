@@ -178,6 +178,7 @@ let OuterC = class C<out T> {
 
 
 //// [varianceAnnotations.js]
+"use strict";
 super_covariant = sub_covariant;
 sub_covariant = super_covariant; // Error
 super_contravariant = sub_contravariant; // Error

@@ -1,10 +1,9 @@
 --- old.privateNamesAndIndexedAccess.js
 +++ new.privateNamesAndIndexedAccess.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
 
  //// [privateNamesAndIndexedAccess.js]
--"use strict";
+ "use strict";
 -var _C_bar;
  class C {
 +    foo = 3;
@@ -15,7 +14,7 @@
          const ok = 3;
          // not supported yet, could support in future:
          const badForNow, #bar;
-@@= skipped -14, +12 lines =@@
+@@= skipped -13, +12 lines =@@
          const badAlways = 3; // Error
      }
  }

@@ -29,6 +29,7 @@ function f3(x: { _foo: number } & number) {
 }
 
 //// [narrowingTypeofFunction.js]
+"use strict";
 function f1(a) {
     if (typeof a === "function") {
         a;

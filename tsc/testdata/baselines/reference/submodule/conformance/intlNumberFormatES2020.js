@@ -27,6 +27,7 @@ const types: Intl.NumberFormatPartTypes[] = [ 'compact', 'unit', 'unknown' ];
 
 
 //// [intlNumberFormatES2020.js]
+"use strict";
 // New/updated resolved options in ES2020
 const { notation, style, signDisplay } = new Intl.NumberFormat('en-NZ').resolvedOptions();
 // Empty options

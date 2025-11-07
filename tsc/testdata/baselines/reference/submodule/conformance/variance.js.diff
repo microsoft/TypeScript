@@ -1,14 +1,6 @@
 --- old.variance.js
 +++ new.variance.js
-@@= skipped -28, +28 lines =@@
-
-
- //// [variance.js]
--"use strict";
- // Test cases for parameter variances affected by conditional types.
- const foo = { prop: true };
- const x = foo;
-@@= skipped -8, +7 lines =@@
+@@= skipped -36, +36 lines =@@
  const z = x;
  // Repro from #30118
  class Bar {

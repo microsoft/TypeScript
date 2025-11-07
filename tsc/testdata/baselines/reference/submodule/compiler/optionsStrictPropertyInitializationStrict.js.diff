@@ -1,8 +1,0 @@
---- old.optionsStrictPropertyInitializationStrict.js
-+++ new.optionsStrictPropertyInitializationStrict.js
-@@= skipped -4, +4 lines =@@
-
-
- //// [optionsStrictPropertyInitializationStrict.js]
--"use strict";
- var x;

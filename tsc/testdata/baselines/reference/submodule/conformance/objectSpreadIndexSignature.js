@@ -20,6 +20,7 @@ writable.a = 0;  // should be ok.
 
 
 //// [objectSpreadIndexSignature.js]
+"use strict";
 let i = Object.assign(Object.assign({}, indexed1), { b: 11 });
 // only indexed has indexer, so i[101]: any
 i[101];

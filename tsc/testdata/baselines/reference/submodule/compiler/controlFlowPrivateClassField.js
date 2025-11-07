@@ -29,6 +29,7 @@ class Example2 {
 }
 
 //// [controlFlowPrivateClassField.js]
+"use strict";
 class Example {
     #test;
     constructor(test) {

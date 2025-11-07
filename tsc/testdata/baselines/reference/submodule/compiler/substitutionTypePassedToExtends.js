@@ -9,3 +9,4 @@ type Bar2<T extends Set<unknown[]>> = T
 
 
 //// [substitutionTypePassedToExtends.js]
+"use strict";

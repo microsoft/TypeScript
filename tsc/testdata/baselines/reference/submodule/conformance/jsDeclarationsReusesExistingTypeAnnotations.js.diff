@@ -1,14 +1,6 @@
 --- old.jsDeclarationsReusesExistingTypeAnnotations.js
 +++ new.jsDeclarationsReusesExistingTypeAnnotations.js
-@@= skipped -104, +104 lines =@@
-
-
- //// [index.js]
--"use strict";
- class С1 {
-     /** @type {string=} */
-     p1 = undefined;
-@@= skipped -96, +95 lines =@@
+@@= skipped -200, +200 lines =@@
  }
  declare class С2 {
      /** @type {string=} */

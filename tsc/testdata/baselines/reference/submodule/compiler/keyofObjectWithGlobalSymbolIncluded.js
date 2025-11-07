@@ -9,6 +9,7 @@ type Q = keyof typeof obj;
 
 
 //// [keyofObjectWithGlobalSymbolIncluded.js]
+"use strict";
 const obj = {
     [Symbol.species]: Array
 };

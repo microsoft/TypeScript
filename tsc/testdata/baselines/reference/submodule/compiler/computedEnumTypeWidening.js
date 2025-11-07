@@ -80,6 +80,7 @@ val2 = MyDeclaredEnum.B;
 
 
 //// [computedEnumTypeWidening.js]
+"use strict";
 var E;
 (function (E) {
     E["A"] = computed(0);

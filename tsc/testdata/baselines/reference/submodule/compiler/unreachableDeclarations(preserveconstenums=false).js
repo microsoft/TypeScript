@@ -89,6 +89,7 @@ function func5() {
 
 
 //// [unreachableDeclarations.js]
+"use strict";
 function func1() {
     aFunc();
     console.log(EnumA.Value);

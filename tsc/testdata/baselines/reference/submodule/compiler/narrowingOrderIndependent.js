@@ -35,6 +35,7 @@ if (a.stringOrUndefined) {
 
 
 //// [narrowingOrderIndependent.js]
+"use strict";
 // Repro from #36709
 class A {
     stringOrUndefined;

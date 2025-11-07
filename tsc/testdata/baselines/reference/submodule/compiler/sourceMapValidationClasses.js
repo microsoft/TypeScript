@@ -44,7 +44,6 @@ var Foo;
     let Bar;
     (function (Bar) {
         "use strict";
-        "use strict";
         class Greeter {
             greeting;
             constructor(greeting) {

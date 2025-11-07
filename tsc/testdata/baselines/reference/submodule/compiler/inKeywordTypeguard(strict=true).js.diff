@@ -1,10 +1,8 @@
 --- old.inKeywordTypeguard(strict=true).js
 +++ new.inKeywordTypeguard(strict=true).js
-@@= skipped -386, +386 lines =@@
-
-
+@@= skipped -388, +388 lines =@@
  //// [inKeywordTypeguard.js]
--"use strict";
+ "use strict";
  class A {
 +    a;
  }
@@ -13,7 +11,7 @@
  }
  function negativeClassesTest(x) {
      if ("a" in x) {
-@@= skipped -22, +23 lines =@@
+@@= skipped -20, +22 lines =@@
      }
  }
  class AWithOptionalProp {

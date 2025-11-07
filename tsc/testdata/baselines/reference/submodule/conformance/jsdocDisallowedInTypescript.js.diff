@@ -1,12 +1,6 @@
 --- old.jsdocDisallowedInTypescript.js
 +++ new.jsdocDisallowedInTypescript.js
-@@= skipped -26, +26 lines =@@
-
-
- //// [jsdocDisallowedInTypescript.js]
--"use strict";
- // grammar error from checker
- var ara = [1, 2, 3];
+@@= skipped -32, +32 lines =@@
  function f(x, y) {
      return x ? x + y[1] : y[0];
  }

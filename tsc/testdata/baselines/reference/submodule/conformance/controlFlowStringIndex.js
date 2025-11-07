@@ -14,6 +14,7 @@ if (value.foo !== null) {
 
 
 //// [controlFlowStringIndex.js]
+"use strict";
 if (value.foo !== null) {
     value.foo.toExponential();
     value.other; // should still be number | null

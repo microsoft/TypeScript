@@ -43,6 +43,7 @@ class Foo {
 }
 
 //// [controlFlowForCatchAndFinally.js]
+"use strict";
 async function test() {
     let browser = undefined;
     let page = undefined;

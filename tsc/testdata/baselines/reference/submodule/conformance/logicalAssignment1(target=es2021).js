@@ -29,6 +29,7 @@ i ??= 42
 
 
 //// [logicalAssignment1.js]
+"use strict";
 a &&= "foo";
 b ||= "foo";
 c ??= "foo";

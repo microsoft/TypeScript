@@ -1,17 +1,14 @@
 --- old.mappedTypeGenericIndexedAccess.js
 +++ new.mappedTypeGenericIndexedAccess.js
-@@= skipped -46, +46 lines =@@
-
-
- //// [mappedTypeGenericIndexedAccess.js]
--"use strict";
+@@= skipped -49, +49 lines =@@
+ "use strict";
  // Repro from #49242
  class Test {
 +    entries;
      constructor() {
          this.entries = {};
      }
-@@= skipped -18, +18 lines =@@
+@@= skipped -15, +16 lines =@@
      [0]: (p) => console.log(p.foo),
      [1]: (p) => console.log(p.a),
  };

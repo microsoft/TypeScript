@@ -60,6 +60,7 @@ class Foo {
 
 
 //// [intersectionWithConflictingPrivates.js]
+"use strict";
 class A {
     x;
     y;

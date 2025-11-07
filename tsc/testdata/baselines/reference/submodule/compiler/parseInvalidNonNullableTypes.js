@@ -26,6 +26,7 @@ const d: !number = 1;
 
 
 //// [parseInvalidNonNullableTypes.js]
+"use strict";
 function f1(a) {
     return true;
 }

@@ -95,18 +95,21 @@ declare const console: { log(msg: any): void; };
 declare let x: number;
 
 //// [/user/username/projects/project/commonFile1.js] *new* 
+"use strict";
 let x = 1;
 
 //// [/user/username/projects/project/commonFile2.d.ts] *new* 
 declare let y: number;
 
 //// [/user/username/projects/project/commonFile2.js] *new* 
+"use strict";
 let y = 1;
 
 //// [/user/username/projects/project/other.d.ts] *new* 
 declare let z: number;
 
 //// [/user/username/projects/project/other.js] *new* 
+"use strict";
 let z = 0;
 
 //// [/user/username/projects/project/project1.tsconfig.tsbuildinfo] *new* 

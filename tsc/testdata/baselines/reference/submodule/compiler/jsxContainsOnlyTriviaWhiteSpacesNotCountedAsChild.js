@@ -23,6 +23,7 @@ function NoticeList(props: Props) {
 </NoticeList>;
 
 //// [jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.jsx]
+"use strict";
 function NoticeList(props) {
     return null;
 }

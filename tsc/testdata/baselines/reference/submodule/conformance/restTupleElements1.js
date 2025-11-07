@@ -72,6 +72,7 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 
 
 //// [restTupleElements1.js]
+"use strict";
 assign();
 assign();
 assign();

@@ -64,6 +64,7 @@ function doit2() {
 
 
 //// [mappedTypes5.js]
+"use strict";
 function f(p, r, pr, rp) {
     let a1 = p;
     let a2 = r;

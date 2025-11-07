@@ -85,6 +85,7 @@ class OkClass2<T> {
 
 
 //// [noInfer.js]
+"use strict";
 // NoInfer<T> is erased for primitives
 foo1('foo', 'foo'); // ok
 foo1('foo', 'bar'); // error

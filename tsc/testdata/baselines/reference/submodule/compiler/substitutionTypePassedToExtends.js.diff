@@ -1,7 +1,0 @@
---- old.substitutionTypePassedToExtends.js
-+++ new.substitutionTypePassedToExtends.js
-@@= skipped -8, +8 lines =@@
-
-
- //// [substitutionTypePassedToExtends.js]
--"use strict";

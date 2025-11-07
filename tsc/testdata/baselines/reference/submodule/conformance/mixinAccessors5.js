@@ -26,6 +26,7 @@ declare class TestB extends basicMixin(GetterA, GetterB) {
   
 
 //// [mixinAccessors5.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/61967
 
 

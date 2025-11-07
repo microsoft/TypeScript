@@ -155,6 +155,7 @@ F2({
 
 
 //// [excessPropertyCheckWithUnions.js]
+"use strict";
 let wrong = { tag: "T", a1: "extra" };
 wrong = { tag: "A", d20: 12 };
 wrong = { tag: "D" };

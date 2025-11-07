@@ -8,4 +8,5 @@ const leak = call(wrap(<T>(x: T) => x), 1);
 
 
 //// [nestedGenericSpreadInference.js]
+"use strict";
 const leak = call(wrap((x) => x), 1);

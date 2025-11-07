@@ -1,10 +1,8 @@
 --- old.protectedAccessThroughContextualThis.js
 +++ new.protectedAccessThroughContextualThis.js
-@@= skipped -23, +23 lines =@@
- }
-
+@@= skipped -25, +25 lines =@@
  //// [protectedAccessThroughContextualThis.js]
--"use strict";
+ "use strict";
  class Foo {
 +    protec = 'bar';
 +    privat = '';

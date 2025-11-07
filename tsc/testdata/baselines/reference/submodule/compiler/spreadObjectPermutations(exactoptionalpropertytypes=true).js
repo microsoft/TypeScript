@@ -23,6 +23,7 @@ const v_cba = { ...c, ...b, ...a };
 
 
 //// [spreadObjectPermutations.js]
+"use strict";
 const v_a = Object.assign({}, a);
 const v_b = Object.assign({}, b);
 const v_c = Object.assign({}, c);

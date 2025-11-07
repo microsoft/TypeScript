@@ -28,6 +28,7 @@ function getBreedSizeWithFunction(animal: Animal): string | undefined {
 
 
 //// [typePredicatesOptionalChaining3.js]
+"use strict";
 function getBreedSizeWithoutFunction(animal) {
     var _a;
     if (((_a = animal === null || animal === void 0 ? void 0 : animal.breed) === null || _a === void 0 ? void 0 : _a.size) != null) {

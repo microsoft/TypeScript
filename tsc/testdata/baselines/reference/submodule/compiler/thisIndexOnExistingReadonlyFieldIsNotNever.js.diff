@@ -1,10 +1,6 @@
 --- old.thisIndexOnExistingReadonlyFieldIsNotNever.js
 +++ new.thisIndexOnExistingReadonlyFieldIsNotNever.js
-@@= skipped -24, +24 lines =@@
-
-
- //// [thisIndexOnExistingReadonlyFieldIsNotNever.js]
--"use strict";
+@@= skipped -28, +28 lines =@@
  class CoachMarkAnchorDecorator {
      decorateComponent(anchor) {
          return class CoachMarkAnchor extends Component {

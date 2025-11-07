@@ -1,10 +1,8 @@
 --- old.strictPropertyInitialization.js
 +++ new.strictPropertyInitialization.js
-@@= skipped -162, +162 lines =@@
-
-
+@@= skipped -164, +164 lines =@@
  //// [strictPropertyInitialization.js]
--"use strict";
+ "use strict";
  // Properties with non-undefined types require initialization
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
@@ -112,7 +110,7 @@
  }
  // No strict initialization checks for abstract members
  class C9 {
-@@= skipped -81, +73 lines =@@
+@@= skipped -79, +72 lines =@@
  // Properties with non-undefined types must be assigned before they can be accessed
  // within their constructor
  class C10 {

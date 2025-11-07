@@ -31,6 +31,7 @@ cd = ca;  // Error
 
 
 //// [varianceAnnotationValidation.js]
+"use strict";
 // Repro from #49607
 ;
 class Dog {

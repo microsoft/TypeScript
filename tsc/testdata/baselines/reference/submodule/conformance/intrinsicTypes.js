@@ -58,6 +58,7 @@ function foo4<U extends string>(x: Uppercase<U>) {
 
 
 //// [intrinsicTypes.js]
+"use strict";
 function foo1(s, x, y) {
     s = x;
     s = y;

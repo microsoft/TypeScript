@@ -24,6 +24,7 @@ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
 
 
 //// [lambdaParameterWithTupleArgsHasCorrectAssignability.js]
+"use strict";
 class GenericClass {
     from;
 }

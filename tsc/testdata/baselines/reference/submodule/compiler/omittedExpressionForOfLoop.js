@@ -14,6 +14,7 @@ for (const [] of []) {
 }
 
 //// [omittedExpressionForOfLoop.js]
+"use strict";
 for (const [,] of doesNotExist) {
 }
 for (const [,] of undefined) {

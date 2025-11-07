@@ -39,6 +39,7 @@ if (v === 0) {
 
 
 //// [staticIndexSignature4.js]
+"use strict";
 class B {
 }
 class D {

@@ -19,6 +19,7 @@ const bar: Bar<any> = {};
 test(bar);
 
 //// [reverseMappedTypeRecursiveInference.js]
+"use strict";
 function test(value) {
     console.log(value);
     return undefined;

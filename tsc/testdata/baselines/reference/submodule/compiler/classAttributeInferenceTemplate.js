@@ -31,6 +31,7 @@ class MyClass2 {
 
 
 //// [classAttributeInferenceTemplate.js]
+"use strict";
 class MyClass {
     property;
     property2;

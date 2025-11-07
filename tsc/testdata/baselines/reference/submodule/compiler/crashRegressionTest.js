@@ -35,7 +35,6 @@ var MsPortal;
         let TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
-            "use strict";
             class StringTemplate {
                 _templateStorage;
                 constructor(templateStorage) {

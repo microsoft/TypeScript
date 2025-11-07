@@ -1,14 +1,6 @@
 --- old.inferTypeParameterConstraints.js
 +++ new.inferTypeParameterConstraints.js
-@@= skipped -40, +40 lines =@@
-
-
- //// [inferTypeParameterConstraints.js]
--"use strict";
- // Repro from #42636
- // https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
- class BaseClass {
-@@= skipped -9, +8 lines =@@
+@@= skipped -49, +49 lines =@@
      }
  }
  class Klass extends BaseClass {

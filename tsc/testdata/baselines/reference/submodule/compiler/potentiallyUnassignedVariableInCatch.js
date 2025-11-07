@@ -12,6 +12,7 @@ try {
 
 
 //// [potentiallyUnassignedVariableInCatch.js]
+"use strict";
 let foo;
 try {
     if (Math.random() > 0.5) {

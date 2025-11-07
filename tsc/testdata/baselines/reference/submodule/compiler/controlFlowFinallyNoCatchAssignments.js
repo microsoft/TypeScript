@@ -17,6 +17,7 @@ try {
 console.log(a); // <- error here
 
 //// [controlFlowFinallyNoCatchAssignments.js]
+"use strict";
 let x;
 x = Math.random();
 let a;

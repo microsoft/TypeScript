@@ -17,6 +17,7 @@ const getName2 = (person?: Person): string => {
 
 
 //// [typePredicatesOptionalChaining2.js]
+"use strict";
 const getName1 = (person) => {
     return typeof (person === null || person === void 0 ? void 0 : person.name) === 'string' ? person === null || person === void 0 ? void 0 : person.name : '';
 };

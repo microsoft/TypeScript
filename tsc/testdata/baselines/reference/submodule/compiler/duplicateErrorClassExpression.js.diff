@@ -1,10 +1,8 @@
 --- old.duplicateErrorClassExpression.js
 +++ new.duplicateErrorClassExpression.js
-@@= skipped -22, +22 lines =@@
- obj[x];
-
+@@= skipped -24, +24 lines =@@
  //// [duplicateErrorClassExpression.js]
--"use strict";
+ "use strict";
  class Base {
 +    foo;
  }

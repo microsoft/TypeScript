@@ -28,7 +28,6 @@
 +class B extends A {
 +    constructor() {
 +        'inject';
-+        'inject';
 +        super();
 +        const a = 1;
 +        const b = 1;
@@ -39,7 +38,7 @@
  function foo(method, _context) {
      return function () {
          method.call(this);
-@@= skipped -28, +18 lines =@@
+@@= skipped -28, +17 lines =@@
  }
  new B();
  // https://github.com/microsoft/TypeScript/issues/53448

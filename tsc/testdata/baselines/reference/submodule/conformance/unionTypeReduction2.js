@@ -68,6 +68,7 @@ function run(options: { something?(b?: string): void }) {
 
 
 //// [unionTypeReduction2.js]
+"use strict";
 function f1(x, y) {
     let z = !!true ? x : y; // { f(x?: string): void }
     z.f();

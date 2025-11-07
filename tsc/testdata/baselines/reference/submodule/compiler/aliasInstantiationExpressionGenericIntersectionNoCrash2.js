@@ -19,4 +19,5 @@ wat as Wat<string>;
 
 
 //// [aliasInstantiationExpressionGenericIntersectionNoCrash2.js]
+"use strict";
 wat;

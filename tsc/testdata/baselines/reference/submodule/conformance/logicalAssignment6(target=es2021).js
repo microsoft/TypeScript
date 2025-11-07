@@ -15,6 +15,7 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 
 
 //// [logicalAssignment6.js]
+"use strict";
 function foo1(results, results1) {
     (results ||= (results1 ||= [])).push(100);
 }

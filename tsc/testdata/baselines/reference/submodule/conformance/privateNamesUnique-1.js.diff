@@ -1,10 +1,9 @@
 --- old.privateNamesUnique-1.js
 +++ new.privateNamesUnique-1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
 
  //// [privateNamesUnique-1.js]
--"use strict";
+ "use strict";
 -var _A_foo, _B_foo;
  class A {
 -    constructor() {

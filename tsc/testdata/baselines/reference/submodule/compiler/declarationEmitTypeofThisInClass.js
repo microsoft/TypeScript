@@ -7,6 +7,7 @@ class Foo {
 }
 
 //// [declarationEmitTypeofThisInClass.js]
+"use strict";
 class Foo {
     foo;
     bar; //Public property 'bar' of exported class has or is using private name 'this'.(4031)

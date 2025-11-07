@@ -42,6 +42,7 @@ const elem6 = <obj. MemberClassComponent />;
 
 
 //// [jsxComponentTypeErrors.jsx]
+"use strict";
 function FunctionComponent({ type }) {
     return {
         type

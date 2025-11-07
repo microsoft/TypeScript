@@ -62,6 +62,7 @@ class A {
 
 
 //// [privateNamesIncompatibleModifiersJs.js]
+"use strict";
 class A {
     /**
      * @public

@@ -33,7 +33,6 @@ function foo() {
 let let = 10;
 function foo() {
     "use strict";
-    "use strict";
     var public = 10;
     var static = "hi";
     let let = "blah";

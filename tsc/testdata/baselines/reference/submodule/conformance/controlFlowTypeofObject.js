@@ -72,6 +72,7 @@ function f6(x: unknown) {
 
 
 //// [controlFlowTypeofObject.js]
+"use strict";
 function f1(x) {
     if (!x) {
         return;

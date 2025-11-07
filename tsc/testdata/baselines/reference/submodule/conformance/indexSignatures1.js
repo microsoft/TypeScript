@@ -325,6 +325,7 @@ type K2 = keyof Rec2;  // Id
 
 
 //// [indexSignatures1.js]
+"use strict";
 // Symbol index signature checking
 const sym = Symbol();
 function gg3(x, y, z) {

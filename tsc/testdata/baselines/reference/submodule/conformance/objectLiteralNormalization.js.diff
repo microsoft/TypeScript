@@ -1,14 +1,6 @@
 --- old.objectLiteralNormalization.js
 +++ new.objectLiteralNormalization.js
-@@= skipped -52, +52 lines =@@
-
-
- //// [objectLiteralNormalization.js]
--"use strict";
- // Object literals in unions are normalized upon widening
- let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
- a1.a; // number
-@@= skipped -94, +93 lines =@@
+@@= skipped -146, +146 lines =@@
      baz?: boolean;
  };
  declare let c1: {

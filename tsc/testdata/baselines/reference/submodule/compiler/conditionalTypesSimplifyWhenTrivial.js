@@ -68,6 +68,7 @@ const zee = z!!!; // since x is `any`, `x extends null | undefined` should be bo
 
 
 //// [conditionalTypesSimplifyWhenTrivial.js]
+"use strict";
 const fn1 = (params) => params;
 function fn2(x) {
     var y = x;

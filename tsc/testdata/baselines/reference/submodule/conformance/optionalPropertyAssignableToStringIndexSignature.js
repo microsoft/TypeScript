@@ -22,6 +22,7 @@ function f<T>() {
 
 
 //// [optionalPropertyAssignableToStringIndexSignature.js]
+"use strict";
 stringDictionary = optionalProperties; // ok
 stringDictionary = undefinedProperties; // error
 probablyArray = numberLiteralKeys; // error

@@ -49,6 +49,7 @@ else {
 }
 
 //// [errorOnEnumReferenceInCondition.js]
+"use strict";
 var Nums;
 (function (Nums) {
     Nums[Nums["Zero"] = 0] = "Zero";

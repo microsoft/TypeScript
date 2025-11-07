@@ -105,6 +105,7 @@ const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
 
 
 //// [noUncheckedIndexedAccess.js]
+"use strict";
 var NumericEnum1;
 (function (NumericEnum1) {
     NumericEnum1[NumericEnum1["A"] = 0] = "A";

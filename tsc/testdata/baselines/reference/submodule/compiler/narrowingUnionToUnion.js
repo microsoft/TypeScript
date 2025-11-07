@@ -266,6 +266,7 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
 
 
 //// [narrowingUnionToUnion.js]
+"use strict";
 function fx1(x) {
     if (isFalsy(x)) {
         x; // "" | 0 | undefined

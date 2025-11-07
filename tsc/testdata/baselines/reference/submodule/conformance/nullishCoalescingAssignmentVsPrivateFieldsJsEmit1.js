@@ -17,6 +17,7 @@ function neverThis(): never {
 
 
 //// [nullishCoalescingAssignmentVsPrivateFieldsJsEmit1.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/61109
 class Cls {
     #privateProp;

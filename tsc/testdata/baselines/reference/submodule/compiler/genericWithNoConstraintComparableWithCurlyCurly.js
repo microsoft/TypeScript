@@ -32,6 +32,7 @@ function yes<T extends object | null | undefined>() {
 }
 
 //// [genericWithNoConstraintComparableWithCurlyCurly.js]
+"use strict";
 function foo() {
     let x = {};
     x;

@@ -42,6 +42,7 @@ someNumber > E2.C1;
 
 
 //// [mixedTypeEnumComparison.js]
+"use strict";
 if (someNumber > 25 /* E.N2 */) {
     someNumber = 25 /* E.N2 */;
 }

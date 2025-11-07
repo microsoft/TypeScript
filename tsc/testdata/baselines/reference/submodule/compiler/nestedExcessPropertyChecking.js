@@ -92,6 +92,7 @@ const TEST_VALUE: ExtendedValue = {
 
 
 //// [nestedExcessPropertyChecking.js]
+"use strict";
 const ab1 = {}; // Error
 const ab2 = {}; // Error
 var E;

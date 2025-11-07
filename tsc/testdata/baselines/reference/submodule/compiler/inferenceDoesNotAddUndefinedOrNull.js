@@ -34,6 +34,7 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
 
 
 //// [inferenceDoesNotAddUndefinedOrNull.js]
+"use strict";
 function flatMapChildren(node, cb) {
     const result = [];
     node.forEachChild(child => {

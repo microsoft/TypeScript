@@ -27,6 +27,7 @@ function foo() {
 
 
 //// [coAndContraVariantInferences4.js]
+"use strict";
 function foo() {
     every(modifiers, isModifier);
     every(modifiers, isDecorator);

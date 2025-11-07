@@ -35,6 +35,7 @@ const increment2: (
 
 
 //// [asyncFunctionContextuallyTypedReturns.js]
+"use strict";
 f(v => v ? [0] : Promise.reject());
 f(async v => v ? [0] : Promise.reject());
 g(v => v ? "contextuallyTypable" : Promise.reject());

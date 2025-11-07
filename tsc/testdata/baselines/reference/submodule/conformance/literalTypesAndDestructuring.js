@@ -25,6 +25,7 @@ bar;  // "yo" | "ha"
 
 
 //// [literalTypesAndDestructuring.js]
+"use strict";
 var _a, _b, _c;
 let { a: a1 } = x;
 let { a: a2 = 0 } = x;

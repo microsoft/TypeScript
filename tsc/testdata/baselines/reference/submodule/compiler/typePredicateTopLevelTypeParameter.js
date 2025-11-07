@@ -18,6 +18,7 @@ const foundAdmins = admins.filter(isDefined);  // "admin"[]
 
 
 //// [typePredicateTopLevelTypeParameter.js]
+"use strict";
 // Repro from #51980
 function getPermissions(user) {
     if (user === 'Jack')

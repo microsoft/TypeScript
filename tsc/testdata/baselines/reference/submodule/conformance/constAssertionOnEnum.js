@@ -44,6 +44,7 @@ var Bar;
 let foo = Foo.A;
 let bar = Bar.A;
 //// [ns.js]
+"use strict";
 var ns;
 (function (ns) {
     let Foo;

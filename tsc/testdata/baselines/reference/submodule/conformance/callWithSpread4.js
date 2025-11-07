@@ -33,6 +33,7 @@ pli(...[reads, writes, writes] as const)
 
 
 //// [callWithSpread4.js]
+"use strict";
 pli(reads, ...gun, tr, fun, ...gz, writes);
 test(...anys);
 pli(...[reads, writes, writes]);

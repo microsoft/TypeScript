@@ -9,6 +9,7 @@ class A {
 
 
 //// [privateNameCircularReference.js]
+"use strict";
 class A {
     #foo = this.#bar;
     #bar = this.#foo;

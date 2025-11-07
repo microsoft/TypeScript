@@ -20,6 +20,7 @@ interface Y extends X<Y> {
 
 
 //// [circularBaseTypes.js]
+"use strict";
 // Repro from #38098
 ; // Error
 function f(m) {

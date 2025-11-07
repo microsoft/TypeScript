@@ -17,6 +17,7 @@ function foo3(results: number[] | undefined) {
 
 
 //// [logicalAssignment8.js]
+"use strict";
 function foo1(results) {
     (results ||= bar?.value ?? []).push(100);
 }

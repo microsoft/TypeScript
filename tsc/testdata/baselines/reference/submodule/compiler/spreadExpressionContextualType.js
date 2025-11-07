@@ -22,6 +22,7 @@ function test2<T extends Apple | Orange>(item: T): T {
 
 
 //// [spreadExpressionContextualType.js]
+"use strict";
 // Repro from #43966
 function test(item) {
     return Object.assign({}, item);

@@ -30,6 +30,7 @@ type Result5 = Example5<Record<'x', any>, Record<'y', any>>;  // "x" | "y"
 
 
 //// [keyofIntersection.js]
+"use strict";
 
 
 //// [keyofIntersection.d.ts]

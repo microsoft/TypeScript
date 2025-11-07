@@ -19,6 +19,7 @@ const b = <Button></Button>
 
 
 //// [tsxAttributesHasInferrableIndex.js]
+"use strict";
 function createElement(name, attributes, ...contents) {
     return name;
 }

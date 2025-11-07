@@ -28,6 +28,7 @@ const query = Object.entries(obj).map(
 
 
 //// [inferenceOptionalPropertiesToIndexSignatures.js]
+"use strict";
 let a1 = foo(x1); // string | number
 let a2 = foo(x2); // string | number | undefined
 let a3 = foo(x3); // string | number

@@ -1,9 +1,0 @@
---- old.voidParamAssignmentCompatibility.js
-+++ new.voidParamAssignmentCompatibility.js
-@@= skipped -12, +12 lines =@@
-
-
- //// [voidParamAssignmentCompatibility.js]
--"use strict";
- let gg = g;
- gg = o.method;

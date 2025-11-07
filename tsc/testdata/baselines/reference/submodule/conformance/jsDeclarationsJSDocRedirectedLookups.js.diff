@@ -1,14 +1,6 @@
 --- old.jsDeclarationsJSDocRedirectedLookups.js
 +++ new.jsDeclarationsJSDocRedirectedLookups.js
-@@= skipped -32, +32 lines =@@
- /** @type {event} */const q = undefined;
-
- //// [index.js]
--"use strict";
- // these are recognized as TS concepts by the checker
- /** @type {String} */ const a = "";
- /** @type {Number} */ const b = 0;
-@@= skipped -30, +29 lines =@@
+@@= skipped -62, +62 lines =@@
 
 
  //// [index.d.ts]

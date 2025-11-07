@@ -252,6 +252,7 @@ function f35431(a: A) {
 }
 
 //// [exhaustiveSwitchStatements1.js]
+"use strict";
 function f1(x) {
     if (!!true) {
         switch (x) {

@@ -18,6 +18,7 @@ if (isOneOf(kind, ['apple', 'banana'] as const)) {
 }
 
 //// [typePredicatesCanNarrowByDiscriminant.js]
+"use strict";
 if (isOneOf(fruit.kind, ['apple', 'banana'])) {
     fruit.kind;
     fruit;

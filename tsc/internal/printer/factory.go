@@ -399,7 +399,7 @@ func (f *NodeFactory) SplitStandardPrologue(source []*ast.Statement) (prologue [
 			return source[:i], source[i:]
 		}
 	}
-	return nil, source
+	return source, nil
 }
 
 // Splits a slice of statements into two parts: custom prologue statements (e.g., with `EFCustomPrologue` set) and the rest of the statements

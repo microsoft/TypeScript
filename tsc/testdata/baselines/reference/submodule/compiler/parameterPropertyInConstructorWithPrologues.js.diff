@@ -6,21 +6,17 @@
  class Foo1 {
 +    A;
      constructor(A) {
--        "ngInject1";
+         "ngInject1";
          this.A = A;
-+        "ngInject1";
      }
  }
  class Foo2 {
 +    A;
 +    B;
      constructor(A, B) {
--        "ngInject1";
--        "ngInject2";
-         this.A = A;
-         this.B = B;
-+        "ngInject1";
-+        "ngInject2";
+         "ngInject1";
+         "ngInject2";
+@@= skipped -14, +17 lines =@@
      }
  }
  class Foo3 {
@@ -28,34 +24,26 @@
 +    B;
 +    C;
      constructor(A, B, C) {
--        "ngInject1";
--        "ngInject2";
-         this.A = A;
-         this.B = B;
-         this.C = C;
-+        "ngInject1";
-+        "ngInject2";
+         "ngInject1";
+         "ngInject2";
+@@= skipped -9, +12 lines =@@
      }
  }
  class Foo4 {
 +    A;
      constructor(A) {
-+        "ngInject1";
          "ngInject1";
          this.A = A;
-         console.log("hi");
+@@= skipped -7, +8 lines =@@
      }
  }
  class Foo5 {
 +    A;
 +    B;
      constructor(A, B) {
-+        "ngInject1";
-+        "ngInject2";
          "ngInject1";
          "ngInject2";
-         this.A = A;
-@@= skipped -39, +51 lines =@@
+@@= skipped -9, +11 lines =@@
      }
  }
  class Foo6 {
@@ -63,37 +51,21 @@
 +    B;
 +    C;
      constructor(A, B, C) {
-+        "ngInject1";
-+        "ngInject2";
          "ngInject1";
          "ngInject2";
-         this.A = A;
-@@= skipped -10, +15 lines =@@
+@@= skipped -10, +13 lines =@@
      }
  }
  class Foo7 extends C {
 +    member;
      constructor(member) {
-+        "ngInject1";
          "ngInject1";
          super();
-         this.member = member;
-@@= skipped -8, +10 lines =@@
+@@= skipped -8, +9 lines =@@
      }
  }
  class Foo8 extends C {
 +    member;
      constructor(member) {
-+        "ngInject1";
          "ngInject1";
-         super();
-         this.member = member;
-@@= skipped -11, +13 lines =@@
- }
- class Foo9 extends C {
-     constructor() {
-+        "ngInject1";
-+        "ngInject2";
-         "ngInject1";
-         "ngInject2";
          super();

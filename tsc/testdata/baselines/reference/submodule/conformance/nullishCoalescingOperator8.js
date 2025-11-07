@@ -10,6 +10,7 @@ const n3 = a.m() ?? b.p ?? b.m() ?? "default";;
 
 
 //// [nullishCoalescingOperator8.js]
+"use strict";
 var _a, _b, _c, _d, _e;
 const n1 = (_a = a.p) !== null && _a !== void 0 ? _a : "default";
 const n2 = (_b = a.m()) !== null && _b !== void 0 ? _b : "default";

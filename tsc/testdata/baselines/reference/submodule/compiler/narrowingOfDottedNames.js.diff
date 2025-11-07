@@ -1,10 +1,7 @@
 --- old.narrowingOfDottedNames.js
 +++ new.narrowingOfDottedNames.js
-@@= skipped -93, +93 lines =@@
-
-
- //// [narrowingOfDottedNames.js]
--"use strict";
+@@= skipped -96, +96 lines =@@
+ "use strict";
  // Repro from #8383
  class A {
 +    prop;
@@ -14,7 +11,7 @@
  }
  function isA(x) {
      return x instanceof A;
-@@= skipped -34, +35 lines =@@
+@@= skipped -31, +33 lines =@@
  }
  // Repro from #28100
  class Foo1 {

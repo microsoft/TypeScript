@@ -297,12 +297,6 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 	prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Nodes)
 	statements := slices.Clone(prologue)
 
-	// ensure "use strict" if not present
-	if ast.IsExternalModule(tx.currentSourceFile) ||
-		tx.compilerOptions.AlwaysStrict.DefaultIfUnknown(tx.compilerOptions.Strict).IsTrue() {
-		statements = tx.Factory().EnsureUseStrict(statements)
-	}
-
 	// emit custom prologues from other transformations
 	custom, rest := tx.Factory().SplitCustomPrologue(rest)
 	statements = append(statements, core.FirstResult(tx.topLevelVisitor.VisitSlice(custom))...)

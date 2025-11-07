@@ -17,6 +17,7 @@ const foo3 = {
 
 
 //// [thisPredicateInObjectLiteral.js]
+"use strict";
 // Should be OK
 const foo2 = {
     isNumber() {

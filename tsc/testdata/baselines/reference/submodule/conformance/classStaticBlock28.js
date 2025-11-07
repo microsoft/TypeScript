@@ -12,6 +12,7 @@ class C {
 console.log(foo)
 
 //// [classStaticBlock28.js]
+"use strict";
 let foo;
 class C {
     static {

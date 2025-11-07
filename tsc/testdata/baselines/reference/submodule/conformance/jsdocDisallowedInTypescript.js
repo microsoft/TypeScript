@@ -27,6 +27,7 @@ var anys: Array<*>;
 
 
 //// [jsdocDisallowedInTypescript.js]
+"use strict";
 // grammar error from checker
 var ara = [1, 2, 3];
 function f(x, y) {

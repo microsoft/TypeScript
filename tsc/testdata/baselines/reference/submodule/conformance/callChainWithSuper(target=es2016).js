@@ -9,6 +9,7 @@ class Derived extends Base {
 }
 
 //// [callChainWithSuper.js]
+"use strict";
 // GH#34952
 class Base {
     method() { }

@@ -33,6 +33,7 @@ function bar3 (f?: (a: number) => void) {
 
 
 //// [logicalAssignment5.js]
+"use strict";
 function foo1(f) {
     f ??= (a => a);
     f(42);

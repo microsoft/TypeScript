@@ -25,6 +25,7 @@ const willErrorSomeDay: typeof A = class {}; // OK for now
 
 
 //// [privateNamesAndStaticFields.js]
+"use strict";
 class A {
     static #foo;
     static #bar;

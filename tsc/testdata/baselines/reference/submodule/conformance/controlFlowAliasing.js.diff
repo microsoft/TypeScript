@@ -1,14 +1,6 @@
 --- old.controlFlowAliasing.js
 +++ new.controlFlowAliasing.js
-@@= skipped -303, +303 lines =@@
- }
-
- //// [controlFlowAliasing.js]
--"use strict";
- // Narrowing by aliased conditional expressions
- function f10(x) {
-     const isString = typeof x === "string";
-@@= skipped -193, +192 lines =@@
+@@= skipped -496, +496 lines =@@
      }
  }
  class C10 {

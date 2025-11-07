@@ -119,6 +119,7 @@ function badSyntax(v: Foo) {
 
 
 //// [privateNameInInExpression.js]
+"use strict";
 class Foo {
     #field = 1;
     static #staticField = 2;

@@ -1,14 +1,6 @@
 --- old.numericEnumMappedType.js
 +++ new.numericEnumMappedType.js
-@@= skipped -39, +39 lines =@@
-
-
- //// [numericEnumMappedType.js]
--"use strict";
- // Repro from #31771
- var E1;
- (function (E1) {
-@@= skipped -18, +17 lines =@@
+@@= skipped -57, +57 lines =@@
  b2[e2] = "b";
  var N1;
  (function (N1) {

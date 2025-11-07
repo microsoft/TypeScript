@@ -41,6 +41,7 @@ f([container1, container2], (value1, value2) => {
 
 
 //// [numericStringLiteralTypes.js]
+"use strict";
 function f1(a, x) {
     let s = a[x]; // boolean
 }

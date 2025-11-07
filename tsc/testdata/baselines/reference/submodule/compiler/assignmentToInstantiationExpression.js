@@ -14,6 +14,7 @@ getValue2<number> = () => 1234;
 
 
 //// [assignmentToInstantiationExpression.js]
+"use strict";
 let obj = {};
 obj.fn = () => 1234;
 let getValue;

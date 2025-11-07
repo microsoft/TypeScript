@@ -304,6 +304,7 @@ class A53267 {
 }
 
 //// [controlFlowAliasing.js]
+"use strict";
 // Narrowing by aliased conditional expressions
 function f10(x) {
     const isString = typeof x === "string";

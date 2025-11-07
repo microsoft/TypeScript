@@ -54,6 +54,7 @@ class Foo<T extends string> {
 
 
 //// [spreadObjectOrFalsy.js]
+"use strict";
 function f1(a) {
     return Object.assign({}, a); // Error
 }

@@ -29,6 +29,7 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 
 
 //// [genericCallWithinOwnBodyCastTypeParameterIdentity.js]
+"use strict";
 const toThenable = (fn) => (input) => {
     const result = fn(input);
     return {

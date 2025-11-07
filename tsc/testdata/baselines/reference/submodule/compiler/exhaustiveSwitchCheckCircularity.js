@@ -40,6 +40,7 @@ function functionC(): void {
 
 
 //// [exhaustiveSwitchCheckCircularity.js]
+"use strict";
 // Repro from #47539
 function f() {
     let foo = "aaa";

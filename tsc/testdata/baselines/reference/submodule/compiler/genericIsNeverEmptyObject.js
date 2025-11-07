@@ -13,6 +13,7 @@ let o2: { b: string, x: number } = test(o1);
 
 
 //// [genericIsNeverEmptyObject.js]
+"use strict";
 // Repro from #29067
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};

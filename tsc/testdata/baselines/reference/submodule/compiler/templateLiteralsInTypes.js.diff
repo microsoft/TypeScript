@@ -1,9 +1,0 @@
---- old.templateLiteralsInTypes.js
-+++ new.templateLiteralsInTypes.js
-@@= skipped -6, +6 lines =@@
-
-
- //// [templateLiteralsInTypes.js]
--"use strict";
- const f = (hdr, val) => `${hdr}:\t${val}\r\n`;
- f("x").foo;

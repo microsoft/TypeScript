@@ -16,6 +16,7 @@ f1<"b">(event => { });
 
 
 //// [genericInferenceDefaultTypeParameter.js]
+"use strict";
 // Repro from #50858
 f1(event => { });
 f1(event => { });

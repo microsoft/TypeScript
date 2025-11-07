@@ -13,6 +13,7 @@ let t1 = a?.m?.({x: 12});
 t1 = a!.m!({x: 12});
 
 //// [callChain.3.js]
+"use strict";
 var _a, _b, _c, _d, _e;
 const n1 = (_a = a === null || a === void 0 ? void 0 : a.m) === null || _a === void 0 ? void 0 : _a.call(a, { x: 12 }); // should be an error (`undefined` is not assignable to `number`)
 const n2 = (_b = a === null || a === void 0 ? void 0 : a.m) === null || _b === void 0 ? void 0 : _b.call(a, { x: absorb() }); // likewise

@@ -138,6 +138,7 @@ function f2() {
 }
 
 //// [inferTypesWithExtends1.js]
+"use strict";
 function f1() {
     return x1;
 }

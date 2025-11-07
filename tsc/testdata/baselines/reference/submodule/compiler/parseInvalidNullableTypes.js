@@ -28,6 +28,7 @@ let h: undefined?;
 
 
 //// [parseInvalidNullableTypes.js]
+"use strict";
 function f1(a) {
     return true;
 }

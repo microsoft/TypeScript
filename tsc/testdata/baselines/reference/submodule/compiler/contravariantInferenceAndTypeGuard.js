@@ -30,6 +30,7 @@ const x: List<Test> = filter1; // $ExpectType List<Test>
 
 
 //// [contravariantInferenceAndTypeGuard.js]
+"use strict";
 const list2 = new List();
 const filter1 = list2.filter(function (item, node, list) {
     this.b; // $ExpectType string

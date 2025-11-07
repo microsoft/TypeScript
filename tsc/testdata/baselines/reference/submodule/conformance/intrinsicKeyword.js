@@ -24,6 +24,7 @@ function f3() {
 
 
 //// [intrinsicKeyword.js]
+"use strict";
 let e1;
 let e2;
 function f1() {

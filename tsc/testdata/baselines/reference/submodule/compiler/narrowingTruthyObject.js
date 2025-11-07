@@ -33,6 +33,7 @@ function f1(x: unknown): any {
 
 
 //// [narrowingTruthyObject.js]
+"use strict";
 function foo(x, b) {
     if (typeof x === 'object') {
         x.toString();

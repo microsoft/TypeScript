@@ -24,6 +24,7 @@ function foo(options?: { a: string, b: number }) {
 
 
 //// [propertyAccessWidening.js]
+"use strict";
 // Repro from #31762
 function g1(headerNames) {
     let t = [{ hasLineBreak: false, cells: [] }];

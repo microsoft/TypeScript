@@ -610,6 +610,7 @@ function f50(obj: Test5) {
 }
 
 //// [controlFlowOptionalChain.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
 let a;
 o === null || o === void 0 ? void 0 : o[a = 1];

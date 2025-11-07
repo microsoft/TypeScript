@@ -234,6 +234,7 @@ const f = (value: Union) => {
 
 
 //// [strictSubtypeAndNarrowing.js]
+"use strict";
 // Check that `any` is a strict supertype of `unknown`
 const a11 = [x11, x12];
 const a12 = [x12, x11];

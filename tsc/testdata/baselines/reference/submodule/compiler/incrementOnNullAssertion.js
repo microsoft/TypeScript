@@ -17,6 +17,7 @@ else {
 
 
 //// [incrementOnNullAssertion.js]
+"use strict";
 const x = 'bar';
 let foo = {};
 if (foo[x] === undefined) {

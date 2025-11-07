@@ -12,6 +12,7 @@ class C {
 
 
 //// [thisShadowingErrorSpans.js]
+"use strict";
 class C {
     m() {
         this.m();

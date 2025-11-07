@@ -15,6 +15,7 @@ function bar(this: string | number) {
 }
 
 //// [controlFlowAnalysisOnBareThisKeyword.js]
+"use strict";
 function bigger() {
     if (isBig(this)) {
         this.big; // Expect property to exist

@@ -15,6 +15,7 @@ class A1 {
 
 
 //// [privateNameStaticMethod.js]
+"use strict";
 class A1 {
     static #method(param) {
         return "";

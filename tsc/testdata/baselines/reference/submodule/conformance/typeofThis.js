@@ -146,6 +146,7 @@ class Tests12 {
 }
 
 //// [typeofThis.js]
+"use strict";
 class Test {
     data = {};
     constructor() {

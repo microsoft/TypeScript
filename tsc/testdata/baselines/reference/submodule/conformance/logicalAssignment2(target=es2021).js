@@ -31,6 +31,7 @@ c.foo.bar().baz ??= result.foo.bar().baz
 
 
 //// [logicalAssignment2.js]
+"use strict";
 a.baz &&= result.baz;
 b.baz ||= result.baz;
 c.baz ??= result.baz;

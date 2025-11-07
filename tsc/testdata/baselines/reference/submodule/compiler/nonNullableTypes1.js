@@ -38,6 +38,7 @@ class A {
 
 
 //// [nonNullableTypes1.js]
+"use strict";
 function f1(x) {
     let y = x || "hello"; // NonNullable<T> | string
 }

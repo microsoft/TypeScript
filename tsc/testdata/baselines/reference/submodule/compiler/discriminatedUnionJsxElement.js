@@ -25,6 +25,7 @@ function ListItem(_data: IListItemData) {
 
 
 //// [discriminatedUnionJsxElement.jsx]
+"use strict";
 // Repro from #46021
 function Menu(data) {
     var _a;

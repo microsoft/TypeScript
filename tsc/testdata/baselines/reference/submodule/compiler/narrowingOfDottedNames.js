@@ -94,6 +94,7 @@ while (target) {
 
 
 //// [narrowingOfDottedNames.js]
+"use strict";
 // Repro from #8383
 class A {
     prop;

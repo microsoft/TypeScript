@@ -17,6 +17,7 @@ function foo3(results: number[] | undefined) {
 
 
 //// [logicalAssignment8.js]
+"use strict";
 function foo1(results) {
     var _a;
     (results || (results = (_a = bar === null || bar === void 0 ? void 0 : bar.value) !== null && _a !== void 0 ? _a : [])).push(100);

@@ -24,6 +24,7 @@ const bindCopy2: BindingFunction = function () {
 }
 
 //// [protectedAccessThroughContextualThis.js]
+"use strict";
 class Foo {
     protec = 'bar';
     privat = '';

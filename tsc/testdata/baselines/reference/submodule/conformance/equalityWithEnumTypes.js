@@ -45,6 +45,7 @@ function f2(v: E2) {
 
 
 //// [equalityWithEnumTypes.js]
+"use strict";
 // Literal enum type
 var E1;
 (function (E1) {

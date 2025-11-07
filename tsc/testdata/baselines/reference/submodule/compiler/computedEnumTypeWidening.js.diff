@@ -1,10 +1,7 @@
 --- old.computedEnumTypeWidening.js
 +++ new.computedEnumTypeWidening.js
-@@= skipped -79, +79 lines =@@
-
-
- //// [computedEnumTypeWidening.js]
--"use strict";
+@@= skipped -82, +82 lines =@@
+ "use strict";
  var E;
  (function (E) {
 -    E[E["A"] = computed(0)] = "A";
@@ -22,7 +19,7 @@
  })(E || (E = {}));
  function f1() {
      const c1 = E.B; // Fresh E.B
-@@= skipped -51, +54 lines =@@
+@@= skipped -48, +52 lines =@@
  let v1 = E.B;
  let v2 = E.B;
  class C {

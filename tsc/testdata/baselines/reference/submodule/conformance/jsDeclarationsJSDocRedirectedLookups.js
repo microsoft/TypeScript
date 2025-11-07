@@ -33,6 +33,7 @@
 /** @type {event} */const q = undefined;
 
 //// [index.js]
+"use strict";
 // these are recognized as TS concepts by the checker
 /** @type {String} */ const a = "";
 /** @type {Number} */ const b = 0;

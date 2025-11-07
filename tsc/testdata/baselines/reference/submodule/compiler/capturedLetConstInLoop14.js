@@ -17,6 +17,7 @@ function foo(x: number) {
 
 
 //// [capturedLetConstInLoop14.js]
+"use strict";
 function use(v) { }
 function foo(x) {
     var v = 1;

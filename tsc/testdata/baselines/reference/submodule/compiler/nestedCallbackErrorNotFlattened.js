@@ -9,4 +9,5 @@ declare let y: Cb<Cb<Cb<Cb<string>>>>;
 y = x;
 
 //// [nestedCallbackErrorNotFlattened.js]
+"use strict";
 y = x;

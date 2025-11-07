@@ -66,6 +66,7 @@ if (state) {
 
 
 //// [controlFlowManyCallExpressionStatementsPerf.js]
+"use strict";
 function test(x) { return x; }
 let state = true;
 if (state) {

@@ -26,6 +26,7 @@ mapped8({foo: s => 42});
 mapped9({foo: s => 42});
 
 //// [mappedTypeContextualTypesApplied.js]
+"use strict";
 mapped1({ foo: s => 42 });
 mapped2({ foo: s => 42 });
 mapped3({ foo: s => 42 });

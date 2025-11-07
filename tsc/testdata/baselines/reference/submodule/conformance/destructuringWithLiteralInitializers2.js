@@ -31,6 +31,7 @@ function f43([x = 0, y = 'bar'] = [sx, nx]) {}
 
 
 //// [destructuringWithLiteralInitializers2.js]
+"use strict";
 function f00([x, y]) { }
 function f01([x, y] = []) { }
 function f02([x, y] = [1]) { }

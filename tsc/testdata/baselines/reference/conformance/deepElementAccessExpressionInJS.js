@@ -16,6 +16,7 @@ function calculatePropertyName(index) {
 
 
 //// [elementAccessExpressionInJS.js]
+"use strict";
 if (module[calculatePropertyName(1)]) {
 }
 function calculatePropertyName(index) {

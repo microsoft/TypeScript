@@ -22,6 +22,7 @@ f.register(s, null);
 f.unregister(s);
 
 //// [acceptSymbolAsWeakType.js]
+"use strict";
 const s = Symbol('s');
 const ws = new WeakSet([s]);
 ws.add(s);

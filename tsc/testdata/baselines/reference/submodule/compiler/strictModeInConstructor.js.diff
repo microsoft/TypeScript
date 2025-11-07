@@ -7,7 +7,6 @@
 +    s = 9;
      constructor() {
          "use strict"; // No error
-+        "use strict"; // No error
          super();
 -        this.s = 9;
      }
@@ -34,7 +33,6 @@
 +    static s = 9;
      constructor() {
          "use strict"; // No error
-+        "use strict"; // No error
          super();
      }
  }

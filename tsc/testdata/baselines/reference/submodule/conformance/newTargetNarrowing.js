@@ -13,6 +13,7 @@ f.marked = true;
 
 
 //// [newTargetNarrowing.js]
+"use strict";
 function foo(x) { }
 function f() {
     if (new.target.marked === true) {

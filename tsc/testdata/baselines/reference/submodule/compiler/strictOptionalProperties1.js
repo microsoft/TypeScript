@@ -238,6 +238,7 @@ type UC = UA & UB;  // undefined
 
 
 //// [strictOptionalProperties1.js]
+"use strict";
 function f1(obj) {
     let a = obj.a; // string | undefined
     let b = obj.b; // string | undefined

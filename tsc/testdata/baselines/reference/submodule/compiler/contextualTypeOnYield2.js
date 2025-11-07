@@ -7,6 +7,7 @@ const g: OrGen = function* () {
 }
 
 //// [contextualTypeOnYield2.js]
+"use strict";
 const g = function* () {
     return (num) => console.log(num);
 };

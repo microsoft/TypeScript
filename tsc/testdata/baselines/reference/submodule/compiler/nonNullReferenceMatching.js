@@ -36,6 +36,7 @@ class Component {
 }
 
 //// [nonNullReferenceMatching.js]
+"use strict";
 class Component {
     props;
     thumbYElementRef = (ref) => {

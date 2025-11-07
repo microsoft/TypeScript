@@ -76,6 +76,7 @@ declare const iter2: IteratorObject<string>;
 const iter3 = iter2.flatMap(() => g1);
 
 //// [builtinIterator.js]
+"use strict";
 const iterator = Iterator.from([0, 1, 2]);
 const mapped = iterator.map(String);
 const filtered = iterator.filter(x => x > 0);

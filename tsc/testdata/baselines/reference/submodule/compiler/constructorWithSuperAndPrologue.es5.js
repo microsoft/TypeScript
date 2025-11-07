@@ -30,7 +30,6 @@ class A {
 class B extends A {
     constructor() {
         "ngInject";
-        "ngInject";
         console.log("B");
         super();
     }

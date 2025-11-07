@@ -14,6 +14,7 @@ BigInt(undefined)
 
 
 //// [constructBigint.js]
+"use strict";
 BigInt(1);
 BigInt(1n);
 BigInt("0");

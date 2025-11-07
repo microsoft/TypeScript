@@ -28,6 +28,7 @@ const r2 = Moon({
 
 
 //// [multipleInferenceContexts.js]
+"use strict";
 const r2 = Moon({
     data: { msg: "" },
     render() {

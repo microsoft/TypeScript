@@ -1,8 +1,0 @@
---- old.controlFlowInitializedDestructuringVariables.js
-+++ new.controlFlowInitializedDestructuringVariables.js
-@@= skipped -8, +8 lines =@@
-
-
- //// [controlFlowInitializedDestructuringVariables.js]
--"use strict";
- const { a = "0", b = +a, } = obj;

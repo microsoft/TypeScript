@@ -104,6 +104,7 @@ type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 
 
 //// [mappedTypesArraysTuples.js]
+"use strict";
 let y10 = unboxify(x10);
 let y11 = unboxify(x11);
 let y12 = unboxify(x12);

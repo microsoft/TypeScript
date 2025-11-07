@@ -22,6 +22,7 @@ class A {
 
 
 //// [readonlyArraysAndTuples2.js]
+"use strict";
 class A {
     @someDec
     j = [];

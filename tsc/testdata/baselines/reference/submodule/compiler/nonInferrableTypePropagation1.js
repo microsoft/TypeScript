@@ -31,5 +31,6 @@ const result2 = createAndUnbox(() => thing.pipe(
 
 
 //// [nonInferrableTypePropagation1.js]
+"use strict";
 const result1 = createAndUnbox(() => thing.pipe(map((data) => box(data)), tap((v) => log(v))));
 const result2 = createAndUnbox(() => thing.pipe(tap((v) => log(v)), map((data) => box(data))));

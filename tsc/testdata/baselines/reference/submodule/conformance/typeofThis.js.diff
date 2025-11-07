@@ -1,10 +1,8 @@
 --- old.typeofThis.js
 +++ new.typeofThis.js
-@@= skipped -145, +145 lines =@@
- }
-
+@@= skipped -147, +147 lines =@@
  //// [typeofThis.js]
--"use strict";
+ "use strict";
  class Test {
 +    data = {};
      constructor() {
@@ -21,7 +19,7 @@
          var copy = { foo: '' };
          var foo = '';
          var self = this;
-@@= skipped -28, +27 lines =@@
+@@= skipped -26, +26 lines =@@
      let x = 1;
  }
  class Test5 {

@@ -49,6 +49,7 @@ enum StrExt {
 }
 
 //// [isolatedDeclarationErrorsEnums.js]
+"use strict";
 var E;
 (function (E) {
     E["A"] = computed(0);

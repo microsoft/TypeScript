@@ -23,6 +23,7 @@ let obj: { 3: string } = { 3: "three" };
 obj[x];
 
 //// [duplicateErrorClassExpression.js]
+"use strict";
 class Base {
     foo;
 }

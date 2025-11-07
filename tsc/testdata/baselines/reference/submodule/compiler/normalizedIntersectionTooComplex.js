@@ -40,6 +40,7 @@ const comp = ctor({ common: "ok", ref: x => console.log(x) });
 
 
 //// [normalizedIntersectionTooComplex.js]
+"use strict";
 // Repro from #30050
 const ctor = getCtor(all);
 const comp = ctor({ common: "ok", ref: x => console.log(x) });

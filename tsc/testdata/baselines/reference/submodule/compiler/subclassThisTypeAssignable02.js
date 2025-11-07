@@ -35,10 +35,12 @@ const test9 = new C();
 
 
 //// [tile1.js]
+"use strict";
 class C {
     view(v) { return 0; }
 }
 const test8 = new C();
 //// [file1.js]
+"use strict";
 /** @type {ClassComponent<any>} */
 const test9 = new C();
