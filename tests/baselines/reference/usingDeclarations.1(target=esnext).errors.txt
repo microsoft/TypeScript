@@ -1,0 +1,28 @@
+usingDeclarations.1.ts(100,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarations.1.ts(104,9): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+usingDeclarations.1.ts(111,13): error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+
+
+==== usingDeclarations.1.ts (3 errors) ====
+    switch (Math.random()) {
+        case 0:
+            using d20 = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+
+        case 1:
+            using d21 = { [Symbol.dispose]() {} };
+            ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+            break;
+    }
+
+    if (true)
+        switch (0) {
+            case 0:
+                using d22 = { [Symbol.dispose]() {} };
+                ~~~~~
+!!! error TS95198: A 'using' declaration cannot be placed within a 'case' or 'default' clause.
+                break;
+        }
