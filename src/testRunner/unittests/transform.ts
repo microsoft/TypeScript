@@ -55,6 +55,22 @@ describe("unittests:: TransformAPI", () => {
         return (file: T) => file;
     }
 
+    function transformInitializerToDefaultJSDoc<T extends ts.SourceFile | ts.Bundle>(context: ts.TransformationContext) {
+        return (file: T) => {
+            if (!ts.isSourceFile(file)) {
+                return file;
+            }
+            const visitor: ts.Visitor = (node: ts.Node): ts.VisitResult<ts.Node> => {
+                if (ts.isPropertyDeclaration(node) && node.initializer) {
+                    return ts.addSyntheticLeadingComment(node, /*kind*/ ts.SyntaxKind.MultiLineCommentTrivia, /*text*/ `* @default \`${node.initializer.getText()}\``, /*hasTrailingNewLine*/ true);
+                }
+                return ts.visitEachChild(node, visitor, context);
+            };
+
+            return ts.visitNode(file, visitor) as T;
+        };
+    }
+
     function replaceIdentifiersNamedOldNameWithNewName2(context: ts.TransformationContext) {
         const visitor = (node: ts.Node): ts.Node => {
             if (ts.isIdentifier(node) && node.text === "oldName") {
@@ -391,6 +407,25 @@ describe("unittests:: TransformAPI", () => {
                 declaration: true,
             },
         });
+    });
+
+    testBaseline("transformDeclarationFileBefore", () => {
+        return baselineDeclarationTransform(
+            `
+                export class Test { 
+                    public foo: string = "bar" 
+                }
+            `,
+            {
+                transformers: {
+                    beforeDeclarations: [transformInitializerToDefaultJSDoc],
+                },
+                compilerOptions: {
+                    newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                    declaration: true,
+                },
+            },
+        );
     });
 
     // https://github.com/microsoft/TypeScript/issues/33295
