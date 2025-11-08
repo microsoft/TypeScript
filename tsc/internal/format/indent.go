@@ -66,8 +66,11 @@ func getIndentationForNodeWorker(
 			// }, {                  itself contributes nothing.
 			//   prop: 1        L3 - The indentation of the second object literal is best understood by
 			// })                    looking at the relationship between the list and *first* list item.
-			listLine, _ := getStartLineAndCharacterForNode(firstListChild, sourceFile)
-			listIndentsChild := firstListChild != nil && listLine > containingListOrParentStartLine
+			var listIndentsChild bool
+			if firstListChild != nil {
+				listLine, _ := getStartLineAndCharacterForNode(firstListChild, sourceFile)
+				listIndentsChild = listLine > containingListOrParentStartLine
+			}
 			actualIndentation := getActualIndentationForListItem(current, sourceFile, options, listIndentsChild)
 			if actualIndentation != -1 {
 				return actualIndentation + indentationDelta
