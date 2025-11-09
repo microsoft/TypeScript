@@ -1,0 +1,18 @@
+// === Inlay Hints ===
+    tuples.forEach((t) => {})
+                   ^
+{
+  "text": "callbackfn:",
+  "position": 72,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    tuples.forEach((t) => {})
+                     ^
+{
+  "text": ": [string, string]",
+  "position": 74,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
