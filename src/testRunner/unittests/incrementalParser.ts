@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
 function withChange(text: ts.IScriptSnapshot, start: number, length: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     const contents = ts.getSnapshotText(text);
@@ -120,7 +120,7 @@ function insertCode(source: string, index: number, toInsert: string) {
     }
 }
 
-describe("unittests:: Incremental Parser", () => {
+describe("unittests:: incrementalParser::", () => {
     it("Inserting into method", () => {
         const source = "class C {\r\n" +
             "    public foo1() { }\r\n" +
@@ -160,7 +160,7 @@ describe("unittests:: Incremental Parser", () => {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
     });
 
     it("Regular expression 2", () => {
@@ -804,6 +804,15 @@ module m3 { }\
 
         const index = source.indexOf("extends");
         deleteCode(source, index, "extends IFoo<T>");
+    });
+
+    it("when comment changes to incomplete", () => {
+        const source = "function bug(\r\n    test /** */ true = test test 123\r\n) {}";
+        const oldText = ts.ScriptSnapshot.fromString(source);
+        const index = source.indexOf("/");
+        const newTextAndChange = withChange(oldText, index, 1, "");
+
+        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
     });
 
     it("Type after incomplete enum 1", () => {

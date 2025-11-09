@@ -8,11 +8,11 @@ enum TopLevelEnum {
 >ThisWasAllowedButShouldNotBe : Symbol(TopLevelEnum.ThisWasAllowedButShouldNotBe, Decl(this_inside-enum-should-not-be-allowed.ts, 0, 19))
 }
 
-module ModuleEnum {
+namespace ModuleEnum {
 >ModuleEnum : Symbol(ModuleEnum, Decl(this_inside-enum-should-not-be-allowed.ts, 2, 1))
 
     enum EnumInModule {
->EnumInModule : Symbol(EnumInModule, Decl(this_inside-enum-should-not-be-allowed.ts, 4, 19))
+>EnumInModule : Symbol(EnumInModule, Decl(this_inside-enum-should-not-be-allowed.ts, 4, 22))
 
         WasADifferentError = this // this was handled as if this was in a module
 >WasADifferentError : Symbol(EnumInModule.WasADifferentError, Decl(this_inside-enum-should-not-be-allowed.ts, 5, 23))

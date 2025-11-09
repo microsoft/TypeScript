@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
-// @Filename: /a/index.ts
+// @Filename: /home/src/workspaces/project/a/index.ts
 ////namespace NS {
 ////    export function /*1*/FA() {
 ////        FB();
@@ -17,7 +17,7 @@
 ////    FC() { },
 //// };
 
-// @Filename: /a/tsconfig.json
+// @Filename: /home/src/workspaces/project/a/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "references": [
@@ -29,7 +29,7 @@
 ////    ],
 ////}
 
-// @Filename: /b/index.ts
+// @Filename: /home/src/workspaces/project/b/index.ts
 ////namespace NS {
 ////    export function /*4*/FB() {}
 ////}
@@ -40,7 +40,7 @@
 ////
 ////const ib: I = { FB() {} };
 
-// @Filename: /b/tsconfig.json
+// @Filename: /home/src/workspaces/project/b/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "files": [
@@ -48,7 +48,7 @@
 ////    ],
 ////}
 
-// @Filename: /c/index.ts
+// @Filename: /home/src/workspaces/project/c/index.ts
 ////namespace NS {
 ////    export function /*7*/FC() {}
 ////}
@@ -59,7 +59,7 @@
 ////
 ////const ic: I = { FC() {} };
 
-// @Filename: /c/tsconfig.json
+// @Filename: /home/src/workspaces/project/c/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "files": [
@@ -67,7 +67,7 @@
 ////    ],
 ////}
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
 ////        "composite": true,
@@ -78,7 +78,7 @@
 ////    "files": []
 ////}
 
-// @Filename: /tsconfig.settings.json
+// @Filename: /home/src/workspaces/project/tsconfig.settings.json
 ////{
 ////    "compilerOptions": {
 ////        "composite": true,

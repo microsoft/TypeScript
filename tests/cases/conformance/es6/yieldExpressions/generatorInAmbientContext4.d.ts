@@ -1,4 +1,4 @@
 //@target: ES6
-declare module M {
+declare namespace M {
     function *generator(): any;
 }

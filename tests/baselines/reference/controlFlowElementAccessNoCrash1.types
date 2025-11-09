@@ -1,0 +1,105 @@
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccessNoCrash1.ts] ////
+
+=== controlFlowElementAccessNoCrash1.ts ===
+interface TestTscEdit {
+  caption: string;
+>caption : string
+>        : ^^^^^^
+
+  commandLineArgs?: readonly string[];
+>commandLineArgs : readonly string[] | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface TestTscCompile {
+  subScenario: string;
+>subScenario : string
+>            : ^^^^^^
+
+  commandLineArgs: readonly string[];
+>commandLineArgs : readonly string[]
+>                : ^^^^^^^^^^^^^^^^^
+}
+
+interface VerifyTscEditDiscrepanciesInput {
+  index: number;
+>index : number
+>      : ^^^^^^
+
+  edits: readonly TestTscEdit[];
+>edits : readonly TestTscEdit[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+
+  commandLineArgs: TestTscCompile["commandLineArgs"];
+>commandLineArgs : readonly string[]
+>                : ^^^^^^^^^^^^^^^^^
+}
+
+function testTscCompile(input: TestTscCompile) {}
+>testTscCompile : (input: TestTscCompile) => void
+>               : ^     ^^              ^^^^^^^^^
+>input : TestTscCompile
+>      : ^^^^^^^^^^^^^^
+
+function verifyTscEditDiscrepancies({
+>verifyTscEditDiscrepancies : ({ index, edits, commandLineArgs, }: VerifyTscEditDiscrepanciesInput) => void
+>                           : ^                                  ^^                               ^^^^^^^^^
+
+  index,
+>index : number
+>      : ^^^^^^
+
+  edits,
+>edits : readonly TestTscEdit[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+
+  commandLineArgs,
+>commandLineArgs : readonly string[]
+>                : ^^^^^^^^^^^^^^^^^
+
+}: VerifyTscEditDiscrepanciesInput) {
+  const { caption } = edits[index];
+>caption : string
+>        : ^^^^^^
+>edits[index] : TestTscEdit
+>             : ^^^^^^^^^^^
+>edits : readonly TestTscEdit[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+
+  testTscCompile({
+>testTscCompile({    subScenario: caption,    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,  }) : void
+>                                                                                                                   : ^^^^
+>testTscCompile : (input: TestTscCompile) => void
+>               : ^     ^^              ^^^^^^^^^
+>{    subScenario: caption,    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,  } : { subScenario: string; commandLineArgs: readonly string[]; }
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    subScenario: caption,
+>subScenario : string
+>            : ^^^^^^
+>caption : string
+>        : ^^^^^^
+
+    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
+>commandLineArgs : readonly string[]
+>                : ^^^^^^^^^^^^^^^^^
+>edits[index].commandLineArgs || commandLineArgs : readonly string[]
+>                                                : ^^^^^^^^^^^^^^^^^
+>edits[index].commandLineArgs : readonly string[] | undefined
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>edits[index] : TestTscEdit
+>             : ^^^^^^^^^^^
+>edits : readonly TestTscEdit[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+>commandLineArgs : readonly string[] | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>commandLineArgs : readonly string[]
+>                : ^^^^^^^^^^^^^^^^^
+
+  });
+}
+

@@ -1,20 +1,20 @@
-module X {
+namespace X {
     export enum Foo {
         A, B
     }
 }
-module Y {
+namespace Y {
     export enum Foo {
         A, B
     }
 }
-module Z {
+namespace Z {
     export enum Foo {
         A = 1 << 1,
         B = 1 << 2,
     }
 }
-module Ka {
+namespace Ka {
     export enum Foo {
         A = 1 << 10,
         B = 1 << 11,

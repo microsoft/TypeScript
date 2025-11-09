@@ -22,6 +22,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -41,8 +42,10 @@ import {
     isBindingPattern,
     isCallExpression,
     isCallSignatureDeclaration,
+    isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorTypeNode,
+    isConstructSignatureDeclaration,
     isEnumMember,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
@@ -69,8 +72,8 @@ import {
     isObjectLiteralExpression,
     isOptionalTypeNode,
     isParameter,
-    isParameterDeclaration,
     isParenthesizedTypeNode,
+    isPartOfParameterDeclaration,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -102,10 +105,10 @@ import {
     NodeArray,
     NodeBuilderFlags,
     ParameterDeclaration,
+    parameterIsThisKeyword,
     PrefixUnaryExpression,
     PropertyDeclaration,
     QuotePreference,
-    Signature,
     SignatureDeclarationBase,
     skipParentheses,
     some,
@@ -117,11 +120,13 @@ import {
     tokenToString,
     TupleTypeReference,
     Type,
+    TypeFlags,
+    TypePredicate,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
@@ -259,7 +264,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
+            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+        ) {
             return;
         }
 
@@ -290,11 +298,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const candidates: Signature[] = [];
-        const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
-        if (!signature || !candidates.length) {
-            return;
-        }
+        const signature = checker.getResolvedSignature(expr);
+        if (signature === undefined) return;
 
         let signatureParamPos = 0;
         for (const originalArg of args) {
@@ -350,7 +355,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 
@@ -400,6 +405,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
+        const typePredicate = checker.getTypePredicateOfSignature(signature);
+
+        if (typePredicate?.type) {
+            const hintParts = typePredicateToInlayHintParts(typePredicate);
+            if (hintParts) {
+                addTypeHints(hintParts, getTypeAnnotationPosition(decl));
+                return;
+            }
+        }
+
         const returnType = checker.getReturnTypeOfSignature(signature);
         if (isModuleReferenceType(returnType)) {
             return;
@@ -425,24 +440,26 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
-            const param = node.parameters[i];
-            if (!isHintableDeclaration(param)) {
+        let pos = 0;
+        for (const param of node.parameters) {
+            if (isHintableDeclaration(param)) {
+                addParameterTypeHint(param, parameterIsThisKeyword(param) ? signature.thisParameter : signature.parameters[pos]);
+            }
+            if (parameterIsThisKeyword(param)) {
                 continue;
             }
-
-            const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
-            if (effectiveTypeAnnotation) {
-                continue;
-            }
-
-            const typeHints = getParameterDeclarationTypeHints(signature.parameters[i]);
-            if (!typeHints) {
-                continue;
-            }
-
-            addTypeHints(typeHints, param.questionToken ? param.questionToken.end : param.name.end);
+            pos++;
         }
+    }
+
+    function addParameterTypeHint(node: ParameterDeclaration, symbol: Symbol | undefined) {
+        const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(node);
+        if (effectiveTypeAnnotation || symbol === undefined) return;
+
+        const typeHints = getParameterDeclarationTypeHints(symbol);
+        if (typeHints === undefined) return;
+
+        addTypeHints(typeHints, node.questionToken ? node.questionToken.end : node.name.end);
     }
 
     function getParameterDeclarationTypeHints(symbol: Symbol) {
@@ -469,6 +486,17 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         });
     }
 
+    function printTypePredicateInSingleLine(typePredicate: TypePredicate) {
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const printer = createPrinterWithRemoveComments();
+
+        return usingSingleLineStringWriter(writer => {
+            const typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
+            Debug.assertIsDefined(typePredicateNode, "should always get typePredicateNode");
+            printer.writeNode(EmitHint.Unspecified, typePredicateNode, /*sourceFile*/ file, writer);
+        });
+    }
+
     function typeToInlayHintParts(type: Type): InlayHintDisplayPart[] | string {
         if (!shouldUseInteractiveInlayHints(preferences)) {
             return printTypeInSingleLine(type);
@@ -476,10 +504,24 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
-        Debug.assertIsDefined(typeNode, "should always get typenode");
+        Debug.assertIsDefined(typeNode, "should always get typeNode");
+        return getInlayHintDisplayParts(typeNode);
+    }
 
+    function typePredicateToInlayHintParts(typePredicate: TypePredicate): InlayHintDisplayPart[] | string {
+        if (!shouldUseInteractiveInlayHints(preferences)) {
+            return printTypePredicateInSingleLine(typePredicate);
+        }
+
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const typeNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
+        Debug.assertIsDefined(typeNode, "should always get typenode");
+        return getInlayHintDisplayParts(typeNode);
+    }
+
+    function getInlayHintDisplayParts(node: Node) {
         const parts: InlayHintDisplayPart[] = [];
-        visitForDisplayParts(typeNode);
+        visitForDisplayParts(node);
         return parts;
 
         function visitForDisplayParts(node: Node) {
@@ -540,6 +582,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isTypeParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     visitForDisplayParts(node.name);
                     if (node.constraint) {
@@ -555,6 +598,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isParameter);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     if (node.dotDotDotToken) {
                         parts.push({ text: "..." });
@@ -785,6 +829,15 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(node.type);
                     }
                     break;
+                case SyntaxKind.ConstructSignature:
+                    Debug.assertNode(node, isConstructSignatureDeclaration);
+                    parts.push({ text: "new " });
+                    visitParametersAndTypeParameters(node);
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
                 case SyntaxKind.ArrayBindingPattern:
                     Debug.assertNode(node, isArrayBindingPattern);
                     parts.push({ text: "[" });
@@ -835,6 +888,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.ThisType:
                     Debug.assertNode(node, isThisTypeNode);
                     parts.push({ text: "this" });
+                    break;
+                case SyntaxKind.ComputedPropertyName:
+                    Debug.assertNode(node, isComputedPropertyName);
+                    parts.push({ text: "[" });
+                    visitForDisplayParts(node.expression);
+                    parts.push({ text: "]" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
@@ -894,7 +953,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
-        if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
+        if ((isPartOfParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }

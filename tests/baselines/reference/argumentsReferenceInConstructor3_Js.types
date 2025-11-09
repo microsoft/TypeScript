@@ -3,20 +3,27 @@
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
 	get arguments() {
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 
 		return { bar: {} };
 >{ bar: {} } : { bar: {}; }
+>            : ^^^^^^^^^^^^
 >bar : {}
+>    : ^^
 >{} : {}
+>   : ^^
 	}
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 	/**
 	 * Constructor
@@ -26,10 +33,13 @@ class B extends A {
 	constructor(foo = {}) {
 >foo : any
 >{} : {}
+>   : ^^
 
 		super();
 >super() : void
+>        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
 
 		/**
 		 * @type object
@@ -38,7 +48,9 @@ class B extends A {
 >this.foo = foo : any
 >this.foo : any
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
 >foo : any
 
 		/**
@@ -48,12 +60,18 @@ class B extends A {
 >this.bar = super.arguments.foo : error
 >this.bar : any
 >this : this
+>     : ^^^^
 >bar : any
+>    : ^^^
 >super.arguments.foo : error
 >super.arguments : { bar: {}; }
+>                : ^^^^^^^^^^^^
 >super : A
+>      : ^
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 	}
 }
 

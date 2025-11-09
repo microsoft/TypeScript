@@ -1,7 +1,7 @@
 foo(): Bar { }
 function Foo      () ¬   { }
 4+:5
-module M {
+namespace M {
 function a(
     : T) { }
 }

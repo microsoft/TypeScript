@@ -1,0 +1,358 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsExpressions.ts] ////
+
+=== isolatedDeclarationErrorsExpressions.ts ===
+declare function time(): bigint
+>time : Symbol(time, Decl(isolatedDeclarationErrorsExpressions.ts, 0, 0))
+
+export const numberConst = 1;
+>numberConst : Symbol(numberConst, Decl(isolatedDeclarationErrorsExpressions.ts, 1, 12))
+
+export const numberConstBad1 = 1 + 1;
+>numberConstBad1 : Symbol(numberConstBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 2, 12))
+
+export const numberConstBad2 = Math.random();
+>numberConstBad2 : Symbol(numberConstBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 3, 12))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+export const numberConstBad3 = numberConst;
+>numberConstBad3 : Symbol(numberConstBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 4, 12))
+>numberConst : Symbol(numberConst, Decl(isolatedDeclarationErrorsExpressions.ts, 1, 12))
+
+export const bigIntConst = 1n;
+>bigIntConst : Symbol(bigIntConst, Decl(isolatedDeclarationErrorsExpressions.ts, 6, 12))
+
+export const bigIntConstBad1 = 1n + 1n;
+>bigIntConstBad1 : Symbol(bigIntConstBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 7, 12))
+
+export const bigIntConstBad2 = time();
+>bigIntConstBad2 : Symbol(bigIntConstBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 8, 12))
+>time : Symbol(time, Decl(isolatedDeclarationErrorsExpressions.ts, 0, 0))
+
+export const bigIntConstBad3 = bigIntConst;
+>bigIntConstBad3 : Symbol(bigIntConstBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 9, 12))
+>bigIntConst : Symbol(bigIntConst, Decl(isolatedDeclarationErrorsExpressions.ts, 6, 12))
+
+export const stringConst = "s";
+>stringConst : Symbol(stringConst, Decl(isolatedDeclarationErrorsExpressions.ts, 11, 12))
+
+export const stringConstBad = "s" + "s";
+>stringConstBad : Symbol(stringConstBad, Decl(isolatedDeclarationErrorsExpressions.ts, 12, 12))
+
+// These are just strings
+export const templateConstOk1 = `s`;
+>templateConstOk1 : Symbol(templateConstOk1, Decl(isolatedDeclarationErrorsExpressions.ts, 15, 12))
+
+export const templateConstNotOk2 = `s${1n}`;
+>templateConstNotOk2 : Symbol(templateConstNotOk2, Decl(isolatedDeclarationErrorsExpressions.ts, 16, 12))
+
+export const templateConstNotOk3 = `s${1} - ${"S"}`;
+>templateConstNotOk3 : Symbol(templateConstNotOk3, Decl(isolatedDeclarationErrorsExpressions.ts, 17, 12))
+
+export const templateConstNotOk4 = `s${1} - ${"S"} - ${false}`;
+>templateConstNotOk4 : Symbol(templateConstNotOk4, Decl(isolatedDeclarationErrorsExpressions.ts, 18, 12))
+
+export const templateConstNotOk5 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateConstNotOk5 : Symbol(templateConstNotOk5, Decl(isolatedDeclarationErrorsExpressions.ts, 19, 12))
+
+export let numberLet = 1;
+>numberLet : Symbol(numberLet, Decl(isolatedDeclarationErrorsExpressions.ts, 21, 10))
+
+export let numberLetBad1 = 1 + 1;
+>numberLetBad1 : Symbol(numberLetBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 22, 10))
+
+export let numberLetBad2 = Math.random();
+>numberLetBad2 : Symbol(numberLetBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 23, 10))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+export let numberLetBad3 = numberLet;
+>numberLetBad3 : Symbol(numberLetBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 24, 10))
+>numberLet : Symbol(numberLet, Decl(isolatedDeclarationErrorsExpressions.ts, 21, 10))
+
+export let bigIntLet = 1n;
+>bigIntLet : Symbol(bigIntLet, Decl(isolatedDeclarationErrorsExpressions.ts, 26, 10))
+
+export let bigIntLetBad1 = 1n + 1n;
+>bigIntLetBad1 : Symbol(bigIntLetBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 27, 10))
+
+export let bigIntLetBad2 = time();
+>bigIntLetBad2 : Symbol(bigIntLetBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 28, 10))
+>time : Symbol(time, Decl(isolatedDeclarationErrorsExpressions.ts, 0, 0))
+
+export let bigIntLetBad3 = bigIntLet;
+>bigIntLetBad3 : Symbol(bigIntLetBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 29, 10))
+>bigIntLet : Symbol(bigIntLet, Decl(isolatedDeclarationErrorsExpressions.ts, 26, 10))
+
+export let stringLet = "s";
+>stringLet : Symbol(stringLet, Decl(isolatedDeclarationErrorsExpressions.ts, 31, 10))
+
+export let stringLetBad = "s" + "s";
+>stringLetBad : Symbol(stringLetBad, Decl(isolatedDeclarationErrorsExpressions.ts, 32, 10))
+
+export let templateLetOk1 = `s`;
+>templateLetOk1 : Symbol(templateLetOk1, Decl(isolatedDeclarationErrorsExpressions.ts, 34, 10))
+
+export let templateLetOk2 = `s${1} - ${"S"}`;
+>templateLetOk2 : Symbol(templateLetOk2, Decl(isolatedDeclarationErrorsExpressions.ts, 35, 10))
+
+export let templateLetOk3 = `s${1} - ${"S"} - ${false}`;
+>templateLetOk3 : Symbol(templateLetOk3, Decl(isolatedDeclarationErrorsExpressions.ts, 36, 10))
+
+export let templateLetOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateLetOk4 : Symbol(templateLetOk4, Decl(isolatedDeclarationErrorsExpressions.ts, 37, 10))
+
+// As const
+
+export let numberLetAsConst = 1 as const;
+>numberLetAsConst : Symbol(numberLetAsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 41, 10))
+>const : Symbol(const)
+
+export let bigIntLetAsConst = 1n as const;
+>bigIntLetAsConst : Symbol(bigIntLetAsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 43, 10))
+>const : Symbol(const)
+
+export let stringLetAsConst = "s" as const;
+>stringLetAsConst : Symbol(stringLetAsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 45, 10))
+>const : Symbol(const)
+
+export let templateLetOk1AsConst = `s` as const;
+>templateLetOk1AsConst : Symbol(templateLetOk1AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 47, 10))
+>const : Symbol(const)
+
+export let templateLetOk2AsConst = `s${1} - ${"S"}` as const;
+>templateLetOk2AsConst : Symbol(templateLetOk2AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 48, 10))
+>const : Symbol(const)
+
+export let templateLetOk3AsConst = `s${1} - ${"S"} - ${false}` as const;
+>templateLetOk3AsConst : Symbol(templateLetOk3AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 49, 10))
+>const : Symbol(const)
+
+export let templateLetOk4AsConst = `s${1 + 1} - ${"S"} - ${!false}` as const;
+>templateLetOk4AsConst : Symbol(templateLetOk4AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 50, 10))
+>const : Symbol(const)
+
+export let arr = [1, 2, 3];
+>arr : Symbol(arr, Decl(isolatedDeclarationErrorsExpressions.ts, 52, 10))
+
+export let arrConst = [1, 2, 3] as const;
+>arrConst : Symbol(arrConst, Decl(isolatedDeclarationErrorsExpressions.ts, 53, 10))
+>const : Symbol(const)
+
+export let arrWithSpread = [1, 2, 3, ...arr] as const;
+>arrWithSpread : Symbol(arrWithSpread, Decl(isolatedDeclarationErrorsExpressions.ts, 54, 10))
+>arr : Symbol(arr, Decl(isolatedDeclarationErrorsExpressions.ts, 52, 10))
+>const : Symbol(const)
+
+export class Exported {
+>Exported : Symbol(Exported, Decl(isolatedDeclarationErrorsExpressions.ts, 54, 54))
+
+    public numberLet = 1;
+>numberLet : Symbol(Exported.numberLet, Decl(isolatedDeclarationErrorsExpressions.ts, 56, 23))
+
+    public numberLetBad1 = 1 + 1;
+>numberLetBad1 : Symbol(Exported.numberLetBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 57, 25))
+
+    public numberLetBad2 = Math.random();
+>numberLetBad2 : Symbol(Exported.numberLetBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 58, 33))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    public numberLetBad3 = numberLet;
+>numberLetBad3 : Symbol(Exported.numberLetBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 59, 41))
+>numberLet : Symbol(numberLet, Decl(isolatedDeclarationErrorsExpressions.ts, 21, 10))
+
+    public bigIntLet = 1n;
+>bigIntLet : Symbol(Exported.bigIntLet, Decl(isolatedDeclarationErrorsExpressions.ts, 60, 37))
+
+    public bigIntLetBad1 = 1n + 1n;
+>bigIntLetBad1 : Symbol(Exported.bigIntLetBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 62, 26))
+
+    public bigIntLetBad2 = time();
+>bigIntLetBad2 : Symbol(Exported.bigIntLetBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 63, 35))
+>time : Symbol(time, Decl(isolatedDeclarationErrorsExpressions.ts, 0, 0))
+
+    public bigIntLetBad3 = bigIntLet;
+>bigIntLetBad3 : Symbol(Exported.bigIntLetBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 64, 34))
+>bigIntLet : Symbol(bigIntLet, Decl(isolatedDeclarationErrorsExpressions.ts, 26, 10))
+
+    public stringLet = "s";
+>stringLet : Symbol(Exported.stringLet, Decl(isolatedDeclarationErrorsExpressions.ts, 65, 37))
+
+    public stringLetBad = "s" + "s";
+>stringLetBad : Symbol(Exported.stringLetBad, Decl(isolatedDeclarationErrorsExpressions.ts, 67, 27))
+
+    public templateLetOk1 = `s`;
+>templateLetOk1 : Symbol(Exported.templateLetOk1, Decl(isolatedDeclarationErrorsExpressions.ts, 68, 36))
+
+    public templateLetOk2 = `s${1} - ${"S"}`;
+>templateLetOk2 : Symbol(Exported.templateLetOk2, Decl(isolatedDeclarationErrorsExpressions.ts, 70, 32))
+
+    public templateLetOk3 = `s${1} - ${"S"} - ${false}`;
+>templateLetOk3 : Symbol(Exported.templateLetOk3, Decl(isolatedDeclarationErrorsExpressions.ts, 71, 45))
+
+    public templateLetOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateLetOk4 : Symbol(Exported.templateLetOk4, Decl(isolatedDeclarationErrorsExpressions.ts, 72, 56))
+
+
+    readonly numberConst = 1;
+>numberConst : Symbol(Exported.numberConst, Decl(isolatedDeclarationErrorsExpressions.ts, 73, 61))
+
+    readonly numberConstBad1 = 1 + 1;
+>numberConstBad1 : Symbol(Exported.numberConstBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 76, 29))
+
+    readonly numberConstBad2 = Math.random();
+>numberConstBad2 : Symbol(Exported.numberConstBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 77, 37))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    readonly numberConstBad3 = numberConst;
+>numberConstBad3 : Symbol(Exported.numberConstBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 78, 45))
+>numberConst : Symbol(numberConst, Decl(isolatedDeclarationErrorsExpressions.ts, 1, 12))
+
+    readonly bigIntConst = 1n;
+>bigIntConst : Symbol(Exported.bigIntConst, Decl(isolatedDeclarationErrorsExpressions.ts, 79, 43))
+
+    readonly bigIntConstBad1 = 1n + 1n;
+>bigIntConstBad1 : Symbol(Exported.bigIntConstBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 81, 30))
+
+    readonly bigIntConstBad2 = time();
+>bigIntConstBad2 : Symbol(Exported.bigIntConstBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 82, 39))
+>time : Symbol(time, Decl(isolatedDeclarationErrorsExpressions.ts, 0, 0))
+
+    readonly bigIntConstBad3 = bigIntConst;
+>bigIntConstBad3 : Symbol(Exported.bigIntConstBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 83, 38))
+>bigIntConst : Symbol(bigIntConst, Decl(isolatedDeclarationErrorsExpressions.ts, 6, 12))
+
+    readonly stringConst = "s";
+>stringConst : Symbol(Exported.stringConst, Decl(isolatedDeclarationErrorsExpressions.ts, 84, 43))
+
+    readonly stringConstBad = "s" + "s";
+>stringConstBad : Symbol(Exported.stringConstBad, Decl(isolatedDeclarationErrorsExpressions.ts, 86, 31))
+
+    readonly templateConstOk1 = `s`;
+>templateConstOk1 : Symbol(Exported.templateConstOk1, Decl(isolatedDeclarationErrorsExpressions.ts, 87, 40))
+
+    readonly templateConstNotOk2 = `s${1} - ${"S"}`;
+>templateConstNotOk2 : Symbol(Exported.templateConstNotOk2, Decl(isolatedDeclarationErrorsExpressions.ts, 89, 36))
+
+    readonly templateConstNotOk3 = `s${1} - ${"S"} - ${false}`;
+>templateConstNotOk3 : Symbol(Exported.templateConstNotOk3, Decl(isolatedDeclarationErrorsExpressions.ts, 90, 52))
+
+    readonly templateConstNotOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateConstNotOk4 : Symbol(Exported.templateConstNotOk4, Decl(isolatedDeclarationErrorsExpressions.ts, 91, 63))
+
+    numberLetAsConst = 1 as const;
+>numberLetAsConst : Symbol(Exported.numberLetAsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 92, 68))
+>const : Symbol(const)
+
+    bigIntLetAsConst = 1n as const;
+>bigIntLetAsConst : Symbol(Exported.bigIntLetAsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 94, 34))
+>const : Symbol(const)
+
+    stringLetAsConst = "s" as const;
+>stringLetAsConst : Symbol(Exported.stringLetAsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 96, 35))
+>const : Symbol(const)
+
+    templateLetOk1AsConst = `s` as const;
+>templateLetOk1AsConst : Symbol(Exported.templateLetOk1AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 98, 36))
+>const : Symbol(const)
+
+    templateLetOk2AsConst = `s${1} - ${"S"}` as const;
+>templateLetOk2AsConst : Symbol(Exported.templateLetOk2AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 100, 41))
+>const : Symbol(const)
+
+    templateLetOk3AsConst = `s${1} - ${"S"} - ${false}` as const;
+>templateLetOk3AsConst : Symbol(Exported.templateLetOk3AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 101, 54))
+>const : Symbol(const)
+
+    templateLetOk4AsConst = `s${1 + 1} - ${"S"} - ${!false}` as const;
+>templateLetOk4AsConst : Symbol(Exported.templateLetOk4AsConst, Decl(isolatedDeclarationErrorsExpressions.ts, 102, 65))
+>const : Symbol(const)
+
+}
+
+export function numberParam(p = 1): void { }
+>numberParam : Symbol(numberParam, Decl(isolatedDeclarationErrorsExpressions.ts, 105, 1))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 107, 28))
+
+export function numberParamBad1(p = 1 + 1): void { }
+>numberParamBad1 : Symbol(numberParamBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 107, 44))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 108, 32))
+
+export function numberParamBad2(p = Math.random()): void { }
+>numberParamBad2 : Symbol(numberParamBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 108, 52))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 109, 32))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+export function numberParamBad3(p = numberParam): void { }
+>numberParamBad3 : Symbol(numberParamBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 109, 60))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 110, 32))
+>numberParam : Symbol(numberParam, Decl(isolatedDeclarationErrorsExpressions.ts, 105, 1))
+
+export function bigIntParam(p = 1n): void { }
+>bigIntParam : Symbol(bigIntParam, Decl(isolatedDeclarationErrorsExpressions.ts, 110, 58))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 112, 28))
+
+export function bigIntParamBad1(p = 1n + 1n): void { }
+>bigIntParamBad1 : Symbol(bigIntParamBad1, Decl(isolatedDeclarationErrorsExpressions.ts, 112, 45))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 113, 32))
+
+export function bigIntParamBad2(p = time()): void { }
+>bigIntParamBad2 : Symbol(bigIntParamBad2, Decl(isolatedDeclarationErrorsExpressions.ts, 113, 54))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 114, 32))
+>time : Symbol(time, Decl(isolatedDeclarationErrorsExpressions.ts, 0, 0))
+
+export function bigIntParamBad3(p = bigIntParam): void { }
+>bigIntParamBad3 : Symbol(bigIntParamBad3, Decl(isolatedDeclarationErrorsExpressions.ts, 114, 53))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 115, 32))
+>bigIntParam : Symbol(bigIntParam, Decl(isolatedDeclarationErrorsExpressions.ts, 110, 58))
+
+export function stringParam(p = "s"): void { }
+>stringParam : Symbol(stringParam, Decl(isolatedDeclarationErrorsExpressions.ts, 115, 58))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 117, 28))
+
+export function stringParamBad(p = "s" + "s"): void { }
+>stringParamBad : Symbol(stringParamBad, Decl(isolatedDeclarationErrorsExpressions.ts, 117, 46))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 118, 31))
+
+export function templateParamOk1(p = `s`): void { }
+>templateParamOk1 : Symbol(templateParamOk1, Decl(isolatedDeclarationErrorsExpressions.ts, 118, 55))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 120, 33))
+
+export function templateParamOk2(p = `s${1} - ${"S"}`): void { }
+>templateParamOk2 : Symbol(templateParamOk2, Decl(isolatedDeclarationErrorsExpressions.ts, 120, 51))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 121, 33))
+
+export function templateParamOk3(p = `s${1} - ${"S"} - ${false}`): void { }
+>templateParamOk3 : Symbol(templateParamOk3, Decl(isolatedDeclarationErrorsExpressions.ts, 121, 64))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 122, 33))
+
+export function templateParamOk4(p = `s${1 + 1} - ${"S"} - ${!false}`): void { }
+>templateParamOk4 : Symbol(templateParamOk4, Decl(isolatedDeclarationErrorsExpressions.ts, 122, 75))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsExpressions.ts, 123, 33))
+
+
+export const { a } = { a: 1 };
+>a : Symbol(a, Decl(isolatedDeclarationErrorsExpressions.ts, 126, 14))
+>a : Symbol(a, Decl(isolatedDeclarationErrorsExpressions.ts, 126, 22))
+
+export const [, , b = 1]: [number, number, number | undefined] = [0, 1, 2];
+>b : Symbol(b, Decl(isolatedDeclarationErrorsExpressions.ts, 127, 17))
+
+export function foo([, , b]: [
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpressions.ts, 127, 75))
+>b : Symbol(b, Decl(isolatedDeclarationErrorsExpressions.ts, 129, 24))
+
+    number,
+    number,
+    number
+] = [0, 1, 2]): void {
+
+}

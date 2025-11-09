@@ -42,7 +42,7 @@ invalidNumberAssignments.ts(23,1): error TS2630: Cannot assign to 'i' because it
         ~~
 !!! error TS2322: Type 'number' is not assignable to type '{ 0: number; }'.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     M = x;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

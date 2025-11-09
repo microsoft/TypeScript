@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     CallExpression,
     ConstructorDeclaration,
@@ -16,12 +21,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "classSuperMustPrecedeThisAccess";
 const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
@@ -38,7 +38,7 @@ registerCodeFix({
     fixIds: [fixId],
     getAllCodeActions(context) {
         const { sourceFile } = context;
-        const seenClasses = new Map<number, true>(); // Ensure we only do this once per class.
+        const seenClasses = new Set<number>(); // Ensure we only do this once per class.
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const nodes = getNodes(diag.file, diag.start);
             if (!nodes) return;

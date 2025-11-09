@@ -4,7 +4,7 @@
 // @allowJs: true
 // @checkJs: true
 // @filename: uniqueSymbolsDeclarationsInJs.js
-// @out: uniqueSymbolsDeclarationsInJs-out.js
+// @outFile: uniqueSymbolsDeclarationsInJs-out.js
 // @useDefineForClassFields: false
 
 // classes

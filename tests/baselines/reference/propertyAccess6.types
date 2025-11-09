@@ -6,8 +6,12 @@ var foo: any;
 
 foo.bar = 4;
 >foo.bar = 4 : 4
+>            : ^
 >foo.bar : any
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 >4 : 4
+>  : ^
 

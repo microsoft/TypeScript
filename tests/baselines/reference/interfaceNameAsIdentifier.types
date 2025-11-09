@@ -6,9 +6,11 @@ interface C {
 }
 C();
 >C() : any
+>    : ^^^
 >C : any
+>  : ^^^
 
-module m2 {
+namespace m2 {
     export interface C {
         (): void;
     }
@@ -16,7 +18,11 @@ module m2 {
 
 m2.C();
 >m2.C() : any
+>       : ^^^
 >m2.C : any
+>     : ^^^
 >m2 : any
+>   : ^^^
 >C : any
+>  : ^^^
 

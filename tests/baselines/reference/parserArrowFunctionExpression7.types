@@ -3,10 +3,13 @@
 === parserArrowFunctionExpression7.ts ===
 ({
 >({	async m() {		for (;;) {		}	}}) : { m(): Promise<never>; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{	async m() {		for (;;) {		}	}} : { m(): Promise<never>; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 	async m() {
 >m : () => Promise<never>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 		for (;;) {
 		}

@@ -1,16 +1,16 @@
 /// <reference path="../fourslash.ts"/>
 
-// @filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import { weirdName as otherName } from "bar";
 //// const [|weirdName: number = 1|];
 
-// @filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {}
 
-// @filename: /node_modules/bar/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/bar/index.d.ts
 //// export const [|weirdName: number|];
 
-// @filename: /node_modules/bar/package.json
+// @Filename: /home/src/workspaces/project/node_modules/bar/package.json
 //// {}
 
 

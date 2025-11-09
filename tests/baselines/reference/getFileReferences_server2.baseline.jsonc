@@ -1,11 +1,11 @@
 // === getFileReferences ===
-// fileName: /packages/shared/src/referenced.ts
+// fileName: /home/src/workspaces/project/packages/shared/src/referenced.ts
 
-// === /packages/server/index.js ===
+// === /home/src/workspaces/project/packages/server/index.js ===
 // const mod = require("[|../shared/src/referenced|]");
 
-// === /packages/server/router.js ===
+// === /home/src/workspaces/project/packages/server/router.js ===
 // const blah = require("[|../shared/dist/referenced|]");
 
-// === /packages/client/index.ts ===
+// === /home/src/workspaces/project/packages/client/index.ts ===
 // import "[|@shared/referenced|]";

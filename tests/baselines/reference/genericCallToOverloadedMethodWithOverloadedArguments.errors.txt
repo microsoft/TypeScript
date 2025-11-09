@@ -9,6 +9,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(52,38): error TS2769: No
   Overload 2 of 2, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
 genericCallToOverloadedMethodWithOverloadedArguments.ts(68,38): error TS2769: No overload matches this call.
   Overload 1 of 3, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
@@ -17,9 +18,11 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(68,38): error TS2769: No
   Overload 2 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
   Overload 3 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => string, progress?: (preservation: any) => void): Promise<string>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
 genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No overload matches this call.
   Overload 1 of 2, '(cb: (x: number) => Promise<boolean>): Promise<boolean>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
@@ -28,10 +31,11 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
   Overload 2 of 2, '(cb: (x: number) => Promise<boolean>, error?: (error: any) => Promise<boolean>): Promise<boolean>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
       Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+        Type 'number' is not assignable to type 'boolean'.
 
 
 ==== genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
-    module m1 {
+    namespace m1 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -44,7 +48,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m2 {
+    namespace m2 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -62,7 +66,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m3 {
+    namespace m3 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -76,7 +80,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m4 {
+    namespace m4 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -96,11 +100,12 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
 !!! error TS2769:   Overload 2 of 2, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
 !!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
 !!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'string'.
     }
     
     //////////////////////////////////////
     
-    module m5 {
+    namespace m5 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -121,14 +126,16 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
 !!! error TS2769:   Overload 2 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
 !!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
 !!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'string'.
 !!! error TS2769:   Overload 3 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => string, progress?: (preservation: any) => void): Promise<string>', gave the following error.
 !!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
 !!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'string'.
     }
     
     //////////////////////////////////////
     
-    module m6 {
+    namespace m6 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -149,5 +156,6 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
 !!! error TS2769:   Overload 2 of 2, '(cb: (x: number) => Promise<boolean>, error?: (error: any) => Promise<boolean>): Promise<boolean>', gave the following error.
 !!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
 !!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'boolean'.
     }
     

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFilesForNodeNativeModules.ts] ////
+
+=== main.ts ===
+import mod = require("./dir/native.node");
+>mod : typeof mod
+>    : ^^^^^^^^^^
+
+mod.doNativeThing("good");
+>mod.doNativeThing("good") : unknown
+>                          : ^^^^^^^
+>mod.doNativeThing : (flag: string) => unknown
+>                  : ^    ^^      ^^^^^       
+>mod : typeof mod
+>    : ^^^^^^^^^^
+>doNativeThing : (flag: string) => unknown
+>              : ^    ^^      ^^^^^       
+>"good" : "good"
+>       : ^^^^^^
+
+=== dir/native.d.node.ts ===
+export function doNativeThing(flag: string): unknown;
+>doNativeThing : (flag: string) => unknown
+>              : ^    ^^      ^^^^^       
+>flag : string
+>     : ^^^^^^
+

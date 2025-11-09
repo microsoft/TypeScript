@@ -4,7 +4,7 @@ importDeclWithExportModifierAndExportAssignment.ts(6,1): error TS2309: An export
 
 
 ==== importDeclWithExportModifierAndExportAssignment.ts (3 errors) ====
-    module x {
+    namespace x {
         interface c {
         }
     }

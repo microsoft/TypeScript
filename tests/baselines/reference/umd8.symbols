@@ -10,9 +10,9 @@ let y: Foo; // OK in type position
 >Foo : Symbol(Foo, Decl(foo.d.ts, 6, 15))
 
 y.foo();
->y.foo : Symbol(ff.foo, Decl(foo.d.ts, 0, 21))
+>y.foo : Symbol(Thing.foo, Decl(foo.d.ts, 0, 21))
 >y : Symbol(y, Decl(a.ts, 3, 3))
->foo : Symbol(ff.foo, Decl(foo.d.ts, 0, 21))
+>foo : Symbol(Thing.foo, Decl(foo.d.ts, 0, 21))
 
 let z: Foo.SubThing; // OK in ns position
 >z : Symbol(z, Decl(a.ts, 5, 3))

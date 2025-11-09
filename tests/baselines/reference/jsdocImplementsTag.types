@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplementsTag.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef { { foo: string } } A
+ */
+
+/**
+ * @implements { A }
+ */
+class B {
+>B : B
+>  : ^
+
+    foo = ''
+>foo : string
+>    : ^^^^^^
+>'' : ""
+>   : ^^
+}
+

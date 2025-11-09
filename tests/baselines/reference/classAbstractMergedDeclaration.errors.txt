@@ -18,9 +18,9 @@ classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance
 
 ==== classAbstractMergedDeclaration.ts (16 errors) ====
     abstract class CM {}
-    module CM {}
+    namespace CM {}
     
-    module MC {}
+    namespace MC {}
     abstract class MC {}
     
     abstract class CI {}

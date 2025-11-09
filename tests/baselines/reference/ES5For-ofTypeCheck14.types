@@ -3,8 +3,11 @@
 === ES5For-ofTypeCheck14.ts ===
 var union: string | Set<number>
 >union : string | Set<number>
+>      : ^^^^^^^^^^^^^^^^^^^^
 
 for (const e of union) { }
 >e : string
+>  : ^^^^^^
 >union : string | Set<number>
+>      : ^^^^^^^^^^^^^^^^^^^^
 

@@ -1,21 +1,21 @@
 //// [tests/cases/compiler/declFileImportChainInExportAssignment.ts] ////
 
 === declFileImportChainInExportAssignment.ts ===
-module m {
+namespace m {
 >m : Symbol(m, Decl(declFileImportChainInExportAssignment.ts, 0, 0))
 
-    export module c {
->c : Symbol(c, Decl(declFileImportChainInExportAssignment.ts, 0, 10))
+    export namespace c {
+>c : Symbol(c, Decl(declFileImportChainInExportAssignment.ts, 0, 13))
 
         export class c {
->c : Symbol(c, Decl(declFileImportChainInExportAssignment.ts, 1, 21))
+>c : Symbol(c, Decl(declFileImportChainInExportAssignment.ts, 1, 24))
         }
     }
 }
 import a = m.c;
 >a : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 5, 1))
 >m : Symbol(m, Decl(declFileImportChainInExportAssignment.ts, 0, 0))
->c : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 0, 10))
+>c : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 0, 13))
 
 import b = a;
 >b : Symbol(b, Decl(declFileImportChainInExportAssignment.ts, 6, 15))

@@ -3,17 +3,25 @@
 === symbolType15.ts ===
 var sym: symbol;
 >sym : symbol
+>    : ^^^^^^
 
 var symObj: Symbol;
 >symObj : Symbol
+>       : ^^^^^^
 
 symObj = sym;
 >symObj = sym : symbol
+>             : ^^^^^^
 >symObj : Symbol
+>       : ^^^^^^
 >sym : symbol
+>    : ^^^^^^
 
 sym = symObj;
 >sym = symObj : Symbol
+>             : ^^^^^^
 >sym : symbol
+>    : ^^^^^^
 >symObj : Symbol
+>       : ^^^^^^
 

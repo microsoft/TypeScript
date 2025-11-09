@@ -1,16 +1,12 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
 import {
     createHasErrorMessageLogger,
     nullLogger,
-} from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+} from "../../../harness/tsserverLogger.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -145,6 +141,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
 
             expect(session.executeCommand(req)).to.deep.equal({
                 responseRequired: false,
+                performanceData: undefined,
             });
             expect(lastSent).to.deep.equal({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -233,7 +230,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;
-                req.arguments = null; // eslint-disable-line no-null/no-null
+                req.arguments = null; // eslint-disable-line no-restricted-syntax
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;
@@ -354,7 +351,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
             const command = "test";
 
-            session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
+            session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true, /*performanceData*/ undefined);
 
             expect(lastSent).to.deep.equal({
                 seq: 0,
@@ -474,7 +471,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
         };
         const command = "test";
 
-        session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
+        session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true, /*performanceData*/ undefined);
 
         expect(session.lastSent).to.deep.equal({
             seq: 0,
@@ -545,11 +542,11 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 response = this.executeCommand(msg).response as ts.server.protocol.Response;
             }
             catch (e) {
-                this.doOutput(/*info*/ undefined, msg.command, msg.seq, /*success*/ false, e.toString());
+                this.doOutput(/*info*/ undefined, msg.command, msg.seq, /*success*/ false, /*performanceData*/ undefined, e.toString());
                 return;
             }
             if (response) {
-                this.doOutput(response, msg.command, msg.seq, /*success*/ true);
+                this.doOutput(response, msg.command, msg.seq, /*success*/ true, /*performanceData*/ undefined);
             }
         }
 
@@ -666,7 +663,7 @@ describe("unittests:: tsserver:: Session:: helpers", () => {
     it(ts.server.getLocationInNewDocument.name, () => {
         const text = `// blank line\nconst x = 0;`;
         const renameLocationInOldText = text.indexOf("0");
-        const fileName = "/a.ts";
+        const fileName = "/home/src/projects/project/a.ts";
         const edits: ts.FileTextChanges = {
             fileName,
             textChanges: [

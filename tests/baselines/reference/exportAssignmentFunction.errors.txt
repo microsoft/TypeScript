@@ -1,0 +1,13 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== exportAssignmentFunction_B.ts (0 errors) ====
+    import fooFunc = require("exportAssignmentFunction_A");
+    
+    var n: number = fooFunc();
+==== exportAssignmentFunction_A.ts (0 errors) ====
+    function foo() { return 0; }
+    
+    export = foo;
+    

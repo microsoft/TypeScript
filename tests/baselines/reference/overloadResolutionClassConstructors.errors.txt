@@ -14,7 +14,7 @@ overloadResolutionClassConstructors.ts(80,9): error TS2345: Argument of type 'nu
 overloadResolutionClassConstructors.ts(84,9): error TS2344: Type 'boolean' does not satisfy the constraint 'string'.
 overloadResolutionClassConstructors.ts(87,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
 overloadResolutionClassConstructors.ts(88,15): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
-overloadResolutionClassConstructors.ts(96,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
+overloadResolutionClassConstructors.ts(96,18): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 overloadResolutionClassConstructors.ts(98,18): error TS2339: Property 'blah' does not exist on type 'string'.
 
 
@@ -144,7 +144,8 @@ overloadResolutionClassConstructors.ts(98,18): error TS2339: Property 'blah' doe
     }
     new fn5((n) => n.toFixed());
                      ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.
     new fn5((n) => n.substr(0));
     new fn5((n) => n.blah); // Error
                      ~~~~

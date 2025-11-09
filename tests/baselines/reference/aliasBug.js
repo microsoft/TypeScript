@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/aliasBug.ts] ////
 
 //// [aliasBug.ts]
-module foo {    
+namespace foo {    
     export class Provide {
     }
 
-    export module bar { export module baz {export class boo {}}}
+    export namespace bar { export namespace baz {export class boo {}}}
 }
 
 import provide = foo;

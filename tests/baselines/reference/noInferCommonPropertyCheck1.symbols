@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/noInferCommonPropertyCheck1.ts] ////
+
+=== noInferCommonPropertyCheck1.ts ===
+declare const partialObj1: Partial<{ a: unknown; b: unknown }>;
+>partialObj1 : Symbol(partialObj1, Decl(noInferCommonPropertyCheck1.ts, 0, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(noInferCommonPropertyCheck1.ts, 0, 36))
+>b : Symbol(b, Decl(noInferCommonPropertyCheck1.ts, 0, 48))
+
+declare const partialObj2: Partial<{ c: unknown; d: unknown }>;
+>partialObj2 : Symbol(partialObj2, Decl(noInferCommonPropertyCheck1.ts, 1, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(noInferCommonPropertyCheck1.ts, 1, 36))
+>d : Symbol(d, Decl(noInferCommonPropertyCheck1.ts, 1, 48))
+
+declare const someObj1: { x: string };
+>someObj1 : Symbol(someObj1, Decl(noInferCommonPropertyCheck1.ts, 2, 13))
+>x : Symbol(x, Decl(noInferCommonPropertyCheck1.ts, 2, 25))
+
+declare function test1<T>(a: T, b: NoInfer<T> & { prop?: unknown }): void;
+>test1 : Symbol(test1, Decl(noInferCommonPropertyCheck1.ts, 2, 38))
+>T : Symbol(T, Decl(noInferCommonPropertyCheck1.ts, 4, 23))
+>a : Symbol(a, Decl(noInferCommonPropertyCheck1.ts, 4, 26))
+>T : Symbol(T, Decl(noInferCommonPropertyCheck1.ts, 4, 23))
+>b : Symbol(b, Decl(noInferCommonPropertyCheck1.ts, 4, 31))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInferCommonPropertyCheck1.ts, 4, 23))
+>prop : Symbol(prop, Decl(noInferCommonPropertyCheck1.ts, 4, 49))
+
+test1(partialObj1, someObj1);
+>test1 : Symbol(test1, Decl(noInferCommonPropertyCheck1.ts, 2, 38))
+>partialObj1 : Symbol(partialObj1, Decl(noInferCommonPropertyCheck1.ts, 0, 13))
+>someObj1 : Symbol(someObj1, Decl(noInferCommonPropertyCheck1.ts, 2, 13))
+
+declare function test2<T1, T2>(
+>test2 : Symbol(test2, Decl(noInferCommonPropertyCheck1.ts, 6, 29))
+>T1 : Symbol(T1, Decl(noInferCommonPropertyCheck1.ts, 8, 23))
+>T2 : Symbol(T2, Decl(noInferCommonPropertyCheck1.ts, 8, 26))
+
+  a: T1,
+>a : Symbol(a, Decl(noInferCommonPropertyCheck1.ts, 8, 31))
+>T1 : Symbol(T1, Decl(noInferCommonPropertyCheck1.ts, 8, 23))
+
+  b: T2,
+>b : Symbol(b, Decl(noInferCommonPropertyCheck1.ts, 9, 8))
+>T2 : Symbol(T2, Decl(noInferCommonPropertyCheck1.ts, 8, 26))
+
+  c: NoInfer<T1> & NoInfer<T2>,
+>c : Symbol(c, Decl(noInferCommonPropertyCheck1.ts, 10, 8))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(noInferCommonPropertyCheck1.ts, 8, 23))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T2 : Symbol(T2, Decl(noInferCommonPropertyCheck1.ts, 8, 26))
+
+): void;
+
+test2(partialObj1, partialObj2, someObj1);
+>test2 : Symbol(test2, Decl(noInferCommonPropertyCheck1.ts, 6, 29))
+>partialObj1 : Symbol(partialObj1, Decl(noInferCommonPropertyCheck1.ts, 0, 13))
+>partialObj2 : Symbol(partialObj2, Decl(noInferCommonPropertyCheck1.ts, 1, 13))
+>someObj1 : Symbol(someObj1, Decl(noInferCommonPropertyCheck1.ts, 2, 13))
+
+declare function test3<T1, T2>(
+>test3 : Symbol(test3, Decl(noInferCommonPropertyCheck1.ts, 14, 42))
+>T1 : Symbol(T1, Decl(noInferCommonPropertyCheck1.ts, 16, 23))
+>T2 : Symbol(T2, Decl(noInferCommonPropertyCheck1.ts, 16, 26))
+
+  a: T1,
+>a : Symbol(a, Decl(noInferCommonPropertyCheck1.ts, 16, 31))
+>T1 : Symbol(T1, Decl(noInferCommonPropertyCheck1.ts, 16, 23))
+
+  b: T2,
+>b : Symbol(b, Decl(noInferCommonPropertyCheck1.ts, 17, 8))
+>T2 : Symbol(T2, Decl(noInferCommonPropertyCheck1.ts, 16, 26))
+
+  c: NoInfer<T1 & T2>,
+>c : Symbol(c, Decl(noInferCommonPropertyCheck1.ts, 18, 8))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(noInferCommonPropertyCheck1.ts, 16, 23))
+>T2 : Symbol(T2, Decl(noInferCommonPropertyCheck1.ts, 16, 26))
+
+): void;
+
+test3(partialObj1, partialObj2, someObj1);
+>test3 : Symbol(test3, Decl(noInferCommonPropertyCheck1.ts, 14, 42))
+>partialObj1 : Symbol(partialObj1, Decl(noInferCommonPropertyCheck1.ts, 0, 13))
+>partialObj2 : Symbol(partialObj2, Decl(noInferCommonPropertyCheck1.ts, 1, 13))
+>someObj1 : Symbol(someObj1, Decl(noInferCommonPropertyCheck1.ts, 2, 13))
+

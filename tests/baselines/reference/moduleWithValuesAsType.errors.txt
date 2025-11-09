@@ -2,7 +2,7 @@ moduleWithValuesAsType.ts(5,8): error TS2709: Cannot use namespace 'A' as a type
 
 
 ==== moduleWithValuesAsType.ts (1 errors) ====
-    module A {
+    namespace A {
         var b = 1;
     }
     

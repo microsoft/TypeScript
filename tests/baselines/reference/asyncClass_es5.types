@@ -3,4 +3,5 @@
 === asyncClass_es5.ts ===
 async class C {
 >C : C
+>  : ^
 }

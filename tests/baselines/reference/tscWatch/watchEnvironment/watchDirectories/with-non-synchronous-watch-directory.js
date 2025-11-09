@@ -1,7 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/src/file1.ts] Inode:: 6
+import { x } from "file2";
+
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 9
+export const x = 10;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 10
+{ "compilerOptions": { "moduleResolution": "node10" } }
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 16
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -12,27 +20,26 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/src/file1.ts]
-import { x } from "file2";
-
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts]
-export const x = 10;
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
+[7m [0m [91m                                           ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/src/file1.js]
+//// [/user/username/projects/myproject/src/file1.js] Inode:: 117
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -41,26 +48,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/file2/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":16}
 /user/username/projects/myproject: *new*
-  {}
+  {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
-  {}
+  {"inode":7}
 /user/username/projects/myproject/node_modules/file2: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
-  {}
+  {"inode":9}
 /user/username/projects/myproject/src: *new*
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts: *new*
-  {}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":10}
 
 Timeout callback:: count: 1
 1: timerToUpdateChildWatches *new*
@@ -69,23 +84,20 @@ Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
 ]
 Program options: {
+  "moduleResolution": 2,
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/file2/index.d.ts
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -108,31 +120,49 @@ Change:: Remove directory node_modules
 Input::
 //// [/user/username/projects/myproject/node_modules/file2/index.d.ts] deleted
 
+Output::
+sysLog:: /user/username/projects/myproject/node_modules/file2/index.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
+sysLog:: /user/username/projects/myproject/node_modules/file2:: Changing watcher to MissingFileSystemEntryWatcher
+sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to MissingFileSystemEntryWatcher
+
+
 PolledWatches::
+/user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {"pollingInterval":250}
+/user/username/projects/myproject/node_modules/file2/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
+  {"inode":4}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {}
+  {"inode":10}
 
 FsWatches *deleted*::
+/user/username/projects/myproject/node_modules:
+  {"inode":7}
 /user/username/projects/myproject/node_modules/file2:
-  {}
+  {"inode":8}
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
+  {"inode":9}
 
 Timeout callback:: count: 3
 7: timerToInvalidateFailedLookupResolutions *new*
@@ -145,23 +175,27 @@ Before running Timeout callback:: count: 3
 9: timerToUpdateChildWatches
 
 Invoking Timeout callback:: timeoutId:: 8:: timerToUpdateProgram
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
+[96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m1[0m import { x } from "file2";
-[7m [0m [91m                  ~~~~~~~[0m
+[7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
+[7m [0m [91m                                           ~~~~~~~~[0m
 
-[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 117
 
 PolledWatches::
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules: *new*
@@ -169,23 +203,29 @@ PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
+PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
+  {"pollingInterval":250}
+/user/username/projects/myproject/node_modules/file2/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/src:
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":6}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
 
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *deleted*
@@ -196,17 +236,16 @@ Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
 ]
 Program options: {
+  "moduleResolution": 2,
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
@@ -230,6 +269,7 @@ Before running Timeout callback:: count: 2
 11: timerToInvalidateFailedLookupResolutions
 12: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -239,17 +279,19 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 13: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
+[96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m1[0m import { x } from "file2";
-[7m [0m [91m                  ~~~~~~~[0m
+[7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
+[7m [0m [91m                                           ~~~~~~~~[0m
 
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -259,16 +301,16 @@ Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
 ]
 Program options: {
+  "moduleResolution": 2,
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -278,8 +320,39 @@ Change:: Start npm install
 
 Input::
 
+Output::
+sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/node_modules: *new*
+  {"inode":118}
+/user/username/projects/myproject/src:
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":6}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
+
 Timeout callback:: count: 1
-15: timerToUpdateChildWatches *new*
+16: timerToUpdateChildWatches *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -289,8 +362,8 @@ Change:: npm install folder creation of file2
 Input::
 
 Timeout callback:: count: 1
-15: timerToUpdateChildWatches *deleted*
-16: timerToUpdateChildWatches *new*
+16: timerToUpdateChildWatches *deleted*
+17: timerToUpdateChildWatches *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -298,7 +371,7 @@ exitCode:: ExitStatus.undefined
 Change:: npm install index file in file2
 
 Input::
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts]
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 120
 export const x = 10;
 
 
@@ -310,7 +383,7 @@ Change:: Updates the program
 Input::
 
 Before running Timeout callback:: count: 1
-16: timerToUpdateChildWatches
+17: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 2
 
@@ -323,24 +396,24 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {}
+  {"inode":4}
 /user/username/projects/myproject/node_modules:
-  {}
+  {"inode":118}
 /user/username/projects/myproject/node_modules/file2: *new*
-  {}
+  {"inode":119}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {}
+  {"inode":10}
 
 Timeout callback:: count: 2
-17: timerToInvalidateFailedLookupResolutions *new*
-18: timerToUpdateProgram *new*
+18: timerToInvalidateFailedLookupResolutions *new*
+19: timerToUpdateProgram *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -350,14 +423,15 @@ Change:: Invalidates module resolution cache
 Input::
 
 Before running Timeout callback:: count: 2
-17: timerToInvalidateFailedLookupResolutions
-18: timerToUpdateProgram
+18: timerToInvalidateFailedLookupResolutions
+19: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
-18: timerToUpdateProgram *deleted*
-19: timerToUpdateProgram *new*
+19: timerToUpdateProgram *deleted*
+20: timerToUpdateProgram *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -367,65 +441,78 @@ Change:: Pending updates
 Input::
 
 Before running Timeout callback:: count: 1
-19: timerToUpdateProgram
+20: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m1[0m { "compilerOptions": { "moduleResolution": "node10" } }
+[7m [0m [91m                                           ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 117
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/file2/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {}
+  {"inode":4}
 /user/username/projects/myproject/node_modules:
-  {}
+  {"inode":118}
 /user/username/projects/myproject/node_modules/file2:
-  {}
+  {"inode":119}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
-  {}
+  {"inode":120}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {}
+  {"inode":10}
 
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
 ]
 Program options: {
+  "moduleResolution": 2,
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/node_modules/file2/index.d.ts
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)

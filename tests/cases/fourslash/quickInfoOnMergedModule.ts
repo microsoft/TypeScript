@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-////module M2 {
+////namespace M2 {
 ////    export interface A {
 ////        foo: string;
 ////    }
 ////    var a: A;
 ////    var r = a.foo + a.bar;
 ////}
-////module M2 {
+////namespace M2 {
 ////    export interface A {
 ////        bar: number;
 ////    }
