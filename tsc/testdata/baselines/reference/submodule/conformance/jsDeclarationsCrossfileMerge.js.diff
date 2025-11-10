@@ -1,11 +1,7 @@
 --- old.jsDeclarationsCrossfileMerge.js
 +++ new.jsDeclarationsCrossfileMerge.js
-@@= skipped -17, +17 lines =@@
- function validate() { }
- exports.default = validate;
+@@= skipped -19, +19 lines =@@
  //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  const m = require("./exporter");
  module.exports = m.default;
 +export var memberName = "thing";

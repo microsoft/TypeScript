@@ -21,33 +21,7 @@
  >default : Symbol(default, Decl(g.js, 0, 0))
 
  === /main1.ts ===
-@@= skipped -96, +96 lines =@@
- >g1 : Symbol(g1, Decl(main1.ts, 28, 6))
-
- g1.default;
-->g1.default : Symbol(g1.default, Decl(g.js, 0, 0))
- >g1 : Symbol(g1, Decl(main1.ts, 28, 6))
-->default : Symbol(g1.default, Decl(g.js, 0, 0))
-
- import g2 = require("./g"); // { default: 0 }
- >g2 : Symbol(g2, Decl(main1.ts, 29, 11))
-
- g2.default;
-->g2.default : Symbol(g1.default, Decl(g.js, 0, 0))
-+>g2.default : Symbol(g1, Decl(g.js, 0, 0))
- >g2 : Symbol(g2, Decl(main1.ts, 29, 11))
-->default : Symbol(g1.default, Decl(g.js, 0, 0))
-+>default : Symbol(g1, Decl(g.js, 0, 0))
-
- === /main2.mts ===
- import { x, y } from "./a"; // No y
-@@= skipped -126, +124 lines =@@
- const g2 = require("./g"); // { default: 0 }
- >g2 : Symbol(g2, Decl(main3.cjs, 17, 5))
- >require : Symbol(require)
-->"./g" : Symbol(g1, Decl(g.js, 0, 0))
-+>"./g" : Symbol(g2, Decl(g.js, 0, 0))
-
+@@= skipped -227, +227 lines =@@
  === /main4.cjs ===
  exports.x = require("./g");
  >exports.x : Symbol(x, Decl(main4.cjs, 0, 0))

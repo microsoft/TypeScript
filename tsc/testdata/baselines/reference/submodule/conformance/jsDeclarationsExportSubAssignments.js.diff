@@ -1,15 +1,6 @@
 --- old.jsDeclarationsExportSubAssignments.js
 +++ new.jsDeclarationsExportSubAssignments.js
-@@= skipped -9, +9 lines =@@
- module.exports.Strings = Strings;
-
- //// [cls.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- const Strings = {
-     a: "A",
-     b: "B"
-@@= skipped -7, +9 lines =@@
+@@= skipped -16, +16 lines =@@
  class Foo {
  }
  module.exports = Foo;

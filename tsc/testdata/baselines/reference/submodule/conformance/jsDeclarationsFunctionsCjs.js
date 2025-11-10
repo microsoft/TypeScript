@@ -62,8 +62,6 @@ module.exports.j = function j() {}
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 export var a = function a() { };
 module.exports.a = function a() { };
 export var b = function b() { };

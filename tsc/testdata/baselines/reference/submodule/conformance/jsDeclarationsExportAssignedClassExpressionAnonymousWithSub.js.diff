@@ -1,15 +1,6 @@
 --- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.js
 +++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.js
-@@= skipped -16, +16 lines =@@
-
-
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- module.exports = class {
-     /**
-      * @param {number} p
-@@= skipped -8, +10 lines =@@
+@@= skipped -24, +24 lines =@@
          this.t = 12 + p;
      }
  };

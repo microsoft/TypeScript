@@ -8,7 +8,6 @@
  /main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
  /main1.ts(23,8): error TS1192: Module '"/e"' has no default export.
 -/main2.mts(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
-+/main1.ts(30,4): error TS2339: Property 'default' does not exist on type '0'.
  /main2.mts(4,4): error TS2339: Property 'default' does not exist on type 'typeof import("/a")'.
  /main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
  /main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
@@ -18,7 +17,7 @@
  /main3.cjs(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
  /main3.cjs(5,8): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
  /main3.cjs(8,8): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
-@@= skipped -18, +16 lines =@@
+@@= skipped -18, +15 lines =@@
  /main3.cjs(17,8): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 
 
@@ -31,21 +30,19 @@
      
  ==== /b.ts (0 errors) ====
      export default 0;
-@@= skipped -30, +28 lines =@@
+@@= skipped -28, +26 lines =@@
+ ==== /g.js (0 errors) ====
+     exports.default = 0;
      
- ==== /main1.ts (4 errors) ====
+-==== /main1.ts (4 errors) ====
++==== /main1.ts (3 errors) ====
      import { x, y } from "./a"; // No y
 -                ~
 -!!! error TS2305: Module '"./a"' has no exported member 'y'.
      import a1 = require("./a"); // { x: 0 }
      const a2 = require("./a"); // Error in TS
                 ~~~~~~~
-@@= skipped -37, +35 lines =@@
-     
-     import g1 from "./g"; // { default: 0 }
-     g1.default;
-+       ~~~~~~~
-+!!! error TS2339: Property 'default' does not exist on type '0'.
+@@= skipped -42, +40 lines =@@
      import g2 = require("./g"); // { default: 0 }
      g2.default;
      
@@ -57,7 +54,7 @@
      import a1 = require("./a"); // { x: 0 }
      a1.x;
      a1.default.x; // Arguably should exist but doesn't
-@@= skipped -38, +38 lines =@@
+@@= skipped -35, +33 lines =@@
               ~
  !!! error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
                  ~

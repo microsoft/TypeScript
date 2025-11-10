@@ -57,7 +57,6 @@ const couldntThinkOfAny = {};
 const test = (base) => {
     return base;
 };
-export {};
 
 
 //// [base.d.ts]
@@ -70,5 +69,18 @@ declare namespace BaseFactory {
 }
 export = BaseFactory;
 //// [file.d.ts]
-export type BaseFactory = import('./base');
+type BaseFactory = import('./base');
 export type BaseFactoryFactory = (factory: import('./base')) ;
+/** @typedef {import('./base')} BaseFactory */
+/**
+ * @callback BaseFactoryFactory
+ * @param {import('./base')} factory
+ */
+/** @enum {import('./base')} */
+declare const couldntThinkOfAny: {};
+/**
+ *
+ * @param {InstanceType<BaseFactory["Base"]>} base
+ * @returns {InstanceType<BaseFactory["Base"]>}
+ */
+declare const test: (base: any) => any;

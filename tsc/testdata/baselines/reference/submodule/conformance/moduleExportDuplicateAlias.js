@@ -14,7 +14,6 @@ apply()
 
 //// [moduleExportAliasDuplicateAlias.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 export var apply = undefined;
 exports.apply = undefined;
 function a() { }

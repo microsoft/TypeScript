@@ -4,8 +4,6 @@
 
 
  //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +export var a = function a() { };
  module.exports.a = function a() { };
 +export var b = function b() { };
@@ -15,7 +13,7 @@
  module.exports.c = function c() { };
  module.exports.c.Cls = class {
  };
-@@= skipped -11, +16 lines =@@
+@@= skipped -11, +14 lines =@@
   * @param {number} b
   * @return {string}
   */

@@ -16,8 +16,6 @@ MyClass.staticProperty = 123;
  */
 
 //// [source.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = MyClass;
 function MyClass() { }
 MyClass.staticMethod = function () { };

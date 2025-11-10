@@ -1,27 +1,17 @@
 --- old.jsFileAlternativeUseOfOverloadTag.js
 +++ new.jsFileAlternativeUseOfOverloadTag.js
-@@= skipped -54, +54 lines =@@
-
-
- //// [jsFileAlternativeUseOfOverloadTag.js]
-+"use strict";
- // These are a few examples of existing alternative uses of @overload tag.
- // They will not work as expected with our implementation, but we are
- // trying to make sure that our changes do not result in any crashes here.
-+Object.defineProperty(exports, "__esModule", { value: true });
- const example1 = {
-     /**
-      * @overload Example1(value)
-@@= skipped -51, +53 lines =@@
+@@= skipped -105, +105 lines =@@
 
 
  //// [jsFileAlternativeUseOfOverloadTag.d.ts]
 -declare namespace example1 {
--    /**
--     * @overload Example1(value)
--     *   Creates Example1
--     *   @param value [String]
--     */
++declare function Example1(value: any): any;
++declare const example1: {
+     /**
+      * @overload Example1(value)
+      *   Creates Example1
+      *   @param value [String]
+      */
 -    function constructor(value: any): any;
 -}
 -declare namespace example2 {
@@ -66,19 +56,41 @@
 -    export { constructor_1 as constructor };
 -}
 -declare namespace example3 {
--    /**
--     * @overload evaluate(options = {}, [callback])
--     *   Evaluate something
--     *   @note Something interesting
--     *   @param options [map]
--     *   @return [string] returns evaluation result
--     *   @return [null] returns nothing if callback provided
--     *   @callback callback function (error, result)
--     *     If callback is provided it will be called with evaluation result
--     *     @param error [Error]
--     *     @param result [String]
--     *   @see callback
--     */
++    constructor: (value: any, options: any) => void;
++};
++declare function Example2(value: any, secretAccessKey: any, sessionToken: any): any;
++declare function Example2(): any;
++declare const example2: {
++    /**
++     * Example 2
++     *
++     * @overload Example2(value)
++     *   Creates Example2
++     *   @param value [String]
++     *   @param secretAccessKey [String]
++     *   @param sessionToken [String]
++     *   @example Creates with string value
++     *     const example = new Example('');
++     * @overload Example2(options)
++     *   Creates Example2
++     *   @option options value [String]
++     *   @example Creates with options object
++     *     const example = new Example2({
++     *       value: '',
++     *     });
++     */
++    constructor: () => void;
++};
++declare function evaluate(): any;
++export type callback = (error: any, result: any) ;
++declare const example3: {
+     /**
+      * @overload evaluate(options = {}, [callback])
+      *   Evaluate something
+@@= skipped -63, +48 lines =@@
+      *     @param result [String]
+      *   @see callback
+      */
 -    function evaluate(): any;
 -}
 -/**
@@ -86,17 +98,67 @@
 - *     If callback is provided it will be called with evaluation result
 - */
 -type callback = (error: any, result: any) => any;
-+export type callback = (error: any, result: any) ;
++    evaluate: (options: any, callback: any) => void;
++};
 +
 +
 +//// [DtsFileErrors]
 +
 +
-+dist/jsFileAlternativeUseOfOverloadTag.d.ts(1,50): error TS1005: '=>' expected.
++dist/jsFileAlternativeUseOfOverloadTag.d.ts(34,50): error TS1005: '=>' expected.
 +
 +
 +==== dist/jsFileAlternativeUseOfOverloadTag.d.ts (1 errors) ====
++    declare function Example1(value: any): any;
++    declare const example1: {
++        /**
++         * @overload Example1(value)
++         *   Creates Example1
++         *   @param value [String]
++         */
++        constructor: (value: any, options: any) => void;
++    };
++    declare function Example2(value: any, secretAccessKey: any, sessionToken: any): any;
++    declare function Example2(): any;
++    declare const example2: {
++        /**
++         * Example 2
++         *
++         * @overload Example2(value)
++         *   Creates Example2
++         *   @param value [String]
++         *   @param secretAccessKey [String]
++         *   @param sessionToken [String]
++         *   @example Creates with string value
++         *     const example = new Example('');
++         * @overload Example2(options)
++         *   Creates Example2
++         *   @option options value [String]
++         *   @example Creates with options object
++         *     const example = new Example2({
++         *       value: '',
++         *     });
++         */
++        constructor: () => void;
++    };
++    declare function evaluate(): any;
 +    export type callback = (error: any, result: any) ;
 +                                                     ~
 +!!! error TS1005: '=>' expected.
++    declare const example3: {
++        /**
++         * @overload evaluate(options = {}, [callback])
++         *   Evaluate something
++         *   @note Something interesting
++         *   @param options [map]
++         *   @return [string] returns evaluation result
++         *   @return [null] returns nothing if callback provided
++         *   @callback callback function (error, result)
++         *     If callback is provided it will be called with evaluation result
++         *     @param error [Error]
++         *     @param result [String]
++         *   @see callback
++         */
++        evaluate: (options: any, callback: any) => void;
++    };
 +    

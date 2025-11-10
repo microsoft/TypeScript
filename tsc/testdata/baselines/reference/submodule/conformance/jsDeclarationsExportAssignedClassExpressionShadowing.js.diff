@@ -1,11 +1,8 @@
 --- old.jsDeclarationsExportAssignedClassExpressionShadowing.js
 +++ new.jsDeclarationsExportAssignedClassExpressionShadowing.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
 
  //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  class A {
 -    constructor() {
 -        this.member = new Q();

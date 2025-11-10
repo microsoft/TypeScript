@@ -236,14 +236,10 @@ module.exports = { ns };
 const ns = require("./cls");
 module.exports = ns;
 //// [cjs3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const ns = require("./cls");
 export var ns = ns;
 module.exports.ns = ns;
 //// [cjs4.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const ns = require("./cls");
 export var names = ns;
 module.exports.names = ns;

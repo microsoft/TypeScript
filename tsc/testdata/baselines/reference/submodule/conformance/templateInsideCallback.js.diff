@@ -1,14 +1,6 @@
 --- old.templateInsideCallback.js
 +++ new.templateInsideCallback.js
-@@= skipped -58, +58 lines =@@
-
- //// [templateInsideCallback.js]
- "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- /**
-  * @typedef Oops
-  * @template T
-@@= skipped -47, +48 lines =@@
+@@= skipped -105, +105 lines =@@
      /** @type {unknown[]} */
      const result = [];
      for (let i = 0; i < array.length; i += 1) {
@@ -36,30 +28,15 @@
 - * @returns {T[]}
 - */
 -declare function flatMap(): any;
--/**
-- * @typedef Oops
-- * @template T
-- * @property {T} a
-- * @property {T} b
-- */
--/**
-- * @callback Call
-- * @template T
-- * @param {T} x
-- * @returns {T}
-- */
--/**
-- * @template T
-- * @type {Call<T>}
-- */
--declare const identity: Call<T>;
--type Nested = {
 +export type Call = () ;
-+export type Nested = {
-     oh: {
-         no: number;
+ /**
+  * @typedef Oops
+  * @template T
+@@= skipped -46, +31 lines =@@
          noooooo: string;
      };
  };
 -type Oops = any;
 -type Call = () => any;
++declare function flatMap(): any;
++declare function flatMap(): any;

@@ -152,19 +152,19 @@ f2.default;
 >default : 0
 
 import g1 from "./g"; // { default: 0 }
->g1 : 0
+>g1 : typeof g1
 
 g1.default;
->g1.default : any
->g1 : 0
->default : any
+>g1.default : 0
+>g1 : typeof g1
+>default : 0
 
 import g2 = require("./g"); // { default: 0 }
->g2 : typeof g2
+>g2 : typeof g1
 
 g2.default;
 >g2.default : 0
->g2 : typeof g2
+>g2 : typeof g1
 >default : 0
 
 === /main2.mts ===
@@ -224,10 +224,10 @@ import f2 = require("./f.cjs"); // { default: 0 }
 >f2 : typeof f2
 
 import g1 from "./g"; // { default: 0 }
->g1 : 0
+>g1 : typeof g1
 
 import g2 = require("./g"); // { default: 0 }
->g2 : typeof g2
+>g2 : typeof g1
 
 === /main3.cjs ===
 import { x, y } from "./a"; // No y
@@ -289,11 +289,11 @@ const f2 = require("./f.cjs"); // { default: 0 }
 >"./f.cjs" : "./f.cjs"
 
 import g1 from "./g"; // { default: 0 }
->g1 : 0
+>g1 : typeof g1
 
 const g2 = require("./g"); // { default: 0 }
->g2 : typeof g2
->require("./g") : typeof g2
+>g2 : typeof g1
+>require("./g") : typeof g1
 >require : any
 >"./g" : "./g"
 

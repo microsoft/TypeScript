@@ -1,18 +1,14 @@
 --- old.jsDeclarationsTypeReferences3.js
 +++ new.jsDeclarationsTypeReferences3.js
-@@= skipped -14, +14 lines =@@
-
-
+@@= skipped -16, +16 lines =@@
  //// [index.js]
-+"use strict";
  /// <reference types="node" />
-+Object.defineProperty(exports, "__esModule", { value: true });
  const Something = require("fs").Something;
 +export var A = {};
  module.exports.A = {};
  module.exports.A.B = {
      thing: new Something()
-@@= skipped -9, +12 lines =@@
+@@= skipped -7, +8 lines =@@
 
 
  //// [index.d.ts]

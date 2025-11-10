@@ -4,7 +4,6 @@
 
  //// [moduleExportAliasDuplicateAlias.js]
  "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +export var apply = undefined;
  module.exports.apply = undefined;
  function a() { }
@@ -14,7 +13,7 @@
  module.exports.apply = a;
  module.exports.apply();
  //// [test.js]
-@@= skipped -12, +16 lines =@@
+@@= skipped -12, +15 lines =@@
 
 
  //// [moduleExportAliasDuplicateAlias.d.ts]

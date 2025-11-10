@@ -33,3 +33,9 @@ export type WorksWithPeopleCallback = (person: {
     name: string;
     age?: number;
 }) => void;
+/**
+ * For each person, calls your callback.
+ * @param {WorksWithPeopleCallback} callback
+ * @returns {void}
+ */
+declare function eachPerson(callback: WorksWithPeopleCallback): void;

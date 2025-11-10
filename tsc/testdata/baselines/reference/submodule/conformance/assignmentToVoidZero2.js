@@ -21,8 +21,6 @@ j + k
 
 
 //// [assignmentToVoidZero2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 export var j = 1;
 exports.j = 1;
 export var k = void 0;

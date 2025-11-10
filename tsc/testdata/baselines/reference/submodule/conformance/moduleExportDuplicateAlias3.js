@@ -17,7 +17,6 @@ const result = apply.toFixed()
 
 //// [moduleExportAliasDuplicateAlias.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 export var apply = undefined;
 exports.apply = undefined;
 export var apply = undefined;

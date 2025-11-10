@@ -2,7 +2,6 @@
 /main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
 /main1.ts(23,8): error TS1192: Module '"/e"' has no default export.
-/main1.ts(30,4): error TS2339: Property 'default' does not exist on type '0'.
 /main2.mts(4,4): error TS2339: Property 'default' does not exist on type 'typeof import("/a")'.
 /main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
@@ -43,7 +42,7 @@
 ==== /g.js (0 errors) ====
     exports.default = 0;
     
-==== /main1.ts (4 errors) ====
+==== /main1.ts (3 errors) ====
     import { x, y } from "./a"; // No y
     import a1 = require("./a"); // { x: 0 }
     const a2 = require("./a"); // Error in TS
@@ -80,8 +79,6 @@
     
     import g1 from "./g"; // { default: 0 }
     g1.default;
-       ~~~~~~~
-!!! error TS2339: Property 'default' does not exist on type '0'.
     import g2 = require("./g"); // { default: 0 }
     g2.default;
     

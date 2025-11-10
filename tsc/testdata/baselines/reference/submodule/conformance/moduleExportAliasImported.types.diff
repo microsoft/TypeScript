@@ -31,5 +31,5 @@
  === importer.js ===
  import('./bug28014')
 ->import('./bug28014') : Promise<{ version: 1; default: { (): void; version: 1; }; }>
-+>import('./bug28014') : Promise<() => void>
++>import('./bug28014') : Promise<{ default: () => void; }>
  >'./bug28014' : "./bug28014"

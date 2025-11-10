@@ -14,8 +14,6 @@ module.exports.Sub.prototype = { }
 
 
 //// [jsDeclarationsExportAssignedConstructorFunctionWithSub.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @param {number} p
  */

@@ -1,14 +1,6 @@
 --- old.jsDeclarationsExportAssignedConstructorFunctionWithSub.js
 +++ new.jsDeclarationsExportAssignedConstructorFunctionWithSub.js
-@@= skipped -13, +13 lines =@@
-
-
- //// [jsDeclarationsExportAssignedConstructorFunctionWithSub.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- /**
-  * @param {number} p
-  */
+@@= skipped -19, +19 lines =@@
  module.exports = function (p) {
      this.t = 12 + p;
  };

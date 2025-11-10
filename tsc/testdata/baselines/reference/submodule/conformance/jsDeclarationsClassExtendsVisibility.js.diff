@@ -1,15 +1,6 @@
 --- old.jsDeclarationsClassExtendsVisibility.js
 +++ new.jsDeclarationsClassExtendsVisibility.js
-@@= skipped -17, +17 lines =@@
- }
- module.exports = Bar;
- //// [cls.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- const Bar = require("./bar");
- const Strings = {
-     a: "A",
-@@= skipped -8, +10 lines =@@
+@@= skipped -25, +25 lines =@@
  class Foo extends Bar {
  }
  module.exports = Foo;

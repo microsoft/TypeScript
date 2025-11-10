@@ -16,8 +16,6 @@ module.exports.Strings = Strings;
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const Strings = {
     a: "A",
     b: "B"

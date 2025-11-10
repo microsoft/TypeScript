@@ -26,8 +26,6 @@ module.exports.Strings = Strings
 
 
 //// [source.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class Handler {
     static get OPTIONS() {
         return 1;

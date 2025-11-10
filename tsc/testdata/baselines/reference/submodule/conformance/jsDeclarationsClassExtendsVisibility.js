@@ -18,8 +18,6 @@ class Bar {
 }
 module.exports = Bar;
 //// [cls.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const Bar = require("./bar");
 const Strings = {
     a: "A",

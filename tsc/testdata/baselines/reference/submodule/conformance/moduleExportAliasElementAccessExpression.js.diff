@@ -1,11 +1,8 @@
 --- old.moduleExportAliasElementAccessExpression.js
 +++ new.moduleExportAliasElementAccessExpression.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
 
  //// [moduleExportAliasElementAccessExpression.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
  function D() { }
 +export var D = D;
  exports["D"] = D;

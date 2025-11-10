@@ -16,7 +16,6 @@ exports.K = class K {
 
 //// [mod1.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 export var K = class K {
     values() {
     }

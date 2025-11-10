@@ -1,15 +1,6 @@
 --- old.jsDeclarationsFunctionPrototypeStatic.js
 +++ new.jsDeclarationsFunctionPrototypeStatic.js
-@@= skipped -15, +15 lines =@@
-  */
-
- //// [source.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- module.exports = MyClass;
- function MyClass() { }
- MyClass.staticMethod = function () { };
-@@= skipped -16, +18 lines =@@
+@@= skipped -31, +31 lines =@@
  //// [source.d.ts]
  export = MyClass;
  declare function MyClass(): void;

@@ -18,8 +18,6 @@ var diddy = funky(1)
 
 
 //// [commonJSAliasedExport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const donkey = (ast) => ast;
 function funky(declaration) {
     return false;

@@ -10,8 +10,6 @@ module.exports = Foo;
 module.exports.Strings = Strings;
 
 //// [cls.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const Strings = {
     a: "A",
     b: "B"

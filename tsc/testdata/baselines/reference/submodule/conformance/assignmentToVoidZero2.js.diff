@@ -4,15 +4,13 @@
 
 
  //// [assignmentToVoidZero2.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +export var j = 1;
  exports.j = 1;
 +export var k = void 0;
  exports.k = void 0;
  var o = {};
  o.x = 1;
-@@= skipped -20, +24 lines =@@
+@@= skipped -20, +22 lines =@@
 
 
  //// [assignmentToVoidZero2.d.ts]
