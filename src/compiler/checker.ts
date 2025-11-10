@@ -33791,25 +33791,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (isJsxElement(parent) && parent.openingElement === openingLikeElement || isJsxFragment(parent) && parent.openingFragment === openingLikeElement) &&
             getSemanticJsxChildren(parent.children).length > 0
         ) {
-            // Compute contextual type for children before checking them
+            // Compute contextual type for fragment children before checking them
             let childrenContextualType: Type | undefined;
-            if (jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
-                let contextualType: Type | undefined;
-                if (isJsxOpeningElement(openingLikeElement)) {
-                    contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined);
+            if (isJsxOpeningFragment(openingLikeElement) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                // For fragments, get the props type from the Fragment factory's signature
+                const fragmentType = getJSXFragmentType(openingLikeElement);
+                const signatures = getSignaturesOfType(fragmentType, SignatureKind.Call);
+                if (signatures.length > 0) {
+                    const contextualType = getTypeOfFirstParameterOfSignature(signatures[0]);
+                    childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                 }
-                else if (isJsxOpeningFragment(openingLikeElement)) {
-                    // For fragments, get the props type from the Fragment factory's signature
-                    const fragmentType = getJSXFragmentType(openingLikeElement);
-                    const signatures = getSignaturesOfType(fragmentType, SignatureKind.Call);
-                    if (signatures.length > 0) {
-                        contextualType = getTypeOfFirstParameterOfSignature(signatures[0]);
-                    }
-                }
-                childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
             }
 
-            // Check children with contextual type
+            // Check children with contextual type (only for fragments)
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode, childrenContextualType);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
@@ -33819,6 +33813,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (explicitlySpecifyChildrenAttribute) {
                     error(attributeParent, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                 }
+
+                const contextualType = isJsxOpeningElement(openingLikeElement) ? getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined) : undefined;
+                const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                 // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                 const childrenPropSymbol = createSymbol(SymbolFlags.Property, jsxChildrenPropertyName);
                 childrenPropSymbol.links.type = childrenTypes.length === 1 ? childrenTypes[0] :
