@@ -33791,7 +33791,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (isJsxElement(parent) && parent.openingElement === openingLikeElement || isJsxFragment(parent) && parent.openingFragment === openingLikeElement) &&
             getSemanticJsxChildren(parent.children).length > 0
         ) {
-            const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
+            // Compute contextual type for children before checking them
+            let childrenContextualType: Type | undefined;
+            if (jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                let contextualType: Type | undefined;
+                if (isJsxOpeningElement(openingLikeElement)) {
+                    contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined);
+                }
+                else if (isJsxOpeningFragment(openingLikeElement)) {
+                    // For fragments, get the props type from the Fragment factory's signature
+                    const fragmentType = getJSXFragmentType(openingLikeElement);
+                    const signatures = getSignaturesOfType(fragmentType, SignatureKind.Call);
+                    if (signatures.length > 0) {
+                        contextualType = getTypeOfFirstParameterOfSignature(signatures[0]);
+                    }
+                }
+                childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
+            }
+
+            // Check children with contextual type
+            const childrenTypes: Type[] = checkJsxChildren(parent, checkMode, childrenContextualType);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
                 // Error if there is a attribute named "children" explicitly specified and children element.
@@ -33800,9 +33819,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (explicitlySpecifyChildrenAttribute) {
                     error(attributeParent, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                 }
-
-                const contextualType = isJsxOpeningElement(openingLikeElement) ? getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined) : undefined;
-                const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                 // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                 const childrenPropSymbol = createSymbol(SymbolFlags.Property, jsxChildrenPropertyName);
                 childrenPropSymbol.links.type = childrenTypes.length === 1 ? childrenTypes[0] :
@@ -33842,7 +33858,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
+    function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode, childrenContextualType?: Type) {
         const childrenTypes: Type[] = [];
         for (const child of node.children) {
             // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
@@ -33856,7 +33872,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 continue; // empty jsx expressions don't *really* count as present children
             }
             else {
-                childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));
+                // If we have a contextual type for children, use it when checking child expressions
+                if (childrenContextualType && child.kind === SyntaxKind.JsxExpression && child.expression) {
+                    childrenTypes.push(checkExpressionForMutableLocationWithContextualType(child.expression, childrenContextualType));
+                }
+                else {
+                    childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));
+                }
             }
         }
         return childrenTypes;
@@ -37418,7 +37440,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const jsxFragmentFactoryName = getJsxNamespace(node);
 
         // #38720/60122, allow null as jsxFragmentFactory
-        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
+        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsx === JsxEmit.ReactJSX || compilerOptions.jsx === JsxEmit.ReactJSXDev || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
         if (!shouldResolveFactoryReference) return sourceFileLinks.jsxFragmentType = anyType;
 
         const shouldModuleRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
