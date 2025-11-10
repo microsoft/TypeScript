@@ -1,5 +1,6 @@
 go test fuzz v1
 string(".ts")
-string("/")
-int32(99)
-uint8(1)
+string("")
+byte('\x00')
+bool(false)
+bool(false)

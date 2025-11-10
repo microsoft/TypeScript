@@ -1,0 +1,6 @@
+go test fuzz v1
+string(".js")
+string("c(0000{\n/**@overload */get 0")
+byte('\x00')
+bool(false)
+bool(true)

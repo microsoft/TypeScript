@@ -918,8 +918,14 @@ func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent 
 			if childTypeTag != nil && childTypeTag.TypeExpression != nil && !isObjectOrObjectArrayTypeReference(childTypeTag.TypeExpression.Type()) {
 				typeExpression = childTypeTag.TypeExpression
 			} else {
-				typeExpression = p.finishNode(jsdocTypeLiteral, jsdocPropertyTags[0].Pos())
+				// !!! This differs from Strada but prevents a crash
+				pos := start
+				if len(jsdocPropertyTags) > 0 {
+					pos = jsdocPropertyTags[0].Pos()
+				}
+				typeExpression = p.finishNode(jsdocTypeLiteral, pos)
 			}
+			end = typeExpression.End()
 		}
 	}
 

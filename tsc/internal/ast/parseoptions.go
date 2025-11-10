@@ -31,8 +31,8 @@ func GetSourceFileAffectingCompilerOptions(fileName string, options *core.Compil
 }
 
 type ExternalModuleIndicatorOptions struct {
-	jsx   bool
-	force bool
+	JSX   bool
+	Force bool
 }
 
 func GetExternalModuleIndicatorOptions(fileName string, options *core.CompilerOptions, metadata SourceFileMetaData) ExternalModuleIndicatorOptions {
@@ -43,7 +43,7 @@ func GetExternalModuleIndicatorOptions(fileName string, options *core.CompilerOp
 	switch options.GetEmitModuleDetectionKind() {
 	case core.ModuleDetectionKindForce:
 		// All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
-		return ExternalModuleIndicatorOptions{force: true}
+		return ExternalModuleIndicatorOptions{Force: true}
 	case core.ModuleDetectionKindLegacy:
 		// Files are modules if they have imports, exports, or import.meta
 		return ExternalModuleIndicatorOptions{}
@@ -52,8 +52,8 @@ func GetExternalModuleIndicatorOptions(fileName string, options *core.CompilerOp
 		// If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
 		// otherwise, the presence of import or export statments (or import.meta) implies module-ness
 		return ExternalModuleIndicatorOptions{
-			jsx:   options.Jsx == core.JsxEmitReactJSX || options.Jsx == core.JsxEmitReactJSXDev,
-			force: isFileForcedToBeModuleByFormat(fileName, options, metadata),
+			JSX:   options.Jsx == core.JsxEmitReactJSX || options.Jsx == core.JsxEmitReactJSXDev,
+			Force: isFileForcedToBeModuleByFormat(fileName, options, metadata),
 		}
 	default:
 		return ExternalModuleIndicatorOptions{}
@@ -89,13 +89,13 @@ func getExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOp
 		return nil
 	}
 
-	if opts.jsx {
+	if opts.JSX {
 		if node := isFileModuleFromUsingJSXTag(file); node != nil {
 			return node
 		}
 	}
 
-	if opts.force {
+	if opts.Force {
 		return file.AsNode()
 	}
 

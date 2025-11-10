@@ -41,7 +41,9 @@ func GetJSDocCommentRanges(f *ast.NodeFactory, commentRanges []ast.CommentRange,
 	}
 	// Keep if the comment starts with '/**' but not if it is '/**/'
 	return slices.DeleteFunc(commentRanges, func(comment ast.CommentRange) bool {
-		return comment.End() > node.End() || text[comment.Pos()+1] != '*' || text[comment.Pos()+2] != '*' || text[comment.Pos()+3] == '/'
+		commentStart := comment.Pos()
+		commentLen := comment.End() - commentStart
+		return comment.End() > node.End() || commentLen < 4 || text[commentStart+1] != '*' || text[commentStart+2] != '*' || text[commentStart+3] == '/'
 	})
 }
 

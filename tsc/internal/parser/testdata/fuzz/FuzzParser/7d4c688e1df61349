@@ -1,0 +1,6 @@
+go test fuzz v1
+string(".js")
+string("0%{\n/**@satisfies */A")
+byte('\x00')
+bool(true)
+bool(false)

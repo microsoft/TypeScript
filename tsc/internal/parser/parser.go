@@ -503,7 +503,7 @@ func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser
 	list := make([]*ast.Node, 0, 16)
 	for i := 0; !p.isListTerminator(kind); i++ {
 		if p.isListElement(kind, false /*inErrorRecovery*/) {
-			elt := parseElement(p, i)
+			elt := parseElement(p, len(list))
 			if len(p.reparseList) > 0 {
 				for _, e := range p.reparseList {
 					// Propagate @typedef type alias declarations outwards to a context that permits them.
@@ -1029,8 +1029,12 @@ func (p *Parser) parseDeclaration() *ast.Statement {
 
 func (p *Parser) parseDeclarationWorker(pos int, hasJSDoc bool, modifiers *ast.ModifierList) *ast.Statement {
 	switch p.token {
-	case ast.KindVarKeyword, ast.KindLetKeyword, ast.KindConstKeyword, ast.KindUsingKeyword, ast.KindAwaitKeyword:
+	case ast.KindVarKeyword, ast.KindLetKeyword, ast.KindConstKeyword, ast.KindUsingKeyword:
 		return p.parseVariableStatement(pos, hasJSDoc, modifiers)
+	case ast.KindAwaitKeyword:
+		if p.isAwaitUsingDeclaration() {
+			return p.parseVariableStatement(pos, hasJSDoc, modifiers)
+		}
 	case ast.KindFunctionKeyword:
 		return p.parseFunctionDeclaration(pos, hasJSDoc, modifiers)
 	case ast.KindClassKeyword:
@@ -6397,6 +6401,9 @@ func skipNonBlanks(text string, pos int) int {
 }
 
 func skipTo(text string, pos int, s string) int {
+	if pos >= len(text) {
+		return -1
+	}
 	i := strings.Index(text[pos:], s)
 	if i < 0 {
 		return -1
