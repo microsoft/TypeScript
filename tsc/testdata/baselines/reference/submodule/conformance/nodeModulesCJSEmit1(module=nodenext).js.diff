@@ -1,14 +1,9 @@
 --- old.nodeModulesCJSEmit1(module=nodenext).js
 +++ new.nodeModulesCJSEmit1(module=nodenext).js
-@@= skipped -21, +21 lines =@@
-
- //// [1.cjs]
- "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -24, +24 lines =@@
  module.exports = {};
  //// [2.cjs]
  "use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +export var foo = 0;
  exports.foo = 0;
  //// [3.cjs]

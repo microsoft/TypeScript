@@ -34,6 +34,7 @@ module.exports = a;
 const a = {};
 module.exports = a;
 //// [file.js]
+"use strict";
 // cjs format file
 const a = {};
 module.exports = a;

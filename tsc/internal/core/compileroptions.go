@@ -232,12 +232,11 @@ func (options *CompilerOptions) GetEmitModuleDetectionKind() ModuleDetectionKind
 	if options.ModuleDetection != ModuleDetectionKindNone {
 		return options.ModuleDetection
 	}
-	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNode20, ModuleKindNodeNext:
+	moduleKind := options.GetEmitModuleKind()
+	if ModuleKindNode16 <= moduleKind && moduleKind <= ModuleKindNodeNext {
 		return ModuleDetectionKindForce
-	default:
-		return ModuleDetectionKindAuto
 	}
+	return ModuleDetectionKindAuto
 }
 
 func (options *CompilerOptions) GetResolvePackageJsonExports() bool {
