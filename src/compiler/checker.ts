@@ -37441,11 +37441,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!shouldResolveFactoryReference) return sourceFileLinks.jsxFragmentType = anyType;
 
         const shouldModuleRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
+        // When using react-jsx/react-jsxdev, the fragment comes from the jsx-runtime module as "Fragment" export
+        // Use "Fragment" in error message instead of the default "React" namespace
+        const isModernJsx = compilerOptions.jsx === JsxEmit.ReactJSX || compilerOptions.jsx === JsxEmit.ReactJSXDev;
+        const fragmentFactoryNameForError = isModernJsx ? ReactNames.Fragment : jsxFragmentFactoryName;
         const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(
                 node,
-                jsxFragmentFactoryName,
+                fragmentFactoryNameForError,
                 shouldModuleRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                 /*nameNotFoundMessage*/ jsxFactoryRefErr,
                 /*isUse*/ true,

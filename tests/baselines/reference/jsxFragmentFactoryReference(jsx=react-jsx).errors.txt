@@ -1,5 +1,5 @@
 jsxFragmentFactoryReference.tsx(3,9): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
-jsxFragmentFactoryReference.tsx(3,9): error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+jsxFragmentFactoryReference.tsx(3,9): error TS2879: Using JSX fragments requires fragment factory 'Fragment' to be in scope, but it could not be found.
 
 
 ==== jsxFragmentFactoryReference.tsx (2 errors) ====
@@ -9,7 +9,7 @@ jsxFragmentFactoryReference.tsx(3,9): error TS2879: Using JSX fragments requires
             ~~
 !!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
             ~~
-!!! error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+!!! error TS2879: Using JSX fragments requires fragment factory 'Fragment' to be in scope, but it could not be found.
         )
     }
     
