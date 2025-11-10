@@ -45842,6 +45842,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
+        type = getReducedType(type);
         if (type === silentNeverType) {
             return silentNeverIterationTypes;
         }
