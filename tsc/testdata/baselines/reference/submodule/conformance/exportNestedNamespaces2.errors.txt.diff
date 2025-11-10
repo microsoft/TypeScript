@@ -5,8 +5,6 @@
  first.js(2,9): error TS2339: Property 'formatters' does not exist on type 'typeof import("first")'.
 +second.js(1,1): error TS2631: Cannot assign to '"second"' because it is a namespace.
  second.js(2,9): error TS2339: Property 'formatters' does not exist on type 'typeof import("second")'.
-+use.js(3,18): error TS2339: Property 'j' does not exist on type '{}'.
-+use.js(4,28): error TS2339: Property 'o' does not exist on type '{}'.
 
 
  ==== mod.js (0 errors) ====
@@ -30,17 +28,3 @@
      exports.formatters.o = function (v) {
              ~~~~~~~~~~
  !!! error TS2339: Property 'formatters' does not exist on type 'typeof import("second")'.
-         return v
-     }
-     
--==== use.js (0 errors) ====
-+==== use.js (2 errors) ====
-     import * as debug from './mod'
-     
-     debug.formatters.j
-+                     ~
-+!!! error TS2339: Property 'j' does not exist on type '{}'.
-     var one = debug.formatters.o(1)
-+                               ~
-+!!! error TS2339: Property 'o' does not exist on type '{}'.
-     

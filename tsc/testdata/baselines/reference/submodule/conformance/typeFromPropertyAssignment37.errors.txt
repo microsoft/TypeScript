@@ -1,6 +1,5 @@
 mod.js(1,14): error TS2304: Cannot find name 'exports'.
 mod.js(1,24): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-mod.js(3,10): error TS2339: Property 'existy' does not exist on type '{}'.
 use.js(1,22): error TS2306: File 'mod.js' is not a module.
 
 
@@ -13,7 +12,7 @@ use.js(1,22): error TS2306: File 'mod.js' is not a module.
     }
     util.existy // no error
     
-==== mod.js (3 errors) ====
+==== mod.js (2 errors) ====
     const util = exports = module.exports = {}
                  ~~~~~~~
 !!! error TS2304: Cannot find name 'exports'.
@@ -21,7 +20,5 @@ use.js(1,22): error TS2306: File 'mod.js' is not a module.
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     if (!!false) {
         util.existy = function () { }
-             ~~~~~~
-!!! error TS2339: Property 'existy' does not exist on type '{}'.
     }
     

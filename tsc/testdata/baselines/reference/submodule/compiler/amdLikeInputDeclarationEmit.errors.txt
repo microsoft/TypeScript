@@ -1,6 +1,4 @@
 ExtendedClass.js(17,5): error TS1231: An export assignment must be at the top level of a file or module declaration.
-ExtendedClass.js(17,12): error TS2339: Property 'exports' does not exist on type '{}'.
-ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type '{}'.
 
 
 ==== typing.d.ts (0 errors) ====
@@ -12,7 +10,7 @@ ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type
         }
         export = BaseClass;
     }
-==== ExtendedClass.js (3 errors) ====
+==== ExtendedClass.js (1 errors) ====
     define("lib/ExtendedClass", ["deps/BaseClass"], 
     /**
      * {typeof import("deps/BaseClass")}
@@ -32,9 +30,5 @@ ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type
         module.exports = ExtendedClass
         ~~~~~~
 !!! error TS1231: An export assignment must be at the top level of a file or module declaration.
-               ~~~~~~~
-!!! error TS2339: Property 'exports' does not exist on type '{}'.
         return module.exports;
-                      ~~~~~~~
-!!! error TS2339: Property 'exports' does not exist on type '{}'.
     });

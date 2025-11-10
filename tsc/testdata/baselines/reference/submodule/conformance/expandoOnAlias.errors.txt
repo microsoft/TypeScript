@@ -1,13 +1,11 @@
 test.js(4,5): error TS2339: Property 'config' does not exist on type 'typeof Vue'.
-test.js(12,8): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
-test.js(14,8): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
 
 
 ==== vue.js (0 errors) ====
     export class Vue {}
     export const config = { x: 0 };
     
-==== test.js (3 errors) ====
+==== test.js (1 errors) ====
     import { Vue, config } from "./vue";
     
     // Expando declarations aren't allowed on aliases.
@@ -22,10 +20,6 @@ test.js(14,8): error TS2339: Property 'y' does not exist on type '{ x: number; }
     // This is not an expando declaration; it works because non-strict JS allows
     // loosey goosey assignment on objects.
     config.y = {};
-           ~
-!!! error TS2339: Property 'y' does not exist on type '{ x: number; }'.
     config.x;
     config.y;
-           ~
-!!! error TS2339: Property 'y' does not exist on type '{ x: number; }'.
     

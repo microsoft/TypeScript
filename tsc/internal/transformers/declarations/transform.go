@@ -1343,7 +1343,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 
 	modifiers := tx.ensureModifiers(input.AsNode())
 	typeParameters := tx.ensureTypeParams(input.AsNode(), input.TypeParameters)
-	ctor := getFirstConstructorWithBody(input.AsNode())
+	ctor := ast.GetFirstConstructorWithBody(input.AsNode())
 	var parameterProperties []*ast.Node
 	if ctor != nil {
 		oldDiag := tx.state.getSymbolAccessibilityDiagnostic

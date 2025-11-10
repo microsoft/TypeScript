@@ -1518,12 +1518,14 @@ func (c *Checker) onFailedToResolveSymbol(errorLocation *ast.Node, name string, 
 	suggestion := c.getSuggestedSymbolForNonexistentSymbol(errorLocation, name, meaning)
 	if suggestion != nil && !(suggestion.ValueDeclaration != nil && ast.IsAmbientModule(suggestion.ValueDeclaration) && ast.IsGlobalScopeAugmentation(suggestion.ValueDeclaration)) {
 		suggestionName := c.symbolToString(suggestion)
-		message := core.IfElse(meaning == ast.SymbolFlagsNamespace, diagnostics.Cannot_find_namespace_0_Did_you_mean_1, diagnostics.Cannot_find_name_0_Did_you_mean_1)
+		isUncheckedJS := c.isUncheckedJSSuggestion(errorLocation, suggestion, false /*excludeClasses*/)
+		message := core.IfElse(meaning == ast.SymbolFlagsNamespace, diagnostics.Cannot_find_namespace_0_Did_you_mean_1,
+			core.IfElse(isUncheckedJS, diagnostics.Could_not_find_name_0_Did_you_mean_1, diagnostics.Cannot_find_name_0_Did_you_mean_1))
 		diagnostic := NewDiagnosticForNode(errorLocation, message, name, suggestionName)
 		if suggestion.ValueDeclaration != nil {
 			diagnostic.AddRelatedInfo(NewDiagnosticForNode(suggestion.ValueDeclaration, diagnostics.X_0_is_declared_here, suggestionName))
 		}
-		c.diagnostics.Add(diagnostic)
+		c.addErrorOrSuggestion(!isUncheckedJS, diagnostic)
 		return
 	}
 	// And then fall back to unspecified "not found"
@@ -10873,11 +10875,10 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 			if c.checkPrivateIdentifierPropertyAccess(leftType, right, lexicallyScopedSymbol) {
 				return c.errorType
 			}
-			// !!!
-			// containingClass := getContainingClassExcludingClassDecorators(right)
-			// if containingClass && isPlainJSFile(ast.GetSourceFileOfNode(containingClass), c.compilerOptions.checkJs) {
-			// 	c.grammarErrorOnNode(right, diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class, right.Text())
-			// }
+			containingClass := getContainingClassExcludingClassDecorators(right)
+			if containingClass != nil && ast.IsPlainJSFile(ast.GetSourceFileOfNode(containingClass), c.compilerOptions.CheckJs) {
+				c.grammarErrorOnNode(right, diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class, right.Text())
+			}
 		} else {
 			isSetonlyAccessor := prop.Flags&ast.SymbolFlagsSetAccessor != 0 && prop.Flags&ast.SymbolFlagsGetAccessor == 0
 			if isSetonlyAccessor && assignmentKind != AssignmentKindDefinite {
@@ -10904,6 +10905,10 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 			indexInfo = c.getApplicableIndexInfoForName(apparentType, right.Text())
 		}
 		if indexInfo == nil {
+			isUncheckedJS := c.isUncheckedJSSuggestion(node, leftType.symbol, true /*excludeClasses*/)
+			if !isUncheckedJS && c.isJSLiteralType(leftType) {
+				return c.anyType
+			}
 			if leftType.symbol == c.globalThisSymbol {
 				globalSymbol := c.globalThisSymbol.Exports[right.Text()]
 				if globalSymbol != nil && globalSymbol.Flags&ast.SymbolFlagsBlockScoped != 0 {
@@ -10914,7 +10919,7 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 				return c.anyType
 			}
 			if right.Text() != "" && !c.checkAndReportErrorForExtendingInterface(node) {
-				c.reportNonexistentProperty(right, core.IfElse(isThisTypeParameter(leftType), apparentType, leftType))
+				c.reportNonexistentProperty(right, core.IfElse(isThisTypeParameter(leftType), apparentType, leftType), isUncheckedJS)
 			}
 			return c.errorType
 		}
@@ -11091,7 +11096,7 @@ func (c *Checker) checkPrivateIdentifierPropertyAccess(leftType *Type, right *as
 	return false
 }
 
-func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *Type) {
+func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *Type, isUncheckedJS bool) {
 	if ast.IsJSDocNameReferenceContext(propNode) {
 		return
 	}
@@ -11123,7 +11128,8 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 				suggestion := c.getSuggestedSymbolForNonexistentProperty(propNode, containingType)
 				if suggestion != nil {
 					suggestedName := ast.SymbolName(suggestion)
-					diagnostic = NewDiagnosticChainForNode(diagnostic, propNode, diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, missingProperty, container, suggestedName)
+					message := core.IfElse(isUncheckedJS, diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2, diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2)
+					diagnostic = NewDiagnosticChainForNode(diagnostic, propNode, message, missingProperty, container, suggestedName)
 					if suggestion.ValueDeclaration != nil {
 						diagnostic.AddRelatedInfo(NewDiagnosticForNode(suggestion.ValueDeclaration, diagnostics.X_0_is_declared_here, suggestedName))
 					}
@@ -11140,7 +11146,7 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 			}
 		}
 	}
-	c.diagnostics.Add(diagnostic)
+	c.addErrorOrSuggestion(!isUncheckedJS || diagnostic.Code() != diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2.Code(), diagnostic)
 }
 
 func (c *Checker) getSuggestedLibForNonExistentProperty(missingProperty string, containingType *Type) string {
@@ -12609,7 +12615,8 @@ func (c *Checker) checkInExpression(left *ast.Expression, right *ast.Expression,
 		// Unlike in 'checkPrivateIdentifierExpression' we now have access to the RHS type
 		// which provides us with the opportunity to emit more detailed errors
 		if c.symbolNodeLinks.Get(left).resolvedSymbol == nil && ast.GetContainingClass(left) != nil {
-			c.reportNonexistentProperty(left, rightType)
+			isUncheckedJS := c.isUncheckedJSSuggestion(left, rightType.symbol, true /*excludeClasses*/)
+			c.reportNonexistentProperty(left, rightType, isUncheckedJS)
 		}
 	} else {
 		// The type of the left operand must be assignable to string, number, or symbol.
@@ -12714,6 +12721,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		}
 		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
 		result.objectFlags |= objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
+		if contextualType == nil && ast.IsInJSFile(node) && !ast.IsInJsonFile(node) {
+			result.objectFlags |= ObjectFlagsJSLiteral
+		}
 		if patternWithComputedProperties {
 			result.objectFlags |= ObjectFlagsObjectLiteralPatternWithComputedProperties
 		}
@@ -17598,6 +17608,10 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 }
 
 func (c *Checker) reportImplicitAny(declaration *ast.Node, t *Type, wideningKind WideningKind) {
+	if ast.IsInJSFile(declaration) && !ast.IsCheckJSEnabledForFile(ast.GetSourceFileOfNode(declaration), c.compilerOptions) {
+		// Only report implicit any errors/suggestions in TS and ts-check JS files
+		return
+	}
 	typeAsString := c.TypeToString(c.getWidenedType(t))
 	var diagnostic *diagnostics.Message
 	switch declaration.Kind {
@@ -26321,6 +26335,9 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 		if indexType.flags&TypeFlagsNever != 0 {
 			return c.neverType
 		}
+		if c.isJSLiteralType(objectType) {
+			return c.anyType
+		}
 		if accessExpression != nil && !isConstEnumObjectType(objectType) {
 			if isObjectLiteralType(objectType) {
 				if c.noImplicitAny && indexType.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
@@ -26377,6 +26394,9 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 	}
 	if accessFlags&AccessFlagsAllowMissing != 0 && isObjectLiteralType(objectType) {
 		return c.undefinedType
+	}
+	if c.isJSLiteralType(objectType) {
+		return c.anyType
 	}
 	if accessNode != nil {
 		indexNode := getIndexNodeForAccessExpression(accessNode)

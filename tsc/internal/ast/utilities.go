@@ -3921,3 +3921,12 @@ func HasContextSensitiveParameters(node *Node) bool {
 func IsInfinityOrNaNString(name string) bool {
 	return name == "Infinity" || name == "-Infinity" || name == "NaN"
 }
+
+func GetFirstConstructorWithBody(node *Node) *Node {
+	for _, member := range node.Members() {
+		if IsConstructorDeclaration(member) && NodeIsPresent(member.Body()) {
+			return member
+		}
+	}
+	return nil
+}

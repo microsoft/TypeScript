@@ -2,17 +2,13 @@
 +++ new.exportNestedNamespaces.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+mod.js(2,11): error TS2339: Property 'K' does not exist on type '{}'.
-+use.js(3,17): error TS2339: Property 'K' does not exist on type '{}'.
 +use.js(8,15): error TS2694: Namespace '"mod"' has no exported member 'n'.
 +use.js(9,13): error TS2749: 's.Classic' refers to a value, but is being used as a type here. Did you mean 'typeof s.Classic'?
 +
 +
-+==== mod.js (1 errors) ====
++==== mod.js (0 errors) ====
 +    exports.n = {};
 +    exports.n.K = function () {
-+              ~
-+!!! error TS2339: Property 'K' does not exist on type '{}'.
 +        this.x = 10;
 +    }
 +    exports.Classic = class {
@@ -21,12 +17,10 @@
 +        }
 +    }
 +    
-+==== use.js (3 errors) ====
++==== use.js (2 errors) ====
 +    import * as s from './mod'
 +    
 +    var k = new s.n.K()
-+                    ~
-+!!! error TS2339: Property 'K' does not exist on type '{}'.
 +    k.x
 +    var classic = new s.Classic()
 +    

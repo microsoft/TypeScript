@@ -6,11 +6,10 @@
 -
 -==== 0.js (1 errors) ====
 +0.js(6,21): error TS1003: Identifier expected.
-+0.js(8,9): error TS2339: Property 'SomeName' does not exist on type '{}'.
 +0.js(10,12): error TS2503: Cannot find namespace 'exports'.
 +
 +
-+==== 0.js (3 errors) ====
++==== 0.js (2 errors) ====
      // @ts-check
      
      var exports = {};
@@ -22,8 +21,6 @@
 +    
 +!!! error TS1003: Identifier expected.
      exports.SomeName;
-+            ~~~~~~~~
-+!!! error TS2339: Property 'SomeName' does not exist on type '{}'.
      
      /** @type {exports.SomeName} */
 -                       ~~~~~~~~

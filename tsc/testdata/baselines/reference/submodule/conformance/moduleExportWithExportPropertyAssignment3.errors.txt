@@ -1,24 +1,20 @@
-a.js(6,6): error TS2339: Property 'justProperty' does not exist on type '{ justExport: number; bothBefore: number; bothAfter: number; }'.
 mod1.js(2,1): error TS2322: Type 'string' is not assignable to type 'number'.
 mod1.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 mod1.js(8,1): error TS2322: Type 'string' is not assignable to type 'number'.
-mod1.js(9,16): error TS2339: Property 'justProperty' does not exist on type '{ justExport: number; bothBefore: number; bothAfter: number; }'.
 
 
-==== a.js (1 errors) ====
+==== a.js (0 errors) ====
     /// <reference path='./requires.d.ts' />
     var mod1 = require('./mod1')
     mod1.justExport.toFixed()
     mod1.bothBefore.toFixed() // error, 'toFixed' not on 'string | number'
     mod1.bothAfter.toFixed() // error, 'toFixed' not on 'string | number'
     mod1.justProperty.length
-         ~~~~~~~~~~~~
-!!! error TS2339: Property 'justProperty' does not exist on type '{ justExport: number; bothBefore: number; bothAfter: number; }'.
     
 ==== requires.d.ts (0 errors) ====
     declare var module: { exports: any };
     declare function require(name: string): any;
-==== mod1.js (4 errors) ====
+==== mod1.js (3 errors) ====
     /// <reference path='./requires.d.ts' />
     module.exports.bothBefore = 'string'
     ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,6 +34,4 @@ mod1.js(9,16): error TS2339: Property 'justProperty' does not exist on type '{ j
     ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     module.exports.justProperty = 'string'
-                   ~~~~~~~~~~~~
-!!! error TS2339: Property 'justProperty' does not exist on type '{ justExport: number; bothBefore: number; bothAfter: number; }'.
     

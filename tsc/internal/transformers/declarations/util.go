@@ -203,15 +203,6 @@ func shouldEmitFunctionProperties(input *ast.FunctionDeclaration) bool {
 	return len(overloadSignatures) == 0 || overloadSignatures[len(overloadSignatures)-1] == input.AsNode()
 }
 
-func getFirstConstructorWithBody(node *ast.Node) *ast.Node {
-	for _, member := range node.Members() {
-		if ast.IsConstructorDeclaration(member) && ast.NodeIsPresent(member.Body()) {
-			return member
-		}
-	}
-	return nil
-}
-
 func getEffectiveBaseTypeNode(node *ast.Node) *ast.Node {
 	baseType := ast.GetClassExtendsHeritageElement(node)
 	// !!! TODO: JSDoc support
