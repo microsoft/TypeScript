@@ -28,7 +28,7 @@
 - * @returns {T[]}
 - */
 -declare function flatMap(): any;
-+export type Call = () ;
++type Call = () ;
  /**
   * @typedef Oops
   * @template T

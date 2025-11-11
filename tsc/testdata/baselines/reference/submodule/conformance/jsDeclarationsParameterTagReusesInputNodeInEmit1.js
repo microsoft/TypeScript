@@ -70,7 +70,7 @@ declare namespace BaseFactory {
 export = BaseFactory;
 //// [file.d.ts]
 type BaseFactory = import('./base');
-export type BaseFactoryFactory = (factory: import('./base')) ;
+type BaseFactoryFactory = (factory: import('./base')) ;
 /** @typedef {import('./base')} BaseFactory */
 /**
  * @callback BaseFactoryFactory

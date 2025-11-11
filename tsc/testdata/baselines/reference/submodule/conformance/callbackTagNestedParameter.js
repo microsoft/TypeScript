@@ -29,7 +29,7 @@ function eachPerson(callback) {
  * @param {number} [person.age]
  * @returns {void}
  */
-export type WorksWithPeopleCallback = (person: {
+type WorksWithPeopleCallback = (person: {
     name: string;
     age?: number;
 }) => void;

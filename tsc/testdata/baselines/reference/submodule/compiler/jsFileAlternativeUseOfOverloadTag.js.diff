@@ -82,7 +82,7 @@
 +    constructor: () => void;
 +};
 +declare function evaluate(): any;
-+export type callback = (error: any, result: any) ;
++type callback = (error: any, result: any) ;
 +declare const example3: {
      /**
       * @overload evaluate(options = {}, [callback])
@@ -105,7 +105,7 @@
 +//// [DtsFileErrors]
 +
 +
-+dist/jsFileAlternativeUseOfOverloadTag.d.ts(34,50): error TS1005: '=>' expected.
++dist/jsFileAlternativeUseOfOverloadTag.d.ts(34,43): error TS1005: '=>' expected.
 +
 +
 +==== dist/jsFileAlternativeUseOfOverloadTag.d.ts (1 errors) ====
@@ -142,8 +142,8 @@
 +        constructor: () => void;
 +    };
 +    declare function evaluate(): any;
-+    export type callback = (error: any, result: any) ;
-+                                                     ~
++    type callback = (error: any, result: any) ;
++                                              ~
 +!!! error TS1005: '=>' expected.
 +    declare const example3: {
 +        /**

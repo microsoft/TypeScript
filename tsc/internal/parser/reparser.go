@@ -93,14 +93,8 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		if callbackTag.TypeExpression == nil {
 			break
 		}
-
-		export := p.factory.NewModifier(ast.KindExportKeyword)
-		export.Loc = tag.Loc
-		export.Flags = p.contextFlags | ast.NodeFlagsReparsed
-		modifiers := p.newModifierList(export.Loc, p.nodeSlicePool.NewSlice1(export))
 		functionType := p.reparseJSDocSignature(callbackTag.TypeExpression, tag, jsDoc, tag, nil)
-
-		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.factory.DeepCloneReparse(callbackTag.FullName), nil, functionType)
+		typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.factory.DeepCloneReparse(callbackTag.FullName), nil, functionType)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
 		p.finishReparsedNode(typeAlias, tag)
 		p.reparseList = append(p.reparseList, typeAlias)
