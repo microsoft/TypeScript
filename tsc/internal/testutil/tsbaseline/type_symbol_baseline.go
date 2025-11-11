@@ -31,7 +31,7 @@ func DoTypeAndSymbolBaseline(
 	t *testing.T,
 	baselinePath string,
 	header string,
-	program *compiler.Program,
+	program compiler.ProgramLike,
 	allFiles []*harnessutil.TestFile,
 	opts baseline.Options,
 	skipTypeBaselines bool,
@@ -259,13 +259,13 @@ func iterateBaseline(allFiles []*harnessutil.TestFile, fullWalker *typeWriterWal
 }
 
 type typeWriterWalker struct {
-	program              *compiler.Program
+	program              compiler.ProgramLike
 	hadErrorBaseline     bool
 	currentSourceFile    *ast.SourceFile
 	declarationTextCache map[*ast.Node]string
 }
 
-func newTypeWriterWalker(program *compiler.Program, hadErrorBaseline bool) *typeWriterWalker {
+func newTypeWriterWalker(program compiler.ProgramLike, hadErrorBaseline bool) *typeWriterWalker {
 	return &typeWriterWalker{
 		program:              program,
 		hadErrorBaseline:     hadErrorBaseline,
@@ -276,7 +276,7 @@ func newTypeWriterWalker(program *compiler.Program, hadErrorBaseline bool) *type
 func (walker *typeWriterWalker) getTypeCheckerForCurrentFile() (*checker.Checker, func()) {
 	// If we don't use the right checker for the file, its contents won't be up to date
 	// since the types/symbols baselines appear to depend on files having been checked.
-	return walker.program.GetTypeCheckerForFile(context.Background(), walker.currentSourceFile)
+	return walker.program.Program().GetTypeCheckerForFile(context.Background(), walker.currentSourceFile)
 }
 
 type typeWriterResult struct {

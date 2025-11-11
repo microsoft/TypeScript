@@ -263,7 +263,7 @@ func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collec
 	// We need to use a set here since the code can contain the same import twice,
 	// but that will only be one dependency.
 	// To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-	checker, done := program.GetTypeCheckerForFile(context.TODO(), file)
+	checker, done := program.GetTypeCheckerForFileExclusive(context.TODO(), file)
 	defer done()
 	for _, importName := range file.Imports() {
 		addReferencedFilesFromImportLiteral(file, &referencedFiles, checker, importName)

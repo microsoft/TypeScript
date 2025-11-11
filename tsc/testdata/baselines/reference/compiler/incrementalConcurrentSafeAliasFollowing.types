@@ -1,0 +1,152 @@
+//// [tests/cases/compiler/incrementalConcurrentSafeAliasFollowing.ts] ////
+
+=== file1.ts ===
+// need an out of date but present buildinfo, chained export aliases,
+// and enough files that the same checker is used for multiple files
+// to trigger the race from typescript-go/#1470
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as c}
+>b : 1
+>c : any
+
+=== file2.ts ===
+const a = 1
+>a : 1
+>1 : 1
+
+export type {a as b}
+>a : 1
+>b : any
+
+=== file0.ts ===
+import {c} from "./file1.js"
+>c : 1
+
+export type {c as d}
+>c : 1
+>d : any
+
+=== file3.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as e}
+>b : 1
+>e : any
+
+=== file4.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as f}
+>b : 1
+>f : any
+
+=== file5.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as g}
+>b : 1
+>g : any
+
+=== file6.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as h}
+>b : 1
+>h : any
+
+=== file7.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as i}
+>b : 1
+>i : any
+
+=== file8.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as j}
+>b : 1
+>j : any
+
+=== file9.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as k}
+>b : 1
+>k : any
+
+=== file10.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as l}
+>b : 1
+>l : any
+
+=== file11.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as m}
+>b : 1
+>m : any
+
+=== file12.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as n}
+>b : 1
+>n : any
+
+=== file13.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as o}
+>b : 1
+>o : any
+
+=== file14.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as p}
+>b : 1
+>p : any
+
+=== file15.ts ===
+import {b} from "./file2.js"
+>b : 1
+
+export type {b as q}
+>b : 1
+>q : any
+
+=== barrel.ts ===
+
+export * from "./file0.js"
+export * from "./file1.js"
+export * from "./file2.js"
+export * from "./file3.js"
+export * from "./file4.js"
+export * from "./file5.js"
+export * from "./file6.js"
+export * from "./file7.js"
+export * from "./file8.js"
+export * from "./file9.js"
+export * from "./file10.js"
+export * from "./file11.js"
+export * from "./file12.js"
+export * from "./file13.js"
+export * from "./file14.js"
+export * from "./file15.js"

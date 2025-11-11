@@ -229,7 +229,7 @@ func (h *affectedFilesHandler) handleDtsMayChangeOfAffectedFile(dtsMayChange dts
 				break
 			}
 			if typeChecker == nil {
-				typeChecker, done = h.program.program.GetTypeCheckerForFile(h.ctx, affectedFile)
+				typeChecker, done = h.program.program.GetTypeCheckerForFileExclusive(h.ctx, affectedFile)
 			}
 			aliased := checker.SkipAlias(exported, typeChecker)
 			if aliased == exported {

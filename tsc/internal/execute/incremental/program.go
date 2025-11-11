@@ -84,10 +84,34 @@ func (p *Program) Options() *core.CompilerOptions {
 	return p.snapshot.options
 }
 
+// CommonSourceDirectory implements compiler.AnyProgram interface.
+func (p *Program) CommonSourceDirectory() string {
+	p.panicIfNoProgram("CommonSourceDirectory")
+	return p.program.CommonSourceDirectory()
+}
+
+// Program implements compiler.AnyProgram interface.
+func (p *Program) Program() *compiler.Program {
+	p.panicIfNoProgram("Program")
+	return p.program
+}
+
+// IsSourceFileDefaultLibrary implements compiler.AnyProgram interface.
+func (p *Program) IsSourceFileDefaultLibrary(path tspath.Path) bool {
+	p.panicIfNoProgram("IsSourceFileDefaultLibrary")
+	return p.program.IsSourceFileDefaultLibrary(path)
+}
+
 // GetSourceFiles implements compiler.AnyProgram interface.
 func (p *Program) GetSourceFiles() []*ast.SourceFile {
 	p.panicIfNoProgram("GetSourceFiles")
 	return p.program.GetSourceFiles()
+}
+
+// GetSourceFile implements compiler.AnyProgram interface.
+func (p *Program) GetSourceFile(path string) *ast.SourceFile {
+	p.panicIfNoProgram("GetSourceFile")
+	return p.program.GetSourceFile(path)
 }
 
 // GetConfigFileParsingDiagnostics implements compiler.AnyProgram interface.
@@ -170,6 +194,12 @@ func (p *Program) GetDeclarationDiagnostics(ctx context.Context, file *ast.Sourc
 		return result.Diagnostics
 	}
 	return nil
+}
+
+// GetSuggestionDiagnostics implements compiler.AnyProgram interface.
+func (p *Program) GetSuggestionDiagnostics(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic {
+	p.panicIfNoProgram("GetSuggestionDiagnostics")
+	return p.program.GetSuggestionDiagnostics(ctx, file) // TODO: incremental suggestion diagnostics (only relevant in editor incremental builder?)
 }
 
 // GetModeForUsageLocation implements compiler.AnyProgram interface.

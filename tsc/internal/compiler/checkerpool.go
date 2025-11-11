@@ -14,6 +14,7 @@ import (
 type CheckerPool interface {
 	GetChecker(ctx context.Context) (*checker.Checker, func())
 	GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
+	GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
 	GetAllCheckers(ctx context.Context) ([]*checker.Checker, func())
 	Files(checker *checker.Checker) iter.Seq[*ast.SourceFile]
 }
@@ -24,6 +25,7 @@ type checkerPool struct {
 
 	createCheckersOnce sync.Once
 	checkers           []*checker.Checker
+	locks              []sync.Mutex
 	fileAssociations   map[*ast.SourceFile]*checker.Checker
 }
 
@@ -34,6 +36,7 @@ func newCheckerPool(checkerCount int, program *Program) *checkerPool {
 		program:      program,
 		checkerCount: checkerCount,
 		checkers:     make([]*checker.Checker, checkerCount),
+		locks:        make([]sync.Mutex, checkerCount),
 	}
 
 	return pool
@@ -43,6 +46,16 @@ func (p *checkerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFil
 	p.createCheckers()
 	checker := p.fileAssociations[file]
 	return checker, noop
+}
+
+func (p *checkerPool) GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
+	c, done := p.GetCheckerForFile(ctx, file)
+	idx := slices.Index(p.checkers, c)
+	p.locks[idx].Lock()
+	return c, sync.OnceFunc(func() {
+		p.locks[idx].Unlock()
+		done()
+	})
 }
 
 func (p *checkerPool) GetChecker(ctx context.Context) (*checker.Checker, func()) {

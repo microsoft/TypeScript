@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/execute/incremental"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
@@ -687,13 +688,13 @@ func compileFilesWithHost(
 	}
 	emitResult := program.Emit(ctx, compiler.EmitOptions{})
 
-	return newCompilationResult(config.CompilerOptions(), program, emitResult, diagnostics, harnessOptions)
+	return newCompilationResult(host, config.CompilerOptions(), program, emitResult, diagnostics, harnessOptions)
 }
 
 type CompilationResult struct {
 	Diagnostics      []*ast.Diagnostic
 	Result           *compiler.EmitResult
-	Program          *compiler.Program
+	Program          compiler.ProgramLike
 	Options          *core.CompilerOptions
 	HarnessOptions   *HarnessOptions
 	JS               collections.OrderedMap[string, *TestFile]
@@ -705,6 +706,7 @@ type CompilationResult struct {
 	inputs           []*TestFile
 	inputsAndOutputs collections.OrderedMap[string, *CompilationOutput]
 	Trace            string
+	Host             compiler.CompilerHost
 }
 
 type CompilationOutput struct {
@@ -715,8 +717,9 @@ type CompilationOutput struct {
 }
 
 func newCompilationResult(
+	host compiler.CompilerHost,
 	options *core.CompilerOptions,
-	program *compiler.Program,
+	program compiler.ProgramLike,
 	result *compiler.EmitResult,
 	diagnostics []*ast.Diagnostic,
 	harnessOptions *HarnessOptions,
@@ -731,9 +734,10 @@ func newCompilationResult(
 		Program:        program,
 		Options:        options,
 		HarnessOptions: harnessOptions,
+		Host:           host,
 	}
 
-	fs := program.Host().FS().(*OutputRecorderFS)
+	fs := host.FS().(*OutputRecorderFS)
 	if fs != nil && program != nil {
 		// Corsa, unlike Strada, can use multiple threads for emit. As a result, the order of outputs is non-deterministic.
 		// To make the order deterministic, we sort the outputs by the order of the inputs.
@@ -803,7 +807,7 @@ func compareTestFiles(a *TestFile, b *TestFile) int {
 }
 
 func (c *CompilationResult) getOutputPath(path string, ext string) string {
-	path = tspath.ResolvePath(c.Program.GetCurrentDirectory(), path)
+	path = tspath.ResolvePath(c.Host.GetCurrentDirectory(), path)
 	var outDir string
 	if ext == ".d.ts" || ext == ".d.mts" || ext == ".d.cts" || (strings.HasSuffix(ext, ".ts") && strings.Contains(ext, ".d.")) {
 		outDir = c.Options.DeclarationDir
@@ -817,17 +821,17 @@ func (c *CompilationResult) getOutputPath(path string, ext string) string {
 		common := c.Program.CommonSourceDirectory()
 		if common != "" {
 			path = tspath.GetRelativePathFromDirectory(common, path, tspath.ComparePathsOptions{
-				UseCaseSensitiveFileNames: c.Program.UseCaseSensitiveFileNames(),
-				CurrentDirectory:          c.Program.GetCurrentDirectory(),
+				UseCaseSensitiveFileNames: c.Host.FS().UseCaseSensitiveFileNames(),
+				CurrentDirectory:          c.Host.GetCurrentDirectory(),
 			})
-			path = tspath.CombinePaths(tspath.ResolvePath(c.Program.GetCurrentDirectory(), c.Options.OutDir), path)
+			path = tspath.CombinePaths(tspath.ResolvePath(c.Host.GetCurrentDirectory(), c.Options.OutDir), path)
 		}
 	}
 	return tspath.ChangeExtension(path, ext)
 }
 
 func (r *CompilationResult) FS() vfs.FS {
-	return r.Program.Host().FS()
+	return r.Host.FS()
 }
 
 func (r *CompilationResult) GetNumberOfJSFiles(includeJson bool) int {
@@ -852,7 +856,7 @@ func (c *CompilationResult) Outputs() []*TestFile {
 }
 
 func (c *CompilationResult) GetInputsAndOutputsForFile(path string) *CompilationOutput {
-	return c.inputsAndOutputs.GetOrZero(tspath.ResolvePath(c.Program.GetCurrentDirectory(), path))
+	return c.inputsAndOutputs.GetOrZero(tspath.ResolvePath(c.Host.GetCurrentDirectory(), path))
 }
 
 func (c *CompilationResult) GetInputsForFile(path string) []*TestFile {
@@ -915,7 +919,24 @@ func (c *CompilationResult) GetSourceMapRecord() string {
 	return sourceMapRecorder.String()
 }
 
-func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLine) *compiler.Program {
+type testBuildInfoReader struct {
+	inner incremental.BuildInfoReader
+}
+
+func (t *testBuildInfoReader) ReadBuildInfo(config *tsoptions.ParsedCommandLine) *incremental.BuildInfo {
+	r := t.inner.ReadBuildInfo(config)
+	if r == nil {
+		return nil
+	}
+	r.Version = core.Version()
+	return r
+}
+
+func getTestBuildInfoReader(host compiler.CompilerHost) *testBuildInfoReader {
+	return &testBuildInfoReader{inner: incremental.NewBuildInfoReader(host)}
+}
+
+func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLine) compiler.ProgramLike {
 	var singleThreaded core.Tristate
 	if testutil.TestProgramIsSingleThreaded() {
 		singleThreaded = core.TSTrue
@@ -927,6 +948,11 @@ func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLi
 		SingleThreaded: singleThreaded,
 	}
 	program := compiler.NewProgram(programOptions)
+	if config.CompilerOptions().Incremental.IsTrue() {
+		oldProgram := incremental.ReadBuildInfoProgram(config, getTestBuildInfoReader(host), host)
+		incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), false)
+		return incrementalProgram
+	}
 	return program
 }
 

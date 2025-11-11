@@ -20,6 +20,7 @@ type CheckerPool struct {
 	cond                *sync.Cond
 	createCheckersOnce  sync.Once
 	checkers            []*checker.Checker
+	locks               []sync.Mutex
 	inUse               map[*checker.Checker]bool
 	fileAssociations    map[*ast.SourceFile]int
 	requestAssociations map[string]int
@@ -33,6 +34,7 @@ func newCheckerPool(maxCheckers int, program *compiler.Program, log func(msg str
 		program:             program,
 		maxCheckers:         maxCheckers,
 		checkers:            make([]*checker.Checker, maxCheckers),
+		locks:               make([]sync.Mutex, maxCheckers),
 		inUse:               make(map[*checker.Checker]bool),
 		requestAssociations: make(map[string]int),
 		log:                 log,
@@ -73,6 +75,12 @@ func (p *CheckerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFil
 	checker, index := p.getCheckerLocked(requestID)
 	p.fileAssociations[file] = index
 	return checker, p.createRelease(requestID, index, checker)
+}
+
+// GetCheckerForFileExclusive is the same as GetCheckerForFile but also locks a mutex associated with the checker.
+// Call `done` to free the lock.
+func (p *CheckerPool) GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
+	panic("unimplemented") // implement if used by LS
 }
 
 func (p *CheckerPool) GetChecker(ctx context.Context) (*checker.Checker, func()) {

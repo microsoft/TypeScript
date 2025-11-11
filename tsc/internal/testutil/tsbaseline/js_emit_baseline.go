@@ -201,7 +201,7 @@ func prepareDeclarationCompilationContext(
 		var sourceFileName string
 
 		if len(options.OutDir) != 0 {
-			sourceFilePath := tspath.GetNormalizedAbsolutePath(sourceFile.FileName(), result.Program.GetCurrentDirectory())
+			sourceFilePath := tspath.GetNormalizedAbsolutePath(sourceFile.FileName(), result.Host.GetCurrentDirectory())
 			sourceFilePath = strings.Replace(sourceFilePath, result.Program.CommonSourceDirectory(), "", 1)
 			sourceFileName = tspath.CombinePaths(options.OutDir, sourceFilePath)
 		} else {
