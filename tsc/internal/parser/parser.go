@@ -1894,7 +1894,7 @@ func (p *Parser) parseErrorForMissingSemicolonAfter(node *ast.Node) {
 	// Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
 	var expressionText string
 	if node.Kind == ast.KindIdentifier {
-		expressionText = node.AsIdentifier().Text
+		expressionText = node.Text()
 	}
 	if expressionText == "" {
 		p.parseErrorAtCurrentToken(diagnostics.X_0_expected, scanner.TokenToString(ast.KindSemicolonToken))
@@ -2115,7 +2115,7 @@ func (p *Parser) parseImportDeclarationOrImportEqualsDeclaration(pos int, hasJSD
 		identifier = p.parseIdentifier()
 	}
 	phaseModifier := ast.KindUnknown
-	if identifier != nil && identifier.AsIdentifier().Text == "type" &&
+	if identifier != nil && identifier.Text() == "type" &&
 		(p.token != ast.KindFromKeyword || p.isIdentifier() && p.lookAhead((*Parser).nextTokenIsFromKeywordOrEqualsToken)) &&
 		(p.isIdentifier() || p.tokenAfterImportDefinitelyProducesImportDeclaration()) {
 		phaseModifier = ast.KindTypeKeyword
@@ -2123,7 +2123,7 @@ func (p *Parser) parseImportDeclarationOrImportEqualsDeclaration(pos int, hasJSD
 		if p.isIdentifier() {
 			identifier = p.parseIdentifier()
 		}
-	} else if identifier != nil && identifier.AsIdentifier().Text == "defer" {
+	} else if identifier != nil && identifier.Text() == "defer" {
 		var shouldParseAsDeferModifier bool
 		if p.token == ast.KindFromKeyword {
 			shouldParseAsDeferModifier = !p.lookAhead((*Parser).nextTokenIsTokenStringLiteral)
@@ -2298,7 +2298,7 @@ func (p *Parser) parseImportOrExportSpecifier(kind ast.Kind) (isTypeOnly bool, p
 	disallowKeywords := kind == ast.KindImportSpecifier
 	var nameOk bool
 	name, nameOk = p.parseModuleExportName(disallowKeywords)
-	if name.Kind == ast.KindIdentifier && name.AsIdentifier().Text == "type" {
+	if name.Kind == ast.KindIdentifier && name.Text() == "type" {
 		// If the first token of an import specifier is 'type', there are a lot of possibilities,
 		// especially if we see 'as' afterwards:
 		//
@@ -4259,7 +4259,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 	// So we need just a bit of lookahead to ensure that it can only be a signature.
 	unwrappedType := returnType
 	for unwrappedType != nil && unwrappedType.Kind == ast.KindParenthesizedType {
-		unwrappedType = unwrappedType.AsParenthesizedTypeNode().Type // Skip parens if need be
+		unwrappedType = unwrappedType.Type() // Skip parens if need be
 	}
 	if !allowAmbiguity && p.token != ast.KindEqualsGreaterThanToken && p.token != ast.KindOpenBraceToken {
 		// Returning undefined here will cause our caller to rewind to where we started from.
@@ -4321,10 +4321,8 @@ func typeHasArrowFunctionBlockingParseError(node *ast.TypeNode) bool {
 	switch node.Kind {
 	case ast.KindTypeReference:
 		return ast.NodeIsMissing(node.AsTypeReference().TypeName)
-	case ast.KindFunctionType, ast.KindConstructorType:
+	case ast.KindFunctionType, ast.KindConstructorType, ast.KindParenthesizedType:
 		return typeHasArrowFunctionBlockingParseError(node.Type())
-	case ast.KindParenthesizedType:
-		return typeHasArrowFunctionBlockingParseError(node.AsParenthesizedTypeNode().Type)
 	}
 	return false
 }
@@ -4600,8 +4598,8 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 		var closingElement *ast.Node
 		lastChild := core.LastOrNil(children.Nodes)
 		if lastChild != nil && lastChild.Kind == ast.KindJsxElement &&
-			!tagNamesAreEquivalent(lastChild.AsJsxElement().OpeningElement.AsJsxOpeningElement().TagName, lastChild.AsJsxElement().ClosingElement.AsJsxClosingElement().TagName) &&
-			tagNamesAreEquivalent(opening.AsJsxOpeningElement().TagName, lastChild.AsJsxElement().ClosingElement.AsJsxClosingElement().TagName) {
+			!tagNamesAreEquivalent(lastChild.AsJsxElement().OpeningElement.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) &&
+			tagNamesAreEquivalent(opening.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) {
 			// when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
 			// restructure (<div>(...<span>...</div>)) --> (<div>(...<span>...</>)</div>)
 			// (no need to error; the parent will error)
@@ -4609,7 +4607,7 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			missingIdentifier := p.finishNodeWithEnd(p.newIdentifier(""), end, end)
 			newClosingElement := p.finishNodeWithEnd(p.factory.NewJsxClosingElement(missingIdentifier), end, end)
 			newLast := p.finishNodeWithEnd(
-				p.factory.NewJsxElement(lastChild.AsJsxElement().OpeningElement, lastChild.AsJsxElement().Children, newClosingElement),
+				p.factory.NewJsxElement(lastChild.AsJsxElement().OpeningElement, lastChild.Children(), newClosingElement),
 				lastChild.AsJsxElement().OpeningElement.Pos(),
 				end,
 			)
@@ -4617,8 +4615,8 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			if lastChild.AsJsxElement().OpeningElement != nil {
 				lastChild.AsJsxElement().OpeningElement.Parent = newLast
 			}
-			if lastChild.AsJsxElement().Children != nil {
-				for _, c := range lastChild.AsJsxElement().Children.Nodes {
+			if lastChild.Children() != nil {
+				for _, c := range lastChild.Children().Nodes {
 					c.Parent = newLast
 				}
 			}
@@ -4627,13 +4625,13 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			closingElement = lastChild.AsJsxElement().ClosingElement
 		} else {
 			closingElement = p.parseJsxClosingElement(opening, inExpressionContext)
-			if !tagNamesAreEquivalent(opening.AsJsxOpeningElement().TagName, closingElement.AsJsxClosingElement().TagName) {
-				if openingTag != nil && ast.IsJsxOpeningElement(openingTag) && tagNamesAreEquivalent(closingElement.AsJsxClosingElement().TagName, openingTag.AsJsxOpeningElement().TagName) {
+			if !tagNamesAreEquivalent(opening.TagName(), closingElement.TagName()) {
+				if openingTag != nil && ast.IsJsxOpeningElement(openingTag) && tagNamesAreEquivalent(closingElement.TagName(), openingTag.TagName()) {
 					// opening incorrectly matched with its parent's closing -- put error on opening
-					p.parseErrorAtRange(opening.AsJsxOpeningElement().TagName.Loc, diagnostics.JSX_element_0_has_no_corresponding_closing_tag, scanner.GetTextOfNodeFromSourceText(p.sourceText, opening.AsJsxOpeningElement().TagName, false /*includeTrivia*/))
+					p.parseErrorAtRange(opening.TagName().Loc, diagnostics.JSX_element_0_has_no_corresponding_closing_tag, scanner.GetTextOfNodeFromSourceText(p.sourceText, opening.TagName(), false /*includeTrivia*/))
 				} else {
 					// other opening/closing mismatches -- put error on closing
-					p.parseErrorAtRange(closingElement.AsJsxClosingElement().TagName.Loc, diagnostics.Expected_corresponding_JSX_closing_tag_for_0, scanner.GetTextOfNodeFromSourceText(p.sourceText, opening.AsJsxOpeningElement().TagName, false /*includeTrivia*/))
+					p.parseErrorAtRange(closingElement.TagName().Loc, diagnostics.Expected_corresponding_JSX_closing_tag_for_0, scanner.GetTextOfNodeFromSourceText(p.sourceText, opening.TagName(), false /*includeTrivia*/))
 				}
 			}
 		}
@@ -4683,8 +4681,8 @@ func (p *Parser) parseJsxChildren(openingTag *ast.Expression) *ast.NodeList {
 		}
 		list = append(list, child)
 		if ast.IsJsxOpeningElement(openingTag) && child.Kind == ast.KindJsxElement &&
-			!tagNamesAreEquivalent(child.AsJsxElement().OpeningElement.AsJsxOpeningElement().TagName, child.AsJsxElement().ClosingElement.AsJsxClosingElement().TagName) &&
-			tagNamesAreEquivalent(openingTag.AsJsxOpeningElement().TagName, child.AsJsxElement().ClosingElement.AsJsxClosingElement().TagName) {
+			!tagNamesAreEquivalent(child.AsJsxElement().OpeningElement.TagName(), child.AsJsxElement().ClosingElement.TagName()) &&
+			tagNamesAreEquivalent(openingTag.TagName(), child.AsJsxElement().ClosingElement.TagName()) {
 			// stop after parsing a mismatched child like <div>...(<span></div>) in order to reattach the </div> higher
 			break
 		}
@@ -4703,10 +4701,10 @@ func (p *Parser) parseJsxChild(openingTag *ast.Node, token ast.Kind) *ast.Expres
 		} else {
 			// We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
 			// or to cover only 'Foo' in < Foo >
-			tag := openingTag.AsJsxOpeningElement().TagName
+			tag := openingTag.TagName()
 			start := min(scanner.SkipTrivia(p.sourceText, tag.Pos()), tag.End())
 			p.parseErrorAt(start, tag.End(), diagnostics.JSX_element_0_has_no_corresponding_closing_tag,
-				scanner.GetTextOfNodeFromSourceText(p.sourceText, openingTag.AsJsxOpeningElement().TagName, false /*includeTrivia*/))
+				scanner.GetTextOfNodeFromSourceText(p.sourceText, openingTag.TagName(), false /*includeTrivia*/))
 		}
 		return nil
 	case ast.KindLessThanSlashToken, ast.KindConflictMarkerTrivia:
@@ -4773,7 +4771,7 @@ func (p *Parser) parseJsxClosingElement(open *ast.Node, inExpressionContext bool
 	tagName := p.parseJsxElementName()
 	if p.parseExpectedWithDiagnostic(ast.KindGreaterThanToken, nil /*diagnosticMessage*/, false /*shouldAdvance*/) {
 		// manually advance the scanner in order to look for jsx text inside jsx
-		if inExpressionContext || !tagNamesAreEquivalent(open.AsJsxOpeningElement().TagName, tagName) {
+		if inExpressionContext || !tagNamesAreEquivalent(open.TagName(), tagName) {
 			p.nextToken()
 		} else {
 			p.scanJsxText()
@@ -5253,7 +5251,7 @@ func (p *Parser) parsePropertyAccessExpressionRest(pos int, expression *ast.Expr
 		p.parseErrorAtRange(p.skipRangeTrivia(name.Loc), diagnostics.An_optional_chain_cannot_contain_private_identifiers)
 	}
 	if ast.IsExpressionWithTypeArguments(expression) {
-		typeArguments := expression.AsExpressionWithTypeArguments().TypeArguments
+		typeArguments := expression.TypeArgumentList()
 		if typeArguments != nil {
 			loc := core.NewTextRange(typeArguments.Pos()-1, scanner.SkipTrivia(p.sourceText, typeArguments.End())+1)
 			p.parseErrorAtRange(loc, diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access)
@@ -5268,15 +5266,15 @@ func (p *Parser) tryReparseOptionalChain(node *ast.Expression) bool {
 	}
 	// check for an optional chain in a non-null expression
 	if ast.IsNonNullExpression(node) {
-		expr := node.AsNonNullExpression().Expression
+		expr := node.Expression()
 		for ast.IsNonNullExpression(expr) && expr.Flags&ast.NodeFlagsOptionalChain == 0 {
-			expr = expr.AsNonNullExpression().Expression
+			expr = expr.Expression()
 		}
 		if expr.Flags&ast.NodeFlagsOptionalChain != 0 {
 			// this is part of an optional chain. Walk down from `node` to `expression` and set the flag.
 			for ast.IsNonNullExpression(node) {
 				node.Flags |= ast.NodeFlagsOptionalChain
-				node = node.AsNonNullExpression().Expression
+				node = node.Expression()
 			}
 			return true
 		}
@@ -5293,11 +5291,11 @@ func (p *Parser) parseElementAccessExpressionRest(pos int, expression *ast.Expre
 		argument := p.parseExpressionAllowIn()
 		switch argument.Kind {
 		case ast.KindStringLiteral:
-			argument.AsStringLiteral().Text = p.internIdentifier(argument.AsStringLiteral().Text)
+			argument.AsStringLiteral().Text = p.internIdentifier(argument.Text())
 		case ast.KindNoSubstitutionTemplateLiteral:
-			argument.AsNoSubstitutionTemplateLiteral().Text = p.internIdentifier(argument.AsNoSubstitutionTemplateLiteral().Text)
+			argument.AsNoSubstitutionTemplateLiteral().Text = p.internIdentifier(argument.Text())
 		case ast.KindNumericLiteral:
-			argument.AsNumericLiteral().Text = p.internIdentifier(argument.AsNumericLiteral().Text)
+			argument.AsNumericLiteral().Text = p.internIdentifier(argument.Text())
 		}
 		argumentExpression = argument
 	}
@@ -5321,7 +5319,7 @@ func (p *Parser) parseCallExpressionRest(pos int, expression *ast.Expression) *a
 		if typeArguments != nil || p.token == ast.KindOpenParenToken {
 			// Absorb type arguments into CallExpression when preceding expression is ExpressionWithTypeArguments
 			if questionDotToken == nil && expression.Kind == ast.KindExpressionWithTypeArguments {
-				typeArguments = expression.AsExpressionWithTypeArguments().TypeArguments
+				typeArguments = expression.TypeArgumentList()
 				expression = expression.AsExpressionWithTypeArguments().Expression
 			}
 			inner := expression
@@ -5616,7 +5614,7 @@ func (p *Parser) parseNewExpressionOrNewDotTarget() *ast.Node {
 	var typeArguments *ast.NodeList
 	// Absorb type arguments into NewExpression when preceding expression is ExpressionWithTypeArguments
 	if expression.Kind == ast.KindExpressionWithTypeArguments {
-		typeArguments = expression.AsExpressionWithTypeArguments().TypeArguments
+		typeArguments = expression.TypeArgumentList()
 		expression = expression.AsExpressionWithTypeArguments().Expression
 	}
 	if p.token == ast.KindQuestionDotToken {
@@ -6259,15 +6257,15 @@ func tagNamesAreEquivalent(lhs *ast.Expression, rhs *ast.Expression) bool {
 	}
 	switch lhs.Kind {
 	case ast.KindIdentifier:
-		return lhs.AsIdentifier().Text == rhs.AsIdentifier().Text
+		return lhs.Text() == rhs.Text()
 	case ast.KindThisKeyword:
 		return true
 	case ast.KindJsxNamespacedName:
-		return lhs.AsJsxNamespacedName().Namespace.AsIdentifier().Text == rhs.AsJsxNamespacedName().Namespace.AsIdentifier().Text &&
-			lhs.AsJsxNamespacedName().Name().AsIdentifier().Text == rhs.AsJsxNamespacedName().Name().AsIdentifier().Text
+		return lhs.AsJsxNamespacedName().Namespace.Text() == rhs.AsJsxNamespacedName().Namespace.Text() &&
+			lhs.AsJsxNamespacedName().Name().Text() == rhs.AsJsxNamespacedName().Name().Text()
 	case ast.KindPropertyAccessExpression:
 		return lhs.AsPropertyAccessExpression().Name().Text() == rhs.AsPropertyAccessExpression().Name().Text() &&
-			tagNamesAreEquivalent(lhs.AsPropertyAccessExpression().Expression, rhs.AsPropertyAccessExpression().Expression)
+			tagNamesAreEquivalent(lhs.Expression(), rhs.Expression())
 	}
 	panic("Unhandled case in tagNamesAreEquivalent")
 }
@@ -6522,7 +6520,7 @@ func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 	}
 	switch node.Kind {
 	case ast.KindParameter, ast.KindPropertyDeclaration, ast.KindMethodDeclaration:
-		if token := node.PostfixToken(); token != nil && token.Flags&ast.NodeFlagsReparsed == 0 && ast.IsQuestionToken(token) {
+		if token := node.QuestionToken(); token != nil && token.Flags&ast.NodeFlagsReparsed == 0 && ast.IsQuestionToken(token) {
 			p.jsErrorAtRange(token.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?")
 		}
 		fallthrough
@@ -6534,7 +6532,7 @@ func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 			p.jsErrorAtRange(t.Loc, diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files)
 		}
 	case ast.KindImportDeclaration:
-		if clause := node.AsImportDeclaration().ImportClause; clause != nil && clause.IsTypeOnly() {
+		if clause := node.ImportClause(); clause != nil && clause.IsTypeOnly() {
 			p.jsErrorAtRange(node.Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import type")
 		}
 	case ast.KindExportDeclaration:
@@ -6583,11 +6581,9 @@ func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 		}
 		fallthrough
 	case ast.KindVariableStatement, ast.KindPropertyDeclaration:
-		if modifiers := node.Modifiers(); modifiers != nil {
-			for _, modifier := range modifiers.Nodes {
-				if modifier.Flags&ast.NodeFlagsReparsed == 0 && modifier.Kind != ast.KindDecorator && ast.ModifierToFlag(modifier.Kind)&ast.ModifierFlagsJavaScript == 0 {
-					p.jsErrorAtRange(modifier.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, scanner.TokenToString(modifier.Kind))
-				}
+		for _, modifier := range node.ModifierNodes() {
+			if modifier.Flags&ast.NodeFlagsReparsed == 0 && modifier.Kind != ast.KindDecorator && ast.ModifierToFlag(modifier.Kind)&ast.ModifierFlagsJavaScript == 0 {
+				p.jsErrorAtRange(modifier.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, scanner.TokenToString(modifier.Kind))
 			}
 		}
 	case ast.KindParameter:

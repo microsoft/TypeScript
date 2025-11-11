@@ -43,8 +43,8 @@ func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(nod
 		argumentExpressionTemp := ch.Factory().NewTempVariable()
 		ch.EmitContext().AddVariableDeclaration(argumentExpressionTemp)
 
-		objExpr := ch.Factory().NewAssignmentExpression(expressionTemp, left.AsElementAccessExpression().Expression)
-		objExpr.Loc = left.AsElementAccessExpression().Expression.Loc
+		objExpr := ch.Factory().NewAssignmentExpression(expressionTemp, left.Expression())
+		objExpr.Loc = left.Expression().Loc
 		accessExpr := ch.Factory().NewAssignmentExpression(argumentExpressionTemp, left.AsElementAccessExpression().ArgumentExpression)
 		accessExpr.Loc = left.AsElementAccessExpression().ArgumentExpression.Loc
 

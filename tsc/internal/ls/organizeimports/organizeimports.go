@@ -39,11 +39,11 @@ func getModuleSpecifierExpression(declaration *ast.Statement) *ast.Expression {
 	case ast.KindImportEqualsDeclaration:
 		importEquals := declaration.AsImportEqualsDeclaration()
 		if importEquals.ModuleReference.Kind == ast.KindExternalModuleReference {
-			return importEquals.ModuleReference.AsExternalModuleReference().Expression
+			return importEquals.ModuleReference.Expression()
 		}
 		return nil
 	case ast.KindImportDeclaration:
-		return declaration.AsImportDeclaration().ModuleSpecifier
+		return declaration.ModuleSpecifier()
 	case ast.KindVariableStatement:
 		// For require statements: const x = require('...')
 		variableStatement := declaration.AsVariableStatement()

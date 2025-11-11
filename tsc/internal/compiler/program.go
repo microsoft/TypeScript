@@ -664,7 +664,7 @@ func (p *Program) verifyCompilerOptions() {
 				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer.AsObjectLiteralExpression(), key, func(keyProps *ast.PropertyAssignment) *ast.Diagnostic {
 					initializer := keyProps.Initializer
 					if ast.IsArrayLiteralExpression(initializer) {
-						elements := initializer.AsArrayLiteralExpression().Elements
+						elements := initializer.ElementList()
 						if elements != nil && len(elements.Nodes) > valueIndex {
 							diag := tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), elements.Nodes[valueIndex], message, args...)
 							p.programDiagnostics = append(p.programDiagnostics, diag)

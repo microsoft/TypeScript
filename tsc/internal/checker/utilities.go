@@ -85,7 +85,7 @@ func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
 }
 
 func isEmptyObjectLiteral(expression *ast.Node) bool {
-	return expression.Kind == ast.KindObjectLiteralExpression && len(expression.AsObjectLiteralExpression().Properties.Nodes) == 0
+	return ast.IsObjectLiteralExpression(expression) && len(expression.Properties()) == 0
 }
 
 type AssignmentKind int32
@@ -134,26 +134,6 @@ func isInCompoundLikeAssignment(node *ast.Node) bool {
 func isCompoundLikeAssignment(assignment *ast.Node) bool {
 	right := ast.SkipParentheses(assignment.AsBinaryExpression().Right)
 	return right.Kind == ast.KindBinaryExpression && isShiftOperatorOrHigher(right.AsBinaryExpression().OperatorToken.Kind)
-}
-
-func getAssertedTypeNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindAsExpression:
-		return node.AsAsExpression().Type
-	case ast.KindSatisfiesExpression:
-		return node.AsSatisfiesExpression().Type
-	case ast.KindTypeAssertionExpression:
-		return node.AsTypeAssertion().Type
-	}
-	panic("Unhandled case in getAssertedTypeNode")
-}
-
-func isConstAssertion(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindAsExpression, ast.KindTypeAssertionExpression:
-		return isConstTypeReference(getAssertedTypeNode(node))
-	}
-	return false
 }
 
 func isConstTypeReference(node *ast.Node) bool {
@@ -243,7 +223,7 @@ func isShorthandAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
 
 func isShorthandAmbientModule(node *ast.Node) bool {
 	// The only kind of module that can be missing a body is a shorthand ambient module.
-	return node != nil && node.Kind == ast.KindModuleDeclaration && node.AsModuleDeclaration().Body == nil
+	return node != nil && node.Kind == ast.KindModuleDeclaration && node.Body() == nil
 }
 
 func getAliasDeclarationFromName(node *ast.Node) *ast.Node {
@@ -269,7 +249,7 @@ func entityNameToString(name *ast.Node) string {
 	case ast.KindQualifiedName:
 		return entityNameToString(name.AsQualifiedName().Left) + "." + entityNameToString(name.AsQualifiedName().Right)
 	case ast.KindPropertyAccessExpression:
-		return entityNameToString(name.AsPropertyAccessExpression().Expression) + "." + entityNameToString(name.AsPropertyAccessExpression().Name())
+		return entityNameToString(name.Expression()) + "." + entityNameToString(name.AsPropertyAccessExpression().Name())
 	case ast.KindJsxNamespacedName:
 		return entityNameToString(name.AsJsxNamespacedName().Namespace) + ":" + entityNameToString(name.AsJsxNamespacedName().Name())
 	}
@@ -285,12 +265,12 @@ func getContainingQualifiedNameNode(node *ast.Node) *ast.Node {
 
 func isSideEffectImport(node *ast.Node) bool {
 	ancestor := ast.FindAncestor(node, ast.IsImportDeclaration)
-	return ancestor != nil && ancestor.AsImportDeclaration().ImportClause == nil
+	return ancestor != nil && ancestor.ImportClause() == nil
 }
 
 func getExternalModuleRequireArgument(node *ast.Node) *ast.Node {
 	if ast.IsVariableDeclarationInitializedToRequire(node) {
-		return node.AsVariableDeclaration().Initializer.AsCallExpression().Arguments.Nodes[0]
+		return node.Initializer().Arguments()[0]
 	}
 	return nil
 }
@@ -354,27 +334,11 @@ func isExclamationToken(node *ast.Node) bool {
 }
 
 func isOptionalDeclaration(declaration *ast.Node) bool {
-	switch declaration.Kind {
-	case ast.KindParameter:
-		return declaration.AsParameterDeclaration().QuestionToken != nil
-	case ast.KindPropertyDeclaration:
-		return ast.IsQuestionToken(declaration.AsPropertyDeclaration().PostfixToken)
-	case ast.KindPropertySignature:
-		return ast.IsQuestionToken(declaration.AsPropertySignatureDeclaration().PostfixToken)
-	case ast.KindMethodDeclaration:
-		return ast.IsQuestionToken(declaration.AsMethodDeclaration().PostfixToken)
-	case ast.KindMethodSignature:
-		return ast.IsQuestionToken(declaration.AsMethodSignatureDeclaration().PostfixToken)
-	case ast.KindPropertyAssignment:
-		return ast.IsQuestionToken(declaration.AsPropertyAssignment().PostfixToken)
-	case ast.KindShorthandPropertyAssignment:
-		return ast.IsQuestionToken(declaration.AsShorthandPropertyAssignment().PostfixToken)
-	}
-	return false
+	return ast.HasQuestionToken(declaration)
 }
 
 func isEmptyArrayLiteral(expression *ast.Node) bool {
-	return ast.IsArrayLiteralExpression(expression) && len(expression.AsArrayLiteralExpression().Elements.Nodes) == 0
+	return ast.IsArrayLiteralExpression(expression) && len(expression.Elements()) == 0
 }
 
 func declarationBelongsToPrivateAmbientMember(declaration *ast.Node) bool {
@@ -1049,7 +1013,7 @@ func isThisInitializedObjectBindingExpression(node *ast.Node) bool {
 }
 
 func isThisInitializedDeclaration(node *ast.Node) bool {
-	return node != nil && ast.IsVariableDeclaration(node) && node.AsVariableDeclaration().Initializer != nil && node.AsVariableDeclaration().Initializer.Kind == ast.KindThisKeyword
+	return node != nil && ast.IsVariableDeclaration(node) && node.Initializer() != nil && node.Initializer().Kind == ast.KindThisKeyword
 }
 
 func isInfinityOrNaNString(name string) bool {
@@ -1098,23 +1062,11 @@ func isNonNullAccess(node *ast.Node) bool {
 }
 
 func getTagNameOfNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindJsxOpeningElement:
-		return node.AsJsxOpeningElement().TagName
-	case ast.KindJsxClosingElement:
-		return node.AsJsxClosingElement().TagName
-	case ast.KindJsxSelfClosingElement:
-		return node.AsJsxSelfClosingElement().TagName
-	}
-	panic("Unhandled case in getTagNameOfNode")
+	return node.TagName()
 }
 
 func getBindingElementPropertyName(node *ast.Node) *ast.Node {
-	name := node.AsBindingElement().PropertyName
-	if name != nil {
-		return name
-	}
-	return node.Name()
+	return node.PropertyNameOrName()
 }
 
 func isCallChain(node *ast.Node) bool {
@@ -1140,16 +1092,10 @@ func isSuperProperty(node *ast.Node) bool {
 
 func getMembersOfDeclaration(node *ast.Node) []*ast.Node {
 	switch node.Kind {
-	case ast.KindInterfaceDeclaration:
-		return node.AsInterfaceDeclaration().Members.Nodes
-	case ast.KindClassDeclaration:
-		return node.AsClassDeclaration().Members.Nodes
-	case ast.KindClassExpression:
-		return node.AsClassExpression().Members.Nodes
-	case ast.KindTypeLiteral:
-		return node.AsTypeLiteralNode().Members.Nodes
+	case ast.KindInterfaceDeclaration, ast.KindClassDeclaration, ast.KindClassExpression, ast.KindTypeLiteral:
+		return node.Members()
 	case ast.KindObjectLiteralExpression:
-		return node.AsObjectLiteralExpression().Properties.Nodes
+		return node.Properties()
 	}
 	return nil
 }
@@ -1196,7 +1142,7 @@ func isInRightSideOfImportOrExportAssignment(node *ast.EntityName) bool {
 	}
 
 	return node.Parent.Kind == ast.KindImportEqualsDeclaration && node.Parent.AsImportEqualsDeclaration().ModuleReference == node ||
-		(node.Parent.Kind == ast.KindExportAssignment || node.Parent.Kind == ast.KindJSExportAssignment) && node.Parent.AsExportAssignment().Expression == node
+		(node.Parent.Kind == ast.KindExportAssignment || node.Parent.Kind == ast.KindJSExportAssignment) && node.Parent.Expression() == node
 }
 
 func isJsxIntrinsicTagName(tagName *ast.Node) bool {
@@ -1397,10 +1343,8 @@ func minAndMax[T any](slice []T, getValue func(value T) int) (int, int) {
 
 func getNonModifierTokenRangeOfNode(node *ast.Node) core.TextRange {
 	pos := node.Pos()
-	if node.Modifiers() != nil {
-		if last := ast.FindLastVisibleNode(node.Modifiers().Nodes); last != nil {
-			pos = last.Pos()
-		}
+	if last := ast.FindLastVisibleNode(node.ModifierNodes()); last != nil {
+		pos = last.Pos()
 	}
 	return scanner.GetRangeOfTokenAtPosition(ast.GetSourceFileOfNode(node), pos)
 }

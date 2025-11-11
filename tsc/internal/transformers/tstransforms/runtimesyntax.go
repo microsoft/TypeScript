@@ -137,7 +137,7 @@ func (tx *RuntimeSyntaxTransformer) recordDeclarationInScope(node *ast.Node) {
 		}
 		return
 	case ast.KindArrayBindingPattern, ast.KindObjectBindingPattern:
-		for _, element := range node.AsBindingPattern().Elements.Nodes {
+		for _, element := range node.Elements() {
 			tx.recordDeclarationInScope(element)
 		}
 		return
@@ -191,9 +191,9 @@ func (tx *RuntimeSyntaxTransformer) getExpressionForPropertyName(member *ast.Enu
 	case ast.KindIdentifier:
 		return tx.Factory().NewStringLiteralFromNode(name)
 	case ast.KindStringLiteral:
-		return tx.Factory().NewStringLiteral(name.AsStringLiteral().Text)
+		return tx.Factory().NewStringLiteral(name.Text())
 	case ast.KindNumericLiteral:
-		return tx.Factory().NewNumericLiteral(name.AsNumericLiteral().Text)
+		return tx.Factory().NewNumericLiteral(name.Text())
 	default:
 		return name
 	}
@@ -928,7 +928,7 @@ func findSuperStatementIndexPath(statements []*ast.Statement, start int) []int {
 			indices[0] = i
 			return indices
 		} else if ast.IsTryStatement(statement) {
-			return slices.Insert(findSuperStatementIndexPath(statement.AsTryStatement().TryBlock.AsBlock().Statements.Nodes, 0), 0, i)
+			return slices.Insert(findSuperStatementIndexPath(statement.AsTryStatement().TryBlock.Statements(), 0), 0, i)
 		}
 	}
 	return nil

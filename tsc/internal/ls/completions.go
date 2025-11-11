@@ -1051,10 +1051,7 @@ func (l *LanguageService) getCompletionData(
 			numberIndexType := typeChecker.GetNumberIndexType(t)
 			isNewIdentifierLocation = stringIndexType != nil || numberIndexType != nil
 			typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker)
-			properties := objectLikeContainer.AsObjectLiteralExpression().Properties
-			if properties != nil {
-				existingMembers = properties.Nodes
-			}
+			existingMembers = objectLikeContainer.Properties()
 
 			if len(typeMembers) == 0 {
 				// Edge case: If NumberIndexType exists
@@ -1107,10 +1104,7 @@ func (l *LanguageService) getCompletionData(
 						)
 					},
 				)
-				elements := objectLikeContainer.AsBindingPattern().Elements
-				if elements != nil {
-					existingMembers = elements.Nodes
-				}
+				existingMembers = objectLikeContainer.Elements()
 			}
 		}
 
@@ -2098,7 +2092,7 @@ func (l *LanguageService) createCompletionItem(
 			insertText = name
 		}
 
-		if insertQuestionDot || data.propertyAccessToConvert.AsPropertyAccessExpression().QuestionDotToken != nil {
+		if insertQuestionDot || data.propertyAccessToConvert.QuestionDotToken() != nil {
 			insertText = "?." + insertText
 		}
 
@@ -3524,7 +3518,7 @@ func getContextualKeywords(file *ast.SourceFile, contextToken *ast.Node, positio
 		tokenLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, contextToken.End())
 		currentLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, position)
 		if (ast.IsImportDeclaration(parent) ||
-			ast.IsExportDeclaration(parent) && parent.AsExportDeclaration().ModuleSpecifier != nil) &&
+			ast.IsExportDeclaration(parent) && parent.ModuleSpecifier() != nil) &&
 			contextToken == parent.ModuleSpecifier() &&
 			tokenLine == currentLine {
 			entries = append(entries, &lsproto.CompletionItem{
@@ -4001,10 +3995,10 @@ func filterObjectMembersList(
 
 		if ast.IsSpreadAssignment(member) {
 			setMemberDeclaredBySpreadAssignment(member, &membersDeclaredBySpreadAssignment, typeChecker)
-		} else if ast.IsBindingElement(member) && member.AsBindingElement().PropertyName != nil {
+		} else if ast.IsBindingElement(member) && member.PropertyName() != nil {
 			// include only identifiers in completion list
-			if member.AsBindingElement().PropertyName.Kind == ast.KindIdentifier {
-				existingName = member.AsBindingElement().PropertyName.Text()
+			if member.PropertyName().Kind == ast.KindIdentifier {
+				existingName = member.PropertyName().Text()
 			}
 		} else {
 			// TODO: Account for computed property name
@@ -4092,7 +4086,7 @@ func tryGetObjectTypeDeclarationCompletionContainer(
 		}
 		return nil
 	case ast.KindEndOfFile:
-		stmtList := location.Parent.AsSourceFile().Statements
+		stmtList := location.Parent.StatementList()
 		if stmtList != nil && len(stmtList.Nodes) > 0 && ast.IsObjectTypeDeclaration(stmtList.Nodes[len(stmtList.Nodes)-1]) {
 			cls := stmtList.Nodes[len(stmtList.Nodes)-1]
 			if findChildOfKind(cls, ast.KindCloseBraceToken, file) == nil {
@@ -5445,7 +5439,7 @@ func (l *LanguageService) getImportStatementCompletionInfo(contextToken *ast.Nod
 		result.replacementSpan = l.getSingleLineReplacementSpanForImportCompletionNode(candidate)
 		result.couldBeTypeOnlyImportSpecifier = couldBeTypeOnlyImportSpecifier(candidate, contextToken)
 		if ast.IsImportDeclaration(candidate) {
-			result.isTopLevelTypeOnly = candidate.AsImportDeclaration().ImportClause.IsTypeOnly()
+			result.isTopLevelTypeOnly = candidate.ImportClause().IsTypeOnly()
 		} else if candidate.Kind == ast.KindImportEqualsDeclaration {
 			result.isTopLevelTypeOnly = candidate.IsTypeOnly()
 		}

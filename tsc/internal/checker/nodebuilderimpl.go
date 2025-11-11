@@ -163,7 +163,7 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 				qualifier = id
 			}
 		}
-		return b.f.UpdateImportTypeNode(imprt, imprt.IsTypeOf, imprt.Argument, imprt.Attributes, qualifier, ref.AsTypeReferenceNode().TypeArguments)
+		return b.f.UpdateImportTypeNode(imprt, imprt.IsTypeOf, imprt.Argument, imprt.Attributes, qualifier, ref.TypeArgumentList())
 	} else {
 		// first shift type arguments
 		// !!! In the old emitter, an Identifier could have type arguments for use with quickinfo:
@@ -185,7 +185,7 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		for _, id := range ids {
 			typeName = b.f.NewQualifiedName(typeName, id)
 		}
-		return b.f.UpdateTypeReferenceNode(root.AsTypeReferenceNode(), typeName, ref.AsTypeReferenceNode().TypeArguments)
+		return b.f.UpdateTypeReferenceNode(root.AsTypeReferenceNode(), typeName, ref.TypeArgumentList())
 	}
 }
 
@@ -670,7 +670,7 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 				break
 			}
 		}
-		if name != nil && ast.IsComputedPropertyName(name) && ast.IsEntityName(name.AsComputedPropertyName().Expression) {
+		if name != nil && ast.IsComputedPropertyName(name) && ast.IsEntityName(name.Expression()) {
 			lhs := b.createAccessFromSymbolChain(chain, index-1, stopper, overrideTypeArguments)
 			if ast.IsEntityName(lhs) {
 				return b.f.NewIndexedAccessTypeNode(
@@ -1093,38 +1093,34 @@ func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 		if requireCall == nil {
 			return nil
 		}
-		return requireCall.AsCallExpression().Arguments.Nodes[0]
-	case ast.KindImportDeclaration:
-		return node.AsImportDeclaration().ModuleSpecifier
-	case ast.KindExportDeclaration:
-		return node.AsExportDeclaration().ModuleSpecifier
-	case ast.KindJSDocImportTag:
-		return node.AsJSDocImportTag().ModuleSpecifier
+		return requireCall.Arguments()[0]
+	case ast.KindImportDeclaration, ast.KindExportDeclaration, ast.KindJSDocImportTag:
+		return node.ModuleSpecifier()
 	case ast.KindImportEqualsDeclaration:
 		ref := node.AsImportEqualsDeclaration().ModuleReference
 		if ref.Kind != ast.KindExternalModuleReference {
 			return nil
 		}
-		return ref.AsExternalModuleReference().Expression
+		return ref.Expression()
 	case ast.KindImportClause:
 		if ast.IsImportDeclaration(node.Parent) {
-			return node.Parent.AsImportDeclaration().ModuleSpecifier
+			return node.Parent.ModuleSpecifier()
 		}
-		return node.Parent.AsJSDocImportTag().ModuleSpecifier
+		return node.Parent.ModuleSpecifier()
 	case ast.KindNamespaceExport:
-		return node.Parent.AsExportDeclaration().ModuleSpecifier
+		return node.Parent.ModuleSpecifier()
 	case ast.KindNamespaceImport:
 		if ast.IsImportDeclaration(node.Parent.Parent) {
-			return node.Parent.Parent.AsImportDeclaration().ModuleSpecifier
+			return node.Parent.Parent.ModuleSpecifier()
 		}
-		return node.Parent.Parent.AsJSDocImportTag().ModuleSpecifier
+		return node.Parent.Parent.ModuleSpecifier()
 	case ast.KindExportSpecifier:
-		return node.Parent.Parent.AsExportDeclaration().ModuleSpecifier
+		return node.Parent.Parent.ModuleSpecifier()
 	case ast.KindImportSpecifier:
 		if ast.IsImportDeclaration(node.Parent.Parent.Parent) {
-			return node.Parent.Parent.Parent.AsImportDeclaration().ModuleSpecifier
+			return node.Parent.Parent.Parent.ModuleSpecifier()
 		}
-		return node.Parent.Parent.Parent.AsJSDocImportTag().ModuleSpecifier
+		return node.Parent.Parent.Parent.ModuleSpecifier()
 	case ast.KindImportType:
 		if ast.IsLiteralImportTypeNode(node) {
 			return node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal
@@ -1312,7 +1308,7 @@ func (b *NodeBuilderImpl) typeParameterToName(typeParameter *Type) *ast.Identifi
 			b.ctx.typeParameterNamesByTextNextNameCount = make(map[string]int)
 		}
 
-		rawText := result.AsIdentifier().Text
+		rawText := result.Text()
 		i := 0
 		cached, ok := b.ctx.typeParameterNamesByTextNextNameCount[rawText]
 		if ok {
@@ -1434,7 +1430,7 @@ func (b *NodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 		// wrap it with a conditional like `SomeModifiersType extends infer U ? {..the mapped type...} : never` to ensure the resulting
 		// type stays homomorphic
 
-		rawConstraintTypeFromDeclaration := b.getTypeFromTypeNode(mapped.declaration.TypeParameter.AsTypeParameter().Constraint.AsTypeOperatorNode().Type, false)
+		rawConstraintTypeFromDeclaration := b.getTypeFromTypeNode(mapped.declaration.TypeParameter.AsTypeParameter().Constraint.Type(), false)
 		if rawConstraintTypeFromDeclaration != nil {
 			rawConstraintTypeFromDeclaration = b.ch.getConstraintOfTypeParameter(rawConstraintTypeFromDeclaration)
 		}
@@ -1556,7 +1552,7 @@ func (b *NodeBuilderImpl) symbolToParameterDeclaration(parameterSymbol *ast.Symb
 	parameterTypeNode := b.serializeTypeForDeclaration(parameterDeclaration, parameterType, parameterSymbol)
 	var modifiers *ast.ModifierList
 	if b.ctx.flags&nodebuilder.FlagsOmitParameterModifiers == 0 && preserveModifierFlags && parameterDeclaration != nil && ast.CanHaveModifiers(parameterDeclaration) {
-		originals := core.Filter(parameterDeclaration.Modifiers().Nodes, ast.IsModifier)
+		originals := core.Filter(parameterDeclaration.ModifierNodes(), ast.IsModifier)
 		clones := core.Map(originals, func(node *ast.Node) *ast.Node { return node.Clone(b.f) })
 		if len(clones) > 0 {
 			modifiers = b.f.NewModifierList(clones)
@@ -2108,7 +2104,7 @@ func (b *NodeBuilderImpl) isStringNamed(d *ast.Declaration) bool {
 		return false
 	}
 	if ast.IsComputedPropertyName(name) {
-		t := b.ch.checkExpression(name.AsComputedPropertyName().Expression)
+		t := b.ch.checkExpression(name.Expression())
 		return t.flags&TypeFlagsStringLike != 0
 	}
 	if ast.IsElementAccessExpression(name) {

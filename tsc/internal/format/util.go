@@ -90,10 +90,10 @@ func isGrammarError(parent *ast.Node, child *ast.Node) bool {
 		return child == parent.AsTypeParameter().Expression
 	}
 	if ast.IsPropertySignatureDeclaration(parent) {
-		return child == parent.AsPropertySignatureDeclaration().Initializer
+		return child == parent.Initializer()
 	}
 	if ast.IsPropertyDeclaration(parent) {
-		return ast.IsAutoAccessorPropertyDeclaration(parent) && child == parent.AsPropertyDeclaration().PostfixToken && child.Kind == ast.KindQuestionToken
+		return ast.IsAutoAccessorPropertyDeclaration(parent) && child == parent.PostfixToken() && child.Kind == ast.KindQuestionToken
 	}
 	if ast.IsPropertyAssignment(parent) {
 		pa := parent.AsPropertyAssignment()
@@ -106,16 +106,16 @@ func isGrammarError(parent *ast.Node, child *ast.Node) bool {
 		return child == sp.EqualsToken || child == sp.PostfixToken || (mods != nil && isGrammarErrorElement(&mods.NodeList, child, ast.IsModifierLike))
 	}
 	if ast.IsMethodDeclaration(parent) {
-		return child == parent.AsMethodDeclaration().PostfixToken && child.Kind == ast.KindExclamationToken
+		return child == parent.PostfixToken() && child.Kind == ast.KindExclamationToken
 	}
 	if ast.IsConstructorDeclaration(parent) {
-		return child == parent.AsConstructorDeclaration().Type || isGrammarErrorElement(parent.AsConstructorDeclaration().TypeParameters, child, ast.IsTypeParameterDeclaration)
+		return child == parent.AsConstructorDeclaration().Type || isGrammarErrorElement(parent.TypeParameterList(), child, ast.IsTypeParameterDeclaration)
 	}
 	if ast.IsGetAccessorDeclaration(parent) {
-		return isGrammarErrorElement(parent.AsGetAccessorDeclaration().TypeParameters, child, ast.IsTypeParameterDeclaration)
+		return isGrammarErrorElement(parent.TypeParameterList(), child, ast.IsTypeParameterDeclaration)
 	}
 	if ast.IsSetAccessorDeclaration(parent) {
-		return child == parent.AsSetAccessorDeclaration().Type || isGrammarErrorElement(parent.AsSetAccessorDeclaration().TypeParameters, child, ast.IsTypeParameterDeclaration)
+		return child == parent.AsSetAccessorDeclaration().Type || isGrammarErrorElement(parent.TypeParameterList(), child, ast.IsTypeParameterDeclaration)
 	}
 	if ast.IsNamespaceExportDeclaration(parent) {
 		mods := parent.AsNamespaceExportDeclaration().Modifiers()

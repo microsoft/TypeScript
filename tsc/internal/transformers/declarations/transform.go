@@ -404,7 +404,7 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 						return nil
 					}
 				}
-			} else if !tx.resolver.IsLateBound(tx.EmitContext().ParseNode(input)) || !ast.IsEntityNameExpression(input.Name().AsComputedPropertyName().Expression) {
+			} else if !tx.resolver.IsLateBound(tx.EmitContext().ParseNode(input)) || !ast.IsEntityNameExpression(input.Name().Expression()) {
 				return nil
 			}
 		}
@@ -529,7 +529,7 @@ func (tx *DeclarationTransformer) checkName(node *ast.Node) {
 	}
 	tx.state.errorNameNode = node.Name()
 	debug.Assert(ast.HasDynamicName(node)) // Should only be called with dynamic names
-	entityName := node.Name().AsComputedPropertyName().Expression
+	entityName := node.Name().Expression()
 	tx.checkEntityNameVisibility(entityName, tx.enclosingDeclaration)
 	if !tx.suppressNewDiagnosticContexts {
 		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
@@ -922,7 +922,7 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 			input.Modifiers(),
 			input.IsTypeOnly(),
 			input.AsExportDeclaration().ExportClause,
-			tx.rewriteModuleSpecifier(input, input.AsExportDeclaration().ModuleSpecifier),
+			tx.rewriteModuleSpecifier(input, input.ModuleSpecifier()),
 			tx.tryGetResolutionModeOverride(input.AsExportDeclaration().Attributes),
 		)
 	case ast.KindCommonJSExport:
@@ -932,7 +932,7 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 		tx.resultHasScopeMarker = true
 		name := input.AsCommonJSExport().Name()
 		if ast.IsIdentifier(name) {
-			if name.AsIdentifier().Text == "default" {
+			if name.Text() == "default" {
 				// const _default: Type; export default _default;
 				newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 				tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
@@ -1004,7 +1004,7 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 			tx.resultHasExternalModuleIndicator = true
 		}
 		tx.resultHasScopeMarker = true
-		if input.AsExportAssignment().Expression.Kind == ast.KindIdentifier {
+		if input.Expression().Kind == ast.KindIdentifier {
 			return input
 		}
 		// expression is non-identifier, create _default typed variable to reference
@@ -1262,7 +1262,7 @@ func (tx *DeclarationTransformer) transformModuleDeclaration(input *ast.ModuleDe
 		oldHasScopeFix := tx.resultHasScopeMarker
 		tx.resultHasScopeMarker = false
 		tx.needsScopeFixMarker = false
-		statements := tx.Visitor().VisitNodes(inner.AsModuleBlock().Statements)
+		statements := tx.Visitor().VisitNodes(inner.StatementList())
 		lateStatements := tx.transformAndReplaceLatePaintedStatements(statements)
 		if input.Flags&ast.NodeFlagsAmbient != 0 {
 			tx.needsScopeFixMarker = false // If it was `declare`'d everything is implicitly exported already, ignore late printed "privates"
@@ -1358,7 +1358,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 				updated := tx.Factory().NewPropertyDeclaration(
 					tx.ensureModifiers(param),
 					param.Name(),
-					param.AsParameterDeclaration().QuestionToken,
+					param.QuestionToken(),
 					tx.ensureType(param, false),
 					tx.ensureNoInitializer(param),
 				)
@@ -1410,8 +1410,8 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 
 	if extendsClause != nil && !ast.IsEntityNameExpression(extendsClause.AsExpressionWithTypeArguments().Expression) && extendsClause.AsExpressionWithTypeArguments().Expression.Kind != ast.KindNullKeyword {
 		oldId := "default"
-		if ast.NodeIsPresent(input.Name()) && ast.IsIdentifier(input.Name()) && len(input.Name().AsIdentifier().Text) > 0 {
-			oldId = input.Name().AsIdentifier().Text
+		if ast.NodeIsPresent(input.Name()) && ast.IsIdentifier(input.Name()) && len(input.Name().Text()) > 0 {
+			oldId = input.Name().Text()
 		}
 		newId := tx.Factory().NewUniqueNameEx(oldId+"_base", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 		tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
@@ -1675,8 +1675,8 @@ func (tx *DeclarationTransformer) filterBindingPatternInitializers(node *ast.Nod
 		return node
 	} else {
 		// TODO: visitor to avoid always making new nodes?
-		elements := make([]*ast.Node, 0, len(node.AsBindingPattern().Elements.Nodes))
-		for _, elem := range node.AsBindingPattern().Elements.Nodes {
+		elements := make([]*ast.Node, 0, len(node.Elements()))
+		for _, elem := range node.Elements() {
 			if elem.Kind == ast.KindOmittedExpression {
 				elements = append(elements, elem)
 				continue
@@ -1787,7 +1787,7 @@ func (tx *DeclarationTransformer) transformImportDeclaration(decl *ast.ImportDec
 	}
 	// Named imports (optionally with visible default)
 	bindingList := core.Filter(
-		decl.ImportClause.AsImportClause().NamedBindings.AsNamedImports().Elements.Nodes,
+		decl.ImportClause.AsImportClause().NamedBindings.Elements(),
 		func(b *ast.Node) bool {
 			return tx.resolver.IsDeclarationVisible(b)
 		},

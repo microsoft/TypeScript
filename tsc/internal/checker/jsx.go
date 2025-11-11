@@ -267,7 +267,7 @@ func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, cont
 		return discriminated
 	}
 	jsxChildrenPropertyName := c.getJsxElementChildrenPropertyName(c.getJsxNamespaceAt(node))
-	discriminantProperties := core.Filter(node.AsJsxAttributes().Properties.Nodes, func(p *ast.Node) bool {
+	discriminantProperties := core.Filter(node.Properties(), func(p *ast.Node) bool {
 		symbol := p.Symbol()
 		if symbol == nil || !ast.IsJsxAttribute(p) {
 			return false
@@ -293,7 +293,7 @@ func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, cont
 
 func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
 	reportedError := false
-	for _, prop := range node.AsJsxAttributes().Properties.Nodes {
+	for _, prop := range node.Properties() {
 		if !ast.IsJsxSpreadAttribute(prop) && !isHyphenatedJsxName(prop.Name().Text()) {
 			nameType := c.getStringLiteralType(prop.Name().Text())
 			if nameType != nil && nameType.flags&TypeFlagsNever == 0 {
@@ -719,7 +719,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 		// Create anonymous type from given attributes symbol table.
 		// @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
 		// @param attributesTable a symbol table of attributes property
-		for _, attributeDecl := range attributes.AsJsxAttributes().Properties.Nodes {
+		for _, attributeDecl := range attributes.Properties() {
 			member := attributeDecl.Symbol()
 			if ast.IsJsxAttribute(attributeDecl) {
 				exprType := c.checkJsxAttribute(attributeDecl, checkMode)
@@ -796,11 +796,11 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 		case ast.IsJsxElement(parent):
 			// We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
 			if parent.AsJsxElement().OpeningElement == openingLikeElement {
-				children = parent.AsJsxElement().Children.Nodes
+				children = parent.Children().Nodes
 			}
 		case ast.IsJsxFragment(parent):
 			if parent.AsJsxFragment().OpeningFragment == openingLikeElement {
-				children = parent.AsJsxFragment().Children.Nodes
+				children = parent.Children().Nodes
 			}
 		}
 		return len(ast.GetSemanticJsxChildren(children)) != 0
@@ -939,7 +939,7 @@ func (c *Checker) getJsxPropsTypeFromClassType(sig *Signature, context *ast.Node
 		attributesType = c.getReturnTypeOfSignature(sig)
 	default:
 		attributesType = c.getJsxPropsTypeForSignatureFromMember(sig, forcedLookupLocation)
-		if attributesType == nil && len(context.Attributes().AsJsxAttributes().Properties.Nodes) != 0 {
+		if attributesType == nil && len(context.Attributes().Properties()) != 0 {
 			// There is no property named 'props' on this instance type
 			c.error(context, diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, forcedLookupLocation)
 		}

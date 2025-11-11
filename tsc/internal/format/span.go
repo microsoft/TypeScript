@@ -206,7 +206,7 @@ func newFormatSpanWorker(
 func getNonDecoratorTokenPosOfNode(node *ast.Node, file *ast.SourceFile) int {
 	var lastDecorator *ast.Node
 	if ast.HasDecorators(node) {
-		lastDecorator = core.FindLast(node.Modifiers().Nodes, ast.IsDecorator)
+		lastDecorator = core.FindLast(node.ModifierNodes(), ast.IsDecorator)
 	}
 	if file == nil {
 		file = ast.GetSourceFileOfNode(node)
@@ -1171,7 +1171,7 @@ func (i *dynamicIndenter) shouldAddDelta(line int, kind ast.Kind, container *ast
 
 func getFirstNonDecoratorTokenOfNode(node *ast.Node) ast.Kind {
 	if ast.CanHaveModifiers(node) {
-		modifier := core.Find(node.Modifiers().Nodes[core.FindIndex(node.Modifiers().Nodes, ast.IsDecorator):], ast.IsModifier)
+		modifier := core.Find(node.ModifierNodes()[core.FindIndex(node.ModifierNodes(), ast.IsDecorator):], ast.IsModifier)
 		if modifier != nil {
 			return modifier.Kind
 		}

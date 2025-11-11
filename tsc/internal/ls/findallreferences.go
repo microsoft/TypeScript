@@ -1150,7 +1150,7 @@ func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, pro
 				var node *ast.Node
 				// At `module.exports = ...`, reference node is `module`
 				if ast.IsBinaryExpression(decl) && ast.IsPropertyAccessExpression(decl.AsBinaryExpression().Left) {
-					node = decl.AsBinaryExpression().Left.AsPropertyAccessExpression().Expression
+					node = decl.AsBinaryExpression().Left.Expression()
 				} else if ast.IsExportAssignment(decl) {
 					// Find the export keyword
 					node = findChildOfKind(decl, ast.KindExportKeyword, sourceFile)
@@ -1428,14 +1428,14 @@ func isNewExpressionTarget(node *ast.Node) bool {
 	if node.Parent == nil {
 		return false
 	}
-	return node.Parent.Kind == ast.KindNewExpression && node.Parent.AsNewExpression().Expression == node
+	return node.Parent.Kind == ast.KindNewExpression && node.Parent.Expression() == node
 }
 
 func isCallExpressionTarget(node *ast.Node) bool {
 	if node.Parent == nil {
 		return false
 	}
-	return node.Parent.Kind == ast.KindCallExpression && node.Parent.AsCallExpression().Expression == node
+	return node.Parent.Kind == ast.KindCallExpression && node.Parent.Expression() == node
 }
 
 func isMethodOrAccessor(node *ast.Node) bool {

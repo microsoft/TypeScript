@@ -1549,7 +1549,7 @@ func (c *Checker) createFinalArrayType(elementType *Type) *Type {
 func (c *Checker) reportFlowControlError(node *ast.Node) {
 	block := ast.FindAncestor(node, ast.IsFunctionOrModuleBlock)
 	sourceFile := ast.GetSourceFileOfNode(node)
-	span := scanner.GetRangeOfTokenAtPosition(sourceFile, ast.GetStatementsOfBlock(block).Pos())
+	span := scanner.GetRangeOfTokenAtPosition(sourceFile, block.StatementList().Pos())
 	c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis))
 }
 
@@ -1759,11 +1759,8 @@ func (c *Checker) getDestructuringPropertyName(node *ast.Node) (string, bool) {
 	if ast.IsPropertyAssignment(node) || ast.IsShorthandPropertyAssignment(node) {
 		return c.getLiteralPropertyNameText(node.Name())
 	}
-	if ast.IsArrayBindingPattern(parent) {
-		return strconv.Itoa(slices.Index(parent.AsBindingPattern().Elements.Nodes, node)), true
-	}
-	if ast.IsArrayLiteralExpression(parent) {
-		return strconv.Itoa(slices.Index(parent.AsArrayLiteralExpression().Elements.Nodes, node)), true
+	if ast.IsArrayLiteralExpression(parent) || ast.IsArrayBindingPattern(parent) {
+		return strconv.Itoa(slices.Index(parent.Elements(), node)), true
 	}
 	return "", false
 }
@@ -2099,7 +2096,7 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 		case ast.KindSuperKeyword:
 			return c.checkSuperExpression(node)
 		case ast.KindPropertyAccessExpression:
-			t := c.getTypeOfDottedName(node.AsPropertyAccessExpression().Expression, diagnostic)
+			t := c.getTypeOfDottedName(node.Expression(), diagnostic)
 			if t != nil {
 				name := node.Name()
 				var prop *ast.Symbol
@@ -2115,7 +2112,7 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 				}
 			}
 		case ast.KindParenthesizedExpression:
-			return c.getTypeOfDottedName(node.AsParenthesizedExpression().Expression, diagnostic)
+			return c.getTypeOfDottedName(node.Expression(), diagnostic)
 		}
 	}
 	return nil
@@ -2243,7 +2240,7 @@ func (c *Checker) getInitialTypeOfBindingElement(node *ast.Node) *Type {
 	case ast.IsObjectBindingPattern(pattern):
 		t = c.getTypeOfDestructuredProperty(parentType, getBindingElementPropertyName(node))
 	case !hasDotDotDotToken(node):
-		t = c.getTypeOfDestructuredArrayElement(parentType, slices.Index(pattern.AsBindingPattern().Elements.Nodes, node))
+		t = c.getTypeOfDestructuredArrayElement(parentType, slices.Index(pattern.Elements(), node))
 	default:
 		t = c.getTypeOfDestructuredSpreadExpression(parentType)
 	}
@@ -2286,7 +2283,7 @@ func (c *Checker) getAssignedTypeOfBinaryExpression(node *ast.Node) *Type {
 }
 
 func (c *Checker) getAssignedTypeOfArrayLiteralElement(node *ast.Node, element *ast.Node) *Type {
-	return c.getTypeOfDestructuredArrayElement(c.getAssignedType(node), slices.Index(node.AsArrayLiteralExpression().Elements.Nodes, element))
+	return c.getTypeOfDestructuredArrayElement(c.getAssignedType(node), slices.Index(node.Elements(), element))
 }
 
 func (c *Checker) getTypeOfDestructuredArrayElement(t *Type, index int) *Type {
@@ -2682,11 +2679,8 @@ func (c *Checker) markNodeAssignmentsWorker(node *ast.Node) bool {
 		return false
 	case ast.KindExportSpecifier:
 		exportDeclaration := node.AsExportSpecifier().Parent.Parent.AsExportDeclaration()
-		name := node.AsExportSpecifier().PropertyName
-		if name == nil {
-			name = node.Name()
-		}
-		if !node.AsExportSpecifier().IsTypeOnly && !exportDeclaration.IsTypeOnly && exportDeclaration.ModuleSpecifier == nil && !ast.IsStringLiteral(name) {
+		name := node.PropertyNameOrName()
+		if !node.IsTypeOnly() && !exportDeclaration.IsTypeOnly && exportDeclaration.ModuleSpecifier == nil && !ast.IsStringLiteral(name) {
 			symbol := c.resolveEntityName(name, ast.SymbolFlagsValue, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil)
 			if symbol != nil && c.isParameterOrMutableLocalVariable(symbol) {
 				links := c.markedAssignmentSymbolLinks.Get(symbol)

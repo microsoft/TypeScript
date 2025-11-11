@@ -534,7 +534,7 @@ func isUMDExportSymbol(symbol *ast.Symbol) bool {
 }
 
 func isNamespaceReexportDeclaration(node *ast.Node) bool {
-	return ast.IsNamespaceExport(node) && node.Parent.AsExportDeclaration().ModuleSpecifier != nil
+	return ast.IsNamespaceExport(node) && node.Parent.ModuleSpecifier() != nil
 }
 
 func (ch *Checker) getCandidateListForSymbol(

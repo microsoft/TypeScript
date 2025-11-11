@@ -81,8 +81,8 @@ func GetModuleSpecifiersWithInfo(
 
 func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker CheckerShape) string {
 	for _, decl := range moduleSymbol.Declarations {
-		if isNonGlobalAmbientModule(decl) && (!ast.IsModuleAugmentationExternal(decl) || !tspath.IsExternalModuleNameRelative(decl.Name().AsStringLiteral().Text)) {
-			return decl.Name().AsStringLiteral().Text
+		if isNonGlobalAmbientModule(decl) && (!ast.IsModuleAugmentationExternal(decl) || !tspath.IsExternalModuleNameRelative(decl.Name().Text())) {
+			return decl.Name().Text()
 		}
 	}
 
@@ -123,7 +123,7 @@ func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker Checker
 		}
 		// TODO: Possible strada bug - isn't this insufficient in the presence of merge symbols?
 		if exportSymbol == d.Symbol() {
-			return possibleContainer.Name().AsStringLiteral().Text
+			return possibleContainer.Name().Text()
 		}
 	}
 	return ""

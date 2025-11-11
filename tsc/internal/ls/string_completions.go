@@ -354,10 +354,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		}
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
 		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) string {
-			if n.PropertyName() != nil {
-				return n.PropertyName().Text()
-			}
-			return n.Name().Text()
+			return n.PropertyNameOrName().Text()
 		})...)
 		uniques := core.Filter(exports, func(e *ast.Symbol) bool {
 			return e.Name != ast.InternalSymbolNameDefault && !existing.Has(e.Name)

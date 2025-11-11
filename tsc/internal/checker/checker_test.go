@@ -51,7 +51,7 @@ foo.bar;`
 	file := p.GetSourceFile("/foo.ts")
 	interfaceId := file.Statements.Nodes[0].Name()
 	varId := file.Statements.Nodes[1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].Name()
-	propAccess := file.Statements.Nodes[2].AsExpressionStatement().Expression
+	propAccess := file.Statements.Nodes[2].Expression()
 	nodes := []*ast.Node{interfaceId, varId, propAccess}
 	for _, node := range nodes {
 		symbol := c.GetSymbolAtLocation(node)

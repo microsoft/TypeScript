@@ -252,7 +252,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		// If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
 		// had to include a backslash: `not \${a} substitution`.
 		var b strings.Builder
-		text := node.TemplateLiteralLikeData().Text
+		text := node.Text()
 		rawText := node.TemplateLiteralLikeData().RawText
 		raw := len(rawText) > 0 || len(text) == 0
 
@@ -443,14 +443,8 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	switch node.Kind {
 	case ast.KindTypeParameter:
 		switch {
-		case ast.IsFunctionLike(parent):
-			return parent.FunctionLikeData().TypeParameters
-		case ast.IsClassLike(parent):
-			return parent.ClassLikeData().TypeParameters
-		case ast.IsInterfaceDeclaration(parent):
-			return parent.AsInterfaceDeclaration().TypeParameters
-		case ast.IsTypeOrJSTypeAliasDeclaration(parent):
-			return parent.AsTypeAliasDeclaration().TypeParameters
+		case ast.IsFunctionLike(parent) || ast.IsClassLike(parent) || ast.IsInterfaceDeclaration(parent) || ast.IsTypeOrJSTypeAliasDeclaration(parent):
+			return parent.TypeParameterList()
 		case ast.IsInferTypeNode(parent):
 			break
 		default:
@@ -487,32 +481,20 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	// }
 
 	switch parent.Kind {
-	case ast.KindTypeLiteral:
+	case ast.KindTypeLiteral, ast.KindInterfaceDeclaration:
 		if ast.IsTypeElement(node) {
-			return parent.AsTypeLiteralNode().Members
-		}
-	case ast.KindInterfaceDeclaration:
-		if ast.IsTypeElement(node) {
-			return parent.AsInterfaceDeclaration().Members
+			return parent.MemberList()
 		}
 	case ast.KindUnionType:
 		return parent.AsUnionTypeNode().Types
 	case ast.KindIntersectionType:
 		return parent.AsIntersectionTypeNode().Types
-	case ast.KindTupleType:
-		return parent.AsTupleTypeNode().Elements
-	case ast.KindArrayLiteralExpression:
-		return parent.AsArrayLiteralExpression().Elements
+	case ast.KindArrayLiteralExpression, ast.KindTupleType, ast.KindNamedImports, ast.KindNamedExports:
+		return parent.ElementList()
 	case ast.KindCommaListExpression:
 		panic("not implemented")
-	case ast.KindNamedImports:
-		return parent.AsNamedImports().Elements
-	case ast.KindNamedExports:
-		return parent.AsNamedExports().Elements
-	case ast.KindObjectLiteralExpression:
-		return parent.AsObjectLiteralExpression().Properties
-	case ast.KindJsxAttributes:
-		return parent.AsJsxAttributes().Properties
+	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
+		return parent.PropertyList()
 	case ast.KindCallExpression:
 		p := parent.AsCallExpression()
 		switch {
@@ -529,41 +511,29 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		case node != p.Expression:
 			return p.Arguments
 		}
-	case ast.KindJsxElement:
+	case ast.KindJsxElement, ast.KindJsxFragment:
 		if ast.IsJsxChild(node) {
-			return parent.AsJsxElement().Children
+			return parent.Children()
 		}
-	case ast.KindJsxFragment:
-		if ast.IsJsxChild(node) {
-			return parent.AsJsxFragment().Children
-		}
-	case ast.KindJsxOpeningElement:
+	case ast.KindJsxOpeningElement, ast.KindJsxSelfClosingElement:
 		if ast.IsTypeNode(node) {
-			return parent.AsJsxOpeningElement().TypeArguments
+			return parent.TypeArgumentList()
 		}
-	case ast.KindJsxSelfClosingElement:
-		if ast.IsTypeNode(node) {
-			return parent.AsJsxSelfClosingElement().TypeArguments
-		}
-	case ast.KindBlock:
-		return parent.AsBlock().Statements
-	case ast.KindCaseClause, ast.KindDefaultClause:
-		return parent.AsCaseOrDefaultClause().Statements
-	case ast.KindModuleBlock:
-		return parent.AsModuleBlock().Statements
+	case ast.KindBlock, ast.KindModuleBlock, ast.KindCaseClause, ast.KindDefaultClause:
+		return parent.StatementList()
 	case ast.KindCaseBlock:
 		return parent.AsCaseBlock().Clauses
 	case ast.KindClassDeclaration, ast.KindClassExpression:
 		if ast.IsClassElement(node) {
-			return parent.ClassLikeData().Members
+			return parent.MemberList()
 		}
 	case ast.KindEnumDeclaration:
 		if ast.IsEnumMember(node) {
-			return parent.AsEnumDeclaration().Members
+			return parent.MemberList()
 		}
 	case ast.KindSourceFile:
 		if ast.IsStatement(node) {
-			return parent.AsSourceFile().Statements
+			return parent.StatementList()
 		}
 	}
 
@@ -640,13 +610,13 @@ func greatestEnd(end int, nodes ...interface{ End() int }) int {
 
 func skipSynthesizedParentheses(node *ast.Node) *ast.Node {
 	for node.Kind == ast.KindParenthesizedExpression && ast.NodeIsSynthesized(node) {
-		node = node.AsParenthesizedExpression().Expression
+		node = node.Expression()
 	}
 	return node
 }
 
 func isNewExpressionWithoutArguments(node *ast.Node) bool {
-	return node.Kind == ast.KindNewExpression && node.AsNewExpression().Arguments == nil
+	return node.Kind == ast.KindNewExpression && node.ArgumentList() == nil
 }
 
 func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
@@ -660,7 +630,7 @@ func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression)
 	if !ast.IsCallExpression(node) {
 		return false
 	}
-	node = ast.SkipPartiallyEmittedExpressions(node.AsCallExpression().Expression)
+	node = ast.SkipPartiallyEmittedExpressions(node.Expression())
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node)
 }
 

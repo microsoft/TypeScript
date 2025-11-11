@@ -188,7 +188,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 				diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1_from_module_2,
 				diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
 			)
-			errorNode := node.AsTypeAliasDeclaration().Type
+			errorNode := node.Type()
 			typeName := node.Name()
 			return &SymbolAccessibilityDiagnostic{
 				errorNode:         errorNode,

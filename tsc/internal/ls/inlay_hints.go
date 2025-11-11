@@ -282,8 +282,8 @@ func (s *inlayHintState) addParameterTypeHint(node *ast.ParameterDeclarationNode
 		return
 	}
 	var pos int
-	if node.AsParameterDeclaration().QuestionToken != nil {
-		pos = node.AsParameterDeclaration().QuestionToken.End()
+	if node.QuestionToken() != nil {
+		pos = node.QuestionToken().End()
 	} else {
 		pos = node.Name().End()
 	}
@@ -488,7 +488,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "..."})
 			}
 			visitForDisplayParts(node.Name())
-			if node.AsParameterDeclaration().QuestionToken != nil {
+			if node.QuestionToken() != nil {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "?"})
 			}
 			if node.Type() != nil {
@@ -528,7 +528,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "..."})
 			}
 			visitForDisplayParts(node.Name())
-			if node.AsNamedTupleMember().QuestionToken != nil {
+			if node.QuestionToken() != nil {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "?"})
 			}
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: ": "})
@@ -587,10 +587,10 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 				visitForDisplayParts(node.AsMappedTypeNode().NameType)
 			}
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "]"})
-			if node.AsMappedTypeNode().QuestionToken != nil {
-				if node.AsMappedTypeNode().QuestionToken.Kind == ast.KindPlusToken {
+			if node.QuestionToken() != nil {
+				if node.QuestionToken().Kind == ast.KindPlusToken {
 					parts = append(parts, &lsproto.InlayHintLabelPart{Value: "+"})
-				} else if node.AsMappedTypeNode().QuestionToken.Kind == ast.KindMinusToken {
+				} else if node.QuestionToken().Kind == ast.KindMinusToken {
 					parts = append(parts, &lsproto.InlayHintLabelPart{Value: "-"})
 				}
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "?"})
@@ -628,11 +628,11 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
 			}
 			visitForDisplayParts(node.Name())
-			if node.AsPropertySignatureDeclaration().PostfixToken != nil {
+			if node.PostfixToken() != nil {
 				parts = append(
 					parts,
 					&lsproto.InlayHintLabelPart{
-						Value: scanner.TokenToString(node.AsPropertySignatureDeclaration().PostfixToken.Kind),
+						Value: scanner.TokenToString(node.PostfixToken().Kind),
 					})
 			}
 			if node.Type() != nil {
@@ -653,11 +653,11 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
 			}
 			visitForDisplayParts(node.Name())
-			if node.AsMethodSignatureDeclaration().PostfixToken != nil {
+			if node.PostfixToken() != nil {
 				parts = append(
 					parts,
 					&lsproto.InlayHintLabelPart{
-						Value: scanner.TokenToString(node.AsMethodSignatureDeclaration().PostfixToken.Kind),
+						Value: scanner.TokenToString(node.PostfixToken().Kind),
 					})
 			}
 			visitParametersAndTypeParameters(node)
@@ -715,7 +715,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "this"})
 		case ast.KindComputedPropertyName:
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "["})
-			visitForDisplayParts(node.AsComputedPropertyName().Expression)
+			visitForDisplayParts(node.Expression())
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "]"})
 		default:
 			debug.FailBadSyntaxKind(node)

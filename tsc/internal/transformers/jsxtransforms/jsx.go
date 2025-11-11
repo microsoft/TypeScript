@@ -146,7 +146,7 @@ func hasKeyAfterPropsSpread(node *ast.Node) bool {
 	for _, elem := range opener.Attributes().Properties() {
 		if ast.IsJsxSpreadAttribute(elem) && (!ast.IsObjectLiteralExpression(elem.Expression()) || core.Some(elem.Expression().Properties(), ast.IsSpreadAssignment)) {
 			spread = true
-		} else if spread && ast.IsJsxAttribute(elem) && ast.IsIdentifier(elem.Name()) && elem.Name().AsIdentifier().Text == "key" {
+		} else if spread && ast.IsJsxAttribute(elem) && ast.IsIdentifier(elem.Name()) && elem.Name().Text() == "key" {
 			return true
 		}
 	}
@@ -180,11 +180,11 @@ func (tx *JSXTransformer) insertStatementAfterCustomPrologue(to []*ast.Node, sta
 }
 
 func sortByImportDeclarationSource(a *ast.Node, b *ast.Node) int {
-	return stringutil.CompareStringsCaseSensitive(a.AsImportDeclaration().ModuleSpecifier.AsStringLiteral().Text, b.AsImportDeclaration().ModuleSpecifier.AsStringLiteral().Text)
+	return stringutil.CompareStringsCaseSensitive(a.ModuleSpecifier().Text(), b.ModuleSpecifier().Text())
 }
 
 func getSpecifierOfRequireCall(s *ast.Node) string {
-	return s.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration().Initializer.AsCallExpression().Arguments.Nodes[0].AsStringLiteral().Text
+	return s.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].Initializer().Arguments()[0].Text()
 }
 
 func sortByRequireSource(a *ast.Node, b *ast.Node) int {
@@ -192,11 +192,11 @@ func sortByRequireSource(a *ast.Node, b *ast.Node) int {
 }
 
 func sortImportSpecifiers(a *ast.Node, b *ast.Node) int {
-	res := stringutil.CompareStringsCaseSensitive(a.AsImportSpecifier().PropertyName.Text(), b.AsImportSpecifier().PropertyName.Text())
+	res := stringutil.CompareStringsCaseSensitive(a.PropertyName().Text(), b.PropertyName().Text())
 	if res != 0 {
 		return res
 	}
-	return stringutil.CompareStringsCaseSensitive(a.AsImportSpecifier().Name().AsIdentifier().Text, b.AsImportSpecifier().Name().AsIdentifier().Text)
+	return stringutil.CompareStringsCaseSensitive(a.AsImportSpecifier().Name().Text(), b.AsImportSpecifier().Name().Text())
 }
 
 func getSortedSpecifiers(m map[string]*ast.Node) []*ast.Node {
@@ -254,7 +254,7 @@ func (tx *JSXTransformer) visitSourceFile(file *ast.SourceFile) *ast.Node {
 				sorted := getSortedSpecifiers(importSpecifiersMap)
 				asBindingElems := make([]*ast.Node, 0, len(sorted))
 				for _, elem := range sorted {
-					asBindingElems = append(asBindingElems, tx.Factory().NewBindingElement(nil, elem.AsImportSpecifier().PropertyName, elem.AsImportSpecifier().Name(), nil))
+					asBindingElems = append(asBindingElems, tx.Factory().NewBindingElement(nil, elem.PropertyName(), elem.AsImportSpecifier().Name(), nil))
 				}
 				s := tx.Factory().NewVariableStatement(nil, tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewVariableDeclaration(
 					tx.Factory().NewBindingPattern(ast.KindObjectBindingPattern, tx.Factory().NewNodeList(asBindingElems)),
@@ -372,9 +372,9 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementJSX(element *ast.Node, child
 		childrenProp = tx.convertJsxChildrenToChildrenPropAssignment(children.Nodes)
 	}
 	var keyAttr *ast.Node
-	attrs := element.Attributes().AsJsxAttributes().Properties.Nodes
+	attrs := element.Attributes().Properties()
 	for i, p := range attrs {
-		if p.Kind == ast.KindJsxAttribute && p.AsJsxAttribute().Name() != nil && ast.IsIdentifier(p.AsJsxAttribute().Name()) && p.AsJsxAttribute().Name().AsIdentifier().Text == "key" {
+		if p.Kind == ast.KindJsxAttribute && p.AsJsxAttribute().Name() != nil && ast.IsIdentifier(p.AsJsxAttribute().Name()) && p.AsJsxAttribute().Name().Text() == "key" {
 			keyAttr = p
 			attrs = slices.Clone(attrs)
 			attrs = slices.Delete(attrs, i, i+1)
@@ -532,10 +532,10 @@ func (tx *JSXTransformer) transformJsxAttributeInitializer(node *ast.Node) *ast.
 		return res
 	}
 	if node.Kind == ast.KindJsxExpression {
-		if node.AsJsxExpression().Expression == nil {
+		if node.Expression() == nil {
 			return tx.Factory().NewTrueExpression()
 		}
-		return tx.Visitor().Visit(node.AsJsxExpression().Expression)
+		return tx.Visitor().Visit(node.Expression())
 	}
 	if ast.IsJsxElement(node) || ast.IsJsxSelfClosingElement(node) || ast.IsJsxFragment(node) {
 		tx.setInChild(false)
@@ -642,7 +642,7 @@ func (tx *JSXTransformer) createJsxFactoryExpressionFromEntityName(e *ast.Node, 
 		right := tx.Factory().NewIdentifier(e.AsQualifiedName().Right.Text())
 		return tx.Factory().NewPropertyAccessExpression(left, nil, right, ast.NodeFlagsNone)
 	}
-	return tx.createReactNamespace(e.AsIdentifier().Text, parent)
+	return tx.createReactNamespace(e.Text(), parent)
 }
 
 func (tx *JSXTransformer) createJsxPsuedoFactoryExpression(parent *ast.Node, e *ast.Node, target string) *ast.Node {

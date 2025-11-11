@@ -14,7 +14,7 @@ func isClassThisAssignmentBlock(emitContext *printer.EmitContext, node *ast.Node
 		if len(body.Statements.Nodes) == 1 {
 			statement := body.Statements.Nodes[0]
 			if ast.IsExpressionStatement(statement) {
-				expression := statement.AsExpressionStatement().Expression
+				expression := statement.Expression()
 				if ast.IsAssignmentExpression(expression, true /*excludeCompoundAssignment*/) {
 					binary := expression.AsBinaryExpression()
 					return ast.IsIdentifier(binary.Left) &&

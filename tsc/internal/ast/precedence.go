@@ -203,7 +203,7 @@ func getOperator(expression *Expression) Kind {
 func GetExpressionPrecedence(expression *Expression) OperatorPrecedence {
 	operator := getOperator(expression)
 	var flags OperatorPrecedenceFlags
-	if expression.Kind == KindNewExpression && expression.AsNewExpression().Arguments == nil {
+	if expression.Kind == KindNewExpression && expression.ArgumentList() == nil {
 		flags = OperatorPrecedenceFlagsNewWithoutArguments
 	} else if IsOptionalChain(expression) {
 		flags = OperatorPrecedenceFlagsOptionalChain

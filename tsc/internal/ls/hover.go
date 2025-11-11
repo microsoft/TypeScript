@@ -89,7 +89,7 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, de
 					case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 						writeOptionalEntityName(&b, tag.Name())
 					case ast.KindJSDocAugmentsTag:
-						writeOptionalEntityName(&b, tag.AsJSDocAugmentsTag().ClassName)
+						writeOptionalEntityName(&b, tag.ClassName())
 					case ast.KindJSDocSeeTag:
 						writeOptionalEntityName(&b, tag.AsJSDocSeeTag().NameExpression)
 					case ast.KindJSDocTemplateTag:

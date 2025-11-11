@@ -610,7 +610,7 @@ func isSyntacticOwner(startingToken *ast.Node, node *ast.CallLikeExpression, sou
 	case ast.KindOpenParenToken, ast.KindCommaToken:
 		return slices.Contains(invocationChildren, startingToken)
 	case ast.KindLessThanToken:
-		return containsPrecedingToken(startingToken, sourceFile, node.AsCallExpression().Expression)
+		return containsPrecedingToken(startingToken, sourceFile, node.Expression())
 	default:
 		return false
 	}

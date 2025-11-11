@@ -443,7 +443,7 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 	}
 	switch node.Kind {
 	case ast.KindAsExpression:
-		if !isConstAssertion(node) {
+		if !ast.IsConstAssertion(node) {
 			break
 		}
 		fallthrough
@@ -493,7 +493,7 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 		return false
 	}
 	reportedError := false
-	for _, prop := range node.AsObjectLiteralExpression().Properties.Nodes {
+	for _, prop := range node.Properties() {
 		if ast.IsSpreadAssignment(prop) {
 			continue
 		}
@@ -525,7 +525,7 @@ func (c *Checker) elaborateArrayLiteral(node *ast.Node, source *Type, target *Ty
 		}
 	}
 	reportedError := false
-	for i, element := range node.AsArrayLiteralExpression().Elements.Nodes {
+	for i, element := range node.Elements() {
 		if ast.IsOmittedExpression(element) || c.isTupleLikeType(target) && c.getPropertyOfType(target, jsnum.Number(i).String()) == nil {
 			continue
 		}
@@ -1963,7 +1963,7 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 			return name + "_n"
 		case ast.KindArrayBindingPattern:
 			if hasDotDotDotToken(node) {
-				elements := node.Name().AsBindingPattern().Elements.Nodes
+				elements := node.Name().Elements()
 				lastElement := core.LastOrNil(elements)
 				lastElementIsBindingElementRest := lastElement != nil && ast.IsBindingElement(lastElement) && hasDotDotDotToken(lastElement)
 				elementCount := len(elements) - core.IfElse(lastElementIsBindingElementRest, 1, 0)

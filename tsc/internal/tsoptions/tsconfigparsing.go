@@ -292,7 +292,7 @@ func convertConfigFileToObject(
 ) (any, []*ast.Diagnostic) {
 	var rootExpression *ast.Expression
 	if len(sourceFile.Statements.Nodes) > 0 {
-		rootExpression = sourceFile.Statements.Nodes[0].AsExpressionStatement().Expression
+		rootExpression = sourceFile.Statements.Nodes[0].Expression()
 	}
 	if rootExpression != nil && rootExpression.Kind != ast.KindObjectLiteralExpression {
 		baseFileName := "tsconfig.json"
@@ -304,7 +304,7 @@ func convertConfigFileToObject(
 		// synthesizing a top-level array literal expression. There's a reasonable chance the first element of that
 		// array is a well-formed configuration object, made into an array element by stray characters.
 		if ast.IsArrayLiteralExpression(rootExpression) {
-			firstObject := core.Find(rootExpression.AsArrayLiteralExpression().Elements.Nodes, ast.IsObjectLiteralExpression)
+			firstObject := core.Find(rootExpression.Elements(), ast.IsObjectLiteralExpression)
 			if firstObject != nil {
 				return convertToJson(sourceFile, firstObject, true /*returnValue*/, jsonConversionNotifier)
 			}
@@ -383,7 +383,7 @@ func convertJsonOptionOfListType(
 	if values, ok := values.([]any); ok {
 		mappedValues := core.MapIndex(values, func(v any, index int) any {
 			if valueExpression != nil {
-				expression = valueExpression.AsArrayLiteralExpression().Elements.Nodes[index]
+				expression = valueExpression.Elements()[index]
 			}
 			result, err := convertJsonOption(option.Elements(), v, basePath, propertyAssignment, expression, sourceFile)
 			errors = append(errors, err...)
@@ -493,7 +493,7 @@ func getExtendsConfigPathOrArray(
 		for index, fileName := range value.([]any) {
 			var expression *ast.Expression = nil
 			if valueExpression != nil {
-				expression = valueExpression.AsArrayLiteralExpression().Elements.Nodes[index]
+				expression = valueExpression.Elements()[index]
 			}
 			if reflect.TypeOf(fileName).Kind() == reflect.String {
 				val, err := getExtendsConfigPath(fileName.(string), host, newBase, expression, sourceFile)
@@ -785,17 +785,17 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 
 	case ast.KindStringLiteral:
 		if !isDoubleQuotedString(valueExpression) {
-			return valueExpression.AsStringLiteral().Text, []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.String_literal_with_double_quotes_expected)}
+			return valueExpression.Text(), []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.String_literal_with_double_quotes_expected)}
 		}
-		return valueExpression.AsStringLiteral().Text, nil
+		return valueExpression.Text(), nil
 
 	case ast.KindNumericLiteral:
-		return float64(jsnum.FromString(valueExpression.AsNumericLiteral().Text)), nil
+		return float64(jsnum.FromString(valueExpression.Text())), nil
 	case ast.KindPrefixUnaryExpression:
 		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind != ast.KindNumericLiteral {
 			break // not valid JSON syntax
 		}
-		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand.AsNumericLiteral().Text)), nil
+		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand.Text())), nil
 	case ast.KindObjectLiteralExpression:
 		objectLiteralExpression := valueExpression.AsObjectLiteralExpression()
 		// Currently having element option declaration in the tsconfig with type "object"
@@ -808,7 +808,7 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 	case ast.KindArrayLiteralExpression:
 		result, errors := convertArrayLiteralExpressionToJson(
 			sourceFile,
-			valueExpression.AsArrayLiteralExpression().Elements.Nodes,
+			valueExpression.Elements(),
 			option,
 			returnValue,
 		)
@@ -837,7 +837,7 @@ func ParseJsonConfigFileContent(json any, host ParseConfigHost, basePath string,
 func convertToObject(sourceFile *ast.SourceFile) (any, []*ast.Diagnostic) {
 	var rootExpression *ast.Expression
 	if len(sourceFile.Statements.Nodes) != 0 {
-		rootExpression = sourceFile.Statements.Nodes[0].AsExpressionStatement().Expression
+		rootExpression = sourceFile.Statements.Nodes[0].Expression()
 	}
 	return convertToJson(sourceFile, rootExpression, true /*returnValue*/, nil /*jsonConversionNotifier*/)
 }
@@ -1425,7 +1425,7 @@ func ForEachTsConfigPropArray[T any](tsConfigSourceFile *ast.SourceFile, propKey
 func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	return ForEachTsConfigPropArray(config.ConfigFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Diagnostic {
 		if ast.IsArrayLiteralExpression(property.Initializer) {
-			value := property.Initializer.AsArrayLiteralExpression().Elements.Nodes
+			value := property.Initializer.Elements()
 			if len(value) > index {
 				return CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, value[index], message, args...)
 			}
@@ -1437,8 +1437,8 @@ func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, mes
 func GetCallbackForFindingPropertyAssignmentByValue(value string) func(property *ast.PropertyAssignment) *ast.Node {
 	return func(property *ast.PropertyAssignment) *ast.Node {
 		if ast.IsArrayLiteralExpression(property.Initializer) {
-			return core.Find(property.Initializer.AsArrayLiteralExpression().Elements.Nodes, func(element *ast.Node) bool {
-				return ast.IsStringLiteral(element) && element.AsStringLiteral().Text == value
+			return core.Find(property.Initializer.Elements(), func(element *ast.Node) bool {
+				return ast.IsStringLiteral(element) && element.Text() == value
 			})
 		}
 		return nil
@@ -1467,7 +1467,7 @@ func ForEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression
 
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {
 	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes) > 0 {
-		expression := tsConfigSourceFile.Statements.Nodes[0].AsExpressionStatement().Expression
+		expression := tsConfigSourceFile.Statements.Nodes[0].Expression()
 		return expression.AsObjectLiteralExpression()
 	}
 	return nil

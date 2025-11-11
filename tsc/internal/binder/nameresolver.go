@@ -174,7 +174,7 @@ loop:
 				}
 			}
 		case ast.KindExpressionWithTypeArguments:
-			if lastLocation == location.AsExpressionWithTypeArguments().Expression && ast.IsHeritageClause(location.Parent) && location.Parent.AsHeritageClause().Token == ast.KindExtendsKeyword {
+			if lastLocation == location.Expression() && ast.IsHeritageClause(location.Parent) && location.Parent.AsHeritageClause().Token == ast.KindExtendsKeyword {
 				container := location.Parent.Parent
 				if ast.IsClassLike(container) {
 					result = r.lookup(r.getSymbolOfDeclaration(container).Members, name, meaning&ast.SymbolFlagsType)
@@ -217,8 +217,8 @@ loop:
 			}
 			if meaning&ast.SymbolFlagsFunction != 0 {
 				functionName := location.AsFunctionExpression().Name()
-				if functionName != nil && name == functionName.AsIdentifier().Text {
-					result = location.AsFunctionExpression().Symbol
+				if functionName != nil && name == functionName.Text() {
+					result = location.Symbol()
 					break loop
 				}
 			}
@@ -267,14 +267,14 @@ loop:
 		case ast.KindInferType:
 			if meaning&ast.SymbolFlagsTypeParameter != 0 {
 				parameterName := location.AsInferTypeNode().TypeParameter.AsTypeParameter().Name()
-				if parameterName != nil && name == parameterName.AsIdentifier().Text {
-					result = location.AsInferTypeNode().TypeParameter.AsTypeParameter().Symbol
+				if parameterName != nil && name == parameterName.Text() {
+					result = location.AsInferTypeNode().TypeParameter.Symbol()
 					break loop
 				}
 			}
 		case ast.KindExportSpecifier:
 			exportSpecifier := location.AsExportSpecifier()
-			if lastLocation != nil && lastLocation == exportSpecifier.PropertyName && location.Parent.Parent.AsExportDeclaration().ModuleSpecifier != nil {
+			if lastLocation != nil && lastLocation == exportSpecifier.PropertyName && location.Parent.Parent.ModuleSpecifier() != nil {
 				location = location.Parent.Parent.Parent
 			}
 		}

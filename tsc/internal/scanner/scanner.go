@@ -2335,7 +2335,7 @@ func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJSDoc 
 
 func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
 	pos := SkipTrivia(sourceFile.Text(), node.Pos())
-	body := node.AsArrowFunction().Body
+	body := node.Body()
 	if body != nil && body.Kind == ast.KindBlock {
 		startLine, _ := GetECMALineAndCharacterOfPosition(sourceFile, body.Pos())
 		endLine, _ := GetECMALineAndCharacterOfPosition(sourceFile, body.End())
@@ -2374,7 +2374,7 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 	case ast.KindCaseClause, ast.KindDefaultClause:
 		start := SkipTrivia(sourceFile.Text(), node.Pos())
 		end := node.End()
-		statements := node.AsCaseOrDefaultClause().Statements.Nodes
+		statements := node.Statements()
 		if len(statements) != 0 {
 			end = statements[0].Pos()
 		}

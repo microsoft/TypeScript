@@ -13,13 +13,13 @@ import (
  * @internal
  */
 func isClassNamedEvaluationHelperBlock(emitContext *printer.EmitContext, node *ast.Node) bool {
-	if !ast.IsClassStaticBlockDeclaration(node) || len(node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Nodes) != 1 {
+	if !ast.IsClassStaticBlockDeclaration(node) || len(node.AsClassStaticBlockDeclaration().Body.Statements()) != 1 {
 		return false
 	}
 
-	statement := node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Nodes[0]
+	statement := node.AsClassStaticBlockDeclaration().Body.Statements()[0]
 	if ast.IsExpressionStatement(statement) {
-		expression := statement.AsExpressionStatement().Expression
+		expression := statement.Expression()
 		if emitContext.IsCallToHelper(expression, "__setFunctionName") {
 			arguments := expression.AsCallExpression().Arguments
 			return len(arguments.Nodes) >= 2 &&
@@ -99,13 +99,13 @@ func isNamedEvaluationSource(node *ast.Node) bool {
 	case ast.KindShorthandPropertyAssignment:
 		return node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer != nil
 	case ast.KindVariableDeclaration:
-		return ast.IsIdentifier(node.AsVariableDeclaration().Name()) && node.AsVariableDeclaration().Initializer != nil
+		return ast.IsIdentifier(node.AsVariableDeclaration().Name()) && node.Initializer() != nil
 	case ast.KindParameter:
-		return ast.IsIdentifier(node.AsParameterDeclaration().Name()) && node.AsParameterDeclaration().Initializer != nil && node.AsParameterDeclaration().DotDotDotToken == nil
+		return ast.IsIdentifier(node.AsParameterDeclaration().Name()) && node.Initializer() != nil && node.AsParameterDeclaration().DotDotDotToken == nil
 	case ast.KindBindingElement:
-		return ast.IsIdentifier(node.AsBindingElement().Name()) && node.AsBindingElement().Initializer != nil && node.AsBindingElement().DotDotDotToken == nil
+		return ast.IsIdentifier(node.AsBindingElement().Name()) && node.Initializer() != nil && node.AsBindingElement().DotDotDotToken == nil
 	case ast.KindPropertyDeclaration:
-		return node.AsPropertyDeclaration().Initializer != nil
+		return node.Initializer() != nil
 	case ast.KindBinaryExpression:
 		switch node.AsBinaryExpression().OperatorToken.Kind {
 		case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
@@ -134,7 +134,7 @@ func isNamedEvaluationAnd(emitContext *printer.EmitContext, node *ast.Node, cb f
 	case ast.KindBinaryExpression:
 		return isAnonymousFunctionDefinition(emitContext, node.AsBinaryExpression().Right, cb)
 	case ast.KindExportAssignment:
-		return isAnonymousFunctionDefinition(emitContext, node.AsExportAssignment().Expression, cb)
+		return isAnonymousFunctionDefinition(emitContext, node.Expression(), cb)
 	default:
 		panic("Unhandled case in isNamedEvaluation")
 	}
@@ -236,7 +236,7 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 	factory := emitContext.Factory
 	namedEvaluationBlock := createClassNamedEvaluationHelperBlock(emitContext, assignedName, thisExpression)
 	if node.Name() != nil {
-		emitContext.SetSourceMapRange(namedEvaluationBlock.Body().AsBlock().Statements.Nodes[0], node.Name().Loc)
+		emitContext.SetSourceMapRange(namedEvaluationBlock.Body().Statements()[0], node.Name().Loc)
 	}
 
 	insertionIndex := slices.IndexFunc(node.Members(), func(n *ast.Node) bool {
