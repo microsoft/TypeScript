@@ -94,22 +94,32 @@ func (p *CheckerPool) Files(checker *checker.Checker) iter.Seq[*ast.SourceFile] 
 	panic("unimplemented")
 }
 
-func (p *CheckerPool) GetAllCheckers(ctx context.Context) ([]*checker.Checker, func()) {
+func (p *CheckerPool) Count() int {
+	return p.maxCheckers
+}
+
+func (p *CheckerPool) ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker)) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
 	requestID := core.GetRequestID(ctx)
 	if requestID == "" {
-		panic("cannot call GetAllCheckers on a project.checkerPool without a request ID")
+		panic("cannot call ForEachCheckerParallel on a project.checkerPool without a request ID")
 	}
 
 	// A request can only access one checker
 	if c, release := p.getRequestCheckerLocked(requestID); c != nil {
-		return []*checker.Checker{c}, release
+		defer release()
+		cb(0, c)
+		return
 	}
 
+	// TODO: Does this ever work without deadlocking? `p.GetChecker` also tries to lock this mutex.
+	// Should this just be a panic?
 	c, release := p.GetChecker(ctx)
-	return []*checker.Checker{c}, release
+	defer release()
+	cb(0, c)
+	return
 }
 
 func (p *CheckerPool) getCheckerLocked(requestID string) (*checker.Checker, int) {
