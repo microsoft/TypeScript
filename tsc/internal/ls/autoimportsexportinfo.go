@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
-func (l *LanguageService) getExportInfos(
+func (l *LanguageService) getExportInfoMap(
 	ctx context.Context,
 	ch *checker.Checker,
 	importingFile *ast.SourceFile,

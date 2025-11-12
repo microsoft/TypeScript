@@ -93,10 +93,13 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 	var markers []*Marker
 	var ranges []*RangeMarker
 
-	filesWithMarker, symlinks, _, globalOptions, e := testrunner.ParseTestFilesAndSymlinks(
+	filesWithMarker, symlinks, _, globalOptions, e := testrunner.ParseTestFilesAndSymlinksWithOptions(
 		contents,
 		fileName,
 		parseFileContent,
+		testrunner.ParseTestFilesOptions{
+			AllowImplicitFirstFile: true,
+		},
 	)
 	if e != nil {
 		t.Fatalf("Error parsing fourslash data: %s", e.Error())

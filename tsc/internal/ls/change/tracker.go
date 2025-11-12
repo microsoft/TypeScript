@@ -29,28 +29,28 @@ type NodeOptions struct {
 	// Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
 	delta *int
 
-	leadingTriviaOption
-	trailingTriviaOption
+	LeadingTriviaOption
+	TrailingTriviaOption
 	joiner string
 }
 
-type leadingTriviaOption int
+type LeadingTriviaOption int
 
 const (
-	leadingTriviaOptionNone       leadingTriviaOption = 0
-	leadingTriviaOptionExclude    leadingTriviaOption = 1
-	leadingTriviaOptionIncludeAll leadingTriviaOption = 2
-	leadingTriviaOptionJSDoc      leadingTriviaOption = 3
-	leadingTriviaOptionStartLine  leadingTriviaOption = 4
+	LeadingTriviaOptionNone       LeadingTriviaOption = 0
+	LeadingTriviaOptionExclude    LeadingTriviaOption = 1
+	LeadingTriviaOptionIncludeAll LeadingTriviaOption = 2
+	LeadingTriviaOptionJSDoc      LeadingTriviaOption = 3
+	LeadingTriviaOptionStartLine  LeadingTriviaOption = 4
 )
 
-type trailingTriviaOption int
+type TrailingTriviaOption int
 
 const (
-	trailingTriviaOptionNone              trailingTriviaOption = 0
-	trailingTriviaOptionExclude           trailingTriviaOption = 1
-	trailingTriviaOptionExcludeWhitespace trailingTriviaOption = 2
-	trailingTriviaOptionInclude           trailingTriviaOption = 3
+	TrailingTriviaOptionNone              TrailingTriviaOption = 0
+	TrailingTriviaOptionExclude           TrailingTriviaOption = 1
+	TrailingTriviaOptionExcludeWhitespace TrailingTriviaOption = 2
+	TrailingTriviaOptionInclude           TrailingTriviaOption = 3
 )
 
 type trackerEditKind int
@@ -82,11 +82,17 @@ type Tracker struct {
 	*printer.EmitContext
 
 	*ast.NodeFactory
-	changes *collections.MultiMap[*ast.SourceFile, *trackerEdit]
+	changes      *collections.MultiMap[*ast.SourceFile, *trackerEdit]
+	deletedNodes []deletedNode
 
 	// created during call to getChanges
 	writer *printer.ChangeTrackerWriter
 	// printer
+}
+
+type deletedNode struct {
+	sourceFile *ast.SourceFile
+	node       *ast.Node
 }
 
 func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, formatOptions *format.FormatCodeSettings, converters *lsconv.Converters) *Tracker {
@@ -104,10 +110,10 @@ func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, form
 	}
 }
 
-// !!! address strada note
-//   - Note: after calling this, the TextChanges object must be discarded!
+// GetChanges returns the accumulated text edits.
+// Note: after calling this, the Tracker object must be discarded!
 func (t *Tracker) GetChanges() map[string][]*lsproto.TextEdit {
-	// !!! finishDeleteDeclarations
+	t.finishDeleteDeclarations()
 	// !!! finishClassesWithNodesInsertedAtStart
 	changes := t.getTextChangesFromChanges()
 	// !!! changes for new files
@@ -118,11 +124,11 @@ func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, new
 	if options == nil {
 		// defaults to `useNonAdjustedPositions`
 		options = &NodeOptions{
-			leadingTriviaOption:  leadingTriviaOptionExclude,
-			trailingTriviaOption: trailingTriviaOptionExclude,
+			LeadingTriviaOption:  LeadingTriviaOptionExclude,
+			TrailingTriviaOption: TrailingTriviaOptionExclude,
 		}
 	}
-	t.ReplaceRange(sourceFile, t.getAdjustedRange(sourceFile, oldNode, oldNode, options.leadingTriviaOption, options.trailingTriviaOption), newNode, *options)
+	t.ReplaceRange(sourceFile, t.getAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNode, *options)
 }
 
 func (t *Tracker) ReplaceRange(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range, newNode *ast.Node, options NodeOptions) {
@@ -166,7 +172,87 @@ func (t *Tracker) InsertNodesAfter(sourceFile *ast.SourceFile, after *ast.Node, 
 }
 
 func (t *Tracker) InsertNodeBefore(sourceFile *ast.SourceFile, before *ast.Node, newNode *ast.Node, blankLineBetween bool) {
-	t.InsertNodeAt(sourceFile, core.TextPos(t.getAdjustedStartPosition(sourceFile, before, leadingTriviaOptionNone, false)), newNode, t.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween))
+	t.InsertNodeAt(sourceFile, core.TextPos(t.getAdjustedStartPosition(sourceFile, before, LeadingTriviaOptionNone, false)), newNode, t.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween))
+}
+
+// InsertModifierBefore inserts a modifier token (like 'type') before a node with a trailing space.
+func (t *Tracker) InsertModifierBefore(sourceFile *ast.SourceFile, modifier ast.Kind, before *ast.Node) {
+	pos := astnav.GetStartOfNode(before, sourceFile, false)
+	token := sourceFile.GetOrCreateToken(modifier, pos, pos, before.Parent)
+	t.InsertNodeAt(sourceFile, core.TextPos(pos), token, NodeOptions{Suffix: " "})
+}
+
+// Delete queues a node for deletion with smart handling of list items, imports, etc.
+// The actual deletion happens in finishDeleteDeclarations during GetChanges.
+func (t *Tracker) Delete(sourceFile *ast.SourceFile, node *ast.Node) {
+	t.deletedNodes = append(t.deletedNodes, deletedNode{sourceFile: sourceFile, node: node})
+}
+
+// DeleteRange deletes a text range from the source file.
+func (t *Tracker) DeleteRange(sourceFile *ast.SourceFile, textRange core.TextRange) {
+	lspRange := t.converters.ToLSPRange(sourceFile, textRange)
+	t.ReplaceRangeWithText(sourceFile, lspRange, "")
+}
+
+// DeleteNode deletes a node immediately with specified trivia options.
+// Stop! Consider using Delete instead, which has logic for deleting nodes from delimited lists.
+func (t *Tracker) DeleteNode(sourceFile *ast.SourceFile, node *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
+	rng := t.getAdjustedRange(sourceFile, node, node, leadingTrivia, trailingTrivia)
+	t.ReplaceRangeWithText(sourceFile, rng, "")
+}
+
+// DeleteNodeRange deletes a range of nodes with specified trivia options.
+func (t *Tracker) DeleteNodeRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
+	startPosition := t.getAdjustedStartPosition(sourceFile, startNode, leadingTrivia, false)
+	endPosition := t.getAdjustedEndPosition(sourceFile, endNode, trailingTrivia)
+	startPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(startPosition))
+	endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(endPosition))
+	t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: startPos, End: endPos}, "")
+}
+
+// finishDeleteDeclarations processes all queued deletions with smart handling for lists and trailing commas.
+func (t *Tracker) finishDeleteDeclarations() {
+	deletedNodesInLists := make(map[*ast.Node]bool)
+
+	for _, deleted := range t.deletedNodes {
+		// Skip if this node is contained within another deleted node
+		isContained := false
+		for _, other := range t.deletedNodes {
+			if other.sourceFile == deleted.sourceFile && other.node != deleted.node &&
+				rangeContainsRangeExclusive(other.node, deleted.node) {
+				isContained = true
+				break
+			}
+		}
+		if isContained {
+			continue
+		}
+
+		deleteDeclaration(t, deletedNodesInLists, deleted.sourceFile, deleted.node)
+	}
+
+	// Handle trailing commas for last elements in lists
+	for node := range deletedNodesInLists {
+		sourceFile := ast.GetSourceFileOfNode(node)
+		list := format.GetContainingList(node, sourceFile)
+		if list == nil || node != list.Nodes[len(list.Nodes)-1] {
+			continue
+		}
+
+		lastNonDeletedIndex := -1
+		for i := len(list.Nodes) - 2; i >= 0; i-- {
+			if !deletedNodesInLists[list.Nodes[i]] {
+				lastNonDeletedIndex = i
+				break
+			}
+		}
+
+		if lastNonDeletedIndex != -1 {
+			startPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(list.Nodes[lastNonDeletedIndex].End()))
+			endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(t.startPositionToDeleteNodeInList(sourceFile, list.Nodes[lastNonDeletedIndex+1])))
+			t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: startPos, End: endPos}, "")
+		}
+	}
 }
 
 func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *ast.Node, newNode *ast.Node) core.TextPos {
@@ -180,7 +266,7 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *as
 			NodeOptions{},
 		)
 	}
-	return core.TextPos(t.getAdjustedEndPosition(sourceFile, after, trailingTriviaOptionNone))
+	return core.TextPos(t.getAdjustedEndPosition(sourceFile, after, TrailingTriviaOptionNone))
 }
 
 /**
@@ -287,7 +373,11 @@ func (t *Tracker) InsertImportSpecifierAtIndex(sourceFile *ast.SourceFile, newSp
 	namedImportsNode := namedImports.AsNamedImports()
 	elements := namedImportsNode.Elements.Nodes
 
-	if index > 0 && len(elements) > index {
+	if index >= len(elements) {
+		// Insert at the end (after the last element)
+		t.InsertNodeInListAfter(sourceFile, elements[len(elements)-1], newSpecifier, elements)
+	} else if index > 0 {
+		// Insert after the element at index-1
 		t.InsertNodeInListAfter(sourceFile, elements[index-1], newSpecifier, elements)
 	} else {
 		// Insert before the first element
@@ -385,6 +475,10 @@ func (t *Tracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.
 
 func ptrTo[T any](v T) *T {
 	return &v
+}
+
+func rangeContainsRangeExclusive(outer *ast.Node, inner *ast.Node) bool {
+	return outer.Pos() < inner.Pos() && inner.End() < outer.End()
 }
 
 func isSeparator(node *ast.Node, candidate *ast.Node) bool {

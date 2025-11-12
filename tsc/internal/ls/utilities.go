@@ -1176,6 +1176,22 @@ func getAdjustedLocationForExportDeclaration(node *ast.ExportDeclaration, forRen
 	return nil
 }
 
+func symbolFlagsHaveMeaning(flags ast.SymbolFlags, meaning ast.SemanticMeaning) bool {
+	if meaning == ast.SemanticMeaningAll {
+		return true
+	}
+	if meaning&ast.SemanticMeaningValue != 0 {
+		return flags&ast.SymbolFlagsValue != 0
+	}
+	if meaning&ast.SemanticMeaningType != 0 {
+		return flags&ast.SymbolFlagsType != 0
+	}
+	if meaning&ast.SemanticMeaningNamespace != 0 {
+		return flags&ast.SymbolFlagsNamespace != 0
+	}
+	return false
+}
+
 func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 	// todo: check if this function needs to be changed for jsdoc updates
 	node = getAdjustedLocation(node, false /*forRename*/, nil)

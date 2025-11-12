@@ -1391,10 +1391,6 @@ func GetNameOfDeclaration(declaration *Node) *Node {
 	return nil
 }
 
-func GetImportClauseOfDeclaration(declaration *Declaration) *ImportClause {
-	return declaration.ImportClause().AsImportClause()
-}
-
 func GetNonAssignedNameOfDeclaration(declaration *Node) *Node {
 	// !!!
 	switch declaration.Kind {

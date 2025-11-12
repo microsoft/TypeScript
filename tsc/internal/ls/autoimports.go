@@ -356,13 +356,13 @@ func (l *LanguageService) getImportCompletionAction(
 	sourceFile *ast.SourceFile,
 	position int,
 	exportMapKey ExportInfoMapKey,
-	symbolName string, // !!! needs *string ?
+	symbolName string,
 	isJsxTagName bool,
 	// formatContext *formattingContext,
 ) (string, codeAction) {
 	var exportInfos []*SymbolExportInfo
 	// `exportMapKey` should be in the `itemData` of each auto-import completion entry and sent in resolving completion entry requests
-	exportInfos = l.getExportInfos(ctx, ch, sourceFile, exportMapKey)
+	exportInfos = l.getExportInfoMap(ctx, ch, sourceFile, exportMapKey)
 	if len(exportInfos) == 0 {
 		panic("Some exportInfo should match the specified exportMapKey")
 	}
@@ -482,7 +482,7 @@ func fileContainsPackageImport(sourceFile *ast.SourceFile, packageName string) b
 }
 
 func isImportableSymbol(symbol *ast.Symbol, ch *checker.Checker) bool {
-	return !ch.IsUndefinedSymbol(symbol) && !ch.IsUnknownSymbol(symbol) && !checker.IsKnownSymbol(symbol) // !!! && !checker.IsPrivateIdentifierSymbol(symbol);
+	return !ch.IsUndefinedSymbol(symbol) && !ch.IsUnknownSymbol(symbol) && !checker.IsKnownSymbol(symbol) && !checker.IsPrivateIdentifierSymbol(symbol)
 }
 
 func getDefaultLikeExportInfo(moduleSymbol *ast.Symbol, ch *checker.Checker) *ExportInfo {
@@ -536,7 +536,7 @@ func (l *LanguageService) getImportFixForSymbol(
 	if isValidTypeOnlySite == nil {
 		isValidTypeOnlySite = ptrTo(ast.IsValidTypeOnlyAliasUseSite(astnav.GetTokenAtPosition(sourceFile, position)))
 	}
-	useRequire := getShouldUseRequire(sourceFile, l.GetProgram())
+	useRequire := shouldUseRequire(sourceFile, l.GetProgram())
 	packageJsonImportFilter := l.createPackageJsonImportFilter(sourceFile)
 	_, fixes := l.getImportFixes(ch, exportInfos, ptrTo(l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(position))), isValidTypeOnlySite, &useRequire, sourceFile, false /* fromCacheOnly */)
 	return l.getBestFix(fixes, sourceFile, packageJsonImportFilter.allowsImportingSpecifier)
@@ -581,26 +581,25 @@ func (l *LanguageService) compareModuleSpecifiers(
 	allowsImportingSpecifier func(specifier string) bool,
 	toPath func(fileName string) tspath.Path,
 ) int {
-	if a.kind == ImportFixKindUseNamespace || b.kind == ImportFixKindUseNamespace {
-		return 0
-	}
-	if comparison := core.CompareBooleans(
-		b.moduleSpecifierKind != modulespecifiers.ResultKindNodeModules || allowsImportingSpecifier(b.moduleSpecifier),
-		a.moduleSpecifierKind != modulespecifiers.ResultKindNodeModules || allowsImportingSpecifier(a.moduleSpecifier),
-	); comparison != 0 {
-		return comparison
-	}
-	if comparison := compareModuleSpecifierRelativity(a, b, l.UserPreferences()); comparison != 0 {
-		return comparison
-	}
-	if comparison := compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, l.GetProgram()); comparison != 0 {
-		return comparison
-	}
-	if comparison := core.CompareBooleans(isFixPossiblyReExportingImportingFile(a, importingFile.Path(), toPath), isFixPossiblyReExportingImportingFile(b, importingFile.Path(), toPath)); comparison != 0 {
-		return comparison
-	}
-	if comparison := tspath.CompareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier); comparison != 0 {
-		return comparison
+	if a.kind != ImportFixKindUseNamespace && b.kind != ImportFixKindUseNamespace {
+		if comparison := core.CompareBooleans(
+			b.moduleSpecifierKind != modulespecifiers.ResultKindNodeModules || allowsImportingSpecifier(b.moduleSpecifier),
+			a.moduleSpecifierKind != modulespecifiers.ResultKindNodeModules || allowsImportingSpecifier(a.moduleSpecifier),
+		); comparison != 0 {
+			return comparison
+		}
+		if comparison := compareModuleSpecifierRelativity(a, b, l.UserPreferences()); comparison != 0 {
+			return comparison
+		}
+		if comparison := compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, l.GetProgram()); comparison != 0 {
+			return comparison
+		}
+		if comparison := core.CompareBooleans(isFixPossiblyReExportingImportingFile(a, importingFile.Path(), toPath), isFixPossiblyReExportingImportingFile(b, importingFile.Path(), toPath)); comparison != 0 {
+			return comparison
+		}
+		if comparison := tspath.CompareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier); comparison != 0 {
+			return comparison
+		}
 	}
 	return 0
 }
@@ -911,29 +910,9 @@ func tryUseExistingNamespaceImport(existingImports []*FixAddToExistingImportInfo
 		if existingImport.importKind != ImportKindNamed {
 			continue
 		}
-		var namespacePrefix string
-		declaration := existingImport.declaration
-		switch declaration.Kind {
-		case ast.KindVariableDeclaration, ast.KindImportEqualsDeclaration:
-			name := declaration.Name()
-			if declaration.Kind == ast.KindVariableDeclaration && (name == nil || name.Kind != ast.KindIdentifier) {
-				continue
-			}
-			namespacePrefix = name.Text()
-		case ast.KindJSDocImportTag, ast.KindImportDeclaration:
-			importClause := ast.GetImportClauseOfDeclaration(declaration)
-			if importClause == nil || importClause.NamedBindings == nil || importClause.NamedBindings.Kind != ast.KindNamespaceImport {
-				continue
-			}
-			namespacePrefix = importClause.NamedBindings.Name().Text()
-		default:
-			debug.AssertNever(declaration)
-		}
-		if namespacePrefix == "" {
-			continue
-		}
-		moduleSpecifier := checker.TryGetModuleSpecifierFromDeclaration(declaration)
-		if moduleSpecifier != nil && moduleSpecifier.Text() != "" {
+		namespacePrefix := getNamespaceLikeImportText(existingImport.declaration)
+		moduleSpecifier := checker.TryGetModuleSpecifierFromDeclaration(existingImport.declaration)
+		if namespacePrefix != "" && moduleSpecifier != nil && moduleSpecifier.Text() != "" {
 			return getUseNamespaceImport(
 				moduleSpecifier.Text(),
 				modulespecifiers.ResultKindNone,
@@ -943,6 +922,28 @@ func tryUseExistingNamespaceImport(existingImports []*FixAddToExistingImportInfo
 		}
 	}
 	return nil
+}
+
+func getNamespaceLikeImportText(declaration *ast.Statement) string {
+	switch declaration.Kind {
+	case ast.KindVariableDeclaration:
+		name := declaration.Name()
+		if name != nil && name.Kind == ast.KindIdentifier {
+			return name.Text()
+		}
+		return ""
+	case ast.KindImportEqualsDeclaration:
+		return declaration.Name().Text()
+	case ast.KindJSDocImportTag, ast.KindImportDeclaration:
+		importClause := declaration.ImportClause()
+		if importClause != nil && importClause.AsImportClause().NamedBindings != nil && importClause.AsImportClause().NamedBindings.Kind == ast.KindNamespaceImport {
+			return importClause.AsImportClause().NamedBindings.Name().Text()
+		}
+		return ""
+	default:
+		debug.AssertNever(declaration)
+		return ""
+	}
 }
 
 func tryAddToExistingImport(existingImports []*FixAddToExistingImportInfo, isValidTypeOnlyUseSite *bool, ch *checker.Checker, compilerOptions *core.CompilerOptions) *ImportFix {
@@ -990,11 +991,11 @@ func (info *FixAddToExistingImportInfo) getAddToExistingImportFix(isValidTypeOnl
 		return nil
 	}
 
-	importClause := ast.GetImportClauseOfDeclaration(info.declaration)
+	importClause := info.declaration.ImportClause()
 	if importClause == nil || !ast.IsStringLiteralLike(info.declaration.ModuleSpecifier()) {
 		return nil
 	}
-	namedBindings := importClause.NamedBindings
+	namedBindings := importClause.AsImportClause().NamedBindings
 	// A type-only import may not have both a default and named imports, so the only way a name can
 	// be added to an existing type-only import is adding a named import to existing named bindings.
 	if importClause.IsTypeOnly() && !(info.importKind == ImportKindNamed && namedBindings != nil) {
@@ -1161,7 +1162,7 @@ func getAddAsTypeOnly(
 	return AddAsTypeOnlyAllowed
 }
 
-func getShouldUseRequire(
+func shouldUseRequire(
 	sourceFile *ast.SourceFile, // !!! | FutureSourceFile
 	program *compiler.Program,
 ) bool {
@@ -1460,19 +1461,33 @@ func (l *LanguageService) codeActionForFixWorker(
 	switch fix.kind {
 	case ImportFixKindUseNamespace:
 		addNamespaceQualifier(changeTracker, sourceFile, fix.qualification())
-		return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, `${fix.namespacePrefix}.${symbolName}`)
+		return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, fmt.Sprintf("%s.%s", *fix.namespacePrefix, symbolName))
 	case ImportFixKindJsdocTypeImport:
-		// !!! not implemented
-		// changeTracker.addImportType(changeTracker, sourceFile, fix, quotePreference);
-		// return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, getImportTypePrefix(fix.moduleSpecifier, quotePreference) + symbolName);
+		if fix.usagePosition == nil {
+			return nil
+		}
+		quotePreference := getQuotePreference(sourceFile, l.UserPreferences())
+		quoteChar := "\""
+		if quotePreference == quotePreferenceSingle {
+			quoteChar = "'"
+		}
+		importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, fix.moduleSpecifier, quoteChar)
+		changeTracker.InsertText(sourceFile, *fix.usagePosition, importTypePrefix)
+		return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, importTypePrefix+symbolName)
 	case ImportFixKindAddToExisting:
+		var defaultImport *Import
+		var namedImports []*Import
+		if fix.importKind == ImportKindDefault {
+			defaultImport = &Import{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}
+		} else if fix.importKind == ImportKindNamed {
+			namedImports = []*Import{{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly, propertyName: fix.propertyName}}
+		}
 		l.doAddExistingFix(
 			changeTracker,
 			sourceFile,
 			fix.importClauseOrBindingPattern,
-			core.IfElse(fix.importKind == ImportKindDefault, &Import{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}, nil),
-			core.IfElse(fix.importKind == ImportKindNamed, []*Import{{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}}, nil),
-			// nil /*removeExistingImportSpecifiers*/,
+			defaultImport,
+			namedImports,
 		)
 		moduleSpecifierWithoutQuotes := stringutil.StripQuotes(fix.moduleSpecifier)
 		if includeSymbolNameInDescription {
@@ -1481,9 +1496,14 @@ func (l *LanguageService) codeActionForFixWorker(
 		return diagnostics.FormatMessage(diagnostics.Update_import_from_0, moduleSpecifierWithoutQuotes)
 	case ImportFixKindAddNew:
 		var declarations []*ast.Statement
-		defaultImport := core.IfElse(fix.importKind == ImportKindDefault, &Import{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}, nil)
-		namedImports := core.IfElse(fix.importKind == ImportKindNamed, []*Import{{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}}, nil)
+		var defaultImport *Import
+		var namedImports []*Import
 		var namespaceLikeImport *Import
+		if fix.importKind == ImportKindDefault {
+			defaultImport = &Import{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly}
+		} else if fix.importKind == ImportKindNamed {
+			namedImports = []*Import{{name: symbolName, addAsTypeOnly: fix.addAsTypeOnly, propertyName: fix.propertyName}}
+		}
 		qualification := fix.qualification()
 		if fix.importKind == ImportKindNamespace || fix.importKind == ImportKindCommonJS {
 			namespaceLikeImport = &Import{kind: fix.importKind, addAsTypeOnly: fix.addAsTypeOnly, name: symbolName}
@@ -1512,16 +1532,16 @@ func (l *LanguageService) codeActionForFixWorker(
 		}
 		return diagnostics.FormatMessage(diagnostics.Add_import_from_0, fix.moduleSpecifier)
 	case ImportFixKindPromoteTypeOnly:
-		// !!! type only
-		// promotedDeclaration := promoteFromTypeOnly(changes, fix.typeOnlyAliasDeclaration, program, sourceFile, preferences);
-		// if promotedDeclaration.Kind == ast.KindImportSpecifier {
-		// return diagnostics.FormatMessage(diagnostics.Remove_type_from_import_of_0_from_1, symbolName, getModuleSpecifierText(promotedDeclaration.parent.parent))
-		// }
-		// return diagnostics.FormatMessage(diagnostics.Remove_type_from_import_declaration_from_0, getModuleSpecifierText(promotedDeclaration));
+		promotedDeclaration := promoteFromTypeOnly(changeTracker, fix.typeOnlyAliasDeclaration, l.GetProgram(), sourceFile, l)
+		if promotedDeclaration.Kind == ast.KindImportSpecifier {
+			moduleSpec := getModuleSpecifierText(promotedDeclaration.Parent.Parent)
+			return diagnostics.FormatMessage(diagnostics.Remove_type_from_import_of_0_from_1, symbolName, moduleSpec)
+		}
+		moduleSpec := getModuleSpecifierText(promotedDeclaration)
+		return diagnostics.FormatMessage(diagnostics.Remove_type_from_import_declaration_from_0, moduleSpec)
 	default:
 		panic(fmt.Sprintf(`Unexpected fix kind %v`, fix.kind))
 	}
-	return nil
 }
 
 func getNewRequires(
@@ -1608,7 +1628,7 @@ func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name *as
 	)
 }
 
-func getModuleSpecifierText(promotedDeclaration *ast.ImportDeclaration) string {
+func getModuleSpecifierText(promotedDeclaration *ast.Node) string {
 	if promotedDeclaration.Kind == ast.KindImportEqualsDeclaration {
 		importEqualsDeclaration := promotedDeclaration.AsImportEqualsDeclaration()
 		if ast.IsExternalModuleReference(importEqualsDeclaration.ModuleReference) {

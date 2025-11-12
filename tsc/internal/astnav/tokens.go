@@ -672,3 +672,60 @@ func shouldSkipChild(node *ast.Node) bool {
 		ast.IsJSDocLinkLike(node) ||
 		ast.IsJSDocTag(node)
 }
+
+// FindChildOfKind searches for a child node or token of the specified kind within a containing node.
+// This function scans through both AST nodes and intervening tokens to find the first match.
+func FindChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) *ast.Node {
+	lastNodePos := containingNode.Pos()
+	scan := scanner.GetScannerForSourceFile(sourceFile, lastNodePos)
+
+	var foundChild *ast.Node
+	visitNode := func(node *ast.Node) bool {
+		if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+			return false
+		}
+		// Look for child in preceding tokens.
+		startPos := lastNodePos
+		for startPos < node.Pos() {
+			tokenKind := scan.Token()
+			tokenFullStart := scan.TokenFullStart()
+			tokenEnd := scan.TokenEnd()
+			token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode)
+			if tokenKind == kind {
+				foundChild = token
+				return true
+			}
+			startPos = tokenEnd
+			scan.Scan()
+		}
+		if node.Kind == kind {
+			foundChild = node
+			return true
+		}
+
+		lastNodePos = node.End()
+		scan.ResetPos(lastNodePos)
+		return false
+	}
+
+	ast.ForEachChildAndJSDoc(containingNode, sourceFile, visitNode)
+
+	if foundChild != nil {
+		return foundChild
+	}
+
+	// Look for child in trailing tokens.
+	startPos := lastNodePos
+	for startPos < containingNode.End() {
+		tokenKind := scan.Token()
+		tokenFullStart := scan.TokenFullStart()
+		tokenEnd := scan.TokenEnd()
+		token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode)
+		if tokenKind == kind {
+			return token
+		}
+		startPos = tokenEnd
+		scan.Scan()
+	}
+	return nil
+}

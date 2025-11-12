@@ -172,7 +172,7 @@ func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile
 }
 
 // method on the changeTracker because use of converters
-func (t *Tracker) getAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption leadingTriviaOption, trailingOption trailingTriviaOption) lsproto.Range {
+func (t *Tracker) getAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) lsproto.Range {
 	return t.converters.ToLSPRange(
 		sourceFile,
 		core.NewTextRange(
@@ -183,8 +183,8 @@ func (t *Tracker) getAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.No
 }
 
 // method on the changeTracker because use of converters
-func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast.Node, leadingOption leadingTriviaOption, hasTrailingComment bool) int {
-	if leadingOption == leadingTriviaOptionJSDoc {
+func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast.Node, leadingOption LeadingTriviaOption, hasTrailingComment bool) int {
+	if leadingOption == LeadingTriviaOptionJSDoc {
 		if JSDocComments := parser.GetJSDocCommentRanges(t.NodeFactory, nil, node, sourceFile.Text()); len(JSDocComments) > 0 {
 			return format.GetLineStartPositionForPosition(JSDocComments[0].Pos(), sourceFile)
 		}
@@ -194,9 +194,9 @@ func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast
 	startOfLinePos := format.GetLineStartPositionForPosition(start, sourceFile)
 
 	switch leadingOption {
-	case leadingTriviaOptionExclude:
+	case LeadingTriviaOptionExclude:
 		return start
-	case leadingTriviaOptionStartLine:
+	case LeadingTriviaOptionStartLine:
 		if node.Loc.ContainsInclusive(startOfLinePos) {
 			return startOfLinePos
 		}
@@ -218,7 +218,7 @@ func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast
 		// fullstart
 		// when b is replaced - we usually want to keep the leading trvia
 		// when b is deleted - we delete it
-		if leadingOption == leadingTriviaOptionIncludeAll {
+		if leadingOption == LeadingTriviaOptionIncludeAll {
 			return fullStart
 		}
 		return start
@@ -248,8 +248,8 @@ func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast
 
 // method on the changeTracker because of converters
 // Return the end position of a multiline comment of it is on another line; otherwise returns `undefined`;
-func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.SourceFile, node *ast.Node, trailingOpt trailingTriviaOption) int {
-	if trailingOpt == trailingTriviaOptionInclude {
+func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.SourceFile, node *ast.Node, trailingOpt TrailingTriviaOption) int {
+	if trailingOpt == TrailingTriviaOptionInclude {
 		// If the trailing comment is a multiline comment that extends to the next lines,
 		// return the end of the comment and track it for the next nodes to adjust.
 		lineStarts := sourceFile.ECMALineMap()
@@ -274,11 +274,11 @@ func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.Sourc
 }
 
 // method on the changeTracker because of converters
-func (t *Tracker) getAdjustedEndPosition(sourceFile *ast.SourceFile, node *ast.Node, trailingTriviaOption trailingTriviaOption) int {
-	if trailingTriviaOption == trailingTriviaOptionExclude {
+func (t *Tracker) getAdjustedEndPosition(sourceFile *ast.SourceFile, node *ast.Node, TrailingTriviaOption TrailingTriviaOption) int {
+	if TrailingTriviaOption == TrailingTriviaOptionExclude {
 		return node.End()
 	}
-	if trailingTriviaOption == trailingTriviaOptionExcludeWhitespace {
+	if TrailingTriviaOption == TrailingTriviaOptionExcludeWhitespace {
 		if comments := slices.AppendSeq(
 			slices.Collect(scanner.GetTrailingCommentRanges(t.NodeFactory, sourceFile.Text(), node.End())),
 			scanner.GetLeadingCommentRanges(t.NodeFactory, sourceFile.Text(), node.End()),
@@ -290,13 +290,13 @@ func (t *Tracker) getAdjustedEndPosition(sourceFile *ast.SourceFile, node *ast.N
 		return node.End()
 	}
 
-	if multilineEndPosition := t.getEndPositionOfMultilineTrailingComment(sourceFile, node, trailingTriviaOption); multilineEndPosition != 0 {
+	if multilineEndPosition := t.getEndPositionOfMultilineTrailingComment(sourceFile, node, TrailingTriviaOption); multilineEndPosition != 0 {
 		return multilineEndPosition
 	}
 
 	newEnd := scanner.SkipTriviaEx(sourceFile.Text(), node.End(), &scanner.SkipTriviaOptions{StopAfterLineBreak: true})
 
-	if newEnd != node.End() && (trailingTriviaOption == trailingTriviaOptionInclude || stringutil.IsLineBreak(rune(sourceFile.Text()[newEnd-1]))) {
+	if newEnd != node.End() && (TrailingTriviaOption == TrailingTriviaOptionInclude || stringutil.IsLineBreak(rune(sourceFile.Text()[newEnd-1]))) {
 		return newEnd
 	}
 	return node.End()

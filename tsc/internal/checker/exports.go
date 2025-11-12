@@ -170,3 +170,15 @@ func (c *Checker) GetIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
 func (c *Checker) GetResolvedSymbol(node *ast.Node) *ast.Symbol {
 	return c.getResolvedSymbol(node)
 }
+
+func (c *Checker) GetJsxNamespace(location *ast.Node) string {
+	return c.getJsxNamespace(location)
+}
+
+func (c *Checker) ResolveName(name string, location *ast.Node, meaning ast.SymbolFlags, excludeGlobals bool) *ast.Symbol {
+	return c.resolveName(location, name, meaning, nil, true, excludeGlobals)
+}
+
+func (c *Checker) GetSymbolFlags(symbol *ast.Symbol) ast.SymbolFlags {
+	return c.getSymbolFlags(symbol)
+}
