@@ -21,8 +21,8 @@ func FS() vfs.FS {
 
 var osVFS vfs.FS = &osFS{
 	common: internal.Common{
-		RootFor:  os.DirFS,
-		Realpath: osFSRealpath,
+		RootFor:        os.DirFS,
+		IsReparsePoint: isReparsePoint,
 	},
 }
 
