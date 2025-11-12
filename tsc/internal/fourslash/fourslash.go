@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"maps"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -203,9 +204,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	}
 	f.activeFilename = f.testData.Files[0].fileName
 
+	_, testPath, _, _ := runtime.Caller(1)
 	t.Cleanup(func() {
 		inputWriter.Close()
-		f.verifyBaselines(t)
+		f.verifyBaselines(t, testPath)
 	})
 	return f
 }
@@ -2243,9 +2245,9 @@ func (f *FourslashTest) getRangeText(r *RangeMarker) string {
 	return script.content[r.Range.Pos():r.Range.End()]
 }
 
-func (f *FourslashTest) verifyBaselines(t *testing.T) {
+func (f *FourslashTest) verifyBaselines(t *testing.T, testPath string) {
 	for command, content := range f.baselines {
-		baseline.Run(t, getBaselineFileName(t, command), content.String(), getBaselineOptions(command))
+		baseline.Run(t, getBaselineFileName(t, command), content.String(), getBaselineOptions(command, testPath))
 	}
 }
 
