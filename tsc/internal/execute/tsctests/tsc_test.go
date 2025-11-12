@@ -37,6 +37,60 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"--verbose", "--build"},
 		},
 		{
+			subScenario:     "Initialized TSConfig with files options",
+			commandLineArgs: []string{"--init", "file0.st", "file1.ts", "file2.ts"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with boolean value compiler options",
+			commandLineArgs: []string{"--init", "--noUnusedLocals"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with enum value compiler options",
+			commandLineArgs: []string{"--init", "--target", "es5", "--jsx", "react"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with list compiler options",
+			commandLineArgs: []string{"--init", "--types", "jquery,mocha"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with list compiler options with enum value",
+			commandLineArgs: []string{"--init", "--lib", "es5,es2015.core"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with incorrect compiler option",
+			commandLineArgs: []string{"--init", "--someNonExistOption"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with incorrect compiler option value",
+			commandLineArgs: []string{"--init", "--lib", "nonExistLib,es5,es2015.promise"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with advanced options",
+			commandLineArgs: []string{"--init", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with --help",
+			commandLineArgs: []string{"--init", "--help"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with --watch",
+			commandLineArgs: []string{"--init", "--watch"},
+		},
+		{
+			subScenario:     "Initialized TSConfig with tsconfig.json",
+			commandLineArgs: []string{"--init"},
+			files: FileMap{
+				"/home/src/workspaces/project/first.ts": `export const a = 1`,
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"noEmit": true
+					}
+				}`),
+			},
+		},
+		{
 			subScenario:     "help",
 			commandLineArgs: []string{"--help"},
 		},
