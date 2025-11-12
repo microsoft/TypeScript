@@ -1082,7 +1082,7 @@ func (p *Program) getDiagnosticsWithPrecedingDirectives(sourceFile *ast.SourceFi
 	// Build map of directives by line number
 	directivesByLine := make(map[int]ast.CommentDirective)
 	for _, directive := range sourceFile.CommentDirectives {
-		line, _ := scanner.GetECMALineAndCharacterOfPosition(sourceFile, directive.Loc.Pos())
+		line := scanner.GetECMALineOfPosition(sourceFile, directive.Loc.Pos())
 		directivesByLine[line] = directive
 	}
 	lineStarts := scanner.GetECMALineStarts(sourceFile)

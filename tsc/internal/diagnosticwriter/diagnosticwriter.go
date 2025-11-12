@@ -90,7 +90,7 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 		lastLineChar++ // When length is zero, squiggle the character right after the start position.
 	}
 
-	lastLineOfFile, _ := scanner.GetECMALineAndCharacterOfPosition(sourceFile, len(sourceFile.Text()))
+	lastLineOfFile := scanner.GetECMALineOfPosition(sourceFile, len(sourceFile.Text()))
 
 	hasMoreThanFiveLines := lastLine-firstLine >= 4
 	gutterWidth := len(strconv.Itoa(lastLine + 1))
@@ -357,7 +357,7 @@ func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, 
 	if file == nil || len(fileErrors) == 0 {
 		return ""
 	}
-	line, _ := scanner.GetECMALineAndCharacterOfPosition(file, fileErrors[0].Loc().Pos())
+	line := scanner.GetECMALineOfPosition(file, fileErrors[0].Loc().Pos())
 	fileName := file.FileName()
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
 		fileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)

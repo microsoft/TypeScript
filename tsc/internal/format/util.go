@@ -10,8 +10,8 @@ import (
 )
 
 func rangeIsOnOneLine(node core.TextRange, file *ast.SourceFile) bool {
-	startLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, node.Pos())
-	endLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, node.End())
+	startLine := scanner.GetECMALineOfPosition(file, node.Pos())
+	endLine := scanner.GetECMALineOfPosition(file, node.End())
 	return startLine == endLine
 }
 
@@ -77,7 +77,7 @@ func getCloseTokenForOpenToken(kind ast.Kind) ast.Kind {
 
 func GetLineStartPositionForPosition(position int, sourceFile *ast.SourceFile) int {
 	lineStarts := scanner.GetECMALineStarts(sourceFile)
-	line, _ := scanner.GetECMALineAndCharacterOfPosition(sourceFile, position)
+	line := scanner.GetECMALineOfPosition(sourceFile, position)
 	return int(lineStarts[line])
 }
 

@@ -2518,7 +2518,7 @@ func boolToPtr(v bool) *bool {
 }
 
 func getLineOfPosition(file *ast.SourceFile, pos int) int {
-	line, _ := scanner.GetECMALineAndCharacterOfPosition(file, pos)
+	line := scanner.GetECMALineOfPosition(file, pos)
 	return line
 }
 
@@ -3515,8 +3515,8 @@ func getContextualKeywords(file *ast.SourceFile, contextToken *ast.Node, positio
 	// Source: https://tc39.es/proposal-import-assertions/
 	if contextToken != nil {
 		parent := contextToken.Parent
-		tokenLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, contextToken.End())
-		currentLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, position)
+		tokenLine := scanner.GetECMALineOfPosition(file, contextToken.End())
+		currentLine := scanner.GetECMALineOfPosition(file, position)
 		if (ast.IsImportDeclaration(parent) ||
 			ast.IsExportDeclaration(parent) && parent.ModuleSpecifier() != nil) &&
 			contextToken == parent.ModuleSpecifier() &&

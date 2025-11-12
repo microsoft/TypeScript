@@ -798,8 +798,8 @@ func (c *Checker) checkGrammarArrowFunction(node *ast.Node, file *ast.SourceFile
 	}
 
 	equalsGreaterThanToken := arrowFunc.EqualsGreaterThanToken
-	startLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, equalsGreaterThanToken.Pos())
-	endLine, _ := scanner.GetECMALineAndCharacterOfPosition(file, equalsGreaterThanToken.End())
+	startLine := scanner.GetECMALineOfPosition(file, equalsGreaterThanToken.Pos())
+	endLine := scanner.GetECMALineOfPosition(file, equalsGreaterThanToken.End())
 	return startLine != endLine && c.grammarErrorOnNode(equalsGreaterThanToken, diagnostics.Line_terminator_not_permitted_before_arrow)
 }
 
