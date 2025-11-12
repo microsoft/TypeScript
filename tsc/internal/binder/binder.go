@@ -377,7 +377,7 @@ func GetSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, descri
 
 func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
 	container := b.container
-	if node.Kind == ast.KindCommonJSExport {
+	if ast.IsCommonJSExport(node) {
 		container = b.file.AsNode()
 	}
 	hasExportModifier := ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsExport != 0 || ast.IsImplicitlyExportedJSTypeAlias(node)
@@ -402,7 +402,7 @@ func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags
 	//       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
 	//       and this case is specially handled. Module augmentations should only be merged with original module definition
 	//       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-	if !ast.IsAmbientModule(node) && (hasExportModifier || container.Flags&ast.NodeFlagsExportContext != 0) {
+	if !ast.IsAmbientModule(node) && (hasExportModifier || ast.IsCommonJSExport(node) || container.Flags&ast.NodeFlagsExportContext != 0) {
 		if !ast.IsLocalsContainer(container) || (ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) && b.getDeclarationName(node) == ast.InternalSymbolNameMissing) || ast.IsCommonJSExport(node) {
 			return b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, symbolFlags, symbolExcludes)
 			// No local symbol for an unnamed default!
