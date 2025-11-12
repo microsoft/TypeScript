@@ -1,0 +1,24 @@
+--- old.inlayHintsTupleTypeCrash.baseline
++++ new.inlayHintsTupleTypeCrash.baseline
+@@= skipped --1, +0 lines =@@
++// === Inlay Hints ===
++  tuples.forEach((l) => {})
++                   ^
++{
++  "label": [
++    {
++      "value": ": "
++    },
++    {
++      "value": "["
++    },
++    {
++      "value": "string"
++    },
++    {
++      "value": "]"
++    }
++  ],
++  "kind": 1,
++  "paddingLeft": true
++}
