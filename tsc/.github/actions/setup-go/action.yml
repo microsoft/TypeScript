@@ -3,8 +3,8 @@ description: Setup Go
 
 inputs:
   go-version:
-    description: Go version range to set up.
-    default: '>=1.25.0'
+    description: Go version to set up in go-install.ps1 format
+    default: 'go1.25'
   create:
     description: Create the cache
     default: 'false'
@@ -18,19 +18,42 @@ runs:
   steps:
     - name: Install Go
       id: install-go
-      uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
-      with:
-        go-version: ${{ inputs.go-version }}
-        cache: false
+      shell: pwsh
+      run: |
+        # https://github.com/microsoft/go-infra/blob/main/goinstallscript/powershell/go-install.ps1
+        ${{ github.action_path }}/go-install.ps1 -Version ${{ inputs.go-version }} -GitHubActionsPath
+
+        $goVersionOutput = go version
+        Write-Host $goVersionOutput
+        # Extract version like "1.23.4" from "go version go1.23.4 windows/amd64"
+        if ($goVersionOutput -match 'go version go([\d\.]+)') {
+          $exactVersion = $matches[1]
+          "go-version=$exactVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "Exact Go version: $exactVersion"
+        } else {
+          Write-Error "Failed to parse Go version from: $goVersionOutput"
+          exit 1
+        }
+
+    - name: Verify Microsoft Go
+      shell: pwsh
+      run: |
+        $goPath = (Get-Command go).Source
+        Write-Host "Go executable path: $goPath"
+        if ($goPath -notlike "*microsoft-go*") {
+          Write-Error "Go installation is not from microsoft-go. Path: $goPath"
+          exit 1
+        }
+        Write-Host "✓ Verified: Microsoft Go is active"
 
     # Avoid hardcoding the cache keys more than once.
     - name: Get cache info
       shell: bash
       id: cache-info
       env:
-        MODULES_KEY: go-modules-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/.custom-gcl.yml') }}
-        LINT_KEY: golangci-lint-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/.custom-gcl.yml') }}
-        BUILD_KEY: go-build-cache-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}
+        MODULES_KEY: go-modules-${{ runner.os }}-msft-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/.custom-gcl.yml') }}
+        LINT_KEY: golangci-lint-${{ runner.os }}-msft-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/.custom-gcl.yml') }}
+        BUILD_KEY: go-build-cache-${{ runner.os }}-msft-${{ steps.install-go.outputs.go-version }}
       run: |
         echo "modules-key=$MODULES_KEY" >> $GITHUB_OUTPUT
         echo "lint-key=$LINT_KEY" >> $GITHUB_OUTPUT
