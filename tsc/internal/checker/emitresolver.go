@@ -34,7 +34,7 @@ type DeclarationFileLinks struct {
 
 type EmitResolver struct {
 	checker                 *Checker
-	checkerMu               sync.Mutex
+	checkerMu               *sync.Mutex
 	isValueAliasDeclaration func(node *ast.Node) bool
 	aliasMarkingVisitor     func(node *ast.Node) bool
 	referenceResolver       binder.ReferenceResolver
@@ -47,6 +47,7 @@ func newEmitResolver(checker *Checker) *EmitResolver {
 	e := &EmitResolver{checker: checker}
 	e.isValueAliasDeclaration = e.isValueAliasDeclarationWorker
 	e.aliasMarkingVisitor = e.aliasMarkingVisitorWorker
+	e.checkerMu = &checker.mu
 	return e
 }
 

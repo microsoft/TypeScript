@@ -26,7 +26,7 @@ type checkerPool struct {
 
 	createCheckersOnce sync.Once
 	checkers           []*checker.Checker
-	locks              []sync.Mutex
+	locks              []*sync.Mutex
 	fileAssociations   map[*ast.SourceFile]*checker.Checker
 }
 
@@ -37,7 +37,7 @@ func newCheckerPool(checkerCount int, program *Program) *checkerPool {
 		program:      program,
 		checkerCount: checkerCount,
 		checkers:     make([]*checker.Checker, checkerCount),
-		locks:        make([]sync.Mutex, checkerCount),
+		locks:        make([]*sync.Mutex, checkerCount),
 	}
 
 	return pool
@@ -74,7 +74,7 @@ func (p *checkerPool) createCheckers() {
 		wg := core.NewWorkGroup(p.program.SingleThreaded())
 		for i := range p.checkerCount {
 			wg.Queue(func() {
-				p.checkers[i] = checker.NewChecker(p.program)
+				p.checkers[i], p.locks[i] = checker.NewChecker(p.program)
 			})
 		}
 

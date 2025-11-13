@@ -857,9 +857,11 @@ type Checker struct {
 	activeTypeMappersCaches                     []map[string]*Type
 	ambientModulesOnce                          sync.Once
 	ambientModules                              []*ast.Symbol
+
+	mu sync.Mutex
 }
 
-func NewChecker(program Program) *Checker {
+func NewChecker(program Program) (*Checker, *sync.Mutex) {
 	program.BindSourceFiles()
 
 	c := &Checker{}
@@ -1071,7 +1073,7 @@ func NewChecker(program Program) *Checker {
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()
-	return c
+	return c, &c.mu
 }
 
 func createFileIndexMap(files []*ast.SourceFile) map[*ast.SourceFile]int {

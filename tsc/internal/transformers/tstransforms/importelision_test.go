@@ -213,7 +213,7 @@ func TestImportElision(t *testing.T) {
 
 			compilerOptions := &core.CompilerOptions{}
 
-			c := checker.NewChecker(&fakeProgram{
+			c, _ := checker.NewChecker(&fakeProgram{
 				singleThreaded:  true,
 				compilerOptions: compilerOptions,
 				files:           files,
