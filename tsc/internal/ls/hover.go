@@ -28,7 +28,8 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
 	rangeNode := getNodeForQuickInfo(node)
-	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, c.GetSymbolAtLocation(node), rangeNode, contentFormat)
+	symbol := getSymbolAtLocationForQuickInfo(c, node)
+	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat)
 	if quickInfo == "" {
 		return lsproto.HoverOrNull{}, nil
 	}
@@ -280,6 +281,17 @@ func getNodeForQuickInfo(node *ast.Node) *ast.Node {
 		return node.Parent
 	}
 	return node
+}
+
+func getSymbolAtLocationForQuickInfo(c *checker.Checker, node *ast.Node) *ast.Symbol {
+	if objectElement := getContainingObjectLiteralElement(node); objectElement != nil {
+		if contextualType := c.GetContextualType(objectElement.Parent, checker.ContextFlagsNone); contextualType != nil {
+			if properties := c.GetPropertySymbolsFromContextualType(objectElement, contextualType, false /*unionSymbolOk*/); len(properties) == 1 {
+				return properties[0]
+			}
+		}
+	}
+	return c.GetSymbolAtLocation(node)
 }
 
 func inConstructorContext(node *ast.Node) bool {

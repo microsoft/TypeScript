@@ -9,7 +9,7 @@ import (
 
 func TestQuickInfoUnion_discriminated(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: quickInfoJsDocTags.ts
 type U = A | B;
