@@ -111,8 +111,8 @@ export function foo() {
 }
 
 export function bar() {
->bar : () => any
->    : ^^^^^^^^^
+>bar : () => number
+>    : ^^^^^^^^^^^^
 
   var x;
 >x : any

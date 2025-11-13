@@ -96,4 +96,4 @@ export declare function g(): number;
 export declare function h(): number;
 export declare function i(): number;
 export declare function foo(): number;
-export declare function bar(): any;
+export declare function bar(): number;
