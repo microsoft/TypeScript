@@ -261,7 +261,9 @@ import {
     isBinaryExpression,
     isBindingElement,
     isBindingPattern,
+    isBlock,
     isCallExpression,
+    isCaseClause,
     isClassDeclaration,
     isClassElement,
     isClassExpression,
@@ -274,6 +276,7 @@ import {
     isDeclaration,
     isDeclarationFileName,
     isDecorator,
+    isDefaultClause,
     isElementAccessExpression,
     isEnumDeclaration,
     isEnumMember,
@@ -332,6 +335,7 @@ import {
     isMethodDeclaration,
     isMethodOrAccessor,
     isModifierLike,
+    isModuleBlock,
     isModuleDeclaration,
     isModuleOrEnumDeclaration,
     isNamedDeclaration,
@@ -603,6 +607,7 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
+import Module from "module";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];
@@ -12371,6 +12376,11 @@ function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node
 
 function getFirstChild(node: Node): Node | undefined {
     return forEachChild(node, child => child);
+}
+
+/** @internal */
+export function canHaveStatements(node: Node): node is Block | ModuleBlock | SourceFile | CaseClause | DefaultClause {
+    return isBlock(node) || isModuleBlock(node) || isSourceFile(node) || isCaseClause(node) || isDefaultClause(node);
 }
 
 /** @internal */

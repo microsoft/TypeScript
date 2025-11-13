@@ -62,6 +62,7 @@ import {
     canHaveLocals,
     canHaveModifiers,
     canHaveModuleSpecifier,
+    canHaveStatements,
     canHaveSymbol,
     canIncludeBindAndCheckDiagnostics,
     canUsePropertyAccess,
@@ -49221,8 +49222,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let end = node.end;
 
         const parent = node.parent;
-        if (parent && (isBlock(parent) || isModuleBlock(parent) || isSourceFile(parent) || parent.kind === SyntaxKind.CaseClause || parent.kind === SyntaxKind.DefaultClause)) {
-            const statements = (parent as Block | ModuleBlock | SourceFile | CaseClause | DefaultClause).statements;
+        if (canHaveStatements(parent)) {
+            const statements = parent.statements;
             const offset = statements.indexOf(node as Statement);
             if (offset >= 0) {
                 for (let i = offset + 1; i < statements.length; i++) {
