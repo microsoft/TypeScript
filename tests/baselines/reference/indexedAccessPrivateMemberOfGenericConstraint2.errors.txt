@@ -1,47 +1,47 @@
-indexedAccessPrivateMemberOfGenericConstraint.ts(9,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(9,32): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(10,27): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(11,27): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(12,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(13,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(14,23): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(15,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(16,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(26,25): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(26,33): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(27,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(28,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(29,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(30,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(31,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(32,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(33,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(43,33): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(44,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(45,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(46,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(47,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(48,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(49,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(50,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(60,25): error TS2536: Type '"a"' cannot be used to index type 'T'.
-indexedAccessPrivateMemberOfGenericConstraint.ts(60,33): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(61,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(62,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(63,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(64,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(65,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(66,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(67,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(9,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(9,32): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(10,27): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(11,27): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(12,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(13,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(14,23): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(15,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(16,37): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(26,25): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(26,33): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(27,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(28,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(29,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(30,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(31,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(32,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(33,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(43,33): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(44,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(45,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(46,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(47,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(48,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(49,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(50,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(60,25): error TS2536: Type '"a"' cannot be used to index type 'T'.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(60,33): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(61,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(62,28): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(63,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(64,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(65,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(66,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
+indexedAccessPrivateMemberOfGenericConstraint2.ts(67,38): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
 
 
-==== indexedAccessPrivateMemberOfGenericConstraint.ts (35 errors) ====
+==== indexedAccessPrivateMemberOfGenericConstraint2.ts (35 errors) ====
     class A {
-      private a: number;
+      declare private a: { foo: number };
     }
     
     class B {
-      private a: string;
+      declare private a: { bar: string };
     }
     
     type X<T extends A> = [T["a"], (T | B)["a"]];
@@ -72,11 +72,11 @@ indexedAccessPrivateMemberOfGenericConstraint.ts(67,38): error TS4105: Private o
 !!! error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
     
     class C {
-      declare private a: number;
+      declare private a: { foo: number };
     }
     
     class D {
-      declare a: string;
+      declare a: { bar: string };
     }
     
     type X2<T extends C> = [T["a"], (T | D)["a"]];
@@ -107,11 +107,11 @@ indexedAccessPrivateMemberOfGenericConstraint.ts(67,38): error TS4105: Private o
 !!! error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
     
     class E {
-      declare a: number;
+      declare a: { foo: number };
     }
     
     class F {
-      declare private a: string;
+      declare private a: { bar: string };
     }
     
     type X3<T extends E> = [T["a"], (T | F)["a"]];
@@ -140,11 +140,11 @@ indexedAccessPrivateMemberOfGenericConstraint.ts(67,38): error TS4105: Private o
 !!! error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
     
     class G {
-      declare b: number;
+      declare b: { foo: number };
     }
     
     class H {
-      declare private a: string;
+      declare private a: { bar: string };
     }
     
     type X4<T extends G> = [T["a"], (T | H)["a"]];
