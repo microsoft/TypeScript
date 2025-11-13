@@ -2,4 +2,4 @@
 // === /goToDefinitionSwitchCase7.ts ===
 // switch (null) {
 //   case null:
-//     export /*GOTO DEF*/default 123;
+//     [|export /*GOTO DEF*/default 123;|]

@@ -886,6 +886,9 @@ func (b *NodeBuilderImpl) getNameOfSymbolAsWritten(symbol *ast.Symbol) string {
 	if len(name) > 0 {
 		return name
 	}
+	if symbol.Name == ast.InternalSymbolNameMissing {
+		return "__missing"
+	}
 	return symbol.Name
 }
 

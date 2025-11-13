@@ -1,9 +1,13 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsFunctionIncomplete.ts ===
 // function (param: string) {
-// ^
+// ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | function (Missing)(param: string): void
+// | function (Missing)(): void
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
@@ -11,9 +15,13 @@
 // | ----------------------------------------------------------------------
 // }\
 // function  {
-// ^
+// ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*3*/.
+// | ```tsx
+// | function (Missing)(param: string): void
+// | function (Missing)(): void
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
@@ -31,7 +39,22 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction (Missing)(param: string): void\nfunction (Missing)(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 8
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -55,7 +78,22 @@
       "Name": "3",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction (Missing)(param: string): void\nfunction (Missing)(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 0
+        },
+        "end": {
+          "line": 2,
+          "character": 8
+        }
+      }
+    }
   },
   {
     "marker": {

@@ -30518,7 +30518,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 		}
 		return nil
 	case ast.KindDefaultKeyword, ast.KindFunctionKeyword, ast.KindEqualsGreaterThanToken, ast.KindClassKeyword:
-		return c.getSymbolOfNode(node)
+		return c.getSymbolOfNode(node.Parent)
 	case ast.KindImportType:
 		if ast.IsLiteralImportTypeNode(node) {
 			return c.getSymbolAtLocation(node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal, ignoreErrors)

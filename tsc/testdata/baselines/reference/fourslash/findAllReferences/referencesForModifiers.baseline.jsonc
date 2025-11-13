@@ -124,4 +124,4 @@
 // const enum E {
 // }
 // async function fn() {}
-// export /*FIND ALL REFS*/default class C2 {}
+// export /*FIND ALL REFS*/[|default|] class C2 {}

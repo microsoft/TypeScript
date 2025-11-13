@@ -1,9 +1,12 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsClassIncomplete.ts ===
 // class  {
-// ^
+// ^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | class __missing
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
@@ -21,7 +24,22 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass __missing\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    }
   },
   {
     "marker": {

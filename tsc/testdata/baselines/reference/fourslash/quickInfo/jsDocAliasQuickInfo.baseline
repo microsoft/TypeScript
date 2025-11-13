@@ -5,9 +5,12 @@
 //  * @type {number}
 //  */
 // export default 10;
-//        ^
+//        ^^^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | (property) default: 10
+// | ```
+// | Comment
 // | ----------------------------------------------------------------------
 === /test.ts ===
 // export { default as test } from "./jsDocAliasQuickInfo";
@@ -32,7 +35,22 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) default: 10\n```\nComment"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 7
+        },
+        "end": {
+          "line": 4,
+          "character": 14
+        }
+      }
+    }
   },
   {
     "marker": {
