@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/unreachableYieldExpressionsVsInferredYieldTypes.ts] ////
+
+=== unreachableYieldExpressionsVsInferredYieldTypes.ts ===
+export function* g() {
+>g : Symbol(g, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 0, 0))
+
+  let x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 1, 5))
+
+  x = 1;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 1, 5))
+
+  yield x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 1, 5))
+
+  return 'foo';
+  yield x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 1, 5))
+}
+
+export function* h() {
+>h : Symbol(h, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 6, 1))
+
+  return 'foo';
+  let y;
+>y : Symbol(y, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 10, 5))
+
+  y = 1;
+>y : Symbol(y, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 10, 5))
+
+  yield y;
+>y : Symbol(y, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 10, 5))
+}
+
+export function* i() {
+>i : Symbol(i, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 13, 1))
+
+  yield true;
+  return 'foo';
+  let y;
+>y : Symbol(y, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 18, 5))
+
+  y = 1;
+>y : Symbol(y, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 18, 5))
+
+  yield y;
+>y : Symbol(y, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 18, 5))
+}
+
+export function* j() {
+>j : Symbol(j, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 21, 1))
+
+  let x: string | number | boolean;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 24, 5))
+
+  x = 1;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 24, 5))
+
+  yield x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 24, 5))
+
+  return true;
+
+  x = "foo";
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 24, 5))
+
+  yield x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 24, 5))
+}
+

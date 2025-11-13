@@ -1,0 +1,49 @@
+unreachableYieldExpressionsVsInferredYieldTypes.ts(6,3): error TS7027: Unreachable code detected.
+unreachableYieldExpressionsVsInferredYieldTypes.ts(11,3): error TS7027: Unreachable code detected.
+unreachableYieldExpressionsVsInferredYieldTypes.ts(19,3): error TS7027: Unreachable code detected.
+unreachableYieldExpressionsVsInferredYieldTypes.ts(30,3): error TS7027: Unreachable code detected.
+
+
+==== unreachableYieldExpressionsVsInferredYieldTypes.ts (4 errors) ====
+    export function* g() {
+      let x;
+      x = 1;
+      yield x;
+      return 'foo';
+      yield x;
+      ~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    export function* h() {
+      return 'foo';
+      let y;
+      ~~~~~~
+!!! error TS7027: Unreachable code detected.
+      y = 1;
+      yield y;
+    }
+    
+    export function* i() {
+      yield true;
+      return 'foo';
+      let y;
+      ~~~~~~
+!!! error TS7027: Unreachable code detected.
+      y = 1;
+      yield y;
+    }
+    
+    export function* j() {
+      let x: string | number | boolean;
+      x = 1;
+      yield x;
+      return true;
+    
+      x = "foo";
+      ~~~~~~~~~~
+      yield x;
+    ~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    

@@ -1,0 +1,36 @@
+unreachableReturnStatementsVsInferredReturnTypes.ts(5,3): error TS7027: Unreachable code detected.
+unreachableReturnStatementsVsInferredReturnTypes.ts(10,3): error TS7027: Unreachable code detected.
+unreachableReturnStatementsVsInferredReturnTypes.ts(20,3): error TS7027: Unreachable code detected.
+
+
+==== unreachableReturnStatementsVsInferredReturnTypes.ts (3 errors) ====
+    export function g() {
+      let x;
+      x = 1;
+      return x;
+      return x;
+      ~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    export function h() {
+      return 1;
+      let y;
+      ~~~~~~
+!!! error TS7027: Unreachable code detected.
+      y = 1;
+      return y;
+    }
+    
+    export function i() {
+      let x: string | number | boolean;
+      x = 1;
+      return x;
+    
+      x = "foo";
+      ~~~~~~~~~~
+      return x;
+    ~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    

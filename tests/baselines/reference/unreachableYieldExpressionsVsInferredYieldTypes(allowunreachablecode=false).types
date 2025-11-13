@@ -7,16 +7,19 @@ export function* g() {
 
   let x;
 >x : any
+>  : ^^^
 
   x = 1;
 >x = 1 : 1
 >      : ^
 >x : any
+>  : ^^^
 >1 : 1
 >  : ^
 
   yield x;
 >yield x : any
+>        : ^^^
 >x : number
 >  : ^^^^^^
 
@@ -26,7 +29,9 @@ export function* g() {
 
   yield x;
 >yield x : any
+>        : ^^^
 >x : any
+>  : ^^^
 }
 
 export function* h() {
@@ -39,17 +44,21 @@ export function* h() {
 
   let y;
 >y : any
+>  : ^^^
 
   y = 1;
 >y = 1 : 1
 >      : ^
 >y : any
+>  : ^^^
 >1 : 1
 >  : ^
 
   yield y;
 >yield y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 export function* i() {
@@ -58,6 +67,7 @@ export function* i() {
 
   yield true;
 >yield true : any
+>           : ^^^
 >true : true
 >     : ^^^^
 
@@ -67,17 +77,21 @@ export function* i() {
 
   let y;
 >y : any
+>  : ^^^
 
   y = 1;
 >y = 1 : 1
 >      : ^
 >y : any
+>  : ^^^
 >1 : 1
 >  : ^
 
   yield y;
 >yield y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 export function* j() {
@@ -98,6 +112,7 @@ export function* j() {
 
   yield x;
 >yield x : any
+>        : ^^^
 >x : number
 >  : ^^^^^^
 
@@ -115,6 +130,7 @@ export function* j() {
 
   yield x;
 >yield x : any
+>        : ^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }

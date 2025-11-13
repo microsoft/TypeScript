@@ -1,6 +1,7 @@
 // @strict: true
 // @target: esnext
 // @lib: esnext
+// @allowUnreachableCode: true, false
 // @declaration: true
 
 export function* g() {

@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: true, false
 // @declaration: true
 
 export function g() {

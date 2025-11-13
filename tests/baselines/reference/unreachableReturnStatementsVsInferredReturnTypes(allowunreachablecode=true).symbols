@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/unreachableReturnStatementsVsInferredReturnTypes.ts] ////
+
+=== unreachableReturnStatementsVsInferredReturnTypes.ts ===
+export function g() {
+>g : Symbol(g, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 0, 0))
+
+  let x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 1, 5))
+
+  x = 1;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 1, 5))
+
+  return x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 1, 5))
+
+  return x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 1, 5))
+}
+
+export function h() {
+>h : Symbol(h, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 5, 1))
+
+  return 1;
+  let y;
+>y : Symbol(y, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 9, 5))
+
+  y = 1;
+>y : Symbol(y, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 9, 5))
+
+  return y;
+>y : Symbol(y, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 9, 5))
+}
+
+export function i() {
+>i : Symbol(i, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 12, 1))
+
+  let x: string | number | boolean;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 15, 5))
+
+  x = 1;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 15, 5))
+
+  return x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 15, 5))
+
+  x = "foo";
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 15, 5))
+
+  return x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 15, 5))
+}
+
