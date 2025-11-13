@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/partiallyEmittedExpressionLeftHandSide.ts] ////
+
+=== partiallyEmittedExpressionLeftHandSide.ts ===
+async function testNonNullWithAwait() {
+>testNonNullWithAwait : Symbol(testNonNullWithAwait, Decl(partiallyEmittedExpressionLeftHandSide.ts, 0, 0))
+
+    const result = (await null as any)!;
+>result : Symbol(result, Decl(partiallyEmittedExpressionLeftHandSide.ts, 1, 9))
+
+    return result;
+>result : Symbol(result, Decl(partiallyEmittedExpressionLeftHandSide.ts, 1, 9))
+}
+
+async function testNonNullWithComplexExpression() {
+>testNonNullWithComplexExpression : Symbol(testNonNullWithComplexExpression, Decl(partiallyEmittedExpressionLeftHandSide.ts, 3, 1))
+
+    const obj = { prop: Promise.resolve("test") };
+>obj : Symbol(obj, Decl(partiallyEmittedExpressionLeftHandSide.ts, 6, 9))
+>prop : Symbol(prop, Decl(partiallyEmittedExpressionLeftHandSide.ts, 6, 17))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    const result = (await obj.prop as string)!;
+>result : Symbol(result, Decl(partiallyEmittedExpressionLeftHandSide.ts, 7, 9))
+>obj.prop : Symbol(prop, Decl(partiallyEmittedExpressionLeftHandSide.ts, 6, 17))
+>obj : Symbol(obj, Decl(partiallyEmittedExpressionLeftHandSide.ts, 6, 9))
+>prop : Symbol(prop, Decl(partiallyEmittedExpressionLeftHandSide.ts, 6, 17))
+
+    return result;
+>result : Symbol(result, Decl(partiallyEmittedExpressionLeftHandSide.ts, 7, 9))
+}
