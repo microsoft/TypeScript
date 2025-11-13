@@ -49215,28 +49215,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const sourceFile = getSourceFileOfNode(node);
 
-        const start = skipTrivia(sourceFile.text, node.pos);
+        let start = node.pos;
         let end = node.end;
 
-        // TODO: if we are doing range diagnostics, it's possible we _haven't_
-        // reported nodes before us in the same statement list. We should walk backwards
-        // and extend the range to include any prior unreachable unreported nodes as well.
         const parent = node.parent;
         if (canHaveStatements(parent)) {
             const statements = parent.statements;
             const offset = statements.indexOf(node as Statement);
             if (offset >= 0) {
+                // Scan backwards to find the first unreachable unreported node;
+                // this may happen when producing region diagnostics where not all nodes
+                // will have been visited.
+                let first = offset;
+                for (let i = offset - 1; i >= 0; i--) {
+                    const prevNode = statements[i];
+                    if (!isPotentiallyExecutableNode(prevNode) || reportedUnreachableNodes.has(prevNode) || !isSourceElementUnreachable(prevNode)) {
+                        break;
+                    }
+                    first = i;
+                    reportedUnreachableNodes.add(prevNode);
+                }
+
+                let last = offset;
                 for (let i = offset + 1; i < statements.length; i++) {
                     const nextNode = statements[i];
                     if (!isPotentiallyExecutableNode(nextNode) || !isSourceElementUnreachable(nextNode)) {
                         break;
                     }
-                    end = nextNode.end;
+                    last = i;
                     reportedUnreachableNodes.add(nextNode);
                 }
+
+                start = statements[first].pos;
+                end = statements[last].end;
             }
         }
 
+        start = skipTrivia(sourceFile.text, start);
         addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
 
         return true;
