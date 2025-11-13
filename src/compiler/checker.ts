@@ -1120,8 +1120,6 @@ import {
     UnionType,
     UnionTypeNode,
     UniqueESSymbolType,
-    unreachableCodeIsError,
-    unusedLabelIsError,
     usingSingleLineStringWriter,
     VariableDeclaration,
     VariableDeclarationList,
@@ -46609,8 +46607,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             });
         }
 
-        if (node.label.flags & NodeFlags.Unreachable) {
-            errorOrSuggestion(unusedLabelIsError(compilerOptions), node.label, Diagnostics.Unused_label);
+        if (node.label.flags & NodeFlags.Unreachable && compilerOptions.allowUnusedLabels !== true) {
+            errorOrSuggestion(compilerOptions.allowUnusedLabels === false, node.label, Diagnostics.Unused_label);
         }
 
         // ensure that label is unique
@@ -49016,7 +49014,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        if (!withinUnreachableCode) {
+        if (compilerOptions.allowUnreachableCode !== true && !withinUnreachableCode) {
             if (checkSourceElementUnreachable(node)) {
                 withinUnreachableCode = true;
             }
@@ -49215,7 +49213,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         (reportedUnreachableNodes ??= new Set()).add(node);
 
-        const isError = unreachableCodeIsError(compilerOptions);
         const sourceFile = getSourceFileOfNode(node);
 
         const start = skipTrivia(sourceFile.text, node.pos);
@@ -49237,7 +49234,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        addErrorOrSuggestion(isError, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
 
         return true;
     }
