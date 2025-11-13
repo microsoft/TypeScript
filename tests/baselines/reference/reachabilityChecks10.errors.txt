@@ -5,6 +5,7 @@ reachabilityChecks10.ts(2,1): error TS7027: Unreachable code detected.
     throw new Error("")
     console.log("1")
     ~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     console.log("2")
+    ~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
     

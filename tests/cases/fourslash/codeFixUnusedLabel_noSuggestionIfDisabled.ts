@@ -2,6 +2,12 @@
 
 // @allowUnusedLabels: true
 
-////foo: while (true) {}
+////[|foo|]: while (true) {}
 
-verify.getSuggestionDiagnostics([]);
+// Suggestions are returned, but turned into greyed-out text by the editor.
+verify.getSuggestionDiagnostics(test.ranges().map((range): FourSlashInterface.Diagnostic => ({
+    message: "Unused label.",
+    code: 7028,
+    reportsUnnecessary: true,
+    range,
+})));

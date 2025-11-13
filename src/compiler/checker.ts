@@ -1118,6 +1118,8 @@ import {
     UnionType,
     UnionTypeNode,
     UniqueESSymbolType,
+    unreachableCodeIsError,
+    unusedLabelIsError,
     usingSingleLineStringWriter,
     VariableDeclaration,
     VariableDeclarationList,
@@ -1512,6 +1514,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
     var isInferencePartiallyBlocked = false;
+    var withinUnreachableCode = false;
+    var reportedUnreachableNodes: Set<Node> | undefined;
 
     var emptySymbols = createSymbolTable();
     var arrayVariances = [VarianceFlags.Covariant];
@@ -46603,6 +46607,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             });
         }
 
+        if (node.label.flags & NodeFlags.Unreachable) {
+            errorOrSuggestion(unusedLabelIsError(compilerOptions), node.label, Diagnostics.Unused_label);
+        }
+
         // ensure that label is unique
         checkSourceElement(node.statement);
     }
@@ -48967,10 +48975,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkSourceElement(node: Node | undefined): void {
         if (node) {
             const saveCurrentNode = currentNode;
+            const saveWithinUnreachableCode = withinUnreachableCode;
             currentNode = node;
             instantiationCount = 0;
             checkSourceElementWorker(node);
             currentNode = saveCurrentNode;
+            withinUnreachableCode = saveWithinUnreachableCode;
         }
     }
 
@@ -49003,8 +49013,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     cancellationToken.throwIfCancellationRequested();
             }
         }
-        if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && canHaveFlowNode(node) && node.flowNode && !isReachableFlowNode(node.flowNode)) {
-            errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+
+        if (!withinUnreachableCode) {
+            if (checkSourceElementUnreachable(node)) {
+                withinUnreachableCode = true;
+            }
         }
 
         // If editing this, keep `isSourceElement` in utilities up to date.
@@ -49183,6 +49196,67 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.MissingDeclaration:
                 return checkMissingDeclaration(node);
         }
+    }
+
+    function checkSourceElementUnreachable(node: Node): boolean {
+        reportedUnreachableNodes ||= new Set();
+
+        if (reportedUnreachableNodes.has(node)) {
+            return true;
+        }
+
+        if (!isSourceElementUnreachable(node)) {
+            return false;
+        }
+
+        reportedUnreachableNodes.add(node);
+
+        const isError = unreachableCodeIsError(compilerOptions);
+        const sourceFile = getSourceFileOfNode(node);
+
+        const start = skipTrivia(sourceFile.text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        let end = node.end;
+
+        const parent = node.parent;
+        if (parent && (isBlock(parent) || isModuleBlock(parent) || isSourceFile(parent) || parent.kind === SyntaxKind.CaseClause || parent.kind === SyntaxKind.DefaultClause)) {
+            const statements = (parent as Block | ModuleBlock | SourceFile | CaseClause | DefaultClause).statements;
+            const offset = statements.indexOf(node as Statement);
+            if (offset >= 0) {
+                for (let i = offset + 1; i < statements.length; i++) {
+                    const nextNode = statements[i];
+                    if (!isSourceElementUnreachable(nextNode)) {
+                        break;
+                    }
+                    end = nextNode.end;
+                    reportedUnreachableNodes.add(nextNode);
+                }
+            }
+        }
+
+        addErrorOrSuggestion(isError, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
+
+        return true;
+    }
+
+    function isSourceElementUnreachable(node: Node): boolean {
+        if (node.flags & NodeFlags.Unreachable) {
+            switch (node.kind) {
+                case SyntaxKind.EnumDeclaration:
+                    return !isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(compilerOptions);
+                case SyntaxKind.ModuleDeclaration:
+                    return isInstantiatedModule(node as ModuleDeclaration, shouldPreserveConstEnums(compilerOptions));
+                case SyntaxKind.VariableStatement:
+                    return !!(getCombinedNodeFlags((node as VariableStatement).declarationList) & NodeFlags.BlockScoped) || (node as VariableStatement).declarationList.declarations.some(d => d.initializer);
+                default:
+                    return true;
+            }
+        }
+        else if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
+            if (canHaveFlowNode(node) && node.flowNode) {
+                return !isReachableFlowNode(node.flowNode);
+            }
+        }
+        return false;
     }
 
     function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {

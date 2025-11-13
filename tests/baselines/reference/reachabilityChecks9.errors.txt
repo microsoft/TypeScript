@@ -11,8 +11,9 @@ reachabilityChecks9.ts(20,7): error TS7027: Unreachable code detected.
           return;
           console.log("1");
           ~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
           console.log("2");
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
         case "b":
           console.log("3");
       }
@@ -26,8 +27,9 @@ reachabilityChecks9.ts(20,7): error TS7027: Unreachable code detected.
           return;
           console.log("2");
           ~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
           console.log("3");
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
         case "b":
           console.log("4");
       }
