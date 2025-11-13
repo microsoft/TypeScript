@@ -233,10 +233,10 @@ var n = function <T extends {}>(x: T) {
 var n = function () {
 >n : number
 >  : ^^^^^^
->function () {    return 3;    return 5;}() : 3 | 5
->                                           : ^^^^^
->function () {    return 3;    return 5;} : () => 3 | 5
->                                         : ^^^^^^^^^^^
+>function () {    return 3;    return 5;}() : number
+>                                           : ^^^^^^
+>function () {    return 3;    return 5;} : () => number
+>                                         : ^^^^^^^^^^^^
 
     return 3;
 >3 : 3
@@ -534,8 +534,8 @@ var f10: (x: number) => any = x => { // should be (x: number) => Derived | Deriv
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Derived | Derived1    return new Derived();    return new Derived2();} : (x: number) => Derived | Derived2
->                                                                                                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Derived | Derived1    return new Derived();    return new Derived2();} : (x: number) => Derived
+>                                                                                                          : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -556,8 +556,8 @@ var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base | AnotherClass
->                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base
+>                                                                                                            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -578,8 +578,8 @@ var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base | AnotherClass
->                                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base
+>                                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
