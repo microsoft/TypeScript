@@ -1,4 +1,3 @@
-import Module from "module";
 import {
     __String,
     AccessExpression,
