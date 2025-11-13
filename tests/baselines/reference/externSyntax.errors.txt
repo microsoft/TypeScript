@@ -3,7 +3,7 @@ externSyntax.ts(8,20): error TS1183: An implementation cannot be declared in amb
 
 ==== externSyntax.ts (1 errors) ====
     declare var v;
-    declare module M {
+    declare namespace M {
         export class D {
             public p;
         }

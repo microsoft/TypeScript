@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue4.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue4.ts ===
+declare const f: 'a' | 'b' | 'c';
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue4.ts, 0, 13))
+
+switch (true) {
+  case f === "a":
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue4.ts, 0, 13))
+
+  default:
+    f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue4.ts, 0, 13))
+
+  case f === "b":
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue4.ts, 0, 13))
+
+    f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue4.ts, 0, 13))
+}
+

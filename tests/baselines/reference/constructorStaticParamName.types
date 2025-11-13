@@ -5,8 +5,10 @@
 
 class test {
 >test : test
+>     : ^^^^
 
     constructor (static) { }
 >static : any
+>       : ^^^
 }
 

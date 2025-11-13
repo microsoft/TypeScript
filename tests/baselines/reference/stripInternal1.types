@@ -3,11 +3,14 @@
 === stripInternal1.ts ===
 class C {
 >C : C
+>  : ^
 
   foo(): void { }
 >foo : () => void
+>    : ^^^^^^    
 
   // @internal
   bar(): void { }
 >bar : () => void
+>    : ^^^^^^    
 }

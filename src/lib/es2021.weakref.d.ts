@@ -1,3 +1,5 @@
+/// <reference lib="es2015.symbol.wellknown" />
+
 interface WeakRef<T extends WeakKey> {
     readonly [Symbol.toStringTag]: "WeakRef";
 
@@ -42,7 +44,7 @@ interface FinalizationRegistry<T> {
      * @param unregisterToken The token that was used as the unregisterToken argument when calling
      * register to register the target value.
      */
-    unregister(unregisterToken: WeakKey): void;
+    unregister(unregisterToken: WeakKey): boolean;
 }
 
 interface FinalizationRegistryConstructor {

@@ -1,6 +1,6 @@
 // @target: es2017
 // @jsx: react
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @skipLibCheck: true
 // @libFiles: react.d.ts,lib.d.ts
 

@@ -15,15 +15,18 @@ const { __, _, ___ } = R;
 
 //// [m1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var R;
-exports["default"] = R = {
+exports.default = R = {
     "__": 20,
     "_": 10,
     "___": 30
 };
 //// [m2.js]
 "use strict";
-exports.__esModule = true;
-var m1_1 = require("./m1");
-var __ = m1_1["default"].__, _ = m1_1["default"]._, ___ = m1_1["default"].___;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var m1_1 = __importDefault(require("./m1"));
+var __ = m1_1.default.__, _ = m1_1.default._, ___ = m1_1.default.___;

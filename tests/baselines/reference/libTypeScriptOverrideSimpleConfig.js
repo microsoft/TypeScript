@@ -10,6 +10,7 @@ const a: ABC = { abc: "Hello" }
 // by the module above ^
 window.localStorage
 
+
 //// [index.js]
 /// <reference lib="dom" />
 var a = { abc: "Hello" };

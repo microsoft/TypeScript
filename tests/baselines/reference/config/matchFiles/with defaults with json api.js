@@ -29,26 +29,26 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/a.ts",
-  "c:/dev/b.ts",
-  "c:/dev/x/a.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/a.ts",
+    "c:/dev/b.ts",
+    "c:/dev/x/a.ts"
+  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "compileOnSave": false
+  },
+  "wildcardDirectories": {
+    "c:/dev": "WatchDirectoryFlags.Recursive"
+  },
   "compileOnSave": false
- },
- "wildcardDirectories": {
-  "c:/dev": "WatchDirectoryFlags.Recursive"
- },
- "compileOnSave": false
 }
 Errors::
 

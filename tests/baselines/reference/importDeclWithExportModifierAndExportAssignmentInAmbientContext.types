@@ -3,16 +3,21 @@
 === importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts ===
 declare module "m" {
 >"m" : typeof import("m")
+>    : ^^^^^^^^^^^^^^^^^^
 
-    module x {
+    namespace x {
         interface c {
         }
     }
     export import a = x.c;
 >a : any
+>  : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >c : a
+>  : ^
 
     export = x;
 >x : typeof x
+>  : ^^^^^^^^
 }

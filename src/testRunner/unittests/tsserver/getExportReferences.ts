@@ -1,24 +1,23 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: getExportReferences", () => {
+describe("unittests:: tsserver:: getExportReferences::", () => {
     function makeSampleSession() {
         const mainTs: File = {
-            path: "/main.ts",
+            path: "/home/src/projects/project/main.ts",
             content: 'import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";',
         };
         const modTs: File = {
-            path: "/mod.ts",
+            path: "/home/src/projects/project/mod.ts",
             content: `export const value = 0;
 export const [valueA, valueB] = [0, 1];
 export const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };
@@ -26,11 +25,11 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
 `,
         };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([mainTs, modTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost([mainTs, modTs, tsconfig]);
+        const session = new TestSession(host);
         openFilesForSession([mainTs, modTs], session);
         return { session, modTs };
     }

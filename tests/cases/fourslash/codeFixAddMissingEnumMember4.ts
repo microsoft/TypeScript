@@ -9,7 +9,7 @@ verify.codeFix({
     description: "Add missing enum member 'b'",
     newFileContent: `enum E {
     a = "a",
-    b = "b"
+    b = "b",
 }
 E.b`
 });

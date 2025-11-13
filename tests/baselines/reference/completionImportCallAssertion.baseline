@@ -1,12 +1,15 @@
+// === Completions ===
 === /tests/cases/fourslash/main.ts ===
 // import("./other.json", {});
 //                         ^
 // | ----------------------------------------------------------------------
+// | (property) ImportCallOptions.with?: ImportAttributes
 // | (property) ImportCallOptions.assert?: ImportAssertions
 // | ----------------------------------------------------------------------
 // import("./other.json", { asse});
 //                          ^^^^
 // | ----------------------------------------------------------------------
+// | (property) ImportCallOptions.with?: ImportAttributes
 // | (property) ImportCallOptions.assert?: ImportAssertions
 // | ----------------------------------------------------------------------
 
@@ -24,10 +27,63 @@
       "isNewIdentifierLocation": false,
       "entries": [
         {
-          "name": "assert",
+          "name": "with",
           "kind": "property",
           "kindModifiers": "declare,optional",
           "sortText": "12",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportCallOptions",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "with",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "assert",
+          "kind": "property",
+          "kindModifiers": "deprecated,declare,optional",
+          "sortText": "z12",
           "displayParts": [
             {
               "text": "(",
@@ -74,8 +130,18 @@
               "kind": "interfaceName"
             }
           ],
-          "documentation": []
+          "documentation": [],
+          "tags": [
+            {
+              "name": "deprecated"
+            }
+          ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -96,10 +162,63 @@
       },
       "entries": [
         {
-          "name": "assert",
+          "name": "with",
           "kind": "property",
           "kindModifiers": "declare,optional",
           "sortText": "12",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportCallOptions",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "with",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "assert",
+          "kind": "property",
+          "kindModifiers": "deprecated,declare,optional",
+          "sortText": "z12",
           "displayParts": [
             {
               "text": "(",
@@ -146,8 +265,18 @@
               "kind": "interfaceName"
             }
           ],
-          "documentation": []
+          "documentation": [],
+          "tags": [
+            {
+              "name": "deprecated"
+            }
+          ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

@@ -3,4 +3,5 @@
 === downlevelLetConst6.ts ===
 let
 >let : any
+>    : ^^^
 

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile.ts] ////
 
 === privacyInterfaceExtendsClauseDeclFile_externalModule.ts ===
-export module publicModule {
+export namespace publicModule {
     export interface publicInterfaceInPublicModule {
     }
 
@@ -19,16 +19,18 @@ export module publicModule {
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
 >privateModule : any
+>              : ^^^
     }
 
     export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
     }
 }
 
-module privateModule {
+namespace privateModule {
     export interface publicInterfaceInPrivateModule {
 
     }
@@ -47,9 +49,11 @@ module privateModule {
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
     }
 }
 
@@ -71,14 +75,16 @@ export interface publicInterfaceImplementingPrivateInterface extends privateInte
 
 interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
 }
 export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
 >privateModule : any
+>              : ^^^
 }
 
 === privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     export interface publicInterfaceInPublicModule {
     }
 

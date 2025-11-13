@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Debug,
     Diagnostics,
     factory,
@@ -7,12 +12,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
 const fixId = fixIdAddMissingTypeof;
@@ -38,6 +38,6 @@ function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode 
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
-    const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.assertions, importType.qualifier, importType.typeArguments, /*isTypeOf*/ true);
+    const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.attributes, importType.qualifier, importType.typeArguments, /*isTypeOf*/ true);
     changes.replaceNode(sourceFile, importType, newTypeNode);
 }

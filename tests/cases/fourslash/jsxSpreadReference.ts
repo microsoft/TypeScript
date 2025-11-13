@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //@Filename: file.tsx
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -17,7 +17,5 @@
 //// [|var [|/*dst*/{| "contextRangeIndex": 0 |}nn|]: {name?: string; size?: number};|]
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
-verify.baselineCommands(
-    { type: "findRenameLocations", rangeText: "nn" },
-    { type: "goToDefinition", markerOrRange: "src" },
-);
+verify.baselineRenameAtRangesWithText("nn")
+verify.baselineGoToDefinition("src");

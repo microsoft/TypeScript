@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/asyncYieldStarContextualType.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== asyncYieldStarContextualType.ts ===
+// https://github.com/microsoft/TypeScript/issues/57903
+interface Result<T, E> {
+    [Symbol.iterator](): Generator<E, T, unknown>
+>[Symbol.iterator] : () => Generator<E, T, unknown>
+>                  : ^^^^^^                        
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+}
+
+type Book = { id: string; title: string; authorId: string };
+>Book : Book
+>     : ^^^^
+>id : string
+>   : ^^^^^^
+>title : string
+>      : ^^^^^^
+>authorId : string
+>         : ^^^^^^
+
+type Author = { id: string; name: string };
+>Author : Author
+>       : ^^^^^^
+>id : string
+>   : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+type BookWithAuthor = Book & { author: Author };
+>BookWithAuthor : BookWithAuthor
+>               : ^^^^^^^^^^^^^^
+>author : Author
+>       : ^^^^^^
+
+declare const authorPromise: Promise<Result<Author, "NOT_FOUND_AUTHOR">>;
+>authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const mapper: <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">;
+>mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
+>       : ^ ^^      ^^                             ^^^^^                             
+>result : Result<T, "NOT_FOUND_AUTHOR">
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const g: <T, U, V>() => AsyncGenerator<T, U, V>;
+>g : <T, U, V>() => AsyncGenerator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                       
+
+async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown> {
+>f : () => AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown>
+>  : ^^^^^^                                                                              
+
+    // Without yield*, the type of test1 is
+    //   Result<Author, "NOT_FOUND_AUTHOR>
+    const test1 = await authorPromise.then(mapper)
+>test1 : Result<Author, "NOT_FOUND_AUTHOR">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
+>       : ^ ^^      ^^                             ^^^^^                             
+
+    // With yield*, the type of test2 is
+    //    Author | BookWithAuthor
+    // But this codepath has no way to produce BookWithAuthor
+    const test2 = yield* await authorPromise.then(mapper)
+>test2 : Author
+>      : ^^^^^^
+>yield* await authorPromise.then(mapper) : Author
+>                                        : ^^^^^^
+>await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
+>       : ^ ^^      ^^                             ^^^^^                             
+
+    const x1 = yield* g();
+>x1 : unknown
+>   : ^^^^^^^
+>yield* g() : unknown
+>           : ^^^^^^^
+>g() : AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", unknown, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : <T, U, V>() => AsyncGenerator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                       
+
+    const x2: number = yield* g();
+>x2 : number
+>   : ^^^^^^
+>yield* g() : number
+>           : ^^^^^^
+>g() : AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", number, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : <T, U, V>() => AsyncGenerator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                       
+
+    return null! as BookWithAuthor;
+>null! as BookWithAuthor : BookWithAuthor
+>                        : ^^^^^^^^^^^^^^
+>null! : null
+>      : ^^^^
+}

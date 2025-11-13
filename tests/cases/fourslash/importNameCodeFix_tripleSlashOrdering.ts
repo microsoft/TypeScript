@@ -33,13 +33,6 @@
 ////
 ////const y = x + 1;
 
-// @Filename: /e.ts
-////// some comment
-////
-/////// <reference no-default-lib="true" />
-////
-////const y = x + 1;
-
 // @Filename: /f.ts
 ////// some comment
 ////
@@ -81,18 +74,6 @@ verify.importFixAtPosition([
 `// some comment
 
 /// <reference types="node" />
-
-import { x } from "./a";
-
-const y = x + 1;`,
-]);
-
-goTo.file("/e.ts");
-
-verify.importFixAtPosition([
-`// some comment
-
-/// <reference no-default-lib="true" />
 
 import { x } from "./a";
 

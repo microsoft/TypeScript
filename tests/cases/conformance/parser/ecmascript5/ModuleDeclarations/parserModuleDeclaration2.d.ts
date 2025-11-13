@@ -1,2 +1,2 @@
-module M {
+namespace M {
 }

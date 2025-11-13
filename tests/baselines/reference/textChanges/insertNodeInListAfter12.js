@@ -6,5 +6,6 @@ import {
 ===MODIFIED===
 
 import {
-    x, a
+    x,
+    a
 } from "bar"

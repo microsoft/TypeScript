@@ -3,4 +3,5 @@
 === parserExportAssignment4.ts ===
 export = ;
 > : any
+> : ^^^
 

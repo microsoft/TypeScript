@@ -3,21 +3,26 @@
 === unreachableYieldExpressionsVsInferredYieldTypes.ts ===
 export function* g() {
 >g : () => Generator<number, string, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   let x;
 >x : any
 
   x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
 
   yield x;
 >yield x : any
 >x : number
+>  : ^^^^^^
 
   return 'foo';
 >'foo' : "foo"
+>      : ^^^^^
 
   yield x;
 >yield x : any
@@ -26,17 +31,21 @@ export function* g() {
 
 export function* h() {
 >h : () => Generator<never, string, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return 'foo';
 >'foo' : "foo"
+>      : ^^^^^
 
   let y;
 >y : any
 
   y = 1;
 >y = 1 : 1
+>      : ^
 >y : any
 >1 : 1
+>  : ^
 
   yield y;
 >yield y : any
@@ -45,21 +54,26 @@ export function* h() {
 
 export function* i() {
 >i : () => Generator<boolean, string, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   yield true;
 >yield true : any
 >true : true
+>     : ^^^^
 
   return 'foo';
 >'foo' : "foo"
+>      : ^^^^^
 
   let y;
 >y : any
 
   y = 1;
 >y = 1 : 1
+>      : ^
 >y : any
 >1 : 1
+>  : ^
 
   yield y;
 >yield y : any
@@ -68,29 +82,40 @@ export function* i() {
 
 export function* j() {
 >j : () => Generator<number, boolean, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   x = 1;
 >x = 1 : 1
+>      : ^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
   yield x;
 >yield x : any
 >x : number
+>  : ^^^^^^
 
   return true;
 >true : true
+>     : ^^^^
 
   x = "foo";
 >x = "foo" : "foo"
+>          : ^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
   yield x;
 >yield x : any
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

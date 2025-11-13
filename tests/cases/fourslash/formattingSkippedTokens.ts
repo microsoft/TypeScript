@@ -3,7 +3,7 @@
 /////*1*/foo(): Bar { }
 /////*2*/function Foo      () #   { }
 /////*3*/4+:5
-//// module M {
+//// namespace M {
 ////function a(
 /////*4*/    : T) { }
 ////}

@@ -1,5 +1,7 @@
 import {
     combinePaths,
+    Debug,
+    forEachAncestorDirectory,
     forEachKey,
     getBaseFileName,
     getDirectoryPath,
@@ -16,8 +18,9 @@ import {
     Version,
     version,
     versionMajorMinor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
+    ActionPackageInstalled,
     ActionSet,
     ActionWatchTypingLocations,
     BeginInstallTypes,
@@ -26,18 +29,27 @@ import {
     EndInstallTypes,
     EventBeginInstallTypes,
     EventEndInstallTypes,
+    EventTypesRegistry,
+    InstallPackageRequest,
     InstallTypingHost,
     InvalidateCachedTypings,
+    PackageInstalledResponse,
     SetTypings,
+    stringifyIndented,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
     WatchTypingLocations,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 interface NpmConfig {
     devDependencies: MapLike<any>;
 }
 
 interface NpmLock {
-    dependencies: { [packageName: string]: { version: string; }; };
+    dependencies?: { [packageName: string]: { version: string; }; };
+    packages?: {
+        [nodeModulesAtTypesPackage: string]: { version: string; };
+    };
 }
 
 export interface Log {
@@ -64,7 +76,7 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
 }
 
 /** @internal */
-export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean): boolean {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
         const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
@@ -75,7 +87,10 @@ export function installNpmPackages(npmPath: string, tsVersion: string, packageNa
 }
 
 /** @internal */
-export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number): {
+    command: string;
+    remaining: number;
+} {
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
     while (true) {
@@ -104,8 +119,7 @@ export abstract class TypingsInstaller {
     private readonly knownCachesSet = new Set<string>();
     private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
-    /** @internal */
-    readonly pendingRunRequests: PendingRequest[] = [];
+    private pendingRunRequests: PendingRequest[] = [];
 
     private installRunCount = 1;
     private inFlightRequestCount = 0;
@@ -118,7 +132,7 @@ export abstract class TypingsInstaller {
         private readonly safeListPath: Path,
         private readonly typesMapLocation: Path,
         private readonly throttleLimit: number,
-        protected readonly log = nullLog,
+        protected readonly log: Log = nullLog,
     ) {
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
@@ -127,7 +141,34 @@ export abstract class TypingsInstaller {
         this.processCacheLocation(this.globalCachePath);
     }
 
-    closeProject(req: CloseProject) {
+    /** @internal */
+    handleRequest(req: TypingInstallerRequestUnion): void {
+        switch (req.kind) {
+            case "discover":
+                this.install(req);
+                break;
+            case "closeProject":
+                this.closeProject(req);
+                break;
+            case "typesRegistry": {
+                const typesRegistry: { [key: string]: MapLike<string>; } = {};
+                this.typesRegistry.forEach((value, key) => {
+                    typesRegistry[key] = value;
+                });
+                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
+                this.sendResponse(response);
+                break;
+            }
+            case "installPackage": {
+                this.installPackage(req);
+                break;
+            }
+            default:
+                Debug.assertNever(req);
+        }
+    }
+
+    closeProject(req: CloseProject): void {
         this.closeWatchers(req.projectName);
     }
 
@@ -151,9 +192,9 @@ export abstract class TypingsInstaller {
         }
     }
 
-    install(req: DiscoverTypings) {
+    install(req: DiscoverTypings): void {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
+            this.log.writeLine(`Got install request${stringifyIndented(req)}`);
         }
 
         // load existing typing information from the cache
@@ -180,10 +221,6 @@ export abstract class TypingsInstaller {
             req.compilerOptions,
         );
 
-        if (this.log.isEnabled()) {
-            this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
-        }
-
         // start watching files
         this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
 
@@ -196,6 +233,41 @@ export abstract class TypingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`No new typings were requested as a result of typings discovery`);
             }
+        }
+    }
+
+    /** @internal */
+    installPackage(req: InstallPackageRequest): void {
+        const { fileName, packageName, projectName, projectRootPath, id } = req;
+        const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
+            if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
+                return directory;
+            }
+        }) || projectRootPath;
+        if (cwd) {
+            this.installWorker(-1, [packageName], cwd, success => {
+                const message = success ?
+                    `Package ${packageName} installed.` :
+                    `There was an error installing ${packageName}.`;
+                const response: PackageInstalledResponse = {
+                    kind: ActionPackageInstalled,
+                    projectName,
+                    id,
+                    success,
+                    message,
+                };
+                this.sendResponse(response);
+            });
+        }
+        else {
+            const response: PackageInstalledResponse = {
+                kind: ActionPackageInstalled,
+                projectName,
+                id,
+                success: false,
+                message: "Could not determine a project root path.",
+            };
+            this.sendResponse(response);
         }
     }
 
@@ -232,12 +304,16 @@ export abstract class TypingsInstaller {
             const npmConfig = JSON.parse(this.installTypingHost.readFile(packageJson)!) as NpmConfig; // TODO: GH#18217
             const npmLock = JSON.parse(this.installTypingHost.readFile(packageLockJson)!) as NpmLock; // TODO: GH#18217
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
-                this.log.writeLine(`Loaded content of '${packageLockJson}'`);
+                this.log.writeLine(`Loaded content of '${packageJson}':${stringifyIndented(npmConfig)}`);
+                this.log.writeLine(`Loaded content of '${packageLockJson}':${stringifyIndented(npmLock)}`);
             }
-            if (npmConfig.devDependencies && npmLock.dependencies) {
+            // Packages is present in lock file 3 vs lockfile 2 has dependencies field for already installed types package
+            if (npmConfig.devDependencies && (npmLock.packages || npmLock.dependencies)) {
                 for (const key in npmConfig.devDependencies) {
-                    if (!hasProperty(npmLock.dependencies, key)) {
+                    if (
+                        (npmLock.packages && !hasProperty(npmLock.packages, `node_modules/${key}`)) ||
+                        (npmLock.dependencies && !hasProperty(npmLock.dependencies, key))
+                    ) {
                         // if package in package.json but not package-lock.json, skip adding to cache so it is reinstalled on next use
                         continue;
                     }
@@ -264,7 +340,8 @@ export abstract class TypingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Adding entry into typings cache: '${packageName}' => '${typingFile}'`);
                     }
-                    const info = getProperty(npmLock.dependencies, key);
+                    const info = npmLock.packages && getProperty(npmLock.packages, `node_modules/${key}`) ||
+                        getProperty(npmLock.dependencies!, key);
                     const version = info && info.version;
                     if (!version) {
                         continue;
@@ -307,7 +384,7 @@ export abstract class TypingsInstaller {
         });
     }
 
-    protected ensurePackageDirectoryExists(directory: string) {
+    protected ensurePackageDirectoryExists(directory: string): void {
         const npmConfigPath = combinePaths(directory, "package.json");
         if (this.log.isEnabled()) {
             this.log.writeLine(`Npm config file: ${npmConfigPath}`);
@@ -458,7 +535,8 @@ export abstract class TypingsInstaller {
 
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
-
+    /** @internal */
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void; // eslint-disable-line @typescript-eslint/unified-signatures
     protected readonly latestDistTag = "latest";
 }
 

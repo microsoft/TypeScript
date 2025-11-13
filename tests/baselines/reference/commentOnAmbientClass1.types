@@ -4,7 +4,9 @@
 ///<reference path="a.ts"/>
 declare class E extends C {
 >E : E
+>  : ^
 >C : C
+>  : ^
 }
 === a.ts ===
 /*!=========
@@ -15,10 +17,12 @@ declare class E extends C {
 /*! Don't keep this pinned comment */
 declare class C {
 >C : C
+>  : ^
 }
 
 // Don't keep this comment.
 declare class D {
 >D : D
+>  : ^
 }
 

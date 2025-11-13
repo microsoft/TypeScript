@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 function foo1 () {
                 ^
 {

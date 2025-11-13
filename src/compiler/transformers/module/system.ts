@@ -92,11 +92,13 @@ import {
     map,
     MetaProperty,
     ModifierFlags,
+    ModuleExportName,
+    moduleExportNameIsDefault,
+    moduleExportNameTextUnescaped,
     moveEmitHelpers,
     Node,
     NodeFlags,
     ObjectLiteralElementLike,
-    outFile,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
     PostfixUnaryExpression,
@@ -129,7 +131,7 @@ import {
     VisitResult,
     WhileStatement,
     WithStatement,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformSystemModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -251,7 +253,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             EmitFlags.NoTrailingComments,
         );
 
-        if (!outFile(compilerOptions)) {
+        if (!compilerOptions.outFile) {
             moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
         }
 
@@ -355,7 +357,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         startLexicalEnvironment();
 
         // Add any prologue directives.
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, topLevelVisitor);
 
         // var __moduleName = context_1 && context_1.id;
@@ -434,7 +436,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // this set is used to filter names brought by star expors.
 
         // local names set should only be added if we have anything exported
-        if (!moduleInfo.exportedNames && moduleInfo.exportSpecifiers.size === 0) {
+        if (!some(moduleInfo.exportedNames) && moduleInfo.exportedFunctions.size === 0 && moduleInfo.exportSpecifiers.size === 0) {
             // no exported declarations (export var ...) or export specifiers (export {x})
             // check if we have any non star export declarations.
             let hasExportDeclarationWithExportClause = false;
@@ -456,7 +458,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const exportedNames: ObjectLiteralElementLike[] = [];
         if (moduleInfo.exportedNames) {
             for (const exportedLocalName of moduleInfo.exportedNames) {
-                if (exportedLocalName.escapedText === "default") {
+                if (moduleExportNameIsDefault(exportedLocalName)) {
                     continue;
                 }
 
@@ -468,6 +470,21 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     ),
                 );
             }
+        }
+
+        for (const f of moduleInfo.exportedFunctions) {
+            if (hasSyntacticModifier(f, ModifierFlags.Default)) {
+                continue;
+            }
+            Debug.assert(!!f.name);
+
+            // write name of exported declaration, i.e 'export var x...'
+            exportedNames.push(
+                factory.createPropertyAssignment(
+                    factory.createStringLiteralFromNode(f.name),
+                    factory.createTrue(),
+                ),
+            );
         }
 
         const exportedNamesStorageRef = factory.createUniqueName("exportedNames");
@@ -630,10 +647,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                 for (const e of entry.exportClause.elements) {
                                     properties.push(
                                         factory.createPropertyAssignment(
-                                            factory.createStringLiteral(idText(e.name)),
+                                            factory.createStringLiteral(moduleExportNameTextUnescaped(e.name)),
                                             factory.createElementAccessExpression(
                                                 parameterName,
-                                                factory.createStringLiteral(idText(e.propertyName || e.name)),
+                                                factory.createStringLiteral(moduleExportNameTextUnescaped(e.propertyName || e.name)),
                                             ),
                                         ),
                                     );
@@ -656,7 +673,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                             exportFunction,
                                             /*typeArguments*/ undefined,
                                             [
-                                                factory.createStringLiteral(idText(entry.exportClause.name)),
+                                                factory.createStringLiteral(moduleExportNameTextUnescaped(entry.exportClause.name)),
                                                 parameterName,
                                             ],
                                         ),
@@ -1149,7 +1166,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const exportSpecifiers = moduleInfo.exportSpecifiers.get(name);
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
-                if (exportSpecifier.name.escapedText !== excludeName) {
+                if (moduleExportNameTextUnescaped(exportSpecifier.name) !== excludeName) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name);
                 }
             }
@@ -1402,7 +1419,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateLabeledStatement(
             node,
             node.label,
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock) ?? factory.createExpressionStatement(factory.createIdentifier("")),
         );
     }
 
@@ -1428,7 +1445,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateIfStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock) ?? factory.createBlock([]),
             visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock),
         );
     }
@@ -1837,13 +1854,14 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     );
                 }
                 else if (isImportSpecifier(importDeclaration)) {
+                    const importedName = importDeclaration.propertyName || importDeclaration.name;
+                    const target = factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration);
                     return setTextRange(
                         factory.createPropertyAssignment(
                             factory.cloneNode(name),
-                            factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(importDeclaration.propertyName || importDeclaration.name),
-                            ),
+                            importedName.kind === SyntaxKind.StringLiteral
+                                ? factory.createElementAccessExpression(target, factory.cloneNode(importedName))
+                                : factory.createPropertyAccessExpression(target, factory.cloneNode(importedName)),
                         ),
                         /*location*/ node,
                     );
@@ -1905,11 +1923,12 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     );
                 }
                 else if (isImportSpecifier(importDeclaration)) {
+                    const importedName = importDeclaration.propertyName || importDeclaration.name;
+                    const target = factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration);
                     return setTextRange(
-                        factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                            factory.cloneNode(importDeclaration.propertyName || importDeclaration.name),
-                        ),
+                        importedName.kind === SyntaxKind.StringLiteral
+                            ? factory.createElementAccessExpression(target, factory.cloneNode(importedName))
+                            : factory.createPropertyAccessExpression(target, factory.cloneNode(importedName)),
                         /*location*/ node,
                     );
                 }
@@ -1978,7 +1997,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         else if (isGeneratedIdentifier(name) && isFileLevelReservedGeneratedIdentifier(name)) {
             const exportSpecifiers = moduleInfo?.exportSpecifiers.get(name);
             if (exportSpecifiers) {
-                const exportedNames: Identifier[] = [];
+                const exportedNames: ModuleExportName[] = [];
                 for (const exportSpecifier of exportSpecifiers) {
                     exportedNames.push(exportSpecifier.name);
                 }

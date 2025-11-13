@@ -3,17 +3,21 @@
 === unreachableReturnStatementsVsInferredReturnTypes.ts ===
 export function g() {
 >g : () => number
+>  : ^^^^^^^^^^^^
 
   let x;
 >x : any
 
   x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
 
   return x;
 >x : number
+>  : ^^^^^^
 
   return x;
 >x : any
@@ -21,17 +25,21 @@ export function g() {
 
 export function h() {
 >h : () => number
+>  : ^^^^^^^^^^^^
 
   return 1;
 >1 : 1
+>  : ^
 
   let y;
 >y : any
 
   y = 1;
 >y = 1 : 1
+>      : ^
 >y : any
 >1 : 1
+>  : ^
 
   return y;
 >y : any
@@ -39,24 +47,34 @@ export function h() {
 
 export function i() {
 >i : () => number
+>  : ^^^^^^^^^^^^
 
   let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   x = 1;
 >x = 1 : 1
+>      : ^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
   return x;
 >x : number
+>  : ^^^^^^
 
   x = "foo";
 >x = "foo" : "foo"
+>          : ^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
   return x;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

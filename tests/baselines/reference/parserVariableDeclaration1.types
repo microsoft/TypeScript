@@ -3,17 +3,25 @@
 === parserVariableDeclaration1.ts ===
 		var selection = a, 
 >selection : any
+>          : ^^^
 >a : any
+>  : ^^^
 
 			position = b,
 >position : any
+>         : ^^^
 >b : any
+>  : ^^^
 
 			model = c,
 >model : any
+>      : ^^^
 >c : any
+>  : ^^^
 
 			support = d;
 >support : any
+>        : ^^^
 >d : any
+>  : ^^^
 

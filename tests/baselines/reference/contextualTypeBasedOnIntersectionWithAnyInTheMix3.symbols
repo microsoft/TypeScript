@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts ===
+type TypeMap = {
+>TypeMap : Symbol(TypeMap, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 0, 0))
+
+  str: "a" | "b" | "c";
+>str : Symbol(str, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 0, 16))
+
+  num: 1 | 2 | 3;
+>num : Symbol(num, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 1, 23))
+
+};
+
+declare function test1<
+>test1 : Symbol(test1, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 3, 2))
+
+  T extends { [K in keyof TypeMap]: TypeMap[K][] } & { [k: string]: any[] },
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 5, 23))
+>K : Symbol(K, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 6, 15))
+>TypeMap : Symbol(TypeMap, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 0, 0))
+>TypeMap : Symbol(TypeMap, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 0, 0))
+>K : Symbol(K, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 6, 15))
+>k : Symbol(k, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 6, 56))
+
+>(arg: T): T;
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 7, 2))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 5, 23))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 5, 23))
+
+const result = test1({
+>result : Symbol(result, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 9, 5))
+>test1 : Symbol(test1, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 3, 2))
+
+  num: [1, 2],
+>num : Symbol(num, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 9, 22))
+
+  str: ["a", "b"],
+>str : Symbol(str, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 10, 14))
+
+  bool: [true, false],
+>bool : Symbol(bool, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 11, 18))
+
+});
+
+declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
+>test2 : Symbol(test2, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 13, 3))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 15, 23))
+>type : Symbol(type, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 15, 27))
+>type : Symbol(type, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 15, 53))
+
+test2({ type: "foo" });
+>test2 : Symbol(test2, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 13, 3))
+>type : Symbol(type, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 17, 7))
+
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
+>x : Symbol(x, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 5))
+>ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 10))
+>ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 24))
+>ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 41))
+
+const a: [any] & [1] = [1];
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 22, 5))
+
+const b: any[] & 1[] = [1, 1];
+>b : Symbol(b, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 23, 5))
+
+const c: { a: any } & { a: 1 } = { a: 1 };
+>c : Symbol(c, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 5))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 10))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 23))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 34))
+
+const d: (() => { a: 1 }) & (() => { a: any }) = () => ({
+>d : Symbol(d, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 5))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 17))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 36))
+
+  a: 1,
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 57))
+
+});
+

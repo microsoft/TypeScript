@@ -2,7 +2,7 @@
 //@module: commonjs
 //@jsx: preserve
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -10,7 +10,7 @@
 //// }
 
 //@Filename: exporter.tsx
-//// export module M {
+//// export namespace M {
 ////    export declare function SFCComp(props: { Three: number; Four: string }): JSX.Element;
 //// }
 

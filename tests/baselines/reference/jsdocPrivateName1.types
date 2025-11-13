@@ -3,10 +3,13 @@
 === jsdocPrivateName1.js ===
 class A {
 >A : A
+>  : ^
 
     /** @type {boolean} some number value */
     #foo = 3 // Error because not assignable to boolean
 >#foo : boolean
+>     : ^^^^^^^
 >3 : 3
+>  : ^
 }
 

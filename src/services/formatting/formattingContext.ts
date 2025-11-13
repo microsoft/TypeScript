@@ -1,3 +1,4 @@
+import { TextRangeWithKind } from "../_namespaces/ts.formatting.js";
 import {
     Debug,
     findChildOfKind,
@@ -5,10 +6,7 @@ import {
     Node,
     SourceFileLike,
     SyntaxKind,
-} from "../_namespaces/ts";
-import {
-    TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const enum FormattingRequestKind {
@@ -37,7 +35,7 @@ export class FormattingContext {
     constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
     }
 
-    public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
+    public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node): void {
         this.currentTokenSpan = Debug.checkDefined(currentRange);
         this.currentTokenParent = Debug.checkDefined(currentTokenParent);
         this.nextTokenSpan = Debug.checkDefined(nextRange);
@@ -78,7 +76,7 @@ export class FormattingContext {
         return this.tokensAreOnSameLine;
     }
 
-    public ContextNodeBlockIsOnOneLine() {
+    public ContextNodeBlockIsOnOneLine(): boolean {
         if (this.contextNodeBlockIsOnOneLine === undefined) {
             this.contextNodeBlockIsOnOneLine = this.BlockIsOnOneLine(this.contextNode);
         }
@@ -86,7 +84,7 @@ export class FormattingContext {
         return this.contextNodeBlockIsOnOneLine;
     }
 
-    public NextNodeBlockIsOnOneLine() {
+    public NextNodeBlockIsOnOneLine(): boolean {
         if (this.nextNodeBlockIsOnOneLine === undefined) {
             this.nextNodeBlockIsOnOneLine = this.BlockIsOnOneLine(this.nextTokenParent);
         }

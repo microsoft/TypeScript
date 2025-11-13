@@ -28,21 +28,21 @@ export function i() {
 //// [unreachableReturnStatementsVsInferredReturnTypes.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.i = exports.h = exports.g = void 0;
+exports.g = g;
+exports.h = h;
+exports.i = i;
 function g() {
     var x;
     x = 1;
     return x;
     return x;
 }
-exports.g = g;
 function h() {
     return 1;
     var y;
     y = 1;
     return y;
 }
-exports.h = h;
 function i() {
     var x;
     x = 1;
@@ -50,7 +50,6 @@ function i() {
     x = "foo";
     return x;
 }
-exports.i = i;
 
 
 //// [unreachableReturnStatementsVsInferredReturnTypes.d.ts]

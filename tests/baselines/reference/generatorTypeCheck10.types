@@ -3,6 +3,7 @@
 === generatorTypeCheck10.ts ===
 function* g(): IterableIterator<any> {
 >g : () => IterableIterator<any>
+>  : ^^^^^^                     
 
     return;
 }

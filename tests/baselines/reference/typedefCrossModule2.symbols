@@ -16,7 +16,9 @@ var bb;
 
 var bbb = new mod.Baz();
 >bbb : Symbol(bbb, Decl(use.js, 5, 3))
+>mod.Baz : Symbol(Baz, Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18), Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
+>Baz : Symbol(Baz, Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18), Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18))
 
 === mod1.js ===
 // error

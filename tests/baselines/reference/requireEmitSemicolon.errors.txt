@@ -1,0 +1,22 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== requireEmitSemicolon_1.ts (0 errors) ====
+    ///<reference path='requireEmitSemicolon_0.ts'/>
+    import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
+    
+    export namespace Database {
+    	export class DB {
+    	    public findPerson(id: number): P.Models.Person {
+    	        return new P.Models.Person("Rock");
+    	    }
+    	}
+    } 
+==== requireEmitSemicolon_0.ts (0 errors) ====
+    export namespace Models {
+    	export class Person {
+            constructor(name: string) { }
+    	}
+    }
+    

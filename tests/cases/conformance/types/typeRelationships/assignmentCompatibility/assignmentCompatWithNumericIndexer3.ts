@@ -22,7 +22,7 @@ var b2: { [x: number]: Derived2; };
 a = b2; // ok
 b2 = a; // error
 
-module Generics {
+namespace Generics {
     class A<T extends Derived> {
         [x: number]: T;
     }

@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash2.ts] ////
+
+=== aliasInstantiationExpressionGenericIntersectionNoCrash2.ts ===
+declare class Class<T> {
+>Class : Class<T>
+>      : ^^^^^^^^
+
+  x: T;
+>x : T
+>  : ^
+}
+
+declare function fn<T>(): T;
+>fn : <T>() => T
+>   : ^ ^^^^^^^ 
+
+
+type ClassAlias<T> = typeof Class<T>;
+>ClassAlias : typeof Class<T>
+>           :                
+>Class : typeof Class
+>      : ^^^^^^^^^^^^
+
+type FnAlias<T> = typeof fn<T>;
+>FnAlias : typeof fn<T>
+>        :             
+>fn : <T_1>() => T_1
+>   : ^^^^^^^^^^^   
+
+type Wat<T> = ClassAlias<T> & FnAlias<T>;
+>Wat : Wat<T>
+>    : ^^^^^^
+
+
+declare const wat: Wat<number>;
+>wat : Wat<number>
+>    : ^^^^^^^^^^^
+
+wat as Wat<string>;
+>wat as Wat<string> : Wat<string>
+>                   : ^^^^^^^^^^^
+>wat : Wat<number>
+>    : ^^^^^^^^^^^
+

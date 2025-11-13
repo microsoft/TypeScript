@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/intersectionWithConstructSignaturePrototypeResult.ts] ////
+
+=== intersectionWithConstructSignaturePrototypeResult.ts ===
+declare class EmberObject {}
+>EmberObject : EmberObject
+>            : ^^^^^^^^^^^
+
+type PersonType = Readonly<typeof EmberObject> &
+>PersonType : PersonType
+>           : ^^^^^^^^^^
+>EmberObject : typeof EmberObject
+>            : ^^^^^^^^^^^^^^^^^^
+
+  (new (properties?: object) => {
+>properties : object | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+
+    firstName: string;
+>firstName : string
+>          : ^^^^^^
+
+    lastName: string;
+>lastName : string
+>         : ^^^^^^
+
+  } & EmberObject) &
+  (new (...args: any[]) => {
+>args : any[]
+>     : ^^^^^
+
+    firstName: string;
+>firstName : string
+>          : ^^^^^^
+
+    lastName: string;
+>lastName : string
+>         : ^^^^^^
+
+  } & EmberObject);
+
+type PersonPrototype = PersonType["prototype"];
+>PersonPrototype : EmberObject
+>                : ^^^^^^^^^^^
+

@@ -3,8 +3,11 @@
 === systemModule4.ts ===
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export var y;
 >y : any
+>  : ^^^
 

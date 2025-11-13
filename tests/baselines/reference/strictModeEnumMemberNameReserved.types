@@ -3,18 +3,26 @@
 === strictModeEnumMemberNameReserved.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 enum E {
 >E : E
+>  : ^
 
     static
 >static : E.static
+>       : ^^^^^^^^
 }
 
 const x1: E.static = E.static;
 >x1 : E
+>   : ^
 >E : any
+>  : ^^^
 >E.static : E
+>         : ^
 >E : typeof E
+>  : ^^^^^^^^
 >static : E
+>       : ^
 

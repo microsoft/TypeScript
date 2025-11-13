@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute2.tsx] ////
+
+=== contextuallyTypedJsxAttribute2.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(contextuallyTypedJsxAttribute2.tsx, 2, 6))
+
+import { ComponentPropsWithRef, ElementType } from "react";
+>ComponentPropsWithRef : Symbol(ComponentPropsWithRef, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 8))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+
+function UnwrappedLink<T extends ElementType = ElementType>(
+>UnwrappedLink : Symbol(UnwrappedLink, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 59))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 5, 23))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+
+  props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">,
+>props : Symbol(props, Decl(contextuallyTypedJsxAttribute2.tsx, 5, 60))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>ComponentPropsWithRef : Symbol(ComponentPropsWithRef, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 8))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 5, 23))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 5, 23))
+
+) {
+  return <a></a>;
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
+}
+
+<UnwrappedLink onClick={(e) => {}} />;
+>UnwrappedLink : Symbol(UnwrappedLink, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 59))
+>onClick : Symbol(onClick, Decl(contextuallyTypedJsxAttribute2.tsx, 11, 14))
+>e : Symbol(e, Decl(contextuallyTypedJsxAttribute2.tsx, 11, 25))
+
+function UnwrappedLink2<T extends ElementType = ElementType>(
+>UnwrappedLink2 : Symbol(UnwrappedLink2, Decl(contextuallyTypedJsxAttribute2.tsx, 11, 38))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 13, 24))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+
+  props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
+>props : Symbol(props, Decl(contextuallyTypedJsxAttribute2.tsx, 13, 61))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>ComponentPropsWithRef : Symbol(ComponentPropsWithRef, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 8))
+>ElementType : Symbol(ElementType, Decl(contextuallyTypedJsxAttribute2.tsx, 3, 31))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 13, 24))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 13, 24))
+
+    as?: T;
+>as : Symbol(as, Decl(contextuallyTypedJsxAttribute2.tsx, 14, 79))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttribute2.tsx, 13, 24))
+
+  },
+) {
+  return <a></a>;
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
+}
+
+<UnwrappedLink2 onClick={(e) => {}} />;
+>UnwrappedLink2 : Symbol(UnwrappedLink2, Decl(contextuallyTypedJsxAttribute2.tsx, 11, 38))
+>onClick : Symbol(onClick, Decl(contextuallyTypedJsxAttribute2.tsx, 21, 15))
+>e : Symbol(e, Decl(contextuallyTypedJsxAttribute2.tsx, 21, 26))
+
+<UnwrappedLink2 as="button" onClick={(e) => {}} />;
+>UnwrappedLink2 : Symbol(UnwrappedLink2, Decl(contextuallyTypedJsxAttribute2.tsx, 11, 38))
+>as : Symbol(as, Decl(contextuallyTypedJsxAttribute2.tsx, 22, 15))
+>onClick : Symbol(onClick, Decl(contextuallyTypedJsxAttribute2.tsx, 22, 27))
+>e : Symbol(e, Decl(contextuallyTypedJsxAttribute2.tsx, 22, 38))
+

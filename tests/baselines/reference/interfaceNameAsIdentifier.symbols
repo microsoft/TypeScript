@@ -8,11 +8,11 @@ interface C {
 }
 C();
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(interfaceNameAsIdentifier.ts, 3, 4))
 
     export interface C {
->C : Symbol(C, Decl(interfaceNameAsIdentifier.ts, 5, 11))
+>C : Symbol(C, Decl(interfaceNameAsIdentifier.ts, 5, 14))
 
         (): void;
     }

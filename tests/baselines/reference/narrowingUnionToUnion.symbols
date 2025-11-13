@@ -538,3 +538,100 @@ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgai
 >workingAgain : Symbol(workingAgain, Decl(narrowingUnionToUnion.ts, 220, 13))
 >aProp : Symbol(aProp, Decl(narrowingUnionToUnion.ts, 214, 40))
 
+// Repro from #56144
+
+type Union =
+>Union : Symbol(Union, Decl(narrowingUnionToUnion.ts, 224, 88))
+
+    | { type: 'a'; variant: 1 }
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18))
+
+    | { type: 'a'; variant: 2 }
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 230, 7))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 230, 18))
+
+    | { type: 'b' };
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 231, 7))
+
+function example1(value: Union): { type: 'a'; variant: 2 } | null {
+>example1 : Symbol(example1, Decl(narrowingUnionToUnion.ts, 231, 20))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 233, 18))
+>Union : Symbol(Union, Decl(narrowingUnionToUnion.ts, 224, 88))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 233, 34))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 233, 45))
+
+    if (value.type !== 'a') {
+>value.type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7), Decl(narrowingUnionToUnion.ts, 231, 7))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 233, 18))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7), Decl(narrowingUnionToUnion.ts, 231, 7))
+
+        return null;
+    }
+    if (value.variant === 1) {
+>value.variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18), Decl(narrowingUnionToUnion.ts, 230, 18))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 233, 18))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18), Decl(narrowingUnionToUnion.ts, 230, 18))
+
+        return null;
+    }
+    return value;
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 233, 18))
+}
+
+function example2(value: Union): { type: 'a'; variant: 2 } | null {
+>example2 : Symbol(example2, Decl(narrowingUnionToUnion.ts, 241, 1))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 243, 18))
+>Union : Symbol(Union, Decl(narrowingUnionToUnion.ts, 224, 88))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 243, 34))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 243, 45))
+
+    if (value.type !== 'a') {
+>value.type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7), Decl(narrowingUnionToUnion.ts, 231, 7))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 243, 18))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7), Decl(narrowingUnionToUnion.ts, 231, 7))
+
+        return null;
+    }
+    if (value.type === 'a' && value.variant === 1) {
+>value.type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 243, 18))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7))
+>value.variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18), Decl(narrowingUnionToUnion.ts, 230, 18))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 243, 18))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18), Decl(narrowingUnionToUnion.ts, 230, 18))
+
+        return null;
+    }
+    return value;
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 243, 18))
+}
+
+function example3(value: Union): { type: 'a'; variant: 2 } | null {
+>example3 : Symbol(example3, Decl(narrowingUnionToUnion.ts, 251, 1))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 253, 18))
+>Union : Symbol(Union, Decl(narrowingUnionToUnion.ts, 224, 88))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 253, 34))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 253, 45))
+
+    if (value.type !== 'a') {
+>value.type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7), Decl(narrowingUnionToUnion.ts, 231, 7))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 253, 18))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7), Decl(narrowingUnionToUnion.ts, 231, 7))
+
+        return null;
+    }
+    if (value.type && value.variant === 1) {
+>value.type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 253, 18))
+>type : Symbol(type, Decl(narrowingUnionToUnion.ts, 229, 7), Decl(narrowingUnionToUnion.ts, 230, 7))
+>value.variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18), Decl(narrowingUnionToUnion.ts, 230, 18))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 253, 18))
+>variant : Symbol(variant, Decl(narrowingUnionToUnion.ts, 229, 18), Decl(narrowingUnionToUnion.ts, 230, 18))
+
+        return null;
+    }
+    return value;
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 253, 18))
+}
+

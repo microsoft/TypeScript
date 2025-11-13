@@ -3,7 +3,9 @@
 === generatorInAmbientContext3.d.ts ===
 declare class C {
 >C : C
+>  : ^
 
     *generator(): any;
 >generator : () => any
+>          : ^^^^^^   
 }

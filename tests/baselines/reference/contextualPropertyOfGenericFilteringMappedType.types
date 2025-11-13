@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/contextualPropertyOfGenericFilteringMappedType.ts] ////
+
+=== contextualPropertyOfGenericFilteringMappedType.ts ===
+declare function f1<T extends object>(
+>f1 : <T extends object>(data: T, handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void; }) => void
+>   : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                        ^^^^^    
+
+  data: T,
+>data : T
+>     : ^
+
+  handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void },
+>handlers : { [P in keyof T as P]: (value: T[P], prop: P) => void; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^     ^^    ^^    ^^ ^^^^^    ^^^
+>value : T[P]
+>      : ^^^^
+>prop : P
+>     : ^
+
+): void;
+
+f1(
+>f1(  {    foo: 0,    bar: "",  },  {    foo: (value, key) => {},    bar: (value, key) => {},  },) : void
+>                                                                                                  : ^^^^
+>f1 : <T extends object>(data: T, handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void; }) => void
+>   : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                        ^^^^^    
+  {
+>{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 0,
+>foo : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+    bar: "",
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+  },
+  {
+>{    foo: (value, key) => {},    bar: (value, key) => {},  } : { foo: (value: number, key: "foo") => void; bar: (value: string, key: "bar") => void; }
+>                                                             : ^^^^^^^^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+
+    foo: (value, key) => {},
+>foo : (value: number, key: "foo") => void
+>    : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>(value, key) => {} : (value: number, key: "foo") => void
+>                   : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>key : "foo"
+>    : ^^^^^
+
+    bar: (value, key) => {},
+>bar : (value: string, key: "bar") => void
+>    : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>(value, key) => {} : (value: string, key: "bar") => void
+>                   : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>key : "bar"
+>    : ^^^^^
+
+  },
+);
+
+declare function f2<T extends object>(
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
+>   : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                                                      ^^^^^    
+
+  data: T,
+>data : T
+>     : ^
+
+  handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void },
+>handlers : { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^    ^^    ^^ ^^^^^    ^^^
+>value : T[P]
+>      : ^^^^
+>prop : P
+>     : ^
+
+): void;
+
+f2(
+>f2(  {    foo: 0,    bar: "",  },  {    bar: (value, key) => {},  },) : void
+>                                                                      : ^^^^
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
+>   : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                                                      ^^^^^    
+  {
+>{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 0,
+>foo : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+    bar: "",
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+  },
+  {
+>{    bar: (value, key) => {},  } : { bar: (value: string, key: "bar") => void; }
+>                                 : ^^^^^^^^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+
+    bar: (value, key) => {},
+>bar : (value: string, key: "bar") => void
+>    : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>(value, key) => {} : (value: string, key: "bar") => void
+>                   : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>key : "bar"
+>    : ^^^^^
+
+  },
+);
+
+f2(
+>f2(  {    foo: 0,    bar: "",  },  {    foo: (value, key) => {      // implicit `any`s    },  },) : void
+>                                                                                                  : ^^^^
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
+>   : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                                                      ^^^^^    
+  {
+>{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 0,
+>foo : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+    bar: "",
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+  },
+  {
+>{    foo: (value, key) => {      // implicit `any`s    },  } : { foo: (value: any, key: any) => void; }
+>                                                             : ^^^^^^^^     ^^^^^^^   ^^^^^^^^^^^^^^^^^
+
+    foo: (value, key) => {
+>foo : (value: any, key: any) => void
+>    : ^     ^^^^^^^   ^^^^^^^^^^^^^^
+>(value, key) => {      // implicit `any`s    } : (value: any, key: any) => void
+>                                               : ^     ^^^^^^^   ^^^^^^^^^^^^^^
+>value : any
+>      : ^^^
+>key : any
+>    : ^^^
+
+      // implicit `any`s
+    },
+  },
+);
+
