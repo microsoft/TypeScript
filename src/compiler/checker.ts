@@ -49218,7 +49218,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isError = unreachableCodeIsError(compilerOptions);
         const sourceFile = getSourceFileOfNode(node);
 
-        const start = skipTrivia(sourceFile.text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        const start = skipTrivia(sourceFile.text, node.pos);
         let end = node.end;
 
         const parent = node.parent;
