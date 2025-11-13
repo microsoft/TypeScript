@@ -1,0 +1,553 @@
+//// [tests/cases/compiler/inferenceContextSensitiveDependentParameters1.ts] ////
+
+=== inferenceContextSensitiveDependentParameters1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62204
+
+declare function TestConfig<
+>TestConfig : Symbol(TestConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 0, 0))
+
+  const TConfig extends { a?: any; b?: any; c?: any },
+>TConfig : Symbol(TConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 2, 28))
+>a : Symbol(a, Decl(inferenceContextSensitiveDependentParameters1.ts, 3, 25))
+>b : Symbol(b, Decl(inferenceContextSensitiveDependentParameters1.ts, 3, 34))
+>c : Symbol(c, Decl(inferenceContextSensitiveDependentParameters1.ts, 3, 43))
+
+>(
+  config: TConfig,
+>config : Symbol(config, Decl(inferenceContextSensitiveDependentParameters1.ts, 4, 2))
+>TConfig : Symbol(TConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 2, 28))
+
+  test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false,
+>test : Symbol(test, Decl(inferenceContextSensitiveDependentParameters1.ts, 5, 18))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>TConfig : Symbol(TConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 2, 28))
+
+): void;
+
+TestConfig(
+>TestConfig : Symbol(TestConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 0, 0))
+  {
+    a: "hello",
+>a : Symbol(a, Decl(inferenceContextSensitiveDependentParameters1.ts, 10, 3))
+
+    b: function () {
+>b : Symbol(b, Decl(inferenceContextSensitiveDependentParameters1.ts, 11, 15))
+
+      return "123";
+    },
+  },
+  true,
+);
+
+declare function TestConfig_2<
+>TestConfig_2 : Symbol(TestConfig_2, Decl(inferenceContextSensitiveDependentParameters1.ts, 17, 2))
+
+  const TConfig extends { a?: any; b?: (arg: number) => unknown; c?: any },
+>TConfig : Symbol(TConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 19, 30))
+>a : Symbol(a, Decl(inferenceContextSensitiveDependentParameters1.ts, 20, 25))
+>b : Symbol(b, Decl(inferenceContextSensitiveDependentParameters1.ts, 20, 34))
+>arg : Symbol(arg, Decl(inferenceContextSensitiveDependentParameters1.ts, 20, 40))
+>c : Symbol(c, Decl(inferenceContextSensitiveDependentParameters1.ts, 20, 64))
+
+>(
+  config: TConfig,
+>config : Symbol(config, Decl(inferenceContextSensitiveDependentParameters1.ts, 21, 2))
+>TConfig : Symbol(TConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 19, 30))
+
+  test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false,
+>test : Symbol(test, Decl(inferenceContextSensitiveDependentParameters1.ts, 22, 18))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>TConfig : Symbol(TConfig, Decl(inferenceContextSensitiveDependentParameters1.ts, 19, 30))
+
+): void;
+
+TestConfig_2(
+>TestConfig_2 : Symbol(TestConfig_2, Decl(inferenceContextSensitiveDependentParameters1.ts, 17, 2))
+  {
+    a: "hello",
+>a : Symbol(a, Decl(inferenceContextSensitiveDependentParameters1.ts, 27, 3))
+
+    b: (arg) => {
+>b : Symbol(b, Decl(inferenceContextSensitiveDependentParameters1.ts, 28, 15))
+>arg : Symbol(arg, Decl(inferenceContextSensitiveDependentParameters1.ts, 29, 8))
+
+      return "123";
+    },
+  },
+  true,
+);
+
+// https://github.com/microsoft/TypeScript/issues/47599#issuecomment-2919401231
+type KeysMatchingType<T, V> = {
+>KeysMatchingType : Symbol(KeysMatchingType, Decl(inferenceContextSensitiveDependentParameters1.ts, 34, 2))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 37, 22))
+>V : Symbol(V, Decl(inferenceContextSensitiveDependentParameters1.ts, 37, 24))
+
+  [K in keyof T]: T[K] extends V ? K : never;
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 38, 3))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 37, 22))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 37, 22))
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 38, 3))
+>V : Symbol(V, Decl(inferenceContextSensitiveDependentParameters1.ts, 37, 24))
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 38, 3))
+
+}[keyof T];
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 37, 22))
+
+type ExtractItems<R, IK extends keyof R> = R[IK] extends readonly (infer T)[]
+>ExtractItems : Symbol(ExtractItems, Decl(inferenceContextSensitiveDependentParameters1.ts, 39, 11))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 18))
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 20))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 18))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 18))
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 20))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 72))
+
+  ? T
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 40, 72))
+
+  : never;
+type StreamPaginatedDataProps<R, IK, TK> = {
+>StreamPaginatedDataProps : Symbol(StreamPaginatedDataProps, Decl(inferenceContextSensitiveDependentParameters1.ts, 42, 10))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 30))
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 32))
+>TK : Symbol(TK, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 36))
+
+  callback: (limit: number, offset: number) => Promise<R>;
+>callback : Symbol(callback, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 44))
+>limit : Symbol(limit, Decl(inferenceContextSensitiveDependentParameters1.ts, 44, 13))
+>offset : Symbol(offset, Decl(inferenceContextSensitiveDependentParameters1.ts, 44, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 30))
+
+  responseKeys: { items: IK; total: TK };
+>responseKeys : Symbol(responseKeys, Decl(inferenceContextSensitiveDependentParameters1.ts, 44, 58))
+>items : Symbol(items, Decl(inferenceContextSensitiveDependentParameters1.ts, 45, 17))
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 32))
+>total : Symbol(total, Decl(inferenceContextSensitiveDependentParameters1.ts, 45, 28))
+>TK : Symbol(TK, Decl(inferenceContextSensitiveDependentParameters1.ts, 43, 36))
+
+  limit?: number;
+>limit : Symbol(limit, Decl(inferenceContextSensitiveDependentParameters1.ts, 45, 41))
+
+};
+
+declare function streamPaginatedData<
+>streamPaginatedData : Symbol(streamPaginatedData, Decl(inferenceContextSensitiveDependentParameters1.ts, 47, 2))
+
+  R,
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 49, 37))
+
+  const IK extends KeysMatchingType<R, readonly unknown[]>,
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 50, 4))
+>KeysMatchingType : Symbol(KeysMatchingType, Decl(inferenceContextSensitiveDependentParameters1.ts, 34, 2))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 49, 37))
+
+  const TK extends KeysMatchingType<R, number>,
+>TK : Symbol(TK, Decl(inferenceContextSensitiveDependentParameters1.ts, 51, 59))
+>KeysMatchingType : Symbol(KeysMatchingType, Decl(inferenceContextSensitiveDependentParameters1.ts, 34, 2))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 49, 37))
+
+>({
+  callback,
+>callback : Symbol(callback, Decl(inferenceContextSensitiveDependentParameters1.ts, 53, 3))
+
+  responseKeys,
+>responseKeys : Symbol(responseKeys, Decl(inferenceContextSensitiveDependentParameters1.ts, 54, 11))
+
+  limit,
+>limit : Symbol(limit, Decl(inferenceContextSensitiveDependentParameters1.ts, 55, 15))
+
+}: StreamPaginatedDataProps<R, IK, TK>): AsyncGenerator<
+>StreamPaginatedDataProps : Symbol(StreamPaginatedDataProps, Decl(inferenceContextSensitiveDependentParameters1.ts, 42, 10))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 49, 37))
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 50, 4))
+>TK : Symbol(TK, Decl(inferenceContextSensitiveDependentParameters1.ts, 51, 59))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+  ExtractItems<R, IK>,
+>ExtractItems : Symbol(ExtractItems, Decl(inferenceContextSensitiveDependentParameters1.ts, 39, 11))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 49, 37))
+>IK : Symbol(IK, Decl(inferenceContextSensitiveDependentParameters1.ts, 50, 4))
+
+  void,
+  unknown
+>;
+
+const sampleData = [
+>sampleData : Symbol(sampleData, Decl(inferenceContextSensitiveDependentParameters1.ts, 63, 5))
+
+  { location: { name: "New York" } },
+>location : Symbol(location, Decl(inferenceContextSensitiveDependentParameters1.ts, 64, 3))
+>name : Symbol(name, Decl(inferenceContextSensitiveDependentParameters1.ts, 64, 15))
+
+  { location: { name: "Tokyo" } },
+>location : Symbol(location, Decl(inferenceContextSensitiveDependentParameters1.ts, 65, 3))
+>name : Symbol(name, Decl(inferenceContextSensitiveDependentParameters1.ts, 65, 15))
+
+] as const;
+>const : Symbol(const)
+
+streamPaginatedData({
+>streamPaginatedData : Symbol(streamPaginatedData, Decl(inferenceContextSensitiveDependentParameters1.ts, 47, 2))
+
+  callback: async (a, b) => ({
+>callback : Symbol(callback, Decl(inferenceContextSensitiveDependentParameters1.ts, 68, 21))
+>a : Symbol(a, Decl(inferenceContextSensitiveDependentParameters1.ts, 69, 19))
+>b : Symbol(b, Decl(inferenceContextSensitiveDependentParameters1.ts, 69, 21))
+
+    someCount: sampleData.length,
+>someCount : Symbol(someCount, Decl(inferenceContextSensitiveDependentParameters1.ts, 69, 30))
+>sampleData.length : Symbol(length)
+>sampleData : Symbol(sampleData, Decl(inferenceContextSensitiveDependentParameters1.ts, 63, 5))
+>length : Symbol(length)
+
+    abra: sampleData,
+>abra : Symbol(abra, Decl(inferenceContextSensitiveDependentParameters1.ts, 70, 33))
+>sampleData : Symbol(sampleData, Decl(inferenceContextSensitiveDependentParameters1.ts, 63, 5))
+
+  }),
+  responseKeys: { total: "someCount", items: "abra" },
+>responseKeys : Symbol(responseKeys, Decl(inferenceContextSensitiveDependentParameters1.ts, 72, 5))
+>total : Symbol(total, Decl(inferenceContextSensitiveDependentParameters1.ts, 73, 17))
+>items : Symbol(items, Decl(inferenceContextSensitiveDependentParameters1.ts, 73, 37))
+
+})
+
+// https://github.com/microsoft/TypeScript/issues/47599#issuecomment-2132658606
+interface Base {
+>Base : Symbol(Base, Decl(inferenceContextSensitiveDependentParameters1.ts, 74, 2))
+
+  x: string;
+>x : Symbol(Base.x, Decl(inferenceContextSensitiveDependentParameters1.ts, 77, 16))
+}
+interface Foo extends Base {
+>Foo : Symbol(Foo, Decl(inferenceContextSensitiveDependentParameters1.ts, 79, 1))
+>Base : Symbol(Base, Decl(inferenceContextSensitiveDependentParameters1.ts, 74, 2))
+
+  y: number;
+>y : Symbol(Foo.y, Decl(inferenceContextSensitiveDependentParameters1.ts, 80, 28))
+}
+
+type Fn<T> = (t: T) => void;
+>Fn : Symbol(Fn, Decl(inferenceContextSensitiveDependentParameters1.ts, 82, 1))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 84, 8))
+>t : Symbol(t, Decl(inferenceContextSensitiveDependentParameters1.ts, 84, 14))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 84, 8))
+
+declare const FooFn: Fn<Foo>;
+>FooFn : Symbol(FooFn, Decl(inferenceContextSensitiveDependentParameters1.ts, 85, 13))
+>Fn : Symbol(Fn, Decl(inferenceContextSensitiveDependentParameters1.ts, 82, 1))
+>Foo : Symbol(Foo, Decl(inferenceContextSensitiveDependentParameters1.ts, 79, 1))
+
+type Baz = <R extends Base, F extends Fn<R>>(arg: {
+>Baz : Symbol(Baz, Decl(inferenceContextSensitiveDependentParameters1.ts, 85, 29))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 12))
+>Base : Symbol(Base, Decl(inferenceContextSensitiveDependentParameters1.ts, 74, 2))
+>F : Symbol(F, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 27))
+>Fn : Symbol(Fn, Decl(inferenceContextSensitiveDependentParameters1.ts, 82, 1))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 12))
+>arg : Symbol(arg, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 45))
+
+  x: (bar: Foo) => R;
+>x : Symbol(x, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 51))
+>bar : Symbol(bar, Decl(inferenceContextSensitiveDependentParameters1.ts, 88, 6))
+>Foo : Symbol(Foo, Decl(inferenceContextSensitiveDependentParameters1.ts, 79, 1))
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 12))
+
+  y?: F[];
+>y : Symbol(y, Decl(inferenceContextSensitiveDependentParameters1.ts, 88, 21))
+>F : Symbol(F, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 27))
+
+}) => R;
+>R : Symbol(R, Decl(inferenceContextSensitiveDependentParameters1.ts, 87, 12))
+
+declare const baz: Baz;
+>baz : Symbol(baz, Decl(inferenceContextSensitiveDependentParameters1.ts, 92, 13))
+>Baz : Symbol(Baz, Decl(inferenceContextSensitiveDependentParameters1.ts, 85, 29))
+
+const R1 = baz({ x: (ctx) => ctx });
+>R1 : Symbol(R1, Decl(inferenceContextSensitiveDependentParameters1.ts, 93, 5))
+>baz : Symbol(baz, Decl(inferenceContextSensitiveDependentParameters1.ts, 92, 13))
+>x : Symbol(x, Decl(inferenceContextSensitiveDependentParameters1.ts, 93, 16))
+>ctx : Symbol(ctx, Decl(inferenceContextSensitiveDependentParameters1.ts, 93, 21))
+>ctx : Symbol(ctx, Decl(inferenceContextSensitiveDependentParameters1.ts, 93, 21))
+
+const R2 = baz({ x: (ctx) => ctx, y: [FooFn] });
+>R2 : Symbol(R2, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 5))
+>baz : Symbol(baz, Decl(inferenceContextSensitiveDependentParameters1.ts, 92, 13))
+>x : Symbol(x, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 16))
+>ctx : Symbol(ctx, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 21))
+>ctx : Symbol(ctx, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 21))
+>y : Symbol(y, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 33))
+>FooFn : Symbol(FooFn, Decl(inferenceContextSensitiveDependentParameters1.ts, 85, 13))
+
+// https://github.com/microsoft/TypeScript/issues/55489
+type NonStringIterable<T> = T extends string
+>NonStringIterable : Symbol(NonStringIterable, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 48))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 97, 23))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 97, 23))
+
+  ? never
+  : T extends Iterable<any>
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 97, 23))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+  ? T
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 97, 23))
+
+  : never;
+
+declare function doSomething<T>(value: NonStringIterable<T>): T;
+>doSomething : Symbol(doSomething, Decl(inferenceContextSensitiveDependentParameters1.ts, 101, 10))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 103, 29))
+>value : Symbol(value, Decl(inferenceContextSensitiveDependentParameters1.ts, 103, 32))
+>NonStringIterable : Symbol(NonStringIterable, Decl(inferenceContextSensitiveDependentParameters1.ts, 94, 48))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 103, 29))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 103, 29))
+
+const o = { foo() {} };
+>o : Symbol(o, Decl(inferenceContextSensitiveDependentParameters1.ts, 105, 5))
+>foo : Symbol(foo, Decl(inferenceContextSensitiveDependentParameters1.ts, 105, 11))
+
+doSomething("value"); // error
+>doSomething : Symbol(doSomething, Decl(inferenceContextSensitiveDependentParameters1.ts, 101, 10))
+
+doSomething(["v"]);
+>doSomething : Symbol(doSomething, Decl(inferenceContextSensitiveDependentParameters1.ts, 101, 10))
+
+doSomething([o]);
+>doSomething : Symbol(doSomething, Decl(inferenceContextSensitiveDependentParameters1.ts, 101, 10))
+>o : Symbol(o, Decl(inferenceContextSensitiveDependentParameters1.ts, 105, 5))
+
+doSomething([{ foo() {} }]);
+>doSomething : Symbol(doSomething, Decl(inferenceContextSensitiveDependentParameters1.ts, 101, 10))
+>foo : Symbol(foo, Decl(inferenceContextSensitiveDependentParameters1.ts, 110, 14))
+
+// https://github.com/microsoft/TypeScript/issues/55124
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(inferenceContextSensitiveDependentParameters1.ts, 110, 28))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 113, 12))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 113, 12))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 113, 12))
+
+type ExtractFields<Options> = Values<{
+>ExtractFields : Symbol(ExtractFields, Decl(inferenceContextSensitiveDependentParameters1.ts, 113, 28))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 114, 19))
+>Values : Symbol(Values, Decl(inferenceContextSensitiveDependentParameters1.ts, 110, 28))
+
+  [K in keyof Options]: Options[K] extends object ? keyof Options[K] : never;
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 115, 3))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 114, 19))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 114, 19))
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 115, 3))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 114, 19))
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 115, 3))
+
+}>;
+type SetType<Options> = {
+>SetType : Symbol(SetType, Decl(inferenceContextSensitiveDependentParameters1.ts, 116, 3))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 117, 13))
+
+  [key: string]: any;
+>key : Symbol(key, Decl(inferenceContextSensitiveDependentParameters1.ts, 118, 3))
+
+  target?: ExtractFields<Options>;
+>target : Symbol(target, Decl(inferenceContextSensitiveDependentParameters1.ts, 118, 21))
+>ExtractFields : Symbol(ExtractFields, Decl(inferenceContextSensitiveDependentParameters1.ts, 113, 28))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 117, 13))
+
+};
+
+declare function test55124<OptionsData extends SetType<OptionsData>>(
+>test55124 : Symbol(test55124, Decl(inferenceContextSensitiveDependentParameters1.ts, 120, 2))
+>OptionsData : Symbol(OptionsData, Decl(inferenceContextSensitiveDependentParameters1.ts, 122, 27))
+>SetType : Symbol(SetType, Decl(inferenceContextSensitiveDependentParameters1.ts, 116, 3))
+>OptionsData : Symbol(OptionsData, Decl(inferenceContextSensitiveDependentParameters1.ts, 122, 27))
+
+  options: OptionsData,
+>options : Symbol(options, Decl(inferenceContextSensitiveDependentParameters1.ts, 122, 69))
+>OptionsData : Symbol(OptionsData, Decl(inferenceContextSensitiveDependentParameters1.ts, 122, 27))
+
+): void;
+
+test55124({
+>test55124 : Symbol(test55124, Decl(inferenceContextSensitiveDependentParameters1.ts, 120, 2))
+
+  target: "$test4",
+>target : Symbol(target, Decl(inferenceContextSensitiveDependentParameters1.ts, 126, 11))
+
+  data1: {
+>data1 : Symbol(data1, Decl(inferenceContextSensitiveDependentParameters1.ts, 127, 19))
+
+    $test1: 111,
+>$test1 : Symbol($test1, Decl(inferenceContextSensitiveDependentParameters1.ts, 128, 10))
+
+    $test2: null,
+>$test2 : Symbol($test2, Decl(inferenceContextSensitiveDependentParameters1.ts, 129, 16))
+
+  },
+  data2: {
+>data2 : Symbol(data2, Decl(inferenceContextSensitiveDependentParameters1.ts, 131, 4))
+
+    $test3: {},
+>$test3 : Symbol($test3, Decl(inferenceContextSensitiveDependentParameters1.ts, 132, 10))
+
+    $test4: () => {},
+>$test4 : Symbol($test4, Decl(inferenceContextSensitiveDependentParameters1.ts, 133, 15))
+
+    $test5() {},
+>$test5 : Symbol($test5, Decl(inferenceContextSensitiveDependentParameters1.ts, 134, 21))
+
+  },
+});
+
+type SetType_2<Options> = {
+>SetType_2 : Symbol(SetType_2, Decl(inferenceContextSensitiveDependentParameters1.ts, 137, 3))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 139, 15))
+
+  [key: `data${number}`]: Record<string, (arg: number) => void>;
+>key : Symbol(key, Decl(inferenceContextSensitiveDependentParameters1.ts, 140, 3))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(inferenceContextSensitiveDependentParameters1.ts, 140, 42))
+
+  target?: ExtractFields<Options>;
+>target : Symbol(target, Decl(inferenceContextSensitiveDependentParameters1.ts, 140, 64))
+>ExtractFields : Symbol(ExtractFields, Decl(inferenceContextSensitiveDependentParameters1.ts, 113, 28))
+>Options : Symbol(Options, Decl(inferenceContextSensitiveDependentParameters1.ts, 139, 15))
+
+};
+
+declare function test55124_2<OptionsData extends SetType_2<OptionsData>>(
+>test55124_2 : Symbol(test55124_2, Decl(inferenceContextSensitiveDependentParameters1.ts, 142, 2))
+>OptionsData : Symbol(OptionsData, Decl(inferenceContextSensitiveDependentParameters1.ts, 144, 29))
+>SetType_2 : Symbol(SetType_2, Decl(inferenceContextSensitiveDependentParameters1.ts, 137, 3))
+>OptionsData : Symbol(OptionsData, Decl(inferenceContextSensitiveDependentParameters1.ts, 144, 29))
+
+  options: OptionsData,
+>options : Symbol(options, Decl(inferenceContextSensitiveDependentParameters1.ts, 144, 73))
+>OptionsData : Symbol(OptionsData, Decl(inferenceContextSensitiveDependentParameters1.ts, 144, 29))
+
+): void;
+
+test55124_2({
+>test55124_2 : Symbol(test55124_2, Decl(inferenceContextSensitiveDependentParameters1.ts, 142, 2))
+
+  target: "$test4",
+>target : Symbol(target, Decl(inferenceContextSensitiveDependentParameters1.ts, 148, 13))
+
+  data1: {
+>data1 : Symbol(data1, Decl(inferenceContextSensitiveDependentParameters1.ts, 149, 19))
+
+    $test1: () => {},
+>$test1 : Symbol($test1, Decl(inferenceContextSensitiveDependentParameters1.ts, 150, 10))
+
+    $test2: () => {},
+>$test2 : Symbol($test2, Decl(inferenceContextSensitiveDependentParameters1.ts, 151, 21))
+
+  },
+  data2: {
+>data2 : Symbol(data2, Decl(inferenceContextSensitiveDependentParameters1.ts, 153, 4))
+
+    $test3: () => {},
+>$test3 : Symbol($test3, Decl(inferenceContextSensitiveDependentParameters1.ts, 154, 10))
+
+    $test4: () => {},
+>$test4 : Symbol($test4, Decl(inferenceContextSensitiveDependentParameters1.ts, 155, 21))
+
+    $test5: (arg) => {},
+>$test5 : Symbol($test5, Decl(inferenceContextSensitiveDependentParameters1.ts, 156, 21))
+>arg : Symbol(arg, Decl(inferenceContextSensitiveDependentParameters1.ts, 157, 13))
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/54438
+interface Entity {
+>Entity : Symbol(Entity, Decl(inferenceContextSensitiveDependentParameters1.ts, 159, 3))
+
+  id: number;
+>id : Symbol(Entity.id, Decl(inferenceContextSensitiveDependentParameters1.ts, 162, 18))
+
+  name: string;
+>name : Symbol(Entity.name, Decl(inferenceContextSensitiveDependentParameters1.ts, 163, 13))
+}
+
+type Fn54438<T> = (params: Record<string, unknown>) => T[];
+>Fn54438 : Symbol(Fn54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 165, 1))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 13))
+>params : Symbol(params, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 13))
+
+declare function test54438<T, K extends keyof T>(fn: Fn54438<T>, key: K): T;
+>test54438 : Symbol(test54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 59))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 27))
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 29))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 27))
+>fn : Symbol(fn, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 49))
+>Fn54438 : Symbol(Fn54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 165, 1))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 27))
+>key : Symbol(key, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 64))
+>K : Symbol(K, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 29))
+>T : Symbol(T, Decl(inferenceContextSensitiveDependentParameters1.ts, 169, 27))
+
+test54438(() => [] as Entity[], "id");
+>test54438 : Symbol(test54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 59))
+>Entity : Symbol(Entity, Decl(inferenceContextSensitiveDependentParameters1.ts, 159, 3))
+
+test54438((params: Record<string, unknown>) => [] as Entity[], "name");
+>test54438 : Symbol(test54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 59))
+>params : Symbol(params, Decl(inferenceContextSensitiveDependentParameters1.ts, 172, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Entity : Symbol(Entity, Decl(inferenceContextSensitiveDependentParameters1.ts, 159, 3))
+
+test54438((params: unknown) => [] as Entity[], "id");
+>test54438 : Symbol(test54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 59))
+>params : Symbol(params, Decl(inferenceContextSensitiveDependentParameters1.ts, 173, 11))
+>Entity : Symbol(Entity, Decl(inferenceContextSensitiveDependentParameters1.ts, 159, 3))
+
+test54438((params) => [] as Entity[], "id");
+>test54438 : Symbol(test54438, Decl(inferenceContextSensitiveDependentParameters1.ts, 167, 59))
+>params : Symbol(params, Decl(inferenceContextSensitiveDependentParameters1.ts, 174, 11))
+>Entity : Symbol(Entity, Decl(inferenceContextSensitiveDependentParameters1.ts, 159, 3))
+
+export declare const serve: <Req>(props: {
+>serve : Symbol(serve, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 20))
+>Req : Symbol(Req, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 29))
+>props : Symbol(props, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 34))
+
+  bindings: Extract<NoInfer<Req>, string>;
+>bindings : Symbol(bindings, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 42))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>Req : Symbol(Req, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 29))
+
+  fetch: (event: unknown) => Generator<Req>;
+>fetch : Symbol(fetch, Decl(inferenceContextSensitiveDependentParameters1.ts, 177, 42))
+>event : Symbol(event, Decl(inferenceContextSensitiveDependentParameters1.ts, 178, 10))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Req : Symbol(Req, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 29))
+
+}) => unknown;
+
+declare const bar: () => Generator<"SendMessage">;
+>bar : Symbol(bar, Decl(inferenceContextSensitiveDependentParameters1.ts, 181, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+serve({
+>serve : Symbol(serve, Decl(inferenceContextSensitiveDependentParameters1.ts, 176, 20))
+
+  bindings: "SendMessage" as const,
+>bindings : Symbol(bindings, Decl(inferenceContextSensitiveDependentParameters1.ts, 183, 7))
+>const : Symbol(const)
+
+  fetch: function* (a) {
+>fetch : Symbol(fetch, Decl(inferenceContextSensitiveDependentParameters1.ts, 184, 35))
+>a : Symbol(a, Decl(inferenceContextSensitiveDependentParameters1.ts, 185, 20))
+
+    yield* bar();
+>bar : Symbol(bar, Decl(inferenceContextSensitiveDependentParameters1.ts, 181, 13))
+
+  },
+});

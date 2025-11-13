@@ -1,0 +1,199 @@
+//// [tests/cases/compiler/contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts] ////
+
+=== contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/51831
+
+type NoMatchAll<K> = Exclude<K, "_">
+>NoMatchAll : Symbol(NoMatchAll, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 0, 0))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 2, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 2, 16))
+
+type Union<T extends object> = {
+>Union : Symbol(Union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 2, 36))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 3, 11))
+
+  [P in keyof T]: ({ [Q in "kind"]: P } & T[P]) extends infer U ? { [Q in keyof U]: U[Q] } : never
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 3))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 3, 11))
+>Q : Symbol(Q, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 22))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 3))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 3, 11))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 3))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 61))
+>Q : Symbol(Q, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 69))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 61))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 61))
+>Q : Symbol(Q, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 4, 69))
+
+}[keyof T]
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 3, 11))
+
+type UnionMap<U extends { kind: string }> = { [K in U["kind"]]: U extends { kind: K } ? U : never }
+>UnionMap : Symbol(UnionMap, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 5, 10))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 14))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 25))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 47))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 14))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 14))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 75))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 47))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 14))
+
+type ExhaustivePattern<T extends { kind: string }, R> = { [K in T["kind"] as NoMatchAll<K>]: (union: UnionMap<T>[K]) => R };
+>ExhaustivePattern : Symbol(ExhaustivePattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 99))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 23))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 34))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 50))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 59))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 23))
+>NoMatchAll : Symbol(NoMatchAll, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 0, 0))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 59))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 94))
+>UnionMap : Symbol(UnionMap, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 5, 10))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 23))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 59))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 50))
+
+type NonExhaustivePattern<T extends { kind: string }, R> = { [K in T["kind"] as NoMatchAll<K>]?: (union: UnionMap<T>[K]) => R } & {_: (union: T) => R};
+>NonExhaustivePattern : Symbol(NonExhaustivePattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 124))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 26))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 37))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 53))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 62))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 26))
+>NoMatchAll : Symbol(NoMatchAll, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 0, 0))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 62))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 98))
+>UnionMap : Symbol(UnionMap, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 5, 10))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 26))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 62))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 53))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 131))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 135))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 26))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 53))
+
+type Pattern<T extends { kind: string }, R> = ExhaustivePattern<T, R> | NonExhaustivePattern<T, R>;
+>Pattern : Symbol(Pattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 151))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 13))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 24))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 40))
+>ExhaustivePattern : Symbol(ExhaustivePattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 6, 99))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 13))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 40))
+>NonExhaustivePattern : Symbol(NonExhaustivePattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 7, 124))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 13))
+>R : Symbol(R, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 40))
+
+function match<U extends { kind: string }, T>(union: U, pattern: Pattern<U, T>): T {
+>match : Symbol(match, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 99))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 15))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 26))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 42))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 46))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 15))
+>pattern : Symbol(pattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 55))
+>Pattern : Symbol(Pattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 8, 151))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 15))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 42))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 42))
+
+  if((pattern as any)[union.kind]) {
+>pattern : Symbol(pattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 55))
+>union.kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 26))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 46))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 26))
+
+    return (pattern as any)[union.kind](union as U) as T
+>pattern : Symbol(pattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 55))
+>union.kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 26))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 46))
+>kind : Symbol(kind, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 26))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 46))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 15))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 42))
+  }
+  return (pattern as any)["_"](union as U) as T
+>pattern : Symbol(pattern, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 55))
+>union : Symbol(union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 46))
+>U : Symbol(U, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 15))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 11, 42))
+}
+
+type ValueType = Union<{
+>ValueType : Symbol(ValueType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 16, 1))
+>Union : Symbol(Union, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 2, 36))
+
+  String: {value: string},
+>String : Symbol(String, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 18, 24))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 19, 11))
+
+  Number: {value: number},
+>Number : Symbol(Number, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 19, 26))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 20, 11))
+
+  Boolean: {value: boolean},
+>Boolean : Symbol(Boolean, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 20, 26))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 21, 12))
+
+  Date: {value: Date}
+>Date : Symbol(Date, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 21, 28))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 22, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+}>
+
+function main(value: ValueType) {
+>main : Symbol(main, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 23, 2))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 25, 14))
+>ValueType : Symbol(ValueType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 16, 1))
+
+  let test1 = match<ValueType, string>(value, {
+>test1 : Symbol(test1, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 26, 5))
+>match : Symbol(match, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 99))
+>ValueType : Symbol(ValueType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 16, 1))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 25, 14))
+
+    String: ({value}) => value,
+>String : Symbol(String, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 26, 47))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 27, 14))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 27, 14))
+
+    Number: ({value}) => value.toString(),
+>Number : Symbol(Number, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 27, 31))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 28, 14))
+>value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 28, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    _: (token) => "Unknown"
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 28, 42))
+>token : Symbol(token, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 29, 8))
+
+  });
+
+  let test2 = match(value, {
+>test2 : Symbol(test2, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 32, 5))
+>match : Symbol(match, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 9, 99))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 25, 14))
+
+    String: ({value}) => value,
+>String : Symbol(String, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 32, 28))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 33, 14))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 33, 14))
+
+    Number: ({value}) => value.toString(),
+>Number : Symbol(Number, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 33, 31))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 34, 14))
+>value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 34, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    _: (token) => "Unknown"
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 34, 42))
+>token : Symbol(token, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType4.ts, 35, 8))
+
+  });
+}
+
