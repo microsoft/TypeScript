@@ -708,6 +708,7 @@ import {
     isPartOfTypeOnlyImportOrExportDeclaration,
     isPartOfTypeQuery,
     isPlainJsFile,
+    isPotentiallyExecutableNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
@@ -49199,9 +49200,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSourceElementUnreachable(node: Node): boolean {
-        reportedUnreachableNodes ||= new Set();
+        if (!isPotentiallyExecutableNode(node)) {
+            return false;
+        }
 
-        if (reportedUnreachableNodes.has(node)) {
+        if (reportedUnreachableNodes?.has(node)) {
             return true;
         }
 
@@ -49209,7 +49212,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        reportedUnreachableNodes.add(node);
+        (reportedUnreachableNodes ??= new Set()).add(node);
 
         const isError = unreachableCodeIsError(compilerOptions);
         const sourceFile = getSourceFileOfNode(node);
@@ -49224,7 +49227,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (offset >= 0) {
                 for (let i = offset + 1; i < statements.length; i++) {
                     const nextNode = statements[i];
-                    if (!isSourceElementUnreachable(nextNode)) {
+                    if (!isPotentiallyExecutableNode(nextNode) || !isSourceElementUnreachable(nextNode)) {
                         break;
                     }
                     end = nextNode.end;
@@ -49239,22 +49242,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSourceElementUnreachable(node: Node): boolean {
+        // Precondition: isPotentiallyExecutableNode is true
         if (node.flags & NodeFlags.Unreachable) {
             switch (node.kind) {
                 case SyntaxKind.EnumDeclaration:
                     return !isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(compilerOptions);
                 case SyntaxKind.ModuleDeclaration:
                     return isInstantiatedModule(node as ModuleDeclaration, shouldPreserveConstEnums(compilerOptions));
-                case SyntaxKind.VariableStatement:
-                    return !!(getCombinedNodeFlags((node as VariableStatement).declarationList) & NodeFlags.BlockScoped) || (node as VariableStatement).declarationList.declarations.some(d => d.initializer);
                 default:
                     return true;
             }
         }
-        else if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
-            if (canHaveFlowNode(node) && node.flowNode) {
-                return !isReachableFlowNode(node.flowNode);
-            }
+        else if (canHaveFlowNode(node) && node.flowNode) {
+            return !isReachableFlowNode(node.flowNode);
         }
         return false;
     }

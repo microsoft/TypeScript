@@ -198,6 +198,7 @@ import {
     isParenthesizedExpression,
     isPartOfParameterDeclaration,
     isPartOfTypeQuery,
+    isPotentiallyExecutableNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPrologueDirective,
@@ -1090,15 +1091,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
 
-        const isPotentiallyExecutableStatement = (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) ||
-            node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.EnumDeclaration || node.kind === SyntaxKind.ModuleDeclaration;
-
-        if (isPotentiallyExecutableStatement && canHaveFlowNode(node)) {
-            node.flowNode = currentFlow;
-        }
-
         if (currentFlow === unreachableFlow) {
-            if (isPotentiallyExecutableStatement) {
+            if (isPotentiallyExecutableNode(node)) {
                 (node as Mutable<Node>).flags |= NodeFlags.Unreachable;
             }
             bindEachChild(node);
@@ -1106,6 +1100,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
+
+        if (SyntaxKind.FirstStatement <= node.kind && node.kind <= SyntaxKind.LastStatement && canHaveFlowNode(node)) {
+            node.flowNode = currentFlow;
+        }
+
         switch (node.kind) {
             case SyntaxKind.WhileStatement:
                 bindWhileStatement(node as WhileStatement);
