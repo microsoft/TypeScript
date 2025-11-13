@@ -5388,7 +5388,7 @@ function getAutoImportSymbolFromCompletionEntryData(name: string, data: Completi
 
     if (!moduleSymbol) return undefined;
     let symbol = data.exportName === InternalSymbolName.ExportEquals
-        ? checker.resolveExternalModuleSymbol(moduleSymbol)
+        ? moduleSymbol.exports?.get(InternalSymbolName.ExportEquals)
         : checker.tryGetMemberInModuleExportsAndProperties(data.exportName, moduleSymbol);
     if (!symbol) return undefined;
     const isDefaultExport = data.exportName === InternalSymbolName.Default;
