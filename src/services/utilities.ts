@@ -203,6 +203,7 @@ import {
     isJSDocTypeAlias,
     isJsxElement,
     isJsxExpression,
+    isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
     isKeyword,
@@ -1547,7 +1548,8 @@ export function getAdjustedRenameLocation(node: Node): Node {
  * @internal
  */
 export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-    return getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
+    const token = getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
+    return isIdentifier(token) && isJsxNamespacedName(token.parent) ? token.parent : token;
 }
 
 /**
