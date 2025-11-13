@@ -13,6 +13,7 @@ TestAutoImportCrossProject_symlinks_toDist
 TestAutoImportCrossProject_symlinks_toSrc
 TestAutoImportFileExcludePatterns3
 TestAutoImportJsDocImport1
+TestAutoImportModuleNone1
 TestAutoImportNodeNextJSRequire
 TestAutoImportPathsAliasesAndBarrels
 TestAutoImportPnpm
@@ -328,6 +329,7 @@ TestInstanceTypesForGenericType1
 TestJavascriptModules20
 TestJavascriptModulesTypeImport
 TestJsDocAugments
+TestJsDocAugmentsAndExtends
 TestJsDocExtends
 TestJsDocFunctionSignatures10
 TestJsDocFunctionSignatures11
