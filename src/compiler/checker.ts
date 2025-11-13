@@ -34451,24 +34451,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        // Find the first enclosing class that has the declaring classes of the protected constituents
-        // of the property as base classes
-        let enclosingClass = forEachEnclosingClass(location, enclosingDeclaration => {
-            const enclosingClass = getDeclaredTypeOfSymbol(getSymbolOfDeclaration(enclosingDeclaration)) as InterfaceType;
-            return isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing);
-        });
+        // For instance members, first check for explicit 'this' parameter which takes precedence.
+        // For static members, only use enclosing class hierarchy (explicit 'this' doesn't apply to statics).
+        let enclosingClass: InterfaceType | undefined;
+        let fromExplicitThis = false;
+
+        if (!(flags & ModifierFlags.Static)) {
+            enclosingClass = getEnclosingClassFromThisParameter(location);
+            fromExplicitThis = !!enclosingClass;
+            enclosingClass = enclosingClass && isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing);
+        }
+
+        // If no explicit 'this' parameter (or static member), find the first enclosing class that has
+        // the declaring classes of the protected constituents of the property as base classes
+        if (!enclosingClass) {
+            fromExplicitThis = false;
+            enclosingClass = forEachEnclosingClass(location, enclosingDeclaration => {
+                const enclosingClass = getDeclaredTypeOfSymbol(getSymbolOfDeclaration(enclosingDeclaration)) as InterfaceType;
+                return isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing);
+            });
+        }
+
         // A protected property is accessible if the property is within the declaring class or classes derived from it
         if (!enclosingClass) {
-            // allow PropertyAccessibility if context is in function with this parameter
-            // static member access is disallowed
-            enclosingClass = getEnclosingClassFromThisParameter(location);
-            enclosingClass = enclosingClass && isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing);
-            if (flags & ModifierFlags.Static || !enclosingClass) {
+            if (flags & ModifierFlags.Static) {
                 if (errorNode) {
                     error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || containingType));
                 }
                 return false;
             }
+            // No enclosing class found at all
+            if (errorNode) {
+                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || containingType));
+            }
+            return false;
         }
         // No further restrictions for static properties
         if (flags & ModifierFlags.Static) {
@@ -34478,7 +34494,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // get the original type -- represented as the type constraint of the 'this' type
             containingType = (containingType as TypeParameter).isThisType ? getConstraintOfTypeParameter(containingType as TypeParameter)! : getBaseConstraintOfType(containingType as TypeParameter)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
         }
-        if (!containingType || !hasBaseType(containingType, enclosingClass)) {
+        // Allow protected access if containingType is enclosingClass or its subclass (standard behavior).
+        // Also allow if enclosingClass came from explicit 'this' parameter and is a subclass of containingType.
+        // This handles cases like: BaseClass.prototype.method.call(this) where this: DerivedClass
+        if (!containingType || !(hasBaseType(containingType, enclosingClass) || (fromExplicitThis && hasBaseType(enclosingClass, containingType)))) {
             if (errorNode) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1_This_is_an_instance_of_class_2, symbolToString(prop), typeToString(enclosingClass), typeToString(containingType));
             }
