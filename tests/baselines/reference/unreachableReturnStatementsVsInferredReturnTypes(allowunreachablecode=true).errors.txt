@@ -1,27 +1,18 @@
-unreachableReturnStatementsVsInferredReturnTypes.ts(5,3): error TS7027: Unreachable code detected.
-unreachableReturnStatementsVsInferredReturnTypes.ts(10,3): error TS7027: Unreachable code detected.
-unreachableReturnStatementsVsInferredReturnTypes.ts(20,3): error TS7027: Unreachable code detected.
-unreachableReturnStatementsVsInferredReturnTypes.ts(30,3): error TS7027: Unreachable code detected.
 unreachableReturnStatementsVsInferredReturnTypes.ts(34,7): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.
-unreachableReturnStatementsVsInferredReturnTypes.ts(38,5): error TS7027: Unreachable code detected.
 unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variable 'x' implicitly has an 'any' type.
 
 
-==== unreachableReturnStatementsVsInferredReturnTypes.ts (7 errors) ====
+==== unreachableReturnStatementsVsInferredReturnTypes.ts (2 errors) ====
     export function g() {
       let x;
       x = 1;
       return x;
       return x;
-      ~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     export function h() {
       return 1;
       let y;
-      ~~~~~~
-!!! error TS7027: Unreachable code detected.
       y = 1;
       return y;
     }
@@ -32,10 +23,7 @@ unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variab
       return x;
     
       x = "foo";
-      ~~~~~~~~~~
       return x;
-    ~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     function throws(): never {
@@ -45,8 +33,6 @@ unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variab
     export function foo() {
       throws();
       return 42;
-      ~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     export function bar() {
@@ -57,8 +43,6 @@ unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variab
       if (Math.random()) {
         throws();
         return x;
-        ~~~~~~
-!!! error TS7027: Unreachable code detected.
                ~
 !!! error TS7005: Variable 'x' implicitly has an 'any' type.
       }

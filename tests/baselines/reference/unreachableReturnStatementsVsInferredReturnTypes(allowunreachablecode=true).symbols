@@ -50,3 +50,46 @@ export function i() {
 >x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 15, 5))
 }
 
+function throws(): never {
+>throws : Symbol(throws, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 21, 1))
+
+  throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function foo() {
+>foo : Symbol(foo, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 25, 1))
+
+  throws();
+>throws : Symbol(throws, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 21, 1))
+
+  return 42;
+}
+
+export function bar() {
+>bar : Symbol(bar, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 30, 1))
+
+  var x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 33, 5))
+
+  x = 1;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 33, 5))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    throws();
+>throws : Symbol(throws, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 21, 1))
+
+    return x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 33, 5))
+  }
+  x = 2;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 33, 5))
+
+  return x;
+>x : Symbol(x, Decl(unreachableReturnStatementsVsInferredReturnTypes.ts, 33, 5))
+}
+

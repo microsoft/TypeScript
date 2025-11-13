@@ -24,3 +24,23 @@ export function i() {
   x = "foo";
   return x;
 }
+
+function throws(): never {
+  throw new Error();
+}
+
+export function foo() {
+  throws();
+  return 42;
+}
+
+export function bar() {
+  var x;
+  x = 1;
+  if (Math.random()) {
+    throws();
+    return x;
+  }
+  x = 2;
+  return x;
+}

@@ -7,11 +7,13 @@ export function g() {
 
   let x;
 >x : any
+>  : ^^^
 
   x = 1;
 >x = 1 : 1
 >      : ^
 >x : any
+>  : ^^^
 >1 : 1
 >  : ^
 
@@ -21,6 +23,7 @@ export function g() {
 
   return x;
 >x : any
+>  : ^^^
 }
 
 export function h() {
@@ -33,16 +36,19 @@ export function h() {
 
   let y;
 >y : any
+>  : ^^^
 
   y = 1;
 >y = 1 : 1
 >      : ^
 >y : any
+>  : ^^^
 >1 : 1
 >  : ^
 
   return y;
 >y : any
+>  : ^^^
 }
 
 export function i() {
@@ -76,5 +82,80 @@ export function i() {
   return x;
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function throws(): never {
+>throws : () => never
+>       : ^^^^^^     
+
+  throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+}
+
+export function foo() {
+>foo : () => number
+>    : ^^^^^^^^^^^^
+
+  throws();
+>throws() : never
+>         : ^^^^^
+>throws : () => never
+>       : ^^^^^^     
+
+  return 42;
+>42 : 42
+>   : ^^
+}
+
+export function bar() {
+>bar : () => any
+>    : ^^^^^^^^^
+
+  var x;
+>x : any
+>  : ^^^
+
+  x = 1;
+>x = 1 : 1
+>      : ^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    throws();
+>throws() : never
+>         : ^^^^^
+>throws : () => never
+>       : ^^^^^^     
+
+    return x;
+>x : any
+>  : ^^^
+  }
+  x = 2;
+>x = 2 : 2
+>      : ^
+>x : any
+>  : ^^^
+>2 : 2
+>  : ^
+
+  return x;
+>x : number
+>  : ^^^^^^
 }
 
