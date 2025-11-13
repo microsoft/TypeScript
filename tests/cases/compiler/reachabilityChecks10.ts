@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: false
 // @noEmit: true
 
 throw new Error("")

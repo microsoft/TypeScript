@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: false
 // @noEmit: true
 
 // https://github.com/microsoft/TypeScript/issues/55562
