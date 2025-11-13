@@ -49218,6 +49218,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const start = skipTrivia(sourceFile.text, node.pos);
         let end = node.end;
 
+        // TODO: if we are doing range diagnostics, it's possible we _haven't_
+        // reported nodes before us in the same statement list. We should walk backwards
+        // and extend the range to include any prior unreachable unreported nodes as well.
         const parent = node.parent;
         if (canHaveStatements(parent)) {
             const statements = parent.statements;
@@ -49455,6 +49458,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         performance.mark(afterMark);
         performance.measure("Check", beforeMark, afterMark);
         tracing?.pop();
+        reportedUnreachableNodes = undefined;
     }
 
     function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
