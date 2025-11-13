@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/andAndGeneric.ts] ////
+
+=== andAndGeneric.ts ===
+declare function id<T>(x: T): T;
+>id : Symbol(id, Decl(andAndGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(andAndGeneric.ts, 0, 20))
+>x : Symbol(x, Decl(andAndGeneric.ts, 0, 23))
+>T : Symbol(T, Decl(andAndGeneric.ts, 0, 20))
+>T : Symbol(T, Decl(andAndGeneric.ts, 0, 20))
+
+function f<T>(x: T) {
+>f : Symbol(f, Decl(andAndGeneric.ts, 0, 32))
+>T : Symbol(T, Decl(andAndGeneric.ts, 2, 11))
+>x : Symbol(x, Decl(andAndGeneric.ts, 2, 14))
+>T : Symbol(T, Decl(andAndGeneric.ts, 2, 11))
+
+    return id(x && x);  // should NOT be narrowed to NonNullable<T>
+>id : Symbol(id, Decl(andAndGeneric.ts, 0, 0))
+>x : Symbol(x, Decl(andAndGeneric.ts, 2, 14))
+>x : Symbol(x, Decl(andAndGeneric.ts, 2, 14))
+}
+
+// ---- expected types ----
+const t1 = f(null);      // null  (currently incorrectly NonNullable<null> -> never)
+>t1 : Symbol(t1, Decl(andAndGeneric.ts, 7, 5))
+>f : Symbol(f, Decl(andAndGeneric.ts, 0, 32))
+
+const t2 = f(0);         // 0
+>t2 : Symbol(t2, Decl(andAndGeneric.ts, 8, 5))
+>f : Symbol(f, Decl(andAndGeneric.ts, 0, 32))
+
+const t3 = f(1);         // 1
+>t3 : Symbol(t3, Decl(andAndGeneric.ts, 9, 5))
+>f : Symbol(f, Decl(andAndGeneric.ts, 0, 32))
+
+const t4 = f<"a" | null>("a");  // "a"
+>t4 : Symbol(t4, Decl(andAndGeneric.ts, 10, 5))
+>f : Symbol(f, Decl(andAndGeneric.ts, 0, 32))
+
+const t5 = f<"a" | null>(null); // null
+>t5 : Symbol(t5, Decl(andAndGeneric.ts, 11, 5))
+>f : Symbol(f, Decl(andAndGeneric.ts, 0, 32))
+
