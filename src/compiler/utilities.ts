@@ -1,3 +1,4 @@
+import Module from "module";
 import {
     __String,
     AccessExpression,
@@ -607,7 +608,6 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
-import Module from "module";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];
