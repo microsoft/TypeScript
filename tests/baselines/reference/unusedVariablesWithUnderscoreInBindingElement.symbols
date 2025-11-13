@@ -254,28 +254,35 @@ function t7() {
 >t7 : Symbol(t7, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 76, 1))
 
     // error
+    const { a0, b0 } = { a0: 1, b0: 1 };
+>a0 : Symbol(a0, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 11))
+>b0 : Symbol(b0, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 15))
+>a0 : Symbol(a0, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 24))
+>b0 : Symbol(b0, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 31))
+
+    // ok 
     const { _a1, _b1 } = { _a1: 1, _b1: 1 };
->_a1 : Symbol(_a1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 11))
->_b1 : Symbol(_b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 16))
->_a1 : Symbol(_a1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 26))
->_b1 : Symbol(_b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 80, 34))
+>_a1 : Symbol(_a1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 11))
+>_b1 : Symbol(_b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 16))
+>_a1 : Symbol(_a1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 26))
+>_b1 : Symbol(_b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 34))
 
     // ok
     const { a2: _a2, b2: _b2 } = { a2: 1, b2: 1 };
->a2 : Symbol(a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 34))
->_a2 : Symbol(_a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 11))
->b2 : Symbol(b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 41))
->_b2 : Symbol(_b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 20))
->a2 : Symbol(a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 34))
->b2 : Symbol(b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 83, 41))
+>a2 : Symbol(a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 34))
+>_a2 : Symbol(_a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 11))
+>b2 : Symbol(b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 41))
+>_b2 : Symbol(_b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 20))
+>a2 : Symbol(a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 34))
+>b2 : Symbol(b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 41))
 
     // ok
     const { _a3: _ignoreA3, _b3: _ignoreB3 } = { _a3: 1, _b3: 1 };
->_a3 : Symbol(_a3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 48))
->_ignoreA3 : Symbol(_ignoreA3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 11))
->_b3 : Symbol(_b3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 56))
->_ignoreB3 : Symbol(_ignoreB3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 27))
->_a3 : Symbol(_a3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 48))
->_b3 : Symbol(_b3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 86, 56))
+>_a3 : Symbol(_a3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 89, 48))
+>_ignoreA3 : Symbol(_ignoreA3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 89, 11))
+>_b3 : Symbol(_b3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 89, 56))
+>_ignoreB3 : Symbol(_ignoreB3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 89, 27))
+>_a3 : Symbol(_a3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 89, 48))
+>_b3 : Symbol(_b3, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 89, 56))
 }
 
