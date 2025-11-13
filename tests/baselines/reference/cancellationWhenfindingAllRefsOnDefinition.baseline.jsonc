@@ -97,11 +97,6 @@
 
 
 
-// === customWork ===
-// cancelled findAllReferences
-
-
-
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
 // --- (line: 3) skipped ---

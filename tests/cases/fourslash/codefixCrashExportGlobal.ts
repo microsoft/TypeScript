@@ -1,5 +1,9 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 // @Filename: bar.ts
 //// import * as foo from './foo'
 //// export as namespace foo

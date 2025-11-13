@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/contextualPropertyOfGenericFilteringMappedType.ts] ////
+
+=== contextualPropertyOfGenericFilteringMappedType.ts ===
+declare function f1<T extends object>(
+>f1 : Symbol(f1, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 20))
+
+  data: T,
+>data : Symbol(data, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 38))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 20))
+
+  handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void },
+>handlers : Symbol(handlers, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 1, 10))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 2, 15))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 20))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 2, 15))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 2, 36))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 20))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 2, 15))
+>prop : Symbol(prop, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 2, 48))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 2, 15))
+
+): void;
+
+f1(
+>f1 : Symbol(f1, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 0, 0))
+  {
+    foo: 0,
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 6, 3))
+
+    bar: "",
+>bar : Symbol(bar, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 7, 11))
+
+  },
+  {
+    foo: (value, key) => {},
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 10, 3))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 11, 10))
+>key : Symbol(key, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 11, 16))
+
+    bar: (value, key) => {},
+>bar : Symbol(bar, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 11, 28))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 12, 10))
+>key : Symbol(key, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 12, 16))
+
+  },
+);
+
+declare function f2<T extends object>(
+>f2 : Symbol(f2, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 14, 2))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 16, 20))
+
+  data: T,
+>data : Symbol(data, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 16, 38))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 16, 20))
+
+  handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void },
+>handlers : Symbol(handlers, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 17, 10))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 15))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 16, 20))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 16, 20))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 15))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 15))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 66))
+>T : Symbol(T, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 16, 20))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 15))
+>prop : Symbol(prop, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 78))
+>P : Symbol(P, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 18, 15))
+
+): void;
+
+f2(
+>f2 : Symbol(f2, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 14, 2))
+  {
+    foo: 0,
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 22, 3))
+
+    bar: "",
+>bar : Symbol(bar, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 23, 11))
+
+  },
+  {
+    bar: (value, key) => {},
+>bar : Symbol(bar, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 26, 3))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 27, 10))
+>key : Symbol(key, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 27, 16))
+
+  },
+);
+
+f2(
+>f2 : Symbol(f2, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 14, 2))
+  {
+    foo: 0,
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 32, 3))
+
+    bar: "",
+>bar : Symbol(bar, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 33, 11))
+
+  },
+  {
+    foo: (value, key) => {
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 36, 3))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 37, 10))
+>key : Symbol(key, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 37, 16))
+
+      // implicit `any`s
+    },
+  },
+);
+

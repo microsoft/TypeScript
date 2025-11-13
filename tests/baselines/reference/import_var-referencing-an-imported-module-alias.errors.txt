@@ -1,0 +1,12 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== consumer.ts (0 errors) ====
+    import host = require("host");
+    var hostVar = host;
+    var v = new hostVar.Host();
+     
+==== host.ts (0 errors) ====
+    export class Host { }
+    

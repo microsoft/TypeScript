@@ -3,10 +3,13 @@
 === exportAssignmentWithExports.ts ===
 export class C { }
 >C : C
+>  : ^
 
 class D { }
 >D : D
+>  : ^
 
 export = D;
 >D : D
+>  : ^
 

@@ -1,4 +1,4 @@
-declare module linq {
+declare namespace linq {
 
     interface Enumerable<T> {
         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;

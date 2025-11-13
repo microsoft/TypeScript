@@ -1,3 +1,3 @@
 /* Generated file to emulate the project namespace. */
 
-export * from "../projectsRunner";
+export * from "../projectsRunner.js";

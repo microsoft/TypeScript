@@ -3,6 +3,7 @@
 === bug25104.js ===
 class C {
 >C : C
+>  : ^
 
     /**
      * @typedef {C~A} C~B
@@ -11,6 +12,7 @@ class C {
     /** @param {C~A} o */
     constructor(o) {
 >o : any
+>  : ^^^
     }
 }
 

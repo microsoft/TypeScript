@@ -5,7 +5,7 @@ parserClassDeclaration10.ts(3,4): error TS2391: Function implementation is missi
 ==== parserClassDeclaration10.ts (2 errors) ====
     class C {
        constructor();
-       ~~~~~~~~~~~~~~
+       ~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
        foo();
        ~~~

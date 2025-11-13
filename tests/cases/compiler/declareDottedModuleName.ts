@@ -1,11 +1,11 @@
 // @declaration: true
-module M {
-    module P.Q { } // This shouldnt be emitted
+namespace M {
+    namespace P.Q { } // This shouldnt be emitted
 }
 
-module M {
-    export module R.S { }  //This should be emitted
+namespace M {
+    export namespace R.S { }  //This should be emitted
 }
 
-module T.U { // This needs to be emitted
+namespace T.U { // This needs to be emitted
 }

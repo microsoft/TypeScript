@@ -3,7 +3,9 @@ Resolving "./bar" from /a/b/c/d.ts with typings: c/d/e.d.ts
 
 
 //// [/a/b/c/bar/package.json]
-{"typings":"c/d/e.d.ts"}
+{
+  "typings": "c/d/e.d.ts"
+}
 
 //// [/a/b/c/bar/c/d/e.d.ts]
 
@@ -18,7 +20,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
     "/a/b/c/bar.tsx",
-    "/a/b/c/bar.d.ts"
+    "/a/b/c/bar.d.ts",
+    "/a/b/c/bar.js",
+    "/a/b/c/bar.jsx"
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
@@ -30,7 +34,9 @@ Resolving "./bar" from /a/b/c/d.ts with typings: c/d/e.d.ts with host that doesn
 
 
 //// [/a/b/c/bar/package.json]
-{"typings":"c/d/e.d.ts"}
+{
+  "typings": "c/d/e.d.ts"
+}
 
 //// [/a/b/c/bar/c/d/e.d.ts]
 
@@ -45,7 +51,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
     "/a/b/c/bar.tsx",
-    "/a/b/c/bar.d.ts"
+    "/a/b/c/bar.d.ts",
+    "/a/b/c/bar.js",
+    "/a/b/c/bar.jsx"
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
@@ -57,7 +65,9 @@ Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts
 
 
 //// [/a/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/a/bar/e.d.ts]
 
@@ -72,7 +82,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/bar.ts",
     "/a/bar.tsx",
-    "/a/bar.d.ts"
+    "/a/bar.d.ts",
+    "/a/bar.js",
+    "/a/bar.jsx"
   ],
   "affectingLocations": [
     "/a/bar/package.json"
@@ -84,7 +96,9 @@ Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesn
 
 
 //// [/a/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/a/bar/e.d.ts]
 
@@ -99,7 +113,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/a/bar.ts",
     "/a/bar.tsx",
-    "/a/bar.d.ts"
+    "/a/bar.d.ts",
+    "/a/bar.js",
+    "/a/bar.jsx"
   ],
   "affectingLocations": [
     "/a/bar/package.json"
@@ -111,7 +127,9 @@ Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts
 
 
 //// [/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/bar/e.d.ts]
 
@@ -126,7 +144,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/bar.ts",
     "/bar.tsx",
-    "/bar.d.ts"
+    "/bar.d.ts",
+    "/bar.js",
+    "/bar.jsx"
   ],
   "affectingLocations": [
     "/bar/package.json"
@@ -138,7 +158,9 @@ Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesnt hav
 
 
 //// [/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/bar/e.d.ts]
 
@@ -153,7 +175,9 @@ Resolution:: {
   "failedLookupLocations": [
     "/bar.ts",
     "/bar.tsx",
-    "/bar.d.ts"
+    "/bar.d.ts",
+    "/bar.js",
+    "/bar.jsx"
   ],
   "affectingLocations": [
     "/bar/package.json"
@@ -165,7 +189,9 @@ Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts
 
 
 //// [c:/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [c:/bar/e.d.ts]
 
@@ -180,7 +206,9 @@ Resolution:: {
   "failedLookupLocations": [
     "c:/bar.ts",
     "c:/bar.tsx",
-    "c:/bar.d.ts"
+    "c:/bar.d.ts",
+    "c:/bar.js",
+    "c:/bar.jsx"
   ],
   "affectingLocations": [
     "c:/bar/package.json"
@@ -192,7 +220,9 @@ Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts with host that doesnt
 
 
 //// [c:/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [c:/bar/e.d.ts]
 
@@ -207,7 +237,9 @@ Resolution:: {
   "failedLookupLocations": [
     "c:/bar.ts",
     "c:/bar.tsx",
-    "c:/bar.d.ts"
+    "c:/bar.d.ts",
+    "c:/bar.js",
+    "c:/bar.jsx"
   ],
   "affectingLocations": [
     "c:/bar/package.json"

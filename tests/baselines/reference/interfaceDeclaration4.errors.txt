@@ -13,7 +13,7 @@ interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
 ==== interfaceDeclaration4.ts (6 errors) ====
     // Import this module when test harness supports external modules. Also remove the internal module below.
     // import Foo = require("interfaceDeclaration5")
-    module Foo {
+    namespace Foo {
         export interface I1 { item: string; }
         export class C1 { }
     }

@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameInOuterScope.ts] ////
+
+=== declarationEmitTypeParameterNameInOuterScope.ts ===
+class A { }
+>A : A
+>  : ^
+
+var a = <A,>(x: A) => x;
+>a : <A>(x: A) => A
+>  : ^ ^^ ^^ ^^^^^^
+><A,>(x: A) => x : <A>(x: A) => A
+>                : ^ ^^ ^^ ^^^^^^
+>x : A
+>  : ^
+>x : A
+>  : ^
+
+function a2<A,>(x: A) { return x }
+>a2 : <A>(x: A) => A
+>   : ^ ^^ ^^ ^^^^^^
+>x : A
+>  : ^
+>x : A
+>  : ^
+
+var a3 = <A,>(x: A) => new A();
+>a3 : <A>(x: A) => globalThis.A
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
+><A,>(x: A) => new A() : <A>(x: A) => globalThis.A
+>                      : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
+>x : A
+>  : ^
+>new A() : globalThis.A
+>        : ^^^^^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+
+function a4<A,>(x: A) { return new A() }
+>a4 : <A>(x: A) => globalThis.A
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
+>x : A
+>  : ^
+>new A() : globalThis.A
+>        : ^^^^^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+
+
+interface B { }
+
+var b = <B,>(x: B) => x;
+>b : <B>(x: B) => B
+>  : ^ ^^ ^^ ^^^^^^
+><B,>(x: B) => x : <B>(x: B) => B
+>                : ^ ^^ ^^ ^^^^^^
+>x : B
+>  : ^
+>x : B
+>  : ^
+
+function b2<B,>(x: B) { return x }
+>b2 : <B>(x: B) => B
+>   : ^ ^^ ^^ ^^^^^^
+>x : B
+>  : ^
+>x : B
+>  : ^
+

@@ -13,7 +13,7 @@ interface Derived2 extends Derived {
     z: string;
 }
 
-module Generic {
+namespace Generic {
     interface Base<T> extends Derived2<T> { // error
         x: string;
     }

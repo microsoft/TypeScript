@@ -8,7 +8,7 @@ callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' 
 
 
 ==== callSignatureAssignabilityInInheritance.ts (2 errors) ====
-    module CallSignature {
+    namespace CallSignature {
         interface Base { // T
             // M's
             (x: number): void;
@@ -41,7 +41,7 @@ callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' 
         }
     }
     
-    module MemberWithCallSignature {
+    namespace MemberWithCallSignature {
         interface Base { // T
             // M's
             a: (x: number) => void;

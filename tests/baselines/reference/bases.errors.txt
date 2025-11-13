@@ -35,9 +35,9 @@ bases.ts(18,9): error TS2339: Property 'y' does not exist on type 'C'.
 !!! error TS2420:   Property 'x' is missing in type 'C' but required in type 'I'.
 !!! related TS2728 bases.ts:2:5: 'x' is declared here.
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
             this.x: any;
-    ~~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                  ~
@@ -47,8 +47,6 @@ bases.ts(18,9): error TS2339: Property 'y' does not exist on type 'C'.
                     ~~~
 !!! error TS2693: 'any' only refers to a type, but is being used as a value here.
         }
-    ~~~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }
     
     new C().x;

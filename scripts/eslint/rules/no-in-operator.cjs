@@ -1,5 +1,7 @@
-const { TSESTree } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+
+/** @import { TSESTree } from "@typescript-eslint/utils" */
+void 0;
 
 module.exports = createRule({
     name: "no-in-operator",

@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoForConstAssertions.ts ===
 // const a = { a: 1 } as const;
 //                       ^^^^^

@@ -1,4 +1,4 @@
-module M {
+namespace M {
     function f() {
         var x;
     }
@@ -8,7 +8,7 @@ module M {
     var test2=y; // y visible because same module
 }
 
-module N {
+namespace N {
     var test3=M.y; // nope y private property of M
     var test4=M.z; // ok public property of M
 }

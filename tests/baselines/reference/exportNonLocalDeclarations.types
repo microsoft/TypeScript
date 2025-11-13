@@ -3,7 +3,9 @@
 === exportNonLocalDeclarations.ts ===
 export { string };
 >string : any
+>       : ^^^
 
 export type { number };
 >number : any
+>       : ^^^
 

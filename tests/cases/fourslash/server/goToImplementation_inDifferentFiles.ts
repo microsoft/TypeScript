@@ -1,6 +1,6 @@
 /// <reference path='../fourslash.ts'/>
 
-// @Filename: /bar.ts
+// @Filename: /home/src/workspaces/project/bar.ts
 ////import {Foo} from './foo'
 ////
 ////class [|A|] implements Foo {
@@ -11,7 +11,7 @@
 ////    func() {}
 ////}
 
-// @Filename: /foo.ts
+// @Filename: /home/src/workspaces/project/foo.ts
 ////export interface /**/Foo {
 ////    func();
 ////}

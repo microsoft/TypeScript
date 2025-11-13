@@ -1,17 +1,16 @@
-import * as ts from "../../../_namespaces/ts";
+import * as ts from "../../../_namespaces/ts.js";
+import { jsonToReadableText } from "../../helpers.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../../helpers/tsserver";
+    TestSession,
+} from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
+describe("unittests:: tsserver:: events:: largeFileReferenced:: with large file", () => {
     function getFileType(useLargeTsFile: boolean) {
         return useLargeTsFile ? "ts" : "js";
     }
@@ -26,9 +25,8 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
             fileSize: ts.server.maxFileSize + 1,
         };
         files.push(largeFile);
-        const host = createServerHost(files);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
         return session;
     }
 
@@ -40,9 +38,9 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
             };
             const tsconfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } }),
+                content: jsonToReadableText({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } }),
             };
-            const files = [file, libFile, tsconfig];
+            const files = [file, tsconfig];
             const session = createSessionWithEventHandler(files, useLargeTsFile);
             openFilesForSession([file], session);
             baselineTsserverLogs("events/largeFileReferenced", `when large ${getFileType(useLargeTsFile)} file is included by tsconfig`, session);
@@ -53,7 +51,7 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
                 path: `/user/username/projects/myproject/src/file.ts`,
                 content: `export var y = 10;import {x} from "./large"`,
             };
-            const files = [file, libFile];
+            const files = [file];
             const session = createSessionWithEventHandler(files, useLargeTsFile);
             openFilesForSession([file], session);
             baselineTsserverLogs("events/largeFileReferenced", `when large ${getFileType(useLargeTsFile)} file is included by module resolution`, session);

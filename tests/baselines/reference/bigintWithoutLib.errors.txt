@@ -32,20 +32,20 @@ bigintWithoutLib.ts(33,20): error TS2583: Cannot find name 'BigUint64Array'. Do 
 bigintWithoutLib.ts(34,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(35,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(36,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(43,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(43,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(43,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(44,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(44,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(44,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(45,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(46,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(45,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(46,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(46,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(47,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(47,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(47,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(48,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(49,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(50,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(51,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(52,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(48,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(49,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(50,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(51,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(52,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(55,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
 bigintWithoutLib.ts(55,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigintWithoutLib.ts(56,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
@@ -164,42 +164,42 @@ bigintWithoutLib.ts(56,36): error TS2345: Argument of type 'bigint' is not assig
     const dataView = new DataView(new ArrayBuffer(80));
     dataView.setBigInt64(1, -1n);
              ~~~~~~~~~~~
-!!! error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'setBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
                              ~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     dataView.setBigInt64(1, -1n, true);
              ~~~~~~~~~~~
-!!! error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'setBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
                              ~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     dataView.setBigInt64(1, -1);
              ~~~~~~~~~~~
-!!! error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'setBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     dataView.setBigUint64(2, 123n);
              ~~~~~~~~~~~~
-!!! error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'setBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
                              ~~~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     dataView.setBigUint64(2, 123n, true);
              ~~~~~~~~~~~~
-!!! error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'setBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
                              ~~~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     dataView.setBigUint64(2, 123);
              ~~~~~~~~~~~~
-!!! error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'setBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigintVal = dataView.getBigInt64(1);
                          ~~~~~~~~~~~
-!!! error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'getBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigintVal = dataView.getBigInt64(1, true);
                          ~~~~~~~~~~~
-!!! error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'getBigInt64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigintVal = dataView.getBigUint64(2);
                          ~~~~~~~~~~~~
-!!! error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'getBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigintVal = dataView.getBigUint64(2, true);
                          ~~~~~~~~~~~~
-!!! error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+!!! error TS2550: Property 'getBigUint64' does not exist on type 'DataView<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     
     // Test Intl methods with new parameter type
     new Intl.NumberFormat("fr").format(3000n);

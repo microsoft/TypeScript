@@ -10,7 +10,7 @@ importDeclWithClassModifiers.ts(7,28): error TS2694: Namespace 'x' has no export
 
 
 ==== importDeclWithClassModifiers.ts (9 errors) ====
-    module x {
+    namespace x {
         interface c {
         }
     }

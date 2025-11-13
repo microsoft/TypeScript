@@ -5,21 +5,27 @@
 
 class C {
 >C : C
+>  : ^
 
     private [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     private [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 class E<T> {
 >E : E<T>
+>  : ^^^^
 
     private [x: string]: T;
 >x : string
+>  : ^^^^^^
 }

@@ -1,0 +1,213 @@
+//// [tests/cases/conformance/types/typeAliases/builtinIteratorReturn.ts] ////
+
+=== builtinIteratorReturn.ts ===
+declare const array: number[];
+>array : number[]
+>      : ^^^^^^^^
+
+declare const map: Map<string, number>;
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+
+declare const set: Set<number>;
+>set : Set<number>
+>    : ^^^^^^^^^^^
+
+const i0 = array[Symbol.iterator]();
+>i0 : ArrayIterator<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>array[Symbol.iterator]() : ArrayIterator<number>
+>                         : ^^^^^^^^^^^^^^^^^^^^^
+>array[Symbol.iterator] : () => ArrayIterator<number>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array : number[]
+>      : ^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+
+const i1 = array.values();
+>i1 : ArrayIterator<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>array.values() : ArrayIterator<number>
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>array.values : () => ArrayIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array : number[]
+>      : ^^^^^^^^
+>values : () => ArrayIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const i2 = array.keys();
+>i2 : ArrayIterator<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>array.keys() : ArrayIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>array.keys : () => ArrayIterator<number>
+>           : ^^^^^^                     
+>array : number[]
+>      : ^^^^^^^^
+>keys : () => ArrayIterator<number>
+>     : ^^^^^^                     
+
+const i3 = array.entries();
+>i3 : ArrayIterator<[number, number]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array.entries() : ArrayIterator<[number, number]>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array.entries : () => ArrayIterator<[number, number]>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array : number[]
+>      : ^^^^^^^^
+>entries : () => ArrayIterator<[number, number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+for (const x of array);
+>x : number
+>  : ^^^^^^
+>array : number[]
+>      : ^^^^^^^^
+
+const i4 = map[Symbol.iterator]();
+>i4 : MapIterator<[string, number]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map[Symbol.iterator]() : MapIterator<[string, number]>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map[Symbol.iterator] : () => MapIterator<[string, number]>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+
+const i5 = map.values();
+>i5 : MapIterator<number>
+>   : ^^^^^^^^^^^^^^^^^^^
+>map.values() : MapIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^
+>map.values : () => MapIterator<number>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>values : () => MapIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const i6 = map.keys();
+>i6 : MapIterator<string>
+>   : ^^^^^^^^^^^^^^^^^^^
+>map.keys() : MapIterator<string>
+>           : ^^^^^^^^^^^^^^^^^^^
+>map.keys : () => MapIterator<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>keys : () => MapIterator<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const i7 = map.entries();
+>i7 : MapIterator<[string, number]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.entries() : MapIterator<[string, number]>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.entries : () => MapIterator<[string, number]>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>entries : () => MapIterator<[string, number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+for (const x of map);
+>x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+
+const i8 = set[Symbol.iterator]();
+>i8 : SetIterator<number>
+>   : ^^^^^^^^^^^^^^^^^^^
+>set[Symbol.iterator]() : SetIterator<number>
+>                       : ^^^^^^^^^^^^^^^^^^^
+>set[Symbol.iterator] : () => SetIterator<number>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>set : Set<number>
+>    : ^^^^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+
+const i9 = set.values();
+>i9 : SetIterator<number>
+>   : ^^^^^^^^^^^^^^^^^^^
+>set.values() : SetIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^
+>set.values : () => SetIterator<number>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>set : Set<number>
+>    : ^^^^^^^^^^^
+>values : () => SetIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const i10 = set.keys();
+>i10 : SetIterator<number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>set.keys() : SetIterator<number>
+>           : ^^^^^^^^^^^^^^^^^^^
+>set.keys : () => SetIterator<number>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>set : Set<number>
+>    : ^^^^^^^^^^^
+>keys : () => SetIterator<number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const i11 = set.entries();
+>i11 : SetIterator<[number, number]>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.entries() : SetIterator<[number, number]>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.entries : () => SetIterator<[number, number]>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set : Set<number>
+>    : ^^^^^^^^^^^
+>entries : () => SetIterator<[number, number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+for (const x of set);
+>x : number
+>  : ^^^^^^
+>set : Set<number>
+>    : ^^^^^^^^^^^
+
+declare const i12: IterableIterator<number, undefined>;
+>i12 : IterableIterator<number, undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const i13: IterableIterator<number, any>;
+>i13 : IterableIterator<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const i14: IterableIterator<number, boolean>;
+>i14 : IterableIterator<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const i15: Iterable<number, undefined>;
+>i15 : Iterable<number, undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const i16: Iterable<number, any>;
+>i16 : Iterable<number>
+>    : ^^^^^^^^^^^^^^^^
+
+declare const i17: Iterable<number, boolean>;
+>i17 : Iterable<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+

@@ -1,22 +1,27 @@
 //// [tests/cases/compiler/jsxFactoryIdentifierWithAbsentParameter.ts] ////
 
 === test.tsx ===
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         [s: string]: any;
 >s : string
+>  : ^^^^^^
     }
 }
 
 export class AppComponent {
 >AppComponent : AppComponent
+>             : ^^^^^^^^^^^^
 
     render() {
 >render : () => any
+>       : ^^^^^^^^^
 
         return <div />;
 ><div /> : any
+>        : ^^^
 >div : any
+>    : ^^^
     }
 }
 

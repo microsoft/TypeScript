@@ -34,7 +34,7 @@ forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable de
     
     function F(x: string): number { return 42; }
     
-    module M {
+    namespace M {
         export class A {
             name: string;
         }

@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/constructorOverloads9.ts] ////
+
+=== constructorOverloads9.ts ===
+export class C {
+>C : C
+>  : ^
+
+    a;
+>a : any
+
+    constructor();
+    constructor(x = '') {
+>x : string
+>  : ^^^^^^
+>'' : ""
+>   : ^^
+
+        this.a = x;
+>this.a = x : string
+>           : ^^^^^^
+>this.a : any
+>this : this
+>     : ^^^^
+>a : any
+>  : ^^^
+>x : string
+>  : ^^^^^^
+    }
+}
+

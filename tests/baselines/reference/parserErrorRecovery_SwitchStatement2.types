@@ -3,11 +3,14 @@
 === parserErrorRecovery_SwitchStatement2.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor() {
     switch (e) {
 >e : any
+>  : ^^^
 
 class D {
 >D : D
+>  : ^
 }

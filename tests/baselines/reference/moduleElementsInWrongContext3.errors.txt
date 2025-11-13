@@ -18,10 +18,10 @@ moduleElementsInWrongContext3.ts(29,9): error TS1232: An import declaration can 
 
 
 ==== moduleElementsInWrongContext3.ts (17 errors) ====
-    module P {
+    namespace P {
         {
-            module M { }
-            ~~~~~~
+            namespace M { }
+            ~~~~~~~~~
 !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
             export namespace N {
             ~~~~~~

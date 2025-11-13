@@ -1,99 +1,349 @@
 Fs::
 //// [/dev/circular.json]
-{"extends":"./circular2","compilerOptions":{"module":"amd"}}
+{
+  "extends": "./circular2",
+  "compilerOptions": {
+    "module": "amd"
+  }
+}
 
 //// [/dev/circular2.json]
-{"extends":"./circular","compilerOptions":{"module":"commonjs"}}
+{
+  "extends": "./circular",
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/dev/configs/base.json]
-{"compilerOptions":{"allowJs":true,"noImplicitAny":true,"strictNullChecks":true}}
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  }
+}
 
 //// [/dev/configs/extendsArrayFifth.json]
-{"extends":["./extendsArrayFirst","./extendsArraySecond","./extendsArrayThird","./extendsArrayFourth"],"files":[]}
+{
+  "extends": [
+    "./extendsArrayFirst",
+    "./extendsArraySecond",
+    "./extendsArrayThird",
+    "./extendsArrayFourth"
+  ],
+  "files": []
+}
 
 //// [/dev/configs/extendsArrayFirst.json]
-{"compilerOptions":{"allowJs":true,"noImplicitAny":true,"strictNullChecks":true}}
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  }
+}
 
 //// [/dev/configs/extendsArrayFourth.json]
-{"compilerOptions":{"module":"system","strictNullChecks":false},"include":null,"files":["../main.ts"]}
+{
+  "compilerOptions": {
+    "module": "system",
+    "strictNullChecks": false
+  },
+  "include": null,
+  "files": [
+    "../main.ts"
+  ]
+}
 
 //// [/dev/configs/extendsArraySecond.json]
-{"compilerOptions":{"module":"amd"},"include":["../supplemental.*"]}
+{
+  "compilerOptions": {
+    "module": "amd"
+  },
+  "include": [
+    "../supplemental.*"
+  ]
+}
 
 //// [/dev/configs/extendsArrayThird.json]
-{"compilerOptions":{"module":null,"noImplicitAny":false},"extends":"./extendsArrayFirst","include":["../supplemental.*"]}
+{
+  "compilerOptions": {
+    "module": null,
+    "noImplicitAny": false
+  },
+  "extends": "./extendsArrayFirst",
+  "include": [
+    "../supplemental.*"
+  ]
+}
 
 //// [/dev/configs/fifth.json]
-{"extends":"./fourth","include":["../tests/utils.ts"],"files":[]}
+{
+  "extends": "./fourth",
+  "include": [
+    "../tests/utils.ts"
+  ],
+  "files": []
+}
+
+//// [/dev/configs/first/templateextends.json]
+{
+  "extends": "../second/templateextends.json",
+  "include": [
+    "${configDir}/../supplemental.*"
+  ],
+  "compilerOptions": {
+    "rootDirs": [
+      "root1",
+      "${configDir}/root2",
+      "root3"
+    ]
+  }
+}
 
 //// [/dev/configs/first.json]
-{"extends":"./base","compilerOptions":{"module":"commonjs"},"files":["../main.ts"]}
+{
+  "extends": "./base",
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [
+    "../main.ts"
+  ]
+}
 
 //// [/dev/configs/fourth.json]
-{"extends":"./third","compilerOptions":{"module":"system"},"include":null,"files":["../main.ts"]}
+{
+  "extends": "./third",
+  "compilerOptions": {
+    "module": "system"
+  },
+  "include": null,
+  "files": [
+    "../main.ts"
+  ]
+}
+
+//// [/dev/configs/second/templateextends.json]
+{
+  "files": [
+    "${configDir}/main.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./insecond",
+    "declarationDir": "${configDir}/decls",
+    "paths": {
+      "something": [
+        "${configDir}/something"
+      ],
+      "something/*": [
+        "${configDir}/something/*"
+      ],
+      "other/*": [
+        "./other/*"
+      ]
+    }
+  }
+}
 
 //// [/dev/configs/second.json]
-{"extends":"./base","compilerOptions":{"module":"amd"},"include":["../supplemental.*"]}
+{
+  "extends": "./base",
+  "compilerOptions": {
+    "module": "amd"
+  },
+  "include": [
+    "../supplemental.*"
+  ]
+}
+
+//// [/dev/configs/template.json]
+{
+  "include": [
+    "${configDir}/../supplemental.*"
+  ],
+  "files": [
+    "${configDir}/main.ts"
+  ],
+  "compilerOptions": {
+    "declarationDir": "${configDir}/decls",
+    "rootDirs": [
+      "root1",
+      "${configDir}/root2",
+      "root3"
+    ],
+    "paths": {
+      "something": [
+        "${configDir}/something"
+      ],
+      "something/*": [
+        "${configDir}/something/*"
+      ],
+      "other/*": [
+        "./other/*"
+      ]
+    }
+  }
+}
+
+//// [/dev/configs/templateandextends.json]
+{
+  "extends": "./first/templateextends.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./src"
+  }
+}
 
 //// [/dev/configs/tests.json]
-{"compilerOptions":{"preserveConstEnums":true,"removeComments":false,"sourceMap":true},"exclude":["../tests/baselines","../tests/scenarios"],"include":["../tests/**/*.ts"]}
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "sourceMap": true
+  },
+  "exclude": [
+    "../tests/baselines",
+    "../tests/scenarios"
+  ],
+  "include": [
+    "../tests/**/*.ts"
+  ]
+}
 
 //// [/dev/configs/third.json]
-{"extends":"./second","compilerOptions":{"module":null},"include":["../supplemental.*"]}
+{
+  "extends": "./second",
+  "compilerOptions": {
+    "module": null
+  },
+  "include": [
+    "../supplemental.*"
+  ]
+}
 
 //// [/dev/extends.json]
-{"extends":42}
+{
+  "extends": 42
+}
 
 //// [/dev/extends2.json]
-{"extends":"configs/base"}
+{
+  "extends": "configs/base"
+}
 
 //// [/dev/extends3.json]
-{"extends":""}
+{
+  "extends": ""
+}
 
 //// [/dev/extends4.json]
-{"extends":[""]}
+{
+  "extends": [
+    ""
+  ]
+}
 
 //// [/dev/extendsArrayFails.json]
-{"extends":["./missingFile"],"compilerOptions":{"types":[]}}
+{
+  "extends": [
+    "./missingFile"
+  ],
+  "compilerOptions": {
+    "types": []
+  }
+}
 
 //// [/dev/extendsArrayFails2.json]
-{"extends":[42]}
+{
+  "extends": [
+    42
+  ]
+}
 
 //// [/dev/failure.json]
-{"extends":"./failure2.json","compilerOptions":{"typeRoots":[]}}
+{
+  "extends": "./failure2.json",
+  "compilerOptions": {
+    "typeRoots": []
+  }
+}
 
 //// [/dev/failure2.json]
-{"excludes":["*.js"]}
+{
+  "excludes": [
+    "*.js"
+  ]
+}
 
 //// [/dev/main.ts]
 
 
 //// [/dev/missing.json]
-{"extends":"./missing2","compilerOptions":{"types":[]}}
+{
+  "extends": "./missing2",
+  "compilerOptions": {
+    "types": []
+  }
+}
 
 //// [/dev/node_modules/@foo/tsconfig/package.json]
-{"name":"@foo/tsconfig","version":"1.0.0","exports":{".":"./src/tsconfig.json"}}
+{
+  "name": "@foo/tsconfig",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./src/tsconfig.json"
+  }
+}
 
 //// [/dev/node_modules/@foo/tsconfig/src/tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/dev/node_modules/config-box/package.json]
-{"name":"config-box","version":"1.0.0","tsconfig":"./strict.json"}
+{
+  "name": "config-box",
+  "version": "1.0.0",
+  "tsconfig": "./strict.json"
+}
 
 //// [/dev/node_modules/config-box/strict.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/dev/node_modules/config-box/unstrict.json]
-{"compilerOptions":{"strict":false}}
+{
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 //// [/dev/node_modules/config-box-implied/package.json]
-{"name":"config-box-implied","version":"1.0.0"}
+{
+  "name": "config-box-implied",
+  "version": "1.0.0"
+}
 
 //// [/dev/node_modules/config-box-implied/tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/dev/node_modules/config-box-implied/unstrict/tsconfig.json]
-{"compilerOptions":{"strict":false}}
+{
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 //// [/dev/supplemental.ts]
 
@@ -111,37 +361,93 @@ Fs::
 
 
 //// [/dev/tsconfig.extendsBox.json]
-{"extends":"config-box","files":["main.ts"]}
+{
+  "extends": "config-box",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsBoxImplied.json]
-{"extends":"config-box-implied","files":["main.ts"]}
+{
+  "extends": "config-box-implied",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsBoxImpliedPath.json]
-{"extends":"config-box-implied/tsconfig.json","files":["main.ts"]}
+{
+  "extends": "config-box-implied/tsconfig.json",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsBoxImpliedUnstrict.json]
-{"extends":"config-box-implied/unstrict","files":["main.ts"]}
+{
+  "extends": "config-box-implied/unstrict",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsBoxImpliedUnstrictExtension.json]
-{"extends":"config-box-implied/unstrict/tsconfig","files":["main.ts"]}
+{
+  "extends": "config-box-implied/unstrict/tsconfig",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsFoo.json]
-{"extends":"@foo/tsconfig","files":["main.ts"]}
+{
+  "extends": "@foo/tsconfig",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsStrict.json]
-{"extends":"config-box/strict","files":["main.ts"]}
+{
+  "extends": "config-box/strict",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsStrictExtension.json]
-{"extends":"config-box/strict.json","files":["main.ts"]}
+{
+  "extends": "config-box/strict.json",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.extendsUnStrict.json]
-{"extends":"config-box/unstrict","files":["main.ts"]}
+{
+  "extends": "config-box/unstrict",
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/dev/tsconfig.json]
-{"extends":"./configs/base","files":["main.ts","supplemental.ts"]}
+{
+  "extends": "./configs/base",
+  "files": [
+    "main.ts",
+    "supplemental.ts"
+  ]
+}
 
 //// [/dev/tsconfig.nostrictnull.json]
-{"extends":"./tsconfig","compilerOptions":{"strictNullChecks":false}}
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "strictNullChecks": false
+  }
+}
 
 
 configFileName:: adds extendedSourceFiles only once

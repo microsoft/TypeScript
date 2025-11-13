@@ -24,7 +24,7 @@ export declare var v: number;
 export declare enum E {X = 1}
 
 //// [file6.ts]
-export declare module M { var v: number; }
+export declare namespace M { var v: number; }
 
 
 //// [file1.js]

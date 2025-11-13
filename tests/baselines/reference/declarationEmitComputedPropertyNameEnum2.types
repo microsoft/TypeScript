@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyNameEnum2.ts] ////
+
+=== type.ts ===
+export type Type = { x?: { [Enum.A]: 0 } };
+>Type : Type
+>     : ^^^^
+>x : { [x: number]: 0; } | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Enum.A] : 0
+>         : ^
+>Enum.A : any
+>       : ^^^
+>Enum : any
+>     : ^^^
+>A : any
+>  : ^^^
+
+=== index.ts ===
+import { type Type } from "./type";
+>Type : any
+>     : ^^^
+
+export const foo = { ...({} as Type) };
+>foo : { x?: { [Enum.A]: 0; }; }
+>    : ^^^^^^                ^^^
+>{ ...({} as Type) } : { x?: { [Enum.A]: 0; }; }
+>                    : ^^^^^^                ^^^
+>({} as Type) : Type
+>             : ^^^^
+>{} as Type : Type
+>           : ^^^^
+>{} : {}
+>   : ^^
+

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module Foo {/*1*/
+////namespace Foo {/*1*/
 ////}/*2*/
 ////
 ////import bar  =    Foo;/*3*/
@@ -9,7 +9,7 @@
 
 format.document();
 goTo.marker("1");
-verify.currentLineContentIs("module Foo {");
+verify.currentLineContentIs("namespace Foo {");
 goTo.marker("2");
 verify.currentLineContentIs("}");
 goTo.marker("3");

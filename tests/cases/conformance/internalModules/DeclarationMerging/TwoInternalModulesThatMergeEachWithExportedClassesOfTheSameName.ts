@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export class Point {
         x: number;
         y: number;
@@ -13,15 +13,15 @@ module A{
     }
 }
 
-module X.Y.Z {
+namespace X.Y.Z {
     export class Line {
         length: number;
     }
 }
 
-module X {
-    export module Y {
-        export module Z {
+namespace X {
+    export namespace Y {
+        export namespace Z {
             // expected error
             export class Line {
                 name: string;

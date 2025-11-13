@@ -46,12 +46,12 @@ exports.default = 12;
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = exports.x = void 0;
+exports.x = void 0;
+exports.default = foo;
+exports.bar = foo;
 function foo() {
     return foo;
 }
-exports.default = foo;
-exports.bar = foo;
 exports.x = foo;
 //// [index3.js]
 "use strict";
@@ -84,8 +84,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var index3_1 = require("./index3");
+var index3_1 = __importDefault(require("./index3"));
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
@@ -107,9 +110,9 @@ exports.default = 12;
 //// [index6.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = func;
 // merge type alias and function (OK)
 function func() { }
-exports.default = func;
 ;
 /**
  * @typedef {string | number} default

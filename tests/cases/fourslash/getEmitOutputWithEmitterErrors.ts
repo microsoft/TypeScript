@@ -5,7 +5,7 @@
 
 // @Filename: inputFile.ts
 // @emitThisFile: true
-////module M {
+////namespace M {
 ////  class C { }
 ////  export var foo = new C();
 ////}

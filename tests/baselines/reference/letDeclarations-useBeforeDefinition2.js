@@ -6,6 +6,7 @@ l;
 //// [file2.ts]
 const l = 0;
 
+
 //// [out.js]
 l;
 const l = 0;

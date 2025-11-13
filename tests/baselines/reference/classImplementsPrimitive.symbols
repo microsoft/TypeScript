@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/classImplementsPrimitive.ts] ////
+
+=== classImplementsPrimitive.ts ===
+// classes cannot implement primitives
+
+class C implements number { }
+>C : Symbol(C, Decl(classImplementsPrimitive.ts, 0, 0))
+
+class C2 implements string { }
+>C2 : Symbol(C2, Decl(classImplementsPrimitive.ts, 2, 29))
+
+class C3 implements boolean { }
+>C3 : Symbol(C3, Decl(classImplementsPrimitive.ts, 3, 30))
+
+const C4 = class implements number {}
+>C4 : Symbol(C4, Decl(classImplementsPrimitive.ts, 6, 5))
+
+const C5 = class implements string {}
+>C5 : Symbol(C5, Decl(classImplementsPrimitive.ts, 7, 5))
+
+const C6 = class implements boolean {}
+>C6 : Symbol(C6, Decl(classImplementsPrimitive.ts, 8, 5))
+
+const C7 = class A implements number { }
+>C7 : Symbol(C7, Decl(classImplementsPrimitive.ts, 10, 5))
+>A : Symbol(A, Decl(classImplementsPrimitive.ts, 10, 10))
+
+const C8 = class B implements string { }
+>C8 : Symbol(C8, Decl(classImplementsPrimitive.ts, 11, 5))
+>B : Symbol(B, Decl(classImplementsPrimitive.ts, 11, 10))
+
+const C9 = class C implements boolean { }
+>C9 : Symbol(C9, Decl(classImplementsPrimitive.ts, 12, 5))
+>C : Symbol(C, Decl(classImplementsPrimitive.ts, 12, 10))
+

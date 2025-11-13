@@ -1,0 +1,9 @@
+computedPropertyNames46_ES5.ts(2,6): error TS2873: This kind of expression is always falsy.
+
+
+==== computedPropertyNames46_ES5.ts (1 errors) ====
+    var o = {
+        ["" || 0]: 0
+         ~~
+!!! error TS2873: This kind of expression is always falsy.
+    };

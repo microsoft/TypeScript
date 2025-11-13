@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export abstract class A {}
     export class B extends A {}
 }

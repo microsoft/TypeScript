@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/classAccessorInitializationInferenceWithElementAccess1.ts] ////
+
+=== classAccessorInitializationInferenceWithElementAccess1.ts ===
+export class Cls {
+>Cls : Cls
+>    : ^^^
+
+    accessor x;
+>x : number[]
+>  : ^^^^^^^^
+
+    accessor y;
+>y : { seed: number; }
+>  : ^^^^^^^^^^^^^^^^^
+
+    accessor z;
+>z : string
+>  : ^^^^^^
+
+    accessor 0;
+>0 : number[]
+>  : ^^^^^^^^
+
+    constructor(seed: number) {
+>seed : number
+>     : ^^^^^^
+
+        this['x'] = [seed];
+>this['x'] = [seed] : number[]
+>                   : ^^^^^^^^
+>this['x'] : number[]
+>          : ^^^^^^^^
+>this : this
+>     : ^^^^
+>'x' : "x"
+>    : ^^^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+        this['y'] = { seed };
+>this['y'] = { seed } : { seed: number; }
+>                     : ^^^^^^^^^^^^^^^^^
+>this['y'] : { seed: number; }
+>          : ^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>'y' : "y"
+>    : ^^^
+>{ seed } : { seed: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+        this['z'] = `${seed}`;
+>this['z'] = `${seed}` : string
+>                      : ^^^^^^
+>this['z'] : string
+>          : ^^^^^^
+>this : this
+>     : ^^^^
+>'z' : "z"
+>    : ^^^
+>`${seed}` : string
+>          : ^^^^^^
+>seed : number
+>     : ^^^^^^
+
+        this[0] = [seed];
+>this[0] = [seed] : number[]
+>                 : ^^^^^^^^
+>this[0] : number[]
+>        : ^^^^^^^^
+>this : this
+>     : ^^^^
+>0 : 0
+>  : ^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+    }
+}
+

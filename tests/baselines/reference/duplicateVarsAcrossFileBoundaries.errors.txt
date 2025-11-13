@@ -35,11 +35,11 @@ duplicateVarsAcrossFileBoundaries_2.ts(3,5): error TS2403: Subsequent variable d
     var z = 0;
     
 ==== duplicateVarsAcrossFileBoundaries_4.ts (0 errors) ====
-    module P { }
+    namespace P { }
     import p = P;
     var q;
     
 ==== duplicateVarsAcrossFileBoundaries_5.ts (0 errors) ====
-    module Q { }
+    namespace Q { }
     import q = Q;
     var p;

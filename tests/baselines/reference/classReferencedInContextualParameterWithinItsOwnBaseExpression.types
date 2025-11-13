@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/classReferencedInContextualParameterWithinItsOwnBaseExpression.ts] ////
+
+=== classReferencedInContextualParameterWithinItsOwnBaseExpression.ts ===
+interface Pretty<To> {
+  (a: To): string;
+>a : To
+>  : ^^
+}
+
+interface Schema<A> {
+  readonly pretty?: Pretty<A>;
+>pretty : Pretty<A> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface Class<A> {
+  new (): A;
+}
+
+declare const Class: <Self>(
+>Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
+>      : ^    ^^          ^^      ^^^^^                                                                                 
+
+  identifier: string,
+>identifier : string
+>           : ^^^^^^
+
+) => <Fields>(
+  fields: Fields,
+>fields : Fields
+>       : ^^^^^^
+
+  annotations?: Schema<Self>,
+>annotations : Schema<Self> | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+) => Class<OutputFrom<Fields>>;
+
+type Type<TOutput> = {
+>Type : Type<TOutput>
+>     : ^^^^^^^^^^^^^
+
+  _TOutput: TOutput;
+>_TOutput : TOutput
+>         : ^^^^^^^
+
+};
+
+type OutputFrom<TFields> = {
+>OutputFrom : OutputFrom<TFields>
+>           : ^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof TFields]: "_TOutput" extends keyof TFields[K]
+    ? TFields[K]["_TOutput"]
+    : never;
+};
+
+declare function string(): Type<string>;
+>string : () => Type<string>
+>       : ^^^^^^            
+
+export class A extends Class<A>("A")(
+>A : A
+>  : ^
+>Class<A>("A")(  { a: string },  {    pretty: (a) => JSON.stringify(a),  },) : OutputFrom<{ a: () => Type<string>; }>
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^            ^^^^
+>Class<A>("A") : <Fields>(fields: Fields, annotations?: Schema<A> | undefined) => Class<OutputFrom<Fields>>
+>              : ^      ^^      ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
+>      : ^    ^^          ^^      ^^^^^                                                                                 
+>"A" : "A"
+>    : ^^^
+
+  { a: string },
+>{ a: string } : { a: () => Type<string>; }
+>              : ^^^^^^^^^^^            ^^^
+>a : () => Type<string>
+>  : ^^^^^^            
+>string : () => Type<string>
+>       : ^^^^^^            
+  {
+>{    pretty: (a) => JSON.stringify(a),  } : { pretty: (a: A) => string; }
+>                                          : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+    pretty: (a) => JSON.stringify(a),
+>pretty : (a: A) => string
+>       : ^ ^^^^^^^^^^^^^^
+>(a) => JSON.stringify(a) : (a: A) => string
+>                         : ^ ^^^^^^^^^^^^^^
+>a : A
+>  : ^
+>JSON.stringify(a) : string
+>                  : ^^^^^^
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
+>JSON : JSON
+>     : ^^^^
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
+>a : A
+>  : ^
+
+  },
+) {}
+

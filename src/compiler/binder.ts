@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveFlowNode,
     canHaveLocals,
     canHaveSymbol,
     CaseBlock,
@@ -65,10 +66,15 @@ import {
     Expression,
     ExpressionStatement,
     findAncestor,
+    FlowArrayMutation,
+    FlowAssignment,
+    FlowCall,
+    FlowCondition,
     FlowFlags,
     FlowLabel,
     FlowNode,
     FlowReduceLabel,
+    FlowSwitchClause,
     forEach,
     forEachChild,
     ForInOrOfStatement,
@@ -94,6 +100,7 @@ import {
     getExpandoInitializer,
     getHostSignatureFromJSDoc,
     getImmediatelyInvokedFunctionExpression,
+    getJSDocHost,
     getJSDocTypeTag,
     getLeftmostAccessExpression,
     getNameOfDeclaration,
@@ -136,6 +143,7 @@ import {
     isBlock,
     isBlockOrCatchScoped,
     IsBlockScopedContainer,
+    isBooleanLiteral,
     isCallExpression,
     isClassStaticBlockDeclaration,
     isConditionalTypeNode,
@@ -144,11 +152,9 @@ import {
     isDeclarationStatement,
     isDestructuringAssignment,
     isDottedName,
-    isElementAccessExpression,
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
-    isEnumDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportsIdentifier,
@@ -172,6 +178,7 @@ import {
     isJSDocEnumTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
+    isJSDocTypeAssertion,
     isJsonSourceFile,
     isJsxNamespacedName,
     isLeftHandSideExpression,
@@ -185,7 +192,6 @@ import {
     isModuleExportsAccessExpression,
     isNamedDeclaration,
     isNamespaceExport,
-    isNonNullExpression,
     isNullishCoalesce,
     isObjectLiteralExpression,
     isObjectLiteralMethod,
@@ -194,9 +200,9 @@ import {
     isOptionalChain,
     isOptionalChainRoot,
     isOutermostOptionalChain,
-    isParameterDeclaration,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
+    isPartOfParameterDeclaration,
     isPartOfTypeQuery,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
@@ -228,6 +234,7 @@ import {
     JSDocClassTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocImportTag,
     JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
@@ -245,6 +252,7 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    moduleExportNameIsDefault,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -262,7 +270,6 @@ import {
     ParenthesizedExpression,
     Pattern,
     PatternAmbientModule,
-    perfLogger,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateIdentifier,
@@ -281,7 +288,6 @@ import {
     setValueDeclaration,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
-    shouldResolveJsRequire,
     SignatureDeclaration,
     skipParentheses,
     sliceAfter,
@@ -315,8 +321,8 @@ import {
     VariableDeclaration,
     WhileStatement,
     WithStatement,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export const enum ModuleInstanceState {
@@ -428,6 +434,9 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
 
 function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
     const name = specifier.propertyName || specifier.name;
+    if (name.kind !== SyntaxKind.Identifier) {
+        return ModuleInstanceState.Instantiated; // Skip for invalid syntax like this: export { "x" }
+    }
     let p: Node | undefined = specifier.parent;
     while (p) {
         if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
@@ -494,19 +503,17 @@ export const enum ContainerFlags {
     IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
 }
 
-function initFlowNode<T extends FlowNode>(node: T) {
-    Debug.attachFlowNodeDebugInfo(node);
-    return node;
+/** @internal */
+export function createFlowNode(flags: FlowFlags, node: unknown, antecedent: FlowNode | FlowNode[] | undefined): FlowNode {
+    return Debug.attachFlowNodeDebugInfo({ flags, id: 0, node, antecedent } as FlowNode);
 }
 
 const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
-export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+export function bindSourceFile(file: SourceFile, options: CompilerOptions): void {
     performance.mark("beforeBind");
-    perfLogger?.logStartBindFile("" + file.fileName);
     binder(file, options);
-    perfLogger?.logStopBindFile();
     performance.mark("afterBind");
     performance.measure("Bind", "beforeBind", "afterBind");
 }
@@ -525,6 +532,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var lastContainer: HasLocals;
     var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
     var seenThisKeyword: boolean;
+    var jsDocImports: JSDocImportTag[];
 
     // state used by control flow analysis
     var currentFlow: FlowNode;
@@ -537,6 +545,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var inReturnPosition: boolean;
+    var hasFlowEffects: boolean;
 
     // state used for emit helpers
     var emitFlags: NodeFlags;
@@ -555,8 +565,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
     var classifiableNames: Set<__String>;
 
-    var unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    var reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var unreachableFlow = createFlowNode(FlowFlags.Unreachable, /*node*/ undefined, /*antecedent*/ undefined);
+    var reportedUnreachableFlow = createFlowNode(FlowFlags.Unreachable, /*node*/ undefined, /*antecedent*/ undefined);
     var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
     /* eslint-enable no-var */
 
@@ -592,6 +602,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             file.symbolCount = symbolCount;
             file.classifiableNames = classifiableNames;
             delayedBindJSDocTypedefTag();
+            bindJSDocImports();
         }
 
         file = undefined!;
@@ -603,6 +614,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         blockScopeContainer = undefined!;
         lastContainer = undefined!;
         delayedTypeAliases = undefined!;
+        jsDocImports = undefined!;
         seenThisKeyword = false;
         currentFlow = undefined!;
         currentBreakTarget = undefined;
@@ -613,6 +625,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        inReturnPosition = false;
+        hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
@@ -749,7 +763,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean, isComputedName?: boolean): Symbol {
         Debug.assert(isComputedName || !hasDynamicName(node));
 
-        const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
+        const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && moduleExportNameIsDefault(node.name);
 
         // The exported symbol for an export default function/class node is always named "default"
         const name = isComputedName ? InternalSymbolName.Computed
@@ -957,7 +971,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveContainer = container;
         const saveThisParentContainer = thisParentContainer;
         const savedBlockScopeContainer = blockScopeContainer;
+        const savedInReturnPosition = inReturnPosition;
 
+        if (node.kind === SyntaxKind.ArrowFunction && node.body.kind !== SyntaxKind.Block) inReturnPosition = true;
         // Depending on what kind of node this is, we may have to adjust the current container
         // and block-container.   If the current node is a container, then it is automatically
         // considered the current block-container as well.  Also, for containers that we know
@@ -1008,7 +1024,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
             // similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
-                currentFlow = initFlowNode({ flags: FlowFlags.Start });
+                currentFlow = createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
                 if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
                     currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
                 }
@@ -1061,6 +1077,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindChildren(node);
         }
 
+        inReturnPosition = savedInReturnPosition;
         container = saveContainer;
         thisParentContainer = saveThisParentContainer;
         blockScopeContainer = savedBlockScopeContainer;
@@ -1089,12 +1106,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
         if (checkUnreachable(node)) {
+            if (canHaveFlowNode(node) && node.flowNode) {
+                node.flowNode = undefined;
+            }
             bindEachChild(node);
             bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
-        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
+        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && (!options.allowUnreachableCode || node.kind === SyntaxKind.ReturnStatement)) {
             (node as HasFlowNode).flowNode = currentFlow;
         }
         switch (node.kind) {
@@ -1180,6 +1200,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocEnumTag:
                 bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                 break;
+            case SyntaxKind.JSDocImportTag:
+                bindJSDocImportTag(node as JSDocImportTag);
+                break;
             // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.SourceFile: {
                 bindEachFunctionsFirst((node as SourceFile).statements);
@@ -1215,14 +1238,18 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function isNarrowingExpression(expr: Expression): boolean {
         switch (expr.kind) {
             case SyntaxKind.Identifier:
-            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.ThisKeyword:
+                return true;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return containsNarrowableReference(expr);
             case SyntaxKind.CallExpression:
                 return hasNarrowableArgument(expr as CallExpression);
             case SyntaxKind.ParenthesizedExpression:
+                if (isJSDocTypeAssertion(expr)) {
+                    return false;
+                }
+                // fallthrough
             case SyntaxKind.NonNullExpression:
                 return isNarrowingExpression((expr as ParenthesizedExpression | NonNullExpression).expression);
             case SyntaxKind.BinaryExpression:
@@ -1236,11 +1263,24 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function isNarrowableReference(expr: Expression): boolean {
-        return isDottedName(expr)
-            || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
-            || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
-            || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) && isNarrowableReference(expr.expression)
-            || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
+        switch (expr.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.MetaProperty:
+                return true;
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.NonNullExpression:
+                return isNarrowableReference((expr as PropertyAccessExpression | ParenthesizedExpression | NonNullExpression).expression);
+            case SyntaxKind.ElementAccessExpression:
+                return (isStringOrNumericLiteralLike((expr as ElementAccessExpression).argumentExpression) || isEntityNameExpression((expr as ElementAccessExpression).argumentExpression)) &&
+                    isNarrowableReference((expr as ElementAccessExpression).expression);
+            case SyntaxKind.BinaryExpression:
+                return (expr as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference((expr as BinaryExpression).right) ||
+                    isAssignmentOperator((expr as BinaryExpression).operatorToken.kind) && isLeftHandSideExpression((expr as BinaryExpression).left);
+        }
+        return false;
     }
 
     function containsNarrowableReference(expr: Expression): boolean {
@@ -1279,8 +1319,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right);
+                const left = skipParentheses(expr.left);
+                const right = skipParentheses(expr.right);
+                return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+                    isNarrowingTypeofOperands(right, left) || isNarrowingTypeofOperands(left, right) ||
+                    (isBooleanLiteral(right) && isNarrowingExpression(left) || isBooleanLiteral(left) && isNarrowingExpression(right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
@@ -1306,16 +1349,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return containsNarrowableReference(expr);
     }
 
-    function createBranchLabel(): FlowLabel {
-        return initFlowNode({ flags: FlowFlags.BranchLabel, antecedents: undefined });
+    function createBranchLabel() {
+        return createFlowNode(FlowFlags.BranchLabel, /*node*/ undefined, /*antecedent*/ undefined) as FlowLabel;
     }
 
-    function createLoopLabel(): FlowLabel {
-        return initFlowNode({ flags: FlowFlags.LoopLabel, antecedents: undefined });
+    function createLoopLabel() {
+        return createFlowNode(FlowFlags.LoopLabel, /*node*/ undefined, /*antecedent*/ undefined) as FlowLabel;
     }
 
-    function createReduceLabel(target: FlowLabel, antecedents: FlowNode[], antecedent: FlowNode): FlowReduceLabel {
-        return initFlowNode({ flags: FlowFlags.ReduceLabel, target, antecedents, antecedent });
+    function createReduceLabel(target: FlowLabel, antecedents: FlowNode[], antecedent: FlowNode) {
+        return createFlowNode(FlowFlags.ReduceLabel, { target, antecedents }, antecedent) as FlowReduceLabel;
     }
 
     function setFlowNodeReferenced(flow: FlowNode) {
@@ -1324,13 +1367,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function addAntecedent(label: FlowLabel, antecedent: FlowNode): void {
-        if (!(antecedent.flags & FlowFlags.Unreachable) && !contains(label.antecedents, antecedent)) {
-            (label.antecedents || (label.antecedents = [])).push(antecedent);
+        if (!(antecedent.flags & FlowFlags.Unreachable) && !contains(label.antecedent, antecedent)) {
+            (label.antecedent || (label.antecedent = [])).push(antecedent);
             setFlowNodeReferenced(antecedent);
         }
     }
 
-    function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression | undefined): FlowNode {
+    function createFlowCondition(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, antecedent: FlowNode, expression: Expression | undefined) {
         if (antecedent.flags & FlowFlags.Unreachable) {
             return antecedent;
         }
@@ -1348,30 +1391,32 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             return antecedent;
         }
         setFlowNodeReferenced(antecedent);
-        return initFlowNode({ flags, antecedent, node: expression });
+        return createFlowNode(flags, expression, antecedent) as FlowCondition;
     }
 
-    function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
+    function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
         setFlowNodeReferenced(antecedent);
-        return initFlowNode({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
+        return createFlowNode(FlowFlags.SwitchClause, { switchStatement, clauseStart, clauseEnd }, antecedent) as FlowSwitchClause;
     }
 
-    function createFlowMutation(flags: FlowFlags, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement): FlowNode {
+    function createFlowMutation(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement) {
         setFlowNodeReferenced(antecedent);
-        const result = initFlowNode({ flags, antecedent, node });
+        hasFlowEffects = true;
+        const result = createFlowNode(flags, node, antecedent) as FlowAssignment | FlowArrayMutation;
         if (currentExceptionTarget) {
             addAntecedent(currentExceptionTarget, result);
         }
         return result;
     }
 
-    function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
+    function createFlowCall(antecedent: FlowNode, node: CallExpression) {
         setFlowNodeReferenced(antecedent);
-        return initFlowNode({ flags: FlowFlags.Call, antecedent, node });
+        hasFlowEffects = true;
+        return createFlowNode(FlowFlags.Call, node, antecedent) as FlowCall;
     }
 
     function finishFlowLabel(flow: FlowLabel): FlowNode {
-        const antecedents = flow.antecedents;
+        const antecedents = flow.antecedent;
         if (!antecedents) {
             return unreachableFlow;
         }
@@ -1492,13 +1537,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindForStatement(node: ForStatement): void {
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const preBodyLabel = createBranchLabel();
+        const preIncrementorLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
         bind(node.initializer);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = preLoopLabel;
         bindCondition(node.condition, preBodyLabel, postLoopLabel);
         currentFlow = finishFlowLabel(preBodyLabel);
-        bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+        bindIterativeStatement(node.statement, postLoopLabel, preIncrementorLabel);
+        addAntecedent(preIncrementorLabel, currentFlow);
+        currentFlow = finishFlowLabel(preIncrementorLabel);
         bind(node.incrementor);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = finishFlowLabel(postLoopLabel);
@@ -1538,7 +1586,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+        const savedInReturnPosition = inReturnPosition;
+        inReturnPosition = true;
         bind(node.expression);
+        inReturnPosition = savedInReturnPosition;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -1546,6 +1597,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         currentFlow = unreachableFlow;
+        hasFlowEffects = true;
     }
 
     function findActiveLabel(name: __String) {
@@ -1562,6 +1614,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (flowLabel) {
             addAntecedent(flowLabel, currentFlow);
             currentFlow = unreachableFlow;
+            hasFlowEffects = true;
         }
     }
 
@@ -1628,7 +1681,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // set of antecedents for the pre-finally label. As control flow analysis passes by a ReduceLabel
             // node, the pre-finally label is temporarily switched to the reduced antecedent set.
             const finallyLabel = createBranchLabel();
-            finallyLabel.antecedents = concatenate(concatenate(normalExitLabel.antecedents, exceptionLabel.antecedents), returnLabel.antecedents);
+            finallyLabel.antecedent = concatenate(concatenate(normalExitLabel.antecedent, exceptionLabel.antecedent), returnLabel.antecedent);
             currentFlow = finallyLabel;
             bind(node.finallyBlock);
             if (currentFlow.flags & FlowFlags.Unreachable) {
@@ -1638,18 +1691,18 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             else {
                 // If we have an IIFE return target and return statements in the try or catch blocks, add a control
                 // flow that goes back through the finally block and back through only the return statements.
-                if (currentReturnTarget && returnLabel.antecedents) {
-                    addAntecedent(currentReturnTarget, createReduceLabel(finallyLabel, returnLabel.antecedents, currentFlow));
+                if (currentReturnTarget && returnLabel.antecedent) {
+                    addAntecedent(currentReturnTarget, createReduceLabel(finallyLabel, returnLabel.antecedent, currentFlow));
                 }
                 // If we have an outer exception target (i.e. a containing try-finally or try-catch-finally), add a
                 // control flow that goes back through the finally blok and back through each possible exception source.
-                if (currentExceptionTarget && exceptionLabel.antecedents) {
-                    addAntecedent(currentExceptionTarget, createReduceLabel(finallyLabel, exceptionLabel.antecedents, currentFlow));
+                if (currentExceptionTarget && exceptionLabel.antecedent) {
+                    addAntecedent(currentExceptionTarget, createReduceLabel(finallyLabel, exceptionLabel.antecedent, currentFlow));
                 }
                 // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
                 // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
                 // result in an unreachable current control flow.
-                currentFlow = normalExitLabel.antecedents ? createReduceLabel(finallyLabel, normalExitLabel.antecedents, currentFlow) : unreachableFlow;
+                currentFlow = normalExitLabel.antecedent ? createReduceLabel(finallyLabel, normalExitLabel.antecedent, currentFlow) : unreachableFlow;
             }
         }
         else {
@@ -1670,7 +1723,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // We mark a switch statement as possibly exhaustive if it has no default clause and if all
         // case clauses have unreachable end points (e.g. they all return). Note, we no longer need
         // this property in control flow analysis, it's there only for backwards compatibility.
-        node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedents;
+        node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedent;
         if (!hasDefault) {
             addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));
         }
@@ -1681,11 +1734,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindCaseBlock(node: CaseBlock): void {
         const clauses = node.clauses;
-        const isNarrowingSwitch = isNarrowingExpression(node.parent.expression);
-        let fallthroughFlow = unreachableFlow;
+        const isNarrowingSwitch = node.parent.expression.kind === SyntaxKind.TrueKeyword || isNarrowingExpression(node.parent.expression);
+        let fallthroughFlow: FlowNode = unreachableFlow;
+
         for (let i = 0; i < clauses.length; i++) {
             const clauseStart = i;
             while (!clauses[i].statements.length && i + 1 < clauses.length) {
+                if (fallthroughFlow === unreachableFlow) {
+                    currentFlow = preSwitchCaseFlow!;
+                }
                 bind(clauses[i]);
                 i++;
             }
@@ -1887,8 +1944,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (isLogicalOrCoalescingBinaryOperator(operator) || isLogicalOrCoalescingAssignmentOperator(operator)) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
+                    const saveCurrentFlow = currentFlow;
+                    const saveHasFlowEffects = hasFlowEffects;
+                    hasFlowEffects = false;
                     bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
-                    currentFlow = finishFlowLabel(postExpressionLabel);
+                    currentFlow = hasFlowEffects ? finishFlowLabel(postExpressionLabel) : saveCurrentFlow;
+                    hasFlowEffects ||= saveHasFlowEffects;
                 }
                 else {
                     bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
@@ -1968,16 +2029,26 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const trueLabel = createBranchLabel();
         const falseLabel = createBranchLabel();
         const postExpressionLabel = createBranchLabel();
+        const saveCurrentFlow = currentFlow;
+        const saveHasFlowEffects = hasFlowEffects;
+        hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenTrue = currentFlow;
+        }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenFalse = currentFlow;
+        }
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);
-        currentFlow = finishFlowLabel(postExpressionLabel);
+        currentFlow = hasFlowEffects ? finishFlowLabel(postExpressionLabel) : saveCurrentFlow;
+        hasFlowEffects ||= saveHasFlowEffects;
     }
 
     function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
@@ -2056,6 +2127,17 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
+    function bindJSDocImportTag(node: JSDocImportTag) {
+        // don't bind the importClause yet; that's delayed until bindJSDocImports
+        bind(node.tagName);
+        bind(node.moduleSpecifier);
+        bind(node.attributes);
+
+        if (typeof node.comment !== "string") {
+            bindEach(node.comment);
+        }
+    }
+
     function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
         doWithConditionalBranches(bind, node, trueTarget, falseTarget);
         if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
@@ -2109,8 +2191,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindOptionalChainFlow(node: OptionalChain) {
         if (isTopLevelLogicalExpression(node)) {
             const postExpressionLabel = createBranchLabel();
+            const saveCurrentFlow = currentFlow;
+            const saveHasFlowEffects = hasFlowEffects;
             bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
-            currentFlow = finishFlowLabel(postExpressionLabel);
+            currentFlow = hasFlowEffects ? finishFlowLabel(postExpressionLabel) : saveCurrentFlow;
+            hasFlowEffects ||= saveHasFlowEffects;
         }
         else {
             bindOptionalChain(node, currentTrueTarget!, currentFalseTarget!);
@@ -2379,7 +2464,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const host = typeAlias.parent.parent;
             container = (getEnclosingContainer(host) as IsContainer | undefined) || file;
             blockScopeContainer = (getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined) || file;
-            currentFlow = initFlowNode({ flags: FlowFlags.Start });
+            currentFlow = createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
             parent = typeAlias;
             bind(typeAlias.typeExpression);
             const declName = getNameOfDeclaration(typeAlias);
@@ -2427,6 +2512,35 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 bind(typeAlias.fullName);
             }
         }
+        container = saveContainer;
+        lastContainer = saveLastContainer;
+        blockScopeContainer = saveBlockScopeContainer;
+        parent = saveParent;
+        currentFlow = saveCurrentFlow;
+    }
+
+    function bindJSDocImports() {
+        if (jsDocImports === undefined) {
+            return;
+        }
+
+        const saveContainer = container;
+        const saveLastContainer = lastContainer;
+        const saveBlockScopeContainer = blockScopeContainer;
+        const saveParent = parent;
+        const saveCurrentFlow = currentFlow;
+
+        for (const jsDocImportTag of jsDocImports) {
+            const host = getJSDocHost(jsDocImportTag);
+            const enclosingContainer = host ? getEnclosingContainer(host) as IsContainer | undefined : undefined;
+            const enclosingBlockScopeContainer = host ? getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined : undefined;
+            container = enclosingContainer || file;
+            blockScopeContainer = enclosingBlockScopeContainer || file;
+            currentFlow = createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
+            parent = jsDocImportTag;
+            bind(jsDocImportTag.importClause);
+        }
+
         container = saveContainer;
         lastContainer = saveLastContainer;
         blockScopeContainer = saveBlockScopeContainer;
@@ -2554,7 +2668,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function checkStrictModeFunctionName(node: FunctionLikeDeclaration) {
-        if (inStrictMode) {
+        if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
             checkStrictModeEvalOrArguments(node, node.name);
         }
@@ -2564,14 +2678,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Provide specialized messages to help the user understand why we think they're in
         // strict mode.
         if (getContainingClass(node)) {
-            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Class_definitions_are_automatically_in_strict_mode;
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Class_definitions_are_automatically_in_strict_mode;
         }
 
         if (file.externalModuleIndicator) {
-            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Modules_are_automatically_in_strict_mode;
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Modules_are_automatically_in_strict_mode;
         }
 
-        return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5;
+        return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5;
     }
 
     function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
@@ -2986,6 +3100,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
             case SyntaxKind.JSDocOverloadTag:
                 return bind((node as JSDocOverloadTag).typeExpression);
+            case SyntaxKind.JSDocImportTag:
+                return (jsDocImports || (jsDocImports = [])).push(node as JSDocImportTag);
         }
     }
 
@@ -3299,7 +3415,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
         // Class declarations in Typescript do not allow property declarations
-        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer);
+        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) || lookupSymbolForPropertyAccess(node.left.expression, container);
         if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
             return;
         }
@@ -3418,7 +3534,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-        let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
+        let namespaceSymbol = lookupSymbolForPropertyAccess(name, blockScopeContainer) || lookupSymbolForPropertyAccess(name, container);
         const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
         namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
         bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
@@ -3549,7 +3665,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (
                 isInJSFile(node) &&
-                shouldResolveJsRequire(options) &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)
@@ -3559,7 +3674,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             else if (isBlockOrCatchScoped(node)) {
                 bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
             }
-            else if (isParameterDeclaration(node)) {
+            else if (isPartOfParameterDeclaration(node)) {
                 // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
                 // because its parent chain has already been set up, since parents are set before descending into children.
                 //
@@ -3697,7 +3812,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
                 // report error on class declarations
                 node.kind === SyntaxKind.ClassDeclaration ||
-                // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                // report errors on enums with preserved emit
+                isEnumDeclarationWithPreservedEmit(node, options) ||
+                // report error on instantiated modules
                 (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
 
             if (reportError) {
@@ -3721,7 +3838,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             node.declarationList.declarations.some(d => !!d.initializer)
                         );
 
-                    eachUnreachableRange(node, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
+                    eachUnreachableRange(node, options, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
                 }
             }
         }
@@ -3729,7 +3846,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 }
 
-function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
+function isEnumDeclarationWithPreservedEmit(node: Node, options: CompilerOptions): boolean {
+    return node.kind === SyntaxKind.EnumDeclaration && (!isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(options));
+}
+
+function eachUnreachableRange(node: Node, options: CompilerOptions, cb: (start: Node, last: Node) => void): void {
     if (isStatement(node) && isExecutableStatement(node) && isStatementsContainer(node.parent)) {
         const { statements } = node.parent;
         const slice = sliceAfter(statements, node);
@@ -3738,26 +3859,27 @@ function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void)
     else {
         cb(node, node);
     }
-}
-// As opposed to a pure declaration like an `interface`
-function isExecutableStatement(s: Statement): boolean {
-    // Don't remove statements that can validly be used before they appear.
-    return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
-        // `var x;` may declare a variable used above
-        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
-}
 
-function isPurelyTypeDeclaration(s: Statement): boolean {
-    switch (s.kind) {
-        case SyntaxKind.InterfaceDeclaration:
-        case SyntaxKind.TypeAliasDeclaration:
-            return true;
-        case SyntaxKind.ModuleDeclaration:
-            return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
-        case SyntaxKind.EnumDeclaration:
-            return hasSyntacticModifier(s, ModifierFlags.Const);
-        default:
-            return false;
+    // As opposed to a pure declaration like an `interface`
+    function isExecutableStatement(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return !isEnumDeclarationWithPreservedEmit(s, options);
+            default:
+                return false;
+        }
     }
 }
 
@@ -3829,6 +3951,10 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ConstructorType:
         case SyntaxKind.ClassStaticBlockDeclaration:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
+        case SyntaxKind.JSDocImportTag:
+            // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:

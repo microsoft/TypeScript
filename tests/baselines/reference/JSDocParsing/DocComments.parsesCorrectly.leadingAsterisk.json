@@ -16,7 +16,6 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 13,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "type"
             },
@@ -30,7 +29,6 @@
                     "kind": "NumberKeyword",
                     "pos": 15,
                     "end": 21,
-                    "modifierFlagsCache": 0,
                     "transformFlags": 1
                 }
             }

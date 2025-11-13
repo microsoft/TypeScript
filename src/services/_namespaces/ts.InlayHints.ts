@@ -1,3 +1,3 @@
 /* Generated file to emulate the ts.InlayHints namespace. */
 
-export * from "../inlayHints";
+export * from "../inlayHints.js";

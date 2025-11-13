@@ -1,0 +1,173 @@
+isolatedDeclarationErrorsObjects.ts(7,8): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(12,12): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(16,12): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(21,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(24,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(25,8): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(29,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(32,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(40,9): error TS7032: Property 'singleSetterBad' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+isolatedDeclarationErrorsObjects.ts(40,25): error TS7006: Parameter 'value' implicitly has an 'any' type.
+isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(64,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(65,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(66,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(67,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(68,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(75,5): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(77,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
+
+
+==== isolatedDeclarationErrorsObjects.ts (19 errors) ====
+    export let o = {
+        a: 1,
+        b: ""
+    }
+    
+    export let oBad = {
+        a: Math.random(),
+           ~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:6:12: Add a type annotation to the variable oBad.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:7:8: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    }
+    export const V = 1;
+    export let oBad2 = {
+        a: {
+            b: Math.random(),
+               ~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:10:12: Add a type annotation to the variable oBad2.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:12:12: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+        },
+        c: {
+            d: 1,
+            e: V,
+               ~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:10:12: Add a type annotation to the variable oBad2.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:16:12: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+        }
+    }
+    
+    export let oWithMethods = {
+        method() { },
+        ~~~~~~
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:20:12: Add a type annotation to the variable oWithMethods.
+!!! related TS9034 isolatedDeclarationErrorsObjects.ts:21:5: Add a return type to the method
+        okMethod(): void { },
+        a: 1,
+        bad() { },
+        ~~~
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:20:12: Add a type annotation to the variable oWithMethods.
+!!! related TS9034 isolatedDeclarationErrorsObjects.ts:24:5: Add a return type to the method
+        e: V,
+           ~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:20:12: Add a type annotation to the variable oWithMethods.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:25:8: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    }
+    export let oWithMethodsNested = {
+        foo: {
+            method() { },
+            ~~~~~~
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:27:12: Add a type annotation to the variable oWithMethodsNested.
+!!! related TS9034 isolatedDeclarationErrorsObjects.ts:29:9: Add a return type to the method
+            a: 1,
+            okMethod(): void { },
+            bad() { }
+            ~~~
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:27:12: Add a type annotation to the variable oWithMethodsNested.
+!!! related TS9034 isolatedDeclarationErrorsObjects.ts:32:9: Add a return type to the method
+        }
+    }
+    
+    
+    
+    export let oWithAccessor = {
+        get singleGetterBad() { return 0 },
+        set singleSetterBad(value) { },
+            ~~~~~~~~~~~~~~~
+!!! error TS7032: Property 'singleSetterBad' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+                            ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+                            ~~~~~
+!!! error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9033 isolatedDeclarationErrorsObjects.ts:40:9: Add a type to parameter of the set accessor declaration.
+    
+        get getSetBad() { return 0 },
+        set getSetBad(value) { },
+    
+        get getSetOk(): number { return 0 },
+        set getSetOk(value) { },
+    
+        get getSetOk2() { return 0 },
+        set getSetOk2(value: number) { },
+        
+        get getSetOk3(): number { return 0 },
+        set getSetOk3(value: number) { },
+    }
+    
+    function prop<T>(v: T): T { return v }
+    
+    const s: unique symbol = Symbol();
+    const str: string = "";
+    enum E {
+        V = 10,
+    }
+    export const oWithComputedProperties = {
+        [1]: 1,
+        [1 + 3]: 1,
+        ~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
+        [prop(2)]: 2,
+        ~~~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
+        [s]: 1,
+        ~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
+        [E.V]: 1,
+        ~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
+        [str]: 0,
+        ~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
+    }
+    
+    const part = { a: 1 };
+    
+    export const oWithSpread = {
+        b: 1,
+        ...part,
+        ~~~~~~~
+!!! error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:73:14: Add a type annotation to the variable oWithSpread.
+        c: 1,
+        part,
+        ~~~~
+!!! error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:73:14: Add a type annotation to the variable oWithSpread.
+    }
+    
+    
+    export const oWithSpread2 = {
+        b: 1,
+        nested: {
+            ...part,
+            ~~~~~~~
+!!! error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread2.
+        },
+        c: 1,
+    }
+    

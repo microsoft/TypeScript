@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/accessorsInAmbientContext.ts] ////
 
 === accessorsInAmbientContext.ts ===
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(accessorsInAmbientContext.ts, 0, 0))
 
     class C {
->C : Symbol(C, Decl(accessorsInAmbientContext.ts, 0, 18))
+>C : Symbol(C, Decl(accessorsInAmbientContext.ts, 0, 21))
 
         get X() { return 1; }
 >X : Symbol(C.X, Decl(accessorsInAmbientContext.ts, 1, 13), Decl(accessorsInAmbientContext.ts, 2, 29))

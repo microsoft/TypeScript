@@ -1,3 +1,4 @@
+// === Inlay Hints ===
  foo1(1, 2);
       ^
 {
@@ -192,6 +193,24 @@ trace(``);
 {
   "text": "message:",
   "position": 758,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    'foo',
+    ^
+{
+  "text": "param2:",
+  "position": 884,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    true,
+    ^
+{
+  "text": "param3:",
+  "position": 895,
   "kind": "Parameter",
   "whitespaceAfter": true
 }

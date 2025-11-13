@@ -1,17 +1,14 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
+    TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
-describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
+} from "../helpers/tsserver.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+describe("unittests:: tsserver:: inconsistentErrorInEditor::", () => {
     it("should not error", () => {
-        const host = createServerHost([]);
-        const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost([]);
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
@@ -38,12 +35,10 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
         verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
         baselineTsserverLogs("inconsistentErrorInEditor", "should not error", session);
     });
-});
 
-describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
-    it("should not error", () => {
-        const host = createServerHost([]);
-        const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
+    it("should not error 2", () => {
+        const host = TestServerHost.createServerHost([]);
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
@@ -68,6 +63,6 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
             },
         });
         verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
-        baselineTsserverLogs("inconsistentErrorInEditor2", "should not error", session);
+        baselineTsserverLogs("inconsistentErrorInEditor", "should not error 2", session);
     });
 });

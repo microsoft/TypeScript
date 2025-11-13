@@ -638,7 +638,7 @@ var DerivedWithFunctionExpression = /** @class */ (function (_super) {
 var DerivedWithParenthesis = /** @class */ (function (_super) {
     __extends(DerivedWithParenthesis, _super);
     function DerivedWithParenthesis() {
-        var _this = _super.call(this) || this;
+        var _this = (_this = _super.call(this) || this);
         _this.prop = true;
         return _this;
     }
@@ -649,7 +649,7 @@ var DerivedWithParenthesisAfterStatement = /** @class */ (function (_super) {
     function DerivedWithParenthesisAfterStatement() {
         var _this = this;
         _this.prop;
-        _this = _super.call(this) || this;
+        (_this = _super.call(this) || this);
         _this.prop = true;
         return _this;
     }
@@ -658,7 +658,7 @@ var DerivedWithParenthesisAfterStatement = /** @class */ (function (_super) {
 var DerivedWithParenthesisBeforeStatement = /** @class */ (function (_super) {
     __extends(DerivedWithParenthesisBeforeStatement, _super);
     function DerivedWithParenthesisBeforeStatement() {
-        var _this = _super.call(this) || this;
+        var _this = (_this = _super.call(this) || this);
         _this.prop = true;
         _this.prop;
         return _this;

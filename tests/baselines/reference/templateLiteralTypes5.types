@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes5.ts] ////
+
+=== templateLiteralTypes5.ts ===
+// https://github.com/microsoft/TypeScript/issues/55364
+interface TypeMap {
+  a: "A";
+>a : "A"
+>  : ^^^
+
+  b: "B";
+>b : "B"
+>  : ^^^
+}
+declare const f: <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0];
+>f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
+>  : ^  ^^^^^^^^^         ^^ ^^       ^^^^^           
+>x : `${T0}`
+>  : ^^^^^^^
+
+type F1 = <T1 extends "a" | "b">(x: `${T1}`) => TypeMap[T1];
+>F1 : F1
+>   : ^^
+>x : `${T1}`
+>  : ^^^^^^^
+
+const f1: F1 = f; 
+>f1 : F1
+>   : ^^
+>f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
+>  : ^  ^^^^^^^^^         ^^ ^^       ^^^^^           
+
+type F2 = <T2 extends 'a' | 'b'>(x: `${T2}`) => TypeMap[`${T2}`]
+>F2 : F2
+>   : ^^
+>x : `${T2}`
+>  : ^^^^^^^
+
+const f2: F2 = f
+>f2 : F2
+>   : ^^
+>f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
+>  : ^  ^^^^^^^^^         ^^ ^^       ^^^^^           
+
+function f3<T3 extends "a" | "b">(x: T3) {
+>f3 : <T3 extends "a" | "b">(x: T3) => void
+>   : ^  ^^^^^^^^^         ^^ ^^  ^^^^^^^^^
+>x : T3
+>  : ^^
+
+    const test1: `${T3}` = x    
+>test1 : `${T3}`
+>      : ^^^^^^^
+>x : T3
+>  : ^^
+
+    const test2: T3 = "" as `${T3}`;    
+>test2 : T3
+>      : ^^
+>"" as `${T3}` : `${T3}`
+>              : ^^^^^^^
+>"" : ""
+>   : ^^
+}
+

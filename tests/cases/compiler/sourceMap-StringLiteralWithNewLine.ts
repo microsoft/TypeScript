@@ -1,5 +1,5 @@
 // @lib: es5
-// @target: ES3
+// @target: ES5
 // @sourcemap: true
 
 interface Document {
@@ -9,7 +9,7 @@ interface Window {
 }
 declare var window: Window;
 
-module Foo {
+namespace Foo {
     var x = "test1";
     var y = "test 2\
 isn't this a lot of fun";
