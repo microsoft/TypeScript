@@ -1,0 +1,27 @@
+reachabilityChecksIgnored.ts(4,5): error TS7027: Unreachable code detected.
+reachabilityChecksIgnored.ts(11,5): error TS2578: Unused '@ts-expect-error' directive.
+reachabilityChecksIgnored.ts(11,5): error TS7027: Unreachable code detected.
+
+
+==== reachabilityChecksIgnored.ts (3 errors) ====
+    function a() {
+        throw new Error("");
+    
+        // @ts-ignore
+        ~~~~~~~~~~~~~
+        console.log("unreachable");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function b() {
+        throw new Error("");
+    
+        // @ts-expect-error
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+        ~~~~~~~~~~~~~~~~~~~
+        console.log("unreachable");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
