@@ -1305,7 +1305,7 @@ export function createSyntacticTypeNodeBuilder(
                 candidateExpr = body;
             }
         }
-        if (candidateExpr) {
+        if (candidateExpr && resolver.isPossiblyReachable(candidateExpr)) {
             if (isContextuallyTyped(candidateExpr)) {
                 const type = isJSDocTypeAssertion(candidateExpr) ? getJSDocTypeAssertionType(candidateExpr) :
                     isAsExpression(candidateExpr) || isTypeAssertionExpression(candidateExpr) ? candidateExpr.type :

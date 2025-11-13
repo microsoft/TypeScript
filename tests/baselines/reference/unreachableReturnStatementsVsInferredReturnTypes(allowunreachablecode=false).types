@@ -96,8 +96,8 @@ function throws(): never {
 }
 
 export function foo() {
->foo : () => number
->    : ^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
 
   throws();
 >throws() : never

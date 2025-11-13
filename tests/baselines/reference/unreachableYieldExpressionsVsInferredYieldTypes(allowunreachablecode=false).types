@@ -135,3 +135,83 @@ export function* j() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
+function throws(): never {
+>throws : () => never
+>       : ^^^^^^     
+
+  throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+}
+
+export function* foo() {
+>foo : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  throws();
+>throws() : never
+>         : ^^^^^
+>throws : () => never
+>       : ^^^^^^     
+
+  yield 42;
+>yield 42 : any
+>         : ^^^
+>42 : 42
+>   : ^^
+}
+
+export function* bar() {
+>bar : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  var x;
+>x : any
+>  : ^^^
+
+  x = 1;
+>x = 1 : 1
+>      : ^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    throws();
+>throws() : never
+>         : ^^^^^
+>throws : () => never
+>       : ^^^^^^     
+
+    yield x;
+>yield x : any
+>        : ^^^
+>x : any
+>  : ^^^
+  }
+  x = 2;
+>x = 2 : 2
+>      : ^
+>x : any
+>  : ^^^
+>2 : 2
+>  : ^
+
+  yield x;
+>yield x : any
+>        : ^^^
+>x : number
+>  : ^^^^^^
+}

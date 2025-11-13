@@ -68,3 +68,45 @@ export function* j() {
 >x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 24, 5))
 }
 
+function throws(): never {
+>throws : Symbol(throws, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 31, 1))
+
+  throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function* foo() {
+>foo : Symbol(foo, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 35, 1))
+
+  throws();
+>throws : Symbol(throws, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 31, 1))
+
+  yield 42;
+}
+
+export function* bar() {
+>bar : Symbol(bar, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 40, 1))
+
+  var x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 43, 5))
+
+  x = 1;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 43, 5))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    throws();
+>throws : Symbol(throws, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 31, 1))
+
+    yield x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 43, 5))
+  }
+  x = 2;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 43, 5))
+
+  yield x;
+>x : Symbol(x, Decl(unreachableYieldExpressionsVsInferredYieldTypes.ts, 43, 5))
+}

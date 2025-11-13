@@ -6402,6 +6402,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return !!annotationType && typeNodeIsEquivalentToType(node, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type);
             },
+            
+            isPossiblyReachable(expression) {
+                const ancestor = findAncestor(expression, canHaveFlowNode);
+                if (!ancestor) {
+                    return true;
+                }
+                return !!ancestor.flowNode && isReachableFlowNode(ancestor.flowNode); 
+            }
         };
         return {
             syntacticBuilderResolver,
