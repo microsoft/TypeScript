@@ -724,15 +724,15 @@ whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2)
 >                                                                                    : ^^^^
 >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
 >          : ^ ^^     ^^                                                        ^^^^^^^^^
->{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 2 | 1; receiver: (t: 2 | 1) => void; }
+>{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 1 | 2; receiver: (t: 1 | 2) => void; }
 >                                                                         : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->generator : (bob: any) => 2 | 1
+>generator : (bob: any) => 1 | 2
 >          : ^   ^^^^^^^^^^^^^^^
->(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
+>(bob) => bob ? 1 : 2 : (bob: any) => 1 | 2
 >                     : ^   ^^^^^^^^^^^^^^^
 >bob : any
 >    : ^^^
->bob ? 1 : 2 : 2 | 1
+>bob ? 1 : 2 : 1 | 2
 >            : ^^^^^
 >bob : any
 >    : ^^^
@@ -740,11 +740,11 @@ whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2)
 >  : ^
 >2 : 2
 >  : ^
->receiver : (t: 2 | 1) => void
+>receiver : (t: 1 | 2) => void
 >         : ^ ^^^^^^^^^^^^^^^^
->(t) => console.log(t + 2) : (t: 2 | 1) => void
+>(t) => console.log(t + 2) : (t: 1 | 2) => void
 >                          : ^ ^^^^^^^^^^^^^^^^
->t : 2 | 1
+>t : 1 | 2
 >  : ^^^^^
 >console.log(t + 2) : void
 >                   : ^^^^
@@ -756,7 +756,7 @@ whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2)
 >    : ^^^^    ^^     ^^^^^    
 >t + 2 : number
 >      : ^^^^^^
->t : 2 | 1
+>t : 1 | 2
 >  : ^^^^^
 >2 : 2
 >  : ^
@@ -766,11 +766,11 @@ nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
 >                                                           : ^^^^
 >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
 >          : ^ ^^         ^^               ^^        ^^             ^^^^^^^^^
->(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
+>(bob) => bob ? 1 : 2 : (bob: any) => 1 | 2
 >                     : ^   ^^^^^^^^^^^^^^^
 >bob : any
 >    : ^^^
->bob ? 1 : 2 : 2 | 1
+>bob ? 1 : 2 : 1 | 2
 >            : ^^^^^
 >bob : any
 >    : ^^^
@@ -778,9 +778,9 @@ nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
 >  : ^
 >2 : 2
 >  : ^
->(t) => console.log(t + 2) : (t: 2 | 1) => void
+>(t) => console.log(t + 2) : (t: 1 | 2) => void
 >                          : ^ ^^^^^^^^^^^^^^^^
->t : 2 | 1
+>t : 1 | 2
 >  : ^^^^^
 >console.log(t + 2) : void
 >                   : ^^^^
@@ -792,7 +792,7 @@ nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
 >    : ^^^^    ^^     ^^^^^    
 >t + 2 : number
 >      : ^^^^^^
->t : 2 | 1
+>t : 1 | 2
 >  : ^^^^^
 >2 : 2
 >  : ^

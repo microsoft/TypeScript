@@ -7,9 +7,9 @@ declare let opt: number | undefined;
 
 // OK: One or other operand is possibly nullish
 const test1 = (opt ? undefined : 32) ?? "possibly reached";
->test1 : 32 | "possibly reached"
+>test1 : "possibly reached" | 32
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
->(opt ? undefined : 32) ?? "possibly reached" : 32 | "possibly reached"
+>(opt ? undefined : 32) ?? "possibly reached" : "possibly reached" | 32
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^
 >(opt ? undefined : 32) : 32
 >                       : ^^
@@ -43,13 +43,13 @@ const test2 = (opt ? undefined : null) ?? "always reached";
 
 // Not OK: Both operands non-nullish
 const test3 = (opt ? 132 : 17) ?? "unreachable";
->test3 : 132 | 17 | "unreachable"
+>test3 : "unreachable" | 17 | 132
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
->(opt ? 132 : 17) ?? "unreachable" : 132 | 17 | "unreachable"
+>(opt ? 132 : 17) ?? "unreachable" : "unreachable" | 17 | 132
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->(opt ? 132 : 17) : 132 | 17
+>(opt ? 132 : 17) : 17 | 132
 >                 : ^^^^^^^^
->opt ? 132 : 17 : 132 | 17
+>opt ? 132 : 17 : 17 | 132
 >               : ^^^^^^^^
 >opt : number
 >    : ^^^^^^
@@ -424,7 +424,7 @@ console.log((cond || undefined) && 1 / cond);
 >     : ^^^
 
 function foo(this: Object | undefined) {
->foo : (this: Object | undefined) => Object | 0
+>foo : (this: Object | undefined) => 0 | Object
 >    : ^    ^^                  ^^^^^^^^^^^^^^^
 >this : Object
 >     : ^^^^^^
@@ -562,7 +562,7 @@ tag`foo${1}` ?? 32; // ok
 >   : ^^
 
 `foo${1}` ?? 32; // error
->`foo${1}` ?? 32 : 32 | "foo1"
+>`foo${1}` ?? 32 : "foo1" | 32
 >                : ^^^^^^^^^^^
 >`foo${1}` : "foo1"
 >          : ^^^^^^
@@ -572,7 +572,7 @@ tag`foo${1}` ?? 32; // ok
 >   : ^^
 
 `foo` ?? 32; // error
->`foo` ?? 32 : 32 | "foo"
+>`foo` ?? 32 : "foo" | 32
 >            : ^^^^^^^^^^
 >`foo` : "foo"
 >      : ^^^^^

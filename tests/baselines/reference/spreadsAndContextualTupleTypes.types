@@ -214,7 +214,7 @@ const a3 = foo([...staticPath3Level, randomID, 'doc.pdf']);
 >    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'doc.pdf'] : ["home", "user", "downloads", string, "doc.pdf"]
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...staticPath3Level : "home" | "user" | "downloads"
+>...staticPath3Level : "downloads" | "home" | "user"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -272,7 +272,7 @@ const b3 = foo([...staticPath3Level, randomID, 'folder', 'doc.pdf']);
 >    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'folder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "doc.pdf"]
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...staticPath3Level : "home" | "user" | "downloads"
+>...staticPath3Level : "downloads" | "home" | "user"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -336,7 +336,7 @@ const c3 = foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf']
 >    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "subfolder", "doc.pdf"]
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...staticPath3Level : "home" | "user" | "downloads"
+>...staticPath3Level : "downloads" | "home" | "user"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -406,7 +406,7 @@ const d3 = foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'another-s
 >    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...staticPath3Level : "home" | "user" | "downloads"
+>...staticPath3Level : "downloads" | "home" | "user"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

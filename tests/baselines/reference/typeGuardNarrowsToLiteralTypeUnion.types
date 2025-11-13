@@ -10,7 +10,7 @@ declare function isFoo(value: string) : value is ("foo" | "bar");
 declare function doThis(value: "foo" | "bar"): void;
 >doThis : (value: "foo" | "bar") => void
 >       : ^     ^^             ^^^^^    
->value : "foo" | "bar"
+>value : "bar" | "foo"
 >      : ^^^^^^^^^^^^^
 
 declare function doThat(value: string) : void;
@@ -36,7 +36,7 @@ if (isFoo(value)) {
 >              : ^^^^
 >doThis : (value: "foo" | "bar") => void
 >       : ^     ^^             ^^^^^    
->value : "foo" | "bar"
+>value : "bar" | "foo"
 >      : ^^^^^^^^^^^^^
 
 } else {

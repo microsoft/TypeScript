@@ -54,13 +54,13 @@ async function main() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await x.next2() : number | AsyncEnumeratorDone
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x.next2() : Promise<AsyncEnumeratorDone> | Promise<number>
+>x.next2() : Promise<number> | Promise<AsyncEnumeratorDone>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x.next2 : () => Promise<AsyncEnumeratorDone> | Promise<number>
+>x.next2 : () => Promise<number> | Promise<AsyncEnumeratorDone>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IAsyncEnumerator<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
->next2 : () => Promise<AsyncEnumeratorDone> | Promise<number>
+>next2 : () => Promise<number> | Promise<AsyncEnumeratorDone>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let c = await x.next3();
