@@ -1092,6 +1092,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inAssignmentPattern = false;
 
         if (currentFlow === unreachableFlow) {
+            if (canHaveFlowNode(node)) {
+                node.flowNode = undefined;
+            }
             if (isPotentiallyExecutableNode(node)) {
                 (node as Mutable<Node>).flags |= NodeFlags.Unreachable;
             }
