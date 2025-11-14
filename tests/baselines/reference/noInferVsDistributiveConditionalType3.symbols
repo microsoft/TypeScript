@@ -1,0 +1,176 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferVsDistributiveConditionalType3.ts] ////
+
+=== noInferVsDistributiveConditionalType3.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/51831
+
+type NoMatchAll<K> = Exclude<K, "_">
+>NoMatchAll : Symbol(NoMatchAll, Decl(noInferVsDistributiveConditionalType3.ts, 0, 0))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 2, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 2, 16))
+
+type Union<T extends object> = {
+>Union : Symbol(Union, Decl(noInferVsDistributiveConditionalType3.ts, 2, 36))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 4, 11))
+
+  [P in keyof T]: ({ [Q in "kind"]: P } & T[P]) extends infer U ? { [Q in keyof U]: U[Q] } : never
+>P : Symbol(P, Decl(noInferVsDistributiveConditionalType3.ts, 5, 3))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 4, 11))
+>Q : Symbol(Q, Decl(noInferVsDistributiveConditionalType3.ts, 5, 22))
+>P : Symbol(P, Decl(noInferVsDistributiveConditionalType3.ts, 5, 3))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 4, 11))
+>P : Symbol(P, Decl(noInferVsDistributiveConditionalType3.ts, 5, 3))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 5, 61))
+>Q : Symbol(Q, Decl(noInferVsDistributiveConditionalType3.ts, 5, 69))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 5, 61))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 5, 61))
+>Q : Symbol(Q, Decl(noInferVsDistributiveConditionalType3.ts, 5, 69))
+
+}[keyof T]
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 4, 11))
+
+type UnionMap<U extends { kind: string }> = { [K in U["kind"]]: U extends { kind: K } ? U : never }
+>UnionMap : Symbol(UnionMap, Decl(noInferVsDistributiveConditionalType3.ts, 6, 10))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 7, 14))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 7, 25))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 7, 47))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 7, 14))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 7, 14))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 7, 75))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 7, 47))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 7, 14))
+
+type ExhaustivePattern<T extends { kind: string }, R> = { [K in T["kind"] as NoMatchAll<K>]: (u1: UnionMap<T>[K]) => R };
+>ExhaustivePattern : Symbol(ExhaustivePattern, Decl(noInferVsDistributiveConditionalType3.ts, 7, 99))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 8, 23))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 8, 34))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 8, 50))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 8, 59))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 8, 23))
+>NoMatchAll : Symbol(NoMatchAll, Decl(noInferVsDistributiveConditionalType3.ts, 0, 0))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 8, 59))
+>u1 : Symbol(u1, Decl(noInferVsDistributiveConditionalType3.ts, 8, 94))
+>UnionMap : Symbol(UnionMap, Decl(noInferVsDistributiveConditionalType3.ts, 6, 10))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 8, 23))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 8, 59))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 8, 50))
+
+type NonExhaustivePattern<T extends { kind: string }, R> = { [K in T["kind"] as NoMatchAll<K>]?: (u2: UnionMap<T>[K]) => R } & {_: (union: T) => R};
+>NonExhaustivePattern : Symbol(NonExhaustivePattern, Decl(noInferVsDistributiveConditionalType3.ts, 8, 121))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 9, 26))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 9, 37))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 9, 53))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 9, 62))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 9, 26))
+>NoMatchAll : Symbol(NoMatchAll, Decl(noInferVsDistributiveConditionalType3.ts, 0, 0))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 9, 62))
+>u2 : Symbol(u2, Decl(noInferVsDistributiveConditionalType3.ts, 9, 98))
+>UnionMap : Symbol(UnionMap, Decl(noInferVsDistributiveConditionalType3.ts, 6, 10))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 9, 26))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType3.ts, 9, 62))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 9, 53))
+>_ : Symbol(_, Decl(noInferVsDistributiveConditionalType3.ts, 9, 128))
+>union : Symbol(union, Decl(noInferVsDistributiveConditionalType3.ts, 9, 132))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 9, 26))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 9, 53))
+
+type Pattern<T extends { kind: string }, R> = ExhaustivePattern<T, R> | NonExhaustivePattern<T, R>;
+>Pattern : Symbol(Pattern, Decl(noInferVsDistributiveConditionalType3.ts, 9, 148))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 10, 13))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 10, 24))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 10, 40))
+>ExhaustivePattern : Symbol(ExhaustivePattern, Decl(noInferVsDistributiveConditionalType3.ts, 7, 99))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 10, 13))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 10, 40))
+>NonExhaustivePattern : Symbol(NonExhaustivePattern, Decl(noInferVsDistributiveConditionalType3.ts, 8, 121))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 10, 13))
+>R : Symbol(R, Decl(noInferVsDistributiveConditionalType3.ts, 10, 40))
+
+function match<U extends { kind: string }, T>(union: U, pattern: Pattern<NoInfer<U>, T>): T {
+>match : Symbol(match, Decl(noInferVsDistributiveConditionalType3.ts, 10, 99))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 12, 15))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 12, 26))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 12, 42))
+>union : Symbol(union, Decl(noInferVsDistributiveConditionalType3.ts, 12, 46))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 12, 15))
+>pattern : Symbol(pattern, Decl(noInferVsDistributiveConditionalType3.ts, 12, 55))
+>Pattern : Symbol(Pattern, Decl(noInferVsDistributiveConditionalType3.ts, 9, 148))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 12, 15))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 12, 42))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 12, 42))
+
+  if((pattern as any)[union.kind]) {
+>pattern : Symbol(pattern, Decl(noInferVsDistributiveConditionalType3.ts, 12, 55))
+>union.kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 12, 26))
+>union : Symbol(union, Decl(noInferVsDistributiveConditionalType3.ts, 12, 46))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 12, 26))
+
+    return (pattern as any)[union.kind](union as U) as T
+>pattern : Symbol(pattern, Decl(noInferVsDistributiveConditionalType3.ts, 12, 55))
+>union.kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 12, 26))
+>union : Symbol(union, Decl(noInferVsDistributiveConditionalType3.ts, 12, 46))
+>kind : Symbol(kind, Decl(noInferVsDistributiveConditionalType3.ts, 12, 26))
+>union : Symbol(union, Decl(noInferVsDistributiveConditionalType3.ts, 12, 46))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 12, 15))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 12, 42))
+  }
+  return (pattern as any)["_"](union as U) as T
+>pattern : Symbol(pattern, Decl(noInferVsDistributiveConditionalType3.ts, 12, 55))
+>union : Symbol(union, Decl(noInferVsDistributiveConditionalType3.ts, 12, 46))
+>U : Symbol(U, Decl(noInferVsDistributiveConditionalType3.ts, 12, 15))
+>T : Symbol(T, Decl(noInferVsDistributiveConditionalType3.ts, 12, 42))
+}
+
+type ValueType = Union<{
+>ValueType : Symbol(ValueType, Decl(noInferVsDistributiveConditionalType3.ts, 17, 1))
+>Union : Symbol(Union, Decl(noInferVsDistributiveConditionalType3.ts, 2, 36))
+
+  String: {value: string},
+>String : Symbol(String, Decl(noInferVsDistributiveConditionalType3.ts, 19, 24))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 20, 11))
+
+  Number: {value: number},
+>Number : Symbol(Number, Decl(noInferVsDistributiveConditionalType3.ts, 20, 26))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 21, 11))
+
+  Boolean: {value: boolean},
+>Boolean : Symbol(Boolean, Decl(noInferVsDistributiveConditionalType3.ts, 21, 26))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 22, 12))
+
+  Date: {value: Date}
+>Date : Symbol(Date, Decl(noInferVsDistributiveConditionalType3.ts, 22, 28))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 23, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+}>
+
+function main(value: ValueType) {
+>main : Symbol(main, Decl(noInferVsDistributiveConditionalType3.ts, 24, 2))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 26, 14))
+>ValueType : Symbol(ValueType, Decl(noInferVsDistributiveConditionalType3.ts, 17, 1))
+
+  let test1 = match(value, {
+>test1 : Symbol(test1, Decl(noInferVsDistributiveConditionalType3.ts, 27, 5))
+>match : Symbol(match, Decl(noInferVsDistributiveConditionalType3.ts, 10, 99))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 26, 14))
+
+    String: ({value}) => value,
+>String : Symbol(String, Decl(noInferVsDistributiveConditionalType3.ts, 27, 28))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 28, 14))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 28, 14))
+
+    Number: ({value}) => value.toString(),
+>Number : Symbol(Number, Decl(noInferVsDistributiveConditionalType3.ts, 28, 31))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 29, 14))
+>value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(noInferVsDistributiveConditionalType3.ts, 29, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    _: (token) => "Unknown"
+>_ : Symbol(_, Decl(noInferVsDistributiveConditionalType3.ts, 29, 42))
+>token : Symbol(token, Decl(noInferVsDistributiveConditionalType3.ts, 30, 8))
+
+  });
+}
+

@@ -1,0 +1,289 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferVsDistributiveConditionalType2.ts] ////
+
+=== noInferVsDistributiveConditionalType2.ts ===
+type EventObject = {
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+  type: string;
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 0, 20))
+
+};
+
+type FooEvent = { type: "FOO" };
+>FooEvent : Symbol(FooEvent, Decl(noInferVsDistributiveConditionalType2.ts, 2, 2))
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 4, 17))
+
+type BarEvent = { type: "BAR" };
+>BarEvent : Symbol(BarEvent, Decl(noInferVsDistributiveConditionalType2.ts, 4, 32))
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 5, 17))
+
+type Input = FooEvent | BarEvent;
+>Input : Symbol(Input, Decl(noInferVsDistributiveConditionalType2.ts, 5, 32))
+>FooEvent : Symbol(FooEvent, Decl(noInferVsDistributiveConditionalType2.ts, 2, 2))
+>BarEvent : Symbol(BarEvent, Decl(noInferVsDistributiveConditionalType2.ts, 4, 32))
+
+type ExtractEventSimplified<
+>ExtractEventSimplified : Symbol(ExtractEventSimplified, Decl(noInferVsDistributiveConditionalType2.ts, 7, 33))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 9, 28))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+  K extends TEvent["type"],
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType2.ts, 10, 29))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 9, 28))
+
+> = string extends TEvent["type"] ? TEvent : Extract<TEvent, { type: K }>;
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 9, 28))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 9, 28))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 9, 28))
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 12, 62))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType2.ts, 10, 29))
+
+type Result = ExtractEventSimplified<NoInfer<Input>, "FOO">;
+>Result : Symbol(Result, Decl(noInferVsDistributiveConditionalType2.ts, 12, 74))
+>ExtractEventSimplified : Symbol(ExtractEventSimplified, Decl(noInferVsDistributiveConditionalType2.ts, 7, 33))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>Input : Symbol(Input, Decl(noInferVsDistributiveConditionalType2.ts, 5, 32))
+
+type EventDescriptorMatches<
+>EventDescriptorMatches : Symbol(EventDescriptorMatches, Decl(noInferVsDistributiveConditionalType2.ts, 14, 60))
+
+  TEventType extends string,
+>TEventType : Symbol(TEventType, Decl(noInferVsDistributiveConditionalType2.ts, 16, 28))
+
+  TNormalizedDescriptor,
+>TNormalizedDescriptor : Symbol(TNormalizedDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 17, 28))
+
+> = TEventType extends TNormalizedDescriptor ? true : false;
+>TEventType : Symbol(TEventType, Decl(noInferVsDistributiveConditionalType2.ts, 16, 28))
+>TNormalizedDescriptor : Symbol(TNormalizedDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 17, 28))
+
+type PartialEventDescriptor<TEventType extends string> =
+>PartialEventDescriptor : Symbol(PartialEventDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 19, 60))
+>TEventType : Symbol(TEventType, Decl(noInferVsDistributiveConditionalType2.ts, 21, 28))
+
+  TEventType extends `${infer TLeading}.${infer TTail}`
+>TEventType : Symbol(TEventType, Decl(noInferVsDistributiveConditionalType2.ts, 21, 28))
+>TLeading : Symbol(TLeading, Decl(noInferVsDistributiveConditionalType2.ts, 22, 29))
+>TTail : Symbol(TTail, Decl(noInferVsDistributiveConditionalType2.ts, 22, 47))
+
+    ? `${TLeading}.*` | `${TLeading}.${PartialEventDescriptor<TTail>}`
+>TLeading : Symbol(TLeading, Decl(noInferVsDistributiveConditionalType2.ts, 22, 29))
+>TLeading : Symbol(TLeading, Decl(noInferVsDistributiveConditionalType2.ts, 22, 29))
+>PartialEventDescriptor : Symbol(PartialEventDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 19, 60))
+>TTail : Symbol(TTail, Decl(noInferVsDistributiveConditionalType2.ts, 22, 47))
+
+    : never;
+
+type EventDescriptor<TEvent extends EventObject> =
+>EventDescriptor : Symbol(EventDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 24, 12))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 26, 21))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+  | TEvent["type"]
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 26, 21))
+
+  | PartialEventDescriptor<TEvent["type"]>
+>PartialEventDescriptor : Symbol(PartialEventDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 19, 60))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 26, 21))
+
+  | "*";
+
+type NormalizeDescriptor<TDescriptor extends string> = TDescriptor extends "*"
+>NormalizeDescriptor : Symbol(NormalizeDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 29, 8))
+>TDescriptor : Symbol(TDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 31, 25))
+>TDescriptor : Symbol(TDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 31, 25))
+
+  ? string
+  : TDescriptor extends `${infer TLeading}.*`
+>TDescriptor : Symbol(TDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 31, 25))
+>TLeading : Symbol(TLeading, Decl(noInferVsDistributiveConditionalType2.ts, 33, 32))
+
+  ? `${TLeading}.${string}`
+>TLeading : Symbol(TLeading, Decl(noInferVsDistributiveConditionalType2.ts, 33, 32))
+
+  : TDescriptor;
+>TDescriptor : Symbol(TDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 31, 25))
+
+type ExtractEvent<
+>ExtractEvent : Symbol(ExtractEvent, Decl(noInferVsDistributiveConditionalType2.ts, 35, 16))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+  TDescriptor extends EventDescriptor<TEvent>,
+>TDescriptor : Symbol(TDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 38, 29))
+>EventDescriptor : Symbol(EventDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 24, 12))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+
+> = string extends TEvent["type"]
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+
+  ? TEvent
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+
+  : NormalizeDescriptor<TDescriptor> extends infer TNormalizedDescriptor
+>NormalizeDescriptor : Symbol(NormalizeDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 29, 8))
+>TDescriptor : Symbol(TDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 38, 29))
+>TNormalizedDescriptor : Symbol(TNormalizedDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 42, 50))
+
+  ? TEvent extends any
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+
+    ? // true is the check type here to match both true and boolean
+      true extends EventDescriptorMatches<TEvent["type"], TNormalizedDescriptor>
+>EventDescriptorMatches : Symbol(EventDescriptorMatches, Decl(noInferVsDistributiveConditionalType2.ts, 14, 60))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+>TNormalizedDescriptor : Symbol(TNormalizedDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 42, 50))
+
+      ? TEvent
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 37, 18))
+
+      : never
+    : never
+  : never;
+
+type ActionFunction<
+>ActionFunction : Symbol(ActionFunction, Decl(noInferVsDistributiveConditionalType2.ts, 49, 10))
+
+  TExpressionEvent extends EventObject,
+>TExpressionEvent : Symbol(TExpressionEvent, Decl(noInferVsDistributiveConditionalType2.ts, 51, 20))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 52, 39))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+> = {
+  (args: { event: TExpressionEvent }): void;
+>args : Symbol(args, Decl(noInferVsDistributiveConditionalType2.ts, 55, 3))
+>event : Symbol(event, Decl(noInferVsDistributiveConditionalType2.ts, 55, 10))
+>TExpressionEvent : Symbol(TExpressionEvent, Decl(noInferVsDistributiveConditionalType2.ts, 51, 20))
+
+  _out_TEvent?: TEvent;
+>_out_TEvent : Symbol(_out_TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 55, 44))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 52, 39))
+
+};
+
+type TransitionsConfig<TEvent extends EventObject> = {
+>TransitionsConfig : Symbol(TransitionsConfig, Decl(noInferVsDistributiveConditionalType2.ts, 57, 2))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 59, 23))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+
+  [K in EventDescriptor<TEvent>]?: {
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType2.ts, 60, 3))
+>EventDescriptor : Symbol(EventDescriptor, Decl(noInferVsDistributiveConditionalType2.ts, 24, 12))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 59, 23))
+
+    actions?: ActionFunction<ExtractEvent<TEvent, K>, TEvent>;
+>actions : Symbol(actions, Decl(noInferVsDistributiveConditionalType2.ts, 60, 36))
+>ActionFunction : Symbol(ActionFunction, Decl(noInferVsDistributiveConditionalType2.ts, 49, 10))
+>ExtractEvent : Symbol(ExtractEvent, Decl(noInferVsDistributiveConditionalType2.ts, 35, 16))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 59, 23))
+>K : Symbol(K, Decl(noInferVsDistributiveConditionalType2.ts, 60, 3))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 59, 23))
+
+  };
+};
+
+declare function createMachine<TEvent extends EventObject>(config: {
+>createMachine : Symbol(createMachine, Decl(noInferVsDistributiveConditionalType2.ts, 63, 2))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 65, 31))
+>EventObject : Symbol(EventObject, Decl(noInferVsDistributiveConditionalType2.ts, 0, 0))
+>config : Symbol(config, Decl(noInferVsDistributiveConditionalType2.ts, 65, 59))
+
+  types?: {
+>types : Symbol(types, Decl(noInferVsDistributiveConditionalType2.ts, 65, 68))
+
+    events?: TEvent;
+>events : Symbol(events, Decl(noInferVsDistributiveConditionalType2.ts, 66, 11))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 65, 31))
+
+  };
+  on?: TransitionsConfig<NoInfer<TEvent>>;
+>on : Symbol(on, Decl(noInferVsDistributiveConditionalType2.ts, 68, 4))
+>TransitionsConfig : Symbol(TransitionsConfig, Decl(noInferVsDistributiveConditionalType2.ts, 57, 2))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>TEvent : Symbol(TEvent, Decl(noInferVsDistributiveConditionalType2.ts, 65, 31))
+
+}): void;
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(noInferVsDistributiveConditionalType2.ts, 63, 2))
+
+  types: {
+>types : Symbol(types, Decl(noInferVsDistributiveConditionalType2.ts, 72, 15))
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : Symbol(events, Decl(noInferVsDistributiveConditionalType2.ts, 73, 10))
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 74, 19))
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 74, 37))
+
+  },
+  on: {
+>on : Symbol(on, Decl(noInferVsDistributiveConditionalType2.ts, 75, 4))
+
+    FOO: {
+>FOO : Symbol(FOO, Decl(noInferVsDistributiveConditionalType2.ts, 76, 7))
+
+      actions: ({ event }) => {
+>actions : Symbol(actions, Decl(noInferVsDistributiveConditionalType2.ts, 77, 10))
+>event : Symbol(event, Decl(noInferVsDistributiveConditionalType2.ts, 78, 17))
+
+        event; // { type: "FOO"; }
+>event : Symbol(event, Decl(noInferVsDistributiveConditionalType2.ts, 78, 17))
+
+      },
+    },
+  },
+});
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(noInferVsDistributiveConditionalType2.ts, 63, 2))
+
+  types: {} as {
+>types : Symbol(types, Decl(noInferVsDistributiveConditionalType2.ts, 85, 15))
+
+    events:
+>events : Symbol(events, Decl(noInferVsDistributiveConditionalType2.ts, 86, 16))
+
+      | { type: "mouse.click.up"; direction: "up" }
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 88, 9))
+>direction : Symbol(direction, Decl(noInferVsDistributiveConditionalType2.ts, 88, 33))
+
+      | { type: "mouse.click.down"; direction: "down" }
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 89, 9))
+>direction : Symbol(direction, Decl(noInferVsDistributiveConditionalType2.ts, 89, 35))
+
+      | { type: "mouse.move" }
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 90, 9))
+
+      | { type: "mouse" }
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 91, 9))
+
+      | { type: "keypress" };
+>type : Symbol(type, Decl(noInferVsDistributiveConditionalType2.ts, 92, 9))
+
+  },
+  on: {
+>on : Symbol(on, Decl(noInferVsDistributiveConditionalType2.ts, 93, 4))
+
+    "mouse.*": {
+>"mouse.*" : Symbol("mouse.*", Decl(noInferVsDistributiveConditionalType2.ts, 94, 7))
+
+      actions: ({ event }) => {
+>actions : Symbol(actions, Decl(noInferVsDistributiveConditionalType2.ts, 95, 16))
+>event : Symbol(event, Decl(noInferVsDistributiveConditionalType2.ts, 96, 17))
+
+        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }
+>event : Symbol(event, Decl(noInferVsDistributiveConditionalType2.ts, 96, 17))
+
+      },
+    },
+  },
+});
+
