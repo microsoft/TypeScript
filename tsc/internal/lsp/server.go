@@ -742,9 +742,29 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			return err
 		}
 		s.session.InitializeWithConfig(userPreferences)
+
+		_, err = s.sendRequest(ctx, lsproto.MethodClientRegisterCapability, &lsproto.RegistrationParams{
+			Registrations: []*lsproto.Registration{
+				{
+					Id:     "typescript-config-watch-id",
+					Method: string(lsproto.MethodWorkspaceDidChangeConfiguration),
+					RegisterOptions: ptrTo(any(lsproto.DidChangeConfigurationRegistrationOptions{
+						Section: &lsproto.StringOrStrings{
+							// !!! Both the 'javascript' and 'js/ts' scopes need to be watched for settings as well.
+							Strings: &[]string{"typescript"},
+						},
+					})),
+				},
+			},
+		})
+		if err != nil {
+			return fmt.Errorf("failed to register configuration change watcher: %w", err)
+		}
 	}
 
-	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
+	// !!! temporary.
+	// Remove when we have `handleDidChangeConfiguration`/implicit project config support
+	// derived from 'js/ts.implicitProjectConfig.*'.
 	if s.compilerOptionsForInferredProjects != nil {
 		s.session.DidChangeCompilerOptionsForInferredProjects(ctx, s.compilerOptionsForInferredProjects)
 	}
@@ -762,9 +782,14 @@ func (s *Server) handleExit(ctx context.Context, params any) error {
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
-	// !!! only implemented because needed for fourslash
+	settings, ok := params.Settings.(map[string]any)
+	if !ok {
+		return nil
+	}
+	// !!! Both the 'javascript' and 'js/ts' scopes need to be checked for settings as well.
+	tsSettings := settings["typescript"]
 	userPreferences := s.session.UserPreferences()
-	if parsed := userPreferences.Parse(params.Settings); parsed != nil {
+	if parsed := userPreferences.Parse(tsSettings); parsed != nil {
 		userPreferences = parsed
 	}
 	s.session.Configure(userPreferences)
