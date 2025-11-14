@@ -1,3 +1,4 @@
+import { fixRootDirSync } from "@sheetalkamat/ts-fix-rootdir";
 import {
     arrayFrom,
     BuilderProgram,
@@ -48,6 +49,7 @@ import {
     formatMessage,
     generateTSConfig,
     getBuildOrderFromAnyBuildOrder,
+    getCompilerOptionsOfBuildOptions,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
     getErrorSummaryText,
@@ -636,6 +638,17 @@ function executeCommandLineWorker(
         fileName => getNormalizedAbsolutePath(fileName, currentDirectory),
     );
     if (configFileName) {
+        const fixRootDirLogs: string[] = [];
+        try {
+            const fixes = fixRootDirSync(configFileName, commandLineOptions as any, log => fixRootDirLogs.push(log));
+            for (const [fileName, text] of Object.entries(fixes)) {
+                sys.writeFile(fileName, text);
+            }
+        }
+        catch (e) {
+            throw new Error([...fixRootDirLogs, `Error: ${e instanceof Error ? e.message : e}`].join(sys.newLine));
+        }
+
         const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
         const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
@@ -746,6 +759,18 @@ export function executeCommandLine(
 ): void | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> {
     if (isBuildCommand(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs);
+        const fixRootDirLogs: string[] = [];
+        try {
+            for (const project of projects) {
+                const fixes = fixRootDirSync(project, getCompilerOptionsOfBuildOptions(buildOptions) as any, log => fixRootDirLogs.push(log));
+                for (const [fileName, text] of Object.entries(fixes)) {
+                    sys.writeFile(fileName, text);
+                }
+            }
+        }
+        catch (e) {
+            throw new Error([...fixRootDirLogs, `Error: ${e instanceof Error ? e.message : e}`].join(sys.newLine));
+        }
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {
             system.enableCPUProfiler(buildOptions.generateCpuProfile, () =>
                 performBuild(

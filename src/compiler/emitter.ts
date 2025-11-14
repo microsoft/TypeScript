@@ -664,6 +664,21 @@ export function getCommonSourceDirectory(
     return commonSourceDirectory;
 }
 
+export function getCommonSourceDirectory60(options: CompilerOptions): string | undefined {
+    if (!options.rootDir && !options.composite && !options.outFile && options.configFilePath) {
+        // Project compilations never infer their root from the input source paths
+        let commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
+
+        if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+            // Make sure directory path ends with directory separator so this string can directly
+            // used to replace with "" to get the relative path of the source file and the relative path doesn't
+            // start with / making it rooted path
+            commonSourceDirectory += directorySeparator;
+        }
+        return commonSourceDirectory;
+    }
+}
+
 /** @internal */
 export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
     return getCommonSourceDirectory(

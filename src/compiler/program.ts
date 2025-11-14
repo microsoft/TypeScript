@@ -63,6 +63,7 @@ import {
     DiagnosticWithLocation,
     directorySeparator,
     DirectoryStructureHost,
+    emitFileNamesIsEqual,
     emitFiles,
     EmitHost,
     emitModuleKindIsNonNodeESM,
@@ -108,6 +109,7 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getCommonSourceDirectory as ts_getCommonSourceDirectory,
+    getCommonSourceDirectory60,
     getCommonSourceDirectoryOfConfig,
     getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
@@ -129,6 +131,7 @@ import {
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
     getOutputDeclarationFileName,
+    getOutputPathsFor,
     getPackageScopeForPath,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
@@ -231,6 +234,7 @@ import {
     NodeWithTypeArguments,
     noop,
     normalizePath,
+    normalizeSlashes,
     notImplementedResolver,
     noTransformers,
     ObjectLiteralExpression,
@@ -291,6 +295,7 @@ import {
     SourceFile,
     sourceFileAffectingCompilerOptions,
     sourceFileMayBeEmitted,
+    sourceFileMayBeEmitted60,
     startsWith,
     Statement,
     StringLiteral,
@@ -2144,6 +2149,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             return commonSourceDirectory;
         }
         const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, program));
+
         commonSourceDirectory = ts_getCommonSourceDirectory(
             options,
             () => mapDefined(emittedFiles, file => file.isDeclarationFile ? undefined : file.fileName),
@@ -2151,6 +2157,24 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             getCanonicalFileName,
             commonSourceDirectory => checkSourceFilesBelongToPath(emittedFiles, commonSourceDirectory),
         );
+
+        const commonDir60 = getCommonSourceDirectory60(options);
+        if (commonDir60) {
+            const emittedFiles60 = filter(files, file => sourceFileMayBeEmitted60(file, program));
+            const commonDir2 = getDirectoryPath(normalizeSlashes(options.configFilePath!));
+            const result = checkSourceFilesBelongToPathWorker(emittedFiles60, commonDir2);
+            if (!result.allFilesBelongToPath) {
+                result.filesWithError?.forEach(sourceFile => {
+                    programDiagnostics.addLazyConfigDiagnostic(
+                        sourceFile,
+                        Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files,
+                        sourceFile.fileName,
+                        "!!! Sheetal CommonDir computed: " + commonSourceDirectory + " commonDir in 6.0 : " + commonDir60,
+                    );
+                });
+            }
+        }
+
         programDiagnostics.setCommonSourceDirectory(commonSourceDirectory);
         return commonSourceDirectory;
     }
@@ -3971,24 +3995,33 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     function checkSourceFilesBelongToPath(sourceFiles: readonly SourceFile[], rootDirectory: string): boolean {
+        const result = checkSourceFilesBelongToPathWorker(sourceFiles, rootDirectory);
+        result.filesWithError?.forEach(sourceFile => {
+            programDiagnostics.addLazyConfigDiagnostic(
+                sourceFile,
+                Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files,
+                sourceFile.fileName,
+                rootDirectory,
+            );
+        });
+        return result.allFilesBelongToPath;
+    }
+
+    function checkSourceFilesBelongToPathWorker(sourceFiles: readonly SourceFile[], rootDirectory: string) {
         let allFilesBelongToPath = true;
+        let filesWithError: SourceFile[] | undefined;
         const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
         for (const sourceFile of sourceFiles) {
             if (!sourceFile.isDeclarationFile) {
                 const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                 if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                    programDiagnostics.addLazyConfigDiagnostic(
-                        sourceFile,
-                        Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files,
-                        sourceFile.fileName,
-                        rootDirectory,
-                    );
+                    (filesWithError ??= []).push(sourceFile);
                     allFilesBelongToPath = false;
                 }
             }
         }
 
-        return allFilesBelongToPath;
+        return { allFilesBelongToPath, filesWithError };
     }
 
     function parseProjectReferenceConfigFile(ref: ProjectReference): ResolvedProjectReference | undefined {
@@ -4364,6 +4397,37 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 }
                 verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
             });
+        }
+        {
+            const commonDir60 = getCommonSourceDirectory60(options);
+            if (commonDir60) {
+                const emitHost = getEmitHost();
+                const emitHost60 = {
+                    ...emitHost,
+                    getCommonSourceDirectory: () => commonDir60,
+                };
+
+                for (const sourceFile of emitHost.getSourceFiles()) {
+                    const canBeEmitted = sourceFileMayBeEmitted(sourceFile, emitHost);
+                    const canBeEmitted60 = sourceFileMayBeEmitted60(sourceFile, emitHost60);
+                    const outputPaths = canBeEmitted ?
+                        getOutputPathsFor(sourceFile, emitHost, /*forceDtsPaths*/ false) :
+                        undefined;
+                    const outputPaths60 = canBeEmitted60 ?
+                        getOutputPathsFor(sourceFile, emitHost60, /*forceDtsPaths*/ false) :
+                        undefined;
+                    if (!emitFileNamesIsEqual(outputPaths, outputPaths60)) {
+                        // Report error
+                        programDiagnostics.addConfigDiagnostic(createCompilerDiagnostic(
+                            Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files,
+                            "!!! Sheetal: Output layout chaned for file: " + sourceFile.fileName +
+                                "\n commonDir: " + getCommonSourceDirectory() + " commonDir 6.0:: " + commonDir60 +
+                                "\n outputPaths:: " + JSON.stringify(outputPaths) +
+                                "\n Output paths in 6.0: " + JSON.stringify(outputPaths60),
+                        ));
+                    }
+                }
+            }
         }
 
         // Verify that all the emit files are unique and don't overwrite input files

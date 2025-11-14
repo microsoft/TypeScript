@@ -114,5 +114,8 @@
     "volta": {
         "node": "20.1.0",
         "npm": "8.19.4"
+    },
+    "dependencies": {
+        "@sheetalkamat/ts-fix-rootdir": "^1.0.1"
     }
 }
