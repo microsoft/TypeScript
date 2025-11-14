@@ -18,9 +18,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
-func (l *LanguageService) ProvideDocumentSymbols(ctx context.Context, documentURI lsproto.DocumentUri, hierarchicalSupport bool) (lsproto.DocumentSymbolResponse, error) {
+func (l *LanguageService) ProvideDocumentSymbols(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.DocumentSymbolResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
-	if hierarchicalSupport {
+	if lsproto.GetClientCapabilities(ctx).TextDocument.DocumentSymbol.HierarchicalDocumentSymbolSupport {
 		symbols := l.getDocumentSymbolsForChildren(ctx, file.AsNode())
 		return lsproto.SymbolInformationsOrDocumentSymbolsOrNull{DocumentSymbols: &symbols}, nil
 	}

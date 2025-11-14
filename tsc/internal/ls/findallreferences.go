@@ -430,7 +430,7 @@ func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto
 	return lsproto.LocationsOrNull{Locations: &locations}, nil
 }
 
-func (l *LanguageService) ProvideImplementations(ctx context.Context, params *lsproto.ImplementationParams, clientSupportsLink bool) (lsproto.ImplementationResponse, error) {
+func (l *LanguageService) ProvideImplementations(ctx context.Context, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
@@ -452,7 +452,7 @@ func (l *LanguageService) ProvideImplementations(ctx context.Context, params *ls
 		}
 	}
 
-	if clientSupportsLink {
+	if lsproto.GetClientCapabilities(ctx).TextDocument.Implementation.LinkSupport {
 		links := l.convertEntriesToLocationLinks(entries)
 		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{DefinitionLinks: &links}, nil
 	}

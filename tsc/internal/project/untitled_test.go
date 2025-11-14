@@ -87,7 +87,7 @@ x++;`
 	assert.Assert(t, len(refs) == 3, "Expected 3 references, got %d", len(refs))
 
 	// Also test definition using ProvideDefinition
-	definition, err := languageService.ProvideDefinition(ctx, uri, lspPosition, false)
+	definition, err := languageService.ProvideDefinition(ctx, uri, lspPosition)
 	assert.NilError(t, err)
 	if definition.Locations != nil {
 		t.Logf("Definition found: %d locations", len(*definition.Locations))

@@ -36,7 +36,6 @@ func (l *LanguageService) ProvideCompletion(
 	documentURI lsproto.DocumentUri,
 	LSPPosition lsproto.Position,
 	context *lsproto.CompletionContext,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) (lsproto.CompletionResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
 	var triggerCharacter *string
@@ -49,7 +48,6 @@ func (l *LanguageService) ProvideCompletion(
 		file,
 		position,
 		triggerCharacter,
-		clientOptions,
 	)
 	completionList = ensureItemData(file.FileName(), position, completionList)
 	return lsproto.CompletionItemsOrListOrNull{List: completionList}, nil
@@ -342,7 +340,6 @@ func (l *LanguageService) getCompletionsAtPosition(
 	file *ast.SourceFile,
 	position int,
 	triggerCharacter *string,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	_, previousToken := getRelevantTokens(position, file)
 	if triggerCharacter != nil && !IsInString(file, position, previousToken) && !isValidTrigger(file, *triggerCharacter, previousToken, position) {
@@ -369,7 +366,6 @@ func (l *LanguageService) getCompletionsAtPosition(
 		position,
 		previousToken,
 		compilerOptions,
-		clientOptions,
 	)
 	if stringCompletions != nil {
 		return stringCompletions
@@ -380,8 +376,8 @@ func (l *LanguageService) getCompletionsAtPosition(
 		previousToken.Kind == ast.KindIdentifier) &&
 		ast.IsBreakOrContinueStatement(previousToken.Parent) {
 		return l.getLabelCompletionsAtPosition(
+			ctx,
 			previousToken.Parent,
-			clientOptions,
 			file,
 			position,
 			l.getOptionalReplacementSpan(previousToken, file),
@@ -406,7 +402,6 @@ func (l *LanguageService) getCompletionsAtPosition(
 			compilerOptions,
 			data,
 			position,
-			clientOptions,
 			optionalReplacementSpan,
 		)
 		// !!! check if response is incomplete
@@ -414,7 +409,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 	case *completionDataKeyword:
 		optionalReplacementSpan := l.getOptionalReplacementSpan(previousToken, file)
 		return l.specificKeywordCompletionInfo(
-			clientOptions,
+			ctx,
 			position,
 			file,
 			data.keywordCompletions,
@@ -425,7 +420,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 		// If the current position is a jsDoc tag name, only tag names should be provided for completion
 		items := getJSDocTagNameCompletions()
 		items = append(items, getJSDocParameterCompletions(
-			clientOptions,
+			ctx,
 			file,
 			position,
 			checker,
@@ -433,12 +428,12 @@ func (l *LanguageService) getCompletionsAtPosition(
 			preferences,
 			/*tagNameOnly*/ true,
 		)...)
-		return l.jsDocCompletionInfo(clientOptions, position, file, items)
+		return l.jsDocCompletionInfo(ctx, position, file, items)
 	case *completionDataJSDocTag:
 		// If the current position is a jsDoc tag, only tags should be provided for completion
 		items := getJSDocTagCompletions()
 		items = append(items, getJSDocParameterCompletions(
-			clientOptions,
+			ctx,
 			file,
 			position,
 			checker,
@@ -446,9 +441,9 @@ func (l *LanguageService) getCompletionsAtPosition(
 			preferences,
 			/*tagNameOnly*/ false,
 		)...)
-		return l.jsDocCompletionInfo(clientOptions, position, file, items)
+		return l.jsDocCompletionInfo(ctx, position, file, items)
 	case *completionDataJSDocParameterName:
-		return l.jsDocCompletionInfo(clientOptions, position, file, getJSDocParameterNameCompletions(data.tag))
+		return l.jsDocCompletionInfo(ctx, position, file, getJSDocParameterNameCompletions(data.tag))
 	default:
 		panic("getCompletionData() returned unexpected type: " + fmt.Sprintf("%T", data))
 	}
@@ -1818,7 +1813,6 @@ func (l *LanguageService) completionInfoFromData(
 	compilerOptions *core.CompilerOptions,
 	data *completionDataData,
 	position int,
-	clientOptions *lsproto.CompletionClientCapabilities,
 	optionalReplacementSpan *lsproto.Range,
 ) *lsproto.CompletionList {
 	keywordFilters := data.keywordFilters
@@ -1829,7 +1823,7 @@ func (l *LanguageService) completionInfoFromData(
 
 	// Verify if the file is JSX language variant
 	if file.LanguageVariant == core.LanguageVariantJSX {
-		list := l.getJsxClosingTagCompletion(data.location, file, position, clientOptions)
+		list := l.getJsxClosingTagCompletion(ctx, data.location, file, position)
 		if list != nil {
 			return list
 		}
@@ -1868,7 +1862,6 @@ func (l *LanguageService) completionInfoFromData(
 		position,
 		file,
 		compilerOptions,
-		clientOptions,
 	)
 
 	if data.keywordFilters != KeywordCompletionFiltersNone {
@@ -1909,7 +1902,7 @@ func (l *LanguageService) completionInfoFromData(
 	// !!! exhaustive case completions
 
 	itemDefaults := l.setItemDefaults(
-		clientOptions,
+		ctx,
 		position,
 		file,
 		sortedEntries,
@@ -1931,7 +1924,6 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	position int,
 	file *ast.SourceFile,
 	compilerOptions *core.CompilerOptions,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) (uniqueNames collections.Set[string], sortedEntries []*lsproto.CompletionItem) {
 	closestSymbolDeclaration := getClosestSymbolDeclaration(data.contextToken, data.location)
 	useSemicolons := lsutil.ProbablyUsesSemicolons(file)
@@ -1988,7 +1980,6 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 			origin,
 			useSemicolons,
 			compilerOptions,
-			clientOptions,
 			isMemberCompletion,
 		)
 		if entry == nil {
@@ -2054,9 +2045,9 @@ func (l *LanguageService) createCompletionItem(
 	origin *symbolOriginInfo,
 	useSemicolons bool,
 	compilerOptions *core.CompilerOptions,
-	clientOptions *lsproto.CompletionClientCapabilities,
 	isMemberCompletion bool,
 ) *lsproto.CompletionItem {
+	clientOptions := lsproto.GetClientCapabilities(ctx).TextDocument.Completion
 	contextToken := data.contextToken
 	var insertText string
 	var filterText string
@@ -2173,7 +2164,7 @@ func (l *LanguageService) createCompletionItem(
 			if data.importStatementCompletion.isTopLevelTypeOnly {
 				insertText += typeOnlyText
 			}
-			tabStop := core.IfElse(ptrIsTrue(clientOptions.CompletionItem.SnippetSupport), "$1", "")
+			tabStop := core.IfElse(clientOptions.CompletionItem.SnippetSupport, "$1", "")
 			importKind := getImportKind(file, exportKind, l.GetProgram(), true /*forceImportKeyword*/)
 			escapedSnippet := escapeSnippetText(name)
 			suffix := core.IfElse(useSemicolons, ";", "")
@@ -2190,7 +2181,7 @@ func (l *LanguageService) createCompletionItem(
 			}
 
 			replacementSpan = data.importStatementCompletion.replacementSpan
-			isSnippet = ptrIsTrue(clientOptions.CompletionItem.SnippetSupport)
+			isSnippet = clientOptions.CompletionItem.SnippetSupport
 		}
 	}
 
@@ -2234,7 +2225,7 @@ func (l *LanguageService) createCompletionItem(
 		insertText = origin.asObjectLiteralMethod().insertText
 		isSnippet = origin.asObjectLiteralMethod().isSnippet
 		labelDetails = origin.asObjectLiteralMethod().labelDetails // !!! check if this can conflict with case above where we set label details
-		if !clientSupportsItemLabelDetails(clientOptions) {
+		if !clientSupportsItemLabelDetails(ctx) {
 			name = name + *origin.asObjectLiteralMethod().labelDetails.Detail
 			labelDetails = nil
 		}
@@ -2244,7 +2235,7 @@ func (l *LanguageService) createCompletionItem(
 
 	if data.isJsxIdentifierExpected &&
 		!data.isRightOfOpenTag &&
-		clientSupportsItemSnippet(clientOptions) &&
+		clientSupportsItemSnippet(ctx) &&
 		preferences.JsxAttributeCompletionStyle != lsutil.JsxAttributeCompletionStyleNone &&
 		!(ast.IsJsxAttribute(data.location.Parent) && data.location.Parent.Initializer() != nil) {
 		useBraces := preferences.JsxAttributeCompletionStyle == lsutil.JsxAttributeCompletionStyleBraces
@@ -2311,10 +2302,10 @@ func (l *LanguageService) createCompletionItem(
 
 	elementKind := getSymbolKind(typeChecker, symbol, data.location)
 	var commitCharacters *[]string
-	if clientSupportsItemCommitCharacters(clientOptions) {
+	if clientSupportsItemCommitCharacters(ctx) {
 		if elementKind == ScriptElementKindWarning || elementKind == ScriptElementKindString {
 			commitCharacters = &[]string{}
-		} else if !clientSupportsDefaultCommitCharacters(clientOptions) {
+		} else if !clientSupportsDefaultCommitCharacters(ctx) {
 			commitCharacters = ptrTo(data.defaultCommitCharacters)
 		}
 		// Otherwise use the completion list default.
@@ -2324,6 +2315,7 @@ func (l *LanguageService) createCompletionItem(
 	kindModifiers := getSymbolModifiers(typeChecker, symbol)
 
 	return l.createLSPCompletionItem(
+		ctx,
 		name,
 		insertText,
 		filterText,
@@ -2335,7 +2327,6 @@ func (l *LanguageService) createCompletionItem(
 		labelDetails,
 		file,
 		position,
-		clientOptions,
 		isMemberCompletion,
 		isSnippet,
 		hasAction,
@@ -4315,7 +4306,7 @@ func isTypeKeywordTokenOrIdentifier(node *ast.Node) bool {
 // Returns the item defaults for completion items, if that capability is supported.
 // Otherwise, if some item default is not supported by client, sets that property on each item.
 func (l *LanguageService) setItemDefaults(
-	clientOptions *lsproto.CompletionClientCapabilities,
+	ctx context.Context,
 	position int,
 	file *ast.SourceFile,
 	items []*lsproto.CompletionItem,
@@ -4324,8 +4315,8 @@ func (l *LanguageService) setItemDefaults(
 ) *lsproto.CompletionItemDefaults {
 	var itemDefaults *lsproto.CompletionItemDefaults
 	if defaultCommitCharacters != nil {
-		supportsItemCommitCharacters := clientSupportsItemCommitCharacters(clientOptions)
-		if clientSupportsDefaultCommitCharacters(clientOptions) && supportsItemCommitCharacters {
+		supportsItemCommitCharacters := clientSupportsItemCommitCharacters(ctx)
+		if clientSupportsDefaultCommitCharacters(ctx) && supportsItemCommitCharacters {
 			itemDefaults = &lsproto.CompletionItemDefaults{
 				CommitCharacters: defaultCommitCharacters,
 			}
@@ -4343,7 +4334,7 @@ func (l *LanguageService) setItemDefaults(
 			Start: optionalReplacementSpan.Start,
 			End:   l.createLspPosition(position, file),
 		}
-		if clientSupportsDefaultEditRange(clientOptions) {
+		if clientSupportsDefaultEditRange(ctx) {
 			itemDefaults = core.OrElse(itemDefaults, &lsproto.CompletionItemDefaults{})
 			itemDefaults.EditRange = &lsproto.RangeOrEditRangeWithInsertReplace{
 				EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
@@ -4365,7 +4356,7 @@ func (l *LanguageService) setItemDefaults(
 					item.InsertText = nil
 				}
 			}
-		} else if clientSupportsItemInsertReplace(clientOptions) {
+		} else if clientSupportsItemInsertReplace(ctx) {
 			for _, item := range items {
 				if item.TextEdit == nil {
 					item.TextEdit = &lsproto.TextEditOrInsertReplaceEdit{
@@ -4384,7 +4375,7 @@ func (l *LanguageService) setItemDefaults(
 }
 
 func (l *LanguageService) specificKeywordCompletionInfo(
-	clientOptions *lsproto.CompletionClientCapabilities,
+	ctx context.Context,
 	position int,
 	file *ast.SourceFile,
 	items []*lsproto.CompletionItem,
@@ -4393,7 +4384,7 @@ func (l *LanguageService) specificKeywordCompletionInfo(
 ) *lsproto.CompletionList {
 	defaultCommitCharacters := getDefaultCommitCharacters(isNewIdentifierLocation)
 	itemDefaults := l.setItemDefaults(
-		clientOptions,
+		ctx,
 		position,
 		file,
 		items,
@@ -4408,10 +4399,10 @@ func (l *LanguageService) specificKeywordCompletionInfo(
 }
 
 func (l *LanguageService) getJsxClosingTagCompletion(
+	ctx context.Context,
 	location *ast.Node,
 	file *ast.SourceFile,
 	position int,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	// We wanna walk up the tree till we find a JSX closing element.
 	jsxClosingElement := ast.FindAncestorOrQuit(location, func(node *ast.Node) ast.FindAncestorResult {
@@ -4449,6 +4440,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
 
 	item := l.createLSPCompletionItem(
+		ctx,
 		fullClosingTag, /*name*/
 		"",             /*insertText*/
 		"",             /*filterText*/
@@ -4460,7 +4452,6 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 		nil, /*labelDetails*/
 		file,
 		position,
-		clientOptions,
 		true,  /*isMemberCompletion*/
 		false, /*isSnippet*/
 		false, /*hasAction*/
@@ -4470,7 +4461,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 	)
 	items := []*lsproto.CompletionItem{item}
 	itemDefaults := l.setItemDefaults(
-		clientOptions,
+		ctx,
 		position,
 		file,
 		items,
@@ -4486,6 +4477,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 }
 
 func (l *LanguageService) createLSPCompletionItem(
+	ctx context.Context,
 	name string,
 	insertText string,
 	filterText string,
@@ -4497,7 +4489,6 @@ func (l *LanguageService) createLSPCompletionItem(
 	labelDetails *lsproto.CompletionItemLabelDetails,
 	file *ast.SourceFile,
 	position int,
-	clientOptions *lsproto.CompletionClientCapabilities,
 	isMemberCompletion bool,
 	isSnippet bool,
 	hasAction bool,
@@ -4591,19 +4582,19 @@ func (l *LanguageService) createLSPCompletionItem(
 }
 
 func (l *LanguageService) getLabelCompletionsAtPosition(
+	ctx context.Context,
 	node *ast.BreakOrContinueStatement,
-	clientOptions *lsproto.CompletionClientCapabilities,
 	file *ast.SourceFile,
 	position int,
 	optionalReplacementSpan *lsproto.Range,
 ) *lsproto.CompletionList {
-	items := l.getLabelStatementCompletions(node, clientOptions, file, position)
+	items := l.getLabelStatementCompletions(ctx, node, file, position)
 	if len(items) == 0 {
 		return nil
 	}
 	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
 	itemDefaults := l.setItemDefaults(
-		clientOptions,
+		ctx,
 		position,
 		file,
 		items,
@@ -4618,8 +4609,8 @@ func (l *LanguageService) getLabelCompletionsAtPosition(
 }
 
 func (l *LanguageService) getLabelStatementCompletions(
+	ctx context.Context,
 	node *ast.BreakOrContinueStatement,
-	clientOptions *lsproto.CompletionClientCapabilities,
 	file *ast.SourceFile,
 	position int,
 ) []*lsproto.CompletionItem {
@@ -4635,6 +4626,7 @@ func (l *LanguageService) getLabelStatementCompletions(
 			if !uniques.Has(name) {
 				uniques.Add(name)
 				items = append(items, l.createLSPCompletionItem(
+					ctx,
 					name,
 					"", /*insertText*/
 					"", /*filterText*/
@@ -4646,7 +4638,6 @@ func (l *LanguageService) getLabelStatementCompletions(
 					nil, /*labelDetails*/
 					file,
 					position,
-					clientOptions,
 					false, /*isMemberCompletion*/
 					false, /*isSnippet*/
 					false, /*hasAction*/
@@ -4886,38 +4877,28 @@ func isInJsxText(contextToken *ast.Node, location *ast.Node) bool {
 	return false
 }
 
-func hasCompletionItem(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	return clientOptions != nil && clientOptions.CompletionItem != nil
+func clientSupportsItemLabelDetails(ctx context.Context) bool {
+	return lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionItem.LabelDetailsSupport
 }
 
-func clientSupportsItemLabelDetails(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	return hasCompletionItem(clientOptions) && ptrIsTrue(clientOptions.CompletionItem.LabelDetailsSupport)
+func clientSupportsItemSnippet(ctx context.Context) bool {
+	return lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionItem.SnippetSupport
 }
 
-func clientSupportsItemSnippet(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	return hasCompletionItem(clientOptions) && ptrIsTrue(clientOptions.CompletionItem.SnippetSupport)
+func clientSupportsItemCommitCharacters(ctx context.Context) bool {
+	return lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionItem.CommitCharactersSupport
 }
 
-func clientSupportsItemCommitCharacters(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	return hasCompletionItem(clientOptions) && ptrIsTrue(clientOptions.CompletionItem.CommitCharactersSupport)
+func clientSupportsItemInsertReplace(ctx context.Context) bool {
+	return lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionItem.InsertReplaceSupport
 }
 
-func clientSupportsItemInsertReplace(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	return hasCompletionItem(clientOptions) && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport)
+func clientSupportsDefaultCommitCharacters(ctx context.Context) bool {
+	return slices.Contains(lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionList.ItemDefaults, "commitCharacters")
 }
 
-func clientSupportsDefaultCommitCharacters(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	if clientOptions == nil || clientOptions.CompletionList == nil || clientOptions.CompletionList.ItemDefaults == nil {
-		return false
-	}
-	return slices.Contains(*clientOptions.CompletionList.ItemDefaults, "commitCharacters")
-}
-
-func clientSupportsDefaultEditRange(clientOptions *lsproto.CompletionClientCapabilities) bool {
-	if clientOptions == nil || clientOptions.CompletionList == nil || clientOptions.CompletionList.ItemDefaults == nil {
-		return false
-	}
-	return slices.Contains(*clientOptions.CompletionList.ItemDefaults, "editRange")
+func clientSupportsDefaultEditRange(ctx context.Context) bool {
+	return slices.Contains(lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionList.ItemDefaults, "editRange")
 }
 
 type argumentInfoForCompletions struct {
@@ -5002,7 +4983,6 @@ func (l *LanguageService) ResolveCompletionItem(
 	ctx context.Context,
 	item *lsproto.CompletionItem,
 	data *CompletionItemData,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) (*lsproto.CompletionItem, error) {
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
@@ -5013,7 +4993,7 @@ func (l *LanguageService) ResolveCompletionItem(
 		return nil, fmt.Errorf("file not found: %s", data.FileName)
 	}
 
-	return l.getCompletionItemDetails(ctx, program, data.Position, file, item, data, clientOptions), nil
+	return l.getCompletionItemDetails(ctx, program, data.Position, file, item, data), nil
 }
 
 func GetCompletionItemData(item *lsproto.CompletionItem) (*CompletionItemData, error) {
@@ -5028,17 +5008,8 @@ func GetCompletionItemData(item *lsproto.CompletionItem) (*CompletionItemData, e
 	return &itemData, nil
 }
 
-func getCompletionDocumentationFormat(clientOptions *lsproto.CompletionClientCapabilities) lsproto.MarkupKind {
-	if clientOptions == nil || clientOptions.CompletionItem == nil || clientOptions.CompletionItem.DocumentationFormat == nil {
-		// Default to plaintext if no preference specified
-		return lsproto.MarkupKindPlainText
-	}
-	formats := *clientOptions.CompletionItem.DocumentationFormat
-	if len(formats) == 0 {
-		return lsproto.MarkupKindPlainText
-	}
-	// Return the first (most preferred) format
-	return formats[0]
+func getCompletionDocumentationFormat(ctx context.Context) lsproto.MarkupKind {
+	return lsproto.PreferredMarkupKind(lsproto.GetClientCapabilities(ctx).TextDocument.Completion.CompletionItem.DocumentationFormat)
 }
 
 func (l *LanguageService) getCompletionItemDetails(
@@ -5047,19 +5018,18 @@ func (l *LanguageService) getCompletionItemDetails(
 	position int,
 	file *ast.SourceFile,
 	item *lsproto.CompletionItem,
-	itemData *CompletionItemData,
-	clientOptions *lsproto.CompletionClientCapabilities,
+	data *CompletionItemData,
 ) *lsproto.CompletionItem {
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
-	docFormat := getCompletionDocumentationFormat(clientOptions)
+	docFormat := getCompletionDocumentationFormat(ctx)
 	contextToken, previousToken := getRelevantTokens(position, file)
 	if IsInString(file, position, previousToken) {
 		return l.getStringLiteralCompletionDetails(
 			ctx,
 			checker,
 			item,
-			itemData.Name,
+			data.Name,
 			file,
 			position,
 			contextToken,
@@ -5073,8 +5043,7 @@ func (l *LanguageService) getCompletionItemDetails(
 		checker,
 		file,
 		position,
-		itemData,
-		clientOptions,
+		data,
 	)
 	preferences := l.UserPreferences()
 
@@ -5083,16 +5052,16 @@ func (l *LanguageService) getCompletionItemDetails(
 		request := *symbolCompletion.request
 		switch request := request.(type) {
 		case *completionDataJSDocTagName:
-			return createSimpleDetails(item, itemData.Name, docFormat)
+			return createSimpleDetails(item, data.Name, docFormat)
 		case *completionDataJSDocTag:
-			return createSimpleDetails(item, itemData.Name, docFormat)
+			return createSimpleDetails(item, data.Name, docFormat)
 		case *completionDataJSDocParameterName:
-			return createSimpleDetails(item, itemData.Name, docFormat)
+			return createSimpleDetails(item, data.Name, docFormat)
 		case *completionDataKeyword:
 			if core.Some(request.keywordCompletions, func(c *lsproto.CompletionItem) bool {
-				return c.Label == itemData.Name
+				return c.Label == data.Name
 			}) {
-				return createSimpleDetails(item, itemData.Name, docFormat)
+				return createSimpleDetails(item, data.Name, docFormat)
 			}
 			return item
 		default:
@@ -5100,7 +5069,7 @@ func (l *LanguageService) getCompletionItemDetails(
 		}
 	case symbolCompletion.symbol != nil:
 		symbolDetails := symbolCompletion.symbol
-		actions := l.getCompletionItemActions(ctx, checker, file, position, itemData, symbolDetails)
+		actions := l.getCompletionItemActions(ctx, checker, file, position, data, symbolDetails)
 		return l.createCompletionDetailsForSymbol(
 			item,
 			symbolDetails.symbol,
@@ -5118,9 +5087,9 @@ func (l *LanguageService) getCompletionItemDetails(
 	default:
 		// Didn't find a symbol with this name.  See if we can find a keyword instead.
 		if core.Some(allKeywordCompletions(), func(c *lsproto.CompletionItem) bool {
-			return c.Label == itemData.Name
+			return c.Label == data.Name
 		}) {
-			return createSimpleDetails(item, itemData.Name, docFormat)
+			return createSimpleDetails(item, data.Name, docFormat)
 		}
 		return item
 	}
@@ -5149,7 +5118,6 @@ func (l *LanguageService) getSymbolCompletionFromItemData(
 	file *ast.SourceFile,
 	position int,
 	itemData *CompletionItemData,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) detailsData {
 	if itemData.Source == SourceSwitchCases {
 		return detailsData{
@@ -5601,14 +5569,14 @@ func isTagWithTypeExpression(tag *ast.JSDocTag) bool {
 }
 
 func (l *LanguageService) jsDocCompletionInfo(
-	clientOptions *lsproto.CompletionClientCapabilities,
+	ctx context.Context,
 	position int,
 	file *ast.SourceFile,
 	items []*lsproto.CompletionItem,
 ) *lsproto.CompletionList {
 	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
 	itemDefaults := l.setItemDefaults(
-		clientOptions,
+		ctx,
 		position,
 		file,
 		items,
@@ -5744,7 +5712,7 @@ func getJSDocTagCompletions() []*lsproto.CompletionItem {
 }
 
 func getJSDocParameterCompletions(
-	clientOptions *lsproto.CompletionClientCapabilities,
+	ctx context.Context,
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,

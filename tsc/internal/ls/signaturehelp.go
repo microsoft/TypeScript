@@ -43,8 +43,6 @@ func (l *LanguageService) ProvideSignatureHelp(
 	documentURI lsproto.DocumentUri,
 	position lsproto.Position,
 	context *lsproto.SignatureHelpContext,
-	clientOptions *lsproto.SignatureHelpClientCapabilities,
-	docFormat lsproto.MarkupKind,
 ) (lsproto.SignatureHelpResponse, error) {
 	program, sourceFile := l.getProgramAndFile(documentURI)
 	items := l.GetSignatureHelpItems(
@@ -52,9 +50,7 @@ func (l *LanguageService) ProvideSignatureHelp(
 		int(l.converters.LineAndCharacterToPosition(sourceFile, position)),
 		program,
 		sourceFile,
-		context,
-		clientOptions,
-		docFormat)
+		context)
 	return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
 }
 
@@ -64,8 +60,6 @@ func (l *LanguageService) GetSignatureHelpItems(
 	program *compiler.Program,
 	sourceFile *ast.SourceFile,
 	context *lsproto.SignatureHelpContext,
-	clientOptions *lsproto.SignatureHelpClientCapabilities,
-	docFormat lsproto.MarkupKind,
 ) *lsproto.SignatureHelp {
 	typeChecker, done := program.GetTypeCheckerForFile(ctx, sourceFile)
 	defer done()
@@ -143,12 +137,12 @@ func (l *LanguageService) GetSignatureHelpItems(
 
 	// return typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
 	if candidateInfo.candidateInfo != nil {
-		return l.createSignatureHelpItems(candidateInfo.candidateInfo.candidates, candidateInfo.candidateInfo.resolvedSignature, argumentInfo, sourceFile, typeChecker, onlyUseSyntacticOwners, clientOptions, docFormat)
+		return l.createSignatureHelpItems(ctx, candidateInfo.candidateInfo.candidates, candidateInfo.candidateInfo.resolvedSignature, argumentInfo, sourceFile, typeChecker, onlyUseSyntacticOwners)
 	}
-	return createTypeHelpItems(candidateInfo.typeInfo, argumentInfo, sourceFile, clientOptions, typeChecker)
+	return createTypeHelpItems(candidateInfo.typeInfo, argumentInfo, sourceFile, typeChecker)
 }
 
-func createTypeHelpItems(symbol *ast.Symbol, argumentInfo *argumentListInfo, sourceFile *ast.SourceFile, clientOptions *lsproto.SignatureHelpClientCapabilities, c *checker.Checker) *lsproto.SignatureHelp {
+func createTypeHelpItems(symbol *ast.Symbol, argumentInfo *argumentListInfo, sourceFile *ast.SourceFile, c *checker.Checker) *lsproto.SignatureHelp {
 	typeParameters := c.GetLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
 	if typeParameters == nil {
 		return nil
@@ -205,7 +199,10 @@ func getTypeHelpItem(symbol *ast.Symbol, typeParameter []*checker.Type, enclosin
 	}
 }
 
-func (l *LanguageService) createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature *checker.Signature, argumentInfo *argumentListInfo, sourceFile *ast.SourceFile, c *checker.Checker, useFullPrefix bool, clientOptions *lsproto.SignatureHelpClientCapabilities, docFormat lsproto.MarkupKind) *lsproto.SignatureHelp {
+func (l *LanguageService) createSignatureHelpItems(ctx context.Context, candidates []*checker.Signature, resolvedSignature *checker.Signature, argumentInfo *argumentListInfo, sourceFile *ast.SourceFile, c *checker.Checker, useFullPrefix bool) *lsproto.SignatureHelp {
+	caps := lsproto.GetClientCapabilities(ctx)
+	docFormat := lsproto.PreferredMarkupKind(caps.TextDocument.SignatureHelp.SignatureInformation.DocumentationFormat)
+
 	enclosingDeclaration := getEnclosingDeclarationFromInvocation(argumentInfo.invocation)
 	if enclosingDeclaration == nil {
 		return nil

@@ -17,8 +17,10 @@ func (l *LanguageService) ProvideDefinition(
 	ctx context.Context,
 	documentURI lsproto.DocumentUri,
 	position lsproto.Position,
-	clientSupportsLink bool,
 ) (lsproto.DefinitionResponse, error) {
+	caps := lsproto.GetClientCapabilities(ctx)
+	clientSupportsLink := caps.TextDocument.Definition.LinkSupport
+
 	program, file := l.getProgramAndFile(documentURI)
 	node := astnav.GetTouchingPropertyName(file, int(l.converters.LineAndCharacterToPosition(file, position)))
 	if node.Kind == ast.KindSourceFile {
@@ -68,8 +70,10 @@ func (l *LanguageService) ProvideTypeDefinition(
 	ctx context.Context,
 	documentURI lsproto.DocumentUri,
 	position lsproto.Position,
-	clientSupportsLink bool,
-) (lsproto.DefinitionResponse, error) {
+) (lsproto.TypeDefinitionResponse, error) {
+	caps := lsproto.GetClientCapabilities(ctx)
+	clientSupportsLink := caps.TextDocument.TypeDefinition.LinkSupport
+
 	program, file := l.getProgramAndFile(documentURI)
 	node := astnav.GetTouchingPropertyName(file, int(l.converters.LineAndCharacterToPosition(file, position)))
 	if node.Kind == ast.KindSourceFile {
@@ -278,9 +282,4 @@ func getDeclarationsFromType(t *checker.Type) []*ast.Node {
 		}
 	}
 	return result
-}
-
-func clientSupportsLink(clientCapabilities *lsproto.DefinitionClientCapabilities) bool {
-	return clientCapabilities != nil &&
-		ptrIsTrue(clientCapabilities.LinkSupport)
 }

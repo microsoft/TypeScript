@@ -25725,3 +25725,1347 @@ func (o *StringLiteralSnippet) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	}
 	return nil
 }
+
+// Helper function for dereferencing pointers with zero value fallback
+func derefOr[T any](v *T) T {
+	if v != nil {
+		return *v
+	}
+	var zero T
+	return zero
+}
+
+type ResolvedChangeAnnotationsSupportOptions struct {
+	GroupsOnLabel bool `json:"groupsOnLabel,omitzero"`
+}
+
+func resolveChangeAnnotationsSupportOptions(v *ChangeAnnotationsSupportOptions) ResolvedChangeAnnotationsSupportOptions {
+	if v == nil {
+		return ResolvedChangeAnnotationsSupportOptions{}
+	}
+	return ResolvedChangeAnnotationsSupportOptions{
+		GroupsOnLabel: derefOr(v.GroupsOnLabel),
+	}
+}
+
+type ResolvedWorkspaceEditClientCapabilities struct {
+	DocumentChanges         bool                                    `json:"documentChanges,omitzero"`
+	ResourceOperations      []ResourceOperationKind                 `json:"resourceOperations,omitzero"`
+	FailureHandling         FailureHandlingKind                     `json:"failureHandling,omitzero"`
+	NormalizesLineEndings   bool                                    `json:"normalizesLineEndings,omitzero"`
+	ChangeAnnotationSupport ResolvedChangeAnnotationsSupportOptions `json:"changeAnnotationSupport,omitzero"`
+	MetadataSupport         bool                                    `json:"metadataSupport,omitzero"`
+	SnippetEditSupport      bool                                    `json:"snippetEditSupport,omitzero"`
+}
+
+func resolveWorkspaceEditClientCapabilities(v *WorkspaceEditClientCapabilities) ResolvedWorkspaceEditClientCapabilities {
+	if v == nil {
+		return ResolvedWorkspaceEditClientCapabilities{}
+	}
+	return ResolvedWorkspaceEditClientCapabilities{
+		DocumentChanges:         derefOr(v.DocumentChanges),
+		ResourceOperations:      derefOr(v.ResourceOperations),
+		FailureHandling:         derefOr(v.FailureHandling),
+		NormalizesLineEndings:   derefOr(v.NormalizesLineEndings),
+		ChangeAnnotationSupport: resolveChangeAnnotationsSupportOptions(v.ChangeAnnotationSupport),
+		MetadataSupport:         derefOr(v.MetadataSupport),
+		SnippetEditSupport:      derefOr(v.SnippetEditSupport),
+	}
+}
+
+type ResolvedDidChangeConfigurationClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveDidChangeConfigurationClientCapabilities(v *DidChangeConfigurationClientCapabilities) ResolvedDidChangeConfigurationClientCapabilities {
+	if v == nil {
+		return ResolvedDidChangeConfigurationClientCapabilities{}
+	}
+	return ResolvedDidChangeConfigurationClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedDidChangeWatchedFilesClientCapabilities struct {
+	DynamicRegistration    bool `json:"dynamicRegistration,omitzero"`
+	RelativePatternSupport bool `json:"relativePatternSupport,omitzero"`
+}
+
+func resolveDidChangeWatchedFilesClientCapabilities(v *DidChangeWatchedFilesClientCapabilities) ResolvedDidChangeWatchedFilesClientCapabilities {
+	if v == nil {
+		return ResolvedDidChangeWatchedFilesClientCapabilities{}
+	}
+	return ResolvedDidChangeWatchedFilesClientCapabilities{
+		DynamicRegistration:    derefOr(v.DynamicRegistration),
+		RelativePatternSupport: derefOr(v.RelativePatternSupport),
+	}
+}
+
+type ResolvedClientSymbolKindOptions struct {
+	ValueSet []SymbolKind `json:"valueSet,omitzero"`
+}
+
+func resolveClientSymbolKindOptions(v *ClientSymbolKindOptions) ResolvedClientSymbolKindOptions {
+	if v == nil {
+		return ResolvedClientSymbolKindOptions{}
+	}
+	return ResolvedClientSymbolKindOptions{
+		ValueSet: derefOr(v.ValueSet),
+	}
+}
+
+type ResolvedClientSymbolTagOptions struct {
+	ValueSet []SymbolTag `json:"valueSet,omitzero"`
+}
+
+func resolveClientSymbolTagOptions(v *ClientSymbolTagOptions) ResolvedClientSymbolTagOptions {
+	if v == nil {
+		return ResolvedClientSymbolTagOptions{}
+	}
+	return ResolvedClientSymbolTagOptions{
+		ValueSet: v.ValueSet,
+	}
+}
+
+type ResolvedClientSymbolResolveOptions struct {
+	Properties []string `json:"properties,omitzero"`
+}
+
+func resolveClientSymbolResolveOptions(v *ClientSymbolResolveOptions) ResolvedClientSymbolResolveOptions {
+	if v == nil {
+		return ResolvedClientSymbolResolveOptions{}
+	}
+	return ResolvedClientSymbolResolveOptions{
+		Properties: v.Properties,
+	}
+}
+
+type ResolvedWorkspaceSymbolClientCapabilities struct {
+	DynamicRegistration bool                               `json:"dynamicRegistration,omitzero"`
+	SymbolKind          ResolvedClientSymbolKindOptions    `json:"symbolKind,omitzero"`
+	TagSupport          ResolvedClientSymbolTagOptions     `json:"tagSupport,omitzero"`
+	ResolveSupport      ResolvedClientSymbolResolveOptions `json:"resolveSupport,omitzero"`
+}
+
+func resolveWorkspaceSymbolClientCapabilities(v *WorkspaceSymbolClientCapabilities) ResolvedWorkspaceSymbolClientCapabilities {
+	if v == nil {
+		return ResolvedWorkspaceSymbolClientCapabilities{}
+	}
+	return ResolvedWorkspaceSymbolClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		SymbolKind:          resolveClientSymbolKindOptions(v.SymbolKind),
+		TagSupport:          resolveClientSymbolTagOptions(v.TagSupport),
+		ResolveSupport:      resolveClientSymbolResolveOptions(v.ResolveSupport),
+	}
+}
+
+type ResolvedExecuteCommandClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveExecuteCommandClientCapabilities(v *ExecuteCommandClientCapabilities) ResolvedExecuteCommandClientCapabilities {
+	if v == nil {
+		return ResolvedExecuteCommandClientCapabilities{}
+	}
+	return ResolvedExecuteCommandClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedSemanticTokensWorkspaceClientCapabilities struct {
+	RefreshSupport bool `json:"refreshSupport,omitzero"`
+}
+
+func resolveSemanticTokensWorkspaceClientCapabilities(v *SemanticTokensWorkspaceClientCapabilities) ResolvedSemanticTokensWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedSemanticTokensWorkspaceClientCapabilities{}
+	}
+	return ResolvedSemanticTokensWorkspaceClientCapabilities{
+		RefreshSupport: derefOr(v.RefreshSupport),
+	}
+}
+
+type ResolvedCodeLensWorkspaceClientCapabilities struct {
+	RefreshSupport bool `json:"refreshSupport,omitzero"`
+}
+
+func resolveCodeLensWorkspaceClientCapabilities(v *CodeLensWorkspaceClientCapabilities) ResolvedCodeLensWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedCodeLensWorkspaceClientCapabilities{}
+	}
+	return ResolvedCodeLensWorkspaceClientCapabilities{
+		RefreshSupport: derefOr(v.RefreshSupport),
+	}
+}
+
+type ResolvedFileOperationClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	DidCreate           bool `json:"didCreate,omitzero"`
+	WillCreate          bool `json:"willCreate,omitzero"`
+	DidRename           bool `json:"didRename,omitzero"`
+	WillRename          bool `json:"willRename,omitzero"`
+	DidDelete           bool `json:"didDelete,omitzero"`
+	WillDelete          bool `json:"willDelete,omitzero"`
+}
+
+func resolveFileOperationClientCapabilities(v *FileOperationClientCapabilities) ResolvedFileOperationClientCapabilities {
+	if v == nil {
+		return ResolvedFileOperationClientCapabilities{}
+	}
+	return ResolvedFileOperationClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		DidCreate:           derefOr(v.DidCreate),
+		WillCreate:          derefOr(v.WillCreate),
+		DidRename:           derefOr(v.DidRename),
+		WillRename:          derefOr(v.WillRename),
+		DidDelete:           derefOr(v.DidDelete),
+		WillDelete:          derefOr(v.WillDelete),
+	}
+}
+
+type ResolvedInlineValueWorkspaceClientCapabilities struct {
+	RefreshSupport bool `json:"refreshSupport,omitzero"`
+}
+
+func resolveInlineValueWorkspaceClientCapabilities(v *InlineValueWorkspaceClientCapabilities) ResolvedInlineValueWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedInlineValueWorkspaceClientCapabilities{}
+	}
+	return ResolvedInlineValueWorkspaceClientCapabilities{
+		RefreshSupport: derefOr(v.RefreshSupport),
+	}
+}
+
+type ResolvedInlayHintWorkspaceClientCapabilities struct {
+	RefreshSupport bool `json:"refreshSupport,omitzero"`
+}
+
+func resolveInlayHintWorkspaceClientCapabilities(v *InlayHintWorkspaceClientCapabilities) ResolvedInlayHintWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedInlayHintWorkspaceClientCapabilities{}
+	}
+	return ResolvedInlayHintWorkspaceClientCapabilities{
+		RefreshSupport: derefOr(v.RefreshSupport),
+	}
+}
+
+type ResolvedDiagnosticWorkspaceClientCapabilities struct {
+	RefreshSupport bool `json:"refreshSupport,omitzero"`
+}
+
+func resolveDiagnosticWorkspaceClientCapabilities(v *DiagnosticWorkspaceClientCapabilities) ResolvedDiagnosticWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedDiagnosticWorkspaceClientCapabilities{}
+	}
+	return ResolvedDiagnosticWorkspaceClientCapabilities{
+		RefreshSupport: derefOr(v.RefreshSupport),
+	}
+}
+
+type ResolvedFoldingRangeWorkspaceClientCapabilities struct {
+	RefreshSupport bool `json:"refreshSupport,omitzero"`
+}
+
+func resolveFoldingRangeWorkspaceClientCapabilities(v *FoldingRangeWorkspaceClientCapabilities) ResolvedFoldingRangeWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedFoldingRangeWorkspaceClientCapabilities{}
+	}
+	return ResolvedFoldingRangeWorkspaceClientCapabilities{
+		RefreshSupport: derefOr(v.RefreshSupport),
+	}
+}
+
+type ResolvedTextDocumentContentClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveTextDocumentContentClientCapabilities(v *TextDocumentContentClientCapabilities) ResolvedTextDocumentContentClientCapabilities {
+	if v == nil {
+		return ResolvedTextDocumentContentClientCapabilities{}
+	}
+	return ResolvedTextDocumentContentClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedWorkspaceClientCapabilities struct {
+	ApplyEdit              bool                                              `json:"applyEdit,omitzero"`
+	WorkspaceEdit          ResolvedWorkspaceEditClientCapabilities           `json:"workspaceEdit,omitzero"`
+	DidChangeConfiguration ResolvedDidChangeConfigurationClientCapabilities  `json:"didChangeConfiguration,omitzero"`
+	DidChangeWatchedFiles  ResolvedDidChangeWatchedFilesClientCapabilities   `json:"didChangeWatchedFiles,omitzero"`
+	Symbol                 ResolvedWorkspaceSymbolClientCapabilities         `json:"symbol,omitzero"`
+	ExecuteCommand         ResolvedExecuteCommandClientCapabilities          `json:"executeCommand,omitzero"`
+	WorkspaceFolders       bool                                              `json:"workspaceFolders,omitzero"`
+	Configuration          bool                                              `json:"configuration,omitzero"`
+	SemanticTokens         ResolvedSemanticTokensWorkspaceClientCapabilities `json:"semanticTokens,omitzero"`
+	CodeLens               ResolvedCodeLensWorkspaceClientCapabilities       `json:"codeLens,omitzero"`
+	FileOperations         ResolvedFileOperationClientCapabilities           `json:"fileOperations,omitzero"`
+	InlineValue            ResolvedInlineValueWorkspaceClientCapabilities    `json:"inlineValue,omitzero"`
+	InlayHint              ResolvedInlayHintWorkspaceClientCapabilities      `json:"inlayHint,omitzero"`
+	Diagnostics            ResolvedDiagnosticWorkspaceClientCapabilities     `json:"diagnostics,omitzero"`
+	FoldingRange           ResolvedFoldingRangeWorkspaceClientCapabilities   `json:"foldingRange,omitzero"`
+	TextDocumentContent    ResolvedTextDocumentContentClientCapabilities     `json:"textDocumentContent,omitzero"`
+}
+
+func resolveWorkspaceClientCapabilities(v *WorkspaceClientCapabilities) ResolvedWorkspaceClientCapabilities {
+	if v == nil {
+		return ResolvedWorkspaceClientCapabilities{}
+	}
+	return ResolvedWorkspaceClientCapabilities{
+		ApplyEdit:              derefOr(v.ApplyEdit),
+		WorkspaceEdit:          resolveWorkspaceEditClientCapabilities(v.WorkspaceEdit),
+		DidChangeConfiguration: resolveDidChangeConfigurationClientCapabilities(v.DidChangeConfiguration),
+		DidChangeWatchedFiles:  resolveDidChangeWatchedFilesClientCapabilities(v.DidChangeWatchedFiles),
+		Symbol:                 resolveWorkspaceSymbolClientCapabilities(v.Symbol),
+		ExecuteCommand:         resolveExecuteCommandClientCapabilities(v.ExecuteCommand),
+		WorkspaceFolders:       derefOr(v.WorkspaceFolders),
+		Configuration:          derefOr(v.Configuration),
+		SemanticTokens:         resolveSemanticTokensWorkspaceClientCapabilities(v.SemanticTokens),
+		CodeLens:               resolveCodeLensWorkspaceClientCapabilities(v.CodeLens),
+		FileOperations:         resolveFileOperationClientCapabilities(v.FileOperations),
+		InlineValue:            resolveInlineValueWorkspaceClientCapabilities(v.InlineValue),
+		InlayHint:              resolveInlayHintWorkspaceClientCapabilities(v.InlayHint),
+		Diagnostics:            resolveDiagnosticWorkspaceClientCapabilities(v.Diagnostics),
+		FoldingRange:           resolveFoldingRangeWorkspaceClientCapabilities(v.FoldingRange),
+		TextDocumentContent:    resolveTextDocumentContentClientCapabilities(v.TextDocumentContent),
+	}
+}
+
+type ResolvedTextDocumentSyncClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	WillSave            bool `json:"willSave,omitzero"`
+	WillSaveWaitUntil   bool `json:"willSaveWaitUntil,omitzero"`
+	DidSave             bool `json:"didSave,omitzero"`
+}
+
+func resolveTextDocumentSyncClientCapabilities(v *TextDocumentSyncClientCapabilities) ResolvedTextDocumentSyncClientCapabilities {
+	if v == nil {
+		return ResolvedTextDocumentSyncClientCapabilities{}
+	}
+	return ResolvedTextDocumentSyncClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		WillSave:            derefOr(v.WillSave),
+		WillSaveWaitUntil:   derefOr(v.WillSaveWaitUntil),
+		DidSave:             derefOr(v.DidSave),
+	}
+}
+
+type ResolvedTextDocumentFilterClientCapabilities struct {
+	RelativePatternSupport bool `json:"relativePatternSupport,omitzero"`
+}
+
+func resolveTextDocumentFilterClientCapabilities(v *TextDocumentFilterClientCapabilities) ResolvedTextDocumentFilterClientCapabilities {
+	if v == nil {
+		return ResolvedTextDocumentFilterClientCapabilities{}
+	}
+	return ResolvedTextDocumentFilterClientCapabilities{
+		RelativePatternSupport: derefOr(v.RelativePatternSupport),
+	}
+}
+
+type ResolvedCompletionItemTagOptions struct {
+	ValueSet []CompletionItemTag `json:"valueSet,omitzero"`
+}
+
+func resolveCompletionItemTagOptions(v *CompletionItemTagOptions) ResolvedCompletionItemTagOptions {
+	if v == nil {
+		return ResolvedCompletionItemTagOptions{}
+	}
+	return ResolvedCompletionItemTagOptions{
+		ValueSet: v.ValueSet,
+	}
+}
+
+type ResolvedClientCompletionItemResolveOptions struct {
+	Properties []string `json:"properties,omitzero"`
+}
+
+func resolveClientCompletionItemResolveOptions(v *ClientCompletionItemResolveOptions) ResolvedClientCompletionItemResolveOptions {
+	if v == nil {
+		return ResolvedClientCompletionItemResolveOptions{}
+	}
+	return ResolvedClientCompletionItemResolveOptions{
+		Properties: v.Properties,
+	}
+}
+
+type ResolvedClientCompletionItemInsertTextModeOptions struct {
+	ValueSet []InsertTextMode `json:"valueSet,omitzero"`
+}
+
+func resolveClientCompletionItemInsertTextModeOptions(v *ClientCompletionItemInsertTextModeOptions) ResolvedClientCompletionItemInsertTextModeOptions {
+	if v == nil {
+		return ResolvedClientCompletionItemInsertTextModeOptions{}
+	}
+	return ResolvedClientCompletionItemInsertTextModeOptions{
+		ValueSet: v.ValueSet,
+	}
+}
+
+type ResolvedClientCompletionItemOptions struct {
+	SnippetSupport          bool                                              `json:"snippetSupport,omitzero"`
+	CommitCharactersSupport bool                                              `json:"commitCharactersSupport,omitzero"`
+	DocumentationFormat     []MarkupKind                                      `json:"documentationFormat,omitzero"`
+	DeprecatedSupport       bool                                              `json:"deprecatedSupport,omitzero"`
+	PreselectSupport        bool                                              `json:"preselectSupport,omitzero"`
+	TagSupport              ResolvedCompletionItemTagOptions                  `json:"tagSupport,omitzero"`
+	InsertReplaceSupport    bool                                              `json:"insertReplaceSupport,omitzero"`
+	ResolveSupport          ResolvedClientCompletionItemResolveOptions        `json:"resolveSupport,omitzero"`
+	InsertTextModeSupport   ResolvedClientCompletionItemInsertTextModeOptions `json:"insertTextModeSupport,omitzero"`
+	LabelDetailsSupport     bool                                              `json:"labelDetailsSupport,omitzero"`
+}
+
+func resolveClientCompletionItemOptions(v *ClientCompletionItemOptions) ResolvedClientCompletionItemOptions {
+	if v == nil {
+		return ResolvedClientCompletionItemOptions{}
+	}
+	return ResolvedClientCompletionItemOptions{
+		SnippetSupport:          derefOr(v.SnippetSupport),
+		CommitCharactersSupport: derefOr(v.CommitCharactersSupport),
+		DocumentationFormat:     derefOr(v.DocumentationFormat),
+		DeprecatedSupport:       derefOr(v.DeprecatedSupport),
+		PreselectSupport:        derefOr(v.PreselectSupport),
+		TagSupport:              resolveCompletionItemTagOptions(v.TagSupport),
+		InsertReplaceSupport:    derefOr(v.InsertReplaceSupport),
+		ResolveSupport:          resolveClientCompletionItemResolveOptions(v.ResolveSupport),
+		InsertTextModeSupport:   resolveClientCompletionItemInsertTextModeOptions(v.InsertTextModeSupport),
+		LabelDetailsSupport:     derefOr(v.LabelDetailsSupport),
+	}
+}
+
+type ResolvedClientCompletionItemOptionsKind struct {
+	ValueSet []CompletionItemKind `json:"valueSet,omitzero"`
+}
+
+func resolveClientCompletionItemOptionsKind(v *ClientCompletionItemOptionsKind) ResolvedClientCompletionItemOptionsKind {
+	if v == nil {
+		return ResolvedClientCompletionItemOptionsKind{}
+	}
+	return ResolvedClientCompletionItemOptionsKind{
+		ValueSet: derefOr(v.ValueSet),
+	}
+}
+
+type ResolvedCompletionListCapabilities struct {
+	ItemDefaults     []string `json:"itemDefaults,omitzero"`
+	ApplyKindSupport bool     `json:"applyKindSupport,omitzero"`
+}
+
+func resolveCompletionListCapabilities(v *CompletionListCapabilities) ResolvedCompletionListCapabilities {
+	if v == nil {
+		return ResolvedCompletionListCapabilities{}
+	}
+	return ResolvedCompletionListCapabilities{
+		ItemDefaults:     derefOr(v.ItemDefaults),
+		ApplyKindSupport: derefOr(v.ApplyKindSupport),
+	}
+}
+
+type ResolvedCompletionClientCapabilities struct {
+	DynamicRegistration bool                                    `json:"dynamicRegistration,omitzero"`
+	CompletionItem      ResolvedClientCompletionItemOptions     `json:"completionItem,omitzero"`
+	CompletionItemKind  ResolvedClientCompletionItemOptionsKind `json:"completionItemKind,omitzero"`
+	InsertTextMode      InsertTextMode                          `json:"insertTextMode,omitzero"`
+	ContextSupport      bool                                    `json:"contextSupport,omitzero"`
+	CompletionList      ResolvedCompletionListCapabilities      `json:"completionList,omitzero"`
+}
+
+func resolveCompletionClientCapabilities(v *CompletionClientCapabilities) ResolvedCompletionClientCapabilities {
+	if v == nil {
+		return ResolvedCompletionClientCapabilities{}
+	}
+	return ResolvedCompletionClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		CompletionItem:      resolveClientCompletionItemOptions(v.CompletionItem),
+		CompletionItemKind:  resolveClientCompletionItemOptionsKind(v.CompletionItemKind),
+		InsertTextMode:      derefOr(v.InsertTextMode),
+		ContextSupport:      derefOr(v.ContextSupport),
+		CompletionList:      resolveCompletionListCapabilities(v.CompletionList),
+	}
+}
+
+type ResolvedHoverClientCapabilities struct {
+	DynamicRegistration bool         `json:"dynamicRegistration,omitzero"`
+	ContentFormat       []MarkupKind `json:"contentFormat,omitzero"`
+}
+
+func resolveHoverClientCapabilities(v *HoverClientCapabilities) ResolvedHoverClientCapabilities {
+	if v == nil {
+		return ResolvedHoverClientCapabilities{}
+	}
+	return ResolvedHoverClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		ContentFormat:       derefOr(v.ContentFormat),
+	}
+}
+
+type ResolvedClientSignatureParameterInformationOptions struct {
+	LabelOffsetSupport bool `json:"labelOffsetSupport,omitzero"`
+}
+
+func resolveClientSignatureParameterInformationOptions(v *ClientSignatureParameterInformationOptions) ResolvedClientSignatureParameterInformationOptions {
+	if v == nil {
+		return ResolvedClientSignatureParameterInformationOptions{}
+	}
+	return ResolvedClientSignatureParameterInformationOptions{
+		LabelOffsetSupport: derefOr(v.LabelOffsetSupport),
+	}
+}
+
+type ResolvedClientSignatureInformationOptions struct {
+	DocumentationFormat      []MarkupKind                                       `json:"documentationFormat,omitzero"`
+	ParameterInformation     ResolvedClientSignatureParameterInformationOptions `json:"parameterInformation,omitzero"`
+	ActiveParameterSupport   bool                                               `json:"activeParameterSupport,omitzero"`
+	NoActiveParameterSupport bool                                               `json:"noActiveParameterSupport,omitzero"`
+}
+
+func resolveClientSignatureInformationOptions(v *ClientSignatureInformationOptions) ResolvedClientSignatureInformationOptions {
+	if v == nil {
+		return ResolvedClientSignatureInformationOptions{}
+	}
+	return ResolvedClientSignatureInformationOptions{
+		DocumentationFormat:      derefOr(v.DocumentationFormat),
+		ParameterInformation:     resolveClientSignatureParameterInformationOptions(v.ParameterInformation),
+		ActiveParameterSupport:   derefOr(v.ActiveParameterSupport),
+		NoActiveParameterSupport: derefOr(v.NoActiveParameterSupport),
+	}
+}
+
+type ResolvedSignatureHelpClientCapabilities struct {
+	DynamicRegistration  bool                                      `json:"dynamicRegistration,omitzero"`
+	SignatureInformation ResolvedClientSignatureInformationOptions `json:"signatureInformation,omitzero"`
+	ContextSupport       bool                                      `json:"contextSupport,omitzero"`
+}
+
+func resolveSignatureHelpClientCapabilities(v *SignatureHelpClientCapabilities) ResolvedSignatureHelpClientCapabilities {
+	if v == nil {
+		return ResolvedSignatureHelpClientCapabilities{}
+	}
+	return ResolvedSignatureHelpClientCapabilities{
+		DynamicRegistration:  derefOr(v.DynamicRegistration),
+		SignatureInformation: resolveClientSignatureInformationOptions(v.SignatureInformation),
+		ContextSupport:       derefOr(v.ContextSupport),
+	}
+}
+
+type ResolvedDeclarationClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	LinkSupport         bool `json:"linkSupport,omitzero"`
+}
+
+func resolveDeclarationClientCapabilities(v *DeclarationClientCapabilities) ResolvedDeclarationClientCapabilities {
+	if v == nil {
+		return ResolvedDeclarationClientCapabilities{}
+	}
+	return ResolvedDeclarationClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		LinkSupport:         derefOr(v.LinkSupport),
+	}
+}
+
+type ResolvedDefinitionClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	LinkSupport         bool `json:"linkSupport,omitzero"`
+}
+
+func resolveDefinitionClientCapabilities(v *DefinitionClientCapabilities) ResolvedDefinitionClientCapabilities {
+	if v == nil {
+		return ResolvedDefinitionClientCapabilities{}
+	}
+	return ResolvedDefinitionClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		LinkSupport:         derefOr(v.LinkSupport),
+	}
+}
+
+type ResolvedTypeDefinitionClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	LinkSupport         bool `json:"linkSupport,omitzero"`
+}
+
+func resolveTypeDefinitionClientCapabilities(v *TypeDefinitionClientCapabilities) ResolvedTypeDefinitionClientCapabilities {
+	if v == nil {
+		return ResolvedTypeDefinitionClientCapabilities{}
+	}
+	return ResolvedTypeDefinitionClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		LinkSupport:         derefOr(v.LinkSupport),
+	}
+}
+
+type ResolvedImplementationClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	LinkSupport         bool `json:"linkSupport,omitzero"`
+}
+
+func resolveImplementationClientCapabilities(v *ImplementationClientCapabilities) ResolvedImplementationClientCapabilities {
+	if v == nil {
+		return ResolvedImplementationClientCapabilities{}
+	}
+	return ResolvedImplementationClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		LinkSupport:         derefOr(v.LinkSupport),
+	}
+}
+
+type ResolvedReferenceClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveReferenceClientCapabilities(v *ReferenceClientCapabilities) ResolvedReferenceClientCapabilities {
+	if v == nil {
+		return ResolvedReferenceClientCapabilities{}
+	}
+	return ResolvedReferenceClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedDocumentHighlightClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveDocumentHighlightClientCapabilities(v *DocumentHighlightClientCapabilities) ResolvedDocumentHighlightClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentHighlightClientCapabilities{}
+	}
+	return ResolvedDocumentHighlightClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedDocumentSymbolClientCapabilities struct {
+	DynamicRegistration               bool                            `json:"dynamicRegistration,omitzero"`
+	SymbolKind                        ResolvedClientSymbolKindOptions `json:"symbolKind,omitzero"`
+	HierarchicalDocumentSymbolSupport bool                            `json:"hierarchicalDocumentSymbolSupport,omitzero"`
+	TagSupport                        ResolvedClientSymbolTagOptions  `json:"tagSupport,omitzero"`
+	LabelSupport                      bool                            `json:"labelSupport,omitzero"`
+}
+
+func resolveDocumentSymbolClientCapabilities(v *DocumentSymbolClientCapabilities) ResolvedDocumentSymbolClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentSymbolClientCapabilities{}
+	}
+	return ResolvedDocumentSymbolClientCapabilities{
+		DynamicRegistration:               derefOr(v.DynamicRegistration),
+		SymbolKind:                        resolveClientSymbolKindOptions(v.SymbolKind),
+		HierarchicalDocumentSymbolSupport: derefOr(v.HierarchicalDocumentSymbolSupport),
+		TagSupport:                        resolveClientSymbolTagOptions(v.TagSupport),
+		LabelSupport:                      derefOr(v.LabelSupport),
+	}
+}
+
+type ResolvedClientCodeActionKindOptions struct {
+	ValueSet []CodeActionKind `json:"valueSet,omitzero"`
+}
+
+func resolveClientCodeActionKindOptions(v *ClientCodeActionKindOptions) ResolvedClientCodeActionKindOptions {
+	if v == nil {
+		return ResolvedClientCodeActionKindOptions{}
+	}
+	return ResolvedClientCodeActionKindOptions{
+		ValueSet: v.ValueSet,
+	}
+}
+
+type ResolvedClientCodeActionLiteralOptions struct {
+	CodeActionKind ResolvedClientCodeActionKindOptions `json:"codeActionKind,omitzero"`
+}
+
+func resolveClientCodeActionLiteralOptions(v *ClientCodeActionLiteralOptions) ResolvedClientCodeActionLiteralOptions {
+	if v == nil {
+		return ResolvedClientCodeActionLiteralOptions{}
+	}
+	return ResolvedClientCodeActionLiteralOptions{
+		CodeActionKind: resolveClientCodeActionKindOptions(v.CodeActionKind),
+	}
+}
+
+type ResolvedClientCodeActionResolveOptions struct {
+	Properties []string `json:"properties,omitzero"`
+}
+
+func resolveClientCodeActionResolveOptions(v *ClientCodeActionResolveOptions) ResolvedClientCodeActionResolveOptions {
+	if v == nil {
+		return ResolvedClientCodeActionResolveOptions{}
+	}
+	return ResolvedClientCodeActionResolveOptions{
+		Properties: v.Properties,
+	}
+}
+
+type ResolvedCodeActionTagOptions struct {
+	ValueSet []CodeActionTag `json:"valueSet,omitzero"`
+}
+
+func resolveCodeActionTagOptions(v *CodeActionTagOptions) ResolvedCodeActionTagOptions {
+	if v == nil {
+		return ResolvedCodeActionTagOptions{}
+	}
+	return ResolvedCodeActionTagOptions{
+		ValueSet: v.ValueSet,
+	}
+}
+
+type ResolvedCodeActionClientCapabilities struct {
+	DynamicRegistration      bool                                   `json:"dynamicRegistration,omitzero"`
+	CodeActionLiteralSupport ResolvedClientCodeActionLiteralOptions `json:"codeActionLiteralSupport,omitzero"`
+	IsPreferredSupport       bool                                   `json:"isPreferredSupport,omitzero"`
+	DisabledSupport          bool                                   `json:"disabledSupport,omitzero"`
+	DataSupport              bool                                   `json:"dataSupport,omitzero"`
+	ResolveSupport           ResolvedClientCodeActionResolveOptions `json:"resolveSupport,omitzero"`
+	HonorsChangeAnnotations  bool                                   `json:"honorsChangeAnnotations,omitzero"`
+	DocumentationSupport     bool                                   `json:"documentationSupport,omitzero"`
+	TagSupport               ResolvedCodeActionTagOptions           `json:"tagSupport,omitzero"`
+}
+
+func resolveCodeActionClientCapabilities(v *CodeActionClientCapabilities) ResolvedCodeActionClientCapabilities {
+	if v == nil {
+		return ResolvedCodeActionClientCapabilities{}
+	}
+	return ResolvedCodeActionClientCapabilities{
+		DynamicRegistration:      derefOr(v.DynamicRegistration),
+		CodeActionLiteralSupport: resolveClientCodeActionLiteralOptions(v.CodeActionLiteralSupport),
+		IsPreferredSupport:       derefOr(v.IsPreferredSupport),
+		DisabledSupport:          derefOr(v.DisabledSupport),
+		DataSupport:              derefOr(v.DataSupport),
+		ResolveSupport:           resolveClientCodeActionResolveOptions(v.ResolveSupport),
+		HonorsChangeAnnotations:  derefOr(v.HonorsChangeAnnotations),
+		DocumentationSupport:     derefOr(v.DocumentationSupport),
+		TagSupport:               resolveCodeActionTagOptions(v.TagSupport),
+	}
+}
+
+type ResolvedClientCodeLensResolveOptions struct {
+	Properties []string `json:"properties,omitzero"`
+}
+
+func resolveClientCodeLensResolveOptions(v *ClientCodeLensResolveOptions) ResolvedClientCodeLensResolveOptions {
+	if v == nil {
+		return ResolvedClientCodeLensResolveOptions{}
+	}
+	return ResolvedClientCodeLensResolveOptions{
+		Properties: v.Properties,
+	}
+}
+
+type ResolvedCodeLensClientCapabilities struct {
+	DynamicRegistration bool                                 `json:"dynamicRegistration,omitzero"`
+	ResolveSupport      ResolvedClientCodeLensResolveOptions `json:"resolveSupport,omitzero"`
+}
+
+func resolveCodeLensClientCapabilities(v *CodeLensClientCapabilities) ResolvedCodeLensClientCapabilities {
+	if v == nil {
+		return ResolvedCodeLensClientCapabilities{}
+	}
+	return ResolvedCodeLensClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		ResolveSupport:      resolveClientCodeLensResolveOptions(v.ResolveSupport),
+	}
+}
+
+type ResolvedDocumentLinkClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	TooltipSupport      bool `json:"tooltipSupport,omitzero"`
+}
+
+func resolveDocumentLinkClientCapabilities(v *DocumentLinkClientCapabilities) ResolvedDocumentLinkClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentLinkClientCapabilities{}
+	}
+	return ResolvedDocumentLinkClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		TooltipSupport:      derefOr(v.TooltipSupport),
+	}
+}
+
+type ResolvedDocumentColorClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveDocumentColorClientCapabilities(v *DocumentColorClientCapabilities) ResolvedDocumentColorClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentColorClientCapabilities{}
+	}
+	return ResolvedDocumentColorClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedDocumentFormattingClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveDocumentFormattingClientCapabilities(v *DocumentFormattingClientCapabilities) ResolvedDocumentFormattingClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentFormattingClientCapabilities{}
+	}
+	return ResolvedDocumentFormattingClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedDocumentRangeFormattingClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+	RangesSupport       bool `json:"rangesSupport,omitzero"`
+}
+
+func resolveDocumentRangeFormattingClientCapabilities(v *DocumentRangeFormattingClientCapabilities) ResolvedDocumentRangeFormattingClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentRangeFormattingClientCapabilities{}
+	}
+	return ResolvedDocumentRangeFormattingClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		RangesSupport:       derefOr(v.RangesSupport),
+	}
+}
+
+type ResolvedDocumentOnTypeFormattingClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveDocumentOnTypeFormattingClientCapabilities(v *DocumentOnTypeFormattingClientCapabilities) ResolvedDocumentOnTypeFormattingClientCapabilities {
+	if v == nil {
+		return ResolvedDocumentOnTypeFormattingClientCapabilities{}
+	}
+	return ResolvedDocumentOnTypeFormattingClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedRenameClientCapabilities struct {
+	DynamicRegistration           bool                          `json:"dynamicRegistration,omitzero"`
+	PrepareSupport                bool                          `json:"prepareSupport,omitzero"`
+	PrepareSupportDefaultBehavior PrepareSupportDefaultBehavior `json:"prepareSupportDefaultBehavior,omitzero"`
+	HonorsChangeAnnotations       bool                          `json:"honorsChangeAnnotations,omitzero"`
+}
+
+func resolveRenameClientCapabilities(v *RenameClientCapabilities) ResolvedRenameClientCapabilities {
+	if v == nil {
+		return ResolvedRenameClientCapabilities{}
+	}
+	return ResolvedRenameClientCapabilities{
+		DynamicRegistration:           derefOr(v.DynamicRegistration),
+		PrepareSupport:                derefOr(v.PrepareSupport),
+		PrepareSupportDefaultBehavior: derefOr(v.PrepareSupportDefaultBehavior),
+		HonorsChangeAnnotations:       derefOr(v.HonorsChangeAnnotations),
+	}
+}
+
+type ResolvedClientFoldingRangeKindOptions struct {
+	ValueSet []FoldingRangeKind `json:"valueSet,omitzero"`
+}
+
+func resolveClientFoldingRangeKindOptions(v *ClientFoldingRangeKindOptions) ResolvedClientFoldingRangeKindOptions {
+	if v == nil {
+		return ResolvedClientFoldingRangeKindOptions{}
+	}
+	return ResolvedClientFoldingRangeKindOptions{
+		ValueSet: derefOr(v.ValueSet),
+	}
+}
+
+type ResolvedClientFoldingRangeOptions struct {
+	CollapsedText bool `json:"collapsedText,omitzero"`
+}
+
+func resolveClientFoldingRangeOptions(v *ClientFoldingRangeOptions) ResolvedClientFoldingRangeOptions {
+	if v == nil {
+		return ResolvedClientFoldingRangeOptions{}
+	}
+	return ResolvedClientFoldingRangeOptions{
+		CollapsedText: derefOr(v.CollapsedText),
+	}
+}
+
+type ResolvedFoldingRangeClientCapabilities struct {
+	DynamicRegistration bool                                  `json:"dynamicRegistration,omitzero"`
+	RangeLimit          uint32                                `json:"rangeLimit,omitzero"`
+	LineFoldingOnly     bool                                  `json:"lineFoldingOnly,omitzero"`
+	FoldingRangeKind    ResolvedClientFoldingRangeKindOptions `json:"foldingRangeKind,omitzero"`
+	FoldingRange        ResolvedClientFoldingRangeOptions     `json:"foldingRange,omitzero"`
+}
+
+func resolveFoldingRangeClientCapabilities(v *FoldingRangeClientCapabilities) ResolvedFoldingRangeClientCapabilities {
+	if v == nil {
+		return ResolvedFoldingRangeClientCapabilities{}
+	}
+	return ResolvedFoldingRangeClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		RangeLimit:          derefOr(v.RangeLimit),
+		LineFoldingOnly:     derefOr(v.LineFoldingOnly),
+		FoldingRangeKind:    resolveClientFoldingRangeKindOptions(v.FoldingRangeKind),
+		FoldingRange:        resolveClientFoldingRangeOptions(v.FoldingRange),
+	}
+}
+
+type ResolvedSelectionRangeClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveSelectionRangeClientCapabilities(v *SelectionRangeClientCapabilities) ResolvedSelectionRangeClientCapabilities {
+	if v == nil {
+		return ResolvedSelectionRangeClientCapabilities{}
+	}
+	return ResolvedSelectionRangeClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedClientDiagnosticsTagOptions struct {
+	ValueSet []DiagnosticTag `json:"valueSet,omitzero"`
+}
+
+func resolveClientDiagnosticsTagOptions(v *ClientDiagnosticsTagOptions) ResolvedClientDiagnosticsTagOptions {
+	if v == nil {
+		return ResolvedClientDiagnosticsTagOptions{}
+	}
+	return ResolvedClientDiagnosticsTagOptions{
+		ValueSet: v.ValueSet,
+	}
+}
+
+type ResolvedPublishDiagnosticsClientCapabilities struct {
+	RelatedInformation     bool                                `json:"relatedInformation,omitzero"`
+	TagSupport             ResolvedClientDiagnosticsTagOptions `json:"tagSupport,omitzero"`
+	CodeDescriptionSupport bool                                `json:"codeDescriptionSupport,omitzero"`
+	DataSupport            bool                                `json:"dataSupport,omitzero"`
+	VersionSupport         bool                                `json:"versionSupport,omitzero"`
+}
+
+func resolvePublishDiagnosticsClientCapabilities(v *PublishDiagnosticsClientCapabilities) ResolvedPublishDiagnosticsClientCapabilities {
+	if v == nil {
+		return ResolvedPublishDiagnosticsClientCapabilities{}
+	}
+	return ResolvedPublishDiagnosticsClientCapabilities{
+		RelatedInformation:     derefOr(v.RelatedInformation),
+		TagSupport:             resolveClientDiagnosticsTagOptions(v.TagSupport),
+		CodeDescriptionSupport: derefOr(v.CodeDescriptionSupport),
+		DataSupport:            derefOr(v.DataSupport),
+		VersionSupport:         derefOr(v.VersionSupport),
+	}
+}
+
+type ResolvedCallHierarchyClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveCallHierarchyClientCapabilities(v *CallHierarchyClientCapabilities) ResolvedCallHierarchyClientCapabilities {
+	if v == nil {
+		return ResolvedCallHierarchyClientCapabilities{}
+	}
+	return ResolvedCallHierarchyClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedClientSemanticTokensRequestOptions struct {
+	Range BooleanOrEmptyObject                          `json:"range,omitzero"`
+	Full  BooleanOrClientSemanticTokensRequestFullDelta `json:"full,omitzero"`
+}
+
+func resolveClientSemanticTokensRequestOptions(v *ClientSemanticTokensRequestOptions) ResolvedClientSemanticTokensRequestOptions {
+	if v == nil {
+		return ResolvedClientSemanticTokensRequestOptions{}
+	}
+	return ResolvedClientSemanticTokensRequestOptions{
+		Range: derefOr(v.Range),
+		Full:  derefOr(v.Full),
+	}
+}
+
+type ResolvedSemanticTokensClientCapabilities struct {
+	DynamicRegistration     bool                                       `json:"dynamicRegistration,omitzero"`
+	Requests                ResolvedClientSemanticTokensRequestOptions `json:"requests,omitzero"`
+	TokenTypes              []string                                   `json:"tokenTypes,omitzero"`
+	TokenModifiers          []string                                   `json:"tokenModifiers,omitzero"`
+	Formats                 []TokenFormat                              `json:"formats,omitzero"`
+	OverlappingTokenSupport bool                                       `json:"overlappingTokenSupport,omitzero"`
+	MultilineTokenSupport   bool                                       `json:"multilineTokenSupport,omitzero"`
+	ServerCancelSupport     bool                                       `json:"serverCancelSupport,omitzero"`
+	AugmentsSyntaxTokens    bool                                       `json:"augmentsSyntaxTokens,omitzero"`
+}
+
+func resolveSemanticTokensClientCapabilities(v *SemanticTokensClientCapabilities) ResolvedSemanticTokensClientCapabilities {
+	if v == nil {
+		return ResolvedSemanticTokensClientCapabilities{}
+	}
+	return ResolvedSemanticTokensClientCapabilities{
+		DynamicRegistration:     derefOr(v.DynamicRegistration),
+		Requests:                resolveClientSemanticTokensRequestOptions(v.Requests),
+		TokenTypes:              v.TokenTypes,
+		TokenModifiers:          v.TokenModifiers,
+		Formats:                 v.Formats,
+		OverlappingTokenSupport: derefOr(v.OverlappingTokenSupport),
+		MultilineTokenSupport:   derefOr(v.MultilineTokenSupport),
+		ServerCancelSupport:     derefOr(v.ServerCancelSupport),
+		AugmentsSyntaxTokens:    derefOr(v.AugmentsSyntaxTokens),
+	}
+}
+
+type ResolvedLinkedEditingRangeClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveLinkedEditingRangeClientCapabilities(v *LinkedEditingRangeClientCapabilities) ResolvedLinkedEditingRangeClientCapabilities {
+	if v == nil {
+		return ResolvedLinkedEditingRangeClientCapabilities{}
+	}
+	return ResolvedLinkedEditingRangeClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedMonikerClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveMonikerClientCapabilities(v *MonikerClientCapabilities) ResolvedMonikerClientCapabilities {
+	if v == nil {
+		return ResolvedMonikerClientCapabilities{}
+	}
+	return ResolvedMonikerClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedTypeHierarchyClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveTypeHierarchyClientCapabilities(v *TypeHierarchyClientCapabilities) ResolvedTypeHierarchyClientCapabilities {
+	if v == nil {
+		return ResolvedTypeHierarchyClientCapabilities{}
+	}
+	return ResolvedTypeHierarchyClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedInlineValueClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveInlineValueClientCapabilities(v *InlineValueClientCapabilities) ResolvedInlineValueClientCapabilities {
+	if v == nil {
+		return ResolvedInlineValueClientCapabilities{}
+	}
+	return ResolvedInlineValueClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedClientInlayHintResolveOptions struct {
+	Properties []string `json:"properties,omitzero"`
+}
+
+func resolveClientInlayHintResolveOptions(v *ClientInlayHintResolveOptions) ResolvedClientInlayHintResolveOptions {
+	if v == nil {
+		return ResolvedClientInlayHintResolveOptions{}
+	}
+	return ResolvedClientInlayHintResolveOptions{
+		Properties: v.Properties,
+	}
+}
+
+type ResolvedInlayHintClientCapabilities struct {
+	DynamicRegistration bool                                  `json:"dynamicRegistration,omitzero"`
+	ResolveSupport      ResolvedClientInlayHintResolveOptions `json:"resolveSupport,omitzero"`
+}
+
+func resolveInlayHintClientCapabilities(v *InlayHintClientCapabilities) ResolvedInlayHintClientCapabilities {
+	if v == nil {
+		return ResolvedInlayHintClientCapabilities{}
+	}
+	return ResolvedInlayHintClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+		ResolveSupport:      resolveClientInlayHintResolveOptions(v.ResolveSupport),
+	}
+}
+
+type ResolvedDiagnosticClientCapabilities struct {
+	RelatedInformation     bool                                `json:"relatedInformation,omitzero"`
+	TagSupport             ResolvedClientDiagnosticsTagOptions `json:"tagSupport,omitzero"`
+	CodeDescriptionSupport bool                                `json:"codeDescriptionSupport,omitzero"`
+	DataSupport            bool                                `json:"dataSupport,omitzero"`
+	DynamicRegistration    bool                                `json:"dynamicRegistration,omitzero"`
+	RelatedDocumentSupport bool                                `json:"relatedDocumentSupport,omitzero"`
+}
+
+func resolveDiagnosticClientCapabilities(v *DiagnosticClientCapabilities) ResolvedDiagnosticClientCapabilities {
+	if v == nil {
+		return ResolvedDiagnosticClientCapabilities{}
+	}
+	return ResolvedDiagnosticClientCapabilities{
+		RelatedInformation:     derefOr(v.RelatedInformation),
+		TagSupport:             resolveClientDiagnosticsTagOptions(v.TagSupport),
+		CodeDescriptionSupport: derefOr(v.CodeDescriptionSupport),
+		DataSupport:            derefOr(v.DataSupport),
+		DynamicRegistration:    derefOr(v.DynamicRegistration),
+		RelatedDocumentSupport: derefOr(v.RelatedDocumentSupport),
+	}
+}
+
+type ResolvedInlineCompletionClientCapabilities struct {
+	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
+}
+
+func resolveInlineCompletionClientCapabilities(v *InlineCompletionClientCapabilities) ResolvedInlineCompletionClientCapabilities {
+	if v == nil {
+		return ResolvedInlineCompletionClientCapabilities{}
+	}
+	return ResolvedInlineCompletionClientCapabilities{
+		DynamicRegistration: derefOr(v.DynamicRegistration),
+	}
+}
+
+type ResolvedTextDocumentClientCapabilities struct {
+	Synchronization    ResolvedTextDocumentSyncClientCapabilities         `json:"synchronization,omitzero"`
+	Filters            ResolvedTextDocumentFilterClientCapabilities       `json:"filters,omitzero"`
+	Completion         ResolvedCompletionClientCapabilities               `json:"completion,omitzero"`
+	Hover              ResolvedHoverClientCapabilities                    `json:"hover,omitzero"`
+	SignatureHelp      ResolvedSignatureHelpClientCapabilities            `json:"signatureHelp,omitzero"`
+	Declaration        ResolvedDeclarationClientCapabilities              `json:"declaration,omitzero"`
+	Definition         ResolvedDefinitionClientCapabilities               `json:"definition,omitzero"`
+	TypeDefinition     ResolvedTypeDefinitionClientCapabilities           `json:"typeDefinition,omitzero"`
+	Implementation     ResolvedImplementationClientCapabilities           `json:"implementation,omitzero"`
+	References         ResolvedReferenceClientCapabilities                `json:"references,omitzero"`
+	DocumentHighlight  ResolvedDocumentHighlightClientCapabilities        `json:"documentHighlight,omitzero"`
+	DocumentSymbol     ResolvedDocumentSymbolClientCapabilities           `json:"documentSymbol,omitzero"`
+	CodeAction         ResolvedCodeActionClientCapabilities               `json:"codeAction,omitzero"`
+	CodeLens           ResolvedCodeLensClientCapabilities                 `json:"codeLens,omitzero"`
+	DocumentLink       ResolvedDocumentLinkClientCapabilities             `json:"documentLink,omitzero"`
+	ColorProvider      ResolvedDocumentColorClientCapabilities            `json:"colorProvider,omitzero"`
+	Formatting         ResolvedDocumentFormattingClientCapabilities       `json:"formatting,omitzero"`
+	RangeFormatting    ResolvedDocumentRangeFormattingClientCapabilities  `json:"rangeFormatting,omitzero"`
+	OnTypeFormatting   ResolvedDocumentOnTypeFormattingClientCapabilities `json:"onTypeFormatting,omitzero"`
+	Rename             ResolvedRenameClientCapabilities                   `json:"rename,omitzero"`
+	FoldingRange       ResolvedFoldingRangeClientCapabilities             `json:"foldingRange,omitzero"`
+	SelectionRange     ResolvedSelectionRangeClientCapabilities           `json:"selectionRange,omitzero"`
+	PublishDiagnostics ResolvedPublishDiagnosticsClientCapabilities       `json:"publishDiagnostics,omitzero"`
+	CallHierarchy      ResolvedCallHierarchyClientCapabilities            `json:"callHierarchy,omitzero"`
+	SemanticTokens     ResolvedSemanticTokensClientCapabilities           `json:"semanticTokens,omitzero"`
+	LinkedEditingRange ResolvedLinkedEditingRangeClientCapabilities       `json:"linkedEditingRange,omitzero"`
+	Moniker            ResolvedMonikerClientCapabilities                  `json:"moniker,omitzero"`
+	TypeHierarchy      ResolvedTypeHierarchyClientCapabilities            `json:"typeHierarchy,omitzero"`
+	InlineValue        ResolvedInlineValueClientCapabilities              `json:"inlineValue,omitzero"`
+	InlayHint          ResolvedInlayHintClientCapabilities                `json:"inlayHint,omitzero"`
+	Diagnostic         ResolvedDiagnosticClientCapabilities               `json:"diagnostic,omitzero"`
+	InlineCompletion   ResolvedInlineCompletionClientCapabilities         `json:"inlineCompletion,omitzero"`
+}
+
+func resolveTextDocumentClientCapabilities(v *TextDocumentClientCapabilities) ResolvedTextDocumentClientCapabilities {
+	if v == nil {
+		return ResolvedTextDocumentClientCapabilities{}
+	}
+	return ResolvedTextDocumentClientCapabilities{
+		Synchronization:    resolveTextDocumentSyncClientCapabilities(v.Synchronization),
+		Filters:            resolveTextDocumentFilterClientCapabilities(v.Filters),
+		Completion:         resolveCompletionClientCapabilities(v.Completion),
+		Hover:              resolveHoverClientCapabilities(v.Hover),
+		SignatureHelp:      resolveSignatureHelpClientCapabilities(v.SignatureHelp),
+		Declaration:        resolveDeclarationClientCapabilities(v.Declaration),
+		Definition:         resolveDefinitionClientCapabilities(v.Definition),
+		TypeDefinition:     resolveTypeDefinitionClientCapabilities(v.TypeDefinition),
+		Implementation:     resolveImplementationClientCapabilities(v.Implementation),
+		References:         resolveReferenceClientCapabilities(v.References),
+		DocumentHighlight:  resolveDocumentHighlightClientCapabilities(v.DocumentHighlight),
+		DocumentSymbol:     resolveDocumentSymbolClientCapabilities(v.DocumentSymbol),
+		CodeAction:         resolveCodeActionClientCapabilities(v.CodeAction),
+		CodeLens:           resolveCodeLensClientCapabilities(v.CodeLens),
+		DocumentLink:       resolveDocumentLinkClientCapabilities(v.DocumentLink),
+		ColorProvider:      resolveDocumentColorClientCapabilities(v.ColorProvider),
+		Formatting:         resolveDocumentFormattingClientCapabilities(v.Formatting),
+		RangeFormatting:    resolveDocumentRangeFormattingClientCapabilities(v.RangeFormatting),
+		OnTypeFormatting:   resolveDocumentOnTypeFormattingClientCapabilities(v.OnTypeFormatting),
+		Rename:             resolveRenameClientCapabilities(v.Rename),
+		FoldingRange:       resolveFoldingRangeClientCapabilities(v.FoldingRange),
+		SelectionRange:     resolveSelectionRangeClientCapabilities(v.SelectionRange),
+		PublishDiagnostics: resolvePublishDiagnosticsClientCapabilities(v.PublishDiagnostics),
+		CallHierarchy:      resolveCallHierarchyClientCapabilities(v.CallHierarchy),
+		SemanticTokens:     resolveSemanticTokensClientCapabilities(v.SemanticTokens),
+		LinkedEditingRange: resolveLinkedEditingRangeClientCapabilities(v.LinkedEditingRange),
+		Moniker:            resolveMonikerClientCapabilities(v.Moniker),
+		TypeHierarchy:      resolveTypeHierarchyClientCapabilities(v.TypeHierarchy),
+		InlineValue:        resolveInlineValueClientCapabilities(v.InlineValue),
+		InlayHint:          resolveInlayHintClientCapabilities(v.InlayHint),
+		Diagnostic:         resolveDiagnosticClientCapabilities(v.Diagnostic),
+		InlineCompletion:   resolveInlineCompletionClientCapabilities(v.InlineCompletion),
+	}
+}
+
+type ResolvedNotebookDocumentSyncClientCapabilities struct {
+	DynamicRegistration     bool `json:"dynamicRegistration,omitzero"`
+	ExecutionSummarySupport bool `json:"executionSummarySupport,omitzero"`
+}
+
+func resolveNotebookDocumentSyncClientCapabilities(v *NotebookDocumentSyncClientCapabilities) ResolvedNotebookDocumentSyncClientCapabilities {
+	if v == nil {
+		return ResolvedNotebookDocumentSyncClientCapabilities{}
+	}
+	return ResolvedNotebookDocumentSyncClientCapabilities{
+		DynamicRegistration:     derefOr(v.DynamicRegistration),
+		ExecutionSummarySupport: derefOr(v.ExecutionSummarySupport),
+	}
+}
+
+type ResolvedNotebookDocumentClientCapabilities struct {
+	Synchronization ResolvedNotebookDocumentSyncClientCapabilities `json:"synchronization,omitzero"`
+}
+
+func resolveNotebookDocumentClientCapabilities(v *NotebookDocumentClientCapabilities) ResolvedNotebookDocumentClientCapabilities {
+	if v == nil {
+		return ResolvedNotebookDocumentClientCapabilities{}
+	}
+	return ResolvedNotebookDocumentClientCapabilities{
+		Synchronization: resolveNotebookDocumentSyncClientCapabilities(v.Synchronization),
+	}
+}
+
+type ResolvedClientShowMessageActionItemOptions struct {
+	AdditionalPropertiesSupport bool `json:"additionalPropertiesSupport,omitzero"`
+}
+
+func resolveClientShowMessageActionItemOptions(v *ClientShowMessageActionItemOptions) ResolvedClientShowMessageActionItemOptions {
+	if v == nil {
+		return ResolvedClientShowMessageActionItemOptions{}
+	}
+	return ResolvedClientShowMessageActionItemOptions{
+		AdditionalPropertiesSupport: derefOr(v.AdditionalPropertiesSupport),
+	}
+}
+
+type ResolvedShowMessageRequestClientCapabilities struct {
+	MessageActionItem ResolvedClientShowMessageActionItemOptions `json:"messageActionItem,omitzero"`
+}
+
+func resolveShowMessageRequestClientCapabilities(v *ShowMessageRequestClientCapabilities) ResolvedShowMessageRequestClientCapabilities {
+	if v == nil {
+		return ResolvedShowMessageRequestClientCapabilities{}
+	}
+	return ResolvedShowMessageRequestClientCapabilities{
+		MessageActionItem: resolveClientShowMessageActionItemOptions(v.MessageActionItem),
+	}
+}
+
+type ResolvedShowDocumentClientCapabilities struct {
+	Support bool `json:"support,omitzero"`
+}
+
+func resolveShowDocumentClientCapabilities(v *ShowDocumentClientCapabilities) ResolvedShowDocumentClientCapabilities {
+	if v == nil {
+		return ResolvedShowDocumentClientCapabilities{}
+	}
+	return ResolvedShowDocumentClientCapabilities{
+		Support: v.Support,
+	}
+}
+
+type ResolvedWindowClientCapabilities struct {
+	WorkDoneProgress bool                                         `json:"workDoneProgress,omitzero"`
+	ShowMessage      ResolvedShowMessageRequestClientCapabilities `json:"showMessage,omitzero"`
+	ShowDocument     ResolvedShowDocumentClientCapabilities       `json:"showDocument,omitzero"`
+}
+
+func resolveWindowClientCapabilities(v *WindowClientCapabilities) ResolvedWindowClientCapabilities {
+	if v == nil {
+		return ResolvedWindowClientCapabilities{}
+	}
+	return ResolvedWindowClientCapabilities{
+		WorkDoneProgress: derefOr(v.WorkDoneProgress),
+		ShowMessage:      resolveShowMessageRequestClientCapabilities(v.ShowMessage),
+		ShowDocument:     resolveShowDocumentClientCapabilities(v.ShowDocument),
+	}
+}
+
+type ResolvedStaleRequestSupportOptions struct {
+	Cancel                 bool     `json:"cancel,omitzero"`
+	RetryOnContentModified []string `json:"retryOnContentModified,omitzero"`
+}
+
+func resolveStaleRequestSupportOptions(v *StaleRequestSupportOptions) ResolvedStaleRequestSupportOptions {
+	if v == nil {
+		return ResolvedStaleRequestSupportOptions{}
+	}
+	return ResolvedStaleRequestSupportOptions{
+		Cancel:                 v.Cancel,
+		RetryOnContentModified: v.RetryOnContentModified,
+	}
+}
+
+type ResolvedRegularExpressionsClientCapabilities struct {
+	Engine  string `json:"engine,omitzero"`
+	Version string `json:"version,omitzero"`
+}
+
+func resolveRegularExpressionsClientCapabilities(v *RegularExpressionsClientCapabilities) ResolvedRegularExpressionsClientCapabilities {
+	if v == nil {
+		return ResolvedRegularExpressionsClientCapabilities{}
+	}
+	return ResolvedRegularExpressionsClientCapabilities{
+		Engine:  v.Engine,
+		Version: derefOr(v.Version),
+	}
+}
+
+type ResolvedMarkdownClientCapabilities struct {
+	Parser      string   `json:"parser,omitzero"`
+	Version     string   `json:"version,omitzero"`
+	AllowedTags []string `json:"allowedTags,omitzero"`
+}
+
+func resolveMarkdownClientCapabilities(v *MarkdownClientCapabilities) ResolvedMarkdownClientCapabilities {
+	if v == nil {
+		return ResolvedMarkdownClientCapabilities{}
+	}
+	return ResolvedMarkdownClientCapabilities{
+		Parser:      v.Parser,
+		Version:     derefOr(v.Version),
+		AllowedTags: derefOr(v.AllowedTags),
+	}
+}
+
+type ResolvedGeneralClientCapabilities struct {
+	StaleRequestSupport ResolvedStaleRequestSupportOptions           `json:"staleRequestSupport,omitzero"`
+	RegularExpressions  ResolvedRegularExpressionsClientCapabilities `json:"regularExpressions,omitzero"`
+	Markdown            ResolvedMarkdownClientCapabilities           `json:"markdown,omitzero"`
+	PositionEncodings   []PositionEncodingKind                       `json:"positionEncodings,omitzero"`
+}
+
+func resolveGeneralClientCapabilities(v *GeneralClientCapabilities) ResolvedGeneralClientCapabilities {
+	if v == nil {
+		return ResolvedGeneralClientCapabilities{}
+	}
+	return ResolvedGeneralClientCapabilities{
+		StaleRequestSupport: resolveStaleRequestSupportOptions(v.StaleRequestSupport),
+		RegularExpressions:  resolveRegularExpressionsClientCapabilities(v.RegularExpressions),
+		Markdown:            resolveMarkdownClientCapabilities(v.Markdown),
+		PositionEncodings:   derefOr(v.PositionEncodings),
+	}
+}
+
+// ResolvedClientCapabilities is a version of ClientCapabilities where all nested
+// fields are values (not pointers), making it easier to access deeply nested capabilities.
+// Use ResolveClientCapabilities to convert from ClientCapabilities.
+type ResolvedClientCapabilities struct {
+	Workspace        ResolvedWorkspaceClientCapabilities        `json:"workspace,omitzero"`
+	TextDocument     ResolvedTextDocumentClientCapabilities     `json:"textDocument,omitzero"`
+	NotebookDocument ResolvedNotebookDocumentClientCapabilities `json:"notebookDocument,omitzero"`
+	Window           ResolvedWindowClientCapabilities           `json:"window,omitzero"`
+	General          ResolvedGeneralClientCapabilities          `json:"general,omitzero"`
+	Experimental     any                                        `json:"experimental,omitzero"`
+}
+
+func ResolveClientCapabilities(v *ClientCapabilities) ResolvedClientCapabilities {
+	if v == nil {
+		return ResolvedClientCapabilities{}
+	}
+	return ResolvedClientCapabilities{
+		Workspace:        resolveWorkspaceClientCapabilities(v.Workspace),
+		TextDocument:     resolveTextDocumentClientCapabilities(v.TextDocument),
+		NotebookDocument: resolveNotebookDocumentClientCapabilities(v.NotebookDocument),
+		Window:           resolveWindowClientCapabilities(v.Window),
+		General:          resolveGeneralClientCapabilities(v.General),
+		Experimental:     derefOr(v.Experimental),
+	}
+}

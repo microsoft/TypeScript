@@ -46,7 +46,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 	position int,
 	contextToken *ast.Node,
 	compilerOptions *core.CompilerOptions,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	// !!! reference comment
 	if IsInString(file, position, contextToken) {
@@ -65,7 +64,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 			file,
 			position,
 			compilerOptions,
-			clientOptions,
 		)
 	}
 	return nil
@@ -78,7 +76,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	file *ast.SourceFile,
 	position int,
 	options *core.CompilerOptions,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	if completion == nil {
 		return nil
@@ -88,7 +85,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	switch {
 	case completion.fromPaths != nil:
 		completion := completion.fromPaths
-		return l.convertPathCompletions(completion, file, position, clientOptions)
+		return l.convertPathCompletions(ctx, completion, file, position)
 	case completion.fromProperties != nil:
 		completion := completion.fromProperties
 		data := &completionDataData{
@@ -105,11 +102,10 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			position,
 			file,
 			options,
-			clientOptions,
 		)
 		defaultCommitCharacters := getDefaultCommitCharacters(completion.hasIndexSignature)
 		itemDefaults := l.setItemDefaults(
-			clientOptions,
+			ctx,
 			position,
 			file,
 			items,
@@ -134,6 +130,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 		items := core.Map(completion.types, func(t *checker.StringLiteralType) *lsproto.CompletionItem {
 			name := printer.EscapeString(t.AsLiteralType().Value().(string), quoteChar)
 			return l.createLSPCompletionItem(
+				ctx,
 				name,
 				"", /*insertText*/
 				"", /*filterText*/
@@ -145,7 +142,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 				nil, /*labelDetails*/
 				file,
 				position,
-				clientOptions,
 				false, /*isMemberCompletion*/
 				false, /*isSnippet*/
 				false, /*hasAction*/
@@ -156,7 +152,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 		})
 		defaultCommitCharacters := getDefaultCommitCharacters(completion.isNewIdentifier)
 		itemDefaults := l.setItemDefaults(
-			clientOptions,
+			ctx,
 			position,
 			file,
 			items,
@@ -174,16 +170,17 @@ func (l *LanguageService) convertStringLiteralCompletions(
 }
 
 func (l *LanguageService) convertPathCompletions(
+	ctx context.Context,
 	pathCompletions []*pathCompletion,
 	file *ast.SourceFile,
 	position int,
-	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	isNewIdentifierLocation := true // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
 	defaultCommitCharacters := getDefaultCommitCharacters(isNewIdentifierLocation)
 	items := core.Map(pathCompletions, func(pathCompletion *pathCompletion) *lsproto.CompletionItem {
 		replacementSpan := l.createLspRangeFromBounds(pathCompletion.textRange.Pos(), pathCompletion.textRange.End(), file)
 		return l.createLSPCompletionItem(
+			ctx,
 			pathCompletion.name,
 			"", /*insertText*/
 			"", /*filterText*/
@@ -195,7 +192,6 @@ func (l *LanguageService) convertPathCompletions(
 			nil, /*labelDetails*/
 			file,
 			position,
-			clientOptions,
 			false, /*isMemberCompletion*/
 			false, /*isSnippet*/
 			false, /*hasAction*/
@@ -205,7 +201,7 @@ func (l *LanguageService) convertPathCompletions(
 		)
 	})
 	itemDefaults := l.setItemDefaults(
-		clientOptions,
+		ctx,
 		position,
 		file,
 		items,

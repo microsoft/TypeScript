@@ -1,6 +1,7 @@
 package lsproto
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"strings"
@@ -148,4 +149,26 @@ func (Null) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 
 func (Null) MarshalJSONTo(enc *jsontext.Encoder) error {
 	return enc.WriteToken(jsontext.Null)
+}
+
+type clientCapabilitiesKey struct{}
+
+func WithClientCapabilities(ctx context.Context, caps *ResolvedClientCapabilities) context.Context {
+	return context.WithValue(ctx, clientCapabilitiesKey{}, caps)
+}
+
+func GetClientCapabilities(ctx context.Context) *ResolvedClientCapabilities {
+	if caps, _ := ctx.Value(clientCapabilitiesKey{}).(*ResolvedClientCapabilities); caps != nil {
+		return caps
+	}
+	return &ResolvedClientCapabilities{}
+}
+
+// PreferredMarkupKind returns the first (most preferred) markup kind from the given formats,
+// or MarkupKindPlainText if the slice is empty.
+func PreferredMarkupKind(formats []MarkupKind) MarkupKind {
+	if len(formats) > 0 {
+		return formats[0]
+	}
+	return MarkupKindPlainText
 }

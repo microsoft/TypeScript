@@ -12,7 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
-func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri, clientOptions *lsproto.DiagnosticClientCapabilities) (lsproto.DocumentDiagnosticResponse, error) {
+func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {
 	program, file := l.getProgramAndFile(uri)
 
 	diagnostics := make([][]*ast.Diagnostic, 0, 4)
@@ -28,12 +28,12 @@ func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.Do
 
 	return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
 		FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
-			Items: l.toLSPDiagnostics(clientOptions, diagnostics...),
+			Items: l.toLSPDiagnostics(ctx, diagnostics...),
 		},
 	}, nil
 }
 
-func (l *LanguageService) toLSPDiagnostics(clientOptions *lsproto.DiagnosticClientCapabilities, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
+func (l *LanguageService) toLSPDiagnostics(ctx context.Context, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
 	size := 0
 	for _, diagSlice := range diagnostics {
 		size += len(diagSlice)
@@ -41,13 +41,14 @@ func (l *LanguageService) toLSPDiagnostics(clientOptions *lsproto.DiagnosticClie
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, size)
 	for _, diagSlice := range diagnostics {
 		for _, diag := range diagSlice {
-			lspDiagnostics = append(lspDiagnostics, l.toLSPDiagnostic(clientOptions, diag))
+			lspDiagnostics = append(lspDiagnostics, l.toLSPDiagnostic(ctx, diag))
 		}
 	}
 	return lspDiagnostics
 }
 
-func (l *LanguageService) toLSPDiagnostic(clientOptions *lsproto.DiagnosticClientCapabilities, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
+func (l *LanguageService) toLSPDiagnostic(ctx context.Context, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
+	clientOptions := lsproto.GetClientCapabilities(ctx).TextDocument.Diagnostic
 	var severity lsproto.DiagnosticSeverity
 	switch diagnostic.Category() {
 	case diagnostics.CategorySuggestion:
@@ -61,7 +62,7 @@ func (l *LanguageService) toLSPDiagnostic(clientOptions *lsproto.DiagnosticClien
 	}
 
 	var relatedInformation []*lsproto.DiagnosticRelatedInformation
-	if clientOptions != nil && ptrIsTrue(clientOptions.RelatedInformation) {
+	if clientOptions.RelatedInformation {
 		relatedInformation = make([]*lsproto.DiagnosticRelatedInformation, 0, len(diagnostic.RelatedInformation()))
 		for _, related := range diagnostic.RelatedInformation() {
 			relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
@@ -75,7 +76,7 @@ func (l *LanguageService) toLSPDiagnostic(clientOptions *lsproto.DiagnosticClien
 	}
 
 	var tags []lsproto.DiagnosticTag
-	if clientOptions != nil && clientOptions.TagSupport != nil && (diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated()) {
+	if len(clientOptions.TagSupport.ValueSet) > 0 && (diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated()) {
 		tags = make([]lsproto.DiagnosticTag, 0, 2)
 		if diagnostic.ReportsUnnecessary() && slices.Contains(clientOptions.TagSupport.ValueSet, lsproto.DiagnosticTagUnnecessary) {
 			tags = append(tags, lsproto.DiagnosticTagUnnecessary)
