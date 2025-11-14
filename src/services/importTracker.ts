@@ -44,9 +44,11 @@ import {
     isImportCall,
     isImportEqualsDeclaration,
     isImportTypeNode,
+    isIndexedAccessTypeNode,
     isInJSFile,
     isJSDocCallbackTag,
     isJSDocTypedefTag,
+    isLiteralTypeNode,
     isModuleExportsAccessExpression,
     isNamedExports,
     isNamespaceExport,
@@ -354,6 +356,12 @@ function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: S
                 if (firstIdentifier.escapedText === symbolName(exportSymbol)) {
                     singleReferences.push(firstIdentifier);
                 }
+            }
+            else if (
+                isIndexedAccessTypeNode(decl.parent) && isLiteralTypeNode(decl.parent.indexType) &&
+                isStringLiteral(decl.parent.indexType.literal) && decl.parent.indexType.literal.text === symbolName(exportSymbol)
+            ) {
+                singleReferences.push(decl.parent.indexType.literal);
             }
             else if (exportKind === ExportKind.ExportEquals) {
                 singleReferences.push(decl.argument.literal);
