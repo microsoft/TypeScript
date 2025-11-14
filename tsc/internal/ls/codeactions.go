@@ -64,7 +64,7 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
 	// Process diagnostics in the context to generate quick fixes
 	if params.Context != nil && params.Context.Diagnostics != nil {
 		for _, diag := range params.Context.Diagnostics {
-			if diag.Code.Integer == nil {
+			if diag.Code == nil || diag.Code.Integer == nil {
 				continue
 			}
 
