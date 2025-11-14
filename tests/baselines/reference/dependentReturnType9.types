@@ -1,0 +1,306 @@
+//// [tests/cases/compiler/dependentReturnType9.ts] ////
+
+=== dependentReturnType9.ts ===
+type Payload =
+>Payload : Payload
+>        : ^^^^^^^
+
+  | { _tag: "auth"; username: string; password: string }
+>_tag : "auth"
+>     : ^^^^^^
+>username : string
+>         : ^^^^^^
+>password : string
+>         : ^^^^^^
+
+  | { _tag: "cart"; items: Array<{ id: string; quantity: number }> }
+>_tag : "cart"
+>     : ^^^^^^
+>items : { id: string; quantity: number; }[]
+>      : ^^^^^^      ^^^^^^^^^^^^      ^^^^^
+>id : string
+>   : ^^^^^^
+>quantity : number
+>         : ^^^^^^
+
+  | { _tag: "person"; name: string; age: number };
+>_tag : "person"
+>     : ^^^^^^^^
+>name : string
+>     : ^^^^^^
+>age : number
+>    : ^^^^^^
+
+type PayloadContent = {
+>PayloadContent : PayloadContent
+>               : ^^^^^^^^^^^^^^
+
+  [P in Payload as P["_tag"]]: Omit<P, "_tag">;
+};
+
+// ok, exhaustive cases and default case with throw
+function mockPayload<P_TAG extends Payload["_tag"]>(
+>mockPayload : <P_TAG extends Payload["_tag"]>(str: P_TAG) => PayloadContent[P_TAG]
+>            : ^     ^^^^^^^^^               ^^   ^^     ^^^^^                     
+
+  str: P_TAG,
+>str : P_TAG
+>    : ^^^^^
+
+): PayloadContent[P_TAG] {
+  switch (str) {
+>str : P_TAG
+>    : ^^^^^
+
+    case "auth":
+>"auth" : "auth"
+>       : ^^^^^^
+
+      return { username: "test", password: "admin" };
+>{ username: "test", password: "admin" } : { username: string; password: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>username : string
+>         : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>password : string
+>         : ^^^^^^
+>"admin" : "admin"
+>        : ^^^^^^^
+
+    case "cart":
+>"cart" : "cart"
+>       : ^^^^^^
+
+      return { items: [{ id: "123", quantity: 123 }] };
+>{ items: [{ id: "123", quantity: 123 }] } : { items: { id: string; quantity: number; }[]; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>items : { id: string; quantity: number; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ id: "123", quantity: 123 }] : { id: string; quantity: number; }[]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ id: "123", quantity: 123 } : { id: string; quantity: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>quantity : number
+>         : ^^^^^^
+>123 : 123
+>    : ^^^
+
+    case "person":
+>"person" : "person"
+>         : ^^^^^^^^
+
+      return { name: "andrea", age: 27 };
+>{ name: "andrea", age: 27 } : { name: string; age: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>"andrea" : "andrea"
+>         : ^^^^^^^^
+>age : number
+>    : ^^^^^^
+>27 : 27
+>   : ^^
+
+    default:
+      throw new Error("unknown tag");
+>new Error("unknown tag") : Error
+>                         : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"unknown tag" : "unknown tag"
+>              : ^^^^^^^^^^^^^
+  }
+}
+
+// ok, non-exhaustive cases but default case with throw
+function mockPayload2<P_TAG extends Payload["_tag"]>(
+>mockPayload2 : <P_TAG extends Payload["_tag"]>(str: P_TAG) => PayloadContent[P_TAG]
+>             : ^     ^^^^^^^^^               ^^   ^^     ^^^^^                     
+
+  str: P_TAG,
+>str : P_TAG
+>    : ^^^^^
+
+): PayloadContent[P_TAG] {
+  switch (str) {
+>str : P_TAG
+>    : ^^^^^
+
+    case "auth":
+>"auth" : "auth"
+>       : ^^^^^^
+
+      return { username: "test", password: "admin" };
+>{ username: "test", password: "admin" } : { username: string; password: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>username : string
+>         : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>password : string
+>         : ^^^^^^
+>"admin" : "admin"
+>        : ^^^^^^^
+
+    case "cart":
+>"cart" : "cart"
+>       : ^^^^^^
+
+      return { items: [{ id: "123", quantity: 123 }] };
+>{ items: [{ id: "123", quantity: 123 }] } : { items: { id: string; quantity: number; }[]; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>items : { id: string; quantity: number; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ id: "123", quantity: 123 }] : { id: string; quantity: number; }[]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ id: "123", quantity: 123 } : { id: string; quantity: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>quantity : number
+>         : ^^^^^^
+>123 : 123
+>    : ^^^
+
+    default:
+      throw new Error("unhandled tag");
+>new Error("unhandled tag") : Error
+>                           : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"unhandled tag" : "unhandled tag"
+>                : ^^^^^^^^^^^^^^^
+  }
+}
+
+// ok, exhaustive cases
+function mockPayload3<P_TAG extends Payload["_tag"]>(
+>mockPayload3 : <P_TAG extends Payload["_tag"]>(str: P_TAG) => PayloadContent[P_TAG]
+>             : ^     ^^^^^^^^^               ^^   ^^     ^^^^^                     
+
+  str: P_TAG,
+>str : P_TAG
+>    : ^^^^^
+
+): PayloadContent[P_TAG] {
+  switch (str) {
+>str : P_TAG
+>    : ^^^^^
+
+    case "auth":
+>"auth" : "auth"
+>       : ^^^^^^
+
+      return { username: "test", password: "admin" };
+>{ username: "test", password: "admin" } : { username: string; password: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>username : string
+>         : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>password : string
+>         : ^^^^^^
+>"admin" : "admin"
+>        : ^^^^^^^
+
+    case "cart":
+>"cart" : "cart"
+>       : ^^^^^^
+
+      return { items: [{ id: "123", quantity: 123 }] };
+>{ items: [{ id: "123", quantity: 123 }] } : { items: { id: string; quantity: number; }[]; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>items : { id: string; quantity: number; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ id: "123", quantity: 123 }] : { id: string; quantity: number; }[]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ id: "123", quantity: 123 } : { id: string; quantity: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>quantity : number
+>         : ^^^^^^
+>123 : 123
+>    : ^^^
+
+    case "person":
+>"person" : "person"
+>         : ^^^^^^^^
+
+      return { name: "andrea", age: 27 };
+>{ name: "andrea", age: 27 } : { name: string; age: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>"andrea" : "andrea"
+>         : ^^^^^^^^
+>age : number
+>    : ^^^^^^
+>27 : 27
+>   : ^^
+  }
+}
+
+// error, non-exhaustive cases
+function mockPayload4<P_TAG extends Payload["_tag"]>(
+>mockPayload4 : <P_TAG extends Payload["_tag"]>(str: P_TAG) => PayloadContent[P_TAG]
+>             : ^     ^^^^^^^^^               ^^   ^^     ^^^^^                     
+
+  str: P_TAG,
+>str : P_TAG
+>    : ^^^^^
+
+): PayloadContent[P_TAG] {
+  switch (str) {
+>str : P_TAG
+>    : ^^^^^
+
+    case "auth":
+>"auth" : "auth"
+>       : ^^^^^^
+
+      return { username: "test", password: "admin" };
+>{ username: "test", password: "admin" } : { username: string; password: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>username : string
+>         : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>password : string
+>         : ^^^^^^
+>"admin" : "admin"
+>        : ^^^^^^^
+
+    case "cart":
+>"cart" : "cart"
+>       : ^^^^^^
+
+      return { items: [{ id: "123", quantity: 123 }] };
+>{ items: [{ id: "123", quantity: 123 }] } : { items: { id: string; quantity: number; }[]; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>items : { id: string; quantity: number; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ id: "123", quantity: 123 }] : { id: string; quantity: number; }[]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ id: "123", quantity: 123 } : { id: string; quantity: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>quantity : number
+>         : ^^^^^^
+>123 : 123
+>    : ^^^
+  }
+}
+

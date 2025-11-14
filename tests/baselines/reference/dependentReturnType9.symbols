@@ -1,0 +1,173 @@
+//// [tests/cases/compiler/dependentReturnType9.ts] ////
+
+=== dependentReturnType9.ts ===
+type Payload =
+>Payload : Symbol(Payload, Decl(dependentReturnType9.ts, 0, 0))
+
+  | { _tag: "auth"; username: string; password: string }
+>_tag : Symbol(_tag, Decl(dependentReturnType9.ts, 1, 5))
+>username : Symbol(username, Decl(dependentReturnType9.ts, 1, 19))
+>password : Symbol(password, Decl(dependentReturnType9.ts, 1, 37))
+
+  | { _tag: "cart"; items: Array<{ id: string; quantity: number }> }
+>_tag : Symbol(_tag, Decl(dependentReturnType9.ts, 2, 5))
+>items : Symbol(items, Decl(dependentReturnType9.ts, 2, 19))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(dependentReturnType9.ts, 2, 34))
+>quantity : Symbol(quantity, Decl(dependentReturnType9.ts, 2, 46))
+
+  | { _tag: "person"; name: string; age: number };
+>_tag : Symbol(_tag, Decl(dependentReturnType9.ts, 3, 5))
+>name : Symbol(name, Decl(dependentReturnType9.ts, 3, 21))
+>age : Symbol(age, Decl(dependentReturnType9.ts, 3, 35))
+
+type PayloadContent = {
+>PayloadContent : Symbol(PayloadContent, Decl(dependentReturnType9.ts, 3, 50))
+
+  [P in Payload as P["_tag"]]: Omit<P, "_tag">;
+>P : Symbol(P, Decl(dependentReturnType9.ts, 6, 3))
+>Payload : Symbol(Payload, Decl(dependentReturnType9.ts, 0, 0))
+>P : Symbol(P, Decl(dependentReturnType9.ts, 6, 3))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(dependentReturnType9.ts, 6, 3))
+
+};
+
+// ok, exhaustive cases and default case with throw
+function mockPayload<P_TAG extends Payload["_tag"]>(
+>mockPayload : Symbol(mockPayload, Decl(dependentReturnType9.ts, 7, 2))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 10, 21))
+>Payload : Symbol(Payload, Decl(dependentReturnType9.ts, 0, 0))
+
+  str: P_TAG,
+>str : Symbol(str, Decl(dependentReturnType9.ts, 10, 52))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 10, 21))
+
+): PayloadContent[P_TAG] {
+>PayloadContent : Symbol(PayloadContent, Decl(dependentReturnType9.ts, 3, 50))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 10, 21))
+
+  switch (str) {
+>str : Symbol(str, Decl(dependentReturnType9.ts, 10, 52))
+
+    case "auth":
+      return { username: "test", password: "admin" };
+>username : Symbol(username, Decl(dependentReturnType9.ts, 15, 14))
+>password : Symbol(password, Decl(dependentReturnType9.ts, 15, 32))
+
+    case "cart":
+      return { items: [{ id: "123", quantity: 123 }] };
+>items : Symbol(items, Decl(dependentReturnType9.ts, 17, 14))
+>id : Symbol(id, Decl(dependentReturnType9.ts, 17, 24))
+>quantity : Symbol(quantity, Decl(dependentReturnType9.ts, 17, 35))
+
+    case "person":
+      return { name: "andrea", age: 27 };
+>name : Symbol(name, Decl(dependentReturnType9.ts, 19, 14))
+>age : Symbol(age, Decl(dependentReturnType9.ts, 19, 30))
+
+    default:
+      throw new Error("unknown tag");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+// ok, non-exhaustive cases but default case with throw
+function mockPayload2<P_TAG extends Payload["_tag"]>(
+>mockPayload2 : Symbol(mockPayload2, Decl(dependentReturnType9.ts, 23, 1))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 26, 22))
+>Payload : Symbol(Payload, Decl(dependentReturnType9.ts, 0, 0))
+
+  str: P_TAG,
+>str : Symbol(str, Decl(dependentReturnType9.ts, 26, 53))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 26, 22))
+
+): PayloadContent[P_TAG] {
+>PayloadContent : Symbol(PayloadContent, Decl(dependentReturnType9.ts, 3, 50))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 26, 22))
+
+  switch (str) {
+>str : Symbol(str, Decl(dependentReturnType9.ts, 26, 53))
+
+    case "auth":
+      return { username: "test", password: "admin" };
+>username : Symbol(username, Decl(dependentReturnType9.ts, 31, 14))
+>password : Symbol(password, Decl(dependentReturnType9.ts, 31, 32))
+
+    case "cart":
+      return { items: [{ id: "123", quantity: 123 }] };
+>items : Symbol(items, Decl(dependentReturnType9.ts, 33, 14))
+>id : Symbol(id, Decl(dependentReturnType9.ts, 33, 24))
+>quantity : Symbol(quantity, Decl(dependentReturnType9.ts, 33, 35))
+
+    default:
+      throw new Error("unhandled tag");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+// ok, exhaustive cases
+function mockPayload3<P_TAG extends Payload["_tag"]>(
+>mockPayload3 : Symbol(mockPayload3, Decl(dependentReturnType9.ts, 37, 1))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 40, 22))
+>Payload : Symbol(Payload, Decl(dependentReturnType9.ts, 0, 0))
+
+  str: P_TAG,
+>str : Symbol(str, Decl(dependentReturnType9.ts, 40, 53))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 40, 22))
+
+): PayloadContent[P_TAG] {
+>PayloadContent : Symbol(PayloadContent, Decl(dependentReturnType9.ts, 3, 50))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 40, 22))
+
+  switch (str) {
+>str : Symbol(str, Decl(dependentReturnType9.ts, 40, 53))
+
+    case "auth":
+      return { username: "test", password: "admin" };
+>username : Symbol(username, Decl(dependentReturnType9.ts, 45, 14))
+>password : Symbol(password, Decl(dependentReturnType9.ts, 45, 32))
+
+    case "cart":
+      return { items: [{ id: "123", quantity: 123 }] };
+>items : Symbol(items, Decl(dependentReturnType9.ts, 47, 14))
+>id : Symbol(id, Decl(dependentReturnType9.ts, 47, 24))
+>quantity : Symbol(quantity, Decl(dependentReturnType9.ts, 47, 35))
+
+    case "person":
+      return { name: "andrea", age: 27 };
+>name : Symbol(name, Decl(dependentReturnType9.ts, 49, 14))
+>age : Symbol(age, Decl(dependentReturnType9.ts, 49, 30))
+  }
+}
+
+// error, non-exhaustive cases
+function mockPayload4<P_TAG extends Payload["_tag"]>(
+>mockPayload4 : Symbol(mockPayload4, Decl(dependentReturnType9.ts, 51, 1))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 54, 22))
+>Payload : Symbol(Payload, Decl(dependentReturnType9.ts, 0, 0))
+
+  str: P_TAG,
+>str : Symbol(str, Decl(dependentReturnType9.ts, 54, 53))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 54, 22))
+
+): PayloadContent[P_TAG] {
+>PayloadContent : Symbol(PayloadContent, Decl(dependentReturnType9.ts, 3, 50))
+>P_TAG : Symbol(P_TAG, Decl(dependentReturnType9.ts, 54, 22))
+
+  switch (str) {
+>str : Symbol(str, Decl(dependentReturnType9.ts, 54, 53))
+
+    case "auth":
+      return { username: "test", password: "admin" };
+>username : Symbol(username, Decl(dependentReturnType9.ts, 59, 14))
+>password : Symbol(password, Decl(dependentReturnType9.ts, 59, 32))
+
+    case "cart":
+      return { items: [{ id: "123", quantity: 123 }] };
+>items : Symbol(items, Decl(dependentReturnType9.ts, 61, 14))
+>id : Symbol(id, Decl(dependentReturnType9.ts, 61, 24))
+>quantity : Symbol(quantity, Decl(dependentReturnType9.ts, 61, 35))
+  }
+}
+
