@@ -1,0 +1,27 @@
+KindSourceFile [0, 98), i=1, next=0
+  NodeList [0, 98), i=2, next=27
+    KindVariableStatement [0, 15), i=3, next=9
+      KindVariableDeclarationList [0, 14), i=4, next=0
+        NodeList [3, 14), i=5, next=0
+          KindVariableDeclaration [3, 14), i=6, next=0
+            KindIdentifier "a" [3, 5), i=7, next=8
+            KindStringLiteral "😃" [7, 14), i=8, next=0
+    KindVariableStatement [15, 39), i=9, next=15
+      KindVariableDeclarationList [15, 38), i=10, next=0
+        NodeList [19, 38), i=11, next=0
+          KindVariableDeclaration [19, 38), i=12, next=0
+            KindIdentifier "b" [19, 21), i=13, next=14
+            KindStringLiteral "😃" [23, 38), i=14, next=0
+    KindVariableStatement [39, 69), i=15, next=21
+      KindVariableDeclarationList [39, 68), i=16, next=0
+        NodeList [43, 68), i=17, next=0
+          KindVariableDeclaration [43, 68), i=18, next=0
+            KindIdentifier "c" [43, 45), i=19, next=20
+            KindStringLiteral "�😃" [47, 68), i=20, next=0
+    KindVariableStatement [69, 98), i=21, next=0
+      KindVariableDeclarationList [69, 98), i=22, next=0
+        NodeList [73, 98), i=23, next=0
+          KindVariableDeclaration [73, 98), i=24, next=0
+            KindIdentifier "d" [73, 75), i=25, next=26
+            KindStringLiteral "�😃" [77, 98), i=26, next=0
+  KindEndOfFile [98, 98), i=27, next=0

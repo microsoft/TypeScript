@@ -8,6 +8,25 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
+const (
+	surr1    = 0xd800
+	surr2    = 0xdc00
+	surr3    = 0xe000
+	surrSelf = 0x10000
+)
+
+func codePointIsHighSurrogate(r rune) bool {
+	return surr1 <= r && r < surr2
+}
+
+func codePointIsLowSurrogate(r rune) bool {
+	return surr2 <= r && r < surr3
+}
+
+func surrogatePairToCodepoint(r1, r2 rune) rune {
+	return (r1-surr1)<<10 | (r2 - surr2) + surrSelf
+}
+
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 	return token >= ast.KindIdentifier
 }

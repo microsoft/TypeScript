@@ -35,6 +35,24 @@ func TestEncodeSourceFile(t *testing.T) {
 	})
 }
 
+func TestEncodeSourceFileWithUnicodeEscapes(t *testing.T) {
+	t.Parallel()
+	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: "/test.ts",
+		Path:     "/test.ts",
+	}, `let a = "😃"; let b = "\ud83d\ude03"; let c = "\udc00\ud83d\ude03"; let d = "\ud83d\ud83d\ude03"`, core.ScriptKindTS)
+	t.Run("baseline", func(t *testing.T) {
+		t.Parallel()
+		buf, err := encoder.EncodeSourceFile(sourceFile, "")
+		assert.NilError(t, err)
+
+		str := formatEncodedSourceFile(buf)
+		baseline.Run(t, "encodeSourceFileWithUnicodeEscapes.txt", str, baseline.Options{
+			Subfolder: "api",
+		})
+	})
+}
+
 func BenchmarkEncodeSourceFile(b *testing.B) {
 	repo.SkipIfNoTypeScriptSubmodule(b)
 	filePath := filepath.Join(repo.TypeScriptSubmodulePath, "src/compiler/checker.ts")

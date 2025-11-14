@@ -8,6 +8,7 @@ import {
     cast,
     isImportDeclaration,
     isNamedImports,
+    isStringLiteral,
     isTemplateHead,
     isTemplateMiddle,
     isTemplateTail,
@@ -110,6 +111,31 @@ describe("SourceFile", () => {
             node.forEachChild(visit);
         });
         assert.equal(nodeCount, 8);
+    });
+});
+
+test("unicode escapes", () => {
+    const srcFiles = {
+        "/src/1.ts": `"😃"`,
+        "/src/2.ts": `"\\ud83d\\ude03"`, // this is "😃"
+    };
+
+    const api = spawnAPI({
+        "/tsconfig.json": "{}",
+        ...srcFiles,
+    });
+    const project = api.loadProject("/tsconfig.json");
+
+    Object.keys(srcFiles).forEach(file => {
+        const sourceFile = project.getSourceFile(file);
+        assert.ok(sourceFile);
+
+        sourceFile.forEachChild(function visit(node) {
+            if (isStringLiteral(node)) {
+                assert.equal(node.text, "😃");
+            }
+            node.forEachChild(visit);
+        });
     });
 });
 
