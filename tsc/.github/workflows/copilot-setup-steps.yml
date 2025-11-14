@@ -13,6 +13,9 @@ jobs:
       # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
       contents: read
 
+    env:
+      MS_GOTOOLCHAIN_TELEMETRY_ENABLED: '0'
+
     # You can define any steps you want, and they will run before the agent starts.
     # If you do not check out your code, Copilot will do this for you.
     steps:
@@ -20,11 +23,14 @@ jobs:
         with:
           submodules: true
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: '>=22.16.0'
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
         with:
           lint-cache: 'true'
       - run: npm i -g @playwright/mcp@0.0.28
+      - run: go install golang.org/x/tools/gopls@latest
       - run: npm ci
       # pull dprint caches before network access is blocked
       - run: npx hereby check:format || true

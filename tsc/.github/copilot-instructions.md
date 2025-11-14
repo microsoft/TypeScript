@@ -110,3 +110,4 @@ The TypeScript submodule serves as the reference implementation for behavior and
 
 - Do not add or change existing dependencies unless asked to.
 - Do not remove any debug assertions or panic calls. Existing assertions are never too strict or incorrect.
+- Do not use the `timeout` command when running tests or other commands, unless specifically debugging a hanging issue. Commands should be run directly without timeout wrappers in normal operation.
