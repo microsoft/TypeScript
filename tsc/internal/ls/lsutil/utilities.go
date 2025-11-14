@@ -37,7 +37,7 @@ func ProbablyUsesSemicolons(file *ast.SourceFile) bool {
 					astnav.GetStartOfNode(lastToken, file, false /*includeJSDoc*/))
 				nextTokenLine := scanner.GetECMALineOfPosition(
 					file,
-					scanner.GetRangeOfTokenAtPosition(file, lastToken.End()).Pos())
+					scanner.SkipTrivia(file.Text(), lastToken.End()))
 				// Avoid counting missing semicolon in single-line objects:
 				// `function f(p: { x: string /*no semicolon here is insignificant*/ }) {`
 				if lastTokenLine != nextTokenLine {

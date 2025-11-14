@@ -3968,7 +3968,7 @@ func (c *Checker) checkWithStatement(node *ast.Node) {
 	c.checkExpression(node.Expression())
 	sourceFile := ast.GetSourceFileOfNode(node)
 	if !c.hasParseDiagnostics(sourceFile) {
-		start := scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos()).Pos()
+		start := scanner.SkipTrivia(sourceFile.Text(), node.Pos())
 		end := node.Statement().Pos()
 		c.grammarErrorAtPos(sourceFile.AsNode(), start, end-start, diagnostics.The_with_statement_is_not_supported_All_symbols_in_a_with_block_will_have_type_any)
 	}
