@@ -1,0 +1,95 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeRelationships2.ts] ////
+
+=== mappedTypeRelationships2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62717
+
+type Alias1<T extends object, U extends { [K in keyof T]?: any }> = U;
+>Alias1 : U
+>       : ^
+
+type Alias2<T extends object, U extends Partial<Record<keyof T, any>>> = U;
+>Alias2 : U
+>       : ^
+
+type AB = { a: string; b: string };
+>AB : AB
+>   : ^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+type B = { b: string };
+>B : B
+>  : ^
+>b : string
+>  : ^^^^^^
+
+type Test1 = Alias1<AB, B>; // ok
+>Test1 : B
+>      : ^
+
+type Test2 = Alias2<AB, B>; // ok
+>Test2 : B
+>      : ^
+
+type Test3<T extends AB> = Alias1<T, B>; // ok
+>Test3 : B
+>      : ^
+
+type Test4<T extends AB> = Alias2<T, B>; // ok
+>Test4 : B
+>      : ^
+
+type WithNumber<T> = { [K in keyof T]: T[K] | number };
+>WithNumber : WithNumber<T>
+>           : ^^^^^^^^^^^^^
+
+type Alias3<T extends object, U extends WithNumber<Record<keyof T, any>>> = U;
+>Alias3 : U
+>       : ^
+
+type ABC = { a: string; b: string; c: string };
+>ABC : ABC
+>    : ^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+
+type Test5 = Alias3<AB, ABC>; // ok
+>Test5 : ABC
+>      : ^^^
+
+type Test6<T extends AB> = Alias3<T, ABC>; // error
+>Test6 : ABC
+>      : ^^^
+
+type Alias4<T extends object, U extends WithNumber<Partial<Record<keyof T, any>>>> = U;
+>Alias4 : U
+>       : ^
+
+type Test7 = Alias4<AB, ABC>; // ok
+>Test7 : ABC
+>      : ^^^
+
+type Test8<T extends AB> = Alias4<T, ABC>; // ok
+>Test8 : ABC
+>      : ^^^
+
+type Alias5<T extends object, U extends Partial<WithNumber<Record<keyof T, any>>>> = U;
+>Alias5 : U
+>       : ^
+
+type Test9 = Alias5<AB, ABC>; // ok
+>Test9 : ABC
+>      : ^^^
+
+type Test10<T extends AB> = Alias5<T, ABC>; // ok
+>Test10 : ABC
+>       : ^^^
+
+export {};
+
