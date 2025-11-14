@@ -914,7 +914,7 @@ func getAdjustedLocation(node *ast.Node, forRename bool, sourceFile *ast.SourceF
 		// export /**/type * from "[|module|]";
 		// export /**/type * as ... from "[|module|]";
 		if ast.IsExportDeclaration(parent) && parent.IsTypeOnly() {
-			if location := getAdjustedLocationForExportDeclaration(parent.Parent.AsExportDeclaration(), forRename); location != nil {
+			if location := getAdjustedLocationForExportDeclaration(parent.AsExportDeclaration(), forRename); location != nil {
 				return location
 			}
 		}

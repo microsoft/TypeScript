@@ -1,0 +1,526 @@
+// === findAllReferences ===
+// === /main.ts ===
+// // import ... = ...
+// /*FIND ALL REFS*/import [|A|] = require("./a");
+// namespace N { }
+// import N2 = N;
+// 
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// // import ... = ...
+// import A = /*FIND ALL REFS*/require("[|./a|]");
+// namespace N { }
+// import N2 = N;
+// 
+// // --- (line: 6) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// // import ... = ...
+// import A = require("./a");
+// namespace N { }
+// /*FIND ALL REFS*/import [|N2|] = N;
+// 
+// // import ... from ...
+// import type B from "./b";
+// // --- (line: 8) skipped ---
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// export default class [|B|] {}
+
+// === /main.ts ===
+// --- (line: 3) skipped ---
+// import N2 = N;
+// 
+// // import ... from ...
+// /*FIND ALL REFS*/import type [|B|] from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// export default class [|B|] {}
+
+// === /main.ts ===
+// --- (line: 3) skipped ---
+// import N2 = N;
+// 
+// // import ... from ...
+// import /*FIND ALL REFS*/type [|B|] from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 3) skipped ---
+// import N2 = N;
+// 
+// // import ... from ...
+// import type B /*FIND ALL REFS*/from "[|./b|]";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// // --- (line: 11) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// /*FIND ALL REFS*/import type * as [|C|] from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // --- (line: 12) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// import /*FIND ALL REFS*/type * as [|C|] from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // --- (line: 12) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// import type * /*FIND ALL REFS*/as [|C|] from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // --- (line: 12) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// import type * as C /*FIND ALL REFS*/from "[|./c|]";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // --- (line: 12) skipped ---
+
+
+
+// === findAllReferences ===
+// === /d.ts ===
+// export class [|D|] {}
+
+// === /main.ts ===
+// --- (line: 5) skipped ---
+// // import ... from ...
+// import type B from "./b";
+// import type * as C from "./c";
+// /*FIND ALL REFS*/import type { [|D|] } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// // --- (line: 13) skipped ---
+
+
+
+// === findAllReferences ===
+// === /d.ts ===
+// export class [|D|] {}
+
+// === /main.ts ===
+// --- (line: 5) skipped ---
+// // import ... from ...
+// import type B from "./b";
+// import type * as C from "./c";
+// import /*FIND ALL REFS*/type { [|D|] } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// // --- (line: 13) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 5) skipped ---
+// // import ... from ...
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } /*FIND ALL REFS*/from "[|./d|]";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// // --- (line: 13) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// /*FIND ALL REFS*/import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// import "./f";
+// // --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import /*FIND ALL REFS*/type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// import "./f";
+// // --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } /*FIND ALL REFS*/from "[|./e|]";
+// 
+// // import "module"
+// import "./f";
+// // --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import type { e1, e2 /*FIND ALL REFS*/as [|e3|] } from "./e";
+// 
+// // import "module"
+// import "./f";
+// // --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 9) skipped ---
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// /*FIND ALL REFS*/import "[|./f|]";
+// 
+// // export ... from ...
+// export type * from "./g";
+// // --- (line: 17) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 12) skipped ---
+// import "./f";
+// 
+// // export ... from ...
+// /*FIND ALL REFS*/export type * from "[|./g|]";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// // --- (line: 20) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 12) skipped ---
+// import "./f";
+// 
+// // export ... from ...
+// export /*FIND ALL REFS*/type * from "[|./g|]";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// // --- (line: 20) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 12) skipped ---
+// import "./f";
+// 
+// // export ... from ...
+// export type * /*FIND ALL REFS*/from "[|./g|]";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// // --- (line: 20) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
+// 
+// // export ... from ...
+// export type * from "./g";
+// /*FIND ALL REFS*/export type * as [|H|] from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// // --- (line: 21) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
+// 
+// // export ... from ...
+// export type * from "./g";
+// export /*FIND ALL REFS*/type * as [|H|] from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// // --- (line: 21) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
+// 
+// // export ... from ...
+// export type * from "./g";
+// export type * /*FIND ALL REFS*/as [|H|] from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// // --- (line: 21) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
+// 
+// // export ... from ...
+// export type * from "./g";
+// export type * as H /*FIND ALL REFS*/from "[|./h|]";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// // --- (line: 21) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 14) skipped ---
+// // export ... from ...
+// export type * from "./g";
+// export type * as H from "./h";
+// /*FIND ALL REFS*/export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// // --- (line: 22) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 14) skipped ---
+// // export ... from ...
+// export type * from "./g";
+// export type * as H from "./h";
+// export /*FIND ALL REFS*/type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// // --- (line: 22) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 14) skipped ---
+// // export ... from ...
+// export type * from "./g";
+// export type * as H from "./h";
+// export type { I } /*FIND ALL REFS*/from "[|./i|]";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// // --- (line: 22) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 15) skipped ---
+// export type * from "./g";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// /*FIND ALL REFS*/export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 15) skipped ---
+// export type * from "./g";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export /*FIND ALL REFS*/type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 15) skipped ---
+// export type * from "./g";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } /*FIND ALL REFS*/from "[|./j|]";
+// type Z1 = 1;
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 15) skipped ---
+// export type * from "./g";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 /*FIND ALL REFS*/as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 16) skipped ---
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type [|Z1|] = 1;
+// /*FIND ALL REFS*/export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 16) skipped ---
+// export type * as H from "./h";
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type [|Z1|] = 1;
+// export /*FIND ALL REFS*/type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 20) skipped ---
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// /*FIND ALL REFS*/export type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 20) skipped ---
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export /*FIND ALL REFS*/type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 20) skipped ---
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export type { z2, z3 /*FIND ALL REFS*/as z4 };
+
+
+
+// === findAllReferences ===
+// === /main2.ts ===
+// const [|x|] = {};
+// /*FIND ALL REFS*/export = [|x|];
+
+
+
+// === findAllReferences ===
+// === /main3.ts ===
+// const [|y|] = {};
+// /*FIND ALL REFS*/export default [|y|];
