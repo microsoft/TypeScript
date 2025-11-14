@@ -9,5 +9,6 @@ export { b } from "./b";
 >b : Symbol(b, Decl(a.ts, 0, 8))
 
 export { default as a } from "./b";
+>default : Symbol("b", Decl(b.ts, 0, 0))
 >a : Symbol(a, Decl(a.ts, 1, 8))
 

@@ -3869,7 +3869,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return exportDefaultSymbol;
         }
         const hasDefaultOnly = isOnlyImportableAsDefault(specifier, moduleSymbol);
-        const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
+        let hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
+        // For export specifiers re-exporting 'default', when allowSyntheticDefaultImports is enabled,
+        // allow synthetic default even from TypeScript source files (not just declaration files).
+        // This is consistent with the intent of allowSyntheticDefaultImports to allow treating modules
+        // without a default export as if they had one.
+        if (!hasSyntheticDefault && isExportSpecifier(node) && allowSyntheticDefaultImports) {
+            hasSyntheticDefault = true;
+        }
         if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
             if (hasExportAssignmentSymbol(moduleSymbol) && !allowSyntheticDefaultImports) {
                 const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
