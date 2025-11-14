@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/propertyAccessOnUnionWithGenericConditional.ts] ////
+
+=== propertyAccessOnUnionWithGenericConditional.ts ===
+type InCommon = { common: string };
+>InCommon : Symbol(InCommon, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 0))
+>common : Symbol(common, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 17))
+
+type CondWithAny<K extends string | number> =
+>CondWithAny : Symbol(CondWithAny, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 35))
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 2, 17))
+
+  K extends number ? any : { two: string };
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 2, 17))
+>two : Symbol(two, Decl(propertyAccessOnUnionWithGenericConditional.ts, 3, 28))
+
+type UnionWithAny<K extends string | number> =
+>UnionWithAny : Symbol(UnionWithAny, Decl(propertyAccessOnUnionWithGenericConditional.ts, 3, 43))
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 5, 18))
+
+  InCommon | (CondWithAny<K> & InCommon);
+>InCommon : Symbol(InCommon, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 0))
+>CondWithAny : Symbol(CondWithAny, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 35))
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 5, 18))
+>InCommon : Symbol(InCommon, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 0))
+
+function testWithAny<K extends string | number>(k: K) {
+>testWithAny : Symbol(testWithAny, Decl(propertyAccessOnUnionWithGenericConditional.ts, 6, 41))
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 8, 21))
+>k : Symbol(k, Decl(propertyAccessOnUnionWithGenericConditional.ts, 8, 48))
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 8, 21))
+
+  const val = {} as UnionWithAny<K>;
+>val : Symbol(val, Decl(propertyAccessOnUnionWithGenericConditional.ts, 9, 7))
+>UnionWithAny : Symbol(UnionWithAny, Decl(propertyAccessOnUnionWithGenericConditional.ts, 3, 43))
+>K : Symbol(K, Decl(propertyAccessOnUnionWithGenericConditional.ts, 8, 21))
+
+  val.common;
+>val.common : Symbol(common, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 17))
+>val : Symbol(val, Decl(propertyAccessOnUnionWithGenericConditional.ts, 9, 7))
+>common : Symbol(common, Decl(propertyAccessOnUnionWithGenericConditional.ts, 0, 17))
+}
