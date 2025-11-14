@@ -9,7 +9,6 @@ var n: number = modM.x;
 >n : number
 >  : ^^^^^^
 >modM.x : any
->       : ^^^
 >modM : typeof modM
 >     : ^^^^^^^^^^^
 >x : any
@@ -22,7 +21,6 @@ namespace M {
 
 	export var x;
 >x : any
->  : ^^^
 }
 
 export = M;

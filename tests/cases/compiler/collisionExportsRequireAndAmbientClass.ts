@@ -1,4 +1,4 @@
-//@module: commonjs
+//@module: amd
 //@filename: collisionExportsRequireAndAmbientClass_externalmodule.ts
 export declare class require {
 }

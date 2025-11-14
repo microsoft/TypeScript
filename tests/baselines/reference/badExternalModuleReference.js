@@ -9,5 +9,7 @@ export declare var a: {
 
 
 //// [badExternalModuleReference.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});

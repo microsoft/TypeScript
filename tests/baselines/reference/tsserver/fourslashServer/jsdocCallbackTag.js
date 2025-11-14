@@ -244,7 +244,7 @@ Info seq  [hh:mm:ss:mss] response:
           "line": 19,
           "offset": 22
         },
-        "displayString": "type FooHandler2 = (eventName?: string | undefined, eventName2?: string) => any",
+        "displayString": "type FooHandler2 = (eventName?: string, eventName2?: string) => any",
         "documentation": "- What, another one?",
         "tags": []
       }
@@ -278,7 +278,7 @@ Info seq  [hh:mm:ss:mss] response:
           "line": 9,
           "offset": 21
         },
-        "displayString": "type FooHandler = (eventName: string, eventName2: number | string, eventName3: any) => number",
+        "displayString": "type FooHandler = (eventName: string, eventName2: string | number, eventName3: any) => number",
         "documentation": "- A kind of magic",
         "tags": []
       }

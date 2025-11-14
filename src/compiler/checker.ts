@@ -6846,7 +6846,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return factory.createThisTypeNode();
             }
 
-            if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
+            // When generating QuickInfo, expand type aliases to show resolved types
+            // for better clarity in hover information
+            if (!inTypeAlias && type.aliasSymbol && !(context.flags & NodeBuilderFlags.InQuickInfo) && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                 if (!shouldExpandType(type, context, /*isAlias*/ true)) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
@@ -9032,7 +9034,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result;
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
             const decl = declaration ?? symbol.valueDeclaration ?? getDeclarationWithTypeAnnotation(symbol) ?? symbol.declarations?.[0];
-            if (!canPossiblyExpandType(type, context) && decl) {
+            // When generating QuickInfo, prefer the resolved type over the syntactic form
+            // to ensure indexed access types and generic type aliases are properly resolved
+            if (!canPossiblyExpandType(type, context) && decl && !(context.flags & NodeBuilderFlags.InQuickInfo)) {
                 const restore = addSymbolTypeToContext(context, symbol, type);
                 if (isAccessor(decl)) {
                     result = syntacticNodeBuilder.serializeTypeOfAccessor(decl, symbol, context);
@@ -33867,7 +33871,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
         for (const right of getPropertiesOfType(type)) {
-            if (!(right.flags & SymbolFlags.Optional) && !(getCheckFlags(right) & CheckFlags.Partial)) {
+            if (!(right.flags & SymbolFlags.Optional)) {
                 const left = props.get(right.escapedName);
                 if (left) {
                     const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));

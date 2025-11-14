@@ -5564,6 +5564,7 @@ export const enum NodeBuilderFlags {
     InObjectTypeLiteral                     = 1 << 22,
     InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
     InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
+    InQuickInfo                             = 1 << 27,    // Generating type for QuickInfo/hover - prefer resolved types over aliases
 }
 
 /** @internal */
@@ -5612,10 +5613,11 @@ export const enum TypeFormatFlags {
     InElementType                           = 1 << 21, // Writing an array or union element type
     InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
     InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
+    InQuickInfo                             = 1 << 27, // Generating type for QuickInfo/hover - prefer resolved types
 
     NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | GenerateNamesForShadowedTypeParams | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
-        UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
+        UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias | InQuickInfo |
         UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
 }
 
@@ -7314,7 +7316,6 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory; }, low
 }
 
 export enum ModuleResolutionKind {
-    /** @deprecated */
     Classic = 1,
     /**
      * @deprecated
@@ -7578,14 +7579,10 @@ export interface TypeAcquisition {
 }
 
 export enum ModuleKind {
-    /** @deprecated */
     None = 0,
     CommonJS = 1,
-    /** @deprecated */
     AMD = 2,
-    /** @deprecated */
     UMD = 3,
-    /** @deprecated */
     System = 4,
 
     // NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.

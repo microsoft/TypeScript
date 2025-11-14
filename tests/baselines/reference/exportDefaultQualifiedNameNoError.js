@@ -20,9 +20,6 @@ var C = /** @class */ (function () {
 exports.default = C.x;
 //// [usage.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var code_1 = __importDefault(require("./code"));
+var code_1 = require("./code");
 void code_1.default;

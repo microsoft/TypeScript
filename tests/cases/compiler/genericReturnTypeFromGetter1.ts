@@ -1,4 +1,4 @@
-//@module: commonjs
+//@module: amd
 export interface A<T> {
    new (dbSet: DbSet<T>): T;
 }

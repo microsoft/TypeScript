@@ -133,14 +133,6 @@ export const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -177,7 +169,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -185,14 +177,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -215,7 +199,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -223,14 +207,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -252,7 +228,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -260,14 +236,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -289,7 +257,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -297,14 +265,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -327,7 +287,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: Introduce error with noCheck
 
@@ -468,14 +428,6 @@ export const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -512,7 +464,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -520,14 +472,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -549,7 +493,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: Add file with error
 
@@ -560,13 +504,13 @@ export const c: number = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
-Found 1 error in tsconfig.json[90m:4[0m
+Found 1 error in c.ts[90m:1[0m
 
 
 
@@ -696,14 +640,6 @@ export const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -748,7 +684,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -756,13 +692,13 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
-Found 1 error in tsconfig.json[90m:4[0m
+Found 1 error in c.ts[90m:1[0m
 
 
 
@@ -795,14 +731,6 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -827,7 +755,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -835,13 +763,13 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m4[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
-Found 1 error in tsconfig.json[90m:4[0m
+Found 1 error in c.ts[90m:1[0m
 
 
 

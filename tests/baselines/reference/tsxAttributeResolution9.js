@@ -27,16 +27,18 @@ export class MyComponent {
 
 
 //// [file.jsx]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyComponent = void 0;
-var MyComponent = /** @class */ (function () {
-    function MyComponent() {
-    }
-    MyComponent.prototype.render = function () {
-    };
-    return MyComponent;
-}());
-exports.MyComponent = MyComponent;
-<MyComponent foo="bar"/>; // ok  
-<MyComponent foo={0}/>; // should be an error
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MyComponent = void 0;
+    var MyComponent = /** @class */ (function () {
+        function MyComponent() {
+        }
+        MyComponent.prototype.render = function () {
+        };
+        return MyComponent;
+    }());
+    exports.MyComponent = MyComponent;
+    <MyComponent foo="bar"/>; // ok  
+    <MyComponent foo={0}/>; // should be an error
+});

@@ -20,12 +20,12 @@ export default function defer() {
 
 === b.ts ===
 import defer from "a";
->defer : any
->      : ^^^
+>defer : () => void
+>      : ^^^^^^^^^^
 
 defer();
->defer() : any
->        : ^^^
->defer : any
->      : ^^^
+>defer() : void
+>        : ^^^^
+>defer : () => void
+>      : ^^^^^^^^^^
 

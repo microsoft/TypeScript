@@ -50,13 +50,8 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -210,14 +205,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error.
-
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -317,7 +304,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -348,18 +335,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error.
-
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -388,22 +367,8 @@ Found 1 error.
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ]
-  ],
   "version": "FakeTSVersion",
-  "size": 714
+  "size": 677
 }
 
 
@@ -425,11 +390,14 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -440,44 +408,12 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
-
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output '../outFile.tsbuildinfo'
 
 
 
 
-Program root files: [
-  "/home/src/workspaces/project/a.ts",
-  "/home/src/workspaces/project/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "incremental": true,
-  "module": 2,
-  "outFile": "/home/src/workspaces/outFile.js",
-  "tscBuild": true,
-  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/a.ts
-/home/src/workspaces/project/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -521,13 +457,8 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -688,18 +619,13 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 2 errors.
+Found 1 error.
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"emitDiagnosticsPerFile":[[2,[{"start":13,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":13,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":13,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":13,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -728,20 +654,6 @@ Found 2 errors.
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ]
-  ],
   "emitDiagnosticsPerFile": [
     [
       "./project/a.ts",
@@ -766,7 +678,7 @@ Found 2 errors.
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1035
+  "size": 998
 }
 
 
@@ -788,7 +700,10 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 No shapes updated in the builder::
 
@@ -809,14 +724,6 @@ Output::
 [[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../outFile.tsbuildinfo' is older than input 'a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
-
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error.
 
 
 
@@ -909,7 +816,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -924,18 +831,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error.
-
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -964,22 +863,8 @@ Found 1 error.
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ]
-  ],
   "version": "FakeTSVersion",
-  "size": 714
+  "size": 677
 }
 
 
@@ -1001,11 +886,14 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: Add file with error
 
@@ -1019,14 +907,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../outFile.tsbuildinfo' is older than input 'c.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
 Found 1 error.
@@ -1055,7 +943,7 @@ define("c", ["require", "exports"], function (require, exports) {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[4,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -1091,24 +979,20 @@ define("c", ["require", "exports"], function (require, exports) {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ],
-    [
       "./project/c.ts",
-      "not cached or not changed"
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        }
+      ]
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 785
+  "size": 898
 }
 
 //// [/home/src/workspaces/outFile.d.ts]
@@ -1144,7 +1028,11 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 No shapes updated in the builder::
 
@@ -1176,13 +1064,8 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 2 errors.
+Found 1 error.
 
 
 
@@ -1337,14 +1220,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
-
-
-Found 1 error.
-
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -1453,7 +1328,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 Change:: No Change run with checking
 
@@ -1468,10 +1343,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
 Found 1 error.
@@ -1479,7 +1354,7 @@ Found 1 error.
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[4,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -1515,24 +1390,20 @@ Found 1 error.
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/a.ts",
-      "not cached or not changed"
-    ],
-    [
-      "./project/b.ts",
-      "not cached or not changed"
-    ],
-    [
       "./project/c.ts",
-      "not cached or not changed"
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        }
+      ]
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 785
+  "size": 898
 }
 
 
@@ -1556,7 +1427,11 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 No shapes updated in the builder::
 
@@ -1591,10 +1466,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
-[7m5[0m     "module": "amd",
-[7m [0m [91m              ~~~~~[0m
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
 Found 1 error.
@@ -1622,7 +1497,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 

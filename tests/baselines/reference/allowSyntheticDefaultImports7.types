@@ -18,7 +18,6 @@ import { default as Foo } from "./b";
 
 Foo.bar();
 >Foo.bar() : any
->          : ^^^
 >Foo.bar : () => any
 >        : ^^^^^^^^^
 >Foo : typeof Foo
@@ -28,7 +27,6 @@ Foo.bar();
 
 Foo.foo();
 >Foo.foo() : any
->          : ^^^
 >Foo.foo : () => any
 >        : ^^^^^^^^^
 >Foo : typeof Foo

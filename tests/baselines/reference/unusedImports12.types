@@ -18,8 +18,8 @@ import * as ns from './b';
 >   : ^^^^^^^^^
 
 import r = require("./b");
->r : typeof r
->  : ^^^^^^^^
+>r : typeof ns
+>  : ^^^^^^^^^
 
 === b.ts ===
 export class Member {}

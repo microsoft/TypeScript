@@ -4,5 +4,7 @@
 export declare module "M" { }
 
 //// [ambientExternalModuleInsideNonAmbientExternalModule.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});

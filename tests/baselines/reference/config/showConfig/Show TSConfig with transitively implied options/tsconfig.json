@@ -4,6 +4,7 @@
         "target": "esnext",
         "moduleResolution": "nodenext",
         "moduleDetection": "force",
+        "esModuleInterop": true,
         "useDefineForClassFields": true
     }
 }

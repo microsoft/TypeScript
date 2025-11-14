@@ -47,7 +47,6 @@ export namespace M {
 
     export var x;
 >x : any
->  : ^^^
 }
 export namespace N {
     export interface I {

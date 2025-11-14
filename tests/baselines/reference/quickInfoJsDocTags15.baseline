@@ -6,7 +6,7 @@
 //                    ^^^
 // | ----------------------------------------------------------------------
 // | type Foo = {
-// |     getName: _a.Bar;
+// |     getName: (name: string) => string;
 // | }
 // | ----------------------------------------------------------------------
 //  */
@@ -17,7 +17,7 @@
 //                 ^^^
 // | ----------------------------------------------------------------------
 // | type Foo = {
-// |     getName: _a.Bar;
+// |     getName: (name: string) => string;
 // | }
 // | ----------------------------------------------------------------------
 //  */
@@ -28,7 +28,7 @@
 //                  ^^^
 // | ----------------------------------------------------------------------
 // | type Foo = {
-// |     getName: _a.Bar;
+// |     getName: (name: string) => string;
 // | }
 // | ----------------------------------------------------------------------
 //  */
@@ -98,16 +98,44 @@
           "kind": "space"
         },
         {
-          "text": "_a",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
+          "text": "(",
           "kind": "punctuation"
         },
         {
-          "text": "Bar",
-          "kind": "aliasName"
+          "text": "name",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -188,16 +216,44 @@
           "kind": "space"
         },
         {
-          "text": "_a",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
+          "text": "(",
           "kind": "punctuation"
         },
         {
-          "text": "Bar",
-          "kind": "aliasName"
+          "text": "name",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -278,16 +334,44 @@
           "kind": "space"
         },
         {
-          "text": "_a",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
+          "text": "(",
           "kind": "punctuation"
         },
         {
-          "text": "Bar",
-          "kind": "aliasName"
+          "text": "name",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
         },
         {
           "text": ";",

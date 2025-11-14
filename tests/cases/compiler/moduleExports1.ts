@@ -1,4 +1,4 @@
-//@module: commonjs
+//@module: amd
 export namespace TypeScript.Strasse.Street {
 	export class Rue {
 		public address:string;

@@ -19,12 +19,9 @@ import Route = ReactRouter.Route;
 >      : ^^^
 
 var routes1 = <Route />;
->routes1 : any
->        : ^^^
-><Route /> : any
->          : ^^^
+>routes1 : error
+><Route /> : error
 >Route : any
->      : ^^^
 
 namespace M {
 >M : typeof M
@@ -32,7 +29,6 @@ namespace M {
 
 	export var X: any;
 >X : any
->  : ^^^
 }
 namespace M {
 >M : typeof M
@@ -40,14 +36,10 @@ namespace M {
 
 	// Should emit 'M.X' in both opening and closing tags
 	var y = <X></X>;
->y : any
->  : ^^^
-><X></X> : any
->        : ^^^
+>y : error
+><X></X> : error
 >X : any
->  : ^^^
 >X : any
->  : ^^^
 }
 
 === react.d.ts ===
@@ -57,7 +49,6 @@ declare module 'react' {
 
 	var x: any;
 >x : any
->  : ^^^
 
 	export = x;
 >x : any
@@ -70,7 +61,6 @@ declare namespace ReactRouter {
 
 	var Route: any;
 >Route : any
->      : ^^^
 
 	interface Thing { }
 }

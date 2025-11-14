@@ -1,6 +1,6 @@
 // @filename: file.tsx
 // @jsx: preserve
-// @module: commonjs
+// @module: amd
 // @noLib: true
 // @skipLibCheck: true
 // @libFiles: react.d.ts,lib.d.ts
