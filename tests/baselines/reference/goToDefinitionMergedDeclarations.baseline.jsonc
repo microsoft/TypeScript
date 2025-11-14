@@ -1,0 +1,42 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/test.ts ===
+// <|namespace [|{| defId: 0 |}A|] {
+//     export interface B {}
+// }|>
+// <|class [|{| defId: 1 |}A|] {}|>
+// <|interface [|{| defId: 2 |}A|] {}|>
+// var x: /*GOTO DEF*/A;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "module",
+    "name": "A",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "class",
+    "name": "A",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "interface",
+    "name": "A",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

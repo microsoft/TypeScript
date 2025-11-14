@@ -18,7 +18,7 @@
   [
    {
     "defId": 0,
-    "kind": "const",
+    "kind": "type",
     "name": "T",
     "containerName": "\"/tests/cases/fourslash/foo\"",
     "isLocal": false,
