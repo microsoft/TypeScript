@@ -42,6 +42,7 @@ const (
 	NodeFlagsInWithStatement NodeFlags = 1 << 24 // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 	NodeFlagsJsonFile        NodeFlags = 1 << 25 // If node was parsed in a Json
 	NodeFlagsDeprecated      NodeFlags = 1 << 26 // If has '@deprecated' JSDoc tag
+	NodeFlagsUnreachable     NodeFlags = 1 << 27 // If node is unreachable according to the binder
 
 	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing
 	NodeFlagsConstant    = NodeFlagsConst | NodeFlagsUsing

@@ -631,6 +631,15 @@ func (n *Node) Statements() []*Node {
 	return nil
 }
 
+func (n *Node) CanHaveStatements() bool {
+	switch n.Kind {
+	case KindSourceFile, KindBlock, KindModuleBlock, KindCaseClause, KindDefaultClause:
+		return true
+	default:
+		return false
+	}
+}
+
 func (n *Node) ModifierFlags() ModifierFlags {
 	modifiers := n.Modifiers()
 	if modifiers != nil {

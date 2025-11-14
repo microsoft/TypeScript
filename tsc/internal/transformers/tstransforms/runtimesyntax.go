@@ -1148,7 +1148,7 @@ func (tx *RuntimeSyntaxTransformer) shouldEmitModuleDeclaration(node *ast.Module
 		// If we can't find a parse tree node, assume the node is instantiated.
 		return true
 	}
-	return isInstantiatedModule(node.AsNode(), tx.compilerOptions.ShouldPreserveConstEnums())
+	return ast.IsInstantiatedModule(node.AsNode(), tx.compilerOptions.ShouldPreserveConstEnums())
 }
 
 func getInnermostModuleDeclarationFromDottedModule(moduleDeclaration *ast.ModuleDeclaration) *ast.ModuleDeclaration {

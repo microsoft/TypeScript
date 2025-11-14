@@ -33,9 +33,3 @@ func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression
 	}
 	return nil
 }
-
-func isInstantiatedModule(node *ast.ModuleDeclarationNode, preserveConstEnums bool) bool {
-	moduleState := ast.GetModuleInstanceState(node)
-	return moduleState == ast.ModuleInstanceStateInstantiated ||
-		(preserveConstEnums && moduleState == ast.ModuleInstanceStateConstEnumOnly)
-}

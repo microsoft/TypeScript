@@ -2336,6 +2336,12 @@ func getModuleInstanceStateForAliasTarget(node *Node, ancestors []*Node, visited
 	return ModuleInstanceStateInstantiated
 }
 
+func IsInstantiatedModule(node *Node, preserveConstEnums bool) bool {
+	moduleState := GetModuleInstanceState(node)
+	return moduleState == ModuleInstanceStateInstantiated ||
+		(preserveConstEnums && moduleState == ModuleInstanceStateConstEnumOnly)
+}
+
 func NodeHasName(statement *Node, id *Node) bool {
 	name := statement.Name()
 	if name != nil {
@@ -3831,4 +3837,22 @@ func GetFirstConstructorWithBody(node *Node) *Node {
 		}
 	}
 	return nil
+}
+
+// Returns true for nodes that are considered executable for the purposes of unreachable code detection.
+func IsPotentiallyExecutableNode(node *Node) bool {
+	if KindFirstStatement <= node.Kind && node.Kind <= KindLastStatement {
+		if IsVariableStatement(node) {
+			declarationList := node.AsVariableStatement().DeclarationList
+			if GetCombinedNodeFlags(declarationList)&NodeFlagsBlockScoped != 0 {
+				return true
+			}
+			declarations := declarationList.AsVariableDeclarationList().Declarations.Nodes
+			return core.Some(declarations, func(d *Node) bool {
+				return d.Initializer() != nil
+			})
+		}
+		return true
+	}
+	return IsClassDeclaration(node) || IsEnumDeclaration(node) || IsModuleDeclaration(node)
 }

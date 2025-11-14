@@ -1,0 +1,32 @@
+--- old.neverReturningFunctions1.errors.txt
++++ new.neverReturningFunctions1.errors.txt
+@@= skipped -12, +12 lines =@@
+ neverReturningFunctions1.ts(103,9): error TS7027: Unreachable code detected.
+ neverReturningFunctions1.ts(105,5): error TS7027: Unreachable code detected.
+ neverReturningFunctions1.ts(111,9): error TS7027: Unreachable code detected.
+-neverReturningFunctions1.ts(112,9): error TS7027: Unreachable code detected.
+ neverReturningFunctions1.ts(122,9): error TS7027: Unreachable code detected.
+ neverReturningFunctions1.ts(127,9): error TS7027: Unreachable code detected.
+ neverReturningFunctions1.ts(129,5): error TS7027: Unreachable code detected.
+@@= skipped -10, +9 lines =@@
+ neverReturningFunctions1.ts(153,5): error TS7027: Unreachable code detected.
+
+
+-==== neverReturningFunctions1.ts (23 errors) ====
++==== neverReturningFunctions1.ts (22 errors) ====
+     function fail(message?: string): never {
+         throw new Error(message);
+     }
+@@= skipped -140, +140 lines =@@
+         if (typeof x.a === "string") {
+             fail();
+             x;    // Unreachable
+-            ~~
+-!!! error TS7027: Unreachable code detected.
++            ~~~~~~~~~~~~~~~~~~~~
+             x.a;  // Unreachable
+-            ~~~~
++    ~~~~~~~~~~~~
+ !!! error TS7027: Unreachable code detected.
+         }
+         x;    // { a: string | number }

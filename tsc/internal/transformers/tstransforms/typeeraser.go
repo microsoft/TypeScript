@@ -109,7 +109,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindModuleDeclaration:
 		if !ast.IsIdentifier(node.Name()) ||
-			!isInstantiatedModule(node, tx.compilerOptions.ShouldPreserveConstEnums()) ||
+			!ast.IsInstantiatedModule(node, tx.compilerOptions.ShouldPreserveConstEnums()) ||
 			getInnermostModuleDeclarationFromDottedModule(node.AsModuleDeclaration()).Body == nil {
 			// TypeScript module declarations are elided if they are not instantiated or have no body
 			return tx.elide(node)
