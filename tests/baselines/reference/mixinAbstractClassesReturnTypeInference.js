@@ -54,12 +54,11 @@ declare function Mixin2<TBase extends abstract new (...args: any[]) => any>(base
 }) & {
     staticMixinMethod(): void;
 }) & TBase;
-declare const DerivedFromAbstract2_base: ((abstract new (...args: any[]) => {
+declare class DerivedFromAbstract2 extends ({} as ((abstract new (...args: any[]) => {
     [x: string]: any;
     mixinMethod(): void;
 }) & {
     staticMixinMethod(): void;
-}) & typeof AbstractBase;
-declare class DerivedFromAbstract2 extends DerivedFromAbstract2_base {
+}) & typeof AbstractBase) {
     abstractBaseMethod(): void;
 }
