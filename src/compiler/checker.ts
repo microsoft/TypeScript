@@ -49260,6 +49260,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isSourceElementUnreachable(node: Node): boolean {
         // Precondition: isPotentiallyExecutableNode is true
         if (node.flags & NodeFlags.Unreachable) {
+            // The binder has determined that this code is unreachable.
+            // Ignore const enums unless preserveConstEnums is set.
             switch (node.kind) {
                 case SyntaxKind.EnumDeclaration:
                     return !isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(compilerOptions);
@@ -49270,6 +49272,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if (canHaveFlowNode(node) && node.flowNode) {
+            // For code the binder doesn't know is unreachable, use control flow / types.
             return !isReachableFlowNode(node.flowNode);
         }
         return false;
