@@ -3,6 +3,7 @@
 === b.ts ===
 export const b = null;
 >b : any
+>  : ^^^
 
 === a.ts ===
 export { b } from "./b";
@@ -10,8 +11,8 @@ export { b } from "./b";
 >  : ^^^
 
 export { default as a } from "./b";
->default : typeof import("b")
->        : ^^^^^^^^^^^^^^^^^^
->a : typeof import("b")
->  : ^^^^^^^^^^^^^^^^^^
+>default : any
+>        : ^^^
+>a : any
+>  : ^^^
 
