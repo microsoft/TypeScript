@@ -3076,7 +3076,7 @@ export function createScanner(
 
         // ClassSetExpression ::= '^'? (ClassUnion | ClassIntersection | ClassSubtraction)
         // ClassUnion ::= (ClassSetRange | ClassSetOperand)*
-        // ClassIntersection ::= ClassSetOperand ('&&' ClassSetOperand)+
+        // ClassIntersection ::= ClassSetOperand ('&&' [lookahead != '&'] ClassSetOperand)+
         // ClassSubtraction ::= ClassSetOperand ('--' ClassSetOperand)+
         // ClassSetRange ::= ClassSetCharacter '-' ClassSetCharacter
         function scanClassSetExpression() {
@@ -3093,16 +3093,27 @@ export function createScanner(
             }
             let start = pos;
             let operand!: string;
-            switch (text.slice(pos, pos + 2)) { // TODO: don't use slice
-                case "--":
-                case "&&":
-                    error(Diagnostics.Expected_a_class_set_operand);
-                    mayContainStrings = false;
-                    break;
-                default:
-                    operand = scanClassSetOperand();
-                    break;
+            if (ch === charCodeChecked(pos + 1) && (ch === CharacterCodes.minus || ch === CharacterCodes.ampersand)) {
+                // Saw '--' or '&&', the first operand is absent. Only emit an error and don't consume the operator yet
+                error(Diagnostics.Expected_a_class_set_operand);
+                mayContainStrings = false;
             }
+            // If we see '-', parse the expression as ClassUnion.
+            // An exception is made for '-&&', in which case it is more intuitive to parse as ClassIntersection and scan '-' as an invalid operand
+            else if (
+                ch === CharacterCodes.minus && (
+                    charCodeChecked(pos + 1) !== CharacterCodes.ampersand || charCodeChecked(pos + 2) !== CharacterCodes.ampersand
+                )
+            ) {
+                // '-' can't be an operand in a ClassUnion (a class in Unicode sets mode can't start with '-')
+                error(Diagnostics.Incomplete_character_class_range_Expected_a_class_set_character);
+                mayContainStrings = false;
+            }
+            else {
+                // Scan the first operand
+                operand = scanClassSetOperand();
+            }
+            // Use the first operator to determine the expression type
             switch (charCodeChecked(pos)) {
                 case CharacterCodes.minus:
                     if (charCodeChecked(pos + 1) === CharacterCodes.minus) {
@@ -3125,9 +3136,6 @@ export function createScanner(
                         mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
                         return;
                     }
-                    else {
-                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                    }
                     break;
                 default:
                     if (isCharacterComplement && mayContainStrings) {
@@ -3136,6 +3144,7 @@ export function createScanner(
                     expressionMayContainStrings = mayContainStrings;
                     break;
             }
+            // Neither a ClassIntersection nor a ClassSubtraction, scan as ClassUnion
             while (true) {
                 ch = charCodeChecked(pos);
                 if (ch === CharacterCodes.EOF) {
@@ -3143,23 +3152,26 @@ export function createScanner(
                 }
                 switch (ch) {
                     case CharacterCodes.minus:
-                        pos++;
-                        ch = charCodeChecked(pos);
+                        ch = charCodeChecked(pos + 1);
                         if (isClassContentExit(ch)) {
+                            // A class in Unicode sets mode can't end with '-', it must be followed by a class set character
+                            pos++;
+                            error(Diagnostics.Incomplete_character_class_range_Expected_a_class_set_character);
                             mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
                             return;
                         }
                         if (ch === CharacterCodes.minus) {
+                            // '--', skip for now and emit error later
+                        }
+                        else if (ch === CharacterCodes.ampersand && charCodeChecked(pos + 2) === CharacterCodes.ampersand) {
+                            // '-&&', consume only the '-', skip '&&' for now and emit error later
                             pos++;
-                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                            start = pos - 2;
-                            operand = text.slice(start, pos);
-                            continue;
                         }
                         else {
                             if (!operand) {
-                                error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, start, pos - 1 - start);
+                                error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, start, pos - start);
                             }
+                            pos++;
                             const secondStart = pos;
                             const secondOperand = scanClassSetOperand();
                             if (isCharacterComplement && mayContainStrings) {
@@ -3184,37 +3196,19 @@ export function createScanner(
                             }
                         }
                         break;
-                    case CharacterCodes.ampersand:
-                        start = pos;
-                        pos++;
-                        if (charCodeChecked(pos) === CharacterCodes.ampersand) {
-                            pos++;
-                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                            if (charCodeChecked(pos) === CharacterCodes.ampersand) {
-                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                                pos++;
-                            }
-                        }
-                        else {
-                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
-                        }
-                        operand = text.slice(start, pos);
-                        continue;
                 }
-                if (isClassContentExit(charCodeChecked(pos))) {
+                ch = charCodeChecked(pos);
+                if (isClassContentExit(ch)) {
                     break;
                 }
                 start = pos;
-                switch (text.slice(pos, pos + 2)) { // TODO: don't use slice
-                    case "--":
-                    case "&&":
-                        error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
-                        pos += 2;
-                        operand = text.slice(start, pos);
-                        break;
-                    default:
-                        operand = scanClassSetOperand();
-                        break;
+                if (ch === charCodeChecked(pos + 1) && (ch === CharacterCodes.minus || ch === CharacterCodes.ampersand)) {
+                    error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
+                    pos += 2;
+                    operand = text.slice(start, pos);
+                }
+                else {
+                    operand = scanClassSetOperand();
                 }
             }
             mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
@@ -3230,40 +3224,91 @@ export function createScanner(
                 // Provide user-friendly diagnostic messages
                 switch (ch) {
                     case CharacterCodes.minus:
-                        pos++;
-                        if (charCodeChecked(pos) === CharacterCodes.minus) {
-                            pos++;
+                        if (charCodeChecked(pos + 1) === CharacterCodes.minus) {
                             if (expressionType !== ClassSetExpressionType.ClassSubtraction) {
-                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
+                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
+                            }
+                            pos += 2;
+                            if (
+                                charCodeChecked(pos) === CharacterCodes.minus
+                                && charCodeChecked(pos + 1) === CharacterCodes.minus
+                                && charCodeChecked(pos + 2) !== CharacterCodes.minus
+                            ) {
+                                // 4 consecutive '-', assuming two subtraction operators with a missing operand in between
+                                error(Diagnostics.Expected_a_class_set_operand);
+                                continue;
+                            }
+                            else if (
+                                charCodeChecked(pos) === CharacterCodes.ampersand
+                                && charCodeChecked(pos + 1) === CharacterCodes.ampersand
+                            ) {
+                                if (charCodeChecked(pos + 2) === CharacterCodes.ampersand) {
+                                    // '--&&&', consume a single '&' as a normal operand
+                                    pos++;
+                                    expressionMayContainStrings = false;
+                                }
+                                else {
+                                    // '--&&', assuming two operators with a missing operand in between.
+                                    // We could have emitted an "Expected a class set operand." error here, but doing so will suppress the next
+                                    // "Operators must not be mixed within a character class." error since it starts at the same position.
+                                }
+                                continue;
                             }
                         }
+                        else if (charCodeChecked(pos + 1) === CharacterCodes.ampersand && charCodeChecked(pos + 2) === CharacterCodes.ampersand) {
+                            // '-&&', consume '-' later as an invalid operand with error
+                        }
                         else {
-                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 1, 1);
+                            // a single '-', assuming class set range operator
+                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 1);
+                            pos++;
                         }
                         break;
                     case CharacterCodes.ampersand:
-                        pos++;
-                        if (charCodeChecked(pos) === CharacterCodes.ampersand) {
-                            pos++;
+                        if (charCodeChecked(pos + 1) === CharacterCodes.ampersand) {
                             if (expressionType !== ClassSetExpressionType.ClassIntersection) {
-                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
+                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
                             }
-                            if (charCodeChecked(pos) === CharacterCodes.ampersand) {
-                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                                pos++;
+                            pos += 2;
+                            if (
+                                charCodeChecked(pos) === CharacterCodes.minus
+                                && charCodeChecked(pos + 1) === CharacterCodes.minus
+                                && charCodeChecked(pos + 2) !== CharacterCodes.minus
+                            ) {
+                                // '&&--', assuming two operators with a missing operand in between.
+                                // We could have emitted an "Expected a class set operand." error here, but doing so will suppress the next
+                                // "Operators must not be mixed within a character class." error since it starts at the same position.
+                                continue;
                             }
+                            else if (charCodeChecked(pos) === CharacterCodes.ampersand) {
+                                if (
+                                    charCodeChecked(pos + 1) === CharacterCodes.ampersand
+                                    && charCodeChecked(pos + 2) !== CharacterCodes.ampersand
+                                ) {
+                                    // 4 consecutive '&', assuming two intersection operators with a missing operand in between
+                                    error(Diagnostics.Expected_a_class_set_operand);
+                                }
+                                else {
+                                    // 3 or 5 or more consecutive '&', consume a single '&' with error
+                                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                                    pos++;
+                                    expressionMayContainStrings = false;
+                                }
+                                continue;
+                            }
+                            break;
                         }
                         else {
-                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
+                            // The single '&' is just a normal operand, there must be a missing operator before it
                         }
-                        break;
+                    // falls through
                     default:
                         switch (expressionType) {
                             case ClassSetExpressionType.ClassSubtraction:
-                                error(Diagnostics._0_expected, pos, 0, "--");
+                                error(Diagnostics.Missing_0_in_between_class_set_operands_To_form_a_union_of_these_characters_wrap_them_in_a_nested_class_instead, pos, 0, "--");
                                 break;
                             case ClassSetExpressionType.ClassIntersection:
-                                error(Diagnostics._0_expected, pos, 0, "&&");
+                                error(Diagnostics.Missing_0_in_between_class_set_operands_To_form_a_union_of_these_characters_wrap_them_in_a_nested_class_instead, pos, 0, "&&");
                                 break;
                             default:
                                 break;

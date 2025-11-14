@@ -1849,6 +1849,14 @@
         "category": "Error",
         "code": 1546
     },
+    "Incomplete character class range. Expected a class set character.": {
+        "category": "Error",
+        "code": 1547
+    },
+    "Missing '{0}' in between class set operands. To form a union of these characters, wrap them in a nested class instead.": {
+        "category": "Error",
+        "code": 1548
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
