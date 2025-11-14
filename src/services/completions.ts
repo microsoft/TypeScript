@@ -5013,9 +5013,10 @@ function getCompletionData(
                 return isFunctionLike(contextToken.parent) && !isMethodDeclaration(contextToken.parent);
         }
 
+        const tokenKind = keywordForNode(contextToken);
         // If the previous token is keyword corresponding to class member completion keyword
         // there will be completion available here
-        if (isClassMemberCompletionKeyword(keywordForNode(contextToken)) && isFromObjectTypeDeclaration(contextToken)) {
+        if (isClassMemberCompletionKeyword(tokenKind) && isFromObjectTypeDeclaration(contextToken)) {
             return false;
         }
 
@@ -5034,10 +5035,9 @@ function getCompletionData(
         }
 
         // Previous token may have been a keyword that was converted to an identifier.
-        switch (keywordForNode(contextToken)) {
+        switch (tokenKind) {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.ClassKeyword:
-            case SyntaxKind.ConstKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.EnumKeyword:
             case SyntaxKind.FunctionKeyword:
@@ -5075,13 +5075,17 @@ function getCompletionData(
             }
             else if (
                 contextToken.kind !== SyntaxKind.EqualsToken
-                // Should not block: `class C { blah = c/**/ }`
+                // Should not block: `class C { blah = c/**/ }
                 // But should block: `class C { blah = somewhat c/**/ }` and `class C { blah: SomeType c/**/ }`
                 && (isInitializedProperty(ancestorPropertyDeclaraion as PropertyDeclaration)
                     || hasType(ancestorPropertyDeclaraion))
             ) {
                 return true;
             }
+        }
+
+        if (tokenKind === SyntaxKind.ConstKeyword) {
+            return true;
         }
 
         return isDeclarationName(contextToken)
