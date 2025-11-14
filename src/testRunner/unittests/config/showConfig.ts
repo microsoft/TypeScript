@@ -132,6 +132,11 @@ describe("unittests:: config:: showConfig", () => {
         files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string
     });
 
+    // Test that --showConfig works even when no input files are found
+    showTSConfigCorrectly("Show TSConfig with no input files", ["-p", "tsconfig.json"], {
+        include: ["./*"],
+    });
+
     // Bulk validation of all option declarations
     for (const option of ts.optionDeclarations) {
         baselineOption(option, /*isCompilerOptions*/ true);
