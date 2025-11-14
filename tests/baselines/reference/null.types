@@ -28,8 +28,8 @@ class C {
 >  : ^
 }
 function f() {
->f : () => C
->  : ^^^^^^^
+>f : () => any
+>  : ^^^^^^^^^
 
     return null;
     return new C();
@@ -39,8 +39,8 @@ function f() {
 >  : ^^^^^^^^
 }
 function g() {
->g : () => number
->  : ^^^^^^^^^^^^
+>g : () => any
+>  : ^^^^^^^^^
 
     return null;
     return 3;

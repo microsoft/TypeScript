@@ -6406,6 +6406,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return !!annotationType && typeNodeIsEquivalentToType(node, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type);
             },
+
+            isPossiblyReachable(expression) {
+                const ancestor = findAncestor(expression, canHaveFlowNode);
+                if (!ancestor) {
+                    return true;
+                }
+                return !!ancestor.flowNode && isReachableFlowNode(ancestor.flowNode);
+            },
         };
         return {
             syntacticBuilderResolver,
@@ -39217,6 +39225,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
+            const statement = findAncestor(yieldExpression, isStatement)!;
+            if (canHaveFlowNode(statement) && (!statement.flowNode || !isReachableFlowNode(statement.flowNode))) {
+                return;
+            }
             let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
             if (yieldExpression.expression && isConstContext(yieldExpression.expression)) {
                 yieldExpressionType = getRegularTypeOfLiteralType(yieldExpressionType);
@@ -39333,6 +39345,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (!isFunctionExpressionOrArrowFunction(func.symbol.valueDeclaration!) || isConstantReference((expr as CallExpression).expression))
                 ) {
                     hasReturnOfTypeNever = true;
+                    return;
+                }
+
+                if (!returnStatement.flowNode || !isReachableFlowNode(returnStatement.flowNode)) {
                     return;
                 }
 

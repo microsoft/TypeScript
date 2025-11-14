@@ -2,8 +2,8 @@
 
 === functionWithNoBestCommonType1.ts ===
 function foo() {
->foo : () => true | void
->    : ^^^^^^^^^^^^^^^^^
+>foo : () => boolean
+>    : ^^^^^^^^^^^^^
 
     return true;
 >true : true

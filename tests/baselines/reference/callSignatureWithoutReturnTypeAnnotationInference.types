@@ -84,8 +84,8 @@ var r4 = foo4(1);
 >  : ^
 
 function foo5(x) {
->foo5 : (x: any) => 1 | 2
->     : ^ ^^^^^^^^^^^^^^^
+>foo5 : (x: any) => number
+>     : ^ ^^^^^^^^^^^^^^^^
 >x : any
 
     if (true) {
@@ -105,10 +105,10 @@ function foo5(x) {
 var r5 = foo5(1);
 >r5 : number
 >   : ^^^^^^
->foo5(1) : 1 | 2
->        : ^^^^^
->foo5 : (x: any) => 1 | 2
->     : ^ ^^^^^^^^^^^^^^^
+>foo5(1) : number
+>        : ^^^^^^
+>foo5 : (x: any) => number
+>     : ^ ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
