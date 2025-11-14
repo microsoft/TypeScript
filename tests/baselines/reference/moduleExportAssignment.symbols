@@ -4,7 +4,7 @@
 var npmlog = require('./npmlog')
 >npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
 >require : Symbol(require)
->'./npmlog' : Symbol("npmlog", Decl(npmlog.js, 0, 0))
+>'./npmlog' : Symbol("./npmlog", Decl(npmlog.js, 0, 0))
 
 npmlog.x
 >npmlog.x : Symbol(npmlog.x, Decl(npmlog.js, 7, 23))

@@ -4,8 +4,8 @@
 const { K } = require("./mod1");
 >K : typeof K
 >  : ^^^^^^^^
->require("./mod1") : typeof import("mod1")
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require("./mod1") : typeof import("./mod1")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./mod1" : "./mod1"
 >         : ^^^^^^^^
@@ -34,8 +34,8 @@ exports.K = class K {
 >                                          : ^^^^^^^^
 >exports.K : typeof K
 >          : ^^^^^^^^
->exports : typeof import("mod1")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >K : typeof K
 >  : ^^^^^^^^
 >class K {    values() {    }} : typeof K

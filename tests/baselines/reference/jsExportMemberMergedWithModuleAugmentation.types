@@ -35,8 +35,8 @@ import { Abcde } from "./test";
 >      : ^^^^^^^^^^^^
 
 declare module "./test" {
->"./test" : typeof import("/test")
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>"./test" : typeof import("./test")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
   interface Abcde { b: string }
 >b : string

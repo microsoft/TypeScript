@@ -42,14 +42,14 @@ export const timestamp = x.now();
 
 === c.ts ===
 import { now } from "./a";
->now : () => typeof import("a").Timestamp
->    : ^^^^^^              ^^^  ^^^^^^^^^
+>now : () => typeof import("./a").Timestamp
+>    : ^^^^^^              ^^^^^  ^^^^^^^^^
 
 export const timestamp = now();
 >timestamp : { [timestampSymbol]: true; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >now() : { [timestampSymbol]: true; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->now : () => typeof import("a").Timestamp
->    : ^^^^^^              ^^^  ^^^^^^^^^
+>now : () => typeof import("./a").Timestamp
+>    : ^^^^^^              ^^^^^  ^^^^^^^^^
 

@@ -2,18 +2,18 @@
 
 === index.js ===
 module.exports = class Thing {
->module.exports = class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
->                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^
->module.exports : typeof import("index")
->               : ^^^^^^^^^^^^^^^^^^^^^^
->module : { exports: typeof import("index"); }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("index")
->        : ^^^^^^^^^^^^^^^^^^^^^^
->class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
->                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^
->Thing : typeof import("index")
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>module.exports = class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^
+>module.exports : typeof import(".")
+>               : ^^^^^^^^^^^^^^^^^^
+>module : { exports: typeof import("."); }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import(".")
+>        : ^^^^^^^^^^^^^^^^^^
+>class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^
+>Thing : typeof import(".")
+>      : ^^^^^^^^^^^^^^^^^^
 
     /**
      * @param {number} p

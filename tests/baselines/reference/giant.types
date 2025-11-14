@@ -1144,8 +1144,8 @@ export interface eI {
 >    : ^^^
 }
 export namespace eM {
->eM : typeof import("giant").eM
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>eM : typeof import("./giant").eM
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var V;
 >V : any

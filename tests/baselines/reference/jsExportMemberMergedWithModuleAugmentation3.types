@@ -6,28 +6,28 @@ module.exports.x = 1;
 >                     : ^
 >module.exports.x : 1
 >                 : ^
->module.exports : typeof import("/y")
->               : ^^^^^^^^^^^^^^^^^^^
->module : { exports: typeof import("/y"); }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("/y")
->        : ^^^^^^^^^^^^^^^^^^^
+>module.exports : typeof import("./y.js")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>module : { exports: typeof import("./y.js"); }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./y.js")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : 1
 >  : ^
 >1 : 1
 >  : ^
 
 module.exports = require("./y.js");
->module.exports = require("./y.js") : typeof import("/y")
->                                   : ^^^^^^^^^^^^^^^^^^^
->module.exports : typeof import("/y")
->               : ^^^^^^^^^^^^^^^^^^^
->module : { exports: typeof import("/y"); }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("/y")
->        : ^^^^^^^^^^^^^^^^^^^
->require("./y.js") : typeof import("/y")
->                  : ^^^^^^^^^^^^^^^^^^^
+>module.exports = require("./y.js") : typeof import("./y.js")
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>module.exports : typeof import("./y.js")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>module : { exports: typeof import("./y.js"); }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./y.js")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>require("./y.js") : typeof import("./y.js")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./y.js" : "./y.js"
 >         : ^^^^^^^^

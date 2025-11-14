@@ -9,7 +9,7 @@ exports.n = {};
 exports.n.K = function () {
 >exports.n.K : Symbol(n.K, Decl(mod.js, 0, 15))
 >exports.n : Symbol(n.K, Decl(mod.js, 0, 15))
->exports : Symbol("mod", Decl(mod.js, 0, 0))
+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
 >K : Symbol(n.K, Decl(mod.js, 0, 15))
 
