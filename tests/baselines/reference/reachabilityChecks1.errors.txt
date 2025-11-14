@@ -1,58 +1,105 @@
 reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
-reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
-reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
-reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(51,1): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(60,5): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
 
 
-==== reachabilityChecks1.ts (7 errors) ====
+==== reachabilityChecks1.ts (5 errors) ====
     while (true);
     var x = 1;
     ~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     
+    
+<<<<<<< HEAD
     module A {
+=======
+    namespace A {
+    ~~~~~~~~~~~~~
+>>>>>>> 09e31cf04a (Move unreachable checks to checker (#62751))
         while (true);
+    ~~~~~~~~~~~~~~~~~
         let x;
-        ~~~~~~
-!!! error TS7027: Unreachable code detected.
+    ~~~~~~~~~~
     }
+    ~
     
+    
+<<<<<<< HEAD
     module A1 {
         do {} while(true);
         module A {
+=======
+    namespace A1 {
+    ~~~~~~~~~~~~~~
+        do {} while(true);
+    ~~~~~~~~~~~~~~~~~~~~~~
+        namespace A {
+    ~~~~~~~~~~~~~~~~~
+>>>>>>> 09e31cf04a (Move unreachable checks to checker (#62751))
             interface F {}
+    ~~~~~~~~~~~~~~~~~~~~~~
         }
+    ~~~~~
     }
+    ~
     
+    
+<<<<<<< HEAD
     module A2 {
         while (true);
         module A {
         ~~~~~~~~~~
+=======
+    namespace A2 {
+    ~~~~~~~~~~~~~~
+        while (true);
+    ~~~~~~~~~~~~~~~~~
+        namespace A {
+    ~~~~~~~~~~~~~~~~~
+>>>>>>> 09e31cf04a (Move unreachable checks to checker (#62751))
             var x = 1;
     ~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS7027: Unreachable code detected.
     }
+    ~
     
+    
+<<<<<<< HEAD
     module A3 {
+=======
+    namespace A3 {
+    ~~~~~~~~~~~~~~
+>>>>>>> 09e31cf04a (Move unreachable checks to checker (#62751))
         while (true);
+    ~~~~~~~~~~~~~~~~~
         type T = string;
+    ~~~~~~~~~~~~~~~~~~~~
     }
+    ~
     
+    
+<<<<<<< HEAD
     module A4 {
         while (true);
         module A {
         ~~~~~~~~~~
+=======
+    namespace A4 {
+    ~~~~~~~~~~~~~~
+        while (true);
+    ~~~~~~~~~~~~~~~~~
+        namespace A {
+    ~~~~~~~~~~~~~~~~~
+>>>>>>> 09e31cf04a (Move unreachable checks to checker (#62751))
             const enum E { X }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS7027: Unreachable code detected.
     }
+    ~
+!!! error TS7027: Unreachable code detected.
     
     function f1(x) {
         if (x) {
@@ -73,11 +120,23 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
 !!! error TS7027: Unreachable code detected.
     }
     
+<<<<<<< HEAD
     module B {
         for (; ;);
         module C {
+=======
+    namespace B {
+    ~~~~~~~~~~~~~
+        for (; ;);
+    ~~~~~~~~~~~~~~
+        namespace C {
+    ~~~~~~~~~~~~~~~~~
+>>>>>>> 09e31cf04a (Move unreachable checks to checker (#62751))
         }
+    ~~~~~
     }
+    ~
+!!! error TS7027: Unreachable code detected.
     
     function f3() {
         do {
