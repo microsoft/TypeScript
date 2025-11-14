@@ -357,8 +357,7 @@ export function explainFiles(program: Program, write: (s: string) => void): void
     }
 }
 
-/** @internal */
-export function explainIfFileIsRedirectAndImpliedFormat(
+function explainIfFileIsRedirectAndImpliedFormat(
     file: SourceFile,
     options: CompilerOptions,
     fileNameConvertor?: (fileName: string) => string,
@@ -369,13 +368,6 @@ export function explainIfFileIsRedirectAndImpliedFormat(
             /*details*/ undefined,
             Diagnostics.File_is_output_of_project_reference_source_0,
             toFileName(file.originalFileName, fileNameConvertor),
-        ));
-    }
-    if (file.redirectInfo) {
-        (result ??= []).push(chainDiagnosticMessages(
-            /*details*/ undefined,
-            Diagnostics.File_redirects_to_file_0,
-            toFileName(file.redirectInfo.redirectTarget, fileNameConvertor),
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
