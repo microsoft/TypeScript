@@ -3,7 +3,7 @@
 === /node_modules/foo/src/index.js ===
 module.exports = 1;
 >module.exports : Symbol(export=, Decl(index.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("/node_modules/foo/src/index", Decl(index.js, 0, 0))
 >exports : Symbol(export=, Decl(index.js, 0, 0))
 
 === /a.js ===

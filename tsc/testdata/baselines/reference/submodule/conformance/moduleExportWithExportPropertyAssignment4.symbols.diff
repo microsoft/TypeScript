@@ -41,7 +41,7 @@
 ->bothBefore : Symbol(bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
 +>module.exports.bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16))
 +>module.exports : Symbol(A, Decl(mod1.js, 5, 18))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(A, Decl(mod1.js, 5, 18))
 +>bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16))
 
@@ -73,7 +73,7 @@
 ->exports : Symbol(export=, Decl(mod1.js, 4, 15))
 ->A : Symbol(A, Decl(mod1.js, 5, 18), Decl(mod1.js, 1, 36), Decl(mod1.js, 2, 16), Decl(mod1.js, 3, 16))
 +>module.exports : Symbol(A, Decl(mod1.js, 5, 18))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(A, Decl(mod1.js, 5, 18))
 +>A : Symbol(A, Decl(mod1.js, 5, 18))
 
@@ -94,7 +94,7 @@
 ->bothAfter : Symbol(bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 +>module.exports.bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16))
 +>module.exports : Symbol(A, Decl(mod1.js, 5, 18))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(A, Decl(mod1.js, 5, 18))
 +>bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16))
 
@@ -105,5 +105,5 @@
 ->exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->justProperty : Symbol(justProperty, Decl(mod1.js, 9, 35))
 +>module.exports : Symbol(A, Decl(mod1.js, 5, 18))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(A, Decl(mod1.js, 5, 18))

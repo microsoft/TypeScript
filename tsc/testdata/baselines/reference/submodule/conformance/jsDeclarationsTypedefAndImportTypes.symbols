@@ -18,7 +18,7 @@ class Conn {
 
 module.exports = Conn;
 >module.exports : Symbol(Conn, Decl(conn.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("conn", Decl(conn.js, 0, 0))
 >exports : Symbol(Conn, Decl(conn.js, 0, 0))
 >Conn : Symbol(Conn, Decl(conn.js, 0, 0))
 
@@ -54,7 +54,7 @@ class Wrap {
 
 module.exports = {
 >module.exports : Symbol(export=, Decl(usage.js, 13, 1))
->module : Symbol(module.exports)
+>module : Symbol("usage", Decl(usage.js, 0, 0))
 >exports : Symbol(export=, Decl(usage.js, 13, 1))
 
     Wrap

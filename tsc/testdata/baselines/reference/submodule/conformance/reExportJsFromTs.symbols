@@ -3,7 +3,7 @@
 === /lib/constants.js ===
 module.exports = {
 >module.exports : Symbol(export=, Decl(constants.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("/lib/constants", Decl(constants.js, 0, 0))
 >exports : Symbol(export=, Decl(constants.js, 0, 0))
 
   str: 'x',

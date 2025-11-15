@@ -3,7 +3,7 @@
 === file.js ===
 module.exports = [{ name: 'other', displayName: 'Other', defaultEnabled: true }];
 >module.exports : Symbol(export=, Decl(file.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("file", Decl(file.js, 0, 0))
 >exports : Symbol(export=, Decl(file.js, 0, 0))
 >name : Symbol(name, Decl(file.js, 0, 19))
 >displayName : Symbol(displayName, Decl(file.js, 0, 34))

@@ -39,7 +39,7 @@ declare var module: any;
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
 >module.exports : Symbol(minimatch, Decl(minimatch.js, 6, 1))
->module : Symbol(module.exports)
+>module : Symbol("minimatch", Decl(minimatch.js, 0, 0))
 >exports : Symbol(minimatch, Decl(minimatch.js, 6, 1))
 >minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
 

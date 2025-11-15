@@ -6,7 +6,7 @@ class Foo {}
 
 module.exports = Foo;
 >module.exports : Symbol(Foo, Decl(cls.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("cls", Decl(cls.js, 0, 0))
 >exports : Symbol(Foo, Decl(cls.js, 0, 0))
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 

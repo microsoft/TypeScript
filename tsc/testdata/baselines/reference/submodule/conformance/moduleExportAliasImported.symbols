@@ -9,7 +9,7 @@ function alias() { }
 
 module.exports = alias
 >module.exports : Symbol(alias, Decl(bug28014.js, 0, 19))
->module : Symbol(module.exports)
+>module : Symbol("bug28014", Decl(bug28014.js, 0, 0))
 >exports : Symbol(alias, Decl(bug28014.js, 0, 19))
 >alias : Symbol(alias, Decl(bug28014.js, 0, 19))
 

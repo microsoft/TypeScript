@@ -6,6 +6,6 @@
  */
 module.exports = {};
 >module.exports : Symbol(export=, Decl(panicSatisfiesOnExportEqualsDeclaration.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("panicSatisfiesOnExportEqualsDeclaration", Decl(panicSatisfiesOnExportEqualsDeclaration.js, 0, 0))
 >exports : Symbol(export=, Decl(panicSatisfiesOnExportEqualsDeclaration.js, 0, 0))
 

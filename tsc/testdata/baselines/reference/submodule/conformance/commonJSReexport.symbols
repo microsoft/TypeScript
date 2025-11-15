@@ -17,7 +17,7 @@ const hardline = { type: "hard" }
 
 module.exports = {
 >module.exports : Symbol(export=, Decl(first.js, 0, 33))
->module : Symbol(module.exports)
+>module : Symbol("first", Decl(first.js, 0, 0))
 >exports : Symbol(export=, Decl(first.js, 0, 33))
 
   hardline
@@ -28,7 +28,7 @@ module.exports = {
 === second.js ===
 module.exports = {
 >module.exports : Symbol(export=, Decl(second.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("second", Decl(second.js, 0, 0))
 >exports : Symbol(export=, Decl(second.js, 0, 0))
 
   nested: require('./first')

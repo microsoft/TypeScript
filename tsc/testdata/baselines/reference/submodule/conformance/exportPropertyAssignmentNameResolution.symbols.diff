@@ -8,7 +8,7 @@
 ->module : Symbol(module, Decl(bug24492.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(bug24492.js, 0, 0))
 +>module.exports : Symbol("bug24492", Decl(bug24492.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("bug24492", Decl(bug24492.js, 0, 0))
 +>exports : Symbol("bug24492", Decl(bug24492.js, 0, 0))
  >D : Symbol(D, Decl(bug24492.js, 0, 0))
 

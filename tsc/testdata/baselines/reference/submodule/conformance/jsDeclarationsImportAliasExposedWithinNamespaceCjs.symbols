@@ -42,7 +42,7 @@ function testFn(input) {
 
 module.exports = {testFn, testFnTypes};
 >module.exports : Symbol(export=, Decl(file2.js, 25, 1))
->module : Symbol(module.exports)
+>module : Symbol("file2", Decl(file2.js, 0, 0))
 >exports : Symbol(export=, Decl(file2.js, 25, 1))
 >testFn : Symbol(testFn, Decl(file2.js, 27, 18))
 >testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 25))

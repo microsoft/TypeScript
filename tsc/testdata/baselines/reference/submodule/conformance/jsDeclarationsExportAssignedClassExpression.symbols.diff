@@ -8,7 +8,7 @@
 ->module : Symbol(export=, Decl(index.js, 0, 0))
 ->exports : Symbol(export=, Decl(index.js, 0, 0))
 +>module.exports : Symbol(Thing, Decl(index.js, 0, 16))
-+>module : Symbol(module.exports)
++>module : Symbol("index", Decl(index.js, 0, 0))
 +>exports : Symbol(Thing, Decl(index.js, 0, 16))
  >Thing : Symbol(Thing, Decl(index.js, 0, 16))
 

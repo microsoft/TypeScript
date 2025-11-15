@@ -3,7 +3,7 @@
 === source.js ===
 module.exports = MyClass;
 >module.exports : Symbol(MyClass, Decl(source.js, 0, 25))
->module : Symbol(module.exports)
+>module : Symbol("source", Decl(source.js, 0, 0))
 >exports : Symbol(MyClass, Decl(source.js, 0, 25))
 >MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
 

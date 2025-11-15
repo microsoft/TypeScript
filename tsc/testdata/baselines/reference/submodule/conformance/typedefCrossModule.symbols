@@ -12,7 +12,7 @@ declare var module: { exports: any};
 /** @typedef {A | B} Both */
 module.exports = C
 >module.exports : Symbol(C, Decl(mod1.js, 4, 18))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(C, Decl(mod1.js, 4, 18))
 >C : Symbol(C, Decl(mod1.js, 4, 18))
 

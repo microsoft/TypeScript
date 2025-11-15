@@ -24,7 +24,7 @@ class EE {
 var npmlog = module.exports = new EE()
 >npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))
 >module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 >exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 >EE : Symbol(EE, Decl(npmlog.js, 0, 0))
 
@@ -35,7 +35,7 @@ npmlog.on('hi') // both references should see EE.on
 
 module.exports.on('hi') // here too
 >module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 >exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 
 npmlog.x = 1
@@ -44,7 +44,7 @@ npmlog.x = 1
 module.exports.y = 2
 >module.exports.y : Symbol(y, Decl(npmlog.js, 9, 12))
 >module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 >exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 >y : Symbol(y, Decl(npmlog.js, 9, 12))
 
@@ -53,6 +53,6 @@ npmlog.y
 
 module.exports.x
 >module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 >exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 

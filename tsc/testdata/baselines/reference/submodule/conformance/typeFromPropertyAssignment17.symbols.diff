@@ -19,7 +19,7 @@
 ->exports : Symbol(export=, Decl(minimatch.js, 0, 0))
 ->minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1), Decl(minimatch.js, 1, 26), Decl(minimatch.js, 2, 15))
 +>module.exports : Symbol(minimatch, Decl(minimatch.js, 6, 1))
-+>module : Symbol(module.exports)
++>module : Symbol("minimatch", Decl(minimatch.js, 0, 0))
 +>exports : Symbol(minimatch, Decl(minimatch.js, 6, 1))
 +>minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
 

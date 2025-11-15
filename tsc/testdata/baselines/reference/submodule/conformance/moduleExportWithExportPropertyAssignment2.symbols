@@ -28,11 +28,11 @@ declare function require(name: string): any;
 /// <reference path='./requires.d.ts' />
 module.exports = 1
 >module.exports : Symbol(export=, Decl(mod1.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(export=, Decl(mod1.js, 0, 0))
 
 module.exports.f = function () { }
 >module.exports : Symbol(export=, Decl(mod1.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(export=, Decl(mod1.js, 0, 0))
 

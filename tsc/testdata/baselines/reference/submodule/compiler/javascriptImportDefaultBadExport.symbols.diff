@@ -8,7 +8,7 @@
 ->module : Symbol(export=, Decl(a.js, 0, 17))
 ->exports : Symbol(export=, Decl(a.js, 0, 17))
 +>module.exports : Symbol(alias, Decl(a.js, 0, 5))
-+>module : Symbol(module.exports)
++>module : Symbol("/a", Decl(a.js, 0, 0))
 +>exports : Symbol(alias, Decl(a.js, 0, 5))
  >alias : Symbol(alias, Decl(a.js, 0, 5))
 

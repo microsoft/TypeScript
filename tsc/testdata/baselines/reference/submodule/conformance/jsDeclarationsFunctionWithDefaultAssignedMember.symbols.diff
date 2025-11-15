@@ -29,6 +29,6 @@
 ->exports : Symbol(export=, Decl(index.js, 3, 18))
 ->foo : Symbol(foo, Decl(index.js, 0, 0), Decl(index.js, 0, 17), Decl(index.js, 2, 14))
 +>module.exports : Symbol(foo, Decl(index.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("index", Decl(index.js, 0, 0))
 +>exports : Symbol(foo, Decl(index.js, 0, 0))
 +>foo : Symbol(foo, Decl(index.js, 0, 0))

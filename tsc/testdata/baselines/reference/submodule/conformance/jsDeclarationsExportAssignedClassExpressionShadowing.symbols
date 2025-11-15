@@ -16,7 +16,7 @@ class Q {
 }
 module.exports = class Q {
 >module.exports : Symbol(Q, Decl(index.js, 6, 16))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(Q, Decl(index.js, 6, 16))
 >Q : Symbol(Q, Decl(index.js, 6, 16))
 
@@ -30,7 +30,7 @@ module.exports = class Q {
 }
 module.exports.Another = Q;
 >module.exports : Symbol(Q, Decl(index.js, 6, 16))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(Q, Decl(index.js, 6, 16))
 >Q : Symbol(Q, Decl(index.js, 2, 1))
 

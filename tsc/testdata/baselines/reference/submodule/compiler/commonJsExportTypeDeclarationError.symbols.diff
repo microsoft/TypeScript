@@ -9,7 +9,7 @@
 ->module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
 ->module : Symbol(export=, Decl(test.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(test.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("test", Decl(test.js, 0, 0))
  >exports : Symbol(export=, Decl(test.js, 0, 0))
 
     message: ""

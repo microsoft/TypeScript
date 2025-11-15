@@ -21,7 +21,7 @@
 ->exports : Symbol(export=, Decl(mod2.js, 2, 17))
 ->ns : Symbol(ns, Decl(mod2.js, 1, 5), Decl(mod2.js, 1, 14))
 +>module.exports : Symbol(ns, Decl(mod2.js, 1, 5))
-+>module : Symbol(module.exports)
++>module : Symbol("mod2", Decl(mod2.js, 0, 0))
 +>exports : Symbol(ns, Decl(mod2.js, 1, 5))
 +>ns : Symbol(ns, Decl(mod2.js, 1, 5))
 

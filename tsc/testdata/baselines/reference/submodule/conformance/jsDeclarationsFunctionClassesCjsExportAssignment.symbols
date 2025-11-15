@@ -13,7 +13,7 @@ function Timer(timeout) {
 }
 module.exports = Timer;
 >module.exports : Symbol(Timer, Decl(timer.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("timer", Decl(timer.js, 0, 0))
 >exports : Symbol(Timer, Decl(timer.js, 0, 0))
 >Timer : Symbol(Timer, Decl(timer.js, 0, 0))
 
@@ -33,7 +33,7 @@ function Hook(handle) {
 }
 module.exports = Hook;
 >module.exports : Symbol(Hook, Decl(hook.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("hook", Decl(hook.js, 0, 0))
 >exports : Symbol(Hook, Decl(hook.js, 0, 0))
 >Hook : Symbol(Hook, Decl(hook.js, 0, 0))
 
@@ -104,7 +104,7 @@ Context.prototype = {
 }
 module.exports = Context;
 >module.exports : Symbol(Context, Decl(context.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("context", Decl(context.js, 0, 0))
 >exports : Symbol(Context, Decl(context.js, 0, 0))
 >Context : Symbol(Context, Decl(context.js, 0, 0))
 

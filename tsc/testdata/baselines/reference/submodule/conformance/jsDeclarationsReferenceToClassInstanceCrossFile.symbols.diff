@@ -8,7 +8,7 @@
 ->module : Symbol(module, Decl(rectangle.js, 4, 1))
 ->exports : Symbol(module.exports, Decl(rectangle.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(rectangle.js, 4, 1))
-+>module : Symbol(module.exports)
++>module : Symbol("rectangle", Decl(rectangle.js, 0, 0))
 +>exports : Symbol(export=, Decl(rectangle.js, 4, 1))
  >Rectangle : Symbol(Rectangle, Decl(rectangle.js, 6, 18))
 
@@ -21,6 +21,6 @@
 ->module : Symbol(module, Decl(index.js, 20, 1))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(index.js, 20, 1))
-+>module : Symbol(module.exports)
++>module : Symbol("index", Decl(index.js, 0, 0))
 +>exports : Symbol(export=, Decl(index.js, 20, 1))
  >Render : Symbol(Render, Decl(index.js, 22, 18))

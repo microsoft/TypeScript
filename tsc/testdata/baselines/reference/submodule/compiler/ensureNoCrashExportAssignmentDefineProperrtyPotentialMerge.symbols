@@ -8,7 +8,7 @@ const _item = require("./namespacer");
 
 module.exports = 12;
 >module.exports : Symbol(export=, Decl(index.js, 0, 38))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(export=, Decl(index.js, 0, 38))
 
 Object.defineProperty(module, "exports", { value: "oh no" });
@@ -29,7 +29,7 @@ A.bar = class Q {}
 
 module.exports = A;
 >module.exports : Symbol(A, Decl(namespacey.js, 0, 5))
->module : Symbol(module.exports)
+>module : Symbol("namespacey", Decl(namespacey.js, 0, 0))
 >exports : Symbol(A, Decl(namespacey.js, 0, 5))
 >A : Symbol(A, Decl(namespacey.js, 0, 5))
 
@@ -53,7 +53,7 @@ Object.defineProperty(B, "NS", { value: "why though", writable: true });
 
 module.exports = B;
 >module.exports : Symbol(B, Decl(namespacer.js, 0, 5))
->module : Symbol(module.exports)
+>module : Symbol("namespacer", Decl(namespacer.js, 0, 0))
 >exports : Symbol(B, Decl(namespacer.js, 0, 5))
 >B : Symbol(B, Decl(namespacer.js, 0, 5))
 

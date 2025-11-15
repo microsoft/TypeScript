@@ -8,7 +8,7 @@
 ->module : Symbol(export=, Decl(MC.js, 0, 27))
 ->exports : Symbol(export=, Decl(MC.js, 0, 27))
 +>module.exports : Symbol(MC, Decl(MC.js, 4, 16))
-+>module : Symbol(module.exports)
++>module : Symbol("MC", Decl(MC.js, 0, 0))
 +>exports : Symbol(MC, Decl(MC.js, 4, 16))
  >MC : Symbol(MC, Decl(MC.js, 4, 16))
 
@@ -21,6 +21,6 @@
 ->module : Symbol(export=, Decl(MW.js, 9, 1))
 ->exports : Symbol(export=, Decl(MW.js, 9, 1))
 +>module.exports : Symbol(MW, Decl(MW.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("MW", Decl(MW.js, 0, 0))
 +>exports : Symbol(MW, Decl(MW.js, 0, 0))
  >MW : Symbol(MW, Decl(MW.js, 0, 0))

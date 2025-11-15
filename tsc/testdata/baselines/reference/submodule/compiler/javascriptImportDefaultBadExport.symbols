@@ -6,7 +6,7 @@ const alias = {};
 
 module.exports = alias;
 >module.exports : Symbol(alias, Decl(a.js, 0, 5))
->module : Symbol(module.exports)
+>module : Symbol("/a", Decl(a.js, 0, 0))
 >exports : Symbol(alias, Decl(a.js, 0, 5))
 >alias : Symbol(alias, Decl(a.js, 0, 5))
 

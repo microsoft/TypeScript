@@ -7,7 +7,7 @@
 ->module.exports : Symbol(module.exports, Decl(mod3.js, 0, 0))
 ->module : Symbol(export=, Decl(mod3.js, 1, 13))
 +>module.exports : Symbol(export=, Decl(mod3.js, 1, 13))
-+>module : Symbol(module.exports)
++>module : Symbol("mod3", Decl(mod3.js, 0, 0))
  >exports : Symbol(export=, Decl(mod3.js, 1, 13))
  >Foo : Symbol(Foo, Decl(mod3.js, 2, 18))
  >Bar : Symbol(Bar, Decl(mod3.js, 0, 0))

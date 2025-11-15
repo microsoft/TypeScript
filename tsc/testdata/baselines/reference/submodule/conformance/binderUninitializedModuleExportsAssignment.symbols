@@ -11,7 +11,7 @@ var loop2 = loop1;
 
 module.exports = loop2;
 >module.exports : Symbol(loop2, Decl(loop.js, 1, 3))
->module : Symbol(module.exports)
+>module : Symbol("loop", Decl(loop.js, 0, 0))
 >exports : Symbol(loop2, Decl(loop.js, 1, 3))
 >loop2 : Symbol(loop2, Decl(loop.js, 1, 3))
 

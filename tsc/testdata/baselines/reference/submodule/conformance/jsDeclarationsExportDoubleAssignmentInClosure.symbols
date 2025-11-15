@@ -7,7 +7,7 @@ function foo() {
 
     module.exports = exports = function (o) {
 >module.exports : Symbol(export=, Decl(index.js, 1, 16))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(export=, Decl(index.js, 1, 16))
 >exports : Symbol("index", Decl(index.js, 0, 0))
 >o : Symbol(o, Decl(index.js, 2, 41))

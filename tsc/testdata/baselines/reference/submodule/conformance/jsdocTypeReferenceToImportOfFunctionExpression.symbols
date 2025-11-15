@@ -11,7 +11,7 @@ const MW = require("./MW");
 /** @class */
 module.exports = function MC() {
 >module.exports : Symbol(export=, Decl(MC.js, 0, 27))
->module : Symbol(module.exports)
+>module : Symbol("MC", Decl(MC.js, 0, 0))
 >exports : Symbol(export=, Decl(MC.js, 0, 27))
 >MC : Symbol(MC, Decl(MC.js, 5, 16))
 
@@ -47,7 +47,7 @@ class MW {
 
 module.exports = MW;
 >module.exports : Symbol(MW, Decl(MW.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("MW", Decl(MW.js, 0, 0))
 >exports : Symbol(MW, Decl(MW.js, 0, 0))
 >MW : Symbol(MW, Decl(MW.js, 0, 0))
 

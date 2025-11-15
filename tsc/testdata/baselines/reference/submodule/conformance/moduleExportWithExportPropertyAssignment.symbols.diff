@@ -17,7 +17,7 @@
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->module : Symbol(export=, Decl(mod1.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(mod1.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
  >exports : Symbol(export=, Decl(mod1.js, 0, 0))
 
  /** @param {number} a */
@@ -28,6 +28,6 @@
 ->exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->f : Symbol(f, Decl(mod1.js, 1, 32))
 +>module.exports : Symbol(export=, Decl(mod1.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(export=, Decl(mod1.js, 0, 0))
  >a : Symbol(a, Decl(mod1.js, 3, 29))

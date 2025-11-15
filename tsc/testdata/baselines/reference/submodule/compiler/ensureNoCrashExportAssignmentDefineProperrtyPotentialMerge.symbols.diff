@@ -7,7 +7,7 @@
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 0, 38))
 +>module.exports : Symbol(export=, Decl(index.js, 0, 38))
-+>module : Symbol(module.exports)
++>module : Symbol("index", Decl(index.js, 0, 0))
  >exports : Symbol(export=, Decl(index.js, 0, 38))
 
  Object.defineProperty(module, "exports", { value: "oh no" });
@@ -38,7 +38,7 @@
 ->exports : Symbol(export=, Decl(namespacey.js, 1, 18))
 ->A : Symbol(A, Decl(namespacey.js, 0, 5), Decl(namespacey.js, 0, 12))
 +>module.exports : Symbol(A, Decl(namespacey.js, 0, 5))
-+>module : Symbol(module.exports)
++>module : Symbol("namespacey", Decl(namespacey.js, 0, 0))
 +>exports : Symbol(A, Decl(namespacey.js, 0, 5))
 +>A : Symbol(A, Decl(namespacey.js, 0, 5))
 
@@ -73,6 +73,6 @@
 ->exports : Symbol(export=, Decl(namespacer.js, 2, 72))
 ->B : Symbol(B, Decl(namespacer.js, 0, 5), Decl(namespacer.js, 0, 12), Decl(namespacer.js, 2, 22))
 +>module.exports : Symbol(B, Decl(namespacer.js, 0, 5))
-+>module : Symbol(module.exports)
++>module : Symbol("namespacer", Decl(namespacer.js, 0, 0))
 +>exports : Symbol(B, Decl(namespacer.js, 0, 5))
 +>B : Symbol(B, Decl(namespacer.js, 0, 5))

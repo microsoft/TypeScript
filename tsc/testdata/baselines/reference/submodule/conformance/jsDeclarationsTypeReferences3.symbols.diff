@@ -15,7 +15,7 @@
 ->A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
 +>module.exports.A : Symbol(A, Decl(index.js, 2, 42))
 +>module.exports : Symbol("index", Decl(index.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("index", Decl(index.js, 0, 0))
 +>exports : Symbol("index", Decl(index.js, 0, 0))
 +>A : Symbol(A, Decl(index.js, 2, 42))
 
@@ -29,7 +29,7 @@
 ->B : Symbol(A.B, Decl(index.js, 3, 21))
 +>module.exports.A : Symbol(A, Decl(index.js, 2, 42))
 +>module.exports : Symbol("index", Decl(index.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("index", Decl(index.js, 0, 0))
 +>exports : Symbol("index", Decl(index.js, 0, 0))
 +>A : Symbol(A, Decl(index.js, 2, 42))
 

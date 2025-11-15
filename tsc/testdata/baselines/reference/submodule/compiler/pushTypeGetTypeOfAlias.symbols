@@ -3,7 +3,7 @@
 === bar.js ===
 module.exports = function () {};
 >module.exports : Symbol(export=, Decl(bar.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("bar", Decl(bar.js, 0, 0))
 >exports : Symbol(export=, Decl(bar.js, 0, 0))
 
 exports.blah = exports.someProp;

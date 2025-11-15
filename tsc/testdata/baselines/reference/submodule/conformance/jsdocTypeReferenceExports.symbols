@@ -3,7 +3,7 @@
 === bug27342.js ===
 module.exports = {}
 >module.exports : Symbol(export=, Decl(bug27342.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("bug27342", Decl(bug27342.js, 0, 0))
 >exports : Symbol(export=, Decl(bug27342.js, 0, 0))
 
 /**

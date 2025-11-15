@@ -4,6 +4,6 @@
 /** @enum {string} */
 module.exports = {};
 >module.exports : Symbol(export=, Decl(enumTagOnExports.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
 >exports : Symbol(export=, Decl(enumTagOnExports.js, 0, 0))
 

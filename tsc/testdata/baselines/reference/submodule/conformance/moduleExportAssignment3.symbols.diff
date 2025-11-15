@@ -7,7 +7,7 @@
 ->module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 ->module : Symbol(export=, Decl(mod.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(mod.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("mod", Decl(mod.js, 0, 0))
  >exports : Symbol(export=, Decl(mod.js, 0, 0))
  >x : Symbol(x, Decl(mod.js, 0, 16))
 
@@ -16,5 +16,5 @@
 ->module : Symbol(module, Decl(mod.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(mod.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("mod", Decl(mod.js, 0, 0))
 +>exports : Symbol(export=, Decl(mod.js, 0, 0))

@@ -4,14 +4,14 @@
 module.exports.n = {};
 >module.exports.n : Symbol(n, Decl(mod.js, 0, 0))
 >module.exports : Symbol("mod", Decl(mod.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod", Decl(mod.js, 0, 0))
 >exports : Symbol("mod", Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0))
 
 module.exports.n.K = function C() {
 >module.exports.n : Symbol(n, Decl(mod.js, 0, 0))
 >module.exports : Symbol("mod", Decl(mod.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod", Decl(mod.js, 0, 0))
 >exports : Symbol("mod", Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0))
 >C : Symbol(C, Decl(mod.js, 1, 20))
@@ -21,7 +21,7 @@ module.exports.n.K = function C() {
 module.exports.Classic = class {
 >module.exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 >module.exports : Symbol("mod", Decl(mod.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod", Decl(mod.js, 0, 0))
 >exports : Symbol("mod", Decl(mod.js, 0, 0))
 >Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 

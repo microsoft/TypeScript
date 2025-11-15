@@ -12,7 +12,7 @@ ns.Foo = class {}
 
 module.exports = ns;
 >module.exports : Symbol(ns, Decl(mod2.js, 1, 5))
->module : Symbol(module.exports)
+>module : Symbol("mod2", Decl(mod2.js, 0, 0))
 >exports : Symbol(ns, Decl(mod2.js, 1, 5))
 >ns : Symbol(ns, Decl(mod2.js, 1, 5))
 

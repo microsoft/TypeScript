@@ -3,7 +3,7 @@
 === index.js ===
 module.exports = class {
 >module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
 
     /**
@@ -21,7 +21,7 @@ module.exports = class {
 }
 module.exports.Sub = class {
 >module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
 
     constructor() {
@@ -30,7 +30,7 @@ module.exports.Sub = class {
 >this : Symbol(Sub, Decl(index.js, 8, 20))
 >instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
 >module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
     }
 }

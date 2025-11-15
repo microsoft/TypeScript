@@ -16,13 +16,13 @@ class Foo {}
 
 module.exports = Foo;
 >module.exports : Symbol(Foo, Decl(cls.js, 3, 2))
->module : Symbol(module.exports)
+>module : Symbol("cls", Decl(cls.js, 0, 0))
 >exports : Symbol(Foo, Decl(cls.js, 3, 2))
 >Foo : Symbol(Foo, Decl(cls.js, 3, 2))
 
 module.exports.Strings = Strings;
 >module.exports : Symbol(Foo, Decl(cls.js, 3, 2))
->module : Symbol(module.exports)
+>module : Symbol("cls", Decl(cls.js, 0, 0))
 >exports : Symbol(Foo, Decl(cls.js, 3, 2))
 >Strings : Symbol(Strings, Decl(cls.js, 0, 5))
 

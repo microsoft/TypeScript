@@ -29,13 +29,13 @@ function funky(declaration) {
 }
 module.exports = donkey;
 >module.exports : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
->module : Symbol(module.exports)
+>module : Symbol("commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
 >exports : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
 >donkey : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
 
 module.exports.funky = funky;
 >module.exports : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
->module : Symbol(module.exports)
+>module : Symbol("commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
 >exports : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
 >funky : Symbol(funky, Decl(commonJSAliasedExport.js, 0, 29))
 

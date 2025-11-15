@@ -7,7 +7,7 @@
 ->module.exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 ->module : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
  >exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
  >p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
 
@@ -24,7 +24,7 @@
 ->exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 ->Sub : Symbol(Sub, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 5, 1), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 9, 15))
 +>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 
      this.instance = new module.exports(10);
@@ -35,7 +35,7 @@
 ->module : Symbol(module, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 7, 23))
 ->exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
  }
  module.exports.Sub.prototype = { }
@@ -47,5 +47,5 @@
 ->Sub : Symbol(Sub, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 5, 1), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 9, 15))
 ->prototype : Symbol(Sub.prototype, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 8, 1))
 +>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))

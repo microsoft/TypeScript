@@ -16,7 +16,7 @@
 ->module : Symbol(module, Decl(first.js, 0, 33))
 ->exports : Symbol(module.exports, Decl(first.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(first.js, 0, 33))
-+>module : Symbol(module.exports)
++>module : Symbol("first", Decl(first.js, 0, 0))
 +>exports : Symbol(export=, Decl(first.js, 0, 33))
 
    hardline
@@ -28,7 +28,7 @@
 ->module.exports : Symbol(module.exports, Decl(second.js, 0, 0))
 ->module : Symbol(export=, Decl(second.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(second.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("second", Decl(second.js, 0, 0))
  >exports : Symbol(export=, Decl(second.js, 0, 0))
 
    nested: require('./first')

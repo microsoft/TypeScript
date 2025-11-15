@@ -1,0 +1,21 @@
+// === findAllReferences ===
+// === /a.js ===
+// /*FIND ALL REFS*/const [|b|] = require("./b");
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// const b = require("/*FIND ALL REFS*/[|./b|]");
+
+// === /b.js ===
+// [|module.exports = 0|];
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// const b = require("[|./b|]");
+
+// === /b.js ===
+// /*FIND ALL REFS*/[|module.exports = 0|];

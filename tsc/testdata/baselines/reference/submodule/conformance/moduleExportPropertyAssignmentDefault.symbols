@@ -6,13 +6,13 @@ var axios = {}
 
 module.exports = axios // both assignments should be ok
 >module.exports : Symbol(axios, Decl(axios.js, 0, 3))
->module : Symbol(module.exports)
+>module : Symbol("axios", Decl(axios.js, 0, 0))
 >exports : Symbol(axios, Decl(axios.js, 0, 3))
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 
 module.exports.default = axios
 >module.exports : Symbol(axios, Decl(axios.js, 0, 3))
->module : Symbol(module.exports)
+>module : Symbol("axios", Decl(axios.js, 0, 0))
 >exports : Symbol(axios, Decl(axios.js, 0, 3))
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 

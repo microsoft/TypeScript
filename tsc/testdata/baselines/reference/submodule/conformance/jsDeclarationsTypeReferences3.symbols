@@ -12,14 +12,14 @@ const Something = require("fs").Something;
 module.exports.A = {}
 >module.exports.A : Symbol(A, Decl(index.js, 2, 42))
 >module.exports : Symbol("index", Decl(index.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol("index", Decl(index.js, 0, 0))
 >A : Symbol(A, Decl(index.js, 2, 42))
 
 module.exports.A.B = {
 >module.exports.A : Symbol(A, Decl(index.js, 2, 42))
 >module.exports : Symbol("index", Decl(index.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol("index", Decl(index.js, 0, 0))
 >A : Symbol(A, Decl(index.js, 2, 42))
 

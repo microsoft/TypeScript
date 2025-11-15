@@ -104,7 +104,7 @@ exports.x
 module.exports.y = {
 >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
 >module.exports : Symbol("test", Decl(test.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("test", Decl(test.js, 0, 0))
 >exports : Symbol("test", Decl(test.js, 0, 0))
 >y : Symbol(y, Decl(test.js, 45, 9))
 
@@ -118,7 +118,7 @@ module.exports.y = {
 module.exports.y
 >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
 >module.exports : Symbol("test", Decl(test.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("test", Decl(test.js, 0, 0))
 >exports : Symbol("test", Decl(test.js, 0, 0))
 >y : Symbol(y, Decl(test.js, 45, 9))
 
@@ -164,7 +164,7 @@ F.prototype = {
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
 >module.exports : Symbol(export=, Decl(mod.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod", Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))
 
     status: "done",

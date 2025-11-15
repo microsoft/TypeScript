@@ -9,7 +9,7 @@ export function abc(a, b, c) { return 5; }
 
 module.exports = { abc };
 >module.exports : Symbol(export=, Decl(bug24934.js, 0, 42))
->module : Symbol(module.exports)
+>module : Symbol("bug24934", Decl(bug24934.js, 0, 0))
 >exports : Symbol(export=, Decl(bug24934.js, 0, 42))
 >abc : Symbol(abc, Decl(bug24934.js, 1, 18))
 

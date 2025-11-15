@@ -42,7 +42,7 @@ declare var module: { exports: any };
 /// <reference path='./types.d.ts'/>
 module.exports = class Chunk {
 >module.exports : Symbol(Chunk, Decl(mod1.js, 1, 16))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(Chunk, Decl(mod1.js, 1, 16))
 >Chunk : Symbol(Chunk, Decl(mod1.js, 1, 16))
 

@@ -4,6 +4,6 @@
 /** @type {string} */
 module.exports = 0;
 >module.exports : Symbol(export=, Decl(bug27327.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("bug27327", Decl(bug27327.js, 0, 0))
 >exports : Symbol(export=, Decl(bug27327.js, 0, 0))
 

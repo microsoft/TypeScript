@@ -10,7 +10,7 @@ class C {
 module.exports.C = C
 >module.exports.C : Symbol(C, Decl(mod1.js, 2, 1))
 >module.exports : Symbol("mod1", Decl(mod1.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 >C : Symbol(C, Decl(mod1.js, 2, 1))
 >C : Symbol(C, Decl(mod1.js, 0, 0))

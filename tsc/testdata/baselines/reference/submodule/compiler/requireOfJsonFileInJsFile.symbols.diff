@@ -23,6 +23,6 @@
 ->module.exports : Symbol(module.exports, Decl(js.js, 0, 0))
 ->module : Symbol(export=, Decl(js.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(js.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("/js", Decl(js.js, 0, 0))
  >exports : Symbol(export=, Decl(js.js, 0, 0))
  >a : Symbol(a, Decl(js.js, 0, 18))

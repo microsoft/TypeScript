@@ -65,7 +65,7 @@ const _z = inst[_sym];
 module.exports.F = F;
 >module.exports.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport5.js, 12, 22))
 >module.exports : Symbol("lateBoundAssignmentDeclarationSupport5", Decl(lateBoundAssignmentDeclarationSupport5.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("lateBoundAssignmentDeclarationSupport5", Decl(lateBoundAssignmentDeclarationSupport5.js, 0, 0))
 >exports : Symbol("lateBoundAssignmentDeclarationSupport5", Decl(lateBoundAssignmentDeclarationSupport5.js, 0, 0))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport5.js, 12, 22))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport5.js, 2, 27))
@@ -73,7 +73,7 @@ module.exports.F = F;
 module.exports.S = _sym;
 >module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport5.js, 13, 21))
 >module.exports : Symbol("lateBoundAssignmentDeclarationSupport5", Decl(lateBoundAssignmentDeclarationSupport5.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("lateBoundAssignmentDeclarationSupport5", Decl(lateBoundAssignmentDeclarationSupport5.js, 0, 0))
 >exports : Symbol("lateBoundAssignmentDeclarationSupport5", Decl(lateBoundAssignmentDeclarationSupport5.js, 0, 0))
 >S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport5.js, 13, 21))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport5.js, 1, 5))

@@ -8,6 +8,6 @@
 ->module : Symbol(export=, Decl(mod1.js, 5, 1))
 ->exports : Symbol(export=, Decl(mod1.js, 5, 1))
 +>module.exports : Symbol(Chunk, Decl(mod1.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(Chunk, Decl(mod1.js, 0, 0))
  >Chunk : Symbol(Chunk, Decl(mod1.js, 0, 0))

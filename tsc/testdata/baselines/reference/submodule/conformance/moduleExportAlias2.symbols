@@ -34,7 +34,7 @@ declare var module: { exports: any };
 exports = module.exports = C
 >exports : Symbol("semver", Decl(semver.js, 0, 0))
 >module.exports : Symbol("semver", Decl(semver.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("semver", Decl(semver.js, 0, 0))
 >exports : Symbol("semver", Decl(semver.js, 0, 0))
 >C : Symbol(C, Decl(semver.js, 2, 22))
 

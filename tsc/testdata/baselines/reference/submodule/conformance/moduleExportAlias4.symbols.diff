@@ -9,7 +9,7 @@
 ->exports : Symbol(export=, Decl(bug24024.js, 1, 31))
 ->C : Symbol(wat, Decl(bug24024.js, 2, 16))
 +>module.exports : Symbol(wat, Decl(bug24024.js, 2, 16))
-+>module : Symbol(module.exports)
++>module : Symbol("bug24024", Decl(bug24024.js, 0, 0))
 +>exports : Symbol(wat, Decl(bug24024.js, 2, 16))
 +>C : Symbol(C, Decl(bug24024.js, 2, 16))
 
@@ -21,6 +21,6 @@
 ->D : Symbol(wat.D, Decl(bug24024.js, 2, 27))
 ->D : Symbol(wat.D, Decl(bug24024.js, 3, 18))
 +>module.exports : Symbol(wat, Decl(bug24024.js, 2, 16))
-+>module : Symbol(module.exports)
++>module : Symbol("bug24024", Decl(bug24024.js, 0, 0))
 +>exports : Symbol(wat, Decl(bug24024.js, 2, 16))
 +>D : Symbol(D, Decl(bug24024.js, 3, 18))

@@ -1,5 +1,5 @@
 // === documentHighlights ===
 // === /Foo.js ===
-// /*HIGHLIGHTS*/module.exports = {
+// /*HIGHLIGHTS*/[|module.exports = {
 // 
-// }
+// }|]

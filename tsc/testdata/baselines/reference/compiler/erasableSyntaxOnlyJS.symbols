@@ -11,7 +11,7 @@ import foo = require("./foo.js");
 === bar.cjs ===
 module.exports = {
 >module.exports : Symbol(export=, Decl(bar.cjs, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("bar", Decl(bar.cjs, 0, 0))
 >exports : Symbol(export=, Decl(bar.cjs, 0, 0))
 
     a: 1,
@@ -21,7 +21,7 @@ module.exports = {
 === foo.js ===
 module.exports = {
 >module.exports : Symbol(export=, Decl(foo.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("foo", Decl(foo.js, 0, 0))
 >exports : Symbol(export=, Decl(foo.js, 0, 0))
 
     b: 2,

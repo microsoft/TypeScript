@@ -27,7 +27,7 @@
 ->module : Symbol(npmlog, Decl(npmlog.js, 4, 12))
 ->exports : Symbol(npmlog, Decl(npmlog.js, 4, 12))
 +>module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 +>exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
  >EE : Symbol(EE, Decl(npmlog.js, 0, 0))
 
@@ -42,7 +42,7 @@
 ->exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
 ->on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 +>module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 +>exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 
  npmlog.x = 1
@@ -56,7 +56,7 @@
 ->module : Symbol(module, Decl(npmlog.js, 4, 12))
 ->exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
 +>module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 +>exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
  >y : Symbol(y, Decl(npmlog.js, 9, 12))
 
@@ -72,5 +72,5 @@
 ->exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
 ->x : Symbol(x, Decl(npmlog.js, 7, 23))
 +>module.exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("npmlog", Decl(npmlog.js, 0, 0))
 +>exports : Symbol("npmlog", Decl(npmlog.js, 0, 0))

@@ -45,7 +45,7 @@ declare function require(name: string): any;
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16))
 >module.exports : Symbol(A, Decl(mod1.js, 5, 18))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(A, Decl(mod1.js, 5, 18))
 >bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16))
 
@@ -66,7 +66,7 @@ A.bothAfter = 3
 
 module.exports = A
 >module.exports : Symbol(A, Decl(mod1.js, 5, 18))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(A, Decl(mod1.js, 5, 18))
 >A : Symbol(A, Decl(mod1.js, 5, 18))
 
@@ -78,12 +78,12 @@ function A() {
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16))
 >module.exports : Symbol(A, Decl(mod1.js, 5, 18))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(A, Decl(mod1.js, 5, 18))
 >bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16))
 
 module.exports.justProperty = 'string'
 >module.exports : Symbol(A, Decl(mod1.js, 5, 18))
->module : Symbol(module.exports)
+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
 >exports : Symbol(A, Decl(mod1.js, 5, 18))
 

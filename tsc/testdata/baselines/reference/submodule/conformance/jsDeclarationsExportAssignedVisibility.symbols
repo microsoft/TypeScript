@@ -20,14 +20,14 @@ class Container {
 
 module.exports = Container;
 >module.exports : Symbol(Container, Decl(index.js, 0, 29))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(Container, Decl(index.js, 0, 29))
 >Container : Symbol(Container, Decl(index.js, 0, 29))
 
 === obj.js ===
 module.exports = class Obj {
 >module.exports : Symbol(Obj, Decl(obj.js, 0, 16))
->module : Symbol(module.exports)
+>module : Symbol("obj", Decl(obj.js, 0, 0))
 >exports : Symbol(Obj, Decl(obj.js, 0, 16))
 >Obj : Symbol(Obj, Decl(obj.js, 0, 16))
 

@@ -6,7 +6,7 @@
  module.exports.y = 0; // Error
 +>module.exports.y : Symbol(y, Decl(a.js, 0, 19))
 +>module.exports : Symbol("/a", Decl(a.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("/a", Decl(a.js, 0, 0))
 +>exports : Symbol("/a", Decl(a.js, 0, 0))
 +>y : Symbol(y, Decl(a.js, 0, 19))
 

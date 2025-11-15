@@ -7,5 +7,5 @@
 ->module.exports : Symbol(module.exports, Decl(something.js, 0, 0))
 ->module : Symbol(export=, Decl(something.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(something.js, 0, 0))
-+>module : Symbol(module.exports)
++>module : Symbol("something", Decl(something.js, 0, 0))
  >exports : Symbol(export=, Decl(something.js, 0, 0))

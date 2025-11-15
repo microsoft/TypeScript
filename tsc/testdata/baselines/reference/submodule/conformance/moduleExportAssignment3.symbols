@@ -12,12 +12,12 @@ mod() // should be callable from here too
 === mod.js ===
 module.exports = function x() { }
 >module.exports : Symbol(export=, Decl(mod.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod", Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))
 >x : Symbol(x, Decl(mod.js, 0, 16))
 
 module.exports() // should be callable
 >module.exports : Symbol(export=, Decl(mod.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("mod", Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))
 

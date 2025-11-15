@@ -61,7 +61,7 @@
 ->module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
 ->module : Symbol(export=, Decl(input.js, 42, 1))
 +>module.exports : Symbol(export=, Decl(input.js, 42, 1))
-+>module : Symbol(module.exports)
++>module : Symbol("input", Decl(input.js, 0, 0))
  >exports : Symbol(export=, Decl(input.js, 42, 1))
 
      color: "red"
@@ -73,5 +73,5 @@
 ->module : Symbol(module, Decl(input.js, 42, 1), Decl(input.js, 51, 22))
 ->exports : Symbol(module.exports, Decl(input.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(input.js, 42, 1))
-+>module : Symbol(module.exports)
++>module : Symbol("input", Decl(input.js, 0, 0))
 +>exports : Symbol(export=, Decl(input.js, 42, 1))

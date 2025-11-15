@@ -12,7 +12,7 @@
 ->module : Symbol(module, Decl(reexport.js, 1, 38))
 ->exports : Symbol(module.exports, Decl(reexport.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(reexport.js, 1, 38))
-+>module : Symbol(module.exports)
++>module : Symbol("reexport", Decl(reexport.js, 0, 0))
 +>exports : Symbol(export=, Decl(reexport.js, 1, 38))
  >Thing : Symbol(Thing, Decl(reexport.js, 2, 18))
 
@@ -25,6 +25,6 @@
 ->module : Symbol(module, Decl(thing.js, 1, 14))
 ->exports : Symbol(module.exports, Decl(thing.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(thing.js, 1, 14))
-+>module : Symbol(module.exports)
++>module : Symbol("thing", Decl(thing.js, 0, 0))
 +>exports : Symbol(export=, Decl(thing.js, 1, 14))
  >Thing : Symbol(Thing, Decl(thing.js, 2, 18))

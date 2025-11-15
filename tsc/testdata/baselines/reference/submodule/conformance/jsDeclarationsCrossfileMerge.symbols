@@ -8,7 +8,7 @@ const m = require("./exporter");
 
 module.exports = m.default;
 >module.exports : Symbol(m.default, Decl(exporter.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(m.default, Decl(exporter.js, 0, 0))
 >m.default : Symbol(m.default, Decl(exporter.js, 0, 22))
 >m : Symbol(m, Decl(index.js, 0, 5))
@@ -16,7 +16,7 @@ module.exports = m.default;
 
 module.exports.memberName = "thing";
 >module.exports : Symbol(m.default, Decl(exporter.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(m.default, Decl(exporter.js, 0, 0))
 
 === exporter.js ===

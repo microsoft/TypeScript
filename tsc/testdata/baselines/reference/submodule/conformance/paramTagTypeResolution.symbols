@@ -17,7 +17,7 @@ f(1, n => { })
  */
 module.exports = function (x, k) { return k(x) }
 >module.exports : Symbol(export=, Decl(first.js, 0, 0))
->module : Symbol(module.exports)
+>module : Symbol("first", Decl(first.js, 0, 0))
 >exports : Symbol(export=, Decl(first.js, 0, 0))
 >x : Symbol(x, Decl(first.js, 4, 27))
 >k : Symbol(k, Decl(first.js, 4, 29))

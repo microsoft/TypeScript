@@ -12,7 +12,7 @@
 ->module : Symbol(module, Decl(index.js, 1, 35))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(index.js, 1, 35))
-+>module : Symbol(module.exports)
++>module : Symbol("utils/index", Decl(index.js, 0, 0))
 +>exports : Symbol(export=, Decl(index.js, 1, 35))
 
      errors
@@ -25,7 +25,7 @@
 ->module : Symbol(module, Decl(errors.js, 4, 1))
 ->exports : Symbol(module.exports, Decl(errors.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(errors.js, 4, 1))
-+>module : Symbol(module.exports)
++>module : Symbol("utils/errors", Decl(errors.js, 0, 0))
 +>exports : Symbol(export=, Decl(errors.js, 4, 1))
 
      FancyError

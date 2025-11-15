@@ -23,7 +23,7 @@ BaseFactory.Base = Base;
 
 module.exports = BaseFactory;
 >module.exports : Symbol(BaseFactory, Decl(base.js, 4, 5))
->module : Symbol(module.exports)
+>module : Symbol("base", Decl(base.js, 0, 0))
 >exports : Symbol(BaseFactory, Decl(base.js, 4, 5))
 >BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5))
 

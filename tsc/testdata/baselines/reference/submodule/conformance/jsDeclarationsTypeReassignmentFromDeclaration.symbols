@@ -21,7 +21,7 @@ const items = [];
 
 module.exports = items;
 >module.exports : Symbol(items, Decl(index.js, 1, 5))
->module : Symbol(module.exports)
+>module : Symbol("index", Decl(index.js, 0, 0))
 >exports : Symbol(items, Decl(index.js, 1, 5))
 >items : Symbol(items, Decl(index.js, 1, 5))
 
