@@ -32063,9 +32063,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 anyType;
         }
 
+        // Special handling for completions with overloaded functions and object literals:
+        // When inference is blocked (completion context), the first argument is an object literal,
+        // AND there are multiple overloads, clear the cached signature to force fresh overload resolution.
+        // This prevents showing function properties (bind, call, apply) when the correct overload expects an object.
+        const links = getNodeLinks(callTarget);
+
+        // For issue #62693: Store which argument index is being completed so chooseOverload can use this information
+        // to prefer object-type overloads over function-type overloads when completing object literals.
+        if (isInferencePartiallyBlocked) {
+            links.completionArgumentIndex = argIndex;
+        }
+
         // If we're already in the process of resolving the given signature, don't resolve again as
         // that could cause infinite recursion. Instead, return anySignature.
-        const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+        const signature = links.resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
 
         if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
             return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
@@ -36697,6 +36709,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             candidateForArgumentArityError = undefined;
             candidateForTypeArgumentError = undefined;
 
+            // Special handling for issue #62693: When completing an object literal argument for a generic function
+            // with overloads (one taking a function, one taking an object), we need to prefer the object-type overload
+            // even though generic inference is blocked during completion.
+            const completingObjectLiteralArg = isInferencePartiallyBlocked && args.length > 0 && isObjectLiteralExpression(args[0]) && getNodeLinks(node).completionArgumentIndex === 0;
+            const shouldRelaxApplicabilityForSimpleObjectLiteral = completingObjectLiteralArg;
+
             if (isSingleNonGenericCandidate) {
                 const candidate = candidates[0];
                 if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
@@ -36713,6 +36731,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const candidate = candidates[candidateIndex];
                 if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     continue;
+                }
+
+                // Special handling for overload resolution: skip overloads with function-type
+                // parameters when completing for an object literal argument (not just when object literal exists).
+                // This prevents showing function properties (bind, call, apply) instead of object properties in intellisense.
+                if (completingObjectLiteralArg && candidate.declaration && isFunctionLikeDeclaration(candidate.declaration)) {
+                    const params = candidate.declaration.parameters;
+                    if (params.length > 0) {
+                        const firstParam = params[0];
+                        const paramTypeNode = firstParam.type;
+                        // Check if the parameter's type annotation is a function type
+                        if (paramTypeNode && (paramTypeNode.kind === SyntaxKind.FunctionType || paramTypeNode.kind === SyntaxKind.ConstructorType)) {
+                            // This parameter expects a function, but we're passing an object literal
+                            // Skip this overload candidate and continue to next
+                            continue;
+                        }
+                    }
                 }
 
                 let checkCandidate: Signature;
@@ -36744,10 +36779,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkCandidate = candidate;
                 }
                 if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
-                    // Give preference to error candidates that have no rest parameters (as they are more specific)
-                    (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                    continue;
+                    // Special case for issue #62693: when we have mixed function-type and simple object-type overloads,
+                    // accept the simple object-type overload even if the object literal is incomplete during completion
+                    if (shouldRelaxApplicabilityForSimpleObjectLiteral && candidate.declaration && isFunctionLikeDeclaration(candidate.declaration)) {
+                        const params = candidate.declaration.parameters;
+                        if (params.length > 0) {
+                            const paramTypeNode = params[0].type;
+                            // ONLY accept if this is the SIMPLE object-type overload (not function-type, not complex type)
+                            if (paramTypeNode && paramTypeNode.kind === SyntaxKind.TypeLiteral) {
+                                // Accept this candidate despite applicability error (incomplete object literal)
+                                // Fall through to accept this candidate
+                            }
+                            else {
+                                // Not the simple object-type overload, reject normally
+                                (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                                continue;
+                            }
+                        }
+                        else {
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                            continue;
+                        }
+                    }
+                    else {
+                        // Normal case: reject candidate
+                        (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                        continue;
+                    }
                 }
+
                 if (argCheckMode) {
                     // If one or more context sensitive arguments were excluded, we start including
                     // them now (and keeping do so for any subsequent candidates) and perform a second
