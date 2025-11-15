@@ -43,19 +43,19 @@ function test1(result: Disjoint): string {
         throw result.err;
 >result.err : FooAndBaz
 >           : ^^^^^^^^^
->result : Disjoint
->       : ^^^^^^^^
+>result : { readonly value?: never; readonly err: FooAndBaz; }
+>       : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^         ^^^
 >err : FooAndBaz
 >    : ^^^^^^^^^
     }
     // Error, should OK
     return result.value;
->result.value : string
->             : ^^^^^^
->result : Disjoint
->       : ^^^^^^^^
->value : string
->      : ^^^^^^
+>result.value : never
+>             : ^^^^^
+>result : { readonly value?: never; readonly err: FooAndBaz; }
+>       : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^         ^^^
+>value : never
+>      : ^^^^^
 }
 
 type TrivialIntersection = { a: 1 } & { a: 1 };
