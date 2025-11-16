@@ -39384,6 +39384,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return true;
             case SyntaxKind.MethodDeclaration:
                 return func.parent.kind === SyntaxKind.ObjectLiteralExpression;
+            case SyntaxKind.GetAccessor:
+                return !isReachableFlowNode(func.returnFlowNode!);
             default:
                 return false;
         }
@@ -42549,7 +42551,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkDecorators(node);
             checkSignatureDeclaration(node);
             if (node.kind === SyntaxKind.GetAccessor) {
-                if (!(node.flags & NodeFlags.Ambient) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
+                if (!(node.flags & NodeFlags.Ambient) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn) && isReachableFlowNode(node.returnFlowNode!)) {
                     if (!(node.flags & NodeFlags.HasExplicitReturn)) {
                         error(node.name, Diagnostics.A_get_accessor_must_return_a_value);
                     }

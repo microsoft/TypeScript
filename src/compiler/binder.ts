@@ -1028,9 +1028,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
                 }
             }
-            // We create a return control flow graph for IIFEs and constructors. For constructors
-            // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+            // We create a return control flow graph for IIFEs, constructors and getters.
+            // For constructors we use the return control flow graph in strict property initialization checks.
+            // For getters we use the return control flow graph to check if it's reachable to conditionally permit returnless getters.
+            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.GetAccessor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -1052,7 +1053,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (currentReturnTarget) {
                 addAntecedent(currentReturnTarget, currentFlow);
                 currentFlow = finishFlowLabel(currentReturnTarget);
-                if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
                     (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                 }
             }
