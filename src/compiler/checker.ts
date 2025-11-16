@@ -17200,7 +17200,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // Always substitute on type parameters, regardless of variance, since even
             // in contravariant positions, they may rely on substituted constraints to be valid
-            if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (parent as ConditionalTypeNode).trueType) {
+            if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (parent as ConditionalTypeNode).trueType && !getInferTypeParameters(parent as ConditionalTypeNode)) {
                 const constraint = getImpliedConstraint(type, (parent as ConditionalTypeNode).checkType, (parent as ConditionalTypeNode).extendsType);
                 if (constraint) {
                     constraints = append(constraints, constraint);

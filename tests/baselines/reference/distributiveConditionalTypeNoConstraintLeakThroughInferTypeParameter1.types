@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts] ////
+
+=== distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62761
+
+type Value = 1 | 2
+>Value : Value
+>      : ^^^^^
+
+type Result = [Value] extends [infer V]
+>Result : [1, Value] | [2, Value]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? V extends unknown
+    ? [V, Value]
+    : never
+  : never
+
+type Value2 = { prop: 1 | 2 };
+>Value2 : Value2
+>       : ^^^^^^
+>prop : 1 | 2
+>     : ^^^^^
+
+type Result2 = Value2 extends { prop: infer V }
+>Result2 : [1, Value2] | [2, Value2]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : V
+>     : ^
+
+  ? V extends unknown
+    ? [V, Value2]
+    : never
+  : never;
+

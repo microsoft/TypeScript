@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts] ////
+
+=== distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62761
+
+type Value = 1 | 2
+>Value : Symbol(Value, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 0, 0))
+
+type Result = [Value] extends [infer V]
+>Result : Symbol(Result, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 2, 18))
+>Value : Symbol(Value, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 0, 0))
+>V : Symbol(V, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 4, 36))
+
+  ? V extends unknown
+>V : Symbol(V, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 4, 36))
+
+    ? [V, Value]
+>V : Symbol(V, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 4, 36))
+>Value : Symbol(Value, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 0, 0))
+
+    : never
+  : never
+
+type Value2 = { prop: 1 | 2 };
+>Value2 : Symbol(Value2, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 8, 9))
+>prop : Symbol(prop, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 10, 15))
+
+type Result2 = Value2 extends { prop: infer V }
+>Result2 : Symbol(Result2, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 10, 30))
+>Value2 : Symbol(Value2, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 8, 9))
+>prop : Symbol(prop, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 12, 31))
+>V : Symbol(V, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 12, 43))
+
+  ? V extends unknown
+>V : Symbol(V, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 12, 43))
+
+    ? [V, Value2]
+>V : Symbol(V, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 12, 43))
+>Value2 : Symbol(Value2, Decl(distributiveConditionalTypeNoConstraintLeakThroughInferTypeParameter1.ts, 8, 9))
+
+    : never
+  : never;
+
