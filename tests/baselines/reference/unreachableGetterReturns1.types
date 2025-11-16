@@ -8,14 +8,14 @@ declare function assert(cond: unknown): asserts cond;
 >     : ^^^^^^^
 
 const obj1 = {
->obj1 : { readonly prop: never; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
->{  get prop() {    assert(false);  },} : { readonly prop: never; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj1 : { readonly prop: void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{  get prop() {    assert(false);  },} : { readonly prop: void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   get prop() {
->prop : never
->     : ^^^^^
+>prop : void
+>     : ^^^^
 
     assert(false);
 >assert(false) : void
@@ -93,12 +93,12 @@ type Obj = { prop: number };
 const obj4: Obj = {
 >obj4 : Obj
 >     : ^^^
->{  get prop() {    assert(false);  },} : { readonly prop: never; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  get prop() {    assert(false);  },} : { readonly prop: void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   get prop() {
->prop : never
->     : ^^^^^
+>prop : void
+>     : ^^^^
 
     assert(false);
 >assert(false) : void
@@ -166,3 +166,4 @@ const obj6: Obj = {
 
   },
 };
+
