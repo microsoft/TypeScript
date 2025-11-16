@@ -21,9 +21,11 @@ unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variab
       return 1;
       let y;
       ~~~~~~
-!!! error TS7027: Unreachable code detected.
       y = 1;
+    ~~~~~~~~
       return y;
+    ~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     export function i() {
@@ -45,7 +47,7 @@ unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variab
     export function foo() {
       throws();
       return 42;
-      ~~~~~~
+      ~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
     
@@ -57,7 +59,7 @@ unreachableReturnStatementsVsInferredReturnTypes.ts(38,12): error TS7005: Variab
       if (Math.random()) {
         throws();
         return x;
-        ~~~~~~
+        ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
                ~
 !!! error TS7005: Variable 'x' implicitly has an 'any' type.

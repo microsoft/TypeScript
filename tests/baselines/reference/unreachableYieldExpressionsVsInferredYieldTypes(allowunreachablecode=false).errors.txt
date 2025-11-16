@@ -23,9 +23,11 @@ unreachableYieldExpressionsVsInferredYieldTypes.ts(48,11): error TS7005: Variabl
       return 'foo';
       let y;
       ~~~~~~
-!!! error TS7027: Unreachable code detected.
       y = 1;
+    ~~~~~~~~
       yield y;
+    ~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     export function* i() {
@@ -33,9 +35,11 @@ unreachableYieldExpressionsVsInferredYieldTypes.ts(48,11): error TS7005: Variabl
       return 'foo';
       let y;
       ~~~~~~
-!!! error TS7027: Unreachable code detected.
       y = 1;
+    ~~~~~~~~
       yield y;
+    ~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     export function* j() {

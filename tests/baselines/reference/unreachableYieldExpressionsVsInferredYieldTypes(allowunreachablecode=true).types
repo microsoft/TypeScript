@@ -2,8 +2,8 @@
 
 === unreachableYieldExpressionsVsInferredYieldTypes.ts ===
 export function* g() {
->g : () => Generator<never, string, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : () => Generator<number, string, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   let x;
 >x : any
@@ -62,8 +62,8 @@ export function* h() {
 }
 
 export function* i() {
->i : () => Generator<never, string, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i : () => Generator<boolean, string, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   yield true;
 >yield true : any
@@ -95,8 +95,8 @@ export function* i() {
 }
 
 export function* j() {
->j : () => Generator<never, boolean, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>j : () => Generator<number, boolean, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   let x: string | number | boolean;
 >x : string | number | boolean
@@ -164,8 +164,8 @@ export function* foo() {
 }
 
 export function* bar() {
->bar : () => Generator<never, void, unknown>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   var x;
 >x : any

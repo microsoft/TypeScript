@@ -103,9 +103,9 @@ export function* bar() {
 
 
 //// [unreachableYieldExpressionsVsInferredYieldTypes.d.ts]
-export declare function g(): Generator<never, string, unknown>;
+export declare function g(): Generator<number, string, unknown>;
 export declare function h(): Generator<never, string, unknown>;
-export declare function i(): Generator<never, string, unknown>;
-export declare function j(): Generator<never, boolean, unknown>;
+export declare function i(): Generator<boolean, string, unknown>;
+export declare function j(): Generator<number, boolean, unknown>;
 export declare function foo(): Generator<never, void, unknown>;
-export declare function bar(): Generator<never, void, unknown>;
+export declare function bar(): Generator<number, void, unknown>;
