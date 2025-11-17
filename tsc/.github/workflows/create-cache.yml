@@ -33,6 +33,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
+
       - run: git config --system core.longpaths true
         if: ${{ matrix.os == 'windows-latest' }}
 
