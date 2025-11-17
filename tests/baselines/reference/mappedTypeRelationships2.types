@@ -91,5 +91,154 @@ type Test10<T extends AB> = Alias5<T, ABC>; // ok
 >Test10 : ABC
 >       : ^^^
 
+// part of https://github.com/microsoft/TypeScript/issues/62770
+
+interface WithCommon {
+  field1: number;
+>field1 : number
+>       : ^^^^^^
+
+  field2: string;
+>field2 : string
+>       : ^^^^^^
+}
+
+interface WithSpecial extends WithCommon {
+  special: number;
+>special : number
+>        : ^^^^^^
+}
+
+interface SpecialLookup {
+  special: WithSpecial;
+>special : WithSpecial
+>        : ^^^^^^^^^^^
+}
+
+interface CommonLookup extends SpecialLookup {
+  common: WithCommon;
+>common : WithCommon
+>       : ^^^^^^^^^^
+}
+
+type Lookup<Name extends keyof CommonLookup> = {
+>Lookup : Lookup<Name>
+>       : ^^^^^^^^^^^^
+
+  [K in keyof CommonLookup[Name]]?: CommonLookup[Name][K];
+};
+function someName<K extends keyof SpecialLookup>(): void {
+>someName : <K extends keyof SpecialLookup>() => void
+>         : ^ ^^^^^^^^^                   ^^^^^^^    
+
+  // ok
+  const works1: Lookup<"special"> = {
+>works1 : Lookup<"special">
+>       : ^^^^^^^^^^^^^^^^^
+>{    field1: 1,    field2: "common",    special: 203,  } : { field1: number; field2: string; special: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    field1: 1,
+>field1 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+
+    field2: "common",
+>field2 : string
+>       : ^^^^^^
+>"common" : "common"
+>         : ^^^^^^^^
+
+    special: 203,
+>special : number
+>        : ^^^^^^
+>203 : 203
+>    : ^^^
+
+  };
+
+  // error
+  const works2: Lookup<"common"> = {
+>works2 : Lookup<"common">
+>       : ^^^^^^^^^^^^^^^^
+>{    field1: 5,    field2: "something",    special: 32,   } : { field1: number; field2: string; special: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    field1: 5,
+>field1 : number
+>       : ^^^^^^
+>5 : 5
+>  : ^
+
+    field2: "something",
+>field2 : string
+>       : ^^^^^^
+>"something" : "something"
+>            : ^^^^^^^^^^^
+
+    special: 32, 
+>special : number
+>        : ^^^^^^
+>32 : 32
+>   : ^^
+
+  };
+
+  // ok
+  const works3: Lookup<K> = {
+>works3 : Lookup<K>
+>       : ^^^^^^^^^
+>{    special: undefined,    field1: undefined,    field2: undefined,  } : { special: undefined; field1: undefined; field2: undefined; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    special: undefined,
+>special : undefined
+>        : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    field1: undefined,
+>field1 : undefined
+>       : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    field2: undefined,
+>field2 : undefined
+>       : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  };
+
+  // error
+  const works4: Lookup<K> = {
+>works4 : Lookup<K>
+>       : ^^^^^^^^^
+>{    field1: undefined,    field2: undefined,    special: 32,  } : { field1: undefined; field2: undefined; special: 32; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    field1: undefined,
+>field1 : undefined
+>       : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    field2: undefined,
+>field2 : undefined
+>       : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    special: 32,
+>special : 32
+>        : ^^
+>32 : 32
+>   : ^^
+
+  };
+}
+
 export {};
 

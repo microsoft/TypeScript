@@ -1,7 +1,9 @@
 mappedTypeRelationships2.ts(21,38): error TS2344: Type 'ABC' does not satisfy the constraint 'WithNumber<Record<keyof T, any>>'.
+mappedTypeRelationships2.ts(67,5): error TS2353: Object literal may only specify known properties, and 'special' does not exist in type 'Lookup<"common">'.
+mappedTypeRelationships2.ts(78,9): error TS2322: Type '{ field1: undefined; field2: undefined; special: 32; }' is not assignable to type 'Lookup<K>'.
 
 
-==== mappedTypeRelationships2.ts (1 errors) ====
+==== mappedTypeRelationships2.ts (3 errors) ====
     // https://github.com/microsoft/TypeScript/issues/62717
     
     type Alias1<T extends object, U extends { [K in keyof T]?: any }> = U;
@@ -35,6 +37,62 @@ mappedTypeRelationships2.ts(21,38): error TS2344: Type 'ABC' does not satisfy th
     
     type Test9 = Alias5<AB, ABC>; // ok
     type Test10<T extends AB> = Alias5<T, ABC>; // ok
+    
+    // part of https://github.com/microsoft/TypeScript/issues/62770
+    
+    interface WithCommon {
+      field1: number;
+      field2: string;
+    }
+    
+    interface WithSpecial extends WithCommon {
+      special: number;
+    }
+    
+    interface SpecialLookup {
+      special: WithSpecial;
+    }
+    
+    interface CommonLookup extends SpecialLookup {
+      common: WithCommon;
+    }
+    
+    type Lookup<Name extends keyof CommonLookup> = {
+      [K in keyof CommonLookup[Name]]?: CommonLookup[Name][K];
+    };
+    function someName<K extends keyof SpecialLookup>(): void {
+      // ok
+      const works1: Lookup<"special"> = {
+        field1: 1,
+        field2: "common",
+        special: 203,
+      };
+    
+      // error
+      const works2: Lookup<"common"> = {
+        field1: 5,
+        field2: "something",
+        special: 32, 
+        ~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'special' does not exist in type 'Lookup<"common">'.
+      };
+    
+      // ok
+      const works3: Lookup<K> = {
+        special: undefined,
+        field1: undefined,
+        field2: undefined,
+      };
+    
+      // error
+      const works4: Lookup<K> = {
+            ~~~~~~
+!!! error TS2322: Type '{ field1: undefined; field2: undefined; special: 32; }' is not assignable to type 'Lookup<K>'.
+        field1: undefined,
+        field2: undefined,
+        special: 32,
+      };
+    }
     
     export {};
     

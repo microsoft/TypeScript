@@ -142,5 +142,133 @@ type Test10<T extends AB> = Alias5<T, ABC>; // ok
 >T : Symbol(T, Decl(mappedTypeRelationships2.ts, 30, 12))
 >ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
 
+// part of https://github.com/microsoft/TypeScript/issues/62770
+
+interface WithCommon {
+>WithCommon : Symbol(WithCommon, Decl(mappedTypeRelationships2.ts, 30, 43))
+
+  field1: number;
+>field1 : Symbol(WithCommon.field1, Decl(mappedTypeRelationships2.ts, 34, 22))
+
+  field2: string;
+>field2 : Symbol(WithCommon.field2, Decl(mappedTypeRelationships2.ts, 35, 17))
+}
+
+interface WithSpecial extends WithCommon {
+>WithSpecial : Symbol(WithSpecial, Decl(mappedTypeRelationships2.ts, 37, 1))
+>WithCommon : Symbol(WithCommon, Decl(mappedTypeRelationships2.ts, 30, 43))
+
+  special: number;
+>special : Symbol(WithSpecial.special, Decl(mappedTypeRelationships2.ts, 39, 42))
+}
+
+interface SpecialLookup {
+>SpecialLookup : Symbol(SpecialLookup, Decl(mappedTypeRelationships2.ts, 41, 1))
+
+  special: WithSpecial;
+>special : Symbol(SpecialLookup.special, Decl(mappedTypeRelationships2.ts, 43, 25))
+>WithSpecial : Symbol(WithSpecial, Decl(mappedTypeRelationships2.ts, 37, 1))
+}
+
+interface CommonLookup extends SpecialLookup {
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+>SpecialLookup : Symbol(SpecialLookup, Decl(mappedTypeRelationships2.ts, 41, 1))
+
+  common: WithCommon;
+>common : Symbol(CommonLookup.common, Decl(mappedTypeRelationships2.ts, 47, 46))
+>WithCommon : Symbol(WithCommon, Decl(mappedTypeRelationships2.ts, 30, 43))
+}
+
+type Lookup<Name extends keyof CommonLookup> = {
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+>Name : Symbol(Name, Decl(mappedTypeRelationships2.ts, 51, 12))
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+
+  [K in keyof CommonLookup[Name]]?: CommonLookup[Name][K];
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 52, 3))
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+>Name : Symbol(Name, Decl(mappedTypeRelationships2.ts, 51, 12))
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+>Name : Symbol(Name, Decl(mappedTypeRelationships2.ts, 51, 12))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 52, 3))
+
+};
+function someName<K extends keyof SpecialLookup>(): void {
+>someName : Symbol(someName, Decl(mappedTypeRelationships2.ts, 53, 2))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 54, 18))
+>SpecialLookup : Symbol(SpecialLookup, Decl(mappedTypeRelationships2.ts, 41, 1))
+
+  // ok
+  const works1: Lookup<"special"> = {
+>works1 : Symbol(works1, Decl(mappedTypeRelationships2.ts, 56, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+
+    field1: 1,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 56, 37))
+
+    field2: "common",
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 57, 14))
+
+    special: 203,
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 58, 21))
+
+  };
+
+  // error
+  const works2: Lookup<"common"> = {
+>works2 : Symbol(works2, Decl(mappedTypeRelationships2.ts, 63, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+
+    field1: 5,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 63, 36))
+
+    field2: "something",
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 64, 14))
+
+    special: 32, 
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 65, 24))
+
+  };
+
+  // ok
+  const works3: Lookup<K> = {
+>works3 : Symbol(works3, Decl(mappedTypeRelationships2.ts, 70, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 54, 18))
+
+    special: undefined,
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 70, 29))
+>undefined : Symbol(undefined)
+
+    field1: undefined,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 71, 23))
+>undefined : Symbol(undefined)
+
+    field2: undefined,
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 72, 22))
+>undefined : Symbol(undefined)
+
+  };
+
+  // error
+  const works4: Lookup<K> = {
+>works4 : Symbol(works4, Decl(mappedTypeRelationships2.ts, 77, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 54, 18))
+
+    field1: undefined,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 77, 29))
+>undefined : Symbol(undefined)
+
+    field2: undefined,
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 78, 22))
+>undefined : Symbol(undefined)
+
+    special: 32,
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 79, 22))
+
+  };
+}
+
 export {};
 
