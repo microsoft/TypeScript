@@ -1,6 +1,36 @@
 # Diff files to instead write to submoduleAccepted as "accepted" changes.
+
+## jsdoc ##
+conformance/assertionsAndNonReturningFunctions.types.diff
+conformance/assertionTypePredicates2.errors.txt.diff
+conformance/assignmentToVoidZero1.errors.txt.diff
+conformance/assignmentToVoidZero1.types.diff
+conformance/asyncArrowFunction_allowJs.errors.txt.diff
+conformance/asyncArrowFunction_allowJs.types.diff
+conformance/asyncFunctionDeclaration16_es5.errors.txt.diff
+conformance/asyncFunctionDeclaration16_es5.types.diff
+conformance/binderUninitializedModuleExportsAssignment.types.diff
+conformance/callbackOnConstructor.errors.txt.diff
+conformance/callbackOnConstructor.types.diff
+conformance/callbackTag2.errors.txt.diff
+conformance/callbackTag2.types.diff
+conformance/callbackTag4.types.diff
+conformance/callbackTagNamespace.types.diff
+conformance/callbackTagVariadicType.types.diff
+conformance/callOfPropertylessConstructorFunction.errors.txt.diff
+conformance/callOfPropertylessConstructorFunction.types.diff
+conformance/callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).errors.txt.diff
+conformance/checkExportsObjectAssignProperty.errors.txt.diff
+conformance/checkExportsObjectAssignProperty.types.diff
+conformance/checkJsdocOnEndOfFile.types.diff
+conformance/checkJsdocParamOnVariableDeclaredFunctionExpression.errors.txt.diff
+conformance/checkJsdocParamOnVariableDeclaredFunctionExpression.types.diff
+conformance/checkParamTag1.types.diff
 conformance/node10Alternateresult_noTypes.errors.txt.diff
 conformance/node10AlternateResult_noResolution.errors.txt.diff
+conformance/node10AlternateResult_noResolution.errors.txt.diff
+
+## inlay hints ##
 fourslash/inlayHints/inlayHintsInteractiveParameterNamesWithComments.baseline.diff
 fourslash/inlayHints/inlayHintsImportType2.baseline.diff
 fourslash/inlayHints/inlayHintsInteractiveImportType2.baseline.diff
