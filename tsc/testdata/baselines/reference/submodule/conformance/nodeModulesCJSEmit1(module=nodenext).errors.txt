@@ -1,4 +1,3 @@
-/5.cjs(1,8): error TS1192: Module '"/2"' has no default export.
 /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
 
 
@@ -15,10 +14,8 @@
 ==== /4.cjs (0 errors) ====
     ;
     
-==== /5.cjs (2 errors) ====
+==== /5.cjs (1 errors) ====
     import two from "./2.cjs";   // ok
-           ~~~
-!!! error TS1192: Module '"/2"' has no default export.
     import three from "./3.cjs"; // error
            ~~~~~
 !!! error TS1192: Module '"/3"' has no default export.

@@ -10,10 +10,10 @@ exports.foo = "foo"
 
 === bar.ts ===
 import foo from "./foo.cjs"
->foo : any
+>foo : typeof foo
 
 foo.foo;
->foo.foo : any
->foo : any
->foo : any
+>foo.foo : "foo"
+>foo : typeof foo
+>foo : "foo"
 

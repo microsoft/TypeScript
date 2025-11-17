@@ -9,10 +9,3 @@
  >foo : Symbol(foo, Decl(foo.cjs, 0, 0))
 
  === bar.ts ===
-@@= skipped -8, +8 lines =@@
- >foo : Symbol(foo, Decl(bar.ts, 0, 6))
-
- foo.foo;
-->foo.foo : Symbol(foo.foo, Decl(foo.cjs, 0, 0))
- >foo : Symbol(foo, Decl(bar.ts, 0, 6))
-->foo : Symbol(foo.foo, Decl(foo.cjs, 0, 0))

@@ -2,11 +2,10 @@
 +++ new.nodeModulesCJSEmit1(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
 -/3.cjs(2,1): error TS2304: Cannot find name 'exports'.
-+/5.cjs(1,8): error TS1192: Module '"/2"' has no default export.
  /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
 
 
-@@= skipped -7, +7 lines =@@
+@@= skipped -7, +6 lines =@@
  ==== /2.cjs (0 errors) ====
      exports.foo = 0;
      
@@ -19,12 +18,3 @@
      
  ==== /4.cjs (0 errors) ====
      ;
-     
--==== /5.cjs (1 errors) ====
-+==== /5.cjs (2 errors) ====
-     import two from "./2.cjs";   // ok
-+           ~~~
-+!!! error TS1192: Module '"/2"' has no default export.
-     import three from "./3.cjs"; // error
-            ~~~~~
- !!! error TS1192: Module '"/3"' has no default export.

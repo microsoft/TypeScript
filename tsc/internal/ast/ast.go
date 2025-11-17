@@ -10757,7 +10757,9 @@ type SourceFile struct {
 	NodeCount                   int
 	TextCount                   int
 	CommonJSModuleIndicator     *Node
-	ExternalModuleIndicator     *Node
+	// If this is the SourceFile itself, then this module was "forced"
+	// to be an external module (previously "true").
+	ExternalModuleIndicator *Node
 
 	// Fields set by binder
 
