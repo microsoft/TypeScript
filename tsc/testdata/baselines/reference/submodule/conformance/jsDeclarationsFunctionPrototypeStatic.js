@@ -38,7 +38,7 @@ declare namespace MyClass {
 declare namespace MyClass {
     var staticProperty: number;
 }
-export type DoneCB = (failures: number) ;
+export type DoneCB = (failures: number) => any;
 /**
  * Callback to be invoked when test execution is complete.
  *

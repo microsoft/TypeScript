@@ -132,7 +132,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 	case ast.KindConstructor:
 		signature = p.factory.NewConstructorDeclaration(clonedModifiers, nil, nil, nil, nil, nil)
 	case ast.KindJSDocCallbackTag:
-		signature = p.factory.NewFunctionTypeNode(nil, nil, nil)
+		signature = p.factory.NewFunctionTypeNode(nil, nil, p.factory.NewKeywordTypeNode(ast.KindAnyKeyword))
 	default:
 		panic("Unexpected kind " + fun.Kind.String())
 	}

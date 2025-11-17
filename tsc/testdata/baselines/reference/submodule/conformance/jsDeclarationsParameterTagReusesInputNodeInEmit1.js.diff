@@ -25,7 +25,7 @@
 -    };
 -};
 +type BaseFactory = import('./base');
-+type BaseFactoryFactory = (factory: import('./base')) ;
++type BaseFactoryFactory = (factory: import('./base')) => any;
  /** @typedef {import('./base')} BaseFactory */
  /**
   * @callback BaseFactoryFactory
