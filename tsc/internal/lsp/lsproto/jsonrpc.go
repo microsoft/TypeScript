@@ -105,8 +105,10 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		Method  Method         `json:"method"`
 		ID      *ID            `json:"id,omitzero"`
 		Params  jsontext.Value `json:"params"`
-		Result  any            `json:"result,omitzero"`
-		Error   *ResponseError `json:"error,omitzero"`
+		// We don't have a method in the response, so we have no idea what to decode.
+		// Store the raw text and let the caller decode it.
+		Result jsontext.Value `json:"result,omitzero"`
+		Error  *ResponseError `json:"error,omitzero"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
@@ -114,10 +116,9 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	if raw.ID != nil && raw.Method == "" {
 		m.Kind = MessageKindResponse
 		m.msg = &ResponseMessage{
-			JSONRPC: raw.JSONRPC,
-			ID:      raw.ID,
-			Result:  raw.Result,
-			Error:   raw.Error,
+			ID:     raw.ID,
+			Result: raw.Result,
+			Error:  raw.Error,
 		}
 		return nil
 	}
@@ -138,10 +139,9 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	}
 
 	m.msg = &RequestMessage{
-		JSONRPC: raw.JSONRPC,
-		ID:      raw.ID,
-		Method:  raw.Method,
-		Params:  params,
+		ID:     raw.ID,
+		Method: raw.Method,
+		Params: params,
 	}
 
 	return nil
@@ -151,27 +151,11 @@ func (m *Message) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m.msg)
 }
 
-func NewNotificationMessage(method Method, params any) *RequestMessage {
-	return &RequestMessage{
-		JSONRPC: JSONRPCVersion{},
-		Method:  method,
-		Params:  params,
-	}
-}
-
 type RequestMessage struct {
 	JSONRPC JSONRPCVersion `json:"jsonrpc"`
 	ID      *ID            `json:"id,omitzero"`
 	Method  Method         `json:"method"`
 	Params  any            `json:"params,omitzero"`
-}
-
-func NewRequestMessage(method Method, id *ID, params any) *RequestMessage {
-	return &RequestMessage{
-		ID:     id,
-		Method: method,
-		Params: params,
-	}
 }
 
 func (r *RequestMessage) Message() *Message {

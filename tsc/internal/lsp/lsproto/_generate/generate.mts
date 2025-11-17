@@ -784,6 +784,36 @@ function generateCode() {
     writeLine("}");
     writeLine("");
 
+    // Generate unmarshalResult function
+    writeLine("func unmarshalResult(method Method, data []byte) (any, error) {");
+    writeLine("\tswitch method {");
+
+    // Only requests have results, not notifications
+    for (const request of model.requests) {
+        const methodName = methodNameIdentifier(request.method);
+
+        if (!("result" in request)) {
+            continue;
+        }
+
+        let responseTypeName: string;
+        if (request.typeName && request.typeName.endsWith("Request")) {
+            responseTypeName = request.typeName.replace(/Request$/, "Response");
+        }
+        else {
+            responseTypeName = `${methodName}Response`;
+        }
+
+        writeLine(`\tcase Method${methodName}:`);
+        writeLine(`\t\treturn unmarshalValue[${responseTypeName}](data)`);
+    }
+
+    writeLine("\tdefault:");
+    writeLine(`\t\treturn unmarshalAny(data)`);
+    writeLine("\t}");
+    writeLine("}");
+    writeLine("");
+
     writeLine("// Methods");
     writeLine("const (");
     for (const request of requestsAndNotifications) {
