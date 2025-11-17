@@ -16,7 +16,9 @@
 // | ```tsx
 // | (method) B.foo(): void
 // | ```
+// | Description text here.
 // | 
+// | *@virtual*
 // | ----------------------------------------------------------------------
 // }
 // 
@@ -27,7 +29,9 @@
 // | ```tsx
 // | (method) C.foo(): void
 // | ```
+// | Description text here.
 // | 
+// | *@virtual*
 // | ----------------------------------------------------------------------
 // }
 [
@@ -44,7 +48,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) B.foo(): void\n```\n"
+        "value": "```tsx\n(method) B.foo(): void\n```\nDescription text here.\n\n*@virtual*"
       },
       "range": {
         "start": {
@@ -71,7 +75,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) C.foo(): void\n```\n"
+        "value": "```tsx\n(method) C.foo(): void\n```\nDescription text here.\n\n*@virtual*"
       },
       "range": {
         "start": {

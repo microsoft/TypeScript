@@ -5,7 +5,6 @@
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foo(): void
-// | function foo(x: number): void
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -17,9 +16,11 @@
 //                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foo(): void
 // | function foo(x: number): void
 // | ```
+// | 
+// | 
+// | *@tag* — Tag text
 // | 
 // | ----------------------------------------------------------------------
 [
@@ -36,7 +37,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\n"
+        "value": "```tsx\nfunction foo(): void\n```\n"
       },
       "range": {
         "start": {
@@ -63,7 +64,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\n"
+        "value": "```tsx\nfunction foo(x: number): void\n```\n\n\n*@tag* — Tag text\n"
       },
       "range": {
         "start": {

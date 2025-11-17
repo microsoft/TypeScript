@@ -21,7 +21,7 @@
 //              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | class c2
+// | constructor c2(): c2
 // | ```
 // | This is class c2 without constructor
 // | ----------------------------------------------------------------------
@@ -147,7 +147,7 @@
 //              ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | class c5
+// | constructor c5(): c5
 // | ```
 // | Class with statics
 // | ----------------------------------------------------------------------
@@ -307,7 +307,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2\n```\nThis is class c2 without constructor"
+        "value": "```tsx\nconstructor c2(): c2\n```\nThis is class c2 without constructor"
       },
       "range": {
         "start": {
@@ -712,7 +712,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c5\n```\nClass with statics"
+        "value": "```tsx\nconstructor c5(): c5\n```\nClass with statics"
       },
       "range": {
         "start": {

@@ -18,7 +18,7 @@
 // | ```tsx
 // | (method) B.method(): void
 // | ```
-// | 
+// | Method documentation.
 // | ----------------------------------------------------------------------
 [
   {
@@ -34,7 +34,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) B.method(): void\n```\n"
+        "value": "```tsx\n(method) B.method(): void\n```\nMethod documentation."
       },
       "range": {
         "start": {

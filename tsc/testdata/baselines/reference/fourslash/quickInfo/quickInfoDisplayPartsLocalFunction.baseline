@@ -22,7 +22,6 @@
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foowithoverload(a: string): string
-// | function foowithoverload(a: number): number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -30,7 +29,6 @@
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foowithoverload(a: string): string
 // | function foowithoverload(a: number): number
 // | ```
 // | 
@@ -39,8 +37,7 @@
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foowithoverload(a: string): string
-// | function foowithoverload(a: number): number
+// | function foowithoverload(a: any): any
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -51,8 +48,6 @@
 // | ----------------------------------------------------------------------
 // | ```tsx
 // | function foowith3overload(a: string): string
-// | function foowith3overload(a: number): number
-// | function foowith3overload(a: boolean): boolean
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -60,9 +55,7 @@
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foowith3overload(a: string): string
 // | function foowith3overload(a: number): number
-// | function foowith3overload(a: boolean): boolean
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -70,8 +63,6 @@
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foowith3overload(a: string): string
-// | function foowith3overload(a: number): number
 // | function foowith3overload(a: boolean): boolean
 // | ```
 // | 
@@ -80,9 +71,7 @@
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foowith3overload(a: string): string
-// | function foowith3overload(a: number): number
-// | function foowith3overload(a: boolean): boolean
+// | function foowith3overload(a: any): any
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -213,7 +202,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: string): string\nfunction foowithoverload(a: number): number\n```\n"
+        "value": "```tsx\nfunction foowithoverload(a: string): string\n```\n"
       },
       "range": {
         "start": {
@@ -240,7 +229,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: string): string\nfunction foowithoverload(a: number): number\n```\n"
+        "value": "```tsx\nfunction foowithoverload(a: number): number\n```\n"
       },
       "range": {
         "start": {
@@ -267,7 +256,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: string): string\nfunction foowithoverload(a: number): number\n```\n"
+        "value": "```tsx\nfunction foowithoverload(a: any): any\n```\n"
       },
       "range": {
         "start": {
@@ -294,7 +283,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: string): string\nfunction foowith3overload(a: number): number\nfunction foowith3overload(a: boolean): boolean\n```\n"
+        "value": "```tsx\nfunction foowith3overload(a: string): string\n```\n"
       },
       "range": {
         "start": {
@@ -321,7 +310,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: string): string\nfunction foowith3overload(a: number): number\nfunction foowith3overload(a: boolean): boolean\n```\n"
+        "value": "```tsx\nfunction foowith3overload(a: number): number\n```\n"
       },
       "range": {
         "start": {
@@ -348,7 +337,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: string): string\nfunction foowith3overload(a: number): number\nfunction foowith3overload(a: boolean): boolean\n```\n"
+        "value": "```tsx\nfunction foowith3overload(a: boolean): boolean\n```\n"
       },
       "range": {
         "start": {
@@ -375,7 +364,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: string): string\nfunction foowith3overload(a: number): number\nfunction foowith3overload(a: boolean): boolean\n```\n"
+        "value": "```tsx\nfunction foowith3overload(a: any): any\n```\n"
       },
       "range": {
         "start": {

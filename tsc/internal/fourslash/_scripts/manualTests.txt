@@ -3,6 +3,7 @@ completionsAtIncompleteObjectLiteralProperty
 completionsSelfDeclaring1
 completionsWithDeprecatedTag4
 parserCorruptionAfterMapInClass
+quickInfoForOverloadOnConst1
 renameDefaultKeyword
 renameForDefaultExport01
 tsxCompletion12

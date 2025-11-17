@@ -182,3 +182,7 @@ func (c *Checker) ResolveName(name string, location *ast.Node, meaning ast.Symbo
 func (c *Checker) GetSymbolFlags(symbol *ast.Symbol) ast.SymbolFlags {
 	return c.getSymbolFlags(symbol)
 }
+
+func (c *Checker) GetBaseTypes(t *Type) []*Type {
+	return c.getBaseTypes(t)
+}

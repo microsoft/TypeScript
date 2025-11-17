@@ -121,6 +121,9 @@
 // | (property) Drived1.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base1.foo1 
+// | 
 // | ----------------------------------------------------------------------
 //     foo2(para1: string) { return 1 };
 //     ^^^^
@@ -128,6 +131,12 @@
 // | ```tsx
 // | (method) Drived1.foo2(para1: string): number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base1.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // }
@@ -142,6 +151,9 @@
 // | (property) Drived2.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base1.foo1 
+// | 
 // | ----------------------------------------------------------------------
 //     foo2 = (para1: string) => { return 1; };
 //     ^^^^
@@ -149,6 +161,12 @@
 // | ```tsx
 // | (property) Drived2.foo2: (para1: string) => number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base1.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // }
@@ -176,6 +194,9 @@
 // | (property) Drived3.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base2.foo1 
+// | 
 // | ----------------------------------------------------------------------
 //     foo2(para1: string) { return 1 };
 //     ^^^^
@@ -183,6 +204,12 @@
 // | ```tsx
 // | (method) Drived3.foo2(para1: string): number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base2.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // }
@@ -197,6 +224,9 @@
 // | (property) Drived4.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base2.foo1 
+// | 
 // | ----------------------------------------------------------------------
 //     foo2 = (para1: string) => { return 1; };
 //     ^^^^
@@ -204,6 +234,12 @@
 // | ```tsx
 // | (property) Drived4.foo2: (para1: string) => number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base2.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // }
@@ -215,6 +251,9 @@
 // | (property) Drived1.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base1.foo1 
+// | 
 // | ----------------------------------------------------------------------
 // new Drived1().foo2;
 //               ^^^^
@@ -222,6 +261,12 @@
 // | ```tsx
 // | (method) Drived1.foo2(para1: string): number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base1.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // new Drived2().foo1;
@@ -231,6 +276,9 @@
 // | (property) Drived2.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base1.foo1 
+// | 
 // | ----------------------------------------------------------------------
 // new Drived2().foo2;
 //               ^^^^
@@ -238,6 +286,12 @@
 // | ```tsx
 // | (property) Drived2.foo2: (para1: string) => number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base1.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base1.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // new Drived3().foo1;
@@ -247,6 +301,9 @@
 // | (property) Drived3.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base2.foo1 
+// | 
 // | ----------------------------------------------------------------------
 // new Drived3().foo2;
 //               ^^^^
@@ -254,6 +311,12 @@
 // | ```tsx
 // | (method) Drived3.foo2(para1: string): number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base2.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 // new Drived4().foo1;
@@ -263,6 +326,9 @@
 // | (property) Drived4.foo1: number
 // | ```
 // | 
+// | 
+// | *@description* — Base2.foo1 
+// | 
 // | ----------------------------------------------------------------------
 // new Drived4().foo2;
 //               ^^^^
@@ -270,6 +336,12 @@
 // | ```tsx
 // | (property) Drived4.foo2: (para1: string) => number
 // | ```
+// | 
+// | 
+// | *@param* `q` — Base2.foo2 parameter
+// | 
+// | 
+// | *@returns* — Base2.foo2 return
 // | 
 // | ----------------------------------------------------------------------
 [
@@ -502,7 +574,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived1.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived1.foo1: number\n```\n\n\n*@description* — Base1.foo1 \n"
       },
       "range": {
         "start": {
@@ -529,7 +601,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Drived1.foo2(para1: string): number\n```\n"
+        "value": "```tsx\n(method) Drived1.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n\n*@returns* — Base1.foo2 return\n"
       },
       "range": {
         "start": {
@@ -556,7 +628,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived2.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived2.foo1: number\n```\n\n\n*@description* — Base1.foo1 \n"
       },
       "range": {
         "start": {
@@ -583,7 +655,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived2.foo2: (para1: string) => number\n```\n"
+        "value": "```tsx\n(property) Drived2.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n\n*@returns* — Base1.foo2 return\n"
       },
       "range": {
         "start": {
@@ -610,7 +682,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived3.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived3.foo1: number\n```\n\n\n*@description* — Base2.foo1 \n"
       },
       "range": {
         "start": {
@@ -637,7 +709,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Drived3.foo2(para1: string): number\n```\n"
+        "value": "```tsx\n(method) Drived3.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n\n*@returns* — Base2.foo2 return\n"
       },
       "range": {
         "start": {
@@ -664,7 +736,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived4.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived4.foo1: number\n```\n\n\n*@description* — Base2.foo1 \n"
       },
       "range": {
         "start": {
@@ -691,7 +763,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived4.foo2: (para1: string) => number\n```\n"
+        "value": "```tsx\n(property) Drived4.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n\n*@returns* — Base2.foo2 return\n"
       },
       "range": {
         "start": {
@@ -718,7 +790,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived1.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived1.foo1: number\n```\n\n\n*@description* — Base1.foo1 \n"
       },
       "range": {
         "start": {
@@ -745,7 +817,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Drived1.foo2(para1: string): number\n```\n"
+        "value": "```tsx\n(method) Drived1.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n\n*@returns* — Base1.foo2 return\n"
       },
       "range": {
         "start": {
@@ -772,7 +844,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived2.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived2.foo1: number\n```\n\n\n*@description* — Base1.foo1 \n"
       },
       "range": {
         "start": {
@@ -799,7 +871,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived2.foo2: (para1: string) => number\n```\n"
+        "value": "```tsx\n(property) Drived2.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base1.foo2 parameter\n\n\n*@returns* — Base1.foo2 return\n"
       },
       "range": {
         "start": {
@@ -826,7 +898,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived3.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived3.foo1: number\n```\n\n\n*@description* — Base2.foo1 \n"
       },
       "range": {
         "start": {
@@ -853,7 +925,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Drived3.foo2(para1: string): number\n```\n"
+        "value": "```tsx\n(method) Drived3.foo2(para1: string): number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n\n*@returns* — Base2.foo2 return\n"
       },
       "range": {
         "start": {
@@ -880,7 +952,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived4.foo1: number\n```\n"
+        "value": "```tsx\n(property) Drived4.foo1: number\n```\n\n\n*@description* — Base2.foo1 \n"
       },
       "range": {
         "start": {
@@ -907,7 +979,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Drived4.foo2: (para1: string) => number\n```\n"
+        "value": "```tsx\n(property) Drived4.foo2: (para1: string) => number\n```\n\n\n*@param* `q` — Base2.foo2 parameter\n\n\n*@returns* — Base2.foo2 return\n"
       },
       "range": {
         "start": {
