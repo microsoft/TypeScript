@@ -62,6 +62,7 @@ import {
     canHaveLocals,
     canHaveModifiers,
     canHaveModuleSpecifier,
+    canHaveStatements,
     canHaveSymbol,
     canIncludeBindAndCheckDiagnostics,
     canUsePropertyAccess,
@@ -708,6 +709,7 @@ import {
     isPartOfTypeOnlyImportOrExportDeclaration,
     isPartOfTypeQuery,
     isPlainJsFile,
+    isPotentiallyExecutableNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
@@ -1512,6 +1514,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
     var isInferencePartiallyBlocked = false;
+    var withinUnreachableCode = false;
+    var reportedUnreachableNodes: Set<Node> | undefined;
 
     var emptySymbols = createSymbolTable();
     var arrayVariances = [VarianceFlags.Covariant];
@@ -29377,26 +29381,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbol = getResolvedSymbol(expr);
                 if (isConstantVariable(symbol)) {
                     const declaration = symbol.valueDeclaration!;
+                    let initializer = getCandidateVariableDeclarationInitializer(declaration);
                     // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
-                    if (
-                        isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer) &&
-                        isMatchingReference(reference, declaration.initializer.expression)
-                    ) {
-                        return declaration.initializer;
+                    if (initializer && isAccessExpression(initializer) && isMatchingReference(reference, initializer.expression)) {
+                        return initializer;
                     }
                     // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
                     if (isBindingElement(declaration) && !declaration.initializer) {
-                        const parent = declaration.parent.parent;
-                        if (
-                            isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer)) &&
-                            isMatchingReference(reference, parent.initializer)
-                        ) {
+                        initializer = getCandidateVariableDeclarationInitializer(declaration.parent.parent);
+                        if (initializer && (isIdentifier(initializer) || isAccessExpression(initializer)) && isMatchingReference(reference, initializer)) {
                             return declaration;
                         }
                     }
                 }
             }
             return undefined;
+
+            function getCandidateVariableDeclarationInitializer(node: Node) {
+                return isVariableDeclaration(node) && !node.type && node.initializer ? skipParentheses(node.initializer) : undefined;
+            }
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
@@ -45840,6 +45843,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
+        type = getReducedType(type);
         if (type === silentNeverType) {
             return silentNeverIterationTypes;
         }
@@ -46599,6 +46603,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return false;
             });
+        }
+
+        if (node.label.flags & NodeFlags.Unreachable && compilerOptions.allowUnusedLabels !== true) {
+            errorOrSuggestion(compilerOptions.allowUnusedLabels === false, node.label, Diagnostics.Unused_label);
         }
 
         // ensure that label is unique
@@ -48965,10 +48973,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkSourceElement(node: Node | undefined): void {
         if (node) {
             const saveCurrentNode = currentNode;
+            const saveWithinUnreachableCode = withinUnreachableCode;
             currentNode = node;
             instantiationCount = 0;
             checkSourceElementWorker(node);
             currentNode = saveCurrentNode;
+            withinUnreachableCode = saveWithinUnreachableCode;
         }
     }
 
@@ -49001,8 +49011,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     cancellationToken.throwIfCancellationRequested();
             }
         }
-        if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && canHaveFlowNode(node) && node.flowNode && !isReachableFlowNode(node.flowNode)) {
-            errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+
+        if (compilerOptions.allowUnreachableCode !== true && !withinUnreachableCode) {
+            if (checkSourceElementUnreachable(node)) {
+                withinUnreachableCode = true;
+            }
         }
 
         // If editing this, keep `isSourceElement` in utilities up to date.
@@ -49181,6 +49194,86 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.MissingDeclaration:
                 return checkMissingDeclaration(node);
         }
+    }
+
+    function checkSourceElementUnreachable(node: Node): boolean {
+        if (!isPotentiallyExecutableNode(node)) {
+            return false;
+        }
+
+        if (reportedUnreachableNodes?.has(node)) {
+            return true;
+        }
+
+        if (!isSourceElementUnreachable(node)) {
+            return false;
+        }
+
+        (reportedUnreachableNodes ??= new Set()).add(node);
+
+        const sourceFile = getSourceFileOfNode(node);
+
+        let start = node.pos;
+        let end = node.end;
+
+        const parent = node.parent;
+        if (canHaveStatements(parent)) {
+            const statements = parent.statements;
+            const offset = statements.indexOf(node as Statement);
+            if (offset >= 0) {
+                // Scan backwards to find the first unreachable unreported node;
+                // this may happen when producing region diagnostics where not all nodes
+                // will have been visited.
+                let first = offset;
+                for (let i = offset - 1; i >= 0; i--) {
+                    const prevNode = statements[i];
+                    if (!isPotentiallyExecutableNode(prevNode) || reportedUnreachableNodes.has(prevNode) || !isSourceElementUnreachable(prevNode)) {
+                        break;
+                    }
+                    first = i;
+                    reportedUnreachableNodes.add(prevNode);
+                }
+
+                let last = offset;
+                for (let i = offset + 1; i < statements.length; i++) {
+                    const nextNode = statements[i];
+                    if (!isPotentiallyExecutableNode(nextNode) || !isSourceElementUnreachable(nextNode)) {
+                        break;
+                    }
+                    last = i;
+                    reportedUnreachableNodes.add(nextNode);
+                }
+
+                start = statements[first].pos;
+                end = statements[last].end;
+            }
+        }
+
+        start = skipTrivia(sourceFile.text, start);
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
+
+        return true;
+    }
+
+    function isSourceElementUnreachable(node: Node): boolean {
+        // Precondition: isPotentiallyExecutableNode is true
+        if (node.flags & NodeFlags.Unreachable) {
+            // The binder has determined that this code is unreachable.
+            // Ignore const enums unless preserveConstEnums is set.
+            switch (node.kind) {
+                case SyntaxKind.EnumDeclaration:
+                    return !isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(compilerOptions);
+                case SyntaxKind.ModuleDeclaration:
+                    return isInstantiatedModule(node as ModuleDeclaration, shouldPreserveConstEnums(compilerOptions));
+                default:
+                    return true;
+            }
+        }
+        else if (canHaveFlowNode(node) && node.flowNode) {
+            // For code the binder doesn't know is unreachable, use control flow / types.
+            return !isReachableFlowNode(node.flowNode);
+        }
+        return false;
     }
 
     function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {
@@ -49381,6 +49474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         performance.mark(afterMark);
         performance.measure("Check", beforeMark, afterMark);
         tracing?.pop();
+        reportedUnreachableNodes = undefined;
     }
 
     function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
