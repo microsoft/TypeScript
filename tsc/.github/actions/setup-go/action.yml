@@ -46,6 +46,15 @@ runs:
         }
         Write-Host "✓ Verified: Microsoft Go is active"
 
+    - name: Add GOBIN to PATH
+      shell: bash
+      run: |
+        GOBIN=$(go env GOBIN)
+        if [ -z "$GOBIN" ]; then
+          GOBIN="$(go env GOPATH)/bin"
+        fi
+        echo "$GOBIN" >> $GITHUB_PATH
+
     # Avoid hardcoding the cache keys more than once.
     - name: Get cache info
       shell: bash
