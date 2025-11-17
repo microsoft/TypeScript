@@ -32,12 +32,12 @@ func CreateDiagnosticReporter(sys System, w io.Writer, options *core.CompilerOpt
 	formatOpts := getFormatOptsOfSys(sys)
 	if shouldBePretty(sys, options) {
 		return func(diagnostic *ast.Diagnostic) {
-			diagnosticwriter.FormatDiagnosticWithColorAndContext(w, diagnostic, formatOpts)
+			diagnosticwriter.FormatDiagnosticWithColorAndContext(w, diagnosticwriter.WrapASTDiagnostic(diagnostic), formatOpts)
 			fmt.Fprint(w, formatOpts.NewLine)
 		}
 	}
 	return func(diagnostic *ast.Diagnostic) {
-		diagnosticwriter.WriteFormatDiagnostic(w, diagnostic, formatOpts)
+		diagnosticwriter.WriteFormatDiagnostic(w, diagnosticwriter.WrapASTDiagnostic(diagnostic), formatOpts)
 	}
 }
 
@@ -127,7 +127,7 @@ func CreateReportErrorSummary(sys System, options *core.CompilerOptions) Diagnos
 	if shouldBePretty(sys, options) {
 		formatOpts := getFormatOptsOfSys(sys)
 		return func(diagnostics []*ast.Diagnostic) {
-			diagnosticwriter.WriteErrorSummaryText(sys.Writer(), diagnostics, formatOpts)
+			diagnosticwriter.WriteErrorSummaryText(sys.Writer(), diagnosticwriter.FromASTDiagnostics(diagnostics), formatOpts)
 		}
 	}
 	return QuietDiagnosticsReporter
@@ -141,11 +141,12 @@ func CreateBuilderStatusReporter(sys System, w io.Writer, options *core.Compiler
 	formatOpts := getFormatOptsOfSys(sys)
 	writeStatus := core.IfElse(shouldBePretty(sys, options), diagnosticwriter.FormatDiagnosticsStatusWithColorAndTime, diagnosticwriter.FormatDiagnosticsStatusAndTime)
 	return func(diagnostic *ast.Diagnostic) {
+		writerDiagnostic := diagnosticwriter.WrapASTDiagnostic(diagnostic)
 		if testing != nil {
 			testing.OnBuildStatusReportStart(w)
 			defer testing.OnBuildStatusReportEnd(w)
 		}
-		writeStatus(w, sys.Now().Format("03:04:05 PM"), diagnostic, formatOpts)
+		writeStatus(w, sys.Now().Format("03:04:05 PM"), writerDiagnostic, formatOpts)
 		fmt.Fprint(w, formatOpts.NewLine, formatOpts.NewLine)
 	}
 }
@@ -154,13 +155,14 @@ func CreateWatchStatusReporter(sys System, options *core.CompilerOptions, testin
 	formatOpts := getFormatOptsOfSys(sys)
 	writeStatus := core.IfElse(shouldBePretty(sys, options), diagnosticwriter.FormatDiagnosticsStatusWithColorAndTime, diagnosticwriter.FormatDiagnosticsStatusAndTime)
 	return func(diagnostic *ast.Diagnostic) {
+		writerDiagnostic := diagnosticwriter.WrapASTDiagnostic(diagnostic)
 		writer := sys.Writer()
 		if testing != nil {
 			testing.OnWatchStatusReportStart()
 			defer testing.OnWatchStatusReportEnd()
 		}
-		diagnosticwriter.TryClearScreen(writer, diagnostic, options)
-		writeStatus(writer, sys.Now().Format("03:04:05 PM"), diagnostic, formatOpts)
+		diagnosticwriter.TryClearScreen(writer, writerDiagnostic, options)
+		writeStatus(writer, sys.Now().Format("03:04:05 PM"), writerDiagnostic, formatOpts)
 		fmt.Fprint(writer, formatOpts.NewLine, formatOpts.NewLine)
 	}
 }

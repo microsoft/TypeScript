@@ -1,0 +1,8 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
+
+
+==== /a.js (1 errors) ====
+    enum E { }
+         ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.

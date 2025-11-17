@@ -2465,7 +2465,7 @@ func GetECMAEndLinePosition(sourceFile *ast.SourceFile, line int) int {
 	}
 }
 
-func GetECMAPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, character int) int {
+func GetECMAPositionOfLineAndCharacter(sourceFile ast.SourceFileLike, line int, character int) int {
 	return ComputePositionOfLineAndCharacter(GetECMALineStarts(sourceFile), line, character)
 }
 

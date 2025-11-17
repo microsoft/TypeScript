@@ -1,0 +1,11 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,5): error TS1134: Variable declaration expected.
+/a.js(1,8): error TS1109: Expression expected.
+
+
+==== /a.js (2 errors) ====
+    var ===;
+        ~~~
+!!! error TS1134: Variable declaration expected.
+           ~
+!!! error TS1109: Expression expected.

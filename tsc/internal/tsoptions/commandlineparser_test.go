@@ -190,7 +190,7 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		// assert.DeepEqual(t, tsBaseline.watchoptions, newParsedWatchOptions)
 
 		var formattedErrors strings.Builder
-		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, parsed.Errors, &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
 		newBaselineErrors := formattedErrors.String()
 
 		// !!!
@@ -281,7 +281,7 @@ func (f commandLineSubScenario) assertBuildParseResult(t *testing.T) {
 		// assert.DeepEqual(t, tsBaseline.watchoptions, newParsedWatchOptions)
 
 		var formattedErrors strings.Builder
-		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, parsed.Errors, &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
 		newBaselineErrors := formattedErrors.String()
 
 		// !!!

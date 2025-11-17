@@ -217,6 +217,9 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                 case "getSuggestionDiagnostics":
                 case "getSyntacticDiagnostics":
                     return parseVerifyDiagnostics(func.text, callExpression.arguments);
+                case "baselineSyntacticDiagnostics":
+                case "baselineSyntacticAndSemanticDiagnostics":
+                    return [{ kind: "verifyBaselineDiagnostics" }];
             }
         }
         // `goTo....`
@@ -327,10 +330,11 @@ function parseGoToArgs(args: readonly ts.Expression[], funcName: string): GoToCm
             }
             let arg0;
             if (arg0 = getStringLiteralLike(args[0])) {
+                const text = arg0.text.replace("tests/cases/fourslash/server/", "").replace("tests/cases/fourslash/", "");
                 return [{
                     kind: "goTo",
                     funcName: "file",
-                    args: [getGoStringLiteral(arg0.text)],
+                    args: [getGoStringLiteral(text)],
                 }];
             }
             else if (arg0 = getNumericLiteral(args[0])) {
@@ -1892,6 +1896,10 @@ interface VerifyDiagnosticsCmd {
     isSuggestion: boolean;
 }
 
+interface VerifyBaselineDiagnosticsCmd {
+    kind: "verifyBaselineDiagnostics";
+}
+
 type Cmd =
     | VerifyCompletionsCmd
     | VerifyApplyCodeActionFromCompletionCmd
@@ -1908,7 +1916,8 @@ type Cmd =
     | VerifyRenameInfoCmd
     | VerifyBaselineInlayHintsCmd
     | VerifyImportFixAtPositionCmd
-    | VerifyDiagnosticsCmd;
+    | VerifyDiagnosticsCmd
+    | VerifyBaselineDiagnosticsCmd;
 
 function generateVerifyCompletions({ marker, args, isNewIdentifierLocation, andApplyCodeActionArgs }: VerifyCompletionsCmd): string {
     let expectedList: string;
@@ -2060,6 +2069,8 @@ function generateCmd(cmd: Cmd): string {
         case "verifyDiagnostics":
             const funcName = cmd.isSuggestion ? "VerifySuggestionDiagnostics" : "VerifyNonSuggestionDiagnostics";
             return `f.${funcName}(t, ${cmd.arg})`;
+        case "verifyBaselineDiagnostics":
+            return `f.VerifyBaselineNonSuggestionDiagnostics(t)`;
         default:
             let neverCommand: never = cmd;
             throw new Error(`Unknown command kind: ${neverCommand as Cmd["kind"]}`);

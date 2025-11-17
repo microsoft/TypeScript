@@ -35,14 +35,14 @@ func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*harnessuti
 	baselinePath = tsExtension.ReplaceAllString(baselinePath, ".errors.txt")
 	var errorBaseline string
 	if len(errors) > 0 {
-		errorBaseline = getErrorBaseline(t, inputFiles, errors, pretty)
+		errorBaseline = GetErrorBaseline(t, inputFiles, diagnosticwriter.WrapASTDiagnostics(errors), diagnosticwriter.CompareASTDiagnostics, pretty)
 	} else {
 		errorBaseline = baseline.NoContent
 	}
 	baseline.Run(t, baselinePath, errorBaseline, opts)
 }
 
-func minimalDiagnosticsToString(diagnostics []*ast.Diagnostic, pretty bool) string {
+func minimalDiagnosticsToString(diagnostics []diagnosticwriter.Diagnostic, pretty bool) string {
 	var output strings.Builder
 	if pretty {
 		diagnosticwriter.FormatDiagnosticsWithColorAndContext(&output, diagnostics, formatOpts)
@@ -52,15 +52,15 @@ func minimalDiagnosticsToString(diagnostics []*ast.Diagnostic, pretty bool) stri
 	return output.String()
 }
 
-func getErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, diagnostics []*ast.Diagnostic, pretty bool) string {
+func GetErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFiles []*harnessutil.TestFile, diagnostics []T, compareDiagnostics func(a, b T) int, pretty bool) string {
 	t.Helper()
-	outputLines := iterateErrorBaseline(t, inputFiles, diagnostics, pretty)
+	outputLines := iterateErrorBaseline(t, inputFiles, diagnostics, compareDiagnostics, pretty)
 
 	if pretty {
 		var summaryBuilder strings.Builder
 		diagnosticwriter.WriteErrorSummaryText(
 			&summaryBuilder,
-			diagnostics,
+			diagnosticwriter.ToDiagnostics(diagnostics),
 			formatOpts)
 		summary := removeTestPathPrefixes(summaryBuilder.String(), false)
 		outputLines = append(outputLines, summary)
@@ -68,10 +68,10 @@ func getErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, diagnost
 	return strings.Join(outputLines, "")
 }
 
-func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inputDiagnostics []*ast.Diagnostic, pretty bool) []string {
+func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFiles []*harnessutil.TestFile, inputDiagnostics []T, compareDiagnostics func(a, b T) int, pretty bool) []string {
 	t.Helper()
 	diagnostics := slices.Clone(inputDiagnostics)
-	slices.SortFunc(diagnostics, ast.CompareDiagnostics)
+	slices.SortFunc(diagnostics, compareDiagnostics)
 
 	var outputLines strings.Builder
 	// Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -90,7 +90,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 
 	var result []string
 
-	outputErrorText := func(diag *ast.Diagnostic) {
+	outputErrorText := func(diag diagnosticwriter.Diagnostic) {
 		message := diagnosticwriter.FlattenDiagnosticMessage(diag, harnessNewLine)
 
 		var errLines []string
@@ -106,7 +106,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 		for _, info := range diag.RelatedInformation() {
 			var location string
 			if info.File() != nil {
-				location = " " + formatLocation(info.File(), info.Loc().Pos(), formatOpts, func(output io.Writer, text string, formatStyle string) { fmt.Fprint(output, text) })
+				location = " " + formatLocation(info.File(), info.Pos(), formatOpts, func(output io.Writer, text string, formatStyle string) { fmt.Fprint(output, text) })
 			}
 			location = removeTestPathPrefixes(location, false)
 			if len(location) > 0 && isDefaultLibraryFile(info.File().FileName()) {
@@ -133,7 +133,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 		}
 	}
 
-	topDiagnostics := minimalDiagnosticsToString(diagnostics, pretty)
+	topDiagnostics := minimalDiagnosticsToString(diagnosticwriter.ToDiagnostics(diagnostics), pretty)
 	topDiagnostics = removeTestPathPrefixes(topDiagnostics, false)
 	topDiagnostics = diagnosticsLocationPrefix.ReplaceAllString(topDiagnostics, "$1(--,--)")
 
@@ -154,7 +154,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 	dupeCase := map[string]int{}
 	for _, inputFile := range inputFiles {
 		// Filter down to the errors in the file
-		fileErrors := core.Filter(diagnostics, func(e *ast.Diagnostic) bool {
+		fileErrors := core.Filter(diagnostics, func(e T) bool {
 			return e.File() != nil &&
 				tspath.ComparePaths(removeTestPathPrefixes(e.File().FileName(), false), removeTestPathPrefixes(inputFile.UnitName, false), tspath.ComparePathsOptions{}) == 0
 		})
@@ -193,8 +193,8 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 			outputLines.WriteString(line)
 			for _, errDiagnostic := range fileErrors {
 				// Does any error start or continue on to this line? Emit squiggles
-				errStart := errDiagnostic.Loc().Pos()
-				end := errDiagnostic.Loc().End()
+				errStart := errDiagnostic.Pos()
+				end := errStart + errDiagnostic.Len()
 				if end >= thisLineStart && (errStart < nextLineStart || lineIndex == len(lines)-1) {
 					// How many characters from the start of this line the error starts at (could be positive or negative)
 					relativeOffset := errStart - thisLineStart
@@ -234,12 +234,12 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 
 	numLibraryDiagnostics := core.CountWhere(
 		diagnostics,
-		func(d *ast.Diagnostic) bool {
+		func(d T) bool {
 			return d.File() != nil && (isDefaultLibraryFile(d.File().FileName()) || isBuiltFile(d.File().FileName()))
 		})
 	numTsconfigDiagnostics := core.CountWhere(
 		diagnostics,
-		func(d *ast.Diagnostic) bool {
+		func(d T) bool {
 			return d.File() != nil && isTsConfigFile(d.File().FileName())
 		})
 	// Verify we didn't miss any errors in total
@@ -248,7 +248,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 	return result
 }
 
-func formatLocation(file *ast.SourceFile, pos int, formatOpts *diagnosticwriter.FormattingOptions, writeWithStyleAndReset diagnosticwriter.FormattedWriter) string {
+func formatLocation(file diagnosticwriter.FileLike, pos int, formatOpts *diagnosticwriter.FormattingOptions, writeWithStyleAndReset diagnosticwriter.FormattedWriter) string {
 	var output strings.Builder
 	diagnosticwriter.WriteLocation(&output, file, pos, formatOpts, writeWithStyleAndReset)
 	return output.String()

@@ -1,0 +1,8 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,8): error TS8006: 'module' declarations can only be used in TypeScript files.
+
+
+==== /a.js (1 errors) ====
+    module M { }
+           ~
+!!! error TS8006: 'module' declarations can only be used in TypeScript files.

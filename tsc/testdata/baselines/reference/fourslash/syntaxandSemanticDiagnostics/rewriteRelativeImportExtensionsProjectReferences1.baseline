@@ -1,0 +1,10 @@
+// === Syntax and Semantic Diagnostics ===
+/packages/main/src/index.ts(1,16): error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
+
+
+==== /packages/common/src/index.ts (0 errors) ====
+    export {};
+==== /packages/main/src/index.ts (1 errors) ====
+    import {} from "../../common/src/index.ts";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.

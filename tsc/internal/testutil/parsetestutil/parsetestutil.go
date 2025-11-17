@@ -27,7 +27,7 @@ func CheckDiagnostics(t *testing.T, file *ast.SourceFile) {
 	t.Helper()
 	if len(file.Diagnostics()) > 0 {
 		var b strings.Builder
-		diagnosticwriter.WriteFormatDiagnostics(&b, file.Diagnostics(), &diagnosticwriter.FormattingOptions{
+		diagnosticwriter.WriteFormatDiagnostics(&b, diagnosticwriter.FromASTDiagnostics(file.Diagnostics()), &diagnosticwriter.FormattingOptions{
 			NewLine: "\n",
 		})
 		t.Error(b.String())
@@ -39,7 +39,7 @@ func CheckDiagnosticsMessage(t *testing.T, file *ast.SourceFile, message string)
 	t.Helper()
 	if len(file.Diagnostics()) > 0 {
 		var b strings.Builder
-		diagnosticwriter.WriteFormatDiagnostics(&b, file.Diagnostics(), &diagnosticwriter.FormattingOptions{
+		diagnosticwriter.WriteFormatDiagnostics(&b, diagnosticwriter.FromASTDiagnostics(file.Diagnostics()), &diagnosticwriter.FormattingOptions{
 			NewLine: "\n",
 		})
 		t.Error(message + b.String())

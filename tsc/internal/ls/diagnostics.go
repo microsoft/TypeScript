@@ -104,7 +104,7 @@ func messageChainToString(diagnostic *ast.Diagnostic) string {
 		return diagnostic.Message()
 	}
 	var b strings.Builder
-	diagnosticwriter.WriteFlattenedDiagnosticMessage(&b, diagnostic, "\n")
+	diagnosticwriter.WriteFlattenedASTDiagnosticMessage(&b, diagnostic, "\n")
 	return b.String()
 }
 

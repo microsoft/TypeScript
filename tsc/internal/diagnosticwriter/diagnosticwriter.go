@@ -16,6 +16,87 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
+type FileLike interface {
+	FileName() string
+	Text() string
+	ECMALineMap() []core.TextPos
+}
+
+// Diagnostic interface abstracts over ast.Diagnostic and LSP diagnostics
+type Diagnostic interface {
+	File() FileLike
+	Pos() int
+	End() int
+	Len() int
+	Code() int32
+	Category() diagnostics.Category
+	Message() string
+	MessageChain() []Diagnostic
+	RelatedInformation() []Diagnostic
+}
+
+// ASTDiagnostic wraps ast.Diagnostic to implement the Diagnostic interface
+type ASTDiagnostic struct {
+	*ast.Diagnostic
+}
+
+func (d *ASTDiagnostic) RelatedInformation() []Diagnostic {
+	related := d.Diagnostic.RelatedInformation()
+	result := make([]Diagnostic, len(related))
+	for i, r := range related {
+		result[i] = &ASTDiagnostic{r}
+	}
+	return result
+}
+
+func (d *ASTDiagnostic) File() FileLike {
+	if file := d.Diagnostic.File(); file != nil {
+		return file
+	}
+	return nil
+}
+
+func (d *ASTDiagnostic) MessageChain() []Diagnostic {
+	chain := d.Diagnostic.MessageChain()
+	result := make([]Diagnostic, len(chain))
+	for i, c := range chain {
+		result[i] = &ASTDiagnostic{c}
+	}
+	return result
+}
+
+func WrapASTDiagnostic(d *ast.Diagnostic) *ASTDiagnostic {
+	return &ASTDiagnostic{d}
+}
+
+func WrapASTDiagnostics(diags []*ast.Diagnostic) []*ASTDiagnostic {
+	result := make([]*ASTDiagnostic, len(diags))
+	for i, d := range diags {
+		result[i] = WrapASTDiagnostic(d)
+	}
+	return result
+}
+
+func FromASTDiagnostics(diags []*ast.Diagnostic) []Diagnostic {
+	result := make([]Diagnostic, len(diags))
+	for i, d := range diags {
+		result[i] = WrapASTDiagnostic(d)
+	}
+	return result
+}
+
+func ToDiagnostics[T Diagnostic](diags []T) []Diagnostic {
+	result := make([]Diagnostic, len(diags))
+	for i, d := range diags {
+		result[i] = d
+	}
+	return result
+}
+
+func CompareASTDiagnostics(a, b *ASTDiagnostic) int {
+	return ast.CompareDiagnostics(a.Diagnostic, b.Diagnostic)
+}
+
 type FormattingOptions struct {
 	tspath.ComparePathsOptions
 	NewLine string
@@ -36,7 +117,7 @@ const (
 	ellipsis            = "..."
 )
 
-func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnostic, formatOpts *FormattingOptions) {
+func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []Diagnostic, formatOpts *FormattingOptions) {
 	if len(diags) == 0 {
 		return
 	}
@@ -48,10 +129,10 @@ func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnos
 	}
 }
 
-func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic *ast.Diagnostic, formatOpts *FormattingOptions) {
+func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic, formatOpts *FormattingOptions) {
 	if diagnostic.File() != nil {
 		file := diagnostic.File()
-		pos := diagnostic.Loc().Pos()
+		pos := diagnostic.Pos()
 		WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
 		fmt.Fprint(output, " - ")
 	}
@@ -83,7 +164,7 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic *ast.Diagn
 	}
 }
 
-func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
+func writeCodeSnippet(writer io.Writer, sourceFile FileLike, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
 	firstLine, firstLineChar := scanner.GetECMALineAndCharacterOfPosition(sourceFile, start)
 	lastLine, lastLineChar := scanner.GetECMALineAndCharacterOfPosition(sourceFile, start+length)
 	if length == 0 {
@@ -118,7 +199,7 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 		if i < lastLineOfFile {
 			lineEnd = scanner.GetECMAPositionOfLineAndCharacter(sourceFile, i+1, 0)
 		} else {
-			lineEnd = sourceFile.Loc.End()
+			lineEnd = len(sourceFile.Text())
 		}
 
 		lineContent := strings.TrimRightFunc(sourceFile.Text()[lineStart:lineEnd], unicode.IsSpace) // trim from end
@@ -167,13 +248,17 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 	}
 }
 
-func FlattenDiagnosticMessage(d *ast.Diagnostic, newLine string) string {
+func FlattenDiagnosticMessage(d Diagnostic, newLine string) string {
 	var output strings.Builder
 	WriteFlattenedDiagnosticMessage(&output, d, newLine)
 	return output.String()
 }
 
-func WriteFlattenedDiagnosticMessage(writer io.Writer, diagnostic *ast.Diagnostic, newline string) {
+func WriteFlattenedASTDiagnosticMessage(writer io.Writer, diagnostic *ast.Diagnostic, newline string) {
+	WriteFlattenedDiagnosticMessage(writer, WrapASTDiagnostic(diagnostic), newline)
+}
+
+func WriteFlattenedDiagnosticMessage(writer io.Writer, diagnostic Diagnostic, newline string) {
 	fmt.Fprint(writer, diagnostic.Message())
 
 	for _, chain := range diagnostic.MessageChain() {
@@ -181,7 +266,7 @@ func WriteFlattenedDiagnosticMessage(writer io.Writer, diagnostic *ast.Diagnosti
 	}
 }
 
-func flattenDiagnosticMessageChain(writer io.Writer, chain *ast.Diagnostic, newLine string, level int) {
+func flattenDiagnosticMessageChain(writer io.Writer, chain Diagnostic, newLine string, level int) {
 	fmt.Fprint(writer, newLine)
 	for range level {
 		fmt.Fprint(writer, "  ")
@@ -215,7 +300,7 @@ func writeWithStyleAndReset(output io.Writer, text string, formatStyle string) {
 	fmt.Fprint(output, resetEscapeSequence)
 }
 
-func WriteLocation(output io.Writer, file *ast.SourceFile, pos int, formatOpts *FormattingOptions, writeWithStyleAndReset FormattedWriter) {
+func WriteLocation(output io.Writer, file FileLike, pos int, formatOpts *FormattingOptions, writeWithStyleAndReset FormattedWriter) {
 	firstLine, firstChar := scanner.GetECMALineAndCharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
@@ -235,12 +320,12 @@ func WriteLocation(output io.Writer, file *ast.SourceFile, pos int, formatOpts *
 
 type ErrorSummary struct {
 	TotalErrorCount int
-	GlobalErrors    []*ast.Diagnostic
-	ErrorsByFiles   map[*ast.SourceFile][]*ast.Diagnostic
-	SortedFileList  []*ast.SourceFile
+	GlobalErrors    []Diagnostic
+	ErrorsByFile    map[FileLike][]Diagnostic
+	SortedFiles     []FileLike
 }
 
-func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, formatOpts *FormattingOptions) {
+func WriteErrorSummaryText(output io.Writer, allDiagnostics []Diagnostic, formatOpts *FormattingOptions) {
 	// Roughly corresponds to 'getErrorSummaryText' from watch.ts
 
 	errorSummary := getErrorSummary(allDiagnostics)
@@ -249,12 +334,12 @@ func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, f
 		return
 	}
 
-	firstFile := &ast.SourceFile{}
-	if len(errorSummary.SortedFileList) > 0 {
-		firstFile = errorSummary.SortedFileList[0]
+	var firstFile FileLike
+	if len(errorSummary.SortedFiles) > 0 {
+		firstFile = errorSummary.SortedFiles[0]
 	}
-	firstFileName := prettyPathForFileError(firstFile, errorSummary.ErrorsByFiles[firstFile], formatOpts)
-	numErroringFiles := len(errorSummary.ErrorsByFiles)
+	firstFileName := prettyPathForFileError(firstFile, errorSummary.ErrorsByFile[firstFile], formatOpts)
+	numErroringFiles := len(errorSummary.ErrorsByFile)
 
 	var message string
 	if totalErrorCount == 1 {
@@ -287,10 +372,10 @@ func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, f
 	}
 }
 
-func getErrorSummary(diags []*ast.Diagnostic) *ErrorSummary {
+func getErrorSummary(diags []Diagnostic) *ErrorSummary {
 	var totalErrorCount int
-	var globalErrors []*ast.Diagnostic
-	var errorsByFiles map[*ast.SourceFile][]*ast.Diagnostic
+	var globalErrors []Diagnostic
+	var errorsByFile map[FileLike][]Diagnostic
 
 	for _, diagnostic := range diags {
 		if diagnostic.Category() != diagnostics.CategoryError {
@@ -301,32 +386,32 @@ func getErrorSummary(diags []*ast.Diagnostic) *ErrorSummary {
 		if diagnostic.File() == nil {
 			globalErrors = append(globalErrors, diagnostic)
 		} else {
-			if errorsByFiles == nil {
-				errorsByFiles = make(map[*ast.SourceFile][]*ast.Diagnostic)
+			if errorsByFile == nil {
+				errorsByFile = make(map[FileLike][]Diagnostic)
 			}
-			errorsByFiles[diagnostic.File()] = append(errorsByFiles[diagnostic.File()], diagnostic)
+			errorsByFile[diagnostic.File()] = append(errorsByFile[diagnostic.File()], diagnostic)
 		}
 	}
 
 	// !!!
 	// Need an ordered map here, but sorting for consistency.
-	sortedFileList := slices.SortedFunc(maps.Keys(errorsByFiles), func(a, b *ast.SourceFile) int {
+	sortedFiles := slices.SortedFunc(maps.Keys(errorsByFile), func(a, b FileLike) int {
 		return strings.Compare(a.FileName(), b.FileName())
 	})
 
 	return &ErrorSummary{
 		TotalErrorCount: totalErrorCount,
 		GlobalErrors:    globalErrors,
-		ErrorsByFiles:   errorsByFiles,
-		SortedFileList:  sortedFileList,
+		ErrorsByFile:    errorsByFile,
+		SortedFiles:     sortedFiles,
 	}
 }
 
 func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, formatOpts *FormattingOptions) {
-	sortedFiles := errorSummary.SortedFileList
+	sortedFiles := errorSummary.SortedFiles
 
 	maxErrors := 0
-	for _, errorsForFile := range errorSummary.ErrorsByFiles {
+	for _, errorsForFile := range errorSummary.ErrorsByFile {
 		maxErrors = max(maxErrors, len(errorsForFile))
 	}
 
@@ -344,7 +429,7 @@ func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, for
 	fmt.Fprint(output, formatOpts.NewLine)
 
 	for _, file := range sortedFiles {
-		fileErrors := errorSummary.ErrorsByFiles[file]
+		fileErrors := errorSummary.ErrorsByFile[file]
 		errorCount := len(fileErrors)
 
 		fmt.Fprintf(output, "%*d  ", leftPaddingGoal, errorCount)
@@ -353,11 +438,11 @@ func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, for
 	}
 }
 
-func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, formatOpts *FormattingOptions) string {
+func prettyPathForFileError(file FileLike, fileErrors []Diagnostic, formatOpts *FormattingOptions) string {
 	if file == nil || len(fileErrors) == 0 {
 		return ""
 	}
-	line := scanner.GetECMALineOfPosition(file, fileErrors[0].Loc().Pos())
+	line := scanner.GetECMALineOfPosition(file, fileErrors[0].Pos())
 	fileName := file.FileName()
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
 		fileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
@@ -370,15 +455,15 @@ func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, 
 	)
 }
 
-func WriteFormatDiagnostics(output io.Writer, diagnostics []*ast.Diagnostic, formatOpts *FormattingOptions) {
+func WriteFormatDiagnostics(output io.Writer, diagnostics []Diagnostic, formatOpts *FormattingOptions) {
 	for _, diagnostic := range diagnostics {
 		WriteFormatDiagnostic(output, diagnostic, formatOpts)
 	}
 }
 
-func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatOpts *FormattingOptions) {
+func WriteFormatDiagnostic(output io.Writer, diagnostic Diagnostic, formatOpts *FormattingOptions) {
 	if diagnostic.File() != nil {
-		line, character := scanner.GetECMALineAndCharacterOfPosition(diagnostic.File(), diagnostic.Loc().Pos())
+		line, character := scanner.GetECMALineAndCharacterOfPosition(diagnostic.File(), diagnostic.Pos())
 		fileName := diagnostic.File().FileName()
 		relativeFileName := tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, character+1)
@@ -389,14 +474,14 @@ func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatO
 	fmt.Fprint(output, formatOpts.NewLine)
 }
 
-func FormatDiagnosticsStatusWithColorAndTime(output io.Writer, time string, diag *ast.Diagnostic, formatOpts *FormattingOptions) {
+func FormatDiagnosticsStatusWithColorAndTime(output io.Writer, time string, diag Diagnostic, formatOpts *FormattingOptions) {
 	fmt.Fprint(output, "[")
 	writeWithStyleAndReset(output, time, foregroundColorEscapeGrey)
 	fmt.Fprint(output, "] ")
 	WriteFlattenedDiagnosticMessage(output, diag, formatOpts.NewLine)
 }
 
-func FormatDiagnosticsStatusAndTime(output io.Writer, time string, diag *ast.Diagnostic, formatOpts *FormattingOptions) {
+func FormatDiagnosticsStatusAndTime(output io.Writer, time string, diag Diagnostic, formatOpts *FormattingOptions) {
 	fmt.Fprint(output, time, " - ")
 	WriteFlattenedDiagnosticMessage(output, diag, formatOpts.NewLine)
 }
@@ -406,7 +491,7 @@ var ScreenStartingCodes = []int32{
 	diagnostics.File_change_detected_Starting_incremental_compilation.Code(),
 }
 
-func TryClearScreen(output io.Writer, diag *ast.Diagnostic, options *core.CompilerOptions) bool {
+func TryClearScreen(output io.Writer, diag Diagnostic, options *core.CompilerOptions) bool {
 	if !options.PreserveWatchOutput.IsTrue() &&
 		!options.ExtendedDiagnostics.IsTrue() &&
 		!options.Diagnostics.IsTrue() &&

@@ -1,0 +1,58 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestRewriteRelativeImportExtensionsProjectReferences1(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: packages/common/tsconfig.json
+{
+    "compilerOptions": {
+        "composite": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "module": "nodenext",
+        "resolveJsonModule": false,
+    }
+}
+// @Filename: packages/common/package.json
+{
+    "name": "common",
+    "version": "1.0.0",
+    "type": "module",
+    "exports": {
+        ".": {
+            "source": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    }
+}
+// @Filename: packages/common/src/index.ts
+export {};
+// @Filename: packages/main/tsconfig.json
+{
+    "compilerOptions": {
+        "module": "nodenext",
+        "rewriteRelativeImportExtensions": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "resolveJsonModule": false,
+    },
+    "references": [
+        { "path": "../common" }
+    ]
+}
+// @Filename: packages/main/package.json
+{ "type": "module" }
+// @Filename: packages/main/src/index.ts
+import {} from "../../common/src/index.ts";`
+	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.GoToFile(t, "/packages/main/src/index.ts")
+	f.VerifyBaselineNonSuggestionDiagnostics(t)
+}
