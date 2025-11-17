@@ -6457,7 +6457,7 @@ func (p *Parser) processPragmasIntoFields(context *ast.SourceFile) {
 			case typesOk:
 				var parsed core.ResolutionMode
 				if resolutionModeOk {
-					parsed = parseResolutionMode(resolutionMode.Value, resolutionMode.Pos(), resolutionMode.End() /*, reportDiagnostic*/)
+					parsed = p.parseResolutionMode(resolutionMode.Value, resolutionMode.Pos(), resolutionMode.End())
 				}
 				context.TypeReferenceDirectives = append(context.TypeReferenceDirectives, &ast.FileReference{
 					TextRange:      types.TextRange,
@@ -6498,16 +6498,17 @@ func (p *Parser) processPragmasIntoFields(context *ast.SourceFile) {
 	}
 }
 
-func parseResolutionMode(mode string, pos int, end int /*reportDiagnostic: PragmaDiagnosticReporter*/) (resolutionKind core.ResolutionMode) {
+func (p *Parser) parseResolutionMode(mode string, pos int, end int) (resolutionKind core.ResolutionMode) {
 	if mode == "import" {
 		resolutionKind = core.ModuleKindESNext
+		return resolutionKind
 	}
 	if mode == "require" {
 		resolutionKind = core.ModuleKindCommonJS
+		return resolutionKind
 	}
+	p.parseErrorAt(pos, end, diagnostics.X_resolution_mode_should_be_either_require_or_import)
 	return resolutionKind
-	// reportDiagnostic(pos, end - pos, Diagnostics.resolution_mode_should_be_either_require_or_import);
-	// return undefined;
 }
 
 func (p *Parser) jsErrorAtRange(loc core.TextRange, message *diagnostics.Message, args ...any) {

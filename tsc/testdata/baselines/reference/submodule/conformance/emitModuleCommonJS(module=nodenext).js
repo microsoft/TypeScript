@@ -25,7 +25,6 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
     }
     return path;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 {
     require(__rewriteRelativeImportExtension("" + "./foo.ts"));
     import(__rewriteRelativeImportExtension("" + "./foo.ts"));

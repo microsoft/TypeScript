@@ -40,7 +40,6 @@ func (o *OutputPaths) DeclarationMapPath() string {
 }
 
 func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions, host OutputPathsHost, forceDtsEmit bool) *OutputPaths {
-	// !!! bundle not implemented, may be deprecated
 	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), options, host, GetOutputExtension(sourceFile.FileName(), options.Jsx))
 	isJsonFile := ast.IsJsonSourceFile(sourceFile)
 	// If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it

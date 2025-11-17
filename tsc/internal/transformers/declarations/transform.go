@@ -50,7 +50,6 @@ type DeclarationTransformer struct {
 	declarationFilePath string
 	declarationMapPath  string
 
-	isBundledEmit                    bool
 	needsDeclare                     bool
 	needsScopeFixMarker              bool
 	resultHasScopeMarker             bool
@@ -102,7 +101,6 @@ func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
 	if node == nil {
 		return nil
 	}
-	// !!! TODO: Bundle support?
 	switch node.Kind {
 	case ast.KindSourceFile:
 		return tx.visitSourceFile(node.AsSourceFile())
@@ -161,7 +159,6 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 		return node.AsNode()
 	}
 
-	tx.isBundledEmit = false
 	tx.needsDeclare = true
 	tx.needsScopeFixMarker = false
 	tx.resultHasScopeMarker = false
@@ -238,7 +235,7 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 		tx.state.lateMarkedStatements = tx.state.lateMarkedStatements[1:]
 
 		saveNeedsDeclare := tx.needsDeclare
-		tx.needsDeclare = next.Parent != nil && ast.IsSourceFile(next.Parent) && !(ast.IsExternalModule(next.Parent.AsSourceFile()) && tx.isBundledEmit)
+		tx.needsDeclare = next.Parent != nil && ast.IsSourceFile(next.Parent)
 
 		result := tx.transformTopLevelDeclaration(next)
 
@@ -311,8 +308,6 @@ func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (res
 		if file.IsDeclarationFile {
 			declFileName = file.FileName()
 		} else {
-			// !!! bundled emit support, omit bundled refs
-			// if (tx.isBundledEmit && contains((node as Bundle).sourceFiles, file)) continue
 			paths := tx.host.GetOutputPathsFor(file, true)
 			// Try to use output path for referenced file, or output js path if that doesn't exist, or the input path if all else fails
 			declFileName = paths.DeclarationFilePath()
@@ -1047,11 +1042,6 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
-	if ast.IsStringLiteralLike(input) {
-		if tx.isBundledEmit {
-			// !!! TODO: support bundled emit specifier rewriting
-		}
-	}
 	return input
 }
 
@@ -1578,7 +1568,7 @@ func (tx *DeclarationTransformer) ensureModifierFlags(node *ast.Node) ast.Modifi
 		additions = ast.ModifierFlagsAmbient
 	}
 	parentIsFile := node.Parent.Kind == ast.KindSourceFile
-	if !parentIsFile || (tx.isBundledEmit && parentIsFile && ast.IsExternalModule(node.Parent.AsSourceFile())) {
+	if !parentIsFile {
 		mask ^= ast.ModifierFlagsAmbient
 		additions = ast.ModifierFlagsNone
 	}

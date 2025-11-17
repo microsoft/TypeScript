@@ -1,8 +1,11 @@
+/index.ts(1,45): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(2,1): error TS2304: Cannot find name 'foo'.
 
 
-==== /index.ts (1 errors) ====
+==== /index.ts (2 errors) ====
     /// <reference types="pkg" resolution-mode="esm"/>
+                                                ~~~
+!!! error TS1453: `resolution-mode` should be either `require` or `import`.
     foo; // bad resolution mode, which resolves is arbitrary
     ~~~
 !!! error TS2304: Cannot find name 'foo'.

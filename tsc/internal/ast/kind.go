@@ -339,7 +339,6 @@ const (
 	KindEnumMember
 	// Top-level nodes
 	KindSourceFile
-	KindBundle
 	// JSDoc nodes
 	KindJSDocTypeExpression
 	KindJSDocNameReference

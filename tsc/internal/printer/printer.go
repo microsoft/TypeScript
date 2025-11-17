@@ -4951,9 +4951,6 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	case ast.KindSourceFile:
 		p.emitSourceFile(node.AsSourceFile())
 
-	case ast.KindBundle:
-		panic("not implemented")
-
 	// Transformation nodes
 	case ast.KindNotEmittedTypeElement:
 		p.emitNotEmittedTypeElement(node.AsNotEmittedTypeElement())

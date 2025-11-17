@@ -683,7 +683,9 @@ func (b *Binder) bind(node *ast.Node) bool {
 	case ast.KindInterfaceDeclaration:
 		b.bindBlockScopedDeclaration(node, ast.SymbolFlagsInterface, ast.SymbolFlagsInterfaceExcludes)
 	case ast.KindCallExpression:
-		b.bindCallExpression(node)
+		if ast.IsInJSFile(node) {
+			b.bindCallExpression(node)
+		}
 	case ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration:
 		b.bindBlockScopedDeclaration(node, ast.SymbolFlagsTypeAlias, ast.SymbolFlagsTypeAliasExcludes)
 	case ast.KindEnumDeclaration:
@@ -910,16 +912,24 @@ func (b *Binder) bindFunctionExpression(node *ast.Node) {
 }
 
 func (b *Binder) bindCallExpression(node *ast.Node) {
-	// !!! for ModuleDetectionKind.Force, external module indicator is forced to `true` in Strada for source files, in which case
-	//  we should set the commonjs module indicator but not call b.bindSourceFileAsExternalModule
-	// !!! && file.externalModuleIndicator !== true (used for ModuleDetectionKind.Force)
-	if ast.IsInJSFile(node) &&
-		b.file.ExternalModuleIndicator == nil &&
-		b.file.CommonJSModuleIndicator == nil &&
-		ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) {
-		b.file.CommonJSModuleIndicator = node
-		b.bindSourceFileAsExternalModule()
+	// We're only inspecting call expressions to detect CommonJS modules, so we can skip
+	// this check if we've already seen the module indicator
+	if b.file.CommonJSModuleIndicator == nil && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) {
+		b.setCommonJSModuleIndicator(node)
 	}
+}
+
+func (b *Binder) setCommonJSModuleIndicator(node *ast.Node) bool {
+	if b.file.ExternalModuleIndicator != nil && b.file.ExternalModuleIndicator != b.file.AsNode() {
+		return false
+	}
+	if b.file.CommonJSModuleIndicator == nil {
+		b.file.CommonJSModuleIndicator = node
+		if b.file.ExternalModuleIndicator == nil {
+			b.bindSourceFileAsExternalModule()
+		}
+	}
+	return true
 }
 
 func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {

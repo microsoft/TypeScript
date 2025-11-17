@@ -1179,7 +1179,6 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	if ok {
 		return result
 	}
-	isBundle := false // !!! remove me
 	// For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
 	// just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
 	// using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative
@@ -1190,13 +1189,6 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	endingPref := modulespecifiers.ImportModuleSpecifierEndingPreferenceNone
 	if resolutionMode == core.ResolutionModeESM {
 		endingPref = modulespecifiers.ImportModuleSpecifierEndingPreferenceJs
-	}
-	if isBundle {
-		// !!! relies on option cloning and specifier host implementation
-		// specifierCompilerOptions = &core.CompilerOptions{BaseUrl: host.CommonSourceDirectory()}
-		// TODO: merge with b.ch.compilerOptions
-		specifierPref = modulespecifiers.ImportModuleSpecifierPreferenceNonRelative
-		endingPref = modulespecifiers.ImportModuleSpecifierEndingPreferenceMinimal
 	}
 
 	allSpecifiers := modulespecifiers.GetModuleSpecifiers(
