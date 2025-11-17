@@ -56,7 +56,7 @@ function main() {
 
     if (!manualTests.includes(testName)) {
         manualTests.push(testName);
-        manualTests.sort();
+        manualTests.sort((a, b) => a.localeCompare(b, "en-US"));
         fs.writeFileSync(manualTestsPath, [...manualTests, ""].join("\n"), "utf-8");
     }
 }

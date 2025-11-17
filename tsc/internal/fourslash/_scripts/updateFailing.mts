@@ -31,7 +31,7 @@ function main() {
         failingTests.push(match[1]);
     }
 
-    fs.writeFileSync(failingTestsPath, failingTests.sort().join("\n") + "\n", "utf-8");
+    fs.writeFileSync(failingTestsPath, failingTests.sort((a, b) => a.localeCompare(b, "en-US")).join("\n") + "\n", "utf-8");
     convertFourslash();
 }
 
