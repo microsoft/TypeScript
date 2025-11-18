@@ -1,0 +1,114 @@
+{
+  "name": "typescript-refactoring-playbook",
+  "version": "1.0.0",
+  "description": "The comprehensive, battle-tested guide to migrating from manual type definitions to auto-generated, database-driven TypeScript types",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . --ext .ts,.tsx,.md",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json,sh}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json,sh}\"",
+    "tools:type-coverage": "tsx tools/type-coverage-checker.ts",
+    "tools:schema-drift": "tsx tools/schema-drift-detector.ts",
+    "tools:migration-progress": "tsx tools/migration-progress-tracker.ts",
+    "validate:examples": "npm run validate:supabase && npm run validate:prisma && npm run validate:kysely && npm run validate:drizzle",
+    "validate:supabase": "cd examples/supabase-migration && npm run types:check",
+    "validate:prisma": "cd examples/prisma-migration && npm run types:check",
+    "validate:kysely": "cd examples/kysely-migration && npm run types:check",
+    "validate:drizzle": "cd examples/drizzle-migration && npm run types:check"
+  },
+  "keywords": [
+    "typescript",
+    "database",
+    "type-safety",
+    "migration",
+    "refactoring",
+    "supabase",
+    "prisma",
+    "kysely",
+    "drizzle",
+    "orm",
+    "sql",
+    "postgresql",
+    "mysql",
+    "sqlite",
+    "type-generation",
+    "schema-drift",
+    "playbook",
+    "guide",
+    "best-practices",
+    "developer-experience",
+    "dx"
+  ],
+  "author": "TypeScript Refactoring Playbook Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/typescript-refactoring-playbook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/typescript-refactoring-playbook/issues"
+  },
+  "homepage": "https://github.com/your-org/typescript-refactoring-playbook#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.55.0",
+    "eslint-plugin-markdown": "^3.0.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "tools/**/*.ts",
+      "!tools/**/*.d.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "arrowParens": "always"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "markdown"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": "warn"
+    }
+  }
+}
