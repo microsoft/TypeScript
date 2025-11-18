@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/salsa/typedefModuleExportsIndirect2.ts] ////
+
+=== typedefModuleExportsIndirect2.js ===
+/** @typedef {{ a: 1, m: 1 }} C */
+const f = function() {};
+>f : () => void
+>function() {} : () => void
+
+module.exports = f;
+>module.exports = f : () => void
+>module.exports : () => void
+>module : { readonly f: () => void; }
+>exports : () => void
+>f : () => void
+
+=== use.js ===
+/** @typedef {import('./typedefModuleExportsIndirect2').C} C */
+/** @type {C} */
+var c
+>c : import("typedefModuleExportsIndirect2").C
+

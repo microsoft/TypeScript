@@ -19,5 +19,9 @@
 
 
 // === findAllReferences ===
+// === /a.js ===
+// module.exports = 0;
+// export type [|N|] = number;
+
 // === /b.js ===
-// type T = import("./a")./*FIND ALL REFS*/N;
+// type T = import("./a")./*FIND ALL REFS*/[|N|];

@@ -2,18 +2,13 @@
 +++ new.jsDeclarationsTypedefPropertyAndExportAssignment.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+index.js(3,37): error TS2694: Namespace '"module".export=' has no exported member 'TaskGroup'.
-+index.js(21,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +module.js(24,12): error TS2315: Type 'Object' is not generic.
-+module.js(27,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
-+==== index.js (2 errors) ====
++==== index.js (0 errors) ====
 +    const {taskGroups, taskNameToGroup} = require('./module.js');
 +    
 +    /** @typedef {import('./module.js').TaskGroup} TaskGroup */
-+                                        ~~~~~~~~~
-+!!! error TS2694: Namespace '"module".export=' has no exported member 'TaskGroup'.
 +    
 +    /**
 +     * @typedef TaskNode
@@ -32,9 +27,7 @@
 +    }
 +    
 +    module.exports = MainThreadTasks;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
-+==== module.js (2 errors) ====
++==== module.js (1 errors) ====
 +    /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
 +    
 +    /**
@@ -64,11 +57,6 @@
 +    const taskNameToGroup = {};
 +    
 +    module.exports = {
-+    ~~~~~~~~~~~~~~~~~~
 +        taskGroups,
-+    ~~~~~~~~~~~~~~~
 +        taskNameToGroup,
-+    ~~~~~~~~~~~~~~~~~~~~
 +    };
-+    ~
-+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

@@ -9,7 +9,7 @@ var mod = require('./mod1.js');
 
 /** @type {import("./mod1.js").Baz} */
 var b;
->b : any
+>b : number
 
 /** @type {mod.Baz} */
 var bb;
@@ -32,9 +32,9 @@ class Foo { } // should error
 /** @typedef {number} Bar */
 exports.Bar = class { }
 >exports.Bar = class { } : typeof Bar
->exports.Bar : any
+>exports.Bar : typeof Bar
 >exports : typeof import("mod1")
->Bar : any
+>Bar : typeof Bar
 >class { } : typeof Bar
 
 /** @typedef {number} Baz */
@@ -60,9 +60,9 @@ var Qux = 2;
 /** @typedef {number} Quid */
 exports.Quid = 2;
 >exports.Quid = 2 : 2
->exports.Quid : any
+>exports.Quid : 2
 >exports : typeof import("mod1")
->Quid : any
+>Quid : 2
 >2 : 2
 
 /** @typedef {number} Quack */

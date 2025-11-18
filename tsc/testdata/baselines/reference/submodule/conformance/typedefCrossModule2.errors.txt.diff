@@ -8,21 +8,16 @@
 -
 -
 -==== use.js (0 errors) ====
-+mod1.js(7,9): error TS2339: Property 'Bar' does not exist on type 'typeof import("mod1")'.
 +mod1.js(10,1): error TS2300: Duplicate identifier 'export='.
 +mod1.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+mod1.js(20,9): error TS2339: Property 'Quid' does not exist on type 'typeof import("mod1")'.
 +mod1.js(23,1): error TS2741: Property 'Baz' is missing in type '{ Quack: number; }' but required in type '{ Baz: typeof Baz; }'.
 +mod1.js(23,1): error TS2300: Duplicate identifier 'export='.
-+use.js(2,32): error TS2694: Namespace '"mod1".export=' has no exported member 'Baz'.
 +use.js(4,12): error TS2503: Cannot find namespace 'mod'.
 +
 +
-+==== use.js (2 errors) ====
++==== use.js (1 errors) ====
      var mod = require('./mod1.js');
      /** @type {import("./mod1.js").Baz} */
-+                                   ~~~
-+!!! error TS2694: Namespace '"mod1".export=' has no exported member 'Baz'.
      var b;
      /** @type {mod.Baz} */
 +               ~~~
@@ -30,8 +25,7 @@
      var bb;
      var bbb = new mod.Baz();
      
--==== mod1.js (4 errors) ====
-+==== mod1.js (6 errors) ====
+@@= skipped -15, +18 lines =@@
      // error
      
      /** @typedef {number} Foo */
@@ -43,8 +37,6 @@
      
      /** @typedef {number} Bar */
      exports.Bar = class { }
-+            ~~~
-+!!! error TS2339: Property 'Bar' does not exist on type 'typeof import("mod1")'.
      
      /** @typedef {number} Baz */
 -                          ~~~
@@ -67,12 +59,7 @@
      
      // ok
      
-@@= skipped -42, +50 lines =@@
-     
-     /** @typedef {number} Quid */
-     exports.Quid = 2;
-+            ~~~~
-+!!! error TS2339: Property 'Quid' does not exist on type 'typeof import("mod1")'.
+@@= skipped -30, +28 lines =@@
      
      /** @typedef {number} Quack */
      module.exports = {

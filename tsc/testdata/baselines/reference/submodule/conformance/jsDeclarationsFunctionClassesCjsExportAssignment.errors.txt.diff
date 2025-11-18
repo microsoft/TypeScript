@@ -4,11 +4,8 @@
 -<no content>
 +context.js(4,14): error TS1340: Module './timer' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./timer')'?
 +context.js(5,14): error TS1340: Module './hook' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./hook')'?
-+context.js(6,31): error TS2694: Namespace 'Hook' has no exported member 'HookHandler'.
 +context.js(34,14): error TS2350: Only a void function can be called with the 'new' keyword.
-+context.js(48,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +hook.js(2,20): error TS1340: Module './context' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./context')'?
-+hook.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
 +==== timer.js (0 errors) ====
@@ -19,7 +16,7 @@
 +        this.timeout = timeout;
 +    }
 +    module.exports = Timer;
-+==== hook.js (2 errors) ====
++==== hook.js (1 errors) ====
 +    /**
 +     * @typedef {(arg: import("./context")) => void} HookHandler
 +                       ~~~~~~~~~~~~~~~~~~~
@@ -32,10 +29,8 @@
 +        this.handle = handle;
 +    }
 +    module.exports = Hook;
-+    ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    
-+==== context.js (5 errors) ====
++==== context.js (3 errors) ====
 +    /**
 +     * Imports
 +     *
@@ -46,8 +41,6 @@
 +                 ~~~~~~~~~~~~~~~~
 +!!! error TS1340: Module './hook' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./hook')'?
 +     * @typedef {import("./hook").HookHandler} HookHandler
-+                                  ~~~~~~~~~~~
-+!!! error TS2694: Namespace 'Hook' has no exported member 'HookHandler'.
 +     */
 +    
 +    /**
@@ -92,6 +85,4 @@
 +        }
 +    }
 +    module.exports = Context;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    

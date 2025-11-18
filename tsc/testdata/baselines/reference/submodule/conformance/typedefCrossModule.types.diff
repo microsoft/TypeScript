@@ -64,31 +64,3 @@
  >p : any
  >1 : 1
  }
-@@= skipped -17, +17 lines =@@
- === use.js ===
- /** @type {import('./mod1').Both} */
- var both1 = { type: 'a', x: 1 };
-->both1 : import("mod1").Both
-->{ type: 'a', x: 1 } : { type: "a"; x: 1; }
-->type : "a"
-+>both1 : any
-+>{ type: 'a', x: 1 } : { type: string; x: number; }
-+>type : string
- >'a' : "a"
-->x : 1
-+>x : number
- >1 : 1
-
- /** @type {import('./mod2').Both} */
- var both2 = both1;
- >both2 : import("mod2").Both
-->both1 : import("mod1").A
-+>both1 : any
-
- /** @type {import('./mod3').Both} */
- var both3 = both2;
- >both3 : import("mod3").Both
-->both2 : import("mod2").A
-+>both2 : import("mod2").Both
-
-

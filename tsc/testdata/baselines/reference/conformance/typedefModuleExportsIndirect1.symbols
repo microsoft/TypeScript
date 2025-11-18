@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/salsa/typedefModuleExportsIndirect1.ts] ////
+
+=== typedefModuleExportsIndirect1.js ===
+/** @typedef {{ a: 1, m: 1 }} C */
+const dummy = 0;
+>dummy : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 5))
+
+module.exports = dummy;
+>module.exports : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 5))
+>module : Symbol("typedefModuleExportsIndirect1", Decl(typedefModuleExportsIndirect1.js, 0, 0))
+>exports : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 5))
+>dummy : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 5))
+
+=== use.js ===
+/** @typedef {import('./typedefModuleExportsIndirect1').C} C */
+/** @type {C} */
+var c
+>c : Symbol(c, Decl(use.js, 2, 3))
+

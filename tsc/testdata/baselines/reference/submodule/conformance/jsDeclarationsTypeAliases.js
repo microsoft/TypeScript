@@ -152,3 +152,68 @@ export = _default;
 declare class LocalThing {
     y: string;
 }
+
+
+//// [DtsFileErrors]
+
+
+out/mixed.d.ts(19,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== out/index.d.ts (0 errors) ====
+    export {};
+    export type PropName = string | number | symbol;
+    export type NumberToStringCb = (a: number) => string;
+    export type MixinName<T> = T & {
+        name: string;
+    };
+    export type Identity<T> = (x: T) => T;
+    /**
+     * @typedef {string | number | symbol} PropName
+     */
+    /**
+     * Callback
+     *
+     * @callback NumberToStringCb
+     * @param {number} a
+     * @returns {string}
+     */
+    /**
+     * @template T
+     * @typedef {T & {name: string}} MixinName
+     */
+    /**
+     * Identity function
+     *
+     * @template T
+     * @callback Identity
+     * @param {T} x
+     * @returns {T}
+     */
+    
+==== out/mixed.d.ts (1 errors) ====
+    export type SomeType = {
+        x: string;
+    } | number | LocalThing | ExportedThing;
+    /**
+     * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+     */
+    /**
+     * @param {number} x
+     * @returns {SomeType}
+     */
+    declare function doTheThing(x: number): SomeType;
+    declare class ExportedThing {
+        z: string;
+    }
+    declare const _default: {
+        doTheThing: typeof doTheThing;
+        ExportedThing: typeof ExportedThing;
+    };
+    export = _default;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    declare class LocalThing {
+        y: string;
+    }
+    

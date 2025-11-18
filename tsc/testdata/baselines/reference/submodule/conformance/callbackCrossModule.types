@@ -26,8 +26,8 @@ function C() {
 === use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
->f : (k: any) => any
->k : any
+>f : (k: import("mod1").Con) => any
+>k : import("mod1").Con
 
     if (1 === 2 - 1) {
 >1 === 2 - 1 : boolean
@@ -40,7 +40,7 @@ function f(k) {
     }
     return k({ ok: true})
 >k({ ok: true}) : any
->k : any
+>k : import("mod1").Con
 >{ ok: true} : { ok: boolean; }
 >ok : boolean
 >true : true

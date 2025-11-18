@@ -1,10 +1,7 @@
 --- old.moduleExportAssignment7.errors.txt
 +++ new.moduleExportAssignment7.errors.txt
-@@= skipped -2, +2 lines =@@
- index.ts(4,24): error TS2694: Namespace '"mod".export=' has no exported member 'foo'.
- index.ts(5,24): error TS2694: Namespace '"mod".export=' has no exported member 'qux'.
+@@= skipped -4, +4 lines =@@
  index.ts(6,24): error TS2694: Namespace '"mod".export=' has no exported member 'baz'.
-+index.ts(7,24): error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
  index.ts(8,24): error TS2694: Namespace '"mod".export=' has no exported member 'literal'.
  index.ts(19,31): error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
 +main.js(2,28): error TS2694: Namespace '"mod".export=' has no exported member 'Thing'.
@@ -12,40 +9,16 @@
 +main.js(4,28): error TS2694: Namespace '"mod".export=' has no exported member 'foo'.
 +main.js(5,28): error TS2694: Namespace '"mod".export=' has no exported member 'qux'.
 +main.js(6,28): error TS2694: Namespace '"mod".export=' has no exported member 'baz'.
-+main.js(7,28): error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
 +main.js(8,28): error TS2694: Namespace '"mod".export=' has no exported member 'literal'.
  main.js(20,35): error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
--
--
--==== mod.js (0 errors) ====
-+mod.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+
-+
-+==== mod.js (1 errors) ====
-     class Thing  { x = 1 }
-     class AnotherThing { y = 2  }
-     function foo() { return 3 }
-     function bar() { return 4 }
-     /** @typedef {() => number} buz */
-     module.exports = {
-+    ~~~~~~~~~~~~~~~~~~
-         Thing,
-+    ~~~~~~~~~~
-         AnotherThing,
-+    ~~~~~~~~~~~~~~~~~
-         foo,
-+    ~~~~~~~~
-         qux: bar,
-+    ~~~~~~~~~~~~~
+
+
+@@= skipped -17, +23 lines =@@
          baz() { return 5 },
-+    ~~~~~~~~~~~~~~~~~~~~~~~
          literal: "",
-+    ~~~~~~~~~~~~~~~~
      }
 -==== main.js (1 errors) ====
-+    ~
-+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
-+==== main.js (8 errors) ====
++==== main.js (7 errors) ====
      /**
       * @param {import("./mod").Thing} a
 +                               ~~~~~
@@ -63,29 +36,9 @@
 +                               ~~~
 +!!! error TS2694: Namespace '"mod".export=' has no exported member 'baz'.
       * @param {import("./mod").buz} f
-+                               ~~~
-+!!! error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
       * @param {import("./mod").literal} g
 +                               ~~~~~~~
 +!!! error TS2694: Namespace '"mod".export=' has no exported member 'literal'.
       */
      function jstypes(a, b, c, d, e, f, g) {
          return a.x + b.y + c() + d() + e() + f() + g.length
-@@= skipped -48, +80 lines =@@
-         return a.length + b.length + c() + d() + e() + f() + g.length
-     }
-     
--==== index.ts (7 errors) ====
-+==== index.ts (8 errors) ====
-     function types(
-         a: import('./mod').Thing,
-                            ~~~~~
-@@= skipped -18, +18 lines =@@
-                            ~~~
- !!! error TS2694: Namespace '"mod".export=' has no exported member 'baz'.
-         f: import('./mod').buz,
-+                           ~~~
-+!!! error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
-         g: import('./mod').literal,
-                            ~~~~~~~
- !!! error TS2694: Namespace '"mod".export=' has no exported member 'literal'.

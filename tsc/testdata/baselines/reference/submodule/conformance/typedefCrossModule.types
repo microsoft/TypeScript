@@ -69,22 +69,22 @@ exports.C = function() {
 === use.js ===
 /** @type {import('./mod1').Both} */
 var both1 = { type: 'a', x: 1 };
->both1 : any
->{ type: 'a', x: 1 } : { type: string; x: number; }
->type : string
+>both1 : import("mod1").Both
+>{ type: 'a', x: 1 } : { type: "a"; x: 1; }
+>type : "a"
 >'a' : "a"
->x : number
+>x : 1
 >1 : 1
 
 /** @type {import('./mod2').Both} */
 var both2 = both1;
 >both2 : import("mod2").Both
->both1 : any
+>both1 : import("mod1").A
 
 /** @type {import('./mod3').Both} */
 var both3 = both2;
 >both3 : import("mod3").Both
->both2 : import("mod2").Both
+>both2 : import("mod2").A
 
 
 

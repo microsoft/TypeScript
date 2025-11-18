@@ -9,17 +9,7 @@
  >exports : typeof Conn
  >Conn : typeof Conn
 
-@@= skipped -30, +30 lines =@@
-         /** @type {import("./conn").Whatever} */
-         this.another = "";
- >this.another = "" : ""
-->this.another : import("conn").Whatever
-+>this.another : any
- >this : this
-->another : import("conn").Whatever
-+>another : any
- >"" : ""
-     }
+@@= skipped -38, +38 lines =@@
  }
 
  module.exports = {

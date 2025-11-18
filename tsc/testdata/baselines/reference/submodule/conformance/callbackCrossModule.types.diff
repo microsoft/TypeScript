@@ -32,18 +32,7 @@
  /** @param {import('./mod1').Con} k */
  function f(k) {
 ->f : (k: import("./mod1").Con) => any
-->k : import("mod1").Con
-+>f : (k: any) => any
-+>k : any
++>f : (k: import("mod1").Con) => any
+ >k : import("mod1").Con
 
      if (1 === 2 - 1) {
- >1 === 2 - 1 : boolean
-@@= skipped -14, +14 lines =@@
-     }
-     return k({ ok: true})
- >k({ ok: true}) : any
-->k : import("mod1").Con
-+>k : any
- >{ ok: true} : { ok: boolean; }
- >ok : boolean
- >true : true

@@ -106,11 +106,6 @@ import { Nominal } from '../common/nominal';
 tsgo --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mcommon/nominal.js[0m:[93m5[0m:[93m1[0m - [91merror[0m[90m TS2309: [0mAn export assignment cannot be used in a module with other exported elements.
-
-[7m5[0m module.exports = {};
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~[0m
-
 [96msub-project/index.js[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../../lib/common/nominal"' has no exported member 'Nominal'.
 
 [7m1[0m import { Nominal } from '../common/nominal';
@@ -122,10 +117,9 @@ Output::
 [7m [0m [91m         ~~~~~~~~~[0m
 
 
-Found 3 errors in 3 files.
+Found 2 errors in 2 files.
 
 Errors  Files
-     1  common/nominal.js[90m:5[0m
      1  sub-project-2/index.js[90m:1[0m
      1  sub-project/index.js[90m:1[0m
 
@@ -144,7 +138,7 @@ export = _default;
 module.exports = {};
 
 //// [/home/src/workspaces/lib/common/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.d.ts","../../solution/common/nominal.js"],"fileInfos":[{"version":"24b4796cd50d1a9aabad1583878c494d-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    readonly species: symbol;\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a19075dfba5b2d593b761ed8d8cd526f-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};","signature":"de751e2539eb6f12413f7067ad0a0ef5-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\ndeclare const _default: {};\nexport = _default;\n","impliedNodeFormat":1}],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"semanticDiagnosticsPerFile":[[2,[{"pos":80,"end":99,"code":2309,"category":1,"message":"An export assignment cannot be used in a module with other exported elements."}]]],"latestChangedDtsFile":"./nominal.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.d.ts","../../solution/common/nominal.js"],"fileInfos":[{"version":"24b4796cd50d1a9aabad1583878c494d-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    readonly species: symbol;\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a19075dfba5b2d593b761ed8d8cd526f-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};","signature":"de751e2539eb6f12413f7067ad0a0ef5-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\ndeclare const _default: {};\nexport = _default;\n","impliedNodeFormat":1}],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"latestChangedDtsFile":"./nominal.d.ts"}
 //// [/home/src/workspaces/lib/common/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -194,22 +188,8 @@ module.exports = {};
     "rootDir": "../../solution",
     "skipLibCheck": true
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../../solution/common/nominal.js",
-      [
-        {
-          "pos": 80,
-          "end": 99,
-          "code": 2309,
-          "category": 1,
-          "message": "An export assignment cannot be used in a module with other exported elements."
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "./nominal.d.ts",
-  "size": 1606
+  "size": 1434
 }
 //// [/home/src/workspaces/lib/sub-project-2/index.d.ts] *new* 
 declare const variable: {

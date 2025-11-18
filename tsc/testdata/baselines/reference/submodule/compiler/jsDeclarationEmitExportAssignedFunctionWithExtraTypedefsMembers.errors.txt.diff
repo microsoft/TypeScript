@@ -2,11 +2,10 @@
 +++ new.jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+index.js(9,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +index.js(9,34): error TS7006: Parameter 'options' implicitly has an 'any' type.
 +
 +
-+==== index.js (2 errors) ====
++==== index.js (1 errors) ====
 +    /**
 +     * @typedef Options
 +     * @property {string} opt
@@ -16,8 +15,6 @@
 +     * @param {Options} options
 +     */
 +    module.exports = function loader(options) {}
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +                                     ~~~~~~~
 +!!! error TS7006: Parameter 'options' implicitly has an 'any' type.
 +    

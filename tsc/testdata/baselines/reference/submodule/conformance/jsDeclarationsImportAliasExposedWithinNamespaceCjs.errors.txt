@@ -7,10 +7,9 @@ file.js(18,39): error TS2300: Duplicate identifier 'myTypes'.
 file2.js(6,11): error TS2315: Type 'Object' is not generic.
 file2.js(12,23): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
-file2.js(28,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== file2.js (4 errors) ====
+==== file2.js (3 errors) ====
     const {myTypes} = require('./file.js');
     
     /**
@@ -45,8 +44,6 @@ file2.js(28,1): error TS2309: An export assignment cannot be used in a module wi
     }
     
     module.exports = {testFn, testFnTypes};
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 ==== file.js (6 errors) ====
     /**
      * @namespace myTypes

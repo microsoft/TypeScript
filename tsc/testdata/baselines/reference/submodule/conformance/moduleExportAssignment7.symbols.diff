@@ -31,11 +31,3 @@
  }
 
  /**
-@@= skipped -71, +65 lines =@@
-
-     f: import('./mod').buz,
- >f : Symbol(f, Decl(index.ts, 5, 27))
-->buz : Symbol(buz, Decl(mod.js, 4, 4))
-
-     g: import('./mod').literal,
- >g : Symbol(g, Decl(index.ts, 6, 27))
