@@ -2828,6 +2828,10 @@
         "category": "Error",
         "code": 2552
     },
+    "Cannot find name '{0}'. '{1}' only refers to a type, but is being used as a value here.": {
+        "category": "Error",
+        "code": 2888
+    },
     "Computed values are not permitted in an enum with string valued members.": {
         "category": "Error",
         "code": 2553
