@@ -175,3 +175,137 @@ func TestProject(t *testing.T) {
 		assert.NilError(t, err)
 	})
 }
+
+func TestPushDiagnostics(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	t.Run("publishes program diagnostics on initial program creation", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": `{"compilerOptions": {"baseUrl": "."}}`,
+			"/src/index.ts":      "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+
+		session.WaitForBackgroundTasks()
+
+		calls := utils.Client().PublishDiagnosticsCalls()
+		assert.Assert(t, len(calls) > 0, "expected at least one PublishDiagnostics call")
+
+		// Find the call for tsconfig.json
+		var tsconfigCall *struct {
+			Ctx    context.Context
+			Params *lsproto.PublishDiagnosticsParams
+		}
+		for i := range calls {
+			if calls[i].Params.Uri == "file:///src/tsconfig.json" {
+				tsconfigCall = &calls[i]
+				break
+			}
+		}
+		assert.Assert(t, tsconfigCall != nil, "expected PublishDiagnostics call for tsconfig.json")
+		assert.Assert(t, len(tsconfigCall.Params.Diagnostics) > 0, "expected at least one diagnostic")
+	})
+
+	t.Run("clears diagnostics when project is removed", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json":  `{"compilerOptions": {"baseUrl": "."}}`,
+			"/src/index.ts":       "export const x = 1;",
+			"/src2/tsconfig.json": `{"compilerOptions": {}}`,
+			"/src2/index.ts":      "export const y = 2;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		// Open a file in a different project to trigger cleanup of the first
+		session.DidCloseFile(context.Background(), "file:///src/index.ts")
+		session.DidOpenFile(context.Background(), "file:///src2/index.ts", 1, files["/src2/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src2/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls := utils.Client().PublishDiagnosticsCalls()
+		// Should have at least one call for the first project with diagnostics,
+		// and one clearing it after switching projects
+		var firstProjectCalls []struct {
+			Ctx    context.Context
+			Params *lsproto.PublishDiagnosticsParams
+		}
+		for i := range calls {
+			if calls[i].Params.Uri == "file:///src/tsconfig.json" {
+				firstProjectCalls = append(firstProjectCalls, calls[i])
+			}
+		}
+		assert.Assert(t, len(firstProjectCalls) >= 2, "expected at least 2 PublishDiagnostics calls for first project")
+		// Last call should clear diagnostics
+		lastCall := firstProjectCalls[len(firstProjectCalls)-1]
+		assert.Equal(t, len(lastCall.Params.Diagnostics), 0, "expected empty diagnostics after project cleanup")
+	})
+
+	t.Run("updates diagnostics when program changes", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": `{"compilerOptions": {"baseUrl": "."}}`,
+			"/src/index.ts":      "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		initialCallCount := len(utils.Client().PublishDiagnosticsCalls())
+
+		// Change the tsconfig to remove baseUrl
+		err = utils.FS().WriteFile("/src/tsconfig.json", `{"compilerOptions": {}}`, false)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{Uri: lsproto.DocumentUri("file:///src/tsconfig.json"), Type: lsproto.FileChangeTypeChanged}})
+		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls := utils.Client().PublishDiagnosticsCalls()
+		assert.Assert(t, len(calls) > initialCallCount, "expected additional PublishDiagnostics call after change")
+
+		// Find the last call for tsconfig.json
+		var lastTsconfigCall *struct {
+			Ctx    context.Context
+			Params *lsproto.PublishDiagnosticsParams
+		}
+		for i := len(calls) - 1; i >= 0; i-- {
+			if calls[i].Params.Uri == "file:///src/tsconfig.json" {
+				lastTsconfigCall = &calls[i]
+				break
+			}
+		}
+		assert.Assert(t, lastTsconfigCall != nil, "expected PublishDiagnostics call for tsconfig.json")
+		// After fixing the error, there should be no program diagnostics
+		assert.Equal(t, len(lastTsconfigCall.Params.Diagnostics), 0, "expected no diagnostics after removing baseUrl option")
+	})
+
+	t.Run("does not publish for inferred projects", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/index.ts": "let x: number = 'not a number';",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls := utils.Client().PublishDiagnosticsCalls()
+		// Should not have any calls since inferred projects don't have tsconfig.json
+		assert.Equal(t, len(calls), 0, "expected no PublishDiagnostics calls for inferred projects")
+	})
+}

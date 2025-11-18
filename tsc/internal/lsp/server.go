@@ -219,6 +219,13 @@ func (s *Server) RefreshDiagnostics(ctx context.Context) error {
 	return nil
 }
 
+// PublishDiagnostics implements project.Client.
+func (s *Server) PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
+	notification := lsproto.TextDocumentPublishDiagnosticsInfo.NewNotificationMessage(params)
+	s.outgoingQueue <- notification.Message()
+	return nil
+}
+
 func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserPreferences, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	if !caps.Workspace.Configuration {
@@ -716,15 +723,26 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		cwd = s.cwd
 	}
 
+	var disablePushDiagnostics bool
+	if s.initializeParams != nil && s.initializeParams.InitializationOptions != nil && *s.initializeParams.InitializationOptions != nil {
+		// Check for disablePushDiagnostics option
+		if initOpts, ok := (*s.initializeParams.InitializationOptions).(map[string]any); ok {
+			if disable, ok := initOpts["disablePushDiagnostics"].(bool); ok {
+				disablePushDiagnostics = disable
+			}
+		}
+	}
+
 	s.session = project.NewSession(&project.SessionInit{
 		Options: &project.SessionOptions{
-			CurrentDirectory:   cwd,
-			DefaultLibraryPath: s.defaultLibraryPath,
-			TypingsLocation:    s.typingsLocation,
-			PositionEncoding:   s.positionEncoding,
-			WatchEnabled:       s.watchEnabled,
-			LoggingEnabled:     true,
-			DebounceDelay:      500 * time.Millisecond,
+			CurrentDirectory:       cwd,
+			DefaultLibraryPath:     s.defaultLibraryPath,
+			TypingsLocation:        s.typingsLocation,
+			PositionEncoding:       s.positionEncoding,
+			WatchEnabled:           s.watchEnabled,
+			LoggingEnabled:         true,
+			DebounceDelay:          500 * time.Millisecond,
+			PushDiagnosticsEnabled: !disablePushDiagnostics,
 		},
 		FS:          s.fs,
 		Logger:      s.logger,
@@ -733,36 +751,28 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		ParseCache:  s.parseCache,
 	})
 
-	if s.initializeParams != nil && s.initializeParams.InitializationOptions != nil && *s.initializeParams.InitializationOptions != nil {
-		// handle userPreferences from initializationOptions
-		userPreferences := s.session.NewUserPreferences()
-		userPreferences.Parse(*s.initializeParams.InitializationOptions)
-		s.session.InitializeWithConfig(userPreferences)
-	} else {
-		// request userPreferences if not provided at initialization
-		userPreferences, err := s.RequestConfiguration(ctx)
-		if err != nil {
-			return err
-		}
-		s.session.InitializeWithConfig(userPreferences)
+	userPreferences, err := s.RequestConfiguration(ctx)
+	if err != nil {
+		return err
+	}
+	s.session.InitializeWithConfig(userPreferences)
 
-		_, err = sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
-			Registrations: []*lsproto.Registration{
-				{
-					Id:     "typescript-config-watch-id",
-					Method: string(lsproto.MethodWorkspaceDidChangeConfiguration),
-					RegisterOptions: ptrTo(any(lsproto.DidChangeConfigurationRegistrationOptions{
-						Section: &lsproto.StringOrStrings{
-							// !!! Both the 'javascript' and 'js/ts' scopes need to be watched for settings as well.
-							Strings: &[]string{"typescript"},
-						},
-					})),
-				},
+	_, err = sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
+		Registrations: []*lsproto.Registration{
+			{
+				Id:     "typescript-config-watch-id",
+				Method: string(lsproto.MethodWorkspaceDidChangeConfiguration),
+				RegisterOptions: ptrTo(any(lsproto.DidChangeConfigurationRegistrationOptions{
+					Section: &lsproto.StringOrStrings{
+						// !!! Both the 'javascript' and 'js/ts' scopes need to be watched for settings as well.
+						Strings: &[]string{"typescript"},
+					},
+				})),
 			},
-		})
-		if err != nil {
-			return fmt.Errorf("failed to register configuration change watcher: %w", err)
-		}
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to register configuration change watcher: %w", err)
 	}
 
 	// !!! temporary.

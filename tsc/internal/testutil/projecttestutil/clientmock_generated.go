@@ -21,6 +21,9 @@ var _ project.Client = &ClientMock{}
 //
 //		// make and configure a mocked project.Client
 //		mockedClient := &ClientMock{
+//			PublishDiagnosticsFunc: func(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
+//				panic("mock out the PublishDiagnostics method")
+//			},
 //			RefreshDiagnosticsFunc: func(ctx context.Context) error {
 //				panic("mock out the RefreshDiagnostics method")
 //			},
@@ -37,6 +40,9 @@ var _ project.Client = &ClientMock{}
 //
 //	}
 type ClientMock struct {
+	// PublishDiagnosticsFunc mocks the PublishDiagnostics method.
+	PublishDiagnosticsFunc func(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error
+
 	// RefreshDiagnosticsFunc mocks the RefreshDiagnostics method.
 	RefreshDiagnosticsFunc func(ctx context.Context) error
 
@@ -48,6 +54,13 @@ type ClientMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// PublishDiagnostics holds details about calls to the PublishDiagnostics method.
+		PublishDiagnostics []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Params is the params argument value.
+			Params *lsproto.PublishDiagnosticsParams
+		}
 		// RefreshDiagnostics holds details about calls to the RefreshDiagnostics method.
 		RefreshDiagnostics []struct {
 			// Ctx is the ctx argument value.
@@ -70,9 +83,47 @@ type ClientMock struct {
 			Watchers []*lsproto.FileSystemWatcher
 		}
 	}
+	lockPublishDiagnostics sync.RWMutex
 	lockRefreshDiagnostics sync.RWMutex
 	lockUnwatchFiles       sync.RWMutex
 	lockWatchFiles         sync.RWMutex
+}
+
+// PublishDiagnostics calls PublishDiagnosticsFunc.
+func (mock *ClientMock) PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
+	callInfo := struct {
+		Ctx    context.Context
+		Params *lsproto.PublishDiagnosticsParams
+	}{
+		Ctx:    ctx,
+		Params: params,
+	}
+	mock.lockPublishDiagnostics.Lock()
+	mock.calls.PublishDiagnostics = append(mock.calls.PublishDiagnostics, callInfo)
+	mock.lockPublishDiagnostics.Unlock()
+	if mock.PublishDiagnosticsFunc == nil {
+		var errOut error
+		return errOut
+	}
+	return mock.PublishDiagnosticsFunc(ctx, params)
+}
+
+// PublishDiagnosticsCalls gets all the calls that were made to PublishDiagnostics.
+// Check the length with:
+//
+//	len(mockedClient.PublishDiagnosticsCalls())
+func (mock *ClientMock) PublishDiagnosticsCalls() []struct {
+	Ctx    context.Context
+	Params *lsproto.PublishDiagnosticsParams
+} {
+	var calls []struct {
+		Ctx    context.Context
+		Params *lsproto.PublishDiagnosticsParams
+	}
+	mock.lockPublishDiagnostics.RLock()
+	calls = mock.calls.PublishDiagnostics
+	mock.lockPublishDiagnostics.RUnlock()
+	return calls
 }
 
 // RefreshDiagnostics calls RefreshDiagnosticsFunc.

@@ -209,12 +209,13 @@ func SetupWithOptionsAndTypingsInstaller(files map[string]any, options *project.
 	// Use provided options or create default ones
 	if options == nil {
 		options = &project.SessionOptions{
-			CurrentDirectory:   "/",
-			DefaultLibraryPath: bundled.LibPath(),
-			TypingsLocation:    TestTypingsLocation,
-			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
-			WatchEnabled:       true,
-			LoggingEnabled:     true,
+			CurrentDirectory:       "/",
+			DefaultLibraryPath:     bundled.LibPath(),
+			TypingsLocation:        TestTypingsLocation,
+			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
+			WatchEnabled:           true,
+			LoggingEnabled:         true,
+			PushDiagnosticsEnabled: true,
 		}
 	}
 

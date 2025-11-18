@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
@@ -37,13 +38,14 @@ const (
 // SessionOptions are the immutable initialization options for a session.
 // Snapshots may reference them as a pointer since they never change.
 type SessionOptions struct {
-	CurrentDirectory   string
-	DefaultLibraryPath string
-	TypingsLocation    string
-	PositionEncoding   lsproto.PositionEncodingKind
-	WatchEnabled       bool
-	LoggingEnabled     bool
-	DebounceDelay      time.Duration
+	CurrentDirectory       string
+	DefaultLibraryPath     string
+	TypingsLocation        string
+	PositionEncoding       lsproto.PositionEncodingKind
+	WatchEnabled           bool
+	LoggingEnabled         bool
+	PushDiagnosticsEnabled bool
+	DebounceDelay          time.Duration
 }
 
 type SessionInit struct {
@@ -146,7 +148,6 @@ func NewSession(init *SessionInit) *Session {
 		extendedConfigCache: extendedConfigCache,
 		programCounter:      &programCounter{},
 		backgroundQueue:     background.NewQueue(),
-		snapshotID:          atomic.Uint64{},
 		snapshot: NewSnapshot(
 			uint64(0),
 			&SnapshotFS{
@@ -439,6 +440,7 @@ func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 				s.logger.Log(err)
 			}
 		}
+		s.publishProgramDiagnostics(oldSnapshot, newSnapshot)
 	})
 
 	return newSnapshot
@@ -687,6 +689,57 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 
 func (s *Session) NpmInstall(cwd string, npmInstallArgs []string) ([]byte, error) {
 	return s.npmExecutor.NpmInstall(cwd, npmInstallArgs)
+}
+
+func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *Snapshot) {
+	if !s.options.PushDiagnosticsEnabled {
+		return
+	}
+
+	ctx := context.Background()
+	collections.DiffOrderedMaps(
+		oldSnapshot.ProjectCollection.ProjectsByPath(),
+		newSnapshot.ProjectCollection.ProjectsByPath(),
+		func(configFilePath tspath.Path, addedProject *Project) {
+			if !shouldPublishProgramDiagnostics(addedProject, newSnapshot.ID()) {
+				return
+			}
+			s.publishProjectDiagnostics(ctx, string(configFilePath), addedProject.Program.GetProgramDiagnostics(), newSnapshot.converters)
+		},
+		func(configFilePath tspath.Path, removedProject *Project) {
+			if removedProject.Kind != KindConfigured {
+				return
+			}
+			s.publishProjectDiagnostics(ctx, string(configFilePath), nil, oldSnapshot.converters)
+		},
+		func(configFilePath tspath.Path, oldProject, newProject *Project) {
+			if !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID()) {
+				return
+			}
+			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.Program.GetProgramDiagnostics(), newSnapshot.converters)
+		},
+	)
+}
+
+func shouldPublishProgramDiagnostics(p *Project, snapshotID uint64) bool {
+	if p.Kind != KindConfigured || p.Program == nil || p.ProgramLastUpdate != snapshotID {
+		return false
+	}
+	return p.ProgramUpdateKind > ProgramUpdateKindCloned
+}
+
+func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath string, diagnostics []*ast.Diagnostic, converters *lsconv.Converters) {
+	lspDiagnostics := make([]*lsproto.Diagnostic, 0, len(diagnostics))
+	for _, diag := range diagnostics {
+		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag))
+	}
+
+	if err := s.client.PublishDiagnostics(ctx, &lsproto.PublishDiagnosticsParams{
+		Uri:         lsconv.FileNameToDocumentURI(configFilePath),
+		Diagnostics: lspDiagnostics,
+	}); err != nil && s.options.LoggingEnabled {
+		s.logger.Logf("Error publishing diagnostics: %v", err)
+	}
 }
 
 func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
