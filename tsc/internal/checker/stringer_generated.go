@@ -17,8 +17,9 @@ const _SignatureKind_name = "SignatureKindCallSignatureKindConstruct"
 var _SignatureKind_index = [...]uint8{0, 17, 39}
 
 func (i SignatureKind) String() string {
-	if i < 0 || i >= SignatureKind(len(_SignatureKind_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_SignatureKind_index)-1 {
 		return "SignatureKind(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _SignatureKind_name[_SignatureKind_index[i]:_SignatureKind_index[i+1]]
+	return _SignatureKind_name[_SignatureKind_index[idx]:_SignatureKind_index[idx+1]]
 }

@@ -198,6 +198,12 @@ jobs:
       TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
 
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
@@ -233,6 +239,12 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: true
@@ -251,15 +263,17 @@ jobs:
 
       - name: Regenerate fourslash tests and update failing test list
         run: |
+          set -x
           echo "" > ./internal/fourslash/_scripts/failingTests.txt
-          npm run convertfourslash || true
-          npx hereby test || true
+          npm run convertfourslash >/dev/null 2>&1 || true
+          npx hereby test >/dev/null || true
           npx hereby baseline-accept || true
-          npm run updatefailing || true
+          npm run updatefailing >/dev/null 2>&1 || true
           npx hereby baseline-accept || true
           rm -rf testdata/baselines/reference/fourslash || true
-          npx hereby test || true
+          npx hereby test >/dev/null || true
           npx hereby baseline-accept || true
+          npx hereby test || true
 
       - run: git add .
       - run: git diff --staged --exit-code --stat
@@ -312,6 +326,12 @@ jobs:
   baselines:
     runs-on: ubuntu-latest
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: true

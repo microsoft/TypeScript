@@ -20,8 +20,9 @@ const _ExportKind_name = "ExportKindNamedExportKindDefaultExportKindExportEquals
 var _ExportKind_index = [...]uint8{0, 15, 32, 54, 67, 83}
 
 func (i ExportKind) String() string {
-	if i < 0 || i >= ExportKind(len(_ExportKind_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_ExportKind_index)-1 {
 		return "ExportKind(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _ExportKind_name[_ExportKind_index[i]:_ExportKind_index[i+1]]
+	return _ExportKind_name[_ExportKind_index[idx]:_ExportKind_index[idx+1]]
 }

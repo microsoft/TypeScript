@@ -1193,9 +1193,7 @@ func tryGetModuleNameFromExportsOrImports(
 				return tspath.CombinePaths(packageName, fragmentWithJsExtension)
 			}
 		case MatchingModePattern:
-			starPos := strings.Index(pathOrPattern, "*")
-			leadingSlice := pathOrPattern[0:starPos]
-			trailingSlice := pathOrPattern[starPos+1:]
+			leadingSlice, trailingSlice, _ := strings.Cut(pathOrPattern, "*")
 			caseSensitive := host.UseCaseSensitiveFileNames()
 			if canTryTsExtension && stringutil.HasPrefix(targetFilePath, leadingSlice, caseSensitive) && stringutil.HasSuffix(targetFilePath, trailingSlice, caseSensitive) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]

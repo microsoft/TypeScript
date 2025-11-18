@@ -22,8 +22,9 @@ const _MessageType_name = "MessageTypeUnknownMessageTypeRequestMessageTypeCallRe
 var _MessageType_index = [...]uint8{0, 18, 36, 59, 79, 98, 114, 129}
 
 func (i MessageType) String() string {
-	if i >= MessageType(len(_MessageType_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_MessageType_index)-1 {
 		return "MessageType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _MessageType_name[_MessageType_index[i]:_MessageType_index[i+1]]
+	return _MessageType_name[_MessageType_index[idx]:_MessageType_index[idx+1]]
 }

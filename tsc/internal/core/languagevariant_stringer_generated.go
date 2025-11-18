@@ -17,8 +17,9 @@ const _LanguageVariant_name = "LanguageVariantStandardLanguageVariantJSX"
 var _LanguageVariant_index = [...]uint8{0, 23, 41}
 
 func (i LanguageVariant) String() string {
-	if i < 0 || i >= LanguageVariant(len(_LanguageVariant_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_LanguageVariant_index)-1 {
 		return "LanguageVariant(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _LanguageVariant_name[_LanguageVariant_index[i]:_LanguageVariant_index[i+1]]
+	return _LanguageVariant_name[_LanguageVariant_index[idx]:_LanguageVariant_index[idx+1]]
 }

@@ -18,8 +18,9 @@ const _Tristate_name = "TSUnknownTSFalseTSTrue"
 var _Tristate_index = [...]uint8{0, 9, 16, 22}
 
 func (i Tristate) String() string {
-	if i >= Tristate(len(_Tristate_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_Tristate_index)-1 {
 		return "Tristate(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _Tristate_name[_Tristate_index[i]:_Tristate_index[i+1]]
+	return _Tristate_name[_Tristate_index[idx]:_Tristate_index[idx+1]]
 }

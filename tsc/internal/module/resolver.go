@@ -1957,11 +1957,11 @@ func matchesPatternWithTrailer(target string, name string) bool {
 	if strings.HasSuffix(target, "*") {
 		return false
 	}
-	starPos := strings.Index(target, "*")
-	if starPos == -1 {
+	before, after, ok := strings.Cut(target, "*")
+	if !ok {
 		return false
 	}
-	return strings.HasPrefix(name, target[:starPos]) && strings.HasSuffix(name, target[starPos+1:])
+	return strings.HasPrefix(name, before) && strings.HasSuffix(name, after)
 }
 
 /** True if `extension` is one of the supported `extensions`. */
