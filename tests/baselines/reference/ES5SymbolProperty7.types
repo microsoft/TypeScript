@@ -2,9 +2,10 @@
 
 === ES5SymbolProperty7.ts ===
 var Symbol: { iterator: any };
->Symbol : { iterator: any; }
->       : ^^^^^^^^^^^^   ^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : any
+>         : ^^^
 
 class C {
 >C : C
@@ -13,11 +14,12 @@ class C {
     [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
->Symbol.iterator : any
->Symbol : { iterator: any; }
->       : ^^^^^^^^^^^^   ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }
 
 (new C)[Symbol.iterator]
@@ -29,9 +31,10 @@ class C {
 >      : ^
 >C : typeof C
 >  : ^^^^^^^^
->Symbol.iterator : any
->Symbol : { iterator: any; }
->       : ^^^^^^^^^^^^   ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 

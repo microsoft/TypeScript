@@ -3,8 +3,8 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
-    export module CompilerDiagnostics {
+namespace TypeScript {
+    export namespace CompilerDiagnostics {
         export var debug = false;
         export interface IDiagnosticWriter {
             Alert(output: string): void;

@@ -19,7 +19,7 @@ twoGenericInterfacesWithTheSameNameButDifferentArity.ts(38,22): error TS2428: Al
         y: T;
     }
     
-    module M {
+    namespace M {
         interface A<T> {
                   ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -33,19 +33,19 @@ twoGenericInterfacesWithTheSameNameButDifferentArity.ts(38,22): error TS2428: Al
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface A<T> {
             x: T;
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface A<T, U> { // ok, different declaration space than other M2
             y: T;
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface A<T> {
                          ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -53,7 +53,7 @@ twoGenericInterfacesWithTheSameNameButDifferentArity.ts(38,22): error TS2428: Al
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface A<T, U> { // error
                          ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.

@@ -9,11 +9,11 @@ enum enumdule {
 >Blue : Symbol(enumdule.Blue, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 1, 8))
 }
 
-module enumdule {
+namespace enumdule {
 >enumdule : Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
 
     export class Point {
->Point : Symbol(Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 17))
+>Point : Symbol(Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 20))
 
         constructor(public x: number, public y: number) { }
 >x : Symbol(Point.x, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 7, 20))
@@ -38,7 +38,7 @@ var y: { x: number; y: number };
 
 var y = new enumdule.Point(0, 0);
 >y : Symbol(y, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 14, 3), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 15, 3))
->enumdule.Point : Symbol(enumdule.Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 17))
+>enumdule.Point : Symbol(enumdule.Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 20))
 >enumdule : Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
->Point : Symbol(enumdule.Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 17))
+>Point : Symbol(enumdule.Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 20))
 

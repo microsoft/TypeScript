@@ -1,4 +1,4 @@
-module Tools {
+namespace Tools {
     export class NullLogger { }
 }
 

@@ -7,7 +7,7 @@ assignmentToReferenceTypes.ts(16,1): error TS2630: Cannot assign to 'f' because 
 ==== assignmentToReferenceTypes.ts (4 errors) ====
     // Should all be allowed
     
-    module M {
+    namespace M {
     }
     M = null;
     ~

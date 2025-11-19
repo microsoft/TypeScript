@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/importInTypePosition.ts] ////
 
 === importInTypePosition.ts ===
-module A {
+namespace A {
 >A : Symbol(A, Decl(importInTypePosition.ts, 0, 0))
 
     export class Point {
->Point : Symbol(Point, Decl(importInTypePosition.ts, 0, 10))
+>Point : Symbol(Point, Decl(importInTypePosition.ts, 0, 13))
 
         constructor(public x: number, public y: number) { }
 >x : Symbol(Point.x, Decl(importInTypePosition.ts, 2, 20))
@@ -13,33 +13,33 @@ module A {
     }
     export var Origin = new Point(0, 0);
 >Origin : Symbol(Origin, Decl(importInTypePosition.ts, 4, 14))
->Point : Symbol(Point, Decl(importInTypePosition.ts, 0, 10))
+>Point : Symbol(Point, Decl(importInTypePosition.ts, 0, 13))
 }
 
 // no code gen expected
-module B {
+namespace B {
 >B : Symbol(B, Decl(importInTypePosition.ts, 5, 1))
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : Symbol(a, Decl(importInTypePosition.ts, 8, 10))
+>a : Symbol(a, Decl(importInTypePosition.ts, 8, 13))
 >A : Symbol(a, Decl(importInTypePosition.ts, 0, 0))
 }
 // no code gen expected
-module C {
+namespace C {
 >C : Symbol(C, Decl(importInTypePosition.ts, 11, 1))
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : Symbol(a, Decl(importInTypePosition.ts, 13, 10))
+>a : Symbol(a, Decl(importInTypePosition.ts, 13, 13))
 >A : Symbol(a, Decl(importInTypePosition.ts, 0, 0))
 
     var m: typeof a;
 >m : Symbol(m, Decl(importInTypePosition.ts, 16, 7))
->a : Symbol(a, Decl(importInTypePosition.ts, 13, 10))
+>a : Symbol(a, Decl(importInTypePosition.ts, 13, 13))
 
     var p: a.Point;
 >p : Symbol(p, Decl(importInTypePosition.ts, 17, 7), Decl(importInTypePosition.ts, 18, 7))
->a : Symbol(a, Decl(importInTypePosition.ts, 13, 10))
->Point : Symbol(a.Point, Decl(importInTypePosition.ts, 0, 10))
+>a : Symbol(a, Decl(importInTypePosition.ts, 13, 13))
+>Point : Symbol(a.Point, Decl(importInTypePosition.ts, 0, 13))
 
     var p = { x: 0, y: 0 };
 >p : Symbol(p, Decl(importInTypePosition.ts, 17, 7), Decl(importInTypePosition.ts, 18, 7))

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowSyntheticDefaultImports: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @noUnusedLocals: true
 // @target: es2018
 

@@ -1,4 +1,4 @@
-//@module: amd
+//@module: esnext
 var nake;
 function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
 

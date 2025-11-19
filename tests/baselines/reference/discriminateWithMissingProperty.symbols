@@ -20,7 +20,7 @@ type Arg = {
 } | {
     data: string | Uint8Array;
 >data : Symbol(data, Decl(discriminateWithMissingProperty.ts, 6, 5))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 declare function foo(arg: Arg): void;
@@ -32,5 +32,5 @@ foo({ mode: "numeric", data: new Uint8Array([30]) }); // Should error
 >foo : Symbol(foo, Decl(discriminateWithMissingProperty.ts, 8, 1))
 >mode : Symbol(mode, Decl(discriminateWithMissingProperty.ts, 11, 5))
 >data : Symbol(data, Decl(discriminateWithMissingProperty.ts, 11, 22))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

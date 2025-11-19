@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/aliasErrors.ts] ////
 
 === aliasErrors.ts ===
-module foo {    
+namespace foo {    
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -9,7 +9,7 @@ module foo {
 >Provide : Provide
 >        : ^^^^^^^
     }
-    export module bar { export module baz {export class boo {}}}
+    export namespace bar { export namespace baz {export class boo {}}}
 >bar : typeof bar
 >    : ^^^^^^^^^^
 >baz : typeof baz

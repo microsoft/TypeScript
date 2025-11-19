@@ -3,7 +3,7 @@ generatorOverloads1.ts(3,13): error TS1222: An overload signature cannot be decl
 
 
 ==== generatorOverloads1.ts (2 errors) ====
-    module M {
+    namespace M {
         function* f(s: string): Iterable<any>;
                 ~
 !!! error TS1222: An overload signature cannot be declared as a generator.

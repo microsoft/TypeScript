@@ -284,7 +284,7 @@ else {
 function foo(instance: Function | object) {
 >foo : Symbol(foo, Decl(typeGuardConstructorClassAndNumber.ts, 118, 1))
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     if (typeof instance === 'function') {
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))

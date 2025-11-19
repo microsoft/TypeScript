@@ -3,7 +3,7 @@
 ////class point {
 ////    constructor(public x: number, public y: number) { }
 ////}
-////module point {
+////namespace point {
 ////    export var origin = new point(0, 0);
 ////    export function equals(p1: point, p2: point) {
 ////        return p1.x == p2.x && p1.y == p2.y;

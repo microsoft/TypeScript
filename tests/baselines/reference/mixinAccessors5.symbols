@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/classes/mixinAccessors5.ts] ////
+
+=== mixinAccessors5.ts ===
+// https://github.com/microsoft/TypeScript/issues/61967
+
+declare function basicMixin<T extends object, U extends object>(
+>basicMixin : Symbol(basicMixin, Decl(mixinAccessors5.ts, 0, 0))
+>T : Symbol(T, Decl(mixinAccessors5.ts, 2, 28))
+>U : Symbol(U, Decl(mixinAccessors5.ts, 2, 45))
+
+  t: T,
+>t : Symbol(t, Decl(mixinAccessors5.ts, 2, 64))
+>T : Symbol(T, Decl(mixinAccessors5.ts, 2, 28))
+
+  u: U,
+>u : Symbol(u, Decl(mixinAccessors5.ts, 3, 7))
+>U : Symbol(U, Decl(mixinAccessors5.ts, 2, 45))
+
+): T & U;
+>T : Symbol(T, Decl(mixinAccessors5.ts, 2, 28))
+>U : Symbol(U, Decl(mixinAccessors5.ts, 2, 45))
+  
+declare class GetterA {
+>GetterA : Symbol(GetterA, Decl(mixinAccessors5.ts, 5, 9))
+
+  constructor(...args: any[]);
+>args : Symbol(args, Decl(mixinAccessors5.ts, 8, 14))
+
+  get inCompendium(): boolean;
+>inCompendium : Symbol(GetterA.inCompendium, Decl(mixinAccessors5.ts, 8, 30))
+}
+  
+declare class GetterB {
+>GetterB : Symbol(GetterB, Decl(mixinAccessors5.ts, 11, 1))
+
+  constructor(...args: any[]);
+>args : Symbol(args, Decl(mixinAccessors5.ts, 14, 14))
+
+  get inCompendium(): boolean;
+>inCompendium : Symbol(GetterB.inCompendium, Decl(mixinAccessors5.ts, 14, 30))
+}
+  
+declare class TestB extends basicMixin(GetterA, GetterB) {
+>TestB : Symbol(TestB, Decl(mixinAccessors5.ts, 17, 1))
+>basicMixin : Symbol(basicMixin, Decl(mixinAccessors5.ts, 0, 0))
+>GetterA : Symbol(GetterA, Decl(mixinAccessors5.ts, 5, 9))
+>GetterB : Symbol(GetterB, Decl(mixinAccessors5.ts, 11, 1))
+
+  override get inCompendium(): boolean;
+>inCompendium : Symbol(TestB.inCompendium, Decl(mixinAccessors5.ts, 19, 58))
+}
+  

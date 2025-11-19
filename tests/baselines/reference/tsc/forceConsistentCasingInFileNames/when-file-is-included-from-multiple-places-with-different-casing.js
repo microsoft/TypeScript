@@ -28,7 +28,6 @@ import * as xs4 from "./struct";
 export function foo(): void
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

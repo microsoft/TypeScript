@@ -1,4 +1,4 @@
-module M {
+namespace M {
     interface I {
         salt:number;
         pepper:number;
