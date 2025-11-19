@@ -2405,7 +2405,7 @@ func (c *Checker) typeMaybeAssignableTo(source *Type, target *Type) bool {
 func (c *Checker) getTypePredicateArgument(predicate *TypePredicate, callExpression *ast.Node) *ast.Node {
 	if predicate.kind == TypePredicateKindIdentifier || predicate.kind == TypePredicateKindAssertsIdentifier {
 		arguments := callExpression.Arguments()
-		if int(predicate.parameterIndex) < len(arguments) {
+		if predicate.parameterIndex >= 0 && int(predicate.parameterIndex) < len(arguments) {
 			return arguments[predicate.parameterIndex]
 		}
 	} else {
@@ -2496,7 +2496,7 @@ func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 		case flags&ast.FlowFlagsCall != 0:
 			if signature := c.getEffectsSignature(flow.Node); signature != nil {
 				if predicate := c.getTypePredicateOfSignature(signature); predicate != nil && predicate.kind == TypePredicateKindAssertsIdentifier && predicate.t == nil {
-					if arguments := flow.Node.Arguments(); int(predicate.parameterIndex) < len(arguments) && c.isFalseExpression(arguments[predicate.parameterIndex]) {
+					if arguments := flow.Node.Arguments(); predicate.parameterIndex >= 0 && int(predicate.parameterIndex) < len(arguments) && c.isFalseExpression(arguments[predicate.parameterIndex]) {
 						return false
 					}
 				}
