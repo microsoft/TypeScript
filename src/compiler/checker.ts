@@ -49472,11 +49472,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const beforeMark = nodesToCheck ? "beforeCheckNodes" : "beforeCheck";
         const afterMark = nodesToCheck ? "afterCheckNodes" : "afterCheck";
         performance.mark(beforeMark);
-        reportedUnreachableNodes = undefined;
         nodesToCheck ? checkSourceFileNodesWorker(node, nodesToCheck) : checkSourceFileWorker(node);
         performance.mark(afterMark);
         performance.measure("Check", beforeMark, afterMark);
         tracing?.pop();
+        reportedUnreachableNodes = undefined;
     }
 
     function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {

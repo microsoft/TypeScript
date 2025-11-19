@@ -1024,7 +1024,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             hasExplicitReturn = false;
             bindChildren(node);
             // Reset all reachability check related flags on node (for incremental scenarios)
-            node.flags &= ~(NodeFlags.ReachabilityAndEmitFlags | NodeFlags.Unreachable);
+            node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
             if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                 node.flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
