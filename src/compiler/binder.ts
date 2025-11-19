@@ -1024,7 +1024,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             hasExplicitReturn = false;
             bindChildren(node);
             // Reset all reachability check related flags on node (for incremental scenarios)
-            node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
+            node.flags &= ~(NodeFlags.ReachabilityAndEmitFlags | NodeFlags.Unreachable);
             if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                 node.flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
@@ -1090,6 +1090,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Most nodes aren't valid in an assignment pattern, so we clear the value here
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
+
+        // Clear Unreachable flag from previous binding (for incremental scenarios)
+        if (isPotentiallyExecutableNode(node)) {
+            (node as Mutable<Node>).flags &= ~NodeFlags.Unreachable;
+        }
 
         if (currentFlow === unreachableFlow) {
             if (canHaveFlowNode(node)) {
