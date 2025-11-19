@@ -504,6 +504,7 @@ import {
     isCallLikeOrFunctionLikeExpression,
     isCallOrNewExpression,
     isCallSignatureDeclaration,
+    isCaseOrDefaultClause,
     isCatchClause,
     isCatchClauseVariableDeclaration,
     isCatchClauseVariableDeclarationOrBindingElement,
@@ -53173,6 +53174,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     blockScopeFlags === NodeFlags.Using ?
                         Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
                         Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
+                );
+            }
+            else if (isVariableStatement(declarationList.parent) && isCaseOrDefaultClause(declarationList.parent.parent)) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block :
+                        Diagnostics.await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block,
                 );
             }
 

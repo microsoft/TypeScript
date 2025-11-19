@@ -1849,6 +1849,14 @@
         "category": "Error",
         "code": 1546
     },
+    "'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1547
+    },
+    "'await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1548
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
