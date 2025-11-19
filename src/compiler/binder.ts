@@ -1791,13 +1791,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bind(node.label);
         bind(node.statement);
         if (!activeLabelList.referenced) {
-            // Clear Unreachable flag from previous binding (for incremental scenarios)
-            (node.label as Mutable<Node>).flags &= ~NodeFlags.Unreachable;
             (node.label as Mutable<Node>).flags |= NodeFlags.Unreachable;
-        }
-        else {
-            // Clear Unreachable flag if label is now referenced (for incremental scenarios)
-            (node.label as Mutable<Node>).flags &= ~NodeFlags.Unreachable;
         }
         activeLabelList = activeLabelList.next;
         addAntecedent(postStatementLabel, currentFlow);
