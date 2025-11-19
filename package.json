@@ -47,7 +47,7 @@
         "@types/chai": "^4.3.20",
         "@types/minimist": "^1.2.5",
         "@types/mocha": "^10.0.10",
-        "@types/ms": "^0.7.34",
+        "@types/ms": "^2.1.0",
         "@types/node": "latest",
         "@types/source-map-support": "^0.5.10",
         "@types/which": "^3.0.4",
