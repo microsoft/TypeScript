@@ -65,8 +65,9 @@ function parseTypeScriptFiles(failingTests: Set<string>, manualTests: Set<string
         else if (file.endsWith(".ts") && !manualTests.has(file.slice(0, -3))) {
             const content = fs.readFileSync(filePath, "utf-8");
             const test = parseFileContent(file, content);
+            const isServer = filePath.split(path.sep).includes("server");
             if (test) {
-                const testContent = generateGoTest(failingTests, test);
+                const testContent = generateGoTest(failingTests, test, isServer);
                 const testPath = path.join(outputDir, `${test.name}_test.go`);
                 fs.writeFileSync(testPath, testContent, "utf-8");
             }
@@ -198,6 +199,7 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                 case "baselineGoToDefinition":
                 case "baselineGetDefinitionAtPosition":
                 case "baselineGoToType":
+                case "baselineGoToImplementation":
                     // Both `baselineGoToDefinition` and `baselineGetDefinitionAtPosition` take the same
                     // arguments, but differ in that...
                     //  - `verify.baselineGoToDefinition(...)` called getDefinitionAndBoundSpan
@@ -1130,14 +1132,14 @@ function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [V
 }
 
 function parseBaselineGoToDefinitionArgs(
-    funcName: "baselineGoToDefinition" | "baselineGoToType" | "baselineGetDefinitionAtPosition",
+    funcName: "baselineGoToDefinition" | "baselineGoToType" | "baselineGetDefinitionAtPosition" | "baselineGoToImplementation",
     args: readonly ts.Expression[],
 ): [VerifyBaselineGoToDefinitionCmd] | undefined {
     let boundSpan: true | undefined;
     if (funcName === "baselineGoToDefinition") {
         boundSpan = true;
     }
-    let kind: "verifyBaselineGoToDefinition" | "verifyBaselineGoToType";
+    let kind: "verifyBaselineGoToDefinition" | "verifyBaselineGoToType" | "verifyBaselineGoToImplementation";
     switch (funcName) {
         case "baselineGoToDefinition":
         case "baselineGetDefinitionAtPosition":
@@ -1145,6 +1147,9 @@ function parseBaselineGoToDefinitionArgs(
             break;
         case "baselineGoToType":
             kind = "verifyBaselineGoToType";
+            break;
+        case "baselineGoToImplementation":
+            kind = "verifyBaselineGoToImplementation";
             break;
     }
     const newArgs = [];
@@ -1824,7 +1829,7 @@ interface VerifyBaselineFindAllReferencesCmd {
 }
 
 interface VerifyBaselineGoToDefinitionCmd {
-    kind: "verifyBaselineGoToDefinition" | "verifyBaselineGoToType";
+    kind: "verifyBaselineGoToDefinition" | "verifyBaselineGoToType" | "verifyBaselineGoToImplementation";
     markers: string[];
     boundSpan?: true;
     ranges?: boolean;
@@ -1984,6 +1989,11 @@ function generateBaselineGoToDefinition({ markers, ranges, kind, boundSpan }: Ve
                 return `f.VerifyBaselineGoToTypeDefinition(t)`;
             }
             return `f.VerifyBaselineGoToTypeDefinition(t, ${markers.join(", ")})`;
+        case "verifyBaselineGoToImplementation":
+            if (ranges || markers.length === 0) {
+                return `f.VerifyBaselineGoToImplementation(t)`;
+            }
+            return `f.VerifyBaselineGoToImplementation(t, ${markers.join(", ")})`;
     }
 }
 
@@ -2038,6 +2048,7 @@ function generateCmd(cmd: Cmd): string {
             return generateBaselineDocumentHighlights(cmd);
         case "verifyBaselineGoToDefinition":
         case "verifyBaselineGoToType":
+        case "verifyBaselineGoToImplementation":
             return generateBaselineGoToDefinition(cmd);
         case "verifyBaselineQuickInfo":
             // Quick Info -> Hover
@@ -2083,7 +2094,7 @@ interface GoTest {
     commands: Cmd[];
 }
 
-function generateGoTest(failingTests: Set<string>, test: GoTest): string {
+function generateGoTest(failingTests: Set<string>, test: GoTest, isServer: boolean): string {
     const testName = (test.name[0].toUpperCase() + test.name.substring(1)).replaceAll("-", "_").replaceAll(/[^a-zA-Z0-9_]/g, "");
     const content = test.content;
     const commands = test.commands.map(cmd => generateCmd(cmd)).join("\n");
@@ -2119,7 +2130,7 @@ func Test${testName}(t *testing.T) {
     defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = ${content}
     f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-    ${commands}
+    ${isServer ? `f.MarkTestAsStradaServer()\n` : ""}${commands}
 }`;
     return template;
 }

@@ -35,7 +35,7 @@
 // }
 // 
 // class Z extends Y{
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 // --- (line: 16) skipped ---
 // x.foo();
@@ -56,7 +56,7 @@
 // 	foo(): void{}
 // }
 // 
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 // --- (line: 17) skipped ---
 // y.foo();

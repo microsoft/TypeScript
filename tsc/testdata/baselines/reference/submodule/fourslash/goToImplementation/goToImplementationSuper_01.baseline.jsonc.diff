@@ -1,0 +1,13 @@
+--- old.goToImplementationSuper_01.baseline.jsonc
++++ new.goToImplementationSuper_01.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     hello() {}
+ // }|>
+ // 
+-// class Bar extends Foo {
++// <|class [|Bar|] extends Foo {
+ //     hello() {
+ //         sup/*GOTO IMPL*/er.hello();
+ //     }
+-// }
++// }|>

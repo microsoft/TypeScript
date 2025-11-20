@@ -1,0 +1,13 @@
+--- old.goToDefinitionDestructuredRequire2.baseline.jsonc
++++ new.goToDefinitionDestructuredRequire2.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+-// === /util.js ===
+-// <|class [|Util|] {}|>
+-// module.exports = { Util };
++// === /reexport.js ===
++// const { Util } = require('./util');
++// module.exports = { [|Util|] };
+
+ // === /index.js ===
+ // const { Util } = require('./reexport');

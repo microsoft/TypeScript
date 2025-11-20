@@ -1,0 +1,10 @@
+--- old.goToDefinitionExpandoElementAccess.baseline.jsonc
++++ new.goToDefinitionExpandoElementAccess.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionExpandoElementAccess.ts ===
+ // function f() {}
+-// <|f[[|"x"|]]|> = 0;
+-// <|f[/*GOTO DEF*/[|"x"|]]|> = 1;
++// <|f[[|"x"|]] = 0;|>
++// <|f[/*GOTO DEF*/[|"x"|]] = 1;|>

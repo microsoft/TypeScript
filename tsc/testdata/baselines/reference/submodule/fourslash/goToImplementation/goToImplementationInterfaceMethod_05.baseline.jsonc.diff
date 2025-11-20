@@ -1,0 +1,26 @@
+--- old.goToImplementationInterfaceMethod_05.baseline.jsonc
++++ new.goToImplementationInterfaceMethod_05.baseline.jsonc
+@@= skipped -8, +8 lines =@@
+ // }
+ // 
+ // class Bar extends SuperBar {
+-// --- (line: 10) skipped ---
++//     hello2() {}
++// }
++// 
++// class OtherBar extends SuperBar {
++//     <|[|hello|]() {}|>
++//     hello2() {}
++//     hello3() {}
++// }
++// --- (line: 18) skipped ---
+
+-// --- (line: 26) skipped ---
++// --- (line: 22) skipped ---
++// }
++// 
++// class NotBar extends SuperBar {
++//     <|[|hello|]() {}|>         // Should not be returned because it is not structurally equivalent to Bar
+ // }
+ // 
+ // function whatever(x: Bar) {

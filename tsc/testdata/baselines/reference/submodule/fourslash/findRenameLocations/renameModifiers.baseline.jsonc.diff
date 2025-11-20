@@ -4,173 +4,84 @@
  // === findRenameLocations ===
  // === /renameModifiers.ts ===
 -// /*RENAME*/declare abstract class [|C1RENAME|] {
--//     static a;
--//     readonly b;
--//     public c;
--//     protected d;
--//     private e;
--// }
--// const enum E {
--// }
--// async function fn() {}
--// export default class C2 {}
--
--
--
--// === findRenameLocations ===
--// === /renameModifiers.ts ===
--// declare /*RENAME*/abstract class [|C1RENAME|] {
--//     static a;
--//     readonly b;
--//     public c;
--//     protected d;
--//     private e;
--// }
--// const enum E {
--// }
--// async function fn() {}
--// export default class C2 {}
--
--
--
--// === findRenameLocations ===
--// === /renameModifiers.ts ===
--// declare abstract class C1 {
--//     /*RENAME*/static [|aRENAME|];
--//     readonly b;
--//     public c;
--//     protected d;
--// --- (line: 6) skipped ---
--
--
--
--// === findRenameLocations ===
--// === /renameModifiers.ts ===
--// declare abstract class C1 {
--//     static a;
--//     /*RENAME*/readonly [|bRENAME|];
--//     public c;
--//     protected d;
--//     private e;
--// --- (line: 7) skipped ---
--
--
--
--// === findRenameLocations ===
--// === /renameModifiers.ts ===
--// declare abstract class C1 {
--//     static a;
--//     readonly b;
--//     /*RENAME*/public [|cRENAME|];
--//     protected d;
--//     private e;
--// }
--// --- (line: 8) skipped ---
--
--
--
--// === findRenameLocations ===
--// === /renameModifiers.ts ===
--// declare abstract class C1 {
--//     static a;
--//     readonly b;
--//     public c;
--//     /*RENAME*/protected [|dRENAME|];
--//     private e;
--// }
--// const enum E {
--// --- (line: 9) skipped ---
--
--
--
--// === findRenameLocations ===
--// === /renameModifiers.ts ===
--// declare abstract class C1 {
--//     static a;
--//     readonly b;
--//     public c;
--//     protected d;
--//     /*RENAME*/private [|eRENAME|];
 +// /*RENAME*/declare abstract class C1 {
-+//     static a;
-+//     readonly b;
-+//     public c;
-+// // --- (line: 5) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /renameModifiers.ts ===
+ //     static a;
+ //     readonly b;
+ //     public c;
+-//     protected d;
+-//     private e;
+-// }
+-// const enum E {
+-// }
+-// async function fn() {}
+-// export default class C2 {}
++// --- (line: 5) skipped ---
+
+
+
+ // === findRenameLocations ===
+ // === /renameModifiers.ts ===
+-// declare /*RENAME*/abstract class [|C1RENAME|] {
 +// declare /*RENAME*/abstract class C1 {
-+//     static a;
-+//     readonly b;
-+//     public c;
-+// // --- (line: 5) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /renameModifiers.ts ===
-+// declare abstract class C1 {
+ //     static a;
+ //     readonly b;
+ //     public c;
+-//     protected d;
+-//     private e;
+-// }
+-// const enum E {
+-// }
+-// async function fn() {}
+-// export default class C2 {}
++// --- (line: 5) skipped ---
+
+
+
+ // === findRenameLocations ===
+ // === /renameModifiers.ts ===
+ // declare abstract class C1 {
+-//     /*RENAME*/static [|aRENAME|];
 +//     /*RENAME*/static a;
-+//     readonly b;
-+//     public c;
-+//     protected d;
-+// // --- (line: 6) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /renameModifiers.ts ===
-+// declare abstract class C1 {
-+//     static a;
+ //     readonly b;
+ //     public c;
+ //     protected d;
+@@= skipped -44, +32 lines =@@
+ // === /renameModifiers.ts ===
+ // declare abstract class C1 {
+ //     static a;
+-//     /*RENAME*/readonly [|bRENAME|];
 +//     /*RENAME*/readonly b;
-+//     public c;
-+//     protected d;
-+//     private e;
-+// // --- (line: 7) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /renameModifiers.ts ===
-+// declare abstract class C1 {
-+//     static a;
-+//     readonly b;
+ //     public c;
+ //     protected d;
+ //     private e;
+@@= skipped -13, +13 lines =@@
+ // declare abstract class C1 {
+ //     static a;
+ //     readonly b;
+-//     /*RENAME*/public [|cRENAME|];
 +//     /*RENAME*/public c;
-+//     protected d;
-+//     private e;
-+// }
-+// // --- (line: 8) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /renameModifiers.ts ===
-+// declare abstract class C1 {
-+//     static a;
-+//     readonly b;
-+//     public c;
+ //     protected d;
+ //     private e;
+ // }
+@@= skipped -14, +14 lines =@@
+ //     static a;
+ //     readonly b;
+ //     public c;
+-//     /*RENAME*/protected [|dRENAME|];
 +//     /*RENAME*/protected d;
-+//     private e;
-+// }
-+// const enum E {
-+// // --- (line: 9) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /renameModifiers.ts ===
-+// declare abstract class C1 {
-+//     static a;
-+//     readonly b;
-+//     public c;
-+//     protected d;
+ //     private e;
+ // }
+ // const enum E {
+@@= skipped -15, +15 lines =@@
+ //     readonly b;
+ //     public c;
+ //     protected d;
+-//     /*RENAME*/private [|eRENAME|];
 +//     /*RENAME*/private e;
  // }
  // const enum E {
  // }
-@@= skipped -101, +89 lines =@@
+@@= skipped -15, +15 lines =@@
  //     protected d;
  //     private e;
  // }

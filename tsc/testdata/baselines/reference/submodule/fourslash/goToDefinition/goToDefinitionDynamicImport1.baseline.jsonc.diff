@@ -1,0 +1,20 @@
+--- old.goToDefinitionDynamicImport1.baseline.jsonc
++++ new.goToDefinitionDynamicImport1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /foo.ts ===
+-// [||]export function foo() { return "foo"; }
++// [|export function foo() { return "foo"; }
+ // import("./f/*GOTO DEF*/oo")
+-// var x = import("./foo")
++// var x = import("./foo")|]
+
+
+
+ // === goToDefinition ===
+ // === /foo.ts ===
+-// [||]export function foo() { return "foo"; }
++// [|export function foo() { return "foo"; }
+ // import("./foo")
+-// var x = import("./fo/*GOTO DEF*/o")
++// var x = import("./fo/*GOTO DEF*/o")|]

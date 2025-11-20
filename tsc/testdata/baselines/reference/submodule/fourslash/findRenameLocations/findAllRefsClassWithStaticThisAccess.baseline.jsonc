@@ -4,4 +4,4 @@
 //     static s() {
 //         this;
 //     }
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---

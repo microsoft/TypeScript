@@ -13,7 +13,7 @@
 //      * @see {Consider#This#show}
 //      * {@link Consider.This.show}
 //      * @see {NPR.Consider#This#show}
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -116,7 +116,7 @@
 //     export class Consider {
 //         This = class {
 //             show() { }
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 // --- (line: 9) skipped ---
 //      * {@link Consider#m}

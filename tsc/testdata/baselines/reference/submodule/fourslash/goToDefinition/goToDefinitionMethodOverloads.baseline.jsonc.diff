@@ -1,0 +1,24 @@
+--- old.goToDefinitionMethodOverloads.baseline.jsonc
++++ new.goToDefinitionMethodOverloads.baseline.jsonc
+@@= skipped -80, +80 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionMethodOverloads.ts ===
+ // class MethodOverload {
+-//     static /*GOTO DEF*/method();
+-//     static method(foo: string);
++//     <|static /*GOTO DEF*/[|method|]();|>
++//     <|static [|method|](foo: string);|>
+ //     <|static [|method|](foo?: any) { }|>
+ //     public method(): any;
+ //     public method(foo: string);
+@@= skipped -16, +16 lines =@@
+ //     static method();
+ //     static method(foo: string);
+ //     static method(foo?: any) { }
+-//     public /*GOTO DEF*/method(): any;
+-//     public method(foo: string);
++//     <|public /*GOTO DEF*/[|method|](): any;|>
++//     <|public [|method|](foo: string);|>
+ //     <|public [|method|](foo?: any) { return "foo" }|>
+ // }
+ // // static method

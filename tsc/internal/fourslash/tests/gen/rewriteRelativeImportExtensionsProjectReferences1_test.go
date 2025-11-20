@@ -53,6 +53,7 @@ export {};
 // @Filename: packages/main/src/index.ts
 import {} from "../../common/src/index.ts";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/packages/main/src/index.ts")
 	f.VerifyBaselineNonSuggestionDiagnostics(t)
 }

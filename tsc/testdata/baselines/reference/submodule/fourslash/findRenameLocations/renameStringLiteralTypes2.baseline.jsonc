@@ -4,7 +4,7 @@
 // 
 // class C {
 //     p: Foo = "a";
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -17,7 +17,7 @@
 //     m() {
 //         if (this.p === "a") {}
 //         if ("a" === this.p) {}
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -32,7 +32,7 @@
 //         if ("a" === this.p) {}
 // 
 //         if (this.p !== "a") {}
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -46,7 +46,7 @@
 // 
 //         if (this.p !== "a") {}
 //         if ("a" !== this.p) {}
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -60,7 +60,7 @@
 //         if ("a" !== this.p) {}
 // 
 //         if (this.p == "a") {}
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 
 
@@ -74,7 +74,7 @@
 // 
 //         if (this.p == "a") {}
 //         if ("a" == this.p) {}
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -88,7 +88,7 @@
 //         if ("a" == this.p) {}
 // 
 //         if (this.p != "a") {}
-// // --- (line: 16) skipped ---
+// --- (line: 16) skipped ---
 
 
 

@@ -573,8 +573,7 @@ func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntr
 			targetSelectionRange = l.createLspRangeFromRange(selectionTextRange, sourceFile)
 
 			// Get the context range (broader scope including declaration context)
-			contextNode := core.OrElse(getContextNode(entry.node), entry.node)
-			contextTextRange := toContextRange(&selectionTextRange, sourceFile, contextNode)
+			contextTextRange := toContextRange(&selectionTextRange, sourceFile, entry.context)
 			if contextTextRange != nil {
 				targetRange = l.createLspRangeFromRange(*contextTextRange, sourceFile)
 			} else {

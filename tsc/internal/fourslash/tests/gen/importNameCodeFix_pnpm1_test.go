@@ -19,6 +19,7 @@ export declare function Component(): void;
 Component/**/
 // @link: /home/src/workspaces/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react -> /home/src/workspaces/project/node_modules/@types/react`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { Component } from "react";

@@ -36,6 +36,7 @@ export const isBrowser = true;
 // @Filename: /home/src/workspaces/project/src/a.ts
 import {} from "/*1*/";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

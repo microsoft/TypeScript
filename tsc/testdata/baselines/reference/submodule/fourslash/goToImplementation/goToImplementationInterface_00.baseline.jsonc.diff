@@ -1,0 +1,22 @@
+--- old.goToImplementationInterface_00.baseline.jsonc
++++ new.goToImplementationInterface_00.baseline.jsonc
+@@= skipped -5, +5 lines =@@
+ // 
+ // <|interface [|Baz|] extends Foo {}|>
+ // 
+-// var bar: Foo = [|{ hello: helloImpl /**0*/ }|];
+-// var baz: Foo[] = [|[{ hello: helloImpl /**4*/ }]|];
+-// 
+-// function helloImpl () {}
+-// 
+-// function whatever(x: Foo = [|{ hello() {/**1*/} }|] ) {
+-// }
+-// 
+-// class Bar {
+-//     x: Foo = [|{ hello() {} }|]
+-// 
+-//     constructor(public f: Foo = [|{ hello() {/**3*/} }|] ) {}
+-// }
++// var bar: Foo = { hello: helloImpl /**0*/ };
++// var baz: Foo[] = [{ hello: helloImpl /**4*/ }];
++// --- (line: 9) skipped ---

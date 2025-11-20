@@ -13,4 +13,4 @@
 -// const obj: Foo = {
 -//     property: "[|fooRENAME|]",
 -// }
-+// // --- (line: 6) skipped ---
++// --- (line: 6) skipped ---

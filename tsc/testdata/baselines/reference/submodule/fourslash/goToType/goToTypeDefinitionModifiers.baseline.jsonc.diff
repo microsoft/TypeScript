@@ -1,0 +1,137 @@
+--- old.goToTypeDefinitionModifiers.baseline.jsonc
++++ new.goToTypeDefinitionModifiers.baseline.jsonc
+@@= skipped -134, +134 lines =@@
+
+
+ // === goToType ===
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+ // === /a.ts ===
+ // --- (line: 5) skipped ---
+@@= skipped -15, +16 lines =@@
+
+
+ // === goToType ===
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+ // === /a.ts ===
+ // --- (line: 5) skipped ---
+@@= skipped -20, +21 lines =@@
+ // 
+ //     async a() {  }
+ // 
+-//     /*GOTO TYPE*/<|override [|b|]() {}|>
++//     /*GOTO TYPE*/override b() {}
+ // 
+ //     public async c() { }
+ // }
+@@= skipped -15, +15 lines =@@
+ // 
+ //     async a() {  }
+ // 
+-//     <|override [|b|]/*GOTO TYPE*/() {}|>
++//     override b/*GOTO TYPE*/() {}
+ // 
+ //     public async c() { }
+ // }
+@@= skipped -10, +10 lines =@@
+
+
+ // === goToType ===
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+ // === /a.ts ===
+ // --- (line: 9) skipped ---
+@@= skipped -14, +15 lines =@@
+
+
+ // === goToType ===
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+ // === /a.ts ===
+ // --- (line: 9) skipped ---
+@@= skipped -14, +15 lines =@@
+
+
+ // === goToType ===
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+ // === /a.ts ===
+ // --- (line: 9) skipped ---
+@@= skipped -14, +15 lines =@@
+
+
+ // === goToType ===
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+ // === /a.ts ===
+ // --- (line: 9) skipped ---
+@@= skipped -19, +20 lines =@@
+ //     public async c() { }
+ // }
+ // 
+-// <|exp/*GOTO TYPE*/ort function [|foo|]() { }|>
++// exp/*GOTO TYPE*/ort function foo() { }
+
+
+
+@@= skipped -10, +10 lines =@@
+ //     public async c() { }
+ // }
+ // 
+-// <|export function [|foo|]/*GOTO TYPE*/() { }|>
++// export function foo/*GOTO TYPE*/() { }

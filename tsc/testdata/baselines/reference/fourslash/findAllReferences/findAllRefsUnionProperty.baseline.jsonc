@@ -117,7 +117,7 @@
 // };
 // declare const t: T;
 // if (t.type === "a") {
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -132,7 +132,7 @@
 // };
 // declare const t: T;
 // if (t.type === "a") {
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -147,4 +147,4 @@
 // };
 // declare const t: T;
 // if (t.type === "a") {
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---

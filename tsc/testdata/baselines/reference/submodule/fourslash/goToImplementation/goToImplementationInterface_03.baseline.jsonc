@@ -1,0 +1,5 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_03.ts ===
+// interface Fo/*GOTO IMPL*/o { hello: () => void }
+// 
+// var x = <Foo> { hello: () => {} };

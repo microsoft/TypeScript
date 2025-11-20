@@ -11,7 +11,7 @@
 -// const d: 'foo' = 'foo'
 -// declare const ff: Foo
 -// ff.f = '[|fooRENAME|]'
-+// // --- (line: 5) skipped ---
++// --- (line: 5) skipped ---
 
 
 

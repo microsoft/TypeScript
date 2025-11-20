@@ -1,0 +1,8 @@
+--- old.goToImplementationTypeAlias_00.baseline.jsonc
++++ new.goToImplementationTypeAlias_00.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToImplementation ===
+ // === /ref.ts ===
+ // import { TypeAlias } from "./def";
+-// const c: T/*GOTO IMPL*/ypeAlias = [|{ P: 2 }|];
++// const c: T/*GOTO IMPL*/ypeAlias = { P: 2 };

@@ -1,0 +1,8 @@
+--- old.goToImplementationInterface_03.baseline.jsonc
++++ new.goToImplementationInterface_03.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /goToImplementationInterface_03.ts ===
+ // interface Fo/*GOTO IMPL*/o { hello: () => void }
+ // 
+-// var x = <Foo> [|{ hello: () => {} }|];
++// var x = <Foo> { hello: () => {} };

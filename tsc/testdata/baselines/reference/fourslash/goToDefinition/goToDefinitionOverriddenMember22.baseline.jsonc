@@ -1,9 +1,0 @@
-// === goToDefinition ===
-// === /goToDefinitionOverriddenMember22.ts ===
-// const prop = "foo" as const;
-// 
-// abstract class A {}
-// 
-// export class B extends A {
-//   /*GOTO DEF*/override readonly [|[prop]|] = "B";
-// }

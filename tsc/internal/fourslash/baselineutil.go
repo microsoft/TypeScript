@@ -20,7 +20,24 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-func (f *FourslashTest) addResultToBaseline(t *testing.T, command string, actual string) {
+const (
+	autoImportsCmd              baselineCommand = "Auto Imports"
+	documentHighlightsCmd       baselineCommand = "documentHighlights"
+	findAllReferencesCmd        baselineCommand = "findAllReferences"
+	goToDefinitionCmd           baselineCommand = "goToDefinition"
+	goToImplementationCmd       baselineCommand = "goToImplementation"
+	goToTypeDefinitionCmd       baselineCommand = "goToType"
+	inlayHintsCmd               baselineCommand = "Inlay Hints"
+	nonSuggestionDiagnosticsCmd baselineCommand = "Syntax and Semantic Diagnostics"
+	quickInfoCmd                baselineCommand = "QuickInfo"
+	renameCmd                   baselineCommand = "findRenameLocations"
+	signatureHelpCmd            baselineCommand = "SignatureHelp"
+	smartSelectionCmd           baselineCommand = "Smart Selection"
+)
+
+type baselineCommand string
+
+func (f *FourslashTest) addResultToBaseline(t *testing.T, command baselineCommand, actual string) {
 	b, ok := f.baselines[command]
 	if !ok {
 		f.baselines[command] = &strings.Builder{}
@@ -29,10 +46,10 @@ func (f *FourslashTest) addResultToBaseline(t *testing.T, command string, actual
 	if b.Len() != 0 {
 		b.WriteString("\n\n\n\n")
 	}
-	b.WriteString(`// === ` + command + " ===\n" + actual)
+	b.WriteString(`// === ` + string(command) + " ===\n" + actual)
 }
 
-func (f *FourslashTest) writeToBaseline(command string, content string) {
+func (f *FourslashTest) writeToBaseline(command baselineCommand, content string) {
 	b, ok := f.baselines[command]
 	if !ok {
 		f.baselines[command] = &strings.Builder{}
@@ -41,37 +58,35 @@ func (f *FourslashTest) writeToBaseline(command string, content string) {
 	b.WriteString(content)
 }
 
-func getBaselineFileName(t *testing.T, command string) string {
+func getBaselineFileName(t *testing.T, command baselineCommand) string {
 	return getBaseFileNameFromTest(t) + "." + getBaselineExtension(command)
 }
 
-func getBaselineExtension(command string) string {
+func getBaselineExtension(command baselineCommand) string {
 	switch command {
-	case "QuickInfo", "SignatureHelp", "Smart Selection", "Inlay Hints", "Syntax and Semantic Diagnostics":
+	case quickInfoCmd, signatureHelpCmd, smartSelectionCmd, inlayHintsCmd, nonSuggestionDiagnosticsCmd:
 		return "baseline"
-	case "Auto Imports":
+	case autoImportsCmd:
 		return "baseline.md"
-	case "findAllReferences", "goToDefinition", "findRenameLocations":
-		return "baseline.jsonc"
 	default:
 		return "baseline.jsonc"
 	}
 }
 
-func getBaselineOptions(command string, testPath string) baseline.Options {
-	subfolder := "fourslash/" + normalizeCommandName(command)
+func (f *FourslashTest) getBaselineOptions(command baselineCommand, testPath string) baseline.Options {
+	subfolder := "fourslash/" + normalizeCommandName(string(command))
 	if !isSubmoduleTest(testPath) {
 		return baseline.Options{
 			Subfolder: subfolder,
 		}
 	}
 	switch command {
-	case "Smart Selection":
+	case smartSelectionCmd:
 		return baseline.Options{
 			Subfolder:   subfolder,
 			IsSubmodule: true,
 		}
-	case "findRenameLocations":
+	case renameCmd:
 		return baseline.Options{
 			Subfolder:   subfolder,
 			IsSubmodule: true,
@@ -100,7 +115,7 @@ func getBaselineOptions(command string, testPath string) baseline.Options {
 					matches := commandPrefix.FindStringSubmatch(line)
 					if len(matches) > 0 {
 						commandName := matches[1]
-						if commandName == command {
+						if commandName == string(command) {
 							isInCommand = true
 						} else {
 							isInCommand = false
@@ -111,10 +126,10 @@ func getBaselineOptions(command string, testPath string) baseline.Options {
 						commandLines = append(commandLines, fixedLine)
 					}
 				}
-				return strings.Join(commandLines, "\n")
+				return strings.Join(dropTrailingEmptyLines(commandLines), "\n")
 			},
 		}
-	case "Inlay Hints":
+	case inlayHintsCmd:
 		return baseline.Options{
 			Subfolder:   subfolder,
 			IsSubmodule: true,
@@ -133,7 +148,7 @@ func getBaselineOptions(command string, testPath string) baseline.Options {
 					matches := commandPrefix.FindStringSubmatch(line)
 					if len(matches) > 0 {
 						commandName := matches[1]
-						if commandName == command {
+						if commandName == string(command) {
 							isInCommand = true
 						} else {
 							isInCommand = false
@@ -205,7 +220,7 @@ func getBaselineOptions(command string, testPath string) baseline.Options {
 						commandLines = append(commandLines, fixedLine)
 					}
 				}
-				return strings.Join(commandLines, "\n")
+				return strings.Join(dropTrailingEmptyLines(commandLines), "\n")
 			},
 			DiffFixupNew: func(s string) string {
 				lines := strings.Split(s, "\n")
@@ -227,11 +242,71 @@ func getBaselineOptions(command string, testPath string) baseline.Options {
 				return strings.Join(fixedLines, "\n")
 			},
 		}
+	case goToDefinitionCmd, goToTypeDefinitionCmd, goToImplementationCmd:
+		return baseline.Options{
+			Subfolder:   subfolder,
+			IsSubmodule: true,
+			DiffFixupOld: func(s string) string {
+				var commandLines []string
+				commandPrefix := regexp.MustCompile(`^// === ([a-z\sA-Z]*) ===`)
+				testFilePrefix := "/tests/cases/fourslash"
+				serverTestFilePrefix := "/server"
+				oldGoToDefCommand := "getDefinitionAtPosition"
+				oldGoToDefComment := "/*GOTO DEF POS*/"
+				replacer := strings.NewReplacer(
+					testFilePrefix, "",
+					serverTestFilePrefix, "",
+					oldGoToDefCommand, string(goToDefinitionCmd),
+					oldGoToDefComment, "/*GOTO DEF*/",
+				)
+				objectRangeRegex := regexp.MustCompile(`{\| [^|]* \|}`)
+				detailsStr := "// === Details ==="
+				lines := strings.Split(s, "\n")
+				var isInCommand bool
+				var isInDetails bool
+				for _, line := range lines {
+					matches := commandPrefix.FindStringSubmatch(line)
+					if len(matches) > 0 {
+						isInDetails = false
+						commandName := matches[1]
+						if commandName == string(command) ||
+							command == goToDefinitionCmd && commandName == oldGoToDefCommand {
+							isInCommand = true
+						} else {
+							isInCommand = false
+						}
+					}
+					if isInCommand {
+						if strings.Contains(line, detailsStr) {
+							// Drop blank line before details
+							commandLines = commandLines[:len(commandLines)-1]
+							isInDetails = true
+						}
+						// We don't diff the details section, since the structure of responses is different.
+						if !isInDetails {
+							fixedLine := replacer.Replace(line)
+							fixedLine = objectRangeRegex.ReplaceAllString(fixedLine, "")
+							commandLines = append(commandLines, fixedLine)
+						} else if line == "  ]" {
+							isInDetails = false
+						}
+					}
+				}
+				return strings.Join(dropTrailingEmptyLines(commandLines), "\n")
+			},
+			DiffFixupNew: func(s string) string {
+				return strings.ReplaceAll(s, "bundled:///libs/", "")
+			},
+		}
 	default:
 		return baseline.Options{
 			Subfolder: subfolder,
 		}
 	}
+}
+
+func dropTrailingEmptyLines(ss []string) []string {
+	return ss[:core.FindLastIndex(ss, func(s string) bool { return s != "" })+1]
 }
 
 func isSubmoduleTest(testPath string) bool {
@@ -244,6 +319,12 @@ func normalizeCommandName(command string) string {
 	return stringutil.LowerFirstChar(command)
 }
 
+type documentSpan struct {
+	uri         lsproto.DocumentUri
+	textSpan    lsproto.Range
+	contextSpan *lsproto.Range
+}
+
 type baselineFourslashLocationsOptions struct {
 	// markerInfo
 	marker     MarkerOrRange // location
@@ -251,35 +332,44 @@ type baselineFourslashLocationsOptions struct {
 
 	endMarker string
 
-	startMarkerPrefix func(span lsproto.Location) *string
-	endMarkerSuffix   func(span lsproto.Location) *string
+	startMarkerPrefix func(span documentSpan) *string
+	endMarkerSuffix   func(span documentSpan) *string
 
-	additionalLocation *lsproto.Location
+	additionalSpan *documentSpan
 }
 
-func (f *FourslashTest) getBaselineForLocationsWithFileContents(spans []lsproto.Location, options baselineFourslashLocationsOptions) string {
-	locationsByFile := collections.GroupBy(spans, func(span lsproto.Location) lsproto.DocumentUri { return span.Uri })
-	rangesByFile := collections.MultiMap[lsproto.DocumentUri, lsproto.Range]{}
-	for file, locs := range locationsByFile.M {
-		for _, loc := range locs {
-			rangesByFile.Add(file, loc.Range)
-		}
+func locationToSpan(loc lsproto.Location) documentSpan {
+	return documentSpan{
+		uri:      loc.Uri,
+		textSpan: loc.Range,
 	}
-	return f.getBaselineForGroupedLocationsWithFileContents(
-		&rangesByFile,
+}
+
+func (f *FourslashTest) getBaselineForLocationsWithFileContents(locations []lsproto.Location, options baselineFourslashLocationsOptions) string {
+	return f.getBaselineForSpansWithFileContents(
+		core.Map(locations, locationToSpan),
 		options,
 	)
 }
 
-func (f *FourslashTest) getBaselineForGroupedLocationsWithFileContents(groupedRanges *collections.MultiMap[lsproto.DocumentUri, lsproto.Range], options baselineFourslashLocationsOptions) string {
+func (f *FourslashTest) getBaselineForSpansWithFileContents(spans []documentSpan, options baselineFourslashLocationsOptions) string {
+	spansByFile := collections.GroupBy(spans, func(span documentSpan) lsproto.DocumentUri { return span.uri })
+	return f.getBaselineForGroupedSpansWithFileContents(
+		spansByFile,
+		options,
+	)
+}
+
+func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges *collections.MultiMap[lsproto.DocumentUri, documentSpan], options baselineFourslashLocationsOptions) string {
 	// We must always print the file containing the marker,
 	// but don't want to print it twice at the end if it already
 	// found in a file with ranges.
 	foundMarker := false
 	foundAdditionalLocation := false
+	spanToContextId := map[documentSpan]int{}
 
 	baselineEntries := []string{}
-	err := f.vfs.WalkDir("/", func(path string, d vfs.DirEntry, e error) error {
+	walkDirFn := func(path string, d vfs.DirEntry, e error) error {
 		if e != nil {
 			return e
 		}
@@ -304,26 +394,32 @@ func (f *FourslashTest) getBaselineForGroupedLocationsWithFileContents(groupedRa
 			foundMarker = true
 		}
 
-		if options.additionalLocation != nil && options.additionalLocation.Uri == fileName {
+		if options.additionalSpan != nil && options.additionalSpan.uri == fileName {
 			foundAdditionalLocation = true
 		}
 
-		baselineEntries = append(baselineEntries, f.getBaselineContentForFile(path, content, ranges, nil, options))
+		baselineEntries = append(baselineEntries, f.getBaselineContentForFile(path, content, ranges, spanToContextId, options))
 		return nil
-	})
+	}
 
+	err := f.vfs.WalkDir("/", walkDirFn)
+	if err != nil && !errors.Is(err, fs.ErrNotExist) {
+		panic("walkdir error during fourslash baseline: " + err.Error())
+	}
+
+	err = f.vfs.WalkDir("bundled:///", walkDirFn)
 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
 		panic("walkdir error during fourslash baseline: " + err.Error())
 	}
 
 	// In Strada, there is a bug where we only ever add additional spans to baselines if we haven't
 	// already added the file to the baseline.
-	if options.additionalLocation != nil && !foundAdditionalLocation {
-		fileName := options.additionalLocation.Uri.FileName()
+	if options.additionalSpan != nil && !foundAdditionalLocation {
+		fileName := options.additionalSpan.uri.FileName()
 		if content, ok := f.vfs.ReadFile(fileName); ok {
 			baselineEntries = append(
 				baselineEntries,
-				f.getBaselineContentForFile(fileName, content, []lsproto.Range{options.additionalLocation.Range}, nil, options),
+				f.getBaselineContentForFile(fileName, content, []documentSpan{*options.additionalSpan}, spanToContextId, options),
 			)
 			if options.marker != nil && options.marker.FileName() == fileName {
 				foundMarker = true
@@ -335,7 +431,7 @@ func (f *FourslashTest) getBaselineForGroupedLocationsWithFileContents(groupedRa
 		// If we didn't find the marker in any file, we need to add it.
 		markerFileName := options.marker.FileName()
 		if content, ok := f.vfs.ReadFile(markerFileName); ok {
-			baselineEntries = append(baselineEntries, f.getBaselineContentForFile(markerFileName, content, nil, nil, options))
+			baselineEntries = append(baselineEntries, f.getBaselineContentForFile(markerFileName, content, nil, spanToContextId, options))
 		}
 	}
 
@@ -347,45 +443,72 @@ func (f *FourslashTest) getBaselineForGroupedLocationsWithFileContents(groupedRa
 type baselineDetail struct {
 	pos            lsproto.Position
 	positionMarker string
-	span           *lsproto.Range
+	span           *documentSpan
 	kind           string
 }
 
 func (f *FourslashTest) getBaselineContentForFile(
 	fileName string,
 	content string,
-	spansInFile []lsproto.Range,
-	spanToContextId map[lsproto.Range]int,
+	spansInFile []documentSpan,
+	spanToContextId map[documentSpan]int,
 	options baselineFourslashLocationsOptions,
 ) string {
 	details := []*baselineDetail{}
 	detailPrefixes := map[*baselineDetail]string{}
 	detailSuffixes := map[*baselineDetail]string{}
 	canDetermineContextIdInline := true
-	uri := lsconv.FileNameToDocumentURI(fileName)
 
 	if options.marker != nil && options.marker.FileName() == fileName {
 		details = append(details, &baselineDetail{pos: options.marker.LSPos(), positionMarker: options.markerName})
 	}
 
 	for _, span := range spansInFile {
+		contextSpanIndex := len(details)
+
+		// Add context span markers if present
+		if span.contextSpan != nil {
+			details = append(details, &baselineDetail{
+				pos:            span.contextSpan.Start,
+				positionMarker: "<|",
+				span:           &span,
+				kind:           "contextStart",
+			})
+
+			// Check if context span starts after text span
+			if lsproto.ComparePositions(span.contextSpan.Start, span.textSpan.Start) > 0 {
+				canDetermineContextIdInline = false
+			}
+		}
+
 		textSpanIndex := len(details)
 		details = append(details,
-			&baselineDetail{pos: span.Start, positionMarker: "[|", span: &span, kind: "textStart"},
-			&baselineDetail{pos: span.End, positionMarker: core.OrElse(options.endMarker, "|]"), span: &span, kind: "textEnd"},
+			&baselineDetail{pos: span.textSpan.Start, positionMarker: "[|", span: &span, kind: "textStart"},
+			&baselineDetail{pos: span.textSpan.End, positionMarker: core.OrElse(options.endMarker, "|]"), span: &span, kind: "textEnd"},
 		)
 
+		if span.contextSpan != nil {
+			details = append(details, &baselineDetail{
+				pos:            span.contextSpan.End,
+				positionMarker: "|>",
+				span:           &span,
+				kind:           "contextEnd",
+			})
+		}
+
 		if options.startMarkerPrefix != nil {
-			startPrefix := options.startMarkerPrefix(lsproto.Location{Uri: uri, Range: span})
+			startPrefix := options.startMarkerPrefix(span)
 			if startPrefix != nil {
 				// Special case: if this span starts at the same position as the provided marker,
 				// we want the span's prefix to appear before the marker name.
 				// i.e. We want `/*START PREFIX*/A: /*RENAME*/[|ARENAME|]`,
 				// not `/*RENAME*//*START PREFIX*/A: [|ARENAME|]`
-				if options.marker != nil && fileName == options.marker.FileName() && span.Start == options.marker.LSPos() {
+				if options.marker != nil && fileName == options.marker.FileName() && span.textSpan.Start == options.marker.LSPos() {
 					_, ok := detailPrefixes[details[0]]
 					debug.Assert(!ok, "Expected only single prefix at marker location")
 					detailPrefixes[details[0]] = *startPrefix
+				} else if span.contextSpan != nil && span.contextSpan.Start == span.textSpan.Start {
+					detailPrefixes[details[contextSpanIndex]] = *startPrefix
 				} else {
 					detailPrefixes[details[textSpanIndex]] = *startPrefix
 				}
@@ -393,9 +516,16 @@ func (f *FourslashTest) getBaselineContentForFile(
 		}
 
 		if options.endMarkerSuffix != nil {
-			endSuffix := options.endMarkerSuffix(lsproto.Location{Uri: uri, Range: span})
+			endSuffix := options.endMarkerSuffix(span)
 			if endSuffix != nil {
-				detailSuffixes[details[textSpanIndex+1]] = *endSuffix
+				// Same as above for suffixes:
+				if options.marker != nil && fileName == options.marker.FileName() && span.textSpan.End == options.marker.LSPos() {
+					detailSuffixes[details[0]] = *endSuffix
+				} else if span.contextSpan != nil && span.contextSpan.End == span.textSpan.End {
+					detailSuffixes[details[textSpanIndex+2]] = *endSuffix
+				} else {
+					detailSuffixes[details[textSpanIndex+1]] = *endSuffix
+				}
 			}
 		}
 	}
@@ -576,7 +706,7 @@ func (t *textWithContext) add(detail *baselineDetail) {
 				if t.isLibFile {
 					skippedString = "--- (line: --) skipped ---\n"
 				} else {
-					skippedString = fmt.Sprintf(`// --- (line: %v) skipped ---`, posLineIndex+t.nLinesContext+1)
+					skippedString = fmt.Sprintf(`--- (line: %v) skipped ---`, posLineIndex+t.nLinesContext+1)
 				}
 
 				t.readableContents.WriteString("\n")

@@ -16,5 +16,6 @@ func TestOccurrences02(t *testing.T) {
     [|f|]([|f|]);
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

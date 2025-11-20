@@ -9,7 +9,7 @@
 //     }
 // }
 // 
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 // --- (line: 13) skipped ---
 // }
@@ -84,7 +84,7 @@
 //     }
 // }
 // 
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 // --- (line: 13) skipped ---
 // }
@@ -155,7 +155,7 @@
 // }
 // 
 // export interface I {
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -194,7 +194,7 @@
 // }
 // 
 // export interface I {
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 

@@ -11,7 +11,7 @@
 // }
 // 
 // let B = class D {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -28,7 +28,7 @@
 // }
 // 
 // let B = class D {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -45,7 +45,7 @@
 // }
 // 
 // let B = class D {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -62,7 +62,7 @@
 // }
 // 
 // let B = class D {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -79,4 +79,4 @@
 // }
 // 
 // let B = class D {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---

@@ -36,6 +36,7 @@ var t/*1*/;
 var t2/*2*/;
 t(/*4*/"!", /*5*/12, /*6*/false);`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoIs(t, "var t: FooHandler", "")
 	f.GoToMarker(t, "2")

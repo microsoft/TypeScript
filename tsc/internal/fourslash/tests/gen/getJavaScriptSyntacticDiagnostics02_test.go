@@ -18,5 +18,6 @@ var b: boolean = true;
 function foo(): string { }
 var var = "c";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineNonSuggestionDiagnostics(t)
 }

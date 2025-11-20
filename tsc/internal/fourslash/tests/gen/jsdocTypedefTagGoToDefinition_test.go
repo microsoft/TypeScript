@@ -29,5 +29,6 @@ var person; person.[|personName/*3*/|]
 /** @type {Animal} */
 var animal; animal.[|animalName/*4*/|]`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToDefinition(t, true, "3", "4")
 }

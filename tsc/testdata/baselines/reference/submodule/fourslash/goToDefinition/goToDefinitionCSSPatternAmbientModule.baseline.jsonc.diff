@@ -1,0 +1,10 @@
+--- old.goToDefinitionCSSPatternAmbientModule.baseline.jsonc
++++ new.goToDefinitionCSSPatternAmbientModule.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+-// === /index.css ===
+-// [||]html { font-size: 16px; }
+-
+ // === /types.ts ===
+ // <|declare module [|"*.css"|] {
+ //   const styles: any;

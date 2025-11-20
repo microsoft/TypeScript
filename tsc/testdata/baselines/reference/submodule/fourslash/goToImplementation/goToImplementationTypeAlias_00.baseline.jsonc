@@ -1,0 +1,4 @@
+// === goToImplementation ===
+// === /ref.ts ===
+// import { TypeAlias } from "./def";
+// const c: T/*GOTO IMPL*/ypeAlias = { P: 2 };

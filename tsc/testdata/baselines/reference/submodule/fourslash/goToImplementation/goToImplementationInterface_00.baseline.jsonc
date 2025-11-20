@@ -1,0 +1,11 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_00.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     hello: () => void
+// }
+// 
+// <|interface [|Baz|] extends Foo {}|>
+// 
+// var bar: Foo = { hello: helloImpl /**0*/ };
+// var baz: Foo[] = [{ hello: helloImpl /**4*/ }];
+// --- (line: 9) skipped ---

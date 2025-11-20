@@ -21,5 +21,6 @@ func TestReferencesInEmptyFileWithMultipleProjects(t *testing.T) {
 // @Filename: /home/src/workspaces/project/b/b.ts
 /*2*/;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

@@ -15,7 +15,7 @@
 // 
 //         function foo() {
 //             label3: while (true) {
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 
 
@@ -36,7 +36,7 @@
 // 
 //         function foo() {
 //             label3: while (true) {
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 
 
@@ -57,7 +57,7 @@
 // 
 //         function foo() {
 //             label3: while (true) {
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 
 
@@ -78,7 +78,7 @@
 // 
 //         function foo() {
 //             label3: while (true) {
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 
 
@@ -99,4 +99,4 @@
 // 
 //         function foo() {
 //             label3: while (true) {
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---

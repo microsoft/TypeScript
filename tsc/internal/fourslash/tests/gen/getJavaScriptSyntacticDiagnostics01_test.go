@@ -15,5 +15,6 @@ func TestGetJavaScriptSyntacticDiagnostics01(t *testing.T) {
 // @Filename: a.js
 var ===;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineNonSuggestionDiagnostics(t)
 }

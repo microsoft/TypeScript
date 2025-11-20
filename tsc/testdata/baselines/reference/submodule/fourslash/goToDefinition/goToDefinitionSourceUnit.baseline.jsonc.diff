@@ -1,0 +1,39 @@
+--- old.goToDefinitionSourceUnit.baseline.jsonc
++++ new.goToDefinitionSourceUnit.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /a.ts ===
+-// //MyFile Comments
+-// //more comments
+-// /// <reference path="so/*GOTO DEF*/mePath.ts" />
+-// /// <reference path="b.ts" />
++//  //MyFile Comments
++//  //more comments
++//  /// <reference path="so/*GOTO DEF*/mePath.ts" />
++//  /// <reference path="b.ts" />
+ // 
+-// class clsInOverload {
++//  class clsInOverload {
+ // --- (line: 7) skipped ---
+
+
+
+ // === goToDefinition ===
+-// === /b.ts ===
+-// [||]
+-
+ // === /a.ts ===
+-// //MyFile Comments
+-// //more comments
+-// /// <reference path="somePath.ts" />
+-// /// <reference path="[|b/*GOTO DEF*/.ts|]" />
++//  //MyFile Comments
++//  //more comments
++//  /// <reference path="somePath.ts" />
++//  /// <reference path="b/*GOTO DEF*/.ts" />
+ // 
+-// class clsInOverload {
+-//     static fnOverload();
++//  class clsInOverload {
++//      static fnOverload();
+ // --- (line: 8) skipped ---

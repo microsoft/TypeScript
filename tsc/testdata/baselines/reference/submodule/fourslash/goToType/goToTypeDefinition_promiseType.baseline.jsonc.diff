@@ -1,0 +1,33 @@
+--- old.goToTypeDefinition_promiseType.baseline.jsonc
++++ new.goToTypeDefinition_promiseType.baseline.jsonc
+@@= skipped -6, +6 lines =@@
+ // 
+ // export {}
+
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 
+
+
+
+@@= skipped -12, +13 lines =@@
+ // 
+ // export {}
+
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * Represents the completion of an asynchronous operation
+@@= skipped -25, +25 lines =@@
+ // /**
+ //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ // --- (line: --) skipped ---
++// 

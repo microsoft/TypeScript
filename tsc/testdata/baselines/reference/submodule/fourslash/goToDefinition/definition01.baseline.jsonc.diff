@@ -1,0 +1,10 @@
+--- old.definition01.baseline.jsonc
++++ new.definition01.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /a.ts ===
+-// [||]export class Foo {}
++//  [|export class Foo {}|]
+
+ // === /b.ts ===
+ // import n = require([|'./a/*GOTO DEF*/'|]);

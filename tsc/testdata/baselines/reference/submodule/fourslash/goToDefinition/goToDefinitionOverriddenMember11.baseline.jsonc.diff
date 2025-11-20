@@ -1,0 +1,11 @@
+--- old.goToDefinitionOverriddenMember11.baseline.jsonc
++++ new.goToDefinitionOverriddenMember11.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /a.js ===
+ // class Foo {
+-//     <|[|m|]() {}|>
++//     m() {}
+ // }
+ // class Bar extends Foo {
+ //     /** @over/*GOTO DEF*/ride see {@link https://test.com} description */

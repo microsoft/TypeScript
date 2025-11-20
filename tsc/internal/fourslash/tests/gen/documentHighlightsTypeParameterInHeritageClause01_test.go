@@ -15,5 +15,6 @@ func TestDocumentHighlightsTypeParameterInHeritageClause01(t *testing.T) {
 	const content = `interface I<[|T|]> extends I<[|T|]>, [|T|] {
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

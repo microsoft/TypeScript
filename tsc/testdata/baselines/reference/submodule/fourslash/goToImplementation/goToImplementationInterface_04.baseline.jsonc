@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_04.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     (a: number): void
+// }
+// 
+// --- (line: 5) skipped ---

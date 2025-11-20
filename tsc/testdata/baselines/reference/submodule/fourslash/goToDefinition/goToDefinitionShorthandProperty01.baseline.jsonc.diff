@@ -1,0 +1,25 @@
+--- old.goToDefinitionShorthandProperty01.baseline.jsonc
++++ new.goToDefinitionShorthandProperty01.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
++// === lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/name)
++//  */
++// /** @deprecated */
++// <|declare const [|name|]: void;|>
++// /**
++//  * The **`Window.navigator`** read-only property returns a reference to the Navigator object, which has methods and properties about the application running the script.
++//  *
++// --- (line: --) skipped ---
++// 
++
+ // === /goToDefinitionShorthandProperty01.ts ===
+-// <|var [|name|] = "hello";|>
++// var name = "hello";
+ // var id = 100000;
+ // declare var id;
+-// var obj = {/*GOTO DEF*/name, id};
++// var obj = {/*GOTO DEF*/[|name|], id};
+ // obj.name;
+ // obj.id;

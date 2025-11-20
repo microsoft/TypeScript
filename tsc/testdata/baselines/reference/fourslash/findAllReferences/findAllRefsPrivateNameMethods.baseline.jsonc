@@ -7,7 +7,7 @@
 //     }
 // }
 // class D extends C {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -20,7 +20,7 @@
 //     }
 // }
 // class D extends C {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 

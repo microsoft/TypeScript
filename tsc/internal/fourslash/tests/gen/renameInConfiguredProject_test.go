@@ -19,5 +19,6 @@ var y = [|globalName|];
 // @Filename: tsconfig.json
 { "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineRename(t, nil /*preferences*/, ToAny(f.Ranges()[1:])...)
 }

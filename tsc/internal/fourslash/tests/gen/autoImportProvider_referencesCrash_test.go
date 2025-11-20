@@ -39,6 +39,7 @@ new A/**/();
 export {};
 // @link: /home/src/workspaces/project/a -> /home/src/workspaces/project/c/node_modules/a`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/home/src/workspaces/project/c/index.ts")
 	f.VerifyBaselineFindAllReferences(t, "")
 }

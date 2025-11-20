@@ -1,0 +1,11 @@
+--- old.goToDefinitionShorthandProperty04.baseline.jsonc
++++ new.goToDefinitionShorthandProperty04.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionShorthandProperty04.ts ===
+ // interface Foo {
+-//     <|[|foo|](): void|>
++//     foo(): void
+ // }
+ // 
+ // let x: Foo = {

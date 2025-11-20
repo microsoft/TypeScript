@@ -1,0 +1,24 @@
+--- old.gotoDefinitionInObjectBindingPattern2.baseline.jsonc
++++ new.gotoDefinitionInObjectBindingPattern2.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /gotoDefinitionInObjectBindingPattern2.ts ===
+-// var p0 = ({a/*GOTO DEF*/a}) => {console.log(aa)};
++// var p0 = (<|{[|a/*GOTO DEF*/a|]}|>) => {console.log(aa)};
+ // function f2({ a1, b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
+
+
+@@= skipped -7, +7 lines =@@
+ // === goToDefinition ===
+ // === /gotoDefinitionInObjectBindingPattern2.ts ===
+ // var p0 = ({aa}) => {console.log(aa)};
+-// function f2({ a/*GOTO DEF*/1, b1 }: { <|[|a1|]: number,|> b1: number } = { a1: 0, b1: 0 }) {}
++// function f2(<|{ [|a/*GOTO DEF*/1|], b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }|>) {}
+
+
+
+ // === goToDefinition ===
+ // === /gotoDefinitionInObjectBindingPattern2.ts ===
+ // var p0 = ({aa}) => {console.log(aa)};
+-// function f2({ a1, b/*GOTO DEF*/1 }: { a1: number, <|[|b1|]: number|> } = { a1: 0, b1: 0 }) {}
++// function f2(<|{ a1, [|b/*GOTO DEF*/1|] }: { a1: number, b1: number } = { a1: 0, b1: 0 }|>) {}

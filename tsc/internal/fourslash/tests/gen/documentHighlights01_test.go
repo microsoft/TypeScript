@@ -17,5 +17,6 @@ function [|f|](x: typeof [|f|]) {
     [|f|]([|f|]);
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

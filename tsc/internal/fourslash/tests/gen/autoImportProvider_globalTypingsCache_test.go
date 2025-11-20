@@ -32,6 +32,7 @@ func TestAutoImportProvider_globalTypingsCache(t *testing.T) {
 // @Filename: /home/src/workspaces/project/index.js
 BrowserRouter/**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -42,15 +42,11 @@
 -//     m() {
 -//         switch (this.p) {
 -//             case "/*RENAME*/[|aRENAME|]":
--//                 return 1;
--//             case "b":
--//                 return 2;
--// --- (line: 11) skipped ---
 +// type Foo = "/*RENAME*/a" | "b";
 +// 
 +// class C {
 +//     p: Foo = "a";
-+// // --- (line: 5) skipped ---
++// --- (line: 5) skipped ---
 +
 +
 +
@@ -63,7 +59,7 @@
 +//     m() {
 +//         switch (this.p) {
 +//             case "a":
-+// // --- (line: 8) skipped ---
++// --- (line: 8) skipped ---
 +
 +
 +
@@ -74,7 +70,6 @@
 +//     m() {
 +//         switch (this.p) {
 +//             case "/*RENAME*/a":
-+//                 return 1;
-+//             case "b":
-+//                 return 2;
-+// // --- (line: 11) skipped ---
+ //                 return 1;
+ //             case "b":
+ //                 return 2;

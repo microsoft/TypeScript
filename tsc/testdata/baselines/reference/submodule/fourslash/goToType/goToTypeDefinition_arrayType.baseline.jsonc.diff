@@ -1,0 +1,51 @@
+--- old.goToTypeDefinition_arrayType.baseline.jsonc
++++ new.goToTypeDefinition_arrayType.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+ // declare const users2: UsersArr
+ // --- (line: 7) skipped ---
+
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ //     slice(start?: number, end?: number): T[];
+ // }
+@@= skipped -196, +196 lines =@@
+ // interface ArrayConstructor {
+ //     new (arrayLength?: number): any[];
+ // --- (line: --) skipped ---
++// 
+
+ // --- (line: --) skipped ---
+ //     readonly prototype: any[];
+@@= skipped -10, +11 lines =@@
+ // interface TypedPropertyDescriptor<T> {
+ //     enumerable?: boolean;
+ // --- (line: --) skipped ---
++// 
+
+
+
+@@= skipped -17, +18 lines =@@
+ // declare const users3: CustomArray<User>
+ // users3
+
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ //     slice(start?: number, end?: number): T[];
+ // }
+@@= skipped -196, +196 lines =@@
+ // interface ArrayConstructor {
+ //     new (arrayLength?: number): any[];
+ // --- (line: --) skipped ---
++// 
+
+ // --- (line: --) skipped ---
+ //     readonly prototype: any[];
+@@= skipped -10, +11 lines =@@
+ // interface TypedPropertyDescriptor<T> {
+ //     enumerable?: boolean;
+ // --- (line: --) skipped ---
++// 
+
+

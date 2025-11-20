@@ -1,0 +1,10 @@
+--- old.goToDefinitionImport1.baseline.jsonc
++++ new.goToDefinitionImport1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /b.ts ===
+-// [||]export const foo = 1;
++// [|export const foo = 1;|]
+
+ // === /a.ts ===
+ // import { foo } from      [|"./b/*GOTO DEF*/"|];

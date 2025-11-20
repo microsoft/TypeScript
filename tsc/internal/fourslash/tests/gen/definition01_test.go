@@ -17,5 +17,6 @@ var x = new n.Foo();
 // @Filename: a.ts
  /*2*/export class Foo {}`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

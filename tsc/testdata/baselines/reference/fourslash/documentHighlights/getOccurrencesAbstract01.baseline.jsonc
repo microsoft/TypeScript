@@ -8,7 +8,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -22,7 +22,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -36,7 +36,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -50,7 +50,7 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -64,4 +64,4 @@
 // }
 // // Abstract class below should not get highlighted
 // abstract class Foo {
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---

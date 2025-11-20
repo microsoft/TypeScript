@@ -1,9 +1,0 @@
-// === goToType ===
-// === /bar.d.ts ===
-// interface [|ImportMeta|] {
-// }
-
-// === /foo.ts ===
-// /// <reference no-default-lib="true"/>
-// /// <reference path='./bar.d.ts' />
-// import.me/*GOTO TYPE*/ta;

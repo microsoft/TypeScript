@@ -1,0 +1,15 @@
+--- old.gotoDefinitionInObjectBindingPattern1.baseline.jsonc
++++ new.gotoDefinitionInObjectBindingPattern1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /gotoDefinitionInObjectBindingPattern1.ts ===
+-// function bar<T>(onfulfilled: (value: T) => void) {
+-//   return undefined;
+-// }
++// --- (line: 3) skipped ---
+ // interface Test {
+-//   <|[|prop2|]: number|>
++//   prop2: number
+ // }
+-// bar<Test>(({pr/*GOTO DEF*/op2})=>{});
++// bar<Test>((<|{[|pr/*GOTO DEF*/op2|]}|>)=>{});

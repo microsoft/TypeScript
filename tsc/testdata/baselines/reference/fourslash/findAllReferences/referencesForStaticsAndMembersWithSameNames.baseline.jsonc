@@ -7,7 +7,7 @@
 // 			static bar: Foo;
 // 
 // 			public foo(): void {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 // --- (line: 14) skipped ---
 // 		// instance function
@@ -17,7 +17,7 @@
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 
 
@@ -31,7 +31,7 @@
 // 
 // 			public foo(): void {
 // 			}
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 // --- (line: 18) skipped ---
 // 
@@ -53,7 +53,7 @@
 // 
 // 			public foo(): void {
 // 			}
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 // --- (line: 18) skipped ---
 // 
@@ -85,7 +85,7 @@
 // 		x.bar;
 // 
 // 		// static function
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -109,7 +109,7 @@
 // 		x.bar;
 // 
 // 		// static function
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -123,7 +123,7 @@
 // 			}
 // 		}
 // 	}
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 // --- (line: 17) skipped ---
 // 		x.bar;
@@ -146,7 +146,7 @@
 // 			}
 // 		}
 // 	}
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 // --- (line: 17) skipped ---
 // 		x.bar;
@@ -179,7 +179,7 @@
 // 		x.bar;
 // 
 // 		// static function
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -192,7 +192,7 @@
 // 			static bar: Foo;
 // 
 // 			public foo(): void {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 // --- (line: 14) skipped ---
 // 		// instance function
@@ -202,7 +202,7 @@
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 
 
@@ -216,7 +216,7 @@
 // 			}
 // 		}
 // 	}
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 // --- (line: 17) skipped ---
 // 		x.bar;
@@ -239,7 +239,7 @@
 // 
 // 			public foo(): void {
 // 			}
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 // --- (line: 18) skipped ---
 // 

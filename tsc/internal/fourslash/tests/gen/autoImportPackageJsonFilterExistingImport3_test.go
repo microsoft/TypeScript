@@ -22,6 +22,7 @@ declare module "node:fs" {
 // @Filename: /home/src/workspaces/project/index.ts
 readFile/**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{}, nil /*preferences*/)
 	f.GoToBOF(t)

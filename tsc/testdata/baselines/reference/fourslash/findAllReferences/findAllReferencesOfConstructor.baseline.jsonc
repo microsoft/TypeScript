@@ -25,7 +25,7 @@
 //         super.method();
 //     }
 //     method() { super(); }
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 // === /d.ts ===
 // import * as a from "./a";
@@ -61,7 +61,7 @@
 //         super.method();
 //     }
 //     method() { super(); }
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 // === /d.ts ===
 // import * as a from "./a";
@@ -97,7 +97,7 @@
 //         super.method();
 //     }
 //     method() { super(); }
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 // === /d.ts ===
 // import * as a from "./a";

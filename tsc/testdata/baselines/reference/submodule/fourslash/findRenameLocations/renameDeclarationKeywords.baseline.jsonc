@@ -6,7 +6,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -18,7 +18,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -30,7 +30,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -43,7 +43,7 @@
 //     set e(v) {}
 // }
 // interface I1 extends Base { }
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -57,7 +57,7 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -71,7 +71,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -85,7 +85,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -99,7 +99,7 @@
 // enum E { }
 // namespace N { }
 // module M { }
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -113,7 +113,7 @@
 // namespace N { }
 // module M { }
 // function fn() {}
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 
 

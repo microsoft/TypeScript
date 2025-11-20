@@ -13,5 +13,6 @@ func TestReferencesToStringLiteralValue(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const s: string = "some /*1*/ string";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

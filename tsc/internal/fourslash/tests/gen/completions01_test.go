@@ -16,6 +16,7 @@ func TestCompletions01(t *testing.T) {
 x.forEach(function (y) { y/*1*/
 x.forEach(y => y/*2*/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ".")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

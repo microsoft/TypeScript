@@ -22,6 +22,7 @@ export declare function useForm(): void;
 // @Filename: /home/src/workspaces/project/index.ts
 useForm/**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { useForm } from "react-hook-form";

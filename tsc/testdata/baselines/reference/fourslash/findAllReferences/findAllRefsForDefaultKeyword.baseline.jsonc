@@ -4,7 +4,7 @@
 // 
 // const default = 1;
 // 
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -16,7 +16,7 @@
 // 
 // function default() {}
 // 
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -30,7 +30,7 @@
 // 
 // class default {}
 // 
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 

@@ -1,0 +1,21 @@
+--- old.goToDefinitionImportedNames3.baseline.jsonc
++++ new.goToDefinitionImportedNames3.baseline.jsonc
+@@= skipped -9, +9 lines =@@
+ // }
+
+ // === /e.ts ===
+-// import {M, C, I} from "./d";
+-// var c = new /*GOTO DEF*/[|C|]();
++//  import {M, C, I} from "./d";
++//  var c = new /*GOTO DEF*/[|C|]();
+
+
+
+@@= skipped -17, +17 lines =@@
+ // }
+
+ // === /e.ts ===
+-// import {M, /*GOTO DEF*/[|C|], I} from "./d";
+-// var c = new C();
++//  import {M, /*GOTO DEF*/[|C|], I} from "./d";
++//  var c = new C();

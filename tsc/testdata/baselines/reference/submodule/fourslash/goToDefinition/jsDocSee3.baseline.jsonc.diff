@@ -1,0 +1,14 @@
+--- old.jsDocSee3.baseline.jsonc
++++ new.jsDocSee3.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /jsDocSee3.ts ===
+-// function foo (a: string) {
++// function foo (<|[|a|]: string|>) {
+ //     /**
+ //      * @see {/*GOTO DEF*/a}
+ //      */
+-//     function bar (<|[|a|]: string|>) {
++//     function bar (a: string) {
+ //     }
+ // }

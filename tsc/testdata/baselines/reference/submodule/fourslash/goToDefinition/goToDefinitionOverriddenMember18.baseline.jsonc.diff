@@ -1,0 +1,16 @@
+--- old.goToDefinitionOverriddenMember18.baseline.jsonc
++++ new.goToDefinitionOverriddenMember18.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionOverriddenMember18.ts ===
+-// const entityKind = Symbol.for("drizzle:entityKind");
+-// 
+-// abstract class MySqlColumn {
+-//   <|readonly [|[entityKind]|]: string = "MySqlColumn";|>
++// --- (line: 4) skipped ---
+ // }
+ // 
+ // export class MySqlVarBinary extends MySqlColumn {
+-//   /*GOTO DEF*/override readonly [entityKind]: string = "MySqlVarBinary";
++//   /*GOTO DEF*/<|override readonly [|[entityKind]|]: string = "MySqlVarBinary";|>
+ // }

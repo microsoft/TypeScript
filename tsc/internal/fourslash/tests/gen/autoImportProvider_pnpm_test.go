@@ -23,6 +23,7 @@ export declare function autorun(): void;
 autorun/**/
 // @link: /home/src/workspaces/project/node_modules/.pnpm/mobx@6.0.4/node_modules/mobx -> /home/src/workspaces/project/node_modules/mobx`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { autorun } from "mobx";

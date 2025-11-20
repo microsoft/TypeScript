@@ -1,0 +1,11 @@
+--- old.goToImplementationInterface_06.baseline.jsonc
++++ new.goToImplementationInterface_06.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     new (a: number): SomeOtherType;
+ // }
+ // 
+-// interface SomeOtherType {}
+-// 
+-// let x: Foo = [|class { constructor (a: number) {} }|];
+-// let y = <Foo> [|class { constructor (a: number) {} }|];
++// --- (line: 5) skipped ---

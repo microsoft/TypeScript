@@ -25,6 +25,7 @@ new Shape/**/
 export class Shape {}
 // @link: /home/src/workspaces/project/b -> /home/src/workspaces/project/a/node_modules/b`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { Shape } from "b";

@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_02.ts ===
+// interface Fo/*GOTO IMPL*/o { hello: () => void }
+// 
+// let x: number = 9;
+// 
+// --- (line: 5) skipped ---

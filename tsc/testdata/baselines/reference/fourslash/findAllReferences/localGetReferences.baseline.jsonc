@@ -16,7 +16,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -26,7 +26,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -36,7 +36,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -46,7 +46,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -66,7 +66,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -88,7 +88,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -98,7 +98,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -108,7 +108,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -118,7 +118,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -138,7 +138,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -160,7 +160,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -170,7 +170,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -180,7 +180,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -190,7 +190,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -200,7 +200,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -222,7 +222,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -232,7 +232,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -242,7 +242,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -252,7 +252,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -262,7 +262,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -281,7 +281,7 @@
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
 //         this.clsParam++;
-// // --- (line: 18) skipped ---
+// --- (line: 18) skipped ---
 
 
 
@@ -301,7 +301,7 @@
 //         modTest.modVar++;
 //     }
 // }
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -321,7 +321,7 @@
 //         modTest.modVar++;
 //     }
 // }
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -343,7 +343,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -353,7 +353,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -363,7 +363,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -373,7 +373,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -393,7 +393,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -412,7 +412,7 @@
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
 //         this.clsParam++;
-// // --- (line: 18) skipped ---
+// --- (line: 18) skipped ---
 
 
 
@@ -434,7 +434,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -444,7 +444,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -454,7 +454,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -464,7 +464,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -474,7 +474,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -494,7 +494,7 @@
 //         modTest.modVar++;
 //     }
 // }
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -508,7 +508,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -531,7 +531,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -551,7 +551,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -565,7 +565,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -588,7 +588,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -608,7 +608,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -622,7 +622,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 30) skipped ---
 //     fnVar++;
@@ -632,7 +632,7 @@
 // }
 // 
 // module modTest {
-// // --- (line: 38) skipped ---
+// --- (line: 38) skipped ---
 
 
 
@@ -652,7 +652,7 @@
 // 
 //     //Return
 //     return x++;
-// // --- (line: 35) skipped ---
+// --- (line: 35) skipped ---
 
 
 
@@ -672,7 +672,7 @@
 // 
 //     //Return
 //     return x++;
-// // --- (line: 35) skipped ---
+// --- (line: 35) skipped ---
 
 
 
@@ -694,7 +694,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -704,7 +704,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -714,7 +714,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -724,7 +724,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -734,7 +734,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -756,7 +756,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -766,7 +766,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -776,7 +776,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -786,7 +786,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -806,7 +806,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -826,7 +826,7 @@
 // 
 //     //Return
 //     return x++;
-// // --- (line: 35) skipped ---
+// --- (line: 35) skipped ---
 
 
 
@@ -840,7 +840,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 30) skipped ---
 //     fnVar++;
@@ -850,7 +850,7 @@
 // }
 // 
 // module modTest {
-// // --- (line: 38) skipped ---
+// --- (line: 38) skipped ---
 
 
 
@@ -872,7 +872,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -882,7 +882,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -892,7 +892,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -902,7 +902,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -922,7 +922,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -944,7 +944,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -954,7 +954,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -964,7 +964,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -974,7 +974,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -984,7 +984,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -998,7 +998,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -1021,7 +1021,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -1041,7 +1041,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -1055,7 +1055,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -1078,7 +1078,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -1098,7 +1098,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -1120,7 +1120,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1130,7 +1130,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1140,7 +1140,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1150,7 +1150,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1170,7 +1170,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1192,7 +1192,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -1202,7 +1202,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -1212,7 +1212,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -1222,7 +1222,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -1232,7 +1232,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -1246,7 +1246,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -1269,7 +1269,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -1289,7 +1289,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -1311,7 +1311,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1321,7 +1321,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1331,7 +1331,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1341,7 +1341,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1361,7 +1361,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1375,7 +1375,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -1398,7 +1398,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -1418,7 +1418,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -1440,7 +1440,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1450,7 +1450,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1460,7 +1460,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1470,7 +1470,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1490,7 +1490,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1512,7 +1512,7 @@
 //         // References to a class parameter.
 //         this.clsParam++;
 //         modTest.modVar++;
-// // --- (line: 19) skipped ---
+// --- (line: 19) skipped ---
 
 // --- (line: 24) skipped ---
 //     var fnVar = 1;
@@ -1522,7 +1522,7 @@
 //     globalVar++;
 //     modTest.modVar++;
 //     fnVar++;
-// // --- (line: 32) skipped ---
+// --- (line: 32) skipped ---
 
 // --- (line: 39) skipped ---
 // 
@@ -1532,7 +1532,7 @@
 //     modVar++;
 // 
 //     class testCls {
-// // --- (line: 47) skipped ---
+// --- (line: 47) skipped ---
 
 // --- (line: 51) skipped ---
 // 
@@ -1542,7 +1542,7 @@
 //         modVar++;
 //     }
 // 
-// // --- (line: 59) skipped ---
+// --- (line: 59) skipped ---
 
 // --- (line: 70) skipped ---
 // foo(globalVar);
@@ -1552,7 +1552,7 @@
 // modTest.modVar++;
 // globalVar = globalVar + globalVar;
 // 
-// // --- (line: 78) skipped ---
+// --- (line: 78) skipped ---
 
 
 
@@ -1574,7 +1574,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1584,7 +1584,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1594,7 +1594,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1604,7 +1604,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1624,7 +1624,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1646,7 +1646,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1656,7 +1656,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1666,7 +1666,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1676,7 +1676,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1696,7 +1696,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1718,7 +1718,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1728,7 +1728,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1738,7 +1738,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1748,7 +1748,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1768,7 +1768,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1790,7 +1790,7 @@
 //         this.clsVar++;
 //         fooCls.clsSVar++;
 //         // References to a class parameter.
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 // --- (line: 25) skipped ---
 // 
@@ -1800,7 +1800,7 @@
 //     modTest.modVar++;
 //     fnVar++;
 // 
-// // --- (line: 33) skipped ---
+// --- (line: 33) skipped ---
 
 // --- (line: 38) skipped ---
 //     export var modVar:number;
@@ -1810,7 +1810,7 @@
 //     fooCls.clsSVar++;
 //     modVar++;
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 // --- (line: 50) skipped ---
 //         static boo = foo;
@@ -1820,7 +1820,7 @@
 //         fooCls.clsSVar++;
 //         modVar++;
 //     }
-// // --- (line: 58) skipped ---
+// --- (line: 58) skipped ---
 
 // --- (line: 65) skipped ---
 // 
@@ -1840,7 +1840,7 @@
 // // References to illegal assignment.
 // foo = foo + 1;
 // err = err++;
-// // --- (line: 83) skipped ---
+// --- (line: 83) skipped ---
 
 
 
@@ -1854,7 +1854,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -1877,7 +1877,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -1897,7 +1897,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -1911,7 +1911,7 @@
 //     // References to a variable declared in a function.
 //     var fnVar = 1;
 // 
-// // --- (line: 27) skipped ---
+// --- (line: 27) skipped ---
 
 // --- (line: 43) skipped ---
 //     modVar++;
@@ -1934,7 +1934,7 @@
 //     }
 // }
 // 
-// // --- (line: 64) skipped ---
+// --- (line: 64) skipped ---
 
 // --- (line: 67) skipped ---
 // // References to a class argument.
@@ -1954,7 +1954,7 @@
 // err = err++;
 // 
 // //Shadowed fn Parameter
-// // --- (line: 85) skipped ---
+// --- (line: 85) skipped ---
 
 
 
@@ -1971,7 +1971,7 @@
 // }
 // 
 // //Remotes
-// // --- (line: 92) skipped ---
+// --- (line: 92) skipped ---
 
 
 
@@ -1988,7 +1988,7 @@
 // }
 // 
 // //Remotes
-// // --- (line: 92) skipped ---
+// --- (line: 92) skipped ---
 
 
 
@@ -2005,7 +2005,7 @@
 // }
 // 
 // //Remotes
-// // --- (line: 92) skipped ---
+// --- (line: 92) skipped ---
 
 
 
@@ -2049,7 +2049,7 @@
 // // References to a variable declared in global.
 // var globalVar: number = 2;
 // 
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -2063,7 +2063,7 @@
 // 
 // //Shadowed fn Parameter
 // function shdw(globalVar: number) {
-// // --- (line: 86) skipped ---
+// --- (line: 86) skipped ---
 
 
 
@@ -2077,4 +2077,4 @@
 // //Shadowed fn Parameter
 // function shdw(globalVar: number) {
 //     //Increments
-// // --- (line: 87) skipped ---
+// --- (line: 87) skipped ---

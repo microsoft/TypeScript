@@ -1,0 +1,14 @@
+--- old.goToImplementationNamespace_03.baseline.jsonc
++++ new.goToImplementationNamespace_03.baseline.jsonc
+@@= skipped -13, +13 lines =@@
+ //     hello() {}
+ // }|>
+ // 
+-// var someVar1 : Foo.Bar = [|{ hello: () => {/**1*/} }|];
++// var someVar1 : Foo.Bar = { hello: () => {/**1*/} };
+ // 
+-// var someVar2 = <Foo.Bar> [|{ hello: () => {/**2*/} }|];
++// var someVar2 = <Foo.Bar> { hello: () => {/**2*/} };
+ // 
+ // function whatever(x: Foo.Ba/*GOTO IMPL*/r) {
+ // 

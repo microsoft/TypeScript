@@ -4,7 +4,7 @@
 // import aDefault from "./a.js"
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -15,7 +15,7 @@
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
 // 
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -27,7 +27,7 @@
 // import bDefault from "./b.js"
 // 
 // import * as c from "./c"
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 

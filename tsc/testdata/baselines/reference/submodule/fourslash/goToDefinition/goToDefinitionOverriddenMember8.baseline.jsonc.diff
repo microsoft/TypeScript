@@ -1,0 +1,11 @@
+--- old.goToDefinitionOverriddenMember8.baseline.jsonc
++++ new.goToDefinitionOverriddenMember8.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     <|[|m|]() {}|>
+ // }
+
+-// === /./b.ts ===
++// === /b.ts ===
+ // import { A } from "./a";
+ // class B extends A {
+ //     /*GOTO DEF*/[|override|] m() {}

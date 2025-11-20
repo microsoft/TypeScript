@@ -1,0 +1,9 @@
+--- old.goToDefinitionSwitchCase1.baseline.jsonc
++++ new.goToDefinitionSwitchCase1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionSwitchCase1.ts ===
+-// <|[|switch|] (null )|> {
++// [|switch|] (null ) {
+ //   /*GOTO DEF*/case null: break;
+ // }

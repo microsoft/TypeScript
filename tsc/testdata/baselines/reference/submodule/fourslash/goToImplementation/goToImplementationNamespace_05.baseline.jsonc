@@ -1,0 +1,52 @@
+// === goToImplementation ===
+// === /goToImplementationNamespace_05.ts ===
+// <|namespace [|Foo|].Baz {
+//     export function hello() {}
+// }|>
+// 
+// module Bar.Baz {
+//     export function sure() {}
+// }
+// 
+// let x = Fo/*GOTO IMPL*/o;
+// let y = Bar;
+// let x1 = Foo.Baz;
+// let y1 = Bar.Baz;
+
+
+
+// === goToImplementation ===
+// === /goToImplementationNamespace_05.ts ===
+// namespace Foo.Baz {
+//     export function hello() {}
+// }
+// 
+// <|module [|Bar|].Baz {
+//     export function sure() {}
+// }|>
+// 
+// let x = Foo;
+// let y = Ba/*GOTO IMPL*/r;
+// let x1 = Foo.Baz;
+// let y1 = Bar.Baz;
+
+
+
+// === goToImplementation ===
+// === /goToImplementationNamespace_05.ts ===
+// --- (line: 7) skipped ---
+// 
+// let x = Foo;
+// let y = Bar;
+// let x1 = Foo.B/*GOTO IMPL*/az;
+// let y1 = Bar.Baz;
+
+
+
+// === goToImplementation ===
+// === /goToImplementationNamespace_05.ts ===
+// --- (line: 8) skipped ---
+// let x = Foo;
+// let y = Bar;
+// let x1 = Foo.Baz;
+// let y1 = Bar.B/*GOTO IMPL*/az;

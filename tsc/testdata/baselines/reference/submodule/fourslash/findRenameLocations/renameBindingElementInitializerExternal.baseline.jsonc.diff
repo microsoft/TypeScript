@@ -14,60 +14,293 @@
 -//     nested: { lvl2 = [|externalRENAME|]},
 -//     oldName: newName = [|externalRENAME|]
 -// } = obj;
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
+-// 
+-// function f({
+-//     lvl1 = /*RENAME*/[|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// } = obj;
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
+-// 
+-// function f({
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = /*RENAME*/[|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// } = obj;
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
+-// 
+-// function f({
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = /*RENAME*/[|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// } = obj;
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
+-// 
+-// function f({
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = /*RENAME*/[|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// } = obj;
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
+-// 
+-// function f({
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = /*RENAME*/[|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// } = obj;
+-
+-
+-
+-// === findRenameLocations ===
+-// === /renameBindingElementInitializerExternal.ts ===
+-// const [|externalRENAME|] = true;
+-// 
+-// function f({
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = [|externalRENAME|]
+-// }) {}
+-// 
+-// const {
+-//     lvl1 = [|externalRENAME|],
+-//     nested: { lvl2 = [|externalRENAME|]},
+-//     oldName: newName = /*RENAME*/[|externalRENAME|]
+-// } = obj;
 +//     lvl1 = external,
-+// // --- (line: 5) skipped ---
-
-
-
- // === findRenameLocations ===
- // === /renameBindingElementInitializerExternal.ts ===
--// const [|externalRENAME|] = true;
++// --- (line: 5) skipped ---
++
++
++
++// === findRenameLocations ===
++// === /renameBindingElementInitializerExternal.ts ===
 +// const external = true;
- // 
- // function f({
- //     lvl1 = /*RENAME*/[|externalRENAME|],
-@@= skipped -33, +25 lines =@@
-
- // === findRenameLocations ===
- // === /renameBindingElementInitializerExternal.ts ===
--// const [|externalRENAME|] = true;
++// 
++// function f({
++//     lvl1 = /*RENAME*/[|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// }) {}
++// 
++// const {
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// } = obj;
++
++// === bundled:///libs/lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  *
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
++//  */
++// declare var [|externalRENAME|]: External;
++// /**
++//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
++//  *
++// --- (line: --) skipped ---
++// 
++
++
++
++// === findRenameLocations ===
++// === /renameBindingElementInitializerExternal.ts ===
 +// const external = true;
- // 
- // function f({
- //     lvl1 = [|externalRENAME|],
-@@= skipped -18, +18 lines =@@
-
- // === findRenameLocations ===
- // === /renameBindingElementInitializerExternal.ts ===
--// const [|externalRENAME|] = true;
++// 
++// function f({
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = /*RENAME*/[|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// }) {}
++// 
++// const {
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// } = obj;
++
++// === bundled:///libs/lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  *
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
++//  */
++// declare var [|externalRENAME|]: External;
++// /**
++//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
++//  *
++// --- (line: --) skipped ---
++// 
++
++
++
++// === findRenameLocations ===
++// === /renameBindingElementInitializerExternal.ts ===
 +// const external = true;
- // 
- // function f({
- //     lvl1 = [|externalRENAME|],
-@@= skipped -18, +18 lines =@@
-
- // === findRenameLocations ===
- // === /renameBindingElementInitializerExternal.ts ===
--// const [|externalRENAME|] = true;
++// 
++// function f({
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = /*RENAME*/[|externalRENAME|]
++// }) {}
++// 
++// const {
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// } = obj;
++
++// === bundled:///libs/lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  *
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
++//  */
++// declare var [|externalRENAME|]: External;
++// /**
++//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
++//  *
++// --- (line: --) skipped ---
++// 
++
++
++
++// === findRenameLocations ===
++// === /renameBindingElementInitializerExternal.ts ===
 +// const external = true;
- // 
- // function f({
- //     lvl1 = [|externalRENAME|],
-@@= skipped -18, +18 lines =@@
-
- // === findRenameLocations ===
- // === /renameBindingElementInitializerExternal.ts ===
--// const [|externalRENAME|] = true;
++// 
++// function f({
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// }) {}
++// 
++// const {
++//     lvl1 = /*RENAME*/[|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// } = obj;
++
++// === bundled:///libs/lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  *
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
++//  */
++// declare var [|externalRENAME|]: External;
++// /**
++//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
++//  *
++// --- (line: --) skipped ---
++// 
++
++
++
++// === findRenameLocations ===
++// === /renameBindingElementInitializerExternal.ts ===
 +// const external = true;
- // 
- // function f({
- //     lvl1 = [|externalRENAME|],
-@@= skipped -18, +18 lines =@@
-
- // === findRenameLocations ===
- // === /renameBindingElementInitializerExternal.ts ===
--// const [|externalRENAME|] = true;
++// 
++// function f({
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// }) {}
++// 
++// const {
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = /*RENAME*/[|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// } = obj;
++
++// === bundled:///libs/lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  *
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
++//  */
++// declare var [|externalRENAME|]: External;
++// /**
++//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
++//  *
++// --- (line: --) skipped ---
++// 
++
++
++
++// === findRenameLocations ===
++// === /renameBindingElementInitializerExternal.ts ===
 +// const external = true;
- // 
- // function f({
- //     lvl1 = [|externalRENAME|],
++// 
++// function f({
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = [|externalRENAME|]
++// }) {}
++// 
++// const {
++//     lvl1 = [|externalRENAME|],
++//     nested: { lvl2 = [|externalRENAME|]},
++//     oldName: newName = /*RENAME*/[|externalRENAME|]
++// } = obj;
++
++// === bundled:///libs/lib.dom.d.ts ===
++// --- (line: --) skipped ---
++//  *
++//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
++//  */
++// declare var [|externalRENAME|]: External;
++// /**
++//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
++//  *
++// --- (line: --) skipped ---
++// 

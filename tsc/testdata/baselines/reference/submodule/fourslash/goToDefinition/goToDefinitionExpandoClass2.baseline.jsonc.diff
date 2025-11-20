@@ -1,0 +1,14 @@
+--- old.goToDefinitionExpandoClass2.baseline.jsonc
++++ new.goToDefinitionExpandoClass2.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /index.js ===
+ // const Core = {}
+ // 
+-// <|Core.[|Test|]|> = class {
++// <|Core.[|Test|] = class {
+ //   [|constructor() { }|]
+-// }
++// }|>
+ // 
+ // Core.Test.prototype.foo = 10
+ // 

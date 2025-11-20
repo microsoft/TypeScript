@@ -20,5 +20,6 @@ var c = /*1*/globalClass();
 // @Filename: /home/src/workspaces/project/tsconfig.json
 { "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

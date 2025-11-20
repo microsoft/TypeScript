@@ -31,4 +31,4 @@
 //   constructor(readonly prop2: string) {
 //     class D {
 //       readonly prop: string = "";  
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---

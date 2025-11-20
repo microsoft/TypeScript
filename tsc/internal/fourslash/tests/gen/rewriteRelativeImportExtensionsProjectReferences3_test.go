@@ -42,6 +42,7 @@ export {};
 // @Filename: src/services/services.ts
 import {} from "../compiler/parser.ts";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/src/services/services.ts")
 	f.VerifyBaselineNonSuggestionDiagnostics(t)
 }

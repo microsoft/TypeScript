@@ -28,6 +28,7 @@ export type SafeString = string;
 // @Filename: /home/src/workspaces/project/index.ts
 type A = { name: string/**/ }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

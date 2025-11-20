@@ -4,7 +4,7 @@
 //     super;
 // }
 // 
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -15,7 +15,7 @@
 // }
 // 
 // module M {
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -30,7 +30,7 @@
 //     function f(x = super) {
 //     super;
 //     }
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -44,7 +44,7 @@
 //     super;
 //     }
 // 
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -58,4 +58,4 @@
 //     }
 // 
 //     class A {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---

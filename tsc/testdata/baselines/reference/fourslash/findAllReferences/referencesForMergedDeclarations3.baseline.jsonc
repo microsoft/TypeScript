@@ -26,7 +26,7 @@
 //     static staticMethod() { }
 //     method() { }
 // }
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 // --- (line: 8) skipped ---
 //     }

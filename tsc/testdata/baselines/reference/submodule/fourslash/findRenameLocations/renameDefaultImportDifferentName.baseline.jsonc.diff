@@ -1,8 +1,0 @@
---- old.renameDefaultImportDifferentName.baseline.jsonc
-+++ new.renameDefaultImportDifferentName.baseline.jsonc
-@@= skipped -19, +19 lines =@@
- // import [|BRENAME|] from "./B";
- // let b = new /*RENAME*/[|BRENAME|]();
- // b.test();
--
--

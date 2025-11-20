@@ -103,7 +103,7 @@
 +// 
 +// obj = {
 +//     [`prop`]: 1
-+// // --- (line: 7) skipped ---
++// --- (line: 7) skipped ---
 +
 +
 +
@@ -118,7 +118,7 @@
 +// };
 +// 
 +// obj.prop;
-+// // --- (line: 10) skipped ---
++// --- (line: 10) skipped ---
 +
 +
 +

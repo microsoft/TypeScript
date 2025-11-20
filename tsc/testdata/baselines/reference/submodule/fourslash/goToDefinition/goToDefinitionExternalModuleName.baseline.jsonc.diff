@@ -1,0 +1,10 @@
+--- old.goToDefinitionExternalModuleName.baseline.jsonc
++++ new.goToDefinitionExternalModuleName.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /a.ts ===
+-// [||]export class Foo {}
++//  [|export class Foo {}|]
+
+ // === /b.ts ===
+ // import n = require([|'./a/*GOTO DEF*/'|]);

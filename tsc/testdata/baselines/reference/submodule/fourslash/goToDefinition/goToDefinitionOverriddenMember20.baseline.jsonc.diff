@@ -1,0 +1,16 @@
+--- old.goToDefinitionOverriddenMember20.baseline.jsonc
++++ new.goToDefinitionOverriddenMember20.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionOverriddenMember20.ts ===
+-// const prop = "foo" as const;
+-// 
+-// abstract class A {
+-//   <|readonly [|[prop]|] = "A";|>
++// --- (line: 4) skipped ---
+ // }
+ // 
+ // export class B extends A {
+-//   /*GOTO DEF*/override readonly [prop] = "B";
++//   /*GOTO DEF*/<|override readonly [|[prop]|] = "B";|>
+ // }

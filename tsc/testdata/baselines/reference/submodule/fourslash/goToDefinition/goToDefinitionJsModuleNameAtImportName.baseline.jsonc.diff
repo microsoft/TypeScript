@@ -1,0 +1,69 @@
+--- old.goToDefinitionJsModuleNameAtImportName.baseline.jsonc
++++ new.goToDefinitionJsModuleNameAtImportName.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /foo.js ===
+-// [|function notExported() { }
+-// class Blah {
+-//    abc = 123;
+-// }
+-// module.exports.Blah = Blah;|]
++//  [|function notExported() { }
++//  class Blah {
++//     abc = 123;
++//  }
++//  module.exports.Blah = Blah;|]
+
+ // === /bar.js ===
+ // const /*GOTO DEF*/[|BlahModule|] = require("./foo.js");
+@@= skipped -13, +13 lines =@@
+
+ // === goToDefinition ===
+ // === /foo.js ===
+-// [|function notExported() { }
+-// class Blah {
+-//    abc = 123;
+-// }
+-// module.exports.Blah = Blah;|]
++//  [|function notExported() { }
++//  class Blah {
++//     abc = 123;
++//  }
++//  module.exports.Blah = Blah;|]
+
+ // === /bar.js ===
+ // const BlahModule = require("./foo.js");
+@@= skipped -14, +14 lines =@@
+
+ // === goToDefinition ===
+ // === /foo.js ===
+-// [|function notExported() { }
+-// class Blah {
+-//    abc = 123;
+-// }
+-// module.exports.Blah = Blah;|]
++//  [|function notExported() { }
++//  class Blah {
++//     abc = 123;
++//  }
++//  module.exports.Blah = Blah;|]
+
+ // === /barTs.ts ===
+ // import /*GOTO DEF*/[|BlahModule|] = require("./foo.js");
+@@= skipped -14, +14 lines =@@
+
+ // === goToDefinition ===
+ // === /foo.js ===
+-// [|function notExported() { }
+-// class Blah {
+-//    abc = 123;
+-// }
+-// module.exports.Blah = Blah;|]
++//  [|function notExported() { }
++//  class Blah {
++//     abc = 123;
++//  }
++//  module.exports.Blah = Blah;|]
+
+ // === /barTs.ts ===
+ // import BlahModule = require("./foo.js");

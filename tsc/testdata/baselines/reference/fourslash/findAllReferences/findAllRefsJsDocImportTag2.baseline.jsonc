@@ -4,7 +4,7 @@
 //   constructor() {
 //     this.id_ = Math.random();
 //   }
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 // === /player.js ===
 // import [|Component|] from './component.js';

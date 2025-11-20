@@ -41,6 +41,7 @@ import "./sub/folder";
 // @Filename: /home/src/workspaces/project/packages/dep/sub/folder/index.ts
 export const dep = 0;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { dep } from "packages/dep/sub/folder";

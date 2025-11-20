@@ -5,7 +5,7 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 24) skipped ---
 //         protected static statProt;
@@ -23,7 +23,7 @@
 //         declare var foo;
 // 
 //         export class C2 {
-// // --- (line: 40) skipped ---
+// --- (line: 40) skipped ---
 
 // --- (line: 46) skipped ---
 //     }
@@ -42,7 +42,7 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 24) skipped ---
 //         protected static statProt;
@@ -60,7 +60,7 @@
 //         declare var foo;
 // 
 //         export class C2 {
-// // --- (line: 40) skipped ---
+// --- (line: 40) skipped ---
 
 // --- (line: 46) skipped ---
 //     }
@@ -79,7 +79,7 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 24) skipped ---
 //         protected static statProt;
@@ -97,7 +97,7 @@
 //         declare var foo;
 // 
 //         export class C2 {
-// // --- (line: 40) skipped ---
+// --- (line: 40) skipped ---
 
 // --- (line: 46) skipped ---
 //     }
@@ -116,7 +116,7 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 24) skipped ---
 //         protected static statProt;
@@ -134,7 +134,7 @@
 //         declare var foo;
 // 
 //         export class C2 {
-// // --- (line: 40) skipped ---
+// --- (line: 40) skipped ---
 
 // --- (line: 46) skipped ---
 //     }
@@ -153,7 +153,7 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 24) skipped ---
 //         protected static statProt;
@@ -171,7 +171,7 @@
 //         declare var foo;
 // 
 //         export class C2 {
-// // --- (line: 40) skipped ---
+// --- (line: 40) skipped ---
 
 // --- (line: 46) skipped ---
 //     }

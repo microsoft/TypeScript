@@ -1,0 +1,13 @@
+--- old.goToImplementationSuper_00.baseline.jsonc
++++ new.goToImplementationSuper_00.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     constructor() {}
+ // }|>
+ // 
+-// class Bar extends Foo {
++// <|class [|Bar|] extends Foo {
+ //     constructor() {
+ //         su/*GOTO IMPL*/per();
+ //     }
+-// }
++// }|>

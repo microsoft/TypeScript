@@ -19,7 +19,7 @@
 //             function blah() {
 // label:          while (true) {
 //                     if (false) break label;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 

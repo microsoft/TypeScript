@@ -1,0 +1,9 @@
+--- old.goToDefinitionDynamicImport4.baseline.jsonc
++++ new.goToDefinitionDynamicImport4.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /foo.ts ===
+-// <|export function [|bar|]() { return "bar"; }|>
+-// import('./foo').then(({ ba/*GOTO DEF*/r }) => undefined);
++// export function bar() { return "bar"; }
++// import('./foo').then((<|{ [|ba/*GOTO DEF*/r|] }|>) => undefined);

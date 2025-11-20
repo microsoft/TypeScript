@@ -1,0 +1,15 @@
+--- old.gotoDefinitionLinkTag4.baseline.jsonc
++++ new.gotoDefinitionLinkTag4.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+-// === /a.ts ===
+-// <|interface [|Foo|] {
+-//     foo: E.Foo;
+-// }|>
+-
+ // === /b.ts ===
+ // enum E {
+ //     /** {@link /*GOTO DEF*/Foo} */
+-//     Foo
++//     [|Foo|]
+ // }

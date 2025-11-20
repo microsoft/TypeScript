@@ -42,6 +42,7 @@ export const one = 0;
 // @Filename: /home/src/workspaces/project/src/a.ts
 import { } from "/**/";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

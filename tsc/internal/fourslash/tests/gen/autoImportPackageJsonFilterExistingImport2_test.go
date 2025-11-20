@@ -20,6 +20,7 @@ export declare function useState(): void;
 // @Filename: /home/src/workspaces/project/index.ts
 useMemo/**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{}, nil /*preferences*/)
 	f.GoToBOF(t)

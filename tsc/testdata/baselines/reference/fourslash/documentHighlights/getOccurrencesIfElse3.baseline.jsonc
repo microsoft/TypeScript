@@ -11,7 +11,7 @@
 //         if (false)
 //             if (true)
 //                 var x = undefined;
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -28,4 +28,4 @@
 //         if (false)
 //             if (true)
 //                 var x = undefined;
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---

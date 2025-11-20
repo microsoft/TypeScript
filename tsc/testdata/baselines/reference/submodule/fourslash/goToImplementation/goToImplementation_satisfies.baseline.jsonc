@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /a.ts ===
+// interface /*GOTO IMPL*/I {
+// 	foo: string;
+// }
+// 
+// --- (line: 5) skipped ---

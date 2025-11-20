@@ -1,0 +1,9 @@
+--- old.goToImplementationInterface_05.baseline.jsonc
++++ new.goToImplementationInterface_05.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     (a: number): void
+ // }
+ // 
+-// let bar2 = <Foo> [|function(a) {}|];
++// let bar2 = <Foo> function(a) {};
+ // 

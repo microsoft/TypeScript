@@ -1,0 +1,23 @@
+--- old.goToImplementationInterface_02.baseline.jsonc
++++ new.goToImplementationInterface_02.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ // 
+ // let x: number = 9;
+ // 
+-// function createFoo(): Foo {
+-//     if (x === 2) {
+-//         return [|{
+-//             hello() {}
+-//         }|];
+-//     }
+-//     return [|{
+-//         hello() {}
+-//     }|];
+-// }
+-// 
+-// let createFoo2 = (): Foo => [|({hello() {}})|];
+-// 
+-// function createFooLike() {
+-//     return {
+-// --- (line: 20) skipped ---
++// --- (line: 5) skipped ---

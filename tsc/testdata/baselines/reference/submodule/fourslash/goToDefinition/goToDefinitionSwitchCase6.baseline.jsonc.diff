@@ -1,0 +1,13 @@
+--- old.goToDefinitionSwitchCase6.baseline.jsonc
++++ new.goToDefinitionSwitchCase6.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+
+ // === goToDefinition ===
+ // === /goToDefinitionSwitchCase6.ts ===
+-// [|export default { case };
++// export default { case };
+ // /*GOTO DEF*/default;
+-// case 42;|]
++// case 42;
+
+

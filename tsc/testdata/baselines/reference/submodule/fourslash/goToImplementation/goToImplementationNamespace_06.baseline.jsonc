@@ -1,0 +1,8 @@
+// === goToImplementation ===
+// === /goToImplementationNamespace_06.ts ===
+// <|namespace [|F/*GOTO IMPL*/oo|] {
+//     declare function hello(): void;
+// }|>
+// 
+// 
+// let x: typeof Foo = { hello() {} };

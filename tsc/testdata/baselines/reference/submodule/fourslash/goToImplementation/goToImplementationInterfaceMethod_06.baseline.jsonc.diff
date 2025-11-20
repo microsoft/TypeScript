@@ -1,0 +1,24 @@
+--- old.goToImplementationInterfaceMethod_06.baseline.jsonc
++++ new.goToImplementationInterfaceMethod_06.baseline.jsonc
+@@= skipped -19, +19 lines =@@
+ //     someOtherFunction() {}
+ // };
+ // 
+-// --- (line: 26) skipped ---
+-
+-// --- (line: 37) skipped ---
++// class FooLike implements SuperFoo {
++//      <|[|hello|]() {}|>
++//      someOtherFunction() {}
++// }
++// 
++// class NotRelatedToFoo {
++//      hello() {}                // This case is equivalent to the last case, but is not returned because it does not share a common ancestor with Foo
++//      someOtherFunction() {}
++// }
++// 
++// class NotFoo implements SuperFoo {
++//      <|[|hello|]() {}|>                // We only want implementations of Foo, even though the function is declared in SuperFoo
+ // }
+ // 
+ // function (x: Foo) {

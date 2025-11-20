@@ -1,0 +1,17 @@
+--- old.goToDefinitionJsModuleExports.baseline.jsonc
++++ new.goToDefinitionJsModuleExports.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /foo.js ===
+-// x.[|test|] = <|() => { }|>
++// x.test = () => { }
+ // x./*GOTO DEF*/test();
+ // x.test3 = function () { }
+ // x.test3();
+@@= skipped -10, +10 lines =@@
+ // === /foo.js ===
+ // x.test = () => { }
+ // x.test();
+-// x.[|test3|] = <|function () { }|>
++// x.test3 = function () { }
+ // x./*GOTO DEF*/test3();

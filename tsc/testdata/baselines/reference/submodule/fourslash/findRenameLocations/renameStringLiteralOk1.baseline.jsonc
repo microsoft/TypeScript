@@ -4,7 +4,7 @@
 // class Foo {
 //     f = f()
 // }
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 

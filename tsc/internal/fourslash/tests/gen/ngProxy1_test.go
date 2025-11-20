@@ -25,6 +25,7 @@ let x = [1, 2];
 x/**/
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "Proxied x: number[]hello world", "")
 }

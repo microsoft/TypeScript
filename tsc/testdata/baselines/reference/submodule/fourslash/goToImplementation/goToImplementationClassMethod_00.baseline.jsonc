@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationClassMethod_00.ts ===
+// class Bar {
+//     <|[|hello|]() {}|>
+// }
+// 
+// new Bar().hel/*GOTO IMPL*/lo;

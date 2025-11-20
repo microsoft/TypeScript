@@ -25,5 +25,6 @@ export function add(a: number, b: number): number;
 // @Filename: /a/b/c/d/e/index.ts
 import { add } from "#utils";`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/a/b/c/d/e/index.ts")
 }

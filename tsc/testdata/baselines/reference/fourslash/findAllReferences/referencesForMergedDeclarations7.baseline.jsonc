@@ -6,7 +6,7 @@
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 

@@ -5,7 +5,7 @@
 // namespace N { }
 // import N2 = N;
 // 
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -16,7 +16,7 @@
 // namespace N { }
 // import N2 = N;
 // 
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -29,7 +29,7 @@
 // 
 // // import ... from ...
 // import type B from "./b";
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -46,7 +46,7 @@
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -63,7 +63,7 @@
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -77,7 +77,7 @@
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -91,7 +91,7 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -105,7 +105,7 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -119,7 +119,7 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -133,7 +133,7 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -150,7 +150,7 @@
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 
 
@@ -167,7 +167,7 @@
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 
 
@@ -181,7 +181,7 @@
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 
 
@@ -195,7 +195,7 @@
 // 
 // // import "module"
 // import "./f";
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -209,7 +209,7 @@
 // 
 // // import "module"
 // import "./f";
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -223,7 +223,7 @@
 // 
 // // import "module"
 // import "./f";
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -237,7 +237,7 @@
 // 
 // // import "module"
 // import "./f";
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -251,7 +251,7 @@
 // 
 // // export ... from ...
 // export type * from "./g";
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 
 
@@ -265,7 +265,7 @@
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// // --- (line: 20) skipped ---
+// --- (line: 20) skipped ---
 
 
 
@@ -279,7 +279,7 @@
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// // --- (line: 20) skipped ---
+// --- (line: 20) skipped ---
 
 
 
@@ -293,7 +293,7 @@
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// // --- (line: 20) skipped ---
+// --- (line: 20) skipped ---
 
 
 
@@ -307,7 +307,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -321,7 +321,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -335,7 +335,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -349,7 +349,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -363,7 +363,7 @@
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 
 
@@ -377,7 +377,7 @@
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 
 
@@ -391,7 +391,7 @@
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 
 

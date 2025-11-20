@@ -1,0 +1,10 @@
+--- old.goToDefinitionJsModuleName.baseline.jsonc
++++ new.goToDefinitionJsModuleName.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /foo.js ===
+-// [||]module.exports = {};
++// [|module.exports = {};|]
+
+ // === /bar.js ===
+ // var x = require(/*GOTO DEF*/[|"./foo"|]);

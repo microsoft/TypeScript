@@ -1,0 +1,19 @@
+--- old.goToDefinitionSignatureAlias_require.baseline.jsonc
++++ new.goToDefinitionSignatureAlias_require.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /a.js ===
+-// module.exports = <|function [|f|]() {}|>
++// [|module.exports = <|function [|f|]() {}|]|>
+
+ // === /b.js ===
+ // const f = require("./a");
+@@= skipped -9, +9 lines =@@
+
+ // === goToDefinition ===
+ // === /a.js ===
+-// module.exports = <|function [|f|]() {}|>
++// [|module.exports = <|function [|f|]() {}|]|>
+
+ // === /bar.ts ===
+ // import f = require("./a");

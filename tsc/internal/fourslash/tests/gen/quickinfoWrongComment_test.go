@@ -25,6 +25,7 @@ type F = A | B
 const f: F = { colour: "green" }
 f.colour/*1*/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoIs(t, "(property) colour: \"green\" | \"red\" | \"yellow\"", "The colour")
 }

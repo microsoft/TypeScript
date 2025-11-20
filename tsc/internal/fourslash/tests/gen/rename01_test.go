@@ -17,5 +17,6 @@ func TestRename01(t *testing.T) {
     "this is a reference to [|Bar|] in a string"
 }|]`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1])
 }

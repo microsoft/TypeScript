@@ -28,6 +28,7 @@ var x1; x1./*2*/;
 /** @type {T.People} */
 var x1; x1./*3*/;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, []string{"1", "3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -1,0 +1,10 @@
+--- old.goToImplementation_satisfies.baseline.jsonc
++++ new.goToImplementation_satisfies.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ // 	foo: string;
+ // }
+ // 
+-// function f() {
+-//     const foo = [|{ foo: '' }|] satisfies I;
+-// }
++// --- (line: 5) skipped ---

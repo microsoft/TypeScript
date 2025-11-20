@@ -7,7 +7,7 @@
 // 
 //     //Increments
 //     modVar++;
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -21,7 +21,7 @@
 //     }
 // 
 //     function testFn(){
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 

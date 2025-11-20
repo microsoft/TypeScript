@@ -22,5 +22,6 @@ func TestJsdocCallbackTagRename01(t *testing.T) {
 /** @type {/*1*/[|FooCallback|]} */
 var t;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1])
 }

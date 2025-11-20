@@ -19,5 +19,6 @@ class /*0*/globalClass {
 ///<reference path="referencesForGlobals_1.ts" />
 var c = /*1*/globalClass();`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

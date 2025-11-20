@@ -1,0 +1,24 @@
+--- old.goToDefinitionFunctionOverloadsInClass.baseline.jsonc
++++ new.goToDefinitionFunctionOverloadsInClass.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionFunctionOverloadsInClass.ts ===
+ // class clsInOverload {
+-//     static fnOverload();
+-//     static /*GOTO DEF*/fnOverload(foo: string);
++//     <|static [|fnOverload|]();|>
++//     <|static /*GOTO DEF*/[|fnOverload|](foo: string);|>
+ //     <|static [|fnOverload|](foo: any) { }|>
+ //     public fnOverload(): any;
+ //     public fnOverload(foo: string);
+@@= skipped -16, +16 lines =@@
+ //     static fnOverload();
+ //     static fnOverload(foo: string);
+ //     static fnOverload(foo: any) { }
+-//     public /*GOTO DEF*/fnOverload(): any;
+-//     public fnOverload(foo: string);
++//     <|public /*GOTO DEF*/[|fnOverload|](): any;|>
++//     <|public [|fnOverload|](foo: string);|>
+ //     <|public [|fnOverload|](foo: any) { return "foo" }|>
+ // 
+ //     constructor() { }

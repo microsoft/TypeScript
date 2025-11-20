@@ -303,7 +303,7 @@
 //     "prop2"() { }
 // };
 // 
-// // --- (line: 31) skipped ---
+// --- (line: 31) skipped ---
 
 
 
@@ -317,7 +317,7 @@
 //     "prop2": function () { }
 // };
 // 
-// // --- (line: 36) skipped ---
+// --- (line: 36) skipped ---
 
 
 
@@ -331,7 +331,7 @@
 //     ["prop2"]: function () { }
 // };
 // 
-// // --- (line: 41) skipped ---
+// --- (line: 41) skipped ---
 
 
 
@@ -345,7 +345,7 @@
 //     ["prop2"]() { }
 // };
 // 
-// // --- (line: 46) skipped ---
+// --- (line: 46) skipped ---
 
 
 
@@ -359,7 +359,7 @@
 //     get ["prop2"]() { return () => { }; }
 // };
 // 
-// // --- (line: 51) skipped ---
+// --- (line: 51) skipped ---
 
 
 

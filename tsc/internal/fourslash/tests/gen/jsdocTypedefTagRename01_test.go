@@ -23,5 +23,6 @@ func TestJsdocTypedefTagRename01(t *testing.T) {
 /** @type {[|NumberLike|]} */
 var numberLike;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineRename(t, nil /*preferences*/, ToAny(f.Ranges()[1:])...)
 }

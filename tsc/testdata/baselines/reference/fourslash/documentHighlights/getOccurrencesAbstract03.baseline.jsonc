@@ -6,7 +6,7 @@
 //     }
 //     abstract class B {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -18,7 +18,7 @@
 //     }
 //     abstract class B {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 

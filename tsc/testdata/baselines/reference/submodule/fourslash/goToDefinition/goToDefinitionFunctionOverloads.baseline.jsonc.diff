@@ -1,0 +1,13 @@
+--- old.goToDefinitionFunctionOverloads.baseline.jsonc
++++ new.goToDefinitionFunctionOverloads.baseline.jsonc
+@@= skipped -35, +35 lines =@@
+
+ // === goToDefinition ===
+ // === /goToDefinitionFunctionOverloads.ts ===
+-// function /*GOTO DEF*/functionOverload(value: number);
+-// function functionOverload(value: string);
++// <|function /*GOTO DEF*/[|functionOverload|](value: number);|>
++// <|function [|functionOverload|](value: string);|>
+ // <|function [|functionOverload|]() {}|>
+ // 
+ // functionOverload(123);

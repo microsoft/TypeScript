@@ -162,4 +162,4 @@
 // async function* f() {
 //     yield C;
 //     await C;
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---

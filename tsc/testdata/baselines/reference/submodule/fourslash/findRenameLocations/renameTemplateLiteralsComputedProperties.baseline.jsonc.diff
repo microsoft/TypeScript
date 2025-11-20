@@ -113,7 +113,7 @@
 +//     ['bool']: boolean;
 +// }
 +// 
-+// // --- (line: 6) skipped ---
++// --- (line: 6) skipped ---
 +
 +
 +
@@ -127,7 +127,7 @@
 +//     ['bool']: true,
 +// };
 +// 
-+// // --- (line: 11) skipped ---
++// --- (line: 11) skipped ---
 +
 +
 +
@@ -141,29 +141,14 @@
 +//     [`bool`]: false,
 +// };
 +// 
-+// // --- (line: 16) skipped ---
++// --- (line: 16) skipped ---
 
 
 
-@@= skipped -132, +60 lines =@@
- // 
- // o.bool;
- // o['bool'];
--// --- (line: 23) skipped ---
--
--// === /b.js ===
--// import { o as obj } from './a';
--// 
--// obj.[|numRENAME|];
--// obj[`[|numRENAME|]`];
--// 
--// obj.bool;
--// obj[`bool`];
--
--
--
--// === findRenameLocations ===
--// === /a.ts ===
+@@= skipped -147, +75 lines =@@
+
+ // === findRenameLocations ===
+ // === /a.ts ===
 -// interface Obj {
 -//     [`[|numRENAME|]`]: number;
 -//     ['bool']: boolean;
@@ -270,49 +255,6 @@
 -// 
 -// obj.bool;
 -// obj[`bool`];
--
--
--
--// === findRenameLocations ===
--// === /a.ts ===
--// interface Obj {
--//     [`[|numRENAME|]`]: number;
--//     ['bool']: boolean;
--// }
--// 
--// let o: Obj = {
--//     [`[|numRENAME|]`]: 0,
--//     ['bool']: true,
--// };
--// 
--// o = {
--//     ['[|numRENAME|]']: 1,
--//     [`bool`]: false,
--// };
--// 
--// o.[|numRENAME|];
--// o['[|numRENAME|]'];
--// o["[|numRENAME|]"];
--// o[`[|numRENAME|]`];
--// 
--// o.bool;
--// o['bool'];
--// --- (line: 23) skipped ---
-+// // --- (line: 23) skipped ---
-+
-+// === /b.js ===
-+// import { o as obj } from './a';
-+// 
-+// obj.[|numRENAME|];
-+// obj[`[|numRENAME|]`];
-+// 
-+// obj.bool;
-+// obj[`bool`];
-+
-+
-+
-+// === findRenameLocations ===
-+// === /a.ts ===
 +// --- (line: 13) skipped ---
 +// };
 +// 
@@ -321,7 +263,7 @@
 +// o["num"];
 +// o[`num`];
 +// 
-+// // --- (line: 21) skipped ---
++// --- (line: 21) skipped ---
 +
 +
 +
@@ -335,7 +277,7 @@
 +// o[`num`];
 +// 
 +// o.bool;
-+// // --- (line: 22) skipped ---
++// --- (line: 22) skipped ---
 +
 +
 +
@@ -349,39 +291,11 @@
 +// 
 +// o.bool;
 +// o['bool'];
-+// // --- (line: 23) skipped ---
-+
-+
-+
-+// === findRenameLocations ===
-+// === /a.ts ===
-+// interface Obj {
-+//     [`[|numRENAME|]`]: number;
-+//     ['bool']: boolean;
-+// }
-+// 
-+// let o: Obj = {
-+//     [`[|numRENAME|]`]: 0,
-+//     ['bool']: true,
-+// };
-+// 
-+// o = {
-+//     ['[|numRENAME|]']: 1,
-+//     [`bool`]: false,
-+// };
-+// 
-+// o.[|numRENAME|];
-+// o['[|numRENAME|]'];
-+// o["[|numRENAME|]"];
-+// o[`[|numRENAME|]`];
-+// 
-+// o.bool;
-+// o['bool'];
-+// // --- (line: 23) skipped ---
++// --- (line: 23) skipped ---
 
- // === /b.js ===
- // import { o as obj } from './a';
-@@= skipped -162, +93 lines =@@
+
+
+@@= skipped -147, +78 lines =@@
 
 
  // === findRenameLocations ===
@@ -541,7 +455,7 @@
 +// }
 +// 
 +// let o: Obj = {
-+// // --- (line: 7) skipped ---
++// --- (line: 7) skipped ---
 +
 +
 +
@@ -555,7 +469,7 @@
 +// };
 +// 
 +// o = {
-+// // --- (line: 12) skipped ---
++// --- (line: 12) skipped ---
 +
 +
 +
@@ -569,7 +483,7 @@
 +// };
 +// 
 +// o.num;
-+// // --- (line: 17) skipped ---
++// --- (line: 17) skipped ---
 
 
 

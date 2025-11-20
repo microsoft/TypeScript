@@ -6,7 +6,7 @@
 //  *   bar: number;
 //  * }} Foo
 //  */
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -19,7 +19,7 @@
 //  * }} Foo
 //  */
 // 
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 

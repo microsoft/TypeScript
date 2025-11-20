@@ -1,0 +1,19 @@
+--- old.goToDefinitionImports.baseline.jsonc
++++ new.goToDefinitionImports.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
++// === /a.ts ===
++// [|export default function f() {}
++// export const x = 0;|]
++
+ // === /b.ts ===
+ // import f, { x } from "./a";
+-// <|import * as [|a|] from "./a";|>
++// import * as a from "./a";
+ // import b = require("./b");
+ // f;
+ // x;
+-// /*GOTO DEF*/a;
++// /*GOTO DEF*/[|a|];
+ // b;
+

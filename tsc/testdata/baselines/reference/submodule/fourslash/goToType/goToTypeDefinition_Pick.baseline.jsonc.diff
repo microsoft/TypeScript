@@ -1,0 +1,56 @@
+--- old.goToTypeDefinition_Pick.baseline.jsonc
++++ new.goToTypeDefinition_Pick.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+ // declare const user2: PickedUser
+ // user2
+
+-// === lib.d.ts ===
++// === lib.es5.d.ts ===
+ // --- (line: --) skipped ---
+ // /**
+ //  * From T, pick a set of properties whose keys are in the union K
+@@= skipped -12, +12 lines =@@
+ // /**
+ //  * Construct a type with a set of properties K of type T
+ // --- (line: --) skipped ---
++// 
+
+
+
+ // === goToType ===
++// === lib.es5.d.ts ===
++// --- (line: --) skipped ---
++// /**
++//  * From T, pick a set of properties whose keys are in the union K
++//  */
++// type Pick<T, K extends keyof T> = [|{
++//     [P in K]: T[P];
++// }|];
++// 
++// /**
++//  * Construct a type with a set of properties K of type T
++// --- (line: --) skipped ---
++// 
++
+ // === /goToTypeDefinition_Pick.ts ===
+-// type User = [|{ id: number; name: string; }|];
+-// declare const user: Pick<User, "name">
+-// user
++// --- (line: 3) skipped ---
+ // 
+ // type PickedUser = Pick<User, "name">
+ // declare const user2: PickedUser
+ // /*GOTO TYPE*/user2
+-
+-// === lib.d.ts ===
+-// --- (line: --) skipped ---
+-// /**
+-//  * From T, pick a set of properties whose keys are in the union K
+-//  */
+-// type Pick<T, K extends keyof T> = [|{
+-//     [P in K]: T[P];
+-// }|];
+-// 
+-// /**
+-//  * Construct a type with a set of properties K of type T
+-// --- (line: --) skipped ---

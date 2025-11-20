@@ -6,7 +6,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -22,7 +22,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -34,7 +34,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -59,7 +59,7 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -73,7 +73,7 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -87,7 +87,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -103,7 +103,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -127,7 +127,7 @@
 // enum E { }
 // namespace N { }
 // module M { }
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -141,7 +141,7 @@
 // namespace N { }
 // module M { }
 // function fn() {}
-// // --- (line: 13) skipped ---
+// --- (line: 13) skipped ---
 
 
 
@@ -155,7 +155,7 @@
 // module M { }
 // function fn() {}
 // var x;
-// // --- (line: 14) skipped ---
+// --- (line: 14) skipped ---
 
 
 
@@ -169,7 +169,7 @@
 // function fn() {}
 // var x;
 // let y;
-// // --- (line: 15) skipped ---
+// --- (line: 15) skipped ---
 
 
 
@@ -183,7 +183,7 @@
 // var x;
 // let y;
 // const z = 1;
-// // --- (line: 16) skipped ---
+// --- (line: 16) skipped ---
 
 
 
@@ -197,7 +197,7 @@
 // let y;
 // const z = 1;
 // interface Implemented2 {}
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 
 

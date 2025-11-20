@@ -1,0 +1,8 @@
+--- old.goToImplementationNamespace_06.baseline.jsonc
++++ new.goToImplementationNamespace_06.baseline.jsonc
+@@= skipped -4, +4 lines =@@
+ // }|>
+ // 
+ // 
+-// let x: typeof Foo = [|{ hello() {} }|];
++// let x: typeof Foo = { hello() {} };

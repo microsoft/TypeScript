@@ -1,0 +1,36 @@
+--- old.goToTypeDefinition_returnType.baseline.jsonc
++++ new.goToTypeDefinition_returnType.baseline.jsonc
+@@= skipped -148, +148 lines =@@
+
+ // === goToType ===
+ // === /goToTypeDefinition_returnType.ts ===
+-// --- (line: 15) skipped ---
+-// 
+-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
+-// 
+-// const [|f7|] = <|(i: I) => {}|>;
+-// 
+-// function f8(i: I): I;
+-// function f8(j: J): J;
+-// --- (line: 23) skipped ---
+-
+ // --- (line: 28) skipped ---
+ // f4();
+ // f5();
+@@= skipped -21, +11 lines =@@
+
+ // === goToType ===
+ // === /goToTypeDefinition_returnType.ts ===
+-// --- (line: 19) skipped ---
+-// 
+-// function f8(i: I): I;
+-// function f8(j: J): J;
++// --- (line: 17) skipped ---
++// 
++// const f7 = (i: I) => {};
++// 
++// <|function [|f8|](i: I): I;|>
++// <|function [|f8|](j: J): J;|>
+ // <|function [|f8|](ij: any): any { return ij; }|>
+ // 
+ // f0();

@@ -5,7 +5,7 @@
 //         FB();
 //     }
 // }
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -51,7 +51,7 @@
 // }
 // 
 // interface I {
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -90,7 +90,7 @@
 // }
 // 
 // interface I {
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 

@@ -1,6 +1,0 @@
-// === goToDefinition ===
-// === /foo.ts ===
-// const Bar;
-// const [|Foo|] = [|Bar|] = function () {}
-// Foo.prototype.bar = function() {}
-// new Foo/*GOTO DEF*/();

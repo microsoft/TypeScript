@@ -1,0 +1,13 @@
+--- old.goToDefinitionConstructorOverloads.baseline.jsonc
++++ new.goToDefinitionConstructorOverloads.baseline.jsonc
+@@= skipped -33, +33 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionConstructorOverloads.ts ===
+ // class ConstructorOverload {
+-//     /*GOTO DEF*/constructor();
+-//     constructor(foo: string);
++//     /*GOTO DEF*/[|constructor();|]
++//     [|constructor(foo: string);|]
+ //     [|constructor(foo: any)  { }|]
+ // }
+ // 

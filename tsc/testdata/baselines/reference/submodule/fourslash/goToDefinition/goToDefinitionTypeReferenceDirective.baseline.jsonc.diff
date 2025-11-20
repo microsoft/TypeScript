@@ -1,0 +1,12 @@
+--- old.goToDefinitionTypeReferenceDirective.baseline.jsonc
++++ new.goToDefinitionTypeReferenceDirective.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+-// === /src/types/lib/index.d.ts ===
+-// [||]declare let $: {x: number};
+-
+ // === /src/app.ts ===
+-// /// <reference types="[|lib|]/*GOTO DEF*/"/>
+-// $.x;
++//  /// <reference types="lib/*GOTO DEF*/"/>
++//  $.x;

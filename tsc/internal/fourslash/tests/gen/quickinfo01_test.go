@@ -26,6 +26,7 @@ var /*1*/x : One | Two;
 x./*2*/commonProperty;
 x./*3*/commonFunction;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyQuickInfoAt(t, "1", "var x: One | Two", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) commonProperty: string | number", "")
 	f.VerifyQuickInfoAt(t, "3", "(method) commonFunction(): number", "")

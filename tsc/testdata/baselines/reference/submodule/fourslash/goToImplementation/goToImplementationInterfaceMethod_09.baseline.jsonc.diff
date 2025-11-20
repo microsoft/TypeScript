@@ -1,0 +1,38 @@
+--- old.goToImplementationInterfaceMethod_09.baseline.jsonc
++++ new.goToImplementationInterfaceMethod_09.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToImplementation ===
+ // === /goToImplementationInterfaceMethod_09.ts ===
+-// --- (line: 9) skipped ---
+-//     hello() {}
++// interface Foo {
++//     hello (): void;
++// }
++// 
++// class SubBar extends Bar {
++//     <|[|hello|]() {}|>
++// }
++// 
++// class Bar extends SuperBar {
++//     <|[|hello|]() {}|>
+ // 
+ //     whatever() {
+ //         super.he/*GOTO IMPL*/llo();
+@@= skipped -20, +28 lines =@@
+
+ // === goToImplementation ===
+ // === /goToImplementationInterfaceMethod_09.ts ===
+-// --- (line: 10) skipped ---
++// interface Foo {
++//     hello (): void;
++// }
++// 
++// class SubBar extends Bar {
++//     <|[|hello|]() {}|>
++// }
++// 
++// class Bar extends SuperBar {
++//     <|[|hello|]() {}|>
+ // 
+ //     whatever() {
+ //         super.hello();

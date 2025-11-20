@@ -5,7 +5,7 @@
 // }
 // function f(readonly p) {}
 // 
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 

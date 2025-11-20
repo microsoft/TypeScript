@@ -1,0 +1,21 @@
+--- old.goToDefinitionSimple.baseline.jsonc
++++ new.goToDefinitionSimple.baseline.jsonc
+@@= skipped -2, +2 lines =@@
+ // <|class [|c|] { }|>
+
+ // === /Consumption.ts ===
+-// var n = new /*GOTO DEF*/[|c|]();
+-// var n = new c();
++//  var n = new /*GOTO DEF*/[|c|]();
++//  var n = new c();
+
+
+
+@@= skipped -10, +10 lines =@@
+ // <|class [|c|] { }|>
+
+ // === /Consumption.ts ===
+-// var n = new c();
+-// var n = new [|c|]/*GOTO DEF*/();
++//  var n = new c();
++//  var n = new [|c|]/*GOTO DEF*/();

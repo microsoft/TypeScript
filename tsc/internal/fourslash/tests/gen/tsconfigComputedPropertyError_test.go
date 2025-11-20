@@ -20,5 +20,6 @@ func TestTsconfigComputedPropertyError(t *testing.T) {
     "compileOnSave": true
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 }

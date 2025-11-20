@@ -11,7 +11,7 @@
 //     export { N }; // Renaming N here would rename
 // }
 // declare module "b" {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -28,7 +28,7 @@
 //     export { N }; // Renaming N here would rename
 // }
 // declare module "b" {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -42,7 +42,7 @@
 //     export { N }; // Renaming N here would rename
 // }
 // declare module "b" {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -93,7 +93,7 @@
 // }
 // declare module "mod" {
 //     export = N;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 9) skipped ---
 // }
@@ -111,7 +111,7 @@
 // }
 // declare module "mod" {
 //     export = N;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 // --- (line: 9) skipped ---
 // }

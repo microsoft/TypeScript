@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationNamespace_02.ts ===
+// module Foo {
+//     <|export function [|hello|]() {}|>
+// }
+// 
+// Foo.hell/*GOTO IMPL*/o();

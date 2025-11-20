@@ -1,0 +1,17 @@
+--- old.goToImplementationInterface_04.baseline.jsonc
++++ new.goToImplementationInterface_04.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     (a: number): void
+ // }
+ // 
+-// var bar: Foo = [|(a) => {/**0*/}|];
+-// 
+-// function whatever(x: Foo = [|(a) => {/**1*/}|] ) {
+-// }
+-// 
+-// class Bar {
+-//     x: Foo = [|(a) => {/**2*/}|]
+-// 
+-//     constructor(public f: Foo = [|function(a) {}|] ) {}
+-// }
++// --- (line: 5) skipped ---

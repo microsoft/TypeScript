@@ -27,6 +27,7 @@ function test2() {
    var n/*2*/umberLike2;
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "2")
 	f.VerifyQuickInfoExists(t)
 	f.GoToMarker(t, "1")

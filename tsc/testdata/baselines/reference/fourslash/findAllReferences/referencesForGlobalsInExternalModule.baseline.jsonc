@@ -5,7 +5,7 @@
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -16,7 +16,7 @@
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -27,7 +27,7 @@
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -41,7 +41,7 @@
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -55,7 +55,7 @@
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -69,7 +69,7 @@
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 
@@ -84,7 +84,7 @@
 // 
 // module topLevelModule {
 //     export var x;
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -99,7 +99,7 @@
 // 
 // module topLevelModule {
 //     export var x;
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -114,7 +114,7 @@
 // 
 // module topLevelModule {
 //     export var x;
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 

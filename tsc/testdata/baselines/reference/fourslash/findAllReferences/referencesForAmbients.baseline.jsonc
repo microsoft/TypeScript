@@ -9,7 +9,7 @@
 //     var f2: typeof foo.f;
 // }
 // 
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -24,7 +24,7 @@
 //     var f2: typeof foo.f;
 // }
 // 
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -40,7 +40,7 @@
 // }
 // 
 // declare module "baz" {
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -56,7 +56,7 @@
 // }
 // 
 // declare module "baz" {
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -143,7 +143,7 @@
 //     var f2: typeof foo.f;
 // }
 // 
-// // --- (line: 10) skipped ---
+// --- (line: 10) skipped ---
 
 
 
@@ -177,7 +177,7 @@
 // }
 // 
 // declare module "baz" {
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 

@@ -32,7 +32,7 @@
 // }
 // // abstract cannot appear here, won't get highlighted
 // let c = abstract class Foo {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -45,4 +45,4 @@
 // }
 // // abstract cannot appear here, won't get highlighted
 // let c = abstract class Foo {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---

@@ -1,0 +1,13 @@
+--- old.goToTypeDefinition_typedef.baseline.jsonc
++++ new.goToTypeDefinition_typedef.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToType ===
+ // === /a.js ===
+ // /**
+-//  * [|@typedef {object} I
+-//  * @property {number} x
++//  * @typedef {object} I
++//  * [|@property {number} x
+ //  |]*/
+ // 
+ // /** @type {I} */

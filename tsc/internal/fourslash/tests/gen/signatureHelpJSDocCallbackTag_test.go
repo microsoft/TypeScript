@@ -36,5 +36,6 @@ var t;
 var t2;
 t(/*4*/"!", /*5*/12, /*6*/false);`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineSignatureHelp(t)
 }

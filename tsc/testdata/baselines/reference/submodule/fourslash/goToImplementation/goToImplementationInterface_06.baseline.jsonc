@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_06.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     new (a: number): SomeOtherType;
+// }
+// 
+// --- (line: 5) skipped ---

@@ -4,7 +4,7 @@
 // 
 // function f({
 //     lvl1 = external,
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -24,6 +24,18 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+//  *
+//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
+//  */
+// declare var [|externalRENAME|]: External;
+// /**
+//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
+//  *
+// --- (line: --) skipped ---
+// 
+
 
 
 // === findRenameLocations ===
@@ -42,6 +54,18 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+//  *
+//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
+//  */
+// declare var [|externalRENAME|]: External;
+// /**
+//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
+//  *
+// --- (line: --) skipped ---
+// 
+
 
 
 // === findRenameLocations ===
@@ -59,6 +83,18 @@
 //     nested: { lvl2 = [|externalRENAME|]},
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+//  *
+//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
+//  */
+// declare var [|externalRENAME|]: External;
+// /**
+//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
+//  *
+// --- (line: --) skipped ---
+// 
 
 
 
@@ -78,6 +114,18 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+//  *
+//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
+//  */
+// declare var [|externalRENAME|]: External;
+// /**
+//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
+//  *
+// --- (line: --) skipped ---
+// 
+
 
 
 // === findRenameLocations ===
@@ -96,6 +144,18 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+//  *
+//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
+//  */
+// declare var [|externalRENAME|]: External;
+// /**
+//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
+//  *
+// --- (line: --) skipped ---
+// 
+
 
 
 // === findRenameLocations ===
@@ -113,3 +173,15 @@
 //     nested: { lvl2 = [|externalRENAME|]},
 //     oldName: newName = /*RENAME*/[|externalRENAME|]
 // } = obj;
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+//  *
+//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
+//  */
+// declare var [|externalRENAME|]: External;
+// /**
+//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
+//  *
+// --- (line: --) skipped ---
+// 

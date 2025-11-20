@@ -4,7 +4,7 @@
 // function f(this) {
 //     return this;
 //     function g(this) { return this; }
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -16,7 +16,7 @@
 //     function g(this) { return this; }
 // }
 // class C {
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -28,7 +28,7 @@
 //     function g(this) { return this; }
 // }
 // class C {
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -41,7 +41,7 @@
 // }
 // class C {
 //     static x() {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -54,7 +54,7 @@
 // }
 // class C {
 //     static x() {
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -71,7 +71,7 @@
 //     }
 //     constructor() {
 //         this;
-// // --- (line: 15) skipped ---
+// --- (line: 15) skipped ---
 
 
 
@@ -88,7 +88,7 @@
 //     }
 //     constructor() {
 //         this;
-// // --- (line: 15) skipped ---
+// --- (line: 15) skipped ---
 
 
 

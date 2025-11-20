@@ -11,4 +11,4 @@
 -//         class Inner { x = this; }
 -//     }
 -// }
-+// // --- (line: 5) skipped ---
++// --- (line: 5) skipped ---

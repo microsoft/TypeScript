@@ -1,0 +1,16 @@
+--- old.goToDefinitionImportedNames10.baseline.jsonc
++++ new.goToDefinitionImportedNames10.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /a.js ===
+-// <|class [|Class|] {
+-//   f;
+-// }|>
+-// module.exports.Class = Class;
++//  class Class {
++//    f;
++//  }
++//  <|module.exports.[|Class|] = Class|>;
+
+ // === /b.js ===
+ // const { Class } = require("./a");

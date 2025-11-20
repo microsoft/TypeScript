@@ -11,7 +11,7 @@
 -//     import { N } from "a";
 -//     export const y: typeof N.x;
 -// }
-+// // --- (line: 12) skipped ---
++// --- (line: 12) skipped ---
 
 
 
@@ -26,7 +26,7 @@
 -//     import { N } from "a";
 -//     export const y: typeof N.x;
 -// }
-+// // --- (line: 12) skipped ---
++// --- (line: 12) skipped ---
 
 
 
@@ -41,7 +41,7 @@
 -//     import { N } from "a";
 -//     export const y: typeof N.x;
 -// }
-+// // --- (line: 12) skipped ---
++// --- (line: 12) skipped ---
 
 
 
@@ -64,22 +64,3 @@
 +//     export const y: typeof N.x;
  // }
 
-
-@@= skipped -55, +54 lines =@@
- // }
- // declare module "mod" {
- //     export = N;
--// --- (line: 6) skipped ---
-+// // --- (line: 6) skipped ---
-
- // --- (line: 9) skipped ---
- // }
-@@= skipped -18, +18 lines =@@
- // }
- // declare module "mod" {
- //     export = N;
--// --- (line: 6) skipped ---
-+// // --- (line: 6) skipped ---
-
- // --- (line: 9) skipped ---
- // }

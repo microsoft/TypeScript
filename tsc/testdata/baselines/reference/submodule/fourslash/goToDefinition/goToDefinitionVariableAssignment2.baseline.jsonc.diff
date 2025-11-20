@@ -1,0 +1,10 @@
+--- old.goToDefinitionVariableAssignment2.baseline.jsonc
++++ new.goToDefinitionVariableAssignment2.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /foo.ts ===
+ // const Bar;
+-// const Foo = [|Bar|] = <|function () {}|>
++// <|const [|Foo|] = [|Bar|] = <|function () {}|>|>
+ // Foo.prototype.bar = function() {}
+ // new Foo/*GOTO DEF*/();

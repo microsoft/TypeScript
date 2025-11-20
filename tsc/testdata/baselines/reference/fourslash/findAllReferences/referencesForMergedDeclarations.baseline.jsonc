@@ -4,7 +4,7 @@
 // }
 // 
 // module Foo {
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 // --- (line: 8) skipped ---
 // }
@@ -21,7 +21,7 @@
 // }
 // 
 // module Foo {
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 // --- (line: 8) skipped ---
 // }
@@ -122,7 +122,7 @@
 // }
 // 
 // module Foo {
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 // --- (line: 8) skipped ---
 // }

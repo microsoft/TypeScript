@@ -59,6 +59,7 @@ export declare function fooFromLol(): void;
 // @Filename: /home/src/workspaces/project/src/foo.ts
 fooFrom/**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

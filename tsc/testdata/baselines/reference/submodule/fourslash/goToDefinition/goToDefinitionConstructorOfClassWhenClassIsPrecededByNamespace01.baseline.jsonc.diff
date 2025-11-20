@@ -1,0 +1,13 @@
+--- old.goToDefinitionConstructorOfClassWhenClassIsPrecededByNamespace01.baseline.jsonc
++++ new.goToDefinitionConstructorOfClassWhenClassIsPrecededByNamespace01.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionConstructorOfClassWhenClassIsPrecededByNamespace01.ts ===
+-// namespace Foo {
++// <|namespace [|Foo|] {
+ //     export var x;
+-// }
++// }|>
+ // 
+ // <|class [|Foo|] {
+ //     [|constructor() {

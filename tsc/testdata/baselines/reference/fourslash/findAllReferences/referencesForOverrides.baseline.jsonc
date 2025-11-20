@@ -11,7 +11,7 @@
 // 			}
 // 		}
 // 	}
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 // --- (line: 58) skipped ---
 // 
@@ -21,7 +21,7 @@
 // 
 // 		var y: SimpleInterfaceTest.IBar = null;
 // 		y.ifoo();
-// // --- (line: 66) skipped ---
+// --- (line: 66) skipped ---
 
 
 
@@ -38,7 +38,7 @@
 // 		}
 // 	}
 // 
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 // --- (line: 61) skipped ---
 // 		x.foo();
@@ -48,7 +48,7 @@
 // 
 //         var w: SimpleClassInterfaceTest.Bar = null;
 //         w.icfoo();
-// // --- (line: 69) skipped ---
+// --- (line: 69) skipped ---
 
 
 
@@ -65,7 +65,7 @@
 // 			}
 // 		}
 // 	}
-// // --- (line: 31) skipped ---
+// --- (line: 31) skipped ---
 
 // --- (line: 64) skipped ---
 // 		y.ifoo();
@@ -75,7 +75,7 @@
 // 
 // 		var z = new Test.BarBlah();
 // 		z.field = "";
-// // --- (line: 72) skipped ---
+// --- (line: 72) skipped ---
 
 
 
@@ -111,7 +111,7 @@
 // 		}
 // 	}
 // 
-// // --- (line: 60) skipped ---
+// --- (line: 60) skipped ---
 
 // --- (line: 67) skipped ---
 //         w.icfoo();
@@ -134,7 +134,7 @@
 // 		}
 // 
 // 		export interface IBlah extends IBase {
-// // --- (line: 39) skipped ---
+// --- (line: 39) skipped ---
 
 // --- (line: 43) skipped ---
 // 		}
@@ -149,7 +149,7 @@
 // 		}
 // 
 // 		export class BarBlah extends Bar {
-// // --- (line: 56) skipped ---
+// --- (line: 56) skipped ---
 
 // --- (line: 68) skipped ---
 // 

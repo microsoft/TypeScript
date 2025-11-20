@@ -6,7 +6,7 @@
 //   class Foo {
 //       *memberFunction() {
 //           return yield 1;
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -18,7 +18,7 @@
 //   class Foo {
 //       *memberFunction() {
 //           return yield 1;
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -30,4 +30,4 @@
 //   class Foo {
 //       *memberFunction() {
 //           return yield 1;
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---

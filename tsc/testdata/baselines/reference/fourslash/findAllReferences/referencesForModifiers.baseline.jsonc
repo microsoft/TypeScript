@@ -4,7 +4,7 @@
 //     static a;
 //     readonly b;
 //     public c;
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -14,7 +14,7 @@
 //     static a;
 //     readonly b;
 //     public c;
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -25,7 +25,7 @@
 //     readonly b;
 //     public c;
 //     protected d;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -37,7 +37,7 @@
 //     public c;
 //     protected d;
 //     private e;
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -50,7 +50,7 @@
 //     protected d;
 //     private e;
 // }
-// // --- (line: 8) skipped ---
+// --- (line: 8) skipped ---
 
 
 
@@ -64,7 +64,7 @@
 //     private e;
 // }
 // const enum E {
-// // --- (line: 9) skipped ---
+// --- (line: 9) skipped ---
 
 
 

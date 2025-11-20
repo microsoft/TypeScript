@@ -10,7 +10,7 @@
 //     }
 // 
 //     export interface I1 {
-// // --- (line: 29) skipped ---
+// --- (line: 29) skipped ---
 
 
 
@@ -26,7 +26,7 @@
 //     }
 // 
 //     export interface I1 {
-// // --- (line: 29) skipped ---
+// --- (line: 29) skipped ---
 
 
 
@@ -42,4 +42,4 @@
 //     }
 // 
 //     export interface I1 {
-// // --- (line: 29) skipped ---
+// --- (line: 29) skipped ---

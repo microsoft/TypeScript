@@ -5,7 +5,7 @@
 //     ['bool']: boolean;
 // }
 // 
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -19,7 +19,7 @@
 //     ['bool']: true,
 // };
 // 
-// // --- (line: 11) skipped ---
+// --- (line: 11) skipped ---
 
 
 
@@ -33,7 +33,7 @@
 //     [`bool`]: false,
 // };
 // 
-// // --- (line: 16) skipped ---
+// --- (line: 16) skipped ---
 
 
 
@@ -61,7 +61,7 @@
 // 
 // o.bool;
 // o['bool'];
-// // --- (line: 23) skipped ---
+// --- (line: 23) skipped ---
 
 // === /b.js ===
 // import { o as obj } from './a';
@@ -84,7 +84,7 @@
 // o["num"];
 // o[`num`];
 // 
-// // --- (line: 21) skipped ---
+// --- (line: 21) skipped ---
 
 
 
@@ -98,7 +98,7 @@
 // o[`num`];
 // 
 // o.bool;
-// // --- (line: 22) skipped ---
+// --- (line: 22) skipped ---
 
 
 
@@ -112,7 +112,7 @@
 // 
 // o.bool;
 // o['bool'];
-// // --- (line: 23) skipped ---
+// --- (line: 23) skipped ---
 
 
 
@@ -140,7 +140,7 @@
 // 
 // o.bool;
 // o['bool'];
-// // --- (line: 23) skipped ---
+// --- (line: 23) skipped ---
 
 // === /b.js ===
 // import { o as obj } from './a';
@@ -173,7 +173,7 @@
 // }
 // 
 // let o: Obj = {
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 
@@ -187,7 +187,7 @@
 // };
 // 
 // o = {
-// // --- (line: 12) skipped ---
+// --- (line: 12) skipped ---
 
 
 
@@ -201,7 +201,7 @@
 // };
 // 
 // o.num;
-// // --- (line: 17) skipped ---
+// --- (line: 17) skipped ---
 
 
 

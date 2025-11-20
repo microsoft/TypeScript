@@ -1,0 +1,10 @@
+--- old.gotoDefinitionThrowsTag.baseline.jsonc
++++ new.gotoDefinitionThrowsTag.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /gotoDefinitionThrowsTag.ts ===
+-// <|class [|E|] extends Error {}|>
++// class E extends Error {}
+ // 
+ // /**
+ //  * @throws {/*GOTO DEF*/E}

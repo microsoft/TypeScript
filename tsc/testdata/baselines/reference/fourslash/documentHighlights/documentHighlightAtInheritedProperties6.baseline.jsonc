@@ -5,7 +5,7 @@
 //     prop1: string;
 // }
 // 
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -17,7 +17,7 @@
 // }
 // 
 // class D extends C {
-// // --- (line: 7) skipped ---
+// --- (line: 7) skipped ---
 
 
 

@@ -1,0 +1,29 @@
+// === goToImplementation ===
+// === /goToImplementationClassMethod_01.ts ===
+// abstract class AbstractBar {
+//     abstract hello(): void;
+// }
+// 
+// class Bar extends AbstractBar{
+//     <|[|hello|]() {}|>
+// }
+// 
+// function whatever(x: AbstractBar) {
+//     x.he/*GOTO IMPL*/llo();
+// }
+
+
+
+// === goToImplementation ===
+// === /goToImplementationClassMethod_01.ts ===
+// abstract class AbstractBar {
+//     abstract he/*GOTO IMPL*/llo(): void;
+// }
+// 
+// class Bar extends AbstractBar{
+//     <|[|hello|]() {}|>
+// }
+// 
+// function whatever(x: AbstractBar) {
+//     x.hello();
+// }

@@ -66,5 +66,6 @@ class Button extends [|/*1*/Control|] {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToDefinition(t, true, "1", "3")
 }

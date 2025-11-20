@@ -4,7 +4,7 @@
 //     someFunction() { this;  }
 // }
 // 
-// // --- (line: 5) skipped ---
+// --- (line: 5) skipped ---
 
 
 
@@ -15,7 +15,7 @@
 // }
 // 
 // type Options = "option 1" | "option 2";
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 

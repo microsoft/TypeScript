@@ -1,0 +1,33 @@
+--- old.goToImplementationNamespace_05.baseline.jsonc
++++ new.goToImplementationNamespace_05.baseline.jsonc
+@@= skipped -33, +33 lines =@@
+
+ // === goToImplementation ===
+ // === /goToImplementationNamespace_05.ts ===
+-// namespace Foo.<|[|Baz|] {
+-//     export function hello() {}
+-// }|>
+-// 
+-// module Bar.Baz {
+-//     export function sure() {}
+-// }
++// --- (line: 7) skipped ---
+ // 
+ // let x = Foo;
+ // let y = Bar;
+@@= skipped -17, +11 lines =@@
+
+ // === goToImplementation ===
+ // === /goToImplementationNamespace_05.ts ===
+-// namespace Foo.Baz {
+-//     export function hello() {}
+-// }
+-// 
+-// module Bar.<|[|Baz|] {
+-//     export function sure() {}
+-// }|>
+-// 
++// --- (line: 8) skipped ---
+ // let x = Foo;
+ // let y = Bar;
+ // let x1 = Foo.Baz;

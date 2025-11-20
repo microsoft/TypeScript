@@ -5,7 +5,7 @@
 // 
 // function f() {
 //     this;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
 
 
 
@@ -16,4 +16,4 @@
 // 
 // function f() {
 //     this;
-// // --- (line: 6) skipped ---
+// --- (line: 6) skipped ---
