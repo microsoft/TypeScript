@@ -4271,7 +4271,7 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 	}
 	c.checkIndexConstraints(classType, symbol, false /*isStaticIndex*/)
 	c.checkIndexConstraints(staticType, symbol, true /*isStaticIndex*/)
-	c.checkTypeForDuplicateIndexSignatures(node)
+	c.checkClassOrInterfaceForDuplicateIndexSignatures(node)
 	c.checkPropertyInitialization(node)
 }
 
@@ -4758,14 +4758,15 @@ func (c *Checker) checkIndexConstraintForIndexSignature(t *Type, checkInfo *Inde
 	}
 }
 
-func (c *Checker) checkTypeForDuplicateIndexSignatures(node *ast.Node) {
-	if ast.IsInterfaceDeclaration(node) {
-		// in case of merging interface declaration it is possible that we'll enter this check procedure several times for every declaration
-		// to prevent this run check only for the first declaration of a given kind
-		if symbol := c.getSymbolOfDeclaration(node); len(symbol.Declarations) != 0 && symbol.Declarations[0] != node {
-			return
-		}
+func (c *Checker) checkClassOrInterfaceForDuplicateIndexSignatures(node *ast.Node) {
+	// Only check the type once
+	if links := c.declaredTypeLinks.Get(c.getSymbolOfDeclaration(node)); !links.indexSignaturesChecked {
+		links.indexSignaturesChecked = true
+		c.checkTypeForDuplicateIndexSignatures(node)
 	}
+}
+
+func (c *Checker) checkTypeForDuplicateIndexSignatures(node *ast.Node) {
 	// TypeScript 1.0 spec (April 2014)
 	// 3.7.4: An object type can contain at most one string index signature and one numeric index signature.
 	// 8.5: A class declaration can have at most one string index member declaration and one numeric index member declaration
@@ -4865,8 +4866,8 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 	symbol := c.getSymbolOfDeclaration(node)
 	c.checkTypeParameterListsIdentical(symbol)
 	// Only check this symbol once
-	firstInterfaceDecl := ast.GetDeclarationOfKind(symbol, ast.KindInterfaceDeclaration)
-	if node == firstInterfaceDecl {
+	if links := c.declaredTypeLinks.Get(symbol); !links.interfaceChecked {
+		links.interfaceChecked = true
 		t := c.getDeclaredTypeOfSymbol(symbol)
 		typeWithThis := c.getTypeWithThisArgument(t, nil, false)
 		// run subsequent checks only if first set succeeded
@@ -4886,7 +4887,7 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 		c.checkTypeReferenceNode(heritageElement)
 	}
 	c.checkSourceElements(node.Members())
-	c.checkTypeForDuplicateIndexSignatures(node)
+	c.checkClassOrInterfaceForDuplicateIndexSignatures(node)
 	c.registerForUnusedIdentifiersCheck(node)
 }
 

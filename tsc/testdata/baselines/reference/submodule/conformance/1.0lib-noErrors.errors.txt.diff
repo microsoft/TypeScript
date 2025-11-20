@@ -2,10 +2,13 @@
 +++ new.1.0lib-noErrors.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++1.0lib-noErrors.ts(92,5): error TS2374: Duplicate index signature for type 'string'.
 +1.0lib-noErrors.ts(130,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Object' must be of type 'ObjectConstructor', but here has type '{ (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }'.
 +1.0lib-noErrors.ts(251,5): error TS2687: All declarations of 'length' must have identical modifiers.
 +1.0lib-noErrors.ts(258,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Function' must be of type 'FunctionConstructor', but here has type '{ (...args: string[]): Function; new (...args: string[]): Function; prototype: Function; }'.
++1.0lib-noErrors.ts(269,5): error TS2374: Duplicate index signature for type 'number'.
 +1.0lib-noErrors.ts(414,5): error TS2687: All declarations of 'length' must have identical modifiers.
++1.0lib-noErrors.ts(424,5): error TS2374: Duplicate index signature for type 'number'.
 +1.0lib-noErrors.ts(430,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'String' must be of type 'StringConstructor', but here has type '{ (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }'.
 +1.0lib-noErrors.ts(439,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Boolean' must be of type 'BooleanConstructor', but here has type '{ (value?: any): boolean; new (value?: any): Boolean; prototype: Boolean; }'.
 +1.0lib-noErrors.ts(472,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Number' must be of type 'NumberConstructor', but here has type '{ (value?: any): number; new (value?: any): Number; prototype: Number; MAX_VALUE: number; MIN_VALUE: number; NaN: number; NEGATIVE_INFINITY: number; POSITIVE_INFINITY: number; }'.
@@ -18,6 +21,11 @@
 +1.0lib-noErrors.ts(516,5): error TS2687: All declarations of 'SQRT1_2' must have identical modifiers.
 +1.0lib-noErrors.ts(518,5): error TS2687: All declarations of 'SQRT2' must have identical modifiers.
 +1.0lib-noErrors.ts(767,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Date' must be of type 'DateConstructor', but here has type '{ (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }'.
++1.0lib-noErrors.ts(793,11): error TS2430: Interface 'RegExpExecArray' incorrectly extends interface 'string[]'.
++  Types of property 'concat' are incompatible.
++    Type '(...items: string[][]) => string[]' is not assignable to type '{ (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }'.
++      Types of parameters 'items' and 'items' are incompatible.
++        Type 'string' is not assignable to type 'string[]'.
 +1.0lib-noErrors.ts(840,5): error TS2687: All declarations of 'source' must have identical modifiers.
 +1.0lib-noErrors.ts(843,5): error TS2687: All declarations of 'global' must have identical modifiers.
 +1.0lib-noErrors.ts(846,5): error TS2687: All declarations of 'ignoreCase' must have identical modifiers.
@@ -30,10 +38,11 @@
 +1.0lib-noErrors.ts(909,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'SyntaxError' must be of type 'SyntaxErrorConstructor', but here has type '{ (message?: string): SyntaxError; new (message?: string): SyntaxError; prototype: SyntaxError; }'.
 +1.0lib-noErrors.ts(917,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'TypeError' must be of type 'TypeErrorConstructor', but here has type '{ (message?: string): TypeError; new (message?: string): TypeError; prototype: TypeError; }'.
 +1.0lib-noErrors.ts(925,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'URIError' must be of type 'URIErrorConstructor', but here has type '{ (message?: string): URIError; new (message?: string): URIError; prototype: URIError; }'.
++1.0lib-noErrors.ts(1132,5): error TS2374: Duplicate index signature for type 'number'.
 +1.0lib-noErrors.ts(1134,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Array' must be of type 'ArrayConstructor', but here has type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }'.
 +
 +
-+==== 1.0lib-noErrors.ts (29 errors) ====
++==== 1.0lib-noErrors.ts (34 errors) ====
 +    /* *****************************************************************************
 +    Copyright (c) Microsoft Corporation. All rights reserved. 
 +    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -126,6 +135,8 @@
 +    
 +    interface PropertyDescriptorMap {
 +        [s: string]: PropertyDescriptor;
++        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2374: Duplicate index signature for type 'string'.
 +    }
 +    
 +    interface Object {
@@ -311,6 +322,8 @@
 +    
 +    interface IArguments {
 +        [index: number]: any;
++        ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2374: Duplicate index signature for type 'number'.
 +        length: number;
 +        callee: Function;
 +    }
@@ -468,6 +481,8 @@
 +        substr(from: number, length?: number): string;
 +    
 +        [index: number]: string;
++        ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2374: Duplicate index signature for type 'number'.
 +    }
 +    
 +    /** 
@@ -865,6 +880,12 @@
 +    }
 +    
 +    interface RegExpExecArray {
++              ~~~~~~~~~~~~~~~
++!!! error TS2430: Interface 'RegExpExecArray' incorrectly extends interface 'string[]'.
++!!! error TS2430:   Types of property 'concat' are incompatible.
++!!! error TS2430:     Type '(...items: string[][]) => string[]' is not assignable to type '{ (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }'.
++!!! error TS2430:       Types of parameters 'items' and 'items' are incompatible.
++!!! error TS2430:         Type 'string' is not assignable to type 'string[]'.
 +        [index: number]: string;
 +        length: number;
 +    
@@ -1236,6 +1257,8 @@
 +        length: number;
 +    
 +        [n: number]: T;
++        ~~~~~~~~~~~~~~~
++!!! error TS2374: Duplicate index signature for type 'number'.
 +    }
 +    declare var Array: {
 +                ~~~~~
