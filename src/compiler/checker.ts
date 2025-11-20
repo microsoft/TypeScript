@@ -36603,7 +36603,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else {
-                        Debug.fail("No error for last overload signature");
+                        // Fallback: Generate a generic error when no specific error can be determined
+                        // This replaces the Debug.fail() to prevent compiler crashes
+                        // See: https://github.com/microsoft/TypeScript/issues/61524
+                        const fallbackChain = chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.No_overload_matches_this_call,
+                        );
+                        const errorNode = getErrorNodeForCallNode(node);
+                        const fallbackDiag = createDiagnosticForNodeFromMessageChain(
+                            getSourceFileOfNode(errorNode),
+                            errorNode,
+                            fallbackChain,
+                            /*relatedInformation*/ undefined,
+                        );
+
+                        diagnostics.add(fallbackDiag);
                     }
                 }
                 else {
@@ -36624,7 +36639,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             allDiagnostics.push(diags);
                         }
                         else {
-                            Debug.fail("No error for 3 or fewer overload signatures");
+                            // Fallback: Generate a generic error for this overload candidate
+                            // This prevents crashes when processing multiple overload signatures
+                            const fallbackChain = chainDiagnosticMessages(
+                                /*details*/ undefined,
+                                Diagnostics.Overload_0_of_1_2_gave_the_following_error,
+                                i + 1,
+                                candidates.length,
+                                signatureToString(c),
+                            );
+                            const errorNode = getErrorNodeForCallNode(node);
+                            const fallbackDiag = createDiagnosticForNodeFromMessageChain(
+                                getSourceFileOfNode(errorNode),
+                                errorNode,
+                                fallbackChain,
+                                /*relatedInformation*/ undefined,
+                            );
+                            allDiagnostics.push([fallbackDiag]);
                         }
                         i++;
                     }
