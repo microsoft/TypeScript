@@ -2191,7 +2191,7 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 
 	nodeArguments := nodeAsCall.Arguments
 	argumentNodes := nodeArguments.Nodes
-	if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindNodeNext && c.moduleKind != core.ModuleKindNode16 && c.moduleKind != core.ModuleKindPreserve {
+	if !(core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext) && c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
 		// We are allowed trailing comma after proposal-import-assertions.
 		c.checkGrammarForDisallowedTrailingComma(nodeArguments, diagnostics.Trailing_comma_not_allowed)
 
