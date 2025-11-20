@@ -476,6 +476,17 @@ function generateCode() {
         const lines: string[] = [];
 
         for (const prop of structure.properties) {
+            // Add property documentation if it exists
+            if (prop.documentation) {
+                const propDoc = formatDocumentation(prop.documentation);
+                if (propDoc) {
+                    // Add the documentation with proper indentation
+                    for (const line of propDoc.split("\n").filter(l => l)) {
+                        lines.push(`${indent}${line}`);
+                    }
+                }
+            }
+
             const type = resolveType(prop.type);
 
             // For reference types that are structures, use a named resolved type
@@ -553,7 +564,30 @@ function generateCode() {
         // Main function is exported, helpers are unexported
         const funcName = isMain ? `Resolve${structure.name}` : `resolve${structure.name}`;
 
-        // Generate the resolved type
+        // Generate the resolved type with documentation
+        if (!isMain) {
+            // For non-main types, add standard documentation header
+            if (structure.documentation) {
+                const typeDoc = formatDocumentation(structure.documentation);
+                if (typeDoc) {
+                    // Prepend comment explaining this is the resolved version
+                    lines.push(`// ${typeName} is a resolved version of ${structure.name} with all optional fields`);
+                    lines.push(`// converted to non-pointer values for easier access.`);
+                    lines.push(`//`);
+                    // Add the original structure documentation
+                    for (const line of typeDoc.split("\n").filter(l => l)) {
+                        lines.push(line);
+                    }
+                }
+            }
+            else {
+                // If no documentation, just add a basic comment
+                lines.push(`// ${typeName} is a resolved version of ${structure.name} with all optional fields`);
+                lines.push(`// converted to non-pointer values for easier access.`);
+            }
+        }
+        // For main type, documentation is added separately before calling this function
+
         lines.push(`type ${typeName} struct {`);
         lines.push(...generateResolvedStruct(structure, "\t"));
         lines.push(`}`);
@@ -1037,6 +1071,13 @@ function generateCode() {
         writeLine("// ResolvedClientCapabilities is a version of ClientCapabilities where all nested");
         writeLine("// fields are values (not pointers), making it easier to access deeply nested capabilities.");
         writeLine("// Use ResolveClientCapabilities to convert from ClientCapabilities.");
+        if (clientCapsStructure.documentation) {
+            writeLine("//");
+            const typeDoc = formatDocumentation(clientCapsStructure.documentation);
+            for (const line of typeDoc.split("\n").filter(l => l)) {
+                writeLine(line);
+            }
+        }
         const mainLines = generateResolvedTypeAndHelper(clientCapsStructure, true);
         for (const line of mainLines) {
             writeLine(line);
