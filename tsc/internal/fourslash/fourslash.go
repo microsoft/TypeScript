@@ -2588,8 +2588,7 @@ func (f *FourslashTest) getDiagnostics(t *testing.T, fileName string) []*lsproto
 }
 
 func isSuggestionDiagnostic(diag *lsproto.Diagnostic) bool {
-	return diag.Tags != nil && len(*diag.Tags) > 0 ||
-		(diag.Severity != nil && *diag.Severity == lsproto.DiagnosticSeverityHint)
+	return diag.Severity != nil && *diag.Severity == lsproto.DiagnosticSeverityHint
 }
 
 func (f *FourslashTest) VerifyBaselineNonSuggestionDiagnostics(t *testing.T) {

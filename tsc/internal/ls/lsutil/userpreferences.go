@@ -19,6 +19,7 @@ func NewDefaultUserPreferences() *UserPreferences {
 		IncludeCompletionsWithSnippetText:  core.TSTrue,
 		DisplayPartsForJSDoc:               true,
 		DisableLineTextInReferences:        true,
+		ReportStyleChecksAsWarnings:        true,
 	}
 }
 
@@ -148,6 +149,7 @@ type UserPreferences struct {
 	DisableSuggestions           bool // !!!
 	DisableLineTextInReferences  bool // !!!
 	DisplayPartsForJSDoc         bool // !!!
+	ReportStyleChecksAsWarnings  bool // !!! If this changes, we need to ask the client to recompute diagnostics
 }
 
 type JsxAttributeCompletionStyle string
@@ -628,5 +630,7 @@ func (p *UserPreferences) set(name string, value any) {
 		p.DisableLineTextInReferences = parseBoolWithDefault(value, true)
 	case "displaypartsforjsdoc":
 		p.DisplayPartsForJSDoc = parseBoolWithDefault(value, true)
+	case "reportstylechecksaswarnings":
+		p.ReportStyleChecksAsWarnings = parseBoolWithDefault(value, true)
 	}
 }

@@ -10,6 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
@@ -204,30 +205,44 @@ func ptrTo[T any](v T) *T {
 	return &v
 }
 
-type diagnosticCapabilities struct {
-	relatedInformation bool
-	tagValueSet        []lsproto.DiagnosticTag
+type diagnosticOptions struct {
+	reportStyleChecksAsWarnings bool
+	relatedInformation          bool
+	tagValueSet                 []lsproto.DiagnosticTag
 }
 
 // DiagnosticToLSPPull converts a diagnostic for pull diagnostics (textDocument/diagnostic)
-func DiagnosticToLSPPull(ctx context.Context, converters *Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
+func DiagnosticToLSPPull(ctx context.Context, converters *Converters, diagnostic *ast.Diagnostic, reportStyleChecksAsWarnings bool) *lsproto.Diagnostic {
 	clientCaps := lsproto.GetClientCapabilities(ctx).TextDocument.Diagnostic
-	return diagnosticToLSP(converters, diagnostic, diagnosticCapabilities{
-		relatedInformation: clientCaps.RelatedInformation,
-		tagValueSet:        clientCaps.TagSupport.ValueSet,
+	return diagnosticToLSP(converters, diagnostic, diagnosticOptions{
+		reportStyleChecksAsWarnings: reportStyleChecksAsWarnings, // !!! get through context UserPreferences
+		relatedInformation:          clientCaps.RelatedInformation,
+		tagValueSet:                 clientCaps.TagSupport.ValueSet,
 	})
 }
 
 // DiagnosticToLSPPush converts a diagnostic for push diagnostics (textDocument/publishDiagnostics)
 func DiagnosticToLSPPush(ctx context.Context, converters *Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
 	clientCaps := lsproto.GetClientCapabilities(ctx).TextDocument.PublishDiagnostics
-	return diagnosticToLSP(converters, diagnostic, diagnosticCapabilities{
+	return diagnosticToLSP(converters, diagnostic, diagnosticOptions{
 		relatedInformation: clientCaps.RelatedInformation,
 		tagValueSet:        clientCaps.TagSupport.ValueSet,
 	})
 }
 
-func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, caps diagnosticCapabilities) *lsproto.Diagnostic {
+// https://github.com/microsoft/vscode/blob/93e08afe0469712706ca4e268f778cfadf1a43ef/extensions/typescript-language-features/src/typeScriptServiceClientHost.ts#L40C7-L40C29
+var styleCheckDiagnostics = collections.NewSetFromItems(
+	diagnostics.X_0_is_declared_but_never_used.Code(),
+	diagnostics.X_0_is_declared_but_its_value_is_never_read.Code(),
+	diagnostics.Property_0_is_declared_but_its_value_is_never_read.Code(),
+	diagnostics.All_imports_in_import_declaration_are_unused.Code(),
+	diagnostics.Unreachable_code_detected.Code(),
+	diagnostics.Unused_label.Code(),
+	diagnostics.Fallthrough_case_in_switch.Code(),
+	diagnostics.Not_all_code_paths_return_a_value.Code(),
+)
+
+func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, opts diagnosticOptions) *lsproto.Diagnostic {
 	var severity lsproto.DiagnosticSeverity
 	switch diagnostic.Category() {
 	case diagnostics.CategorySuggestion:
@@ -240,8 +255,12 @@ func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, caps di
 		severity = lsproto.DiagnosticSeverityError
 	}
 
+	if opts.reportStyleChecksAsWarnings && severity == lsproto.DiagnosticSeverityError && styleCheckDiagnostics.Has(diagnostic.Code()) {
+		severity = lsproto.DiagnosticSeverityWarning
+	}
+
 	var relatedInformation []*lsproto.DiagnosticRelatedInformation
-	if caps.relatedInformation {
+	if opts.relatedInformation {
 		relatedInformation = make([]*lsproto.DiagnosticRelatedInformation, 0, len(diagnostic.RelatedInformation()))
 		for _, related := range diagnostic.RelatedInformation() {
 			relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
@@ -255,12 +274,12 @@ func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, caps di
 	}
 
 	var tags []lsproto.DiagnosticTag
-	if len(caps.tagValueSet) > 0 && (diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated()) {
+	if len(opts.tagValueSet) > 0 && (diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated()) {
 		tags = make([]lsproto.DiagnosticTag, 0, 2)
-		if diagnostic.ReportsUnnecessary() && slices.Contains(caps.tagValueSet, lsproto.DiagnosticTagUnnecessary) {
+		if diagnostic.ReportsUnnecessary() && slices.Contains(opts.tagValueSet, lsproto.DiagnosticTagUnnecessary) {
 			tags = append(tags, lsproto.DiagnosticTagUnnecessary)
 		}
-		if diagnostic.ReportsDeprecated() && slices.Contains(caps.tagValueSet, lsproto.DiagnosticTagDeprecated) {
+		if diagnostic.ReportsDeprecated() && slices.Contains(opts.tagValueSet, lsproto.DiagnosticTagDeprecated) {
 			tags = append(tags, lsproto.DiagnosticTagDeprecated)
 		}
 	}
