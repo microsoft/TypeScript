@@ -32,11 +32,11 @@ someMo/**/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label: "someModule",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "./someModule",
 							},
-						})),
+						},
 						Detail:              PtrTo("(property) default: 1"),
 						Kind:                PtrTo(lsproto.CompletionItemKindField),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
@@ -44,11 +44,11 @@ someMo/**/`
 					},
 					&lsproto.CompletionItem{
 						Label: "someModule",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "./someModule",
 							},
-						})),
+						},
 						Detail:              PtrTo("const someModule: 0"),
 						Kind:                PtrTo(lsproto.CompletionItemKindVariable),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
@@ -60,7 +60,7 @@ someMo/**/`
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:   "someModule",
 		Source: "./someModule",
-		AutoImportData: &ls.AutoImportData{
+		AutoImportData: &lsproto.AutoImportData{
 			ExportName: "default",
 			FileName:   "/someModule.ts",
 		},

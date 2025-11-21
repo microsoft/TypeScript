@@ -57,11 +57,11 @@ func TestCompletionsImport_umdDefaultNoCrash1(t *testing.T) {
 				&lsproto.CompletionItem{
 					Label:               "Dottie",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "dottie",
 						},
-					})),
+					},
 					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},

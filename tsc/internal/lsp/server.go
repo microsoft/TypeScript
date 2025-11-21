@@ -170,9 +170,11 @@ func (s *Server) WatchFiles(ctx context.Context, id project.WatcherID, watchers 
 			{
 				Id:     string(id),
 				Method: string(lsproto.MethodWorkspaceDidChangeWatchedFiles),
-				RegisterOptions: ptrTo(any(lsproto.DidChangeWatchedFilesRegistrationOptions{
-					Watchers: watchers,
-				})),
+				RegisterOptions: &lsproto.RegisterOptions{
+					DidChangeWatchedFiles: &lsproto.DidChangeWatchedFilesRegistrationOptions{
+						Watchers: watchers,
+					},
+				},
 			},
 		},
 	})
@@ -724,12 +726,9 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	}
 
 	var disablePushDiagnostics bool
-	if s.initializeParams != nil && s.initializeParams.InitializationOptions != nil && *s.initializeParams.InitializationOptions != nil {
-		// Check for disablePushDiagnostics option
-		if initOpts, ok := (*s.initializeParams.InitializationOptions).(map[string]any); ok {
-			if disable, ok := initOpts["disablePushDiagnostics"].(bool); ok {
-				disablePushDiagnostics = disable
-			}
+	if s.initializeParams != nil && s.initializeParams.InitializationOptions != nil {
+		if s.initializeParams.InitializationOptions.DisablePushDiagnostics != nil {
+			disablePushDiagnostics = *s.initializeParams.InitializationOptions.DisablePushDiagnostics
 		}
 	}
 
@@ -762,12 +761,14 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			{
 				Id:     "typescript-config-watch-id",
 				Method: string(lsproto.MethodWorkspaceDidChangeConfiguration),
-				RegisterOptions: ptrTo(any(lsproto.DidChangeConfigurationRegistrationOptions{
-					Section: &lsproto.StringOrStrings{
-						// !!! Both the 'javascript' and 'js/ts' scopes need to be watched for settings as well.
-						Strings: &[]string{"typescript"},
+				RegisterOptions: &lsproto.RegisterOptions{
+					DidChangeConfiguration: &lsproto.DidChangeConfigurationRegistrationOptions{
+						Section: &lsproto.StringOrStrings{
+							// !!! Both the 'javascript' and 'js/ts' scopes need to be watched for settings as well.
+							Strings: &[]string{"typescript"},
+						},
 					},
-				})),
+				},
 			},
 		},
 	})
@@ -894,10 +895,7 @@ func (s *Server) handleCompletion(ctx context.Context, languageService *ls.Langu
 }
 
 func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsproto.CompletionItem, reqMsg *lsproto.RequestMessage) (lsproto.CompletionResolveResponse, error) {
-	data, err := ls.GetCompletionItemData(params)
-	if err != nil {
-		return nil, err
-	}
+	data := params.Data
 	languageService, err := s.session.GetLanguageService(ctx, lsconv.FileNameToDocumentURI(data.FileName))
 	if err != nil {
 		return nil, err

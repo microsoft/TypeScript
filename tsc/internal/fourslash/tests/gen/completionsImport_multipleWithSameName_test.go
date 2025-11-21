@@ -43,11 +43,11 @@ fo/**/`
 					},
 					&lsproto.CompletionItem{
 						Label: "foo",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "./a",
 							},
-						})),
+						},
 						Detail:              PtrTo("const foo: 0"),
 						Kind:                PtrTo(lsproto.CompletionItemKindVariable),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
@@ -55,11 +55,11 @@ fo/**/`
 					},
 					&lsproto.CompletionItem{
 						Label: "foo",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "./b",
 							},
-						})),
+						},
 						Detail:              PtrTo("const foo: 1"),
 						Kind:                PtrTo(lsproto.CompletionItemKindVariable),
 						AdditionalTextEdits: fourslash.AnyTextEdits,

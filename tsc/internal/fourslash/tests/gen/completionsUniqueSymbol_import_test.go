@@ -43,11 +43,11 @@ i[|./**/|];`
 				&lsproto.CompletionItem{
 					Label:      "publicSym",
 					InsertText: PtrTo("[publicSym]"),
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "./a",
 						},
-					})),
+					},
 					SortText:            PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{

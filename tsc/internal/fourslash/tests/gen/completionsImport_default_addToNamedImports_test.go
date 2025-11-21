@@ -31,11 +31,11 @@ f/**/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "foo",
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "./a",
 						},
-					})),
+					},
 					Detail:              PtrTo("function foo(): void"),
 					Kind:                PtrTo(lsproto.CompletionItemKindFunction),
 					AdditionalTextEdits: fourslash.AnyTextEdits,

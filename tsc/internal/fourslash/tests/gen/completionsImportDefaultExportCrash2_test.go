@@ -54,21 +54,21 @@ export default methods.$;
 				&lsproto.CompletionItem{
 					Label:               "$",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "dom7",
 						},
-					})),
+					},
 					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label:               "Dom7",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "./dom7",
 						},
-					})),
+					},
 					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},

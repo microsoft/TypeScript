@@ -42,11 +42,11 @@ import {} from "@reduxjs/toolkit";
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "configureStore",
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "@reduxjs/toolkit",
 						},
-					})),
+					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 				},
@@ -56,7 +56,7 @@ import {} from "@reduxjs/toolkit";
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:   "configureStore",
 		Source: "@reduxjs/toolkit",
-		AutoImportData: &ls.AutoImportData{
+		AutoImportData: &lsproto.AutoImportData{
 			ExportName:      "configureStore",
 			FileName:        "/src/configureStore.ts",
 			ModuleSpecifier: "@reduxjs/toolkit",

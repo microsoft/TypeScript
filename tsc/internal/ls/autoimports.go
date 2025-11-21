@@ -38,17 +38,10 @@ type symbolExportEntry struct {
 	moduleSymbol *ast.Symbol
 }
 
-type ExportInfoMapKey struct {
-	SymbolName        string
-	SymbolId          ast.SymbolId
-	AmbientModuleName string
-	ModuleFile        tspath.Path
-}
-
-func newExportInfoMapKey(importedName string, symbol *ast.Symbol, ambientModuleNameKey string, ch *checker.Checker) ExportInfoMapKey {
-	return ExportInfoMapKey{
+func newExportInfoMapKey(importedName string, symbol *ast.Symbol, ambientModuleNameKey string, ch *checker.Checker) lsproto.ExportInfoMapKey {
+	return lsproto.ExportInfoMapKey{
 		SymbolName:        importedName,
-		SymbolId:          ast.GetSymbolId(ch.SkipAlias(symbol)),
+		SymbolId:          uint64(ast.GetSymbolId(ch.SkipAlias(symbol))),
 		AmbientModuleName: ambientModuleNameKey,
 	}
 }
@@ -72,7 +65,7 @@ type CachedSymbolExportInfo struct {
 }
 
 type ExportInfoMap struct {
-	exportInfo       collections.OrderedMap[ExportInfoMapKey, []*CachedSymbolExportInfo]
+	exportInfo       collections.OrderedMap[lsproto.ExportInfoMapKey, []*CachedSymbolExportInfo]
 	symbols          map[int]symbolExportEntry
 	exportInfoId     int
 	usableByFileName tspath.Path
@@ -86,11 +79,11 @@ type ExportInfoMap struct {
 
 func (e *ExportInfoMap) clear() {
 	e.symbols = map[int]symbolExportEntry{}
-	e.exportInfo = collections.OrderedMap[ExportInfoMapKey, []*CachedSymbolExportInfo]{}
+	e.exportInfo = collections.OrderedMap[lsproto.ExportInfoMapKey, []*CachedSymbolExportInfo]{}
 	e.usableByFileName = ""
 }
 
-func (e *ExportInfoMap) get(importingFile tspath.Path, ch *checker.Checker, key ExportInfoMapKey) []*SymbolExportInfo {
+func (e *ExportInfoMap) get(importingFile tspath.Path, ch *checker.Checker, key lsproto.ExportInfoMapKey) []*SymbolExportInfo {
 	if e.usableByFileName != importingFile {
 		return nil
 	}
@@ -223,7 +216,7 @@ func (e *ExportInfoMap) search(
 	importingFile tspath.Path,
 	preferCapitalized bool,
 	matches func(name string, targetFlags ast.SymbolFlags) bool,
-	action func(info []*SymbolExportInfo, symbolName string, isFromAmbientModule bool, key ExportInfoMapKey) []*SymbolExportInfo,
+	action func(info []*SymbolExportInfo, symbolName string, isFromAmbientModule bool, key lsproto.ExportInfoMapKey) []*SymbolExportInfo,
 ) []*SymbolExportInfo {
 	if importingFile != e.usableByFileName {
 		return nil
@@ -355,7 +348,7 @@ func (l *LanguageService) getImportCompletionAction(
 	moduleSymbol *ast.Symbol,
 	sourceFile *ast.SourceFile,
 	position int,
-	exportMapKey ExportInfoMapKey,
+	exportMapKey lsproto.ExportInfoMapKey,
 	symbolName string,
 	isJsxTagName bool,
 	// formatContext *formattingContext,
@@ -380,7 +373,7 @@ func NewExportInfoMap(globalsTypingCacheLocation string) *ExportInfoMap {
 	return &ExportInfoMap{
 		packages:                   map[string]string{},
 		symbols:                    map[int]symbolExportEntry{},
-		exportInfo:                 collections.OrderedMap[ExportInfoMapKey, []*CachedSymbolExportInfo]{},
+		exportInfo:                 collections.OrderedMap[lsproto.ExportInfoMapKey, []*CachedSymbolExportInfo]{},
 		globalTypingsCacheLocation: globalsTypingCacheLocation,
 	}
 }

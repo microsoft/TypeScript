@@ -30,11 +30,11 @@ export const foo = 0;
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "foo",
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "./foo",
 						},
-					})),
+					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Kind:                PtrTo(lsproto.CompletionItemKindVariable),
 					SortText:            PtrTo(string(ls.DeprecateSortText(ls.SortTextAutoImportSuggestions))),

@@ -34,11 +34,11 @@ export = Foo;
 				&lsproto.CompletionItem{
 					Label:      "Foo",
 					InsertText: PtrTo("import Foo from \"./foo\";"),
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "./foo",
 						},
-					})),
+					},
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "Foo",

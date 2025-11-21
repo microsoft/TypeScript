@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
-	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -16,7 +15,10 @@ type DocumentUri string // !!!
 
 func (uri DocumentUri) FileName() string {
 	if strings.HasPrefix(string(uri), "file://") {
-		parsed := core.Must(url.Parse(string(uri)))
+		parsed, err := url.Parse(string(uri))
+		if err != nil {
+			panic(fmt.Sprintf("invalid file URI: %s", uri))
+		}
 		if parsed.Host != "" {
 			return "//" + parsed.Host + parsed.Path
 		}

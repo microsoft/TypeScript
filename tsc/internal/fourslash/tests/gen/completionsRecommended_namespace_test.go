@@ -58,11 +58,11 @@ alpha.f(new /*c1*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "Name",
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "./a",
 						},
-					})),
+					},
 					Detail:              PtrTo("namespace Name"),
 					Kind:                PtrTo(lsproto.CompletionItemKindModule),
 					AdditionalTextEdits: fourslash.AnyTextEdits,

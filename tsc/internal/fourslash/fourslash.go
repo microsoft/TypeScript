@@ -252,14 +252,13 @@ func (f *FourslashTest) nextID() int32 {
 }
 
 func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities) {
-	initOptions := map[string]any{
-		// Hack: disable push diagnostics entirely, since the fourslash runner does not
-		// yet gracefully handle non-request messages.
-		"disablePushDiagnostics": true,
-	}
 	params := &lsproto.InitializeParams{
-		Locale:                ptrTo("en-US"),
-		InitializationOptions: ptrTo[any](initOptions),
+		Locale: ptrTo("en-US"),
+		InitializationOptions: &lsproto.InitializationOptions{
+			// Hack: disable push diagnostics entirely, since the fourslash runner does not
+			// yet gracefully handle non-request messages.
+			DisablePushDiagnostics: ptrTo(true),
+		},
 	}
 	params.Capabilities = getCapabilitiesWithDefaults(capabilities)
 	// !!! check for errors?
@@ -717,8 +716,8 @@ func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput,
 				if item.Label != expectedAction.Name || item.Data == nil {
 					return false
 				}
-				data, ok := (*item.Data).(*ls.CompletionItemData)
-				if !ok || data.AutoImport == nil {
+				data := item.Data
+				if data.AutoImport == nil {
 					return false
 				}
 				return data.AutoImport.ModuleSpecifier == expectedAction.Source
@@ -956,16 +955,12 @@ var (
 )
 
 func (f *FourslashTest) verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.CompletionItem, expected *lsproto.CompletionItem) {
-	var actualAutoImportData, expectedAutoImportData *ls.AutoImportData
+	var actualAutoImportData, expectedAutoImportData *lsproto.AutoImportData
 	if actual.Data != nil {
-		if data, ok := (*actual.Data).(*ls.CompletionItemData); ok {
-			actualAutoImportData = data.AutoImport
-		}
+		actualAutoImportData = actual.Data.AutoImport
 	}
 	if expected.Data != nil {
-		if data, ok := (*expected.Data).(*ls.CompletionItemData); ok {
-			expectedAutoImportData = data.AutoImport
-		}
+		expectedAutoImportData = expected.Data.AutoImport
 	}
 	if (actualAutoImportData == nil) != (expectedAutoImportData == nil) {
 		t.Fatal(prefix + "Mismatch in auto-import data presence")
@@ -1034,7 +1029,7 @@ func assertDeepEqual(t *testing.T, actual any, expected any, prefix string, opts
 type ApplyCodeActionFromCompletionOptions struct {
 	Name            string
 	Source          string
-	AutoImportData  *ls.AutoImportData
+	AutoImportData  *lsproto.AutoImportData
 	Description     string
 	NewFileContent  *string
 	NewRangeContent *string
@@ -1058,16 +1053,13 @@ func (f *FourslashTest) VerifyApplyCodeActionFromCompletion(t *testing.T, marker
 		if item.Label != options.Name || item.Data == nil {
 			return false
 		}
-		data, ok := (*item.Data).(*ls.CompletionItemData)
-		if !ok {
-			return false
-		}
+		data := item.Data
 		if options.AutoImportData != nil {
 			return data.AutoImport != nil && ((data.AutoImport.FileName == options.AutoImportData.FileName) &&
 				(options.AutoImportData.ModuleSpecifier == "" || data.AutoImport.ModuleSpecifier == options.AutoImportData.ModuleSpecifier) &&
 				(options.AutoImportData.ExportName == "" || data.AutoImport.ExportName == options.AutoImportData.ExportName) &&
-				(options.AutoImportData.AmbientModuleName == nil || data.AutoImport.AmbientModuleName == options.AutoImportData.AmbientModuleName) &&
-				(options.AutoImportData.IsPackageJsonImport == core.TSUnknown || data.AutoImport.IsPackageJsonImport == options.AutoImportData.IsPackageJsonImport))
+				(options.AutoImportData.AmbientModuleName == "" || data.AutoImport.AmbientModuleName == options.AutoImportData.AmbientModuleName) &&
+				data.AutoImport.IsPackageJsonImport == options.AutoImportData.IsPackageJsonImport)
 		}
 		if data.AutoImport == nil && data.Source != "" && data.Source == options.Source {
 			return true

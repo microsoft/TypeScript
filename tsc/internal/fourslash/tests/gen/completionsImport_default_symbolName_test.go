@@ -39,11 +39,11 @@ R/*0*/`
 				&lsproto.CompletionItem{
 					Label: "RangeParser",
 					Kind:  PtrTo(lsproto.CompletionItemKindFunction),
-					Data: PtrTo(any(&ls.CompletionItemData{
-						AutoImport: &ls.AutoImportData{
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportData{
 							ModuleSpecifier: "range-parser",
 						},
-					})),
+					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 					Detail:              PtrTo("namespace RangeParser\nfunction RangeParser(): string"),

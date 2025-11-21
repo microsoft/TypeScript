@@ -319,6 +319,12 @@ export type Property = {
 	 * the property contains the deprecation message.
 	 */
 	deprecated?: string;
+
+	/**
+	 * Whether this property uses omitzero without being a pointer.
+	 * Custom extension for special value types.
+	 */
+	omitzeroValue?: boolean;
 };
 
 /**

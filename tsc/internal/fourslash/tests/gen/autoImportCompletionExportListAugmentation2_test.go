@@ -5,7 +5,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
-	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -59,9 +58,9 @@ class PingCommand extends Command {
 					InsertText:          PtrTo("get container(): Container {\n}"),
 					FilterText:          PtrTo("container"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					Data: PtrTo(any(&ls.CompletionItemData{
+					Data: &lsproto.CompletionItemData{
 						Source: "ClassMemberSnippet/",
-					})),
+					},
 				},
 			},
 		},

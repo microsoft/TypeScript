@@ -5,7 +5,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
-	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -57,9 +56,9 @@ export class MoveInsideNextQuote extends MoveQuoteMatch {/*1*/
 					InsertText:          PtrTo("public execActionWithCount(position: Position): Promise<void> {\n}"),
 					FilterText:          PtrTo("execActionWithCount"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					Data: PtrTo(any(&ls.CompletionItemData{
+					Data: &lsproto.CompletionItemData{
 						Source: "ClassMemberSnippet/",
-					})),
+					},
 				},
 			},
 		},

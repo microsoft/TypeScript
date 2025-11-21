@@ -38,11 +38,11 @@ t/**/`
 					},
 					&lsproto.CompletionItem{
 						Label: "Test1",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "./a",
 							},
-						})),
+						},
 						Detail:              PtrTo("function Test1(): void"),
 						Kind:                PtrTo(lsproto.CompletionItemKindFunction),
 						AdditionalTextEdits: fourslash.AnyTextEdits,

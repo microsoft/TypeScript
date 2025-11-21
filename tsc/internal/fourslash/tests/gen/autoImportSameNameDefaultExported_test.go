@@ -35,21 +35,21 @@ Table/**/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label: "Table",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "antd",
 							},
-						})),
+						},
 						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},
 					&lsproto.CompletionItem{
 						Label: "Table",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "rc-table",
 							},
-						})),
+						},
 						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},

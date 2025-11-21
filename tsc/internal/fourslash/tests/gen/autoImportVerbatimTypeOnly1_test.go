@@ -5,7 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
-	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -26,7 +26,7 @@ const x: /**/`
 		Name:        "I",
 		Source:      "./mod",
 		Description: "Add import from \"./mod.js\"",
-		AutoImportData: &ls.AutoImportData{
+		AutoImportData: &lsproto.AutoImportData{
 			ExportName:      "I",
 			FileName:        "/mod.ts",
 			ModuleSpecifier: "./mod.js",
@@ -40,7 +40,7 @@ const x: `),
 		Name:        "C",
 		Source:      "./mod",
 		Description: "Update import from \"./mod.js\"",
-		AutoImportData: &ls.AutoImportData{
+		AutoImportData: &lsproto.AutoImportData{
 			ExportName:      "C",
 			FileName:        "/mod.ts",
 			ModuleSpecifier: "./mod.js",

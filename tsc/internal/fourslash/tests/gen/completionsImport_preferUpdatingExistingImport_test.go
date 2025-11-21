@@ -38,11 +38,11 @@ y/**/`
 					"x",
 					&lsproto.CompletionItem{
 						Label: "y",
-						Data: PtrTo(any(&ls.CompletionItemData{
-							AutoImport: &ls.AutoImportData{
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportData{
 								ModuleSpecifier: "./deep/module/why/you/want/this/path",
 							},
-						})),
+						},
 						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},
