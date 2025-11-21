@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/issue61524DebugFailureCrash.ts] ////
+
+=== issue61524DebugFailureCrash.ts ===
+// Exact reproduction from https://github.com/microsoft/TypeScript/issues/61524
+// This code causes "Debug Failure. No error for last overload signature"
+
+type Generic<T> = T extends any[] ? T[number] : T[keyof T];
+>Generic : Generic<T>
+>        : ^^^^^^^^^^
+
+export function testFn<A extends Record<string, any>>(
+>testFn : <A extends Record<string, any>>(obj: A, cb: (b: Generic<Partial<A>>) => any) => void
+>       : ^ ^^^^^^^^^                   ^^   ^^ ^^  ^^                               ^^^^^^^^^
+
+    obj: A,
+>obj : A
+>    : ^
+
+    cb: (b: Generic<Partial<A>>) => any
+>cb : (b: Generic<Partial<A>>) => any
+>   : ^ ^^                   ^^^^^   
+>b : Generic<Partial<A>>
+>  : ^^^^^^^^^^^^^^^^^^^
+
+) {
+    for (const [key, val] of Object.entries(obj)) {
+>key : any
+>    : ^^^
+>val : any
+>    : ^^^
+>Object.entries(obj) : any
+>                    : ^^^
+>Object.entries : any
+>               : ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>entries : any
+>        : ^^^
+>obj : A
+>    : ^
+
+        cb(val as Generic<A>);
+>cb(val as Generic<A>) : any
+>                      : ^^^
+>cb : (b: Generic<Partial<A>>) => any
+>   : ^ ^^                   ^^^^^   
+>val as Generic<A> : Generic<A>
+>                  : ^^^^^^^^^^
+>val : any
+>    : ^^^
+    }
+}
+
+// Usage that triggers the crash
+testFn(
+>testFn(    { foo: "bar", num: 42 },    (val) => console.log(val)  // Type inference here causes the issue) : void
+>                                                                                                           : ^^^^
+>testFn : <A extends Record<string, any>>(obj: A, cb: (b: Generic<Partial<A>>) => any) => void
+>       : ^ ^^^^^^^^^                   ^^   ^^ ^^  ^^                               ^^^^^^^^^
+
+    { foo: "bar", num: 42 },
+>{ foo: "bar", num: 42 } : { foo: string; num: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : string
+>    : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+>num : number
+>    : ^^^^^^
+>42 : 42
+>   : ^^
+
+    (val) => console.log(val)  // Type inference here causes the issue
+>(val) => console.log(val) : (val: string | number | undefined) => void
+>                          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>val : string | number | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>console.log(val) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>val : string | number | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+);

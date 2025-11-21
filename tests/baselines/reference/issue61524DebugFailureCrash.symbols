@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/issue61524DebugFailureCrash.ts] ////
+
+=== issue61524DebugFailureCrash.ts ===
+// Exact reproduction from https://github.com/microsoft/TypeScript/issues/61524
+// This code causes "Debug Failure. No error for last overload signature"
+
+type Generic<T> = T extends any[] ? T[number] : T[keyof T];
+>Generic : Symbol(Generic, Decl(issue61524DebugFailureCrash.ts, 0, 0))
+>T : Symbol(T, Decl(issue61524DebugFailureCrash.ts, 3, 13))
+>T : Symbol(T, Decl(issue61524DebugFailureCrash.ts, 3, 13))
+>T : Symbol(T, Decl(issue61524DebugFailureCrash.ts, 3, 13))
+>T : Symbol(T, Decl(issue61524DebugFailureCrash.ts, 3, 13))
+>T : Symbol(T, Decl(issue61524DebugFailureCrash.ts, 3, 13))
+
+export function testFn<A extends Record<string, any>>(
+>testFn : Symbol(testFn, Decl(issue61524DebugFailureCrash.ts, 3, 59))
+>A : Symbol(A, Decl(issue61524DebugFailureCrash.ts, 5, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    obj: A,
+>obj : Symbol(obj, Decl(issue61524DebugFailureCrash.ts, 5, 54))
+>A : Symbol(A, Decl(issue61524DebugFailureCrash.ts, 5, 23))
+
+    cb: (b: Generic<Partial<A>>) => any
+>cb : Symbol(cb, Decl(issue61524DebugFailureCrash.ts, 6, 11))
+>b : Symbol(b, Decl(issue61524DebugFailureCrash.ts, 7, 9))
+>Generic : Symbol(Generic, Decl(issue61524DebugFailureCrash.ts, 0, 0))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(issue61524DebugFailureCrash.ts, 5, 23))
+
+) {
+    for (const [key, val] of Object.entries(obj)) {
+>key : Symbol(key, Decl(issue61524DebugFailureCrash.ts, 9, 16))
+>val : Symbol(val, Decl(issue61524DebugFailureCrash.ts, 9, 20))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(issue61524DebugFailureCrash.ts, 5, 54))
+
+        cb(val as Generic<A>);
+>cb : Symbol(cb, Decl(issue61524DebugFailureCrash.ts, 6, 11))
+>val : Symbol(val, Decl(issue61524DebugFailureCrash.ts, 9, 20))
+>Generic : Symbol(Generic, Decl(issue61524DebugFailureCrash.ts, 0, 0))
+>A : Symbol(A, Decl(issue61524DebugFailureCrash.ts, 5, 23))
+    }
+}
+
+// Usage that triggers the crash
+testFn(
+>testFn : Symbol(testFn, Decl(issue61524DebugFailureCrash.ts, 3, 59))
+
+    { foo: "bar", num: 42 },
+>foo : Symbol(foo, Decl(issue61524DebugFailureCrash.ts, 16, 5))
+>num : Symbol(num, Decl(issue61524DebugFailureCrash.ts, 16, 17))
+
+    (val) => console.log(val)  // Type inference here causes the issue
+>val : Symbol(val, Decl(issue61524DebugFailureCrash.ts, 17, 5))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>val : Symbol(val, Decl(issue61524DebugFailureCrash.ts, 17, 5))
+
+);
