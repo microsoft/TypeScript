@@ -320,9 +320,11 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot, release := session.Snapshot()
 		defer release()
-		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		demoProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/demos/tsconfig.json"))
 		assert.Assert(t, demoProject != nil)
+		solutionProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/tsconfig.json"))
+		assert.Assert(t, solutionProject != nil)
 
 		// Verify the default project is the demos project (not the app project that excludes demos files)
 		defaultProject := snapshot.GetDefaultProject(uri)

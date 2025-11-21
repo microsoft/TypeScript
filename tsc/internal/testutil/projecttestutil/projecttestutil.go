@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 )
 
@@ -34,11 +35,16 @@ type TypingsInstallerOptions struct {
 }
 
 type SessionUtils struct {
-	fs          vfs.FS
-	client      *ClientMock
-	npmExecutor *NpmExecutorMock
-	tiOptions   *TypingsInstallerOptions
-	logger      logging.LogCollector
+	fsFromFileMap iovfs.FsWithSys
+	fs            vfs.FS
+	client        *ClientMock
+	npmExecutor   *NpmExecutorMock
+	tiOptions     *TypingsInstallerOptions
+	logger        logging.LogCollector
+}
+
+func (h *SessionUtils) FsFromFileMap() iovfs.FsWithSys {
+	return h.fsFromFileMap
 }
 
 func (h *SessionUtils) Client() *ClientMock {
@@ -192,15 +198,28 @@ func SetupWithTypingsInstaller(files map[string]any, tiOptions *TypingsInstaller
 }
 
 func SetupWithOptionsAndTypingsInstaller(files map[string]any, options *project.SessionOptions, tiOptions *TypingsInstallerOptions) (*project.Session, *SessionUtils) {
-	fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+	init, sessionUtils := GetSessionInitOptions(files, options, tiOptions)
+	session := project.NewSession(init)
+
+	return session, sessionUtils
+}
+
+func WithRequestID(ctx context.Context) context.Context {
+	return core.WithRequestID(ctx, "0")
+}
+
+func GetSessionInitOptions(files map[string]any, options *project.SessionOptions, tiOptions *TypingsInstallerOptions) (*project.SessionInit, *SessionUtils) {
+	fsFromFileMap := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+	fs := bundled.WrapFS(fsFromFileMap)
 	clientMock := &ClientMock{}
 	npmExecutorMock := &NpmExecutorMock{}
 	sessionUtils := &SessionUtils{
-		fs:          fs,
-		client:      clientMock,
-		npmExecutor: npmExecutorMock,
-		tiOptions:   tiOptions,
-		logger:      logging.NewTestLogger(),
+		fsFromFileMap: fsFromFileMap.(iovfs.FsWithSys),
+		fs:            fs,
+		client:        clientMock,
+		npmExecutor:   npmExecutorMock,
+		tiOptions:     tiOptions,
+		logger:        logging.NewTestLogger(),
 	}
 
 	// Configure the npm executor mock to handle typings installation
@@ -219,17 +238,11 @@ func SetupWithOptionsAndTypingsInstaller(files map[string]any, options *project.
 		}
 	}
 
-	session := project.NewSession(&project.SessionInit{
+	return &project.SessionInit{
 		Options:     options,
 		FS:          fs,
 		Client:      clientMock,
 		NpmExecutor: npmExecutorMock,
 		Logger:      sessionUtils.logger,
-	})
-
-	return session, sessionUtils
-}
-
-func WithRequestID(ctx context.Context) context.Context {
-	return core.WithRequestID(ctx, "0")
+	}, sessionUtils
 }

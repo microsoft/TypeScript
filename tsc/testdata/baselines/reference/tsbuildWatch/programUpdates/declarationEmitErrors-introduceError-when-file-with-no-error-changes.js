@@ -2,10 +2,10 @@ currentDirectory::/user/username/projects/solution
 useCaseSensitiveFileNames::true
 Input::
 //// [/user/username/projects/solution/app/fileWithError.ts] *new* 
-              export var myClassWithError = class {
-                  tags() { }
+export var myClassWithError = class {
+    tags() { }
 
-              };
+};
 //// [/user/username/projects/solution/app/fileWithoutError.ts] *new* 
 export class myClass { }
 //// [/user/username/projects/solution/app/tsconfig.json] *new* 
@@ -74,7 +74,7 @@ class myClass {
 exports.myClass = myClass;
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","./fileWithError.ts","./fileWithoutError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d4354dbd4fafaa0ad3a5b65966837613-              export var myClassWithError = class {\n                  tags() { }\n\n              };","signature":"767d370715ef9e7e7e190b09dbf6cb11-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n","impliedNodeFormat":1},{"version":"181818468a51a2348d25d30b10b6b1bb-export class myClass { }","signature":"00d3ac9a4cccbf94649ca3c19d44376a-export declare class myClass {\n}\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./fileWithoutError.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","./fileWithError.ts","./fileWithoutError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"037c56906f2b733e17b4a0bfeb8ada65-export var myClassWithError = class {\n    tags() { }\n\n};","signature":"767d370715ef9e7e7e190b09dbf6cb11-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n","impliedNodeFormat":1},{"version":"181818468a51a2348d25d30b10b6b1bb-export class myClass { }","signature":"00d3ac9a4cccbf94649ca3c19d44376a-export declare class myClass {\n}\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./fileWithoutError.d.ts"}
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -110,11 +110,11 @@ exports.myClass = myClass;
     },
     {
       "fileName": "./fileWithError.ts",
-      "version": "d4354dbd4fafaa0ad3a5b65966837613-              export var myClassWithError = class {\n                  tags() { }\n\n              };",
+      "version": "037c56906f2b733e17b4a0bfeb8ada65-export var myClassWithError = class {\n    tags() { }\n\n};",
       "signature": "767d370715ef9e7e7e190b09dbf6cb11-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
-        "version": "d4354dbd4fafaa0ad3a5b65966837613-              export var myClassWithError = class {\n                  tags() { }\n\n              };",
+        "version": "037c56906f2b733e17b4a0bfeb8ada65-export var myClassWithError = class {\n    tags() { }\n\n};",
         "signature": "767d370715ef9e7e7e190b09dbf6cb11-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n",
         "impliedNodeFormat": 1
       }
@@ -135,7 +135,7 @@ exports.myClass = myClass;
     "composite": true
   },
   "latestChangedDtsFile": "./fileWithoutError.d.ts",
-  "size": 1460
+  "size": 1418
 }
 
 app/tsconfig.json::

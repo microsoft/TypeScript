@@ -1,0 +1,122 @@
+UseCaseSensitiveFileNames: true
+//// [/myproject/playground/tests.ts] *new* 
+export function foo() {}
+//// [/myproject/playground/tsconfig-json/src/src.ts] *new* 
+export function foobar() {}
+//// [/myproject/playground/tsconfig-json/tests/spec.ts] *new* 
+export function bar() { }
+
+//// [/myproject/playground/tsconfig-json/tsconfig.json] *new* 
+{
+	"include": ["./src"]
+}
+//// [/myproject/playground/tsconfig.json] *new* 
+{}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/playground/tests.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export function foo() {}"
+    }
+  }
+}
+
+Projects::
+  [/myproject/playground/tsconfig.json] *new*
+    /myproject/playground/tests.ts                     
+    /myproject/playground/tsconfig-json/src/src.ts     
+    /myproject/playground/tsconfig-json/tests/spec.ts  
+Open Files::
+  [/myproject/playground/tests.ts] *new*
+    /myproject/playground/tsconfig.json  (default) 
+Config::
+  [/myproject/playground/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/playground/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/playground/tests.ts  
+Config File Names::
+  [/myproject/playground/tests.ts] *new*
+    NearestConfigFileName: /myproject/playground/tsconfig.json
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/playground/tests.ts"
+    }
+  }
+}
+
+Open Files::
+  [/myproject/playground/tests.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/playground/tsconfig-json/tests/spec.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export function bar() { }\n"
+    }
+  }
+}
+
+Projects::
+  [/myproject/playground/tsconfig-json/tsconfig.json] *new*
+    /myproject/playground/tsconfig-json/src/src.ts  
+  [/myproject/playground/tsconfig.json] 
+    /myproject/playground/tests.ts                     
+    /myproject/playground/tsconfig-json/src/src.ts     
+    /myproject/playground/tsconfig-json/tests/spec.ts  
+Open Files::
+  [/myproject/playground/tsconfig-json/tests/spec.ts] *new*
+    /myproject/playground/tsconfig.json  (default) 
+Config::
+  [/myproject/playground/tsconfig-json/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/playground/tsconfig-json/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/playground/tsconfig-json/tests/spec.ts  
+  [/myproject/playground/tsconfig.json] *modified*
+    RetainingProjects:
+      /myproject/playground/tsconfig.json  
+    RetainingOpenFiles: *modified*
+      /myproject/playground/tests.ts                     *deleted*
+      /myproject/playground/tsconfig-json/tests/spec.ts  *new*
+Config File Names::
+  [/myproject/playground/tests.ts] *deleted*
+  [/myproject/playground/tsconfig-json/tests/spec.ts] *new*
+    NearestConfigFileName: /myproject/playground/tsconfig-json/tsconfig.json
+    Ancestors:
+      /myproject/playground/tsconfig-json/tsconfig.json  /myproject/playground/tsconfig.json 
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/playground/tsconfig-json/tests/spec.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 16
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /myproject/playground/tsconfig-json/tests/spec.ts ===
+// export function /*FIND ALL REFS*/[|bar|]() { }
+// 

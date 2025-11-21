@@ -75,7 +75,7 @@ func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *l
 	kind := lsproto.DocumentHighlightKindRead
 	if entry.kind == entryKindRange {
 		return entry.fileName, &lsproto.DocumentHighlight{
-			Range: *entry.textRange,
+			Range: *l.getRangeOfEntry(entry),
 			Kind:  &kind,
 		}
 	}
@@ -86,7 +86,7 @@ func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *l
 	}
 
 	dh := &lsproto.DocumentHighlight{
-		Range: *entry.textRange,
+		Range: *l.getRangeOfEntry(entry),
 		Kind:  &kind,
 	}
 

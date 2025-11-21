@@ -38,9 +38,10 @@ type ProjectCollectionBuilder struct {
 
 	newSnapshotID           uint64
 	programStructureChanged bool
-	fileDefaultProjects     map[tspath.Path]tspath.Path
-	configuredProjects      *dirty.SyncMap[tspath.Path, *Project]
-	inferredProject         *dirty.Box[*Project]
+
+	fileDefaultProjects map[tspath.Path]tspath.Path
+	configuredProjects  *dirty.SyncMap[tspath.Path, *Project]
+	inferredProject     *dirty.Box[*Project]
 
 	apiOpenedProjects map[tspath.Path]struct{}
 }
@@ -243,17 +244,67 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		fileName := summary.Opened.FileName()
 		path := b.toPath(fileName)
 		var toRemoveProjects collections.Set[tspath.Path]
-		openFileResult := b.ensureConfiguredProjectAndAncestorsForOpenFile(fileName, path, logger)
+		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
-			toRemoveProjects.Add(entry.Value().configFilePath)
-			b.updateProgram(entry, logger)
+			toRemoveProjects.Add(entry.Key())
 			return true
 		})
+		var isReferencedBy func(project *Project, refPath tspath.Path, seenProjects *collections.Set[*Project]) bool
+		isReferencedBy = func(project *Project, refPath tspath.Path, seenProjects *collections.Set[*Project]) bool {
+			if !seenProjects.AddIfAbsent(project) {
+				return false
+			}
+
+			if project.potentialProjectReferences != nil {
+				for potentialRef := range project.potentialProjectReferences.Keys() {
+					if potentialRef == refPath {
+						return true
+					}
+				}
+				for potentialRef := range project.potentialProjectReferences.Keys() {
+					if refProject, foundRef := b.configuredProjects.Load(potentialRef); foundRef && isReferencedBy(refProject.Value(), refPath, seenProjects) {
+						return true
+					}
+				}
+			} else if program := project.GetProgram(); program != nil && !program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+				return referencePath != refPath
+			}) {
+				return true
+			}
+			return false
+		}
+
+		retainProjectAndReferences := func(project *Project) {
+			// Retain project
+			toRemoveProjects.Delete(project.configFilePath)
+			if program := project.GetProgram(); program != nil {
+				program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+					if _, ok := b.configuredProjects.Load(referencePath); ok {
+						toRemoveProjects.Delete(referencePath)
+					}
+					return true
+				})
+			}
+		}
+
+		retainDefaultConfiguredProject := func(openFile string, openFilePath tspath.Path, project *Project) {
+			// Retain project and its references
+			retainProjectAndReferences(project)
+
+			// Retain all the ancestor projects
+			b.configFileRegistryBuilder.forEachConfigFileNameFor(openFile, openFilePath, func(configFileName string) {
+				if ancestor := b.findOrCreateProject(configFileName, b.toPath(configFileName), projectLoadKindFind, logger); ancestor != nil {
+					retainProjectAndReferences(ancestor.Value())
+				}
+			})
+		}
 
 		var inferredProjectFiles []string
 		for _, overlay := range b.fs.overlays {
-			if p := b.findDefaultConfiguredProject(overlay.FileName(), b.toPath(overlay.FileName())); p != nil {
-				toRemoveProjects.Delete(p.Value().configFilePath)
+			openFile := overlay.FileName()
+			openFilePath := b.toPath(openFile)
+			if p := b.findDefaultConfiguredProject(openFile, openFilePath); p != nil {
+				retainDefaultConfiguredProject(openFile, openFilePath, p.Value())
 			} else {
 				inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
 			}
@@ -290,51 +341,156 @@ func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
 func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, logger *logging.LogTree) {
 	startTime := time.Now()
 	fileName := uri.FileName()
-	hasChanges := b.programStructureChanged
-
-	// See if we can find a default project without updating a bunch of stuff.
 	path := b.toPath(fileName)
-	if result := b.findDefaultProject(fileName, path); result != nil {
-		hasChanges = b.updateProgram(result, logger) || hasChanges
-		if result.Value() != nil {
-			return
-		}
-	}
+	if b.fs.isOpenFile(path) {
+		hasChanges := b.programStructureChanged
 
-	// Make sure all projects we know about are up to date...
-	b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
-		hasChanges = b.updateProgram(entry, logger) || hasChanges
-		return true
-	})
-	if hasChanges {
-		// If the structure of other projects changed, we might need to move files
-		// in/out of the inferred project.
-		var inferredProjectFiles []string
-		for path, overlay := range b.fs.overlays {
-			if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
-				inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
+		// See if we can find a default project without updating a bunch of stuff.
+		if result := b.findDefaultProject(fileName, path); result != nil {
+			hasChanges = b.updateProgram(result, logger) || hasChanges
+			if result.Value() != nil {
+				return
 			}
 		}
-		if len(inferredProjectFiles) > 0 {
-			b.updateInferredProjectRoots(inferredProjectFiles, logger)
+
+		// Make sure all projects we know about are up to date...
+		b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
+			hasChanges = b.updateProgram(entry, logger) || hasChanges
+			return true
+		})
+		if hasChanges {
+			// If the structure of other projects changed, we might need to move files
+			// in/out of the inferred project.
+			var inferredProjectFiles []string
+			for path, overlay := range b.fs.overlays {
+				if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
+					inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
+				}
+			}
+			if len(inferredProjectFiles) > 0 {
+				b.updateInferredProjectRoots(inferredProjectFiles, logger)
+			}
 		}
-	}
 
-	if b.inferredProject.Value() != nil {
-		b.updateProgram(b.inferredProject, logger)
-	}
+		if b.inferredProject.Value() != nil {
+			b.updateProgram(b.inferredProject, logger)
+		}
 
-	// At this point we should be able to find the default project for the file without
-	// creating anything else. Initially, I verified that and panicked if nothing was found,
-	// but that panic was getting triggered by fourslash infrastructure when it told us to
-	// open a package.json file. This is something the VS Code client would never do, but
-	// it seems possible that another client would. There's no point in panicking; we don't
-	// really even have an error condition until it tries to ask us language questions about
-	// a non-TS-handleable file.
+		// At this point we should be able to find the default project for the file without
+		// creating anything else. Initially, I verified that and panicked if nothing was found,
+		// but that panic was getting triggered by fourslash infrastructure when it told us to
+		// open a package.json file. This is something the VS Code client would never do, but
+		// it seems possible that another client would. There's no point in panicking; we don't
+		// really even have an error condition until it tries to ask us language questions about
+		// a non-TS-handleable file.
+	} else {
+		b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
+	}
 
 	if logger != nil {
 		elapsed := time.Since(startTime)
 		logger.Log(fmt.Sprintf("Completed file request for %s in %v", fileName, elapsed))
+	}
+}
+
+func (b *ProjectCollectionBuilder) DidRequestProject(projectId tspath.Path, logger *logging.LogTree) {
+	startTime := time.Now()
+	if projectId == inferredProjectName {
+		// Update inferred project
+		if b.inferredProject.Value() != nil {
+			b.updateProgram(b.inferredProject, logger)
+		}
+	} else {
+		if entry, ok := b.configuredProjects.Load(projectId); ok {
+			b.updateProgram(entry, logger)
+		}
+	}
+
+	if logger != nil {
+		elapsed := time.Since(startTime)
+		logger.Log(fmt.Sprintf("Completed project update request for %s in %v", projectId, elapsed))
+	}
+}
+
+func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectsReferenced map[tspath.Path]struct{}, logger *logging.LogTree) {
+	startTime := time.Now()
+
+	var currentProjects []tspath.Path
+	b.configuredProjects.Range(func(sme *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
+		currentProjects = append(currentProjects, sme.Key())
+		return true
+	})
+
+	var seenProjects collections.SyncSet[tspath.Path]
+	wg := core.NewWorkGroup(false)
+	for _, projectId := range currentProjects {
+		wg.Queue(func() {
+			if entry, ok := b.configuredProjects.Load(projectId); ok {
+				// If this project has potential project reference for any of the project we are loading ancestor tree for
+				// load this project first
+				if project := entry.Value(); project != nil && (projectsReferenced == nil || project.hasPotentialProjectReference(projectsReferenced)) {
+					b.updateProgram(entry, logger)
+				}
+				b.ensureProjectTree(wg, entry, projectsReferenced, &seenProjects, logger)
+			}
+		})
+	}
+	wg.RunAndWait()
+
+	if logger != nil {
+		elapsed := time.Since(startTime)
+		logger.Log(fmt.Sprintf("Completed project tree request for %v in %v", maps.Keys(projectsReferenced), elapsed))
+	}
+}
+
+func (b *ProjectCollectionBuilder) ensureProjectTree(
+	wg core.WorkGroup,
+	entry *dirty.SyncMapEntry[tspath.Path, *Project],
+	projectsReferenced map[tspath.Path]struct{},
+	seenProjects *collections.SyncSet[tspath.Path],
+	logger *logging.LogTree,
+) {
+	if !seenProjects.AddIfAbsent(entry.Key()) {
+		return
+	}
+
+	project := entry.Value()
+	if project == nil {
+		return
+	}
+
+	program := project.GetProgram()
+	if program == nil {
+		return
+	}
+
+	// If this project disables child load ignore it
+	if program.CommandLine().CompilerOptions().DisableReferencedProjectLoad.IsTrue() {
+		return
+	}
+
+	children := program.GetResolvedProjectReferences()
+	if children == nil {
+		return
+	}
+	for _, childConfig := range children {
+		wg.Queue(func() {
+			if projectsReferenced != nil && program.RangeResolvedProjectReferenceInChildConfig(
+				childConfig,
+				func(referencePath tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+					_, isReferenced := projectsReferenced[referencePath]
+					return !isReferenced
+				}) {
+				return
+			}
+
+			// Load this child project since this is referenced
+			childProjectEntry := b.findOrCreateProject(childConfig.ConfigName(), childConfig.ConfigFile.SourceFile.Path(), projectLoadKindCreate, logger)
+			b.updateProgram(childProjectEntry, logger)
+
+			// Ensure children for this project
+			b.ensureProjectTree(wg, childProjectEntry, projectsReferenced, seenProjects, logger)
+		})
 	}
 }
 
@@ -408,7 +564,7 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	var hasChanges bool
 	for path := range configChangeResult.affectedFiles {
 		fileName := b.fs.overlays[path].FileName()
-		_ = b.ensureConfiguredProjectAndAncestorsForOpenFile(fileName, path, logger)
+		_ = b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		hasChanges = true
 	}
 
@@ -449,7 +605,7 @@ func (b *ProjectCollectionBuilder) findDefaultConfiguredProject(fileName string,
 	})
 
 	if multipleCandidates {
-		if p := b.findOrCreateDefaultConfiguredProjectForOpenScriptInfo(fileName, path, projectLoadKindFind, nil).project; p != nil {
+		if p := b.findOrCreateDefaultConfiguredProjectForFile(fileName, path, projectLoadKindFind, nil).project; p != nil {
 			return p
 		}
 	}
@@ -457,26 +613,51 @@ func (b *ProjectCollectionBuilder) findDefaultConfiguredProject(fileName string,
 	return configuredProjects[project]
 }
 
-func (b *ProjectCollectionBuilder) ensureConfiguredProjectAndAncestorsForOpenFile(fileName string, path tspath.Path, logger *logging.LogTree) searchResult {
-	result := b.findOrCreateDefaultConfiguredProjectForOpenScriptInfo(fileName, path, projectLoadKindCreate, logger)
-	if result.project != nil {
-		// !!! sheetal todo this later
-		// // Create ancestor tree for findAllRefs (dont load them right away)
-		// forEachAncestorProjectLoad(
-		// 	info,
-		// 	tsconfigProject!,
-		// 	ancestor => {
-		// 		seenProjects.set(ancestor.project, kind);
-		// 	},
-		// 	kind,
-		// 	`Creating project possibly referencing default composite project ${defaultProject.getProjectName()} of open file ${info.fileName}`,
-		// 	allowDeferredClosed,
-		// 	reloadedProjects,
-		// 	/*searchOnlyPotentialSolution*/ true,
-		// 	delayReloadedConfiguredProjects,
-		// );
+func (b *ProjectCollectionBuilder) ensureConfiguredProjectAndAncestorsForFile(fileName string, path tspath.Path, logger *logging.LogTree) searchResult {
+	result := b.findOrCreateDefaultConfiguredProjectForFile(fileName, path, projectLoadKindCreate, logger)
+	if result.project != nil && b.fs.isOpenFile(path) {
+		b.createAncestorTree(fileName, path, &result, logger)
 	}
 	return result
+}
+
+func (b *ProjectCollectionBuilder) createAncestorTree(fileName string, path tspath.Path, openResult *searchResult, logger *logging.LogTree) {
+	project := openResult.project.Value()
+	for {
+		// Skip if project is not composite and we are only looking for solution
+		if project.CommandLine != nil &&
+			(!project.CommandLine.CompilerOptions().Composite.IsTrue() ||
+				project.CommandLine.CompilerOptions().DisableSolutionSearching.IsTrue()) {
+			return
+		}
+
+		// Get config file name
+		ancestorConfigName := b.configFileRegistryBuilder.getAncestorConfigFileName(fileName, path, project.configFileName, logger)
+		if ancestorConfigName == "" {
+			return
+		}
+
+		// find or delay load the project
+		ancestorPath := b.toPath(ancestorConfigName)
+		ancestor := b.findOrCreateProject(ancestorConfigName, ancestorPath, projectLoadKindCreate, logger)
+		if ancestor == nil {
+			return
+		}
+
+		openResult.retain.Add(ancestorPath)
+
+		// If this ancestor is new and was not updated because we are just creating it for future loading
+		// eg when invoking find all references or rename that could span multiple projects
+		// we would make the current project as its potential project reference
+		if ancestor.Value().CommandLine == nil &&
+			(project.CommandLine == nil || project.CommandLine.CompilerOptions().Composite.IsTrue()) {
+			ancestor.Change(func(ancestorProject *Project) {
+				ancestorProject.setPotentialProjectReference(project.configFilePath)
+			})
+		}
+
+		project = ancestor.Value()
+	}
 }
 
 type searchNode struct {
@@ -531,7 +712,7 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 		},
 		func(node searchNode) (isResult bool, stop bool) {
 			configFilePath := b.toPath(node.configFileName)
-			config := b.configFileRegistryBuilder.findOrAcquireConfigForOpenFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
+			config := b.configFileRegistryBuilder.findOrAcquireConfigForFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
 			if config == nil {
 				node.logger.Log("Config file for project does not already exist")
 				return false, false
@@ -653,7 +834,7 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 	return searchResult{retain: retain}
 }
 
-func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectForOpenScriptInfo(
+func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectForFile(
 	fileName string,
 	path tspath.Path,
 	loadKind projectLoadKind,
@@ -784,6 +965,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				entry.Change(func(p *Project) {
 					p.CommandLine = commandLine
 					p.commandLineWithTypingsFiles = nil
+					p.potentialProjectReferences = nil
 				})
 			}
 		}
@@ -881,8 +1063,9 @@ func (b *ProjectCollectionBuilder) deleteConfiguredProject(project dirty.Value[*
 		logger.Log("Deleting configured project: " + project.Value().configFileName)
 	}
 	if program := project.Value().Program; program != nil {
-		program.ForEachResolvedProjectReference(func(referencePath tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) {
+		program.RangeResolvedProjectReference(func(referencePath tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
 			b.configFileRegistryBuilder.releaseConfigForProject(referencePath, projectPath)
+			return true
 		})
 	}
 	b.configFileRegistryBuilder.releaseConfigForProject(projectPath, projectPath)

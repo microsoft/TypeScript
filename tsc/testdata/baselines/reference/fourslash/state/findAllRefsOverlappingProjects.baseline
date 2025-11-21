@@ -1,0 +1,237 @@
+UseCaseSensitiveFileNames: true
+//// [/solution/a/index.ts] *new* 
+export interface I {
+	M(): void;
+}
+//// [/solution/a/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"files": ["./index.ts"]
+}
+//// [/solution/b/index.ts] *new* 
+import { I } from "../a";
+export class B implements I {
+	M() {}
+}
+//// [/solution/b/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true
+	},
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../a" },
+	],
+}
+//// [/solution/c/index.ts] *new* 
+import { I } from "../a";
+import { B } from "../b";
+export const C: I = new B();
+//// [/solution/c/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true
+	},
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../b" },
+	],
+}
+//// [/solution/d/index.ts] *new* 
+import { I } from "../a";
+import { C } from "../c";
+export const D: I = C;
+
+//// [/solution/d/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true
+	},
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../c" },
+	],
+}
+//// [/solution/tsconfig.json] *new* 
+{
+	"files": [],
+	"include": [],
+	"references": [
+		{ "path": "./a" },
+		{ "path": "./b" },
+		{ "path": "./c" },
+		{ "path": "./d" },
+	],
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/b/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { I } from \"../a\";\nexport class B implements I {\n\tM() {}\n}"
+    }
+  }
+}
+
+Projects::
+  [/solution/b/tsconfig.json] *new*
+    /solution/a/index.ts  
+    /solution/b/index.ts  
+  [/solution/tsconfig.json] *new*
+Open Files::
+  [/solution/b/index.ts] *new*
+    /solution/b/tsconfig.json  (default) 
+Config::
+  [/solution/a/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/b/tsconfig.json  
+  [/solution/b/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/b/tsconfig.json  
+    RetainingOpenFiles:
+      /solution/b/index.ts  
+Config File Names::
+  [/solution/b/index.ts] *new*
+    NearestConfigFileName: /solution/b/tsconfig.json
+    Ancestors:
+      /solution/b/tsconfig.json  /solution/tsconfig.json 
+      /solution/tsconfig.json     
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/b/index.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 26
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Projects::
+  [/solution/a/tsconfig.json] *new*
+    /solution/a/index.ts  
+  [/solution/b/tsconfig.json] 
+    /solution/a/index.ts  
+    /solution/b/index.ts  
+  [/solution/c/tsconfig.json] *new*
+    /solution/a/index.ts  
+    /solution/b/index.ts  
+    /solution/c/index.ts  
+  [/solution/d/tsconfig.json] *new*
+    /solution/a/index.ts  
+    /solution/b/index.ts  
+    /solution/c/index.ts  
+    /solution/d/index.ts  
+  [/solution/tsconfig.json] *modified*
+Open Files::
+  [/solution/b/index.ts] *modified*
+    /solution/b/tsconfig.json  (default) 
+    /solution/c/tsconfig.json  *new*
+    /solution/d/tsconfig.json  *new*
+Config::
+  [/solution/a/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /solution/a/tsconfig.json  *new*
+      /solution/b/tsconfig.json  
+      /solution/c/tsconfig.json  *new*
+      /solution/d/tsconfig.json  *new*
+      /solution/tsconfig.json    *new*
+  [/solution/b/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /solution/b/tsconfig.json  
+      /solution/c/tsconfig.json  *new*
+      /solution/d/tsconfig.json  *new*
+      /solution/tsconfig.json    *new*
+    RetainingOpenFiles:
+      /solution/b/index.ts  
+  [/solution/c/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/c/tsconfig.json  
+      /solution/d/tsconfig.json  
+      /solution/tsconfig.json    
+  [/solution/d/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/d/tsconfig.json  
+      /solution/tsconfig.json    
+  [/solution/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/tsconfig.json  
+
+
+
+
+// === findAllReferences ===
+// === /solution/a/index.ts ===
+// export interface [|I|] {
+// 	M(): void;
+// }
+
+// === /solution/b/index.ts ===
+// import { [|I|] } from "../a";
+// export class B implements /*FIND ALL REFS*/[|I|] {
+// 	M() {}
+// }
+
+// === /solution/c/index.ts ===
+// import { [|I|] } from "../a";
+// import { B } from "../b";
+// export const C: [|I|] = new B();
+
+// === /solution/d/index.ts ===
+// import { [|I|] } from "../a";
+// import { C } from "../c";
+// export const D: [|I|] = C;
+// 
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/b/index.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 26
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /solution/a/index.ts ===
+// export interface [|I|] {
+// 	M(): void;
+// }
+
+// === /solution/b/index.ts ===
+// import { [|I|] } from "../a";
+// export class B implements /*FIND ALL REFS*/[|I|] {
+// 	M() {}
+// }
+
+// === /solution/c/index.ts ===
+// import { [|I|] } from "../a";
+// import { B } from "../b";
+// export const C: [|I|] = new B();
+
+// === /solution/d/index.ts ===
+// import { [|I|] } from "../a";
+// import { C } from "../c";
+// export const D: [|I|] = C;
+// 

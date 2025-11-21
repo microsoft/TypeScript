@@ -29,7 +29,15 @@ func Dedent(text string) string {
 		}
 	}
 	lines = lines[startLine : lastLine+1]
-	indentation := stringutil.GuessIndentation(lines)
+	mappedLines := make([]string, len(lines))
+	for i, line := range lines {
+		if trimmed := strings.TrimSpace(line); trimmed == "" {
+			mappedLines[i] = ""
+		} else {
+			mappedLines[i] = line
+		}
+	}
+	indentation := stringutil.GuessIndentation(mappedLines)
 	if indentation > 0 {
 		for i := range lines {
 			if len(lines[i]) > indentation {

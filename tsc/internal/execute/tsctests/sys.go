@@ -3,9 +3,7 @@ package tsctests
 import (
 	"fmt"
 	"io"
-	"io/fs"
 	"maps"
-	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -14,8 +12,10 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
+	"github.com/microsoft/typescript-go/internal/testutil/fsbaselineutil"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/testutil/stringtestutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -95,6 +95,20 @@ func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *Te
 	}
 }
 
+func GetFileMapWithBuild(files FileMap, commandLineArgs []string) FileMap {
+	sys := newTestSys(&tscInput{
+		files: maps.Clone(files),
+	}, false)
+	execute.CommandLine(sys, commandLineArgs, sys)
+	sys.fs.writtenFiles.Range(func(key string) bool {
+		if text, ok := sys.fsFromFileMap().ReadFile(key); ok {
+			files[key] = text
+		}
+		return true
+	})
+	return files
+}
+
 func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	cwd := tscInput.cwd
 	if cwd == "" {
@@ -114,6 +128,11 @@ func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	}, currentWrite)
 	sys.env = tscInput.env
 	sys.forIncrementalCorrectness = forIncrementalCorrectness
+	sys.fsDiffer = &fsbaselineutil.FSDiffer{
+		FS:           sys.fs.FS.(iovfs.FsWithSys),
+		DefaultLibs:  func() *collections.SyncSet[string] { return sys.fs.defaultLibs },
+		WrittenFiles: &sys.fs.writtenFiles,
+	}
 
 	// Ensure the default library file is present
 	sys.ensureLibPathExists("lib.d.ts")
@@ -126,24 +145,12 @@ func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	return sys
 }
 
-type diffEntry struct {
-	content       string
-	mTime         time.Time
-	isWritten     bool
-	symlinkTarget string
-}
-
-type snapshot struct {
-	snap        map[string]*diffEntry
-	defaultLibs *collections.SyncSet[string]
-}
-
 type TestSys struct {
 	currentWrite              *strings.Builder
 	programBaselines          strings.Builder
 	programIncludeBaselines   strings.Builder
 	tracer                    *harnessutil.TracerForBaselining
-	serializedDiff            *snapshot
+	fsDiffer                  *fsbaselineutil.FSDiffer
 	forIncrementalCorrectness bool
 
 	fs                 *testFs
@@ -171,11 +178,11 @@ func (s *TestSys) FS() vfs.FS {
 }
 
 func (s *TestSys) fsFromFileMap() iovfs.FsWithSys {
-	return s.fs.FS.(iovfs.FsWithSys)
+	return s.fsDiffer.FS
 }
 
 func (s *TestSys) mapFs() *vfstest.MapFS {
-	return s.fsFromFileMap().FSys().(*vfstest.MapFS)
+	return s.fsDiffer.MapFs()
 }
 
 func (s *TestSys) ensureLibPathExists(path string) {
@@ -223,8 +230,8 @@ func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *colle
 	if result != nil {
 		for _, file := range result.EmittedFiles {
 			modTime := s.mapFs().GetModTime(file)
-			if s.serializedDiff != nil {
-				if diff, ok := s.serializedDiff.snap[file]; ok && diff.mTime.Equal(modTime) {
+			if serializedDiff := s.fsDiffer.SerializedDiff(); serializedDiff != nil {
+				if diff, ok := serializedDiff.Snap[file]; ok && diff.MTime.Equal(modTime) {
 					// Even though written, timestamp was reverted
 					continue
 				}
@@ -500,83 +507,7 @@ func (s *TestSys) clearOutput() {
 }
 
 func (s *TestSys) baselineFSwithDiff(baseline io.Writer) {
-	// todo: baselines the entire fs, possibly doesn't correctly diff all cases of emitted files, since emit isn't fully implemented and doesn't always emit the same way as strada
-	snap := map[string]*diffEntry{}
-
-	diffs := map[string]string{}
-
-	for path, file := range s.mapFs().Entries() {
-		if file.Mode&fs.ModeSymlink != 0 {
-			target, ok := s.mapFs().GetTargetOfSymlink(path)
-			if !ok {
-				panic("Failed to resolve symlink target: " + path)
-			}
-			newEntry := &diffEntry{symlinkTarget: target}
-			snap[path] = newEntry
-			s.addFsEntryDiff(diffs, newEntry, path)
-			continue
-		} else if file.Mode.IsRegular() {
-			newEntry := &diffEntry{content: string(file.Data), mTime: file.ModTime, isWritten: s.fs.writtenFiles.Has(path)}
-			snap[path] = newEntry
-			s.addFsEntryDiff(diffs, newEntry, path)
-		}
-	}
-	if s.serializedDiff != nil {
-		for path := range s.serializedDiff.snap {
-			if fileInfo := s.mapFs().GetFileInfo(path); fileInfo == nil {
-				// report deleted
-				s.addFsEntryDiff(diffs, nil, path)
-			}
-		}
-	}
-	var defaultLibs collections.SyncSet[string]
-	if s.fs.defaultLibs != nil {
-		s.fs.defaultLibs.Range(func(libPath string) bool {
-			defaultLibs.Add(libPath)
-			return true
-		})
-	}
-	s.serializedDiff = &snapshot{
-		snap:        snap,
-		defaultLibs: &defaultLibs,
-	}
-	diffKeys := slices.Collect(maps.Keys(diffs))
-	slices.Sort(diffKeys)
-	for _, path := range diffKeys {
-		fmt.Fprint(baseline, "//// ["+path+"] ", diffs[path], "\n")
-	}
-	fmt.Fprintln(baseline)
-	s.fs.writtenFiles = collections.SyncSet[string]{} // Reset written files after baseline
-}
-
-func (s *TestSys) addFsEntryDiff(diffs map[string]string, newDirContent *diffEntry, path string) {
-	var oldDirContent *diffEntry
-	var defaultLibs *collections.SyncSet[string]
-	if s.serializedDiff != nil {
-		oldDirContent = s.serializedDiff.snap[path]
-		defaultLibs = s.serializedDiff.defaultLibs
-	}
-	// todo handle more cases of fs changes
-	if oldDirContent == nil {
-		if s.fs.defaultLibs == nil || !s.fs.defaultLibs.Has(path) {
-			if newDirContent.symlinkTarget != "" {
-				diffs[path] = "-> " + newDirContent.symlinkTarget + " *new*"
-			} else {
-				diffs[path] = "*new* \n" + newDirContent.content
-			}
-		}
-	} else if newDirContent == nil {
-		diffs[path] = "*deleted*"
-	} else if newDirContent.content != oldDirContent.content {
-		diffs[path] = "*modified* \n" + newDirContent.content
-	} else if newDirContent.isWritten {
-		diffs[path] = "*rewrite with same content*"
-	} else if newDirContent.mTime != oldDirContent.mTime {
-		diffs[path] = "*mTime changed*"
-	} else if defaultLibs != nil && defaultLibs.Has(path) && s.fs.defaultLibs != nil && !s.fs.defaultLibs.Has(path) {
-		// Lib file that was read
-		diffs[path] = "*Lib*\n" + newDirContent.content
-	}
+	s.fsDiffer.BaselineFSwithDiff(baseline)
 }
 
 func (s *TestSys) writeFileNoError(path string, content string, writeByteOrderMark bool) {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
@@ -85,7 +86,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -109,7 +110,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -133,7 +134,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -157,7 +158,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -181,7 +182,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -205,7 +206,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -229,7 +230,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()
@@ -253,7 +254,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
 
-		uri := lsproto.DocumentUri("file://" + aTest)
+		uri := lsconv.FileNameToDocumentURI(aTest)
 		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot, release = session.Snapshot()

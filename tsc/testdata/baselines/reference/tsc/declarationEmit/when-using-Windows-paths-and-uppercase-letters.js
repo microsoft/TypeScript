@@ -8,31 +8,31 @@ Input::
     "main": "index.js"
 }
 //// [D:/Work/pkg1/src/main.ts] *new* 
-               import { PartialType } from './utils';
+import { PartialType } from './utils';
 
-               class Common {}
+class Common {}
 
-               export class Sub extends PartialType(Common) {
-                   id: string;
-               }
+export class Sub extends PartialType(Common) {
+    id: string;
+}
 //// [D:/Work/pkg1/src/utils/index.ts] *new* 
-               import { MyType, MyReturnType } from './type-helpers';
+import { MyType, MyReturnType } from './type-helpers';
 
-               export function PartialType<T>(classRef: MyType<T>) {
-                   abstract class PartialClassType {
-                       constructor() {}
-                   }
+export function PartialType<T>(classRef: MyType<T>) {
+    abstract class PartialClassType {
+        constructor() {}
+    }
 
-                   return PartialClassType as MyReturnType;
-               }
+    return PartialClassType as MyReturnType;
+}
 //// [D:/Work/pkg1/src/utils/type-helpers.ts] *new* 
-                export type MyReturnType = {	
-                    new (...args: any[]): any;
-                };
+export type MyReturnType = {	
+    new (...args: any[]): any;
+};
 
-                export interface MyType<T = any> extends Function {
-                    new (...args: any[]): T;
-                }
+export interface MyType<T = any> extends Function {
+    new (...args: any[]): T;
+}
 //// [D:/Work/pkg1/tsconfig.json] *new* 
 {
     "compilerOptions": {
@@ -46,11 +46,11 @@ Input::
 tsgo -p D:\Work\pkg1 --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96msrc/utils/index.ts[0m:[93m8[0m:[93m27[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+[96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
 
-[7m8[0m                    return PartialClassType as MyReturnType;
-[7m [0m [91m                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     return PartialClassType as MyReturnType;
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 ../../home/src/tslibs/TS/Lib/lib.es2017.full.d.ts
    Default library for target 'ES2017'

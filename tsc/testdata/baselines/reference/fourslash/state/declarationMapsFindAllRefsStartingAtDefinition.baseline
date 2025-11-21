@@ -1,0 +1,208 @@
+UseCaseSensitiveFileNames: true
+//// [/a/a.ts] *new* 
+export function fnA() {}
+export interface IfaceA {}
+export const instanceA: IfaceA = {};
+//// [/a/bin/a.d.ts] *new* 
+export declare function fnA(): void;
+export interface IfaceA {
+}
+export declare const instanceA: IfaceA;
+//# sourceMappingURL=a.d.ts.map
+//// [/a/bin/a.d.ts.map] *new* 
+{
+	"version": 3,
+	"file": "a.d.ts",
+	"sourceRoot": "",
+	"sources": ["../a.ts"],
+	"names": [],
+	"mappings": "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
+}
+//// [/a/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"outDir": "bin",
+		"declarationMap": true,
+		"composite": true
+	}
+}
+//// [/b/bin/b.d.ts] *new* 
+export declare function fnB(): void;
+//# sourceMappingURL=b.d.ts.map
+//// [/b/bin/b.d.ts.map] *new* 
+{
+	"version": 3,
+	"file": "b.d.ts",
+	"sourceRoot": "",
+	"sources": ["../b.ts"],
+	"names": [],
+	"mappings": "AAAA,wBAAgB,GAAG,SAAK"
+}
+//// [/b/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"outDir": "bin",
+		"declarationMap": true,
+		"composite": true
+	}
+}
+//// [/dummy/dummy.ts] *new* 
+export const a = 10;
+//// [/dummy/tsconfig.json] *new* 
+{}
+//// [/user/user.ts] *new* 
+import * as a from "../a/bin/a";
+import * as b from "../b/bin/b";
+export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///user/user.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import * as a from \"../a/bin/a\";\nimport * as b from \"../b/bin/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+    }
+  }
+}
+
+Projects::
+  [/dev/null/inferred] *new*
+    /a/bin/a.d.ts  
+    /b/bin/b.d.ts  
+    /user/user.ts  
+Open Files::
+  [/user/user.ts] *new*
+    /dev/null/inferred  (default) 
+Config File Names::
+  [/user/user.ts] *new*
+    NearestConfigFileName: 
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///a/a.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
+    }
+  }
+}
+
+Projects::
+  [/a/tsconfig.json] *new*
+    /a/a.ts  
+  [/dev/null/inferred] 
+    /a/bin/a.d.ts  
+    /b/bin/b.d.ts  
+    /user/user.ts  
+Open Files::
+  [/a/a.ts] *new*
+    /a/tsconfig.json  (default) 
+  [/user/user.ts] 
+    /dev/null/inferred  (default) 
+Config::
+  [/a/tsconfig.json] *new*
+    RetainingProjects:
+      /a/tsconfig.json  
+    RetainingOpenFiles:
+      /a/a.ts  
+Config File Names::
+  [/a/a.ts] *new*
+    NearestConfigFileName: /a/tsconfig.json
+    Ancestors:
+      /a/tsconfig.json   
+  [/user/user.ts] 
+    NearestConfigFileName: 
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///a/a.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 16
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /a/a.ts ===
+// export function /*FIND ALL REFS*/[|fnA|]() {}
+// export interface IfaceA {}
+// export const instanceA: IfaceA = {};
+
+// === /user/user.ts ===
+// import * as a from "../a/bin/a";
+// import * as b from "../b/bin/b";
+// export function fnUser() { a.[|fnA|](); b.fnB(); a.instanceA; }
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///user/user.ts"
+    }
+  }
+}
+
+Open Files::
+  [/a/a.ts] 
+    /a/tsconfig.json  (default) 
+  [/user/user.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///dummy/dummy.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const a = 10;"
+    }
+  }
+}
+
+Projects::
+  [/a/tsconfig.json] 
+    /a/a.ts  
+  [/dev/null/inferred] *deleted*
+    /a/bin/a.d.ts  
+    /b/bin/b.d.ts  
+    /user/user.ts  
+  [/dummy/tsconfig.json] *new*
+    /dummy/dummy.ts  
+Open Files::
+  [/a/a.ts] 
+    /a/tsconfig.json  (default) 
+  [/dummy/dummy.ts] *new*
+    /dummy/tsconfig.json  (default) 
+Config::
+  [/a/tsconfig.json] 
+    RetainingProjects:
+      /a/tsconfig.json  
+    RetainingOpenFiles:
+      /a/a.ts  
+  [/dummy/tsconfig.json] *new*
+    RetainingProjects:
+      /dummy/tsconfig.json  
+    RetainingOpenFiles:
+      /dummy/dummy.ts  
+Config File Names::
+  [/a/a.ts] 
+    NearestConfigFileName: /a/tsconfig.json
+    Ancestors:
+      /a/tsconfig.json   
+  [/dummy/dummy.ts] *new*
+    NearestConfigFileName: /dummy/tsconfig.json
+  [/user/user.ts] *deleted*

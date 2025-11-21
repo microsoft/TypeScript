@@ -71,7 +71,9 @@ x++;`
 		Context:      &lsproto.ReferenceContext{IncludeDeclaration: true},
 	}
 
-	resp, err := languageService.ProvideReferences(ctx, refParams)
+	originalNode, symbolAndEntries, ok := languageService.ProvideSymbolsAndEntries(ctx, refParams.TextDocumentURI(), refParams.Position, false)
+	assert.Assert(t, ok)
+	resp, err := languageService.ProvideReferencesFromSymbolAndEntries(ctx, refParams, originalNode, symbolAndEntries)
 	assert.NilError(t, err)
 
 	refs := *resp.Locations
@@ -144,7 +146,9 @@ x++;`
 		Context:      &lsproto.ReferenceContext{IncludeDeclaration: true},
 	}
 
-	resp, err := languageService.ProvideReferences(ctx, refParams)
+	originalNode, symbolAndEntries, ok := languageService.ProvideSymbolsAndEntries(ctx, refParams.TextDocumentURI(), refParams.Position, false)
+	assert.Assert(t, ok)
+	resp, err := languageService.ProvideReferencesFromSymbolAndEntries(ctx, refParams, originalNode, symbolAndEntries)
 	assert.NilError(t, err)
 
 	refs := *resp.Locations

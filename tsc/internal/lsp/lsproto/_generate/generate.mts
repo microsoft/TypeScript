@@ -927,6 +927,14 @@ function generateCode() {
             writeLine(`\treturn s.TextDocument.Uri`);
             writeLine(`}`);
             writeLine("");
+
+            if (hasTextDocumentPosition(structure)) {
+                // Generate TextDocumentPosition method
+                writeLine(`func (s *${structure.name}) TextDocumentPosition() Position {`);
+                writeLine(`\treturn s.Position`);
+                writeLine(`}`);
+                writeLine("");
+            }
         }
 
         // Generate UnmarshalJSONFrom method for structure validation
@@ -1365,13 +1373,21 @@ function generateCode() {
     return parts.join("");
 }
 
-function hasTextDocumentURI(structure: Structure) {
+function hasSomeProp(structure: Structure, propName: string, propTypeName: string) {
     return structure.properties?.some(p =>
         !p.optional &&
-        p.name === "textDocument" &&
+        p.name === propName &&
         p.type.kind === "reference" &&
-        p.type.name === "TextDocumentIdentifier"
+        p.type.name === propTypeName
     );
+}
+
+function hasTextDocumentURI(structure: Structure) {
+    return hasSomeProp(structure, "textDocument", "TextDocumentIdentifier");
+}
+
+function hasTextDocumentPosition(structure: Structure) {
+    return hasSomeProp(structure, "position", "Position");
 }
 
 /**

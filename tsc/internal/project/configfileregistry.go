@@ -1,6 +1,7 @@
 package project
 
 import (
+	"iter"
 	"maps"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -106,6 +107,73 @@ func (c *ConfigFileRegistry) clone() *ConfigFileRegistry {
 		configs:         maps.Clone(c.configs),
 		configFileNames: maps.Clone(c.configFileNames),
 	}
+}
+
+// For testing
+type TestConfigEntry struct {
+	FileName           string
+	RetainingProjects  iter.Seq[tspath.Path]
+	RetainingOpenFiles iter.Seq[tspath.Path]
+	RetainingConfigs   iter.Seq[tspath.Path]
+}
+
+// For testing
+func (c *ConfigFileRegistry) ForEachTestConfigEntry(cb func(tspath.Path, *TestConfigEntry)) {
+	if c != nil {
+		for path, entry := range c.configs {
+			cb(path, &TestConfigEntry{
+				FileName:           entry.fileName,
+				RetainingProjects:  maps.Keys(entry.retainingProjects),
+				RetainingOpenFiles: maps.Keys(entry.retainingOpenFiles),
+				RetainingConfigs:   maps.Keys(entry.retainingConfigs),
+			})
+		}
+	}
+}
+
+// For testing
+func (c *ConfigFileRegistry) GetTestConfigEntry(path tspath.Path) *TestConfigEntry {
+	if c != nil {
+		if entry, ok := c.configs[path]; ok {
+			return &TestConfigEntry{
+				FileName:           entry.fileName,
+				RetainingProjects:  maps.Keys(entry.retainingProjects),
+				RetainingOpenFiles: maps.Keys(entry.retainingOpenFiles),
+				RetainingConfigs:   maps.Keys(entry.retainingConfigs),
+			}
+		}
+	}
+	return nil
+}
+
+type TestConfigFileNamesEntry struct {
+	NearestConfigFileName string
+	Ancestors             map[string]string
+}
+
+// For testing
+func (c *ConfigFileRegistry) ForEachTestConfigFileNamesEntry(cb func(tspath.Path, *TestConfigFileNamesEntry)) {
+	if c != nil {
+		for path, entry := range c.configFileNames {
+			cb(path, &TestConfigFileNamesEntry{
+				NearestConfigFileName: entry.nearestConfigFileName,
+				Ancestors:             entry.ancestors,
+			})
+		}
+	}
+}
+
+// For testing
+func (c *ConfigFileRegistry) GetTestConfigFileNamesEntry(path tspath.Path) *TestConfigFileNamesEntry {
+	if c != nil {
+		if entry, ok := c.configFileNames[path]; ok {
+			return &TestConfigFileNamesEntry{
+				NearestConfigFileName: entry.nearestConfigFileName,
+				Ancestors:             entry.ancestors,
+			}
+		}
+	}
+	return nil
 }
 
 type configFileNames struct {

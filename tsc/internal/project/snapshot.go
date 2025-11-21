@@ -3,6 +3,8 @@ package project
 import (
 	"context"
 	"fmt"
+	"maps"
+	"slices"
 	"sync/atomic"
 	"time"
 
@@ -76,6 +78,13 @@ func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
 	return s.ProjectCollection.GetDefaultProject(fileName, path)
 }
 
+func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []*Project {
+	fileName := uri.FileName()
+	path := s.toPath(fileName)
+	// TODO!! sheetal may be change this to handle symlinks!!
+	return s.ProjectCollection.GetProjectsContainingFile(path)
+}
+
 func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
@@ -128,13 +137,30 @@ type APISnapshotRequest struct {
 	UpdateProjects *collections.Set[tspath.Path]
 }
 
+type ProjectTreeRequest struct {
+	// If null, all project trees need to be loaded, otherwise only those that are referenced
+	referencedProjects map[tspath.Path]struct{}
+}
+
+type ResourceRequest struct {
+	// Documents are URIs that were requested by the client.
+	// The new snapshot should ensure projects for these URIs have loaded programs.
+	// If the requested Documents are not open, ensure that their default project is created
+	Documents []lsproto.DocumentUri
+	// Update requested Projects.
+	// this is used when we want to get LS and from all the Projects the file can be part of
+	Projects []tspath.Path
+	// Update and ensure project trees that reference the projects
+	// This is used to compute the solution and project tree so that
+	// we can find references across all the projects in the solution irrespective of which project is open
+	ProjectTree *ProjectTreeRequest
+}
+
 type SnapshotChange struct {
+	ResourceRequest
 	reason UpdateReason
 	// fileChanges are the changes that have occurred since the last snapshot.
 	fileChanges FileChangeSummary
-	// requestedURIs are URIs that were requested by the client.
-	// The new snapshot should ensure projects for these URIs have loaded programs.
-	requestedURIs []lsproto.DocumentUri
 	// compilerOptionsForInferredProjects is the compiler options to use for inferred projects.
 	// It should only be set the value in the next snapshot should be changed. If nil, the
 	// value from the previous snapshot will be copied to the new snapshot.
@@ -179,17 +205,34 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 
 	if session.options.LoggingEnabled {
 		logger = logging.NewLogTree(fmt.Sprintf("Cloning snapshot %d", s.id))
+		getDetails := func() string {
+			details := ""
+			if len(change.Documents) != 0 {
+				details += fmt.Sprintf(" Documents: %v", change.Documents)
+			}
+			if len(change.Projects) != 0 {
+				details += fmt.Sprintf(" Projects: %v", change.Projects)
+			}
+			if change.ProjectTree != nil {
+				details += fmt.Sprintf(" ProjectTree: %v", slices.Collect(maps.Keys(change.ProjectTree.referencedProjects)))
+			}
+			return details
+		}
 		switch change.reason {
 		case UpdateReasonDidOpenFile:
 			logger.Logf("Reason: DidOpenFile - %s", change.fileChanges.Opened)
 		case UpdateReasonDidChangeCompilerOptionsForInferredProjects:
 			logger.Logf("Reason: DidChangeCompilerOptionsForInferredProjects")
 		case UpdateReasonRequestedLanguageServicePendingChanges:
-			logger.Logf("Reason: RequestedLanguageService (pending file changes) - %v", change.requestedURIs)
+			logger.Logf("Reason: RequestedLanguageService (pending file changes) - %v", getDetails())
 		case UpdateReasonRequestedLanguageServiceProjectNotLoaded:
-			logger.Logf("Reason: RequestedLanguageService (project not loaded) - %v", change.requestedURIs)
+			logger.Logf("Reason: RequestedLanguageService (project not loaded) - %v", getDetails())
+		case UpdateReasonRequestedLanguageServiceForFileNotOpen:
+			logger.Logf("Reason: RequestedLanguageService (file not open) - %v", getDetails())
 		case UpdateReasonRequestedLanguageServiceProjectDirty:
-			logger.Logf("Reason: RequestedLanguageService (project dirty) - %v", change.requestedURIs)
+			logger.Logf("Reason: RequestedLanguageService (project dirty) - %v", getDetails())
+		case UpdateReasonRequestedLoadProjectTree:
+			logger.Logf("Reason: RequestedLoadProjectTree - %v", getDetails())
 		}
 	}
 
@@ -244,8 +287,16 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
 	}
 
-	for _, uri := range change.requestedURIs {
+	for _, uri := range change.Documents {
 		projectCollectionBuilder.DidRequestFile(uri, logger.Fork("DidRequestFile"))
+	}
+
+	for _, projectId := range change.Projects {
+		projectCollectionBuilder.DidRequestProject(projectId, logger.Fork("DidRequestProject"))
+	}
+
+	if change.ProjectTree != nil {
+		projectCollectionBuilder.DidRequestProjectTrees(change.ProjectTree.referencedProjects, logger.Fork("DidRequestProjectTrees"))
 	}
 
 	projectCollection, configFileRegistry := projectCollectionBuilder.Finalize(logger)
@@ -266,7 +317,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 			removedFiles := 0
 			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 				for _, project := range projectCollection.Projects() {
-					if project.host.seenFiles.Has(entry.Key()) {
+					if project.host != nil && project.host.seenFiles.Has(entry.Key()) {
 						return true
 					}
 				}

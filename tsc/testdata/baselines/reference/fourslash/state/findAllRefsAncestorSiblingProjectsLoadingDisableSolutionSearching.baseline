@@ -1,0 +1,139 @@
+UseCaseSensitiveFileNames: true
+//// [/solution/compiler/program.ts] *new* 
+namespace ts {
+	export const program: Program = {
+		getSourceFiles: () => [getSourceFile()]
+	};
+	function getSourceFile() { return "something"; }
+}
+//// [/solution/compiler/tsconfig.json] *new* 
+{
+	"compilerOptions": { 
+		"composite": true,
+		"disableSolutionSearching": true,
+	},
+	"files": ["./types.ts", "./program.ts"]
+}
+//// [/solution/compiler/types.ts] *new* 
+namespace ts {
+	export interface Program {
+		getSourceFiles(): string[];
+	}
+}
+//// [/solution/services/services.ts] *new* 
+/// <reference path="../compiler/types.ts" />
+/// <reference path="../compiler/program.ts" />
+namespace ts {
+	const result = program.getSourceFiles();
+}
+//// [/solution/services/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true
+	},
+	"files": ["./services.ts"],
+	"references": [
+		{ "path": "../compiler" },
+	],
+}
+//// [/solution/tsconfig.json] *new* 
+{
+	"files": [],
+	"include": [],
+	"references": [
+		{ "path": "./compiler" },
+		{ "path": "./services" },
+	],
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/compiler/program.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "namespace ts {\n\texport const program: Program = {\n\t\tgetSourceFiles: () => [getSourceFile()]\n\t};\n\tfunction getSourceFile() { return \"something\"; }\n}"
+    }
+  }
+}
+
+Projects::
+  [/solution/compiler/tsconfig.json] *new*
+    /solution/compiler/types.ts    
+    /solution/compiler/program.ts  
+Open Files::
+  [/solution/compiler/program.ts] *new*
+    /solution/compiler/tsconfig.json  (default) 
+Config::
+  [/solution/compiler/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/compiler/tsconfig.json  
+    RetainingOpenFiles:
+      /solution/compiler/program.ts  
+Config File Names::
+  [/solution/compiler/program.ts] *new*
+    NearestConfigFileName: /solution/compiler/tsconfig.json
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/compiler/program.ts"
+    },
+    "position": {
+      "line": 2,
+      "character": 25
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /solution/compiler/program.ts ===
+// namespace ts {
+// 	export const program: Program = {
+// 		getSourceFiles: () => [/*FIND ALL REFS*/[|getSourceFile|]()]
+// 	};
+// 	function [|getSourceFile|]() { return "something"; }
+// }
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/compiler/program.ts"
+    },
+    "position": {
+      "line": 2,
+      "character": 2
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /solution/compiler/program.ts ===
+// namespace ts {
+// 	export const program: Program = {
+// 		/*FIND ALL REFS*/[|getSourceFiles|]: () => [getSourceFile()]
+// 	};
+// 	function getSourceFile() { return "something"; }
+// }
+
+// === /solution/compiler/types.ts ===
+// namespace ts {
+// 	export interface Program {
+// 		[|getSourceFiles|](): string[];
+// 	}
+// }

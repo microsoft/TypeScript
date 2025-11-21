@@ -1,0 +1,422 @@
+UseCaseSensitiveFileNames: true
+//// [/dummy/dummy.ts] *new* 
+const x = 1;
+//// [/dummy/tsconfig.json] *new* 
+{ }
+//// [/myproject/indirect3/main.ts] *new* 
+import { foo } from '../target/src/main';
+foo()
+export function bar() {}
+
+//// [/myproject/indirect3/tsconfig.json] *new* 
+{ }
+//// [/myproject/src/helpers/functions.ts] *new* 
+export function foo() { return 1; }
+//// [/myproject/src/main.ts] *new* 
+import { foo } from './helpers/functions';
+export { foo };
+//// [/myproject/target/src/helpers/functions.d.ts] *new* 
+export declare function foo(): number;
+//# sourceMappingURL=functions.d.ts.map
+//// [/myproject/target/src/helpers/functions.d.ts.map] *new* 
+{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,WAAgB"}
+//// [/myproject/target/src/helpers/functions.js] *new* 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
+function foo() { return 1; }
+
+//// [/myproject/target/src/main.d.ts] *new* 
+import { foo } from './helpers/functions';
+export { foo };
+//# sourceMappingURL=main.d.ts.map
+//// [/myproject/target/src/main.d.ts.map] *new* 
+{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,qBAAqB,CAAC;AAC1C,OAAO,EAAE,GAAG,EAAE,CAAC"}
+//// [/myproject/target/src/main.js] *new* 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
+const functions_1 = require("./helpers/functions");
+Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return functions_1.foo; } });
+
+//// [/myproject/target/tsconfig-src.tsbuildinfo] *new* 
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","../src/helpers/functions.ts","../src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"bf6a9d57f087ab0066015134975ea2b2-export function foo() { return 1; }","signature":"029742dfbcde5b1dfd06f9129660afb3-export declare function foo(): number;\n","impliedNodeFormat":1},{"version":"29b72d75211ebc765497b1845400b55d-import { foo } from './helpers/functions';\nexport { foo };","signature":"e7ab16a2673b38216aba41fa1cf9516c-import { foo } from './helpers/functions';\nexport { foo };\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts"}
+//// [/myproject/target/tsconfig-src.tsbuildinfo.readable.baseline.txt] *new* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "../src/helpers/functions.ts",
+        "../src/main.ts"
+      ],
+      "original": [
+        2,
+        3
+      ]
+    }
+  ],
+  "fileNames": [
+    "lib.d.ts",
+    "../src/helpers/functions.ts",
+    "../src/main.ts"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "lib.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../src/helpers/functions.ts",
+      "version": "bf6a9d57f087ab0066015134975ea2b2-export function foo() { return 1; }",
+      "signature": "029742dfbcde5b1dfd06f9129660afb3-export declare function foo(): number;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "bf6a9d57f087ab0066015134975ea2b2-export function foo() { return 1; }",
+        "signature": "029742dfbcde5b1dfd06f9129660afb3-export declare function foo(): number;\n",
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../src/main.ts",
+      "version": "29b72d75211ebc765497b1845400b55d-import { foo } from './helpers/functions';\nexport { foo };",
+      "signature": "e7ab16a2673b38216aba41fa1cf9516c-import { foo } from './helpers/functions';\nexport { foo };\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "29b72d75211ebc765497b1845400b55d-import { foo } from './helpers/functions';\nexport { foo };",
+        "signature": "e7ab16a2673b38216aba41fa1cf9516c-import { foo } from './helpers/functions';\nexport { foo };\n",
+        "impliedNodeFormat": 1
+      }
+    }
+  ],
+  "fileIdsList": [
+    [
+      "../src/helpers/functions.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../src/main.ts": [
+      "../src/helpers/functions.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./src/main.d.ts",
+  "size": 1479
+}
+//// [/myproject/tsconfig-src.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "./target",
+		"declarationMap": true,
+	},
+	"include": ["./src/\**/*"]
+}
+//// [/myproject/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"disableReferencedProjectLoad": true
+	},
+	"files": [],
+	"references": [{ "path": "./tsconfig-src.json" }]
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/src/main.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { foo } from './helpers/functions';\nexport { foo };"
+    }
+  }
+}
+
+Projects::
+  [/dev/null/inferred] *new*
+    /myproject/src/helpers/functions.ts  
+    /myproject/src/main.ts               
+Open Files::
+  [/myproject/src/main.ts] *new*
+    /dev/null/inferred  (default) 
+Config::
+  [/myproject/tsconfig.json] *new*
+    RetainingOpenFiles:
+      /myproject/src/main.ts  
+Config File Names::
+  [/myproject/src/main.ts] *new*
+    NearestConfigFileName: /myproject/tsconfig.json
+    Ancestors:
+      /myproject/tsconfig.json   
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///dummy/dummy.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "const x = 1;"
+    }
+  }
+}
+
+Projects::
+  [/dev/null/inferred] 
+    /myproject/src/helpers/functions.ts  
+    /myproject/src/main.ts               
+  [/dummy/tsconfig.json] *new*
+    /dummy/dummy.ts  
+Open Files::
+  [/dummy/dummy.ts] *new*
+    /dummy/tsconfig.json  (default) 
+  [/myproject/src/main.ts] 
+    /dev/null/inferred  (default) 
+Config::
+  [/dummy/tsconfig.json] *new*
+    RetainingProjects:
+      /dummy/tsconfig.json  
+    RetainingOpenFiles:
+      /dummy/dummy.ts  
+  [/myproject/tsconfig.json] 
+    RetainingOpenFiles:
+      /myproject/src/main.ts  
+Config File Names::
+  [/dummy/dummy.ts] *new*
+    NearestConfigFileName: /dummy/tsconfig.json
+  [/myproject/src/main.ts] 
+    NearestConfigFileName: /myproject/tsconfig.json
+    Ancestors:
+      /myproject/tsconfig.json   
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///dummy/dummy.ts"
+    }
+  }
+}
+
+Open Files::
+  [/dummy/dummy.ts] *closed*
+  [/myproject/src/main.ts] 
+    /dev/null/inferred  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/src/main.ts"
+    }
+  }
+}
+
+Open Files::
+  [/myproject/src/main.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///dummy/dummy.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "const x = 1;"
+    }
+  }
+}
+
+Projects::
+  [/dev/null/inferred] *deleted*
+    /myproject/src/helpers/functions.ts  
+    /myproject/src/main.ts               
+  [/dummy/tsconfig.json] 
+    /dummy/dummy.ts  
+Open Files::
+  [/dummy/dummy.ts] *new*
+    /dummy/tsconfig.json  (default) 
+Config::
+  [/dummy/tsconfig.json] 
+    RetainingProjects:
+      /dummy/tsconfig.json  
+    RetainingOpenFiles:
+      /dummy/dummy.ts  
+  [/myproject/tsconfig.json] *deleted*
+Config File Names::
+  [/dummy/dummy.ts] 
+    NearestConfigFileName: /dummy/tsconfig.json
+  [/myproject/src/main.ts] *deleted*
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///dummy/dummy.ts"
+    }
+  }
+}
+
+Open Files::
+  [/dummy/dummy.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/src/main.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { foo } from './helpers/functions';\nexport { foo };"
+    }
+  }
+}
+
+Projects::
+  [/dev/null/inferred] *new*
+    /myproject/src/helpers/functions.ts  
+    /myproject/src/main.ts               
+  [/dummy/tsconfig.json] *deleted*
+    /dummy/dummy.ts  
+Open Files::
+  [/myproject/src/main.ts] *new*
+    /dev/null/inferred  (default) 
+Config::
+  [/dummy/tsconfig.json] *deleted*
+  [/myproject/tsconfig.json] *new*
+    RetainingOpenFiles:
+      /myproject/src/main.ts  
+Config File Names::
+  [/dummy/dummy.ts] *deleted*
+  [/myproject/src/main.ts] *new*
+    NearestConfigFileName: /myproject/tsconfig.json
+    Ancestors:
+      /myproject/tsconfig.json   
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/src/main.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 9
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /myproject/src/helpers/functions.ts ===
+// export function [|foo|]() { return 1; }
+
+// === /myproject/src/main.ts ===
+// import { [|foo|] } from './helpers/functions';
+// export { /*FIND ALL REFS*/foo };
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/src/main.ts"
+    }
+  }
+}
+
+Open Files::
+  [/myproject/src/main.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/indirect3/main.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { foo } from '../target/src/main';\nfoo()\nexport function bar() {}\n"
+    }
+  }
+}
+
+Projects::
+  [/dev/null/inferred] *deleted*
+    /myproject/src/helpers/functions.ts  
+    /myproject/src/main.ts               
+  [/myproject/indirect3/tsconfig.json] *new*
+    /myproject/target/src/helpers/functions.d.ts  
+    /myproject/target/src/main.d.ts               
+    /myproject/indirect3/main.ts                  
+Open Files::
+  [/myproject/indirect3/main.ts] *new*
+    /myproject/indirect3/tsconfig.json  (default) 
+Config::
+  [/myproject/indirect3/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/indirect3/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/indirect3/main.ts  
+  [/myproject/tsconfig.json] *deleted*
+Config File Names::
+  [/myproject/indirect3/main.ts] *new*
+    NearestConfigFileName: /myproject/indirect3/tsconfig.json
+  [/myproject/src/main.ts] *deleted*
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/indirect3/main.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 9
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Config::
+  [/myproject/indirect3/tsconfig.json] 
+    RetainingProjects:
+      /myproject/indirect3/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/indirect3/main.ts  
+  [/myproject/tsconfig.json] *new*
+
+
+
+
+// === findAllReferences ===
+// === /myproject/indirect3/main.ts ===
+// import { /*FIND ALL REFS*/[|foo|] } from '../target/src/main';
+// [|foo|]()
+// export function bar() {}
+// 
+
+// === /myproject/src/helpers/functions.ts ===
+// export function [|foo|]() { return 1; }
+
+// === /myproject/src/main.ts ===
+// import { [|foo|] } from './helpers/functions';
+// export { foo };

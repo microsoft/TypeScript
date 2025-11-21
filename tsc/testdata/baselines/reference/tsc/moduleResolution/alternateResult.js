@@ -9,17 +9,17 @@ import { bar2 } from "bar2";
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] *new* 
 export declare const bar: number;
 //// [/home/src/projects/project/node_modules/@types/bar/package.json] *new* 
-      {
-          "name": "@types/bar",
-          "version": "1.0.0",
-          "types": "index.d.ts",
-          "exports": {
-              ".": {
+{
+    "name": "@types/bar",
+    "version": "1.0.0",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
 
-                  "require": "./index.d.ts"
-              }
-          }
-      }
+            "require": "./index.d.ts"
+        }
+    }
+}
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] *new* 
 export declare const bar2: number;
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json] *new* 
@@ -39,37 +39,37 @@ module.exports = { bar: 1 };
 //// [/home/src/projects/project/node_modules/bar/index.mjs] *new* 
 export const bar = 1;
 //// [/home/src/projects/project/node_modules/bar/package.json] *new* 
-     {
-         "name": "bar",
-         "version": "1.0.0",
-         "main": "index.js",
+{
+    "name": "bar",
+    "version": "1.0.0",
+    "main": "index.js",
 
-         "exports": {
-             ".": {
-		
-                 "import": "./index.mjs",
-                 "require": "./index.js"
-             }
-         }
-     }
+    "exports": {
+        ".": {
+
+            "import": "./index.mjs",
+            "require": "./index.js"
+        }
+    }
+}
 //// [/home/src/projects/project/node_modules/bar2/index.js] *new* 
 module.exports = { bar2: 1 };
 //// [/home/src/projects/project/node_modules/bar2/index.mjs] *new* 
 export const bar2 = 1;
 //// [/home/src/projects/project/node_modules/bar2/package.json] *new* 
-     {
-         "name": "bar2",
-         "version": "1.0.0",
-         "main": "index.js",
+{
+    "name": "bar2",
+    "version": "1.0.0",
+    "main": "index.js",
 
-         "exports": {
-             ".": {
-		
-                 "import": "./index.mjs",
-                 "require": "./index.js"
-             }
-         }
-     }
+    "exports": {
+        ".": {
+
+            "import": "./index.mjs",
+            "require": "./index.js"
+        }
+    }
+}
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] *new* 
 export declare const foo: number;
 //// [/home/src/projects/project/node_modules/foo/index.js] *new* 
@@ -77,19 +77,19 @@ module.exports = { foo: 1 };
 //// [/home/src/projects/project/node_modules/foo/index.mjs] *new* 
 export const foo = 1;
 //// [/home/src/projects/project/node_modules/foo/package.json] *new* 
-   {
-       "name": "foo",
-       "version": "1.0.0",
-       "main": "index.js",
-       "types": "index.d.ts",
-       "exports": {
-           ".": {
+{
+    "name": "foo",
+    "version": "1.0.0",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
 
-               "import": "./index.mjs",
-               "require": "./index.js"
-           }
-       }
-   }
+            "import": "./index.mjs",
+            "require": "./index.js"
+        }
+    }
+}
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] *new* 
 export declare const foo2: number;
 //// [/home/src/projects/project/node_modules/foo2/index.js] *new* 
@@ -1913,17 +1913,17 @@ Signatures::
 
 Edit [6]:: update package.json from @types so error is introduced
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json] *modified* 
-      {
-          "name": "@types/bar2",
-          "version": "1.0.0",
-          "types": "index.d.ts",
-          "exports": {
-              ".": {
+{
+    "name": "@types/bar2",
+    "version": "1.0.0",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
 
-                  "require": "./index.d.ts"
-              }
-          }
-      }
+            "require": "./index.d.ts"
+        }
+    }
+}
 
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
@@ -2201,19 +2201,19 @@ Signatures::
 
 Edit [7]:: update package.json so error is introduced
 //// [/home/src/projects/project/node_modules/foo2/package.json] *modified* 
-   {
-       "name": "foo2",
-       "version": "1.0.0",
-       "main": "index.js",
-       "types": "index.d.ts",
-       "exports": {
-           ".": {
+{
+    "name": "foo2",
+    "version": "1.0.0",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
 
-               "import": "./index.mjs",
-               "require": "./index.js"
-           }
-       }
-   }
+            "import": "./index.mjs",
+            "require": "./index.js"
+        }
+    }
+}
 
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated

@@ -6,6 +6,10 @@
 
 
 // === findAllReferences ===
+// === /node_modules/@types/three/index.d.ts ===
+// export * from "[|./three-core|]";
+// export as namespace THREE;
+
 // === /typings/global.d.ts ===
 // import * as _THREE from '/*FIND ALL REFS*/[|three|]';
 // declare global {

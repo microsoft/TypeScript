@@ -1,0 +1,118 @@
+UseCaseSensitiveFileNames: true
+//// [/myproject/a/index.ts] *new* 
+import { B } from "../b/lib";
+const b: B = new B();
+//// [/myproject/a/tsconfig.json] *new* 
+{
+	"disableReferencedProjectLoad": false,
+	"disableSourceOfProjectReferenceRedirect": false,
+	"composite": true
+}
+//// [/myproject/b/helper.ts] *new* 
+import { B } from ".";
+const b: B = new B();
+//// [/myproject/b/index.ts] *new* 
+export class B {
+	M() {}
+}
+//// [/myproject/b/lib/index.d.ts] *new* 
+export declare class B {
+	M(): void;
+}
+//# sourceMappingURL=index.d.ts.map
+//// [/myproject/b/lib/index.d.ts.map] *new* 
+{
+	"version": 3,
+	"file": "index.d.ts",
+	"sourceRoot": "",
+	"sources": ["../index.ts"],
+	"names": [],
+	"mappings": "AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"
+}
+//// [/myproject/b/tsconfig.json] *new* 
+{
+	"declarationMap": true,
+	"outDir": "lib",
+	"composite": true,
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/a/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { B } from \"../b/lib\";\nconst b: B = new B();"
+    }
+  }
+}
+
+Projects::
+  [/myproject/a/tsconfig.json] *new*
+    /myproject/b/lib/index.d.ts  
+    /myproject/a/index.ts        
+Open Files::
+  [/myproject/a/index.ts] *new*
+    /myproject/a/tsconfig.json  (default) 
+Config::
+  [/myproject/a/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/a/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/a/index.ts  
+Config File Names::
+  [/myproject/a/index.ts] *new*
+    NearestConfigFileName: /myproject/a/tsconfig.json
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/a/index.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 9
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Projects::
+  [/myproject/a/tsconfig.json] 
+    /myproject/b/lib/index.d.ts  
+    /myproject/a/index.ts        
+  [/myproject/b/tsconfig.json] *new*
+    /myproject/b/index.ts        
+    /myproject/b/helper.ts       
+    /myproject/b/lib/index.d.ts  
+Config::
+  [/myproject/a/tsconfig.json] 
+    RetainingProjects:
+      /myproject/a/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/a/index.ts  
+  [/myproject/b/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/b/tsconfig.json  
+
+
+
+
+// === findAllReferences ===
+// === /myproject/a/index.ts ===
+// import { [|B|] } from "../b/lib";
+// const b: /*FIND ALL REFS*/[|B|] = new [|B|]();
+
+// === /myproject/b/helper.ts ===
+// import { [|B|] } from ".";
+// const b: [|B|] = new [|B|]();
+
+// === /myproject/b/index.ts ===
+// export class [|B|] {
+// 	M() {}
+// }

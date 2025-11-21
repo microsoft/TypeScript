@@ -1,0 +1,145 @@
+UseCaseSensitiveFileNames: true
+//// [/solution/api/src/server.ts] *new* 
+import * as shared from "../../shared/dist"
+shared.foo.bar();
+//// [/solution/api/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "dist",
+		"rootDir": "src"
+	},
+	"include": ["src"],
+	"references": [{ "path": "../shared" }],
+}
+//// [/solution/app/src/app.ts] *new* 
+import * as shared from "../../shared/dist"
+shared.foo.bar();
+//// [/solution/app/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "dist",
+		"rootDir": "src"
+	},
+	"include": ["src"],
+	"references": [{ "path": "../shared" }],
+}
+//// [/solution/shared/src/index.ts] *new* 
+export const foo = { bar: () => { } };
+//// [/solution/shared/tsconfig.json] *new* 
+{
+    "compilerOptions": {
+        "composite": true,
+        "outDir": "dist",
+        "rootDir": "src"
+    },
+    "include": ["src"],
+}
+//// [/solution/tsconfig.json] *new* 
+{
+	"files": [],
+	"references": [
+		{ "path": "./api" },
+		{ "path": "./app" },
+	],
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/api/src/server.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import * as shared from \"../../shared/dist\"\nshared.foo.bar();"
+    }
+  }
+}
+
+Projects::
+  [/solution/api/tsconfig.json] *new*
+    /solution/shared/src/index.ts  
+    /solution/api/src/server.ts    
+  [/solution/tsconfig.json] *new*
+Open Files::
+  [/solution/api/src/server.ts] *new*
+    /solution/api/tsconfig.json  (default) 
+Config::
+  [/solution/api/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/api/tsconfig.json  
+    RetainingOpenFiles:
+      /solution/api/src/server.ts  
+  [/solution/shared/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/api/tsconfig.json  
+Config File Names::
+  [/solution/api/src/server.ts] *new*
+    NearestConfigFileName: /solution/api/tsconfig.json
+    Ancestors:
+      /solution/api/tsconfig.json  /solution/tsconfig.json 
+      /solution/tsconfig.json       
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///solution/api/src/server.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 11
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Projects::
+  [/solution/api/tsconfig.json] 
+    /solution/shared/src/index.ts  
+    /solution/api/src/server.ts    
+  [/solution/app/tsconfig.json] *new*
+    /solution/shared/src/index.ts  
+    /solution/app/src/app.ts       
+  [/solution/shared/tsconfig.json] *new*
+    /solution/shared/src/index.ts  
+  [/solution/tsconfig.json] *modified*
+Config::
+  [/solution/api/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /solution/api/tsconfig.json  
+      /solution/tsconfig.json      *new*
+    RetainingOpenFiles:
+      /solution/api/src/server.ts  
+  [/solution/app/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/app/tsconfig.json  
+      /solution/tsconfig.json      
+  [/solution/shared/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /solution/api/tsconfig.json     
+      /solution/app/tsconfig.json     *new*
+      /solution/shared/tsconfig.json  *new*
+      /solution/tsconfig.json         *new*
+  [/solution/tsconfig.json] *new*
+    RetainingProjects:
+      /solution/tsconfig.json  
+
+
+
+
+// === findAllReferences ===
+// === /solution/api/src/server.ts ===
+// import * as shared from "../../shared/dist"
+// shared.foo./*FIND ALL REFS*/[|bar|]();
+
+// === /solution/app/src/app.ts ===
+// import * as shared from "../../shared/dist"
+// shared.foo.[|bar|]();
+
+// === /solution/shared/src/index.ts ===
+// export const foo = { [|bar|]: () => { } };

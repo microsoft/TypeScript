@@ -1,0 +1,216 @@
+UseCaseSensitiveFileNames: true
+//// [/a/a.ts] *new* 
+export function fnA() {}
+export interface IfaceA {}
+export const instanceA: IfaceA = {};
+//// [/a/bin/a.d.ts] *new* 
+export declare function fnA(): void;
+export interface IfaceA {
+}
+export declare const instanceA: IfaceA;
+//# sourceMappingURL=a.d.ts.map
+//// [/a/bin/a.d.ts.map] *new* 
+{
+	"version": 3,
+	"file": "a.d.ts",
+	"sourceRoot": "",
+	"sources": ["../a.ts"],
+	"names": [],
+	"mappings": "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
+}
+//// [/a/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"outDir": "bin",
+		"declarationMap": true,
+		"composite": true
+	}
+}
+//// [/b/b.ts] *new* 
+export function fnB() {}
+//// [/b/bin/b.d.ts] *new* 
+export declare function fnB(): void;
+//# sourceMappingURL=b.d.ts.map
+//// [/b/bin/b.d.ts.map] *new* 
+{
+	"version": 3,
+	"file": "b.d.ts",
+	"sourceRoot": "",
+	"sources": ["../b.ts"],
+	"names": [],
+	"mappings": "AAAA,wBAAgB,GAAG,SAAK"
+}
+//// [/b/c.ts] *new* 
+export function fnC() {}
+//// [/b/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"outDir": "bin",
+		"declarationMap": true,
+		"composite": true
+	}
+}
+//// [/dummy/dummy.ts] *new* 
+export const a = 10;
+//// [/dummy/tsconfig.json] *new* 
+{}
+//// [/user/tsconfig.json] *new* 
+{
+	"references": [
+		{ "path": "../a" },
+		{ "path": "../b" }
+	]
+}
+//// [/user/user.ts] *new* 
+import * as a from "../a/a";
+import * as b from "../b/b";
+export function fnUser() {
+	a.fnA();
+	b.fnB();
+	a.instanceA;
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///user/user.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import * as a from \"../a/a\";\nimport * as b from \"../b/b\";\nexport function fnUser() {\n\ta.fnA();\n\tb.fnB();\n\ta.instanceA;\n}"
+    }
+  }
+}
+
+Projects::
+  [/user/tsconfig.json] *new*
+    /a/a.ts        
+    /b/b.ts        
+    /user/user.ts  
+Open Files::
+  [/user/user.ts] *new*
+    /user/tsconfig.json  (default) 
+Config::
+  [/a/tsconfig.json] *new*
+    RetainingProjects:
+      /user/tsconfig.json  
+  [/b/tsconfig.json] *new*
+    RetainingProjects:
+      /user/tsconfig.json  
+  [/user/tsconfig.json] *new*
+    RetainingProjects:
+      /user/tsconfig.json  
+    RetainingOpenFiles:
+      /user/user.ts  
+Config File Names::
+  [/user/user.ts] *new*
+    NearestConfigFileName: /user/tsconfig.json
+
+{
+  "method": "workspace/symbol",
+  "params": {
+    "query": "fn"
+  }
+}
+
+Projects::
+  [/a/tsconfig.json] *new*
+    /a/a.ts  
+  [/b/tsconfig.json] *new*
+    /b/b.ts  
+    /b/c.ts  
+  [/user/tsconfig.json] 
+    /a/a.ts        
+    /b/b.ts        
+    /user/user.ts  
+Config::
+  [/a/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /a/tsconfig.json     *new*
+      /user/tsconfig.json  
+  [/b/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /b/tsconfig.json     *new*
+      /user/tsconfig.json  
+  [/user/tsconfig.json] 
+    RetainingProjects:
+      /user/tsconfig.json  
+    RetainingOpenFiles:
+      /user/user.ts  
+
+
+
+
+// === workspaceSymbol ===
+// === /a/a.ts ===
+// export function [|{| name: fnA, kind: function |}fnA|]() {}
+// export interface IfaceA {}
+// export const instanceA: IfaceA = {};
+
+// === /b/b.ts ===
+// export function [|{| name: fnB, kind: function |}fnB|]() {}
+
+// === /b/c.ts ===
+// export function [|{| name: fnC, kind: function |}fnC|]() {}
+
+// === /user/user.ts ===
+// import * as a from "../a/a";
+// import * as b from "../b/b";
+// export function [|{| name: fnUser, kind: function |}fnUser|]() {
+// 	a.fnA();
+// 	b.fnB();
+// 	a.instanceA;
+// }
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///user/user.ts"
+    }
+  }
+}
+
+Open Files::
+  [/user/user.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///dummy/dummy.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const a = 10;"
+    }
+  }
+}
+
+Projects::
+  [/a/tsconfig.json] *deleted*
+    /a/a.ts  
+  [/b/tsconfig.json] *deleted*
+    /b/b.ts  
+    /b/c.ts  
+  [/dummy/tsconfig.json] *new*
+    /dummy/dummy.ts  
+  [/user/tsconfig.json] *deleted*
+    /a/a.ts        
+    /b/b.ts        
+    /user/user.ts  
+Open Files::
+  [/dummy/dummy.ts] *new*
+    /dummy/tsconfig.json  (default) 
+Config::
+  [/a/tsconfig.json] *deleted*
+  [/b/tsconfig.json] *deleted*
+  [/dummy/tsconfig.json] *new*
+    RetainingProjects:
+      /dummy/tsconfig.json  
+    RetainingOpenFiles:
+      /dummy/dummy.ts  
+  [/user/tsconfig.json] *deleted*
+Config File Names::
+  [/dummy/dummy.ts] *new*
+    NearestConfigFileName: /dummy/tsconfig.json
+  [/user/user.ts] *deleted*

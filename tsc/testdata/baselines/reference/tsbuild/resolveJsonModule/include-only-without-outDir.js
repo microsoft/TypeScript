@@ -9,20 +9,20 @@ Input::
 import hello from "./hello.json"
 export default hello.hello
 //// [/home/src/workspaces/solution/project/tsconfig.json] *new* 
-       {
-           "compilerOptions": {
-               "composite": true,
-               "moduleResolution": "node",
-               "module": "commonjs",
-               "resolveJsonModule": true,
-               "esModuleInterop": true,
-               "allowSyntheticDefaultImports": true,
+{
+    "compilerOptions": {
+        "composite": true,
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
 
-               "skipDefaultLibCheck": true,
+        "skipDefaultLibCheck": true,
 
-           },
-           "include": [ "src/**/*" ],
-       }
+    },
+    "include": [ "src/**/*" ],
+}
 
 tsgo --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: Success

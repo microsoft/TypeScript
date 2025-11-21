@@ -1,0 +1,779 @@
+UseCaseSensitiveFileNames: true
+//// [/myproject/dependency/FnS.ts] *new* 
+export function fn1() { }
+export function fn2() { }
+export function fn3() { }
+export function fn4() { }
+export function fn5() { }
+
+//// [/myproject/dependency/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"declarationMap": true,
+		"declarationDir": "../decls"
+	}
+}
+//// [/myproject/main/main.ts] *new* 
+import {
+	fn1,
+	fn2,
+	fn3,
+	fn4,
+	fn5
+} from "../decls/FnS";
+
+fn1();
+fn2();
+fn3();
+fn4();
+fn5();
+//// [/myproject/main/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"declarationMap": true,
+		"disableSourceOfProjectReferenceRedirect": false
+	},
+	"references": [{ "path": "../dependency" }]
+}
+//// [/myproject/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"disableSourceOfProjectReferenceRedirect": false
+	},
+	"files": [],
+	"references": [
+		{ "path": "dependency" },
+		{ "path": "main" }
+	]
+}
+//// [/random/random.ts] *new* 
+export const a = 10;
+//// [/random/tsconfig.json] *new* 
+{}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+    }
+  }
+}
+
+Projects::
+  [/myproject/dependency/tsconfig.json] *new*
+    /myproject/dependency/FnS.ts  
+  [/myproject/tsconfig.json] *new*
+Open Files::
+  [/myproject/dependency/FnS.ts] *new*
+    /myproject/dependency/tsconfig.json  (default) 
+Config::
+  [/myproject/dependency/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/dependency/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/dependency/FnS.ts  
+Config File Names::
+  [/myproject/dependency/FnS.ts] *new*
+    NearestConfigFileName: /myproject/dependency/tsconfig.json
+    Ancestors:
+      /myproject/dependency/tsconfig.json  /myproject/tsconfig.json 
+      /myproject/tsconfig.json              
+
+{
+  "method": "textDocument/rename",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts"
+    },
+    "position": {
+      "line": 2,
+      "character": 16
+    },
+    "newName": "?"
+  }
+}
+
+Projects::
+  [/myproject/dependency/tsconfig.json] 
+    /myproject/dependency/FnS.ts  
+  [/myproject/main/tsconfig.json] *new*
+    /myproject/dependency/FnS.ts  
+    /myproject/main/main.ts       
+  [/myproject/tsconfig.json] *modified*
+Open Files::
+  [/myproject/dependency/FnS.ts] *modified*
+    /myproject/dependency/tsconfig.json  (default) 
+    /myproject/main/tsconfig.json        *new*
+Config::
+  [/myproject/dependency/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/dependency/tsconfig.json  
+      /myproject/main/tsconfig.json        *new*
+      /myproject/tsconfig.json             *new*
+    RetainingOpenFiles:
+      /myproject/dependency/FnS.ts  
+  [/myproject/main/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+      /myproject/tsconfig.json       
+  [/myproject/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/tsconfig.json  
+
+
+
+
+// === findRenameLocations ===
+// === /myproject/dependency/FnS.ts ===
+// export function fn1() { }
+// export function fn2() { }
+// export function /*RENAME*/[|fn3RENAME|]() { }
+// export function fn4() { }
+// export function fn5() { }
+// 
+
+// === /myproject/main/main.ts ===
+// import {
+// 	fn1,
+// 	fn2,
+// 	[|fn3RENAME|],
+// 	fn4,
+// 	fn5
+// } from "../decls/FnS";
+// 
+// fn1();
+// fn2();
+// [|fn3RENAME|]();
+// fn4();
+// fn5();
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 2
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        },
+        "text": ""
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 3
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        },
+        "text": "f"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 4
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 1
+          },
+          "end": {
+            "line": 0,
+            "character": 1
+          }
+        },
+        "text": "u"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 5
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 2
+          },
+          "end": {
+            "line": 0,
+            "character": 2
+          }
+        },
+        "text": "n"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 6
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 3
+          },
+          "end": {
+            "line": 0,
+            "character": 3
+          }
+        },
+        "text": "c"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 7
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 4
+          },
+          "end": {
+            "line": 0,
+            "character": 4
+          }
+        },
+        "text": "t"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 8
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 5
+          },
+          "end": {
+            "line": 0,
+            "character": 5
+          }
+        },
+        "text": "i"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 9
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 6
+          },
+          "end": {
+            "line": 0,
+            "character": 6
+          }
+        },
+        "text": "o"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 10
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 7
+          },
+          "end": {
+            "line": 0,
+            "character": 7
+          }
+        },
+        "text": "n"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 11
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 8
+          },
+          "end": {
+            "line": 0,
+            "character": 8
+          }
+        },
+        "text": " "
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 12
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 9
+          },
+          "end": {
+            "line": 0,
+            "character": 9
+          }
+        },
+        "text": "f"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 13
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 10
+          }
+        },
+        "text": "o"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 14
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 11
+          },
+          "end": {
+            "line": 0,
+            "character": 11
+          }
+        },
+        "text": "o"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 15
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 12
+          },
+          "end": {
+            "line": 0,
+            "character": 12
+          }
+        },
+        "text": "B"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 16
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 13
+          },
+          "end": {
+            "line": 0,
+            "character": 13
+          }
+        },
+        "text": "a"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 17
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 14
+          }
+        },
+        "text": "r"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 18
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 15
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        },
+        "text": "("
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 19
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 16
+          },
+          "end": {
+            "line": 0,
+            "character": 16
+          }
+        },
+        "text": ")"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 20
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 17
+          },
+          "end": {
+            "line": 0,
+            "character": 17
+          }
+        },
+        "text": " "
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 21
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 18
+          },
+          "end": {
+            "line": 0,
+            "character": 18
+          }
+        },
+        "text": "{"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 22
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 19
+          },
+          "end": {
+            "line": 0,
+            "character": 19
+          }
+        },
+        "text": " "
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 23
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 20
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        },
+        "text": "}"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "version": 24
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 21
+          },
+          "end": {
+            "line": 0,
+            "character": 21
+          }
+        },
+        "text": "\n"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/rename",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts"
+    },
+    "position": {
+      "line": 3,
+      "character": 16
+    },
+    "newName": "?"
+  }
+}
+
+Projects::
+  [/myproject/dependency/tsconfig.json] *modified*
+    /myproject/dependency/FnS.ts  *modified*
+  [/myproject/main/tsconfig.json] *modified*
+    /myproject/dependency/FnS.ts  *modified*
+    /myproject/main/main.ts       
+  [/myproject/tsconfig.json] 
+
+
+
+
+// === findRenameLocations ===
+// === /myproject/dependency/FnS.ts ===
+// function fooBar() { }
+// export function fn1() { }
+// export function fn2() { }
+// export function /*RENAME*/[|fn3RENAME|]() { }
+// export function fn4() { }
+// export function fn5() { }
+// 
+
+// === /myproject/main/main.ts ===
+// import {
+// 	fn1,
+// 	fn2,
+// 	[|fn3RENAME|],
+// 	fn4,
+// 	fn5
+// } from "../decls/FnS";
+// 
+// fn1();
+// fn2();
+// [|fn3RENAME|]();
+// fn4();
+// fn5();

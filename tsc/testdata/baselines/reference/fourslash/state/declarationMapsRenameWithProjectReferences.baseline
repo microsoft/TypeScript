@@ -1,0 +1,300 @@
+UseCaseSensitiveFileNames: true
+//// [/myproject/dependency/FnS.ts] *new* 
+export function fn1() { }
+export function fn2() { }
+export function fn3() { }
+export function fn4() { }
+export function fn5() { }
+
+//// [/myproject/dependency/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"declarationMap": true,
+		"declarationDir": "../decls"
+	}
+}
+//// [/myproject/main/main.ts] *new* 
+import {
+	fn1,
+	fn2,
+	fn3,
+	fn4,
+	fn5
+} from "../decls/FnS";
+
+fn1();
+fn2();
+fn3();
+fn4();
+fn5();
+//// [/myproject/main/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"declarationMap": true,
+		"disableSourceOfProjectReferenceRedirect": false
+	},
+	"references": [{ "path": "../dependency" }]
+}
+//// [/myproject/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"disableSourceOfProjectReferenceRedirect": false
+	},
+	"files": [],
+	"references": [
+		{ "path": "dependency" },
+		{ "path": "main" }
+	]
+}
+//// [/random/random.ts] *new* 
+export const a = 10;
+//// [/random/tsconfig.json] *new* 
+{}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///random/random.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const a = 10;"
+    }
+  }
+}
+
+Projects::
+  [/random/tsconfig.json] *new*
+    /random/random.ts  
+Open Files::
+  [/random/random.ts] *new*
+    /random/tsconfig.json  (default) 
+Config::
+  [/random/tsconfig.json] *new*
+    RetainingProjects:
+      /random/tsconfig.json  
+    RetainingOpenFiles:
+      /random/random.ts  
+Config File Names::
+  [/random/random.ts] *new*
+    NearestConfigFileName: /random/tsconfig.json
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+    }
+  }
+}
+
+Projects::
+  [/myproject/dependency/tsconfig.json] *new*
+    /myproject/dependency/FnS.ts  
+  [/myproject/tsconfig.json] *new*
+  [/random/tsconfig.json] 
+    /random/random.ts  
+Open Files::
+  [/myproject/dependency/FnS.ts] *new*
+    /myproject/dependency/tsconfig.json  (default) 
+  [/random/random.ts] 
+    /random/tsconfig.json  (default) 
+Config::
+  [/myproject/dependency/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/dependency/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/dependency/FnS.ts  
+  [/random/tsconfig.json] 
+    RetainingProjects:
+      /random/tsconfig.json  
+    RetainingOpenFiles:
+      /random/random.ts  
+Config File Names::
+  [/myproject/dependency/FnS.ts] *new*
+    NearestConfigFileName: /myproject/dependency/tsconfig.json
+    Ancestors:
+      /myproject/dependency/tsconfig.json  /myproject/tsconfig.json 
+      /myproject/tsconfig.json              
+  [/random/random.ts] 
+    NearestConfigFileName: /random/tsconfig.json
+
+{
+  "method": "textDocument/rename",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts"
+    },
+    "position": {
+      "line": 2,
+      "character": 16
+    },
+    "newName": "?"
+  }
+}
+
+Projects::
+  [/myproject/dependency/tsconfig.json] 
+    /myproject/dependency/FnS.ts  
+  [/myproject/main/tsconfig.json] *new*
+    /myproject/dependency/FnS.ts  
+    /myproject/main/main.ts       
+  [/myproject/tsconfig.json] *modified*
+  [/random/tsconfig.json] 
+    /random/random.ts  
+Open Files::
+  [/myproject/dependency/FnS.ts] *modified*
+    /myproject/dependency/tsconfig.json  (default) 
+    /myproject/main/tsconfig.json        *new*
+  [/random/random.ts] 
+    /random/tsconfig.json  (default) 
+Config::
+  [/myproject/dependency/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/dependency/tsconfig.json  
+      /myproject/main/tsconfig.json        *new*
+      /myproject/tsconfig.json             *new*
+    RetainingOpenFiles:
+      /myproject/dependency/FnS.ts  
+  [/myproject/main/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+      /myproject/tsconfig.json       
+  [/myproject/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/tsconfig.json  
+  [/random/tsconfig.json] 
+    RetainingProjects:
+      /random/tsconfig.json  
+    RetainingOpenFiles:
+      /random/random.ts  
+
+
+
+
+// === findRenameLocations ===
+// === /myproject/dependency/FnS.ts ===
+// export function fn1() { }
+// export function fn2() { }
+// export function /*RENAME*/[|fn3RENAME|]() { }
+// export function fn4() { }
+// export function fn5() { }
+// 
+
+// === /myproject/main/main.ts ===
+// import {
+// 	fn1,
+// 	fn2,
+// 	[|fn3RENAME|],
+// 	fn4,
+// 	fn5
+// } from "../decls/FnS";
+// 
+// fn1();
+// fn2();
+// [|fn3RENAME|]();
+// fn4();
+// fn5();
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///random/random.ts"
+    }
+  }
+}
+
+Open Files::
+  [/myproject/dependency/FnS.ts] 
+    /myproject/dependency/tsconfig.json  (default) 
+    /myproject/main/tsconfig.json        
+  [/random/random.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///random/random.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const a = 10;"
+    }
+  }
+}
+
+Open Files::
+  [/myproject/dependency/FnS.ts] 
+    /myproject/dependency/tsconfig.json  (default) 
+    /myproject/main/tsconfig.json        
+  [/random/random.ts] *new*
+    /random/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/dependency/FnS.ts"
+    }
+  }
+}
+
+Open Files::
+  [/myproject/dependency/FnS.ts] *closed*
+  [/random/random.ts] 
+    /random/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///random/random.ts"
+    }
+  }
+}
+
+Open Files::
+  [/random/random.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///random/random.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const a = 10;"
+    }
+  }
+}
+
+Projects::
+  [/myproject/dependency/tsconfig.json] *deleted*
+    /myproject/dependency/FnS.ts  
+  [/myproject/main/tsconfig.json] *deleted*
+    /myproject/dependency/FnS.ts  
+    /myproject/main/main.ts       
+  [/myproject/tsconfig.json] *deleted*
+  [/random/tsconfig.json] 
+    /random/random.ts  
+Open Files::
+  [/random/random.ts] *new*
+    /random/tsconfig.json  (default) 
+Config::
+  [/myproject/dependency/tsconfig.json] *deleted*
+  [/myproject/main/tsconfig.json] *deleted*
+  [/myproject/tsconfig.json] *deleted*
+  [/random/tsconfig.json] 
+    RetainingProjects:
+      /random/tsconfig.json  
+    RetainingOpenFiles:
+      /random/random.ts  
+Config File Names::
+  [/myproject/dependency/FnS.ts] *deleted*
+  [/random/random.ts] 
+    NearestConfigFileName: /random/tsconfig.json

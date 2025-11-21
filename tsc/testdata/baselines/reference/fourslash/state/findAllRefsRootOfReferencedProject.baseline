@@ -1,0 +1,163 @@
+UseCaseSensitiveFileNames: true
+//// [/src/common/input/keyboard.test.ts] *new* 
+import { evaluateKeyboardEvent } from 'common/input/keyboard';
+function testEvaluateKeyboardEvent() {
+	return evaluateKeyboardEvent();
+}
+//// [/src/common/input/keyboard.ts] *new* 
+function bar() { return "just a random function so .d.ts location doesnt match"; }
+export function evaluateKeyboardEvent() { }
+//// [/src/common/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"declarationMap": true,
+		"outDir": "../../out",
+		"disableSourceOfProjectReferenceRedirect": false,
+		"paths": {
+			"*": ["../*"],
+		},
+	},
+	"include": ["./\**/*"]
+}
+//// [/src/terminal.ts] *new* 
+import { evaluateKeyboardEvent } from 'common/input/keyboard';
+function foo() {
+	return evaluateKeyboardEvent();
+}
+//// [/src/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"declarationMap": true,
+		"outDir": "../out",
+		"disableSourceOfProjectReferenceRedirect": false,
+		"paths": {
+			"common/*": ["./common/*"],
+		},
+		"tsBuildInfoFile": "../out/src.tsconfig.tsbuildinfo"
+	},
+	"include": ["./\**/*"],
+	"references": [
+		{ "path": "./common" },
+	],
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///src/common/input/keyboard.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }"
+    }
+  }
+}
+
+Projects::
+  [/src/common/tsconfig.json] *new*
+    /src/common/input/keyboard.ts       
+    /src/common/input/keyboard.test.ts  
+  [/src/tsconfig.json] *new*
+Open Files::
+  [/src/common/input/keyboard.ts] *new*
+    /src/common/tsconfig.json  (default) 
+Config::
+  [/src/common/tsconfig.json] *new*
+    RetainingProjects:
+      /src/common/tsconfig.json  
+    RetainingOpenFiles:
+      /src/common/input/keyboard.ts  
+Config File Names::
+  [/src/common/input/keyboard.ts] *new*
+    NearestConfigFileName: /src/common/tsconfig.json
+    Ancestors:
+      /src/common/tsconfig.json  /src/tsconfig.json 
+      /src/tsconfig.json          
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///src/terminal.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n\treturn evaluateKeyboardEvent();\n}"
+    }
+  }
+}
+
+Projects::
+  [/src/common/tsconfig.json] 
+    /src/common/input/keyboard.ts       
+    /src/common/input/keyboard.test.ts  
+  [/src/tsconfig.json] *modified*
+    /src/common/input/keyboard.ts       *new*
+    /src/terminal.ts                    *new*
+    /src/common/input/keyboard.test.ts  *new*
+Open Files::
+  [/src/common/input/keyboard.ts] *modified*
+    /src/common/tsconfig.json  (default) 
+    /src/tsconfig.json         *new*
+  [/src/terminal.ts] *new*
+    /src/tsconfig.json  (default) 
+Config::
+  [/src/common/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /src/common/tsconfig.json  
+      /src/tsconfig.json         *new*
+    RetainingOpenFiles:
+      /src/common/input/keyboard.ts  
+  [/src/tsconfig.json] *new*
+    RetainingProjects:
+      /src/tsconfig.json  
+    RetainingOpenFiles:
+      /src/terminal.ts  
+Config File Names::
+  [/src/common/input/keyboard.ts] 
+    NearestConfigFileName: /src/common/tsconfig.json
+    Ancestors:
+      /src/common/tsconfig.json  /src/tsconfig.json 
+      /src/tsconfig.json          
+  [/src/terminal.ts] *new*
+    NearestConfigFileName: /src/tsconfig.json
+    Ancestors:
+      /src/tsconfig.json   
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///src/common/input/keyboard.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 16
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /src/common/input/keyboard.test.ts ===
+// import { [|evaluateKeyboardEvent|] } from 'common/input/keyboard';
+// function testEvaluateKeyboardEvent() {
+// 	return [|evaluateKeyboardEvent|]();
+// }
+
+// === /src/common/input/keyboard.ts ===
+// function bar() { return "just a random function so .d.ts location doesnt match"; }
+// export function /*FIND ALL REFS*/[|evaluateKeyboardEvent|]() { }
+
+// === /src/terminal.ts ===
+// import { [|evaluateKeyboardEvent|] } from 'common/input/keyboard';
+// function foo() {
+// 	return [|evaluateKeyboardEvent|]();
+// }

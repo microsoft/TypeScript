@@ -1,0 +1,369 @@
+UseCaseSensitiveFileNames: true
+//// [/myproject/core/src/file1.ts] *new* 
+export const coreConst = 10;
+//// [/myproject/core/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+}
+//// [/myproject/coreRef1/src/file1.ts] *new* 
+export const coreRef1Const = 10;
+//// [/myproject/coreRef1/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../core" },
+	]
+}
+//// [/myproject/coreRef2/src/file1.ts] *new* 
+export const coreRef2Const = 10;
+//// [/myproject/coreRef2/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../core" },
+	]
+}
+//// [/myproject/coreRef3/src/file1.ts] *new* 
+export const coreRef3Const = 10;
+//// [/myproject/coreRef3/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../core" },
+	]
+}
+//// [/myproject/indirect/src/file1.ts] *new* 
+export const indirectConst = 10;
+//// [/myproject/indirect/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../coreRef1" },
+	]
+}
+//// [/myproject/indirectDisabledChildLoad1/src/file1.ts] *new* 
+export const indirectDisabledChildLoad1Const = 10;
+//// [/myproject/indirectDisabledChildLoad1/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"disableReferencedProjectLoad": true,
+	},
+	"references": [
+		{ "path": "../coreRef2" },
+	]
+}
+//// [/myproject/indirectDisabledChildLoad2/src/file1.ts] *new* 
+export const indirectDisabledChildLoad2Const = 10;
+//// [/myproject/indirectDisabledChildLoad2/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+		"disableReferencedProjectLoad": true,
+	},
+	"references": [
+		{ "path": "../coreRef3" },
+	]
+}
+//// [/myproject/indirectNoCoreRef/src/file1.ts] *new* 
+export const indirectNoCoreRefConst = 10;
+//// [/myproject/indirectNoCoreRef/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../noCoreRef2" },
+	]
+}
+//// [/myproject/main/src/file1.ts] *new* 
+export const mainConst = 10;
+//// [/myproject/main/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../core" },
+		{ "path": "../indirect" },
+		{ "path": "../noCoreRef1" },
+		{ "path": "../indirectDisabledChildLoad1" },
+		{ "path": "../indirectDisabledChildLoad2" },
+		{ "path": "../refToCoreRef3" },
+		{ "path": "../indirectNoCoreRef" }
+	]
+}
+//// [/myproject/noCoreRef1/src/file1.ts] *new* 
+export const noCoreRef1Const = 10;
+//// [/myproject/noCoreRef1/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+}
+//// [/myproject/noCoreRef2/src/file1.ts] *new* 
+export const noCoreRef2Const = 10;
+//// [/myproject/noCoreRef2/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+}
+//// [/myproject/refToCoreRef3/src/file1.ts] *new* 
+export const refToCoreRef3Const = 10;
+//// [/myproject/refToCoreRef3/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"references": [
+		{ "path": "../coreRef3" },
+	]
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/main/src/file1.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const mainConst = 10;"
+    }
+  }
+}
+
+Projects::
+  [/myproject/main/tsconfig.json] *new*
+    /myproject/main/src/file1.ts  
+Open Files::
+  [/myproject/main/src/file1.ts] *new*
+    /myproject/main/tsconfig.json  (default) 
+Config::
+  [/myproject/core/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/coreRef1/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/coreRef2/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/coreRef3/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirect/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirectDisabledChildLoad1/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirectDisabledChildLoad2/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirectNoCoreRef/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/main/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/main/src/file1.ts  
+  [/myproject/noCoreRef1/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/noCoreRef2/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/refToCoreRef3/tsconfig.json] *new*
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+Config File Names::
+  [/myproject/main/src/file1.ts] *new*
+    NearestConfigFileName: /myproject/main/tsconfig.json
+    Ancestors:
+      /myproject/main/tsconfig.json   
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/core/src/file1.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const coreConst = 10;"
+    }
+  }
+}
+
+Projects::
+  [/myproject/core/tsconfig.json] *new*
+    /myproject/core/src/file1.ts  
+  [/myproject/main/tsconfig.json] 
+    /myproject/main/src/file1.ts  
+Open Files::
+  [/myproject/core/src/file1.ts] *new*
+    /myproject/core/tsconfig.json  (default) 
+  [/myproject/main/src/file1.ts] 
+    /myproject/main/tsconfig.json  (default) 
+Config::
+  [/myproject/core/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/core/tsconfig.json  *new*
+      /myproject/main/tsconfig.json  
+    RetainingOpenFiles: *modified*
+      /myproject/core/src/file1.ts  *new*
+  [/myproject/coreRef1/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/coreRef2/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/coreRef3/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirect/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirectDisabledChildLoad1/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirectDisabledChildLoad2/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/indirectNoCoreRef/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/main/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/main/src/file1.ts  
+  [/myproject/noCoreRef1/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/noCoreRef2/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/refToCoreRef3/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+Config File Names::
+  [/myproject/core/src/file1.ts] *new*
+    NearestConfigFileName: /myproject/core/tsconfig.json
+    Ancestors:
+      /myproject/core/tsconfig.json   
+  [/myproject/main/src/file1.ts] 
+    NearestConfigFileName: /myproject/main/tsconfig.json
+    Ancestors:
+      /myproject/main/tsconfig.json   
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///myproject/core/src/file1.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 13
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Projects::
+  [/myproject/core/tsconfig.json] 
+    /myproject/core/src/file1.ts  
+  [/myproject/coreRef1/tsconfig.json] *new*
+    /myproject/coreRef1/src/file1.ts  
+  [/myproject/coreRef3/tsconfig.json] *new*
+    /myproject/coreRef3/src/file1.ts  
+  [/myproject/indirect/tsconfig.json] *new*
+    /myproject/indirect/src/file1.ts  
+  [/myproject/indirectDisabledChildLoad1/tsconfig.json] *new*
+    /myproject/indirectDisabledChildLoad1/src/file1.ts  
+  [/myproject/indirectDisabledChildLoad2/tsconfig.json] *new*
+    /myproject/indirectDisabledChildLoad2/src/file1.ts  
+  [/myproject/main/tsconfig.json] 
+    /myproject/main/src/file1.ts  
+  [/myproject/refToCoreRef3/tsconfig.json] *new*
+    /myproject/refToCoreRef3/src/file1.ts  
+Config::
+  [/myproject/core/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/core/tsconfig.json                        
+      /myproject/coreRef1/tsconfig.json                    *new*
+      /myproject/coreRef3/tsconfig.json                    *new*
+      /myproject/indirect/tsconfig.json                    *new*
+      /myproject/indirectDisabledChildLoad1/tsconfig.json  *new*
+      /myproject/indirectDisabledChildLoad2/tsconfig.json  *new*
+      /myproject/main/tsconfig.json                        
+      /myproject/refToCoreRef3/tsconfig.json               *new*
+    RetainingOpenFiles:
+      /myproject/core/src/file1.ts  
+  [/myproject/coreRef1/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/coreRef1/tsconfig.json  *new*
+      /myproject/indirect/tsconfig.json  *new*
+      /myproject/main/tsconfig.json      
+  [/myproject/coreRef2/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/indirectDisabledChildLoad1/tsconfig.json  *new*
+      /myproject/main/tsconfig.json                        
+  [/myproject/coreRef3/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/coreRef3/tsconfig.json                    *new*
+      /myproject/indirectDisabledChildLoad2/tsconfig.json  *new*
+      /myproject/main/tsconfig.json                        
+      /myproject/refToCoreRef3/tsconfig.json               *new*
+  [/myproject/indirect/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/indirect/tsconfig.json  *new*
+      /myproject/main/tsconfig.json      
+  [/myproject/indirectDisabledChildLoad1/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/indirectDisabledChildLoad1/tsconfig.json  *new*
+      /myproject/main/tsconfig.json                        
+  [/myproject/indirectDisabledChildLoad2/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/indirectDisabledChildLoad2/tsconfig.json  *new*
+      /myproject/main/tsconfig.json                        
+  [/myproject/indirectNoCoreRef/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/main/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+    RetainingOpenFiles:
+      /myproject/main/src/file1.ts  
+  [/myproject/noCoreRef1/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/noCoreRef2/tsconfig.json] 
+    RetainingProjects:
+      /myproject/main/tsconfig.json  
+  [/myproject/refToCoreRef3/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /myproject/main/tsconfig.json           
+      /myproject/refToCoreRef3/tsconfig.json  *new*
+
+
+
+
+// === findAllReferences ===
+// === /myproject/core/src/file1.ts ===
+// export const /*FIND ALL REFS*/[|coreConst|] = 10;

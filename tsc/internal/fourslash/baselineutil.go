@@ -38,8 +38,13 @@ const (
 type baselineCommand string
 
 func (f *FourslashTest) addResultToBaseline(t *testing.T, command baselineCommand, actual string) {
-	b, ok := f.baselines[command]
-	if !ok {
+	var b *strings.Builder
+	if f.testData.isStateBaseliningEnabled() {
+		// Single baseline for all commands
+		b = &f.stateBaseline.baseline
+	} else if builder, ok := f.baselines[command]; ok {
+		b = builder
+	} else {
 		f.baselines[command] = &strings.Builder{}
 		b = f.baselines[command]
 	}
@@ -334,6 +339,7 @@ type baselineFourslashLocationsOptions struct {
 
 	startMarkerPrefix func(span documentSpan) *string
 	endMarkerSuffix   func(span documentSpan) *string
+	getLocationData   func(span documentSpan) string
 
 	additionalSpan *documentSpan
 }
@@ -384,7 +390,7 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 			return nil
 		}
 
-		content, ok := f.vfs.ReadFile(path)
+		content, ok := f.textOfFile(path)
 		if !ok {
 			// !!! error?
 			return nil
@@ -416,7 +422,7 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	// already added the file to the baseline.
 	if options.additionalSpan != nil && !foundAdditionalLocation {
 		fileName := options.additionalSpan.uri.FileName()
-		if content, ok := f.vfs.ReadFile(fileName); ok {
+		if content, ok := f.textOfFile(fileName); ok {
 			baselineEntries = append(
 				baselineEntries,
 				f.getBaselineContentForFile(fileName, content, []documentSpan{*options.additionalSpan}, spanToContextId, options),
@@ -430,7 +436,7 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	if !foundMarker && options.marker != nil {
 		// If we didn't find the marker in any file, we need to add it.
 		markerFileName := options.marker.FileName()
-		if content, ok := f.vfs.ReadFile(markerFileName); ok {
+		if content, ok := f.textOfFile(markerFileName); ok {
 			baselineEntries = append(baselineEntries, f.getBaselineContentForFile(markerFileName, content, nil, spanToContextId, options))
 		}
 	}
@@ -438,6 +444,13 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	// !!! skipDocumentContainingOnlyMarker
 
 	return strings.Join(baselineEntries, "\n\n")
+}
+
+func (f *FourslashTest) textOfFile(fileName string) (string, bool) {
+	if _, ok := f.openFiles[fileName]; ok {
+		return f.getScriptInfo(fileName).content, true
+	}
+	return f.vfs.ReadFile(fileName)
 }
 
 type baselineDetail struct {
@@ -482,8 +495,12 @@ func (f *FourslashTest) getBaselineContentForFile(
 		}
 
 		textSpanIndex := len(details)
+		startMarker := "[|"
+		if options.getLocationData != nil {
+			startMarker += options.getLocationData(span)
+		}
 		details = append(details,
-			&baselineDetail{pos: span.textSpan.Start, positionMarker: "[|", span: &span, kind: "textStart"},
+			&baselineDetail{pos: span.textSpan.Start, positionMarker: startMarker, span: &span, kind: "textStart"},
 			&baselineDetail{pos: span.textSpan.End, positionMarker: core.OrElse(options.endMarker, "|]"), span: &span, kind: "textEnd"},
 		)
 
@@ -884,4 +901,65 @@ func (t *textWithContext) getIndex(i any) *int {
 
 func codeFence(lang string, code string) string {
 	return "```" + lang + "\n" + code + "\n```"
+}
+
+func symbolInformationToData(symbol *lsproto.SymbolInformation) string {
+	var symbolKindToString string
+	switch symbol.Kind {
+	case lsproto.SymbolKindFile:
+		symbolKindToString = "file"
+	case lsproto.SymbolKindModule:
+		symbolKindToString = "module"
+	case lsproto.SymbolKindNamespace:
+		symbolKindToString = "namespace"
+	case lsproto.SymbolKindPackage:
+		symbolKindToString = "package"
+	case lsproto.SymbolKindClass:
+		symbolKindToString = "class"
+	case lsproto.SymbolKindMethod:
+		symbolKindToString = "method"
+	case lsproto.SymbolKindProperty:
+		symbolKindToString = "property"
+	case lsproto.SymbolKindField:
+		symbolKindToString = "field"
+	case lsproto.SymbolKindConstructor:
+		symbolKindToString = "constructor"
+	case lsproto.SymbolKindEnum:
+		symbolKindToString = "enum"
+	case lsproto.SymbolKindInterface:
+		symbolKindToString = "interface"
+	case lsproto.SymbolKindFunction:
+		symbolKindToString = "function"
+	case lsproto.SymbolKindVariable:
+		symbolKindToString = "variable"
+	case lsproto.SymbolKindConstant:
+		symbolKindToString = "constant"
+	case lsproto.SymbolKindString:
+		symbolKindToString = "string"
+	case lsproto.SymbolKindNumber:
+		symbolKindToString = "number"
+	case lsproto.SymbolKindBoolean:
+		symbolKindToString = "boolean"
+	case lsproto.SymbolKindArray:
+		symbolKindToString = "array"
+	case lsproto.SymbolKindObject:
+		symbolKindToString = "object"
+	case lsproto.SymbolKindKey:
+		symbolKindToString = "key"
+	case lsproto.SymbolKindNull:
+		symbolKindToString = "null"
+	case lsproto.SymbolKindEnumMember:
+		symbolKindToString = "enumMember"
+	case lsproto.SymbolKindStruct:
+		symbolKindToString = "struct"
+	case lsproto.SymbolKindEvent:
+		symbolKindToString = "event"
+	case lsproto.SymbolKindOperator:
+		symbolKindToString = "operator"
+	case lsproto.SymbolKindTypeParameter:
+		symbolKindToString = "typeParameter"
+	default:
+		symbolKindToString = "unknown"
+	}
+	return fmt.Sprintf("{| name: %s, kind: %s |}", symbol.Name, symbolKindToString)
 }

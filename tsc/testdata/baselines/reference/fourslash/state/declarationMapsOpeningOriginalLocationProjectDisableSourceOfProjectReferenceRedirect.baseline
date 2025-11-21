@@ -1,0 +1,107 @@
+UseCaseSensitiveFileNames: true
+//// [/a/a.d.ts] *new* 
+export declare class A {
+}
+//# sourceMappingURL=a.d.ts.map
+//// [/a/a.d.ts.map] *new* 
+{
+	"version": 3,
+	"file": "a.d.ts",
+	"sourceRoot": "",
+	"sources": ["./a.ts"],
+	"names": [],
+	"mappings": "AAAA,qBAAa,CAAC;CAAI"
+}
+//// [/a/a.ts] *new* 
+export class A { }
+//// [/a/tsconfig.json] *new* 
+{}
+//// [/b/b.ts] *new* 
+import {A} from "../a/a";
+new A();
+//// [/b/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"disableSourceOfProjectReferenceRedirect": true
+	},
+	"references": [
+		{ "path": "../a" }
+	]
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///b/b.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import {A} from \"../a/a\";\nnew A();"
+    }
+  }
+}
+
+Projects::
+  [/b/tsconfig.json] *new*
+    /a/a.d.ts  
+    /b/b.ts    
+Open Files::
+  [/b/b.ts] *new*
+    /b/tsconfig.json  (default) 
+Config::
+  [/a/tsconfig.json] *new*
+    RetainingProjects:
+      /b/tsconfig.json  
+  [/b/tsconfig.json] *new*
+    RetainingProjects:
+      /b/tsconfig.json  
+    RetainingOpenFiles:
+      /b/b.ts  
+Config File Names::
+  [/b/b.ts] *new*
+    NearestConfigFileName: /b/tsconfig.json
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///b/b.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 4
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Projects::
+  [/a/tsconfig.json] *new*
+    /a/a.ts  
+  [/b/tsconfig.json] 
+    /a/a.d.ts  
+    /b/b.ts    
+Config::
+  [/a/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /a/tsconfig.json  *new*
+      /b/tsconfig.json  
+  [/b/tsconfig.json] 
+    RetainingProjects:
+      /b/tsconfig.json  
+    RetainingOpenFiles:
+      /b/b.ts  
+
+
+
+
+// === findAllReferences ===
+// === /a/a.ts ===
+// export class [|A|] { }
+
+// === /b/b.ts ===
+// import {[|A|]} from "../a/a";
+// new /*FIND ALL REFS*/[|A|]();

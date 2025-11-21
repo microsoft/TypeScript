@@ -4,10 +4,10 @@ Input::
 //// [/user/username/projects/myproject/pkg0/index.ts] *new* 
 export const pkg0 = 0;
 //// [/user/username/projects/myproject/pkg0/tsconfig.json] *new* 
-     {
-         "compilerOptions": { "composite": true },
+{
+    "compilerOptions": { "composite": true },
 
-     }
+}
 //// [/user/username/projects/myproject/pkg1/index.ts] *new* 
 export const pkg1 = 1;
 //// [/user/username/projects/myproject/pkg1/tsconfig.json] *new* 

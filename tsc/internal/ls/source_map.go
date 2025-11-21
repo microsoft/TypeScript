@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -82,6 +83,50 @@ func (l *LanguageService) tryGetSourcePositionWorker(
 		return nil
 	}
 	if newPos := l.tryGetSourcePositionWorker(documentPos.FileName, core.TextPos(documentPos.Pos)); newPos != nil {
+		return newPos
+	}
+	return documentPos
+}
+
+func (l *LanguageService) tryGetGeneratedPosition(
+	fileName string,
+	position core.TextPos,
+) *sourcemap.DocumentPosition {
+	newPos := l.tryGetGeneratedPositionWorker(fileName, position)
+	if newPos != nil {
+		if _, ok := l.ReadFile(newPos.FileName); !ok { // File doesn't exist
+			return nil
+		}
+	}
+	return newPos
+}
+
+func (l *LanguageService) tryGetGeneratedPositionWorker(
+	fileName string,
+	position core.TextPos,
+) *sourcemap.DocumentPosition {
+	if tspath.IsDeclarationFileName(fileName) {
+		return nil
+	}
+
+	program := l.GetProgram()
+	if program == nil || program.GetSourceFile(fileName) == nil {
+		return nil
+	}
+
+	path := l.toPath(fileName)
+	// If this is source file of project reference source (instead of redirect) there is no generated position
+	if program.IsSourceFromProjectReference(path) {
+		return nil
+	}
+
+	declarationFileName := outputpaths.GetOutputDeclarationFileNameWorker(fileName, program.Options(), program)
+	positionMapper := l.GetDocumentPositionMapper(declarationFileName)
+	documentPos := positionMapper.GetGeneratedPosition(&sourcemap.DocumentPosition{FileName: fileName, Pos: int(position)})
+	if documentPos == nil {
+		return nil
+	}
+	if newPos := l.tryGetGeneratedPositionWorker(documentPos.FileName, core.TextPos(documentPos.Pos)); newPos != nil {
 		return newPos
 	}
 	return documentPos

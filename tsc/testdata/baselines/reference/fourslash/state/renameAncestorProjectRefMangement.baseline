@@ -1,0 +1,254 @@
+UseCaseSensitiveFileNames: true
+//// [/projects/container/compositeExec/index.ts] *new* 
+import { myConst } from "../lib";
+export function getMyConst() {
+	return myConst;
+}
+//// [/projects/container/compositeExec/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../lib" },
+	],
+}
+//// [/projects/container/exec/index.ts] *new* 
+import { myConst } from "../lib";
+export function getMyConst() {
+	return myConst;
+}
+//// [/projects/container/exec/tsconfig.json] *new* 
+{
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../lib" },
+	],
+}
+//// [/projects/container/lib/index.ts] *new* 
+export const myConst = 30;
+//// [/projects/container/lib/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	references: [],
+	files: [
+		"index.ts",
+	],
+}
+//// [/projects/container/tsconfig.json] *new* 
+{
+	"files": [],
+	"include": [],
+	"references": [
+		{ "path": "./exec" },
+		{ "path": "./compositeExec" },
+	],
+}
+
+//// [/projects/temp/temp.ts] *new* 
+let x = 10
+//// [/projects/temp/tsconfig.json] *new* 
+{}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/compositeExec/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { myConst } from \"../lib\";\nexport function getMyConst() {\n\treturn myConst;\n}"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] *new*
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/tsconfig.json] *new*
+Open Files::
+  [/projects/container/compositeExec/index.ts] *new*
+    /projects/container/compositeExec/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/compositeExec/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/container/compositeExec/index.ts  
+  [/projects/container/lib/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/compositeExec/tsconfig.json  
+Config File Names::
+  [/projects/container/compositeExec/index.ts] *new*
+    NearestConfigFileName: /projects/container/compositeExec/tsconfig.json
+    Ancestors:
+      /projects/container/compositeExec/tsconfig.json  /projects/container/tsconfig.json 
+      /projects/container/tsconfig.json                 
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] 
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/tsconfig.json] 
+  [/projects/temp/tsconfig.json] *new*
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/container/compositeExec/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  (default) 
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] 
+    RetainingProjects:
+      /projects/container/compositeExec/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/container/compositeExec/index.ts  
+  [/projects/container/lib/tsconfig.json] 
+    RetainingProjects:
+      /projects/container/compositeExec/tsconfig.json  
+  [/projects/temp/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+Config File Names::
+  [/projects/container/compositeExec/index.ts] 
+    NearestConfigFileName: /projects/container/compositeExec/tsconfig.json
+    Ancestors:
+      /projects/container/compositeExec/tsconfig.json  /projects/container/tsconfig.json 
+      /projects/container/tsconfig.json                 
+  [/projects/temp/temp.ts] *new*
+    NearestConfigFileName: /projects/temp/tsconfig.json
+
+{
+  "method": "textDocument/rename",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/compositeExec/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 9
+    },
+    "newName": "?"
+  }
+}
+
+
+
+
+// === findRenameLocations ===
+// === /projects/container/compositeExec/index.ts ===
+// import { /*START PREFIX*/myConst as /*RENAME*/[|myConstRENAME|] } from "../lib";
+// export function getMyConst() {
+// 	return [|myConstRENAME|];
+// }
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/compositeExec/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  (default) 
+  [/projects/temp/temp.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/compositeExec/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  (default) 
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/compositeExec/index.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/compositeExec/index.ts] *closed*
+  [/projects/temp/temp.ts] 
+    /projects/temp/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/temp/temp.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/tsconfig.json] *deleted*
+  [/projects/temp/tsconfig.json] 
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] *deleted*
+  [/projects/container/lib/tsconfig.json] *deleted*
+  [/projects/temp/tsconfig.json] 
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+Config File Names::
+  [/projects/container/compositeExec/index.ts] *deleted*
+  [/projects/temp/temp.ts] 
+    NearestConfigFileName: /projects/temp/tsconfig.json

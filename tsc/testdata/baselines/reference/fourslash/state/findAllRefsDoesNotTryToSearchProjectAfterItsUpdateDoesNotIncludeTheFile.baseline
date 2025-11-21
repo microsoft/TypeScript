@@ -1,0 +1,452 @@
+UseCaseSensitiveFileNames: true
+//// [/packages/babel-loader/src/index.ts] *new* 
+import type { Foo } from "../../core/src/index.js";
+//// [/packages/babel-loader/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"composite": true,
+		"rootDir": "src",
+		"outDir": "dist"
+	},
+	"include": ["src"],
+	"references": [{"path": "../core"}]
+}
+//// [/packages/core/src/index.ts] *new* 
+import { Bar } from "./loading-indicator.js";
+export type Foo = {};
+const bar: Bar = {
+	prop: 0
+}
+//// [/packages/core/src/loading-indicator.ts] *new* 
+export interface Bar {
+	prop: number;
+}
+const bar: Bar = {
+	prop: 1
+}
+//// [/packages/core/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"composite": true,
+		"rootDir": "./src",
+		"outDir": "./dist",
+	},
+	"include": ["./src"]
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import type { Foo } from \"../../core/src/index.js\";"
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *new*
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+    /packages/babel-loader/src/index.ts      
+Open Files::
+  [/packages/babel-loader/src/index.ts] *new*
+    /packages/babel-loader/tsconfig.json  (default) 
+Config::
+  [/packages/babel-loader/tsconfig.json] *new*
+    RetainingProjects:
+      /packages/babel-loader/tsconfig.json  
+    RetainingOpenFiles:
+      /packages/babel-loader/src/index.ts  
+  [/packages/core/tsconfig.json] *new*
+    RetainingProjects:
+      /packages/babel-loader/tsconfig.json  
+Config File Names::
+  [/packages/babel-loader/src/index.ts] *new*
+    NearestConfigFileName: /packages/babel-loader/tsconfig.json
+    Ancestors:
+      /packages/babel-loader/tsconfig.json   
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/core/src/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n\tprop: 0\n}"
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+    /packages/babel-loader/src/index.ts      
+  [/packages/core/tsconfig.json] *new*
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+Open Files::
+  [/packages/babel-loader/src/index.ts] 
+    /packages/babel-loader/tsconfig.json  (default) 
+  [/packages/core/src/index.ts] *new*
+    /packages/babel-loader/tsconfig.json  
+    /packages/core/tsconfig.json          (default) 
+Config::
+  [/packages/babel-loader/tsconfig.json] 
+    RetainingProjects:
+      /packages/babel-loader/tsconfig.json  
+    RetainingOpenFiles:
+      /packages/babel-loader/src/index.ts  
+  [/packages/core/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /packages/babel-loader/tsconfig.json  
+      /packages/core/tsconfig.json          *new*
+    RetainingOpenFiles: *modified*
+      /packages/core/src/index.ts  *new*
+Config File Names::
+  [/packages/babel-loader/src/index.ts] 
+    NearestConfigFileName: /packages/babel-loader/tsconfig.json
+    Ancestors:
+      /packages/babel-loader/tsconfig.json   
+  [/packages/core/src/index.ts] *new*
+    NearestConfigFileName: /packages/core/tsconfig.json
+    Ancestors:
+      /packages/core/tsconfig.json   
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 2
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        },
+        "text": ""
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 3
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        },
+        "text": "/"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 4
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 1
+          },
+          "end": {
+            "line": 0,
+            "character": 1
+          }
+        },
+        "text": "/"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 5
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 2
+          },
+          "end": {
+            "line": 0,
+            "character": 2
+          }
+        },
+        "text": " "
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 6
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 3
+          },
+          "end": {
+            "line": 0,
+            "character": 3
+          }
+        },
+        "text": "c"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 7
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 4
+          },
+          "end": {
+            "line": 0,
+            "character": 4
+          }
+        },
+        "text": "o"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 8
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 5
+          },
+          "end": {
+            "line": 0,
+            "character": 5
+          }
+        },
+        "text": "m"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 9
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 6
+          },
+          "end": {
+            "line": 0,
+            "character": 6
+          }
+        },
+        "text": "m"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 10
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 7
+          },
+          "end": {
+            "line": 0,
+            "character": 7
+          }
+        },
+        "text": "e"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 11
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 8
+          },
+          "end": {
+            "line": 0,
+            "character": 8
+          }
+        },
+        "text": "n"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/didChange",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts",
+      "version": 12
+    },
+    "contentChanges": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 9
+          },
+          "end": {
+            "line": 0,
+            "character": 9
+          }
+        },
+        "text": "t"
+      }
+    ]
+  }
+}
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/core/src/index.ts"
+    },
+    "position": {
+      "line": 3,
+      "character": 1
+    },
+    "context": {
+      "includeDeclaration": false
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts      *modified*
+    /packages/core/src/loading-indicator.ts  *deleted*
+    /packages/core/src/index.ts              *deleted*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+Open Files::
+  [/packages/babel-loader/src/index.ts] 
+    /packages/babel-loader/tsconfig.json  (default) 
+  [/packages/core/src/index.ts] *modified*
+    /packages/babel-loader/tsconfig.json  *deleted*
+    /packages/core/tsconfig.json          (default) 
+
+
+
+
+// === findAllReferences ===
+// === /packages/core/src/index.ts ===
+// import { Bar } from "./loading-indicator.js";
+// export type Foo = {};
+// const bar: Bar = {
+// 	/*FIND ALL REFS*/[|prop|]: 0
+// }
+
+// === /packages/core/src/loading-indicator.ts ===
+// export interface Bar {
+// 	[|prop|]: number;
+// }
+// const bar: Bar = {
+// 	[|prop|]: 1
+// }
