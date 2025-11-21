@@ -12,7 +12,7 @@ enum enumdule {
 >     : ^^^^^^^^^^^^^
 }
 
-module enumdule {
+namespace enumdule {
 >enumdule : typeof enumdule
 >         : ^^^^^^^^^^^^^^^
 

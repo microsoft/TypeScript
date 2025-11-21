@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileWithExtendsClauseThatHasItsContainerNameConflict.ts] ////
 
 === declFileWithExtendsClauseThatHasItsContainerNameConflict.ts ===
-declare module A.B.C {
+declare namespace A.B.C {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B
@@ -15,7 +15,7 @@ declare module A.B.C {
     }
 }
 
-module A.B {
+namespace A.B {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B
@@ -32,7 +32,7 @@ module A.B {
     }
 }
 
-module A.B.C {
+namespace A.B.C {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B

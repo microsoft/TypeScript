@@ -1,0 +1,22 @@
+name: 'Copilot Setup Steps'
+on: workflow_dispatch
+
+jobs:
+  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    # Set the permissions to the lowest permissions possible needed for your steps.
+    # Copilot will be given its own token for its operations.
+    permissions:
+      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
+      contents: read
+
+    # You can define any steps you want, and they will run before the agent starts.
+    # If you do not check out your code, Copilot will do this for you.
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+      - run: npm ci
+      # pull dprint caches before network access is blocked
+      - run: npx hereby check-format || true

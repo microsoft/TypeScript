@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privateInstanceVisibility.ts] ////
 
 === privateInstanceVisibility.ts ===
-module Test {
+namespace Test {
 >Test : Symbol(Test, Decl(privateInstanceVisibility.ts, 0, 0))
  
     export class Example {
->Example : Symbol(Example, Decl(privateInstanceVisibility.ts, 0, 13))
+>Example : Symbol(Example, Decl(privateInstanceVisibility.ts, 0, 16))
  
         private someNumber: number;
 >someNumber : Symbol(Example.someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
@@ -17,7 +17,7 @@ module Test {
  
             var that = this;                      
 >that : Symbol(that, Decl(privateInstanceVisibility.ts, 10, 15))
->this : Symbol(Example, Decl(privateInstanceVisibility.ts, 0, 13))
+>this : Symbol(Example, Decl(privateInstanceVisibility.ts, 0, 16))
 
             function innerFunction() {
 >innerFunction : Symbol(innerFunction, Decl(privateInstanceVisibility.ts, 10, 28))

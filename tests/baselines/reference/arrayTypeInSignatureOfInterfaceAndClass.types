@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts] ////
 
 === arrayTypeInSignatureOfInterfaceAndClass.ts ===
-declare module WinJS {
+declare namespace WinJS {
 >WinJS : typeof WinJS
 >      : ^^^^^^^^^^^^
 
@@ -24,7 +24,7 @@ declare module WinJS {
 >progress : any
     }
 }
-declare module Data {
+declare namespace Data {
 >Data : typeof Data
 >     : ^^^^^^^^^^^
 

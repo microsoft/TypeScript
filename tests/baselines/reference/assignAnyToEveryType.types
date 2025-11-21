@@ -131,7 +131,7 @@ var j2: { <T>(x: T): string } = x;
 >x : any
 >  : ^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

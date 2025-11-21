@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/declarationEmitGenericTypeParamerSerialization3.ts] ////
+
+=== declarationEmitGenericTypeParamerSerialization3.ts ===
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : Symbol(mixin, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 15))
+>args : Symbol(args, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 32))
+>superclass : Symbol(superclass, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 55))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 15))
+
+  return class extends superclass {};
+>superclass : Symbol(superclass, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 55))
+}
+
+export function wrapper<T>(value: T) {
+>wrapper : Symbol(wrapper, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 2, 1))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 24))
+>value : Symbol(value, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 27))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 24))
+
+  class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 38))
+
+    accessor name = value;
+>name : Symbol(BaseClass.name, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 5, 19))
+>value : Symbol(value, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 27))
+  }
+  return class MyClass extends mixin(BaseClass) {
+>MyClass : Symbol(MyClass, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 8, 8))
+>mixin : Symbol(mixin, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 0, 0))
+>BaseClass : Symbol(BaseClass, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 38))
+
+    accessor name = value;
+>name : Symbol(MyClass.name, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 8, 49))
+>value : Symbol(value, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 4, 27))
+  }
+}
+
+export const Cls = wrapper("test");
+>Cls : Symbol(Cls, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 13, 12))
+>wrapper : Symbol(wrapper, Decl(declarationEmitGenericTypeParamerSerialization3.ts, 2, 1))
+

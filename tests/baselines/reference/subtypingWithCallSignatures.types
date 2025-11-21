@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts] ////
 
 === subtypingWithCallSignatures.ts ===
-module CallSignature {
+namespace CallSignature {
 >CallSignature : typeof CallSignature
 >              : ^^^^^^^^^^^^^^^^^^^^
 

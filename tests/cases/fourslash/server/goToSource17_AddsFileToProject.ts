@@ -1,7 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // This is just made up repro where the js file will be added to auxillary project because its not already part of the project
 // Where in js file doesnt already have import to the corresponding js file hence will be added to project at later on stage
 

@@ -35,7 +35,7 @@ function foo() {
 >"test" : "test"
 >       : ^^^^^^
 }
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

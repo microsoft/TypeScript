@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////module SomeModule { [|export class [|{| "contextRangeIndex": 0 |}SomeClass|] { }|] }
+////namespace SomeModule { [|export class [|{| "contextRangeIndex": 0 |}SomeClass|] { }|] }
 ////export = SomeModule;
 
 // @Filename: b.ts

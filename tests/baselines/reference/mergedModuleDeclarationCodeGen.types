@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/mergedModuleDeclarationCodeGen.ts] ////
 
 === mergedModuleDeclarationCodeGen.ts ===
-export module X {
+export namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
@@ -25,11 +25,11 @@ export module X {
         }
     }
 }
-export module X {
+export namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 

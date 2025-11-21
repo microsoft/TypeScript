@@ -14,7 +14,7 @@ class X<T> {
     x: T;
 }
 
-module Class {
+namespace Class {
     class G<T extends { x: string }> {
         foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
             var x: T;
@@ -39,7 +39,7 @@ module Class {
     var r2 = g2.foo2(c1, c1);
 }
 
-module Interface {
+namespace Interface {
     interface G<T extends { x: string }> {
         foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
     }

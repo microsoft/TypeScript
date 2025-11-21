@@ -2,12 +2,12 @@
 
 // https://github.com/microsoft/TypeScript/issues/7840
 
-declare module chrome.debugger {
+declare namespace chrome.debugger {
     declare var tabId: number;
 }
 
 export const tabId = chrome.debugger.tabId;
 
-declare module test.class {}
+declare namespace test.class {}
 
-declare module debugger {} // still an error
+declare namespace debugger {} // still an error

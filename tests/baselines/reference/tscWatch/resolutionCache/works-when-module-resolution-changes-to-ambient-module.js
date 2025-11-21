@@ -4,7 +4,6 @@ Input::
 import * as fs from "fs";
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -51,6 +50,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/foo.ts: *new*
   {}
@@ -115,6 +118,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
+  {}
 /users/username/projects/project/foo.ts:
   {}
 
@@ -125,12 +132,12 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 2
-14: timerToUpdateProgram *new*
-16: timerToInvalidateFailedLookupResolutions *new*
+15: timerToUpdateProgram *new*
+17: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-14: timerToUpdateProgram
-16: timerToInvalidateFailedLookupResolutions
+15: timerToUpdateProgram
+17: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -153,6 +160,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
+  {}
 /users/username/projects/project/foo.ts:
   {}
 /users/username/projects/project/node_modules/@types/node/index.d.ts: *new*
@@ -167,7 +178,7 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-16: timerToInvalidateFailedLookupResolutions *deleted*
+17: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [

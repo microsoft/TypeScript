@@ -11,7 +11,7 @@
 //import fs = module("fs");
 
 
-//module TypeScriptAllInOne {
+//namespace TypeScriptAllInOne {
 //    export class Program {
 //        static Main(...args: string[]) {
 //            try {

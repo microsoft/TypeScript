@@ -41,6 +41,7 @@ namespace C {
 
         constructor(parameters) {}
 >parameters : any
+>           : ^^^
     }
 }
 

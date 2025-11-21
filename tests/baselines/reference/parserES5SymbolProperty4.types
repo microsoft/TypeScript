@@ -10,8 +10,8 @@ declare class C {
 >                  : ^^^^^^
 >Symbol.isRegExp : any
 >                : ^^^
->Symbol : any
->       : ^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isRegExp : any
 >         : ^^^
 }

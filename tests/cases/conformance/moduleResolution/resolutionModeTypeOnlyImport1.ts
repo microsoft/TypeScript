@@ -1,5 +1,5 @@
 // @module: esnext
-// @moduleResolution: bundler, node10, classic
+// @moduleResolution: bundler, classic
 // @declaration: true
 // @emitDeclarationOnly: true
 

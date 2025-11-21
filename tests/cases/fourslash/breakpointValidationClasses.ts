@@ -2,7 +2,7 @@
 
 // @BaselineFile: bpSpan_classes.baseline
 // @Filename: bpSpan_classes.ts
-////module Foo.Bar {
+////namespace Foo.Bar {
 ////    "use strict";
 ////
 ////    class Greeter {

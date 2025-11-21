@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 
     export class AssignScopeContext {
         constructor (public scopeChain: ScopeChain,

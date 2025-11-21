@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnUsing.ts] ////
+
+=== decoratorOnUsing.ts ===
+declare function dec<T>(target: T): T;
+>dec : <T>(target: T) => T
+>    : ^ ^^      ^^ ^^^^^ 
+>target : T
+>       : ^
+
+@dec
+>dec : <T>(target: T) => T
+>    : ^ ^^      ^^ ^^^^^ 
+
+using 1
+>1 : 1
+>  : ^
+
+@dec
+>dec : <T>(target: T) => T
+>    : ^ ^^      ^^ ^^^^^ 
+
+using x
+>x : any
+>  : ^^^
+
