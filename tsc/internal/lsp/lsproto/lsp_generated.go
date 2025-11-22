@@ -21827,6 +21827,29 @@ const (
 	ErrorCodesUnknownErrorCode     ErrorCodes = -32001
 )
 
+const _ErrorCodes_name = "ParseErrorInternalErrorInvalidParamsMethodNotFoundInvalidRequestServerNotInitializedUnknownErrorCode"
+
+var (
+	_ErrorCodes_index_0 = [...]uint16{0, 10}
+	_ErrorCodes_index_1 = [...]uint16{0, 13, 26, 40, 54}
+	_ErrorCodes_index_2 = [...]uint16{0, 20, 36}
+)
+
+func (e ErrorCodes) String() string {
+	switch {
+	case e == -32700:
+		return _ErrorCodes_name[0:10]
+	case -32603 <= e && e <= -32600:
+		i := int(e) - -32603
+		return _ErrorCodes_name[10+_ErrorCodes_index_1[i] : 10+_ErrorCodes_index_1[i+1]]
+	case -32002 <= e && e <= -32001:
+		i := int(e) - -32002
+		return _ErrorCodes_name[64+_ErrorCodes_index_2[i] : 64+_ErrorCodes_index_2[i+1]]
+	default:
+		return fmt.Sprintf("ErrorCodes(%d)", e)
+	}
+}
+
 type LSPErrorCodes int32
 
 const (
@@ -21856,6 +21879,18 @@ const (
 	// the cancel.
 	LSPErrorCodesRequestCancelled LSPErrorCodes = -32800
 )
+
+const _LSPErrorCodes_name = "RequestFailedServerCancelledContentModifiedRequestCancelled"
+
+var _LSPErrorCodes_index = [...]uint16{0, 13, 28, 43, 59}
+
+func (e LSPErrorCodes) String() string {
+	i := int(e) - -32803
+	if i < 0 || i >= len(_LSPErrorCodes_index)-1 {
+		return fmt.Sprintf("LSPErrorCodes(%d)", e)
+	}
+	return _LSPErrorCodes_name[_LSPErrorCodes_index[i]:_LSPErrorCodes_index[i+1]]
+}
 
 // A set of predefined range kinds.
 type FoldingRangeKind string
@@ -21901,6 +21936,18 @@ const (
 	SymbolKindTypeParameter SymbolKind = 26
 )
 
+const _SymbolKind_name = "FileModuleNamespacePackageClassMethodPropertyFieldConstructorEnumInterfaceFunctionVariableConstantStringNumberBooleanArrayObjectKeyNullEnumMemberStructEventOperatorTypeParameter"
+
+var _SymbolKind_index = [...]uint16{0, 4, 10, 19, 26, 31, 37, 45, 50, 61, 65, 74, 82, 90, 98, 104, 110, 117, 122, 128, 131, 135, 145, 151, 156, 164, 177}
+
+func (e SymbolKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_SymbolKind_index)-1 {
+		return fmt.Sprintf("SymbolKind(%d)", e)
+	}
+	return _SymbolKind_name[_SymbolKind_index[i]:_SymbolKind_index[i+1]]
+}
+
 // Symbol tags are extra annotations that tweak the rendering of a symbol.
 //
 // Since: 3.16
@@ -21910,6 +21957,18 @@ const (
 	// Render a symbol as obsolete, usually using a strike-out.
 	SymbolTagDeprecated SymbolTag = 1
 )
+
+const _SymbolTag_name = "Deprecated"
+
+var _SymbolTag_index = [...]uint16{0, 10}
+
+func (e SymbolTag) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_SymbolTag_index)-1 {
+		return fmt.Sprintf("SymbolTag(%d)", e)
+	}
+	return _SymbolTag_name[_SymbolTag_index[i]:_SymbolTag_index[i+1]]
+}
 
 // Moniker uniqueness level to define scope of the moniker.
 //
@@ -21956,6 +22015,18 @@ const (
 	InlayHintKindParameter InlayHintKind = 2
 )
 
+const _InlayHintKind_name = "TypeParameter"
+
+var _InlayHintKind_index = [...]uint16{0, 4, 13}
+
+func (e InlayHintKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_InlayHintKind_index)-1 {
+		return fmt.Sprintf("InlayHintKind(%d)", e)
+	}
+	return _InlayHintKind_name[_InlayHintKind_index[i]:_InlayHintKind_index[i+1]]
+}
+
 // The message type
 type MessageType uint32
 
@@ -21976,6 +22047,18 @@ const (
 	MessageTypeDebug MessageType = 5
 )
 
+const _MessageType_name = "ErrorWarningInfoLogDebug"
+
+var _MessageType_index = [...]uint16{0, 5, 12, 16, 19, 24}
+
+func (e MessageType) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_MessageType_index)-1 {
+		return fmt.Sprintf("MessageType(%d)", e)
+	}
+	return _MessageType_name[_MessageType_index[i]:_MessageType_index[i+1]]
+}
+
 // Defines how the host (editor) should sync
 // document changes to the language server.
 type TextDocumentSyncKind uint32
@@ -21992,6 +22075,18 @@ const (
 	TextDocumentSyncKindIncremental TextDocumentSyncKind = 2
 )
 
+const _TextDocumentSyncKind_name = "NoneFullIncremental"
+
+var _TextDocumentSyncKind_index = [...]uint16{0, 4, 8, 19}
+
+func (e TextDocumentSyncKind) String() string {
+	i := int(e) - 0
+	if i < 0 || i >= len(_TextDocumentSyncKind_index)-1 {
+		return fmt.Sprintf("TextDocumentSyncKind(%d)", e)
+	}
+	return _TextDocumentSyncKind_name[_TextDocumentSyncKind_index[i]:_TextDocumentSyncKind_index[i+1]]
+}
+
 // Represents reasons why a text document is saved.
 type TextDocumentSaveReason uint32
 
@@ -22004,6 +22099,18 @@ const (
 	// When the editor lost focus.
 	TextDocumentSaveReasonFocusOut TextDocumentSaveReason = 3
 )
+
+const _TextDocumentSaveReason_name = "ManualAfterDelayFocusOut"
+
+var _TextDocumentSaveReason_index = [...]uint16{0, 6, 16, 24}
+
+func (e TextDocumentSaveReason) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_TextDocumentSaveReason_index)-1 {
+		return fmt.Sprintf("TextDocumentSaveReason(%d)", e)
+	}
+	return _TextDocumentSaveReason_name[_TextDocumentSaveReason_index[i]:_TextDocumentSaveReason_index[i+1]]
+}
 
 // The kind of a completion entry.
 type CompletionItemKind uint32
@@ -22036,6 +22143,18 @@ const (
 	CompletionItemKindTypeParameter CompletionItemKind = 25
 )
 
+const _CompletionItemKind_name = "TextMethodFunctionConstructorFieldVariableClassInterfaceModulePropertyUnitValueEnumKeywordSnippetColorFileReferenceFolderEnumMemberConstantStructEventOperatorTypeParameter"
+
+var _CompletionItemKind_index = [...]uint16{0, 4, 10, 18, 29, 34, 42, 47, 56, 62, 70, 74, 79, 83, 90, 97, 102, 106, 115, 121, 131, 139, 145, 150, 158, 171}
+
+func (e CompletionItemKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_CompletionItemKind_index)-1 {
+		return fmt.Sprintf("CompletionItemKind(%d)", e)
+	}
+	return _CompletionItemKind_name[_CompletionItemKind_index[i]:_CompletionItemKind_index[i+1]]
+}
+
 // Completion item tags are extra annotations that tweak the rendering of a completion
 // item.
 //
@@ -22046,6 +22165,18 @@ const (
 	// Render a completion as obsolete, usually using a strike-out.
 	CompletionItemTagDeprecated CompletionItemTag = 1
 )
+
+const _CompletionItemTag_name = "Deprecated"
+
+var _CompletionItemTag_index = [...]uint16{0, 10}
+
+func (e CompletionItemTag) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_CompletionItemTag_index)-1 {
+		return fmt.Sprintf("CompletionItemTag(%d)", e)
+	}
+	return _CompletionItemTag_name[_CompletionItemTag_index[i]:_CompletionItemTag_index[i+1]]
+}
 
 // Defines whether the insert text in a completion item should be interpreted as
 // plain text or a snippet.
@@ -22064,6 +22195,18 @@ const (
 	// See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax
 	InsertTextFormatSnippet InsertTextFormat = 2
 )
+
+const _InsertTextFormat_name = "PlainTextSnippet"
+
+var _InsertTextFormat_index = [...]uint16{0, 9, 16}
+
+func (e InsertTextFormat) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_InsertTextFormat_index)-1 {
+		return fmt.Sprintf("InsertTextFormat(%d)", e)
+	}
+	return _InsertTextFormat_name[_InsertTextFormat_index[i]:_InsertTextFormat_index[i+1]]
+}
 
 // How whitespace and indentation is handled during completion
 // item insertion.
@@ -22088,6 +22231,18 @@ const (
 	InsertTextModeadjustIndentation InsertTextMode = 2
 )
 
+const _InsertTextMode_name = "asIsadjustIndentation"
+
+var _InsertTextMode_index = [...]uint16{0, 4, 21}
+
+func (e InsertTextMode) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_InsertTextMode_index)-1 {
+		return fmt.Sprintf("InsertTextMode(%d)", e)
+	}
+	return _InsertTextMode_name[_InsertTextMode_index[i]:_InsertTextMode_index[i+1]]
+}
+
 // A document highlight kind.
 type DocumentHighlightKind uint32
 
@@ -22099,6 +22254,18 @@ const (
 	// Write-access of a symbol, like writing to a variable.
 	DocumentHighlightKindWrite DocumentHighlightKind = 3
 )
+
+const _DocumentHighlightKind_name = "TextReadWrite"
+
+var _DocumentHighlightKind_index = [...]uint16{0, 4, 8, 13}
+
+func (e DocumentHighlightKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_DocumentHighlightKind_index)-1 {
+		return fmt.Sprintf("DocumentHighlightKind(%d)", e)
+	}
+	return _DocumentHighlightKind_name[_DocumentHighlightKind_index[i]:_DocumentHighlightKind_index[i+1]]
+}
 
 // A set of predefined code action kinds
 type CodeActionKind string
@@ -22182,6 +22349,18 @@ const (
 	// Marks the code action as LLM-generated.
 	CodeActionTagLLMGenerated CodeActionTag = 1
 )
+
+const _CodeActionTag_name = "LLMGenerated"
+
+var _CodeActionTag_index = [...]uint16{0, 12}
+
+func (e CodeActionTag) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_CodeActionTag_index)-1 {
+		return fmt.Sprintf("CodeActionTag(%d)", e)
+	}
+	return _CodeActionTag_name[_CodeActionTag_index[i]:_CodeActionTag_index[i+1]]
+}
 
 type TraceValue string
 
@@ -22300,6 +22479,18 @@ const (
 	InlineCompletionTriggerKindAutomatic InlineCompletionTriggerKind = 2
 )
 
+const _InlineCompletionTriggerKind_name = "InvokedAutomatic"
+
+var _InlineCompletionTriggerKind_index = [...]uint16{0, 7, 16}
+
+func (e InlineCompletionTriggerKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_InlineCompletionTriggerKind_index)-1 {
+		return fmt.Sprintf("InlineCompletionTriggerKind(%d)", e)
+	}
+	return _InlineCompletionTriggerKind_name[_InlineCompletionTriggerKind_index[i]:_InlineCompletionTriggerKind_index[i+1]]
+}
+
 // A set of predefined position encoding kinds.
 //
 // Since: 3.17.0
@@ -22333,6 +22524,18 @@ const (
 	FileChangeTypeDeleted FileChangeType = 3
 )
 
+const _FileChangeType_name = "CreatedChangedDeleted"
+
+var _FileChangeType_index = [...]uint16{0, 7, 14, 21}
+
+func (e FileChangeType) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_FileChangeType_index)-1 {
+		return fmt.Sprintf("FileChangeType(%d)", e)
+	}
+	return _FileChangeType_name[_FileChangeType_index[i]:_FileChangeType_index[i+1]]
+}
+
 type WatchKind uint32
 
 const (
@@ -22343,6 +22546,30 @@ const (
 	// Interested in delete events
 	WatchKindDelete WatchKind = 4
 )
+
+const _WatchKind_name = "CreateChangeDelete"
+
+var _WatchKind_index = [...]uint16{0, 6, 12, 18}
+
+func (e WatchKind) String() string {
+	if e == 0 {
+		return "0"
+	}
+	var parts []string
+	if e&1 != 0 {
+		parts = append(parts, _WatchKind_name[_WatchKind_index[0]:_WatchKind_index[1]])
+	}
+	if e&2 != 0 {
+		parts = append(parts, _WatchKind_name[_WatchKind_index[1]:_WatchKind_index[2]])
+	}
+	if e&4 != 0 {
+		parts = append(parts, _WatchKind_name[_WatchKind_index[2]:_WatchKind_index[3]])
+	}
+	if len(parts) == 0 {
+		return fmt.Sprintf("WatchKind(%d)", e)
+	}
+	return strings.Join(parts, "|")
+}
 
 // The diagnostic's severity.
 type DiagnosticSeverity uint32
@@ -22357,6 +22584,18 @@ const (
 	// Reports a hint.
 	DiagnosticSeverityHint DiagnosticSeverity = 4
 )
+
+const _DiagnosticSeverity_name = "ErrorWarningInformationHint"
+
+var _DiagnosticSeverity_index = [...]uint16{0, 5, 12, 23, 27}
+
+func (e DiagnosticSeverity) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_DiagnosticSeverity_index)-1 {
+		return fmt.Sprintf("DiagnosticSeverity(%d)", e)
+	}
+	return _DiagnosticSeverity_name[_DiagnosticSeverity_index[i]:_DiagnosticSeverity_index[i+1]]
+}
 
 // The diagnostic tags.
 //
@@ -22375,6 +22614,18 @@ const (
 	DiagnosticTagDeprecated DiagnosticTag = 2
 )
 
+const _DiagnosticTag_name = "UnnecessaryDeprecated"
+
+var _DiagnosticTag_index = [...]uint16{0, 11, 21}
+
+func (e DiagnosticTag) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_DiagnosticTag_index)-1 {
+		return fmt.Sprintf("DiagnosticTag(%d)", e)
+	}
+	return _DiagnosticTag_name[_DiagnosticTag_index[i]:_DiagnosticTag_index[i+1]]
+}
+
 // How a completion was triggered
 type CompletionTriggerKind uint32
 
@@ -22388,6 +22639,18 @@ const (
 	// Completion was re-triggered as current completion list is incomplete
 	CompletionTriggerKindTriggerForIncompleteCompletions CompletionTriggerKind = 3
 )
+
+const _CompletionTriggerKind_name = "InvokedTriggerCharacterTriggerForIncompleteCompletions"
+
+var _CompletionTriggerKind_index = [...]uint16{0, 7, 23, 54}
+
+func (e CompletionTriggerKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_CompletionTriggerKind_index)-1 {
+		return fmt.Sprintf("CompletionTriggerKind(%d)", e)
+	}
+	return _CompletionTriggerKind_name[_CompletionTriggerKind_index[i]:_CompletionTriggerKind_index[i+1]]
+}
 
 // Defines how values from a set of defaults and an individual item will be
 // merged.
@@ -22406,6 +22669,18 @@ const (
 	ApplyKindMerge ApplyKind = 2
 )
 
+const _ApplyKind_name = "ReplaceMerge"
+
+var _ApplyKind_index = [...]uint16{0, 7, 12}
+
+func (e ApplyKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_ApplyKind_index)-1 {
+		return fmt.Sprintf("ApplyKind(%d)", e)
+	}
+	return _ApplyKind_name[_ApplyKind_index[i]:_ApplyKind_index[i+1]]
+}
+
 // How a signature help was triggered.
 //
 // Since: 3.15.0
@@ -22419,6 +22694,18 @@ const (
 	// Signature help was triggered by the cursor moving or by the document content changing.
 	SignatureHelpTriggerKindContentChange SignatureHelpTriggerKind = 3
 )
+
+const _SignatureHelpTriggerKind_name = "InvokedTriggerCharacterContentChange"
+
+var _SignatureHelpTriggerKind_index = [...]uint16{0, 7, 23, 36}
+
+func (e SignatureHelpTriggerKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_SignatureHelpTriggerKind_index)-1 {
+		return fmt.Sprintf("SignatureHelpTriggerKind(%d)", e)
+	}
+	return _SignatureHelpTriggerKind_name[_SignatureHelpTriggerKind_index[i]:_SignatureHelpTriggerKind_index[i+1]]
+}
 
 // The reason why code actions were requested.
 //
@@ -22434,6 +22721,18 @@ const (
 	// also be triggered when file content changes.
 	CodeActionTriggerKindAutomatic CodeActionTriggerKind = 2
 )
+
+const _CodeActionTriggerKind_name = "InvokedAutomatic"
+
+var _CodeActionTriggerKind_index = [...]uint16{0, 7, 16}
+
+func (e CodeActionTriggerKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_CodeActionTriggerKind_index)-1 {
+		return fmt.Sprintf("CodeActionTriggerKind(%d)", e)
+	}
+	return _CodeActionTriggerKind_name[_CodeActionTriggerKind_index[i]:_CodeActionTriggerKind_index[i+1]]
+}
 
 // A pattern kind describing if a glob pattern matches a file a folder or
 // both.
@@ -22459,6 +22758,18 @@ const (
 	// A code-cell is source code.
 	NotebookCellKindCode NotebookCellKind = 2
 )
+
+const _NotebookCellKind_name = "MarkupCode"
+
+var _NotebookCellKind_index = [...]uint16{0, 6, 10}
+
+func (e NotebookCellKind) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_NotebookCellKind_index)-1 {
+		return fmt.Sprintf("NotebookCellKind(%d)", e)
+	}
+	return _NotebookCellKind_name[_NotebookCellKind_index[i]:_NotebookCellKind_index[i+1]]
+}
 
 type ResourceOperationKind string
 
@@ -22496,6 +22807,18 @@ const (
 	// according the to language's syntax rule.
 	PrepareSupportDefaultBehaviorIdentifier PrepareSupportDefaultBehavior = 1
 )
+
+const _PrepareSupportDefaultBehavior_name = "Identifier"
+
+var _PrepareSupportDefaultBehavior_index = [...]uint16{0, 10}
+
+func (e PrepareSupportDefaultBehavior) String() string {
+	i := int(e) - 1
+	if i < 0 || i >= len(_PrepareSupportDefaultBehavior_index)-1 {
+		return fmt.Sprintf("PrepareSupportDefaultBehavior(%d)", e)
+	}
+	return _PrepareSupportDefaultBehavior_name[_PrepareSupportDefaultBehavior_index[i]:_PrepareSupportDefaultBehavior_index[i+1]]
+}
 
 type TokenFormat string
 

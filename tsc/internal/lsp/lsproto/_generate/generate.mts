@@ -1013,6 +1013,14 @@ function generateCode() {
         }
     }
 
+    // Helper function to detect if an enum is a bitflag enum
+    // Hardcoded list of bitflag enums
+    const bitflagEnums = new Set(["WatchKind"]);
+
+    function isBitflagEnum(enumeration: any): boolean {
+        return bitflagEnums.has(enumeration.name);
+    }
+
     // Generate enumerations
     writeLine("// Enumerations\n");
 
@@ -1041,6 +1049,8 @@ function generateCode() {
 
         const enumValues = enumeration.values.map(value => ({
             value: String(value.value),
+            numericValue: Number(value.value),
+            name: value.name,
             identifier: `${enumeration.name}${value.name}`,
             documentation: value.documentation,
             deprecated: value.deprecated,
@@ -1066,6 +1076,194 @@ function generateCode() {
 
         writeLine(")");
         writeLine("");
+
+        // Generate String() method for non-string enums
+        if (enumeration.type.name !== "string") {
+            const isBitflag = isBitflagEnum(enumeration);
+
+            if (isBitflag) {
+                // Generate bitflag-aware String() method using stringer-style efficiency
+                const sortedValues = [...enumValues].sort((a, b) => a.numericValue - b.numericValue);
+                const names = sortedValues.map(v => v.name);
+                const values = sortedValues.map(v => v.numericValue);
+
+                const nameConst = `_${enumeration.name}_name`;
+                const indexVar = `_${enumeration.name}_index`;
+                const combinedNames = names.join("");
+
+                writeLine(`const ${nameConst} = "${combinedNames}"`);
+                write(`var ${indexVar} = [...]uint16{0`);
+                let offset = 0;
+                for (const name of names) {
+                    offset += name.length;
+                    write(`, ${offset}`);
+                }
+                writeLine(`}`);
+                writeLine("");
+
+                writeLine(`func (e ${enumeration.name}) String() string {`);
+                writeLine(`\tif e == 0 {`);
+                writeLine(`\t\treturn "0"`);
+                writeLine(`\t}`);
+                writeLine(`\tvar parts []string`);
+                for (let i = 0; i < values.length; i++) {
+                    writeLine(`\tif e&${values[i]} != 0 {`);
+                    writeLine(`\t\tparts = append(parts, ${nameConst}[${indexVar}[${i}]:${indexVar}[${i + 1}]])`);
+                    writeLine(`\t}`);
+                }
+                writeLine(`\tif len(parts) == 0 {`);
+                writeLine(`\t\treturn fmt.Sprintf("${enumeration.name}(%d)", e)`);
+                writeLine(`\t}`);
+                writeLine(`\treturn strings.Join(parts, "|")`);
+                writeLine(`}`);
+                writeLine("");
+            }
+            else {
+                // Generate regular String() method using stringer-style approach
+                // Split values into runs of contiguous values
+                const sortedValues = [...enumValues].sort((a, b) => a.numericValue - b.numericValue);
+
+                // Split into runs
+                const runs: Array<{ names: string[]; values: number[]; }> = [];
+                let currentRun = { names: [sortedValues[0].name], values: [sortedValues[0].numericValue] };
+
+                for (let i = 1; i < sortedValues.length; i++) {
+                    if (sortedValues[i].numericValue === sortedValues[i - 1].numericValue + 1) {
+                        currentRun.names.push(sortedValues[i].name);
+                        currentRun.values.push(sortedValues[i].numericValue);
+                    }
+                    else {
+                        runs.push(currentRun);
+                        currentRun = { names: [sortedValues[i].name], values: [sortedValues[i].numericValue] };
+                    }
+                }
+                runs.push(currentRun);
+
+                const nameConst = `_${enumeration.name}_name`;
+                const indexVar = `_${enumeration.name}_index`;
+
+                if (runs.length === 1) {
+                    // Single contiguous run - simple case
+                    const combinedNames = runs[0].names.join("");
+                    writeLine(`const ${nameConst} = "${combinedNames}"`);
+                    write(`var ${indexVar} = [...]uint16{0`);
+                    let offset = 0;
+                    for (const name of runs[0].names) {
+                        offset += name.length;
+                        write(`, ${offset}`);
+                    }
+                    writeLine(`}`);
+                    writeLine("");
+
+                    const minVal = runs[0].values[0];
+                    writeLine(`func (e ${enumeration.name}) String() string {`);
+                    writeLine(`\ti := int(e) - ${minVal}`);
+                    // For unsigned types, i can still be negative if e < minVal (due to underflow in conversion)
+                    // So we always need to check both bounds
+                    writeLine(`\tif i < 0 || i >= len(${indexVar})-1 {`);
+                    writeLine(`\t\treturn fmt.Sprintf("${enumeration.name}(%d)", e)`);
+                    writeLine(`\t}`);
+                    writeLine(`\treturn ${nameConst}[${indexVar}[i]:${indexVar}[i+1]]`);
+                    writeLine(`}`);
+                    writeLine("");
+                }
+                else if (runs.length <= 10) {
+                    // Multiple runs - use switch statement
+                    let allNames = "";
+                    const runInfo: Array<{ startOffset: number; endOffset: number; minVal: number; maxVal: number; }> = [];
+
+                    for (const run of runs) {
+                        const startOffset = allNames.length;
+                        allNames += run.names.join("");
+                        const endOffset = allNames.length;
+                        runInfo.push({
+                            startOffset,
+                            endOffset,
+                            minVal: run.values[0],
+                            maxVal: run.values[run.values.length - 1],
+                        });
+                    }
+
+                    writeLine(`const ${nameConst} = "${allNames}"`);
+                    writeLine("");
+
+                    // Generate index variables for each run
+                    for (let i = 0; i < runs.length; i++) {
+                        write(`var ${indexVar}_${i} = [...]uint16{0`);
+                        let offset = 0;
+                        for (const name of runs[i].names) {
+                            offset += name.length;
+                            write(`, ${offset}`);
+                        }
+                        writeLine(`}`);
+                    }
+                    writeLine("");
+
+                    writeLine(`func (e ${enumeration.name}) String() string {`);
+                    writeLine(`\tswitch {`);
+
+                    for (let i = 0; i < runs.length; i++) {
+                        const run = runs[i];
+                        const info = runInfo[i];
+
+                        if (run.values.length === 1) {
+                            writeLine(`\tcase e == ${run.values[0]}:`);
+                            writeLine(`\t\treturn ${nameConst}[${info.startOffset}:${info.endOffset}]`);
+                        }
+                        else {
+                            if (info.minVal === 0 && baseType.startsWith("uint")) {
+                                writeLine(`\tcase e <= ${info.maxVal}:`);
+                            }
+                            else if (info.minVal === 0) {
+                                writeLine(`\tcase 0 <= e && e <= ${info.maxVal}:`);
+                            }
+                            else {
+                                writeLine(`\tcase ${info.minVal} <= e && e <= ${info.maxVal}:`);
+                            }
+                            writeLine(`\t\ti := int(e) - ${info.minVal}`);
+                            writeLine(`\t\treturn ${nameConst}[${info.startOffset}+${indexVar}_${i}[i]:${info.startOffset}+${indexVar}_${i}[i+1]]`);
+                        }
+                    }
+
+                    writeLine(`\tdefault:`);
+                    writeLine(`\t\treturn fmt.Sprintf("${enumeration.name}(%d)", e)`);
+                    writeLine(`\t}`);
+                    writeLine(`}`);
+                    writeLine("");
+                }
+                else {
+                    // Too many runs - use a map
+                    let allNames = "";
+                    const valueMap: Array<{ value: number; startOffset: number; endOffset: number; }> = [];
+
+                    for (const run of runs) {
+                        for (let i = 0; i < run.names.length; i++) {
+                            const startOffset = allNames.length;
+                            allNames += run.names[i];
+                            const endOffset = allNames.length;
+                            valueMap.push({ value: run.values[i], startOffset, endOffset });
+                        }
+                    }
+
+                    writeLine(`const ${nameConst} = "${allNames}"`);
+                    writeLine("");
+                    writeLine(`var ${enumeration.name}_map = map[${enumeration.name}]string{`);
+                    for (const entry of valueMap) {
+                        writeLine(`\t${entry.value}: ${nameConst}[${entry.startOffset}:${entry.endOffset}],`);
+                    }
+                    writeLine(`}`);
+                    writeLine("");
+
+                    writeLine(`func (e ${enumeration.name}) String() string {`);
+                    writeLine(`\tif str, ok := ${enumeration.name}_map[e]; ok {`);
+                    writeLine(`\t\treturn str`);
+                    writeLine(`\t}`);
+                    writeLine(`\treturn fmt.Sprintf("${enumeration.name}(%d)", e)`);
+                    writeLine(`}`);
+                    writeLine("");
+                }
+            }
+        }
     }
 
     const requestsAndNotifications: (Request | Notification)[] = [...model.requests, ...model.notifications];
