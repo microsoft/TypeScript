@@ -297,7 +297,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 		if !ast.IsJsxSpreadAttribute(prop) && !isHyphenatedJsxName(prop.Name().Text()) {
 			nameType := c.getStringLiteralType(prop.Name().Text())
 			if nameType != nil && nameType.flags&TypeFlagsNever == 0 {
-				reportedError = c.elaborateElement(source, target, relation, prop.Name(), prop.Initializer(), nameType, nil, diagnosticOutput) || reportedError
+				reportedError = c.elaborateElement(source, target, relation, prop.Name(), prop.Initializer(), nameType, nil, nil, diagnosticOutput) || reportedError
 			}
 		}
 	}
@@ -326,13 +326,14 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 			nonArrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool { return !c.isArrayOrTupleLikeType(t) })
 		}
 		var invalidTextDiagnostic *diagnostics.Message
-		getInvalidTextualChildDiagnostic := func() *diagnostics.Message {
+		var invalidTextDiagnosticArgs []any
+		getInvalidTextualChildDiagnostic := func() (*diagnostics.Message, []any) {
 			if invalidTextDiagnostic == nil {
 				tagNameText := scanner.GetTextOfNode(node.Parent.TagName())
-				diagnostic := diagnostics.X_0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2
-				invalidTextDiagnostic = diagnostics.FormatMessage(diagnostic, tagNameText, childrenPropName, c.TypeToString(childrenTargetType))
+				invalidTextDiagnostic = diagnostics.X_0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2
+				invalidTextDiagnosticArgs = []any{tagNameText, childrenPropName, c.TypeToString(childrenTargetType)}
 			}
-			return invalidTextDiagnostic
+			return invalidTextDiagnostic, invalidTextDiagnosticArgs
 		}
 		if moreThanOneRealChildren {
 			if arrayLikeTargetParts != c.neverType {
@@ -350,7 +351,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 				child := validChildren[0]
 				e := c.getElaborationElementForJsxChild(child, childrenNameType, getInvalidTextualChildDiagnostic)
 				if e.errorNode != nil {
-					reportedError = c.elaborateElement(source, target, relation, e.errorNode, e.innerExpression, e.nameType, e.errorMessage, diagnosticOutput) || reportedError
+					reportedError = c.elaborateElement(source, target, relation, e.errorNode, e.innerExpression, e.nameType, nil, e.createDiagnostic, diagnosticOutput) || reportedError
 				}
 			} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
 				// arity mismatch
@@ -364,13 +365,13 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 }
 
 type JsxElaborationElement struct {
-	errorNode       *ast.Node
-	innerExpression *ast.Node
-	nameType        *Type
-	errorMessage    *diagnostics.Message
+	errorNode        *ast.Node
+	innerExpression  *ast.Node
+	nameType         *Type
+	createDiagnostic func(prop *ast.Node) *ast.Diagnostic // Optional: creates a custom diagnostic for this element
 }
 
-func (c *Checker) generateJsxChildren(node *ast.Node, getInvalidTextDiagnostic func() *diagnostics.Message) iter.Seq[JsxElaborationElement] {
+func (c *Checker) generateJsxChildren(node *ast.Node, getInvalidTextDiagnostic func() (*diagnostics.Message, []any)) iter.Seq[JsxElaborationElement] {
 	return func(yield func(JsxElaborationElement) bool) {
 		memberOffset := 0
 		for i, child := range node.Children().Nodes {
@@ -387,7 +388,7 @@ func (c *Checker) generateJsxChildren(node *ast.Node, getInvalidTextDiagnostic f
 	}
 }
 
-func (c *Checker) getElaborationElementForJsxChild(child *ast.Node, nameType *Type, getInvalidTextDiagnostic func() *diagnostics.Message) JsxElaborationElement {
+func (c *Checker) getElaborationElementForJsxChild(child *ast.Node, nameType *Type, getInvalidTextDiagnostic func() (*diagnostics.Message, []any)) JsxElaborationElement {
 	switch child.Kind {
 	case ast.KindJsxExpression:
 		// child is of the type of the expression
@@ -398,7 +399,15 @@ func (c *Checker) getElaborationElementForJsxChild(child *ast.Node, nameType *Ty
 			return JsxElaborationElement{}
 		}
 		// child is a string
-		return JsxElaborationElement{errorNode: child, innerExpression: nil, nameType: nameType, errorMessage: getInvalidTextDiagnostic()}
+		return JsxElaborationElement{
+			errorNode:       child,
+			innerExpression: nil,
+			nameType:        nameType,
+			createDiagnostic: func(prop *ast.Node) *ast.Diagnostic {
+				errorMessage, errorArgs := getInvalidTextDiagnostic()
+				return NewDiagnosticForNode(prop, errorMessage, errorArgs...)
+			},
+		}
 	case ast.KindJsxElement, ast.KindJsxSelfClosingElement, ast.KindJsxFragment:
 		// child is of type JSX.Element
 		return JsxElaborationElement{errorNode: child, innerExpression: child, nameType: nameType}
@@ -448,7 +457,10 @@ func (c *Checker) elaborateIterableOrArrayLikeTargetElementwise(iterator iter.Se
 				if next != nil {
 					specificSource = c.checkExpressionForMutableLocationWithContextualType(next, sourcePropType)
 				}
-				if c.exactOptionalPropertyTypes && c.isExactOptionalPropertyMismatch(specificSource, targetPropType) {
+				if e.createDiagnostic != nil {
+					// Use the custom diagnostic factory if provided (e.g., for JSX text children with dynamic error messages)
+					c.reportDiagnostic(e.createDiagnostic(prop), diagnosticOutput)
+				} else if c.exactOptionalPropertyTypes && c.isExactOptionalPropertyMismatch(specificSource, targetPropType) {
 					diag := createDiagnosticForNode(prop, diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, c.TypeToString(specificSource), c.TypeToString(targetPropType))
 					c.reportDiagnostic(diag, diagnosticOutput)
 				} else {
@@ -456,10 +468,10 @@ func (c *Checker) elaborateIterableOrArrayLikeTargetElementwise(iterator iter.Se
 					sourceIsOptional := propName != ast.InternalSymbolNameMissing && core.OrElse(c.getPropertyOfType(source, propName), c.unknownSymbol).Flags&ast.SymbolFlagsOptional != 0
 					targetPropType = c.removeMissingType(targetPropType, targetIsOptional)
 					sourcePropType = c.removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional)
-					result := c.checkTypeRelatedToEx(specificSource, targetPropType, relation, prop, e.errorMessage, diagnosticOutput)
+					result := c.checkTypeRelatedToEx(specificSource, targetPropType, relation, prop, nil, diagnosticOutput)
 					if result && specificSource != sourcePropType {
 						// If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-						c.checkTypeRelatedToEx(sourcePropType, targetPropType, relation, prop, e.errorMessage, diagnosticOutput)
+						c.checkTypeRelatedToEx(sourcePropType, targetPropType, relation, prop, nil, diagnosticOutput)
 					}
 				}
 			}

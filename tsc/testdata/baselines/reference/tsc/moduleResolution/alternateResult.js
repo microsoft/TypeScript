@@ -327,7 +327,7 @@ Found 2 errors in the same file, starting at: index.mts[90m:1[0m
 export {};
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2022.full.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"165b91a7791663df5931f0b63ebf9ce2-export declare const foo2: number;","da9728b78f5d24b38c00844e001b4953-export declare const bar2: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","impliedNodeFormat":99}],"fileIdsList":[[2,3]],"options":{"module":100,"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":20,"end":25,"code":7016,"category":1,"message":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","messageChain":[{"pos":20,"end":25,"code":6278,"category":3,"message":"There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings."}]},{"pos":47,"end":52,"code":7016,"category":1,"message":"Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.","messageChain":[{"pos":47,"end":52,"code":6278,"category":3,"message":"There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings."}]}]]]}
+{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2022.full.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"165b91a7791663df5931f0b63ebf9ce2-export declare const foo2: number;","da9728b78f5d24b38c00844e001b4953-export declare const bar2: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","impliedNodeFormat":99}],"fileIdsList":[[2,3]],"options":{"module":100,"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":20,"end":25,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["foo","/home/src/projects/project/node_modules/foo/index.mjs"],"messageChain":[{"pos":20,"end":25,"code":6278,"category":3,"messageKey":"There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278","messageArgs":["/home/src/projects/project/node_modules/foo/index.d.ts","foo"]}]},{"pos":47,"end":52,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["bar","/home/src/projects/project/node_modules/bar/index.mjs"],"messageChain":[{"pos":47,"end":52,"code":6278,"category":3,"messageKey":"There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278","messageArgs":["/home/src/projects/project/node_modules/@types/bar/index.d.ts","@types/bar"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -406,14 +406,22 @@ export {};
           "end": 25,
           "code": 7016,
           "category": 1,
-          "message": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.",
+          "messageKey": "Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016",
+          "messageArgs": [
+            "foo",
+            "/home/src/projects/project/node_modules/foo/index.mjs"
+          ],
           "messageChain": [
             {
               "pos": 20,
               "end": 25,
               "code": 6278,
               "category": 3,
-              "message": "There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings."
+              "messageKey": "There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278",
+              "messageArgs": [
+                "/home/src/projects/project/node_modules/foo/index.d.ts",
+                "foo"
+              ]
             }
           ]
         },
@@ -422,21 +430,29 @@ export {};
           "end": 52,
           "code": 7016,
           "category": 1,
-          "message": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.",
+          "messageKey": "Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016",
+          "messageArgs": [
+            "bar",
+            "/home/src/projects/project/node_modules/bar/index.mjs"
+          ],
           "messageChain": [
             {
               "pos": 47,
               "end": 52,
               "code": 6278,
               "category": 3,
-              "message": "There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings."
+              "messageKey": "There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278",
+              "messageArgs": [
+                "/home/src/projects/project/node_modules/@types/bar/index.d.ts",
+                "@types/bar"
+              ]
             }
           ]
         }
       ]
     ]
   ],
-  "size": 2399
+  "size": 2377
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -1574,7 +1590,7 @@ Found 1 error in index.mts[90m:1[0m
 
 //// [/home/src/projects/project/index.mjs] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es2022.full.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"78bc7ca8c840e090086811119f6d6ba9-export declare const bar: number;","165b91a7791663df5931f0b63ebf9ce2-export declare const foo2: number;","da9728b78f5d24b38c00844e001b4953-export declare const bar2: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":99}],"fileIdsList":[[2,3,4]],"options":{"module":100,"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[[5,[{"pos":20,"end":25,"code":7016,"category":1,"message":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","messageChain":[{"pos":20,"end":25,"code":6278,"category":3,"message":"There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings."}]}]]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es2022.full.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"78bc7ca8c840e090086811119f6d6ba9-export declare const bar: number;","165b91a7791663df5931f0b63ebf9ce2-export declare const foo2: number;","da9728b78f5d24b38c00844e001b4953-export declare const bar2: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":99}],"fileIdsList":[[2,3,4]],"options":{"module":100,"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[[5,[{"pos":20,"end":25,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["foo","/home/src/projects/project/node_modules/foo/index.mjs"],"messageChain":[{"pos":20,"end":25,"code":6278,"category":3,"messageKey":"There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278","messageArgs":["/home/src/projects/project/node_modules/foo/index.d.ts","foo"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1663,21 +1679,29 @@ Found 1 error in index.mts[90m:1[0m
           "end": 25,
           "code": 7016,
           "category": 1,
-          "message": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.",
+          "messageKey": "Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016",
+          "messageArgs": [
+            "foo",
+            "/home/src/projects/project/node_modules/foo/index.mjs"
+          ],
           "messageChain": [
             {
               "pos": 20,
               "end": 25,
               "code": 6278,
               "category": 3,
-              "message": "There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings."
+              "messageKey": "There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278",
+              "messageArgs": [
+                "/home/src/projects/project/node_modules/foo/index.d.ts",
+                "foo"
+              ]
             }
           ]
         }
       ]
     ]
   ],
-  "size": 2063
+  "size": 2052
 }
 
 tsconfig.json::
@@ -2086,7 +2110,7 @@ Found 1 error in index.mts[90m:4[0m
 
 //// [/home/src/projects/project/index.mjs] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es2022.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2a914bfad3bba77712486af8a4cdc415-export declare const foo: number;","78bc7ca8c840e090086811119f6d6ba9-export declare const bar: number;","165b91a7791663df5931f0b63ebf9ce2-export declare const foo2: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":99}],"fileIdsList":[[2,3,4]],"options":{"module":100,"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[[5,[{"pos":104,"end":110,"code":7016,"category":1,"message":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","messageChain":[{"pos":104,"end":110,"code":6278,"category":3,"message":"There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings."}]}]]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es2022.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2a914bfad3bba77712486af8a4cdc415-export declare const foo: number;","78bc7ca8c840e090086811119f6d6ba9-export declare const bar: number;","165b91a7791663df5931f0b63ebf9ce2-export declare const foo2: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":99}],"fileIdsList":[[2,3,4]],"options":{"module":100,"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[[5,[{"pos":104,"end":110,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["bar2","/home/src/projects/project/node_modules/bar2/index.mjs"],"messageChain":[{"pos":104,"end":110,"code":6278,"category":3,"messageKey":"There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278","messageArgs":["/home/src/projects/project/node_modules/@types/bar2/index.d.ts","@types/bar2"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -2175,21 +2199,29 @@ Found 1 error in index.mts[90m:4[0m
           "end": 110,
           "code": 7016,
           "category": 1,
-          "message": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.",
+          "messageKey": "Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016",
+          "messageArgs": [
+            "bar2",
+            "/home/src/projects/project/node_modules/bar2/index.mjs"
+          ],
           "messageChain": [
             {
               "pos": 104,
               "end": 110,
               "code": 6278,
               "category": 3,
-              "message": "There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings."
+              "messageKey": "There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278",
+              "messageArgs": [
+                "/home/src/projects/project/node_modules/@types/bar2/index.d.ts",
+                "@types/bar2"
+              ]
             }
           ]
         }
       ]
     ]
   ],
-  "size": 2076
+  "size": 2065
 }
 
 tsconfig.json::
@@ -2417,7 +2449,7 @@ Found 2 errors in the same file, starting at: index.mts[90m:3[0m
 
 //// [/home/src/projects/project/index.mjs] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2022.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2a914bfad3bba77712486af8a4cdc415-export declare const foo: number;","78bc7ca8c840e090086811119f6d6ba9-export declare const bar: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":99}],"fileIdsList":[[2,3]],"options":{"module":100,"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":75,"end":81,"code":7016,"category":1,"message":"Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.","messageChain":[{"pos":75,"end":81,"code":6278,"category":3,"message":"There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings."}]},{"pos":104,"end":110,"code":7016,"category":1,"message":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","messageChain":[{"pos":104,"end":110,"code":6278,"category":3,"message":"There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings."}]}]]]}
+{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2022.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2a914bfad3bba77712486af8a4cdc415-export declare const foo: number;","78bc7ca8c840e090086811119f6d6ba9-export declare const bar: number;",{"version":"eee0814e4a127747fb836acc50eaeb5a-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":99}],"fileIdsList":[[2,3]],"options":{"module":100,"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":75,"end":81,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["foo2","/home/src/projects/project/node_modules/foo2/index.mjs"],"messageChain":[{"pos":75,"end":81,"code":6278,"category":3,"messageKey":"There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278","messageArgs":["/home/src/projects/project/node_modules/foo2/index.d.ts","foo2"]}]},{"pos":104,"end":110,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["bar2","/home/src/projects/project/node_modules/bar2/index.mjs"],"messageChain":[{"pos":104,"end":110,"code":6278,"category":3,"messageKey":"There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278","messageArgs":["/home/src/projects/project/node_modules/@types/bar2/index.d.ts","@types/bar2"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -2497,14 +2529,22 @@ Found 2 errors in the same file, starting at: index.mts[90m:3[0m
           "end": 81,
           "code": 7016,
           "category": 1,
-          "message": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.",
+          "messageKey": "Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016",
+          "messageArgs": [
+            "foo2",
+            "/home/src/projects/project/node_modules/foo2/index.mjs"
+          ],
           "messageChain": [
             {
               "pos": 75,
               "end": 81,
               "code": 6278,
               "category": 3,
-              "message": "There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings."
+              "messageKey": "There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278",
+              "messageArgs": [
+                "/home/src/projects/project/node_modules/foo2/index.d.ts",
+                "foo2"
+              ]
             }
           ]
         },
@@ -2513,21 +2553,29 @@ Found 2 errors in the same file, starting at: index.mts[90m:3[0m
           "end": 110,
           "code": 7016,
           "category": 1,
-          "message": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.",
+          "messageKey": "Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016",
+          "messageArgs": [
+            "bar2",
+            "/home/src/projects/project/node_modules/bar2/index.mjs"
+          ],
           "messageChain": [
             {
               "pos": 104,
               "end": 110,
               "code": 6278,
               "category": 3,
-              "message": "There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings."
+              "messageKey": "There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The__6278",
+              "messageArgs": [
+                "/home/src/projects/project/node_modules/@types/bar2/index.d.ts",
+                "@types/bar2"
+              ]
             }
           ]
         }
       ]
     ]
   ],
-  "size": 2467
+  "size": 2445
 }
 
 tsconfig.json::

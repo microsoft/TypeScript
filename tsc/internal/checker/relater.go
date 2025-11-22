@@ -503,10 +503,10 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 		}
 		switch prop.Kind {
 		case ast.KindSetAccessor, ast.KindGetAccessor, ast.KindMethodDeclaration, ast.KindShorthandPropertyAssignment:
-			reportedError = c.elaborateElement(source, target, relation, prop.Name(), nil, nameType, nil, diagnosticOutput) || reportedError
+			reportedError = c.elaborateElement(source, target, relation, prop.Name(), nil, nameType, nil, nil, diagnosticOutput) || reportedError
 		case ast.KindPropertyAssignment:
 			message := core.IfElse(ast.IsComputedNonLiteralName(prop.Name()), diagnostics.Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1, nil)
-			reportedError = c.elaborateElement(source, target, relation, prop.Name(), prop.Initializer(), nameType, message, diagnosticOutput) || reportedError
+			reportedError = c.elaborateElement(source, target, relation, prop.Name(), prop.Initializer(), nameType, message, nil, diagnosticOutput) || reportedError
 		}
 	}
 	return reportedError
@@ -531,12 +531,12 @@ func (c *Checker) elaborateArrayLiteral(node *ast.Node, source *Type, target *Ty
 		}
 		nameType := c.getNumberLiteralType(jsnum.Number(i))
 		checkNode := c.getEffectiveCheckNode(element)
-		reportedError = c.elaborateElement(source, target, relation, checkNode, checkNode, nameType, nil, diagnosticOutput) || reportedError
+		reportedError = c.elaborateElement(source, target, relation, checkNode, checkNode, nameType, nil, nil, diagnosticOutput) || reportedError
 	}
 	return reportedError
 }
 
-func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relation, prop *ast.Node, next *ast.Node, nameType *Type, errorMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relation, prop *ast.Node, next *ast.Node, nameType *Type, errorMessage *diagnostics.Message, diagnosticFactory func(prop *ast.Node) *ast.Diagnostic, diagnosticOutput *[]*ast.Diagnostic) bool {
 	targetPropType := c.getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType)
 	if targetPropType == nil || targetPropType.flags&TypeFlagsIndexedAccess != 0 {
 		// Don't elaborate on indexes on generic variables
@@ -557,7 +557,10 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 	if next != nil {
 		specificSource = c.checkExpressionForMutableLocationWithContextualType(next, sourcePropType)
 	}
-	if c.exactOptionalPropertyTypes && c.isExactOptionalPropertyMismatch(specificSource, targetPropType) {
+	if diagnosticFactory != nil {
+		// Use the custom diagnostic factory if provided (e.g., for JSX text children with dynamic error messages)
+		diags = append(diags, diagnosticFactory(prop))
+	} else if c.exactOptionalPropertyTypes && c.isExactOptionalPropertyMismatch(specificSource, targetPropType) {
 		diags = append(diags, createDiagnosticForNode(prop, diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, c.TypeToString(specificSource), c.TypeToString(targetPropType)))
 	} else {
 		propName := c.getPropertyNameFromIndex(nameType, nil /*accessNode*/)

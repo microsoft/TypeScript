@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -45,7 +46,7 @@ func (h *host) GetCurrentDirectory() string {
 	return h.host.GetCurrentDirectory()
 }
 
-func (h *host) Trace(msg string) {
+func (h *host) Trace(msg *diagnostics.Message, args ...any) {
 	panic("build.Orchestrator.host does not support tracing, use a different host for tracing")
 }
 

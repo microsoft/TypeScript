@@ -137,7 +137,8 @@ type buildInfoDiagnosticWithFileName struct {
 	end                int
 	code               int32
 	category           diagnostics.Category
-	message            string
+	messageKey         diagnostics.Key
+	messageArgs        []string
 	messageChain       []*buildInfoDiagnosticWithFileName
 	relatedInformation []*buildInfoDiagnosticWithFileName
 	reportsUnnecessary bool
@@ -165,12 +166,13 @@ func (b *buildInfoDiagnosticWithFileName) toDiagnostic(p *compiler.Program, file
 	for _, info := range b.relatedInformation {
 		relatedInformation = append(relatedInformation, info.toDiagnostic(p, fileForDiagnostic))
 	}
-	return ast.NewDiagnosticWith(
+	return ast.NewDiagnosticFromSerialized(
 		fileForDiagnostic,
 		core.NewTextRange(b.pos, b.end),
 		b.code,
 		b.category,
-		b.message,
+		b.messageKey,
+		b.messageArgs,
 		messageChain,
 		relatedInformation,
 		b.reportsUnnecessary,
@@ -301,7 +303,12 @@ func diagnosticToStringBuilder(diagnostic *ast.Diagnostic, file *ast.SourceFile,
 	}
 	builder.WriteString(diagnostic.Category().Name())
 	builder.WriteString(fmt.Sprintf("%d: ", diagnostic.Code()))
-	builder.WriteString(diagnostic.Message())
+	builder.WriteString(string(diagnostic.MessageKey()))
+	builder.WriteString("\n")
+	for _, arg := range diagnostic.MessageArgs() {
+		builder.WriteString(arg)
+		builder.WriteString("\n")
+	}
 	for _, chain := range diagnostic.MessageChain() {
 		diagnosticToStringBuilder(chain, file, builder)
 	}

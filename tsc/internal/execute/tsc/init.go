@@ -11,17 +11,18 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsonutil"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-func WriteConfigFile(sys System, reportDiagnostic DiagnosticReporter, options *collections.OrderedMap[string, any]) {
+func WriteConfigFile(sys System, locale locale.Locale, reportDiagnostic DiagnosticReporter, options *collections.OrderedMap[string, any]) {
 	getCurrentDirectory := sys.GetCurrentDirectory()
 	file := tspath.NormalizePath(tspath.CombinePaths(getCurrentDirectory, "tsconfig.json"))
 	if sys.FS().FileExists(file) {
 		reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file))
 	} else {
-		_ = sys.FS().WriteFile(file, generateTSConfig(options), false)
+		_ = sys.FS().WriteFile(file, generateTSConfig(options, locale), false)
 		output := []string{"\n"}
 		output = append(output, getHeader(sys, "Created a new tsconfig.json")...)
 		output = append(output, "You can learn more at https://aka.ms/tsconfig", "\n")
@@ -29,7 +30,7 @@ func WriteConfigFile(sys System, reportDiagnostic DiagnosticReporter, options *c
 	}
 }
 
-func generateTSConfig(options *collections.OrderedMap[string, any]) string {
+func generateTSConfig(options *collections.OrderedMap[string, any], locale locale.Locale) string {
 	const tab = "  "
 	var result []string
 
@@ -40,9 +41,8 @@ func generateTSConfig(options *collections.OrderedMap[string, any]) string {
 		}
 	}
 
-	// !!! locale getLocaleSpecificMessage
 	emitHeader := func(header *diagnostics.Message) {
-		result = append(result, tab+tab+"// "+header.Format())
+		result = append(result, tab+tab+"// "+header.Localize(locale))
 	}
 	newline := func() {
 		result = append(result, "")
@@ -143,8 +143,7 @@ func generateTSConfig(options *collections.OrderedMap[string, any]) string {
 	}
 
 	push("{")
-	// !!! locale getLocaleSpecificMessage
-	push(tab + `// ` + diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file.Format())
+	push(tab + `// ` + diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file.Localize(locale))
 	push(tab + `"compilerOptions": {`)
 
 	emitHeader(diagnostics.File_Layout)

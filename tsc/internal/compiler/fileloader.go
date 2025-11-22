@@ -18,7 +18,7 @@ import (
 type libResolution struct {
 	libraryName string
 	resolution  *module.ResolvedModule
-	trace       []string
+	trace       []module.DiagAndArgs
 }
 
 type LibFile struct {
@@ -231,7 +231,7 @@ func processAllProgramFiles(
 			module.ModeAwareCacheKey{Name: value.libraryName, Mode: core.ModuleKindCommonJS}: value.resolution,
 		}
 		for _, trace := range value.trace {
-			opts.Host.Trace(trace)
+			opts.Host.Trace(trace.Message, trace.Args...)
 		}
 	}
 
@@ -286,7 +286,7 @@ func (p *fileLoader) addAutomaticTypeDirectiveTasks() {
 func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 	toParse []resolvedRef,
 	typeResolutionsInFile module.ModeAwareCache[*module.ResolvedTypeReferenceDirective],
-	typeResolutionsTrace []string,
+	typeResolutionsTrace []module.DiagAndArgs,
 ) {
 	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(p.opts.Config.CompilerOptions(), p.opts.Host)
 	if len(automaticTypeDirectiveNames) != 0 {
@@ -449,7 +449,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 	meta := t.metadata
 
 	typeResolutionsInFile := make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(file.TypeReferenceDirectives))
-	var typeResolutionsTrace []string
+	var typeResolutionsTrace []module.DiagAndArgs
 	for index, ref := range file.TypeReferenceDirectives {
 		redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
 		resolutionMode := getModeForTypeReferenceDirectiveInFile(ref, file, meta, module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect))
@@ -527,7 +527,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 	if len(moduleNames) != 0 {
 		resolutionsInFile := make(module.ModeAwareCache[*module.ResolvedModule], len(moduleNames))
-		var resolutionsTrace []string
+		var resolutionsTrace []module.DiagAndArgs
 
 		for index, entry := range moduleNames {
 			moduleName := entry.Text()

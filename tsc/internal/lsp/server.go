@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsonutil"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
@@ -27,7 +28,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/text/language"
 )
 
 type ServerOptions struct {
@@ -160,7 +160,7 @@ type Server struct {
 	initializeParams   *lsproto.InitializeParams
 	clientCapabilities lsproto.ResolvedClientCapabilities
 	positionEncoding   lsproto.PositionEncodingKind
-	locale             language.Tag
+	locale             locale.Locale
 
 	watchEnabled bool
 	watcherID    atomic.Uint32
@@ -365,7 +365,7 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 		case <-ctx.Done():
 			return ctx.Err()
 		case req := <-s.requestQueue:
-			requestCtx := core.WithLocale(ctx, s.locale)
+			requestCtx := locale.WithLocale(ctx, s.locale)
 			if req.ID != nil {
 				var cancel context.CancelFunc
 				requestCtx, cancel = context.WithCancel(core.WithRequestID(requestCtx, req.ID.String()))
@@ -866,11 +866,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 	}
 
 	if s.initializeParams.Locale != nil {
-		locale, err := language.Parse(*s.initializeParams.Locale)
-		if err != nil {
-			return nil, err
-		}
-		s.locale = locale
+		s.locale, _ = locale.Parse(*s.initializeParams.Locale)
 	}
 
 	if s.initializeParams.Trace != nil && *s.initializeParams.Trace == "verbose" {
@@ -999,6 +995,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			LoggingEnabled:         true,
 			DebounceDelay:          500 * time.Millisecond,
 			PushDiagnosticsEnabled: !disablePushDiagnostics,
+			Locale:                 s.locale,
 		},
 		FS:          s.fs,
 		Logger:      s.logger,

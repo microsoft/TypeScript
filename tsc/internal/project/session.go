@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
@@ -48,6 +49,7 @@ type SessionOptions struct {
 	LoggingEnabled         bool
 	PushDiagnosticsEnabled bool
 	DebounceDelay          time.Duration
+	Locale                 locale.Locale
 }
 
 type SessionInit struct {

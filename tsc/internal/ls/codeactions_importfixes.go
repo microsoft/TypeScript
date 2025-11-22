@@ -75,6 +75,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) []Cod
 	for _, fixInfo := range info {
 		tracker := change.NewTracker(ctx, fixContext.Program.Options(), fixContext.LS.FormatOptions(), fixContext.LS.converters)
 		msg := fixContext.LS.codeActionForFixWorker(
+			ctx,
 			tracker,
 			fixContext.SourceFile,
 			fixInfo.symbolName,
@@ -82,7 +83,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) []Cod
 			fixInfo.symbolName != fixInfo.errorIdentifierText,
 		)
 
-		if msg != nil {
+		if msg != "" {
 			// Convert changes to LSP edits
 			changes := tracker.GetChanges()
 			var edits []*lsproto.TextEdit
@@ -91,7 +92,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) []Cod
 			}
 
 			actions = append(actions, CodeAction{
-				Description: msg.Message(),
+				Description: msg,
 				Changes:     edits,
 			})
 		}

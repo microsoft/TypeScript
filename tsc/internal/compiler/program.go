@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
@@ -1568,17 +1569,17 @@ func (p *Program) IsMissingPath(path tspath.Path) bool {
 	})
 }
 
-func (p *Program) ExplainFiles(w io.Writer) {
+func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale) {
 	toRelativeFileName := func(fileName string) string {
 		return tspath.GetRelativePathFromDirectory(p.GetCurrentDirectory(), fileName, p.comparePathsOptions)
 	}
 	for _, file := range p.GetSourceFiles() {
 		fmt.Fprintln(w, toRelativeFileName(file.FileName()))
 		for _, reason := range p.includeProcessor.fileIncludeReasons[file.Path()] {
-			fmt.Fprintln(w, "  ", reason.toDiagnostic(p, true).Message())
+			fmt.Fprintln(w, "  ", reason.toDiagnostic(p, true).Localize(locale))
 		}
 		for _, diag := range p.includeProcessor.explainRedirectAndImpliedFormat(p, file, toRelativeFileName) {
-			fmt.Fprintln(w, "  ", diag.Message())
+			fmt.Fprintln(w, "  ", diag.Localize(locale))
 		}
 	}
 }

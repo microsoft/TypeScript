@@ -25,9 +25,9 @@ type parseTask struct {
 
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
-	resolutionsTrace             []string
+	resolutionsTrace             []module.DiagAndArgs
 	typeResolutionsInFile        module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
-	typeResolutionsTrace         []string
+	typeResolutionsTrace         []module.DiagAndArgs
 	resolutionDiagnostics        []*ast.Diagnostic
 	importHelpersImportSpecifier *ast.Node
 	jsxRuntimeImportSpecifier    *jsxRuntimeImportSpecifier
@@ -255,10 +255,10 @@ func (w *filesParser) collectWorker(loader *fileLoader, tasks []*parseTask, iter
 			continue
 		}
 		for _, trace := range task.typeResolutionsTrace {
-			loader.opts.Host.Trace(trace)
+			loader.opts.Host.Trace(trace.Message, trace.Args...)
 		}
 		for _, trace := range task.resolutionsTrace {
-			loader.opts.Host.Trace(trace)
+			loader.opts.Host.Trace(trace.Message, trace.Args...)
 		}
 		if subTasks := task.subTasks; len(subTasks) > 0 {
 			w.collectWorker(loader, subTasks, iterate, seen)

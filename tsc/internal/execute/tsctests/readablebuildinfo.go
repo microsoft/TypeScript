@@ -62,7 +62,8 @@ type readableBuildInfoDiagnostic struct {
 	End                int                            `json:"end,omitzero"`
 	Code               int32                          `json:"code,omitzero"`
 	Category           diagnostics.Category           `json:"category,omitzero"`
-	Message            string                         `json:"message,omitzero"`
+	MessageKey         diagnostics.Key                `json:"messageKey,omitzero"`
+	MessageArgs        []string                       `json:"messageArgs,omitzero"`
 	MessageChain       []*readableBuildInfoDiagnostic `json:"messageChain,omitzero"`
 	RelatedInformation []*readableBuildInfoDiagnostic `json:"relatedInformation,omitzero"`
 	ReportsUnnecessary bool                           `json:"reportsUnnecessary,omitzero"`
@@ -254,7 +255,8 @@ func (r *readableBuildInfo) toReadableBuildInfoDiagnostic(diagnostics []*increme
 			End:                d.End,
 			Code:               d.Code,
 			Category:           d.Category,
-			Message:            d.Message,
+			MessageKey:         d.MessageKey,
+			MessageArgs:        d.MessageArgs,
 			MessageChain:       r.toReadableBuildInfoDiagnostic(d.MessageChain),
 			RelatedInformation: r.toReadableBuildInfoDiagnostic(d.RelatedInformation),
 			ReportsUnnecessary: d.ReportsUnnecessary,

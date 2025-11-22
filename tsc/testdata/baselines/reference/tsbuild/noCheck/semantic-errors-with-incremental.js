@@ -504,7 +504,7 @@ Output::
 Found 1 error in a.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2c3aef4914dc04eedbda88b614f5cc47-export const a: number = \"hello\";","signature":"03ee330dc35a9c186b6cc67781eafb11-export declare const a: number;\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":2322,"category":1,"message":"Type 'string' is not assignable to type 'number'."}]]]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2c3aef4914dc04eedbda88b614f5cc47-export const a: number = \"hello\";","signature":"03ee330dc35a9c186b6cc67781eafb11-export declare const a: number;\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["string","number"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -573,12 +573,16 @@ Found 1 error in a.ts[90m:1[0m
           "end": 14,
           "code": 2322,
           "category": 1,
-          "message": "Type 'string' is not assignable to type 'number'."
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "string",
+            "number"
+          ]
         }
       ]
     ]
   ],
-  "size": 1398
+  "size": 1425
 }
 
 tsconfig.json::
@@ -794,7 +798,7 @@ exports.c = void 0;
 exports.c = "hello";
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"270675b5bc3d695752ac89c2c3af7b2e-export const a = \"hello\";","signature":"8db48ef76072c70d24f212a9f210f622-export declare const a = \"hello\";\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":2322,"category":1,"message":"Type 'string' is not assignable to type 'number'."}]]]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"270675b5bc3d695752ac89c2c3af7b2e-export const a = \"hello\";","signature":"8db48ef76072c70d24f212a9f210f622-export declare const a = \"hello\";\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["string","number"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -876,12 +880,16 @@ exports.c = "hello";
           "end": 14,
           "code": 2322,
           "category": 1,
-          "message": "Type 'string' is not assignable to type 'number'."
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "string",
+            "number"
+          ]
         }
       ]
     ]
   ],
-  "size": 1589
+  "size": 1616
 }
 
 tsconfig.json::
@@ -910,7 +918,7 @@ export declare const a: number;
 
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","checkPending":true,"root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2c3aef4914dc04eedbda88b614f5cc47-export const a: number = \"hello\";","signature":"03ee330dc35a9c186b6cc67781eafb11-export declare const a: number;\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2,[4,[{"pos":13,"end":14,"code":2322,"category":1,"message":"Type 'string' is not assignable to type 'number'."}]]]}
+{"version":"FakeTSVersion","checkPending":true,"root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2c3aef4914dc04eedbda88b614f5cc47-export const a: number = \"hello\";","signature":"03ee330dc35a9c186b6cc67781eafb11-export declare const a: number;\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2,[4,[{"pos":13,"end":14,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["string","number"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -994,12 +1002,16 @@ export declare const a: number;
           "end": 14,
           "code": 2322,
           "category": 1,
-          "message": "Type 'string' is not assignable to type 'number'."
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "string",
+            "number"
+          ]
         }
       ]
     ]
   ],
-  "size": 1615
+  "size": 1642
 }
 
 tsconfig.json::
@@ -1028,7 +1040,7 @@ export declare const a = "hello";
 
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","checkPending":true,"root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"270675b5bc3d695752ac89c2c3af7b2e-export const a = \"hello\";","signature":"8db48ef76072c70d24f212a9f210f622-export declare const a = \"hello\";\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2,[4,[{"pos":13,"end":14,"code":2322,"category":1,"message":"Type 'string' is not assignable to type 'number'."}]]]}
+{"version":"FakeTSVersion","checkPending":true,"root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"270675b5bc3d695752ac89c2c3af7b2e-export const a = \"hello\";","signature":"8db48ef76072c70d24f212a9f210f622-export declare const a = \"hello\";\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2,[4,[{"pos":13,"end":14,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["string","number"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1112,12 +1124,16 @@ export declare const a = "hello";
           "end": 14,
           "code": 2322,
           "category": 1,
-          "message": "Type 'string' is not assignable to type 'number'."
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "string",
+            "number"
+          ]
         }
       ]
     ]
   ],
-  "size": 1611
+  "size": 1638
 }
 
 tsconfig.json::
@@ -1148,7 +1164,7 @@ Output::
 Found 1 error in c.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"270675b5bc3d695752ac89c2c3af7b2e-export const a = \"hello\";","signature":"8db48ef76072c70d24f212a9f210f622-export declare const a = \"hello\";\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":2322,"category":1,"message":"Type 'string' is not assignable to type 'number'."}]]]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"270675b5bc3d695752ac89c2c3af7b2e-export const a = \"hello\";","signature":"8db48ef76072c70d24f212a9f210f622-export declare const a = \"hello\";\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"32c618963fbf4ae5f1475f9be91d77bb-export const c: number = \"hello\";","signature":"330cf13f2bbf810d913e97d0cc189ea6-export declare const c: number;\n","impliedNodeFormat":1}],"options":{"declaration":true},"semanticDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["string","number"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1230,12 +1246,16 @@ Found 1 error in c.ts[90m:1[0m
           "end": 14,
           "code": 2322,
           "category": 1,
-          "message": "Type 'string' is not assignable to type 'number'."
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "string",
+            "number"
+          ]
         }
       ]
     ]
   ],
-  "size": 1589
+  "size": 1616
 }
 
 tsconfig.json::

@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls/change"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -1439,25 +1440,28 @@ func (l *LanguageService) codeActionForFix(
 	includeSymbolNameInDescription bool,
 ) codeAction {
 	tracker := change.NewTracker(ctx, l.GetProgram().Options(), l.FormatOptions(), l.converters) // !!! changetracker.with
-	diag := l.codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription)
+	diag := l.codeActionForFixWorker(ctx, tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription)
 	changes := tracker.GetChanges()[sourceFile.FileName()]
-	return codeAction{description: diag.Message(), changes: changes}
+	return codeAction{description: diag, changes: changes}
 }
 
 func (l *LanguageService) codeActionForFixWorker(
+	ctx context.Context,
 	changeTracker *change.Tracker,
 	sourceFile *ast.SourceFile,
 	symbolName string,
 	fix *ImportFix,
 	includeSymbolNameInDescription bool,
-) *diagnostics.Message {
+) string {
+	locale := locale.FromContext(ctx)
+
 	switch fix.kind {
 	case ImportFixKindUseNamespace:
 		addNamespaceQualifier(changeTracker, sourceFile, fix.qualification())
-		return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, fmt.Sprintf("%s.%s", *fix.namespacePrefix, symbolName))
+		return diagnostics.Change_0_to_1.Localize(locale, symbolName, fmt.Sprintf("%s.%s", *fix.namespacePrefix, symbolName))
 	case ImportFixKindJsdocTypeImport:
 		if fix.usagePosition == nil {
-			return nil
+			return ""
 		}
 		quotePreference := getQuotePreference(sourceFile, l.UserPreferences())
 		quoteChar := "\""
@@ -1466,7 +1470,7 @@ func (l *LanguageService) codeActionForFixWorker(
 		}
 		importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, fix.moduleSpecifier, quoteChar)
 		changeTracker.InsertText(sourceFile, *fix.usagePosition, importTypePrefix)
-		return diagnostics.FormatMessage(diagnostics.Change_0_to_1, symbolName, importTypePrefix+symbolName)
+		return diagnostics.Change_0_to_1.Localize(locale, symbolName, importTypePrefix+symbolName)
 	case ImportFixKindAddToExisting:
 		var defaultImport *Import
 		var namedImports []*Import
@@ -1484,9 +1488,9 @@ func (l *LanguageService) codeActionForFixWorker(
 		)
 		moduleSpecifierWithoutQuotes := stringutil.StripQuotes(fix.moduleSpecifier)
 		if includeSymbolNameInDescription {
-			return diagnostics.FormatMessage(diagnostics.Import_0_from_1, symbolName, moduleSpecifierWithoutQuotes)
+			return diagnostics.Import_0_from_1.Localize(locale, symbolName, moduleSpecifierWithoutQuotes)
 		}
-		return diagnostics.FormatMessage(diagnostics.Update_import_from_0, moduleSpecifierWithoutQuotes)
+		return diagnostics.Update_import_from_0.Localize(locale, moduleSpecifierWithoutQuotes)
 	case ImportFixKindAddNew:
 		var declarations []*ast.Statement
 		var defaultImport *Import
@@ -1521,17 +1525,17 @@ func (l *LanguageService) codeActionForFixWorker(
 			addNamespaceQualifier(changeTracker, sourceFile, qualification)
 		}
 		if includeSymbolNameInDescription {
-			return diagnostics.FormatMessage(diagnostics.Import_0_from_1, symbolName, fix.moduleSpecifier)
+			return diagnostics.Import_0_from_1.Localize(locale, symbolName, fix.moduleSpecifier)
 		}
-		return diagnostics.FormatMessage(diagnostics.Add_import_from_0, fix.moduleSpecifier)
+		return diagnostics.Add_import_from_0.Localize(locale, fix.moduleSpecifier)
 	case ImportFixKindPromoteTypeOnly:
 		promotedDeclaration := promoteFromTypeOnly(changeTracker, fix.typeOnlyAliasDeclaration, l.GetProgram(), sourceFile, l)
 		if promotedDeclaration.Kind == ast.KindImportSpecifier {
 			moduleSpec := getModuleSpecifierText(promotedDeclaration.Parent.Parent)
-			return diagnostics.FormatMessage(diagnostics.Remove_type_from_import_of_0_from_1, symbolName, moduleSpec)
+			return diagnostics.Remove_type_from_import_of_0_from_1.Localize(locale, symbolName, moduleSpec)
 		}
 		moduleSpec := getModuleSpecifierText(promotedDeclaration)
-		return diagnostics.FormatMessage(diagnostics.Remove_type_from_import_declaration_from_0, moduleSpec)
+		return diagnostics.Remove_type_from_import_declaration_from_0.Localize(locale, moduleSpec)
 	default:
 		panic(fmt.Sprintf(`Unexpected fix kind %v`, fix.kind))
 	}

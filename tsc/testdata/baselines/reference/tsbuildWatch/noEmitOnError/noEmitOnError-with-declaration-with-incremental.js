@@ -395,7 +395,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4dba75627964632af83642176cf4b611-export interface A {\n    name: string;\n}","signature":"54943827690173f946e7a76cd9b9eb27-export interface A {\n    name: string;\n}\n","impliedNodeFormat":1},{"version":"21728e732a07c83043db4a93ca54350c-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"ac4084c9455da7165ada8cb39f592843-console.log(\"hi\");\nexport { }","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":46,"end":47,"code":2322,"category":1,"message":"Type 'number' is not assignable to type 'string'."}]]],"affectedFilesPendingEmit":[3]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4dba75627964632af83642176cf4b611-export interface A {\n    name: string;\n}","signature":"54943827690173f946e7a76cd9b9eb27-export interface A {\n    name: string;\n}\n","impliedNodeFormat":1},{"version":"21728e732a07c83043db4a93ca54350c-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"ac4084c9455da7165ada8cb39f592843-console.log(\"hi\");\nexport { }","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":46,"end":47,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["number","string"]}]]],"affectedFilesPendingEmit":[3]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -489,7 +489,11 @@ Output::
           "end": 47,
           "code": 2322,
           "category": 1,
-          "message": "Type 'number' is not assignable to type 'string'."
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "number",
+            "string"
+          ]
         }
       ]
     ]
@@ -501,7 +505,7 @@ Output::
       3
     ]
   ],
-  "size": 1755
+  "size": 1782
 }
 
 tsconfig.json::
@@ -706,7 +710,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4dba75627964632af83642176cf4b611-export interface A {\n    name: string;\n}","signature":"54943827690173f946e7a76cd9b9eb27-export interface A {\n    name: string;\n}\n","impliedNodeFormat":1},{"version":"6cc24027429965f7fa7493c1b9efd532-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };","signature":"86ced526ce468674cf13e9bae78ff450-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(53,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(53,1): error9027: Add a type annotation to the variable a.","impliedNodeFormat":1},{"version":"ac4084c9455da7165ada8cb39f592843-console.log(\"hi\");\nexport { }","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":53,"end":54,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":53,"end":54,"code":9027,"category":1,"message":"Add a type annotation to the variable a."}]}]]],"affectedFilesPendingEmit":[[3,17]]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4dba75627964632af83642176cf4b611-export interface A {\n    name: string;\n}","signature":"54943827690173f946e7a76cd9b9eb27-export interface A {\n    name: string;\n}\n","impliedNodeFormat":1},{"version":"6cc24027429965f7fa7493c1b9efd532-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };","signature":"562dfe29cab6c7ded7ded341fc9c8131-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(53,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(53,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n","impliedNodeFormat":1},{"version":"ac4084c9455da7165ada8cb39f592843-console.log(\"hi\");\nexport { }","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":53,"end":54,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":53,"end":54,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]]],"affectedFilesPendingEmit":[[3,17]]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -756,11 +760,11 @@ Output::
     {
       "fileName": "../src/main.ts",
       "version": "6cc24027429965f7fa7493c1b9efd532-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };",
-      "signature": "86ced526ce468674cf13e9bae78ff450-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(53,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(53,1): error9027: Add a type annotation to the variable a.",
+      "signature": "562dfe29cab6c7ded7ded341fc9c8131-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(53,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(53,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "6cc24027429965f7fa7493c1b9efd532-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };",
-        "signature": "86ced526ce468674cf13e9bae78ff450-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(53,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(53,1): error9027: Add a type annotation to the variable a.",
+        "signature": "562dfe29cab6c7ded7ded341fc9c8131-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(53,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(53,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
         "impliedNodeFormat": 1
       }
     },
@@ -800,14 +804,20 @@ Output::
           "end": 54,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 53,
               "end": 54,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable a."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "a"
+              ]
             }
           ]
         }
@@ -824,7 +834,7 @@ Output::
       ]
     ]
   ],
-  "size": 2150
+  "size": 2218
 }
 
 tsconfig.json::

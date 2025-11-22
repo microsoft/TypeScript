@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -214,7 +215,7 @@ type diagnosticOptions struct {
 // DiagnosticToLSPPull converts a diagnostic for pull diagnostics (textDocument/diagnostic)
 func DiagnosticToLSPPull(ctx context.Context, converters *Converters, diagnostic *ast.Diagnostic, reportStyleChecksAsWarnings bool) *lsproto.Diagnostic {
 	clientCaps := lsproto.GetClientCapabilities(ctx).TextDocument.Diagnostic
-	return diagnosticToLSP(converters, diagnostic, diagnosticOptions{
+	return diagnosticToLSP(ctx, converters, diagnostic, diagnosticOptions{
 		reportStyleChecksAsWarnings: reportStyleChecksAsWarnings, // !!! get through context UserPreferences
 		relatedInformation:          clientCaps.RelatedInformation,
 		tagValueSet:                 clientCaps.TagSupport.ValueSet,
@@ -224,7 +225,7 @@ func DiagnosticToLSPPull(ctx context.Context, converters *Converters, diagnostic
 // DiagnosticToLSPPush converts a diagnostic for push diagnostics (textDocument/publishDiagnostics)
 func DiagnosticToLSPPush(ctx context.Context, converters *Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
 	clientCaps := lsproto.GetClientCapabilities(ctx).TextDocument.PublishDiagnostics
-	return diagnosticToLSP(converters, diagnostic, diagnosticOptions{
+	return diagnosticToLSP(ctx, converters, diagnostic, diagnosticOptions{
 		relatedInformation: clientCaps.RelatedInformation,
 		tagValueSet:        clientCaps.TagSupport.ValueSet,
 	})
@@ -242,7 +243,8 @@ var styleCheckDiagnostics = collections.NewSetFromItems(
 	diagnostics.Not_all_code_paths_return_a_value.Code(),
 )
 
-func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, opts diagnosticOptions) *lsproto.Diagnostic {
+func diagnosticToLSP(ctx context.Context, converters *Converters, diagnostic *ast.Diagnostic, opts diagnosticOptions) *lsproto.Diagnostic {
+	locale := locale.FromContext(ctx)
 	var severity lsproto.DiagnosticSeverity
 	switch diagnostic.Category() {
 	case diagnostics.CategorySuggestion:
@@ -268,7 +270,7 @@ func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, opts di
 					Uri:   FileNameToDocumentURI(related.File().FileName()),
 					Range: converters.ToLSPRange(related.File(), related.Loc()),
 				},
-				Message: related.Message(),
+				Message: related.Localize(locale),
 			})
 		}
 	}
@@ -296,19 +298,19 @@ func diagnosticToLSP(converters *Converters, diagnostic *ast.Diagnostic, opts di
 			Integer: ptrTo(diagnostic.Code()),
 		},
 		Severity:           &severity,
-		Message:            messageChainToString(diagnostic),
+		Message:            messageChainToString(diagnostic, locale),
 		Source:             ptrTo("ts"),
 		RelatedInformation: ptrToSliceIfNonEmpty(relatedInformation),
 		Tags:               ptrToSliceIfNonEmpty(tags),
 	}
 }
 
-func messageChainToString(diagnostic *ast.Diagnostic) string {
+func messageChainToString(diagnostic *ast.Diagnostic, locale locale.Locale) string {
 	if len(diagnostic.MessageChain()) == 0 {
-		return diagnostic.Message()
+		return diagnostic.Localize(locale)
 	}
 	var b strings.Builder
-	diagnosticwriter.WriteFlattenedASTDiagnosticMessage(&b, diagnostic, "\n")
+	diagnosticwriter.WriteFlattenedASTDiagnosticMessage(&b, diagnostic, "\n", locale)
 	return b.String()
 }
 

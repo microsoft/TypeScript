@@ -7,16 +7,20 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/locale"
 )
 
 // Diagnostic
 
 type Diagnostic struct {
-	file               *SourceFile
-	loc                core.TextRange
-	code               int32
-	category           diagnostics.Category
-	message            string
+	file     *SourceFile
+	loc      core.TextRange
+	code     int32
+	category diagnostics.Category
+	// Original message; may be nil.
+	message            *diagnostics.Message
+	messageKey         diagnostics.Key
+	messageArgs        []string
 	messageChain       []*Diagnostic
 	relatedInformation []*Diagnostic
 	reportsUnnecessary bool
@@ -31,7 +35,8 @@ func (d *Diagnostic) Len() int                          { return d.loc.Len() }
 func (d *Diagnostic) Loc() core.TextRange               { return d.loc }
 func (d *Diagnostic) Code() int32                       { return d.code }
 func (d *Diagnostic) Category() diagnostics.Category    { return d.category }
-func (d *Diagnostic) Message() string                   { return d.message }
+func (d *Diagnostic) MessageKey() diagnostics.Key       { return d.messageKey }
+func (d *Diagnostic) MessageArgs() []string             { return d.messageArgs }
 func (d *Diagnostic) MessageChain() []*Diagnostic       { return d.messageChain }
 func (d *Diagnostic) RelatedInformation() []*Diagnostic { return d.relatedInformation }
 func (d *Diagnostic) ReportsUnnecessary() bool          { return d.reportsUnnecessary }
@@ -72,12 +77,22 @@ func (d *Diagnostic) Clone() *Diagnostic {
 	return &result
 }
 
-func NewDiagnosticWith(
+func (d *Diagnostic) Localize(locale locale.Locale) string {
+	return diagnostics.Localize(locale, d.message, d.messageKey, d.messageArgs...)
+}
+
+// For debugging only.
+func (d *Diagnostic) String() string {
+	return diagnostics.Localize(locale.Default, d.message, d.messageKey, d.messageArgs...)
+}
+
+func NewDiagnosticFromSerialized(
 	file *SourceFile,
 	loc core.TextRange,
 	code int32,
 	category diagnostics.Category,
-	message string,
+	messageKey diagnostics.Key,
+	messageArgs []string,
 	messageChain []*Diagnostic,
 	relatedInformation []*Diagnostic,
 	reportsUnnecessary bool,
@@ -89,7 +104,8 @@ func NewDiagnosticWith(
 		loc:                loc,
 		code:               code,
 		category:           category,
-		message:            message,
+		messageKey:         messageKey,
+		messageArgs:        messageArgs,
 		messageChain:       messageChain,
 		relatedInformation: relatedInformation,
 		reportsUnnecessary: reportsUnnecessary,
@@ -104,7 +120,9 @@ func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Me
 		loc:                loc,
 		code:               message.Code(),
 		category:           message.Category(),
-		message:            message.Format(args...),
+		message:            message,
+		messageKey:         message.Key(),
+		messageArgs:        diagnostics.StringifyArgs(args),
 		reportsUnnecessary: message.ReportsUnnecessary(),
 		reportsDeprecated:  message.ReportsDeprecated(),
 	}
@@ -185,13 +203,13 @@ func EqualDiagnosticsNoRelatedInfo(d1, d2 *Diagnostic) bool {
 	return getDiagnosticPath(d1) == getDiagnosticPath(d2) &&
 		d1.Loc() == d2.Loc() &&
 		d1.Code() == d2.Code() &&
-		d1.Message() == d2.Message() &&
+		slices.Equal(d1.MessageArgs(), d2.MessageArgs()) &&
 		slices.EqualFunc(d1.MessageChain(), d2.MessageChain(), equalMessageChain)
 }
 
 func equalMessageChain(c1, c2 *Diagnostic) bool {
 	return c1.Code() == c2.Code() &&
-		c1.Message() == c2.Message() &&
+		slices.Equal(c1.MessageArgs(), c2.MessageArgs()) &&
 		slices.EqualFunc(c1.MessageChain(), c2.MessageChain(), equalMessageChain)
 }
 
@@ -211,7 +229,7 @@ func compareMessageChainSize(c1, c2 []*Diagnostic) int {
 
 func compareMessageChainContent(c1, c2 []*Diagnostic) int {
 	for i := range c1 {
-		c := strings.Compare(c1[i].Message(), c2[i].Message())
+		c := slices.Compare(c1[i].MessageArgs(), c2[i].MessageArgs())
 		if c != 0 {
 			return c
 		}
@@ -256,7 +274,7 @@ func CompareDiagnostics(d1, d2 *Diagnostic) int {
 	if c != 0 {
 		return c
 	}
-	c = strings.Compare(d1.Message(), d2.Message())
+	c = slices.Compare(d1.MessageArgs(), d2.MessageArgs())
 	if c != 0 {
 		return c
 	}

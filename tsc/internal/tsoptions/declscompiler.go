@@ -211,6 +211,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		IsCommandLineOnly:       true,
 		Description:             diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
 		DefaultValueDescription: diagnostics.Platform_specific,
+		extraValidation:         extraValidationLocale,
 	},
 
 	{

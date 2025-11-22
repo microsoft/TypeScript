@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/glob"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -49,6 +50,9 @@ type ParsedCommandLine struct {
 	literalFileNamesLen int
 	fileNamesByPath     map[tspath.Path]string // maps file names to their paths, used for quick lookups
 	fileNamesByPathOnce sync.Once
+
+	locale     locale.Locale
+	localeOnce sync.Once
 }
 
 func NewParsedCommandLine(
@@ -378,4 +382,11 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		literalFileNamesLen: literalFileNamesLen,
 	}
 	return &parsedCommandLine
+}
+
+func (p *ParsedCommandLine) Locale() locale.Locale {
+	p.localeOnce.Do(func() {
+		p.locale, _ = locale.Parse(p.CompilerOptions().Locale)
+	})
+	return p.locale
 }

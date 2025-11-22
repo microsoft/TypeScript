@@ -14,6 +14,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -150,7 +151,7 @@ func readLibs() []lib {
 
 	if len(diags) > 0 {
 		for _, diag := range diags {
-			log.Printf("%s", diag.Message())
+			log.Printf("%s", diag.Localize(locale.Default))
 		}
 		log.Fatalf("failed to parse libs.json")
 	}

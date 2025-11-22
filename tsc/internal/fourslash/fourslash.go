@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/execute/tsctests"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
@@ -2613,7 +2614,7 @@ func (d *fourslashDiagnostic) Category() diagnostics.Category {
 	return d.category
 }
 
-func (d *fourslashDiagnostic) Message() string {
+func (d *fourslashDiagnostic) Localize(locale locale.Locale) string {
 	return d.message
 }
 

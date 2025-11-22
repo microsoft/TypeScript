@@ -364,11 +364,11 @@ func (o *Orchestrator) getWriter(task *BuildTask) io.Writer {
 }
 
 func (o *Orchestrator) createBuilderStatusReporter(task *BuildTask) tsc.DiagnosticReporter {
-	return tsc.CreateBuilderStatusReporter(o.opts.Sys, o.getWriter(task), o.opts.Command.CompilerOptions, o.opts.Testing)
+	return tsc.CreateBuilderStatusReporter(o.opts.Sys, o.getWriter(task), o.opts.Command.Locale(), o.opts.Command.CompilerOptions, o.opts.Testing)
 }
 
 func (o *Orchestrator) createDiagnosticReporter(task *BuildTask) tsc.DiagnosticReporter {
-	return tsc.CreateDiagnosticReporter(o.opts.Sys, o.getWriter(task), o.opts.Command.CompilerOptions)
+	return tsc.CreateDiagnosticReporter(o.opts.Sys, o.getWriter(task), o.opts.Command.Locale(), o.opts.Command.CompilerOptions)
 }
 
 func NewOrchestrator(opts Options) *Orchestrator {
@@ -392,9 +392,9 @@ func NewOrchestrator(opts Options) *Orchestrator {
 		mTimes: &collections.SyncMap[tspath.Path, time.Time]{},
 	}
 	if opts.Command.CompilerOptions.Watch.IsTrue() {
-		orchestrator.watchStatusReporter = tsc.CreateWatchStatusReporter(opts.Sys, opts.Command.CompilerOptions, opts.Testing)
+		orchestrator.watchStatusReporter = tsc.CreateWatchStatusReporter(opts.Sys, opts.Command.Locale(), opts.Command.CompilerOptions, opts.Testing)
 	} else {
-		orchestrator.errorSummaryReporter = tsc.CreateReportErrorSummary(opts.Sys, opts.Command.CompilerOptions)
+		orchestrator.errorSummaryReporter = tsc.CreateReportErrorSummary(opts.Sys, opts.Command.Locale(), opts.Command.CompilerOptions)
 	}
 	return orchestrator
 }

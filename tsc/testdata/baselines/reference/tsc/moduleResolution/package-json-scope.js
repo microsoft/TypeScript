@@ -106,7 +106,7 @@ exports.x = void 0;
 exports.x = 10;
 
 //// [/home/src/workspaces/project/src/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2016.full.d.ts","./main.ts","./fileB.mts","./fileA.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"28e8748a7acd58f4f59388926e914f86-export const x = 10;","signature":"f9b4154a9a5944099ecf197d4519d083-export declare const x = 10;\n","impliedNodeFormat":1},{"version":"d03690d860e74c03bcacf63f0dd68b93-export function foo() {}","signature":"7ffb4ea6089b1a385965a214ba412941-export declare function foo(): void;\n","impliedNodeFormat":99},{"version":"cc520ca096f0b81d18073ba8a9776fe3-import { foo } from \"./fileB.mjs\";\nfoo();","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[3]],"options":{"composite":true,"module":100,"target":3},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":20,"end":33,"code":1479,"category":1,"message":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.","messageChain":[{"pos":20,"end":33,"code":1481,"category":3,"message":"To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/home/src/workspaces/project/package.json'."}]}]]],"latestChangedDtsFile":"./fileA.d.ts"}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2016.full.d.ts","./main.ts","./fileB.mts","./fileA.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"28e8748a7acd58f4f59388926e914f86-export const x = 10;","signature":"f9b4154a9a5944099ecf197d4519d083-export declare const x = 10;\n","impliedNodeFormat":1},{"version":"d03690d860e74c03bcacf63f0dd68b93-export function foo() {}","signature":"7ffb4ea6089b1a385965a214ba412941-export declare function foo(): void;\n","impliedNodeFormat":99},{"version":"cc520ca096f0b81d18073ba8a9776fe3-import { foo } from \"./fileB.mjs\";\nfoo();","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[3]],"options":{"composite":true,"module":100,"target":3},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":20,"end":33,"code":1479,"category":1,"messageKey":"The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479","messageArgs":["./fileB.mjs"],"messageChain":[{"pos":20,"end":33,"code":1481,"category":3,"messageKey":"To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481","messageArgs":[".mts","/home/src/workspaces/project/package.json"]}]}]]],"latestChangedDtsFile":"./fileA.d.ts"}
 //// [/home/src/workspaces/project/src/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -200,14 +200,21 @@ exports.x = 10;
           "end": 33,
           "code": 1479,
           "category": 1,
-          "message": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+          "messageKey": "The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479",
+          "messageArgs": [
+            "./fileB.mjs"
+          ],
           "messageChain": [
             {
               "pos": 20,
               "end": 33,
               "code": 1481,
               "category": 3,
-              "message": "To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/home/src/workspaces/project/package.json'."
+              "messageKey": "To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481",
+              "messageArgs": [
+                ".mts",
+                "/home/src/workspaces/project/package.json"
+              ]
             }
           ]
         }
@@ -215,7 +222,7 @@ exports.x = 10;
     ]
   ],
   "latestChangedDtsFile": "./fileA.d.ts",
-  "size": 2140
+  "size": 2043
 }
 
 src/tsconfig.json::

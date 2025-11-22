@@ -220,7 +220,7 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 		Config: t.resolved,
 		Host: &compilerHost{
 			host:  orchestrator.host,
-			trace: tsc.GetTraceWithWriterFromSys(&t.result.builder, orchestrator.opts.Testing),
+			trace: tsc.GetTraceWithWriterFromSys(&t.result.builder, orchestrator.opts.Command.Locale(), orchestrator.opts.Testing),
 		},
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	})

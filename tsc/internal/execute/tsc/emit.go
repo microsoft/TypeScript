@@ -10,17 +10,19 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-func GetTraceWithWriterFromSys(w io.Writer, testing CommandLineTesting) func(msg string) {
+func GetTraceWithWriterFromSys(w io.Writer, locale locale.Locale, testing CommandLineTesting) func(msg *diagnostics.Message, args ...any) {
 	if testing == nil {
-		return func(msg string) {
-			fmt.Fprintln(w, msg)
+		return func(msg *diagnostics.Message, args ...any) {
+			fmt.Fprintln(w, msg.Localize(locale, args...))
 		}
 	} else {
-		return testing.GetTrace(w)
+		return testing.GetTrace(w, locale)
 	}
 }
 
@@ -133,7 +135,7 @@ func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
 		}
 	}
 	if options.ExplainFiles.IsTrue() {
-		input.Program.ExplainFiles(input.Writer)
+		input.Program.ExplainFiles(input.Writer, input.Config.Locale())
 	} else if options.ListFiles.IsTrue() || options.ListFilesOnly.IsTrue() {
 		for _, file := range input.Program.GetSourceFiles() {
 			fmt.Fprintln(input.Writer, file.FileName())

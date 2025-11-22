@@ -145,7 +145,7 @@ function multiply(a, b) { return a * b; }
 multiply();
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./anotherModule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"19cd44ed7278957051fca663f821c916-export const World = \"hello\";","signature":"5aad0de3e7b08bb6e110c7b97361b89e-export declare const World = \"hello\";\n","impliedNodeFormat":1},{"version":"4bf9c557eaa1c988144310898522b7b5-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }multiply();","signature":"da642d80443e7ccd327091080a82a43c-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedNodeFormat":1},{"version":"6ceab83400a6167be2fb5feab881ded0-declare const dts: any;","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"semanticDiagnosticsPerFile":[[3,[{"pos":177,"end":185,"code":2554,"category":1,"message":"Expected 2 arguments, but got 0.","relatedInformation":[{"pos":138,"end":147,"code":6210,"category":3,"message":"An argument for 'a' was not provided."}]}]]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./anotherModule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"19cd44ed7278957051fca663f821c916-export const World = \"hello\";","signature":"5aad0de3e7b08bb6e110c7b97361b89e-export declare const World = \"hello\";\n","impliedNodeFormat":1},{"version":"4bf9c557eaa1c988144310898522b7b5-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }multiply();","signature":"da642d80443e7ccd327091080a82a43c-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedNodeFormat":1},{"version":"6ceab83400a6167be2fb5feab881ded0-declare const dts: any;","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"semanticDiagnosticsPerFile":[[3,[{"pos":177,"end":185,"code":2554,"category":1,"messageKey":"Expected_0_arguments_but_got_1_2554","messageArgs":["2","0"],"relatedInformation":[{"pos":138,"end":147,"code":6210,"category":3,"messageKey":"An_argument_for_0_was_not_provided_6210","messageArgs":["a"]}]}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -231,14 +231,21 @@ multiply();
           "end": 185,
           "code": 2554,
           "category": 1,
-          "message": "Expected 2 arguments, but got 0.",
+          "messageKey": "Expected_0_arguments_but_got_1_2554",
+          "messageArgs": [
+            "2",
+            "0"
+          ],
           "relatedInformation": [
             {
               "pos": 138,
               "end": 147,
               "code": 6210,
               "category": 3,
-              "message": "An argument for 'a' was not provided."
+              "messageKey": "An_argument_for_0_was_not_provided_6210",
+              "messageArgs": [
+                "a"
+              ]
             }
           ]
         }
@@ -246,7 +253,7 @@ multiply();
     ]
   ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2078
+  "size": 2133
 }
 
 core/tsconfig.json::

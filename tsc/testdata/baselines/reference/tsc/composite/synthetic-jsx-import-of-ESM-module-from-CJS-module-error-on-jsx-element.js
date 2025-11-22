@@ -45,7 +45,7 @@ const jsx_runtime_1 = require("solid-js/jsx-runtime");
 exports.default = jsx_runtime_1.jsx("div", {});
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2022.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"00e459cbb1596f8c4bdf988b0589433f-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}","impliedNodeFormat":99},{"version":"5af15af7f9b4d97300f8dcfb2bf5b7c4-export default <div/>;","signature":"ca37c00363f904fe93e299b145186400-declare const _default: any;\nexport default _default;\n","impliedNodeFormat":1}],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"semanticDiagnosticsPerFile":[[3,[{"pos":15,"end":21,"code":1479,"category":1,"message":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"solid-js/jsx-runtime\")' call instead.","messageChain":[{"pos":15,"end":21,"code":1483,"category":3,"message":"To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`."}]}]]],"latestChangedDtsFile":"./src/main.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2022.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"00e459cbb1596f8c4bdf988b0589433f-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}","impliedNodeFormat":99},{"version":"5af15af7f9b4d97300f8dcfb2bf5b7c4-export default <div/>;","signature":"ca37c00363f904fe93e299b145186400-declare const _default: any;\nexport default _default;\n","impliedNodeFormat":1}],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"semanticDiagnosticsPerFile":[[3,[{"pos":15,"end":21,"code":1479,"category":1,"messageKey":"The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479","messageArgs":["solid-js/jsx-runtime"],"messageChain":[{"pos":15,"end":21,"code":1483,"category":3,"messageKey":"To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483"}]}]]],"latestChangedDtsFile":"./src/main.d.ts"}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -112,14 +112,17 @@ exports.default = jsx_runtime_1.jsx("div", {});
           "end": 21,
           "code": 1479,
           "category": 1,
-          "message": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"solid-js/jsx-runtime\")' call instead.",
+          "messageKey": "The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479",
+          "messageArgs": [
+            "solid-js/jsx-runtime"
+          ],
           "messageChain": [
             {
               "pos": 15,
               "end": 21,
               "code": 1483,
               "category": 3,
-              "message": "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`."
+              "messageKey": "To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483"
             }
           ]
         }
@@ -127,7 +130,7 @@ exports.default = jsx_runtime_1.jsx("div", {});
     ]
   ],
   "latestChangedDtsFile": "./src/main.d.ts",
-  "size": 1905
+  "size": 1800
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>

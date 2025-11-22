@@ -42,5 +42,9 @@
     "Project '{0}' is out of date because it has errors.": {
         "category": "Message",
         "code": 6423
+    },
+    "Locale must be an IETF BCP 47 language tag. Examples: '{0}', '{1}'.": {
+        "category": "Error",
+        "code": 6048
     }
 }

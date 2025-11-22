@@ -193,7 +193,7 @@ Errors  Files
      1  d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable a."}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable c."}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]],"affectedFilesPendingEmit":[[2,17],[3,17],[4,17],[5,17]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,17],[3,17],[4,17],[5,17]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -268,14 +268,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable a."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "a"
+              ]
             }
           ]
         }
@@ -289,14 +295,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable c."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "c"
+              ]
             }
           ]
         }
@@ -310,14 +322,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
@@ -358,7 +376,7 @@ Errors  Files
       ]
     ]
   ],
-  "size": 2084
+  "size": 2240
 }
 
 tsconfig.json::
@@ -407,7 +425,7 @@ Errors  Files
      1  d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable a."}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable c."}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]],"affectedFilesPendingEmit":[[2,49],[3,49],[4,49],[5,49]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,49],[4,49],[5,49]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -483,14 +501,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable a."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "a"
+              ]
             }
           ]
         }
@@ -504,14 +528,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable c."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "c"
+              ]
             }
           ]
         }
@@ -525,14 +555,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
@@ -573,7 +609,7 @@ Errors  Files
       ]
     ]
   ],
-  "size": 2106
+  "size": 2262
 }
 
 tsconfig.json::
@@ -690,7 +726,7 @@ const d = class {
 exports.d = d;
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","signature":"ee8f9d3f76983159b6f8f0407d3b0dff-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable a.","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable a."}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable c."}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","signature":"797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -731,11 +767,11 @@ exports.d = d;
     {
       "fileName": "./a.ts",
       "version": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
-      "signature": "ee8f9d3f76983159b6f8f0407d3b0dff-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable a.",
+      "signature": "797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
-        "signature": "ee8f9d3f76983159b6f8f0407d3b0dff-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable a.",
+        "signature": "797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
         "impliedNodeFormat": 1
       }
     },
@@ -753,22 +789,22 @@ exports.d = d;
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
         "impliedNodeFormat": 1
       }
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
         "impliedNodeFormat": 1
       }
     }
@@ -785,14 +821,20 @@ exports.d = d;
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable a."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "a"
+              ]
             }
           ]
         }
@@ -806,14 +848,20 @@ exports.d = d;
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable c."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "c"
+              ]
             }
           ]
         }
@@ -827,21 +875,27 @@ exports.d = d;
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
       ]
     ]
   ],
-  "size": 3087
+  "size": 3291
 }
 
 tsconfig.json::
@@ -861,7 +915,7 @@ tsgo --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.","impliedNodeFormat":1}],"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable c."}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -924,22 +978,22 @@ Output::
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
         "impliedNodeFormat": 1
       }
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
         "impliedNodeFormat": 1
       }
     }
@@ -953,14 +1007,20 @@ Output::
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable c."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "c"
+              ]
             }
           ]
         }
@@ -974,14 +1034,20 @@ Output::
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
@@ -995,7 +1061,7 @@ Output::
       2
     ]
   ],
-  "size": 2663
+  "size": 2799
 }
 
 tsconfig.json::
@@ -1036,7 +1102,7 @@ Errors  Files
      1  d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable c."}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]],"affectedFilesPendingEmit":[[2,17],[3,16],[4,16],[5,16]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,17],[3,16],[4,16],[5,16]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1099,22 +1165,22 @@ Errors  Files
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
         "impliedNodeFormat": 1
       }
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
         "impliedNodeFormat": 1
       }
     }
@@ -1131,14 +1197,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable c."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "c"
+              ]
             }
           ]
         }
@@ -1152,14 +1224,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
@@ -1200,7 +1278,7 @@ Errors  Files
       ]
     ]
   ],
-  "size": 2720
+  "size": 2856
 }
 
 tsconfig.json::
@@ -1239,7 +1317,7 @@ Errors  Files
      1  d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.","impliedNodeFormat":1}],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable c."}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,48],[5,48]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,48],[5,48]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1302,22 +1380,22 @@ Errors  Files
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e2ca0ad93099a06094277675c8c60e6f-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable c.",
+        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
         "impliedNodeFormat": 1
       }
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
         "impliedNodeFormat": 1
       }
     }
@@ -1335,14 +1413,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable c."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "c"
+              ]
             }
           ]
         }
@@ -1356,14 +1440,20 @@ Errors  Files
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
@@ -1404,7 +1494,7 @@ Errors  Files
       ]
     ]
   ],
-  "size": 2742
+  "size": 2878
 }
 
 tsconfig.json::
@@ -1432,7 +1522,7 @@ Output::
 Found 1 error in d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"dc7165893e9c62cfeea6f0fad1d8b57c-export const c = class { public p = 10; };","signature":"17c24c6640bff8629aa96eed43575ace-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.","impliedNodeFormat":1}],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[5,[{"pos":13,"end":14,"code":4094,"category":1,"message":"Property 'p' of exported anonymous class type may not be private or protected.","relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"message":"Add a type annotation to the variable d."}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,49],[5,48]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"dc7165893e9c62cfeea6f0fad1d8b57c-export const c = class { public p = 10; };","signature":"17c24c6640bff8629aa96eed43575ace-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,49],[5,48]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1506,11 +1596,11 @@ Found 1 error in d.ts[90m:1[0m
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "da46c64a7214d458d5aad6924e4d69d3-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property 'p' of exported anonymous class type may not be private or protected.\n(13,1): error9027: Add a type annotation to the variable d.",
+        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
         "impliedNodeFormat": 1
       }
     }
@@ -1528,14 +1618,20 @@ Found 1 error in d.ts[90m:1[0m
           "end": 14,
           "code": 4094,
           "category": 1,
-          "message": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
+          "messageArgs": [
+            "p"
+          ],
           "relatedInformation": [
             {
               "pos": 13,
               "end": 14,
               "code": 9027,
               "category": 1,
-              "message": "Add a type annotation to the variable d."
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "d"
+              ]
             }
           ]
         }
@@ -1576,7 +1672,7 @@ Found 1 error in d.ts[90m:1[0m
       ]
     ]
   ],
-  "size": 2318
+  "size": 2386
 }
 
 tsconfig.json::

@@ -35,8 +35,8 @@ type CommandLineOption struct {
 	// used in output in serializing and generate tsconfig
 	Category *diagnostics.Message
 
-	// a flag indicating whether `validateJsonOptionValue` should perform extra checks
-	extraValidation bool
+	// What kind of extra validation `validateJsonOptionValue` should do
+	extraValidation extraValidation
 
 	// true or undefined
 	// used for configDirTemplateSubstitutionOptions
@@ -64,6 +64,14 @@ type CommandLineOption struct {
 	// used for compilerOptionsDeclaration
 	ElementOptions CommandLineOptionNameMap
 }
+
+type extraValidation string
+
+const (
+	extraValidationNone   extraValidation = ""
+	extraValidationSpec   extraValidation = "spec"
+	extraValidationLocale extraValidation = "locale"
+)
 
 func (o *CommandLineOption) DeprecatedKeys() *collections.Set[string] {
 	if o.Kind != CommandLineOptionTypeEnum {
@@ -149,13 +157,13 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Name:            "excludeDirectory",
 		Kind:            CommandLineOptionTypeString,
 		IsFilePath:      true,
-		extraValidation: true,
+		extraValidation: extraValidationSpec,
 	},
 	"excludeFiles": {
 		Name:            "excludeFile",
 		Kind:            CommandLineOptionTypeString,
 		IsFilePath:      true,
-		extraValidation: true,
+		extraValidation: extraValidationSpec,
 	},
 	// Test infra options
 	"libFiles": {
