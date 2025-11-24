@@ -1,0 +1,24 @@
+reverseMappedThisLeak.ts(16,5): error TS2349: This expression is not callable.
+  Type 'unknown' has no call signatures.
+
+
+==== reverseMappedThisLeak.ts (1 errors) ====
+    declare function test<T extends Record<string, unknown>>(obj:{
+      [K in keyof T]: () => T[K];
+    }): T;
+    
+    const obj = test({
+      a() {
+        return 1;
+      },
+      b() {
+        return this.a();
+        // Expected: number
+        // Actual: T[string] (bug)
+      }
+    });
+    
+    obj.b(); // should be `number`, but currently inferred as `T[string]`
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'unknown' has no call signatures.
