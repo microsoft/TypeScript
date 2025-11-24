@@ -2422,7 +2422,7 @@ func (f *FourslashTest) verifyBaselines(t *testing.T, testPath string) {
 func (f *FourslashTest) VerifyBaselineInlayHints(
 	t *testing.T,
 	span *lsproto.Range,
-	userPreferences *lsutil.UserPreferences,
+	testPreferences *lsutil.UserPreferences,
 ) {
 	fileName := f.activeFilename
 	var lspRange lsproto.Range
@@ -2437,10 +2437,12 @@ func (f *FourslashTest) VerifyBaselineInlayHints(
 		Range:        lspRange,
 	}
 
-	if userPreferences != nil {
-		reset := f.ConfigureWithReset(t, userPreferences)
-		defer reset()
+	preferences := testPreferences
+	if preferences == nil {
+		preferences = lsutil.NewDefaultUserPreferences()
 	}
+	reset := f.ConfigureWithReset(t, preferences)
+	defer reset()
 
 	prefix := fmt.Sprintf("At position (Ln %d, Col %d): ", lspRange.Start.Line, lspRange.Start.Character)
 	result := sendRequest(t, f, lsproto.TextDocumentInlayHintInfo, params)
@@ -2746,4 +2748,77 @@ func (f *FourslashTest) VerifyBaselineGoToImplementation(t *testing.T, markerNam
 		false, /*includeOriginalSelectionRange*/
 		markerNames...,
 	)
+}
+
+type VerifyWorkspaceSymbolCase struct {
+	Pattern     string
+	Includes    *[]*lsproto.SymbolInformation
+	Exact       *[]*lsproto.SymbolInformation
+	Preferences *lsutil.UserPreferences
+}
+
+// `verify.navigateTo` in Strada.
+func (f *FourslashTest) VerifyWorkspaceSymbol(t *testing.T, cases []*VerifyWorkspaceSymbolCase) {
+	originalPreferences := f.userPreferences.Copy()
+	for _, testCase := range cases {
+		preferences := testCase.Preferences
+		if preferences == nil {
+			preferences = lsutil.NewDefaultUserPreferences()
+		}
+		f.Configure(t, preferences)
+		result := sendRequest(t, f, lsproto.WorkspaceSymbolInfo, &lsproto.WorkspaceSymbolParams{Query: testCase.Pattern})
+		if result.SymbolInformations == nil {
+			t.Fatalf("Expected non-nil symbol information array from workspace symbol request")
+		}
+		if testCase.Includes != nil {
+			if testCase.Exact != nil {
+				t.Fatalf("Test case cannot have both 'Includes' and 'Exact' fields set")
+			}
+			verifyIncludesSymbols(t, *result.SymbolInformations, *testCase.Includes, "Workspace symbols mismatch with pattern '"+testCase.Pattern+"'")
+		} else {
+			if testCase.Exact == nil {
+				t.Fatalf("Test case must have either 'Includes' or 'Exact' field set")
+			}
+			verifyExactSymbols(t, *result.SymbolInformations, *testCase.Exact, "Workspace symbols mismatch with pattern '"+testCase.Pattern+"'")
+		}
+	}
+	f.Configure(t, originalPreferences)
+}
+
+func verifyExactSymbols(
+	t *testing.T,
+	actual []*lsproto.SymbolInformation,
+	expected []*lsproto.SymbolInformation,
+	prefix string,
+) {
+	if len(actual) != len(expected) {
+		t.Fatalf("%s: Expected %d symbols, but got %d:\n%s", prefix, len(expected), len(actual), cmp.Diff(actual, expected))
+	}
+	for i := range actual {
+		assertDeepEqual(t, actual[i], expected[i], prefix)
+	}
+}
+
+func verifyIncludesSymbols(
+	t *testing.T,
+	actual []*lsproto.SymbolInformation,
+	includes []*lsproto.SymbolInformation,
+	prefix string,
+) {
+	type key struct {
+		name string
+		loc  lsproto.Location
+	}
+	nameAndLocToActualSymbol := make(map[key]*lsproto.SymbolInformation, len(actual))
+	for _, sym := range actual {
+		nameAndLocToActualSymbol[key{name: sym.Name, loc: sym.Location}] = sym
+	}
+
+	for _, sym := range includes {
+		actualSym, ok := nameAndLocToActualSymbol[key{name: sym.Name, loc: sym.Location}]
+		if !ok {
+			t.Fatalf("%s: Expected symbol '%s' at location '%v' not found", prefix, sym.Name, sym.Location)
+		}
+		assertDeepEqual(t, actualSym, sym, fmt.Sprintf("%s: Symbol '%s' at location '%v' mismatch", prefix, sym.Name, sym.Location))
+	}
 }

@@ -68,6 +68,10 @@ type Program struct {
 	// Cached unresolved imports for ATA
 	unresolvedImportsOnce sync.Once
 	unresolvedImports     *collections.Set[string]
+
+	// Used by workspace/symbol
+	hasTSFileOnce sync.Once
+	hasTSFile     bool
 }
 
 // FileExists implements checker.Program.
@@ -1632,6 +1636,23 @@ func (p *Program) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
 
 func (p *Program) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
 	return sourceFileMayBeEmitted(sourceFile, p, forceDtsEmit)
+}
+
+func (p *Program) IsLibFile(sourceFile *ast.SourceFile) bool {
+	_, ok := p.libFiles[sourceFile.Path()]
+	return ok
+}
+
+func (p *Program) HasTSFile() bool {
+	p.hasTSFileOnce.Do(func() {
+		for _, file := range p.files {
+			if tspath.HasImplementationTSFileExtension(file.FileName()) {
+				p.hasTSFile = true
+				break
+			}
+		}
+	})
+	return p.hasTSFile
 }
 
 var plainJSErrors = collections.NewSetFromItems(

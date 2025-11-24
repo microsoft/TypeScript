@@ -44,6 +44,13 @@ func (r *RangeMarker) GetName() *string {
 	return r.Marker.Name
 }
 
+func (r *RangeMarker) LSLocation() lsproto.Location {
+	return lsproto.Location{
+		Uri:   lsconv.FileNameToDocumentURI(r.fileName),
+		Range: r.LSRange,
+	}
+}
+
 type Marker struct {
 	fileName   string
 	Position   int

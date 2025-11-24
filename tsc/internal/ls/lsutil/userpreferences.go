@@ -20,6 +20,8 @@ func NewDefaultUserPreferences() *UserPreferences {
 		DisplayPartsForJSDoc:               true,
 		DisableLineTextInReferences:        true,
 		ReportStyleChecksAsWarnings:        true,
+
+		ExcludeLibrarySymbolsInNavTo: true,
 	}
 }
 
@@ -143,13 +145,16 @@ type UserPreferences struct {
 	IncludeInlayFunctionLikeReturnTypeHints               bool
 	IncludeInlayEnumMemberValueHints                      bool
 
+	// ------- Symbols -------
+
+	ExcludeLibrarySymbolsInNavTo bool
+
 	// ------- Misc -------
 
-	ExcludeLibrarySymbolsInNavTo bool // !!!
-	DisableSuggestions           bool // !!!
-	DisableLineTextInReferences  bool // !!!
-	DisplayPartsForJSDoc         bool // !!!
-	ReportStyleChecksAsWarnings  bool // !!! If this changes, we need to ask the client to recompute diagnostics
+	DisableSuggestions          bool // !!!
+	DisableLineTextInReferences bool // !!!
+	DisplayPartsForJSDoc        bool // !!!
+	ReportStyleChecksAsWarnings bool // !!! If this changes, we need to ask the client to recompute diagnostics
 }
 
 type JsxAttributeCompletionStyle string
@@ -380,6 +385,8 @@ func (p *UserPreferences) parseWorker(config map[string]any) {
 			p.parseSuggest(values)
 		case "preferences":
 			p.parsePreferences(values)
+		case "workspaceSymbols":
+			p.parseWorkspaceSymbols(values)
 		case "format":
 			// !!!
 		case "tsserver":
@@ -516,6 +523,22 @@ func (p *UserPreferences) parseOrganizeImportsPreferences(prefs any) {
 	}
 }
 
+func (p *UserPreferences) parseWorkspaceSymbols(prefs any) {
+	symbolPreferences, ok := prefs.(map[string]any)
+	if !ok {
+		return
+	}
+	for name, value := range symbolPreferences {
+		switch name {
+		// !!! scope
+		case "excludeLibrarySymbols":
+			p.ExcludeLibrarySymbolsInNavTo = parseBoolWithDefault(value, true)
+		default:
+			p.set(name, value)
+		}
+	}
+}
+
 func parseEnabledBool(v map[string]any) bool {
 	// vscode nested option
 	if enabled, ok := v["enabled"]; ok {
@@ -623,7 +646,7 @@ func (p *UserPreferences) set(name string, value any) {
 	case "includeinlayenummembervaluehints":
 		p.IncludeInlayEnumMemberValueHints = parseBoolWithDefault(value, false)
 	case "excludelibrarysymbolsinnavto":
-		p.ExcludeLibrarySymbolsInNavTo = parseBoolWithDefault(value, false)
+		p.ExcludeLibrarySymbolsInNavTo = parseBoolWithDefault(value, true)
 	case "disablesuggestions":
 		p.DisableSuggestions = parseBoolWithDefault(value, false)
 	case "disablelinetextinreferences":

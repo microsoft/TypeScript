@@ -8,9 +8,11 @@ import (
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -238,12 +240,20 @@ type DeclarationInfo struct {
 	matchScore  int
 }
 
-func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *lsconv.Converters, query string) (lsproto.WorkspaceSymbolResponse, error) {
+func ProvideWorkspaceSymbols(
+	ctx context.Context,
+	programs []*compiler.Program,
+	converters *lsconv.Converters,
+	preferences *lsutil.UserPreferences,
+	query string,
+) (lsproto.WorkspaceSymbolResponse, error) {
+	excludeLibrarySymbols := preferences.ExcludeLibrarySymbolsInNavTo
 	// Obtain set of non-declaration source files from all active programs.
 	sourceFiles := map[tspath.Path]*ast.SourceFile{}
 	for _, program := range programs {
 		for _, sourceFile := range program.SourceFiles() {
-			if !sourceFile.IsDeclarationFile {
+			if (program.HasTSFile() || !sourceFile.IsDeclarationFile) &&
+				!shouldExcludeFile(sourceFile, program, excludeLibrarySymbols) {
 				sourceFiles[sourceFile.Path()] = sourceFile
 			}
 		}
@@ -269,17 +279,31 @@ func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, 
 	count := min(len(infos), 256)
 	symbols := make([]*lsproto.SymbolInformation, count)
 	for i, info := range infos[0:count] {
-		node := core.OrElse(ast.GetNameOfDeclaration(info.declaration), info.declaration)
+		node := info.declaration
 		sourceFile := ast.GetSourceFileOfNode(node)
-		pos := scanner.SkipTrivia(sourceFile.Text(), node.Pos())
+		pos := astnav.GetStartOfNode(node, sourceFile, false /*includeJsDoc*/)
+		container := getContainerNode(info.declaration)
+		var containerName *string
+		if container != nil {
+			containerName = strPtrTo(ast.GetDeclarationName(container))
+		}
 		var symbol lsproto.SymbolInformation
 		symbol.Name = info.name
 		symbol.Kind = getSymbolKindFromNode(info.declaration)
 		symbol.Location = converters.ToLSPLocation(sourceFile, core.NewTextRange(pos, node.End()))
+		symbol.ContainerName = containerName
 		symbols[i] = &symbol
 	}
 
 	return lsproto.SymbolInformationsOrWorkspaceSymbolsOrNull{SymbolInformations: &symbols}, nil
+}
+
+func shouldExcludeFile(file *ast.SourceFile, program *compiler.Program, excludeLibrarySymbols bool) bool {
+	return excludeLibrarySymbols && (isInsideNodeModules(file.FileName()) || program.IsLibFile(file))
+}
+
+func isInsideNodeModules(fileName string) bool {
+	return strings.Contains(fileName, "/node_modules/")
 }
 
 // Return a score for matching `s` against `pattern`. In order to match, `s` must contain each of the characters in
@@ -348,6 +372,16 @@ func getSymbolKindFromNode(node *ast.Node) lsproto.SymbolKind {
 		return lsproto.SymbolKindEnumMember
 	case ast.KindTypeParameter:
 		return lsproto.SymbolKindTypeParameter
+	case ast.KindParameter:
+		if ast.HasSyntacticModifier(node, ast.ModifierFlagsParameterPropertyModifier) {
+			return lsproto.SymbolKindProperty
+		}
+		return lsproto.SymbolKindVariable
+	case ast.KindBinaryExpression:
+		switch ast.GetAssignmentDeclarationKind(node.AsBinaryExpression()) {
+		case ast.JSDeclarationKindThisProperty, ast.JSDeclarationKindProperty:
+			return lsproto.SymbolKindProperty
+		}
 	}
 	return lsproto.SymbolKindVariable
 }
