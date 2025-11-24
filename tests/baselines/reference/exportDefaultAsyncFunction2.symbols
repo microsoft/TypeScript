@@ -11,7 +11,7 @@ export function await(...args: any[]): any { }
 >args : Symbol(args, Decl(asyncawait.ts, 1, 22))
 
 === a.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : Symbol(async, Decl(a.ts, 0, 8))
 >await : Symbol(await, Decl(a.ts, 0, 15))
 
@@ -27,7 +27,7 @@ export default async(() => await(Promise.resolve(1)));
 export default async () => { return 0; };
 
 === c.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : Symbol(async, Decl(c.ts, 0, 8))
 >await : Symbol(await, Decl(c.ts, 0, 15))
 
@@ -35,7 +35,7 @@ export default async<number>();
 >async : Symbol(async, Decl(c.ts, 0, 8))
 
 === d.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : Symbol(async, Decl(d.ts, 0, 8))
 >await : Symbol(await, Decl(d.ts, 0, 15))
 
@@ -43,7 +43,7 @@ export default async;
 >async : Symbol(async, Decl(d.ts, 0, 8))
 
 === e.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : Symbol(async, Decl(e.ts, 0, 8))
 >await : Symbol(await, Decl(e.ts, 0, 15))
 

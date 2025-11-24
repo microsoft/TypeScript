@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 //@declaration: true
 
 // @Filename: privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts
@@ -34,8 +34,8 @@ declare module 'm2' {
 // Privacy errors - importing private elements
 import im_private_mi_private = require("m");
 import im_private_mu_private = require("m2");
-import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
-import im_private_mu_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require1");
+import im_private_mi_public = require("./privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
+import im_private_mu_public = require("./privacyTopLevelAmbientExternalModuleImportWithoutExport_require1");
 
 // Usage of privacy error imports
 var privateUse_im_private_mi_private = new im_private_mi_private.c_private();

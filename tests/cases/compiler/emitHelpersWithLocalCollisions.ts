@@ -1,6 +1,5 @@
 // @target: es6
 // @module: *
-// @moduleResolution: classic
 // @experimentalDecorators: true
 // @filename: a.ts
 // @noTypesAndSymbols: true
