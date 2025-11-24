@@ -43,16 +43,16 @@ console.log(globalThis.test.split("-"));
 >    : ^^^^    ^^     ^^^^^    
 >globalThis.test.split("-") : string[]
 >                           : ^^^^^^^^
->globalThis.test.split : (separator: string | RegExp, limit?: number) => string[]
->                      : ^         ^^               ^^     ^^^      ^^^^^        
+>globalThis.test.split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>                      : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >globalThis.test : string
 >                : ^^^^^^
 >globalThis : typeof globalThis
 >           : ^^^^^^^^^^^^^^^^^
 >test : string
 >     : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >"-" : "-"
 >    : ^^^
 

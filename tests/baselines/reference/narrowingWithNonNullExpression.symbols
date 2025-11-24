@@ -3,8 +3,8 @@
 === narrowingWithNonNullExpression.ts ===
 const m = ''.match('');
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
->''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 m! && m[0];
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))

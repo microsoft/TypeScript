@@ -2,7 +2,7 @@
 
 === exportEqualErrorType_1.ts ===
 ///<reference path='exportEqualErrorType_0.ts'/>
-import connect = require('exportEqualErrorType_0');
+import connect = require('./exportEqualErrorType_0');
 >connect : Symbol(connect, Decl(exportEqualErrorType_1.ts, 0, 0))
 
 connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
@@ -42,7 +42,7 @@ var server: {
 
     foo: Date;
 >foo : Symbol(foo, Decl(exportEqualErrorType_0.ts, 9, 29))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 };
 export = server;

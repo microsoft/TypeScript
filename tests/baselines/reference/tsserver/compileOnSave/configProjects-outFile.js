@@ -155,7 +155,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspace/projects/b/moduleFile1.ts",
         "configFile": "/home/src/workspace/projects/b/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 39
+            },
+            "end": {
+              "line": 4,
+              "offset": 47
+            },
+            "text": "Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/workspace/projects/b/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/tsconfig.json' (Configured)
