@@ -1,6 +1,6 @@
 ---
 name: Behavior Difference
-about: tsgo produces different results than TypeScript 5.8
+about: tsgo produces different results than TypeScript 5.9
 title: ''
 labels: ''
 assignees: ''
@@ -11,6 +11,6 @@ assignees: ''
 
 <!-- Share a repository link or a code sample -->
 
-## Behavior with `typescript@5.8`
+## Behavior with `typescript@5.9`
 
 ## Behavior with `tsgo`

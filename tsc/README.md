@@ -27,11 +27,11 @@ This is still a work in progress and is not yet at full feature parity with Type
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Program creation | done | Same files and module resolution as TS 5.8. Not all resolution modes supported yet. |
-| Parsing/scanning | done | Exact same syntax errors as TS 5.8 |
-| Commandline and `tsconfig.json` parsing | mostly done | Missing --help, --init. |
-| Type resolution | done | Same types as TS 5.8. |
-| Type checking | done | Same errors, locations, and messages as TS 5.8. Types printback in errors may display differently. |
+| Program creation | done | Same files and module resolution as TS 5.9. Not all resolution modes supported yet. |
+| Parsing/scanning | done | Exact same syntax errors as TS 5.9 |
+| Commandline and `tsconfig.json` parsing | done | Done, though `tsconfig` errors may not be as helpful. |
+| Type resolution | done | Same types as TS 5.9. |
+| Type checking | done | Same errors, locations, and messages as TS 5.9. Types printback in errors may display differently. |
 | JavaScript-specific inference and JSDoc | in progress | Mostly complete, but intentionally lacking some features. Declaration emit not complete. |
 | JSX | done | - |
 | Declaration emit | in progress | Most common features are in place, but some edge cases and feature flags are still unhandled. |
@@ -39,7 +39,7 @@ This is still a work in progress and is not yet at full feature parity with Type
 | Watch mode | prototype | Watches files and rebuilds, but no incremental rechecking. Not optimized. |
 | Build mode / project references | done | - |
 | Incremental build | done | - |
-| Language service (LSP) | in progress | Some functionality (errors, hover, go to def, refs, sig help). More features coming soon. |
+| Language service (LSP) | in progress | Most functionality. More features coming soon. |
 | API | not ready | - |
 
 Definitions:
@@ -54,7 +54,7 @@ Definitions:
 Long-term, we expect that this repo and its contents will be merged into `microsoft/TypeScript`.
 As a result, the repo and issue tracker for typescript-go will eventually be closed, so treat discussions/issues accordingly.
 
-For a list of intentional changes with respect to TypeScript 5.7, see CHANGES.md.
+For a list of intentional changes with respect to TypeScript 5.9, see CHANGES.md.
 
 ## Contributing
 
