@@ -1091,6 +1091,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
 
+        // Clear Unreachable flag from previous binding (for incremental scenarios)
+        if (isPotentiallyExecutableNode(node)) {
+            (node as Mutable<Node>).flags &= ~NodeFlags.Unreachable;
+        }
+
         if (currentFlow === unreachableFlow) {
             if (canHaveFlowNode(node)) {
                 node.flowNode = undefined;

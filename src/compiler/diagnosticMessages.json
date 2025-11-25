@@ -1849,6 +1849,18 @@
         "category": "Error",
         "code": 1546
     },
+    "'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1547
+    },
+    "'await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1548
+    },
+    "Ignore the tsconfig found and build with commandline options and files.": {
+        "category": "Message",
+        "code": 1549
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -4728,6 +4740,10 @@
     "Visit https://aka.ms/ts6 for migration information.": {
         "category": "Message",
         "code": 5111
+    },
+    "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
+        "category": "Error",
+        "code": 5112
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
