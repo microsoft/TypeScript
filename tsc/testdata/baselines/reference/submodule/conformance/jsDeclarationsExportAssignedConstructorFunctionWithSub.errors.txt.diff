@@ -7,8 +7,8 @@
 -
 -==== jsDeclarationsExportAssignedConstructorFunctionWithSub.js (2 errors) ====
 +jsDeclarationsExportAssignedConstructorFunctionWithSub.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(7,16): error TS2339: Property 'Sub' does not exist on type '(p: any) => void'.
-+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(10,16): error TS2339: Property 'Sub' does not exist on type '(p: any) => void'.
++jsDeclarationsExportAssignedConstructorFunctionWithSub.js(7,16): error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
++jsDeclarationsExportAssignedConstructorFunctionWithSub.js(10,16): error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
 +
 +
 +==== jsDeclarationsExportAssignedConstructorFunctionWithSub.js (3 errors) ====
@@ -28,10 +28,10 @@
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
      module.exports.Sub = function() {
 +                   ~~~
-+!!! error TS2339: Property 'Sub' does not exist on type '(p: any) => void'.
++!!! error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
          this.instance = new module.exports(10);
      }
      module.exports.Sub.prototype = { }
 +                   ~~~
-+!!! error TS2339: Property 'Sub' does not exist on type '(p: any) => void'.
++!!! error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
      

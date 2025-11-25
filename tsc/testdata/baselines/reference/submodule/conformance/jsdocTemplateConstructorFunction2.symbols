@@ -28,7 +28,9 @@ Zet.prototype.add = function(v, o) {
 
     this.u = v || o.nested
 >v : Symbol(v, Decl(templateTagWithNestedTypeLiteral.js, 14, 29))
+>o.nested : Symbol(nested, Decl(templateTagWithNestedTypeLiteral.js, 12, 3))
 >o : Symbol(o, Decl(templateTagWithNestedTypeLiteral.js, 14, 31))
+>nested : Symbol(nested, Decl(templateTagWithNestedTypeLiteral.js, 12, 3))
 
     return this.u
 }

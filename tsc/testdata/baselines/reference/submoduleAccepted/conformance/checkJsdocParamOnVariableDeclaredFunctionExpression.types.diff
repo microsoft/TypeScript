@@ -12,20 +12,3 @@
 +>foo : (n?: number, s?: string) => void
  >n : number
  >s : string
-
-@@= skipped -13, +13 lines =@@
-  * @param {boolean!} b
-  */
- y = function bar(b) {}
-->y = function bar(b) {} : (b: boolean) => void
-+>y = function bar(b) {} : (b: any) => void
- >y : any
-->function bar(b) {} : (b: boolean) => void
-->bar : (b: boolean) => void
-->b : boolean
-+>function bar(b) {} : (b: any) => void
-+>bar : (b: any) => void
-+>b : any
-
- /**
-  * @param {string} s

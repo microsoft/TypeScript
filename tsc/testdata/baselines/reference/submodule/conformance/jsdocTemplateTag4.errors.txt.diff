@@ -4,16 +4,19 @@
 -<no content>
 +a.js(8,16): error TS2315: Type 'Object' is not generic.
 +a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+a.js(16,36): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(13,12): error TS2304: Cannot find name 'K'.
++a.js(14,14): error TS2304: Cannot find name 'V'.
 +a.js(27,16): error TS2315: Type 'Object' is not generic.
 +a.js(28,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+a.js(35,37): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(32,12): error TS2304: Cannot find name 'K'.
++a.js(33,14): error TS2304: Cannot find name 'V'.
 +a.js(47,16): error TS2315: Type 'Object' is not generic.
-+a.js(48,10): error TS2339: Property '_map' does not exist on type '{ Multimap3: () => void; }'.
-+a.js(55,40): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(48,10): error TS2339: Property '_map' does not exist on type '{ Multimap3: <K extends string, V>() => void; }'.
++a.js(52,12): error TS2304: Cannot find name 'K'.
++a.js(53,14): error TS2304: Cannot find name 'V'.
 +
 +
-+==== a.js (9 errors) ====
++==== a.js (12 errors) ====
 +    /**
 +     * Should work for function declarations
 +     * @constructor
@@ -31,11 +34,13 @@
 +    
 +    /**
 +     * @param {K} key the key ok
++               ~
++!!! error TS2304: Cannot find name 'K'.
 +     * @returns {V} the value ok
++                 ~
++!!! error TS2304: Cannot find name 'V'.
 +     */
 +    Multimap.prototype.get = function (key) {
-+                                       ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
 +        return this._map[key + ''];
 +    }
 +    
@@ -56,11 +61,13 @@
 +    
 +    /**
 +     * @param {K} key the key ok
++               ~
++!!! error TS2304: Cannot find name 'K'.
 +     * @returns {V} the value ok
++                 ~
++!!! error TS2304: Cannot find name 'V'.
 +     */
 +    Multimap2.prototype.get = function (key) {
-+                                        ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
 +        return this._map[key + ''];
 +    }
 +    
@@ -77,16 +84,18 @@
 +!!! error TS2315: Type 'Object' is not generic.
 +        this._map = {};
 +             ~~~~
-+!!! error TS2339: Property '_map' does not exist on type '{ Multimap3: () => void; }'.
++!!! error TS2339: Property '_map' does not exist on type '{ Multimap3: <K extends string, V>() => void; }'.
 +    };
 +    
 +    /**
 +     * @param {K} key the key ok
++               ~
++!!! error TS2304: Cannot find name 'K'.
 +     * @returns {V} the value ok
++                 ~
++!!! error TS2304: Cannot find name 'V'.
 +     */
 +    Ns.Multimap3.prototype.get = function (key) {
-+                                           ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
 +        return this._map[key + ''];
 +    }
 +    

@@ -5,10 +5,10 @@
  >this.parentNode?.removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
  >this.parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
 ->this : Symbol(this)
-+>this : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>this : Symbol((Missing), Decl(index.js, 5, 4))
  >parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
  >removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
 ->this : Symbol(this)
-+>this : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>this : Symbol((Missing), Decl(index.js, 5, 4))
 
  };

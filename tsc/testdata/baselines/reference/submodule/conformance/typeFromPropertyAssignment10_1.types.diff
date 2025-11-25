@@ -93,29 +93,21 @@
 
  /** @param {number} k */
  Outer.app.statische = function (k) {
-->Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
+ >Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
 ->Outer.app.statische : (k: number) => number
 ->Outer.app : typeof Outer.app
 ->Outer : typeof Outer
 ->app : typeof Outer.app
 ->statische : (k: number) => number
-->function (k) {    return k ** k;} : (k: number) => number
-->k : number
-+>Outer.app.statische = function (k) {    return k ** k;} : (k: any) => number
 +>Outer.app.statische : any
 +>Outer.app : any
 +>Outer : any
 +>app : any
 +>statische : any
-+>function (k) {    return k ** k;} : (k: any) => number
-+>k : any
+ >function (k) {    return k ** k;} : (k: number) => number
+ >k : number
 
-     return k ** k;
- >k ** k : number
-->k : number
-->k : number
-+>k : any
-+>k : any
+@@= skipped -31, +31 lines =@@
  }
  === application.js ===
  Outer.app.Application = (function () {

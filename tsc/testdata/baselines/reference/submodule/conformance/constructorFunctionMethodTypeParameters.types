@@ -24,18 +24,18 @@ function Cls(t) {
  * @return {V}
  */
 Cls.prototype.topLevelComment = function (t, v) {
->Cls.prototype.topLevelComment = function (t, v) {    return v} : (t: any, v: any) => any
+>Cls.prototype.topLevelComment = function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
 >Cls.prototype.topLevelComment : any
 >Cls.prototype : any
 >Cls : <T extends string>(t: T) => void
 >prototype : any
 >topLevelComment : any
->function (t, v) {    return v} : (t: any, v: any) => any
->t : any
->v : any
+>function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
+>t : T
+>v : V
 
     return v
->v : any
+>v : V
 
 };
 

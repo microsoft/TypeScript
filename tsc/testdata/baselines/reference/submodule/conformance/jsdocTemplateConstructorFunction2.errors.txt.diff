@@ -2,15 +2,30 @@
 +++ new.jsdocTemplateConstructorFunction2.errors.txt
 @@= skipped -0, +0 lines =@@
 -templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
++templateTagWithNestedTypeLiteral.js(11,12): error TS2304: Cannot find name 'T'.
++templateTagWithNestedTypeLiteral.js(13,12): error TS2304: Cannot find name 'T'.
  templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
 
 
 -==== templateTagWithNestedTypeLiteral.js (2 errors) ====
-+==== templateTagWithNestedTypeLiteral.js (1 errors) ====
++==== templateTagWithNestedTypeLiteral.js (3 errors) ====
      /**
       * @param {T} t
       * @template T
-@@= skipped -23, +22 lines =@@
+@@= skipped -13, +14 lines =@@
+     }
+     /**
+      * @param {T} v
++               ~
++!!! error TS2304: Cannot find name 'T'.
+      * @param {object} o
+      * @param {T} o.nested
++               ~
++!!! error TS2304: Cannot find name 'T'.
+      */
+     Zet.prototype.add = function(v, o) {
+         this.u = v || o.nested
+@@= skipped -10, +14 lines =@@
      var z = new Zet(1)
      z.t = 2
      z.u = false

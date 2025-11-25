@@ -38,12 +38,12 @@ module.exports = function () { }
 
 /** @param {number} a */
 module.exports.f = function (a) { }
->module.exports.f = function (a) { } : (a: any) => void
+>module.exports.f = function (a) { } : (a: number) => void
 >module.exports.f : any
 >module.exports : () => void
 >module : { "export=": () => void; }
 >exports : () => void
 >f : any
->function (a) { } : (a: any) => void
->a : any
+>function (a) { } : (a: number) => void
+>a : number
 

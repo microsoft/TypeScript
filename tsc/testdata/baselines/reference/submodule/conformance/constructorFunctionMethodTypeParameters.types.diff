@@ -16,32 +16,16 @@
  >t : any
  >t : T
  }
-@@= skipped -18, +18 lines =@@
-  * @return {V}
-  */
- Cls.prototype.topLevelComment = function (t, v) {
-->Cls.prototype.topLevelComment = function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
-+>Cls.prototype.topLevelComment = function (t, v) {    return v} : (t: any, v: any) => any
+@@= skipped -21, +21 lines =@@
+ >Cls.prototype.topLevelComment = function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
  >Cls.prototype.topLevelComment : any
  >Cls.prototype : any
 ->Cls : typeof Cls
 +>Cls : <T extends string>(t: T) => void
  >prototype : any
  >topLevelComment : any
-->function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
-->t : T
-->v : V
-+>function (t, v) {    return v} : (t: any, v: any) => any
-+>t : any
-+>v : any
-
-     return v
-->v : V
-+>v : any
-
- };
-
-@@= skipped -19, +19 lines =@@
+ >function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
+@@= skipped -16, +16 lines =@@
  >Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
  >Cls.prototype.nestedComment : any
  >Cls.prototype : any

@@ -1,8 +1,9 @@
+constructorFunctionMethodTypeParameters.js(11,12): error TS2304: Cannot find name 'T'.
 constructorFunctionMethodTypeParameters.js(22,16): error TS2304: Cannot find name 'T'.
 constructorFunctionMethodTypeParameters.js(24,17): error TS2304: Cannot find name 'T'.
 
 
-==== constructorFunctionMethodTypeParameters.js (2 errors) ====
+==== constructorFunctionMethodTypeParameters.js (3 errors) ====
     /**
      * @template {string} T
      * @param {T} t
@@ -14,6 +15,8 @@ constructorFunctionMethodTypeParameters.js(24,17): error TS2304: Cannot find nam
     /**
      * @template {string} V
      * @param {T} t
+               ~
+!!! error TS2304: Cannot find name 'T'.
      * @param {V} v
      * @return {V}
      */

@@ -1,7 +1,9 @@
+templateTagWithNestedTypeLiteral.js(11,12): error TS2304: Cannot find name 'T'.
+templateTagWithNestedTypeLiteral.js(13,12): error TS2304: Cannot find name 'T'.
 templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
 
 
-==== templateTagWithNestedTypeLiteral.js (1 errors) ====
+==== templateTagWithNestedTypeLiteral.js (3 errors) ====
     /**
      * @param {T} t
      * @template T
@@ -13,8 +15,12 @@ templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
     }
     /**
      * @param {T} v
+               ~
+!!! error TS2304: Cannot find name 'T'.
      * @param {object} o
      * @param {T} o.nested
+               ~
+!!! error TS2304: Cannot find name 'T'.
      */
     Zet.prototype.add = function(v, o) {
         this.u = v || o.nested

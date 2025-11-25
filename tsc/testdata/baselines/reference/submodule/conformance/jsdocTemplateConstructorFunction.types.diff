@@ -25,24 +25,17 @@
  >t : any
  >t : T
  }
-@@= skipped -21, +21 lines =@@
-  * @param {Id<T>} id
-  */
- Zet.prototype.add = function(v, id) {
-->Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
-+>Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
+@@= skipped -24, +24 lines =@@
+ >Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
  >Zet.prototype.add : any
  >Zet.prototype : any
 ->Zet : typeof Zet
 +>Zet : <T>(t: T) => void
  >prototype : any
  >add : any
-->function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
-->v : T
-->id : Id<T>
-+>function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
-+>v : any
-+>id : any
+ >function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
+@@= skipped -8, +8 lines =@@
+ >id : Id<T>
 
      this.u = v || this.t
 ->this.u = v || this.t : T
@@ -50,28 +43,25 @@
 ->this : this
 ->u : T
 ->v || this.t : T
-->v : T
-->this.t : T
-->this : this
-->t : T
 +>this.u = v || this.t : any
 +>this.u : any
 +>this : any
 +>u : any
 +>v || this.t : any
-+>v : any
+ >v : T
+->this.t : T
+->this : this
+->t : T
 +>this.t : any
 +>this : any
 +>t : any
 
      return id(this.u)
-->id(this.u) : T
-->id : Id<T>
+ >id(this.u) : T
+ >id : Id<T>
 ->this.u : T
 ->this : this
 ->u : T
-+>id(this.u) : any
-+>id : any
 +>this.u : any
 +>this : any
 +>u : any

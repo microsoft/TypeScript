@@ -5,7 +5,8 @@
 -first.js(31,5): error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
 -  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
 -    Target signature provides too few arguments. Expected 2 or more, but got 1.
-+first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
++first.js(8,13): error TS2749: 'Wagon' refers to a value, but is being used as a type here. Did you mean 'typeof Wagon'?
++first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
 +first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
  first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 -generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
@@ -23,17 +24,32 @@
 -        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
 -          Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 -second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-+second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
+-
+-
+-==== first.js (3 errors) ====
++second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
 +second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
-
-
- ==== first.js (3 errors) ====
-@@= skipped -36, +32 lines =@@
++
++
++==== first.js (4 errors) ====
+     /**
+      * @constructor
+      * @param {number} numberOxen
+@@= skipped -23, +20 lines =@@
+         this.numberOxen = numberOxen
+     }
+     /** @param {Wagon[]=} wagons */
++                ~~~~~
++!!! error TS2749: 'Wagon' refers to a value, but is being used as a type here. Did you mean 'typeof Wagon'?
+     Wagon.circle = function (wagons) {
+         return wagons ? wagons.length : 3.14;
+     }
+@@= skipped -13, +15 lines =@@
      }
      // ok
      class Sql extends Wagon {
 +                      ~~~~~
-+!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
++!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
          constructor() {
              super(); // error: not enough arguments
 -            ~~~~~
@@ -75,7 +91,7 @@
 -!!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 -!!! related TS2728 first.js:9:1: 'circle' is declared here.
 +                            ~~~~~
-+!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
++!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
          constructor(public drunkOO: true) {
              // error: wrong type
              super('nope');

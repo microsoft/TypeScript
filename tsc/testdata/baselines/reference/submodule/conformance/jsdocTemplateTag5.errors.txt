@@ -9,7 +9,7 @@ a.js(35,16): error TS2304: Cannot find name 'K'.
 a.js(36,18): error TS2304: Cannot find name 'V'.
 a.js(39,21): error TS2339: Property '_map' does not exist on type '{ get: (key: K) => V; }'.
 a.js(51,16): error TS2315: Type 'Object' is not generic.
-a.js(52,10): error TS2339: Property '_map' does not exist on type '{ Multimap3: { (): void; prototype: { get(key: K): V; }; }; }'.
+a.js(52,10): error TS2339: Property '_map' does not exist on type '{ Multimap3: { <K extends string, V>(): void; prototype: { get(key: K): V; }; }; }'.
 a.js(57,16): error TS2304: Cannot find name 'K'.
 a.js(58,18): error TS2304: Cannot find name 'V'.
 a.js(61,21): error TS2339: Property '_map' does not exist on type '{ get(key: K): V; }'.
@@ -91,7 +91,7 @@ a.js(61,21): error TS2339: Property '_map' does not exist on type '{ get(key: K)
 !!! error TS2315: Type 'Object' is not generic.
         this._map = {};
              ~~~~
-!!! error TS2339: Property '_map' does not exist on type '{ Multimap3: { (): void; prototype: { get(key: K): V; }; }; }'.
+!!! error TS2339: Property '_map' does not exist on type '{ Multimap3: { <K extends string, V>(): void; prototype: { get(key: K): V; }; }; }'.
     };
     
     Ns.Multimap3.prototype = {

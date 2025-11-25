@@ -31,15 +31,15 @@ function Zet(t) {
  * @param {Id<T>} id
  */
 Zet.prototype.add = function(v, id) {
->Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
+>Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
 >Zet.prototype.add : any
 >Zet.prototype : any
 >Zet : <T>(t: T) => void
 >prototype : any
 >add : any
->function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
->v : any
->id : any
+>function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
+>v : T
+>id : Id<T>
 
     this.u = v || this.t
 >this.u = v || this.t : any
@@ -47,14 +47,14 @@ Zet.prototype.add = function(v, id) {
 >this : any
 >u : any
 >v || this.t : any
->v : any
+>v : T
 >this.t : any
 >this : any
 >t : any
 
     return id(this.u)
->id(this.u) : any
->id : any
+>id(this.u) : T
+>id : Id<T>
 >this.u : any
 >this : any
 >u : any

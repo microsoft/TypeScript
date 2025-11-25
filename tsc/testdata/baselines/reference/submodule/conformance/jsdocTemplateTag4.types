@@ -25,14 +25,14 @@ function Multimap() {
  * @returns {V} the value ok
  */
 Multimap.prototype.get = function (key) {
->Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+>Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
 >Multimap.prototype.get : any
 >Multimap.prototype : any
 >Multimap : <K extends string, V>() => void
 >prototype : any
 >get : any
->function (key) {    return this._map[key + ''];} : (key: any) => any
->key : any
+>function (key) {    return this._map[key + ''];} : (key: K) => V
+>key : K
 
     return this._map[key + ''];
 >this._map[key + ''] : any
@@ -40,7 +40,7 @@ Multimap.prototype.get = function (key) {
 >this : any
 >_map : any
 >key + '' : string
->key : any
+>key : K
 >'' : ""
 }
 
@@ -69,14 +69,14 @@ var Multimap2 = function() {
  * @returns {V} the value ok
  */
 Multimap2.prototype.get = function (key) {
->Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+>Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
 >Multimap2.prototype.get : any
 >Multimap2.prototype : any
 >Multimap2 : <K extends string, V>() => void
 >prototype : any
 >get : any
->function (key) {    return this._map[key + ''];} : (key: any) => any
->key : any
+>function (key) {    return this._map[key + ''];} : (key: K) => V
+>key : K
 
     return this._map[key + ''];
 >this._map[key + ''] : any
@@ -84,13 +84,13 @@ Multimap2.prototype.get = function (key) {
 >this : any
 >_map : any
 >key + '' : string
->key : any
+>key : K
 >'' : ""
 }
 
 var Ns = {};
->Ns : { Multimap3: () => void; }
->{} : { Multimap3: () => void; }
+>Ns : { Multimap3: <K extends string, V>() => void; }
+>{} : { Multimap3: <K extends string, V>() => void; }
 
 /**
  * Should work for expando-namespaced initialisers too
@@ -99,17 +99,17 @@ var Ns = {};
  * @template V
  */
 Ns.Multimap3 = function() {
->Ns.Multimap3 = function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
->Ns.Multimap3 : () => void
->Ns : { Multimap3: () => void; }
->Multimap3 : () => void
->function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
+>Ns.Multimap3 = function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : <K extends string, V>() => void
+>Ns.Multimap3 : <K extends string, V>() => void
+>Ns : { Multimap3: <K extends string, V>() => void; }
+>Multimap3 : <K extends string, V>() => void
+>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : <K extends string, V>() => void
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map = {} : {}
 >this._map : any
->this : { Multimap3: () => void; }
+>this : { Multimap3: <K extends string, V>() => void; }
 >_map : any
 >{} : {}
 
@@ -120,16 +120,16 @@ Ns.Multimap3 = function() {
  * @returns {V} the value ok
  */
 Ns.Multimap3.prototype.get = function (key) {
->Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+>Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
 >Ns.Multimap3.prototype.get : any
 >Ns.Multimap3.prototype : any
->Ns.Multimap3 : () => void
->Ns : { Multimap3: () => void; }
->Multimap3 : () => void
+>Ns.Multimap3 : <K extends string, V>() => void
+>Ns : { Multimap3: <K extends string, V>() => void; }
+>Multimap3 : <K extends string, V>() => void
 >prototype : any
 >get : any
->function (key) {    return this._map[key + ''];} : (key: any) => any
->key : any
+>function (key) {    return this._map[key + ''];} : (key: K) => V
+>key : K
 
     return this._map[key + ''];
 >this._map[key + ''] : any
@@ -137,7 +137,7 @@ Ns.Multimap3.prototype.get = function (key) {
 >this : any
 >_map : any
 >key + '' : string
->key : any
+>key : K
 >'' : ""
 }
 

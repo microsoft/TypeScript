@@ -1,13 +1,13 @@
-jsElementAccessNoContextualTypeCrash.js(2,1): error TS2322: Type '{ localize: (string: any) => any; } | {}' is not assignable to type '{ localize: (string: any) => any; }'.
-  Property 'localize' is missing in type '{}' but required in type '{ localize: (string: any) => any; }'.
+jsElementAccessNoContextualTypeCrash.js(2,1): error TS2322: Type '{ localize: (string: string) => string; } | {}' is not assignable to type '{ localize: (string: string) => string; }'.
+  Property 'localize' is missing in type '{}' but required in type '{ localize: (string: string) => string; }'.
 
 
 ==== jsElementAccessNoContextualTypeCrash.js (1 errors) ====
     var Common = {};
     self['Common'] = self['Common'] || {};
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ localize: (string: any) => any; } | {}' is not assignable to type '{ localize: (string: any) => any; }'.
-!!! error TS2322:   Property 'localize' is missing in type '{}' but required in type '{ localize: (string: any) => any; }'.
+!!! error TS2322: Type '{ localize: (string: string) => string; } | {}' is not assignable to type '{ localize: (string: string) => string; }'.
+!!! error TS2322:   Property 'localize' is missing in type '{}' but required in type '{ localize: (string: string) => string; }'.
 !!! related TS2728 jsElementAccessNoContextualTypeCrash.js:7:1: 'localize' is declared here.
     /**
      * @param {string} string

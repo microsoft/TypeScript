@@ -21,7 +21,9 @@ Wagon.circle = function (wagons) {
 
     return wagons ? wagons.length : 3.14;
 >wagons : Symbol(wagons, Decl(first.js, 8, 25))
+>wagons.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >wagons : Symbol(wagons, Decl(first.js, 8, 25))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 }
 /** @param {*[]=} supplies - *[]= is my favourite type */
 Wagon.prototype.load = function (supplies) {
@@ -37,7 +39,9 @@ Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >supplies : Symbol(supplies, Decl(first.js, 15, 24))
 >supplies : Symbol(supplies, Decl(first.js, 15, 24))
+>supplies.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >supplies : Symbol(supplies, Decl(first.js, 15, 24))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
 Wagon.prototype.speed = function () {
 >Wagon.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))

@@ -59,16 +59,16 @@ module.exports.c.Cls = class {}
  * @return {string} 
  */
 module.exports.d = function d(a, b) { return /** @type {*} */(null); }
->module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
->module.exports.d : (a: any, b: any) => any
+>module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
+>module.exports.d : (a: number, b: number) => string
 >module.exports : typeof import("index")
 >module : { "\"index\"": typeof import("index"); }
 >exports : typeof import("index")
->d : (a: any, b: any) => any
->function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
->d : (a: any, b: any) => any
->a : any
->b : any
+>d : (a: number, b: number) => string
+>function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
+>d : (a: number, b: number) => string
+>a : number
+>b : number
 >(null) : any
 
 /**
@@ -78,16 +78,16 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
  * @return {T & U} 
  */
 module.exports.e = function e(a, b) { return /** @type {*} */(null); }
->module.exports.e = function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
->module.exports.e : (a: any, b: any) => any
+>module.exports.e = function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
+>module.exports.e : <T, U>(a: T, b: U) => T & U
 >module.exports : typeof import("index")
 >module : { "\"index\"": typeof import("index"); }
 >exports : typeof import("index")
->e : (a: any, b: any) => any
->function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
->e : (a: any, b: any) => any
->a : any
->b : any
+>e : <T, U>(a: T, b: U) => T & U
+>function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
+>e : <T, U>(a: T, b: U) => T & U
+>a : T
+>b : U
 >(null) : any
 
 /**
@@ -95,33 +95,33 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
  * @param {T} a
  */
 module.exports.f = function f(a) {
->module.exports.f = function f(a) {    return a;} : (a: any) => any
->module.exports.f : (a: any) => any
+>module.exports.f = function f(a) {    return a;} : <T>(a: T) => T
+>module.exports.f : <T>(a: T) => T
 >module.exports : typeof import("index")
 >module : { "\"index\"": typeof import("index"); }
 >exports : typeof import("index")
->f : (a: any) => any
->function f(a) {    return a;} : (a: any) => any
->f : (a: any) => any
->a : any
+>f : <T>(a: T) => T
+>function f(a) {    return a;} : <T>(a: T) => T
+>f : <T>(a: T) => T
+>a : T
 
     return a;
->a : any
+>a : T
 }
 module.exports.f.self = module.exports.f;
->module.exports.f.self = module.exports.f : (a: any) => any
+>module.exports.f.self = module.exports.f : <T>(a: T) => T
 >module.exports.f.self : any
->module.exports.f : (a: any) => any
+>module.exports.f : <T>(a: T) => T
 >module.exports : typeof import("index")
 >module : { "\"index\"": typeof import("index"); }
 >exports : typeof import("index")
->f : (a: any) => any
+>f : <T>(a: T) => T
 >self : any
->module.exports.f : (a: any) => any
+>module.exports.f : <T>(a: T) => T
 >module.exports : typeof import("index")
 >module : { "\"index\"": typeof import("index"); }
 >exports : typeof import("index")
->f : (a: any) => any
+>f : <T>(a: T) => T
 
 /**
  * @param {{x: string}} a

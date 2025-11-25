@@ -587,6 +587,10 @@ func getFunctionLikeHost(host *ast.Node) (*ast.Node, bool) {
 		fun = host.Expression()
 	} else if host.Kind == ast.KindReturnStatement {
 		fun = host.Expression()
+	} else if host.Kind == ast.KindExpressionStatement {
+		if ast.IsBinaryExpression(host.Expression()) {
+			fun = host.Expression().AsBinaryExpression().Right
+		}
 	}
 	if ast.IsFunctionLike(fun) {
 		return fun, true

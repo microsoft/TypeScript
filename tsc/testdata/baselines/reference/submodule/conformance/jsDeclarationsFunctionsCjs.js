@@ -76,7 +76,7 @@ module.exports.c.Cls = class {
  * @param {number} b
  * @return {string}
  */
-export var d = function d(a, b) { return /** @type {*} */ (null as ); };
+export var d = function d(a: number, b: number): string { return /** @type {*} */ (null as ); };
 /**
  * @param {number} a
  * @param {number} b
@@ -89,7 +89,7 @@ module.exports.d = function d(a, b) { return /** @type {*} */ null; };
  * @param {U} b
  * @return {T & U}
  */
-export var e = function e(a, b) { return /** @type {*} */ (null as ); };
+export var e = function e<T, U>(a: T, b: U): T & U { return /** @type {*} */ (null as ); };
 /**
  * @template T,U
  * @param {T} a
@@ -101,7 +101,7 @@ module.exports.e = function e(a, b) { return /** @type {*} */ null; };
  * @template T
  * @param {T} a
  */
-export var f = function f(a) {
+export var f = function f<T>(a: T) {
     return a;
 };
 /**
@@ -146,9 +146,9 @@ module.exports.j = function j() { };
 export declare var a: () => void;
 export declare var b: () => void;
 export declare var c: () => void;
-export declare var d: (a: any, b: any) => any;
-export declare var e: (a: any, b: any) => any;
-export declare var f: (a: any) => any;
+export declare var d: (a: number, b: number) => string;
+export declare var e: <T, U>(a: T, b: U) => T & U;
+export declare var f: <T>(a: T) => T;
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b

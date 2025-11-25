@@ -2,18 +2,23 @@
 +++ new.jsdocTemplateTag.errors.txt
 @@= skipped -0, +0 lines =@@
 -forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+-  Type 'void' is not assignable to type 'Animation'.
+-
+-
+-==== forgot.js (1 errors) ====
 +forgot.js(13,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +forgot.js(13,22): error TS1005: '}' expected.
-+forgot.js(23,1): error TS2322: Type '(keyframes: Keyframe[] | PropertyIndexedKeyframes) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
-   Type 'void' is not assignable to type 'Animation'.
-
-
--==== forgot.js (1 errors) ====
++forgot.js(23,1): error TS2322: Type '(keyframes: Object[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
++  Types of parameters 'keyframes' and 'keyframes' are incompatible.
++    Type 'Keyframe[] | PropertyIndexedKeyframes' is not assignable to type 'Object[]'.
++      Type 'PropertyIndexedKeyframes' is missing the following properties from type 'Object[]': length, pop, push, concat, and 35 more.
++
++
 +==== forgot.js (3 errors) ====
      /**
       * @param {T} a
       * @template T
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +19 lines =@@
       * @param {T} a
       * @template T
       * @returns {function(): T}
@@ -30,6 +35,9 @@
      Element.prototype.animate = function(keyframes) {};
      ~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
-+!!! error TS2322: Type '(keyframes: Keyframe[] | PropertyIndexedKeyframes) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
- !!! error TS2322:   Type 'void' is not assignable to type 'Animation'.
+-!!! error TS2322:   Type 'void' is not assignable to type 'Animation'.
++!!! error TS2322: Type '(keyframes: Object[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
++!!! error TS2322:   Types of parameters 'keyframes' and 'keyframes' are incompatible.
++!!! error TS2322:     Type 'Keyframe[] | PropertyIndexedKeyframes' is not assignable to type 'Object[]'.
++!!! error TS2322:       Type 'PropertyIndexedKeyframes' is missing the following properties from type 'Object[]': length, pop, push, concat, and 35 more.
      

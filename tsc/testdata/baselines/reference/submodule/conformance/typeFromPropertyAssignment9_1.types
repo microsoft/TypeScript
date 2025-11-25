@@ -9,16 +9,16 @@ var my = my ?? {};
 
 /** @param {number} n */
 my.method = function(n) {
->my.method = function(n) {    return n + 1;} : (n: any) => any
+>my.method = function(n) {    return n + 1;} : (n: number) => number
 >my.method : any
 >my : any
 >method : any
->function(n) {    return n + 1;} : (n: any) => any
->n : any
+>function(n) {    return n + 1;} : (n: number) => number
+>n : number
 
     return n + 1;
->n + 1 : any
->n : any
+>n + 1 : number
+>n : number
 >1 : 1
 }
 my.number = 1;

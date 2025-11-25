@@ -45,7 +45,7 @@
   */
  lf.Transaction.prototype.begin = function(scope) {};
 ->lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
-+>lf.Transaction.prototype.begin = function(scope) {} : (scope: any) => void
++>lf.Transaction.prototype.begin = function(scope) {} : (scope: lf.schema.Table[]) => IThenable
  >lf.Transaction.prototype.begin : any
  >lf.Transaction.prototype : any
 ->lf.Transaction : typeof Transaction
@@ -57,6 +57,5 @@
  >prototype : any
  >begin : any
 ->function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
-->scope : lf.schema.Table[]
-+>function(scope) {} : (scope: any) => void
-+>scope : any
++>function(scope) {} : (scope: lf.schema.Table[]) => IThenable
+ >scope : lf.schema.Table[]

@@ -10,11 +10,11 @@
  * @param {Options} options
  */
 module.exports = function loader(options) {}
->module.exports = function loader(options) {} : (options: any) => void
->module.exports : (options: any) => void
->module : { "export=": (options: any) => void; }
->exports : (options: any) => void
->function loader(options) {} : (options: any) => void
->loader : (options: any) => void
->options : any
+>module.exports = function loader(options) {} : (options: Options) => void
+>module.exports : (options: Options) => void
+>module : { "export=": (options: Options) => void; }
+>exports : (options: Options) => void
+>function loader(options) {} : (options: Options) => void
+>loader : (options: Options) => void
+>options : Options
 

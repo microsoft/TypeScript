@@ -14,25 +14,17 @@
 
  /** @param {number} n */
  my.method = function(n) {
-->my.method = function(n) {    return n + 1;} : (n: number) => number
+ >my.method = function(n) {    return n + 1;} : (n: number) => number
 ->my.method : (n: number) => number
 ->my : typeof my
 ->method : (n: number) => number
-->function(n) {    return n + 1;} : (n: number) => number
-->n : number
-+>my.method = function(n) {    return n + 1;} : (n: any) => any
 +>my.method : any
 +>my : any
 +>method : any
-+>function(n) {    return n + 1;} : (n: any) => any
-+>n : any
+ >function(n) {    return n + 1;} : (n: number) => number
+ >n : number
 
-     return n + 1;
-->n + 1 : number
-->n : number
-+>n + 1 : any
-+>n : any
- >1 : 1
+@@= skipped -21, +21 lines =@@
  }
  my.number = 1;
  >my.number = 1 : 1
@@ -139,7 +131,7 @@
  >function () {    return 1;} : () => number
 
      return 1;
-@@= skipped -90, +90 lines =@@
+@@= skipped -69, +69 lines =@@
  }
  my.predicate.query.result = 'none'
  >my.predicate.query.result = 'none' : "none"

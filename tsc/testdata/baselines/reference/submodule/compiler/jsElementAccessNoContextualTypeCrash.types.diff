@@ -6,42 +6,29 @@
  var Common = {};
 ->Common : typeof Common
 ->{} : {}
-+>Common : { localize: (string: any) => any; }
-+>{} : { localize: (string: any) => any; }
++>Common : { localize: (string: string) => string; }
++>{} : { localize: (string: string) => string; }
 
  self['Common'] = self['Common'] || {};
 ->self['Common'] = self['Common'] || {} : {}
 ->self['Common'] : typeof Common
-+>self['Common'] = self['Common'] || {} : { localize: (string: any) => any; } | {}
-+>self['Common'] : { localize: (string: any) => any; }
++>self['Common'] = self['Common'] || {} : { localize: (string: string) => string; } | {}
++>self['Common'] : { localize: (string: string) => string; }
  >self : Window & typeof globalThis
  >'Common' : "Common"
 ->self['Common'] || {} : {}
 ->self['Common'] : typeof Common
-+>self['Common'] || {} : { localize: (string: any) => any; } | {}
-+>self['Common'] : { localize: (string: any) => any; }
++>self['Common'] || {} : { localize: (string: string) => string; } | {}
++>self['Common'] : { localize: (string: string) => string; }
  >self : Window & typeof globalThis
  >'Common' : "Common"
  >{} : {}
-@@= skipped -19, +19 lines =@@
-  * @return {string}
-  */
+@@= skipped -21, +21 lines =@@
  Common.localize = function (string) {
-->Common.localize = function (string) {    return string;} : (string: string) => string
-->Common.localize : (string: string) => string
+ >Common.localize = function (string) {    return string;} : (string: string) => string
+ >Common.localize : (string: string) => string
 ->Common : typeof Common
-->localize : (string: string) => string
-->function (string) {    return string;} : (string: string) => string
-->string : string
-+>Common.localize = function (string) {    return string;} : (string: any) => any
-+>Common.localize : (string: any) => any
-+>Common : { localize: (string: any) => any; }
-+>localize : (string: any) => any
-+>function (string) {    return string;} : (string: any) => any
-+>string : any
-
-     return string;
-->string : string
-+>string : any
-
- };
++>Common : { localize: (string: string) => string; }
+ >localize : (string: string) => string
+ >function (string) {    return string;} : (string: string) => string
+ >string : string

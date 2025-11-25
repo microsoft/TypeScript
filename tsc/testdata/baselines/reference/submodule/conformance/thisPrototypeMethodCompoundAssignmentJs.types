@@ -31,16 +31,16 @@ Element.prototype.remove ??= function () {
 >Element : { new (): Element; prototype: Element; }
 >prototype : Element
 >remove : () => void
->function () {  this.parentNode?.removeChild(this);} : () => void
+>function () {  this.parentNode?.removeChild(this);} : (this: Node) => void
 
   this.parentNode?.removeChild(this);
->this.parentNode?.removeChild(this) : Element | undefined
+>this.parentNode?.removeChild(this) : Node | undefined
 >this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
 >this.parentNode : ParentNode | null
->this : Element
+>this : Node
 >parentNode : ParentNode | null
 >removeChild : (<T extends Node>(child: T) => T) | undefined
->this : Element
+>this : Node
 
 };
 
