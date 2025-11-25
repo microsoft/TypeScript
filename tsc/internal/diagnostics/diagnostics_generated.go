@@ -926,6 +926,8 @@ var X_using_declarations_are_not_allowed_in_ambient_contexts = &Message{code: 15
 
 var X_await_using_declarations_are_not_allowed_in_ambient_contexts = &Message{code: 1546, category: CategoryError, key: "await_using_declarations_are_not_allowed_in_ambient_contexts_1546", text: "'await using' declarations are not allowed in ambient contexts."}
 
+var Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files = &Message{code: 1549, category: CategoryMessage, key: "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549", text: "Ignore the tsconfig found and build with commandline options and files."}
+
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
 var The_types_returned_by_0_are_incompatible_between_these_types = &Message{code: 2201, category: CategoryError, key: "The_types_returned_by_0_are_incompatible_between_these_types_2201", text: "The types returned by '{0}' are incompatible between these types."}
@@ -2355,6 +2357,8 @@ var Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_mod
 var Option_module_must_be_set_to_0_when_option_moduleResolution_is_set_to_1 = &Message{code: 5110, category: CategoryError, key: "Option_module_must_be_set_to_0_when_option_moduleResolution_is_set_to_1_5110", text: "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'."}
 
 var Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information = &Message{code: 5111, category: CategoryMessage, key: "Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111", text: "Visit https://aka.ms/ts6 for migration information."}
+
+var X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error = &Message{code: 5112, category: CategoryError, key: "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112", text: "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error."}
 
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
@@ -5184,6 +5188,8 @@ func keyToMessage(key Key) *Message {
 		return X_using_declarations_are_not_allowed_in_ambient_contexts
 	case "await_using_declarations_are_not_allowed_in_ambient_contexts_1546":
 		return X_await_using_declarations_are_not_allowed_in_ambient_contexts
+	case "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549":
+		return Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":
@@ -6614,6 +6620,8 @@ func keyToMessage(key Key) *Message {
 		return Option_module_must_be_set_to_0_when_option_moduleResolution_is_set_to_1
 	case "Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111":
 		return Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information
+	case "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112":
+		return X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error
 	case "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000":
 		return Generates_a_sourcemap_for_each_corresponding_d_ts_file
 	case "Concatenate_and_emit_output_to_single_file_6001":

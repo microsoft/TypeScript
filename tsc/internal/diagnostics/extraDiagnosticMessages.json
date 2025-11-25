@@ -46,5 +46,13 @@
     "Locale must be an IETF BCP 47 language tag. Examples: '{0}', '{1}'.": {
         "category": "Error",
         "code": 6048
+    },
+    "Ignore the tsconfig found and build with commandline options and files.": {
+        "category": "Message",
+        "code": 1549
+    },
+    "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
+        "category": "Error",
+        "code": 5112
     }
 }

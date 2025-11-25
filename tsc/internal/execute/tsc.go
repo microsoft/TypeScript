@@ -150,19 +150,24 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 				return tsc.CommandLineResult{Status: tsc.ExitStatusDiagnosticsPresent_OutputsSkipped}
 			}
 		}
-	} else if len(commandLine.FileNames()) == 0 {
+	} else if !commandLine.CompilerOptions().IgnoreConfig.IsTrue() || len(commandLine.FileNames()) == 0 {
 		searchPath := tspath.NormalizePath(sys.GetCurrentDirectory())
 		configFileName = findConfigFile(searchPath, sys.FS().FileExists, "tsconfig.json")
-	}
-
-	if configFileName == "" && len(commandLine.FileNames()) == 0 {
-		if commandLine.CompilerOptions().ShowConfig.IsTrue() {
-			reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, tspath.NormalizePath(sys.GetCurrentDirectory())))
-		} else {
-			tsc.PrintVersion(sys, locale)
-			tsc.PrintHelp(sys, locale, commandLine)
+		if len(commandLine.FileNames()) != 0 {
+			if configFileName != "" {
+				// Error to not specify config file
+				reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error))
+				return tsc.CommandLineResult{Status: tsc.ExitStatusDiagnosticsPresent_OutputsSkipped}
+			}
+		} else if configFileName == "" {
+			if commandLine.CompilerOptions().ShowConfig.IsTrue() {
+				reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, tspath.NormalizePath(sys.GetCurrentDirectory())))
+			} else {
+				tsc.PrintVersion(sys, locale)
+				tsc.PrintHelp(sys, locale, commandLine)
+			}
+			return tsc.CommandLineResult{Status: tsc.ExitStatusDiagnosticsPresent_OutputsSkipped}
 		}
-		return tsc.CommandLineResult{Status: tsc.ExitStatusDiagnosticsPresent_OutputsSkipped}
 	}
 
 	// !!! convert to options with absolute paths is usually done here, but for ease of implementation, it's done in `tsoptions.ParseCommandLine()`

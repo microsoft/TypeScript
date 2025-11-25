@@ -298,6 +298,15 @@ var optionsForCompiler = []*CommandLineOption{
 		Description:             diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
 		DefaultValueDescription: false,
 	},
+	{
+		Name:                     "ignoreConfig",
+		Kind:                     CommandLineOptionTypeBoolean,
+		ShowInSimplifiedHelpView: true,
+		Category:                 diagnostics.Command_line_Options,
+		IsCommandLineOnly:        true,
+		Description:              diagnostics.Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files,
+		DefaultValueDescription:  false,
+	},
 
 	// Basic
 	// targetOptionDeclaration,

@@ -259,6 +259,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.GenerateTrace = ParseString(value)
 	case "isolatedModules":
 		allOptions.IsolatedModules = ParseTristate(value)
+	case "ignoreConfig":
+		allOptions.IgnoreConfig = ParseTristate(value)
 	case "ignoreDeprecations":
 		allOptions.IgnoreDeprecations = ParseString(value)
 	case "importHelpers":

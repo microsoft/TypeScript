@@ -47,6 +47,7 @@ type CompilerOptions struct {
 	ForceConsistentCasingInFileNames          Tristate                                  `json:"forceConsistentCasingInFileNames,omitzero"`
 	IsolatedModules                           Tristate                                  `json:"isolatedModules,omitzero"`
 	IsolatedDeclarations                      Tristate                                  `json:"isolatedDeclarations,omitzero"`
+	IgnoreConfig                              Tristate                                  `json:"ignoreConfig,omitzero"`
 	IgnoreDeprecations                        string                                    `json:"ignoreDeprecations,omitzero"`
 	ImportHelpers                             Tristate                                  `json:"importHelpers,omitzero"`
 	InlineSourceMap                           Tristate                                  `json:"inlineSourceMap,omitzero"`

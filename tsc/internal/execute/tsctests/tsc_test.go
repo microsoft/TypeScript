@@ -981,6 +981,59 @@ func TestTscExtends(t *testing.T) {
 	}
 }
 
+func TestTscIgnoreConfig(t *testing.T) {
+	t.Parallel()
+	filesWithoutConfig := func() FileMap {
+		return FileMap{
+			"/home/src/workspaces/project/src/a.ts": "export const a = 10;",
+			"/home/src/workspaces/project/src/b.ts": "export const b = 10;",
+			"/home/src/workspaces/project/c.ts":     "export const c = 10;",
+		}
+	}
+	filesWithConfig := func() FileMap {
+		files := filesWithoutConfig()
+		files["/home/src/workspaces/project/tsconfig.json"] = stringtestutil.Dedent(`
+			{
+                "include": ["src"],
+			}`)
+		return files
+	}
+	getScenarios := func(subScenario string, commandLineArgs []string) []*tscInput {
+		commandLineArgsIgnoreConfig := append(commandLineArgs, "--ignoreConfig")
+		return []*tscInput{
+			{
+				subScenario:     subScenario,
+				files:           filesWithConfig(),
+				commandLineArgs: commandLineArgs,
+			},
+			{
+				subScenario:     subScenario + " with --ignoreConfig",
+				files:           filesWithConfig(),
+				commandLineArgs: commandLineArgsIgnoreConfig,
+			},
+			{
+				subScenario:     subScenario + " when config file absent",
+				files:           filesWithoutConfig(),
+				commandLineArgs: commandLineArgs,
+			},
+			{
+				subScenario:     subScenario + " when config file absent with --ignoreConfig",
+				files:           filesWithoutConfig(),
+				commandLineArgs: commandLineArgsIgnoreConfig,
+			},
+		}
+	}
+	testCases := slices.Concat(
+		getScenarios("without any options", nil),
+		getScenarios("specifying files", []string{"src/a.ts"}),
+		getScenarios("specifying project", []string{"-p", "."}),
+		getScenarios("mixing project and files", []string{"-p", ".", "src/a.ts", "c.ts"}),
+	)
+	for _, test := range testCases {
+		test.run(t, "ignoreConfig")
+	}
+}
+
 func TestTscIncremental(t *testing.T) {
 	t.Parallel()
 	getConstEnumTest := func(bdsContents string, changeEnumFile string, testSuffix string) *tscInput {

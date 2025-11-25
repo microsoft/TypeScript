@@ -1,10 +1,17 @@
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
+//// [/home/src/workspaces/project/c.ts] *new* 
+export const c = 10;
+//// [/home/src/workspaces/project/src/a.ts] *new* 
+export const a = 10;
+//// [/home/src/workspaces/project/src/b.ts] *new* 
+export const b = 10;
 
-tsgo --help
-ExitStatus:: Success
+tsgo --ignoreConfig
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
+Version FakeTSVersion
 tsc: The TypeScript Compiler - Version FakeTSVersion
 
 [1mCOMMON COMMANDS[22m
