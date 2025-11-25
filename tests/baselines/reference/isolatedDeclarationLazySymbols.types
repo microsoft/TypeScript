@@ -40,8 +40,8 @@ const o = {
 foo[o["prop.inner"]] ="A";
 >foo[o["prop.inner"]] ="A" : "A"
 >                          : ^^^
->foo[o["prop.inner"]] : any
->                     : ^^^
+>foo[o["prop.inner"]] : string
+>                     : ^^^^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >o["prop.inner"] : "a"

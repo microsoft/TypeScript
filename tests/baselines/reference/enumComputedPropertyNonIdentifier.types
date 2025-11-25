@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/enumComputedPropertyNonIdentifier.ts] ////
+
+=== enumComputedPropertyNonIdentifier.ts ===
+// Issue #25083: Enum keys not accepted as computed properties if their name is not a valid identifier
+
+enum Type {
+>Type : Type
+>     : ^^^^
+
+    Foo = 'foo',
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+    '3x14' = '3x14',
+>'3x14' : (typeof Type)["3x14"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+
+    'hello-world' = 'hello-world'
+>'hello-world' : (typeof Type)["hello-world"]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'hello-world' : "hello-world"
+>              : ^^^^^^^^^^^^^
+}
+
+// These should work - dot notation
+type TypeMapDot = {
+>TypeMapDot : TypeMapDot
+>           : ^^^^^^^^^^
+
+    [Type.Foo]: string;
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+}
+
+// These should also work - bracket notation with valid identifier
+type TypeMapBracketValid = {
+>TypeMapBracketValid : TypeMapBracketValid
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+    [Type['Foo']]: string;  // Now works!
+>[Type['Foo']] : string
+>              : ^^^^^^
+>Type['Foo'] : Type.Foo
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Foo' : "Foo"
+>      : ^^^^^
+}
+
+// These should work - bracket notation with non-identifier names
+type TypeMapBracketNonIdentifier = {
+>TypeMapBracketNonIdentifier : TypeMapBracketNonIdentifier
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type['3x14']]: number;  // Now works!
+>[Type['3x14']] : number
+>               : ^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+
+    [Type['hello-world']]: string;  // Now works!
+>[Type['hello-world']] : string
+>                      : ^^^^^^
+>Type['hello-world'] : (typeof Type)["hello-world"]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'hello-world' : "hello-world"
+>              : ^^^^^^^^^^^^^
+}
+
+// Test in object types as well
+interface TestInterface {
+    [Type.Foo]: string;  // OK
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+
+    [Type['3x14']]: number;  // Now works!
+>[Type['3x14']] : number
+>               : ^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+// Verify the enum values work in actual objects
+const obj1: Record<Type, any> = {
+>obj1 : Record<Type, any>
+>     : ^^^^^^^^^^^^^^^^^
+>{    [Type.Foo]: 'test',    [Type['3x14']]: 123,    [Type['hello-world']]: 'hello'} : { foo: string; "3x14": number; "hello-world": string; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type.Foo]: 'test',
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+
+    [Type['3x14']]: 123,
+>[Type['3x14']] : number
+>               : ^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+>123 : 123
+>    : ^^^
+
+    [Type['hello-world']]: 'hello'
+>[Type['hello-world']] : string
+>                      : ^^^^^^
+>Type['hello-world'] : (typeof Type)["hello-world"]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'hello-world' : "hello-world"
+>              : ^^^^^^^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+};
+
+// Verify direct access works
+const val1 = Type.Foo;  // OK
+>val1 : Type.Foo
+>     : ^^^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+
+const val2 = Type['Foo'];  // OK
+>val2 : Type.Foo
+>     : ^^^^^^^^
+>Type['Foo'] : Type.Foo
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Foo' : "Foo"
+>      : ^^^^^
+
+const val3 = Type['3x14'];  // OK
+>val3 : (typeof Type)["3x14"]
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+
