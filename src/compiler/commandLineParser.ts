@@ -88,7 +88,7 @@ import {
     NewLineKind,
     Node,
     NodeArray,
-    nodeNextJsonConfigResolver,
+    nodeNextTsconfigResolver,
     normalizePath,
     normalizeSlashes,
     NumericLiteral,
@@ -3641,7 +3641,7 @@ function getExtendsConfigPath(
         return extendedConfigPath;
     }
     // If the path isn't a rooted or relative path, resolve like a module
-    const resolved = nodeNextJsonConfigResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), host);
+    const resolved = nodeNextTsconfigResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), host);
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }
