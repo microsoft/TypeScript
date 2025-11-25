@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/unionBinaryExpressionPreserveOrigin1.ts] ////
+
+=== unionBinaryExpressionPreserveOrigin1.ts ===
+// https://github.com/microsoft/TypeScript/issues/43031
+
+type Brand<K, T> = K & { __brand: T };
+>Brand : Brand<K, T>
+>      : ^^^^^^^^^^^
+>__brand : T
+>        : ^
+
+type BrandedUnknown<T> = Brand<"unknown", T>;
+>BrandedUnknown : BrandedUnknown<T>
+>               : ^^^^^^^^^^^^^^^^^
+
+type Maybe<T> = T | BrandedUnknown<T>;
+>Maybe : Maybe<T>
+>      : ^^^^^^^^
+
+declare const m1: Maybe<boolean> | undefined;
+>m1 : Maybe<boolean> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const test1 = m1 || false;
+>test1 : Maybe<boolean>
+>      : ^^^^^^^^^^^^^^
+>m1 || false : Maybe<boolean>
+>            : ^^^^^^^^^^^^^^
+>m1 : Maybe<boolean> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+const test2 = m1 ?? false;
+>test2 : Maybe<boolean>
+>      : ^^^^^^^^^^^^^^
+>m1 ?? false : Maybe<boolean>
+>            : ^^^^^^^^^^^^^^
+>m1 : Maybe<boolean> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+declare const m2: Maybe<null> | undefined;
+>m2 : Maybe<null> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const test3 = m2 || null;
+>test3 : Maybe<null>
+>      : ^^^^^^^^^^^
+>m2 || null : Maybe<null>
+>           : ^^^^^^^^^^^
+>m2 : Maybe<null> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const test4 = m2 ?? null;
+>test4 : Maybe<null>
+>      : ^^^^^^^^^^^
+>m2 ?? null : Maybe<null>
+>           : ^^^^^^^^^^^
+>m2 : Maybe<null> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type StrOrNum = string | number
+>StrOrNum : StrOrNum
+>         : ^^^^^^^^
+
+declare const numOrStr: StrOrNum;
+>numOrStr : StrOrNum
+>         : ^^^^^^^^
+
+const test5 = numOrStr && numOrStr;
+>test5 : StrOrNum
+>      : ^^^^^^^^
+>numOrStr && numOrStr : StrOrNum
+>                     : ^^^^^^^^
+>numOrStr : StrOrNum
+>         : ^^^^^^^^
+>numOrStr : StrOrNum
+>         : ^^^^^^^^
+
