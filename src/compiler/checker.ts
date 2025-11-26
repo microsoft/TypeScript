@@ -26401,7 +26401,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createArrayType(elementType, isReadonlyArrayType(source));
         }
         if (isTupleType(source)) {
-            const elementTypes = map(getElementTypes(source), (t, i) => inferReverseMappedType(getStringLiteralType("" + i), t, target, constraint));
+            const fixedLength = source.target.fixedLength;
+            const elementTypes = map(getElementTypes(source), (t, i) => inferReverseMappedType(i < fixedLength ? getStringLiteralType("" + i) : numberType, t, target, constraint));
             if (!every(elementTypes, (t): t is Type => !!t)) {
                 return undefined;
             }
