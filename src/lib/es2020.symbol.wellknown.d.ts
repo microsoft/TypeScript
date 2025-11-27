@@ -9,11 +9,15 @@ interface SymbolConstructor {
     readonly matchAll: unique symbol;
 }
 
+interface RegExpStringIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.iterator](): RegExpStringIterator<T>;
+}
+
 interface RegExp {
     /**
      * Matches a string with this regular expression, and returns an iterable of matches
      * containing the results of that search.
      * @param string A string to search within.
      */
-    [Symbol.matchAll](str: string): IterableIterator<RegExpMatchArray>;
+    [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray>;
 }

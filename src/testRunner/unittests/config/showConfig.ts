@@ -1,26 +1,28 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
         describe(name, () => {
-            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/ig, "")}/tsconfig.json`;
+            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
                 const cwd = `/${name}`;
                 const configPath = ts.combinePaths(cwd, "tsconfig.json");
                 const configContents = configJson ? JSON.stringify(configJson) : undefined;
                 const configParseHost: ts.ParseConfigFileHost = {
-                    fileExists: path =>
-                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
-                    getCurrentDirectory() { return cwd; },
+                    fileExists: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
+                    getCurrentDirectory() {
+                        return cwd;
+                    },
                     useCaseSensitiveFileNames: true,
                     onUnRecoverableConfigFileDiagnostic: d => {
                         throw new Error(ts.flattenDiagnosticMessageText(d.messageText, "\n"));
                     },
-                    readDirectory() { return []; },
-                    readFile: path =>
-                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
+                    readDirectory() {
+                        return [];
+                    },
+                    readFile: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
                 };
                 let commandLine = ts.parseCommandLine(commandLinesArgs);
                 if (commandLine.options.project) {
@@ -31,7 +33,7 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 const initResult = ts.convertToTSConfig(commandLine, configPath, configParseHost);
 
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
             });
         });
@@ -55,6 +57,8 @@ describe("unittests:: config:: showConfig", () => {
 
     showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
 
+    showTSConfigCorrectly("Show TSConfig with transitively implied options", ["--showConfig", "--module", "nodenext"]);
+
     showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
         compilerOptions: {
             esModuleInterop: true,
@@ -64,14 +68,14 @@ describe("unittests:: config:: showConfig", () => {
         },
         compileOnSave: true,
         exclude: [
-            "dist"
+            "dist",
         ],
         files: [],
         include: [
-            "src/*"
+            "src/*",
         ],
         references: [
-            { path: "./test" }
+            { path: "./test" },
         ],
     });
 
@@ -92,25 +96,40 @@ describe("unittests:: config:: showConfig", () => {
                 "@common/*": ["src/common/*"],
                 "*": [
                     "node_modules/*",
-                    "src/types/*"
-                ]
+                    "src/types/*",
+                ],
             },
             experimentalDecorators: true,
             emitDecoratorMetadata: true,
-            resolveJsonModule: true
+            resolveJsonModule: true,
         },
         include: [
-            "./src/**/*"
-        ]
+            "./src/**/*",
+        ],
     });
 
     showTSConfigCorrectly("Show TSConfig with watch options", ["-p", "tsconfig.json"], {
         watchOptions: {
-            watchFile: "DynamicPriorityPolling"
+            watchFile: "DynamicPriorityPolling",
         },
         include: [
-            "./src/**/*"
-        ]
+            "./src/**/*",
+        ],
+    });
+
+    showTSConfigCorrectly("Show TSConfig with configDir template template", ["-p", "tsconfig.json"], {
+        compilerOptions: {
+            outDir: "${configDir}/outDir", // eslint-disable-line no-template-curly-in-string
+            typeRoots: ["root1", "${configDir}/root2", "root3"], // eslint-disable-line no-template-curly-in-string
+            paths: {
+                "@myscope/*": ["${configDir}/types/*"], // eslint-disable-line no-template-curly-in-string
+                "other/*": ["other/*"],
+            },
+        },
+        include: [
+            "${configDir}/src/**/*", // eslint-disable-line no-template-curly-in-string
+        ],
+        files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string
     });
 
     // Bulk validation of all option declarations

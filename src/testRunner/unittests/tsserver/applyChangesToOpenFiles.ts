@@ -1,50 +1,54 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    commonFile1,
-    commonFile2,
-} from "../helpers/tscWatch";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
+describe("unittests:: tsserver:: applyChangesToOpenFiles::", () => {
     function fileContentWithComment(file: File) {
         return `// some copy right notice
 ${file.content}`;
     }
 
+    const commonFile1: File = {
+        path: "/user/username/projects/project/commonFile1.ts",
+        content: "let x = 1",
+    };
+    const commonFile2: File = {
+        path: "/user/username/projects/project/commonFile2.ts",
+        content: "let y = 1",
+    };
+
     function setup() {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: "{}"
+            path: "/user/username/projects/project/tsconfig.json",
+            content: "{}",
         };
         const file3: File = {
-            path: "/a/b/file3.ts",
-            content: "let xyz = 1;"
+            path: "/user/username/projects/project/file3.ts",
+            content: "let xyz = 1;",
         };
         const app: File = {
-            path: "/a/b/app.ts",
-            content: "let z = 1;"
+            path: "/user/username/projects/project/app.ts",
+            content: "let z = 1;",
         };
-        const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+
+        const host = TestServerHost.createServerHost([app, file3, commonFile1, commonFile2, configFile]);
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
-            arguments: { file: app.path }
+            arguments: { file: app.path },
         });
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file3.path,
-                fileContent: fileContentWithComment(file3)
-            }
+                fileContent: fileContentWithComment(file3),
+            },
         });
         return { session, file3, app };
     }
@@ -58,12 +62,12 @@ ${file.content}`;
                 openFiles: [
                     {
                         fileName: commonFile1.path,
-                        content: fileContentWithComment(commonFile1)
+                        content: fileContentWithComment(commonFile1),
                     },
                     {
                         fileName: commonFile2.path,
-                        content: fileContentWithComment(commonFile2)
-                    }
+                        content: fileContentWithComment(commonFile2),
+                    },
                 ],
                 changedFiles: [
                     {
@@ -71,19 +75,19 @@ ${file.content}`;
                         changes: [
                             {
                                 span: { start: 0, length: 0 },
-                                newText: "let zzz = 10;"
+                                newText: "let zzz = 10;",
                             },
                             {
                                 span: { start: 0, length: 0 },
-                                newText: "let zz = 10;"
-                            }
-                        ]
-                    }
+                                newText: "let zz = 10;",
+                            },
+                        ],
+                    },
                 ],
                 closedFiles: [
-                    file3.path
-                ]
-            }
+                    file3.path,
+                ],
+            },
         });
         // Open file1 again
         session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
@@ -91,9 +95,9 @@ ${file.content}`;
             arguments: {
                 openFiles: [{
                     fileName: commonFile1.path,
-                    content: commonFile1.content
-                }]
-            }
+                    content: commonFile1.content,
+                }],
+            },
         });
         baselineTsserverLogs("applyChangesToOpenFiles", "with applyChangedToOpenFiles request", session);
     });
@@ -107,12 +111,12 @@ ${file.content}`;
                 openFiles: [
                     {
                         file: commonFile1.path,
-                        fileContent: fileContentWithComment(commonFile1)
+                        fileContent: fileContentWithComment(commonFile1),
                     },
                     {
                         file: commonFile2.path,
-                        fileContent: fileContentWithComment(commonFile2)
-                    }
+                        fileContent: fileContentWithComment(commonFile2),
+                    },
                 ],
                 changedFiles: [
                     {
@@ -127,14 +131,14 @@ ${file.content}`;
                                 start: { line: 1, offset: 1 },
                                 end: { line: 1, offset: 1 },
                                 newText: "let zz = 10;",
-                            }
-                        ]
-                    }
+                            },
+                        ],
+                    },
                 ],
                 closedFiles: [
-                    file3.path
-                ]
-            }
+                    file3.path,
+                ],
+            },
         });
         // Open file1 again
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
@@ -142,9 +146,9 @@ ${file.content}`;
             arguments: {
                 openFiles: [{
                     file: commonFile1.path,
-                    fileContent: commonFile1.content
-                }]
-            }
+                    fileContent: commonFile1.content,
+                }],
+            },
         });
         baselineTsserverLogs("applyChangesToOpenFiles", "with updateOpen request", session);
     });

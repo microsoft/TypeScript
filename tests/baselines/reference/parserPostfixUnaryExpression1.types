@@ -3,7 +3,11 @@
 === parserPostfixUnaryExpression1.ts ===
 foo ++ ++;
 >foo ++ : number
+>       : ^^^^^^
 >foo : any
+>    : ^^^
 >++ : number
+>   : ^^^^^^
 > : any
+> : ^^^
 

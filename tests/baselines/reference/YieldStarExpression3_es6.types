@@ -3,8 +3,11 @@
 === YieldStarExpression3_es6.ts ===
 function *g() {
 >g : () => Generator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield *;
 >yield * : any
+>        : ^^^
 > : any
+> : ^^^
 }

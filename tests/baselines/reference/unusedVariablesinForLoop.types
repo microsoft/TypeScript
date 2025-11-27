@@ -3,10 +3,13 @@
 === unusedVariablesinForLoop.ts ===
 function f1 () {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     for(var i = 0; ;) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     }
 }

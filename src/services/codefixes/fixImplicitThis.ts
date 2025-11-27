@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     ANONYMOUS,
     Debug,
     DiagnosticOrDiagnosticAndArguments,
@@ -17,12 +22,7 @@ import {
     SyntaxKind,
     textChanges,
     TypeChecker,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixImplicitThis";
 const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
@@ -37,9 +37,10 @@ registerCodeFix({
         return diagnostic ? [createCodeFixAction(fixId, changes, diagnostic, fixId, Diagnostics.Fix_all_implicit_this_errors)] : emptyArray;
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        doChange(changes, diag.file, diag.start, context.program.getTypeChecker());
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            doChange(changes, diag.file, diag.start, context.program.getTypeChecker());
+        }),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticOrDiagnosticAndArguments | undefined {

@@ -2,7 +2,7 @@
 
 //// [privacyLocalInternalReferenceImportWithExport.ts]
 // private elements
-module m_private {
+namespace m_private {
     export class c_private {
     }
     export enum e_private {
@@ -15,18 +15,18 @@ module m_private {
     export var v_private = new c_private();
     export interface i_private {
     }
-    export module mi_private {
+    export namespace mi_private {
         export class c {
         }
     }
-    export module mu_private {
+    export namespace mu_private {
         export interface i {
         }
     }
 }
 
 // Public elements
-export module m_public {
+export namespace m_public {
     export class c_public {
     }
     export enum e_public {
@@ -39,17 +39,17 @@ export module m_public {
     export var v_public = 10;
     export interface i_public {
     }
-    export module mi_public {
+    export namespace mi_public {
         export class c {
         }
     }
-    export module mu_public {
+    export namespace mu_public {
         export interface i {
         }
     }
 }
 
-export module import_public {
+export namespace import_public {
     // Privacy errors - importing private elements
     export import im_public_c_private = m_private.c_private;
     export import im_public_e_private = m_private.e_private;
@@ -102,7 +102,7 @@ export module import_public {
     export var publicUse_im_public_mu_public: im_public_mu_public.i;
 }
 
-module import_private {
+namespace import_private {
     // No Privacy errors - importing private elements
     export import im_private_c_private = m_private.c_private;
     export import im_private_e_private = m_private.e_private;
@@ -301,7 +301,7 @@ var import_private;
 
 
 //// [privacyLocalInternalReferenceImportWithExport.d.ts]
-declare module m_private {
+declare namespace m_private {
     class c_private {
     }
     enum e_private {
@@ -312,16 +312,16 @@ declare module m_private {
     var v_private: c_private;
     interface i_private {
     }
-    module mi_private {
+    namespace mi_private {
         class c {
         }
     }
-    module mu_private {
+    namespace mu_private {
         interface i {
         }
     }
 }
-export declare module m_public {
+export declare namespace m_public {
     class c_public {
     }
     enum e_public {
@@ -332,16 +332,16 @@ export declare module m_public {
     var v_public: number;
     interface i_public {
     }
-    module mi_public {
+    namespace mi_public {
         class c {
         }
     }
-    module mu_public {
+    namespace mu_public {
         interface i {
         }
     }
 }
-export declare module import_public {
+export declare namespace import_public {
     export import im_public_c_private = m_private.c_private;
     export import im_public_e_private = m_private.e_private;
     export import im_public_f_private = m_private.f_private;

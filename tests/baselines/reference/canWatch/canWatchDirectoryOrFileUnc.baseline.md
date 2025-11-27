@@ -45,6 +45,13 @@ Determines if given directory or file can be watched
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3                               | true                    |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4                       | true                    |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5               | true                    |
+| //vda1cs4850/workspaces                                                                       | false                   |
+| //vda1cs4850/workspaces/folderAtRoot                                                          | false                   |
+| //vda1cs4850/workspaces/folderAtRoot/folder1                                                  | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2                                          | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3                                  | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4                          | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                  | true                    |
 
 | File                                                                                          | canWatchDirectoryOrFile |
 | --------------------------------------------------------------------------------------------- | ----------------------- |
@@ -87,4 +94,11 @@ Determines if given directory or file can be watched
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                    |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                    |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                    |
+| //vda1cs4850/workspaces/package.json                                                          | false                   |
+| //vda1cs4850/workspaces/folderAtRoot/package.json                                             | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/package.json                                     | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/package.json                             | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/package.json                     | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/package.json             | true                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json     | true                    |
 

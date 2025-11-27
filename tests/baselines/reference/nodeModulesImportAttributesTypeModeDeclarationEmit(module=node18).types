@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmit.ts] ////
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : LocalInterface
+>               : ^^^^^^^^^^^^^^
+
+    & import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface
+    & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface);
+>a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any : any
+
+export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
+>b : import("/node_modules/pkg/import").ImportInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any : any
+
+=== /node_modules/pkg/import.d.ts ===
+
+export interface ImportInterface {}
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}

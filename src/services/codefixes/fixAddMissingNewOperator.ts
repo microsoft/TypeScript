@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     cast,
     Diagnostics,
     factory,
@@ -9,12 +14,7 @@ import {
     textChanges,
     TextSpan,
     textSpanEnd,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "addMissingNewOperator";
 const errorCodes = [Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];
@@ -26,8 +26,7 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_new_operator_to_call, fixId, Diagnostics.Add_missing_new_operator_to_all_calls)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-        addMissingNewOperator(changes, context.sourceFile, diag)),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => addMissingNewOperator(changes, context.sourceFile, diag)),
 });
 
 function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {

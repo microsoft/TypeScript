@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     CodeFixContextBase,
     contains,
@@ -17,12 +22,7 @@ import {
     textChanges,
     TextSpan,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
@@ -36,14 +36,14 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyExport(context) {
-        const fixedExportDeclarations = new Map<number, true>();
+        const fixedExportDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
             if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
                 fixSingleExportDeclaration(changes, exportSpecifier, context);
             }
         });
-    }
+    },
 });
 
 function getExportSpecifierForDiagnosticSpan(span: TextSpan, sourceFile: SourceFile) {
@@ -68,19 +68,19 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
             /*isTypeOnly*/ false,
             factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined
+            /*attributes*/ undefined,
         );
         const typeExportDeclaration = factory.createExportDeclaration(
             /*modifiers*/ undefined,
             /*isTypeOnly*/ true,
             factory.createNamedExports(typeExportSpecifiers),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined
+            /*attributes*/ undefined,
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
             leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
         });
         changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
     }
@@ -94,7 +94,8 @@ function getTypeExportSpecifiers(originExportSpecifier: ExportSpecifier, context
 
     const diagnostics = getDiagnosticsWithinSpan(
         createTextSpanFromNode(exportClause),
-        context.program.getSemanticDiagnostics(context.sourceFile, context.cancellationToken));
+        context.program.getSemanticDiagnostics(context.sourceFile, context.cancellationToken),
+    );
 
     return filter(exportClause.elements, element => {
         return element === originExportSpecifier || findDiagnosticForNode(element, diagnostics)?.code === errorCodes[0];

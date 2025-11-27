@@ -19,13 +19,13 @@ import {
     visitEachChild,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2021(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         hoistVariableDeclaration,
-        factory
+        factory,
     } = context;
     return chainBundle(context, transformSourceFile);
 
@@ -60,17 +60,17 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
                 factory.createTempVariable(hoistVariableDeclaration);
             const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
                 propertyAccessTarget,
-                left.expression
+                left.expression,
             );
 
             if (isPropertyAccessExpression(left)) {
                 assignmentTarget = factory.createPropertyAccessExpression(
                     propertyAccessTarget,
-                    left.name
+                    left.name,
                 );
                 left = factory.createPropertyAccessExpression(
                     propertyAccessTargetAssignment,
-                    left.name
+                    left.name,
                 );
             }
             else {
@@ -80,14 +80,14 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
 
                 assignmentTarget = factory.createElementAccessExpression(
                     propertyAccessTarget,
-                    elementAccessArgument
+                    elementAccessArgument,
                 );
                 left = factory.createElementAccessExpression(
                     propertyAccessTargetAssignment,
                     elementAccessArgumentSimpleCopiable ? left.argumentExpression : factory.createAssignment(
                         elementAccessArgument,
-                        left.argumentExpression
-                    )
+                        left.argumentExpression,
+                    ),
                 );
             }
         }
@@ -98,9 +98,9 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
             factory.createParenthesizedExpression(
                 factory.createAssignment(
                     assignmentTarget,
-                    right
-                )
-            )
+                    right,
+                ),
+            ),
         );
     }
 }

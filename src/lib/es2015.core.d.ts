@@ -38,10 +38,12 @@ interface Array<T> {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end. If start is omitted, `0` is used.
+     * is treated as length+end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start?: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): this;
+
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface ArrayConstructor {
@@ -342,6 +344,8 @@ interface ReadonlyArray<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
+
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface RegExp {
@@ -535,5 +539,41 @@ interface StringConstructor {
      * @param template A well-formed template string call site representation.
      * @param substitutions A set of substitution values.
      */
-    raw(template: { raw: readonly string[] | ArrayLike<string>}, ...substitutions: any[]): string;
+    raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
+}
+
+interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }

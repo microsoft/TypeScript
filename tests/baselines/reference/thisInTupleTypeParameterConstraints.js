@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/thisInTupleTypeParameterConstraints.ts] ////
 
 //// [thisInTupleTypeParameterConstraints.ts]
-/// <reference no-default-lib="true"/>
-
 interface Boolean {}
 interface IArguments {}
 interface Function {}
@@ -26,6 +24,5 @@ f(x);
 
 
 //// [thisInTupleTypeParameterConstraints.js]
-/// <reference no-default-lib="true"/>
 var x;
 f(x);

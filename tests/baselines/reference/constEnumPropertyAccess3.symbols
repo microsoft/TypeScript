@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess3.ts] ////
+
+=== constEnumPropertyAccess3.ts ===
+const enum E {
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+
+    A = ~1,
+>A : Symbol(E.A, Decl(constEnumPropertyAccess3.ts, 0, 14))
+
+    B = -1,
+>B : Symbol(E.B, Decl(constEnumPropertyAccess3.ts, 1, 11))
+
+    C = ~(1 + 1),
+>C : Symbol(E.C, Decl(constEnumPropertyAccess3.ts, 2, 11))
+
+    D = -(1 + 2),
+>D : Symbol(E.D, Decl(constEnumPropertyAccess3.ts, 3, 17))
+
+    E = 1 - 10,
+>E : Symbol(E.E, Decl(constEnumPropertyAccess3.ts, 4, 17))
+}
+
+E.A.toString();
+>E.A.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E.A : Symbol(E.A, Decl(constEnumPropertyAccess3.ts, 0, 14))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>A : Symbol(E.A, Decl(constEnumPropertyAccess3.ts, 0, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E.B.toString();
+>E.B.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E.B : Symbol(E.B, Decl(constEnumPropertyAccess3.ts, 1, 11))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>B : Symbol(E.B, Decl(constEnumPropertyAccess3.ts, 1, 11))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E.C.toString();
+>E.C.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E.C : Symbol(E.C, Decl(constEnumPropertyAccess3.ts, 2, 11))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>C : Symbol(E.C, Decl(constEnumPropertyAccess3.ts, 2, 11))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E.D.toString();
+>E.D.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E.D : Symbol(E.D, Decl(constEnumPropertyAccess3.ts, 3, 17))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>D : Symbol(E.D, Decl(constEnumPropertyAccess3.ts, 3, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E["A"].toString();
+>E["A"].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>"A" : Symbol(E.A, Decl(constEnumPropertyAccess3.ts, 0, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E["B"].toString();
+>E["B"].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>"B" : Symbol(E.B, Decl(constEnumPropertyAccess3.ts, 1, 11))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E["C"].toString();
+>E["C"].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>"C" : Symbol(E.C, Decl(constEnumPropertyAccess3.ts, 2, 11))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E["D"].toString();
+>E["D"].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>"D" : Symbol(E.D, Decl(constEnumPropertyAccess3.ts, 3, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+E["E"].toString();
+>E["E"].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(constEnumPropertyAccess3.ts, 0, 0))
+>"E" : Symbol(E.E, Decl(constEnumPropertyAccess3.ts, 4, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

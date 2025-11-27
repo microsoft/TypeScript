@@ -210,7 +210,7 @@ declare class Context {
      * @param {Input} input
      */
     constructor(input: Input);
-    state: any;
+    state: State;
     /**
      * @param {Input} input
      * @param {HookHandler=} handle
@@ -222,24 +222,6 @@ declare namespace Context {
     export { Timer, Hook, HookHandler, Input, State };
 }
 /**
- * Input type definition
- */
-type Input = {
-    timer: Timer;
-    hook: Hook;
-};
-/**
- * Imports
- */
-type HookHandler = import("./hook").HookHandler;
-/**
- * State type definition
- */
-type State = {
-    timer: Timer;
-    hook: Hook;
-};
-/**
  * Imports
  */
 type Timer = import("./timer");
@@ -247,6 +229,24 @@ type Timer = import("./timer");
  * Imports
  */
 type Hook = import("./hook");
+/**
+ * Imports
+ */
+type HookHandler = import("./hook").HookHandler;
+/**
+ * Input type definition
+ */
+type Input = {
+    timer: Timer;
+    hook: Hook;
+};
+/**
+ * State type definition
+ */
+type State = {
+    timer: Timer;
+    hook: Hook;
+};
 //// [hook.d.ts]
 export = Hook;
 /**

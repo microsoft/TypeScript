@@ -1,16 +1,16 @@
 //// [tests/cases/compiler/reuseInnerModuleMember.ts] ////
 
 //// [reuseInnerModuleMember_0.ts]
-export module M { }
+export namespace M { }
 
 //// [reuseInnerModuleMember_1.ts]
 ///<reference path='reuseInnerModuleMember_0.ts'/>
-declare module bar {
+declare namespace bar {
     interface alpha { }
 }
 
 import f = require('./reuseInnerModuleMember_0');
-module bar {
+namespace bar {
     var x: alpha;
 }
 

@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts] ////
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.ts]
-module foo {
+namespace foo {
     export interface IFoo<T> { }
 }
-module bar {
+namespace bar {
     export class Foo<T> implements foo.IFoo<T> { }
 }
 
@@ -22,11 +22,11 @@ var bar;
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.d.ts]
-declare module foo {
+declare namespace foo {
     interface IFoo<T> {
     }
 }
-declare module bar {
+declare namespace bar {
     class Foo<T> implements foo.IFoo<T> {
     }
 }

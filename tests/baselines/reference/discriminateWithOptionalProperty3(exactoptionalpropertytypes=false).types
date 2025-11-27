@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty3.ts] ////
+
+=== discriminateWithOptionalProperty3.ts ===
+// https://github.com/microsoft/TypeScript/issues/55532#issuecomment-1694744665
+
+type Maybe<T> = null | undefined | T;
+>Maybe : Maybe<T>
+>      : ^^^^^^^^
+
+declare class GraphQLError extends Error {
+>GraphQLError : GraphQLError
+>             : ^^^^^^^^^^^^
+>Error : Error
+>      : ^^^^^
+
+  originalError: Error;
+>originalError : Error
+>              : ^^^^^
+}
+
+interface ExecutionArgs {
+  variableValues?: Maybe<{ readonly [variable: string]: unknown }>;
+>variableValues : Maybe<{ readonly [variable: string]: unknown; }>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>variable : string
+>         : ^^^^^^
+}
+
+interface ExecutionContext {
+  variableValues: { [variable: string]: unknown };
+>variableValues : { [variable: string]: unknown; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>variable : string
+>         : ^^^^^^
+}
+
+type CoercedVariableValues =
+>CoercedVariableValues : CoercedVariableValues
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+  | { errors: ReadonlyArray<GraphQLError>; coerced?: never }
+>errors : readonly GraphQLError[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>coerced : undefined
+>        : ^^^^^^^^^
+
+  | { coerced: { [variable: string]: unknown }; errors?: never };
+>coerced : { [variable: string]: unknown; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>variable : string
+>         : ^^^^^^
+>errors : undefined
+>       : ^^^^^^^^^
+
+declare function getVariableValues(inputs: {
+>getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
+>                  : ^      ^^                                         ^^^^^                     
+>inputs : { readonly [variable: string]: unknown; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  readonly [variable: string]: unknown;
+>variable : string
+>         : ^^^^^^
+
+}): CoercedVariableValues;
+
+export function buildExecutionContext(
+>buildExecutionContext : (args: ExecutionArgs) => ReadonlyArray<GraphQLError> | ExecutionContext
+>                      : ^    ^^             ^^^^^                                              
+
+  args: ExecutionArgs,
+>args : ExecutionArgs
+>     : ^^^^^^^^^^^^^
+
+): ReadonlyArray<GraphQLError> | ExecutionContext {
+  const { variableValues: rawVariableValues } = args;
+>variableValues : any
+>               : ^^^
+>rawVariableValues : Maybe<{ readonly [variable: string]: unknown; }>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : ExecutionArgs
+>     : ^^^^^^^^^^^^^
+
+  const coercedVariableValues = getVariableValues(rawVariableValues ?? {});
+>coercedVariableValues : CoercedVariableValues
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+>getVariableValues(rawVariableValues ?? {}) : CoercedVariableValues
+>                                           : ^^^^^^^^^^^^^^^^^^^^^
+>getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
+>                  : ^      ^^                                         ^^^^^                     
+>rawVariableValues ?? {} : { readonly [variable: string]: unknown; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rawVariableValues : Maybe<{ readonly [variable: string]: unknown; }>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  if (coercedVariableValues.errors) {
+>coercedVariableValues.errors : readonly GraphQLError[] | undefined
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>coercedVariableValues : CoercedVariableValues
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+>errors : readonly GraphQLError[] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return coercedVariableValues.errors;
+>coercedVariableValues.errors : readonly GraphQLError[]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>coercedVariableValues : { errors: ReadonlyArray<GraphQLError>; coerced?: never; }
+>                      : ^^^^^^^^^^                           ^^^^^^^^^^^^     ^^^
+>errors : readonly GraphQLError[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+  }
+
+  return {
+>{    variableValues: coercedVariableValues.coerced,  } : { variableValues: { [variable: string]: unknown; }; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    variableValues: coercedVariableValues.coerced,
+>variableValues : { [variable: string]: unknown; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>coercedVariableValues.coerced : { [variable: string]: unknown; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
+>                      : ^^^^^^^^^^^                                ^^^^^^^^^^^     ^^^
+>coerced : { [variable: string]: unknown; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  };
+}
+

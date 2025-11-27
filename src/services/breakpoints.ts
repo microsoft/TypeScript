@@ -70,14 +70,14 @@ import {
     VariableStatement,
     WhileStatement,
     WithStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Get the breakpoint span in given sourceFile
  *
  * @internal
  */
-export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
+export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number): TextSpan | undefined {
     // Cannot set breakpoint in dts file
     if (sourceFile.isDeclarationFile) {
         return undefined;
@@ -346,11 +346,13 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                     // Set breakpoint on identifier element of destructuring pattern
                     // `a` or `...c` or `d: x` from
                     // `[a, b, ...c]` or `{ a, b }` or `{ d: x }` from destructuring pattern
-                    if ((node.kind === SyntaxKind.Identifier ||
-                        node.kind === SyntaxKind.SpreadElement ||
-                        node.kind === SyntaxKind.PropertyAssignment ||
-                        node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
-                        isArrayLiteralOrObjectLiteralDestructuringPattern(parent)) {
+                    if (
+                        (node.kind === SyntaxKind.Identifier ||
+                            node.kind === SyntaxKind.SpreadElement ||
+                            node.kind === SyntaxKind.PropertyAssignment ||
+                            node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
+                        isArrayLiteralOrObjectLiteralDestructuringPattern(parent)
+                    ) {
                         return textSpan(node);
                     }
 
@@ -362,7 +364,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                         // {a, b, c} = expression
                         if (isArrayLiteralOrObjectLiteralDestructuringPattern(left)) {
                             return spanInArrayLiteralOrObjectLiteralDestructuringPattern(
-                                left as ArrayLiteralExpression | ObjectLiteralExpression);
+                                left as ArrayLiteralExpression | ObjectLiteralExpression,
+                            );
                         }
 
                         if (operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
@@ -411,8 +414,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                     switch (node.parent.kind) {
                         case SyntaxKind.PropertyAssignment:
                             // If this is name of property assignment, set breakpoint in the initializer
-                            if ((node.parent as PropertyAssignment).name === node &&
-                                !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
+                            if (
+                                (node.parent as PropertyAssignment).name === node &&
+                                !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)
+                            ) {
                                 return spanInNode((node.parent as PropertyAssignment).initializer);
                             }
                             break;
@@ -476,14 +481,18 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
             // Breakpoint is possible in variableDeclaration only if there is initialization
             // or its declaration from 'for of'
-            if ((hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer) ||
+            if (
+                (hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer) ||
                 hasSyntacticModifier(variableDeclaration, ModifierFlags.Export) ||
-                parent.parent.kind === SyntaxKind.ForOfStatement) {
+                parent.parent.kind === SyntaxKind.ForOfStatement
+            ) {
                 return textSpanFromVariableDeclaration(variableDeclaration);
             }
 
-            if (isVariableDeclarationList(variableDeclaration.parent) &&
-                variableDeclaration.parent.declarations[0] !== variableDeclaration) {
+            if (
+                isVariableDeclarationList(variableDeclaration.parent) &&
+                variableDeclaration.parent.declarations[0] !== variableDeclaration
+            ) {
                 // If we cannot set breakpoint on this declaration, set it on previous one
                 // Because the variable declaration may be binding pattern and
                 // we would like to set breakpoint in last binding element if that's the case,
@@ -603,8 +612,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInBindingPattern(bindingPattern: BindingPattern): TextSpan | undefined {
             // Set breakpoint in first binding element
-            const firstBindingElement = forEach(bindingPattern.elements,
-                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(bindingPattern.elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -623,8 +631,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
             const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements : node.properties;
 
-            const firstBindingElement = forEach(elements,
-                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -725,9 +732,11 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         }
 
         function spanInOpenParenToken(node: Node): TextSpan | undefined {
-            if (node.parent.kind === SyntaxKind.DoStatement || // Go to while keyword and do action instead
+            if (
+                node.parent.kind === SyntaxKind.DoStatement || // Go to while keyword and do action instead
                 node.parent.kind === SyntaxKind.CallExpression ||
-                node.parent.kind === SyntaxKind.NewExpression) {
+                node.parent.kind === SyntaxKind.NewExpression
+            ) {
                 return spanInPreviousNode(node);
             }
 
@@ -767,9 +776,11 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInColonToken(node: Node): TextSpan | undefined {
             // Is this : specifying return annotation of the function declaration
-            if (isFunctionLike(node.parent) ||
+            if (
+                isFunctionLike(node.parent) ||
                 node.parent.kind === SyntaxKind.PropertyAssignment ||
-                node.parent.kind === SyntaxKind.Parameter) {
+                node.parent.kind === SyntaxKind.Parameter
+            ) {
                 return spanInPreviousNode(node);
             }
 

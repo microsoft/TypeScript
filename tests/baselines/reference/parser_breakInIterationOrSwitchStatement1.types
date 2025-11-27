@@ -3,6 +3,7 @@
 === parser_breakInIterationOrSwitchStatement1.ts ===
 while (true) {
 >true : true
+>     : ^^^^
 
   break;
 }

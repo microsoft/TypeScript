@@ -23,10 +23,9 @@ import {
     getAllowSyntheticDefaultImports,
     getAssignmentDeclarationKind,
     getFunctionFlags,
-    getModeForUsageLocation,
-    getResolvedModule,
     hasInitializer,
     hasPropertyAccessExpressionWithName,
+    hasSyntacticModifier,
     Identifier,
     importFromModuleSpecifier,
     isAsyncFunction,
@@ -38,6 +37,7 @@ import {
     isFunctionExpression,
     isFunctionLike,
     isIdentifier,
+    isImportEqualsDeclaration,
     isPropertyAccessExpression,
     isRequireCall,
     isReturnStatement,
@@ -46,6 +46,7 @@ import {
     isVariableDeclaration,
     isVariableStatement,
     MethodDeclaration,
+    ModifierFlags,
     ModuleKind,
     Node,
     NodeFlags,
@@ -59,7 +60,7 @@ import {
     SyntaxKind,
     TypeChecker,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 
@@ -68,12 +69,14 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
     const diags: DiagnosticWithLocation[] = [];
     const checker = program.getTypeChecker();
-    const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]) ;
+    const isCommonJSFile = program.getImpliedNodeFormatForEmit(sourceFile) === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
 
-    if (!isCommonJSFile &&
+    if (
+        !isCommonJSFile &&
         sourceFile.commonJsModuleIndicator &&
         (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
-        containsTopLevelCommonjs(sourceFile)) {
+        containsTopLevelCommonjs(sourceFile)
+    ) {
         diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
     }
 
@@ -85,9 +88,10 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
         for (const moduleSpecifier of sourceFile.imports) {
             const importNode = importFromModuleSpecifier(moduleSpecifier);
+            if (isImportEqualsDeclaration(importNode) && hasSyntacticModifier(importNode, ModifierFlags.Export)) continue;
             const name = importNameForConvertToDefaultImport(importNode);
             if (!name) continue;
-            const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
+            const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
             if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                 diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
@@ -97,7 +101,8 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
 
     addRange(diags, sourceFile.bindSuggestionDiagnostics);
     addRange(diags, program.getSuggestionDiagnostics(sourceFile, cancellationToken));
-    return diags.sort((d1, d2) => d1.start - d2.start);
+    diags.sort((d1, d2) => d1.start - d2.start);
+    return diags;
 
     function check(node: Node) {
         if (isJsFile) {
@@ -106,18 +111,20 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             }
         }
         else {
-            if (isVariableStatement(node) &&
+            if (
+                isVariableStatement(node) &&
                 node.parent === sourceFile &&
                 node.declarationList.flags & NodeFlags.Const &&
-                node.declarationList.declarations.length === 1) {
+                node.declarationList.declarations.length === 1
+            ) {
                 const init = node.declarationList.declarations[0].initializer;
                 if (init && isRequireCall(init, /*requireStringLiteralLikeArgument*/ true)) {
                     diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
                 }
             }
 
-            const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
-            if (jsdocTypedefNode) {
+            const jsdocTypedefNodes = codefix.getJSDocTypedefNodes(node);
+            for (const jsdocTypedefNode of jsdocTypedefNodes) {
                 diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
             }
 
@@ -138,8 +145,7 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
     return sourceFile.statements.some(statement => {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
-                return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true));
+                return (statement as VariableStatement).declarationList.declarations.some(decl => !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true));
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
                 if (!isBinaryExpression(expression)) return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);
@@ -175,7 +181,8 @@ function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, che
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(
             !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
-            Diagnostics.This_may_be_converted_to_an_async_function));
+            Diagnostics.This_may_be_converted_to_an_async_function,
+        ));
     }
 }
 
@@ -203,7 +210,7 @@ function hasReturnStatementWithPromiseHandler(body: Block, checker: TypeChecker)
 }
 
 /** @internal */
-export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & { expression: CallExpression } {
+export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & { expression: CallExpression; } {
     return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
 }
 
@@ -231,14 +238,15 @@ export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boole
     return true;
 }
 
-function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression } {
+function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression; } {
     return isCallExpression(node) && (
         hasPropertyAccessExpressionWithName(node, "then") ||
         hasPropertyAccessExpressionWithName(node, "catch") ||
-        hasPropertyAccessExpressionWithName(node, "finally"));
+        hasPropertyAccessExpressionWithName(node, "finally")
+    );
 }
 
-function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression }) {
+function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression; }) {
     const name = node.expression.name.text;
     const maxArguments = name === "then" ? 2 : name === "catch" ? 1 : name === "finally" ? 1 : 0;
     if (node.arguments.length > maxArguments) return false;

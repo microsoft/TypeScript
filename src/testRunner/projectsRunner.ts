@@ -1,10 +1,10 @@
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -38,7 +38,7 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 export class ProjectRunner extends Harness.RunnerBase {
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
         if (Harness.shards === 1) {
             return all;
@@ -50,11 +50,11 @@ export class ProjectRunner extends Harness.RunnerBase {
         return "project";
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         describe("projects tests", () => {
             const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
             for (const test of tests) {
-                this.runProjectTestCase(typeof test === "string" ? test : test.file);
+                this.runProjectTestCase(test);
             }
         });
     }
@@ -109,11 +109,13 @@ class ProjectParseConfigHost extends fakes.ParseConfigHost {
     public override readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
         const result = super.readDirectory(path, extensions, excludes, includes, depth);
         const projectRoot = vpath.resolve(vfs.srcFolder, this._testCase.projectRoot);
-        return result.map(item => vpath.relative(
-            projectRoot,
-            vpath.resolve(projectRoot, item),
-            this.vfs.ignoreCase
-        ));
+        return result.map(item =>
+            vpath.relative(
+                projectRoot,
+                vpath.resolve(projectRoot, item),
+                this.vfs.ignoreCase,
+            )
+        );
     }
 }
 
@@ -137,7 +139,7 @@ class ProjectTestCase {
 
     constructor(testCaseFileName: string, { testCase, moduleKind, vfs }: ProjectTestPayload) {
         this.testCase = testCase;
-        this.testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, "").replace(/\.json/, "");
+        this.testCaseJustName = testCaseFileName.replace(/^.*[\\/]/, "").replace(/\.json/, "");
         this.compilerOptions = createCompilerOptions(testCase, moduleKind);
         this.sys = new fakes.System(vfs);
 
@@ -200,15 +202,36 @@ class ProjectTestCase {
             throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
         }
 
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-        fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
-        fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
-        fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
-        fs.makeReadonly();
-
+        function makeFileSystem() {
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
+            fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
+            fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
+            fs.makeReadonly();
+            return fs;
+        }
+        let fs: vfs.FileSystem | undefined;
         return [
-            { name: `@module: commonjs`, payload: { testCase, moduleKind: ts.ModuleKind.CommonJS, vfs: fs } },
-            { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } }
+            {
+                name: `@module: commonjs`,
+                payload: {
+                    testCase,
+                    moduleKind: ts.ModuleKind.CommonJS,
+                    get vfs() {
+                        return fs ??= makeFileSystem();
+                    },
+                },
+            },
+            {
+                name: `@module: amd`,
+                payload: {
+                    testCase,
+                    moduleKind: ts.ModuleKind.AMD,
+                    get vfs() {
+                        return fs ??= makeFileSystem();
+                    },
+                },
+            },
         ];
     }
 
@@ -219,8 +242,9 @@ class ProjectTestCase {
         resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
             .map(({ fileName: input }) =>
                 vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
-                vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
-                input);
+                    vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
+                    input
+            );
 
         resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
             .map(output => output.meta.get("fileName") || output.file)
@@ -258,7 +282,7 @@ class ProjectTestCase {
                     }
 
                     const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // eslint-disable-line no-restricted-syntax
                 }
                 catch (e) {
                     errs.push(e);
@@ -318,11 +342,7 @@ class ProjectTestCase {
         return url;
     }
 
-    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[],
-        getInputFiles: () => readonly string[],
-        compilerHost: ts.CompilerHost,
-        compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
-
+    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[], getInputFiles: () => readonly string[], compilerHost: ts.CompilerHost, compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
         const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
         const errors = ts.getPreEmitDiagnostics(program);
 
@@ -334,7 +354,7 @@ class ProjectTestCase {
                 data.sourceMap = {
                     ...data.sourceMap,
                     sources: data.sourceMap.sources.map(source => this.cleanProjectUrl(source)),
-                    sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot)
+                    sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot),
                 };
             }
         }
@@ -344,7 +364,7 @@ class ProjectTestCase {
             moduleKind,
             program,
             errors: ts.concatenate(errors, emitDiagnostics),
-            sourceMapData
+            sourceMapData,
         };
     }
 
@@ -363,7 +383,7 @@ class ProjectTestCase {
                 }
                 rootFiles.unshift(sourceFile.fileName);
             }
-            else if (!(compilerOptions.outFile || compilerOptions.out)) {
+            else if (!(compilerOptions.outFile)) {
                 let emitOutputFilePathWithoutExtension: string | undefined;
                 if (compilerOptions.outDir) {
                     let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
@@ -382,7 +402,7 @@ class ProjectTestCase {
                 }
             }
             else {
-                const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile) + ts.Extension.Dts;
                 const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
                 if (!ts.contains(allInputFiles, outputDtsFile)) {
                     allInputFiles.unshift(outputDtsFile);
@@ -393,7 +413,7 @@ class ProjectTestCase {
 
         const _vfs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
             documents: allInputFiles,
-            cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot)
+            cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot),
         });
 
         // Dont allow config files since we are compiling existing source options
@@ -425,7 +445,7 @@ function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
             Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
             sourceFile.fileName,
-        content: sourceFile.text
+        content: sourceFile.text,
     }));
 
     return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
@@ -445,7 +465,7 @@ function createCompilerOptions(testCase: ProjectRunnerTestCase & ts.CompilerOpti
 
         sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot
             ? vpath.resolve(vfs.srcFolder, testCase.sourceRoot)
-            : testCase.sourceRoot
+            : testCase.sourceRoot,
     };
 
     // Set the values specified using json

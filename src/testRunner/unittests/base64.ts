@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: base64", () => {
     describe("base64decode", () => {
@@ -10,7 +10,7 @@ describe("unittests:: base64", () => {
                 "日本語",
                 "🐱",
                 "\x00\x01",
-                "\t\n\r\\\"\'\u0062",
+                "\t\n\r\\\"'\u0062",
                 "====",
                 "",
             ];

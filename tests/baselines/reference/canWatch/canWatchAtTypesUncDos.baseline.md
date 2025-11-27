@@ -46,4 +46,11 @@ These are the typeRoots calculated because user didnt specify typeRoots in compi
 | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | true            |
 | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | true            |
 | //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | true            |
+| //vda1cs4850/c$/workspaces/node_modules/@types                                                          | true            |
+| //vda1cs4850/c$/workspaces/folderAtRoot/node_modules/@types                                             | true            |
+| //vda1cs4850/c$/workspaces/folderAtRoot/folder1/node_modules/@types                                     | true            |
+| //vda1cs4850/c$/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | true            |
+| //vda1cs4850/c$/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | true            |
+| //vda1cs4850/c$/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | true            |
+| //vda1cs4850/c$/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | true            |
 

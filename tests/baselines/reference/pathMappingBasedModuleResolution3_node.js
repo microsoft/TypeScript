@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution3_node.ts] ////
 
 //// [file1.ts]
-// baseUrl set via command line
-
 import {x} from "folder2/file2"
 declare function use(a: any): void;
 use(x.toExponential());
@@ -32,7 +30,6 @@ var file4_1 = require("file4"); // found with fallback
 exports.x = file3_1.x + file4_1.y;
 //// [file1.js]
 "use strict";
-// baseUrl set via command line
 Object.defineProperty(exports, "__esModule", { value: true });
 var file2_1 = require("folder2/file2");
 use(file2_1.x.toExponential());

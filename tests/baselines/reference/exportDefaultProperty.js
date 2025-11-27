@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/exportDefaultProperty.ts] ////
 
 //// [declarations.d.ts]
-// This test is just like exportEqualsProperty, but with `export default`.
-
 declare namespace foo.bar {
     export type X = number;
     export const X: number;
@@ -63,14 +61,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "foo".length;
 //// [index.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
-var foobar_1 = require("foobar");
+var foobar_1 = __importDefault(require("foobar"));
 var X = foobar_1.default.X;
-var foobarx_1 = require("foobarx");
+var foobarx_1 = __importDefault(require("foobarx"));
 var x = X;
 var x2 = foobarx_1.default;
-var a_1 = require("./a");
+var a_1 = __importDefault(require("./a"));
 var b = new a_1.default(a_1.default.b);
-var b_1 = require("./b");
+var b_1 = __importDefault(require("./b"));
 b_1.default + 1;

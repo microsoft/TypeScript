@@ -17,13 +17,14 @@ if(foo.C1.s1){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C1 = void 0;
-var C1 = exports.C1 = /** @class */ (function () {
+var C1 = /** @class */ (function () {
     function C1() {
         this.m1 = 42;
     }
     C1.s1 = true;
     return C1;
 }());
+exports.C1 = C1;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

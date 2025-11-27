@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////module Foo {
+////namespace Foo {
 ////    /** @deprecated foo */
 ////    export var foo: number;
 ////}

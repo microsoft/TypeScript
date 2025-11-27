@@ -1,0 +1,375 @@
+//// [tests/cases/compiler/declarationEmitLateBoundAssignments2.ts] ////
+
+=== declarationEmitLateBoundAssignments2.ts ===
+// https://github.com/microsoft/TypeScript/issues/54811
+
+const c = "C"
+>c : "C"
+>  : ^^^
+>"C" : "C"
+>    : ^^^
+
+const num = 1
+>num : 1
+>    : ^
+>1 : 1
+>  : ^
+
+const numStr = "10"
+>numStr : "10"
+>       : ^^^^
+>"10" : "10"
+>     : ^^^^
+
+const withWhitespace = "foo bar"
+>withWhitespace : "foo bar"
+>               : ^^^^^^^^^
+>"foo bar" : "foo bar"
+>          : ^^^^^^^^^
+
+const emoji = "🤷‍♂️"
+>emoji : "🤷‍♂️"
+>      : ^^^^^^^
+>"🤷‍♂️" : "🤷‍♂️"
+>        : ^^^^^^^
+
+export function decl() {}
+>decl : typeof decl
+>     : ^^^^^^^^^^^
+
+decl["B"] = 'foo'
+>decl["B"] = 'foo' : "foo"
+>                  : ^^^^^
+>decl["B"] : string
+>          : ^^^^^^
+>decl : typeof decl
+>     : ^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+export function decl2() {}
+>decl2 : typeof decl2
+>      : ^^^^^^^^^^^^
+
+decl2[c] = 0
+>decl2[c] = 0 : 0
+>             : ^
+>decl2[c] : number
+>         : ^^^^^^
+>decl2 : typeof decl2
+>      : ^^^^^^^^^^^^
+>c : "C"
+>  : ^^^
+>0 : 0
+>  : ^
+
+export function decl3() {}
+>decl3 : typeof decl3
+>      : ^^^^^^^^^^^^
+
+decl3[77] = 0
+>decl3[77] = 0 : 0
+>              : ^
+>decl3[77] : number
+>          : ^^^^^^
+>decl3 : typeof decl3
+>      : ^^^^^^^^^^^^
+>77 : 77
+>   : ^^
+>0 : 0
+>  : ^
+
+export function decl4() {}
+>decl4 : typeof decl4
+>      : ^^^^^^^^^^^^
+
+decl4[num] = 0
+>decl4[num] = 0 : 0
+>               : ^
+>decl4[num] : number
+>           : ^^^^^^
+>decl4 : typeof decl4
+>      : ^^^^^^^^^^^^
+>num : 1
+>    : ^
+>0 : 0
+>  : ^
+
+export function decl5() {}
+>decl5 : typeof decl5
+>      : ^^^^^^^^^^^^
+
+decl5["101"] = 0
+>decl5["101"] = 0 : 0
+>                 : ^
+>decl5["101"] : number
+>             : ^^^^^^
+>decl5 : typeof decl5
+>      : ^^^^^^^^^^^^
+>"101" : "101"
+>      : ^^^^^
+>0 : 0
+>  : ^
+
+export function decl6() {}
+>decl6 : typeof decl6
+>      : ^^^^^^^^^^^^
+
+decl6[numStr] = 0
+>decl6[numStr] = 0 : 0
+>                  : ^
+>decl6[numStr] : number
+>              : ^^^^^^
+>decl6 : typeof decl6
+>      : ^^^^^^^^^^^^
+>numStr : "10"
+>       : ^^^^
+>0 : 0
+>  : ^
+
+export function decl7() {}
+>decl7 : typeof decl7
+>      : ^^^^^^^^^^^^
+
+decl7["qwe rty"] = 0
+>decl7["qwe rty"] = 0 : 0
+>                     : ^
+>decl7["qwe rty"] : number
+>                 : ^^^^^^
+>decl7 : typeof decl7
+>      : ^^^^^^^^^^^^
+>"qwe rty" : "qwe rty"
+>          : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+export function decl8() {}
+>decl8 : typeof decl8
+>      : ^^^^^^^^^^^^
+
+decl8[withWhitespace] = 0
+>decl8[withWhitespace] = 0 : 0
+>                          : ^
+>decl8[withWhitespace] : number
+>                      : ^^^^^^
+>decl8 : typeof decl8
+>      : ^^^^^^^^^^^^
+>withWhitespace : "foo bar"
+>               : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+export function decl9() {}
+>decl9 : typeof decl9
+>      : ^^^^^^^^^^^^
+
+decl9["🤪"] = 0
+>decl9["🤪"] = 0 : 0
+>                : ^
+>decl9["🤪"] : number
+>            : ^^^^^^
+>decl9 : typeof decl9
+>      : ^^^^^^^^^^^^
+>"🤪" : "🤪"
+>     : ^^^^
+>0 : 0
+>  : ^
+
+export function decl10() {}
+>decl10 : typeof decl10
+>       : ^^^^^^^^^^^^^
+
+decl10[emoji] = 0
+>decl10[emoji] = 0 : 0
+>                  : ^
+>decl10[emoji] : number
+>              : ^^^^^^
+>decl10 : typeof decl10
+>       : ^^^^^^^^^^^^^
+>emoji : "🤷‍♂️"
+>      : ^^^^^^^
+>0 : 0
+>  : ^
+
+export const arrow = () => {}
+>arrow : { (): void; B: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; B: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow["B"] = 'bar'
+>arrow["B"] = 'bar' : "bar"
+>                   : ^^^^^
+>arrow["B"] : string
+>           : ^^^^^^
+>arrow : { (): void; B: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+export const arrow2 = () => {}
+>arrow2 : { (): void; C: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; C: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow2[c] = 100
+>arrow2[c] = 100 : 100
+>                : ^^^
+>arrow2[c] : number
+>          : ^^^^^^
+>arrow2 : { (): void; C: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>c : "C"
+>  : ^^^
+>100 : 100
+>    : ^^^
+
+export const arrow3 = () => {}
+>arrow3 : { (): void; 77: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; 77: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow3[77] = 0
+>arrow3[77] = 0 : 0
+>               : ^
+>arrow3[77] : number
+>           : ^^^^^^
+>arrow3 : { (): void; 77: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>77 : 77
+>   : ^^
+>0 : 0
+>  : ^
+
+export const arrow4 = () => {}
+>arrow4 : { (): void; 1: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; 1: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow4[num] = 0
+>arrow4[num] = 0 : 0
+>                : ^
+>arrow4[num] : number
+>            : ^^^^^^
+>arrow4 : { (): void; 1: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>num : 1
+>    : ^
+>0 : 0
+>  : ^
+
+export const arrow5 = () => {}
+>arrow5 : { (): void; "101": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "101": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow5["101"] = 0
+>arrow5["101"] = 0 : 0
+>                  : ^
+>arrow5["101"] : number
+>              : ^^^^^^
+>arrow5 : { (): void; "101": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"101" : "101"
+>      : ^^^^^
+>0 : 0
+>  : ^
+
+export const arrow6 = () => {}
+>arrow6 : { (): void; "10": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "10": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow6[numStr] = 0
+>arrow6[numStr] = 0 : 0
+>                   : ^
+>arrow6[numStr] : number
+>               : ^^^^^^
+>arrow6 : { (): void; "10": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numStr : "10"
+>       : ^^^^
+>0 : 0
+>  : ^
+
+export const arrow7 = () => {}
+>arrow7 : { (): void; "qwe rty": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "qwe rty": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow7["qwe rty"] = 0
+>arrow7["qwe rty"] = 0 : 0
+>                      : ^
+>arrow7["qwe rty"] : number
+>                  : ^^^^^^
+>arrow7 : { (): void; "qwe rty": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"qwe rty" : "qwe rty"
+>          : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+export const arrow8 = () => {}
+>arrow8 : { (): void; "foo bar": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "foo bar": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow8[withWhitespace] = 0
+>arrow8[withWhitespace] = 0 : 0
+>                           : ^
+>arrow8[withWhitespace] : number
+>                       : ^^^^^^
+>arrow8 : { (): void; "foo bar": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withWhitespace : "foo bar"
+>               : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+export const arrow9 = () => {}
+>arrow9 : { (): void; "\uD83E\uDD2A": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "\uD83E\uDD2A": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow9["🤪"] = 0
+>arrow9["🤪"] = 0 : 0
+>                 : ^
+>arrow9["🤪"] : number
+>             : ^^^^^^
+>arrow9 : { (): void; "\uD83E\uDD2A": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"🤪" : "🤪"
+>     : ^^^^
+>0 : 0
+>  : ^
+
+export const arrow10 = () => {}
+>arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arrow10[emoji] = 0
+>arrow10[emoji] = 0 : 0
+>                   : ^
+>arrow10[emoji] : number
+>               : ^^^^^^
+>arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>emoji : "🤷‍♂️"
+>      : ^^^^^^^
+>0 : 0
+>  : ^
+

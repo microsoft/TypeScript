@@ -50,8 +50,7 @@ async function main() {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
         const contents = await fs.promises.readFile(inputFilePath);
         /** @type {ParsedLCL} */
-        // eslint-disable-next-line local/object-literal-surrounding-space
-        const result = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "$_"}).parse(contents);
+        const result = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "$_" }).parse(contents);
         if (!result || !result.LCX || !result.LCX.$_TgtCul) {
             console.error("Unexpected XML file structure. Expected to find result.LCX.$_TgtCul.");
             process.exit(1);
@@ -114,7 +113,7 @@ async function main() {
                 ItemId = ItemId.slice(1); // remove leading semicolon
             }
 
-            val = val.replace(/]5D;/, "]"); // unescape `]`
+            val = val.replace(/\]5D;/, "]"); // unescape `]`
             out[ItemId] = val;
         }
         return JSON.stringify(out, undefined, 2);
@@ -135,8 +134,8 @@ async function main() {
             path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
             getLCGFileXML(
                 Object.entries(JSON.parse(contents))
-                    .sort((a, b) => a[0] > b[0] ? 1 : -1)  // lcg sorted by property keys
-                    .reduce((s, [key, value]) => s + getItemXML(key, value), "")
+                    .sort((a, b) => a[0] > b[0] ? 1 : -1) // lcg sorted by property keys
+                    .reduce((s, [key, value]) => s + getItemXML(key, value), ""),
             ),
         );
         return;
@@ -147,7 +146,7 @@ async function main() {
          */
         function getItemXML(key, value) {
             // escape entrt value
-            value = value.replace(/]/g, "]5D;");
+            value = value.replace(/\]/g, "]5D;");
 
             return `
             <Item ItemId=";${key}" ItemType="0" PsrId="306" Leaf="true">

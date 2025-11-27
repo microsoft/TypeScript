@@ -69,3 +69,14 @@ contextualTypeWithTuple.ts(25,1): error TS2322: Type '[number, string | number]'
 !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
+    
+    // repro from #29311
+    type test1 = [...number[]]
+    type fixed1 = test1 & { length: 2 }
+    let var1: fixed1 = [0, 0]
+    
+    // #52551
+    type EmptyTuple = []
+    interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
+    const withExtra: MyEmptyTuple = []
+    

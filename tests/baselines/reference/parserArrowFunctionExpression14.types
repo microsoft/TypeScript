@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts] ////
+
+=== fileJs.js ===
+a() ? (b: number, c?: string): void => d() : e; // Not legal JS; "Unexpected token ':'" at first colon
+>a() ? (b: number, c?: string): void => d() : e : any
+>                                               : ^^^
+>a() : any
+>    : ^^^
+>a : any
+>  : ^^^
+>(b: number, c?: string): void => d() : (b: number, c?: string) => void
+>                                     : ^ ^^      ^^ ^^^      ^^^^^    
+>b : number
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+>d() : any
+>    : ^^^
+>d : any
+>  : ^^^
+>e : any
+>  : ^^^
+
+=== fileTs.ts ===
+a() ? (b: number, c?: string): void => d() : e;
+>a() ? (b: number, c?: string): void => d() : e : any
+>                                               : ^^^
+>a() : any
+>    : ^^^
+>a : any
+>  : ^^^
+>(b: number, c?: string): void => d() : (b: number, c?: string) => void
+>                                     : ^ ^^      ^^ ^^^      ^^^^^    
+>b : number
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+>d() : any
+>    : ^^^
+>d : any
+>  : ^^^
+>e : any
+>  : ^^^
+

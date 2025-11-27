@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/jsDeclarationEmitDoesNotRenameImport.ts] ////
+
+=== test/Test.js ===
+/** @module test/Test */
+class Test {}
+>Test : Test
+>     : ^^^^
+
+export default Test;
+>Test : Test
+>     : ^^^^
+
+=== Test.js ===
+/** @module Test */
+class Test {}
+>Test : Test
+>     : ^^^^
+
+export default Test;
+>Test : Test
+>     : ^^^^
+
+=== index.js ===
+import Test from './test/Test.js'
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+/**
+ * @typedef {Object} Options
+ * @property {typeof import("./Test.js").default} [test]
+ */
+
+class X extends Test {
+>X : X
+>  : ^
+>Test : Test
+>     : ^^^^
+
+    /**
+     * @param {Options} options
+     */
+    constructor(options) {
+>options : Options
+>        : ^^^^^^^
+
+        super();
+>super() : void
+>        : ^^^^
+>super : typeof Test
+>      : ^^^^^^^^^^^
+
+        if (options.test) {
+>options.test : typeof import("Test").default | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : Options
+>        : ^^^^^^^
+>test : typeof import("Test").default | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            this.test = new options.test();
+>this.test = new options.test() : import("Test").default
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+>this.test : any
+>this : this
+>     : ^^^^
+>test : any
+>     : ^^^
+>new options.test() : import("Test").default
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
+>options.test : typeof import("Test").default
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : Options
+>        : ^^^^^^^
+>test : typeof import("Test").default
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        }
+    }
+}
+
+export default X;
+>X : X
+>  : ^
+

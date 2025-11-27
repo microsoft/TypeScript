@@ -3,7 +3,7 @@
 //// [objectLitArrayDeclNoNew.ts]
 declare var console;
 "use strict";
-module Test {
+namespace Test {
     export interface IState {
     }
 
@@ -43,7 +43,7 @@ var Test;
     function bug() {
         var state = null;
         return {
-            tokens: Gar[],
+            tokens: Gar[], //IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]
             endState: state
         };
     }

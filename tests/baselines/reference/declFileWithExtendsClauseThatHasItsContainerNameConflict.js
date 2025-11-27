@@ -1,19 +1,19 @@
 //// [tests/cases/compiler/declFileWithExtendsClauseThatHasItsContainerNameConflict.ts] ////
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.ts]
-declare module A.B.C {
+declare namespace A.B.C {
     class B {
     }
 }
 
-module A.B {
+namespace A.B {
     export class EventManager {
         id: number;
 
     }
 }
 
-module A.B.C {
+namespace A.B.C {
     export class ContextMenu extends EventManager {
         name: string;
     }
@@ -66,16 +66,16 @@ var A;
 
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.d.ts]
-declare module A.B.C {
+declare namespace A.B.C {
     class B {
     }
 }
-declare module A.B {
+declare namespace A.B {
     class EventManager {
         id: number;
     }
 }
-declare module A.B.C {
+declare namespace A.B.C {
     class ContextMenu extends EventManager {
         name: string;
     }

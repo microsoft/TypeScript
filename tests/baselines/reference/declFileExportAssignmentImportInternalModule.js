@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts] ////
 
 //// [declFileExportAssignmentImportInternalModule.ts]
-module m3 {
-    export module m2 {
+namespace m3 {
+    export namespace m2 {
         export interface connectModule {
             (res, req, next): void;
         }
@@ -33,8 +33,8 @@ module.exports = m;
 
 
 //// [declFileExportAssignmentImportInternalModule.d.ts]
-declare module m3 {
-    module m2 {
+declare namespace m3 {
+    namespace m2 {
         interface connectModule {
             (res: any, req: any, next: any): void;
         }

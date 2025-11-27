@@ -7,17 +7,17 @@ Fs::
 
 //// [/tsconfig.json]
 {
- "extends": "./base.json",
- "watchOptions": {
-  "watchFile": "UseFsEvents"
- }
+  "extends": "./base.json",
+  "watchOptions": {
+    "watchFile": "UseFsEvents"
+  }
 }
 
 
 configFileName:: tsconfig.json
 Result: WatchOptions::
 {
- "watchFile": 4
+  "watchFile": 4
 }
 Errors::
 
@@ -31,7 +31,7 @@ Fs::
 
 //// [/tsconfig.json]
 {
- "extends": "./base.json"
+  "extends": "./base.json"
 }
 
 

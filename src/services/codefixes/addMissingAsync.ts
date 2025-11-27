@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrowFunction,
     CodeFixAllContext,
     CodeFixContext,
@@ -28,19 +33,14 @@ import {
     TextSpan,
     textSpanEnd,
     textSpansEqual,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
 const fixId = "addMissingAsync";
 const errorCodes = [
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-    Diagnostics.Type_0_is_not_comparable_to_type_1.code
+    Diagnostics.Type_0_is_not_comparable_to_type_1.code,
 ];
 
 registerCodeFix({
@@ -87,13 +87,15 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         }
     }
     fixedDeclarations?.add(getNodeId(insertionSite));
-    const cloneWithModifier = factory.updateModifiers(
+    const cloneWithModifier = factory.replaceModifiers(
         getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
-        factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)));
+        factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)),
+    );
     changeTracker.replaceNode(
         sourceFile,
         insertionSite,
-        cloneWithModifier);
+        cloneWithModifier,
+    );
 }
 
 function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan | undefined): FixableDeclaration | undefined {

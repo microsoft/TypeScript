@@ -22,8 +22,8 @@ class C {
 //// [privateNameBadDeclaration.js]
 function A() { }
 A.prototype = {
-    : 1,
-    : function () { },
+    : 1, // Error
+    : function () { }, // Error
     get () { return ""; } // Error
 };
 var B = /** @class */ (function () {
@@ -32,8 +32,8 @@ var B = /** @class */ (function () {
     return B;
 }());
 B.prototype = {
-    : 2,
-    : function () { },
+    : 2, // Error
+    : function () { }, // Error
     get () { return ""; } // Error
 };
 var C = /** @class */ (function () {

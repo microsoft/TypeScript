@@ -1,24 +1,24 @@
 //// [tests/cases/compiler/moduledecl.ts] ////
 
 //// [moduledecl.ts]
-module a {
+namespace a {
 }
 
-module b.a {
+namespace b.a {
 }
 
-module c.a.b {
+namespace c.a.b {
     import ma = a;
 }
 
-module mImport {
+namespace mImport {
     import d = a;
     import e = b.a;
     import d1 = a;
     import e1 = b.a;
 }
 
-module m0 {
+namespace m0 {
     function f1() {
     }
 
@@ -47,7 +47,7 @@ module m0 {
     import m7 = c.a.b;
 }
 
-module m1 {
+namespace m1 {
     export function f1() {
     }
 
@@ -84,30 +84,30 @@ module m1 {
     import m7 = c.a.b;
 }
 
-module m {
-    export module m2 {
+namespace m {
+    export namespace m2 {
         var a = 10;
         export var b: number;
     }
 
-    export module m3 {
+    export namespace m3 {
         export var c: number;
     }
 }
 
-module m {
+namespace m {
 
-    export module m25 {
-        export module m5 {
+    export namespace m25 {
+        export namespace m5 {
             export var c: number;
         }
     }
 }
 
-module m13 {
-    export module m4 {
-        export module m2 {
-            export module m3 {
+namespace m13 {
+    export namespace m4 {
+        export namespace m2 {
+            export namespace m3 {
                 export var c: number;
             }
         }
@@ -118,19 +118,19 @@ module m13 {
     }
 }
 
-declare module m4 {
+declare namespace m4 {
     export var b;
 }
 
-declare module m5 {
+declare namespace m5 {
     export var c;
 }
 
-declare module m43 {
+declare namespace m43 {
     export var b;
 }
 
-declare module m55 {
+declare namespace m55 {
     export var c;
 }
 
@@ -138,7 +138,7 @@ declare module "m3" {
     export var b: number;
 }
 
-module exportTests {
+namespace exportTests {
     export class C1_public {
         private f2() {
             return 30;
@@ -178,7 +178,7 @@ module exportTests {
     }
 }
 
-declare module mAmbient {
+declare namespace mAmbient {
     class C {
         public myProp: number;
     }
@@ -195,7 +195,7 @@ declare module mAmbient {
         z
     }
 
-    module m3 {
+    namespace m3 {
         class C {
             public myProp: number;
         }
@@ -376,17 +376,17 @@ var m3eVar;
 
 
 //// [moduledecl.d.ts]
-declare module a {
+declare namespace a {
 }
-declare module b.a {
+declare namespace b.a {
 }
-declare module c.a.b {
+declare namespace c.a.b {
 }
-declare module mImport {
+declare namespace mImport {
 }
-declare module m0 {
+declare namespace m0 {
 }
-declare module m1 {
+declare namespace m1 {
     function f1(): void;
     function f2(s: string): any;
     function f2(n: number): any;
@@ -411,47 +411,47 @@ declare module m1 {
         [n: number]: c1;
     }
 }
-declare module m {
-    module m2 {
+declare namespace m {
+    namespace m2 {
         var b: number;
     }
-    module m3 {
+    namespace m3 {
         var c: number;
     }
 }
-declare module m {
-    module m25 {
-        module m5 {
+declare namespace m {
+    namespace m25 {
+        namespace m5 {
             var c: number;
         }
     }
 }
-declare module m13 {
-    module m4 {
-        module m2 {
-            module m3 {
+declare namespace m13 {
+    namespace m4 {
+        namespace m2 {
+            namespace m3 {
                 var c: number;
             }
         }
         function f(): number;
     }
 }
-declare module m4 {
+declare namespace m4 {
     var b: any;
 }
-declare module m5 {
+declare namespace m5 {
     var c: any;
 }
-declare module m43 {
+declare namespace m43 {
     var b: any;
 }
-declare module m55 {
+declare namespace m55 {
     var c: any;
 }
 declare module "m3" {
     var b: number;
 }
-declare module exportTests {
+declare namespace exportTests {
     class C1_public {
         private f2;
         f3(): string;
@@ -465,7 +465,7 @@ declare module exportTests {
         get c1(): C1_public;
     }
 }
-declare module mAmbient {
+declare namespace mAmbient {
     class C {
         myProp: number;
     }
@@ -480,7 +480,7 @@ declare module mAmbient {
         y,
         z
     }
-    module m3 {
+    namespace m3 {
         class C {
             myProp: number;
         }

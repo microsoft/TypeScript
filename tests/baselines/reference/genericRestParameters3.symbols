@@ -90,7 +90,7 @@ f1 = f4;
 interface CoolArray<E> extends Array<E> { 
 >CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
 >E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
 
     hello: number;
@@ -186,7 +186,7 @@ declare function foo2(...args: string[] | number[]): void;
 
 let x2: ReadonlyArray<string> = ["hello"];
 >x2 : Symbol(x2, Decl(genericRestParameters3.ts, 63, 3))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 foo2(...x2);
 >foo2 : Symbol(foo2, Decl(genericRestParameters3.ts, 58, 12))

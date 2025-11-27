@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/conditionalReturnExpression.ts] ////
+
+=== conditionalReturnExpression.ts ===
+function return1(x: boolean): 3 {
+>return1 : Symbol(return1, Decl(conditionalReturnExpression.ts, 0, 0))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 0, 17))
+
+    return (x ? (1) : 2);
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 0, 17))
+}
+
+declare function getAny(): any;
+>getAny : Symbol(getAny, Decl(conditionalReturnExpression.ts, 2, 1))
+
+function return2(x: string): string {
+>return2 : Symbol(return2, Decl(conditionalReturnExpression.ts, 4, 31))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 6, 17))
+
+    return x.startsWith("a") ? getAny() : 1;
+>x.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 6, 17))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>getAny : Symbol(getAny, Decl(conditionalReturnExpression.ts, 2, 1))
+}
+
+function return3(x: string): string {
+>return3 : Symbol(return3, Decl(conditionalReturnExpression.ts, 8, 1))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 10, 17))
+
+    return x.startsWith("a") ? "a" : x;
+>x.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 10, 17))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 10, 17))
+}
+
+function return4(x: string): string {
+>return4 : Symbol(return4, Decl(conditionalReturnExpression.ts, 12, 1))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 14, 17))
+
+    return (x.startsWith("a") ? getAny() : 1) as string;
+>x.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 14, 17))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>getAny : Symbol(getAny, Decl(conditionalReturnExpression.ts, 2, 1))
+}
+
+const return5 = (x: string): string => x.startsWith("a") ? getAny() : 1;
+>return5 : Symbol(return5, Decl(conditionalReturnExpression.ts, 18, 5))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 18, 17))
+>x.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 18, 17))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>getAny : Symbol(getAny, Decl(conditionalReturnExpression.ts, 2, 1))
+
+const return6 = (x: string): string => (x.startsWith("a") ? getAny() : 1) as string;
+>return6 : Symbol(return6, Decl(conditionalReturnExpression.ts, 20, 5))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 20, 17))
+>x.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(conditionalReturnExpression.ts, 20, 17))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --))
+>getAny : Symbol(getAny, Decl(conditionalReturnExpression.ts, 2, 1))
+

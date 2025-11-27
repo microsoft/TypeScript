@@ -29,11 +29,9 @@ export class Foo {}
 
 //// [index.mjs]
 import { __decorate } from "tslib";
-export var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo = __decorate([
-        decorator
-    ], Foo);
-    return Foo;
-}());
+let Foo = class Foo {
+};
+Foo = __decorate([
+    decorator
+], Foo);
+export { Foo };

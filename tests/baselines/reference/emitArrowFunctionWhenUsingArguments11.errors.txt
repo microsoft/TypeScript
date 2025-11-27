@@ -1,4 +1,4 @@
-emitArrowFunctionWhenUsingArguments11.ts(3,25): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.
+emitArrowFunctionWhenUsingArguments11.ts(3,25): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
 
 
 ==== emitArrowFunctionWhenUsingArguments11.ts (1 errors) ====
@@ -6,5 +6,5 @@ emitArrowFunctionWhenUsingArguments11.ts(3,25): error TS2496: The 'arguments' ob
         var _arguments = 10;
         var a = () => () => arguments;
                             ~~~~~~~~~
-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.
+!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
     }

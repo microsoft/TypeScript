@@ -75,7 +75,7 @@ import {
     TokenClass,
     TypeChecker,
     TypeParameterDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): Classifier {
@@ -160,7 +160,8 @@ export function createClassifier(): Classifier {
                     endOfLineState = end;
                 }
             }
-        } while (token !== SyntaxKind.EndOfFileToken);
+        }
+        while (token !== SyntaxKind.EndOfFileToken);
 
         function handleToken(): void {
             switch (token) {
@@ -257,21 +258,25 @@ export function createClassifier(): Classifier {
 /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
 /// we have a series of divide operator. this list allows us to be more accurate by ruling out
 /// locations where a regexp cannot exist.
-const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>([
-    SyntaxKind.Identifier,
-    SyntaxKind.StringLiteral,
-    SyntaxKind.NumericLiteral,
-    SyntaxKind.BigIntLiteral,
-    SyntaxKind.RegularExpressionLiteral,
-    SyntaxKind.ThisKeyword,
-    SyntaxKind.PlusPlusToken,
-    SyntaxKind.MinusMinusToken,
-    SyntaxKind.CloseParenToken,
-    SyntaxKind.CloseBracketToken,
-    SyntaxKind.CloseBraceToken,
-    SyntaxKind.TrueKeyword,
-    SyntaxKind.FalseKeyword,
-], token => token, () => true);
+const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>(
+    [
+        SyntaxKind.Identifier,
+        SyntaxKind.StringLiteral,
+        SyntaxKind.NumericLiteral,
+        SyntaxKind.BigIntLiteral,
+        SyntaxKind.RegularExpressionLiteral,
+        SyntaxKind.ThisKeyword,
+        SyntaxKind.PlusPlusToken,
+        SyntaxKind.MinusMinusToken,
+        SyntaxKind.CloseParenToken,
+        SyntaxKind.CloseBracketToken,
+        SyntaxKind.CloseBraceToken,
+        SyntaxKind.TrueKeyword,
+        SyntaxKind.FalseKeyword,
+    ],
+    token => token,
+    () => true,
+);
 
 function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplateStack: SyntaxKind | undefined): EndOfLineState | undefined {
     switch (token) {
@@ -363,14 +368,22 @@ function convertClassificationsToResult(classifications: Classifications, text: 
 
 function convertClassification(type: ClassificationType): TokenClass {
     switch (type) {
-        case ClassificationType.comment: return TokenClass.Comment;
-        case ClassificationType.keyword: return TokenClass.Keyword;
-        case ClassificationType.numericLiteral: return TokenClass.NumberLiteral;
-        case ClassificationType.bigintLiteral: return TokenClass.BigIntLiteral;
-        case ClassificationType.operator: return TokenClass.Operator;
-        case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
-        case ClassificationType.whiteSpace: return TokenClass.Whitespace;
-        case ClassificationType.punctuation: return TokenClass.Punctuation;
+        case ClassificationType.comment:
+            return TokenClass.Comment;
+        case ClassificationType.keyword:
+            return TokenClass.Keyword;
+        case ClassificationType.numericLiteral:
+            return TokenClass.NumberLiteral;
+        case ClassificationType.bigintLiteral:
+            return TokenClass.BigIntLiteral;
+        case ClassificationType.operator:
+            return TokenClass.Operator;
+        case ClassificationType.stringLiteral:
+            return TokenClass.StringLiteral;
+        case ClassificationType.whiteSpace:
+            return TokenClass.Whitespace;
+        case ClassificationType.punctuation:
+            return TokenClass.Punctuation;
         case ClassificationType.identifier:
         case ClassificationType.className:
         case ClassificationType.enumName:
@@ -405,7 +418,7 @@ function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind): boolean {
     }
 }
 
-function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: string, readonly pushTemplate?: true } {
+function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: string; readonly pushTemplate?: true; } {
     // If we're in a string literal, then prepend: "\
     // (and a newline).  That way when we lex we'll think we're still in a string literal.
     //
@@ -413,7 +426,7 @@ function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: str
     // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
     switch (lexState) {
         case EndOfLineState.InDoubleQuoteStringLiteral:
-            return { prefix: "\"\\\n" };
+            return { prefix: '"\\\n' };
         case EndOfLineState.InSingleQuoteStringLiteral:
             return { prefix: "'\\\n" };
         case EndOfLineState.InMultiLineCommentTrivia:
@@ -626,37 +639,61 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
 
 /** Returns true if there exists a module that introduces entities on the value side. */
 function hasValueSideModule(symbol: Symbol): boolean {
-    return some(symbol.declarations, declaration =>
-        isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
+    return some(symbol.declarations, declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
 }
 
 function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
     switch (type) {
-        case ClassificationType.comment: return ClassificationTypeNames.comment;
-        case ClassificationType.identifier: return ClassificationTypeNames.identifier;
-        case ClassificationType.keyword: return ClassificationTypeNames.keyword;
-        case ClassificationType.numericLiteral: return ClassificationTypeNames.numericLiteral;
-        case ClassificationType.bigintLiteral: return ClassificationTypeNames.bigintLiteral;
-        case ClassificationType.operator: return ClassificationTypeNames.operator;
-        case ClassificationType.stringLiteral: return ClassificationTypeNames.stringLiteral;
-        case ClassificationType.whiteSpace: return ClassificationTypeNames.whiteSpace;
-        case ClassificationType.text: return ClassificationTypeNames.text;
-        case ClassificationType.punctuation: return ClassificationTypeNames.punctuation;
-        case ClassificationType.className: return ClassificationTypeNames.className;
-        case ClassificationType.enumName: return ClassificationTypeNames.enumName;
-        case ClassificationType.interfaceName: return ClassificationTypeNames.interfaceName;
-        case ClassificationType.moduleName: return ClassificationTypeNames.moduleName;
-        case ClassificationType.typeParameterName: return ClassificationTypeNames.typeParameterName;
-        case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
-        case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
-        case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
-        case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
-        case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
-        case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
-        case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
-        case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
-        case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
-        default: return undefined!; // TODO: GH#18217 Debug.assertNever(type);
+        case ClassificationType.comment:
+            return ClassificationTypeNames.comment;
+        case ClassificationType.identifier:
+            return ClassificationTypeNames.identifier;
+        case ClassificationType.keyword:
+            return ClassificationTypeNames.keyword;
+        case ClassificationType.numericLiteral:
+            return ClassificationTypeNames.numericLiteral;
+        case ClassificationType.bigintLiteral:
+            return ClassificationTypeNames.bigintLiteral;
+        case ClassificationType.operator:
+            return ClassificationTypeNames.operator;
+        case ClassificationType.stringLiteral:
+            return ClassificationTypeNames.stringLiteral;
+        case ClassificationType.whiteSpace:
+            return ClassificationTypeNames.whiteSpace;
+        case ClassificationType.text:
+            return ClassificationTypeNames.text;
+        case ClassificationType.punctuation:
+            return ClassificationTypeNames.punctuation;
+        case ClassificationType.className:
+            return ClassificationTypeNames.className;
+        case ClassificationType.enumName:
+            return ClassificationTypeNames.enumName;
+        case ClassificationType.interfaceName:
+            return ClassificationTypeNames.interfaceName;
+        case ClassificationType.moduleName:
+            return ClassificationTypeNames.moduleName;
+        case ClassificationType.typeParameterName:
+            return ClassificationTypeNames.typeParameterName;
+        case ClassificationType.typeAliasName:
+            return ClassificationTypeNames.typeAliasName;
+        case ClassificationType.parameterName:
+            return ClassificationTypeNames.parameterName;
+        case ClassificationType.docCommentTagName:
+            return ClassificationTypeNames.docCommentTagName;
+        case ClassificationType.jsxOpenTagName:
+            return ClassificationTypeNames.jsxOpenTagName;
+        case ClassificationType.jsxCloseTagName:
+            return ClassificationTypeNames.jsxCloseTagName;
+        case ClassificationType.jsxSelfClosingTagName:
+            return ClassificationTypeNames.jsxSelfClosingTagName;
+        case ClassificationType.jsxAttribute:
+            return ClassificationTypeNames.jsxAttribute;
+        case ClassificationType.jsxText:
+            return ClassificationTypeNames.jsxText;
+        case ClassificationType.jsxAttributeStringLiteralValue:
+            return ClassificationTypeNames.jsxAttributeStringLiteralValue;
+        default:
+            return undefined!; // TODO: GH#18217 Debug.assertNever(type);
     }
 }
 
@@ -667,7 +704,7 @@ function convertClassificationsToSpans(classifications: Classifications): Classi
     for (let i = 0; i < dense.length; i += 3) {
         result.push({
             textSpan: createTextSpan(dense[i], dense[i + 1]),
-            classificationType: getClassificationTypeName(dense[i + 2])
+            classificationType: getClassificationTypeName(dense[i + 2]),
         });
     }
 
@@ -890,9 +927,9 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
     }
 
     function tryClassifyTripleSlashComment(start: number, width: number): boolean {
-        const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/im;
+        const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/m;
         // Require a leading whitespace character (the parser already does) to prevent terrible backtracking performance
-        const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
+        const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/g;
 
         const text = sourceFile.text.substr(start, width);
         const match = tripleSlashXMLCommentRegEx.exec(text);
@@ -1088,18 +1125,22 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                 const parent = token.parent;
                 if (tokenKind === SyntaxKind.EqualsToken) {
                     // the '=' in a variable declaration is special cased here.
-                    if (parent.kind === SyntaxKind.VariableDeclaration ||
+                    if (
+                        parent.kind === SyntaxKind.VariableDeclaration ||
                         parent.kind === SyntaxKind.PropertyDeclaration ||
                         parent.kind === SyntaxKind.Parameter ||
-                        parent.kind === SyntaxKind.JsxAttribute) {
+                        parent.kind === SyntaxKind.JsxAttribute
+                    ) {
                         return ClassificationType.operator;
                     }
                 }
 
-                if (parent.kind === SyntaxKind.BinaryExpression ||
+                if (
+                    parent.kind === SyntaxKind.BinaryExpression ||
                     parent.kind === SyntaxKind.PrefixUnaryExpression ||
                     parent.kind === SyntaxKind.PostfixUnaryExpression ||
-                    parent.kind === SyntaxKind.ConditionalExpression) {
+                    parent.kind === SyntaxKind.ConditionalExpression
+                ) {
                     return ClassificationType.operator;
                 }
             }

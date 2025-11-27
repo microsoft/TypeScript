@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/jsxParsingError1.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(file.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
 
 	interface IntrinsicElements {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
@@ -24,7 +24,7 @@ const class2 = "bar";
 
 const elem = <div className={class1, class2}/>;
 >elem : Symbol(elem, Decl(file.tsx, 10, 5))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >className : Symbol(className, Decl(file.tsx, 10, 17))
 >class1 : Symbol(class1, Decl(file.tsx, 8, 5))
 >class2 : Symbol(class2, Decl(file.tsx, 9, 5))

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module modTest {
+////namespace modTest {
 ////    //Declare
 ////    export var modVar:number;
 ////    /*1*/
@@ -17,7 +17,7 @@
 ////        modVar++;
 ////    }  /*3*/
 /////*4*/
-////    module testMod {
+////    namespace testMod {
 ////    }
 ////}
 

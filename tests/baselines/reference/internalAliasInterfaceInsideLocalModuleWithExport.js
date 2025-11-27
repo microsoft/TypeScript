@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithExport.ts] ////
 
 //// [internalAliasInterfaceInsideLocalModuleWithExport.ts]
-export module a {
+export namespace a {
     export interface I {
     }
 }
 
-export module c {
+export namespace c {
     export import b = a.I;
     export var x: b;
 }
@@ -24,11 +24,11 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasInterfaceInsideLocalModuleWithExport.d.ts]
-export declare module a {
+export declare namespace a {
     interface I {
     }
 }
-export declare module c {
+export declare namespace c {
     export import b = a.I;
     var x: b;
 }

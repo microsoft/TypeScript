@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/namespaceNotMergedWithFunctionDefaultExport.ts] ////
+
+=== replace-in-file/types/index.d.ts ===
+declare module 'replace-in-file' {
+>'replace-in-file' : typeof import("replace-in-file")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  export function replaceInFile(config: unknown): Promise<unknown[]>;
+>replaceInFile : (config: unknown) => Promise<unknown[]>
+>              : ^      ^^       ^^^^^                  
+>config : unknown
+>       : ^^^^^^^
+
+  export default replaceInFile;
+>replaceInFile : typeof replaceInFile
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+  namespace replaceInFile {
+>replaceInFile : typeof replaceInFile
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+    export function sync(config: unknown): unknown[];
+>sync : (config: unknown) => unknown[]
+>     : ^      ^^       ^^^^^         
+>config : unknown
+>       : ^^^^^^^
+  }
+}

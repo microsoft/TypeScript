@@ -1,4 +1,14 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    findAncestorMatchingSpan,
+    getNoopSymbolTrackerWithResolver,
+    registerCodeFix,
+    typeToAutoImportableTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     createTextSpan,
     DiagnosticMessageChain,
@@ -25,17 +35,7 @@ import {
     TypeChecker,
     TypeParameterDeclaration,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    createImportAdder,
-    eachDiagnostic,
-    findAncestorMatchingSpan,
-    getNoopSymbolTrackerWithResolver,
-    registerCodeFix,
-    typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "addMissingConstraint";
 const errorCodes = [
@@ -63,7 +63,7 @@ registerCodeFix({
     fixIds: [fixId],
     getAllCodeActions: context => {
         const { program, preferences, host } = context;
-        const seen = new Map<number, true>();
+        const seen = new Set<number>();
 
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
@@ -76,7 +76,7 @@ registerCodeFix({
                 return undefined;
             });
         }));
-    }
+    },
 });
 
 interface Info {
@@ -123,7 +123,7 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver({ program, host });
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
-        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, tracker);
+        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, /*internalFlags*/ undefined, tracker);
         if (typeNode) {
             changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default));
             importAdder.writeFixes(changes);
@@ -132,7 +132,7 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
 }
 
 function tryGetConstraintFromDiagnosticMessage(messageText: string | DiagnosticMessageChain) {
-    const [_, constraint] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/`extends (.*)`/) || [];
+    const [, constraint] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/`extends (.*)`/) || [];
     return constraint;
 }
 

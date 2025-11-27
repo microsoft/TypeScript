@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/shadowedFunctionScopedVariablesByBlockScopedOnes.ts] ////
+
+=== shadowedFunctionScopedVariablesByBlockScopedOnes.ts ===
+// https://github.com/microsoft/TypeScript/issues/2185
+
+function test1() {
+>test1 : () => void
+>      : ^^^^^^^^^^
+
+    for (let v; ; ) { var v; }
+>v : any
+>  : ^^^
+>v : any
+>  : ^^^
+}
+function test2() {
+>test2 : () => void
+>      : ^^^^^^^^^^
+
+    for (let v in []) { var v; }
+>v : string
+>  : ^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+>v : any
+>  : ^^^
+}
+function test3() {
+>test3 : () => void
+>      : ^^^^^^^^^^
+
+    for (let v of []) { var v; }
+>v : any
+>  : ^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+>v : any
+>  : ^^^
+}
+function test4() {
+>test4 : () => void
+>      : ^^^^^^^^^^
+    {
+        let x;
+>x : any
+>  : ^^^
+        {
+            var x;
+>x : any
+>  : ^^^
+        }
+    }
+}
+function test5() {
+>test5 : () => void
+>      : ^^^^^^^^^^
+    {
+        {
+            var x;
+>x : any
+>  : ^^^
+        }
+        let x;
+>x : any
+>  : ^^^
+    }
+}
+
+
+

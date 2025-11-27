@@ -72,7 +72,7 @@ interface i1 {
 var i1_i: i1;
 
 /** this is module comment*/
-module m1 {
+namespace m1 {
     /** class b */
     export class b {
         constructor(public x: number) {
@@ -81,7 +81,7 @@ module m1 {
     }
 
     /// module m2
-    export module m2 {
+    export namespace m2 {
     }
 }
 
@@ -160,12 +160,12 @@ interface i1 {
     prop: string;
 }
 declare var i1_i: i1;
-declare module m1 {
+declare namespace m1 {
     class b {
         x: number;
         constructor(x: number);
     }
-    module m2 {
+    namespace m2 {
     }
 }
 declare var x: any;

@@ -48,40 +48,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 // Should be an error, Promise<number>, currently retorted correctly 
-function test3(isError = true) {
-    return __awaiter(this, void 0, void 0, function* () {
+function test3() {
+    return __awaiter(this, arguments, void 0, function* (isError = true) {
         if (isError === true) {
             return 6;
         }
     });
 }
 // Should not be an error, Promise<any>, currently **not** working
-function test4(isError = true) {
-    return __awaiter(this, void 0, void 0, function* () {
+function test4() {
+    return __awaiter(this, arguments, void 0, function* (isError = true) {
         if (isError === true) {
             return undefined;
         }
     });
 }
 // should not be error, Promise<any> currently working correctly 
-function test5(isError = true) {
-    return __awaiter(this, void 0, void 0, function* () {
+function test5() {
+    return __awaiter(this, arguments, void 0, function* (isError = true) {
         if (isError === true) {
             return undefined;
         }
     });
 }
 // should be error, currently reported correctly 
-function test6(isError = true) {
-    return __awaiter(this, void 0, void 0, function* () {
+function test6() {
+    return __awaiter(this, arguments, void 0, function* (isError = true) {
         if (isError === true) {
             return undefined;
         }
     });
 }
 // infered to be Promise<void>, should not be an error, currently reported correctly 
-function test7(isError = true) {
-    return __awaiter(this, void 0, void 0, function* () {
+function test7() {
+    return __awaiter(this, arguments, void 0, function* (isError = true) {
         if (isError === true) {
             return;
         }

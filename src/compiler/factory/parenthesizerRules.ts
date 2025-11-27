@@ -48,7 +48,7 @@ import {
     SyntaxKind,
     TypeNode,
     UnaryExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {
@@ -112,6 +112,16 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         return parenthesizerRule;
     }
 
+    function mixingBinaryOperatorsRequiresParentheses(a: SyntaxKind, b: SyntaxKind) {
+        if (a === SyntaxKind.QuestionQuestionToken) {
+            return b === SyntaxKind.AmpersandAmpersandToken || b === SyntaxKind.BarBarToken;
+        }
+        if (b === SyntaxKind.QuestionQuestionToken) {
+            return a === SyntaxKind.AmpersandAmpersandToken || a === SyntaxKind.BarBarToken;
+        }
+        return false;
+    }
+
     /**
      * Determines whether the operand to a BinaryExpression needs to be parenthesized.
      *
@@ -121,6 +131,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      *                           BinaryExpression.
      */
     function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression | undefined) {
+        const emittedOperand = skipPartiallyEmittedExpressions(operand);
+        if (isBinaryExpression(emittedOperand) && mixingBinaryOperatorsRequiresParentheses(binaryOperator, emittedOperand.operatorToken.kind)) {
+            return true;
+        }
         // If the operand has lower precedence, then it needs to be parenthesized to preserve the
         // intent of the expression. For example, if the operand is `a + b` and the operator is
         // `*`, then we need to parenthesize the operand to preserve the intended order of
@@ -140,7 +154,6 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         // the intended order of operations: `(a ** b) ** c`
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
-        const emittedOperand = skipPartiallyEmittedExpressions(operand);
         if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > OperatorPrecedence.Assignment) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`
@@ -151,9 +164,11 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             case Comparison.LessThan:
                 // If the operand is the right side of a right-associative binary operation
                 // and is a yield expression, then we do not need parentheses.
-                if (!isLeftSideOfBinary
+                if (
+                    !isLeftSideOfBinary
                     && binaryOperatorAssociativity === Associativity.Right
-                    && operand.kind === SyntaxKind.YieldExpression) {
+                    && operand.kind === SyntaxKind.YieldExpression
+                ) {
                     return false;
                 }
 
@@ -176,8 +191,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {
-                    if (isBinaryExpression(emittedOperand)
-                        && emittedOperand.operatorToken.kind === binaryOperator) {
+                    if (
+                        isBinaryExpression(emittedOperand)
+                        && emittedOperand.operatorToken.kind === binaryOperator
+                    ) {
                         // No need to parenthesize the right operand when the binary operator and
                         // operand are the same and one of the following:
                         //  x*(a*b)     => x*a*b
@@ -259,9 +276,9 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
 
             const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);
             const literalKind = isLiteralKind(leftKind)
-                && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
-                    ? leftKind
-                    : SyntaxKind.Unknown;
+                    && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
+                ? leftKind
+                : SyntaxKind.Unknown;
 
             (node as BinaryPlusExpression).cachedLiteralKind = literalKind;
             return literalKind;
@@ -291,7 +308,6 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             ? factory.createParenthesizedExpression(operand)
             : operand;
     }
-
 
     function parenthesizeLeftSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression): Expression {
         return parenthesizeBinaryOperand(binaryOperator, leftSide, /*isLeftSideOfBinary*/ true);
@@ -380,9 +396,11 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         //       new C.x        -> not the same as (new C).x
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        if (isLeftHandSideExpression(emittedExpression)
+        if (
+            isLeftHandSideExpression(emittedExpression)
             && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)
-            && (optionalChain || !isOptionalChain(emittedExpression))) {
+            && (optionalChain || !isOptionalChain(emittedExpression))
+        ) {
             // TODO(rbuckton): Verify whether this assertion holds.
             return expression as LeftHandSideExpression;
         }
@@ -425,7 +443,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                     emittedExpression,
                     setTextRange(factory.createParenthesizedExpression(callee), callee),
                     emittedExpression.typeArguments,
-                    emittedExpression.arguments
+                    emittedExpression.arguments,
                 );
                 return factory.restoreOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
             }

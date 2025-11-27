@@ -1,0 +1,18 @@
+a.ts(1,22): error TS2307: Cannot find module 'unknown-module' or its corresponding type declarations.
+
+
+==== ./a.ts (1 errors) ====
+    import { List } from 'unknown-module';
+                         ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'unknown-module' or its corresponding type declarations.
+    export type MyList = List<number>;
+    
+==== ./b.ts (0 errors) ====
+    import { type MyList } from './a';
+    
+    declare var Decorator: any;
+    
+    class Foo {
+      @Decorator myList?: MyList;
+    }
+    

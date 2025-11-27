@@ -1,17 +1,17 @@
 //// [tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause2.ts] ////
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause2.ts]
-module X.A.C {
+namespace X.A.C {
     export interface Z {
     }
 }
-module X.A.B.C {
+namespace X.A.B.C {
     export class W implements A.C.Z { // This can refer to it as A.C.Z
     }
 }
 
-module X.A.B.C {
-    module A {
+namespace X.A.B.C {
+    namespace A {
     }
 }
 
@@ -37,13 +37,13 @@ var X;
 
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause2.d.ts]
-declare module X.A.C {
+declare namespace X.A.C {
     interface Z {
     }
 }
-declare module X.A.B.C {
+declare namespace X.A.B.C {
     class W implements A.C.Z {
     }
 }
-declare module X.A.B.C {
+declare namespace X.A.B.C {
 }

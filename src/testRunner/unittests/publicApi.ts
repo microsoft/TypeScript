@@ -1,9 +1,10 @@
-import * as compiler from "../_namespaces/compiler";
-import * as documents from "../_namespaces/documents";
-import * as fakes from "../_namespaces/fakes";
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as vfs from "../_namespaces/vfs";
+import * as documents from "../_namespaces/documents.js";
+import * as fakes from "../_namespaces/fakes.js";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as vfs from "../_namespaces/vfs.js";
+import { jsonToReadableText } from "./helpers.js";
+import { TestServerHost } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -19,29 +20,10 @@ describe("unittests:: Public APIs", () => {
         it("should be acknowledged when they change", () => {
             Harness.Baseline.runBaseline(api, fileContent, { PrintDiff: true });
         });
-
-        it("should compile", () => {
-            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
-            const sys = new fakes.System(fs);
-            const options: ts.CompilerOptions = {
-                ...ts.getDefaultCompilerOptions(),
-                strict: true,
-                exactOptionalPropertyTypes: true,
-                lib: ["lib.es2018.d.ts"],
-            };
-            const host = new fakes.CompilerHost(sys, options);
-            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);
-            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
-        });
     }
 
-    describe("for the language service and compiler", () => {
+    describe("for typescript.d.ts", () => {
         verifyApi("typescript.d.ts");
-    });
-
-    describe("for the language server", () => {
-        verifyApi("tsserverlibrary.d.ts");
     });
 });
 
@@ -80,7 +62,7 @@ function test() {}`;
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
-        assert.isDefined(tags[0].comment![0]);
+        assert.isDefined(tags[0].comment[0]);
         assert.isString(tags[0].comment);
         assert.equal(tags[0].comment as string, "Some\n text\r\n with newlines.");
     });
@@ -103,12 +85,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -125,12 +108,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -149,12 +133,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -169,12 +154,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -203,7 +189,7 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                     assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
                     // Throw error here so that actual change to localized diagnostics messages doesnt take place
                     throw new Error("cannot read file");
-                }
+                },
             }, errors);
         });
     }
@@ -222,7 +208,7 @@ var x
         const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
         const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
         const kids = paramTag.getChildren();
-        const seen: Set<ts.Node> = new Set();
+        const seen = new Set<ts.Node>();
         ts.forEachChild(paramTag, n => {
             assert.strictEqual(/*actual*/ false, seen.has(n), "Found a duplicate-added child");
             seen.add(n);
@@ -241,5 +227,101 @@ describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSD
         assert.equal(endOfFileToken.getChildren().length, 1);
         assert.equal(endOfFileToken.getChildCount(), 1);
         assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
+    });
+});
+
+describe("unittests:: Public APIs:: get syntactic and effective modifiers", () => {
+    it("caches and reports correct flags in TS file", () => {
+        // https://github.com/microsoft/TypeScript/issues/42189
+        const content = `
+class C {
+    /** @private */
+    prop = 1;
+}`;
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const classNode = sourceFile.statements[0] as ts.ClassDeclaration;
+        const propNode = classNode.members[0] as ts.PropertyDeclaration;
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getEffectiveModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+    it("caches and reports correct flags in JS file", () => {
+        // https://github.com/microsoft/TypeScript/issues/42189
+        const content = `
+class C {
+    /** @private */
+    prop = 1;
+}`;
+        const sourceFile = ts.createSourceFile("/file.js", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const classNode = sourceFile.statements[0] as ts.ClassDeclaration;
+        const propNode = classNode.members[0] as ts.PropertyDeclaration;
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.Private, ts.getEffectiveModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+});
+
+describe("unittests:: Public APIs:: createProgram", () => {
+    function verifyAPI(useJsonParsingApi: boolean) {
+        const sys = TestServerHost.createWatchedSystem({
+            "/home/src/projects/project/packages/a/index.js": `export const a = 'a';`,
+            "/home/src/projects/project/packages/a/test/index.js": `import 'a';`,
+            "/home/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    checkJs: true,
+                    composite: true,
+                    declaration: true,
+                    emitDeclarationOnly: true,
+                    module: "nodenext",
+                    outDir: "types",
+                },
+            }),
+            "/home/src/projects/project/packages/a/package.json": jsonToReadableText({
+                name: "a",
+                version: "0.0.0",
+                type: "module",
+                exports: {
+                    ".": {
+                        types: "./types/index.d.ts",
+                        default: "./index.js",
+                    },
+                },
+            }),
+        }, { currentDirectory: "/home/src/projects/project" });
+        const commandLine = ts.getParsedCommandLineOfConfigFile(
+            "/home/src/projects/project/packages/a/tsconfig.json",
+            /*optionsToExtend*/ undefined,
+            {
+                fileExists: sys.fileExists.bind(sys),
+                getCurrentDirectory: sys.getCurrentDirectory.bind(sys),
+                onUnRecoverableConfigFileDiagnostic: () => {},
+                readDirectory: sys.readDirectory.bind(sys),
+                readFile: sys.readFile.bind(sys),
+                useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
+                directoryExists: sys.directoryExists.bind(sys),
+                getDirectories: sys.getDirectories.bind(sys),
+                realpath: sys.realpath.bind(sys),
+            },
+        )!;
+        const config = !useJsonParsingApi ? JSON.parse(sys.readFile("/home/src/projects/project/packages/a/tsconfig.json")!) : undefined;
+        // This is really createCompilerHost but we want to use our own sys so simple usage
+        const host = ts.createCompilerHostWorker(
+            useJsonParsingApi ? commandLine.options : config.compilerOptions,
+            /*setParentNodes*/ undefined,
+            sys,
+        );
+        (useJsonParsingApi ? assert.doesNotThrow : assert.throws)(() =>
+            ts.createProgram({
+                rootNames: commandLine.fileNames,
+                options: useJsonParsingApi ? commandLine.options : config.compilerOptions,
+                host,
+            })
+        );
+    }
+    it("when using correct config file API", () => {
+        verifyAPI(/*useJsonParsingApi*/ true);
+    });
+    it("when using direct json read", () => {
+        verifyAPI(/*useJsonParsingApi*/ false);
     });
 });

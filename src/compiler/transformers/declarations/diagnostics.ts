@@ -1,22 +1,40 @@
 import {
+    addRelatedInfo,
+    ArrayLiteralExpression,
+    ArrowFunction,
+    assertType,
     BinaryExpression,
     BindingElement,
     CallSignatureDeclaration,
+    ClassExpression,
+    ComputedPropertyName,
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
+    createDiagnosticForNode,
     Debug,
     Declaration,
     DeclarationName,
     DiagnosticMessage,
     Diagnostics,
+    DiagnosticWithLocation,
     ElementAccessExpression,
+    EmitResolver,
+    EntityNameOrEntityNameExpression,
+    ExportAssignment,
+    Expression,
     ExpressionWithTypeArguments,
+    findAncestor,
     FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAllAccessorDeclarations,
     getNameOfDeclaration,
+    getTextOfNode,
     hasSyntacticModifier,
     ImportEqualsDeclaration,
     IndexSignatureDeclaration,
+    isAsExpression,
     isBinaryExpression,
     isBindingElement,
     isCallSignatureDeclaration,
@@ -24,8 +42,12 @@ import {
     isConstructorDeclaration,
     isConstructSignatureDeclaration,
     isElementAccessExpression,
+    isEntityName,
+    isEntityNameExpression,
+    isExportAssignment,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
+    isFunctionLikeDeclaration,
     isGetAccessor,
     isHeritageClause,
     isImportEqualsDeclaration,
@@ -35,13 +57,19 @@ import {
     isMethodSignature,
     isParameter,
     isParameterPropertyDeclaration,
+    isParenthesizedExpression,
+    isPartOfTypeNode,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isPropertySignature,
+    isReturnStatement,
     isSetAccessor,
+    isStatement,
     isStatic,
     isTypeAliasDeclaration,
+    isTypeAssertionExpression,
     isTypeParameterDeclaration,
+    isTypeQueryNode,
     isVariableDeclaration,
     JSDocCallbackTag,
     JSDocEnumTag,
@@ -53,20 +81,24 @@ import {
     Node,
     ParameterDeclaration,
     PropertyAccessExpression,
+    PropertyAssignment,
     PropertyDeclaration,
     PropertySignature,
     QualifiedName,
     SetAccessorDeclaration,
+    ShorthandPropertyAssignment,
+    SpreadAssignment,
+    SpreadElement,
     SymbolAccessibility,
     SymbolAccessibilityResult,
     SyntaxKind,
     TypeAliasDeclaration,
     TypeParameterDeclaration,
     VariableDeclaration,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
-export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);
+export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined;
 
 /** @internal */
 export interface SymbolAccessibilityDiagnostic {
@@ -129,7 +161,7 @@ export function canProduceDiagnostics(node: Node): node is DeclarationDiagnostic
 }
 
 /** @internal */
-export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
+export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
     if (isSetAccessor(node) || isGetAccessor(node)) {
         return getAccessorNameVisibilityError;
     }
@@ -144,7 +176,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -175,7 +207,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -245,8 +277,10 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         }
         // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
         // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
-        else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
-            (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))) {
+        else if (
+            node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
+            (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))
+        ) {
             // TODO(jfreeman): Deal with computed properties in error reporting.
             if (isStatic(node)) {
                 return symbolAccessibilityResult.errorModuleName ?
@@ -276,7 +310,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -315,7 +349,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: (node as NamedDeclaration).name!,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         };
     }
 
@@ -381,7 +415,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 
         return {
             diagnosticMessage,
-            errorNode: (node as NamedDeclaration).name || node
+            errorNode: (node as NamedDeclaration).name || node,
         };
     }
 
@@ -390,7 +424,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -523,7 +557,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         };
     }
 
@@ -534,8 +568,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             // Class or Interface implemented/extended is inaccessible
             diagnosticMessage = isHeritageClause(node.parent) && node.parent.token === SyntaxKind.ImplementsKeyword ?
                 Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                    node.parent.parent.name ? Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                        Diagnostics.extends_clause_of_exported_class_has_or_is_using_private_name_0;
+                node.parent.parent.name ? Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                Diagnostics.extends_clause_of_exported_class_has_or_is_using_private_name_0;
         }
         else {
             // interface is inaccessible
@@ -545,7 +579,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: node,
-            typeName: getNameOfDeclaration(node.parent.parent as Declaration)
+            typeName: getNameOfDeclaration(node.parent.parent as Declaration),
         };
     }
 
@@ -553,7 +587,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage: Diagnostics.Import_declaration_0_is_using_private_name_1,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         };
     }
 
@@ -565,5 +599,214 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             errorNode: isJSDocTypeAlias(node) ? Debug.checkDefined(node.typeExpression) : (node as TypeAliasDeclaration).type,
             typeName: isJSDocTypeAlias(node) ? getNameOfDeclaration(node) : (node as TypeAliasDeclaration).name,
         };
+    }
+}
+
+/** @internal */
+export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (node: Node) => DiagnosticWithLocation {
+    const relatedSuggestionByDeclarationKind = {
+        [SyntaxKind.ArrowFunction]: Diagnostics.Add_a_return_type_to_the_function_expression,
+        [SyntaxKind.FunctionExpression]: Diagnostics.Add_a_return_type_to_the_function_expression,
+        [SyntaxKind.MethodDeclaration]: Diagnostics.Add_a_return_type_to_the_method,
+        [SyntaxKind.GetAccessor]: Diagnostics.Add_a_return_type_to_the_get_accessor_declaration,
+        [SyntaxKind.SetAccessor]: Diagnostics.Add_a_type_to_parameter_of_the_set_accessor_declaration,
+        [SyntaxKind.FunctionDeclaration]: Diagnostics.Add_a_return_type_to_the_function_declaration,
+        [SyntaxKind.ConstructSignature]: Diagnostics.Add_a_return_type_to_the_function_declaration,
+        [SyntaxKind.Parameter]: Diagnostics.Add_a_type_annotation_to_the_parameter_0,
+        [SyntaxKind.VariableDeclaration]: Diagnostics.Add_a_type_annotation_to_the_variable_0,
+        [SyntaxKind.PropertyDeclaration]: Diagnostics.Add_a_type_annotation_to_the_property_0,
+        [SyntaxKind.PropertySignature]: Diagnostics.Add_a_type_annotation_to_the_property_0,
+        [SyntaxKind.ExportAssignment]: Diagnostics.Move_the_expression_in_default_export_to_a_variable_and_add_a_type_annotation_to_it,
+    } satisfies Partial<Record<SyntaxKind, DiagnosticMessage>>;
+
+    const errorByDeclarationKind = {
+        [SyntaxKind.FunctionExpression]: Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.FunctionDeclaration]: Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.ArrowFunction]: Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.MethodDeclaration]: Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.ConstructSignature]: Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.GetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.SetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.Parameter]: Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.VariableDeclaration]: Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.PropertyDeclaration]: Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.PropertySignature]: Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.ComputedPropertyName]: Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations,
+        [SyntaxKind.SpreadAssignment]: Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
+        [SyntaxKind.ShorthandPropertyAssignment]: Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
+        [SyntaxKind.ArrayLiteralExpression]: Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
+        [SyntaxKind.ExportAssignment]: Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
+        [SyntaxKind.SpreadElement]: Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+    } satisfies Partial<Record<SyntaxKind, DiagnosticMessage>>;
+
+    return getDiagnostic;
+
+    type WithIsolatedDeclarationDiagnostic =
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | ComputedPropertyName
+        | ArrayLiteralExpression
+        | SpreadElement
+        | FunctionDeclaration
+        | FunctionExpression
+        | ArrowFunction
+        | MethodDeclaration
+        | ConstructSignatureDeclaration
+        | BindingElement
+        | VariableDeclaration
+        | PropertyDeclaration
+        | ParameterDeclaration
+        | PropertyAssignment
+        | ClassExpression;
+
+    function getDiagnostic(node: Node) {
+        const heritageClause = findAncestor(node, isHeritageClause);
+        if (heritageClause) {
+            return createDiagnosticForNode(node, Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations);
+        }
+        if ((isPartOfTypeNode(node) || isTypeQueryNode(node.parent)) && (isEntityName(node) || isEntityNameExpression(node))) {
+            return createEntityInTypeNodeError(node);
+        }
+        Debug.type<WithIsolatedDeclarationDiagnostic>(node);
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return createAccessorTypeError(node);
+            case SyntaxKind.ComputedPropertyName:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.SpreadAssignment:
+                return createObjectLiteralError(node);
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.SpreadElement:
+                return createArrayLiteralError(node);
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionDeclaration:
+                return createReturnTypeError(node);
+            case SyntaxKind.BindingElement:
+                return createBindingElementError(node);
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.VariableDeclaration:
+                return createVariableOrPropertyError(node);
+            case SyntaxKind.Parameter:
+                return createParameterError(node);
+            case SyntaxKind.PropertyAssignment:
+                return createExpressionError(node.initializer);
+            case SyntaxKind.ClassExpression:
+                return createClassExpressionError(node);
+            default:
+                assertType<never>(node);
+                return createExpressionError(node as Expression);
+        }
+    }
+
+    function findNearestDeclaration(node: Node) {
+        const result = findAncestor(node, n => isExportAssignment(n) || isStatement(n) || isVariableDeclaration(n) || isPropertyDeclaration(n) || isParameter(n));
+        if (!result) return undefined;
+
+        if (isExportAssignment(result)) return result;
+
+        if (isReturnStatement(result)) {
+            return findAncestor(result, (n): n is Exclude<FunctionLikeDeclaration, ConstructorDeclaration> => isFunctionLikeDeclaration(n) && !isConstructorDeclaration(n));
+        }
+        return (isStatement(result) ? undefined : result) as VariableDeclaration | PropertyDeclaration | ParameterDeclaration | ExportAssignment | undefined;
+    }
+
+    function createAccessorTypeError(node: GetAccessorDeclaration | SetAccessorDeclaration) {
+        const { getAccessor, setAccessor } = getAllAccessorDeclarations(node.symbol.declarations, node);
+
+        const targetNode = (isSetAccessor(node) ? node.parameters[0] : node) ?? node;
+        const diag = createDiagnosticForNode(targetNode, errorByDeclarationKind[node.kind]);
+
+        if (setAccessor) {
+            addRelatedInfo(diag, createDiagnosticForNode(setAccessor, relatedSuggestionByDeclarationKind[setAccessor.kind]));
+        }
+        if (getAccessor) {
+            addRelatedInfo(diag, createDiagnosticForNode(getAccessor, relatedSuggestionByDeclarationKind[getAccessor.kind]));
+        }
+        return diag;
+    }
+    function addParentDeclarationRelatedInfo(node: Node, diag: DiagnosticWithLocation) {
+        const parentDeclaration = findNearestDeclaration(node);
+        if (parentDeclaration) {
+            const targetStr = isExportAssignment(parentDeclaration) || !parentDeclaration.name ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
+        }
+        return diag;
+    }
+    function createObjectLiteralError(node: ShorthandPropertyAssignment | SpreadAssignment | ComputedPropertyName) {
+        const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
+        addParentDeclarationRelatedInfo(node, diag);
+        return diag;
+    }
+    function createArrayLiteralError(node: ArrayLiteralExpression | SpreadElement) {
+        const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
+        addParentDeclarationRelatedInfo(node, diag);
+        return diag;
+    }
+    function createReturnTypeError(node: FunctionDeclaration | FunctionExpression | ArrowFunction | MethodDeclaration | ConstructSignatureDeclaration) {
+        const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
+        addParentDeclarationRelatedInfo(node, diag);
+        addRelatedInfo(diag, createDiagnosticForNode(node, relatedSuggestionByDeclarationKind[node.kind]));
+        return diag;
+    }
+    function createBindingElementError(node: BindingElement) {
+        return createDiagnosticForNode(node, Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations);
+    }
+    function createVariableOrPropertyError(node: VariableDeclaration | PropertyDeclaration) {
+        const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
+        const targetStr = getTextOfNode(node.name, /*includeTrivia*/ false);
+        addRelatedInfo(diag, createDiagnosticForNode(node, relatedSuggestionByDeclarationKind[node.kind], targetStr));
+        return diag;
+    }
+    function createParameterError(node: ParameterDeclaration) {
+        if (isSetAccessor(node.parent)) {
+            return createAccessorTypeError(node.parent);
+        }
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node, node.parent);
+        if (!addUndefined && node.initializer) {
+            return createExpressionError(node.initializer);
+        }
+        const message = addUndefined ?
+            Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_supported_with_isolatedDeclarations :
+            errorByDeclarationKind[node.kind];
+        const diag = createDiagnosticForNode(node, message);
+        const targetStr = getTextOfNode(node.name, /*includeTrivia*/ false);
+        addRelatedInfo(diag, createDiagnosticForNode(node, relatedSuggestionByDeclarationKind[node.kind], targetStr));
+        return diag;
+    }
+    function createClassExpressionError(node: Expression) {
+        return createExpressionError(node, Diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations);
+    }
+    function createEntityInTypeNodeError(node: EntityNameOrEntityNameExpression) {
+        const diag = createDiagnosticForNode(node, Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations, getTextOfNode(node, /*includeTrivia*/ false));
+        addParentDeclarationRelatedInfo(node, diag);
+        return diag;
+    }
+    function createExpressionError(node: Expression, diagnosticMessage?: DiagnosticMessage) {
+        const parentDeclaration = findNearestDeclaration(node);
+        let diag: DiagnosticWithLocation;
+        if (parentDeclaration) {
+            const targetStr = isExportAssignment(parentDeclaration) || !parentDeclaration.name ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const parent = findAncestor(node.parent, n => isExportAssignment(n) || (isStatement(n) ? "quit" : !isParenthesizedExpression(n) && !isTypeAssertionExpression(n) && !isAsExpression(n)));
+
+            if (parentDeclaration === parent) {
+                diag = createDiagnosticForNode(node, diagnosticMessage ?? errorByDeclarationKind[parentDeclaration.kind]);
+                addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
+            }
+            else {
+                diag = createDiagnosticForNode(node, diagnosticMessage ?? Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations);
+                addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
+                addRelatedInfo(diag, createDiagnosticForNode(node, Diagnostics.Add_satisfies_and_a_type_assertion_to_this_expression_satisfies_T_as_T_to_make_the_type_explicit));
+            }
+        }
+        else {
+            diag = createDiagnosticForNode(node, diagnosticMessage ?? Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations);
+        }
+        return diag;
     }
 }

@@ -1,0 +1,709 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpRestArgs1.ts ===
+// function fn(a: number, b: number, c: number) {}
+// const a = [1, 2] as const;
+// const b = [1] as const;
+// 
+// fn(...a, );
+//          ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, b: number, **c: number**): void
+// | ----------------------------------------------------------------------
+// fn(, ...a);
+//    ^
+// | ----------------------------------------------------------------------
+// | fn(**a: number**, b: number, c: number): void
+// | ----------------------------------------------------------------------
+// 
+// fn(...b, );
+//          ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, **b: number**, c: number): void
+// | ----------------------------------------------------------------------
+// fn(, ...b, );
+//    ^
+// | ----------------------------------------------------------------------
+// | fn(**a: number**, b: number, c: number): void
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, b: number, **c: number**): void
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs1.ts",
+      "position": 109,
+      "name": "1"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "fn",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 103,
+        "length": 6
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs1.ts",
+      "position": 115,
+      "name": "2"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "fn",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 115,
+        "length": 6
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs1.ts",
+      "position": 134,
+      "name": "3"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "fn",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 128,
+        "length": 6
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs1.ts",
+      "position": 140,
+      "name": "4"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "fn",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 140,
+        "length": 8
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs1.ts",
+      "position": 148,
+      "name": "5"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "fn",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 140,
+        "length": 8
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  }
+]

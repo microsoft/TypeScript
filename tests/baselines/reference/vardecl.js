@@ -61,7 +61,7 @@ var d4: {
     };
 }
 
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
     var m1;
@@ -227,7 +227,7 @@ declare var d4: {
         y: number;
     };
 };
-declare module m2 {
+declare namespace m2 {
     var a: any, b2: number, b: any;
     class C2 {
         b: any;

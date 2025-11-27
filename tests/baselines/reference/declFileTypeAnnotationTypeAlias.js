@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts] ////
 
 //// [declFileTypeAnnotationTypeAlias.ts]
-module M {
+namespace M {
     export type Value = string | number | boolean;
     export var x: Value;
 
@@ -10,7 +10,7 @@ module M {
 
     export type C = c;
 
-    export module m {
+    export namespace m {
         export class c {
         }
     }
@@ -24,9 +24,9 @@ interface Window {
     someMethod();
 }
 
-module M {
+namespace M {
     export type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W;
     }
@@ -65,13 +65,13 @@ var M;
 
 
 //// [declFileTypeAnnotationTypeAlias.d.ts]
-declare module M {
+declare namespace M {
     type Value = string | number | boolean;
     var x: Value;
     class c {
     }
     type C = c;
-    module m {
+    namespace m {
         class c {
         }
     }
@@ -81,9 +81,9 @@ declare module M {
 interface Window {
     someMethod(): any;
 }
-declare module M {
+declare namespace M {
     type W = Window | string;
-    module N {
+    namespace N {
         class Window {
         }
         var p: W;

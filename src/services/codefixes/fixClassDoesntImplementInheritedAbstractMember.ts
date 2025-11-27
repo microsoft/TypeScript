@@ -1,4 +1,12 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    createMissingMemberNodes,
+    registerCodeFix,
+    TypeConstructionContext,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     cast,
     ClassElement,
@@ -15,31 +23,28 @@ import {
     Symbol,
     textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    createMissingMemberNodes,
-    registerCodeFix,
-    TypeConstructionContext,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
-    Diagnostics.Non_abstract_class_0_does_not_implement_all_abstract_members_of_1.code,
+    Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
+    Diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2.code,
+    Diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2_and_3_more.code,
+    Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
+    Diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1.code,
+    Diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1_and_2_more.code,
 ];
+
 const fixId = "fixClassDoesntImplementInheritedAbstractMember";
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixClassNotImplementingInheritedMembers(context) {
         const { sourceFile, span } = context;
-        const changes = textChanges.ChangeTracker.with(context, t =>
-            addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
+        const changes = textChanges.ChangeTracker.with(context, t => addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
         return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToFixClassDoesntImplementInheritedAbstractMember(context) {
-        const seenClassDeclarations = new Map<number, true>();
+        const seenClassDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/jsFileCompilationMethodOverloadSyntax.ts] ////
+
+=== a.js ===
+class A {
+>A : A
+>  : ^
+
+  foo();
+>foo : () => any
+>    : ^^^^^^^^^
+}
+

@@ -1,4 +1,13 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    createMissingMemberNodes,
+    getNoopSymbolTrackerWithResolver,
+    registerCodeFix,
+    TypeConstructionContext,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     and,
     ClassElement,
@@ -27,20 +36,11 @@ import {
     textChanges,
     TypeChecker,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    createMissingMemberNodes,
-    getNoopSymbolTrackerWithResolver,
-    registerCodeFix,
-    TypeConstructionContext,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,
-    Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
+    Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code,
 ];
 const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
 registerCodeFix({
@@ -55,7 +55,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
-        const seenClassDeclarations = new Map<number, true>();
+        const seenClassDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
@@ -108,7 +108,7 @@ function addMissingDeclarations(
     function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
         const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
         if (indexInfoOfKind) {
-            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
         }
     }
 

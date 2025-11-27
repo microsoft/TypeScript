@@ -1,18 +1,18 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
 ////        "outDir": "./dist",
-////        "sourceRoot": "/",
+////        "sourceRoot": "/home/src/workspaces/project/",
 ////        "declaration": true,
 ////        "declarationMap": true,
 ////        "newLine": "lf",
 ////    },
-////    "files": ["/index.ts"],
+////    "files": ["/home/src/workspaces/project/index.ts"],
 ////}
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 // @emitThisFile: true
 ////export class Foo {
 ////    member: string;
@@ -29,12 +29,12 @@
 ////    member: number;
 ////}
 
-// @Filename: /mymodule.ts
-////import * as mod from "/dist/index";
+// @Filename: /home/src/workspaces/project/mymodule.ts
+////import * as mod from "/home/src/workspaces/project/dist/index";
 ////const instance = new mod.Foo();
 ////instance.[|/*1*/methodName|]({member: 12});
 
-// @Filename: /dist/index.js
+// @Filename: /home/src/workspaces/project/dist/index.js
 ////"use strict";
 ////Object.defineProperty(exports, "__esModule", { value: true });
 ////exports.Foo = void 0;
@@ -53,10 +53,10 @@
 ////exports.Foo = Foo;
 ////
 
-// @Filename: /dist/index.d.ts.map
-////{"version":3,"file":"index.d.ts","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
+// @Filename: /home/src/workspaces/project/dist/index.d.ts.map
+////{"version":3,"file":"index.d.ts","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
 
-// @Filename: /dist/index.d.ts
+// @Filename: /home/src/workspaces/project/dist/index.d.ts
 ////export declare class Foo {
 ////    member: string;
 ////    methodName(propName: SomeType): SomeType;
@@ -73,12 +73,13 @@
 ////}
 //////# sourceMappingURL=index.d.ts.map
 
-goTo.file("/index.ts");
-verify.getEmitOutput(["/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
-
-verify.baselineCommands(
-    { type: "goToImplementation", markerOrRange: "1" }, // getImplementationAtPosition
-    { type: "goToType", markerOrRange: "1" }, // getTypeDefinitionAtPosition
-    { type: "goToDefinition", markerOrRange: "1" }, // getDefinitionAndBoundSpan
-    { type: "getDefinitionAtPosition", markerOrRange: "1" }, // getDefinitionAtPosition
-);
+goTo.file("/home/src/workspaces/project/index.ts");
+verify.getEmitOutput([
+    "/home/src/workspaces/project/dist/index.js",
+    "/home/src/workspaces/project/dist/index.d.ts.map",
+    "/home/src/workspaces/project/dist/index.d.ts"
+]);
+verify.baselineGoToImplementation("1");// getImplementationAtPosition
+verify.baselineGoToType("1");// getTypeDefinitionAtPosition
+verify.baselineGoToDefinition("1");// getDefinitionAndBoundSpan
+verify.baselineGetDefinitionAtPosition("1"); // getDefinitionAtPosition

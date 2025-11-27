@@ -1,15 +1,15 @@
 import * as chai from "chai";
 
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 // this will work in the browser via browserify
 declare global {
     // Module transform: converted from ambient declaration
-    var assert: typeof chai.assert; // eslint-disable-line no-var
+    var assert: typeof chai.assert;
 }
 declare global {
     // Module transform: converted from ambient declaration
-    var expect: typeof chai.expect; // eslint-disable-line no-var
+    var expect: typeof chai.expect;
 }
 globalThis.assert = chai.assert;
 {
@@ -27,7 +27,7 @@ globalThis.assert = chai.assert;
         assertDeepImpl(a, b, msg);
 
         function arrayExtraKeysObject(a: readonly unknown[]): object {
-            const obj: { [key: string]: unknown } = {};
+            const obj: { [key: string]: unknown; } = {};
             for (const key in a) {
                 if (Number.isNaN(Number(key))) {
                     obj[key] = a[key];

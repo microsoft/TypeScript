@@ -20,8 +20,8 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
     UnionType,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /* Tracing events for the compiler. */
 
@@ -51,11 +51,11 @@ export namespace tracingEnabled {
 
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
     interface Args {
-        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
+        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[]; // eslint-disable-line no-restricted-syntax
     }
 
     /** Starts tracing for the given project. */
-    export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
+    export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string): void {
         Debug.assert(!tracing, "Tracing already started");
 
         if (fs === undefined) {
@@ -79,8 +79,7 @@ export namespace tracingEnabled {
             fs.mkdirSync(traceDir, { recursive: true });
         }
 
-        const countPart =
-            mode === "build" ? `.${process.pid}-${++traceCount}`
+        const countPart = mode === "build" ? `.${process.pid}-${++traceCount}`
             : mode === "server" ? `.${process.pid}`
             : ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
@@ -97,16 +96,16 @@ export namespace tracingEnabled {
 
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
         const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
-        fs.writeSync(traceFd,
+        fs.writeSync(
+            traceFd,
             "[\n"
-            + [{ name: "process_name", args: { name: "tsc" }, ...meta },
-               { name: "thread_name", args: { name: "Main" }, ...meta },
-               { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
-                .map(v => JSON.stringify(v)).join(",\n"));
+                + [{ name: "process_name", args: { name: "tsc" }, ...meta }, { name: "thread_name", args: { name: "Main" }, ...meta }, { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
+                    .map(v => JSON.stringify(v)).join(",\n"),
+        );
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog. */
-    export function stopTracing() {
+    export function stopTracing(): void {
         Debug.assert(tracing, "Tracing is not in progress");
         Debug.assert(!!typeCatalog.length === (mode !== "server")); // Have a type catalog iff not in server mode
 
@@ -140,11 +139,11 @@ export namespace tracingEnabled {
         Session = "session",
     }
 
-    export function instant(phase: Phase, name: string, args?: Args) {
+    export function instant(phase: Phase, name: string, args?: Args): void {
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
-    const eventStack: { phase: Phase, name: string, args?: Args, time: number, separateBeginAndEnd: boolean }[] = [];
+    const eventStack: { phase: Phase; name: string; args?: Args; time: number; separateBeginAndEnd: boolean; }[] = [];
 
     /**
      * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
@@ -152,18 +151,18 @@ export namespace tracingEnabled {
      * In the future we might implement an exit handler to dump unfinished events which would deprecate
      * these operations.
      */
-    export function push(phase: Phase, name: string, args?: Args, separateBeginAndEnd = false) {
+    export function push(phase: Phase, name: string, args?: Args, separateBeginAndEnd = false): void {
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
         }
         eventStack.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
     }
-    export function pop(results?: Args) {
+    export function pop(results?: Args): void {
         Debug.assert(eventStack.length > 0);
         writeStackEvent(eventStack.length - 1, 1000 * timestamp(), results);
         eventStack.length--;
     }
-    export function popAll() {
+    export function popAll(): void {
         const endTime = 1000 * timestamp();
         for (let i = eventStack.length - 1; i >= 0; i--) {
             writeStackEvent(i, endTime);
@@ -184,9 +183,7 @@ export namespace tracingEnabled {
         }
     }
 
-    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
-                        time: number = 1000 * timestamp()) {
-
+    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string, time: number = 1000 * timestamp()) {
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === "server" && phase === Phase.CheckTypes) return;
 
@@ -351,7 +348,7 @@ export namespace tracingEnabled {
         performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
     }
 
-    export function dumpLegend() {
+    export function dumpLegend(): void {
         if (!legendPath) {
             return;
         }
@@ -368,9 +365,9 @@ export namespace tracingEnabled {
 
 // define after tracingEnabled is initialized
 /** @internal */
-export const startTracing = tracingEnabled.startTracing;
+export const startTracing: typeof tracingEnabled.startTracing = tracingEnabled.startTracing;
 /** @internal */
-export const dumpTracingLegend = tracingEnabled.dumpLegend;
+export const dumpTracingLegend: typeof tracingEnabled.dumpLegend = tracingEnabled.dumpLegend;
 
 /** @internal */
 export interface TracingNode {

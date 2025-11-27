@@ -1,6 +1,85 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/sample1/core/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  }
+}
+
+//// [/user/username/projects/sample1/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+
+//// [/user/username/projects/sample1/core/some_decl.d.ts]
+declare const dts: any;
+
+//// [/user/username/projects/sample1/core/anotherModule.ts]
+export const World = "hello";
+
+//// [/user/username/projects/sample1/logic/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
+
+//// [/user/username/projects/sample1/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/user/username/projects/sample1/tests/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../logic"
+    }
+  ],
+  "files": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  }
+}
+
+//// [/user/username/projects/sample1/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -14,196 +93,169 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/core/anotherModule.d.ts]
-export declare const World = "hello";
-//# sourceMappingURL=anotherModule.d.ts.map
-
-//// [/src/core/anotherModule.d.ts.map]
-{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
-
-//// [/src/core/anotherModule.js]
+//// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
 
-//// [/src/core/anotherModule.ts]
-export const World = "hello";
+//// [/user/username/projects/sample1/core/anotherModule.d.ts.map]
+{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
+
+//// [/user/username/projects/sample1/core/anotherModule.d.ts]
+export declare const World = "hello";
+//# sourceMappingURL=anotherModule.d.ts.map
+
+//// [/user/username/projects/sample1/core/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.someString = void 0;
+exports.leftPad = leftPad;
+exports.multiply = multiply;
+exports.someString = "HELLO WORLD";
+function leftPad(s, n) { return s + n; }
+function multiply(a, b) { return a * b; }
 
 
-//// [/src/core/index.d.ts]
+//// [/user/username/projects/sample1/core/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAsB,CAAC;AAChD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
+
+//// [/user/username/projects/sample1/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
 export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
-//// [/src/core/index.d.ts.map]
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAsB,CAAC;AAChD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
-
-//// [/src/core/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.multiply = exports.leftPad = exports.someString = void 0;
-exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }
-exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
-
-
-//// [/src/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
-
-
-//// [/src/core/some_decl.d.ts]
-declare const dts: any;
-
-
-//// [/src/core/tsconfig.json]
-{
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "skipDefaultLibCheck": true
-    }
-}
-
-//// [/src/core/tsconfig.tsbuildinfo]
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
 {"version":"FakeTSVersion"}
 
-//// [/src/logic/index.d.ts]
+//// [/user/username/projects/sample1/logic/index.js.map]
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+
+//// [/user/username/projects/sample1/logic/index.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.m = void 0;
+exports.getSecondsInDay = getSecondsInDay;
+var c = __importStar(require("../core/index"));
+function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+var mod = __importStar(require("../core/anotherModule"));
+exports.m = mod;
+//# sourceMappingURL=index.js.map
+
+//// [/user/username/projects/sample1/logic/index.d.ts]
 export declare function getSecondsInDay(): number;
 import * as mod from '../core/anotherModule';
 export declare const m: typeof mod;
 
 
-//// [/src/logic/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.m = exports.getSecondsInDay = void 0;
-var c = require("../core/index");
-function getSecondsInDay() {
-    return c.multiply(10, 15);
-}
-exports.getSecondsInDay = getSecondsInDay;
-var mod = require("../core/anotherModule");
-exports.m = mod;
-//# sourceMappingURL=index.js.map
-
-//// [/src/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
-
-//// [/src/logic/index.ts]
-import * as c from '../core/index';
-export function getSecondsInDay() {
-    return c.multiply(10, 15);
-}
-import * as mod from '../core/anotherModule';
-export const m = mod;
-
-
-//// [/src/logic/tsconfig.json]
-{
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "sourceMap": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    },
-    "references": [
-        { "path": "../core" }
-    ]
-}
-
-
-//// [/src/logic/tsconfig.tsbuildinfo]
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
 {"version":"FakeTSVersion"}
 
-//// [/src/tests/index.d.ts]
+//// [/user/username/projects/sample1/tests/index.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.m = void 0;
+var c = __importStar(require("../core/index"));
+var logic = __importStar(require("../logic/index"));
+c.leftPad("", 10);
+logic.getSecondsInDay();
+var mod = __importStar(require("../core/anotherModule"));
+exports.m = mod;
+
+
+//// [/user/username/projects/sample1/tests/index.d.ts]
 import * as mod from '../core/anotherModule';
 export declare const m: typeof mod;
 
 
-//// [/src/tests/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.m = void 0;
-var c = require("../core/index");
-var logic = require("../logic/index");
-c.leftPad("", 10);
-logic.getSecondsInDay();
-var mod = require("../core/anotherModule");
-exports.m = mod;
-
-
-//// [/src/tests/index.ts]
-import * as c from '../core/index';
-import * as logic from '../logic/index';
-
-c.leftPad("", 10);
-logic.getSecondsInDay();
-
-import * as mod from '../core/anotherModule';
-export const m = mod;
-
-
-//// [/src/tests/tsconfig.json]
-{
-    "references": [
-        { "path": "../core" },
-        { "path": "../logic" }
-    ],
-    "files": ["index.ts"],
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    }
-}
-
-//// [/src/tests/tsconfig.tsbuildinfo]
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
 {"version":"FakeTSVersion"}
 
-//// [/src/ui/index.ts]
-import * as logic from '../logic';
 
-export function run() {
-    console.log(logic.getSecondsInDay());
-}
-
-
-//// [/src/ui/tsconfig.json]
-{
-    "compilerOptions": {
-        "skipDefaultLibCheck": true
-    },
-    "references": [
-        { "path": "../logic/index" }
-    ]
-}
-
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js --b tests --verbose
 Output::
-/lib/tsc --b /src/tests --verbose
-[[90m12:00:23 AM[0m] Projects in this build: 
-    * src/core/tsconfig.json
-    * src/logic/tsconfig.json
-    * src/tests/tsconfig.json
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * core/tsconfig.json
+    * logic/tsconfig.json
+    * tests/tsconfig.json
 
-[[90m12:00:24 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/anotherModule.ts' is older than output 'core/tsconfig.tsbuildinfo'
 
-[[90m12:00:25 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is up to date because newest input 'logic/index.ts' is older than output 'logic/tsconfig.tsbuildinfo'
 
-[[90m12:00:26 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than output 'src/tests/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
+
+
+
 
 exitCode:: ExitStatus.Success
-
-

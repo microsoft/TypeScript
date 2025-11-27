@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/genericCloduleInModule.ts] ////
 
 //// [genericCloduleInModule.ts]
-module A {
+namespace A {
     export class B<T> {
         foo() { }
         static bar() { }
     }
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }

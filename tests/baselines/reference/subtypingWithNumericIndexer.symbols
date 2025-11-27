@@ -43,11 +43,11 @@ class B2 extends A {
 >Derived2 : Symbol(Derived2, Decl(subtypingWithNumericIndexer.ts, 3, 47))
 }
 
-module Generics {
+namespace Generics {
 >Generics : Symbol(Generics, Decl(subtypingWithNumericIndexer.ts, 16, 1))
 
     class A<T extends Base> {
->A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 20))
 >T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 19, 12))
 >Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
 
@@ -58,7 +58,7 @@ module Generics {
 
     class B extends A<Base> {
 >B : Symbol(B, Decl(subtypingWithNumericIndexer.ts, 21, 5))
->A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 20))
 >Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
 
         [x: number]: Derived; // ok
@@ -68,7 +68,7 @@ module Generics {
 
     class B2 extends A<Base> {
 >B2 : Symbol(B2, Decl(subtypingWithNumericIndexer.ts, 25, 5))
->A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 20))
 >Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
 
         [x: number]: Derived2; // ok
@@ -80,7 +80,7 @@ module Generics {
 >B3 : Symbol(B3, Decl(subtypingWithNumericIndexer.ts, 29, 5))
 >T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 31, 13))
 >Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
->A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 20))
 >T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 31, 13))
 
         [x: number]: Derived; // error, BUG?
@@ -92,7 +92,7 @@ module Generics {
 >B4 : Symbol(B4, Decl(subtypingWithNumericIndexer.ts, 33, 5))
 >T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 35, 13))
 >Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
->A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 20))
 >T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 35, 13))
 
         [x: number]: Derived2; // error, BUG?

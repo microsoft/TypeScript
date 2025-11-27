@@ -1,0 +1,54 @@
+// === Inlay Hints ===
+function c2 () { foo2(1, 2); }
+                      ^
+{
+  "text": "c:",
+  "position": 293,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+function c2 () { foo2(1, 2); }
+                         ^
+{
+  "text": "d:",
+  "position": 296,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+function c3 () { foo3(1, 2); }
+                      ^
+{
+  "text": "e:",
+  "position": 324,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+function c3 () { foo3(1, 2); }
+                         ^
+{
+  "text": "f:",
+  "position": 327,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+function c4 () { foo4(1, 2); }
+                      ^
+{
+  "text": "g:",
+  "position": 355,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+function c4 () { foo4(1, 2); }
+                         ^
+{
+  "text": "h:",
+  "position": 358,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

@@ -1,4 +1,4 @@
-declare module M {    
+declare namespace M {    
     export class Function {
         constructor(...args: string[]);
     }

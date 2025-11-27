@@ -1,0 +1,33 @@
+/test.tsx(7,2): error TS2741: Property 'offspring' is missing in type '{ children: string; }' but required in type '{ offspring: string; }'.
+
+
+==== /jsx.d.ts (0 errors) ====
+    declare namespace JSX {
+      interface IntrinsicElements {
+        h1: { children: string }
+      }
+    
+      type Element = string;
+    
+      interface ElementChildrenAttribute {
+        offspring: any;
+      }
+    }
+    
+==== /test.tsx (1 errors) ====
+    const Title = (props: { children: string }) => <h1>{props.children}</h1>;
+    
+    <Title>Hello, world!</Title>;
+    
+    const Wrong = (props: { offspring: string }) => <h1>{props.offspring}</h1>;
+    
+    <Wrong>Byebye, world!</Wrong>
+     ~~~~~
+!!! error TS2741: Property 'offspring' is missing in type '{ children: string; }' but required in type '{ offspring: string; }'.
+!!! related TS2728 /test.tsx:5:25: 'offspring' is declared here.
+    
+==== /jsx/jsx-runtime.ts (0 errors) ====
+    export {};
+==== /jsx/jsx-dev-runtime.ts (0 errors) ====
+    export {};
+    
