@@ -140,3 +140,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 1
+1: undefined *new*

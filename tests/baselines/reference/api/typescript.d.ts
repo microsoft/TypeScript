@@ -3477,6 +3477,7 @@ declare namespace ts {
             private suppressDiagnosticEvents?;
             private eventHandler;
             private readonly noGetErrOnBackgroundUpdate?;
+            private recentAttemptedDefinitionInferenceNames;
             constructor(opts: SessionOptions);
             private sendRequestCompletedEvent;
             private addPerformanceData;
@@ -10730,6 +10731,7 @@ declare namespace ts {
     }
     interface DefinitionInfoAndBoundSpan {
         definitions?: readonly DefinitionInfo[];
+        inferredIndex?: number;
         textSpan: TextSpan;
     }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
