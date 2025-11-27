@@ -1,5 +1,3 @@
-import { readFileSync } from "fs";
-import { getSymbolKind } from "../services/symbolDisplay.js";
 import {
     arrayFrom,
     arrayReverseIterator,
@@ -22,7 +20,6 @@ import {
     concatenate,
     createQueue,
     createSet,
-    createSourceFile,
     createTextSpan,
     createTextSpanFromBounds,
     Debug,
@@ -53,7 +50,6 @@ import {
     forEachNameInAccessChainWalkingLeft,
     FormatCodeSettings,
     formatting,
-    getBaseFileName,
     getDeclarationFromName,
     getDeclarationOfKind,
     getDocumentSpansEqualityComparer,
@@ -63,18 +59,14 @@ import {
     getMappedContextSpan,
     getMappedDocumentSpan,
     getMappedLocation,
-    getNodeKind,
     getNodeModulePathParts,
     getNormalizedAbsolutePath,
-    getOriginalNode,
     getPackageNameFromTypesPackageName,
     getPackageScopeForPath,
     getSnapshotText,
-    getSourceFileOfModule,
     getSupportedCodeFixes,
     getTemporaryModuleResolutionState,
     getTextOfIdentifierOrLiteral,
-    getTokenAtPosition,
     getTouchingPropertyName,
     GoToDefinition,
     HostCancellationToken,
@@ -122,9 +114,7 @@ import {
     removeFileExtension,
     RenameInfo,
     RenameLocation,
-    ScriptElementKind,
     ScriptKind,
-    ScriptTarget,
     SelectionRange,
     SemanticClassificationFormat,
     SignatureHelpItem,
@@ -175,7 +165,6 @@ import {
     LogLevel,
     Msg,
     NormalizedPath,
-    normalizedPathToPath,
     nullTypingsInstaller,
     Project,
     ProjectInfoTelemetryEvent,
@@ -1036,7 +1025,6 @@ export class Session<TMessage = string> implements EventSender {
     /** @internal */
     protected regionDiagLineCountThreshold = 500;
 
-    /** @internal */
     private recentAttemptedDefinitionInferenceNames: Set<string>;
 
     constructor(opts: SessionOptions) {
@@ -1661,12 +1649,12 @@ export class Session<TMessage = string> implements EventSender {
             };
         }
 
-        if (unmappedDefinitionAndBoundSpan?.inferredIndex != undefined) {
+        if (unmappedDefinitionAndBoundSpan?.inferredIndex !== undefined) {
             const name = unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex].name;
 
             if (!this.recentAttemptedDefinitionInferenceNames.has(name)) {
                 this.recentAttemptedDefinitionInferenceNames.add(name)
-                setTimeout(() => this.recentAttemptedDefinitionInferenceNames.delete(name), 5000);
+                this.host.setTimeout(() => this.recentAttemptedDefinitionInferenceNames.delete(name), 5000);
                 unmappedDefinitionAndBoundSpan.definitions = [unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex]];
             }
         }

@@ -335,6 +335,7 @@ declare namespace FourSlashInterface {
         baselineGoToDefinitionAtRangesWithText(...rangeText: string[]): void;
         baselineGetDefinitionAtPosition(...markerOrRange: MarkerOrNameOrRange[]): void;
         baselineGetDefinitionAtRangesWithText(...rangeText: string[]): void;
+        goToDefinitionInferredIndex(expectedDefinitionMarkerName: string): void;
         baselineGoToSourceDefinition(...markerOrRange: MarkerOrNameOrRange[]): void;
         baselineGoToSourceDefinitionAtRangesWithText(...rangeText: string[]): void;
         baselineGoToType(...markerOrRange: MarkerOrNameOrRange[]): void;

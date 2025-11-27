@@ -389,6 +389,10 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGetDefinitionAtPosition(/*markerOrRange*/ undefined, rangeText);
     }
 
+    public goToDefinitionInferredIndex(expectedDefinitionMarkerName: string): void {
+        this.state.verifyGoToDefinitionInferredIndex(expectedDefinitionMarkerName);
+    }
+
     public baselineGoToSourceDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]): void {
         this.state.baselineGoToSourceDefinition(markerOrRange, /*rangeText*/ undefined);
     }

@@ -6,10 +6,6 @@ import {
     CallLikeExpression,
     canHaveSymbol,
     concatenate,
-    createGetSourceFile,
-    createLanguageService,
-    createLanguageServiceSourceFile,
-    createSourceFile,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -32,31 +28,18 @@ import {
     getContainingObjectLiteralElement,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
-    getFirstIdentifier,
-    getIdentifierGeneratedImportReference,
     getInvokedExpression,
-    getLanguageVariant,
     getNameFromPropertyName,
     getNameOfDeclaration,
-    getNodeForGeneratedName,
-    getNodeKind,
     getObjectFlags,
-    getOriginalNode,
-    getPositionOfLineAndCharacter,
     getPropertySymbolsFromContextualType,
-    getStartPositionOfRange,
     getTargetLabel,
     getTextOfPropertyName,
-    getTokenAtPosition,
-    getTokenSourceMapRange,
     getTouchingPropertyName,
     getTouchingToken,
     hasEffectiveModifier,
     hasInitializer,
     hasStaticModifier,
-    Identifier,
-    identifierIsThisKeyword,
-    identifierToKeywordKind,
     isAnyImportOrBareOrAccessedRequire,
     isAssignmentDeclaration,
     isAssignmentExpression,
@@ -70,44 +53,30 @@ import {
     isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isConstructorDeclaration,
-    isDeclaration,
     isDeclarationFileName,
     isDefaultClause,
-    isEnumDeclaration,
-    isExportDeclaration,
     isExternalModuleNameRelative,
-    isFunctionDeclaration,
     isFunctionLike,
     isFunctionLikeDeclaration,
     isFunctionTypeNode,
     isIdentifier,
-    isIdentifierOrThisTypeNode,
-    isIdentifierTypePredicate,
-    isIdentifierTypeReference,
-    isImportDeclaration,
     isImportMeta,
     isImportOrExportSpecifier,
-    isInterfaceDeclaration,
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
     isKnownSymbol,
     isModifier,
-    isModuleDeclaration,
     isModuleSpecifierLike,
     isNamedDeclaration,
     isNameOfFunctionDeclaration,
-    isNamespaceImport,
     isNewExpressionTarget,
     isObjectBindingPattern,
-    isPossiblyTypeArgumentPosition,
     isPropertyName,
-    isQualifiedName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
     isSwitchStatement,
     isTypeAliasDeclaration,
-    isTypeDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
     last,
@@ -122,9 +91,7 @@ import {
     Program,
     ResolvedModuleWithFailedLookupLocations,
     resolvePath,
-    scanTokenAtPosition,
     ScriptElementKind,
-    ScriptSnapshot,
     SignatureDeclaration,
     skipAlias,
     skipParentheses,
@@ -136,7 +103,6 @@ import {
     SymbolDisplay,
     SymbolFlags,
     SyntaxKind,
-    sysLog,
     textRangeContainsPositionInclusive,
     TextSpan,
     tryCast,
@@ -146,9 +112,7 @@ import {
     TypeFlags,
     TypeReference,
     unescapeLeadingUnderscores,
-    writeFile,
 } from "./_namespaces/ts.js";
-import { getIdentifierForNode } from "./refactors/helpers.js";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -577,24 +541,17 @@ export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFi
 }
 
 function getInferrableDefinitionIndex(definitions: readonly DefinitionInfo[], node: Node, program: Program): number | undefined {
-    const INFERRED_KIND_MAP: Record<number, Set<number>> = {
-        184: new Set<number>([SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration]), //inferrable from a type reference
-        212: new Set<number>([SyntaxKind.ModuleDeclaration, SyntaxKind.VariableDeclaration]), //inferrable from a property access
-    };
-    
-    const mainNodeKindInferrable = INFERRED_KIND_MAP[getUsageNodeKind(node)] ?? new Set();
+    const TYPEY_SET = new Set([SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration])
+
+    const mainIsTypey = getUsageNodeKind(node) === SyntaxKind.TypeReference;
     const optionNodes = definitions?.map(def => findNodeFromSpan(program.getSourceFile(def.fileName), def.textSpan)!)
-    const inferredIndices: number[] = [];
-    for (let i = 0; i < optionNodes.length; i++) {
-        if (mainNodeKindInferrable.has(optionNodes[i].parent.kind)) {
-            inferredIndices.push(i);
-        }
-    }
-    return inferredIndices.length === 1 ? inferredIndices[0] : undefined;
+    const definitionsAreTypey = optionNodes.map((node) => TYPEY_SET.has(node?.parent?.kind ?? undefined))
+
+    return definitionsAreTypey.filter((def) => def === mainIsTypey).length === 1 ? definitionsAreTypey.indexOf(mainIsTypey) : undefined;
 }
 
 function getUsageNodeKind(node: Node): SyntaxKind {
-    return node.parent.kind === SyntaxKind.QualifiedName ? getUsageNodeKind(node.parent) : node.parent.kind;
+    return node.kind === SyntaxKind.QualifiedName  || node.kind === SyntaxKind.Identifier ? getUsageNodeKind(node.parent) : node.kind;
 }
 
 function findNodeFromSpan(sourceFile: SourceFile | undefined, span: TextSpan): Node | undefined {
