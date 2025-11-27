@@ -38168,6 +38168,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const errorNode = findAncestor(target.parent, n => n.kind === SyntaxKind.SatisfiesExpression || n.kind === SyntaxKind.JSDocSatisfiesTag);
         checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, errorNode, expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
+        // If the target type is the intrinsic `never` type, treat the whole satisfies-expression
+        // as having type `never`. This makes patterns like `foo satisfies never` usable with
+        // exhaustiveness checks such as `assertNever(foo satisfies never)`.
+        if (targetType === neverType) {
+            return targetType;
+        }
         return exprType;
     }
 
