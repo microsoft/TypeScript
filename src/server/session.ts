@@ -1638,8 +1638,8 @@ export class Session<TMessage = string> implements EventSender {
     private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
-        
         const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+        
         const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
         if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
