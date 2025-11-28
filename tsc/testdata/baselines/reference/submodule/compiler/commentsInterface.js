@@ -91,7 +91,7 @@ var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
 var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
 var i3_i;
 i3_i = {
-    f: (/**i3_i a*/ a) => "Hello" + a,
+    f: /**own f*/ (/**i3_i a*/ a) => "Hello" + a,
     l: this.f,
     /** own x*/
     x: this.f(10),

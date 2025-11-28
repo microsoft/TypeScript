@@ -8,5 +8,5 @@ var v = {
 
 //// [commentsBeforeFunctionExpression1.js]
 var v = {
-    f: (a) => 0
+    f: /**own f*/ (a) => 0
 };

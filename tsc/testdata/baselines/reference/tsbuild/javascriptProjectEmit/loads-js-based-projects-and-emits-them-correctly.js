@@ -207,7 +207,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = getVar;
 const index_1 = require("../sub-project/index");
 const variable = {
-    key: 'value',
+    key: /** @type {MyNominal} */ 'value',
 };
 /**
  * @return {keyof typeof variable}

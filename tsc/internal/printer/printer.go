@@ -4272,9 +4272,10 @@ func (p *Printer) emitPropertyAssignment(node *ast.PropertyAssignment) {
 	// "comment1" is not considered to be leading comment for node.initializer
 	// but rather a trailing comment on the previous node.
 	initializer := node.Initializer
-
-	// !!! emit trailing comments of initializer
-
+	if p.emitContext.EmitFlags(initializer)&EFNoLeadingComments == 0 {
+		commentRange := getCommentRange(initializer)
+		p.emitTrailingComments(commentRange.Pos(), commentSeparatorAfter)
+	}
 	p.emitExpression(initializer, ast.OperatorPrecedenceDisallowComma)
 	p.exitNode(node.AsNode(), state)
 }
