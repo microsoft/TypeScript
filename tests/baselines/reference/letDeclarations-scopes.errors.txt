@@ -113,7 +113,7 @@ letDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not suppo
     };
     
     // modules
-    module m {
+    namespace m {
         let l = 0;
         n = l;
     

@@ -637,7 +637,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: null): Buffer; // eslint-disable-line no-restricted-syntax
+    public readFileSync(path: string, encoding?: null): Buffer<ArrayBuffer>; // eslint-disable-line no-restricted-syntax
     /**
      * Read from a file.
      *
@@ -649,7 +649,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer; // eslint-disable-line no-restricted-syntax
+    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer<ArrayBuffer>; // eslint-disable-line no-restricted-syntax
     public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-restricted-syntax
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
@@ -1148,7 +1148,7 @@ export class FileSystem {
         for (const key of Object.keys(files)) {
             const value = normalizeFileSetEntry(files[key]);
             const path = dirname ? vpath.resolve(dirname, key) : key;
-            vpath.validate(path, vpath.ValidationFlags.Absolute);
+            vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
 
             // eslint-disable-next-line no-restricted-syntax
             if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {

@@ -4,8 +4,9 @@ import {
     createImportAdder,
     eachDiagnostic,
     registerCodeFix,
+    typeNodeToAutoImportableTypeNode,
     typePredicateToAutoImportableTypeNode,
-    typeToAutoImportableTypeNode,
+    typeToMinimizedReferenceType,
 } from "../_namespaces/ts.codefix.js";
 import {
     ArrayBindingPattern,
@@ -118,7 +119,7 @@ const extractExpression = "extract-expression";
 const errorCodes = [
     Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
-    Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
+    Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
@@ -134,7 +135,7 @@ const errorCodes = [
     Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
-    Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_supported_with_isolatedDeclarations.code,
+    Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_supported_with_isolatedDeclarations.code,
     Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations.code,
     Diagnostics.Add_satisfies_and_a_type_assertion_to_this_expression_satisfies_T_as_T_to_make_the_type_explicit.code,
 ];
@@ -1096,9 +1097,9 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
+        const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1107,6 +1108,10 @@ function withContext<T>(
                 isTruncated = true;
             },
         });
+        if (!minimizedTypeNode) {
+            return undefined;
+        }
+        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
     }
 

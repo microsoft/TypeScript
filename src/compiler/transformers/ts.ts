@@ -2282,11 +2282,11 @@ export function transformTypeScript(context: TransformationContext): Transformer
      * @param node The import clause node.
      */
     function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
-        Debug.assert(!node.isTypeOnly);
+        Debug.assert(node.phaseModifier !== SyntaxKind.TypeKeyword);
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
         const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-        return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings) : undefined;
+        return (name || namedBindings) ? factory.updateImportClause(node, node.phaseModifier, name, namedBindings) : undefined;
     }
 
     /**
@@ -2343,7 +2343,14 @@ export function transformTypeScript(context: TransformationContext): Transformer
             // never elide `export <whatever> from <whereever>` declarations -
             // they should be kept for sideffects/untyped exports, even when the
             // type checker doesn't know about any exports
-            return node;
+            return factory.updateExportDeclaration(
+                node,
+                node.modifiers,
+                node.isTypeOnly,
+                node.exportClause,
+                node.moduleSpecifier,
+                node.attributes,
+            );
         }
 
         // Elide the export declaration if all of its named exports are elided.
@@ -2422,8 +2429,10 @@ export function transformTypeScript(context: TransformationContext): Transformer
         }
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
-            const isReferenced = shouldEmitAliasDeclaration(node);
-            return isReferenced ? visitEachChild(node, visitor, context) : undefined;
+            if (!shouldEmitAliasDeclaration(node)) {
+                return undefined;
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         if (!shouldEmitImportEqualsDeclaration(node)) {

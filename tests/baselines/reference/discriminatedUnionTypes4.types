@@ -1,0 +1,300 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes4.ts] ////
+
+=== discriminatedUnionTypes4.ts ===
+// https://github.com/microsoft/TypeScript/issues/61207
+
+enum AnimalType {
+>AnimalType : AnimalType
+>           : ^^^^^^^^^^
+
+  cat = "cat",
+>cat : AnimalType.cat
+>    : ^^^^^^^^^^^^^^
+>"cat" : "cat"
+>      : ^^^^^
+
+  dog = "dog",
+>dog : AnimalType.dog
+>    : ^^^^^^^^^^^^^^
+>"dog" : "dog"
+>      : ^^^^^
+}
+
+type Animal =
+>Animal : Animal
+>       : ^^^^^^
+
+  | {
+      type: `${AnimalType.cat}`;
+>type : "cat"
+>     : ^^^^^
+>AnimalType : any
+>           : ^^^
+
+      meow: string;
+>meow : string
+>     : ^^^^^^
+    }
+  | {
+      type: `${AnimalType.dog}`;
+>type : "dog"
+>     : ^^^^^
+>AnimalType : any
+>           : ^^^
+
+      bark: string;
+>bark : string
+>     : ^^^^^^
+
+    };
+
+function check(p: never) {
+>check : (p: never) => void
+>      : ^ ^^     ^^^^^^^^^
+>p : never
+>  : ^^^^^
+
+  throw new Error("Error!");
+>new Error("Error!") : Error
+>                    : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"Error!" : "Error!"
+>         : ^^^^^^^^
+}
+
+function action1(animal: Animal) {
+>action1 : (animal: Animal) => void
+>        : ^      ^^      ^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+
+  if (animal.type === AnimalType.cat) {
+>animal.type === AnimalType.cat : boolean
+>                               : ^^^^^^^
+>animal.type : "cat" | "dog"
+>            : ^^^^^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+>type : "cat" | "dog"
+>     : ^^^^^^^^^^^^^
+>AnimalType.cat : AnimalType.cat
+>               : ^^^^^^^^^^^^^^
+>AnimalType : typeof AnimalType
+>           : ^^^^^^^^^^^^^^^^^
+>cat : AnimalType.cat
+>    : ^^^^^^^^^^^^^^
+
+    console.log(animal.meow);
+>console.log(animal.meow) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>animal.meow : string
+>            : ^^^^^^
+>animal : { type: `${AnimalType.cat}`; meow: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>meow : string
+>     : ^^^^^^
+
+  } else if (animal.type === AnimalType.dog) {
+>animal.type === AnimalType.dog : boolean
+>                               : ^^^^^^^
+>animal.type : "dog"
+>            : ^^^^^
+>animal : { type: `${AnimalType.dog}`; bark: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>type : "dog"
+>     : ^^^^^
+>AnimalType.dog : AnimalType.dog
+>               : ^^^^^^^^^^^^^^
+>AnimalType : typeof AnimalType
+>           : ^^^^^^^^^^^^^^^^^
+>dog : AnimalType.dog
+>    : ^^^^^^^^^^^^^^
+
+    console.log(animal.bark);
+>console.log(animal.bark) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>animal.bark : string
+>            : ^^^^^^
+>animal : { type: `${AnimalType.dog}`; bark: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>bark : string
+>     : ^^^^^^
+
+  } else {
+    check(animal);
+>check(animal) : void
+>              : ^^^^
+>check : (p: never) => void
+>      : ^ ^^     ^^^^^^^^^
+>animal : never
+>       : ^^^^^
+  }
+}
+
+function action2(animal: Animal) {
+>action2 : (animal: Animal) => void
+>        : ^      ^^      ^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+
+  switch (animal.type) {
+>animal.type : "cat" | "dog"
+>            : ^^^^^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+>type : "cat" | "dog"
+>     : ^^^^^^^^^^^^^
+
+    case `${AnimalType.cat}`:
+>`${AnimalType.cat}` : "cat"
+>                    : ^^^^^
+>AnimalType.cat : AnimalType.cat
+>               : ^^^^^^^^^^^^^^
+>AnimalType : typeof AnimalType
+>           : ^^^^^^^^^^^^^^^^^
+>cat : AnimalType.cat
+>    : ^^^^^^^^^^^^^^
+
+      console.log(animal.meow);
+>console.log(animal.meow) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>animal.meow : string
+>            : ^^^^^^
+>animal : { type: `${AnimalType.cat}`; meow: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>meow : string
+>     : ^^^^^^
+
+      break;
+    case `${AnimalType.dog}`:
+>`${AnimalType.dog}` : "dog"
+>                    : ^^^^^
+>AnimalType.dog : AnimalType.dog
+>               : ^^^^^^^^^^^^^^
+>AnimalType : typeof AnimalType
+>           : ^^^^^^^^^^^^^^^^^
+>dog : AnimalType.dog
+>    : ^^^^^^^^^^^^^^
+
+      console.log(animal.bark);
+>console.log(animal.bark) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>animal.bark : string
+>            : ^^^^^^
+>animal : { type: `${AnimalType.dog}`; bark: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>bark : string
+>     : ^^^^^^
+
+      break;
+    default:
+      check(animal);
+>check(animal) : void
+>              : ^^^^
+>check : (p: never) => void
+>      : ^ ^^     ^^^^^^^^^
+>animal : never
+>       : ^^^^^
+  }
+}
+
+function action3(animal: Animal) {
+>action3 : (animal: Animal) => void
+>        : ^      ^^      ^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+
+  switch (animal.type) {
+>animal.type : "cat" | "dog"
+>            : ^^^^^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+>type : "cat" | "dog"
+>     : ^^^^^^^^^^^^^
+
+    case AnimalType.cat:
+>AnimalType.cat : AnimalType.cat
+>               : ^^^^^^^^^^^^^^
+>AnimalType : typeof AnimalType
+>           : ^^^^^^^^^^^^^^^^^
+>cat : AnimalType.cat
+>    : ^^^^^^^^^^^^^^
+
+      console.log(animal.meow);
+>console.log(animal.meow) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>animal.meow : string
+>            : ^^^^^^
+>animal : { type: `${AnimalType.cat}`; meow: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>meow : string
+>     : ^^^^^^
+
+      break;
+    case AnimalType.dog:
+>AnimalType.dog : AnimalType.dog
+>               : ^^^^^^^^^^^^^^
+>AnimalType : typeof AnimalType
+>           : ^^^^^^^^^^^^^^^^^
+>dog : AnimalType.dog
+>    : ^^^^^^^^^^^^^^
+
+      console.log(animal.bark);
+>console.log(animal.bark) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>animal.bark : string
+>            : ^^^^^^
+>animal : { type: `${AnimalType.dog}`; bark: string; }
+>       : ^^^^^^^^                   ^^^^^^^^      ^^^
+>bark : string
+>     : ^^^^^^
+
+      break;
+    default:
+      check(animal);
+>check(animal) : void
+>              : ^^^^
+>check : (p: never) => void
+>      : ^ ^^     ^^^^^^^^^
+>animal : never
+>       : ^^^^^
+  }
+}
+

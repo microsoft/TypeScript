@@ -1,12 +1,12 @@
 //@module: commonjs
 // @Filename: foo.d.ts
-declare module M1 {
+declare namespace M1 {
     export var X:number;
 }
 export = M1
 
 // @Filename: foo.ts
-module M2 {
+namespace M2 {
     export var Y = 1;
 }
 export = M2

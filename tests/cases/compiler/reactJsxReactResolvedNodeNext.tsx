@@ -8,7 +8,7 @@ export const a = <div></div>;
     "name": "@types/react",
     "version": "0.0.1",
     "main": "",
-    "types": "index.d.ts",
+    "types": "index.d.ts"
 }
 // @filename: node_modules/@types/react/index.d.ts
 declare namespace JSX {

@@ -939,7 +939,7 @@
         "category": "Error",
         "code": 1285
     },
-    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.": {
         "category": "Error",
         "code": 1286
     },
@@ -967,11 +967,18 @@
         "category": "Error",
         "code": 1292
     },
-    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+    "ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
         "category": "Error",
         "code": 1293
     },
-
+    "This syntax is not allowed when 'erasableSyntaxOnly' is enabled.": {
+        "category": "Error",
+        "code": 1294
+    },
+    "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.": {
+        "category": "Error",
+        "code": 1295
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1028,11 +1035,11 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', 'node20', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'node20', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1100,7 +1107,7 @@
         "category": "Error",
         "code": 1341
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1148,7 +1155,7 @@
         "category": "Error",
         "code": 1354
     },
-    "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
+    "A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
         "category": "Error",
         "code": 1355
     },
@@ -1220,7 +1227,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1424,7 +1431,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1826,6 +1833,34 @@
         "category": "Error",
         "code": 1542
     },
+    "Importing a JSON file into an ECMAScript module requires a 'type: \"json\"' import attribute when 'module' is set to '{0}'.": {
+        "category": "Error",
+        "code": 1543
+    },
+    "Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.": {
+        "category": "Error",
+        "code": 1544
+    },
+    "'using' declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1545
+    },
+    "'await using' declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1546
+    },
+    "'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1547
+    },
+    "'await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1548
+    },
+    "Ignore the tsconfig found and build with commandline options and files.": {
+        "category": "Message",
+        "code": 1549
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2060,6 +2095,10 @@
     "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
         "category": "Error",
         "code": 2345
+    },
+    "Call target does not contain any signatures.": {
+        "category": "Error",
+        "code": 2346
     },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
@@ -3400,7 +3439,7 @@
         "category": "Error",
         "code": 2724
     },
-    "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
+    "Class name cannot be 'Object' when targeting ES5 and above with module {0}.": {
         "category": "Error",
         "code": 2725
     },
@@ -3756,7 +3795,7 @@
         "category": "Error",
         "code": 2814
     },
-    "'arguments' cannot be referenced in property initializers.": {
+    "'arguments' cannot be referenced in property initializers or class static initialization blocks.": {
         "category": "Error",
         "code": 2815
     },
@@ -3780,7 +3819,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3788,7 +3827,7 @@
         "category": "Error",
         "code": 2822
     },
-    "Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
+    "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2823
     },
@@ -3868,7 +3907,7 @@
         "category": "Error",
         "code": 2853
     },
-    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 2854
     },
@@ -3948,6 +3987,43 @@
         "category": "Error",
         "code": 2873
     },
+    "This JSX tag requires '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 2874
+    },
+    "This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.": {
+        "category": "Error",
+        "code": 2875
+    },
+    "This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to \"{0}\".": {
+        "category": "Error",
+        "code": 2876
+    },
+    "This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.": {
+        "category": "Error",
+        "code": 2877
+    },
+    "This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.": {
+        "category": "Error",
+        "code": 2878
+    },
+    "Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 2879
+    },
+    "Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.": {
+        "category": "Error",
+        "code": 2880
+    },
+    "This expression is never nullish.": {
+        "category": "Error",
+        "code": 2881
+    },
+    "Cannot find module or type declarations for side-effect import of '{0}'.": {
+        "category": "Error",
+        "code": 2882
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -4384,6 +4460,14 @@
         "category": "Error",
         "code": 4126
     },
+    "This member cannot have an 'override' modifier because its name is dynamic.": {
+        "category": "Error",
+        "code": 4127
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic.": {
+        "category": "Error",
+        "code": 4128
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4593,11 +4677,11 @@
         "category": "Error",
         "code": 5094
     },
-    "Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -4649,9 +4733,13 @@
         "category": "Error",
         "code": 5110
     },
-    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
-        "category": "Error",
+    "Visit https://aka.ms/ts6 for migration information.": {
+        "category": "Message",
         "code": 5111
+    },
+    "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
+        "category": "Error",
+        "code": 5112
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5505,7 +5593,6 @@
         "category": "Message",
         "code": 6243
     },
-
     "Modules": {
         "category": "Message",
         "code": 6244
@@ -5654,6 +5741,42 @@
     "Failed to find peerDependency '{0}'.": {
         "category": "Message",
         "code": 6283
+    },
+    "File Layout": {
+        "category": "Message",
+        "code": 6284
+    },
+    "Environment Settings": {
+        "category": "Message",
+        "code": 6285
+    },
+    "See also https://aka.ms/tsconfig/module": {
+        "category": "Message",
+        "code": 6286
+    },
+    "For nodejs:": {
+        "category": "Message",
+        "code": 6287
+    },
+    "and npm install -D @types/node": {
+        "category": "Message",
+        "code": 6290
+    },
+    "Other Outputs": {
+        "category": "Message",
+        "code": 6291
+    },
+    "Stricter Typechecking Options": {
+        "category": "Message",
+        "code": 6292
+    },
+    "Style Options": {
+        "category": "Message",
+        "code": 6293
+    },
+    "Recommended Options": {
+        "category": "Message",
+        "code": 6294
     },
 
     "Enable project compilation": {
@@ -5934,6 +6057,10 @@
         "category": "Message",
         "code": 6420
     },
+    "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.": {
+        "category": "Message",
+        "code": 6421
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -5963,7 +6090,7 @@
         "category": "Message",
         "code": 6506
     },
-    "Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.": {
+    "Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.": {
         "category": "Message",
         "code": 6600
     },
@@ -6427,10 +6554,13 @@
         "category": "Message",
         "code": 6719
     },
-
     "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
         "category": "Message",
         "code": 6720
+    },
+    "Do not allow runtime constructs that are not part of ECMAScript.": {
+        "category": "Message",
+        "code": 6721
     },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
@@ -6452,6 +6582,10 @@
         "category": "Error",
         "code": 6807
     },
+    "Enable lib replacement.": {
+        "category": "Message",
+        "code": 6808
+    },
 
     "one of:": {
         "category": "Message",
@@ -6469,10 +6603,7 @@
         "category": "Message",
         "code": 6903
     },
-    "module === \"system\" or esModuleInterop": {
-        "category": "Message",
-        "code": 6904
-    },
+
     "`false`, unless `strict` is set": {
         "category": "Message",
         "code": 6905
@@ -6493,7 +6624,7 @@
         "category": "Message",
         "code": 6909
     },
-    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+    "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
         "category": "Message",
         "code": 69010
     },
@@ -6581,6 +6712,10 @@
         "category": "Error",
         "code": 6931
     },
+    "`false`, unless `checkJs` is set": {
+        "category": "Message",
+        "code": 6932
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -6654,7 +6789,7 @@
         "category": "Error",
         "code": 7024
     },
-    "Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.": {
+    "Generator implicitly has yield type '{0}'. Consider supplying a return type annotation.": {
         "category": "Error",
         "code": 7025
     },
@@ -6966,7 +7101,7 @@
         "category": "Error",
         "code": 9008
     },
-    "At least one accessor must have an explicit return type annotation with --isolatedDeclarations.": {
+    "At least one accessor must have an explicit type annotation with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9009
     },
@@ -7026,7 +7161,7 @@
         "category": "Error",
         "code": 9023
     },
-    "Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.": {
+    "Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9025
     },
@@ -8393,5 +8528,21 @@
     "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
         "category": "Error",
         "code": 18057
+    },
+    "Default imports are not allowed in a deferred import.": {
+        "category": "Error",
+        "code": 18058
+    },
+    "Named imports are not allowed in a deferred import.": {
+        "category": "Error",
+        "code": 18059
+    },
+    "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.": {
+        "category": "Error",
+        "code": 18060
+    },
+    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
+        "category": "Error",
+        "code": 18061
     }
 }

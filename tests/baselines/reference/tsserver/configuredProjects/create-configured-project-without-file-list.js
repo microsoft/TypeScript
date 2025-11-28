@@ -21,7 +21,6 @@ let y = 1
 let z = 1
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -48,6 +47,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/project/project/a/b/c/f1.ts ProjectRootPath: undefined:: Result: /home/src/project/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/project/project/a/b/tsconfig.json, currentDirectory: /home/src/project/project/a/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/a/b/tsconfig.json 2000 undefined Project: /home/src/project/project/a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/project/project/a/b/tsconfig.json : {
+ "rootNames": [
+  "/home/src/project/project/a/b/c/f1.ts",
+  "/home/src/project/project/a/b/d/f2.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/project/project/a/b/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -58,15 +66,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /home/src/project/project/a/b/c/f1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /home/src/project/project/a/b/tsconfig.json : {
- "rootNames": [
-  "/home/src/project/project/a/b/c/f1.ts",
-  "/home/src/project/project/a/b/d/f2.ts"
- ],
- "options": {
-  "configFilePath": "/home/src/project/project/a/b/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/a/b 1 undefined Config: /home/src/project/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/a/b 1 undefined Config: /home/src/project/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/a/b/d/f2.ts 500 undefined WatchType: Closed Script info
@@ -83,7 +82,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/a/b/c/f1.ts SVC-1-0 "let x = 1"
 	/home/src/project/project/a/b/d/f2.ts Text-1 "let y = 1"
 
@@ -124,7 +123,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },

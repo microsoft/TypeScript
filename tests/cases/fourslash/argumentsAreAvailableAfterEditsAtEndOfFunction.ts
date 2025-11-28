@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module Test1 {
+////namespace Test1 {
 ////	class Person {
 ////		children: string[];
 ////		constructor(public name: string, children: string[]) {

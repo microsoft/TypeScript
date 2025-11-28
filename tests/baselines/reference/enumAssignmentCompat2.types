@@ -15,7 +15,7 @@ enum W {
 
 }
 
-module W {
+namespace W {
 >W : typeof W
 >  : ^^^^^^^^
 

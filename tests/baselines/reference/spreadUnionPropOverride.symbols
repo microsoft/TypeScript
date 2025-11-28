@@ -1,0 +1,172 @@
+//// [tests/cases/compiler/spreadUnionPropOverride.ts] ////
+
+=== spreadUnionPropOverride.ts ===
+// Repro from #62655
+type Thing = {
+>Thing : Symbol(Thing, Decl(spreadUnionPropOverride.ts, 0, 0))
+
+    id: string;
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 1, 14))
+
+    label: string;
+>label : Symbol(label, Decl(spreadUnionPropOverride.ts, 2, 15))
+
+};
+
+const things: Thing[] = [];
+>things : Symbol(things, Decl(spreadUnionPropOverride.ts, 6, 5))
+>Thing : Symbol(Thing, Decl(spreadUnionPropOverride.ts, 0, 0))
+
+function find(id: string): undefined | Thing {
+>find : Symbol(find, Decl(spreadUnionPropOverride.ts, 6, 27))
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 8, 14))
+>Thing : Symbol(Thing, Decl(spreadUnionPropOverride.ts, 0, 0))
+
+    return things.find(thing => thing.id === id);
+>things.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>things : Symbol(things, Decl(spreadUnionPropOverride.ts, 6, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>thing : Symbol(thing, Decl(spreadUnionPropOverride.ts, 9, 23))
+>thing.id : Symbol(id, Decl(spreadUnionPropOverride.ts, 1, 14))
+>thing : Symbol(thing, Decl(spreadUnionPropOverride.ts, 9, 23))
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 1, 14))
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 8, 14))
+}
+
+declare function fun(thing: Thing): void;
+>fun : Symbol(fun, Decl(spreadUnionPropOverride.ts, 10, 1))
+>thing : Symbol(thing, Decl(spreadUnionPropOverride.ts, 12, 21))
+>Thing : Symbol(Thing, Decl(spreadUnionPropOverride.ts, 0, 0))
+
+fun({
+>fun : Symbol(fun, Decl(spreadUnionPropOverride.ts, 10, 1))
+
+    id: 'foo',
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 14, 5))
+
+    ...find('foo') ?? {
+>find : Symbol(find, Decl(spreadUnionPropOverride.ts, 6, 27))
+
+        label: 'Foo',
+>label : Symbol(label, Decl(spreadUnionPropOverride.ts, 16, 23))
+
+    },
+});
+
+// Should not error when spreading a union where one type doesn't have the property
+const obj1 = {
+>obj1 : Symbol(obj1, Decl(spreadUnionPropOverride.ts, 22, 5))
+
+    x: 1,
+>x : Symbol(x, Decl(spreadUnionPropOverride.ts, 22, 14))
+
+    ...(Math.random() > 0.5 ? { y: 2 } : { y: 2, x: 3 }),
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(spreadUnionPropOverride.ts, 24, 31))
+>y : Symbol(y, Decl(spreadUnionPropOverride.ts, 24, 42))
+>x : Symbol(x, Decl(spreadUnionPropOverride.ts, 24, 48))
+
+}; // OK - x might be overwritten
+
+// Should error when the property is in all constituents
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(spreadUnionPropOverride.ts, 28, 5))
+
+    x: 1,
+>x : Symbol(x, Decl(spreadUnionPropOverride.ts, 28, 14))
+
+    ...(Math.random() > 0.5 ? { x: 2, y: 3 } : { x: 4, z: 5 }),
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(spreadUnionPropOverride.ts, 30, 31))
+>y : Symbol(y, Decl(spreadUnionPropOverride.ts, 30, 37))
+>x : Symbol(x, Decl(spreadUnionPropOverride.ts, 30, 48))
+>z : Symbol(z, Decl(spreadUnionPropOverride.ts, 30, 54))
+
+}; // Error - x is always overwritten
+
+// Should not error with optional property in union
+type Partial1 = { a: string; b?: number };
+>Partial1 : Symbol(Partial1, Decl(spreadUnionPropOverride.ts, 31, 2))
+>a : Symbol(a, Decl(spreadUnionPropOverride.ts, 34, 17))
+>b : Symbol(b, Decl(spreadUnionPropOverride.ts, 34, 28))
+
+type Partial2 = { a: string; c: boolean };
+>Partial2 : Symbol(Partial2, Decl(spreadUnionPropOverride.ts, 34, 42))
+>a : Symbol(a, Decl(spreadUnionPropOverride.ts, 35, 17))
+>c : Symbol(c, Decl(spreadUnionPropOverride.ts, 35, 28))
+
+declare const partial: Partial1 | Partial2;
+>partial : Symbol(partial, Decl(spreadUnionPropOverride.ts, 36, 13))
+>Partial1 : Symbol(Partial1, Decl(spreadUnionPropOverride.ts, 31, 2))
+>Partial2 : Symbol(Partial2, Decl(spreadUnionPropOverride.ts, 34, 42))
+
+const obj3 = {
+>obj3 : Symbol(obj3, Decl(spreadUnionPropOverride.ts, 38, 5))
+
+    b: 42,
+>b : Symbol(b, Decl(spreadUnionPropOverride.ts, 38, 14))
+
+    ...partial,
+>partial : Symbol(partial, Decl(spreadUnionPropOverride.ts, 36, 13))
+
+}; // OK - b is optional in Partial1 and missing in Partial2
+
+// Should error when property is required in all types
+const obj4 = {
+>obj4 : Symbol(obj4, Decl(spreadUnionPropOverride.ts, 44, 5))
+
+    a: "test",
+>a : Symbol(a, Decl(spreadUnionPropOverride.ts, 44, 14))
+
+    ...partial,
+>partial : Symbol(partial, Decl(spreadUnionPropOverride.ts, 36, 13))
+
+}; // Error - a is required in both types
+
+// More complex union case
+type A = { id: string; name: string };
+>A : Symbol(A, Decl(spreadUnionPropOverride.ts, 47, 2))
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 50, 10))
+>name : Symbol(name, Decl(spreadUnionPropOverride.ts, 50, 22))
+
+type B = { name: string; age: number };
+>B : Symbol(B, Decl(spreadUnionPropOverride.ts, 50, 38))
+>name : Symbol(name, Decl(spreadUnionPropOverride.ts, 51, 10))
+>age : Symbol(age, Decl(spreadUnionPropOverride.ts, 51, 24))
+
+type C = { name: string };
+>C : Symbol(C, Decl(spreadUnionPropOverride.ts, 51, 39))
+>name : Symbol(name, Decl(spreadUnionPropOverride.ts, 52, 10))
+
+declare const abc: A | B | C;
+>abc : Symbol(abc, Decl(spreadUnionPropOverride.ts, 54, 13))
+>A : Symbol(A, Decl(spreadUnionPropOverride.ts, 47, 2))
+>B : Symbol(B, Decl(spreadUnionPropOverride.ts, 50, 38))
+>C : Symbol(C, Decl(spreadUnionPropOverride.ts, 51, 39))
+
+const obj5 = {
+>obj5 : Symbol(obj5, Decl(spreadUnionPropOverride.ts, 56, 5))
+
+    id: "123",
+>id : Symbol(id, Decl(spreadUnionPropOverride.ts, 56, 14))
+
+    ...abc,
+>abc : Symbol(abc, Decl(spreadUnionPropOverride.ts, 54, 13))
+
+}; // OK - id is only in A
+
+const obj6 = {
+>obj6 : Symbol(obj6, Decl(spreadUnionPropOverride.ts, 61, 5))
+
+    name: "test",
+>name : Symbol(name, Decl(spreadUnionPropOverride.ts, 61, 14))
+
+    ...abc,
+>abc : Symbol(abc, Decl(spreadUnionPropOverride.ts, 54, 13))
+
+}; // Error - name is in all types
+

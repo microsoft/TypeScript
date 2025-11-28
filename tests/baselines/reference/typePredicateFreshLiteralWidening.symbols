@@ -71,7 +71,7 @@ const item3 = satisfies<Item>()({ value: null });
 
 const values2: Array<"1" | "2" | null> = ["1", "2", null];
 >values2 : Symbol(values2, Decl(typePredicateFreshLiteralWidening.ts, 21, 5))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const filteredValues2 = values2.filter(isNotNull);
 >filteredValues2 : Symbol(filteredValues2, Decl(typePredicateFreshLiteralWidening.ts, 22, 5))

@@ -39,8 +39,8 @@ import type CJSy2 = require("./decl"); // ok I guess?
 >      : ^^^^^^^^^^^
 
 import CJSy3 from "./decl"; // ok in esModuleInterop
->CJSy3 : any
->      : ^^^
+>CJSy3 : typeof CJSy
+>      : ^^^^^^^^^^^
 
 import * as types from "./types"; // ok
 >types : typeof types

@@ -13,7 +13,7 @@ declare const c3 = null, c4 :string = "", c5: any = 0;
 >c4 : Symbol(c4, Decl(constDeclarations-ambient-errors.ts, 3, 24))
 >c5 : Symbol(c5, Decl(constDeclarations-ambient-errors.ts, 3, 41))
 
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(constDeclarations-ambient-errors.ts, 3, 54))
 
     const c6 = 0;

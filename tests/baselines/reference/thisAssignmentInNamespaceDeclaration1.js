@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
 
 //// [a.js]
-module foo {
+namespace foo {
     this.bar = 4;
 }
 

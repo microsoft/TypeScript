@@ -13,11 +13,11 @@ a.forEach(function (v,i,a) {});
 >a : Symbol(a, Decl(extendArray.ts, 1, 24))
 
 
-declare module _Core {
+declare namespace _Core {
 >_Core : Symbol(_Core, Decl(extendArray.ts, 1, 31))
 
   interface Array {
->Array : Symbol(Array, Decl(extendArray.ts, 4, 22))
+>Array : Symbol(Array, Decl(extendArray.ts, 4, 25))
 
     collect(fn:(e:_element) => _element[]) : any[];
 >collect : Symbol(Array.collect, Decl(extendArray.ts, 5, 19))
@@ -31,7 +31,7 @@ declare module _Core {
 
 var arr = (<any>Array).prototype;
 >arr : Symbol(arr, Decl(extendArray.ts, 11, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 arr.collect = function (fn) {
 >arr : Symbol(arr, Decl(extendArray.ts, 11, 3))

@@ -1,0 +1,16 @@
+index.tsx(1,8): error TS2882: Cannot find module or type declarations for side-effect import of './jsx'.
+
+
+==== index.tsx (1 errors) ====
+    import "./jsx";
+           ~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of './jsx'.
+    
+    var skate: any;
+    const React = { createElement: skate.h };
+    
+    class Component {
+        renderCallback() {
+            return <div>test</div>;
+        }
+    };

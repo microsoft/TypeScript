@@ -46,4 +46,42 @@ const f = r + s;`;
         verifyGetErrRequest({ session, files: [target.path] });
         baselineTsserverLogs("pasteEdits", "adds paste edits", session);
     });
+    it("should not error", () => {
+        const file1: File = {
+            path: "/home/src/projects/project/file1.ts",
+            content: `export const r = 1;
+console.log(r);`,
+        };
+        const tsconfig: File = {
+            path: "/home/src/projects/project/tsconfig.json",
+            content: "{}",
+        };
+        const host = TestServerHost.createServerHost([file1, tsconfig]);
+        const session = new TestSession(host);
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [],
+                closedFiles: [],
+                openFiles: [
+                    {
+                        file: "^/untitled/ts-nul-authority/Untitled-1",
+                        fileContent: "function foo(){}\r\n     \r\n",
+                        scriptKindName: "TS",
+                    },
+                ],
+            },
+        });
+        session.executeCommandSeq<ts.server.protocol.GetPasteEditsRequest>({
+            command: ts.server.protocol.CommandTypes.GetPasteEdits,
+            arguments: {
+                file: "^/untitled/ts-nul-authority/Untitled-1",
+                pastedText: ["console.log(r);"],
+                pasteLocations: [{ start: { line: 1, offset: 0 }, end: { line: 1, offset: 0 } }],
+                copiedFrom: { file: file1.path, spans: [{ start: { line: 2, offset: 0 }, end: { line: 2, offset: 13 } }] },
+            },
+        });
+        verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
+        baselineTsserverLogs("pasteEdits", "should not error", session);
+    });
 });

@@ -83,7 +83,7 @@ function f6([f, ...f]) { }
 
 function f7(a, func = (a) => { return 1 }){ }  // not error
 >f7 : (a: any, func?: (a: any) => number) => void
->   : ^ ^^^^^^^    ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^    ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >func : (a: any) => number

@@ -359,7 +359,7 @@ declare module "interface-variable" {
 declare module "module" {
 >"module" : Symbol("module", Decl(modules.d.ts, 26, 1))
 
-    module Foo {
+    namespace Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 28, 25))
 
         export var a: number;
@@ -384,7 +384,7 @@ declare module "interface-module" {
         y: number;
 >y : Symbol(Foo.y, Decl(modules.d.ts, 38, 18))
     }
-    module Foo {
+    namespace Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
 
         export var a: number;
@@ -400,11 +400,11 @@ declare module "interface-module" {
 declare module "variable-module" {
 >"variable-module" : Symbol("variable-module", Decl(modules.d.ts, 46, 1))
 
-    module Foo {
+    namespace Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 48, 34), Decl(modules.d.ts, 55, 7))
 
         interface Bar {
->Bar : Symbol(Bar, Decl(modules.d.ts, 49, 16))
+>Bar : Symbol(Bar, Decl(modules.d.ts, 49, 19))
 
             x: number;
 >x : Symbol(Bar.x, Decl(modules.d.ts, 50, 23))
@@ -442,7 +442,7 @@ declare module "function-module" {
     function foo();
 >foo : Symbol(foo, Decl(modules.d.ts, 67, 34), Decl(modules.d.ts, 68, 19))
 
-    module foo {
+    namespace foo {
 >foo : Symbol(foo, Decl(modules.d.ts, 67, 34), Decl(modules.d.ts, 68, 19))
 
         export var a: number;
@@ -483,7 +483,7 @@ declare module "class-module" {
         y: number;
 >y : Symbol(Foo.y, Decl(modules.d.ts, 86, 18))
     }
-    module Foo {
+    namespace Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))
 
         export var a: number;

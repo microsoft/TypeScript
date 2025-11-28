@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts] ////
 
 //// [collisionCodeGenModuleWithMemberVariable.ts]
-module m1 {
+namespace m1 {
     export var m1 = 10;
     var b = m1;
 }

@@ -204,6 +204,7 @@ import {
     JSDocTypedefTag,
     JSDocTypeTag,
     JsxAttributeLike,
+    JsxCallLike,
     JsxChild,
     JsxExpression,
     JsxOpeningLikeElement,
@@ -304,8 +305,13 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
 }
 
 /** @internal */
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const targetToLibMap: Map<ScriptTarget, string> = new Map([
     [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
+    [ScriptTarget.ES2024, "lib.es2024.full.d.ts"],
     [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
     [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],
     [ScriptTarget.ES2021, "lib.es2021.full.d.ts"],
@@ -321,6 +327,7 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
     const target = getEmitScriptTarget(options);
     switch (target) {
         case ScriptTarget.ESNext:
+        case ScriptTarget.ES2024:
         case ScriptTarget.ES2023:
         case ScriptTarget.ES2022:
         case ScriptTarget.ES2021:
@@ -1527,12 +1534,13 @@ export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier |
 export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ImportSpecifier:
-            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.isTypeOnly;
+            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.NamespaceImport:
-            return (node as NamespaceImport).parent.isTypeOnly;
+            return (node as NamespaceImport).parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportClause:
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportEqualsDeclaration:
-            return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
+            return (node as ImportEqualsDeclaration).isTypeOnly;
     }
     return false;
 }
@@ -1551,6 +1559,10 @@ export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportD
 
 export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
+}
+
+export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
+    return findAncestor(node, isTypeOnlyImportOrExportDeclaration) !== undefined;
 }
 
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
@@ -1953,13 +1965,16 @@ export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLike
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
     switch (node.kind) {
-        case SyntaxKind.JsxOpeningElement:
-        case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.CallExpression:
         case SyntaxKind.NewExpression:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.Decorator:
+        case SyntaxKind.JsxOpeningElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxOpeningFragment:
             return true;
+        case SyntaxKind.BinaryExpression:
+            return (node as BinaryExpression).operatorToken.kind === SyntaxKind.InstanceOfKeyword;
         default:
             return false;
     }
@@ -2473,6 +2488,13 @@ export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeEleme
     const kind = node.kind;
     return kind === SyntaxKind.JsxOpeningElement
         || kind === SyntaxKind.JsxSelfClosingElement;
+}
+
+export function isJsxCallLike(node: Node): node is JsxCallLike {
+    const kind = node.kind;
+    return kind === SyntaxKind.JsxOpeningElement
+        || kind === SyntaxKind.JsxSelfClosingElement
+        || kind === SyntaxKind.JsxOpeningFragment;
 }
 
 // Clauses

@@ -2,11 +2,11 @@
 // @outFile: out.js
 
 // @Filename: declFile.d.ts
-declare module M {
+declare namespace M {
     declare var x;
     declare function f();
 
-    declare module N { }
+    declare namespace N { }
 
     declare class C { }
 }

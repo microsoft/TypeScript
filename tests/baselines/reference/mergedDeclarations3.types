@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/mergedDeclarations3.ts] ////
 
 === mergedDeclarations3.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -16,11 +16,11 @@ module M {
 >      : ^^^^^^^^^^^
  }
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
- export module Color {
+ export namespace Color {
 >Color : typeof Color
 >      : ^^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ var p = M.Color.Blue; // ok
 >Blue : number
 >     : ^^^^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -55,11 +55,11 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    module foo {
+    namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -71,11 +71,11 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export module foo {
+    export namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -87,11 +87,11 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    module foo {
+    namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

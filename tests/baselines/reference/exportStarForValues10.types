@@ -10,6 +10,7 @@ export var v = 1;
 === file1.ts ===
 export interface Foo { x }
 >x : any
+>  : ^^^
 
 === file2.ts ===
 export * from "file0";

@@ -15,7 +15,7 @@ f.privProp; // should not work
 f.pubMeth(); // should work
 f.pubProp; // should work
 
-module M {
+namespace M {
     export class C { public pub = 0; private priv = 1; }
     export var V = 0;
 }

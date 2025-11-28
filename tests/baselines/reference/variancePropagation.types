@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/variancePropagation.ts] ////
+
+=== variancePropagation.ts ===
+// https://github.com/microsoft/TypeScript/issues/62606
+
+interface DerivedTable<S extends { base: any; new: any }> {
+>base : any
+>new : any
+
+    // Error disappears when these property declarations are reversed
+    schema: S["base"] & S["new"]
+>schema : S["base"] & S["new"]
+>       : ^^^^^^^^^^^^^^^^^^^^
+
+    readonlySchema: Readonly<S["base"] & S["new"]>
+>readonlySchema : Readonly<S["base"] & S["new"]>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface Base { baseProp: number; }
+>baseProp : number
+>         : ^^^^^^
+
+interface New  { newProp: boolean; }
+>newProp : boolean
+>        : ^^^^^^^
+
+declare const source: DerivedTable<{ base: Base, new: New }>
+>source : DerivedTable<{ base: Base; new: New; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^   ^^^^
+>base : Base
+>     : ^^^^
+>new : New
+>    : ^^^
+
+const destination: DerivedTable<{ base: Base; new: New & Base }> = source; // Error
+>destination : DerivedTable<{ base: Base; new: New & Base; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^          ^^^^
+>base : Base
+>     : ^^^^
+>new : New & Base
+>    : ^^^^^^^^^^
+>source : DerivedTable<{ base: Base; new: New; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^   ^^^^
+

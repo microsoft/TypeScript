@@ -26,6 +26,18 @@
 // async function foo() {
 //     await Promise.resolve(0);
 // }
-// function notAsync() {
+// <|function [|notAsync|]() {
 //     /*GOTO DEF*/await Promise.resolve(0);
-// }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "notAsync",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

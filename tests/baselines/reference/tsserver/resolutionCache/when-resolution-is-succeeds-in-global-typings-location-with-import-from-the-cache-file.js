@@ -13,7 +13,6 @@ export const x = 10;
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 18
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -27,10 +26,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 109
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 119
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 111
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 121
 {
   "entries": {}
 }
@@ -165,7 +164,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/Library/Caches/typescript/node_modules/@types/undici-types/index.d.ts Text-1 "export const x = 10;\n"
 	/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts Text-1 "import { x } from \"undici-types\";\nexport const y = x;\n"
 	^/aichat-code-block-anysphere/ocjahtkquh/ SVC-1-0 "// worker.js\nconst { parentPort } = require('worker_threads');\nparentPort.postMessage('Hello, world!');\n"
@@ -182,7 +181,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 23
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 24
 
 
 PolledWatches::
@@ -211,7 +210,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-  {"inode":109}
+  {"inode":119}
 /home/src/Vscode: *new*
   {"inode":12}
 /home/src/Vscode/Projects: *new*
@@ -219,7 +218,7 @@ FsWatches::
 /home/src/Vscode/Projects/bin: *new*
   {"inode":14}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":23}
+  {"inode":24}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules: *new*
@@ -407,7 +406,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json:
-  {"inode":109}
+  {"inode":119}
 /home/src/Vscode:
   {"inode":12}
 /home/src/Vscode/Projects:
@@ -415,7 +414,7 @@ FsWatches::
 /home/src/Vscode/Projects/bin:
   {"inode":14}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
-  {"inode":23}
+  {"inode":24}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules:

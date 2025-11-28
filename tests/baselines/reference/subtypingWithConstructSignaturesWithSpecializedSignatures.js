@@ -3,7 +3,7 @@
 //// [subtypingWithConstructSignaturesWithSpecializedSignatures.ts]
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
 
-module CallSignature {
+namespace CallSignature {
     interface Base { // T
         // M's
         new (x: 'a'): void;
@@ -38,7 +38,7 @@ module CallSignature {
     }
 }
 
-module MemberWithCallSignature {
+namespace MemberWithCallSignature {
     interface Base { // T
         // M's
         a: {

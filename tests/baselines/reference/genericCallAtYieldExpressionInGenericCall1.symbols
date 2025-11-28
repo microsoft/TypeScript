@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/genericCallAtYieldExpressionInGenericCall1.ts] ////
+
+=== genericCallAtYieldExpressionInGenericCall1.ts ===
+declare const inner: {
+>inner : Symbol(inner, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 0, 13))
+
+  <A>(value: A): {
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 1, 3))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 1, 6))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 1, 3))
+
+    (): A;
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 1, 3))
+
+    [Symbol.iterator](): {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericCallAtYieldExpressionInGenericCall1.ts, 2, 10))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+      next(...args: ReadonlyArray<any>): IteratorResult<any, A>;
+>next : Symbol(next, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 3, 26))
+>args : Symbol(args, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 4, 11))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 1, 3))
+
+    };
+  };
+};
+
+declare function outer<A>(body: (value: A) => Generator<any, any, any>): void;
+>outer : Symbol(outer, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 7, 2))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 9, 23))
+>body : Symbol(body, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 9, 26))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 9, 33))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 9, 23))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+outer(function* <T>(value: T) {
+>outer : Symbol(outer, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 7, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 11, 17))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 11, 20))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 11, 17))
+
+  const result = yield* inner(value); // ok
+>result : Symbol(result, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 12, 7))
+>inner : Symbol(inner, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 0, 13))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 11, 20))
+
+});
+
+outer(function* <T>(value: T) {
+>outer : Symbol(outer, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 7, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 15, 17))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 15, 20))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 15, 17))
+
+  const x = inner(value);
+>x : Symbol(x, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 16, 7))
+>inner : Symbol(inner, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 0, 13))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 15, 20))
+
+  const result = yield* x; // ok
+>result : Symbol(result, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 17, 7))
+>x : Symbol(x, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 16, 7))
+
+});
+
+declare const inner2: {
+>inner2 : Symbol(inner2, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 20, 13))
+
+  <A>(value: A): () => A;
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 21, 3))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 21, 6))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 21, 3))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 21, 3))
+
+};
+
+outer(function* <T>(value: T) {
+>outer : Symbol(outer, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 7, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 24, 17))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 24, 20))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 24, 17))
+
+  const result = yield* inner2(value); // error
+>result : Symbol(result, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 25, 7))
+>inner2 : Symbol(inner2, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 20, 13))
+>value : Symbol(value, Decl(genericCallAtYieldExpressionInGenericCall1.ts, 24, 20))
+
+});
+

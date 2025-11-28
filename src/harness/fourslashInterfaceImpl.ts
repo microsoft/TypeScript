@@ -279,6 +279,9 @@ export class Verify extends VerifyNegatable {
             return this.state.verifyCompletions(optionsArray[0]);
         }
         for (const options of optionsArray) {
+            if (options.preferences && Object.keys(options).length === 1 && optionsArray.length > 1 && optionsArray.indexOf(options) > 0) {
+                throw new Error("Did you mean to put 'preferences' in the previous 'verify.completions' object argument instead of their own object?");
+            }
             this.state.verifyCompletions(options);
         }
         return {
@@ -449,8 +452,8 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGetEmitOutput();
     }
 
-    public baselineQuickInfo(): void {
-        this.state.baselineQuickInfo();
+    public baselineQuickInfo(verbosityLevels?: FourSlash.VerbosityLevels, maximumLength?: number): void {
+        this.state.baselineQuickInfo(verbosityLevels, maximumLength);
     }
 
     public baselineSignatureHelp(): void {
@@ -657,6 +660,9 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 
+    public preparePasteEdits(options: PreparePasteEditsOptions): void {
+        this.state.verifyPreparePasteEdits(options);
+    }
     public pasteEdits(options: PasteEditsOptions): void {
         this.state.verifyPasteEdits(options);
     }
@@ -2018,6 +2024,11 @@ export interface MoveToFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
+export interface PreparePasteEditsOptions {
+    readonly providePasteEdits: boolean;
+    readonly copiedTextRange: ts.TextRange[];
+    readonly copiedFromFile: string;
+}
 export interface PasteEditsOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     args: ts.PasteEditsArgs;

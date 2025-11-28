@@ -4,6 +4,7 @@
 export interface ProgressCallback {
 	(progress:any):any;
 >progress : any
+>         : ^^^
 }	
 
 // --- Generic promise
@@ -21,9 +22,11 @@ export declare class TPromise<V> {
 >error : (err: any) => void
 >      : ^   ^^   ^^^^^    
 >err : any
+>    : ^^^
 >progress : ProgressCallback
 >         : ^^^^^^^^^^^^^^^^
 >oncancel : any
+>         : ^^^
 	
     // removing this method fixes the error squiggle.....
 	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
@@ -36,6 +39,7 @@ export declare class TPromise<V> {
 >error : (err: any) => TPromise<U>
 >      : ^   ^^   ^^^^^           
 >err : any
+>    : ^^^
 >progress : ProgressCallback
 >         : ^^^^^^^^^^^^^^^^
 }

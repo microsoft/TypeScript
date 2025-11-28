@@ -72,8 +72,7 @@ import {
 
 export const libFile: File = {
     path: getPathForTypeScriptTestLocation("lib.d.ts"),
-    content: `/// <reference no-default-lib="true"/>
-interface Boolean {}
+    content: `interface Boolean {}
 interface Function {}
 interface CallableFunction {}
 interface NewableFunction {}
@@ -1158,7 +1157,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
         // base folder has to be present
         const base = getDirectoryPath(file.path);
-        const folder = Debug.checkDefined(this.getRealFolder(base));
+        const folder = this.getRealFolder(base);
+
+        if (!folder) {
+            throw new Error(`Directory not found: ${base}`);
+        }
 
         if (folder.path === base) {
             if (!this.fs.has(file.path)) {

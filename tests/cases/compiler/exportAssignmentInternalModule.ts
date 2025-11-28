@@ -1,6 +1,6 @@
 //@module: amd
 // @Filename: exportAssignmentInternalModule_A.ts
-module M {
+namespace M {
 	export var x;
 }
 

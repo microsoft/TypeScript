@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource2.ts, 0, 0))
 
     export function hasFlag(val: number, flag: number) {
->hasFlag : Symbol(hasFlag, Decl(parserRealSource2.ts, 5, 19))
+>hasFlag : Symbol(hasFlag, Decl(parserRealSource2.ts, 5, 22))
 >val : Symbol(val, Decl(parserRealSource2.ts, 7, 28))
 >flag : Symbol(flag, Decl(parserRealSource2.ts, 7, 40))
 

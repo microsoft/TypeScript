@@ -1,0 +1,16 @@
+otherc.cts(1,35): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+
+
+==== index.ts (0 errors) ====
+    import json from "./package.json" assert { type: "json" };
+==== otherc.cts (1 errors) ====
+    import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
+                                      ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+    const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
+==== package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "private": true,
+        "type": "module"
+    }

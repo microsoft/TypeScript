@@ -17,7 +17,6 @@ let x = 1;
 }
 
 //// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -44,6 +43,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: C:/projects/a/f1.ts ProjectRootPath: undefined:: Result: C:/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: C:/projects/a/tsconfig.json, currentDirectory: C:/projects/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/projects/a/tsconfig.json 2000 undefined Project: C:/projects/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: C:/projects/a/tsconfig.json : {
+ "rootNames": [
+  "C:/projects/a/f1.ts"
+ ],
+ "options": {
+  "outDir": "C:/projects/a/b",
+  "configFilePath": "C:/projects/a/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -54,15 +62,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for C:/projects/a/f1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: C:/projects/a/tsconfig.json : {
- "rootNames": [
-  "C:/projects/a/f1.ts"
- ],
- "options": {
-  "outDir": "C:/projects/a/b",
-  "configFilePath": "C:/projects/a/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: C:/projects/a 0 undefined Config: C:/projects/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: C:/projects/a 0 undefined Config: C:/projects/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: C:/projects/a/tsconfig.json
@@ -74,7 +73,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: C:/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: C:/projects/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'C:/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	C:/projects/a/f1.ts SVC-1-0 "let x = 1;"
 
 
@@ -112,7 +111,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
