@@ -514,8 +514,6 @@ function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChe
     return undefined;
 }
 
-
-
 /** @internal */
 export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
     const definitions = getDefinitionAtPosition(program, sourceFile, position);
@@ -541,17 +539,17 @@ export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFi
 }
 
 function getInferrableDefinitionIndex(definitions: readonly DefinitionInfo[], node: Node, program: Program): number | undefined {
-    const TYPEY_SET = new Set([SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration])
+    const TYPEY_SET = new Set([SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration]);
 
     const mainIsTypey = getUsageNodeKind(node) === SyntaxKind.TypeReference;
-    const optionNodes = definitions?.map(def => findNodeFromSpan(program.getSourceFile(def.fileName), def.textSpan)!)
-    const definitionsAreTypey = optionNodes.map((node) => TYPEY_SET.has(node?.parent?.kind ?? undefined))
+    const optionNodes = definitions?.map(def => findNodeFromSpan(program.getSourceFile(def.fileName), def.textSpan)!);
+    const definitionsAreTypey = optionNodes.map(node => TYPEY_SET.has(node?.parent?.kind ?? undefined));
 
-    return definitionsAreTypey.filter((def) => def === mainIsTypey).length === 1 ? definitionsAreTypey.indexOf(mainIsTypey) : undefined;
+    return definitionsAreTypey.filter(def => def === mainIsTypey).length === 1 ? definitionsAreTypey.indexOf(mainIsTypey) : undefined;
 }
 
 function getUsageNodeKind(node: Node): SyntaxKind {
-    return node.kind === SyntaxKind.QualifiedName  || node.kind === SyntaxKind.Identifier ? getUsageNodeKind(node.parent) : node.kind;
+    return node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier ? getUsageNodeKind(node.parent) : node.kind;
 }
 
 function findNodeFromSpan(sourceFile: SourceFile | undefined, span: TextSpan): Node | undefined {
@@ -569,8 +567,6 @@ function findNodeFromSpan(sourceFile: SourceFile | undefined, span: TextSpan): N
     }
     return sourceFile ? visit(sourceFile) : undefined;
 }
-
-
 
 // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
 function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {

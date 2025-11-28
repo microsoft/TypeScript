@@ -858,11 +858,13 @@ export class TestState {
         }
 
         // Check if the inferred definition points to the expected marker location
-        if (inferredDef.fileName !== expectedMarker.fileName ||
-            inferredDef.textSpan.start !== expectedMarker.position) {
+        if (
+            inferredDef.fileName !== expectedMarker.fileName ||
+            inferredDef.textSpan.start !== expectedMarker.position
+        ) {
             this.raiseError(
                 `Expected inferredIndex to point to marker "${expectedDefinitionMarkerName}" at ${expectedMarker.fileName}:${expectedMarker.position}, ` +
-                `but it points to ${inferredDef.fileName}:${inferredDef.textSpan.start}.`
+                    `but it points to ${inferredDef.fileName}:${inferredDef.textSpan.start}.`,
             );
         }
     }

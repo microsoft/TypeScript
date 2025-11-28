@@ -1639,7 +1639,7 @@ export class Session<TMessage = string> implements EventSender {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
         const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-        
+
         const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
         if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
@@ -1653,7 +1653,7 @@ export class Session<TMessage = string> implements EventSender {
             const name = unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex].name;
 
             if (!this.recentAttemptedDefinitionInferenceNames.has(name)) {
-                this.recentAttemptedDefinitionInferenceNames.add(name)
+                this.recentAttemptedDefinitionInferenceNames.add(name);
                 this.host.setTimeout(() => this.recentAttemptedDefinitionInferenceNames.delete(name), 5000);
                 unmappedDefinitionAndBoundSpan.definitions = [unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex]];
             }
