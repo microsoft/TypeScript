@@ -26464,6 +26464,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const intraExpressionSites = inferenceContext.reverseMappedIntraExpressionInferenceSites![index];
                 const recordSymbol = getGlobalRecordSymbol();
                 if (intraExpressionSites.length && recordSymbol) {
+                    // Intra-expression inference infers from collected sites into their contextual types.
+                    // The scope node is the object literal expression being source of this whole reverse mapped type
+                    // and its regular contextual type is "replaced" here (it overshadows earlier entries on the stack).
+                    // This tricks the algorithm to avoid contextual types for expressions *inside it* being computed of the mapped type substitution. 
+                    // So `T[K]` stays as `T[K]` (instead of being instantiated as `T["prop"]`)
+                    // and thus it stays being a viable inference target for inferring the type of this reverse mapped type property.
                     pushContextualType(scopeNode as Expression, getTypeAliasInstantiation(recordSymbol, [stringNumberSymbolType, templateType]), /*isCache*/ false);
                     inferFromIntraExpressionSites([inference], intraExpressionSites);
                     popContextualType();
@@ -33496,6 +33502,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) {
                 const isIntraExpressionInferenceSource = intraExpressionInferenceContext && (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl);
                 if (isIntraExpressionInferenceSource) {
+                    // this object literal is a potential source for reverse mapped type inference
+                    // so we push it onto the reverse mapped intra-expression inference scope stack
+                    // that makes `addIntraExpressionInferenceSite` called when checking expressions *contained in* this member
+                    // to collect intra-expression inference sites for the potential reverse mapped type symbol originating from this member
+                    // the member's type itself wouldn't contribute to intra-expression inference
+                    // as there wouldn't be any "earlier" (in source order) expressions able to "consume" this type through contextual parameter assignment
                     pushReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext, node);
                 }
                 let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
