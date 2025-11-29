@@ -410,7 +410,11 @@ const res8 = f4({
 
     (x) => x.v.toLowerCase(),
 >x : Symbol(x, Decl(intraExpressionInferencesReverseMappedTypes.ts, 143, 5))
+>x.v.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x.v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 142, 13))
 >x : Symbol(x, Decl(intraExpressionInferencesReverseMappedTypes.ts, 143, 5))
+>v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 142, 13))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
   ],
 });
@@ -591,7 +595,11 @@ const res10 = f6({
       consume: (x) => x.v.toLowerCase(),
 >consume : Symbol(consume, Decl(intraExpressionInferencesReverseMappedTypes.ts, 192, 33))
 >x : Symbol(x, Decl(intraExpressionInferencesReverseMappedTypes.ts, 193, 16))
+>x.v.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x.v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 192, 24))
 >x : Symbol(x, Decl(intraExpressionInferencesReverseMappedTypes.ts, 193, 16))
+>v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 192, 24))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
     };
   },
@@ -639,7 +647,11 @@ const res11 = f7({
 >v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 207, 21))
 >n : Symbol(n, Decl(intraExpressionInferencesReverseMappedTypes.ts, 207, 13))
 >x : Symbol(x, Decl(intraExpressionInferencesReverseMappedTypes.ts, 207, 32))
+>x.v.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x.v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 207, 21))
 >x : Symbol(x, Decl(intraExpressionInferencesReverseMappedTypes.ts, 207, 32))
+>v : Symbol(v, Decl(intraExpressionInferencesReverseMappedTypes.ts, 207, 21))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
   },
 });

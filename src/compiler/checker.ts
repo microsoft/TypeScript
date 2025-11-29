@@ -26480,9 +26480,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType, sourceValueDeclaration: Declaration | undefined): Type | undefined {
-        const cacheKey = source.id + "," + target.id + "," + constraint.id;
+        const cacheKey = source.id + "," + target.id + "," + constraint.id + (sourceValueDeclaration && getObjectFlags(source) & ObjectFlags.NonInferrableType ? "," + getNodeId(sourceValueDeclaration) : "");
         if (reverseMappedCache.has(cacheKey)) {
-            // TODO: fix a missing cacheKey component
             return reverseMappedCache.get(cacheKey) || unknownType;
         }
         reverseMappedSourceStack.push(source);

@@ -452,7 +452,9 @@ declare function f4<T>(arg: {
 }): T;
 declare const res8: {
     a: string;
-    b: string;
+    b: {
+        v: string;
+    };
 };
 declare function f5<T1, T2>(arg: {
     [K in keyof T1]: {
@@ -484,14 +486,18 @@ declare function f6<T>(arg: {
 }): T;
 declare const res10: {
     a: string;
-    b: string;
+    b: {
+        v: string;
+    };
 };
 declare function f7<T>(arg: {
     [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
 }): T;
 declare const res11: {
     a: string;
-    b: string;
+    b: {
+        v: string;
+    };
 };
 declare function f8<T1, T2>(arg: {
     [K in keyof T1]: {

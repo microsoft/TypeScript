@@ -714,14 +714,14 @@ declare function f4<T>(
 ): T;
 
 const res8 = f4({
->res8 : { a: string; b: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
->f4({  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],}) : { a: string; b: string; }
->                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>res8 : { a: string; b: { v: string; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4({  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],}) : { a: string; b: { v: string; }; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f4 : <T>(arg: { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }) => T
 >   : ^ ^^   ^^                                                             ^^^^^ 
->{  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],} : { a: [(n: string) => string, (x: string) => string]; b: [(n: string) => { v: string; }, (x: string) => any]; }
->                                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>{  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],} : { a: [(n: string) => string, (x: string) => string]; b: [(n: string) => { v: string; }, (x: { v: string; }) => string]; }
+>                                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a: [
 >a : [(n: string) => string, (x: string) => string]
@@ -753,10 +753,10 @@ const res8 = f4({
 
   ],
   b: [
->b : [(n: string) => { v: string; }, (x: string) => any]
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
->[    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ] : [(n: string) => { v: string; }, (x: string) => any]
->                                                        : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>b : [(n: string) => { v: string; }, (x: { v: string; }) => string]
+>  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ] : [(n: string) => { v: string; }, (x: { v: string; }) => string]
+>                                                        : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     (n) => ({ v: n }),
 >(n) => ({ v: n }) : (n: string) => { v: string; }
@@ -773,22 +773,22 @@ const res8 = f4({
 >  : ^^^^^^
 
     (x) => x.v.toLowerCase(),
->(x) => x.v.toLowerCase() : (x: string) => any
->                         : ^ ^^^^^^^^^^^^^^^^
->x : string
+>(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>x.v.toLowerCase() : string
+>                  : ^^^^^^
+>x.v.toLowerCase : () => string
+>                : ^^^^^^      
+>x.v : string
+>    : ^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>v : string
 >  : ^^^^^^
->x.v.toLowerCase() : any
->                  : ^^^
->x.v.toLowerCase : any
->                : ^^^
->x.v : any
->    : ^^^
->x : string
->  : ^^^^^^
->v : any
->  : ^^^
->toLowerCase : any
->            : ^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
 
   ],
 });
@@ -1018,14 +1018,14 @@ declare function f6<T>(arg: {
 }): T;
 
 const res10 = f6({
->res10 : { a: string; b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
->f6({  a() {    return {      produce: (n) => n,      consume: (x) => x.toLowerCase(),    };  },  b() {    return {      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    };  },}) : { a: string; b: string; }
->                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>res10 : { a: string; b: { v: string; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f6({  a() {    return {      produce: (n) => n,      consume: (x) => x.toLowerCase(),    };  },  b() {    return {      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    };  },}) : { a: string; b: { v: string; }; }
+>                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f6 : <T>(arg: { [K in keyof T]: () => { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
 >   : ^ ^^   ^^                                                                                        ^^^^^ 
->{  a() {    return {      produce: (n) => n,      consume: (x) => x.toLowerCase(),    };  },  b() {    return {      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    };  },} : { a(): { produce: (n: string) => string; consume: (x: string) => string; }; b(): { produce: (n: string) => { v: string; }; consume: (x: string) => any; }; }
->                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{  a() {    return {      produce: (n) => n,      consume: (x) => x.toLowerCase(),    };  },  b() {    return {      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    };  },} : { a(): { produce: (n: string) => string; consume: (x: string) => string; }; b(): { produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }; }
+>                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a() {
 >a : () => { produce: (n: string) => string; consume: (x: string) => string; }
@@ -1064,12 +1064,12 @@ const res10 = f6({
     };
   },
   b() {
->b : () => { produce: (n: string) => { v: string; }; consume: (x: string) => any; }
->  : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>b : () => { produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }
+>  : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
->{      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    } : { produce: (n: string) => { v: string; }; consume: (x: string) => any; }
->                                                                                : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>{      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    } : { produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }
+>                                                                                : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       produce: (n) => ({ v: n }),
 >produce : (n: string) => { v: string; }
@@ -1088,24 +1088,24 @@ const res10 = f6({
 >  : ^^^^^^
 
       consume: (x) => x.v.toLowerCase(),
->consume : (x: string) => any
->        : ^ ^^^^^^^^^^^^^^^^
->(x) => x.v.toLowerCase() : (x: string) => any
->                         : ^ ^^^^^^^^^^^^^^^^
->x : string
+>consume : (x: { v: string; }) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>x.v.toLowerCase() : string
+>                  : ^^^^^^
+>x.v.toLowerCase : () => string
+>                : ^^^^^^      
+>x.v : string
+>    : ^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>v : string
 >  : ^^^^^^
->x.v.toLowerCase() : any
->                  : ^^^
->x.v.toLowerCase : any
->                : ^^^
->x.v : any
->    : ^^^
->x : string
->  : ^^^^^^
->v : any
->  : ^^^
->toLowerCase : any
->            : ^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
 
     };
   },
@@ -1126,14 +1126,14 @@ declare function f7<T>(arg: {
 }): T;
 
 const res11 = f7({
->res11 : { a: string; b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
->f7({  a() {    return [(n) => n, (x) => x.toLowerCase()];  },  b() {    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];  },}) : { a: string; b: string; }
->                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>res11 : { a: string; b: { v: string; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f7({  a() {    return [(n) => n, (x) => x.toLowerCase()];  },  b() {    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];  },}) : { a: string; b: { v: string; }; }
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f7 : <T>(arg: { [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void]; }) => T
 >   : ^ ^^   ^^                                                                   ^^^^^ 
->{  a() {    return [(n) => n, (x) => x.toLowerCase()];  },  b() {    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];  },} : { a(): [(n: string) => string, (x: string) => string]; b(): [(n: string) => { v: string; }, (x: string) => any]; }
->                                                                                                                                : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>{  a() {    return [(n) => n, (x) => x.toLowerCase()];  },  b() {    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];  },} : { a(): [(n: string) => string, (x: string) => string]; b(): [(n: string) => { v: string; }, (x: { v: string; }) => string]; }
+>                                                                                                                                : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a() {
 >a : () => [(n: string) => string, (x: string) => string]
@@ -1163,12 +1163,12 @@ const res11 = f7({
 
   },
   b() {
->b : () => [(n: string) => { v: string; }, (x: string) => any]
->  : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>b : () => [(n: string) => { v: string; }, (x: { v: string; }) => string]
+>  : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];
->[(n) => ({ v: n }), (x) => x.v.toLowerCase()] : [(n: string) => { v: string; }, (x: string) => any]
->                                              : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>[(n) => ({ v: n }), (x) => x.v.toLowerCase()] : [(n: string) => { v: string; }, (x: { v: string; }) => string]
+>                                              : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(n) => ({ v: n }) : (n: string) => { v: string; }
 >                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
@@ -1181,22 +1181,22 @@ const res11 = f7({
 >  : ^^^^^^
 >n : string
 >  : ^^^^^^
->(x) => x.v.toLowerCase() : (x: string) => any
->                         : ^ ^^^^^^^^^^^^^^^^
->x : string
+>(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>x.v.toLowerCase() : string
+>                  : ^^^^^^
+>x.v.toLowerCase : () => string
+>                : ^^^^^^      
+>x.v : string
+>    : ^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>v : string
 >  : ^^^^^^
->x.v.toLowerCase() : any
->                  : ^^^
->x.v.toLowerCase : any
->                : ^^^
->x.v : any
->    : ^^^
->x : string
->  : ^^^^^^
->v : any
->  : ^^^
->toLowerCase : any
->            : ^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
 
   },
 });
