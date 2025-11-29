@@ -27598,13 +27598,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (reverseHomomorphicMappedCache.has(cacheKey)) {
                 return reverseHomomorphicMappedCache.get(cacheKey);
             }
-            
+
             const clone = createObjectType(ObjectFlags.ReverseMapped | ObjectFlags.Anonymous, /*symbol*/ undefined) as ReverseMappedType;
             clone.source = reversed.source;
             clone.mappedType = reversed.mappedType;
             clone.constraintType = reversed.constraintType;
             clone.inferenceConstraintType = inferenceConstraintType;
-            
+
             reverseHomomorphicMappedCache.set(cacheKey, clone);
             return clone;
         }
