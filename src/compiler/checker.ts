@@ -14640,7 +14640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const modifiers = getMappedTypeModifiers(type.mappedType);
         const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
-        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.keyType, indexInfo.type, type.mappedType, type.constraintType, type.inferenceConstraintType) || unknownType, readonlyMask && indexInfo.isReadonly)] : emptyArray;
+        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType, type.inferenceConstraintType && getIndexedAccessTypeOrUndefined(type.inferenceConstraintType, indexInfo.keyType)) ?? unknownType, readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
         const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
@@ -26394,15 +26394,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
         // applied to the element type(s).
         if (isArrayType(source)) {
-            const elementType = inferReverseMappedType(numberType, getTypeArguments(source)[0], target, constraint);
+            const elementType = inferReverseMappedType(getTypeArguments(source)[0], target, constraint);
             if (!elementType) {
                 return undefined;
             }
             return createArrayType(elementType, isReadonlyArrayType(source));
         }
         if (isTupleType(source)) {
-            const fixedLength = source.target.fixedLength;
-            const elementTypes = map(getElementTypes(source), (t, i) => inferReverseMappedType(i < fixedLength ? getStringLiteralType("" + i) : numberType, t, target, constraint));
+            const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
             if (!every(elementTypes, (t): t is Type => !!t)) {
                 return undefined;
             }
@@ -26423,22 +26422,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol): Type {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
-            const propertyNameType = getStringLiteralType(unescapeLeadingUnderscores(symbol.escapedName));
-            links.type = inferReverseMappedType(propertyNameType, symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType, symbol.links.inferenceConstraintType) || unknownType;
+            const reverseConstraint = symbol.links.inferenceConstraintType && getIndexedAccessTypeOrUndefined(symbol.links.inferenceConstraintType, getStringLiteralType(unescapeLeadingUnderscores(symbol.escapedName)));
+            links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType, reverseConstraint) ?? unknownType;
         }
         return links.type;
     }
 
-    function inferReverseMappedTypeWorker(propertyNameType: Type, sourceType: Type, target: MappedType, constraint: IndexType, inferenceConstraintType: Type | undefined): Type {
+    function inferReverseMappedTypeWorker(sourceType: Type, target: MappedType, constraint: IndexType, reverseMappedConstraint: Type | undefined): Type {
         const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || inferenceConstraintType && getIndexedAccessTypeOrUndefined(inferenceConstraintType, propertyNameType) || unknownType;
+        return getTypeFromInference(inference) ?? reverseMappedConstraint ?? unknownType;
     }
 
-    function inferReverseMappedType(propertyNameType: Type, source: Type, target: MappedType, constraint: IndexType, inferenceConstraintType?: Type): Type | undefined {
-        const cacheKey = source.id + "," + target.id + "," + constraint.id + "," + (inferenceConstraintType?.id ?? "0");
+    function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType, reverseMappedConstraint?: Type): Type | undefined {
+        const cacheKey = source.id + "," + target.id + "," + constraint.id + "," + (reverseMappedConstraint?.id ?? "0");
         if (reverseMappedCache.has(cacheKey)) {
             return reverseMappedCache.get(cacheKey) || unknownType;
         }
@@ -26449,7 +26448,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isDeeplyNestedType(target, reverseMappedTargetStack, reverseMappedTargetStack.length, 2)) reverseExpandingFlags |= ExpandingFlags.Target;
         let type;
         if (reverseExpandingFlags !== ExpandingFlags.Both) {
-            type = inferReverseMappedTypeWorker(propertyNameType, source, target, constraint, inferenceConstraintType);
+            type = inferReverseMappedTypeWorker(source, target, constraint, reverseMappedConstraint);
         }
         reverseMappedSourceStack.pop();
         reverseMappedTargetStack.pop();
@@ -27594,11 +27593,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type;
             }
             const reversed = type as ReverseMappedType;
+            const cacheKey = reversed.source.id + "," + reversed.mappedType.id + "," + reversed.constraintType.id + "," + inferenceConstraintType.id;
+
+            if (reverseHomomorphicMappedCache.has(cacheKey)) {
+                return reverseHomomorphicMappedCache.get(cacheKey);
+            }
+            
             const clone = createObjectType(ObjectFlags.ReverseMapped | ObjectFlags.Anonymous, /*symbol*/ undefined) as ReverseMappedType;
             clone.source = reversed.source;
             clone.mappedType = reversed.mappedType;
             clone.constraintType = reversed.constraintType;
             clone.inferenceConstraintType = inferenceConstraintType;
+            
+            reverseHomomorphicMappedCache.set(cacheKey, clone);
             return clone;
         }
     }
