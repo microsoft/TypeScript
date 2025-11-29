@@ -26467,7 +26467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Intra-expression inference infers from collected sites into their contextual types.
                     // The scope node is the object literal expression being source of this whole reverse mapped type
                     // and its regular contextual type is "replaced" here (it overshadows earlier entries on the stack).
-                    // This tricks the algorithm to avoid contextual types for expressions *inside it* being computed of the mapped type substitution. 
+                    // This tricks the algorithm to avoid contextual types for expressions *inside it* being computed of the mapped type substitution.
                     // So `T[K]` stays as `T[K]` (instead of being instantiated as `T["prop"]`)
                     // and thus it stays being a viable inference target for inferring the type of this reverse mapped type property.
                     pushContextualType(scopeNode as Expression, getTypeAliasInstantiation(recordSymbol, [stringNumberSymbolType, templateType]), /*isCache*/ false);
