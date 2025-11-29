@@ -1,22 +1,31 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === intraExpressionInferencesReverseMappedTypes.ts ===
 // repro cases based on https://github.com/microsoft/TypeScript/issues/53018
 
 declare function f<T>(
 >f : <T>(arg: { [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>  : ^ ^^   ^^                                                                                  ^^^^^ 
 
   arg: {
 >arg : { [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^                 ^^^^^^
 
     [K in keyof T]: {
       produce: (n: string) => T[K];
 >produce : (n: string) => T[K]
+>        : ^ ^^      ^^^^^    
 >n : string
+>  : ^^^^^^
 
       consume: (x: T[K]) => void;
 >consume : (x: T[K]) => void
+>        : ^ ^^    ^^^^^    
 >x : T[K]
+>  : ^^^^
 
     };
   }
@@ -24,182 +33,285 @@ declare function f<T>(
 
 const res1 = f({
 >res1 : { a: string; b: { v: string; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f({  a: {    produce: (n) => n,    consume: (x) => x.toLowerCase(),  },  b: {    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  },}) : { a: string; b: { v: string; }; }
+>                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(arg: { [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>  : ^ ^^   ^^                                                                                  ^^^^^ 
 >{  a: {    produce: (n) => n,    consume: (x) => x.toLowerCase(),  },  b: {    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  },} : { a: { produce: (n: string) => string; consume: (x: string) => string; }; b: { produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }; }
+>                                                                                                                                                      : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a: {
 >a : { produce: (n: string) => string; consume: (x: string) => string; }
+>  : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{    produce: (n) => n,    consume: (x) => x.toLowerCase(),  } : { produce: (n: string) => string; consume: (x: string) => string; }
+>                                                               : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     produce: (n) => n,
 >produce : (n: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     consume: (x) => x.toLowerCase(),
 >consume : (x: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.toLowerCase() : string
+>                : ^^^^^^
 >x.toLowerCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
   b: {
 >b : { produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }
+>  : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  } : { produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }
+>                                                                          : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     produce: (n) => ({ v: n }),
 >produce : (n: string) => { v: string; }
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
 >{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: { v: string; }) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >x.v.toLowerCase() : string
+>                  : ^^^^^^
 >x.v.toLowerCase : () => string
+>                : ^^^^^^      
 >x.v : string
+>    : ^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
 });
 
 const res2 = f({
 >res2 : { a: string; b: { v: string; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f({  a: {    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  b: {    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },}) : { a: string; b: { v: string; }; }
+>                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(arg: { [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>  : ^ ^^   ^^                                                                                  ^^^^^ 
 >{  a: {    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  b: {    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },} : { a: { produce: () => string; consume: (x: string) => string; }; b: { produce: () => { v: string; }; consume: (x: { v: string; }) => string; }; }
+>                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a: {
 >a : { produce: () => string; consume: (x: string) => string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce: () => string; consume: (x: string) => string; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     produce: function () {
 >produce : () => string
+>        : ^^^^^^^^^^^^
 >function () {      return "hello";    } : () => string
+>                                        : ^^^^^^^^^^^^
 
       return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.toLowerCase(),
 >consume : (x: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.toLowerCase() : string
+>                : ^^^^^^
 >x.toLowerCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
   b: {
 >b : { produce: () => { v: string; }; consume: (x: { v: string; }) => string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce: () => { v: string; }; consume: (x: { v: string; }) => string; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     produce: function () {
 >produce : () => { v: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^
 >function () {      return { v: "hello" };    } : () => { v: string; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^
 
       return { v: "hello" };
 >{ v: "hello" } : { v: string; }
+>               : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: { v: string; }) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >x.v.toLowerCase() : string
+>                  : ^^^^^^
 >x.v.toLowerCase : () => string
+>                : ^^^^^^      
 >x.v : string
+>    : ^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
 });
 
 const res3 = f({
 >res3 : { a: string; b: { v: string; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f({  a: {    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  b: {    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },}) : { a: string; b: { v: string; }; }
+>                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(arg: { [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>  : ^ ^^   ^^                                                                                  ^^^^^ 
 >{  a: {    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  b: {    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },} : { a: { produce(): string; consume: (x: string) => string; }; b: { produce(): { v: string; }; consume: (x: { v: string; }) => string; }; }
+>                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a: {
 >a : { produce(): string; consume: (x: string) => string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce(): string; consume: (x: string) => string; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => string
+>        : ^^^^^^^^^^^^
 
       return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.toLowerCase(),
 >consume : (x: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.toLowerCase() : string
+>                : ^^^^^^
 >x.toLowerCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
   b: {
 >b : { produce(): { v: string; }; consume: (x: { v: string; }) => string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce(): { v: string; }; consume: (x: { v: string; }) => string; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => { v: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^
 
       return { v: "hello" };
 >{ v: "hello" } : { v: string; }
+>               : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: { v: string; }) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >x.v.toLowerCase() : string
+>                  : ^^^^^^
 >x.v.toLowerCase : () => string
+>                : ^^^^^^      
 >x.v : string
+>    : ^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
 });
 
 declare function f2<T extends unknown[]>(
 >f2 : <T extends unknown[]>(arg: [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]) => T
+>   : ^ ^^^^^^^^^         ^^   ^^                                                                                       ^^^^^ 
 
   arg: [
 >arg : [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^                 ^^^^^^^
 
     ...{
       [K in keyof T]: {
         produce: (n: string) => T[K];
 >produce : (n: string) => T[K]
+>        : ^ ^^      ^^^^^    
 >n : string
+>  : ^^^^^^
 
         consume: (x: T[K]) => void;
 >consume : (x: T[K]) => void
+>        : ^ ^^    ^^^^^    
 >x : T[K]
+>  : ^^^^
 
       };
     }
@@ -208,175 +320,273 @@ declare function f2<T extends unknown[]>(
 
 const res4 = f2([
 >res4 : [string, { v: string; }]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2([  {    produce: (n) => n,    consume: (x) => x.toLowerCase(),  },  {    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  },]) : [string, { v: string; }]
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(arg: [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]) => T
+>   : ^ ^^^^^^^^^         ^^   ^^                                                                                       ^^^^^ 
 >[  {    produce: (n) => n,    consume: (x) => x.toLowerCase(),  },  {    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  },] : [{ produce: (n: string) => string; consume: (x: unknown) => any; }, { produce: (n: string) => { v: string; }; consume: (x: unknown) => any; }]
+>                                                                                                                                                : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
   {
 >{    produce: (n) => n,    consume: (x) => x.toLowerCase(),  } : { produce: (n: string) => string; consume: (x: unknown) => any; }
+>                                                               : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     produce: (n) => n,
 >produce : (n: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     consume: (x) => x.toLowerCase(),
 >consume : (x: unknown) => any
+>        : ^ ^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: unknown) => any
+>                       : ^ ^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x.toLowerCase() : any
+>                : ^^^
 >x.toLowerCase : any
+>              : ^^^
 >x : unknown
+>  : ^^^^^^^
 >toLowerCase : any
+>            : ^^^
 
   },
   {
 >{    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  } : { produce: (n: string) => { v: string; }; consume: (x: unknown) => any; }
+>                                                                          : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     produce: (n) => ({ v: n }),
 >produce : (n: string) => { v: string; }
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
 >{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: unknown) => any
+>        : ^ ^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: unknown) => any
+>                         : ^ ^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x.v.toLowerCase() : any
+>                  : ^^^
 >x.v.toLowerCase : any
+>                : ^^^
 >x.v : any
+>    : ^^^
 >x : unknown
+>  : ^^^^^^^
 >v : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
 
   },
 ]);
 
 const res5 = f2([
 >res5 : [string, { v: string; }]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2([  {    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },]) : [string, { v: string; }]
+>                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(arg: [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]) => T
+>   : ^ ^^^^^^^^^         ^^   ^^                                                                                       ^^^^^ 
 >[  {    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },] : [{ produce: () => string; consume: (x: unknown) => any; }, { produce: () => { v: string; }; consume: (x: unknown) => any; }]
+>                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
   {
 >{    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce: () => string; consume: (x: unknown) => any; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     produce: function () {
 >produce : () => string
+>        : ^^^^^^^^^^^^
 >function () {      return "hello";    } : () => string
+>                                        : ^^^^^^^^^^^^
 
       return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.toLowerCase(),
 >consume : (x: unknown) => any
+>        : ^ ^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: unknown) => any
+>                       : ^ ^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x.toLowerCase() : any
+>                : ^^^
 >x.toLowerCase : any
+>              : ^^^
 >x : unknown
+>  : ^^^^^^^
 >toLowerCase : any
+>            : ^^^
 
   },
   {
 >{    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce: () => { v: string; }; consume: (x: unknown) => any; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     produce: function () {
 >produce : () => { v: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^
 >function () {      return { v: "hello" };    } : () => { v: string; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^
 
       return { v: "hello" };
 >{ v: "hello" } : { v: string; }
+>               : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: unknown) => any
+>        : ^ ^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: unknown) => any
+>                         : ^ ^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x.v.toLowerCase() : any
+>                  : ^^^
 >x.v.toLowerCase : any
+>                : ^^^
 >x.v : any
+>    : ^^^
 >x : unknown
+>  : ^^^^^^^
 >v : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
 
   },
 ]);
 
 const res6 = f2([
 >res6 : [string, { v: string; }]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2([  {    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },]) : [string, { v: string; }]
+>                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(arg: [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]) => T
+>   : ^ ^^^^^^^^^         ^^   ^^                                                                                       ^^^^^ 
 >[  {    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },] : [{ produce(): string; consume: (x: unknown) => any; }, { produce(): { v: string; }; consume: (x: unknown) => any; }]
+>                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
   {
 >{    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce(): string; consume: (x: unknown) => any; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => string
+>        : ^^^^^^^^^^^^
 
       return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.toLowerCase(),
 >consume : (x: unknown) => any
+>        : ^ ^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: unknown) => any
+>                       : ^ ^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x.toLowerCase() : any
+>                : ^^^
 >x.toLowerCase : any
+>              : ^^^
 >x : unknown
+>  : ^^^^^^^
 >toLowerCase : any
+>            : ^^^
 
   },
   {
 >{    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce(): { v: string; }; consume: (x: unknown) => any; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => { v: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^
 
       return { v: "hello" };
 >{ v: "hello" } : { v: string; }
+>               : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     },
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: unknown) => any
+>        : ^ ^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: unknown) => any
+>                         : ^ ^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x.v.toLowerCase() : any
+>                  : ^^^
 >x.v.toLowerCase : any
+>                : ^^^
 >x.v : any
+>    : ^^^
 >x : unknown
+>  : ^^^^^^^
 >v : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
 
   },
 ]);
 
 declare function f3<T>(
 >f3 : <T>(arg: { [K in keyof T]: { other: number; produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>   : ^ ^^   ^^                                                                                                 ^^^^^ 
 
   arg: {
 >arg : { [K in keyof T]: { other: number; produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^                   ^^^^^^^^^^^                 ^^^^^^
 
     [K in keyof T]: {
       other: number,
 >other : number
+>      : ^^^^^^
 
       produce: (n: string) => T[K];
 >produce : (n: string) => T[K]
+>        : ^ ^^      ^^^^^    
 >n : string
+>  : ^^^^^^
 
       consume: (x: T[K]) => void;
 >consume : (x: T[K]) => void
+>        : ^ ^^    ^^^^^    
 >x : T[K]
+>  : ^^^^
 
     };
   }
@@ -384,128 +594,767 @@ declare function f3<T>(
 
 const res7 = f3({
 >res7 : { a: string; b: { v: string; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3({  a: {    other: 42,    produce: (n) => n,    consume: (x) => x.toLowerCase(),  },  b: {    other: 100,    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  },}) : { a: string; b: { v: string; }; }
+>                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3 : <T>(arg: { [K in keyof T]: { other: number; produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>   : ^ ^^   ^^                                                                                                 ^^^^^ 
 >{  a: {    other: 42,    produce: (n) => n,    consume: (x) => x.toLowerCase(),  },  b: {    other: 100,    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  },} : { a: { other: number; produce: (n: string) => string; consume: (x: string) => string; }; b: { other: number; produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }; }
+>                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a: {
 >a : { other: number; produce: (n: string) => string; consume: (x: string) => string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{    other: 42,    produce: (n) => n,    consume: (x) => x.toLowerCase(),  } : { other: number; produce: (n: string) => string; consume: (x: string) => string; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     other: 42,
 >other : number
+>      : ^^^^^^
 >42 : 42
+>   : ^^
 
     produce: (n) => n,
 >produce : (n: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     consume: (x) => x.toLowerCase(),
 >consume : (x: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.toLowerCase() : string
+>                : ^^^^^^
 >x.toLowerCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
   b: {
 >b : { other: number; produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    other: 100,    produce: (n) => ({ v: n }),    consume: (x) => x.v.toLowerCase(),  } : { other: number; produce: (n: string) => { v: string; }; consume: (x: { v: string; }) => string; }
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     other: 100,
 >other : number
+>      : ^^^^^^
 >100 : 100
+>    : ^^^
 
     produce: (n) => ({ v: n }),
 >produce : (n: string) => { v: string; }
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
 >{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     consume: (x) => x.v.toLowerCase(),
 >consume : (x: { v: string; }) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >x.v.toLowerCase() : string
+>                  : ^^^^^^
 >x.v.toLowerCase : () => string
+>                : ^^^^^^      
 >x.v : string
+>    : ^^^^^^
 >x : { v: string; }
+>  : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   },
 });
 
 declare function f4<T>(
 >f4 : <T>(arg: { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }) => T
+>   : ^ ^^   ^^                                                             ^^^^^ 
 
   arg: {
 >arg : { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^ ^^    ^^^^^    ^^^^
 
     [K in keyof T]: [
       (n: string) => T[K],
 >n : string
+>  : ^^^^^^
 
       (x: T[K]) => void
 >x : T[K]
+>  : ^^^^
 
     ];
   }
 ): T;
 
 const res8 = f4({
->res8 : { a: string; b: { v: string; }; }
->f4({  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],}) : { a: string; b: { v: string; }; }
+>res8 : { a: string; b: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4({  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],}) : { a: string; b: string; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f4 : <T>(arg: { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }) => T
->{  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],} : { a: [(n: string) => string, (x: string) => string]; b: [(n: string) => { v: string; }, (x: { v: string; }) => string]; }
+>   : ^ ^^   ^^                                                             ^^^^^ 
+>{  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],} : { a: [(n: string) => string, (x: string) => string]; b: [(n: string) => { v: string; }, (x: string) => any]; }
+>                                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
   a: [
 >a : [(n: string) => string, (x: string) => string]
+>  : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >[    (n) => n,    (x) => x.toLowerCase(),  ] : [(n: string) => string, (x: string) => string]
+>                                             : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     (n) => n,
 >(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     (x) => x.toLowerCase(),
 >(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.toLowerCase() : string
+>                : ^^^^^^
 >x.toLowerCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   ],
   b: [
->b : [(n: string) => { v: string; }, (x: { v: string; }) => string]
->[    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ] : [(n: string) => { v: string; }, (x: { v: string; }) => string]
+>b : [(n: string) => { v: string; }, (x: string) => any]
+>  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>[    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ] : [(n: string) => { v: string; }, (x: string) => any]
+>                                                        : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
     (n) => ({ v: n }),
 >(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
 >{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
     (x) => x.v.toLowerCase(),
->(x) => x.v.toLowerCase() : (x: { v: string; }) => string
->x : { v: string; }
->x.v.toLowerCase() : string
->x.v.toLowerCase : () => string
->x.v : string
->x : { v: string; }
->v : string
->toLowerCase : () => string
+>(x) => x.v.toLowerCase() : (x: string) => any
+>                         : ^ ^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.v.toLowerCase() : any
+>                  : ^^^
+>x.v.toLowerCase : any
+>                : ^^^
+>x.v : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>v : any
+>  : ^^^
+>toLowerCase : any
+>            : ^^^
 
   ],
+});
+
+declare function f5<T1, T2>(
+>f5 : <T1, T2>(arg: { [K in keyof T1]: { produce1: (n: string) => T1[K]; consume1: (x: T1[K]) => void; }; } & { [K in keyof T2]: { produce2: (n: string) => T2[K]; consume2: (x: T2[K]) => void; }; }) => [T1, T2]
+>   : ^  ^^  ^^   ^^                                                                                                                                                                                 ^^^^^        
+
+  arg: {
+>arg : { [K in keyof T1]: { produce1: (n: string) => T1[K]; consume1: (x: T1[K]) => void; }; } & { [K_1 in keyof T2]: { produce2: (n: string) => T2[K_1]; consume2: (x: T2[K_1]) => void; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^                    ^^^^^^
+
+    [K in keyof T1]: {
+      produce1: (n: string) => T1[K];
+>produce1 : (n: string) => T1[K]
+>         : ^ ^^      ^^^^^     
+>n : string
+>  : ^^^^^^
+
+      consume1: (x: T1[K]) => void;
+>consume1 : (x: T1[K]) => void
+>         : ^ ^^     ^^^^^    
+>x : T1[K]
+>  : ^^^^^
+
+    };
+  } & {
+    [K in keyof T2]: {
+      produce2: (n: string) => T2[K];
+>produce2 : (n: string) => T2[K]
+>         : ^ ^^      ^^^^^     
+>n : string
+>  : ^^^^^^
+
+      consume2: (x: T2[K]) => void;
+>consume2 : (x: T2[K]) => void
+>         : ^ ^^     ^^^^^    
+>x : T2[K]
+>  : ^^^^^
+
+    };
+  },
+): [T1, T2];
+
+const res9 = f5({
+>res9 : [{ a: string; b: { v: string; }; }, { a: string[]; b: { v: string[]; }; }]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5({  a: {    produce1: (n) => n,    consume1: (x) => x.toLowerCase(),    produce2: (n) => [n],    consume2: (x) => x[0].toLowerCase(),  },  b: {    produce1: (n) => ({ v: n }),    consume1: (x) => x.v.toLowerCase(),    produce2: (n) => ({ v: [n] }),    consume2: (x) => x.v[0].toLowerCase(),  },}) : [{ a: string; b: { v: string; }; }, { a: string[]; b: { v: string[]; }; }]
+>                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5 : <T1, T2>(arg: { [K in keyof T1]: { produce1: (n: string) => T1[K]; consume1: (x: T1[K]) => void; }; } & { [K in keyof T2]: { produce2: (n: string) => T2[K]; consume2: (x: T2[K]) => void; }; }) => [T1, T2]
+>   : ^  ^^  ^^   ^^                                                                                                                                                                                 ^^^^^        
+>{  a: {    produce1: (n) => n,    consume1: (x) => x.toLowerCase(),    produce2: (n) => [n],    consume2: (x) => x[0].toLowerCase(),  },  b: {    produce1: (n) => ({ v: n }),    consume1: (x) => x.v.toLowerCase(),    produce2: (n) => ({ v: [n] }),    consume2: (x) => x.v[0].toLowerCase(),  },} : { a: { produce1: (n: string) => string; consume1: (x: string) => string; produce2: (n: string) => string[]; consume2: (x: string[]) => string; }; b: { produce1: (n: string) => { v: string; }; consume1: (x: { v: string; }) => string; produce2: (n: string) => { v: string[]; }; consume2: (x: { v: string[]; }) => string; }; }
+>                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: {
+>a : { produce1: (n: string) => string; consume1: (x: string) => string; produce2: (n: string) => string[]; consume2: (x: string[]) => string; }
+>  : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    produce1: (n) => n,    consume1: (x) => x.toLowerCase(),    produce2: (n) => [n],    consume2: (x) => x[0].toLowerCase(),  } : { produce1: (n: string) => string; consume1: (x: string) => string; produce2: (n: string) => string[]; consume2: (x: string[]) => string; }
+>                                                                                                                                  : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    produce1: (n) => n,
+>produce1 : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
+>(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+
+    consume1: (x) => x.toLowerCase(),
+>consume1 : (x: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
+>(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.toLowerCase() : string
+>                : ^^^^^^
+>x.toLowerCase : () => string
+>              : ^^^^^^      
+>x : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+    produce2: (n) => [n],
+>produce2 : (n: string) => string[]
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^
+>(n) => [n] : (n: string) => string[]
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>[n] : string[]
+>    : ^^^^^^^^
+>n : string
+>  : ^^^^^^
+
+    consume2: (x) => x[0].toLowerCase(),
+>consume2 : (x: string[]) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^
+>(x) => x[0].toLowerCase() : (x: string[]) => string
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^
+>x : string[]
+>  : ^^^^^^^^
+>x[0].toLowerCase() : string
+>                   : ^^^^^^
+>x[0].toLowerCase : () => string
+>                 : ^^^^^^      
+>x[0] : string
+>     : ^^^^^^
+>x : string[]
+>  : ^^^^^^^^
+>0 : 0
+>  : ^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+  },
+  b: {
+>b : { produce1: (n: string) => { v: string; }; consume1: (x: { v: string; }) => string; produce2: (n: string) => { v: string[]; }; consume2: (x: { v: string[]; }) => string; }
+>  : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    produce1: (n) => ({ v: n }),    consume1: (x) => x.v.toLowerCase(),    produce2: (n) => ({ v: [n] }),    consume2: (x) => x.v[0].toLowerCase(),  } : { produce1: (n: string) => { v: string; }; consume1: (x: { v: string; }) => string; produce2: (n: string) => { v: string[]; }; consume2: (x: { v: string[]; }) => string; }
+>                                                                                                                                                        : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    produce1: (n) => ({ v: n }),
+>produce1 : (n: string) => { v: string; }
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
+>{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+
+    consume1: (x) => x.v.toLowerCase(),
+>consume1 : (x: { v: string; }) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>x.v.toLowerCase() : string
+>                  : ^^^^^^
+>x.v.toLowerCase : () => string
+>                : ^^^^^^      
+>x.v : string
+>    : ^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+    produce2: (n) => ({ v: [n] }),
+>produce2 : (n: string) => { v: string[]; }
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(n) => ({ v: [n] }) : (n: string) => { v: string[]; }
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>({ v: [n] }) : { v: string[]; }
+>             : ^^^^^^^^^^^^^^^^
+>{ v: [n] } : { v: string[]; }
+>           : ^^^^^^^^^^^^^^^^
+>v : string[]
+>  : ^^^^^^^^
+>[n] : string[]
+>    : ^^^^^^^^
+>n : string
+>  : ^^^^^^
+
+    consume2: (x) => x.v[0].toLowerCase(),
+>consume2 : (x: { v: string[]; }) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => x.v[0].toLowerCase() : (x: { v: string[]; }) => string
+>                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { v: string[]; }
+>  : ^^^^^^^^^^^^^^^^
+>x.v[0].toLowerCase() : string
+>                     : ^^^^^^
+>x.v[0].toLowerCase : () => string
+>                   : ^^^^^^      
+>x.v[0] : string
+>       : ^^^^^^
+>x.v : string[]
+>    : ^^^^^^^^
+>x : { v: string[]; }
+>  : ^^^^^^^^^^^^^^^^
+>v : string[]
+>  : ^^^^^^^^
+>0 : 0
+>  : ^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+  },
+});
+
+declare function f6<T>(arg: {
+>f6 : <T>(arg: { [K in keyof T]: () => { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>   : ^ ^^   ^^                                                                                        ^^^^^ 
+>arg : { [K in keyof T]: () => { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^                                                             ^^^
+
+  [K in keyof T]: () => {
+    produce: (n: string) => T[K];
+>produce : (n: string) => T[K]
+>        : ^ ^^      ^^^^^    
+>n : string
+>  : ^^^^^^
+
+    consume: (x: T[K]) => void;
+>consume : (x: T[K]) => void
+>        : ^ ^^    ^^^^^    
+>x : T[K]
+>  : ^^^^
+
+  };
+}): T;
+
+const res10 = f6({
+>res10 : { a: string; b: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f6({  a() {    return {      produce: (n) => n,      consume: (x) => x.toLowerCase(),    };  },  b() {    return {      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    };  },}) : { a: string; b: string; }
+>                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f6 : <T>(arg: { [K in keyof T]: () => { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }) => T
+>   : ^ ^^   ^^                                                                                        ^^^^^ 
+>{  a() {    return {      produce: (n) => n,      consume: (x) => x.toLowerCase(),    };  },  b() {    return {      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    };  },} : { a(): { produce: (n: string) => string; consume: (x: string) => string; }; b(): { produce: (n: string) => { v: string; }; consume: (x: string) => any; }; }
+>                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+  a() {
+>a : () => { produce: (n: string) => string; consume: (x: string) => string; }
+>  : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+    return {
+>{      produce: (n) => n,      consume: (x) => x.toLowerCase(),    } : { produce: (n: string) => string; consume: (x: string) => string; }
+>                                                                     : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+      produce: (n) => n,
+>produce : (n: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+
+      consume: (x) => x.toLowerCase(),
+>consume : (x: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.toLowerCase() : string
+>                : ^^^^^^
+>x.toLowerCase : () => string
+>              : ^^^^^^      
+>x : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+    };
+  },
+  b() {
+>b : () => { produce: (n: string) => { v: string; }; consume: (x: string) => any; }
+>  : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+
+    return {
+>{      produce: (n) => ({ v: n }),      consume: (x) => x.v.toLowerCase(),    } : { produce: (n: string) => { v: string; }; consume: (x: string) => any; }
+>                                                                                : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+
+      produce: (n) => ({ v: n }),
+>produce : (n: string) => { v: string; }
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
+>{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+
+      consume: (x) => x.v.toLowerCase(),
+>consume : (x: string) => any
+>        : ^ ^^^^^^^^^^^^^^^^
+>(x) => x.v.toLowerCase() : (x: string) => any
+>                         : ^ ^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.v.toLowerCase() : any
+>                  : ^^^
+>x.v.toLowerCase : any
+>                : ^^^
+>x.v : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>v : any
+>  : ^^^
+>toLowerCase : any
+>            : ^^^
+
+    };
+  },
+});
+
+declare function f7<T>(arg: {
+>f7 : <T>(arg: { [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void]; }) => T
+>   : ^ ^^   ^^                                                                   ^^^^^ 
+>arg : { [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^                                        ^^^
+
+  [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
+>n : string
+>  : ^^^^^^
+>x : T[K]
+>  : ^^^^
+
+}): T;
+
+const res11 = f7({
+>res11 : { a: string; b: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f7({  a() {    return [(n) => n, (x) => x.toLowerCase()];  },  b() {    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];  },}) : { a: string; b: string; }
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f7 : <T>(arg: { [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void]; }) => T
+>   : ^ ^^   ^^                                                                   ^^^^^ 
+>{  a() {    return [(n) => n, (x) => x.toLowerCase()];  },  b() {    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];  },} : { a(): [(n: string) => string, (x: string) => string]; b(): [(n: string) => { v: string; }, (x: string) => any]; }
+>                                                                                                                                : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  a() {
+>a : () => [(n: string) => string, (x: string) => string]
+>  : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+    return [(n) => n, (x) => x.toLowerCase()];
+>[(n) => n, (x) => x.toLowerCase()] : [(n: string) => string, (x: string) => string]
+>                                   : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>(n) => n : (n: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+>(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.toLowerCase() : string
+>                : ^^^^^^
+>x.toLowerCase : () => string
+>              : ^^^^^^      
+>x : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+  },
+  b() {
+>b : () => [(n: string) => { v: string; }, (x: string) => any]
+>  : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];
+>[(n) => ({ v: n }), (x) => x.v.toLowerCase()] : [(n: string) => { v: string; }, (x: string) => any]
+>                                              : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>(n) => ({ v: n }) : (n: string) => { v: string; }
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>({ v: n }) : { v: string; }
+>           : ^^^^^^^^^^^^^^
+>{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+>(x) => x.v.toLowerCase() : (x: string) => any
+>                         : ^ ^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.v.toLowerCase() : any
+>                  : ^^^
+>x.v.toLowerCase : any
+>                : ^^^
+>x.v : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>v : any
+>  : ^^^
+>toLowerCase : any
+>            : ^^^
+
+  },
+});
+
+declare function f8<T1, T2>(
+>f8 : <T1, T2>(arg: { [K in keyof T1]: { produce: (n: string) => [T1[K], any]; consume: (x: T1[K]) => void; }; } & { a: { produce: (n: string) => [any, T2]; consume2: (x: T2) => void; }; }) => [T1, T2]
+>   : ^  ^^  ^^   ^^                                                                                                                                                                        ^^^^^        
+
+  arg: {
+>arg : { [K in keyof T1]: { produce: (n: string) => [T1[K], any]; consume: (x: T1[K]) => void; }; } & { a: { produce: (n: string) => [any, T2]; consume2: (x: T2) => void; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^                  ^^^^^^^^^^^^^^                                                                 ^^^
+
+    [K in keyof T1]: {
+      produce: (n: string) => [T1[K], any];
+>produce : (n: string) => [T1[K], any]
+>        : ^ ^^      ^^^^^            
+>n : string
+>  : ^^^^^^
+
+      consume: (x: T1[K]) => void;
+>consume : (x: T1[K]) => void
+>        : ^ ^^     ^^^^^    
+>x : T1[K]
+>  : ^^^^^
+
+    };
+  } & {
+    a: {
+>a : { produce: (n: string) => [any, T2]; consume2: (x: T2) => void; }
+>  : ^^^^^^^^^^^                        ^^^^^^^^^^^^               ^^^
+
+      produce: (n: string) => [any, T2];
+>produce : (n: string) => [any, T2]
+>        : ^ ^^      ^^^^^         
+>n : string
+>  : ^^^^^^
+
+      consume2: (x: T2) => void;
+>consume2 : (x: T2) => void
+>         : ^ ^^  ^^^^^    
+>x : T2
+>  : ^^
+
+    };
+  },
+): [T1, T2];
+
+const res12 = f8({
+>res12 : [{ a: string; b: { v: string; }; }, string[]]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f8({  a: {    produce: (n) => [n, [n]],    consume2: (x) => x[0].toLowerCase(),    consume: (x) => x.toLowerCase(),  },  b: {    produce: (n) => [{ v: n }, null],    consume: (x) => x.v.toLowerCase(),  },}) : [{ a: string; b: { v: string; }; }, string[]]
+>                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f8 : <T1, T2>(arg: { [K in keyof T1]: { produce: (n: string) => [T1[K], any]; consume: (x: T1[K]) => void; }; } & { a: { produce: (n: string) => [any, T2]; consume2: (x: T2) => void; }; }) => [T1, T2]
+>   : ^  ^^  ^^   ^^                                                                                                                                                                        ^^^^^        
+>{  a: {    produce: (n) => [n, [n]],    consume2: (x) => x[0].toLowerCase(),    consume: (x) => x.toLowerCase(),  },  b: {    produce: (n) => [{ v: n }, null],    consume: (x) => x.v.toLowerCase(),  },} : { a: { produce: (n: string) => [string, string[]]; consume2: (x: string[]) => string; consume: (x: string) => string; }; b: { produce: (n: string) => [{ v: string; }, null]; consume: (x: { v: string; }) => string; }; }
+>                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: {
+>a : { produce: (n: string) => [string, string[]]; consume2: (x: string[]) => string; consume: (x: string) => string; }
+>  : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{    produce: (n) => [n, [n]],    consume2: (x) => x[0].toLowerCase(),    consume: (x) => x.toLowerCase(),  } : { produce: (n: string) => [string, string[]]; consume2: (x: string[]) => string; consume: (x: string) => string; }
+>                                                                                                              : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+    produce: (n) => [n, [n]],
+>produce : (n: string) => [string, string[]]
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(n) => [n, [n]] : (n: string) => [string, string[]]
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>[n, [n]] : [string, string[]]
+>         : ^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>[n] : string[]
+>    : ^^^^^^^^
+>n : string
+>  : ^^^^^^
+
+    consume2: (x) => x[0].toLowerCase(),
+>consume2 : (x: string[]) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^
+>(x) => x[0].toLowerCase() : (x: string[]) => string
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^
+>x : string[]
+>  : ^^^^^^^^
+>x[0].toLowerCase() : string
+>                   : ^^^^^^
+>x[0].toLowerCase : () => string
+>                 : ^^^^^^      
+>x[0] : string
+>     : ^^^^^^
+>x : string[]
+>  : ^^^^^^^^
+>0 : 0
+>  : ^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+    consume: (x) => x.toLowerCase(),
+>consume : (x: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>(x) => x.toLowerCase() : (x: string) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.toLowerCase() : string
+>                : ^^^^^^
+>x.toLowerCase : () => string
+>              : ^^^^^^      
+>x : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+  },
+  b: {
+>b : { produce: (n: string) => [{ v: string; }, null]; consume: (x: { v: string; }) => string; }
+>  : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    produce: (n) => [{ v: n }, null],    consume: (x) => x.v.toLowerCase(),  } : { produce: (n: string) => [{ v: string; }, null]; consume: (x: { v: string; }) => string; }
+>                                                                                : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    produce: (n) => [{ v: n }, null],
+>produce : (n: string) => [{ v: string; }, null]
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(n) => [{ v: n }, null] : (n: string) => [{ v: string; }, null]
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : string
+>  : ^^^^^^
+>[{ v: n }, null] : [{ v: string; }, null]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>{ v: n } : { v: string; }
+>         : ^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>n : string
+>  : ^^^^^^
+
+    consume: (x) => x.v.toLowerCase(),
+>consume : (x: { v: string; }) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>x.v.toLowerCase() : string
+>                  : ^^^^^^
+>x.v.toLowerCase : () => string
+>                : ^^^^^^      
+>x.v : string
+>    : ^^^^^^
+>x : { v: string; }
+>  : ^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+
+  },
 });
 

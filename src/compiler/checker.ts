@@ -26209,6 +26209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // we infer from any intra-expression inference sites we have collected.
                     if (context.intraExpressionInferenceSites) {
                         inferFromIntraExpressionSites(context.inferences, context.intraExpressionInferenceSites);
+                        context.intraExpressionInferenceSites = undefined;
                     }
                     clearCachedInferences(context.inferences);
                     inference.isFixed = true;
@@ -26236,7 +26237,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function addIntraExpressionInferenceSite(context: InferenceContext, node: Expression | MethodDeclaration, type: Type) {
-        (context.intraExpressionInferenceSites ??= []).push({ node, type });
+        const site = { node, type };
+        (context.intraExpressionInferenceSites ??= []).push(site);
+        if (context.reverseMappedIntraExpressionInferenceSites) {
+            for (const reverseMappedSites of context.reverseMappedIntraExpressionInferenceSites) {
+                reverseMappedSites.push(site);
+            }
+        }
+    }
+
+    function pushReverseMappedTypeIntraExpressionInferenceScope(context: InferenceContext, node: Node) {
+        (context.reverseMappedIntraExpressionInferenceScopeNodes ??= []).push(node);
+        (context.reverseMappedIntraExpressionInferenceSites ??= []).push([]);
+    }
+
+    function popReverseMappedTypeIntraExpressionInferenceScope(context: InferenceContext) {
+        context.reverseMappedIntraExpressionInferenceScopeNodes!.pop();
+        context.reverseMappedIntraExpressionInferenceSites!.pop();
+    }
+
+    function findReverseMappedTypeIntraExpressionInferenceScope(context: InferenceContext | undefined, node: Node) {
+        if (context?.reverseMappedIntraExpressionInferenceScopeNodes) {
+            for (let i = context.reverseMappedIntraExpressionInferenceScopeNodes.length - 1; i >= 0; i--) {
+                if (context.reverseMappedIntraExpressionInferenceScopeNodes[i] === node) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     // We collect intra-expression inference sites within object and array literals to handle cases where
@@ -26427,17 +26455,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        if (sourceValueDeclaration && getObjectFlags(sourceType) & (ObjectFlags.FreshLiteral | ObjectFlags.ArrayLiteral)) {
-            const initializerDeclaration = sourceValueDeclaration.kind === SyntaxKind.PropertyAssignment ?
-                (sourceValueDeclaration as PropertyAssignment).initializer :
-                sourceValueDeclaration;
-            const intraExpressionInferenceSites = getInferenceContext(initializerDeclaration)?.intraExpressionInferenceSites?.filter(site => isNodeDescendantOf(site.node, initializerDeclaration));
-            if (intraExpressionInferenceSites?.length) {
-                const templateType = (getApparentTypeOfContextualType(initializerDeclaration.parent.parent as Expression, ContextFlags.NoConstraints) as MappedType).templateType;
-                if (templateType) {
-                    Debug.assertNode(initializerDeclaration, isExpressionNode);
-                    pushContextualType(initializerDeclaration as any as Expression, templateType, /*isCache*/ false);
-                    inferFromIntraExpressionSites([inference], intraExpressionInferenceSites);
+        if (sourceValueDeclaration && getObjectFlags(sourceType) & ObjectFlags.NonInferrableType) {
+            const scopeNode = sourceValueDeclaration.parent;
+            const inferenceContext = getInferenceContext(scopeNode);
+            const index = findReverseMappedTypeIntraExpressionInferenceScope(inferenceContext, scopeNode);
+            if (index !== -1) {
+                Debug.assert(inferenceContext);
+                const intraExpressionSites = inferenceContext.reverseMappedIntraExpressionInferenceSites![index];
+                const recordSymbol = getGlobalRecordSymbol();
+                if (intraExpressionSites.length && recordSymbol) {
+                    pushContextualType(scopeNode as Expression, getTypeAliasInstantiation(recordSymbol, [stringNumberSymbolType, templateType]), /*isCache*/ false);
+                    inferFromIntraExpressionSites([inference], intraExpressionSites);
                     popContextualType();
                 }
             }
@@ -26448,6 +26476,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType, sourceValueDeclaration: Declaration | undefined): Type | undefined {
         const cacheKey = source.id + "," + target.id + "," + constraint.id;
         if (reverseMappedCache.has(cacheKey)) {
+            // TODO: fix a missing cacheKey component
             return reverseMappedCache.get(cacheKey) || unknownType;
         }
         reverseMappedSourceStack.push(source);
@@ -27137,9 +27166,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
-            if ((constraintType.flags & TypeFlags.Union) || (constraintType.flags & TypeFlags.Intersection)) {
+            if (constraintType.flags & TypeFlags.UnionOrIntersection) {
                 let result = false;
-                for (const type of (constraintType as (UnionType | IntersectionType)).types) {
+                for (const type of (constraintType as (UnionOrIntersectionType)).types) {
                     result = inferToMappedType(source, target, type) || result;
                 }
                 return result;
@@ -33453,6 +33482,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
+        const intraExpressionInferenceContext = contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) ? getInferenceContext(node) : undefined;
+
         let offset = 0;
         for (const memberDecl of node.properties) {
             let member = getSymbolOfDeclaration(memberDecl);
@@ -33463,12 +33494,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                 isObjectLiteralMethod(memberDecl)
             ) {
+                const isIntraExpressionInferenceSource = intraExpressionInferenceContext && (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl);
+                if (isIntraExpressionInferenceSource) {
+                    pushReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext, node);
+                }
                 let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
                     // avoid resolving the left side of the ShorthandPropertyAssignment outside of the destructuring
                     // for error recovery purposes. For example, if a user wrote `{ a = 100 }` instead of `{ a: 100 }`.
                     // we don't want to say "could not find 'a'".
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, checkMode) :
                     checkObjectLiteralMethod(memberDecl, checkMode);
+                if (isIntraExpressionInferenceSource) {
+                    popReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext);
+                }
                 if (isInJavascript) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
                     if (jsDocType) {
@@ -33516,14 +33554,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 member = prop;
                 allPropertiesTable?.set(prop.escapedName, prop);
 
-                if (
-                    contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
-                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl)
-                ) {
-                    const inferenceContext = getInferenceContext(node);
-                    Debug.assert(inferenceContext); // In CheckMode.Inferential we should always have an inference context
+                if (isIntraExpressionInferenceSource) {
                     const inferenceNode = memberDecl.kind === SyntaxKind.PropertyAssignment ? memberDecl.initializer : memberDecl;
-                    addIntraExpressionInferenceSite(inferenceContext, inferenceNode, type);
+                    addIntraExpressionInferenceSite(intraExpressionInferenceContext, inferenceNode, type);
                 }
             }
             else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {

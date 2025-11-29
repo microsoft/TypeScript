@@ -4,9 +4,21 @@ intraExpressionInferencesReverseMappedTypes.ts(80,21): error TS18046: 'x' is of 
 intraExpressionInferencesReverseMappedTypes.ts(86,21): error TS18046: 'x' is of type 'unknown'.
 intraExpressionInferencesReverseMappedTypes.ts(95,21): error TS18046: 'x' is of type 'unknown'.
 intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(143,12): error TS2322: Type '{ v: string; }' is not assignable to type 'string'.
+intraExpressionInferencesReverseMappedTypes.ts(144,14): error TS2339: Property 'v' does not exist on type 'string'.
+intraExpressionInferencesReverseMappedTypes.ts(191,3): error TS2322: Type '() => { produce: (n: string) => { v: string; }; consume: (x: string) => any; }' is not assignable to type '() => { produce: (n: string) => string; consume: (x: string) => void; }'.
+  Call signature return types '{ produce: (n: string) => { v: string; }; consume: (x: string) => any; }' and '{ produce: (n: string) => string; consume: (x: string) => void; }' are incompatible.
+    The types returned by 'produce(...)' are incompatible between these types.
+      Type '{ v: string; }' is not assignable to type 'string'.
+intraExpressionInferencesReverseMappedTypes.ts(194,25): error TS2339: Property 'v' does not exist on type 'string'.
+intraExpressionInferencesReverseMappedTypes.ts(207,3): error TS2322: Type '() => [(n: string) => { v: string; }, (x: string) => any]' is not assignable to type '() => [(n: string) => string, (x: string) => void]'.
+  Call signature return types '[(n: string) => { v: string; }, (x: string) => any]' and '[(n: string) => string, (x: string) => void]' are incompatible.
+    Type at position 0 in source is not compatible with type at position 0 in target.
+      Type '{ v: string; }' is not assignable to type 'string'.
+intraExpressionInferencesReverseMappedTypes.ts(208,41): error TS2339: Property 'v' does not exist on type 'string'.
 
 
-==== intraExpressionInferencesReverseMappedTypes.ts (6 errors) ====
+==== intraExpressionInferencesReverseMappedTypes.ts (12 errors) ====
     // repro cases based on https://github.com/microsoft/TypeScript/issues/53018
     
     declare function f<T>(
@@ -162,7 +174,118 @@ intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of
       ],
       b: [
         (n) => ({ v: n }),
+               ~~~~~~~~~~
+!!! error TS2322: Type '{ v: string; }' is not assignable to type 'string'.
+!!! related TS6502 intraExpressionInferencesReverseMappedTypes.ts:131:7: The expected type comes from the return type of this signature.
         (x) => x.v.toLowerCase(),
+                 ~
+!!! error TS2339: Property 'v' does not exist on type 'string'.
       ],
+    });
+    
+    declare function f5<T1, T2>(
+      arg: {
+        [K in keyof T1]: {
+          produce1: (n: string) => T1[K];
+          consume1: (x: T1[K]) => void;
+        };
+      } & {
+        [K in keyof T2]: {
+          produce2: (n: string) => T2[K];
+          consume2: (x: T2[K]) => void;
+        };
+      },
+    ): [T1, T2];
+    
+    const res9 = f5({
+      a: {
+        produce1: (n) => n,
+        consume1: (x) => x.toLowerCase(),
+        produce2: (n) => [n],
+        consume2: (x) => x[0].toLowerCase(),
+      },
+      b: {
+        produce1: (n) => ({ v: n }),
+        consume1: (x) => x.v.toLowerCase(),
+        produce2: (n) => ({ v: [n] }),
+        consume2: (x) => x.v[0].toLowerCase(),
+      },
+    });
+    
+    declare function f6<T>(arg: {
+      [K in keyof T]: () => {
+        produce: (n: string) => T[K];
+        consume: (x: T[K]) => void;
+      };
+    }): T;
+    
+    const res10 = f6({
+      a() {
+        return {
+          produce: (n) => n,
+          consume: (x) => x.toLowerCase(),
+        };
+      },
+      b() {
+      ~
+!!! error TS2322: Type '() => { produce: (n: string) => { v: string; }; consume: (x: string) => any; }' is not assignable to type '() => { produce: (n: string) => string; consume: (x: string) => void; }'.
+!!! error TS2322:   Call signature return types '{ produce: (n: string) => { v: string; }; consume: (x: string) => any; }' and '{ produce: (n: string) => string; consume: (x: string) => void; }' are incompatible.
+!!! error TS2322:     The types returned by 'produce(...)' are incompatible between these types.
+!!! error TS2322:       Type '{ v: string; }' is not assignable to type 'string'.
+!!! related TS6500 intraExpressionInferencesReverseMappedTypes.ts:191:3: The expected type comes from property 'b' which is declared here on type '{ a: () => { produce: (n: string) => string; consume: (x: string) => void; }; b: () => { produce: (n: string) => string; consume: (x: string) => void; }; }'
+        return {
+          produce: (n) => ({ v: n }),
+          consume: (x) => x.v.toLowerCase(),
+                            ~
+!!! error TS2339: Property 'v' does not exist on type 'string'.
+        };
+      },
+    });
+    
+    declare function f7<T>(arg: {
+      [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
+    }): T;
+    
+    const res11 = f7({
+      a() {
+        return [(n) => n, (x) => x.toLowerCase()];
+      },
+      b() {
+      ~
+!!! error TS2322: Type '() => [(n: string) => { v: string; }, (x: string) => any]' is not assignable to type '() => [(n: string) => string, (x: string) => void]'.
+!!! error TS2322:   Call signature return types '[(n: string) => { v: string; }, (x: string) => any]' and '[(n: string) => string, (x: string) => void]' are incompatible.
+!!! error TS2322:     Type at position 0 in source is not compatible with type at position 0 in target.
+!!! error TS2322:       Type '{ v: string; }' is not assignable to type 'string'.
+!!! related TS6500 intraExpressionInferencesReverseMappedTypes.ts:207:3: The expected type comes from property 'b' which is declared here on type '{ a: () => [(n: string) => string, (x: string) => void]; b: () => [(n: string) => string, (x: string) => void]; }'
+        return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];
+                                            ~
+!!! error TS2339: Property 'v' does not exist on type 'string'.
+      },
+    });
+    
+    declare function f8<T1, T2>(
+      arg: {
+        [K in keyof T1]: {
+          produce: (n: string) => [T1[K], any];
+          consume: (x: T1[K]) => void;
+        };
+      } & {
+        a: {
+          produce: (n: string) => [any, T2];
+          consume2: (x: T2) => void;
+        };
+      },
+    ): [T1, T2];
+    
+    const res12 = f8({
+      a: {
+        produce: (n) => [n, [n]],
+        consume2: (x) => x[0].toLowerCase(),
+        consume: (x) => x.toLowerCase(),
+      },
+      b: {
+        produce: (n) => [{ v: n }, null],
+        consume: (x) => x.v.toLowerCase(),
+      },
     });
     

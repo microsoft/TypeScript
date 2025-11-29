@@ -147,3 +147,93 @@ const res8 = f4({
     (x) => x.v.toLowerCase(),
   ],
 });
+
+declare function f5<T1, T2>(
+  arg: {
+    [K in keyof T1]: {
+      produce1: (n: string) => T1[K];
+      consume1: (x: T1[K]) => void;
+    };
+  } & {
+    [K in keyof T2]: {
+      produce2: (n: string) => T2[K];
+      consume2: (x: T2[K]) => void;
+    };
+  },
+): [T1, T2];
+
+const res9 = f5({
+  a: {
+    produce1: (n) => n,
+    consume1: (x) => x.toLowerCase(),
+    produce2: (n) => [n],
+    consume2: (x) => x[0].toLowerCase(),
+  },
+  b: {
+    produce1: (n) => ({ v: n }),
+    consume1: (x) => x.v.toLowerCase(),
+    produce2: (n) => ({ v: [n] }),
+    consume2: (x) => x.v[0].toLowerCase(),
+  },
+});
+
+declare function f6<T>(arg: {
+  [K in keyof T]: () => {
+    produce: (n: string) => T[K];
+    consume: (x: T[K]) => void;
+  };
+}): T;
+
+const res10 = f6({
+  a() {
+    return {
+      produce: (n) => n,
+      consume: (x) => x.toLowerCase(),
+    };
+  },
+  b() {
+    return {
+      produce: (n) => ({ v: n }),
+      consume: (x) => x.v.toLowerCase(),
+    };
+  },
+});
+
+declare function f7<T>(arg: {
+  [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
+}): T;
+
+const res11 = f7({
+  a() {
+    return [(n) => n, (x) => x.toLowerCase()];
+  },
+  b() {
+    return [(n) => ({ v: n }), (x) => x.v.toLowerCase()];
+  },
+});
+
+declare function f8<T1, T2>(
+  arg: {
+    [K in keyof T1]: {
+      produce: (n: string) => [T1[K], any];
+      consume: (x: T1[K]) => void;
+    };
+  } & {
+    a: {
+      produce: (n: string) => [any, T2];
+      consume2: (x: T2) => void;
+    };
+  },
+): [T1, T2];
+
+const res12 = f8({
+  a: {
+    produce: (n) => [n, [n]],
+    consume2: (x) => x[0].toLowerCase(),
+    consume: (x) => x.toLowerCase(),
+  },
+  b: {
+    produce: (n) => [{ v: n }, null],
+    consume: (x) => x.v.toLowerCase(),
+  },
+});
