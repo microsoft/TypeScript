@@ -199,11 +199,63 @@ const res10 = f6({
   },
 });
 
+const res11 = f6({
+  a: () => {
+    return {
+      produce: (n) => n,
+      consume: (x) => x.toLowerCase(),
+    };
+  },
+  b: () => {
+    return {
+      produce: (n) => ({ v: n }),
+      consume: (x) => x.v.toLowerCase(),
+    };
+  },
+});
+
 declare function f7<T>(arg: {
+  [K in keyof T]: (arg: boolean) => {
+    produce: (n: string) => T[K];
+    consume: (x: T[K]) => void;
+  };
+}): T;
+
+const res12 = f7({
+  a(arg) {
+    return {
+      produce: (n) => n,
+      consume: (x) => x.toLowerCase(),
+    };
+  },
+  b(arg) {
+    return {
+      produce: (n) => ({ v: n }),
+      consume: (x) => x.v.toLowerCase(),
+    };
+  },
+});
+
+const res13 = f7({
+  a: (arg) => {
+    return {
+      produce: (n) => n,
+      consume: (x) => x.toLowerCase(),
+    };
+  },
+  b: (arg) => {
+    return {
+      produce: (n) => ({ v: n }),
+      consume: (x) => x.v.toLowerCase(),
+    };
+  },
+});
+
+declare function f8<T>(arg: {
   [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
 }): T;
 
-const res11 = f7({
+const res14 = f8({
   a() {
     return [(n) => n, (x) => x.toLowerCase()];
   },
@@ -212,7 +264,7 @@ const res11 = f7({
   },
 });
 
-declare function f8<T1, T2>(
+declare function f9<T1, T2>(
   arg: {
     [K in keyof T1]: {
       produce: (n: string) => [T1[K], any];
@@ -226,7 +278,7 @@ declare function f8<T1, T2>(
   },
 ): [T1, T2];
 
-const res12 = f8({
+const res15 = f9({
   a: {
     produce: (n) => [n, [n]],
     consume2: (x) => x[0].toLowerCase(),
@@ -368,7 +420,49 @@ var res10 = f6({
         };
     },
 });
-var res11 = f7({
+var res11 = f6({
+    a: function () {
+        return {
+            produce: function (n) { return n; },
+            consume: function (x) { return x.toLowerCase(); },
+        };
+    },
+    b: function () {
+        return {
+            produce: function (n) { return ({ v: n }); },
+            consume: function (x) { return x.v.toLowerCase(); },
+        };
+    },
+});
+var res12 = f7({
+    a: function (arg) {
+        return {
+            produce: function (n) { return n; },
+            consume: function (x) { return x.toLowerCase(); },
+        };
+    },
+    b: function (arg) {
+        return {
+            produce: function (n) { return ({ v: n }); },
+            consume: function (x) { return x.v.toLowerCase(); },
+        };
+    },
+});
+var res13 = f7({
+    a: function (arg) {
+        return {
+            produce: function (n) { return n; },
+            consume: function (x) { return x.toLowerCase(); },
+        };
+    },
+    b: function (arg) {
+        return {
+            produce: function (n) { return ({ v: n }); },
+            consume: function (x) { return x.v.toLowerCase(); },
+        };
+    },
+});
+var res14 = f8({
     a: function () {
         return [function (n) { return n; }, function (x) { return x.toLowerCase(); }];
     },
@@ -376,7 +470,7 @@ var res11 = f7({
         return [function (n) { return ({ v: n }); }, function (x) { return x.v.toLowerCase(); }];
     },
 });
-var res12 = f8({
+var res15 = f9({
     a: {
         produce: function (n) { return [n, [n]]; },
         consume2: function (x) { return x[0].toLowerCase(); },
@@ -490,16 +584,40 @@ declare const res10: {
         v: string;
     };
 };
-declare function f7<T>(arg: {
-    [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
-}): T;
 declare const res11: {
     a: string;
     b: {
         v: string;
     };
 };
-declare function f8<T1, T2>(arg: {
+declare function f7<T>(arg: {
+    [K in keyof T]: (arg: boolean) => {
+        produce: (n: string) => T[K];
+        consume: (x: T[K]) => void;
+    };
+}): T;
+declare const res12: {
+    a: string;
+    b: {
+        v: string;
+    };
+};
+declare const res13: {
+    a: string;
+    b: {
+        v: string;
+    };
+};
+declare function f8<T>(arg: {
+    [K in keyof T]: () => [(n: string) => T[K], (x: T[K]) => void];
+}): T;
+declare const res14: {
+    a: string;
+    b: {
+        v: string;
+    };
+};
+declare function f9<T1, T2>(arg: {
     [K in keyof T1]: {
         produce: (n: string) => [T1[K], any];
         consume: (x: T1[K]) => void;
@@ -510,7 +628,7 @@ declare function f8<T1, T2>(arg: {
         consume2: (x: T2) => void;
     };
 }): [T1, T2];
-declare const res12: [{
+declare const res15: [{
     a: string;
     b: {
         v: string;
