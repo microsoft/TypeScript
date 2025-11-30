@@ -1,6 +1,6 @@
 mappedTypeErrors.ts(19,20): error TS2313: Type parameter 'P' has a circular constraint.
 mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
-mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
+mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'PropertyKey'.
 mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
 mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
   Type '"foo"' is not assignable to type 'keyof Shape'.
@@ -60,7 +60,7 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
 !!! error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
     type T03 = Record<Date, number>;  // Error
                       ~~~~
-!!! error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
+!!! error TS2344: Type 'Date' does not satisfy the constraint 'PropertyKey'.
     
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error
