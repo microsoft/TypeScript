@@ -1,0 +1,12 @@
+indexedAccessOfConcreteNonpublicFields.ts(4,22): error TS4129: Private member '_property' cannot be accessed via indexed access.
+
+
+==== indexedAccessOfConcreteNonpublicFields.ts (1 errors) ====
+    export class Foo {
+        private _property: string = '';
+        protected _property2: string = '';
+        constructor(arg: Foo['_property'], other: Foo['_property2']) {
+                         ~~~~~~~~~~~~~~~~
+!!! error TS4129: Private member '_property' cannot be accessed via indexed access.
+        }
+    }

@@ -748,7 +748,13 @@ export type ConfiguredProjectToAnyReloadKind = Map<
 >;
 
 /** @internal */
-export type DefaultConfiguredProjectResult = ReturnType<ProjectService["tryFindDefaultConfiguredProjectForOpenScriptInfoOrClosedFileInfo"]>;
+export interface DefaultConfiguredProjectResult {
+    defaultProject: ConfiguredProject | undefined;
+    tsconfigProject: ConfiguredProject | undefined;
+    sentConfigDiag: Set<ConfiguredProject>;
+    seenProjects: ConfigureProjectToLoadKind;
+    seenConfigs: Set<NormalizedPath> | undefined;
+}
 
 /** @internal */
 export interface FindCreateOrLoadConfiguredProjectResult {
@@ -4534,7 +4540,7 @@ export class ProjectService {
         allowDeferredClosed?: boolean,
         /** Used with ConfiguredProjectLoadKind.Reload to check if this project was already reloaded */
         reloadedProjects?: ConfiguredProjectToAnyReloadKind,
-    ) {
+    ): DefaultConfiguredProjectResult {
         const infoIsOpenScriptInfo = isOpenScriptInfo(info);
         const optimizedKind = toConfiguredProjectLoadOptimized(kind);
         const seenProjects: ConfigureProjectToLoadKind = new Map();

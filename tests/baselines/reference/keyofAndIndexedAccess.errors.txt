@@ -1,3 +1,4 @@
+keyofAndIndexedAccess.ts(174,14): error TS4129: Private member 'z' cannot be accessed via indexed access.
 keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
     Type 'T[string]' is not assignable to type 'object'.
@@ -15,7 +16,7 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
       Type 'T[string]' is not assignable to type '{}'.
 
 
-==== keyofAndIndexedAccess.ts (5 errors) ====
+==== keyofAndIndexedAccess.ts (6 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -190,6 +191,8 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         type X = C["x"];
         type Y = C["y"];
         type Z = C["z"];
+                 ~~~~~~
+!!! error TS4129: Private member 'z' cannot be accessed via indexed access.
         let x: X = c["x"];
         let y: Y = c["y"];
         let z: Z = c["z"];
