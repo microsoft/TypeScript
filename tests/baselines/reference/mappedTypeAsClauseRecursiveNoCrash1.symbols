@@ -1,0 +1,121 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauseRecursiveNoCrash1.ts] ////
+
+=== mappedTypeAsClauseRecursiveNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60476
+
+export type FlattenType<Source extends object, Target> = {
+>FlattenType : Symbol(FlattenType, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 0, 0))
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 24))
+>Target : Symbol(Target, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 46))
+
+  [Key in keyof Source as Key extends string
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 3, 3))
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 24))
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 3, 3))
+
+    ? Source[Key] extends object
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 24))
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 3, 3))
+
+      ? `${Key}.${keyof FlattenType<Source[Key], Target> & string}`
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 3, 3))
+>FlattenType : Symbol(FlattenType, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 0, 0))
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 24))
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 3, 3))
+>Target : Symbol(Target, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 46))
+
+      : Key
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 3, 3))
+
+    : never]-?: Target;
+>Target : Symbol(Target, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 2, 46))
+
+};
+
+type FieldSelect = {
+>FieldSelect : Symbol(FieldSelect, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 8, 2))
+
+  table: string;
+>table : Symbol(table, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 10, 20))
+
+  field: string;
+>field : Symbol(field, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 11, 16))
+
+};
+
+type Address = {
+>Address : Symbol(Address, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 13, 2))
+
+  postCode: string;
+>postCode : Symbol(postCode, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 15, 16))
+
+  description: string;
+>description : Symbol(description, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 16, 19))
+
+  address: string;
+>address : Symbol(address, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 17, 22))
+
+};
+
+type User = {
+>User : Symbol(User, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 19, 2))
+
+  id: number;
+>id : Symbol(id, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 21, 13))
+
+  name: string;
+>name : Symbol(name, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 22, 13))
+
+  address: Address;
+>address : Symbol(address, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 23, 15))
+>Address : Symbol(Address, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 13, 2))
+
+};
+
+type FlattenedUser = FlattenType<User, FieldSelect>;
+>FlattenedUser : Symbol(FlattenedUser, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 25, 2))
+>FlattenType : Symbol(FlattenType, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 0, 0))
+>User : Symbol(User, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 19, 2))
+>FieldSelect : Symbol(FieldSelect, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 8, 2))
+
+type FlattenedUserKeys = keyof FlattenType<User, FieldSelect>;
+>FlattenedUserKeys : Symbol(FlattenedUserKeys, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 27, 52))
+>FlattenType : Symbol(FlattenType, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 0, 0))
+>User : Symbol(User, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 19, 2))
+>FieldSelect : Symbol(FieldSelect, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 8, 2))
+
+export type FlattenTypeKeys<Source extends object, Target> = keyof {
+>FlattenTypeKeys : Symbol(FlattenTypeKeys, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 28, 62))
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 28))
+>Target : Symbol(Target, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 50))
+
+  [Key in keyof Source as Key extends string
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 31, 3))
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 28))
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 31, 3))
+
+    ? Source[Key] extends object
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 28))
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 31, 3))
+
+      ? `${Key}.${keyof FlattenType<Source[Key], Target> & string}`
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 31, 3))
+>FlattenType : Symbol(FlattenType, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 0, 0))
+>Source : Symbol(Source, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 28))
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 31, 3))
+>Target : Symbol(Target, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 50))
+
+      : Key
+>Key : Symbol(Key, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 31, 3))
+
+    : never]-?: Target;
+>Target : Symbol(Target, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 30, 50))
+
+};
+
+type FlattenedUserKeys2 = FlattenTypeKeys<User, FieldSelect>;
+>FlattenedUserKeys2 : Symbol(FlattenedUserKeys2, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 36, 2))
+>FlattenTypeKeys : Symbol(FlattenTypeKeys, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 28, 62))
+>User : Symbol(User, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 19, 2))
+>FieldSelect : Symbol(FieldSelect, Decl(mappedTypeAsClauseRecursiveNoCrash1.ts, 8, 2))
+

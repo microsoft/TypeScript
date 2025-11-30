@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/keyRemappingKeyofResult2.ts] ////
+
+=== keyRemappingKeyofResult2.ts ===
+// https://github.com/microsoft/TypeScript/issues/56239
+
+type Values<T> = T[keyof T];
+>Values : Values<T>
+>       : ^^^^^^^^^
+
+type ProvidedActor = {
+>ProvidedActor : ProvidedActor
+>              : ^^^^^^^^^^^^^
+
+  src: string;
+>src : string
+>    : ^^^^^^
+
+  logic: unknown;
+>logic : unknown
+>      : ^^^^^^^
+
+};
+
+interface StateMachineConfig<TActors extends ProvidedActor> {
+  invoke: {
+>invoke : { src: TActors["src"]; }
+>       : ^^^^^^^              ^^^
+
+    src: TActors["src"];
+>src : TActors["src"]
+>    : ^^^^^^^^^^^^^^
+
+  };
+}
+
+declare function setup<TActors extends Record<string, unknown>>(_: {
+>setup : <TActors extends Record<string, unknown>>(_: { actors: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: (config: StateMachineConfig<Values<{ [K in keyof TActors as K & string]: { src: K; logic: TActors[K]; }; }>>) => void; }
+>      : ^       ^^^^^^^^^                       ^^ ^^                                                  ^^^^^                                                                                                                                         
+>_ : { actors: { [K in keyof TActors]: TActors[K]; }; }
+>  : ^^^^^^^^^^                                     ^^^
+
+  actors: {
+>actors : { [K in keyof TActors]: TActors[K]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof TActors]: TActors[K];
+  };
+}): {
+  createMachine: (
+>createMachine : (config: StateMachineConfig<Values<{ [K in keyof TActors as K & string]: { src: K; logic: TActors[K]; }; }>>) => void
+>              : ^      ^^                                                                                                   ^^^^^    
+
+    config: StateMachineConfig<
+>config : StateMachineConfig<Values<{ [K in keyof TActors as K & string]: { src: K; logic: TActors[K]; }; }>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^          ^^^^^^^^
+
+      Values<{
+        [K in keyof TActors as K & string]: {
+          src: K;
+>src : K
+>    : ^
+
+          logic: TActors[K];
+>logic : TActors[K]
+>      : ^^^^^^^^^^
+
+        };
+      }>
+    >,
+  ) => void;
+};
+

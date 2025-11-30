@@ -69,6 +69,7 @@ function g<T>() {
     let x: Oops;
     x = sym;
     x = "str";
+    x = "whatever"; // error
 }
 
 export {};
@@ -97,5 +98,6 @@ function g() {
     let x;
     x = sym;
     x = "str";
+    x = "whatever"; // error
 }
 export {};
