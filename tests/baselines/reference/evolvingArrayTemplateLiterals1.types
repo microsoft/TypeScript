@@ -1,0 +1,125 @@
+//// [tests/cases/compiler/evolvingArrayTemplateLiterals1.ts] ////
+
+=== evolvingArrayTemplateLiterals1.ts ===
+type Vegetable = "spinach" | "carrot";
+>Vegetable : Vegetable
+>          : ^^^^^^^^^
+
+const arr1 = [];
+>arr1 : any[]
+>     : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+const v1 = "carrot";
+>v1 : "carrot"
+>   : ^^^^^^^^
+>"carrot" : "carrot"
+>         : ^^^^^^^^
+
+arr1.push(`vegetable_${v1}`);
+>arr1.push(`vegetable_${v1}`) : number
+>                             : ^^^^^^
+>arr1.push : (...items: any[]) => number
+>          : ^^^^     ^^^^^^^^^^^^      
+>arr1 : any[]
+>     : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>`vegetable_${v1}` : "vegetable_carrot"
+>                  : ^^^^^^^^^^^^^^^^^^
+>v1 : "carrot"
+>   : ^^^^^^^^
+
+arr1;
+>arr1 : string[]
+>     : ^^^^^^^^
+
+const arr2 = [];
+>arr2 : any[]
+>     : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+const v2: "carrot" = "carrot";
+>v2 : "carrot"
+>   : ^^^^^^^^
+>"carrot" : "carrot"
+>         : ^^^^^^^^
+
+arr2.push(`vegetable_${v2}`);
+>arr2.push(`vegetable_${v2}`) : number
+>                             : ^^^^^^
+>arr2.push : (...items: any[]) => number
+>          : ^^^^     ^^^^^^^^^^^^      
+>arr2 : any[]
+>     : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>`vegetable_${v2}` : string
+>                  : ^^^^^^
+>v2 : "carrot"
+>   : ^^^^^^^^
+
+arr2;
+>arr2 : string[]
+>     : ^^^^^^^^
+
+const arr3 = [];
+>arr3 : any[]
+>     : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+const v3: Vegetable = "carrot";
+>v3 : Vegetable
+>   : ^^^^^^^^^
+>"carrot" : "carrot"
+>         : ^^^^^^^^
+
+arr3.push(`vegetable_${v3}`);
+>arr3.push(`vegetable_${v3}`) : number
+>                             : ^^^^^^
+>arr3.push : (...items: any[]) => number
+>          : ^^^^     ^^^^^^^^^^^^      
+>arr3 : any[]
+>     : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>`vegetable_${v3}` : string
+>                  : ^^^^^^
+>v3 : "carrot"
+>   : ^^^^^^^^
+
+arr3;
+>arr3 : string[]
+>     : ^^^^^^^^
+
+const arr4 = [];
+>arr4 : any[]
+>     : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+declare const v4: Vegetable;
+>v4 : Vegetable
+>   : ^^^^^^^^^
+
+arr4.push(`vegetable_${v4}`);
+>arr4.push(`vegetable_${v4}`) : number
+>                             : ^^^^^^
+>arr4.push : (...items: any[]) => number
+>          : ^^^^     ^^^^^^^^^^^^      
+>arr4 : any[]
+>     : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>`vegetable_${v4}` : string
+>                  : ^^^^^^
+>v4 : Vegetable
+>   : ^^^^^^^^^
+
+arr4;
+>arr4 : string[]
+>     : ^^^^^^^^
+
