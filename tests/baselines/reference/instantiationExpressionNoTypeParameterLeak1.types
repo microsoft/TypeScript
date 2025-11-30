@@ -1,0 +1,221 @@
+//// [tests/cases/compiler/instantiationExpressionNoTypeParameterLeak1.ts] ////
+
+=== instantiationExpressionNoTypeParameterLeak1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61041
+
+export const test1 = <X,>(g: <A>(x: X) => X) => g<string>;
+>test1 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+><X,>(g: <A>(x: X) => X) => g<string> : <X>(g: <A>(x: X) => X) => (x: X) => X
+>                                     : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+>x : X
+>  : ^
+>g<string> : (x: X) => X
+>          : ^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+
+export const output1 = test1<number>((y: number) => 1);
+>output1 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test1<number>((y: number) => 1) : (x: number) => number
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
+>test1 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output1(1);
+>output1(1) : number
+>           : ^^^^^^
+>output1 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+export function test2<X>(g: <A>(x: X) => X) {
+>test2 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+>x : X
+>  : ^
+
+  return g<string>;
+>g<string> : (x: X) => X
+>          : ^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+}
+export const output2 = test2<number>((y: number) => 1);
+>output2 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test2<number>((y: number) => 1) : (x: number) => number
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
+>test2 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output2(1);
+>output2(1) : number
+>           : ^^^^^^
+>output2 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+export const test3 = <X,>(g: <A>() => (x: X) => X) => g<string>();
+>test3 : <X>(g: <A>() => (x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^                    ^^^^^^ ^^ ^^^^^ 
+><X,>(g: <A>() => (x: X) => X) => g<string>() : <X>(g: <A>() => (x: X) => X) => (x: X) => X
+>                                             : ^ ^^ ^^                    ^^^^^^ ^^ ^^^^^ 
+>g : <A>() => (x: X) => X
+>  : ^ ^^^^^^^           
+>x : X
+>  : ^
+>g<string>() : (x: X) => X
+>            : ^ ^^ ^^^^^ 
+>g : <A>() => (x: X) => X
+>  : ^ ^^^^^^^           
+
+export const output3 = test3<number>(() => (y: number) => 1);
+>output3 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test3<number>(() => (y: number) => 1) : (x: number) => number
+>                                      : ^ ^^^^^^^^^^^^^^^^^^^
+>test3 : <X>(g: <A>() => (x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^                    ^^^^^^ ^^ ^^^^^ 
+>() => (y: number) => 1 : () => (y: number) => number
+>                       : ^^^^^^^ ^^      ^^^^^^^^^^^
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output3(1);
+>output3(1) : number
+>           : ^^^^^^
+>output3 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+export function test4<X>(g: <A>() => (x: X) => X) {
+>test4 : <X>(g: <A>() => (x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^                    ^^^^^^ ^^ ^^^^^ 
+>g : <A>() => (x: X) => X
+>  : ^ ^^^^^^^           
+>x : X
+>  : ^
+
+  return g<string>();
+>g<string>() : (x: X) => X
+>            : ^ ^^ ^^^^^ 
+>g : <A>() => (x: X) => X
+>  : ^ ^^^^^^^           
+}
+export const output4 = test4<number>(() => (y: number) => 1);
+>output4 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test4<number>(() => (y: number) => 1) : (x: number) => number
+>                                      : ^ ^^^^^^^^^^^^^^^^^^^
+>test4 : <X>(g: <A>() => (x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^                    ^^^^^^ ^^ ^^^^^ 
+>() => (y: number) => 1 : () => (y: number) => number
+>                       : ^^^^^^^ ^^      ^^^^^^^^^^^
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output4(1);
+>output4(1) : number
+>           : ^^^^^^
+>output4 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+export declare function test5<X>(g: <A>(x: X) => X): typeof g<string>;
+>test5 : <X>(g: <A>(x: X) => X) => typeof g<string>
+>      : ^ ^^ ^^              ^^^^^                
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+>x : X
+>  : ^
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+
+export const output5 = test5<number>((y: number) => 1);
+>output5 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test5<number>((y: number) => 1) : (x: number) => number
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
+>test5 : <X>(g: <A>(x: X) => X) => typeof g<string>
+>      : ^ ^^ ^^              ^^^^^                
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output5(1);
+>output5(1) : number
+>           : ^^^^^^
+>output5 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+export const test6 = <X,>(g: <A>(x: X) => X) => g<X>;
+>test6 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+><X,>(g: <A>(x: X) => X) => g<X> : <X>(g: <A>(x: X) => X) => (x: X) => X
+>                                : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+>x : X
+>  : ^
+>g<X> : (x: X) => X
+>     : ^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+
+export const output6 = test6<number>((y: number) => 1);
+>output6 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test6<number>((y: number) => 1) : (x: number) => number
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
+>test6 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output6(1);
+>output6(1) : number
+>           : ^^^^^^
+>output6 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
