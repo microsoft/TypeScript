@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleIndexSignatures1.ts] ////
+
+=== excessPropertyCheckWithMultipleIndexSignatures1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58442
+
+interface ITopType {
+>ITopType : Symbol(ITopType, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 0, 0))
+
+  tKey: string;
+>tKey : Symbol(ITopType.tKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 2, 20))
+}
+
+interface ISubType extends ITopType {
+>ISubType : Symbol(ISubType, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 4, 1))
+>ITopType : Symbol(ITopType, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 0, 0))
+
+  sKey: string;
+>sKey : Symbol(ISubType.sKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 6, 37))
+}
+
+interface ITestInteface {
+>ITestInteface : Symbol(ITestInteface, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 8, 1))
+
+  [pA: string]: ITopType;
+>pA : Symbol(pA, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 11, 3))
+>ITopType : Symbol(ITopType, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 0, 0))
+
+  [pB: number]: ISubType;
+>pB : Symbol(pB, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 12, 3))
+>ISubType : Symbol(ISubType, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 4, 1))
+}
+
+const testObj1: ITestInteface = {
+>testObj1 : Symbol(testObj1, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 15, 5))
+>ITestInteface : Symbol(ITestInteface, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 8, 1))
+
+  a: { tKey: "tVal" },
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 15, 33))
+>tKey : Symbol(tKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 16, 6))
+
+  1: { tKey: "tVal", sKey: "sVal" },
+>1 : Symbol(1, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 16, 22))
+>tKey : Symbol(tKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 17, 6))
+>sKey : Symbol(sKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 17, 20))
+
+};
+
+const testObj1_2: ITestInteface = {
+>testObj1_2 : Symbol(testObj1_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 20, 5))
+>ITestInteface : Symbol(ITestInteface, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 8, 1))
+
+  a: { tKey: "tVal" },
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 20, 35))
+>tKey : Symbol(tKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 21, 6))
+
+  1: { tKey: "tVal", sKey: "sVal", extra: "val3" },
+>1 : Symbol(1, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 21, 22))
+>tKey : Symbol(tKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 22, 6))
+>sKey : Symbol(sKey, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 22, 20))
+>extra : Symbol(extra, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 22, 34))
+
+};
+
+interface ITopType_2 {
+>ITopType_2 : Symbol(ITopType_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 23, 2))
+
+  tKey_2: string;
+>tKey_2 : Symbol(ITopType_2.tKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 25, 22))
+}
+
+interface ISubType_2 extends ITopType_2 {
+>ISubType_2 : Symbol(ISubType_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 27, 1))
+>ITopType_2 : Symbol(ITopType_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 23, 2))
+
+  sKey_2: string;
+>sKey_2 : Symbol(ISubType_2.sKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 29, 41))
+}
+
+interface ITestInteface_2 {
+>ITestInteface_2 : Symbol(ITestInteface_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 31, 1))
+
+  [pA_2: string]: ITopType_2;
+>pA_2 : Symbol(pA_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 34, 3))
+>ITopType_2 : Symbol(ITopType_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 23, 2))
+
+  [pB_2: `sub_${string}`]: ISubType_2;
+>pB_2 : Symbol(pB_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 35, 3))
+>ISubType_2 : Symbol(ISubType_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 27, 1))
+}
+
+const testObj2: ITestInteface_2 = {
+>testObj2 : Symbol(testObj2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 38, 5))
+>ITestInteface_2 : Symbol(ITestInteface_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 31, 1))
+
+  a: { tKey_2: "tVal_2 " },
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 38, 35))
+>tKey_2 : Symbol(tKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 39, 6))
+
+  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2" },
+>sub_b : Symbol(sub_b, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 39, 27))
+>tKey_2 : Symbol(tKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 40, 10))
+>sKey_2 : Symbol(sKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 40, 29))
+
+};
+
+const testObj2_2: ITestInteface_2 = {
+>testObj2_2 : Symbol(testObj2_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 43, 5))
+>ITestInteface_2 : Symbol(ITestInteface_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 31, 1))
+
+  a: { tKey_2: "tVal_2 " },
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 43, 37))
+>tKey_2 : Symbol(tKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 44, 6))
+
+  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2", extra: "val3" },
+>sub_b : Symbol(sub_b, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 44, 27))
+>tKey_2 : Symbol(tKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 45, 10))
+>sKey_2 : Symbol(sKey_2, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 45, 29))
+>extra : Symbol(extra, Decl(excessPropertyCheckWithMultipleIndexSignatures1.ts, 45, 47))
+
+};
+
