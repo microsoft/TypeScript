@@ -1859,7 +1859,36 @@ function createCompletionEntry(
             && !(type.flags & TypeFlags.BooleanLike)
             && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
         ) {
-            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))) {
+            // Check if we should use quotes for string-like types
+            let shouldUseQuotes = false;
+
+            if (type.flags & TypeFlags.StringLike) {
+                // Direct string-like type
+                shouldUseQuotes = true;
+            }
+            else if (type.flags & TypeFlags.Union) {
+                const unionType = type as UnionType;
+                // Check if all types are string-like or undefined (original logic)
+                const allTypesAreStringLikeOrUndefined = every(unionType.types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type)));
+
+                if (allTypesAreStringLikeOrUndefined) {
+                    shouldUseQuotes = true;
+                }
+                else {
+                    // Check if the union contains string-like types that users would typically provide as strings
+                    // This handles cases like Preact's Signalish<string | undefined> = string | undefined | SignalLike<string | undefined>
+                    const hasStringLikeTypes = some(unionType.types, type => !!(type.flags & TypeFlags.StringLike));
+                    const hasPrimitiveTypes = some(unionType.types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined | TypeFlags.Null)));
+
+                    // If the union has string-like types and contains primitive types (string, undefined, null),
+                    // prefer quotes since users commonly want to provide string values rather than complex objects
+                    if (hasStringLikeTypes && hasPrimitiveTypes) {
+                        shouldUseQuotes = true;
+                    }
+                }
+            }
+
+            if (shouldUseQuotes) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                 isSnippet = true;
