@@ -1,0 +1,194 @@
+//// [tests/cases/conformance/es6/Symbols/symbolWellKnown.ts] ////
+
+=== symbolWellKnown.ts ===
+var symbol = Symbol();
+>symbol : symbol
+>       : ^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+symbol[Symbol.toStringTag];
+>symbol[Symbol.toStringTag] : string
+>                           : ^^^^^^
+>symbol : symbol
+>       : ^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var map = new Map();
+>map : Map<any, any>
+>    : ^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+
+map[Symbol.toStringTag];
+>map[Symbol.toStringTag] : string
+>                        : ^^^^^^
+>map : Map<any, any>
+>    : ^^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var readonlyMap = <ReadonlyMap<unknown, unknown>>new Map();
+>readonlyMap : ReadonlyMap<unknown, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><ReadonlyMap<unknown, unknown>>new Map() : ReadonlyMap<unknown, unknown>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+
+readonlyMap[Symbol.toStringTag];
+>readonlyMap[Symbol.toStringTag] : string
+>                                : ^^^^^^
+>readonlyMap : ReadonlyMap<unknown, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var weakMap = new WeakMap();
+>weakMap : WeakMap<object, any>
+>        : ^^^^^^^^^^^^^^^^^^^^
+>new WeakMap() : WeakMap<object, any>
+>              : ^^^^^^^^^^^^^^^^^^^^
+>WeakMap : WeakMapConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+weakMap[Symbol.toStringTag];
+>weakMap[Symbol.toStringTag] : string
+>                            : ^^^^^^
+>weakMap : WeakMap<object, any>
+>        : ^^^^^^^^^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var set = new Set();
+>set : Set<unknown>
+>    : ^^^^^^^^^^^^
+>new Set() : Set<unknown>
+>          : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+set[Symbol.toStringTag];
+>set[Symbol.toStringTag] : string
+>                        : ^^^^^^
+>set : Set<unknown>
+>    : ^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var readonlySet = <ReadonlySet<any>>new Set();
+>readonlySet : ReadonlySet<any>
+>            : ^^^^^^^^^^^^^^^^
+><ReadonlySet<any>>new Set() : ReadonlySet<any>
+>                            : ^^^^^^^^^^^^^^^^
+>new Set() : Set<any>
+>          : ^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+readonlySet[Symbol.toStringTag];
+>readonlySet[Symbol.toStringTag] : string
+>                                : ^^^^^^
+>readonlySet : ReadonlySet<any>
+>            : ^^^^^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var weakSet = new WeakSet();
+>weakSet : WeakSet<object>
+>        : ^^^^^^^^^^^^^^^
+>new WeakSet() : WeakSet<object>
+>              : ^^^^^^^^^^^^^^^
+>WeakSet : WeakSetConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+weakSet[Symbol.toStringTag];
+>weakSet[Symbol.toStringTag] : string
+>                            : ^^^^^^
+>weakSet : WeakSet<object>
+>        : ^^^^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+JSON[Symbol.toStringTag];
+>JSON[Symbol.toStringTag] : string
+>                         : ^^^^^^
+>JSON : JSON
+>     : ^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+Math[Symbol.toStringTag];
+>Math[Symbol.toStringTag] : string
+>                         : ^^^^^^
+>Math : Math
+>     : ^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+var promise = new Promise(()=>{});
+>promise : Promise<unknown>
+>        : ^^^^^^^^^^^^^^^^
+>new Promise(()=>{}) : Promise<unknown>
+>                    : ^^^^^^^^^^^^^^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>()=>{} : () => void
+>       : ^^^^^^^^^^
+
+promise[Symbol.toStringTag];
+>promise[Symbol.toStringTag] : string
+>                            : ^^^^^^
+>promise : Promise<unknown>
+>        : ^^^^^^^^^^^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+
