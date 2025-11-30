@@ -17,7 +17,9 @@ type Orig = { [k: string]: any, str: any, [sym]: any }
 >k : string
 >  : ^^^^^^
 >str : any
+>    : ^^^
 >[sym] : any
+>      : ^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
 
@@ -74,10 +76,12 @@ function f<T>() {
 >k : string
 >  : ^^^^^^
 >str : any
+>    : ^^^
 >[sym] : any
+>      : ^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
-    
+
     type Okay = keyof Orig;
 >Okay : string | number | unique symbol | keyof T
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -111,7 +115,7 @@ function f<T>() {
 >           : ^^^^^^^^^^
 
     // type Okay = string | number | typeof sym
-    
+
     type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
 >Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 >         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -121,7 +125,7 @@ function f<T>() {
         [sym]: any;
     } */
     // no string index signature, right?
-    
+
     type Oops = keyof Remapped;
 >Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 >     : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -158,10 +162,12 @@ function g<T>() {
 >k : string
 >  : ^^^^^^
 >str : any
+>    : ^^^
 >[sym] : any
+>      : ^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
-    
+
     type Okay = keyof Orig;
 >Okay : string | number | unique symbol | keyof T
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -203,7 +209,7 @@ function g<T>() {
     type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
 >DistributiveNonIndex : T extends unknown ? {} extends Record<T, any> ? never : T : never
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
+
     type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
 >Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 >         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -213,7 +219,7 @@ function g<T>() {
         [sym]: any;
     } */
     // no string index signature, right?
-    
+
     type Oops = keyof Remapped;
 >Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 >     : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -239,4 +245,66 @@ function g<T>() {
 >      : ^^^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/57827
+
+type StringKeys<T> = Extract<
+>StringKeys : StringKeys<T>
+>           : ^^^^^^^^^^^^^
+
+  keyof {
+    [P in keyof T as T[P] extends string ? P : never]: any;
+  },
+  string
+>;
+
+function test_57827<T>(z: StringKeys<T>) {
+>test_57827 : <T>(z: StringKeys<T>) => void
+>           : ^ ^^ ^^             ^^^^^^^^^
+>z : Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>
+>  : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const f: string = z;
+>f : string
+>  : ^^^^^^
+>z : Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>
+>  : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  z = "foo"; // error
+>z = "foo" : "foo"
+>          : ^^^^^
+>z : Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>
+>  : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+}
+
+type StringKeys2<T> = keyof {
+>StringKeys2 : keyof { [P in keyof T as T[P] extends string ? P : never]: any; }
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+};
+
+function h<T>(z: StringKeys2<T>) {
+>h : <T>(z: StringKeys2<T>) => void
+>  : ^ ^^ ^^              ^^^^^^^^^
+>z : keyof { [P in keyof T as T[P] extends string ? P : never]: any; }
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  z = "foo"; // error
+>z = "foo" : "foo"
+>          : ^^^^^
+>z : keyof { [P in keyof T as T[P] extends string ? P : never]: any; }
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  const f: string = z; // ok
+>f : string
+>  : ^^^^^^
+>z : string
+>  : ^^^^^^
+}
+
 export {};
+
