@@ -1,0 +1,14 @@
+=== tests/cases/compiler/a.js ===
+Thing.abc = 123
+>Thing.abc : Symbol(Thing.abc, Decl(a.js, 0, 0))
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+>abc : Symbol(Thing.abc, Decl(a.js, 0, 0))
+
+Thing.prototype.def = 456
+>Thing.prototype : Symbol(Thing.def, Decl(a.js, 0, 15))
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+>def : Symbol(Thing.def, Decl(a.js, 0, 15))
+
+new Thing();
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+
