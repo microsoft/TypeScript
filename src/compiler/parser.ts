@@ -4080,7 +4080,7 @@ namespace Parser {
                     parseNameOfParameter(modifiers),
                     parseOptionalToken(SyntaxKind.QuestionToken),
                     parseTypeAnnotation(),
-                    parseInitializer(),
+                    allowInAnd(parseInitializer),
                 ),
                 pos,
             ),
@@ -6686,12 +6686,16 @@ namespace Parser {
         return doOutsideOfContext(disallowInAndDecoratorContext, parseArgumentOrArrayLiteralElement);
     }
 
+    function parseArrayLiteralElement(): Expression {
+        return allowInAnd(parseArgumentOrArrayLiteralElement);
+    }
+
     function parseArrayLiteralExpression(): ArrayLiteralExpression {
         const pos = getNodePos();
         const openBracketPosition = scanner.getTokenStart();
         const openBracketParsed = parseExpected(SyntaxKind.OpenBracketToken);
         const multiLine = scanner.hasPrecedingLineBreak();
-        const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
+        const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketParsed, openBracketPosition);
         return finishNode(factoryCreateArrayLiteralExpression(elements, multiLine), pos);
     }

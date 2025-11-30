@@ -30,3 +30,7 @@ for (; ;) { // ok
 
 for () { // error
 }
+
+for (var m = ['k' in {}]; ;); // ok
+
+for (var n = (b = 'k' in {}) => {}; ;); // ok

@@ -57,3 +57,11 @@ for (; ;) { // ok
 
 for () { // error
 }
+
+for (var m = ['k' in {}]; ;); // ok
+>m : Symbol(m, Decl(for.ts, 31, 8))
+
+for (var n = (b = 'k' in {}) => {}; ;); // ok
+>n : Symbol(n, Decl(for.ts, 33, 8))
+>b : Symbol(b, Decl(for.ts, 33, 14))
+
