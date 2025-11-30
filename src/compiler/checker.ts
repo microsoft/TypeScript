@@ -8874,7 +8874,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     let expression: Expression | undefined;
                     if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                        const literalText = stripQuotes(symbolName).replace(/\\./g, s => s.substring(1));
+                        const literalText = stripQuotes(symbolName.trim()).replace(/\\./g, s => s.substring(1));
                         context.approximateLength += literalText.length + 2; // "literalText"
                         expression = factory.createStringLiteral(literalText, firstChar === CharacterCodes.singleQuote);
                     }
