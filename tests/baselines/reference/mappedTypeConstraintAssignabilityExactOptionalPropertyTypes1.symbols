@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts] ////
+
+=== mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60233
+
+type T = {
+>T : Symbol(T, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 0, 0))
+
+  foo?: true;
+>foo : Symbol(foo, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 2, 10))
+
+  bar?: true;
+>bar : Symbol(bar, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 3, 13))
+
+};
+
+type WrappedT<t extends T> = [t];
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 7, 14))
+>T : Symbol(T, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 0, 0))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 7, 14))
+
+type OmitBarFromWrapped<t> = t extends WrappedT<infer inner>
+>OmitBarFromWrapped : Symbol(OmitBarFromWrapped, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 7, 33))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 9, 24))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 9, 24))
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>inner : Symbol(inner, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 9, 53))
+
+  ? WrappedT<Omit<inner, "bar">>
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>inner : Symbol(inner, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 9, 53))
+
+  : never;
+
+type OmitHomomorphicFromWrapped<t> = t extends WrappedT<infer inner>
+>OmitHomomorphicFromWrapped : Symbol(OmitHomomorphicFromWrapped, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 11, 10))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 13, 32))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 13, 32))
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>inner : Symbol(inner, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 13, 61))
+
+  ? WrappedT<HomomorphicOmit<inner, "bar">>
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>HomomorphicOmit : Symbol(HomomorphicOmit, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 15, 10))
+>inner : Symbol(inner, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 13, 61))
+
+  : never;
+
+type HomomorphicOmit<t, keyToOmit> = {
+>HomomorphicOmit : Symbol(HomomorphicOmit, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 15, 10))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 17, 21))
+>keyToOmit : Symbol(keyToOmit, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 17, 23))
+
+  [k in keyof t as k extends keyToOmit ? never : k]: t[k];
+>k : Symbol(k, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 18, 3))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 17, 21))
+>k : Symbol(k, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 18, 3))
+>keyToOmit : Symbol(keyToOmit, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 17, 23))
+>k : Symbol(k, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 18, 3))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 17, 21))
+>k : Symbol(k, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 18, 3))
+
+};
+
+type OmitHomomorphicFromWrappedConformed<t> = t extends WrappedT<infer inner>
+>OmitHomomorphicFromWrappedConformed : Symbol(OmitHomomorphicFromWrappedConformed, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 19, 2))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 21, 41))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 21, 41))
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>inner : Symbol(inner, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 21, 70))
+
+  ? WrappedT<conform<HomomorphicOmit<inner, "bar">, T>>
+>WrappedT : Symbol(WrappedT, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 5, 2))
+>conform : Symbol(conform, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 23, 10))
+>HomomorphicOmit : Symbol(HomomorphicOmit, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 15, 10))
+>inner : Symbol(inner, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 21, 70))
+>T : Symbol(T, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 0, 0))
+
+  : never;
+
+type conform<t, base> = t extends base ? t : base;
+>conform : Symbol(conform, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 23, 10))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 25, 13))
+>base : Symbol(base, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 25, 15))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 25, 13))
+>base : Symbol(base, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 25, 15))
+>t : Symbol(t, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 25, 13))
+>base : Symbol(base, Decl(mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts, 25, 15))
+
