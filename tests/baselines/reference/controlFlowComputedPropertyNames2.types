@@ -1,0 +1,77 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames2.ts] ////
+
+=== controlFlowComputedPropertyNames2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61389
+
+const arr: number[] = [1, 2, 3];
+>arr : number[]
+>    : ^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+const idx: number = 2;
+>idx : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+if (idx in arr) {
+>idx in arr : boolean
+>           : ^^^^^^^
+>idx : number
+>    : ^^^^^^
+>arr : number[]
+>    : ^^^^^^^^
+
+  const x: number = arr[idx]; // ok
+>x : number
+>  : ^^^^^^
+>arr[idx] : number
+>         : ^^^^^^
+>arr : number[]
+>    : ^^^^^^^^
+>idx : number
+>    : ^^^^^^
+}
+
+const map: Record<string, number> = { a: 1 };
+>map : Record<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+const key: string = "a";
+>key : string
+>    : ^^^^^^
+>"a" : "a"
+>    : ^^^
+
+if (key in map) {
+>key in map : boolean
+>           : ^^^^^^^
+>key : string
+>    : ^^^^^^
+>map : Record<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  const x: number = map[key]; // ok
+>x : number
+>  : ^^^^^^
+>map[key] : number
+>         : ^^^^^^
+>map : Record<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+}
+
