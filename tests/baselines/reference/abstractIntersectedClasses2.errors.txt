@@ -1,0 +1,37 @@
+abstractIntersectedClasses2.ts(24,7): error TS2515: Non-abstract class 'ImplementationB' does not implement inherited abstract member testMethod from class 'MixinB<((abstract new (...args: any[]) => MixinA<typeof Base>.Mixin) & { prototype: MixinA<any>.Mixin; }) & typeof Base>.Mixin & MixinA<typeof Base>.Mixin & Base'.
+abstractIntersectedClasses2.ts(27,7): error TS2515: Non-abstract class 'ImplementationA' does not implement inherited abstract member testMethod from class 'MixinA<typeof Base>.Mixin & Base'.
+
+
+==== abstractIntersectedClasses2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/62014
+    
+    type Constructor = new (...args: any[]) => {};
+    
+    function MixinA<T extends Constructor>(base: T) {
+      abstract class Mixin extends base {
+        abstract testMethod(): string;
+      }
+    
+      return Mixin;
+    }
+    
+    function MixinB<T extends Constructor>(base: T) {
+      abstract class Mixin extends base {
+        abstract testMethod(): string;
+      }
+    
+      return Mixin;
+    }
+    
+    class Base {}
+    
+    // error
+    class ImplementationB extends MixinB(MixinA(Base)) {}
+          ~~~~~~~~~~~~~~~
+!!! error TS2515: Non-abstract class 'ImplementationB' does not implement inherited abstract member testMethod from class 'MixinB<((abstract new (...args: any[]) => MixinA<typeof Base>.Mixin) & { prototype: MixinA<any>.Mixin; }) & typeof Base>.Mixin & MixinA<typeof Base>.Mixin & Base'.
+    
+    // error
+    class ImplementationA extends MixinA(Base) {}
+          ~~~~~~~~~~~~~~~
+!!! error TS2515: Non-abstract class 'ImplementationA' does not implement inherited abstract member testMethod from class 'MixinA<typeof Base>.Mixin & Base'.
+    
