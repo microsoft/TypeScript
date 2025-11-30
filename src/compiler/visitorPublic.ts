@@ -604,7 +604,7 @@ export function visitEachChild<T extends Node>(node: T | undefined, visitor: Vis
     return fn === undefined ? node : fn(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor);
 }
 
-type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, context: TransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor | undefined) => T;
+type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, context: TransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor | undefined) => T | undefined;
 
 // A type that correlates a `SyntaxKind` to a `VisitEachChildFunction<T>`, for nodes in the `HasChildren` union.
 // This looks something like:
@@ -1280,10 +1280,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     [SyntaxKind.VariableStatement]: function visitEachChildOfVariableStatement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+        const declarationList = nodeVisitor(node.declarationList, visitor, isVariableDeclarationList);
+        if (!declarationList) {
+            return;
+        }
         return context.factory.updateVariableStatement(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
-            Debug.checkDefined(nodeVisitor(node.declarationList, visitor, isVariableDeclarationList)),
+            declarationList,
         );
     },
 
