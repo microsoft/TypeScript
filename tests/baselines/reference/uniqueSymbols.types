@@ -136,6 +136,7 @@ const fromAny: unique symbol = {} as any;
 >fromAny : unique symbol
 >        : ^^^^^^^^^^^^^
 >{} as any : any
+>          : ^^^
 >{} : {}
 >   : ^^
 
@@ -172,6 +173,7 @@ function* genFuncYieldConstCall() { yield constCall; }
 >genFuncYieldConstCall : () => Generator<symbol, void, unknown>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield constCall : any
+>                : ^^^
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -179,6 +181,7 @@ function* genFuncYieldLetCall() { yield letCall; }
 >genFuncYieldLetCall : () => Generator<symbol, void, unknown>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield letCall : any
+>              : ^^^
 >letCall : symbol
 >        : ^^^^^^
 
@@ -186,6 +189,7 @@ function* genFuncYieldVarCall() { yield varCall; }
 >genFuncYieldVarCall : () => Generator<symbol, void, unknown>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield varCall : any
+>              : ^^^
 >varCall : symbol
 >        : ^^^^^^
 
@@ -196,6 +200,7 @@ function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCal
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 >yield constCall : any
+>                : ^^^
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -223,6 +228,7 @@ async function* asyncGenFuncYieldConstCall() { yield constCall; }
 >asyncGenFuncYieldConstCall : () => AsyncGenerator<symbol, void, unknown>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield constCall : any
+>                : ^^^
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -230,6 +236,7 @@ async function* asyncGenFuncYieldLetCall() { yield letCall; }
 >asyncGenFuncYieldLetCall : () => AsyncGenerator<symbol, void, unknown>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield letCall : any
+>              : ^^^
 >letCall : symbol
 >        : ^^^^^^
 
@@ -237,6 +244,7 @@ async function* asyncGenFuncYieldVarCall() { yield varCall; }
 >asyncGenFuncYieldVarCall : () => AsyncGenerator<symbol, void, unknown>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield varCall : any
+>              : ^^^
 >varCall : symbol
 >        : ^^^^^^
 
@@ -812,6 +820,7 @@ const o2 = {
 >method3 : () => AsyncGenerator<symbol, void, unknown>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
+>        : ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -819,6 +828,7 @@ const o2 = {
 >method4 : () => Generator<symbol, void, unknown>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
+>        : ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -959,6 +969,7 @@ class C0 {
 >method3 : () => AsyncGenerator<symbol, void, unknown>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
+>        : ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -966,6 +977,7 @@ class C0 {
 >method4 : () => Generator<symbol, void, unknown>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
+>        : ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -1330,6 +1342,7 @@ const o3: Context = {
 
         yield s; // yield type should not widen due to contextual type
 >yield s : any
+>        : ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -1340,6 +1353,7 @@ const o3: Context = {
 
         yield s; // yield type should not widen due to contextual type
 >yield s : any
+>        : ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -1442,4 +1456,39 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >obj : { method(p: typeof s): void; }
 >    : ^^^^^^^^^ ^^        ^^^    ^^^
 }
+
+// https://github.com/microsoft/TypeScript/issues/61070
+const bar = Symbol('bar') satisfies symbol;
+>bar : unique symbol
+>    : ^^^^^^^^^^^^^
+>Symbol('bar') satisfies symbol : unique symbol
+>                               : ^^^^^^^^^^^^^
+>Symbol('bar') : unique symbol
+>              : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+let bar2 = Symbol('bar2') satisfies symbol;
+>bar2 : symbol
+>     : ^^^^^^
+>Symbol('bar2') satisfies symbol : symbol
+>                                : ^^^^^^
+>Symbol('bar2') : symbol
+>               : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>'bar2' : "bar2"
+>       : ^^^^^^
+
+const testErrorMessage1 = Symbol() as string;
+>testErrorMessage1 : string
+>                  : ^^^^^^
+>Symbol() as string : string
+>                   : ^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
