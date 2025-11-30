@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/inferFromAnnotatedParameterWithInitializer.ts] ////
+
+=== inferFromAnnotatedParameterWithInitializer.ts ===
+// https://github.com/microsoft/TypeScript/issues/57706
+
+declare function infer1<T>(fn: Factory<T>): T;
+>infer1 : <T>(fn: Factory<T>) => T
+>       : ^ ^^  ^^          ^^^^^ 
+>fn : Factory<T>
+>   : ^^^^^^^^^^
+
+declare function infer2<T>(fn: Factory2<T>): T;
+>infer2 : <T>(fn: Factory2<T>) => T
+>       : ^ ^^  ^^           ^^^^^ 
+>fn : Factory2<T>
+>   : ^^^^^^^^^^^
+
+export type Factory<T> = (arg1: T, arg2: any) => any;
+>Factory : Factory<T>
+>        : ^^^^^^^^^^
+>arg1 : T
+>     : ^
+>arg2 : any
+
+export type Factory2<T> = (...args: [T, any]) => any;
+>Factory2 : Factory2<T>
+>         : ^^^^^^^^^^^
+>args : [T, any]
+>     : ^^^^^^^^
+
+const f1 = (msg: string = "hello", test: any) => {};
+>f1 : (msg: string | undefined, test: any) => void
+>   : ^   ^^      ^^^^^^^^^^^^^^    ^^   ^^^^^^^^^
+>(msg: string = "hello", test: any) => {} : (msg: string | undefined, test: any) => void
+>                                         : ^   ^^      ^^^^^^^^^^^^^^    ^^   ^^^^^^^^^
+>msg : string
+>    : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>test : any
+
+const a1 = infer1(f1);
+>a1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>infer1(f1) : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>infer1 : <T>(fn: Factory<T>) => T
+>       : ^ ^^  ^^          ^^^^^^
+>f1 : (msg: string | undefined, test: any) => void
+>   : ^   ^^      ^^^^^^^^^^^^^^    ^^   ^^^^^^^^^
+
+const a2 = infer2(f1);
+>a2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>infer2(f1) : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>infer2 : <T>(fn: Factory2<T>) => T
+>       : ^ ^^  ^^           ^^^^^^
+>f1 : (msg: string | undefined, test: any) => void
+>   : ^   ^^      ^^^^^^^^^^^^^^    ^^   ^^^^^^^^^
+
+const f2 = (msg: string = "hello") => {};
+>f2 : (msg?: string) => void
+>   : ^   ^^^      ^^^^^^^^^
+>(msg: string = "hello") => {} : (msg?: string) => void
+>                              : ^   ^^^      ^^^^^^^^^
+>msg : string
+>    : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const b1 = infer1(f2);
+>b1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>infer1(f2) : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>infer1 : <T>(fn: Factory<T>) => T
+>       : ^ ^^  ^^          ^^^^^^
+>f2 : (msg?: string) => void
+>   : ^   ^^^      ^^^^^^^^^
+
+const b2 = infer2(f2);
+>b2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>infer2(f2) : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>infer2 : <T>(fn: Factory2<T>) => T
+>       : ^ ^^  ^^           ^^^^^^
+>f2 : (msg?: string) => void
+>   : ^   ^^^      ^^^^^^^^^
+
+const c1 = infer1((msg: string = "hello") => {});
+>c1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>infer1((msg: string = "hello") => {}) : string | undefined
+>                                      : ^^^^^^^^^^^^^^^^^^
+>infer1 : <T>(fn: Factory<T>) => T
+>       : ^ ^^  ^^          ^^^^^^
+>(msg: string = "hello") => {} : (msg?: string) => void
+>                              : ^   ^^^      ^^^^^^^^^
+>msg : string
+>    : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const c2 = infer2((msg: string = "hello") => {});
+>c2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>infer2((msg: string = "hello") => {}) : string | undefined
+>                                      : ^^^^^^^^^^^^^^^^^^
+>infer2 : <T>(fn: Factory2<T>) => T
+>       : ^ ^^  ^^           ^^^^^^
+>(msg: string = "hello") => {} : (msg?: string) => void
+>                              : ^   ^^^      ^^^^^^^^^
+>msg : string
+>    : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
