@@ -6,6 +6,7 @@ import {
 import {
     Diagnostics,
     factory,
+    findAncestor,
     flatMap,
     getNewLineOrDefaultFromHost,
     getSynthesizedDeepClone,
@@ -122,7 +123,26 @@ function doChange(
         }
     }
 
-    changes.replaceRange(sourceFile, { pos, end }, declaration, { prefix, suffix });
+    const classParent = findAncestor(node, n => n.kind === SyntaxKind.ClassDeclaration);
+
+    if (classParent) {
+        changes.insertNodeBefore(
+            sourceFile,
+            classParent,
+            declaration,
+            /*blankLineBetween*/ false,
+        );
+        // Replace the current node with an empty line
+        changes.replaceNodeWithText(sourceFile, node, "");
+
+        // Exit the function as the changes are already applied
+        return;
+    }
+
+    changes.replaceRange(sourceFile, { pos, end }, declaration, {
+        prefix,
+        suffix,
+    });
 }
 
 function getLeftAndRightSiblings(typedefNode: JSDocTypedefTag): { leftSibling?: Node; rightSibling?: Node; } {
