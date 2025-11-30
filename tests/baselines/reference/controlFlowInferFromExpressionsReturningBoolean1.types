@@ -1,0 +1,254 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInferFromExpressionsReturningBoolean1.ts] ////
+
+=== controlFlowInferFromExpressionsReturningBoolean1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60130
+
+function assert<C>(c: C): asserts c {
+>assert : <C>(c: C) => asserts c
+>       : ^ ^^ ^^ ^^^^^         
+>c : C
+>  : ^
+
+  if (!c) {
+>!c : boolean
+>   : ^^^^^^^
+>c : C
+>  : ^
+
+    throw new TypeError("Assertion failed");
+>new TypeError("Assertion failed") : TypeError
+>                                  : ^^^^^^^^^
+>TypeError : TypeErrorConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
+>"Assertion failed" : "Assertion failed"
+>                   : ^^^^^^^^^^^^^^^^^^
+  }
+}
+
+export function test1(lines: string[]): string[] {
+>test1 : (lines: string[]) => string[]
+>      : ^     ^^        ^^^^^        
+>lines : string[]
+>      : ^^^^^^^^
+
+  let func: {
+>func : { name: string; lines: string[]; } | null
+>     : ^^^^^^^^      ^^^^^^^^^        ^^^^^^^^^^
+
+    name: string;
+>name : string
+>     : ^^^^^^
+
+    lines: string[];
+>lines : string[]
+>      : ^^^^^^^^
+
+  } | null = null;
+
+  for (const line of lines) {
+>line : string
+>     : ^^^^^^
+>lines : string[]
+>      : ^^^^^^^^
+
+    if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+
+      func = {
+>func = {        name: "qwer",        lines: [line],      } : { name: string; lines: string[]; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func : { name: string; lines: string[]; } | null
+>     : ^^^^^^^^      ^^^^^^^^^        ^^^^^^^^^^
+>{        name: "qwer",        lines: [line],      } : { name: string; lines: string[]; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        name: "qwer",
+>name : string
+>     : ^^^^^^
+>"qwer" : "qwer"
+>       : ^^^^^^
+
+        lines: [line],
+>lines : string[]
+>      : ^^^^^^^^
+>[line] : string[]
+>       : ^^^^^^^^
+>line : string
+>     : ^^^^^^
+
+      };
+    } else {
+      assert(func);
+>assert(func) : void
+>             : ^^^^
+>assert : <C>(c: C) => asserts c
+>       : ^ ^^ ^^ ^^^^^         
+>func : { name: string; lines: string[]; } | null
+>     : ^^^^^^^^      ^^^^^^^^^        ^^^^^^^^^^
+
+      const { name, lines } = func;
+>name : string
+>     : ^^^^^^
+>lines : string[]
+>      : ^^^^^^^^
+>func : { name: string; lines: string[]; }
+>     : ^^^^^^^^      ^^^^^^^^^        ^^^
+
+      lines.push(line);
+>lines.push(line) : number
+>                 : ^^^^^^
+>lines.push : (...items: string[]) => number
+>           : ^^^^     ^^^^^^^^^^^^^^^      
+>lines : string[]
+>      : ^^^^^^^^
+>push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
+>line : string
+>     : ^^^^^^
+
+      assert(name !== "abc");
+>assert(name !== "abc") : void
+>                       : ^^^^
+>assert : <C>(c: C) => asserts c
+>       : ^ ^^ ^^ ^^^^^         
+>name !== "abc" : boolean
+>               : ^^^^^^^
+>name : string
+>     : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+    }
+  }
+  if (func) return func.lines;
+>func : { name: string; lines: string[]; } | null
+>     : ^^^^^^^^      ^^^^^^^^^        ^^^^^^^^^^
+>func.lines : string[]
+>           : ^^^^^^^^
+>func : { name: string; lines: string[]; }
+>     : ^^^^^^^^      ^^^^^^^^^        ^^^
+>lines : string[]
+>      : ^^^^^^^^
+
+  return lines;
+>lines : string[]
+>      : ^^^^^^^^
+}
+
+declare function inferStuff<T>(arg: T, checkStuff?: boolean): T;
+>inferStuff : <T>(arg: T, checkStuff?: boolean) => T
+>           : ^ ^^   ^^ ^^          ^^^       ^^^^^ 
+>arg : T
+>    : ^
+>checkStuff : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
+
+export function test2(lines: string[]): string[] {
+>test2 : (lines: string[]) => string[]
+>      : ^     ^^        ^^^^^        
+>lines : string[]
+>      : ^^^^^^^^
+
+  let func: {
+>func : { name: string; } | null
+>     : ^^^^^^^^      ^^^^^^^^^^
+
+    name: string;
+>name : string
+>     : ^^^^^^
+
+  } | null = null;
+
+  for (const _ of lines) {
+>_ : string
+>  : ^^^^^^
+>lines : string[]
+>      : ^^^^^^^^
+
+    if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+
+      func = {
+>func = {        name: "qwer",      } : { name: string; }
+>                                     : ^^^^^^^^^^^^^^^^^
+>func : { name: string; } | null
+>     : ^^^^^^^^      ^^^^^^^^^^
+>{        name: "qwer",      } : { name: string; }
+>                              : ^^^^^^^^^^^^^^^^^
+
+        name: "qwer",
+>name : string
+>     : ^^^^^^
+>"qwer" : "qwer"
+>       : ^^^^^^
+
+      };
+    } else {
+      if (func) {
+>func : { name: string; } | null
+>     : ^^^^^^^^      ^^^^^^^^^^
+
+        const { name } = func;
+>name : string
+>     : ^^^^^^
+>func : { name: string; }
+>     : ^^^^^^^^      ^^^
+
+        func = inferStuff(
+>func = inferStuff(          {            name: "other",          },          name === "abc",        ) : { name: string; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^
+>func : { name: string; } | null
+>     : ^^^^^^^^      ^^^^^^^^^^
+>inferStuff(          {            name: "other",          },          name === "abc",        ) : { name: string; }
+>                                                                                               : ^^^^^^^^^^^^^^^^^
+>inferStuff : <T>(arg: T, checkStuff?: boolean) => T
+>           : ^ ^^   ^^ ^^          ^^^       ^^^^^ 
+          {
+>{            name: "other",          } : { name: string; }
+>                                       : ^^^^^^^^^^^^^^^^^
+
+            name: "other",
+>name : string
+>     : ^^^^^^
+>"other" : "other"
+>        : ^^^^^^^
+
+          },
+          name === "abc",
+>name === "abc" : boolean
+>               : ^^^^^^^
+>name : string
+>     : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+        );
+      }
+    }
+  }
+
+  return lines;
+>lines : string[]
+>      : ^^^^^^^^
+}
