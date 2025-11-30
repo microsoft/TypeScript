@@ -2857,12 +2857,12 @@ function f30(o: Thing | undefined) {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         o.foo;
->o.foo : NonNullable<string | number | undefined>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o.foo : string | number
+>      : ^^^^^^^^^^^^^^^
 >o : Thing
 >  : ^^^^^
->foo : NonNullable<string | number | undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : string | number
+>    : ^^^^^^^^^^^^^^^
     }
 }
 
