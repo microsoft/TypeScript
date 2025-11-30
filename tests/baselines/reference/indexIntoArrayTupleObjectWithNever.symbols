@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/indexIntoArrayTupleObjectWithNever.ts] ////
+
+=== indexIntoArrayTupleObjectWithNever.ts ===
+type A = { a: 42 }[never]
+>A : Symbol(A, Decl(indexIntoArrayTupleObjectWithNever.ts, 0, 0))
+>a : Symbol(a, Decl(indexIntoArrayTupleObjectWithNever.ts, 0, 10))
+
+type B = [42][never]
+>B : Symbol(B, Decl(indexIntoArrayTupleObjectWithNever.ts, 0, 25))
+
+type C = Array<42>[never]
+>C : Symbol(C, Decl(indexIntoArrayTupleObjectWithNever.ts, 2, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type D = 42[never]
+>D : Symbol(D, Decl(indexIntoArrayTupleObjectWithNever.ts, 4, 25))
+
+type E = any[never] // any
+>E : Symbol(E, Decl(indexIntoArrayTupleObjectWithNever.ts, 6, 18))
+
+
+// -----------------------------------------------------------------
+
+type Indexes<T extends readonly any[]> = keyof T & `${number}`
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 8, 19))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 13))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 13))
+
+declare namespace IfNoDuplicateElements {
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 62), Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 1))
+
+    export type Duplicate = "Duplicate"
+>Duplicate : Symbol(Duplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 15, 41))
+
+    export type NotDuplicate = "NotDuplicate"
+>NotDuplicate : Symbol(NotDuplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 16, 39))
+
+    export type HasDuplicates<T extends readonly any[]> = {
+>HasDuplicates : Symbol(HasDuplicates, Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 45))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 18, 30))
+
+         [K in Indexes<T>]: T[K] extends T[Exclude<Indexes<T>, K>] ? Duplicate : NotDuplicate
+>K : Symbol(K, Decl(indexIntoArrayTupleObjectWithNever.ts, 19, 10))
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 8, 19))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 18, 30))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 18, 30))
+>K : Symbol(K, Decl(indexIntoArrayTupleObjectWithNever.ts, 19, 10))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 18, 30))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 8, 19))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 18, 30))
+>K : Symbol(K, Decl(indexIntoArrayTupleObjectWithNever.ts, 19, 10))
+>Duplicate : Symbol(Duplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 15, 41))
+>NotDuplicate : Symbol(NotDuplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 16, 39))
+
+    }[Indexes<T>]
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 8, 19))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 18, 30))
+}
+
+export type IfNoDuplicateElements<
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 1))
+
+    T extends readonly any[],
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 23, 34))
+
+    True = T,
+>True : Symbol(True, Decl(indexIntoArrayTupleObjectWithNever.ts, 24, 29))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 23, 34))
+
+    False = never
+>False : Symbol(False, Decl(indexIntoArrayTupleObjectWithNever.ts, 25, 13))
+
+> = IfNoDuplicateElements.Duplicate extends IfNoDuplicateElements.HasDuplicates<T> ? False : True
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 62), Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 1))
+>Duplicate : Symbol(IfNoDuplicateElements.Duplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 15, 41))
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 62), Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 1))
+>HasDuplicates : Symbol(IfNoDuplicateElements.HasDuplicates, Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 45))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 23, 34))
+>False : Symbol(False, Decl(indexIntoArrayTupleObjectWithNever.ts, 25, 13))
+>True : Symbol(True, Decl(indexIntoArrayTupleObjectWithNever.ts, 24, 29))
+
+type T0 = IfNoDuplicateElements<[1], true, false>
+>T0 : Symbol(T0, Decl(indexIntoArrayTupleObjectWithNever.ts, 27, 97))
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 1))
+
+type T1 = IfNoDuplicateElements<[1,1], true, false>
+>T1 : Symbol(T1, Decl(indexIntoArrayTupleObjectWithNever.ts, 29, 49))
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 1))
+
+// -----------------------------------------------------------------
+
+type T2 = Record<string, boolean>[never]
+>T2 : Symbol(T2, Decl(indexIntoArrayTupleObjectWithNever.ts, 30, 51))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type T3 = Record<`--${string}`, boolean>[never]
+>T3 : Symbol(T3, Decl(indexIntoArrayTupleObjectWithNever.ts, 34, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+
+const obj = {
+>obj : Symbol(obj, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 5))
+
+  arr: [],
+>arr : Symbol(arr, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 13))
+
+};
+
+const objWithIndex: Record<string, boolean> = {};
+>objWithIndex : Symbol(objWithIndex, Decl(indexIntoArrayTupleObjectWithNever.ts, 42, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+const el = obj.arr[0];
+>el : Symbol(el, Decl(indexIntoArrayTupleObjectWithNever.ts, 44, 5))
+>obj.arr : Symbol(arr, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 13))
+>obj : Symbol(obj, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 5))
+>arr : Symbol(arr, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 13))
+
+const result = objWithIndex[el];
+>result : Symbol(result, Decl(indexIntoArrayTupleObjectWithNever.ts, 45, 5))
+>objWithIndex : Symbol(objWithIndex, Decl(indexIntoArrayTupleObjectWithNever.ts, 42, 5))
+>el : Symbol(el, Decl(indexIntoArrayTupleObjectWithNever.ts, 44, 5))
+
+function testUnreachableNeverType(smt: number | string) {
+>testUnreachableNeverType : Symbol(testUnreachableNeverType, Decl(indexIntoArrayTupleObjectWithNever.ts, 45, 32))
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 47, 34))
+
+  if(typeof smt === "number") {}
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 47, 34))
+
+  else if(typeof smt === "string") {}
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 47, 34))
+
+  else {
+    const result = objWithIndex[smt]
+>result : Symbol(result, Decl(indexIntoArrayTupleObjectWithNever.ts, 51, 9))
+>objWithIndex : Symbol(objWithIndex, Decl(indexIntoArrayTupleObjectWithNever.ts, 42, 5))
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 47, 34))
+  }
+}
+
+// -----------------------------------------------------------------
+
