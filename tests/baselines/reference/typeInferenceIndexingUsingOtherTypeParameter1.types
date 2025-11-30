@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/typeInferenceIndexingUsingOtherTypeParameter1.ts] ////
+
+=== Performance Stats ===
+Instantiation count: 2,500
+
+=== typeInferenceIndexingUsingOtherTypeParameter1.ts ===
+type Primitive = null | undefined | string | number | boolean | symbol | bigint;
+>Primitive : Primitive
+>          : ^^^^^^^^^
+
+type FieldValues = Record<string, any>;
+>FieldValues : FieldValues
+>            : ^^^^^^^^^^^
+
+type PathImpl<
+>PathImpl : PathImpl<K, V, TraversedTypes>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  K extends string | number,
+  V,
+  TraversedTypes,
+> = V extends Primitive
+  ? `${K}`
+  : `${K}` | `${K}.${PathInternal<V, TraversedTypes | V>}`;
+
+type PathInternal<T, TraversedTypes = T> = {
+>PathInternal : PathInternal<T, TraversedTypes>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]-?: PathImpl<K & string, T[K], TraversedTypes>;
+}[keyof T];
+
+type Path<T> = T extends any ? PathInternal<T> : never;
+>Path : Path<T>
+>     : ^^^^^^^
+
+type FieldPath<TFieldValues extends FieldValues> = Path<TFieldValues>;
+>FieldPath : FieldPath<TFieldValues>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type PathValue<T, P extends Path<T>> = T extends any
+>PathValue : PathValue<T, P>
+>          : ^^^^^^^^^^^^^^^
+
+  ? P extends `${infer K}.${infer R}`
+    ? K extends keyof T
+      ? R extends Path<T[K]>
+        ? PathValue<T[K], R>
+        : never
+      : never
+    : P extends keyof T
+    ? T[P]
+    : never
+  : never;
+
+type FieldPathValue<
+>FieldPathValue : FieldPathValue<TFieldValues, TFieldPath>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TFieldValues extends FieldValues,
+  TFieldPath extends FieldPath<TFieldValues>,
+> = PathValue<TFieldValues, TFieldPath>;
+
+type UseControllerProps<
+>UseControllerProps : UseControllerProps<TFieldValues, TName>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = {
+  name: TName;
+>name : TName
+>     : ^^^^^
+
+  defaultValue?: FieldPathValue<TFieldValues, TName>;
+>defaultValue : PathValue<TFieldValues, TName> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function useController<
+>useController : <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = Path<TFieldValues>>(props: UseControllerProps<TFieldValues, TName>) => { name: TName; values: TFieldValues; }
+>              : ^            ^^^^^^^^^           ^^^^^^^^^^^^^^^^     ^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^^^^^^     ^^                                       ^^^^^                                      
+
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: UseControllerProps<TFieldValues, TName>,
+>props : UseControllerProps<TFieldValues, TName>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): { name: TName; values: TFieldValues };
+>name : TName
+>     : ^^^^^
+>values : TFieldValues
+>       : ^^^^^^^^^^^^
+
+export const { name, values } = useController({
+>name : "test"
+>     : ^^^^^^
+>values : { test: string; }
+>       : ^^^^^^^^^^^^^^^^^
+>useController({  name: "test",  defaultValue: "",}) : { name: "test"; values: { test: string; }; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useController : <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = Path<TFieldValues>>(props: UseControllerProps<TFieldValues, TName>) => { name: TName; values: TFieldValues; }
+>              : ^            ^^^^^^^^^           ^^^^^^^^^^^^^^^^     ^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^^^^^^     ^^                                       ^^^^^                                      
+>{  name: "test",  defaultValue: "",} : { name: "test"; defaultValue: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  name: "test",
+>name : "test"
+>     : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+  defaultValue: "",
+>defaultValue : string
+>             : ^^^^^^
+>"" : ""
+>   : ^^
+
+});
+

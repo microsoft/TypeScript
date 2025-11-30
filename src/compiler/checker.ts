@@ -20567,7 +20567,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Maps forward-references to later types parameters to the empty object type.
+     * Maps forward-references to later types parameters to the unknown type.
      * This is used during inference when instantiating type parameter defaults.
      */
     function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
@@ -27603,7 +27603,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                    inferredType = aggregateInference;
+                    const recordSymbol = getGlobalRecordSymbol();
+                    const selfReference = recordSymbol ? getTypeAliasInstantiation(recordSymbol, [stringNumberSymbolType, unknownType]) : unknownType;
+                    inferredType = instantiateType(aggregateInference, mergeTypeMappers(makeUnaryTypeMapper(inference.typeParameter, selfReference), context.nonFixingMapper));
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
@@ -27618,7 +27620,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
                     if (defaultType) {
                         // Instantiate the default type. Any forward reference to a type
-                        // parameter should be instantiated to the empty object type.
+                        // parameter should be instantiated to the unknown type.
                         inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
                     }
                 }

@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/typeInferenceIndexingUsingOtherTypeParameter1.ts] ////
+
+=== typeInferenceIndexingUsingOtherTypeParameter1.ts ===
+type Primitive = null | undefined | string | number | boolean | symbol | bigint;
+>Primitive : Symbol(Primitive, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+
+type FieldValues = Record<string, any>;
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type PathImpl<
+>PathImpl : Symbol(PathImpl, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 2, 39))
+
+  K extends string | number,
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 4, 14))
+
+  V,
+>V : Symbol(V, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 5, 28))
+
+  TraversedTypes,
+>TraversedTypes : Symbol(TraversedTypes, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 6, 4))
+
+> = V extends Primitive
+>V : Symbol(V, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 5, 28))
+>Primitive : Symbol(Primitive, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+
+  ? `${K}`
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 4, 14))
+
+  : `${K}` | `${K}.${PathInternal<V, TraversedTypes | V>}`;
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 4, 14))
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 4, 14))
+>PathInternal : Symbol(PathInternal, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 59))
+>V : Symbol(V, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 5, 28))
+>TraversedTypes : Symbol(TraversedTypes, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 6, 4))
+>V : Symbol(V, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 5, 28))
+
+type PathInternal<T, TraversedTypes = T> = {
+>PathInternal : Symbol(PathInternal, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 59))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 18))
+>TraversedTypes : Symbol(TraversedTypes, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 20))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 18))
+
+  [K in keyof T]-?: PathImpl<K & string, T[K], TraversedTypes>;
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 13, 3))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 18))
+>PathImpl : Symbol(PathImpl, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 2, 39))
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 13, 3))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 18))
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 13, 3))
+>TraversedTypes : Symbol(TraversedTypes, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 20))
+
+}[keyof T];
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 12, 18))
+
+type Path<T> = T extends any ? PathInternal<T> : never;
+>Path : Symbol(Path, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 14, 11))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 10))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 10))
+>PathInternal : Symbol(PathInternal, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 59))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 10))
+
+type FieldPath<TFieldValues extends FieldValues> = Path<TFieldValues>;
+>FieldPath : Symbol(FieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 55))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 18, 15))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+>Path : Symbol(Path, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 14, 11))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 18, 15))
+
+type PathValue<T, P extends Path<T>> = T extends any
+>PathValue : Symbol(PathValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 18, 70))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+>P : Symbol(P, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 17))
+>Path : Symbol(Path, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 14, 11))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+
+  ? P extends `${infer K}.${infer R}`
+>P : Symbol(P, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 17))
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 22))
+>R : Symbol(R, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 33))
+
+    ? K extends keyof T
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 22))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+
+      ? R extends Path<T[K]>
+>R : Symbol(R, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 33))
+>Path : Symbol(Path, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 14, 11))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 22))
+
+        ? PathValue<T[K], R>
+>PathValue : Symbol(PathValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 18, 70))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+>K : Symbol(K, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 22))
+>R : Symbol(R, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 21, 33))
+
+        : never
+      : never
+    : P extends keyof T
+>P : Symbol(P, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 17))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+
+    ? T[P]
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 15))
+>P : Symbol(P, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 17))
+
+    : never
+  : never;
+
+type FieldPathValue<
+>FieldPathValue : Symbol(FieldPathValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 30, 10))
+
+  TFieldValues extends FieldValues,
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 32, 20))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+
+  TFieldPath extends FieldPath<TFieldValues>,
+>TFieldPath : Symbol(TFieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 33, 35))
+>FieldPath : Symbol(FieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 55))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 32, 20))
+
+> = PathValue<TFieldValues, TFieldPath>;
+>PathValue : Symbol(PathValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 18, 70))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 32, 20))
+>TFieldPath : Symbol(TFieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 33, 35))
+
+type UseControllerProps<
+>UseControllerProps : Symbol(UseControllerProps, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 35, 40))
+
+  TFieldValues extends FieldValues = FieldValues,
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 37, 24))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 38, 49))
+>FieldPath : Symbol(FieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 55))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 37, 24))
+>FieldPath : Symbol(FieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 55))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 37, 24))
+
+> = {
+  name: TName;
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 40, 5))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 38, 49))
+
+  defaultValue?: FieldPathValue<TFieldValues, TName>;
+>defaultValue : Symbol(defaultValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 41, 14))
+>FieldPathValue : Symbol(FieldPathValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 30, 10))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 37, 24))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 38, 49))
+
+};
+
+declare function useController<
+>useController : Symbol(useController, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 43, 2))
+
+  TFieldValues extends FieldValues = FieldValues,
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 45, 31))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 80))
+
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 46, 49))
+>FieldPath : Symbol(FieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 55))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 45, 31))
+>FieldPath : Symbol(FieldPath, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 16, 55))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 45, 31))
+
+>(
+  props: UseControllerProps<TFieldValues, TName>,
+>props : Symbol(props, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 48, 2))
+>UseControllerProps : Symbol(UseControllerProps, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 35, 40))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 45, 31))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 46, 49))
+
+): { name: TName; values: TFieldValues };
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 50, 4))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 46, 49))
+>values : Symbol(values, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 50, 17))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 45, 31))
+
+export const { name, values } = useController({
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 52, 14))
+>values : Symbol(values, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 52, 20))
+>useController : Symbol(useController, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 43, 2))
+
+  name: "test",
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 52, 47))
+
+  defaultValue: "",
+>defaultValue : Symbol(defaultValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 53, 15))
+
+});
+
