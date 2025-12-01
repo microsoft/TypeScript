@@ -14663,23 +14663,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             inferredProp.declarations = prop.declarations;
             inferredProp.links.nameType = getSymbolLinks(prop).nameType;
             inferredProp.links.propertyType = getTypeOfSymbol(prop);
-            if (
-                type.constraintType.type.flags & TypeFlags.IndexedAccess
-                && (type.constraintType.type as IndexedAccessType).objectType.flags & TypeFlags.TypeParameter
-                && (type.constraintType.type as IndexedAccessType).indexType.flags & TypeFlags.TypeParameter
-            ) {
-                // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
-                // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
-                // type identities produced, we simplify such indexed access occurences
-                const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
-                const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
-                inferredProp.links.mappedType = newMappedType as MappedType;
-                inferredProp.links.constraintType = getIndexType(newTypeParam) as IndexType;
-            }
-            else {
-                inferredProp.links.mappedType = type.mappedType;
-                inferredProp.links.constraintType = type.constraintType;
-            }
+            inferredProp.links.mappedType = type.mappedType;
+            inferredProp.links.constraintType = type.constraintType;
             members.set(prop.escapedName, inferredProp);
         }
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos);
@@ -26370,6 +26355,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
+        // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
+        // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
+        // type identities produced, we simplify such indexed access occurences
+        if (constraint.type.flags & TypeFlags.IndexedAccess) {
+            const newTypeParam = (constraint.type as IndexedAccessType).objectType;
+            target = replaceIndexedAccess(target, constraint.type as ReplaceableIndexedAccessType, newTypeParam) as MappedType;
+            constraint = getIndexType(newTypeParam) as IndexType;
+        }
         const cacheKey = source.id + "," + target.id + "," + constraint.id;
         if (reverseHomomorphicMappedCache.has(cacheKey)) {
             return reverseHomomorphicMappedCache.get(cacheKey);
