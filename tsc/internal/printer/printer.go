@@ -3802,8 +3802,12 @@ func (p *Printer) emitImportAttribute(node *ast.ImportAttribute) {
 	p.emitImportAttributeName(node.Name())
 	p.writePunctuation(":")
 	p.writeSpace()
-	/// !!! emit trailing comments of value
-	p.emitExpression(node.Value, ast.OperatorPrecedenceDisallowComma)
+	value := node.Value
+	if p.emitContext.EmitFlags(node.Value)&EFNoLeadingComments == 0 {
+		commentRange := getCommentRange(value)
+		p.emitTrailingComments(commentRange.Pos(), commentSeparatorAfter)
+	}
+	p.emitExpression(value, ast.OperatorPrecedenceDisallowComma)
 	p.exitNode(node.AsNode(), state)
 }
 
