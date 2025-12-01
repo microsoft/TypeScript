@@ -1,0 +1,59 @@
+unreachableGetterReturns1.ts(4,7): error TS2378: A 'get' accessor must return a value.
+unreachableGetterReturns1.ts(27,7): error TS2322: Type 'void' is not assignable to type 'number'.
+unreachableGetterReturns1.ts(27,7): error TS2378: A 'get' accessor must return a value.
+
+
+==== unreachableGetterReturns1.ts (3 errors) ====
+    declare function assert(cond: unknown): asserts cond;
+    
+    const obj1 = {
+      get prop() {
+          ~~~~
+!!! error TS2378: A 'get' accessor must return a value.
+        assert(false);
+      },
+    };
+    
+    const obj2 = {
+      get prop(): never {
+        assert(false);
+      },
+    };
+    
+    const obj3 = {
+      get prop() {
+        if (Math.random()) {
+          assert(false);
+        }
+        return 42;
+      },
+    };
+    
+    type Obj = { prop: number };
+    
+    const obj4: Obj = {
+      get prop() {
+          ~~~~
+!!! error TS2322: Type 'void' is not assignable to type 'number'.
+!!! related TS6500 unreachableGetterReturns1.ts:24:14: The expected type comes from property 'prop' which is declared here on type 'Obj'
+          ~~~~
+!!! error TS2378: A 'get' accessor must return a value.
+        assert(false);
+      },
+    };
+    
+    const obj5: Obj = {
+      get prop(): never {
+        assert(false);
+      },
+    };
+    
+    const obj6: Obj = {
+      get prop() {
+        if (Math.random()) {
+          assert(false);
+        }
+        return 42;
+      },
+    };
+    

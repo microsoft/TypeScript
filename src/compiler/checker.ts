@@ -6407,6 +6407,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return !!annotationType && typeNodeIsEquivalentToType(node, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type);
             },
+
+            isPossiblyReachable(expression) {
+                const ancestor = findAncestor(expression, canHaveFlowNode);
+                if (!ancestor) {
+                    return true;
+                }
+                return !!ancestor.flowNode && isReachableFlowNode(ancestor.flowNode);
+            },
         };
         return {
             syntacticBuilderResolver,
@@ -39218,6 +39226,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
+            const statement = findAncestor(yieldExpression, isStatement)!;
+            if (canHaveFlowNode(statement) && (!statement.flowNode || !isReachableFlowNode(statement.flowNode))) {
+                return;
+            }
             let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
             if (yieldExpression.expression && isConstContext(yieldExpression.expression)) {
                 yieldExpressionType = getRegularTypeOfLiteralType(yieldExpressionType);
@@ -39334,6 +39346,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (!isFunctionExpressionOrArrowFunction(func.symbol.valueDeclaration!) || isConstantReference((expr as CallExpression).expression))
                 ) {
                     hasReturnOfTypeNever = true;
+                    return;
+                }
+
+                if (!returnStatement.flowNode || !isReachableFlowNode(returnStatement.flowNode)) {
                     return;
                 }
 
@@ -42537,12 +42553,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             checkDecorators(node);
             checkSignatureDeclaration(node);
-            if (node.kind === SyntaxKind.GetAccessor) {
-                if (!(node.flags & NodeFlags.Ambient) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
-                    if (!(node.flags & NodeFlags.HasExplicitReturn)) {
-                        error(node.name, Diagnostics.A_get_accessor_must_return_a_value);
-                    }
-                }
+            if (
+                node.kind === SyntaxKind.GetAccessor && !(node.flags & NodeFlags.Ambient) && nodeIsPresent(node.body) &&
+                (node.flags & (NodeFlags.HasImplicitReturn | NodeFlags.HasExplicitReturn)) === NodeFlags.HasImplicitReturn &&
+                (!node.type || !(getTypeFromTypeNode(node.type).flags & TypeFlags.Never))
+            ) {
+                error(node.name, Diagnostics.A_get_accessor_must_return_a_value);
             }
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including

@@ -10639,6 +10639,7 @@ export interface SyntacticTypeNodeBuilderResolver {
         markError(): void;
         hadError(): boolean;
     };
+    isPossiblyReachable(expression: Expression): boolean;
 }
 
 /** @internal */

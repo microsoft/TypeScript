@@ -5,7 +5,7 @@
 // it is an error if there is no single BCT, these are error cases
 
 function f1() {
->f1 : () => 1 | ""
+>f1 : () => number
 >   : ^^^^^^^^^^^^
 
     if (true) {
@@ -24,8 +24,8 @@ function f1() {
 }
 
 function f2() {
->f2 : () => 1 | "" | 2
->   : ^^^^^^^^^^^^^^^^
+>f2 : () => number
+>   : ^^^^^^^^^^^^
 
     if (true) {
 >true : true
@@ -89,7 +89,7 @@ function f4() {
 }
 
 function f5() {
->f5 : () => 1 | ""
+>f5 : () => number
 >   : ^^^^^^^^^^^^
 
     return 1;
@@ -102,8 +102,8 @@ function f5() {
 }
 
 function f6<T, U>(x: T, y:U) {
->f6 : <T, U>(x: T, y: U) => T | U
->   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>f6 : <T, U>(x: T, y: U) => T
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -125,7 +125,7 @@ function f6<T, U>(x: T, y:U) {
 }
 
 function f8<T extends U, U extends V, V>(x: T, y: U) {
->f8 : <T extends U, U extends V, V>(x: T, y: U) => U
+>f8 : <T extends U, U extends V, V>(x: T, y: U) => T
 >   : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^

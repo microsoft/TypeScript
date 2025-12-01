@@ -377,7 +377,7 @@ export var tests: TestRunner = (function () {
 >         : ^^^^^^^^^^^^^^^
 >"Test for any error" : "Test for any error"
 >                     : ^^^^^^^^^^^^^^^^^^^^
->function () { throw new Error(); return false; } : () => false
+>function () { throw new Error(); return false; } : () => never
 >                                                 : ^^^^^^^^^^^
 >new Error() : Error
 >            : ^^^^^
@@ -403,7 +403,7 @@ export var tests: TestRunner = (function () {
 >         : ^^^^^^^^^^^^^^^
 >"Test RegEx error message match" : "Test RegEx error message match"
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function () { throw new Error("Should also pass"); return false; } : () => false
+>function () { throw new Error("Should also pass"); return false; } : () => never
 >                                                                   : ^^^^^^^^^^^
 >new Error("Should also pass") : Error
 >                              : ^^^^^

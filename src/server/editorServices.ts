@@ -3920,9 +3920,8 @@ export class ProjectService {
         // Create sourceFileLike
         if (!info.sourceFileLike) {
             info.sourceFileLike = {
-                get text() {
-                    Debug.fail("shouldnt need text");
-                    return "";
+                get text(): never {
+                    return Debug.fail("shouldnt need text");
                 },
                 getLineAndCharacterOfPosition: pos => {
                     const lineOffset = info.positionToLineOffset(pos);

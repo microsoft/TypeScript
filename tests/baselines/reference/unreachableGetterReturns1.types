@@ -1,0 +1,169 @@
+//// [tests/cases/compiler/unreachableGetterReturns1.ts] ////
+
+=== unreachableGetterReturns1.ts ===
+declare function assert(cond: unknown): asserts cond;
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>cond : unknown
+>     : ^^^^^^^
+
+const obj1 = {
+>obj1 : { readonly prop: void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{  get prop() {    assert(false);  },} : { readonly prop: void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  get prop() {
+>prop : void
+>     : ^^^^
+
+    assert(false);
+>assert(false) : void
+>              : ^^^^
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>false : false
+>      : ^^^^^
+
+  },
+};
+
+const obj2 = {
+>obj2 : { readonly prop: never; }
+>     : ^^^^^^^^^^^^^^^^^     ^^^
+>{  get prop(): never {    assert(false);  },} : { readonly prop: never; }
+>                                              : ^^^^^^^^^^^^^^^^^     ^^^
+
+  get prop(): never {
+>prop : never
+>     : ^^^^^
+
+    assert(false);
+>assert(false) : void
+>              : ^^^^
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>false : false
+>      : ^^^^^
+
+  },
+};
+
+const obj3 = {
+>obj3 : { readonly prop: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  get prop() {    if (Math.random()) {      assert(false);    }    return 42;  },} : { readonly prop: number; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  get prop() {
+>prop : number
+>     : ^^^^^^
+
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+      assert(false);
+>assert(false) : void
+>              : ^^^^
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>false : false
+>      : ^^^^^
+    }
+    return 42;
+>42 : 42
+>   : ^^
+
+  },
+};
+
+type Obj = { prop: number };
+>Obj : Obj
+>    : ^^^
+>prop : number
+>     : ^^^^^^
+
+const obj4: Obj = {
+>obj4 : Obj
+>     : ^^^
+>{  get prop() {    assert(false);  },} : { readonly prop: void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  get prop() {
+>prop : void
+>     : ^^^^
+
+    assert(false);
+>assert(false) : void
+>              : ^^^^
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>false : false
+>      : ^^^^^
+
+  },
+};
+
+const obj5: Obj = {
+>obj5 : Obj
+>     : ^^^
+>{  get prop(): never {    assert(false);  },} : { readonly prop: never; }
+>                                              : ^^^^^^^^^^^^^^^^^     ^^^
+
+  get prop(): never {
+>prop : never
+>     : ^^^^^
+
+    assert(false);
+>assert(false) : void
+>              : ^^^^
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>false : false
+>      : ^^^^^
+
+  },
+};
+
+const obj6: Obj = {
+>obj6 : Obj
+>     : ^^^
+>{  get prop() {    if (Math.random()) {      assert(false);    }    return 42;  },} : { readonly prop: number; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  get prop() {
+>prop : number
+>     : ^^^^^^
+
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+      assert(false);
+>assert(false) : void
+>              : ^^^^
+>assert : (cond: unknown) => asserts cond
+>       : ^    ^^       ^^^^^            
+>false : false
+>      : ^^^^^
+    }
+    return 42;
+>42 : 42
+>   : ^^
+
+  },
+};
+
