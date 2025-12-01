@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/typeInferenceSelfIndexingTypeParameter2.ts] ////
+
+=== typeInferenceSelfIndexingTypeParameter2.ts ===
+declare function f<T>(
+>f : <T>(arg: { [K in keyof T]: T[K][keyof T[K]]; }) => T
+>  : ^ ^^   ^^                                     ^^^^^ 
+
+  arg: {
+>arg : { [K in keyof T]: T[K][keyof T[K]]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof T]: T[K][keyof T[K]];
+  }
+): T;
+
+const res1 = f({
+>res1 : { a: PartialInference<string, string | number | symbol>; b: PartialInference<number, string | number | symbol>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f({  a: "hello",  b: 100,}) : { a: PartialInference<string, string | number | symbol>; b: PartialInference<number, string | number | symbol>; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : <T>(arg: { [K in keyof T]: T[K][keyof T[K]]; }) => T
+>  : ^ ^^   ^^                                     ^^^^^ 
+>{  a: "hello",  b: 100,} : { a: string; b: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: "hello",
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+  b: 100,
+>b : number
+>  : ^^^^^^
+>100 : 100
+>    : ^^^
+
+});
+

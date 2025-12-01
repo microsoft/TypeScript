@@ -1669,7 +1669,7 @@ interface ThisType<T> {}
 /**
  * Type instantiated to perform partial inferences from indexed accesses
  */
-type PartialInference<T, Keys extends string> = ({
+type PartialInference<T, Keys extends PropertyKey> = ({
     [K in Keys]: {
         [K1 in K]: T;
     };

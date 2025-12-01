@@ -2108,7 +2108,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var unreachableNeverType = createIntrinsicType(TypeFlags.Never, "never", /*objectFlags*/ undefined, "unreachable");
     var nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
     var stringOrNumberType = getUnionType([stringType, numberType]);
-    var stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
+    var stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]) as UnionType;
     var numberOrBigIntType = getUnionType([numberType, bigintType]);
     var templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType, nullType, undefinedType]) as UnionType;
     var numericStringType = getTemplateLiteralType(["", ""], [numberType]); // The `${number}` type
@@ -2143,6 +2143,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var unknownEmptyObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, unknownEmptyObjectType]) : unknownType;
+
+    var allKeysUnknownType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, map(stringNumberSymbolType.types, t => createIndexInfo(t, unknownType, /*isReadonly*/ false))); // { [k: PropertyKey]: unknown }
+    var allKeysAllKeysUnknownType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, map(stringNumberSymbolType.types, t => createIndexInfo(t, allKeysUnknownType, /*isReadonly*/ false))); // { [k: PropertyKey]: { [k: PropertyKey]: unknown } }
 
     var emptyGenericType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
     emptyGenericType.instantiations = new Map<string, TypeReference>();
@@ -26372,6 +26375,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
+        if (constraint.type.flags & TypeFlags.IndexedAccess) {
+            const newTypeParam = (constraint.type as IndexedAccessType).objectType;
+            target = replaceIndexedAccess(target, constraint.type as ReplaceableIndexedAccessType, newTypeParam) as MappedType;
+            constraint = getIndexType(newTypeParam) as IndexType;
+        }
         const cacheKey = source.id + "," + target.id + "," + constraint.id;
         if (reverseHomomorphicMappedCache.has(cacheKey)) {
             return reverseHomomorphicMappedCache.get(cacheKey);
@@ -26434,11 +26442,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function inferReverseMappedTypeWorker(sourceType: Type, target: MappedType, constraint: IndexType): Type {
-        const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
+        const typeParameter = getTypeParameterFromMappedType(target);
+        const inferenceTarget = getIndexedAccessType(constraint.type, typeParameter);
         const templateType = getTemplateTypeFromMappedType(target);
-        const inference = createInferenceInfo(typeParameter);
+        const inference = createInferenceInfo(inferenceTarget);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || (inference.indexes ? getIntersectionType(inference.indexes) : unknownType);
+        const inferredType = getTypeFromInference(inference);
+        if (inferredType) {
+            return inferredType;
+        }
+        if (inference.indexes) {
+            const eraseSelfMapper = makeArrayTypeMapper([constraint.type, typeParameter], [allKeysAllKeysUnknownType, stringNumberSymbolType]);
+            return instantiateType(getIntersectionType(inference.indexes), eraseSelfMapper);
+        }
+        return unknownType;
     }
 
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
@@ -27603,9 +27620,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                    const recordSymbol = getGlobalRecordSymbol();
-                    const selfReference = recordSymbol ? getTypeAliasInstantiation(recordSymbol, [stringNumberSymbolType, unknownType]) : unknownType;
-                    inferredType = instantiateType(aggregateInference, mergeTypeMappers(makeUnaryTypeMapper(inference.typeParameter, selfReference), context.nonFixingMapper));
+                    const eraseSelfMapper = makeUnaryTypeMapper(inference.typeParameter, allKeysUnknownType);
+                    inferredType = instantiateType(aggregateInference, mergeTypeMappers(eraseSelfMapper, context.nonFixingMapper));
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
