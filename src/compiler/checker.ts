@@ -47833,6 +47833,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
             }
         }
+        if (isComputedPropertyName(member.name)) {
+            // Computed property name with a literal expression (e.g., ['key'] or [`key`])
+            // This is deprecated and will be disallowed in a future version
+            suggestionDiagnostics.add(
+                createDiagnosticForNode(member.name, Diagnostics.Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_string_literal_instead),
+            );
+        }
         if (member.initializer) {
             return computeConstantEnumMemberValue(member);
         }
