@@ -110,7 +110,7 @@ func (r *lspReader) Read() (*lsproto.Message, error) {
 
 	req := &lsproto.Message{}
 	if err := json.Unmarshal(data, req); err != nil {
-		return nil, fmt.Errorf("%w: %w", lsproto.ErrInvalidRequest, err)
+		return nil, fmt.Errorf("%w: %w", lsproto.ErrorCodeInvalidRequest, err)
 	}
 
 	return req, nil
@@ -302,7 +302,7 @@ func (s *Server) readLoop(ctx context.Context) error {
 		}
 		msg, err := s.read()
 		if err != nil {
-			if errors.Is(err, lsproto.ErrInvalidRequest) {
+			if errors.Is(err, lsproto.ErrorCodeInvalidRequest) {
 				s.sendError(nil, err)
 				continue
 			}
@@ -318,7 +318,7 @@ func (s *Server) readLoop(ctx context.Context) error {
 				}
 				s.sendResult(req.ID, resp)
 			} else {
-				s.sendError(req.ID, lsproto.ErrServerNotInitialized)
+				s.sendError(req.ID, lsproto.ErrorCodeServerNotInitialized)
 			}
 			continue
 		}
@@ -380,7 +380,7 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 			handle := func() {
 				if err := s.handleRequestOrNotification(requestCtx, req); err != nil {
 					if errors.Is(err, context.Canceled) {
-						s.sendError(req.ID, lsproto.ErrRequestCancelled)
+						s.sendError(req.ID, lsproto.ErrorCodeRequestCancelled)
 					} else if errors.Is(err, io.EOF) {
 						lspExit()
 					} else {
@@ -453,15 +453,15 @@ func (s *Server) sendResult(id *lsproto.ID, result any) {
 }
 
 func (s *Server) sendError(id *lsproto.ID, err error) {
-	code := lsproto.ErrInternalError.Code
-	if errCode := (*lsproto.ErrorCode)(nil); errors.As(err, &errCode) {
-		code = errCode.Code
+	code := lsproto.ErrorCodeInternalError
+	if errCode := lsproto.ErrorCode(0); errors.As(err, &errCode) {
+		code = errCode
 	}
 	// TODO(jakebailey): error data
 	s.sendResponse(&lsproto.ResponseMessage{
 		ID: id,
 		Error: &lsproto.ResponseError{
-			Code:    code,
+			Code:    int32(code),
 			Message: err.Error(),
 		},
 	})
@@ -479,7 +479,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 	}
 	s.Log("unknown method", req.Method)
 	if req.ID != nil {
-		s.sendError(req.ID, lsproto.ErrInvalidRequest)
+		s.sendError(req.ID, lsproto.ErrorCodeInvalidRequest)
 	}
 	return nil
 }
@@ -530,7 +530,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 func registerNotificationHandler[Req any](handlers handlerMap, info lsproto.NotificationInfo[Req], fn func(*Server, context.Context, Req) error) {
 	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) error {
 		if s.session == nil && req.Method != lsproto.MethodInitialized {
-			return lsproto.ErrServerNotInitialized
+			return lsproto.ErrorCodeServerNotInitialized
 		}
 
 		var params Req
@@ -552,7 +552,7 @@ func registerRequestHandler[Req, Resp any](
 ) {
 	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) error {
 		if s.session == nil && req.Method != lsproto.MethodInitialize {
-			return lsproto.ErrServerNotInitialized
+			return lsproto.ErrorCodeServerNotInitialized
 		}
 
 		var params Req
@@ -838,7 +838,7 @@ func (s *Server) recover(req *lsproto.RequestMessage) {
 		stack := debug.Stack()
 		s.Log("panic handling request", req.Method, r, string(stack))
 		if req.ID != nil {
-			s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrInternalError, req.Method, r))
+			s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
 		} else {
 			s.Log("unhandled panic in notification", req.Method, r)
 		}
@@ -847,7 +847,7 @@ func (s *Server) recover(req *lsproto.RequestMessage) {
 
 func (s *Server) handleInitialize(ctx context.Context, params *lsproto.InitializeParams, _ *lsproto.RequestMessage) (lsproto.InitializeResponse, error) {
 	if s.initializeParams != nil {
-		return nil, lsproto.ErrInvalidRequest
+		return nil, lsproto.ErrorCodeInvalidRequest
 	}
 
 	s.initializeParams = params

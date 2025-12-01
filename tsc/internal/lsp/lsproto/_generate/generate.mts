@@ -306,6 +306,29 @@ function patchAndPreprocessModel() {
 
     // Remove _InitializeParams structure after flattening (it was only needed for inheritance)
     model.structures = model.structures.filter(s => s.name !== "_InitializeParams");
+
+    // Merge LSPErrorCodes into ErrorCodes and remove LSPErrorCodes
+    const errorCodesEnum = model.enumerations.find(e => e.name === "ErrorCodes");
+    const lspErrorCodesEnum = model.enumerations.find(e => e.name === "LSPErrorCodes");
+    if (errorCodesEnum && lspErrorCodesEnum) {
+        // Merge LSPErrorCodes values into ErrorCodes
+        errorCodesEnum.values.push(...lspErrorCodesEnum.values);
+        // Remove LSPErrorCodes from the model
+        model.enumerations = model.enumerations.filter(e => e.name !== "LSPErrorCodes");
+    }
+
+    // Singularize plural enum names (e.g., "ErrorCodes" -> "ErrorCode")
+    for (const enumeration of model.enumerations) {
+        if (enumeration.name.endsWith("Codes")) {
+            enumeration.name = enumeration.name.slice(0, -1); // "Codes" -> "Code"
+        }
+        else if (enumeration.name.endsWith("Modifiers")) {
+            enumeration.name = enumeration.name.slice(0, -1); // "Modifiers" -> "Modifier"
+        }
+        else if (enumeration.name.endsWith("Types")) {
+            enumeration.name = enumeration.name.slice(0, -1); // "Types" -> "Type"
+        }
+    }
 }
 
 patchAndPreprocessModel();
@@ -1051,7 +1074,7 @@ function generateCode() {
             value: String(value.value),
             numericValue: Number(value.value),
             name: value.name,
-            identifier: `${enumeration.name}${value.name}`,
+            identifier: `${enumeration.name}${titleCase(value.name)}`,
             documentation: value.documentation,
             deprecated: value.deprecated,
         }));
@@ -1263,6 +1286,14 @@ function generateCode() {
                     writeLine("");
                 }
             }
+        }
+
+        // Generate Error() method for ErrorCode to implement the error interface
+        if (enumeration.name === "ErrorCode") {
+            writeLine(`func (e ${enumeration.name}) Error() string {`);
+            writeLine(`\treturn e.String()`);
+            writeLine(`}`);
+            writeLine("");
         }
     }
 

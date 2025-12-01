@@ -111,7 +111,7 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		Error  *ResponseError `json:"error,omitzero"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
-		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
 	}
 	if raw.ID != nil && raw.Method == "" {
 		m.Kind = MessageKindResponse
@@ -128,7 +128,7 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	if len(raw.Params) > 0 {
 		params, err = unmarshalParams(raw.Method, raw.Params)
 		if err != nil {
-			return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+			return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
 		}
 	}
 
@@ -173,7 +173,7 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 		Params  jsontext.Value `json:"params"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
-		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
 	}
 
 	r.ID = raw.ID
@@ -182,7 +182,7 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 	var err error
 	r.Params, err = unmarshalParams(raw.Method, raw.Params)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
 	}
 
 	return nil
