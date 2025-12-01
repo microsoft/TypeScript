@@ -43,7 +43,8 @@
             {
               "label": "n: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "str(n: number, radix: number): string",
@@ -58,11 +59,11 @@
             {
               "label": "radix: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 1
+      "activeSignature": 1
     }
   },
   {
@@ -83,11 +84,11 @@
             {
               "label": "a: 2"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   }
 ]

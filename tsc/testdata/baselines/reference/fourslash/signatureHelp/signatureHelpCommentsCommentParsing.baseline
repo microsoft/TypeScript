@@ -750,8 +750,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -771,8 +770,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -796,8 +794,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -821,8 +818,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -846,8 +842,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -871,8 +866,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -896,8 +890,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -921,8 +914,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -946,8 +938,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -971,8 +962,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -996,8 +986,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1017,8 +1006,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1038,8 +1026,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1059,8 +1046,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1088,11 +1074,11 @@
             {
               "label": "b: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1120,11 +1106,11 @@
             {
               "label": "b: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1161,11 +1147,11 @@
             {
               "label": "e?: any"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1202,11 +1188,11 @@
             {
               "label": "e?: any"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1243,11 +1229,11 @@
             {
               "label": "e?: any"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -1284,11 +1270,11 @@
             {
               "label": "e?: any"
             }
-          ]
+          ],
+          "activeParameter": 3
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 3
+      "activeSignature": 0
     }
   },
   {
@@ -1325,11 +1311,11 @@
             {
               "label": "e?: any"
             }
-          ]
+          ],
+          "activeParameter": 4
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 4
+      "activeSignature": 0
     }
   },
   {
@@ -1354,7 +1340,8 @@
             {
               "label": "a: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "f1(b: string): any",
@@ -1362,11 +1349,11 @@
             {
               "label": "b: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1391,7 +1378,8 @@
             {
               "label": "a: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "f1(b: string): any",
@@ -1399,11 +1387,11 @@
             {
               "label": "b: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 0
+      "activeSignature": 1
     }
   },
   {
@@ -1443,11 +1431,11 @@
             {
               "label": "f?: () => string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1487,11 +1475,11 @@
             {
               "label": "f?: () => string"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1531,11 +1519,11 @@
             {
               "label": "f?: () => string"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -1575,11 +1563,11 @@
             {
               "label": "f?: () => string"
             }
-          ]
+          ],
+          "activeParameter": 3
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 3
+      "activeSignature": 0
     }
   },
   {
@@ -1619,11 +1607,11 @@
             {
               "label": "f?: () => string"
             }
-          ]
+          ],
+          "activeParameter": 4
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 4
+      "activeSignature": 0
     }
   },
   {
@@ -1663,11 +1651,11 @@
             {
               "label": "f?: () => string"
             }
-          ]
+          ],
+          "activeParameter": 5
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 5
+      "activeSignature": 0
     }
   },
   {
@@ -1692,11 +1680,11 @@
             {
               "label": "a: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1724,11 +1712,11 @@
             {
               "label": "b: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1756,11 +1744,11 @@
             {
               "label": "b: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1788,11 +1776,11 @@
             {
               "label": "bar: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1820,11 +1808,11 @@
             {
               "label": "bar: string"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1870,11 +1858,11 @@
             {
               "label": "d: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1908,11 +1896,11 @@
             {
               "label": "d: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1946,11 +1934,11 @@
             {
               "label": "d: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -1984,11 +1972,11 @@
             {
               "label": "d: number"
             }
-          ]
+          ],
+          "activeParameter": 3
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 3
+      "activeSignature": 0
     }
   },
   {
@@ -2012,8 +2000,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -2037,8 +2024,7 @@
           "parameters": []
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -2069,11 +2055,11 @@
             {
               "label": "c: any"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -2104,11 +2090,11 @@
             {
               "label": "c: any"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -2139,11 +2125,11 @@
             {
               "label": "c: any"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {

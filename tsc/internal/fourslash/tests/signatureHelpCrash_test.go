@@ -20,7 +20,7 @@ function foo<T, U>(x: string, y: T, z: U) {
 foo<number,number>/*1*/("hello", 123,456)
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifySignatureHelp(t, &fourslash.SignatureHelpCase{
+	f.VerifySignatureHelpWithCases(t, &fourslash.SignatureHelpCase{
 		MarkerInput: "1",
 		Expected:    nil,
 		Context: &lsproto.SignatureHelpContext{

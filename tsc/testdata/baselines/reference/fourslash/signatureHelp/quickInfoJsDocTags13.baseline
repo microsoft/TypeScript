@@ -49,7 +49,8 @@
             {
               "label": "a: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "f(a: string): void",
@@ -57,11 +58,11 @@
             {
               "label": "a: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -82,7 +83,8 @@
             {
               "label": "a: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "f(a: string): void",
@@ -90,11 +92,11 @@
             {
               "label": "a: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 0
+      "activeSignature": 1
     }
   }
 ]

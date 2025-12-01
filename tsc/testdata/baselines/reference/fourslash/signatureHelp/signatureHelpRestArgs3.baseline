@@ -39,7 +39,8 @@
             {
               "label": "source: U"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "assign<T extends {}UV>(target: T, source1: U, source2: V): T & U & V",
@@ -57,7 +58,8 @@
             {
               "label": "source2: V"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "assign<T extends {}UVW>(target: T, source1: U, source2: V, source3: W): T & U & V & W",
@@ -78,7 +80,8 @@
             {
               "label": "source3: W"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "assign(target: object, ...sources: any[]): any",
@@ -93,11 +96,11 @@
             {
               "label": "...sources: any[]"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 3,
-      "activeParameter": 1
+      "activeSignature": 3
     }
   }
 ]

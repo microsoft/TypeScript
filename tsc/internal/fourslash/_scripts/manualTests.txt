@@ -13,3 +13,5 @@ quickInfoForOverloadOnConst1
 renameDefaultKeyword
 renameForDefaultExport01
 tsxCompletion12
+jsDocFunctionSignatures2
+jsDocFunctionSignatures12

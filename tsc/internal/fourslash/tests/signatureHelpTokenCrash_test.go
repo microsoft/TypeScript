@@ -23,7 +23,7 @@ foo((/*1*/
 foo/** More comments*/((/*2*/
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifySignatureHelp(t, &fourslash.SignatureHelpCase{
+	f.VerifySignatureHelpWithCases(t, &fourslash.SignatureHelpCase{
 		MarkerInput: "1",
 		Expected:    nil,
 		Context: &lsproto.SignatureHelpContext{
@@ -32,7 +32,7 @@ foo/** More comments*/((/*2*/
 			TriggerKind:      lsproto.SignatureHelpTriggerKindTriggerCharacter,
 		},
 	})
-	f.VerifySignatureHelp(t, &fourslash.SignatureHelpCase{
+	f.VerifySignatureHelpWithCases(t, &fourslash.SignatureHelpCase{
 		MarkerInput: "2",
 		Expected:    nil,
 		Context: &lsproto.SignatureHelpContext{

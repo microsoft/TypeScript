@@ -197,7 +197,8 @@
             {
               "label": "info: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple1(fruit: \"banana\", info: BananaInfo): void",
@@ -208,11 +209,11 @@
             {
               "label": "info: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -236,7 +237,8 @@
             {
               "label": "info: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple2(arg_0: \"banana\", info: BananaInfo): void",
@@ -247,11 +249,11 @@
             {
               "label": "info: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -275,7 +277,8 @@
             {
               "label": "info: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple2(arg_0: \"banana\", info: BananaInfo): void",
@@ -286,11 +289,11 @@
             {
               "label": "info: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -314,7 +317,8 @@
             {
               "label": "rest_0: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple3(fruit: \"banana\", rest_0: BananaInfo): void",
@@ -325,11 +329,11 @@
             {
               "label": "rest_0: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -353,7 +357,8 @@
             {
               "label": "rest_0: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple3(fruit: \"banana\", rest_0: BananaInfo): void",
@@ -364,11 +369,11 @@
             {
               "label": "rest_0: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -392,7 +397,8 @@
             {
               "label": "info: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple4(fruit: \"banana\", info: BananaInfo): void",
@@ -403,11 +409,11 @@
             {
               "label": "info: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -431,7 +437,8 @@
             {
               "label": "info: AppleInfo"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple4(fruit: \"banana\", info: BananaInfo): void",
@@ -442,11 +449,11 @@
             {
               "label": "info: BananaInfo"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -470,7 +477,8 @@
             {
               "label": "...firstInfo_n: AppleInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple5(fruit: \"banana\", ...firstInfo_n: BananaInfo[]): void",
@@ -481,11 +489,11 @@
             {
               "label": "...firstInfo_n: BananaInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -509,7 +517,8 @@
             {
               "label": "...firstInfo_n: AppleInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple5(fruit: \"banana\", ...firstInfo_n: BananaInfo[]): void",
@@ -520,11 +529,11 @@
             {
               "label": "...firstInfo_n: BananaInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -548,7 +557,8 @@
             {
               "label": "...fruitInfo: AppleInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple6(fruit: \"banana\", ...fruitInfo: BananaInfo[]): void",
@@ -559,11 +569,11 @@
             {
               "label": "...fruitInfo: BananaInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -587,7 +597,8 @@
             {
               "label": "...fruitInfo: AppleInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple6(fruit: \"banana\", ...fruitInfo: BananaInfo[]): void",
@@ -598,11 +609,11 @@
             {
               "label": "...fruitInfo: BananaInfo[]"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -629,7 +640,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple7(fruit: \"banana\", ...fruitInfoOrNumber_n: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -643,11 +655,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -674,7 +686,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple7(fruit: \"banana\", ...fruitInfoOrNumber_n: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -688,11 +701,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -719,7 +732,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         },
         {
           "label": "logFruitTuple7(fruit: \"banana\", ...fruitInfoOrNumber_n: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -733,11 +747,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -764,7 +778,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple8(fruit: \"banana\", ...arg_1: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -778,11 +793,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -809,7 +824,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple8(fruit: \"banana\", ...arg_1: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -823,11 +839,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -854,7 +870,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         },
         {
           "label": "logFruitTuple8(fruit: \"banana\", ...arg_1: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -868,11 +885,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -899,7 +916,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple9(fruit: \"banana\", ...fruitInfoOrNumber_n: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -913,11 +931,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -944,7 +962,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple9(fruit: \"banana\", ...fruitInfoOrNumber_n: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -958,11 +977,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -989,7 +1008,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         },
         {
           "label": "logFruitTuple9(fruit: \"banana\", ...fruitInfoOrNumber_n: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -1003,11 +1023,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -1034,7 +1054,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple10(fruit: \"banana\", ...arg_1: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -1048,11 +1069,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1079,7 +1100,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple10(fruit: \"banana\", ...arg_1: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -1093,11 +1115,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1124,7 +1146,8 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         },
         {
           "label": "logFruitTuple10(fruit: \"banana\", ...arg_1: BananaInfo[], secondFruitInfoOrNumber: number): void",
@@ -1138,11 +1161,11 @@
             {
               "label": "secondFruitInfoOrNumber: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -1169,7 +1192,8 @@
             {
               "label": "arg_2: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         },
         {
           "label": "logFruitTuple11(arg_0: \"banana\", ...arg_1: BananaInfo[], arg_2: number): void",
@@ -1183,11 +1207,11 @@
             {
               "label": "arg_2: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1214,7 +1238,8 @@
             {
               "label": "arg_2: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         },
         {
           "label": "logFruitTuple11(arg_0: \"banana\", ...arg_1: BananaInfo[], arg_2: number): void",
@@ -1228,11 +1253,11 @@
             {
               "label": "arg_2: number"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -1259,7 +1284,8 @@
             {
               "label": "arg_2: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         },
         {
           "label": "logFruitTuple11(arg_0: \"banana\", ...arg_1: BananaInfo[], arg_2: number): void",
@@ -1273,11 +1299,11 @@
             {
               "label": "arg_2: number"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -1301,11 +1327,11 @@
             {
               "label": "named: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -1329,11 +1355,11 @@
             {
               "label": "named: string"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   }
 ]

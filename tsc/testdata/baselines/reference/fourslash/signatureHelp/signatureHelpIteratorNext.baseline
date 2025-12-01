@@ -74,11 +74,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -103,11 +103,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 0
+      "activeSignature": 1
     }
   },
   {
@@ -132,11 +132,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -161,11 +161,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 0
+      "activeSignature": 1
     }
   },
   {
@@ -190,11 +190,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -219,11 +219,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 0
+      "activeSignature": 1
     }
   },
   {
@@ -248,11 +248,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -277,11 +277,11 @@
             {
               "label": "value: number"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 1,
-      "activeParameter": 0
+      "activeSignature": 1
     }
   }
 ]

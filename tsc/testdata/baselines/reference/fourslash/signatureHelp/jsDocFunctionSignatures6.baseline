@@ -108,11 +108,11 @@
             {
               "label": "p4?: string"
             }
-          ]
+          ],
+          "activeParameter": 0
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 0
+      "activeSignature": 0
     }
   },
   {
@@ -146,11 +146,11 @@
             {
               "label": "p4?: string"
             }
-          ]
+          ],
+          "activeParameter": 1
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 1
+      "activeSignature": 0
     }
   },
   {
@@ -184,11 +184,11 @@
             {
               "label": "p4?: string"
             }
-          ]
+          ],
+          "activeParameter": 2
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 2
+      "activeSignature": 0
     }
   },
   {
@@ -222,11 +222,11 @@
             {
               "label": "p4?: string"
             }
-          ]
+          ],
+          "activeParameter": 3
         }
       ],
-      "activeSignature": 0,
-      "activeParameter": 3
+      "activeSignature": 0
     }
   }
 ]

@@ -7,7 +7,14 @@
 //             fn.call(thisArg, ...arguments, );
 //                                            ^
 // | ----------------------------------------------------------------------
-// | No signaturehelp at /*1*/.
+// | Function.call(thisArg: any, **...argArray: any[]**): any
+// | Calls a method of an object, substituting another object for the current object.
+// | 
+// | *@param* `thisArg` — The object to be used as the current object.
+// | 
+// | 
+// | *@param* `argArray` — A list of arguments to be passed to the method.
+// | 
 // | ----------------------------------------------------------------------
 //         });
 //     };
@@ -23,6 +30,26 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "signatures": [
+        {
+          "label": "Function.call(thisArg: any, ...argArray: any[]): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Calls a method of an object, substituting another object for the current object.\n\n*@param* `thisArg` — The object to be used as the current object.\n\n\n*@param* `argArray` — A list of arguments to be passed to the method.\n"
+          },
+          "parameters": [
+            {
+              "label": "thisArg: any"
+            },
+            {
+              "label": "...argArray: any[]"
+            }
+          ],
+          "activeParameter": 1
+        }
+      ],
+      "activeSignature": 0
+    }
   }
 ]

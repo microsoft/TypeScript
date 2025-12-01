@@ -1,0 +1,51 @@
+// === SignatureHelp ===
+=== /b.js ===
+// /**
+//  * @import {
+//  *     Foo
+//  * } from './a'
+//  */
+// 
+// /**
+//  * @param {Foo} a
+//  */
+// function foo(a) {}
+// foo()
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(**a: Foo**): void
+// | 
+// | 
+// | *@param* `a`
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 98,
+      "LSPosition": {
+        "line": 10,
+        "character": 4
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "foo(a: Foo): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "\n\n*@param* `a`"
+          },
+          "parameters": [
+            {
+              "label": "a: Foo"
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]
