@@ -29,7 +29,7 @@
 
 // === /d.ts ===
 // import * as a from "./a";
-// new a.C();
+// new a.[|C|]();
 // class d extends a.C { constructor() { [|super|](); }
 
 
@@ -65,7 +65,7 @@
 
 // === /d.ts ===
 // import * as a from "./a";
-// new a.C();
+// new a.[|C|]();
 // class d extends a.C { constructor() { [|super|](); }
 
 
@@ -101,5 +101,5 @@
 
 // === /d.ts ===
 // import * as a from "./a";
-// new a.C();
+// new a.[|C|]();
 // class d extends a.C { constructor() { [|super|](); }

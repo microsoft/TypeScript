@@ -1421,7 +1421,7 @@ func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, s
 		// When renaming at an export specifier, rename the export and not the thing being exported.
 		// state.getReferencesAtExportSpecifier(exportSpecifier.Name(), symbol, exportSpecifier.AsExportSpecifier(), state.createSearch(node, originalSymbol, comingFromUnknown /*comingFrom*/, "", nil), true /*addReferencesHere*/, true /*alwaysGetReferences*/)
 	} else if node != nil && node.Kind == ast.KindDefaultKeyword && symbol.Name == ast.InternalSymbolNameDefault && symbol.Parent != nil {
-		state.addReference(node, symbol, entryKindNone)
+		state.addReference(node, symbol, entryKindNode)
 		state.searchForImportsOfExport(node, symbol, &ExportInfo{exportingModuleSymbol: symbol.Parent, exportKind: ExportKindDefault})
 	} else {
 		search := state.createSearch(node, symbol, ImpExpKindUnknown /*comingFrom*/, "", state.populateSearchSymbolSet(symbol, node, options.use == referenceUseRename, options.useAliasesForRename, options.implementations))
@@ -1573,33 +1573,12 @@ func getReferenceEntriesForShorthandPropertyAssignment(node *ast.Node, checker *
 	}
 }
 
-func climbPastPropertyAccess(node *ast.Node) *ast.Node {
-	if ast.IsRightSideOfPropertyAccess(node) {
-		return node.Parent
-	}
-	return node
-}
-
-func isNewExpressionTarget(node *ast.Node) bool {
-	if node.Parent == nil {
-		return false
-	}
-	return node.Parent.Kind == ast.KindNewExpression && node.Parent.Expression() == node
-}
-
-func isCallExpressionTarget(node *ast.Node) bool {
-	if node.Parent == nil {
-		return false
-	}
-	return node.Parent.Kind == ast.KindCallExpression && node.Parent.Expression() == node
-}
-
 func isMethodOrAccessor(node *ast.Node) bool {
 	return node.Kind == ast.KindMethodDeclaration || node.Kind == ast.KindGetAccessor || node.Kind == ast.KindSetAccessor
 }
 
 func tryGetClassByExtendingIdentifier(node *ast.Node) *ast.ClassLikeDeclaration {
-	return ast.TryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).Parent)
+	return ast.TryGetClassExtendingExpressionWithTypeArguments(ast.ClimbPastPropertyAccess(node).Parent)
 }
 
 func getClassConstructorSymbol(classSymbol *ast.Symbol) *ast.Symbol {
@@ -1632,7 +1611,7 @@ func findOwnConstructorReferences(classSymbol *ast.Symbol, sourceFile *ast.Sourc
 				body := decl.Body()
 				if body != nil {
 					forEachDescendantOfKind(body, ast.KindThisKeyword, func(thisKeyword *ast.Node) {
-						if isNewExpressionTarget(thisKeyword) {
+						if ast.IsNewExpressionTarget(thisKeyword, false, false) {
 							addNode(thisKeyword)
 						}
 					})
@@ -1653,7 +1632,7 @@ func findSuperConstructorAccesses(classDeclaration *ast.ClassLikeDeclaration, ad
 			body := decl.Body()
 			if body != nil {
 				forEachDescendantOfKind(body, ast.KindSuperKeyword, func(node *ast.Node) {
-					if isCallExpressionTarget(node) {
+					if ast.IsCallExpressionTarget(node, false, false) {
 						addNode(node)
 					}
 				})
@@ -1853,8 +1832,8 @@ func (state *refState) getReferencesAtLocation(sourceFile *ast.SourceFile, posit
 }
 
 func (state *refState) addConstructorReferences(referenceLocation *ast.Node, symbol *ast.Symbol, search *refSearch, addReferencesHere bool) {
-	if isNewExpressionTarget(referenceLocation) && addReferencesHere {
-		state.addReference(referenceLocation, symbol, entryKindNone)
+	if ast.IsNewExpressionTarget(referenceLocation, false, false) && addReferencesHere {
+		state.addReference(referenceLocation, symbol, entryKindNode)
 	}
 
 	pusher := func() func(*ast.Node, entryKind) {
@@ -1865,13 +1844,13 @@ func (state *refState) addConstructorReferences(referenceLocation *ast.Node, sym
 		// This is the class declaration containing the constructor.
 		sourceFile := ast.GetSourceFileOfNode(referenceLocation)
 		findOwnConstructorReferences(search.symbol, sourceFile, func(n *ast.Node) {
-			pusher()(n, entryKindNone)
+			pusher()(n, entryKindNode)
 		})
 	} else {
 		// If this class appears in `extends C`, then the extending class' "super" calls are references.
 		if classExtending := tryGetClassByExtendingIdentifier(referenceLocation); classExtending != nil {
 			findSuperConstructorAccesses(classExtending, func(n *ast.Node) {
-				pusher()(n, entryKindNone)
+				pusher()(n, entryKindNode)
 			})
 			state.findInheritedConstructorReferences(classExtending)
 		}
@@ -1880,7 +1859,7 @@ func (state *refState) addConstructorReferences(referenceLocation *ast.Node, sym
 
 func (state *refState) addClassStaticThisReferences(referenceLocation *ast.Node, symbol *ast.Symbol, search *refSearch, addReferencesHere bool) {
 	if addReferencesHere {
-		state.addReference(referenceLocation, symbol, entryKindNone)
+		state.addReference(referenceLocation, symbol, entryKindNode)
 	}
 
 	classLike := referenceLocation.Parent
@@ -1902,7 +1881,7 @@ func (state *refState) addClassStaticThisReferences(referenceLocation *ast.Node,
 			var cb func(*ast.Node)
 			cb = func(node *ast.Node) {
 				if node.Kind == ast.KindThisKeyword {
-					addRef(node, entryKindNone)
+					addRef(node, entryKindNode)
 				} else if !ast.IsFunctionLike(node) && !ast.IsClassLike(node) {
 					node.ForEachChild(func(child *ast.Node) bool {
 						cb(child)
@@ -2017,7 +1996,7 @@ func (state *refState) getReferenceForShorthandProperty(referenceSymbol *ast.Sym
 	// the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
 	// position of property accessing, the referenceEntry of such position will be handled in the first case.
 	if name != nil && search.includes(shorthandValueSymbol) {
-		state.addReference(name, shorthandValueSymbol, entryKindNone)
+		state.addReference(name, shorthandValueSymbol, entryKindNode)
 	}
 }
 
@@ -2163,7 +2142,7 @@ func (state *refState) forEachRelatedSymbol(
 	}
 
 	if res := fromRoot(symbol); res != nil {
-		return res, entryKindNone
+		return res, entryKindNode
 	}
 
 	if symbol.ValueDeclaration != nil && ast.IsParameterPropertyDeclaration(symbol.ValueDeclaration, symbol.ValueDeclaration.Parent) {
@@ -2176,7 +2155,7 @@ func (state *refState) forEachRelatedSymbol(
 		if !(paramProp1.Flags&ast.SymbolFlagsFunctionScopedVariable != 0 && paramProp2.Flags&ast.SymbolFlagsProperty != 0) {
 			panic("Expected a parameter and a property")
 		}
-		return fromRoot(core.IfElse(symbol.Flags&ast.SymbolFlagsFunctionScopedVariable != 0, paramProp2, paramProp1)), entryKindNone
+		return fromRoot(core.IfElse(symbol.Flags&ast.SymbolFlagsFunctionScopedVariable != 0, paramProp2, paramProp1)), entryKindNode
 	}
 
 	if exportSpecifier := ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier); exportSpecifier != nil && (!isForRenamePopulateSearchSymbolSet || exportSpecifier.PropertyName() == nil) {

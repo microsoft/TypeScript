@@ -22,6 +22,7 @@ import (
 
 const (
 	autoImportsCmd              baselineCommand = "Auto Imports"
+	callHierarchyCmd            baselineCommand = "Call Hierarchy"
 	documentHighlightsCmd       baselineCommand = "documentHighlights"
 	findAllReferencesCmd        baselineCommand = "findAllReferences"
 	goToDefinitionCmd           baselineCommand = "goToDefinition"
@@ -71,6 +72,8 @@ func getBaselineExtension(command baselineCommand) string {
 	switch command {
 	case quickInfoCmd, signatureHelpCmd, smartSelectionCmd, inlayHintsCmd, nonSuggestionDiagnosticsCmd:
 		return "baseline"
+	case callHierarchyCmd:
+		return "callHierarchy.txt"
 	case autoImportsCmd:
 		return "baseline.md"
 	default:
@@ -90,6 +93,21 @@ func (f *FourslashTest) getBaselineOptions(command baselineCommand, testPath str
 		return baseline.Options{
 			Subfolder:   subfolder,
 			IsSubmodule: true,
+		}
+	case callHierarchyCmd:
+		return baseline.Options{
+			Subfolder:   subfolder,
+			IsSubmodule: true,
+			DiffFixupOld: func(s string) string {
+				// TypeScript baselines have "/tests/cases/fourslash/" prefix in file paths
+				// Handle /server/ subdirectory - need to remove both prefixes
+				s = strings.ReplaceAll(s, "/tests/cases/fourslash/server/", "/")
+				s = strings.ReplaceAll(s, "/tests/cases/fourslash/", "/")
+				// SymbolKind enum differences between Strada and tsgo
+				s = strings.ReplaceAll(s, "kind: getter", "kind: property")
+				s = strings.ReplaceAll(s, "kind: script", "kind: file")
+				return s
+			},
 		}
 	case renameCmd:
 		return baseline.Options{

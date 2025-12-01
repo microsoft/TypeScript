@@ -126,6 +126,11 @@ func getBaselineDiff(t *testing.T, actual string, expected string, fileName stri
 	}
 	s := DiffText("old."+fileName, "new."+fileName, expected, actual)
 
+	// If the diff is empty (just headers, no hunks), return NoContent
+	if !strings.Contains(s, "@@") {
+		return NoContent
+	}
+
 	// Remove line numbers from unified diff headers; this avoids adding/deleting
 	// lines in our baselines from causing knock-on header changes later in the diff.
 

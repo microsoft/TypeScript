@@ -517,9 +517,13 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentSelectionRangeInfo, (*Server).handleSelectionRange)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentInlayHintInfo, (*Server).handleInlayHint)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentCodeActionInfo, (*Server).handleCodeAction)
+	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentPrepareCallHierarchyInfo, (*Server).handlePrepareCallHierarchy)
 
 	registerMultiProjectReferenceRequestHandler(handlers, lsproto.TextDocumentReferencesInfo, (*Server).handleReferences, combineReferences)
 	registerMultiProjectReferenceRequestHandler(handlers, lsproto.TextDocumentRenameInfo, (*Server).handleRename, combineRenameResponse)
+
+	registerRequestHandler(handlers, lsproto.CallHierarchyIncomingCallsInfo, (*Server).handleCallHierarchyIncomingCalls)
+	registerRequestHandler(handlers, lsproto.CallHierarchyOutgoingCallsInfo, (*Server).handleCallHierarchyOutgoingCalls)
 
 	registerRequestHandler(handlers, lsproto.WorkspaceSymbolInfo, (*Server).handleWorkspaceSymbol)
 	registerRequestHandler(handlers, lsproto.CompletionItemResolveInfo, (*Server).handleCompletionItemResolve)
@@ -952,6 +956,9 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 					},
 				},
 			},
+			CallHierarchyProvider: &lsproto.BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions{
+				Boolean: ptrTo(true),
+			},
 		},
 	}
 
@@ -1283,6 +1290,38 @@ func (s *Server) handleInlayHint(
 	params *lsproto.InlayHintParams,
 ) (lsproto.InlayHintResponse, error) {
 	return languageService.ProvideInlayHint(ctx, params)
+}
+
+func (s *Server) handlePrepareCallHierarchy(
+	ctx context.Context,
+	languageService *ls.LanguageService,
+	params *lsproto.CallHierarchyPrepareParams,
+) (lsproto.CallHierarchyPrepareResponse, error) {
+	return languageService.ProvidePrepareCallHierarchy(ctx, params.TextDocument.Uri, params.Position)
+}
+
+func (s *Server) handleCallHierarchyIncomingCalls(
+	ctx context.Context,
+	params *lsproto.CallHierarchyIncomingCallsParams,
+	_ *lsproto.RequestMessage,
+) (lsproto.CallHierarchyIncomingCallsResponse, error) {
+	languageService, err := s.session.GetLanguageService(ctx, params.Item.Uri)
+	if err != nil {
+		return lsproto.CallHierarchyIncomingCallsOrNull{}, err
+	}
+	return languageService.ProvideCallHierarchyIncomingCalls(ctx, params.Item)
+}
+
+func (s *Server) handleCallHierarchyOutgoingCalls(
+	ctx context.Context,
+	params *lsproto.CallHierarchyOutgoingCallsParams,
+	_ *lsproto.RequestMessage,
+) (lsproto.CallHierarchyOutgoingCallsResponse, error) {
+	languageService, err := s.session.GetLanguageService(ctx, params.Item.Uri)
+	if err != nil {
+		return lsproto.CallHierarchyOutgoingCallsOrNull{}, err
+	}
+	return languageService.ProvideCallHierarchyOutgoingCalls(ctx, params.Item)
 }
 
 func (s *Server) Log(msg ...any) {

@@ -1386,7 +1386,7 @@ func GetNameOfDeclaration(declaration *Node) *Node {
 		return nonAssignedName
 	}
 	if IsFunctionExpression(declaration) || IsArrowFunction(declaration) || IsClassExpression(declaration) {
-		return getAssignedName(declaration)
+		return GetAssignedName(declaration)
 	}
 	return nil
 }
@@ -1415,7 +1415,7 @@ func GetNonAssignedNameOfDeclaration(declaration *Node) *Node {
 	return declaration.Name()
 }
 
-func getAssignedName(node *Node) *Node {
+func GetAssignedName(node *Node) *Node {
 	parent := node.Parent
 	if parent != nil {
 		switch parent.Kind {
@@ -3439,6 +3439,91 @@ func IsTypeDeclarationName(name *Node) bool {
 
 func IsRightSideOfPropertyAccess(node *Node) bool {
 	return node.Parent.Kind == KindPropertyAccessExpression && node.Parent.Name() == node
+}
+
+func IsArgumentExpressionOfElementAccess(node *Node) bool {
+	return node.Parent != nil && node.Parent.Kind == KindElementAccessExpression && node.Parent.AsElementAccessExpression().ArgumentExpression == node
+}
+
+func ClimbPastPropertyAccess(node *Node) *Node {
+	if IsRightSideOfPropertyAccess(node) {
+		return node.Parent
+	}
+	return node
+}
+
+func climbPastPropertyOrElementAccess(node *Node) *Node {
+	if IsRightSideOfPropertyAccess(node) || IsArgumentExpressionOfElementAccess(node) {
+		return node.Parent
+	}
+	return node
+}
+
+func selectExpressionOfCallOrNewExpressionOrDecorator(node *Node) *Node {
+	if IsCallExpression(node) || IsNewExpression(node) || IsDecorator(node) {
+		return node.Expression()
+	}
+	return nil
+}
+
+func selectTagOfTaggedTemplateExpression(node *Node) *Node {
+	if IsTaggedTemplateExpression(node) {
+		return node.AsTaggedTemplateExpression().Tag
+	}
+	return nil
+}
+
+func selectTagNameOfJsxOpeningLikeElement(node *Node) *Node {
+	if IsJsxOpeningElement(node) || IsJsxSelfClosingElement(node) {
+		return node.TagName()
+	}
+	return nil
+}
+
+func IsCallExpressionTarget(node *Node, includeElementAccess bool, skipPastOuterExpressions bool) bool {
+	return isCalleeWorker(node, IsCallExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions)
+}
+
+func IsNewExpressionTarget(node *Node, includeElementAccess bool, skipPastOuterExpressions bool) bool {
+	return isCalleeWorker(node, IsNewExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions)
+}
+
+func IsCallOrNewExpressionTarget(node *Node, includeElementAccess bool, skipPastOuterExpressions bool) bool {
+	return isCalleeWorker(node, IsCallOrNewExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions)
+}
+
+func IsTaggedTemplateTag(node *Node, includeElementAccess bool, skipPastOuterExpressions bool) bool {
+	return isCalleeWorker(node, IsTaggedTemplateExpression, selectTagOfTaggedTemplateExpression, includeElementAccess, skipPastOuterExpressions)
+}
+
+func IsDecoratorTarget(node *Node, includeElementAccess bool, skipPastOuterExpressions bool) bool {
+	return isCalleeWorker(node, IsDecorator, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions)
+}
+
+func IsJsxOpeningLikeElementTagName(node *Node, includeElementAccess bool, skipPastOuterExpressions bool) bool {
+	return isCalleeWorker(node, IsJsxOpeningLikeElement, selectTagNameOfJsxOpeningLikeElement, includeElementAccess, skipPastOuterExpressions)
+}
+
+func isCalleeWorker(
+	node *Node,
+	pred func(*Node) bool,
+	calleeSelector func(*Node) *Node,
+	includeElementAccess bool,
+	skipPastOuterExpressions bool,
+) bool {
+	var target *Node
+	if includeElementAccess {
+		target = climbPastPropertyOrElementAccess(node)
+	} else {
+		target = ClimbPastPropertyAccess(node)
+	}
+	if skipPastOuterExpressions {
+		// Only skip outer expressions if the target is actually an expression node
+		if IsExpression(target) {
+			target = SkipOuterExpressions(target, OEKAll)
+		}
+	}
+	return target != nil && target.Parent != nil && pred(target.Parent) && calleeSelector(target.Parent) == target
 }
 
 func IsRightSideOfQualifiedNameOrPropertyAccess(node *Node) bool {

@@ -350,35 +350,53 @@ func compareDeclarationInfos(d1, d2 DeclarationInfo) int {
 	return d1.declaration.Pos() - d2.declaration.Pos()
 }
 
+// getSymbolKindFromNode converts an AST node to an LSP SymbolKind.
+// Combines getNodeKind with VS Code's fromProtocolScriptElementKind.
 func getSymbolKindFromNode(node *ast.Node) lsproto.SymbolKind {
 	switch node.Kind {
+	case ast.KindSourceFile:
+		if ast.IsExternalModule(node.AsSourceFile()) {
+			return lsproto.SymbolKindModule
+		}
+		return lsproto.SymbolKindFile
 	case ast.KindModuleDeclaration:
-		return lsproto.SymbolKindNamespace
-	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindTypeAliasDeclaration:
+		return lsproto.SymbolKindModule
+	case ast.KindClassDeclaration, ast.KindClassExpression:
 		return lsproto.SymbolKindClass
-	case ast.KindMethodDeclaration, ast.KindMethodSignature:
-		return lsproto.SymbolKindMethod
-	case ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindGetAccessor, ast.KindSetAccessor:
-		return lsproto.SymbolKindProperty
-	case ast.KindConstructor, ast.KindConstructSignature:
-		return lsproto.SymbolKindConstructor
-	case ast.KindEnumDeclaration:
-		return lsproto.SymbolKindEnum
 	case ast.KindInterfaceDeclaration:
 		return lsproto.SymbolKindInterface
-	case ast.KindFunctionDeclaration, ast.KindFunctionExpression:
+	case ast.KindTypeAliasDeclaration:
+		return lsproto.SymbolKindClass
+	case ast.KindEnumDeclaration:
+		return lsproto.SymbolKindEnum
+	case ast.KindVariableDeclaration:
+		return lsproto.SymbolKindVariable
+	case ast.KindArrowFunction, ast.KindFunctionDeclaration, ast.KindFunctionExpression:
 		return lsproto.SymbolKindFunction
-	case ast.KindEnumMember:
-		return lsproto.SymbolKindEnumMember
+	case ast.KindGetAccessor, ast.KindSetAccessor:
+		return lsproto.SymbolKindProperty
+	case ast.KindMethodDeclaration, ast.KindMethodSignature:
+		return lsproto.SymbolKindMethod
+	case ast.KindPropertyDeclaration, ast.KindPropertySignature:
+		return lsproto.SymbolKindProperty
+	case ast.KindIndexSignature, ast.KindCallSignature:
+		return lsproto.SymbolKindMethod
+	case ast.KindConstructSignature:
+		return lsproto.SymbolKindConstructor
+	case ast.KindConstructor, ast.KindClassStaticBlockDeclaration:
+		return lsproto.SymbolKindConstructor
 	case ast.KindTypeParameter:
 		return lsproto.SymbolKindTypeParameter
+	case ast.KindEnumMember:
+		return lsproto.SymbolKindEnumMember
 	case ast.KindParameter:
 		if ast.HasSyntacticModifier(node, ast.ModifierFlagsParameterPropertyModifier) {
 			return lsproto.SymbolKindProperty
 		}
 		return lsproto.SymbolKindVariable
 	case ast.KindBinaryExpression:
-		switch ast.GetAssignmentDeclarationKind(node.AsBinaryExpression()) {
+		kind := ast.GetAssignmentDeclarationKind(node.AsBinaryExpression())
+		switch kind {
 		case ast.JSDeclarationKindThisProperty, ast.JSDeclarationKindProperty:
 			return lsproto.SymbolKindProperty
 		}
