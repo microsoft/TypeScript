@@ -13,21 +13,21 @@ type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 >1 : 1
 >  : ^
 
-declare const createComparator: <T,>(
->createComparator : <T>(property: string, comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1) => Comparator<T>
->                 : ^ ^^        ^^      ^^          ^^                                            ^^^^^             
+declare const createComparator: <T, K extends keyof T>(
+>createComparator : <T, K extends keyof T>(property: K, comparator: (a: T[K], b: T[K]) => 0 | 1 | -1) => Comparator<T>
+>                 : ^ ^^ ^^^^^^^^^       ^^        ^^ ^^          ^^                                ^^^^^             
 
-  property: string,
->property : string
->         : ^^^^^^
+  property: K,
+>property : K
+>         : ^
 
-  comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1,
->comparator : (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1
->           : ^ ^^          ^^ ^^          ^^^^^          
->a : T[keyof T]
->  : ^^^^^^^^^^
->b : T[keyof T]
->  : ^^^^^^^^^^
+  comparator: (a: T[K], b: T[K]) => 0 | 1 | -1,
+>comparator : (a: T[K], b: T[K]) => 0 | 1 | -1
+>           : ^ ^^    ^^ ^^    ^^^^^          
+>a : T[K]
+>  : ^^^^
+>b : T[K]
+>  : ^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -75,24 +75,24 @@ declare class ModuleGraphConnection {
 }
 
 const bySourceOrder = createComparator("sourceOrder", compareNumbers);
->bySourceOrder : Comparator<PartialInference<number, string | number | symbol>>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->createComparator("sourceOrder", compareNumbers) : Comparator<PartialInference<number, string | number | symbol>>
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->createComparator : <T>(property: string, comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1) => Comparator<T>
->                 : ^ ^^        ^^      ^^          ^^                                            ^^^^^             
+>bySourceOrder : Comparator<Record<"sourceOrder", number>>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator("sourceOrder", compareNumbers) : Comparator<Record<"sourceOrder", number>>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator : <T, K extends keyof T>(property: K, comparator: (a: T[K], b: T[K]) => 0 | 1 | -1) => Comparator<T>
+>                 : ^ ^^ ^^^^^^^^^       ^^        ^^ ^^          ^^                                ^^^^^             
 >"sourceOrder" : "sourceOrder"
 >              : ^^^^^^^^^^^^^
 >compareNumbers : (a: number, b: number) => 0 | 1 | -1
 >               : ^ ^^      ^^ ^^      ^^^^^          
 
 const byRangeStart = createComparator("rangeStart", compareNumbers);
->byRangeStart : Comparator<PartialInference<number, string | number | symbol>>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->createComparator("rangeStart", compareNumbers) : Comparator<PartialInference<number, string | number | symbol>>
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->createComparator : <T>(property: string, comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1) => Comparator<T>
->                 : ^ ^^        ^^      ^^          ^^                                            ^^^^^             
+>byRangeStart : Comparator<Record<"rangeStart", number>>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator("rangeStart", compareNumbers) : Comparator<Record<"rangeStart", number>>
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator : <T, K extends keyof T>(property: K, comparator: (a: T[K], b: T[K]) => 0 | 1 | -1) => Comparator<T>
+>                 : ^ ^^ ^^^^^^^^^       ^^        ^^ ^^          ^^                                ^^^^^             
 >"rangeStart" : "rangeStart"
 >             : ^^^^^^^^^^^^
 >compareNumbers : (a: number, b: number) => 0 | 1 | -1
@@ -129,12 +129,12 @@ references.sort(concatComparators(bySourceOrder, byRangeStart));
 >           : ^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
 >sort : (compareFn?: ((a: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }, b: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }) => number) | undefined) => { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }[]
 >     : ^         ^^^^^ ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^ ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
->concatComparators(bySourceOrder, byRangeStart) : Comparator<PartialInference<number, string | number | symbol>>
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>concatComparators(bySourceOrder, byRangeStart) : Comparator<Record<"sourceOrder", number>>
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >concatComparators : <T>(c1: Comparator<T>, c2: Comparator<T>, ...cRest: Comparator<T>[]) => Comparator<T>
 >                  : ^ ^^  ^^             ^^  ^^             ^^^^^     ^^               ^^^^^             
->bySourceOrder : Comparator<PartialInference<number, string | number | symbol>>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->byRangeStart : Comparator<PartialInference<number, string | number | symbol>>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bySourceOrder : Comparator<Record<"sourceOrder", number>>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>byRangeStart : Comparator<Record<"rangeStart", number>>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

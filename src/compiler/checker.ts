@@ -2304,6 +2304,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalBigIntType: ObjectType | undefined;
     var deferredGlobalNaNSymbol: Symbol | undefined;
     var deferredGlobalRecordSymbol: Symbol | undefined;
+    var deferredGlobalPartialInferenceSymbol: Symbol | undefined;
     var deferredGlobalClassDecoratorContextType: GenericType | undefined;
     var deferredGlobalClassMethodDecoratorContextType: GenericType | undefined;
     var deferredGlobalClassGetterDecoratorContextType: GenericType | undefined;
@@ -17632,6 +17633,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return deferredGlobalRecordSymbol === unknownSymbol ? undefined : deferredGlobalRecordSymbol;
     }
 
+    function getGlobalPartialInferenceSymbol(): Symbol | undefined {
+        deferredGlobalPartialInferenceSymbol ||= getGlobalTypeAliasSymbol("PartialInference" as __String, /*arity*/ 2, /*reportErrors*/ false) || unknownSymbol;
+        return deferredGlobalPartialInferenceSymbol === unknownSymbol ? undefined : deferredGlobalPartialInferenceSymbol;
+    }
+
     /**
      * Instantiates a global type that is generic with some element type, and returns that instantiation.
      */
@@ -26908,11 +26914,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!inference.isFixed) {
                         // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
                         // Where `T` is `source` and `Keys` is `target.indexType`
-                        const inferenceTypeSymbol = getGlobalSymbol("PartialInference" as __String, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
-                        const inferenceType = inferenceTypeSymbol && getDeclaredTypeOfSymbol(inferenceTypeSymbol);
-                        if (inferenceType && inferenceType !== unknownType) {
-                            const mapper = createTypeMapper(getSymbolLinks(inferenceTypeSymbol).typeParameters!, [source, (target as IndexedAccessType).indexType]);
-                            inference.indexes = append(inference.indexes, instantiateType(inferenceType, mapper));
+                        const partialInferenceTypeSymbol = getGlobalPartialInferenceSymbol();
+                        if (partialInferenceTypeSymbol) {
+                            if ((target as IndexedAccessType).indexType.flags & TypeFlags.Instantiable) {
+                                const recordSymbol = getGlobalRecordSymbol();
+                                if (recordSymbol) {
+                                    inference.indexes = append(inference.indexes, getTypeAliasInstantiation(recordSymbol, [(target as IndexedAccessType).indexType, source]));
+                                }
+                            }
+                            else {
+                                inference.indexes = append(inference.indexes, getTypeAliasInstantiation(partialInferenceTypeSymbol, [source, (target as IndexedAccessType).indexType]));
+                            }
                         }
                     }
                 }
@@ -27590,7 +27602,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
                 else if (inference.indexes) {
-                    let aggregateInference = getIntersectionType(inference.indexes);
+                    const eraseSelfMapper = makeUnaryTypeMapper(inference.typeParameter, allKeysUnknownType);
+                    let aggregateInference = instantiateType(getIntersectionType(inference.indexes), mergeTypeMappers(eraseSelfMapper, context.nonFixingMapper));
                     const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                     if (constraint) {
                         const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
@@ -27620,8 +27633,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                    const eraseSelfMapper = makeUnaryTypeMapper(inference.typeParameter, allKeysUnknownType);
-                    inferredType = instantiateType(aggregateInference, mergeTypeMappers(eraseSelfMapper, context.nonFixingMapper));
+                    inferredType = aggregateInference;
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.

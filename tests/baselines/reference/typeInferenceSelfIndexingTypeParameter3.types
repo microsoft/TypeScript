@@ -1,0 +1,142 @@
+//// [tests/cases/compiler/typeInferenceSelfIndexingTypeParameter3.ts] ////
+
+=== typeInferenceSelfIndexingTypeParameter3.ts ===
+declare function f1<T>(
+>f1 : <T>(arg: { [K in keyof T]: T[K][keyof T[K]]; }) => T
+>   : ^ ^^   ^^                                     ^^^^^ 
+
+  arg: {
+>arg : { [K in keyof T]: T[K][keyof T[K]]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof T]: T[K][keyof T[K]];
+  }
+): T;
+
+const res1 = f1({
+>res1 : { a: Record<string | number | symbol, string>; b: Record<string | number | symbol, number>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f1({  a: "hello",  b: 100,}) : { a: Record<string | number | symbol, string>; b: Record<string | number | symbol, number>; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(arg: { [K in keyof T]: T[K][keyof T[K]]; }) => T
+>   : ^ ^^   ^^                                     ^^^^^ 
+>{  a: "hello",  b: 100,} : { a: string; b: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: "hello",
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+  b: 100,
+>b : number
+>  : ^^^^^^
+>100 : 100
+>    : ^^^
+
+});
+
+type Inner<O> = {
+>Inner : Inner<O>
+>      : ^^^^^^^^
+
+  [I in keyof O]: O[I][keyof O[I]];
+};
+
+declare function f2<T>(fields: {
+>f2 : <T>(fields: { [K in keyof T]: { label: string; values: Inner<T[K]>; }; }) => T
+>   : ^ ^^      ^^                                                            ^^^^^ 
+>fields : { [K in keyof T]: { label: string; values: Inner<T[K]>; }; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^           ^^^^^^
+
+  [K in keyof T]: {
+    label: string;
+>label : string
+>      : ^^^^^^
+
+    values: Inner<T[K]>;
+>values : Inner<T[K]>
+>       : ^^^^^^^^^^^
+
+  };
+}): T;
+
+const res2 = f2({
+>res2 : { prop: { foo: Record<string | number | symbol, number>; bar: Record<string | number | symbol, boolean>; }; other: { baz: Record<string | number | symbol, string>; qwe: Record<string | number | symbol, boolean[]>; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2({  prop: {    label: "first",    values: {      foo: 123,      bar: true,    },  },  other: {    label: "second",    values: {      baz: "",      qwe: [true],    },  },}) : { prop: { foo: Record<string | number | symbol, number>; bar: Record<string | number | symbol, boolean>; }; other: { baz: Record<string | number | symbol, string>; qwe: Record<string | number | symbol, boolean[]>; }; }
+>                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2 : <T>(fields: { [K in keyof T]: { label: string; values: Inner<T[K]>; }; }) => T
+>   : ^ ^^      ^^                                                            ^^^^^ 
+>{  prop: {    label: "first",    values: {      foo: 123,      bar: true,    },  },  other: {    label: "second",    values: {      baz: "",      qwe: [true],    },  },} : { prop: { label: string; values: { foo: number; bar: true; }; }; other: { label: string; values: { baz: string; qwe: true[]; }; }; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  prop: {
+>prop : { label: string; values: { foo: number; bar: true; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    label: "first",    values: {      foo: 123,      bar: true,    },  } : { label: string; values: { foo: number; bar: true; }; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    label: "first",
+>label : string
+>      : ^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+    values: {
+>values : { foo: number; bar: true; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      foo: 123,      bar: true,    } : { foo: number; bar: true; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      foo: 123,
+>foo : number
+>    : ^^^^^^
+>123 : 123
+>    : ^^^
+
+      bar: true,
+>bar : true
+>    : ^^^^
+>true : true
+>     : ^^^^
+
+    },
+  },
+  other: {
+>other : { label: string; values: { baz: string; qwe: true[]; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    label: "second",    values: {      baz: "",      qwe: [true],    },  } : { label: string; values: { baz: string; qwe: true[]; }; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    label: "second",
+>label : string
+>      : ^^^^^^
+>"second" : "second"
+>         : ^^^^^^^^
+
+    values: {
+>values : { baz: string; qwe: true[]; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      baz: "",      qwe: [true],    } : { baz: string; qwe: true[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      baz: "",
+>baz : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+      qwe: [true],
+>qwe : true[]
+>    : ^^^^^^
+>[true] : true[]
+>       : ^^^^^^
+>true : true
+>     : ^^^^
+
+    },
+  },
+});
+

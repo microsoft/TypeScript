@@ -1,0 +1,39 @@
+typeInferenceSelfIndexingTypeParameter1.ts(30,50): error TS2345: Argument of type 'Comparator<Record<"rangeStart", number>>' is not assignable to parameter of type 'Comparator<Record<"sourceOrder", number>>'.
+  Property 'rangeStart' is missing in type 'Record<"sourceOrder", number>' but required in type 'Record<"rangeStart", number>'.
+
+
+==== typeInferenceSelfIndexingTypeParameter1.ts (1 errors) ====
+    type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
+    
+    declare const createComparator: <T, K extends keyof T>(
+      property: K,
+      comparator: (a: T[K], b: T[K]) => 0 | 1 | -1,
+    ) => Comparator<T>;
+    
+    declare const concatComparators: <T,>(
+      c1: Comparator<T>,
+      c2: Comparator<T>,
+      ...cRest: Comparator<T>[]
+    ) => Comparator<T>;
+    
+    declare const compareNumbers: (a: number, b: number) => 0 | 1 | -1;
+    
+    declare class ModuleGraphConnection {
+      clone(): ModuleGraphConnection;
+    }
+    
+    const bySourceOrder = createComparator("sourceOrder", compareNumbers);
+    const byRangeStart = createComparator("rangeStart", compareNumbers);
+    
+    declare const references: {
+      connection: ModuleGraphConnection;
+      sourceOrder: number;
+      rangeStart: number | undefined;
+      defer?: boolean;
+    }[];
+    
+    references.sort(concatComparators(bySourceOrder, byRangeStart));
+                                                     ~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Comparator<Record<"rangeStart", number>>' is not assignable to parameter of type 'Comparator<Record<"sourceOrder", number>>'.
+!!! error TS2345:   Property 'rangeStart' is missing in type 'Record<"sourceOrder", number>' but required in type 'Record<"rangeStart", number>'.
+    

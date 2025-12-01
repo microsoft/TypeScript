@@ -98,10 +98,10 @@ declare function useController<
 export const { name, values } = useController({
 >name : "test"
 >     : ^^^^^^
->values : { test: string; }
->       : ^^^^^^^^^^^^^^^^^
->useController({  name: "test",  defaultValue: "",}) : { name: "test"; values: { test: string; }; }
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : Record<"test", string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>useController({  name: "test",  defaultValue: "",}) : { name: "test"; values: Record<"test", string>; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useController : <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = Path<TFieldValues>>(props: UseControllerProps<TFieldValues, TName>) => { name: TName; values: TFieldValues; }
 >              : ^            ^^^^^^^^^           ^^^^^^^^^^^^^^^^     ^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^^^^^^     ^^                                       ^^^^^                                      
 >{  name: "test",  defaultValue: "",} : { name: "test"; defaultValue: string; }

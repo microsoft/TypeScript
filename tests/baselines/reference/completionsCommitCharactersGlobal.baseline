@@ -2692,7 +2692,7 @@
 // | type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void
 // | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 // | type Partial<T> = { [P in keyof T]?: T[P]; }
-// | type PartialInference<T, Keys extends string> = { [K in Keys]: { [K1 in K]: T; }; }[Keys]
+// | type PartialInference<T, Keys extends PropertyKey> = { [K in Keys]: { [K1 in K]: T; }; }[Keys]
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
 // | interface Promise<T>
 // | type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>
@@ -2873,7 +2873,7 @@
 // | type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void
 // | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 // | type Partial<T> = { [P in keyof T]?: T[P]; }
-// | type PartialInference<T, Keys extends string> = { [K in Keys]: { [K1 in K]: T; }; }[Keys]
+// | type PartialInference<T, Keys extends PropertyKey> = { [K in Keys]: { [K1 in K]: T; }; }[Keys]
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
 // | interface Promise<T>
 // | type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>
@@ -80663,8 +80663,8 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
+              "text": "PropertyKey",
+              "kind": "aliasName"
             },
             {
               "text": ">",
@@ -90340,8 +90340,8 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
+              "text": "PropertyKey",
+              "kind": "aliasName"
             },
             {
               "text": ">",
