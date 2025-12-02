@@ -1,0 +1,262 @@
+//// [tests/cases/compiler/noSilentNeverTypeLeak1.ts] ////
+
+=== noSilentNeverTypeLeak1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62824
+
+type Values<T> = T[keyof T];
+>Values : Values<T>
+>       : ^^^^^^^^^
+
+type MachineContext = Record<string, any>;
+>MachineContext : MachineContext
+>               : ^^^^^^^^^^^^^^
+
+interface ParameterizedObject {
+  type: string;
+>type : string
+>     : ^^^^^^
+
+  params?: unknown;
+>params : unknown
+>       : ^^^^^^^
+}
+
+type ActionFunction<
+>ActionFunction : ActionFunction<TContext, TParams, TAction>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TContext extends MachineContext,
+  TParams extends ParameterizedObject["params"] | undefined,
+  TAction extends ParameterizedObject,
+> = {
+  (ctx: TContext, params: TParams): void;
+>ctx : TContext
+>    : ^^^^^^^^
+>params : TParams
+>       : ^^^^^^^
+
+  _out_TAction?: TAction;
+>_out_TAction : TAction | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+
+};
+
+type ToParameterizedObject<
+>ToParameterizedObject : ToParameterizedObject<TParameterizedMap>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TParameterizedMap extends Record<
+    string,
+    ParameterizedObject["params"] | undefined
+  >,
+> = Values<{
+  [K in keyof TParameterizedMap & string]: {
+    type: K;
+>type : K
+>     : ^
+
+    params: TParameterizedMap[K];
+>params : TParameterizedMap[K]
+>       : ^^^^^^^^^^^^^^^^^^^^
+
+  };
+}>;
+
+type CollectActions<
+>CollectActions : CollectActions<TContext, TParams>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TContext extends MachineContext,
+  TParams extends ParameterizedObject["params"] | undefined,
+> = (
+  {
+    context,
+>context : TContext
+>        : ^^^^^^^^
+
+    enqueue,
+>enqueue : (action: () => void) => void
+>        : ^      ^^          ^^^^^    
+
+  }: {
+    context: TContext;
+>context : TContext
+>        : ^^^^^^^^
+
+    enqueue: (action: () => void) => void;
+>enqueue : (action: () => void) => void
+>        : ^      ^^          ^^^^^    
+>action : () => void
+>       : ^^^^^^    
+
+  },
+  params: TParams,
+>params : TParams
+>       : ^^^^^^^
+
+) => void;
+
+declare function enqueueActions<
+>enqueueActions : <TContext extends MachineContext, TParams extends ParameterizedObject["params"] | undefined, TAction extends ParameterizedObject = ParameterizedObject>(collect: CollectActions<TContext, TParams>) => ActionFunction<TContext, TParams, TAction>
+>               : ^        ^^^^^^^^^              ^^       ^^^^^^^^^                                         ^^       ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                 ^^^^^                                          
+
+  TContext extends MachineContext,
+  TParams extends ParameterizedObject["params"] | undefined,
+  TAction extends ParameterizedObject = ParameterizedObject,
+>(
+  collect: CollectActions<TContext, TParams>,
+>collect : CollectActions<TContext, TParams>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): ActionFunction<TContext, TParams, TAction>;
+
+declare function setup<
+>setup : <TContext extends MachineContext, TActions extends Record<string, ParameterizedObject["params"] | undefined> = {}>({ types, actions, }: { types?: { context?: TContext; }; actions?: { [K in keyof TActions]: ActionFunction<TContext, TActions[K], ToParameterizedObject<TActions>>; }; }) => void
+>      : ^        ^^^^^^^^^              ^^        ^^^^^^^^^                                                         ^^^^^^^                   ^^                                                                                                                                                  ^^^^^    
+
+  TContext extends MachineContext,
+  TActions extends Record<
+    string,
+    ParameterizedObject["params"] | undefined
+  > = {},
+>({
+  types,
+>types : { context?: TContext; } | undefined
+>      : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^
+
+  actions,
+>actions : { [K in keyof TActions]: ActionFunction<TContext, TActions[K], ToParameterizedObject<TActions>>; } | undefined
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}: {
+  types?: { context?: TContext };
+>types : { context?: TContext; } | undefined
+>      : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>context : TContext | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+  actions?: {
+>actions : { [K in keyof TActions]: ActionFunction<TContext, TActions[K], ToParameterizedObject<TActions>>; } | undefined
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof TActions]: ActionFunction<
+      TContext,
+      TActions[K],
+      ToParameterizedObject<TActions>
+    >;
+  };
+}): void;
+
+setup({
+>setup({  actions: {    doStuff: enqueueActions((_, params: number) => {}),  },}) : void
+>                                                                                 : ^^^^
+>setup : <TContext extends MachineContext, TActions extends Record<string, ParameterizedObject["params"] | undefined> = {}>({ types, actions, }: { types?: { context?: TContext; }; actions?: { [K in keyof TActions]: ActionFunction<TContext, TActions[K], ToParameterizedObject<TActions>>; }; }) => void
+>      : ^        ^^^^^^^^^              ^^        ^^^^^^^^^                                                         ^^^^^^^                   ^^                                                                                                                                                  ^^^^^    
+>{  actions: {    doStuff: enqueueActions((_, params: number) => {}),  },} : { actions: { doStuff: ActionFunction<MachineContext, number, never>; }; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  actions: {
+>actions : { doStuff: ActionFunction<MachineContext, number, never>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    doStuff: enqueueActions((_, params: number) => {}),  } : { doStuff: ActionFunction<MachineContext, number, never>; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    doStuff: enqueueActions((_, params: number) => {}),
+>doStuff : ActionFunction<MachineContext, number, never>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions((_, params: number) => {}) : ActionFunction<MachineContext, number, never>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions : <TContext extends MachineContext, TParams extends ParameterizedObject["params"] | undefined, TAction extends ParameterizedObject = ParameterizedObject>(collect: CollectActions<TContext, TParams>) => ActionFunction<TContext, TParams, TAction>
+>               : ^        ^^^^^^^^^              ^^       ^^^^^^^^^                                         ^^       ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                 ^^^^^                                          
+>(_, params: number) => {} : (_: { context: MachineContext; enqueue: (action: () => void) => void; }, params: number) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^^^      ^^      ^^^^^^^^^
+>_ : { context: MachineContext; enqueue: (action: () => void) => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^
+>params : number
+>       : ^^^^^^
+
+  },
+});
+
+setup({
+>setup({  actions: {    doStuff: enqueueActions((_, params: number) => {}),    doOtherStuff: (_, params: string) => {},  },}) : void
+>                                                                                                                             : ^^^^
+>setup : <TContext extends MachineContext, TActions extends Record<string, ParameterizedObject["params"] | undefined> = {}>({ types, actions, }: { types?: { context?: TContext; }; actions?: { [K in keyof TActions]: ActionFunction<TContext, TActions[K], ToParameterizedObject<TActions>>; }; }) => void
+>      : ^        ^^^^^^^^^              ^^        ^^^^^^^^^                                                         ^^^^^^^                   ^^                                                                                                                                                  ^^^^^    
+>{  actions: {    doStuff: enqueueActions((_, params: number) => {}),    doOtherStuff: (_, params: string) => {},  },} : { actions: { doStuff: ActionFunction<MachineContext, number, never>; doOtherStuff: (_: MachineContext, params: string) => void; }; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^^^^^^^
+
+  actions: {
+>actions : { doStuff: ActionFunction<MachineContext, number, never>; doOtherStuff: (_: MachineContext, params: string) => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^^^^
+>{    doStuff: enqueueActions((_, params: number) => {}),    doOtherStuff: (_, params: string) => {},  } : { doStuff: ActionFunction<MachineContext, number, never>; doOtherStuff: (_: MachineContext, params: string) => void; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^^^^
+
+    doStuff: enqueueActions((_, params: number) => {}),
+>doStuff : ActionFunction<MachineContext, number, never>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions((_, params: number) => {}) : ActionFunction<MachineContext, number, never>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions : <TContext extends MachineContext, TParams extends ParameterizedObject["params"] | undefined, TAction extends ParameterizedObject = ParameterizedObject>(collect: CollectActions<TContext, TParams>) => ActionFunction<TContext, TParams, TAction>
+>               : ^        ^^^^^^^^^              ^^       ^^^^^^^^^                                         ^^       ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                 ^^^^^                                          
+>(_, params: number) => {} : (_: { context: MachineContext; enqueue: (action: () => void) => void; }, params: number) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^^^      ^^      ^^^^^^^^^
+>_ : { context: MachineContext; enqueue: (action: () => void) => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^
+>params : number
+>       : ^^^^^^
+
+    doOtherStuff: (_, params: string) => {},
+>doOtherStuff : (_: MachineContext, params: string) => void
+>             : ^ ^^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
+>(_, params: string) => {} : (_: MachineContext, params: string) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
+>_ : MachineContext
+>  : ^^^^^^^^^^^^^^
+>params : string
+>       : ^^^^^^
+
+  },
+});
+
+setup({
+>setup({  actions: {    doStuff: enqueueActions((_, params: number) => {}),    doOtherStuff: (_: any, params: string) => {},  },}) : void
+>                                                                                                                                  : ^^^^
+>setup : <TContext extends MachineContext, TActions extends Record<string, ParameterizedObject["params"] | undefined> = {}>({ types, actions, }: { types?: { context?: TContext; }; actions?: { [K in keyof TActions]: ActionFunction<TContext, TActions[K], ToParameterizedObject<TActions>>; }; }) => void
+>      : ^        ^^^^^^^^^              ^^        ^^^^^^^^^                                                         ^^^^^^^                   ^^                                                                                                                                                  ^^^^^    
+>{  actions: {    doStuff: enqueueActions((_, params: number) => {}),    doOtherStuff: (_: any, params: string) => {},  },} : { actions: { doStuff: ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>; doOtherStuff: (_: any, params: string) => void; }; }
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^      ^^      ^^^^^^^^^^^^^^^
+
+  actions: {
+>actions : { doStuff: ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>; doOtherStuff: (_: any, params: string) => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^      ^^      ^^^^^^^^^^^^
+>{    doStuff: enqueueActions((_, params: number) => {}),    doOtherStuff: (_: any, params: string) => {},  } : { doStuff: ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>; doOtherStuff: (_: any, params: string) => void; }
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^      ^^      ^^^^^^^^^^^^
+
+    doStuff: enqueueActions((_, params: number) => {}),
+>doStuff : ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions((_, params: number) => {}) : ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions : <TContext extends MachineContext, TParams extends ParameterizedObject["params"] | undefined, TAction extends ParameterizedObject = ParameterizedObject>(collect: CollectActions<TContext, TParams>) => ActionFunction<TContext, TParams, TAction>
+>               : ^        ^^^^^^^^^              ^^       ^^^^^^^^^                                         ^^       ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                 ^^^^^                                          
+>(_, params: number) => {} : (_: { context: MachineContext; enqueue: (action: () => void) => void; }, params: number) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^^^      ^^      ^^^^^^^^^
+>_ : { context: MachineContext; enqueue: (action: () => void) => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^
+>params : number
+>       : ^^^^^^
+
+    doOtherStuff: (_: any, params: string) => {},
+>doOtherStuff : (_: any, params: string) => void
+>             : ^ ^^   ^^      ^^      ^^^^^^^^^
+>(_: any, params: string) => {} : (_: any, params: string) => void
+>                               : ^ ^^   ^^      ^^      ^^^^^^^^^
+>_ : any
+>  : ^^^
+>params : string
+>       : ^^^^^^
+
+  },
+});
+
