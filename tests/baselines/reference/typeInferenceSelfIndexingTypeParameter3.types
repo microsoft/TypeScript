@@ -1,142 +1,140 @@
 //// [tests/cases/compiler/typeInferenceSelfIndexingTypeParameter3.ts] ////
 
 === typeInferenceSelfIndexingTypeParameter3.ts ===
-declare function f1<T>(
->f1 : <T>(arg: { [K in keyof T]: T[K][keyof T[K]]; }) => T
->   : ^ ^^   ^^                                     ^^^^^ 
+type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
+>Comparator : Comparator<T>
+>           : ^^^^^^^^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
 
-  arg: {
->arg : { [K in keyof T]: T[K][keyof T[K]]; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+declare const createComparator: <T,>(
+>createComparator : <T>(property: string, comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1) => Comparator<T>
+>                 : ^ ^^        ^^      ^^          ^^                                            ^^^^^             
 
-    [K in keyof T]: T[K][keyof T[K]];
-  }
-): T;
+  property: string,
+>property : string
+>         : ^^^^^^
 
-const res1 = f1({
->res1 : { a: Record<string | number | symbol, string>; b: Record<string | number | symbol, number>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f1({  a: "hello",  b: 100,}) : { a: Record<string | number | symbol, string>; b: Record<string | number | symbol, number>; }
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f1 : <T>(arg: { [K in keyof T]: T[K][keyof T[K]]; }) => T
->   : ^ ^^   ^^                                     ^^^^^ 
->{  a: "hello",  b: 100,} : { a: string; b: number; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+  comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1,
+>comparator : (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1
+>           : ^ ^^          ^^ ^^          ^^^^^          
+>a : T[keyof T]
+>  : ^^^^^^^^^^
+>b : T[keyof T]
+>  : ^^^^^^^^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
 
-  a: "hello",
->a : string
+) => Comparator<T>;
+
+declare const concatComparators: <T,>(
+>concatComparators : <T>(c1: Comparator<T>, c2: Comparator<T>, ...cRest: Comparator<T>[]) => Comparator<T>
+>                  : ^ ^^  ^^             ^^  ^^             ^^^^^     ^^               ^^^^^             
+
+  c1: Comparator<T>,
+>c1 : Comparator<T>
+>   : ^^^^^^^^^^^^^
+
+  c2: Comparator<T>,
+>c2 : Comparator<T>
+>   : ^^^^^^^^^^^^^
+
+  ...cRest: Comparator<T>[]
+>cRest : Comparator<T>[]
+>      : ^^^^^^^^^^^^^^^
+
+) => Comparator<T>;
+
+declare const compareNumbers: (a: number, b: number) => 0 | 1 | -1;
+>compareNumbers : (a: number, b: number) => 0 | 1 | -1
+>               : ^ ^^      ^^ ^^      ^^^^^          
+>a : number
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
-
-  b: 100,
 >b : number
 >  : ^^^^^^
->100 : 100
->    : ^^^
-
-});
-
-type Inner<O> = {
->Inner : Inner<O>
->      : ^^^^^^^^
-
-  [I in keyof O]: O[I][keyof O[I]];
-};
-
-declare function f2<T>(fields: {
->f2 : <T>(fields: { [K in keyof T]: { label: string; values: Inner<T[K]>; }; }) => T
->   : ^ ^^      ^^                                                            ^^^^^ 
->fields : { [K in keyof T]: { label: string; values: Inner<T[K]>; }; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^           ^^^^^^
-
-  [K in keyof T]: {
-    label: string;
->label : string
->      : ^^^^^^
-
-    values: Inner<T[K]>;
->values : Inner<T[K]>
->       : ^^^^^^^^^^^
-
-  };
-}): T;
-
-const res2 = f2({
->res2 : { prop: { foo: Record<string | number | symbol, number>; bar: Record<string | number | symbol, boolean>; }; other: { baz: Record<string | number | symbol, string>; qwe: Record<string | number | symbol, boolean[]>; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f2({  prop: {    label: "first",    values: {      foo: 123,      bar: true,    },  },  other: {    label: "second",    values: {      baz: "",      qwe: [true],    },  },}) : { prop: { foo: Record<string | number | symbol, number>; bar: Record<string | number | symbol, boolean>; }; other: { baz: Record<string | number | symbol, string>; qwe: Record<string | number | symbol, boolean[]>; }; }
->                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f2 : <T>(fields: { [K in keyof T]: { label: string; values: Inner<T[K]>; }; }) => T
->   : ^ ^^      ^^                                                            ^^^^^ 
->{  prop: {    label: "first",    values: {      foo: 123,      bar: true,    },  },  other: {    label: "second",    values: {      baz: "",      qwe: [true],    },  },} : { prop: { label: string; values: { foo: number; bar: true; }; }; other: { label: string; values: { baz: string; qwe: true[]; }; }; }
->                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  prop: {
->prop : { label: string; values: { foo: number; bar: true; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    label: "first",    values: {      foo: 123,      bar: true,    },  } : { label: string; values: { foo: number; bar: true; }; }
->                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    label: "first",
->label : string
->      : ^^^^^^
->"first" : "first"
->        : ^^^^^^^
-
-    values: {
->values : { foo: number; bar: true; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{      foo: 123,      bar: true,    } : { foo: number; bar: true; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-      foo: 123,
->foo : number
->    : ^^^^^^
->123 : 123
->    : ^^^
-
-      bar: true,
->bar : true
->    : ^^^^
->true : true
->     : ^^^^
-
-    },
-  },
-  other: {
->other : { label: string; values: { baz: string; qwe: true[]; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    label: "second",    values: {      baz: "",      qwe: [true],    },  } : { label: string; values: { baz: string; qwe: true[]; }; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    label: "second",
->label : string
->      : ^^^^^^
->"second" : "second"
->         : ^^^^^^^^
-
-    values: {
->values : { baz: string; qwe: true[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{      baz: "",      qwe: [true],    } : { baz: string; qwe: true[]; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-      baz: "",
->baz : string
->    : ^^^^^^
->"" : ""
+>-1 : -1
 >   : ^^
+>1 : 1
+>  : ^
 
-      qwe: [true],
->qwe : true[]
->    : ^^^^^^
->[true] : true[]
->       : ^^^^^^
->true : true
->     : ^^^^
+declare class ModuleGraphConnection {
+>ModuleGraphConnection : ModuleGraphConnection
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
-    },
-  },
-});
+  clone(): ModuleGraphConnection;
+>clone : () => ModuleGraphConnection
+>      : ^^^^^^                     
+}
+
+const bySourceOrder = createComparator("sourceOrder", compareNumbers);
+>bySourceOrder : Comparator<Record<string | number | symbol, number>>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator("sourceOrder", compareNumbers) : Comparator<Record<string | number | symbol, number>>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator : <T>(property: string, comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1) => Comparator<T>
+>                 : ^ ^^        ^^      ^^          ^^                                            ^^^^^             
+>"sourceOrder" : "sourceOrder"
+>              : ^^^^^^^^^^^^^
+>compareNumbers : (a: number, b: number) => 0 | 1 | -1
+>               : ^ ^^      ^^ ^^      ^^^^^          
+
+const byRangeStart = createComparator("rangeStart", compareNumbers);
+>byRangeStart : Comparator<Record<string | number | symbol, number>>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator("rangeStart", compareNumbers) : Comparator<Record<string | number | symbol, number>>
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createComparator : <T>(property: string, comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1) => Comparator<T>
+>                 : ^ ^^        ^^      ^^          ^^                                            ^^^^^             
+>"rangeStart" : "rangeStart"
+>             : ^^^^^^^^^^^^
+>compareNumbers : (a: number, b: number) => 0 | 1 | -1
+>               : ^ ^^      ^^ ^^      ^^^^^          
+
+declare const references: {
+>references : { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }[]
+>           : ^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
+
+  connection: ModuleGraphConnection;
+>connection : ModuleGraphConnection
+>           : ^^^^^^^^^^^^^^^^^^^^^
+
+  sourceOrder: number;
+>sourceOrder : number
+>            : ^^^^^^
+
+  rangeStart: number | undefined;
+>rangeStart : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+
+  defer?: boolean;
+>defer : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
+
+}[];
+
+references.sort(concatComparators(bySourceOrder, byRangeStart));
+>references.sort(concatComparators(bySourceOrder, byRangeStart)) : { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }[]
+>                                                                : ^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
+>references.sort : (compareFn?: ((a: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }, b: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }) => number) | undefined) => { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }[]
+>                : ^         ^^^^^ ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^ ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
+>references : { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }[]
+>           : ^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
+>sort : (compareFn?: ((a: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }, b: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }) => number) | undefined) => { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean; }[]
+>     : ^         ^^^^^ ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^ ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                  ^^^^^^^^^^       ^^^^^
+>concatComparators(bySourceOrder, byRangeStart) : Comparator<Record<string | number | symbol, number>>
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>concatComparators : <T>(c1: Comparator<T>, c2: Comparator<T>, ...cRest: Comparator<T>[]) => Comparator<T>
+>                  : ^ ^^  ^^             ^^  ^^             ^^^^^     ^^               ^^^^^             
+>bySourceOrder : Comparator<Record<string | number | symbol, number>>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>byRangeStart : Comparator<Record<string | number | symbol, number>>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

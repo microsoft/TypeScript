@@ -2108,7 +2108,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var unreachableNeverType = createIntrinsicType(TypeFlags.Never, "never", /*objectFlags*/ undefined, "unreachable");
     var nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
     var stringOrNumberType = getUnionType([stringType, numberType]);
-    var stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]) as UnionType;
+    var stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
     var numberOrBigIntType = getUnionType([numberType, bigintType]);
     var templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType, nullType, undefinedType]) as UnionType;
     var numericStringType = getTemplateLiteralType(["", ""], [numberType]); // The `${number}` type
@@ -2143,9 +2143,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var unknownEmptyObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, unknownEmptyObjectType]) : unknownType;
-
-    var allKeysUnknownType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, map(stringNumberSymbolType.types, t => createIndexInfo(t, unknownType, /*isReadonly*/ false))); // { [k: PropertyKey]: unknown }
-    var allKeysAllKeysUnknownType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, map(stringNumberSymbolType.types, t => createIndexInfo(t, allKeysUnknownType, /*isReadonly*/ false))); // { [k: PropertyKey]: { [k: PropertyKey]: unknown } }
 
     var emptyGenericType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
     emptyGenericType.instantiations = new Map<string, TypeReference>();
@@ -26441,18 +26438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(inferenceTarget);
         inferTypes([inference], sourceType, templateType);
-        const inferredType = getTypeFromInference(inference);
-        if (inferredType) {
-            return inferredType;
-        }
-        if (inference.indexes) {
-            const eraseSelfMapper = makeArrayTypeMapper([constraint.type, typeParameter], [allKeysAllKeysUnknownType, stringNumberSymbolType]);
-            const aggregateInference = instantiateType(getIntersectionType(inference.indexes), eraseSelfMapper);
-            if (!(getReducedType(aggregateInference).flags & TypeFlags.Never)) {
-                return aggregateInference;
-            }
-        }
-        return unknownType;
+        return getTypeFromInference(inference) || unknownType;
     }
 
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
@@ -26521,7 +26507,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeFromInference(inference: InferenceInfo) {
         return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
             inference.contraCandidates ? getIntersectionType(inference.contraCandidates) :
-            undefined;
+            getAggregateInference(inference);
     }
 
     function hasSkipDirectInferenceFlag(node: Node) {
@@ -27568,6 +27554,52 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getWidenedType(unwidenedType);
     }
 
+    function getAggregateInference(inference: InferenceInfo, constraintType?: Type, compareTypes?: TypeComparer, mapper?: TypeMapper | undefined): Type | undefined {
+        if (!inference.indexes) {
+            return undefined;
+        }
+        const typeEraser = createTypeEraser([inference.typeParameter.flags & TypeFlags.IndexedAccess ? (inference.typeParameter as IndexedAccessType).objectType : inference.typeParameter]);
+        const aggregateInference = instantiateType(getIntersectionType(inference.indexes), mapper ? mergeTypeMappers(typeEraser, mapper) : typeEraser);
+        if (getReducedType(aggregateInference).flags & TypeFlags.Never) {
+            // `never` inference isn't that useful of an inference given its assignable to every other type
+            return undefined;
+        }
+        if (!constraintType || (compareTypes ??= compareTypesAssignable)(aggregateInference, getTypeWithThisArgument(constraintType, aggregateInference))) {
+            return aggregateInference;
+        }
+        if (constraintType.flags & TypeFlags.Union) {
+            const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), constraintType);
+            if (discriminantProps) {
+                let match: Type | undefined;
+                findDiscriminant:
+                for (const p of discriminantProps) {
+                    const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
+                    for (const type of (constraintType as UnionType).types) {
+                        const propType = getTypeOfPropertyOfType(type, p.escapedName);
+                        if (propType && candidatePropType && isTypeAssignableTo(candidatePropType, propType)) {
+                            if (match && match !== type) {
+                                match = undefined;
+                                break findDiscriminant;
+                            }
+                            else {
+                                match = type;
+                            }
+                        }
+                    }
+                }
+                if (match) {
+                    const combinedType = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
+                    if (compareTypes(combinedType, getTypeWithThisArgument(constraintType, combinedType))) {
+                        return combinedType;
+                    }
+                }
+            }
+        }
+        // if the aggregate inference isn't assignable to the constraint return undefined
+        // this way the compiler keeps preferring the default type
+        return undefined;
+    }
+
     function getInferredType(context: InferenceContext, index: number): Type {
         const inference = context.inferences[index];
         if (!inference.inferredType) {
@@ -27593,51 +27625,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
                 else if (inference.indexes) {
-                    const eraseSelfMapper = makeUnaryTypeMapper(inference.typeParameter, allKeysUnknownType);
-                    let aggregateInference: Type | undefined = instantiateType(getIntersectionType(inference.indexes), mergeTypeMappers(eraseSelfMapper, context.nonFixingMapper));
-                    if (getReducedType(aggregateInference).flags & TypeFlags.Never) {
-                        // `never` inference isn't that useful of an inference given its assignable to every other type
-                        aggregateInference = undefined;
-                    }
-                    const constraint = getConstraintOfTypeParameter(inference.typeParameter);
-                    if (aggregateInference && constraint) {
-                        const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                        let assignableToConstraint = context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference));
-                        if (!assignableToConstraint) {
-                            if (instantiatedConstraint.flags & TypeFlags.Union) {
-                                const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
-                                if (discriminantProps) {
-                                    let match: Type | undefined;
-                                    findDiscriminant:
-                                    for (const p of discriminantProps) {
-                                        const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
-                                        for (const type of (instantiatedConstraint as UnionType).types) {
-                                            const propType = getTypeOfPropertyOfType(type, p.escapedName);
-                                            if (propType && candidatePropType && checkTypeAssignableTo(candidatePropType, propType, /*errorNode*/ undefined)) {
-                                                if (match && match !== type) {
-                                                    match = undefined;
-                                                    break findDiscriminant;
-                                                }
-                                                else {
-                                                    match = type;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (match) {
-                                        aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
-                                        assignableToConstraint = context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference));
-                                    }
-                                }
-                            }
-                            if (!assignableToConstraint) {
-                                // if the aggregate inference isn't assignable to the constraint clear it out
-                                // this way the compiler keeps preferring the default type
-                                aggregateInference = undefined;
-                            }
-                        }
-                    }
-                    inferredType = aggregateInference;
+                    const instantiatedConstraint = instantiateType(getConstraintOfTypeParameter(inference.typeParameter), context.nonFixingMapper);
+                    inferredType = getAggregateInference(inference, instantiatedConstraint, context.compareTypes, context.nonFixingMapper);
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.

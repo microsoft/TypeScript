@@ -1,16 +1,13 @@
-typeInferenceSelfIndexingTypeParameter2.ts(30,17): error TS2345: Argument of type 'Comparator<Record<string | number | symbol, number>>' is not assignable to parameter of type '(a: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean | undefined; }, b: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean | undefined; }) => number'.
-  Types of parameters 'a' and 'a' are incompatible.
-    Type '{ connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean | undefined; }' is not assignable to type 'Record<string | number | symbol, number>'.
-      Property 'connection' is incompatible with index signature.
-        Type 'ModuleGraphConnection' is not assignable to type 'number'.
+typeInferenceSelfIndexingTypeParameter2.ts(30,50): error TS2345: Argument of type 'Comparator<Record<"rangeStart", number>>' is not assignable to parameter of type 'Comparator<Record<"sourceOrder", number>>'.
+  Property 'rangeStart' is missing in type 'Record<"sourceOrder", number>' but required in type 'Record<"rangeStart", number>'.
 
 
 ==== typeInferenceSelfIndexingTypeParameter2.ts (1 errors) ====
     type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
     
-    declare const createComparator: <T,>(
-      property: string,
-      comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1,
+    declare const createComparator: <T, K extends keyof T>(
+      property: K,
+      comparator: (a: T[K], b: T[K]) => 0 | 1 | -1,
     ) => Comparator<T>;
     
     declare const concatComparators: <T,>(
@@ -36,10 +33,7 @@ typeInferenceSelfIndexingTypeParameter2.ts(30,17): error TS2345: Argument of typ
     }[];
     
     references.sort(concatComparators(bySourceOrder, byRangeStart));
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'Comparator<Record<string | number | symbol, number>>' is not assignable to parameter of type '(a: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean | undefined; }, b: { connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean | undefined; }) => number'.
-!!! error TS2345:   Types of parameters 'a' and 'a' are incompatible.
-!!! error TS2345:     Type '{ connection: ModuleGraphConnection; sourceOrder: number; rangeStart: number | undefined; defer?: boolean | undefined; }' is not assignable to type 'Record<string | number | symbol, number>'.
-!!! error TS2345:       Property 'connection' is incompatible with index signature.
-!!! error TS2345:         Type 'ModuleGraphConnection' is not assignable to type 'number'.
+                                                     ~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Comparator<Record<"rangeStart", number>>' is not assignable to parameter of type 'Comparator<Record<"sourceOrder", number>>'.
+!!! error TS2345:   Property 'rangeStart' is missing in type 'Record<"sourceOrder", number>' but required in type 'Record<"rangeStart", number>'.
     

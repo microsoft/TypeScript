@@ -22,3 +22,7 @@ export const { name, values } = useController({
   name: "test",
   defaultValue: "",
 });
+
+declare function fn1<T, U>(arg: T[keyof T & keyof U], u: U): T;
+
+const res1 = fn1("foo", { prop: 42 });

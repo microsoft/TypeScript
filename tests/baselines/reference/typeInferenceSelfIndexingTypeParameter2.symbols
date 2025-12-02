@@ -9,21 +9,24 @@ type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 >b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 0, 27))
 >T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 0, 16))
 
-declare const createComparator: <T,>(
+declare const createComparator: <T, K extends keyof T>(
 >createComparator : Symbol(createComparator, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 13))
 >T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 33))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 35))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 33))
 
-  property: string,
->property : Symbol(property, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 37))
+  property: K,
+>property : Symbol(property, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 55))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 35))
 
-  comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1,
->comparator : Symbol(comparator, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 3, 19))
+  comparator: (a: T[K], b: T[K]) => 0 | 1 | -1,
+>comparator : Symbol(comparator, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 3, 14))
 >a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 4, 15))
 >T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 33))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 35))
+>b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 4, 23))
 >T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 33))
->b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 4, 29))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 33))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 33))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 2, 35))
 
 ) => Comparator<T>;
 >Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter2.ts, 0, 0))

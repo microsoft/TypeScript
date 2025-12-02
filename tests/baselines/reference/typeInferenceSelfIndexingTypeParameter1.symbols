@@ -1,106 +1,15 @@
 //// [tests/cases/compiler/typeInferenceSelfIndexingTypeParameter1.ts] ////
 
 === typeInferenceSelfIndexingTypeParameter1.ts ===
-type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
->Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 16))
->a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 22))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 16))
->b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 27))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 16))
+declare function fn1<T>(arg: T[keyof T]): T
+>fn1 : Symbol(fn1, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 21))
+>arg : Symbol(arg, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 24))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 21))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 21))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 21))
 
-declare const createComparator: <T, K extends keyof T>(
->createComparator : Symbol(createComparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 13))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 33))
->K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 35))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 33))
-
-  property: K,
->property : Symbol(property, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 55))
->K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 35))
-
-  comparator: (a: T[K], b: T[K]) => 0 | 1 | -1,
->comparator : Symbol(comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 3, 14))
->a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 4, 15))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 33))
->K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 35))
->b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 4, 23))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 33))
->K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 35))
-
-) => Comparator<T>;
->Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 33))
-
-declare const concatComparators: <T,>(
->concatComparators : Symbol(concatComparators, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 13))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 34))
-
-  c1: Comparator<T>,
->c1 : Symbol(c1, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 38))
->Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 34))
-
-  c2: Comparator<T>,
->c2 : Symbol(c2, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 8, 20))
->Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 34))
-
-  ...cRest: Comparator<T>[]
->cRest : Symbol(cRest, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 9, 20))
->Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 34))
-
-) => Comparator<T>;
->Comparator : Symbol(Comparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
->T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 34))
-
-declare const compareNumbers: (a: number, b: number) => 0 | 1 | -1;
->compareNumbers : Symbol(compareNumbers, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 13))
->a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 31))
->b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 41))
-
-declare class ModuleGraphConnection {
->ModuleGraphConnection : Symbol(ModuleGraphConnection, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 67))
-
-  clone(): ModuleGraphConnection;
->clone : Symbol(ModuleGraphConnection.clone, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 15, 37))
->ModuleGraphConnection : Symbol(ModuleGraphConnection, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 67))
-}
-
-const bySourceOrder = createComparator("sourceOrder", compareNumbers);
->bySourceOrder : Symbol(bySourceOrder, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 19, 5))
->createComparator : Symbol(createComparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 13))
->compareNumbers : Symbol(compareNumbers, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 13))
-
-const byRangeStart = createComparator("rangeStart", compareNumbers);
->byRangeStart : Symbol(byRangeStart, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 20, 5))
->createComparator : Symbol(createComparator, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 2, 13))
->compareNumbers : Symbol(compareNumbers, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 13))
-
-declare const references: {
->references : Symbol(references, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 22, 13))
-
-  connection: ModuleGraphConnection;
->connection : Symbol(connection, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 22, 27))
->ModuleGraphConnection : Symbol(ModuleGraphConnection, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 13, 67))
-
-  sourceOrder: number;
->sourceOrder : Symbol(sourceOrder, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 23, 36))
-
-  rangeStart: number | undefined;
->rangeStart : Symbol(rangeStart, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 24, 22))
-
-  defer?: boolean;
->defer : Symbol(defer, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 25, 33))
-
-}[];
-
-references.sort(concatComparators(bySourceOrder, byRangeStart));
->references.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->references : Symbol(references, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 22, 13))
->sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->concatComparators : Symbol(concatComparators, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 7, 13))
->bySourceOrder : Symbol(bySourceOrder, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 19, 5))
->byRangeStart : Symbol(byRangeStart, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 20, 5))
+const res1 = fn1(["foo"]);
+>res1 : Symbol(res1, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 1, 5))
+>fn1 : Symbol(fn1, Decl(typeInferenceSelfIndexingTypeParameter1.ts, 0, 0))
 

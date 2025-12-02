@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesInConditionalTypes1.ts] ////
+
+=== typeInferenceAggregateFromIndicesInConditionalTypes1.ts ===
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    a: string;
+>a : string
+>  : ^^^^^^
+
+    b: number;
+>b : number
+>  : ^^^^^^
+
+    c: boolean;
+>c : boolean
+>  : ^^^^^^^
+}
+
+type AC<T> = T extends { a: (infer R extends Record<string, any>)["_a"]; c: (infer R)["_c"] } ? R : never;
+>AC : AC<T>
+>   : ^^^^^
+>a : R["_a"]
+>  : ^^^^^^^
+>c : R["_c"]
+>  : ^^^^^^^
+
+type Result1 = AC<Foo>;
+>Result1 : { _a: string; } & { _c: boolean; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

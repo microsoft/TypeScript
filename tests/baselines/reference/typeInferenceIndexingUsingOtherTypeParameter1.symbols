@@ -69,3 +69,20 @@ export const { name, values } = useController({
 
 });
 
+declare function fn1<T, U>(arg: T[keyof T & keyof U], u: U): T;
+>fn1 : Symbol(fn1, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 3))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+>U : Symbol(U, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 23))
+>arg : Symbol(arg, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 27))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+>U : Symbol(U, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 23))
+>u : Symbol(u, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 53))
+>U : Symbol(U, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 23))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+
+const res1 = fn1("foo", { prop: 42 });
+>res1 : Symbol(res1, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 24, 5))
+>fn1 : Symbol(fn1, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 3))
+>prop : Symbol(prop, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 24, 25))
+

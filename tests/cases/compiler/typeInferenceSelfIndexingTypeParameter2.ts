@@ -3,9 +3,9 @@
 
 type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
-declare const createComparator: <T,>(
-  property: string,
-  comparator: (a: T[keyof T], b: T[keyof T]) => 0 | 1 | -1,
+declare const createComparator: <T, K extends keyof T>(
+  property: K,
+  comparator: (a: T[K], b: T[K]) => 0 | 1 | -1,
 ) => Comparator<T>;
 
 declare const concatComparators: <T,>(

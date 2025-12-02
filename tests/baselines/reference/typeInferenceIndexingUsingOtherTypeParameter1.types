@@ -65,3 +65,27 @@ export const { name, values } = useController({
 
 });
 
+declare function fn1<T, U>(arg: T[keyof T & keyof U], u: U): T;
+>fn1 : <T, U>(arg: T[keyof T & keyof U], u: U) => T
+>    : ^ ^^ ^^   ^^                    ^^ ^^ ^^^^^ 
+>arg : T[keyof T & keyof U]
+>    : ^^^^^^^^^^^^^^^^^^^^
+>u : U
+>  : ^
+
+const res1 = fn1("foo", { prop: 42 });
+>res1 : { prop: "foo"; }
+>     : ^^^^^^^^^^^^^^^^
+>fn1("foo", { prop: 42 }) : { prop: "foo"; }
+>                         : ^^^^^^^^^^^^^^^^
+>fn1 : <T, U>(arg: T[keyof T & keyof U], u: U) => T
+>    : ^ ^^ ^^   ^^                    ^^ ^^ ^^^^^ 
+>"foo" : "foo"
+>      : ^^^^^
+>{ prop: 42 } : { prop: number; }
+>             : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+
