@@ -70,5 +70,9 @@
     "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
         "category": "Error",
         "code": 5112
+    },
+    "Option '--incremental' is only valid with a known configuration file (like 'tsconfig.json') or when '--tsBuildInfoFile' is explicitly provided.": {
+        "category": "Error",
+        "code": 5074
     }
 }

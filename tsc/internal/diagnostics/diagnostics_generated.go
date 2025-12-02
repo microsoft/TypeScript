@@ -2288,7 +2288,7 @@ var Unknown_build_option_0 = &Message{code: 5072, category: CategoryError, key: 
 
 var Build_option_0_requires_a_value_of_type_1 = &Message{code: 5073, category: CategoryError, key: "Build_option_0_requires_a_value_of_type_1_5073", text: "Build option '{0}' requires a value of type {1}."}
 
-var Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified = &Message{code: 5074, category: CategoryError, key: "Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBui_5074", text: "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified."}
+var Option_incremental_is_only_valid_with_a_known_configuration_file_like_tsconfig_json_or_when_tsBuildInfoFile_is_explicitly_provided = &Message{code: 5074, category: CategoryError, key: "Option_incremental_is_only_valid_with_a_known_configuration_file_like_tsconfig_json_or_when_tsBuildI_5074", text: "Option '--incremental' is only valid with a known configuration file (like 'tsconfig.json') or when '--tsBuildInfoFile' is explicitly provided."}
 
 var X_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2 = &Message{code: 5075, category: CategoryError, key: "_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075", text: "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'."}
 
@@ -6558,8 +6558,8 @@ func keyToMessage(key Key) *Message {
 		return Unknown_build_option_0
 	case "Build_option_0_requires_a_value_of_type_1_5073":
 		return Build_option_0_requires_a_value_of_type_1
-	case "Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBui_5074":
-		return Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified
+	case "Option_incremental_is_only_valid_with_a_known_configuration_file_like_tsconfig_json_or_when_tsBuildI_5074":
+		return Option_incremental_is_only_valid_with_a_known_configuration_file_like_tsconfig_json_or_when_tsBuildInfoFile_is_explicitly_provided
 	case "_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075":
 		return X_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2
 	case "_0_and_1_operations_cannot_be_mixed_without_parentheses_5076":
