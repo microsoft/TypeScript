@@ -26600,11 +26600,6 @@ func (c *Checker) isAssignmentToReadonlyEntity(expr *ast.Node, symbol *ast.Symbo
 			if expressionSymbol.Flags&ast.SymbolFlagsModuleExports != 0 {
 				return false
 			}
-			// references through namespace import should be readonly
-			if expressionSymbol.Flags&ast.SymbolFlagsAlias != 0 {
-				declaration := c.getDeclarationOfAliasSymbol(expressionSymbol)
-				return declaration != nil && ast.IsNamespaceImport(declaration)
-			}
 		}
 	}
 	if c.isReadonlySymbol(symbol) {
@@ -26626,6 +26621,17 @@ func (c *Checker) isAssignmentToReadonlyEntity(expr *ast.Node, symbol *ast.Symbo
 			}
 		}
 		return true
+	}
+	if ast.IsAccessExpression(expr) {
+		// references through namespace import should be readonly
+		node := ast.SkipParentheses(expr.Expression())
+		if ast.IsIdentifier(node) {
+			expressionSymbol := c.getResolvedSymbol(node)
+			if expressionSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+				declaration := c.getDeclarationOfAliasSymbol(expressionSymbol)
+				return declaration != nil && ast.IsNamespaceImport(declaration)
+			}
+		}
 	}
 	return false
 }
