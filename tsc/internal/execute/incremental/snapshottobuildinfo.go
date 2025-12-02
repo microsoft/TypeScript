@@ -197,7 +197,7 @@ func (t *toBuildInfo) collectRootFiles() {
 }
 
 func (t *toBuildInfo) setFileInfoAndEmitSignatures() {
-	t.buildInfo.FileInfos = core.MapNonNil(t.program.GetSourceFiles(), func(file *ast.SourceFile) *BuildInfoFileInfo {
+	t.buildInfo.FileInfos = core.Map(t.program.GetSourceFiles(), func(file *ast.SourceFile) *BuildInfoFileInfo {
 		info, _ := t.snapshot.fileInfos.Load(file.Path())
 		fileId := t.toFileId(file.Path())
 		//  tryAddRoot(key, fileId);
@@ -206,11 +206,6 @@ func (t *toBuildInfo) setFileInfoAndEmitSignatures() {
 				panic(fmt.Sprintf("File name at index %d does not match expected relative path or libName: %s != %s", fileId-1, t.buildInfo.FileNames[fileId-1], t.relativeToBuildInfo(string(file.Path()))))
 			}
 		}
-		if int(fileId) != len(t.buildInfo.FileNames) {
-			// Duplicate - for now ignore
-			return nil
-		}
-
 		if t.snapshot.options.Composite.IsTrue() {
 			if !ast.IsJsonSourceFile(file) && t.program.SourceFileMayBeEmitted(file, false) {
 				if emitSignature, loaded := t.snapshot.emitSignatures.Load(file.Path()); !loaded {
@@ -235,9 +230,6 @@ func (t *toBuildInfo) setFileInfoAndEmitSignatures() {
 		}
 		return newBuildInfoFileInfo(info)
 	})
-	if t.buildInfo.FileInfos == nil {
-		t.buildInfo.FileInfos = []*BuildInfoFileInfo{}
-	}
 }
 
 func (t *toBuildInfo) setRootOfIncrementalProgram() {

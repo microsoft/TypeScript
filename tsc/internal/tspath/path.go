@@ -334,6 +334,12 @@ func GetNormalizedPathComponents(path string, currentDirectory string) []string 
 	return reducePathComponents(GetPathComponents(path, currentDirectory))
 }
 
+func GetNormalizedAbsolutePathWithoutRoot(fileName string, currentDirectory string) string {
+	absolutePath := GetNormalizedAbsolutePath(fileName, currentDirectory)
+	rootLength := GetRootLength(absolutePath)
+	return absolutePath[rootLength:]
+}
+
 func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string {
 	rootLength := GetRootLength(fileName)
 	if rootLength == 0 && currentDirectory != "" {

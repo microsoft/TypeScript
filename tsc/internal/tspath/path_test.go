@@ -417,6 +417,14 @@ func TestGetNormalizedAbsolutePath(t *testing.T) {
 	assert.Equal(t, GetNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c")
 }
 
+func TestGetNormalizedAbsolutePathWithoutRoot(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, GetNormalizedAbsolutePathWithoutRoot("/a/b/c.txt", "/a/b"), "a/b/c.txt")
+	assert.Equal(t, GetNormalizedAbsolutePathWithoutRoot("c:/work/hello.txt", "c:/work"), "work/hello.txt")
+	assert.Equal(t, GetNormalizedAbsolutePathWithoutRoot("c:/work/hello.txt", "d:/worspaces"), "work/hello.txt")
+}
+
 var getNormalizedAbsolutePathTests = map[string][][]string{
 	"non-normalized inputs": {
 		{"/.", ""},

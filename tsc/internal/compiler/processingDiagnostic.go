@@ -79,7 +79,7 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 	processRelatedInfo := func(includeReason *FileIncludeReason) {
 		if preferredLocation == nil && includeReason.isReferencedFile() && !program.includeProcessor.getReferenceLocation(includeReason, program).isSynthetic {
 			preferredLocation = includeReason
-		} else {
+		} else if preferredLocation != includeReason {
 			info := program.includeProcessor.getRelatedInfo(includeReason, program)
 			if info != nil {
 				relatedInfo = append(relatedInfo, info)

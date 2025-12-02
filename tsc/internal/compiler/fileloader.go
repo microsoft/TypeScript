@@ -129,128 +129,12 @@ func processAllProgramFiles(
 	}
 
 	loader.filesParser.parse(&loader, loader.rootTasks)
+
 	// Clear out loader and host to ensure its not used post program creation
 	loader.projectReferenceFileMapper.loader = nil
 	loader.projectReferenceFileMapper.host = nil
 
-	totalFileCount := int(loader.totalFileCount.Load())
-	libFileCount := int(loader.libFileCount.Load())
-
-	var missingFiles []string
-	files := make([]*ast.SourceFile, 0, totalFileCount-libFileCount)
-	libFiles := make([]*ast.SourceFile, 0, totalFileCount) // totalFileCount here since we append files to it later to construct the final list
-
-	filesByPath := make(map[tspath.Path]*ast.SourceFile, totalFileCount)
-	loader.includeProcessor.fileIncludeReasons = make(map[tspath.Path][]*FileIncludeReason, totalFileCount)
-	var outputFileToProjectReferenceSource map[tspath.Path]string
-	if !opts.canUseProjectReferenceSource() {
-		outputFileToProjectReferenceSource = make(map[tspath.Path]string, totalFileCount)
-	}
-	resolvedModules := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule], totalFileCount+1)
-	typeResolutionsInFile := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], totalFileCount)
-	sourceFileMetaDatas := make(map[tspath.Path]ast.SourceFileMetaData, totalFileCount)
-	var jsxRuntimeImportSpecifiers map[tspath.Path]*jsxRuntimeImportSpecifier
-	var importHelpersImportSpecifiers map[tspath.Path]*ast.Node
-	var sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
-	libFilesMap := make(map[tspath.Path]*LibFile, libFileCount)
-
-	loader.filesParser.collect(&loader, loader.rootTasks, func(task *parseTask) {
-		if task.redirectedParseTask != nil {
-			if !opts.canUseProjectReferenceSource() {
-				outputFileToProjectReferenceSource[task.redirectedParseTask.path] = task.FileName()
-			}
-			return
-		}
-
-		if task.isForAutomaticTypeDirective {
-			typeResolutionsInFile[task.path] = task.typeResolutionsInFile
-			return
-		}
-		file := task.file
-		path := task.path
-		if file == nil {
-			// !!! sheetal file preprocessing diagnostic explaining getSourceFileFromReferenceWorker
-			missingFiles = append(missingFiles, task.normalizedFilePath)
-			return
-		}
-
-		// !!! sheetal todo porting file case errors
-		// if _, ok := filesByPath[path]; ok {
-		// 	Check if it differs only in drive letters its ok to ignore that error:
-		// 	const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
-		// 	const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(fileName, currentDirectory);
-		// 	if (checkedAbsolutePath !== inputAbsolutePath) {
-		// 	    reportFileNamesDifferOnlyInCasingError(fileName, file, reason);
-		// 	}
-		// } else if loader.comparePathsOptions.UseCaseSensitiveFileNames {
-		// 	pathIgnoreCase := tspath.ToPath(file.FileName(), loader.comparePathsOptions.CurrentDirectory, false)
-		// 	// for case-sensitsive file systems check if we've already seen some file with similar filename ignoring case
-		// 	if _, ok := filesByNameIgnoreCase[pathIgnoreCase]; ok {
-		// 		reportFileNamesDifferOnlyInCasingError(fileName, existingFile, reason);
-		// 	} else {
-		// 		filesByNameIgnoreCase[pathIgnoreCase] = file
-		// 	}
-		// }
-
-		if task.libFile != nil {
-			libFiles = append(libFiles, file)
-			libFilesMap[path] = task.libFile
-		} else {
-			files = append(files, file)
-		}
-		filesByPath[path] = file
-		resolvedModules[path] = task.resolutionsInFile
-		typeResolutionsInFile[path] = task.typeResolutionsInFile
-		sourceFileMetaDatas[path] = task.metadata
-
-		if task.jsxRuntimeImportSpecifier != nil {
-			if jsxRuntimeImportSpecifiers == nil {
-				jsxRuntimeImportSpecifiers = make(map[tspath.Path]*jsxRuntimeImportSpecifier, totalFileCount)
-			}
-			jsxRuntimeImportSpecifiers[path] = task.jsxRuntimeImportSpecifier
-		}
-		if task.importHelpersImportSpecifier != nil {
-			if importHelpersImportSpecifiers == nil {
-				importHelpersImportSpecifiers = make(map[tspath.Path]*ast.Node, totalFileCount)
-			}
-			importHelpersImportSpecifiers[path] = task.importHelpersImportSpecifier
-		}
-		if task.fromExternalLibrary {
-			sourceFilesFoundSearchingNodeModules.Add(path)
-		}
-	})
-	loader.sortLibs(libFiles)
-
-	allFiles := append(libFiles, files...)
-
-	keys := slices.Collect(loader.pathForLibFileResolutions.Keys())
-	slices.Sort(keys)
-	for _, key := range keys {
-		value, _ := loader.pathForLibFileResolutions.Load(key)
-		resolvedModules[key] = module.ModeAwareCache[*module.ResolvedModule]{
-			module.ModeAwareCacheKey{Name: value.libraryName, Mode: core.ModuleKindCommonJS}: value.resolution,
-		}
-		for _, trace := range value.trace {
-			opts.Host.Trace(trace.Message, trace.Args...)
-		}
-	}
-
-	return processedFiles{
-		resolver:                             loader.resolver,
-		files:                                allFiles,
-		filesByPath:                          filesByPath,
-		projectReferenceFileMapper:           loader.projectReferenceFileMapper,
-		resolvedModules:                      resolvedModules,
-		typeResolutionsInFile:                typeResolutionsInFile,
-		sourceFileMetaDatas:                  sourceFileMetaDatas,
-		jsxRuntimeImportSpecifiers:           jsxRuntimeImportSpecifiers,
-		importHelpersImportSpecifiers:        importHelpersImportSpecifiers,
-		sourceFilesFoundSearchingNodeModules: sourceFilesFoundSearchingNodeModules,
-		libFiles:                             libFilesMap,
-		missingFiles:                         missingFiles,
-		includeProcessor:                     loader.includeProcessor,
-		outputFileToProjectReferenceSource:   outputFileToProjectReferenceSource,
-	}
+	return loader.filesParser.getProcessedFiles(&loader)
 }
 
 func (p *fileLoader) toPath(file string) tspath.Path {
@@ -466,11 +350,10 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 
 		if resolved.IsResolved() {
 			t.addSubTask(resolvedRef{
-				fileName:              resolved.ResolvedFileName,
-				increaseDepth:         resolved.IsExternalLibraryImport,
-				elideOnDepth:          false,
-				isFromExternalLibrary: resolved.IsExternalLibraryImport,
-				includeReason:         includeReason,
+				fileName:      resolved.ResolvedFileName,
+				increaseDepth: resolved.IsExternalLibraryImport,
+				elideOnDepth:  false,
+				includeReason: includeReason,
 			}, nil)
 		} else {
 			p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
@@ -566,10 +449,9 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 			if shouldAddFile {
 				t.addSubTask(resolvedRef{
-					fileName:              resolvedFileName,
-					increaseDepth:         resolvedModule.IsExternalLibraryImport,
-					elideOnDepth:          isJsFileFromNodeModules,
-					isFromExternalLibrary: resolvedModule.IsExternalLibraryImport,
+					fileName:      resolvedFileName,
+					increaseDepth: resolvedModule.IsExternalLibraryImport,
+					elideOnDepth:  isJsFileFromNodeModules,
 					includeReason: &FileIncludeReason{
 						kind: fileIncludeKindImport,
 						data: &referencedFileData{

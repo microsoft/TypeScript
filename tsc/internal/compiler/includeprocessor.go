@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"slices"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -57,6 +58,32 @@ func (i *includeProcessor) getDiagnostics(p *Program) *ast.DiagnosticsCollection
 
 func (i *includeProcessor) addProcessingDiagnostic(d ...*processingDiagnostic) {
 	i.processingDiagnostics = append(i.processingDiagnostics, d...)
+}
+
+func (i *includeProcessor) addProcessingDiagnosticsForFileCasing(file tspath.Path, existingCasing string, currentCasing string, reason *FileIncludeReason) {
+	if !reason.isReferencedFile() && slices.ContainsFunc(i.fileIncludeReasons[file], func(r *FileIncludeReason) bool {
+		return r.isReferencedFile()
+	}) {
+		i.addProcessingDiagnostic(&processingDiagnostic{
+			kind: processingDiagnosticKindExplainingFileInclude,
+			data: &includeExplainingDiagnostic{
+				file:             file,
+				diagnosticReason: reason,
+				message:          diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+				args:             []any{existingCasing, currentCasing},
+			},
+		})
+	} else {
+		i.addProcessingDiagnostic(&processingDiagnostic{
+			kind: processingDiagnosticKindExplainingFileInclude,
+			data: &includeExplainingDiagnostic{
+				file:             file,
+				diagnosticReason: reason,
+				message:          diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
+				args:             []any{currentCasing, existingCasing},
+			},
+		})
+	}
 }
 
 func (i *includeProcessor) getReferenceLocation(r *FileIncludeReason, program *Program) *referenceFileLocation {
