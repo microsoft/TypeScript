@@ -8,8 +8,6 @@
             "name": "Launch VS Code extension",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "--disable-extension=vscode.typescript-language-features",
-                "--disable-extension=ms-vscode.vscode-typescript-next",
                 "--extensionDevelopmentPath=${workspaceRoot}/_extension"
             ],
             "outFiles": [
