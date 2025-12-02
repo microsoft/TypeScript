@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-json-experiment/json"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
@@ -84,6 +85,51 @@ func TestCommandLineParseResult(t *testing.T) {
 	for _, testCase := range parseCommandLineSubScenarios {
 		testCase.createSubScenario("parseCommandLine").assertParseResult(t)
 	}
+}
+
+func TestCustomConditionsNullOverride(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{
+		"/project/tsconfig.json": `{
+  "compilerOptions": {
+    "customConditions": ["condition1", "condition2"]
+  }
+}`,
+		"/project/index.ts": `console.log("Hello, World!");`,
+	}
+
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true)
+
+	// Parse command line with --customConditions null
+	cmdLine := tsoptions.ParseCommandLine([]string{"--project", "/project", "--customConditions", "null"}, host)
+
+	// Check that the raw options contain null for customConditions
+	if rawMap, ok := cmdLine.Raw.(*collections.OrderedMap[string, any]); ok {
+		customConditionsRaw, exists := rawMap.Get("customConditions")
+		assert.Assert(t, exists, "customConditions should exist in raw options")
+		assert.Assert(t, customConditionsRaw == nil, "customConditions should be nil in raw options, got: %v", customConditionsRaw)
+	} else {
+		t.Fatal("Raw options should be an OrderedMap")
+	}
+
+	// Now parse the config file with the command line options
+	// Wrap command line options in "compilerOptions" key to match tsconfig.json structure
+	wrappedRaw := &collections.OrderedMap[string, any]{}
+	wrappedRaw.Set("compilerOptions", cmdLine.Raw.(*collections.OrderedMap[string, any]))
+	parsedConfig, errors := tsoptions.GetParsedCommandLineOfConfigFile(
+		"/project/tsconfig.json",
+		cmdLine.CompilerOptions(),
+		wrappedRaw,
+		host,
+		nil,
+	)
+
+	assert.Assert(t, len(errors) == 0, "Should not have errors: %v", errors)
+
+	// Check that customConditions is nil (overridden by command line)
+	customConditions := parsedConfig.CompilerOptions().CustomConditions
+	assert.Assert(t, customConditions == nil, "customConditions should be nil after override, got: %v", customConditions)
 }
 
 func TestParseCommandLineVerifyNull(t *testing.T) {

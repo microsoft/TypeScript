@@ -299,7 +299,7 @@ func BenchmarkNewProgram(b *testing.B) {
 
 		host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil)
 
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), nil, host, nil)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), nil, nil, host, nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 
 		opts := compiler.ProgramOptions{

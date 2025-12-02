@@ -60,7 +60,14 @@ func (h *host) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
 func (h *host) GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine {
 	return h.resolvedReferences.loadOrStoreNew(path, func(path tspath.Path) *tsoptions.ParsedCommandLine {
 		configStart := h.orchestrator.opts.Sys.Now()
-		commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, h.orchestrator.opts.Command.CompilerOptions, h, &h.extendedConfigCache)
+		// Wrap command line options in "compilerOptions" key to match tsconfig.json structure
+		var commandLineRaw *collections.OrderedMap[string, any]
+		if raw, ok := h.orchestrator.opts.Command.Raw.(*collections.OrderedMap[string, any]); ok {
+			wrapped := &collections.OrderedMap[string, any]{}
+			wrapped.Set("compilerOptions", raw)
+			commandLineRaw = wrapped
+		}
+		commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, h.orchestrator.opts.Command.CompilerOptions, commandLineRaw, h, &h.extendedConfigCache)
 		configTime := h.orchestrator.opts.Sys.Now().Sub(configStart)
 		h.configTimes.Store(path, configTime)
 		return commandLine

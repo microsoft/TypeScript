@@ -80,6 +80,7 @@ func ParseBuildCommandLine(
 		WatchOptions:    convertMapToOptions(parser.options, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions,
 		Projects:        parser.fileNames,
 		Errors:          parser.errors,
+		Raw:             parser.options,
 
 		comparePathsOptions: tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),

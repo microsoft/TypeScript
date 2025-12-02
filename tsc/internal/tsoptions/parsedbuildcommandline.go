@@ -15,6 +15,7 @@ type ParsedBuildCommandLine struct {
 	WatchOptions    *core.WatchOptions    `json:"watchOptions"`
 	Projects        []string              `json:"projects"`
 	Errors          []*ast.Diagnostic     `json:"errors"`
+	Raw             any                   `json:"raw"`
 
 	comparePathsOptions tspath.ComparePathsOptions
 

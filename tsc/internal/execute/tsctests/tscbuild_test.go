@@ -1545,7 +1545,7 @@ func TestBuildOutputPaths(t *testing.T) {
 		t.Run("GetOutputFileNames/"+s.subScenario, func(t *testing.T) {
 			t.Parallel()
 			sys := newTestSys(input, false)
-			config, _ := tsoptions.GetParsedCommandLineOfConfigFile("/home/src/workspaces/project/tsconfig.json", &core.CompilerOptions{}, sys, nil)
+			config, _ := tsoptions.GetParsedCommandLineOfConfigFile("/home/src/workspaces/project/tsconfig.json", &core.CompilerOptions{}, nil, sys, nil)
 			assert.DeepEqual(t, slices.Collect(config.GetOutputFileNames()), s.expectedDtsNames)
 		})
 	}

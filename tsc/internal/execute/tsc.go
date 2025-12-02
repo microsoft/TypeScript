@@ -177,7 +177,14 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 	var compileTimes tsc.CompileTimes
 	if configFileName != "" {
 		configStart := sys.Now()
-		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, compilerOptionsFromCommandLine, sys, extendedConfigCache)
+		var commandLineRaw *collections.OrderedMap[string, any]
+		if raw, ok := commandLine.Raw.(*collections.OrderedMap[string, any]); ok {
+			// Wrap command line options in a "compilerOptions" key to match tsconfig.json structure
+			wrapped := &collections.OrderedMap[string, any]{}
+			wrapped.Set("compilerOptions", raw)
+			commandLineRaw = wrapped
+		}
+		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, compilerOptionsFromCommandLine, commandLineRaw, sys, extendedConfigCache)
 		compileTimes.ConfigTime = sys.Now().Sub(configStart)
 		if len(errors) != 0 {
 			// these are unrecoverable errors--exit to report them as diagnostics

@@ -127,6 +127,7 @@ func (api *API) ParseConfigFile(configFileName string) (*ConfigFileResponse, err
 		api.session,
 		configDir,
 		nil, /*existingOptions*/
+		nil, /*existingOptionsRaw*/
 		configFileName,
 		nil, /*resolutionStack*/
 		nil, /*extraFileExtensions*/

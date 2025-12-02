@@ -87,6 +87,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 				parseConfigHost,
 				configDir,
 				nil, /*existingOptions*/
+				nil, /*existingOptionsRaw*/
 				configFileName,
 				nil, /*resolutionStack*/
 				nil, /*extraFileExtensions*/
