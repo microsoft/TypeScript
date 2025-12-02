@@ -654,7 +654,6 @@ export namespace SmartIndenter {
             case SyntaxKind.VariableStatement:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ReturnStatement:
-            case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ArrayBindingPattern:
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.JsxOpeningElement:
@@ -695,6 +694,15 @@ export namespace SmartIndenter {
                     return true;
                 }
                 break;
+            case SyntaxKind.ConditionalExpression:
+                if (child && sourceFile) {
+                    const childStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).line;
+                    const childEndLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.end)).line;
+                    if (!rangeIsOnOneLine(sourceFile, parent) && childStartLine !== childEndLine && childKind !== SyntaxKind.ParenthesizedExpression) {
+                        return false;
+                    }
+                }
+                return true;
             case SyntaxKind.DoStatement:
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForInStatement:
