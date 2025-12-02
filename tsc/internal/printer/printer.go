@@ -5059,7 +5059,7 @@ func (p *Printer) emitCommentsBeforeToken(token ast.Kind, pos int, contextNode *
 
 	if contextNode.Pos() != startPos {
 		indentLeading := flags&tefIndentLeadingComments != 0
-		needsIndent := indentLeading && p.currentSourceFile != nil && !positionsAreOnSameLine(startPos, pos, p.currentSourceFile)
+		needsIndent := indentLeading && p.currentSourceFile != nil && !PositionsAreOnSameLine(startPos, pos, p.currentSourceFile)
 		p.increaseIndentIf(needsIndent)
 		p.emitLeadingComments(startPos, false /*elided*/)
 		p.decreaseIndentIf(needsIndent)

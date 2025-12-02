@@ -15,3 +15,7 @@ renameForDefaultExport01
 tsxCompletion12
 jsDocFunctionSignatures2
 jsDocFunctionSignatures12
+outliningHintSpansForFunction
+getOutliningSpans
+outliningForNonCompleteInterfaceDeclaration
+incrementalParsingWithJsDoc

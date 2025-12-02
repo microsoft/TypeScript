@@ -519,9 +519,13 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentCodeLensInfo, (*Server).handleCodeLens)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentCodeActionInfo, (*Server).handleCodeAction)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentPrepareCallHierarchyInfo, (*Server).handlePrepareCallHierarchy)
+	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentFoldingRangeInfo, (*Server).handleFoldingRange)
 
 	registerMultiProjectReferenceRequestHandler(handlers, lsproto.TextDocumentReferencesInfo, (*Server).handleReferences, combineReferences)
 	registerMultiProjectReferenceRequestHandler(handlers, lsproto.TextDocumentRenameInfo, (*Server).handleRename, combineRenameResponse)
+
+	registerRequestHandler(handlers, lsproto.CallHierarchyIncomingCallsInfo, (*Server).handleCallHierarchyIncomingCalls)
+	registerRequestHandler(handlers, lsproto.CallHierarchyOutgoingCallsInfo, (*Server).handleCallHierarchyOutgoingCalls)
 
 	registerRequestHandler(handlers, lsproto.CallHierarchyIncomingCallsInfo, (*Server).handleCallHierarchyIncomingCalls)
 	registerRequestHandler(handlers, lsproto.CallHierarchyOutgoingCallsInfo, (*Server).handleCallHierarchyOutgoingCalls)
@@ -939,6 +943,9 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 			DocumentSymbolProvider: &lsproto.BooleanOrDocumentSymbolOptions{
 				Boolean: ptrTo(true),
 			},
+			FoldingRangeProvider: &lsproto.BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions{
+				Boolean: ptrTo(true),
+			},
 			RenameProvider: &lsproto.BooleanOrRenameOptions{
 				Boolean: ptrTo(true),
 			},
@@ -1131,6 +1138,10 @@ func (s *Server) handleSignatureHelp(ctx context.Context, languageService *ls.La
 		params.Position,
 		params.Context,
 	)
+}
+
+func (s *Server) handleFoldingRange(ctx context.Context, ls *ls.LanguageService, params *lsproto.FoldingRangeParams) (lsproto.FoldingRangeResponse, error) {
+	return ls.ProvideFoldingRange(ctx, params.TextDocument.Uri)
 }
 
 func (s *Server) handleDefinition(ctx context.Context, ls *ls.LanguageService, params *lsproto.DefinitionParams) (lsproto.DefinitionResponse, error) {

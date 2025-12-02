@@ -335,7 +335,7 @@ func rangeIsOnSingleLine(r core.TextRange, sourceFile *ast.SourceFile) bool {
 }
 
 func rangeStartPositionsAreOnSameLine(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile) bool {
-	return positionsAreOnSameLine(
+	return PositionsAreOnSameLine(
 		getStartPositionOfRange(range1, sourceFile, false /*includeComments*/),
 		getStartPositionOfRange(range2, sourceFile, false /*includeComments*/),
 		sourceFile,
@@ -343,15 +343,15 @@ func rangeStartPositionsAreOnSameLine(range1 core.TextRange, range2 core.TextRan
 }
 
 func rangeEndPositionsAreOnSameLine(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile) bool {
-	return positionsAreOnSameLine(range1.End(), range2.End(), sourceFile)
+	return PositionsAreOnSameLine(range1.End(), range2.End(), sourceFile)
 }
 
 func rangeStartIsOnSameLineAsRangeEnd(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile) bool {
-	return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile, false /*includeComments*/), range2.End(), sourceFile)
+	return PositionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile, false /*includeComments*/), range2.End(), sourceFile)
 }
 
 func rangeEndIsOnSameLineAsRangeStart(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile) bool {
-	return positionsAreOnSameLine(range1.End(), getStartPositionOfRange(range2, sourceFile, false /*includeComments*/), sourceFile)
+	return PositionsAreOnSameLine(range1.End(), getStartPositionOfRange(range2, sourceFile, false /*includeComments*/), sourceFile)
 }
 
 func getStartPositionOfRange(r core.TextRange, sourceFile *ast.SourceFile, includeComments bool) int {
@@ -361,7 +361,7 @@ func getStartPositionOfRange(r core.TextRange, sourceFile *ast.SourceFile, inclu
 	return scanner.SkipTriviaEx(sourceFile.Text(), r.Pos(), &scanner.SkipTriviaOptions{StopAtComments: includeComments})
 }
 
-func positionsAreOnSameLine(pos1 int, pos2 int, sourceFile *ast.SourceFile) bool {
+func PositionsAreOnSameLine(pos1 int, pos2 int, sourceFile *ast.SourceFile) bool {
 	return GetLinesBetweenPositions(sourceFile, pos1, pos2) == 0
 }
 
