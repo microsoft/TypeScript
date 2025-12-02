@@ -26902,7 +26902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
                         return;
                     }
-                    if (!inference.isFixed) {
+                    if (!hasInferenceCandidates(inference)) {
                         const partialInferenceTypeSymbol = getGlobalPartialInferenceSymbol();
                         if (partialInferenceTypeSymbol) {
                             if ((target as IndexedAccessType).indexType.flags & TypeFlags.Instantiable) {
