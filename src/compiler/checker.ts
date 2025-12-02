@@ -26447,7 +26447,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (inference.indexes) {
             const eraseSelfMapper = makeArrayTypeMapper([constraint.type, typeParameter], [allKeysAllKeysUnknownType, stringNumberSymbolType]);
-            return instantiateType(getIntersectionType(inference.indexes), eraseSelfMapper);
+            const aggregateInference = instantiateType(getIntersectionType(inference.indexes), eraseSelfMapper);
+            if (!(getReducedType(aggregateInference).flags & TypeFlags.Never)) {
+                return aggregateInference;
+            }
         }
         return unknownType;
     }
@@ -26900,8 +26903,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return;
                     }
                     if (!inference.isFixed) {
-                        // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
-                        // Where `T` is `source` and `Keys` is `target.indexType`
                         const partialInferenceTypeSymbol = getGlobalPartialInferenceSymbol();
                         if (partialInferenceTypeSymbol) {
                             if ((target as IndexedAccessType).indexType.flags & TypeFlags.Instantiable) {
@@ -26911,6 +26912,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 }
                             }
                             else {
+                                // Instantiates instance of `type PartialInference<T, Keys extends PropertyKey> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
+                                // Where `T` is `source` and `Keys` is `target.indexType`
                                 inference.indexes = append(inference.indexes, getTypeAliasInstantiation(partialInferenceTypeSymbol, [source, (target as IndexedAccessType).indexType]));
                             }
                         }
@@ -27591,9 +27594,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else if (inference.indexes) {
                     const eraseSelfMapper = makeUnaryTypeMapper(inference.typeParameter, allKeysUnknownType);
-                    let aggregateInference = instantiateType(getIntersectionType(inference.indexes), mergeTypeMappers(eraseSelfMapper, context.nonFixingMapper));
+                    let aggregateInference: Type | undefined = instantiateType(getIntersectionType(inference.indexes), mergeTypeMappers(eraseSelfMapper, context.nonFixingMapper));
+                    if (getReducedType(aggregateInference).flags & TypeFlags.Never) {
+                        // `never` inference isn't that useful of an inference given its assignable to every other type
+                        aggregateInference = undefined;
+                    }
                     const constraint = getConstraintOfTypeParameter(inference.typeParameter);
-                    if (constraint) {
+                    if (aggregateInference && constraint) {
                         const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
                         if (instantiatedConstraint.flags & TypeFlags.Union && !context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
                             const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
