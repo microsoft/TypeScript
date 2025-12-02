@@ -10634,11 +10634,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set_5096" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_allowImportingTsExtensions_can_only_be_used_when_one_of_noEmit_emitDeclarationOnly_or_rewrite_5096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.]]></Val>
+          <Val><![CDATA[Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "allowImportingTsExtensions" можно использовать, только если установлен параметр "noEmit" или "emitDeclarationOnly".]]></Val>
+            <Val><![CDATA[Параметр allowImportingTsExtensions можно использовать только при настройке одного из вариантов: noEmit, emitDeclarationOnly или rewriteRelativeImportExtensions.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

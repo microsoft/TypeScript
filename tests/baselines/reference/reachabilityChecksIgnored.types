@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/reachabilityChecksIgnored.ts] ////
+
+=== reachabilityChecksIgnored.ts ===
+function a() {
+>a : () => void
+>  : ^^^^^^^^^^
+
+    throw new Error("");
+>new Error("") : Error
+>              : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+    // @ts-ignore
+    console.log("unreachable");
+>console.log("unreachable") : void
+>                           : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"unreachable" : "unreachable"
+>              : ^^^^^^^^^^^^^
+}
+
+function b() {
+>b : () => void
+>  : ^^^^^^^^^^
+
+    throw new Error("");
+>new Error("") : Error
+>              : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+    // @ts-expect-error
+    console.log("unreachable");
+>console.log("unreachable") : void
+>                           : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"unreachable" : "unreachable"
+>              : ^^^^^^^^^^^^^
+}
