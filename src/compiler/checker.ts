@@ -27602,29 +27602,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                     if (aggregateInference && constraint) {
                         const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                        if (instantiatedConstraint.flags & TypeFlags.Union && !context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
-                            const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
-                            if (discriminantProps) {
-                                let match: Type | undefined;
-                                findDiscriminant:
-                                for (const p of discriminantProps) {
-                                    const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
-                                    for (const type of (instantiatedConstraint as UnionType).types) {
-                                        const propType = getTypeOfPropertyOfType(type, p.escapedName);
-                                        if (propType && candidatePropType && checkTypeAssignableTo(candidatePropType, propType, /*errorNode*/ undefined)) {
-                                            if (match && match !== type) {
-                                                match = undefined;
-                                                break findDiscriminant;
-                                            }
-                                            else {
-                                                match = type;
+                        let assignableToConstraint = context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference));
+                        if (!assignableToConstraint) {
+                            if (instantiatedConstraint.flags & TypeFlags.Union) {
+                                const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
+                                if (discriminantProps) {
+                                    let match: Type | undefined;
+                                    findDiscriminant:
+                                    for (const p of discriminantProps) {
+                                        const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
+                                        for (const type of (instantiatedConstraint as UnionType).types) {
+                                            const propType = getTypeOfPropertyOfType(type, p.escapedName);
+                                            if (propType && candidatePropType && checkTypeAssignableTo(candidatePropType, propType, /*errorNode*/ undefined)) {
+                                                if (match && match !== type) {
+                                                    match = undefined;
+                                                    break findDiscriminant;
+                                                }
+                                                else {
+                                                    match = type;
+                                                }
                                             }
                                         }
                                     }
+                                    if (match) {
+                                        aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
+                                        assignableToConstraint = context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference));
+                                    }
                                 }
-                                if (match) {
-                                    aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
-                                }
+                            }
+                            if (!assignableToConstraint) {
+                                // if the aggregate inference isn't assignable to the constraint clear it out
+                                // this way the compiler keeps preferring the default type
+                                aggregateInference = undefined;
                             }
                         }
                     }
@@ -27634,7 +27643,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We use silentNeverType as the wildcard that signals no inferences.
                     inferredType = silentNeverType;
                 }
-                else {
+                if (!inferredType) {
                     // Infer either the default or the empty object type when no inferences were
                     // made. It is important to remember that in this case, inference still
                     // succeeds, meaning there is no error for not having inference candidates. An
