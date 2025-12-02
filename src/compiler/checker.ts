@@ -19611,7 +19611,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isGenericTupleType(objectType) && !indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target)) :
                 isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target))) || isGenericReducibleType(objectType))
         ) {
-            if (objectType.flags & TypeFlags.AnyOrUnknown) {
+            if (objectType.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Never)) {
                 return objectType;
             }
             // Defer the operation by creating an indexed access type.
