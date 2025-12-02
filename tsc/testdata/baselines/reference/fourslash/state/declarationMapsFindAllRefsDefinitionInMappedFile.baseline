@@ -75,7 +75,7 @@ Config File Names::
       "character": 0
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }

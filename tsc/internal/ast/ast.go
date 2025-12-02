@@ -2214,11 +2214,11 @@ func IsWriteAccess(node *Node) bool {
 }
 
 func IsWriteAccessForReference(node *Node) bool {
-	decl := getDeclarationFromName(node)
+	decl := GetDeclarationFromName(node)
 	return (decl != nil && declarationIsWriteAccess(decl)) || node.Kind == KindDefaultKeyword || IsWriteAccess(node)
 }
 
-func getDeclarationFromName(name *Node) *Declaration {
+func GetDeclarationFromName(name *Node) *Declaration {
 	if name == nil || name.Parent == nil {
 		return nil
 	}

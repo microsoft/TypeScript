@@ -4262,6 +4262,14 @@ var Set_the_number_of_checkers_per_project = &Message{code: 100003, category: Ca
 
 var X_4_unless_singleThreaded_is_passed = &Message{code: 100004, category: CategoryMessage, key: "4_unless_singleThreaded_is_passed_100004", text: "4, unless --singleThreaded is passed."}
 
+var X_0_references = &Message{code: 100005, category: CategoryMessage, key: "_0_references_100005", text: "{0} references"}
+
+var X_1_reference = &Message{code: 100006, category: CategoryMessage, key: "1_reference_100006", text: "1 reference"}
+
+var X_0_implementations = &Message{code: 100007, category: CategoryMessage, key: "_0_implementations_100007", text: "{0} implementations"}
+
+var X_1_implementation = &Message{code: 100008, category: CategoryMessage, key: "1_implementation_100008", text: "1 implementation"}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8524,6 +8532,14 @@ func keyToMessage(key Key) *Message {
 		return Set_the_number_of_checkers_per_project
 	case "4_unless_singleThreaded_is_passed_100004":
 		return X_4_unless_singleThreaded_is_passed
+	case "_0_references_100005":
+		return X_0_references
+	case "1_reference_100006":
+		return X_1_reference
+	case "_0_implementations_100007":
+		return X_0_implementations
+	case "1_implementation_100008":
+		return X_1_implementation
 	default:
 		return nil
 	}

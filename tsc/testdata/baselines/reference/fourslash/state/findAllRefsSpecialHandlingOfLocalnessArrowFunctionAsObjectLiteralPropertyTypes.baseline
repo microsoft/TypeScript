@@ -93,7 +93,7 @@ Config File Names::
       "character": 11
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }

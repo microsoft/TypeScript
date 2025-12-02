@@ -73,7 +73,7 @@ Config File Names::
       "character": 4
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }

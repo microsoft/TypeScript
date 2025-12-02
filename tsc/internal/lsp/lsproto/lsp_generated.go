@@ -21595,6 +21595,9 @@ type ClientSemanticTokensRequestFullDelta struct {
 type InitializationOptions struct {
 	// DisablePushDiagnostics disables automatic pushing of diagnostics to the client.
 	DisablePushDiagnostics *bool `json:"disablePushDiagnostics,omitzero"`
+
+	// The client-side command name that resolved references/implementations `CodeLens` should trigger. Arguments passed will be `(DocumentUri, Position, Location[])`.
+	CodeLensShowLocationsCommandName *string `json:"codeLensShowLocationsCommandName,omitzero"`
 }
 
 // ExportInfoMapKey uniquely identifies an export for auto-import purposes.
@@ -21651,6 +21654,70 @@ type CompletionItemData struct {
 	AutoImport *AutoImportData `json:"autoImport,omitzero"`
 }
 
+type CodeLensData struct {
+	// The kind of the code lens ("references" or "implementations").
+	Kind CodeLensKind `json:"kind"`
+
+	// The document in which the code lens and its range are located.
+	Uri DocumentUri `json:"uri"`
+}
+
+var _ json.UnmarshalerFrom = (*CodeLensData)(nil)
+
+func (s *CodeLensData) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	const (
+		missingKind uint = 1 << iota
+		missingUri
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"kind"`:
+			missing &^= missingKind
+			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
+				return err
+			}
+		case `"uri"`:
+			missing &^= missingUri
+			if err := json.UnmarshalDecode(dec, &s.Uri); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingKind != 0 {
+			missingProps = append(missingProps, "kind")
+		}
+		if missing&missingUri != 0 {
+			missingProps = append(missingProps, "uri")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -21665,9 +21732,6 @@ type CodeActionData struct{}
 
 // WorkspaceSymbolData is a placeholder for custom data preserved on a WorkspaceSymbol.
 type WorkspaceSymbolData struct{}
-
-// CodeLensData is a placeholder for custom data preserved on a CodeLens.
-type CodeLensData struct{}
 
 // DocumentLinkData is a placeholder for custom data preserved on a DocumentLink.
 type DocumentLinkData struct{}
@@ -22815,6 +22879,13 @@ type TokenFormat string
 
 const (
 	TokenFormatRelative TokenFormat = "relative"
+)
+
+type CodeLensKind string
+
+const (
+	CodeLensKindReferences      CodeLensKind = "references"
+	CodeLensKindImplementations CodeLensKind = "implementations"
 )
 
 func unmarshalParams(method Method, data []byte) (any, error) {

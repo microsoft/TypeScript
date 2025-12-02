@@ -1,0 +1,72 @@
+// === Code Lenses ===
+// === /anonymousFunctionExpressions.ts ===
+// export let /*CODELENS: 0 references*/anonFn1 = function () {};
+// export const anonFn2 = function () {};
+// 
+// let anonFn3 = function () {};
+// const anonFn4 = function () {};
+// 
+
+
+
+// === Code Lenses ===
+// === /anonymousFunctionExpressions.ts ===
+// export let anonFn1 = function () {};
+// export const /*CODELENS: 0 references*/anonFn2 = function () {};
+// 
+// let anonFn3 = function () {};
+// const anonFn4 = function () {};
+// 
+
+
+
+// === Code Lenses ===
+// === /arrowFunctions.ts ===
+// export let /*CODELENS: 0 references*/arrowFn1 = () => {};
+// export const arrowFn2 = () => {};
+// 
+// let arrowFn3 = () => {};
+// const arrowFn4 = () => {};
+// 
+
+
+
+// === Code Lenses ===
+// === /arrowFunctions.ts ===
+// export let arrowFn1 = () => {};
+// export const /*CODELENS: 0 references*/arrowFn2 = () => {};
+// 
+// let arrowFn3 = () => {};
+// const arrowFn4 = () => {};
+// 
+
+
+
+// === Code Lenses ===
+// === /namedFunctions.ts ===
+// export let /*CODELENS: 1 reference*/namedFn1 = function namedFn1() {
+//     namedFn1();
+// }
+// [|namedFn1|]();
+// 
+// export const namedFn2 = function namedFn2() {
+//     namedFn2();
+// --- (line: 8) skipped ---
+
+
+
+// === Code Lenses ===
+// === /namedFunctions.ts ===
+// export let namedFn1 = function namedFn1() {
+//     namedFn1();
+// }
+// namedFn1();
+// 
+// export const /*CODELENS: 1 reference*/namedFn2 = function namedFn2() {
+//     namedFn2();
+// }
+// [|namedFn2|]();
+// 
+// let namedFn3 = function namedFn3() {};
+// const namedFn4 = function namedFn4() {};
+// 

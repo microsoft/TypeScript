@@ -1,0 +1,78 @@
+// === Code Lenses ===
+// === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
+// export interface /*CODELENS: 3 implementations*/I {
+//   methodA(): void;
+// }
+// export interface I {
+//   methodB(): void;
+// }
+// 
+// interface [|J|] extends I {
+//   methodB(): void;
+//   methodC(): void;
+// }
+// 
+// class [|C|] implements J {
+//   methodA(): void {}
+//   methodB(): void {}
+//   methodC(): void {}
+// }
+// 
+// class [|AbstractC|] implements J {
+//   abstract methodA(): void;
+//   methodB(): void {}
+//   abstract methodC(): void;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
+// --- (line: 4) skipped ---
+//   methodB(): void;
+// }
+// 
+// interface /*CODELENS: 2 implementations*/J extends I {
+//   methodB(): void;
+//   methodC(): void;
+// }
+// 
+// class [|C|] implements J {
+//   methodA(): void {}
+//   methodB(): void {}
+//   methodC(): void {}
+// }
+// 
+// class [|AbstractC|] implements J {
+//   abstract methodA(): void;
+//   methodB(): void {}
+//   abstract methodC(): void;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
+// --- (line: 16) skipped ---
+// }
+// 
+// class AbstractC implements J {
+//   abstract /*CODELENS: 0 implementations*/methodA(): void;
+//   methodB(): void {}
+//   abstract methodC(): void;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
+// --- (line: 18) skipped ---
+// class AbstractC implements J {
+//   abstract methodA(): void;
+//   methodB(): void {}
+//   abstract /*CODELENS: 0 implementations*/methodC(): void;
+// }
+// 

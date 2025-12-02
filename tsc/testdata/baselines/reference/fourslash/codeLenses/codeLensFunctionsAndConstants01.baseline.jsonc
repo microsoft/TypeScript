@@ -1,0 +1,42 @@
+// === Code Lenses ===
+// === /exports.ts ===
+// let callCount = 0;
+// export function /*CODELENS: 3 references*/foo(n: number): void {
+//   callCount++;
+//   if (n > 0) {
+// 	[|foo|](n - 1);
+//   }
+//   else {
+//     console.log("function was called " + callCount + " times");
+//   }
+// }
+// 
+// [|foo|](5);
+// 
+// export const bar = 123;
+// 
+
+// === /importer.ts ===
+// import { foo, bar } from "./exports";
+// 
+// [|foo|](5);
+// console.log(bar);
+// 
+
+
+
+// === Code Lenses ===
+// === /importer.ts ===
+// import { foo, bar } from "./exports";
+// 
+// foo(5);
+// console.log([|bar|]);
+// 
+
+// === /exports.ts ===
+// --- (line: 10) skipped ---
+// 
+// foo(5);
+// 
+// export const /*CODELENS: 1 reference*/bar = 123;
+// 

@@ -1,0 +1,242 @@
+// === Code Lenses ===
+// === /classPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// class /*CODELENS: 0 references*/Point implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 7) skipped ---
+
+
+
+// === Code Lenses ===
+// === /objectPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// let x = 0;
+// let y = 0;
+// const p: Pointable = {
+//   [|getX|](): number {
+// 	return x;
+//   },
+//   getY(): number {
+// --- (line: 10) skipped ---
+
+// === /classPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// class Point implements Pointable {
+//   /*CODELENS: 1 reference*/getX(): number {
+//     return 0;
+//   }
+//   getY(): number {
+// --- (line: 8) skipped ---
+
+
+
+// === Code Lenses ===
+// === /classPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// class Point implements Pointable {
+//   /*CODELENS: 0 implementations*/getX(): number {
+//     return 0;
+//   }
+//   getY(): number {
+// --- (line: 8) skipped ---
+
+
+
+// === Code Lenses ===
+// === /objectPointable.ts ===
+// --- (line: 5) skipped ---
+//   getX(): number {
+// 	return x;
+//   },
+//   [|getY|](): number {
+// 	return y;
+//   },
+// };
+// 
+
+// === /classPointable.ts ===
+// --- (line: 3) skipped ---
+//   getX(): number {
+//     return 0;
+//   }
+//   /*CODELENS: 1 reference*/getY(): number {
+//     return 0;
+//   }
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /classPointable.ts ===
+// --- (line: 3) skipped ---
+//   getX(): number {
+//     return 0;
+//   }
+//   /*CODELENS: 0 implementations*/getY(): number {
+//     return 0;
+//   }
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /classPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// class Point implements [|Pointable|] {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 7) skipped ---
+
+// === /objectPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// let x = 0;
+// let y = 0;
+// const p: [|Pointable|] = {
+//   getX(): number {
+// 	return x;
+//   },
+// --- (line: 9) skipped ---
+
+// === /pointable.ts ===
+// export interface /*CODELENS: 2 references*/Pointable {
+//   getX(): number;
+//   getY(): number;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /classPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// class [|Point|] implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 7) skipped ---
+
+// === /pointable.ts ===
+// export interface /*CODELENS: 1 implementation*/Pointable {
+//   getX(): number;
+//   getY(): number;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /objectPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// let x = 0;
+// let y = 0;
+// const p: Pointable = {
+//   [|getX|](): number {
+// 	return x;
+//   },
+//   getY(): number {
+// --- (line: 10) skipped ---
+
+// === /pointable.ts ===
+// export interface Pointable {
+//   /*CODELENS: 1 reference*/getX(): number;
+//   getY(): number;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /classPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// class Point implements Pointable {
+//   [|getX|](): number {
+//     return 0;
+//   }
+//   getY(): number {
+// --- (line: 8) skipped ---
+
+// === /objectPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// let x = 0;
+// let y = 0;
+// const p: Pointable = {
+//   [|getX|](): number {
+// 	return x;
+//   },
+//   getY(): number {
+// --- (line: 10) skipped ---
+
+// === /pointable.ts ===
+// export interface Pointable {
+//   /*CODELENS: 2 implementations*/getX(): number;
+//   getY(): number;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /objectPointable.ts ===
+// --- (line: 5) skipped ---
+//   getX(): number {
+// 	return x;
+//   },
+//   [|getY|](): number {
+// 	return y;
+//   },
+// };
+// 
+
+// === /pointable.ts ===
+// export interface Pointable {
+//   getX(): number;
+//   /*CODELENS: 1 reference*/getY(): number;
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /classPointable.ts ===
+// --- (line: 3) skipped ---
+//   getX(): number {
+//     return 0;
+//   }
+//   [|getY|](): number {
+//     return 0;
+//   }
+// }
+// 
+
+// === /objectPointable.ts ===
+// --- (line: 5) skipped ---
+//   getX(): number {
+// 	return x;
+//   },
+//   [|getY|](): number {
+// 	return y;
+//   },
+// };
+// 
+
+// === /pointable.ts ===
+// export interface Pointable {
+//   getX(): number;
+//   /*CODELENS: 2 implementations*/getY(): number;
+// }
+// 

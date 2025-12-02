@@ -19,6 +19,22 @@
         "category": "Message",
         "code": 100004
     },
+    "{0} references": {
+        "category": "Message",
+        "code": 100005
+    },
+    "1 reference": {
+        "category": "Message",
+        "code": 100006
+    },
+    "{0} implementations": {
+        "category": "Message",
+        "code": 100007
+    },
+    "1 implementation": {
+        "category": "Message",
+        "code": 100008
+    },
     "Non-relative paths are not allowed. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090

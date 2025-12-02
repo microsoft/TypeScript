@@ -599,11 +599,24 @@ func (l *LanguageService) ProvideSymbolsAndEntries(ctx context.Context, uri lspr
 
 func (l *LanguageService) ProvideReferencesFromSymbolAndEntries(ctx context.Context, params *lsproto.ReferenceParams, originalNode *ast.Node, symbolsAndEntries []*SymbolAndEntries) (lsproto.ReferencesResponse, error) {
 	// `findReferencedSymbols` except only computes the information needed to return reference locations
-	locations := core.FlatMap(symbolsAndEntries, l.convertSymbolAndEntriesToLocations)
+	locations := core.FlatMap(symbolsAndEntries, func(s *SymbolAndEntries) []lsproto.Location {
+		return l.convertSymbolAndEntriesToLocations(s, params.Context.IncludeDeclaration)
+	})
 	return lsproto.LocationsOrNull{Locations: &locations}, nil
 }
 
 func (l *LanguageService) ProvideImplementations(ctx context.Context, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
+	return l.provideImplementationsEx(ctx, params, provideImplementationsOpts{})
+}
+
+type provideImplementationsOpts struct {
+	// Force the result to be Location objects.
+	requireLocationsResult bool
+	// Omit node(s) containing the original position.
+	dropOriginNodes bool
+}
+
+func (l *LanguageService) provideImplementationsEx(ctx context.Context, params *lsproto.ImplementationParams, opts provideImplementationsOpts) (lsproto.ImplementationResponse, error) {
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
@@ -620,12 +633,14 @@ func (l *LanguageService) ProvideImplementations(ctx context.Context, params *ls
 		queue = queue[1:]
 		if !seenNodes.Has(entry.node) {
 			seenNodes.Add(entry.node)
-			entries = append(entries, entry)
+			if !(opts.dropOriginNodes && entry.node.Loc.ContainsInclusive(position)) {
+				entries = append(entries, entry)
+			}
 			queue = append(queue, l.getImplementationReferenceEntries(ctx, program, entry.node, entry.node.Pos())...)
 		}
 	}
 
-	if lsproto.GetClientCapabilities(ctx).TextDocument.Implementation.LinkSupport {
+	if !opts.requireLocationsResult && lsproto.GetClientCapabilities(ctx).TextDocument.Implementation.LinkSupport {
 		links := l.convertEntriesToLocationLinks(entries)
 		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{DefinitionLinks: &links}, nil
 	}
@@ -713,8 +728,41 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 }
 
 // == functions for conversions ==
-func (l *LanguageService) convertSymbolAndEntriesToLocations(s *SymbolAndEntries) []lsproto.Location {
-	return l.convertEntriesToLocations(s.references)
+func (l *LanguageService) convertSymbolAndEntriesToLocations(s *SymbolAndEntries, includeDeclarations bool) []lsproto.Location {
+	references := s.references
+
+	// !!! includeDeclarations
+	if !includeDeclarations && s.definition != nil {
+		references = core.Filter(references, func(entry *ReferenceEntry) bool {
+			return !isDeclarationOfSymbol(entry.node, s.definition.symbol)
+		})
+	}
+
+	return l.convertEntriesToLocations(references)
+}
+
+func isDeclarationOfSymbol(node *ast.Node, target *ast.Symbol) bool {
+	if target == nil {
+		return false
+	}
+
+	var source *ast.Node
+	if decl := ast.GetDeclarationFromName(node); decl != nil {
+		source = decl
+	} else if node.Kind == ast.KindDefaultKeyword {
+		source = node.Parent
+	} else if ast.IsLiteralComputedPropertyDeclarationName(node) {
+		source = node.Parent.Parent
+	} else if node.Kind == ast.KindConstructorKeyword && ast.IsConstructorDeclaration(node.Parent) {
+		source = node.Parent.Parent
+	}
+
+	// !!!
+	// const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as Declaration : undefined;
+
+	return source != nil && core.Some(target.Declarations, func(decl *ast.Node) bool {
+		return decl == source
+	})
 }
 
 func (l *LanguageService) convertEntriesToLocations(entries []*ReferenceEntry) []lsproto.Location {
@@ -1715,7 +1763,8 @@ func (state *refState) getReferencesInContainerOrFiles(symbol *ast.Symbol, searc
 	// Try to get the smallest valid scope that we can limit our search to;
 	// otherwise we'll need to search globally (i.e. include each file).
 	if scope := getSymbolScope(symbol); scope != nil {
-		state.getReferencesInContainer(scope, ast.GetSourceFileOfNode(scope), search /*addReferencesHere*/, !(scope.Kind == ast.KindSourceFile && !slices.Contains(state.sourceFiles, scope.AsSourceFile())))
+		addReferencesHere := scope.Kind != ast.KindSourceFile || slices.Contains(state.sourceFiles, scope.AsSourceFile())
+		state.getReferencesInContainer(scope, ast.GetSourceFileOfNode(scope), search, addReferencesHere)
 	} else {
 		// Global search
 		for _, sourceFile := range state.sourceFiles {

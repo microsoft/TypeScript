@@ -387,7 +387,7 @@ Config File Names::
       "character": 9
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }
@@ -465,7 +465,7 @@ Config File Names::
       "character": 9
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }

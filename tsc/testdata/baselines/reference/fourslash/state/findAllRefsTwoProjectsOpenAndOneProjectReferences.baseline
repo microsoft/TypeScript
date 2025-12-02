@@ -280,7 +280,7 @@ Config File Names::
       "character": 13
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }

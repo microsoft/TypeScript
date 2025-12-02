@@ -145,6 +145,14 @@ type UserPreferences struct {
 	IncludeInlayFunctionLikeReturnTypeHints               bool
 	IncludeInlayEnumMemberValueHints                      bool
 
+	// ------- CodeLens -------
+
+	ReferencesCodeLensEnabled                     bool
+	ImplementationsCodeLensEnabled                bool
+	ReferencesCodeLensShowOnAllFunctions          bool
+	ImplementationsCodeLensShowOnInterfaceMethods bool
+	ImplementationsCodeLensShowOnAllClassMethods  bool
+
 	// ------- Symbols -------
 
 	ExcludeLibrarySymbolsInNavTo bool
@@ -381,6 +389,10 @@ func (p *UserPreferences) parseWorker(config map[string]any) {
 			continue
 		case "inlayHints":
 			p.parseInlayHints(values)
+		case "referencesCodeLens":
+			p.parseReferencesCodeLens(values)
+		case "implementationsCodeLens":
+			p.parseImplementationsCodeLens(values)
 		case "suggest":
 			p.parseSuggest(values)
 		case "preferences":
@@ -440,6 +452,38 @@ func (p *UserPreferences) parseInlayHints(prefs any) {
 		} else {
 			// non-vscode case
 			p.set(name, v)
+		}
+	}
+}
+
+func (p *UserPreferences) parseReferencesCodeLens(prefs any) {
+	referencesCodeLens, ok := prefs.(map[string]any)
+	if !ok {
+		return
+	}
+	for name, value := range referencesCodeLens {
+		switch name {
+		case "enabled":
+			p.set("referencesCodeLensEnabled", value)
+		case "showOnAllFunctions":
+			p.set("referencesCodeLensShowOnAllFunctions", value)
+		}
+	}
+}
+
+func (p *UserPreferences) parseImplementationsCodeLens(prefs any) {
+	implementationsCodeLens, ok := prefs.(map[string]any)
+	if !ok {
+		return
+	}
+	for name, value := range implementationsCodeLens {
+		switch name {
+		case "enabled":
+			p.set("implementationsCodeLensEnabled", value)
+		case "showOnInterfaceMethods":
+			p.set("implementationsCodeLensShowOnInterfaceMethods", value)
+		case "showOnAllClassMethods":
+			p.set("implementationsCodeLensShowOnAllClassMethods", value)
 		}
 	}
 }
@@ -655,5 +699,15 @@ func (p *UserPreferences) set(name string, value any) {
 		p.DisplayPartsForJSDoc = parseBoolWithDefault(value, true)
 	case "reportstylechecksaswarnings":
 		p.ReportStyleChecksAsWarnings = parseBoolWithDefault(value, true)
+	case "referencescodelensenabled":
+		p.ReferencesCodeLensEnabled = parseBoolWithDefault(value, false)
+	case "implementationscodelensenabled":
+		p.ImplementationsCodeLensEnabled = parseBoolWithDefault(value, false)
+	case "referencescodelensshowonallfunctions":
+		p.ReferencesCodeLensShowOnAllFunctions = parseBoolWithDefault(value, false)
+	case "implementationscodelensshowoninterfacemethods":
+		p.ImplementationsCodeLensShowOnInterfaceMethods = parseBoolWithDefault(value, false)
+	case "implementationscodelensshowonallclassmethods":
+		p.ImplementationsCodeLensShowOnAllClassMethods = parseBoolWithDefault(value, false)
 	}
 }

@@ -34,6 +34,7 @@ const (
 	renameCmd                   baselineCommand = "findRenameLocations"
 	signatureHelpCmd            baselineCommand = "SignatureHelp"
 	smartSelectionCmd           baselineCommand = "Smart Selection"
+	codeLensesCmd               baselineCommand = "Code Lenses"
 )
 
 type baselineCommand string

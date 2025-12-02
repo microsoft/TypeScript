@@ -1,0 +1,101 @@
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// export abstract class /*CODELENS: 0 implementations*/ABC {
+//   abstract methodA(): void;
+//   methodB(): void {}
+//   #methodC(): void {}
+// --- (line: 5) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// export abstract class ABC {
+//   abstract /*CODELENS: 0 implementations*/methodA(): void;
+//   methodB(): void {}
+//   #methodC(): void {}
+//   protected methodD(): void {}
+// --- (line: 6) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// export abstract class ABC {
+//   abstract methodA(): void;
+//   /*CODELENS: 0 implementations*/methodB(): void {}
+//   #methodC(): void {}
+//   protected methodD(): void {}
+//   private methodE(): void {}
+// --- (line: 7) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// export abstract class ABC {
+//   abstract methodA(): void;
+//   methodB(): void {}
+//   #methodC(): void {}
+//   protected /*CODELENS: 0 implementations*/methodD(): void {}
+//   private methodE(): void {}
+//   protected abstract methodG(): void;
+//   public methodH(): void {}
+// --- (line: 9) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// --- (line: 3) skipped ---
+//   #methodC(): void {}
+//   protected methodD(): void {}
+//   private methodE(): void {}
+//   protected abstract /*CODELENS: 0 implementations*/methodG(): void;
+//   public methodH(): void {}
+// 
+//   static methodStaticA(): void {}
+// --- (line: 11) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// --- (line: 4) skipped ---
+//   protected methodD(): void {}
+//   private methodE(): void {}
+//   protected abstract methodG(): void;
+//   public /*CODELENS: 0 implementations*/methodH(): void {}
+// 
+//   static methodStaticA(): void {}
+//   protected static methodStaticB(): void {}
+// --- (line: 12) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// --- (line: 6) skipped ---
+//   protected abstract methodG(): void;
+//   public methodH(): void {}
+// 
+//   static /*CODELENS: 0 implementations*/methodStaticA(): void {}
+//   protected static methodStaticB(): void {}
+//   private static methodStaticC(): void {}
+//   static #methodStaticD(): void {}
+// }
+// 
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=true.ts ===
+// --- (line: 7) skipped ---
+//   public methodH(): void {}
+// 
+//   static methodStaticA(): void {}
+//   protected static /*CODELENS: 0 implementations*/methodStaticB(): void {}
+//   private static methodStaticC(): void {}
+//   static #methodStaticD(): void {}
+// }
+// 

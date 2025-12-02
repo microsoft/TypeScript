@@ -40,17 +40,23 @@
                         ],
                         "default": "verbose",
                         "description": "Trace TypeScript Go server communication.",
-                        "tags": ["experimental"]
+                        "tags": [
+                            "experimental"
+                        ]
                     },
                     "typescript.native-preview.pprofDir": {
                         "type": "string",
                         "description": "Directory to write pprof profiles to.",
-                        "tags": ["experimental"]
+                        "tags": [
+                            "experimental"
+                        ]
                     },
                     "typescript.native-preview.tsdk": {
                         "type": "string",
                         "description": "Path to the @typescript/native-preview package or tsgo binary directory. If not specified, the extension will look for it in the default location.",
-                        "tags": ["experimental"]
+                        "tags": [
+                            "experimental"
+                        ]
                     }
                 }
             }
@@ -91,6 +97,11 @@
                 "title": "Report Issue",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
+            },
+            {
+                "title": "Show References of CodeLens",
+                "command": "typescript.native-preview.codeLens.showLocations",
+                "enablement": "false"
             }
         ]
     },

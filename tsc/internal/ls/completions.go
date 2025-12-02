@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"maps"
 	"slices"
 	"strings"
 	"sync"
@@ -1989,7 +1988,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	}
 
 	uniqueSet := collections.NewSetWithSizeHint[string](len(uniques))
-	for name := range maps.Keys(uniques) {
+	for name := range uniques {
 		uniqueSet.Add(name)
 	}
 	return *uniqueSet, sortedEntries

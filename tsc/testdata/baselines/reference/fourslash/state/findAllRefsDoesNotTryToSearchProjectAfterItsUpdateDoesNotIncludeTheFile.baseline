@@ -412,7 +412,7 @@ Config File Names::
       "character": 1
     },
     "context": {
-      "includeDeclaration": false
+      "includeDeclaration": true
     }
   }
 }
