@@ -1357,7 +1357,7 @@ func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, pro
 					node = decl.AsBinaryExpression().Left.Expression()
 				} else if ast.IsExportAssignment(decl) {
 					// Find the export keyword
-					node = findChildOfKind(decl, ast.KindExportKeyword, sourceFile)
+					node = astnav.FindChildOfKind(decl, ast.KindExportKeyword, sourceFile)
 					debug.Assert(node != nil, "Expected to find export keyword")
 				} else {
 					node = ast.GetNameOfDeclaration(decl)
@@ -1645,7 +1645,7 @@ func findOwnConstructorReferences(classSymbol *ast.Symbol, sourceFile *ast.Sourc
 	if constructorSymbol != nil && len(constructorSymbol.Declarations) > 0 {
 		for _, decl := range constructorSymbol.Declarations {
 			if decl.Kind == ast.KindConstructor {
-				if ctrKeyword := findChildOfKind(decl, ast.KindConstructorKeyword, sourceFile); ctrKeyword != nil {
+				if ctrKeyword := astnav.FindChildOfKind(decl, ast.KindConstructorKeyword, sourceFile); ctrKeyword != nil {
 					addNode(ctrKeyword)
 				}
 			}

@@ -276,7 +276,7 @@ func getReturnOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Nod
 	body := funcNode.Body()
 	if body != nil {
 		ast.ForEachReturnStatement(body, func(ret *ast.Node) bool {
-			keyword := findChildOfKind(ret, ast.KindReturnKeyword, sourceFile)
+			keyword := astnav.FindChildOfKind(ret, ast.KindReturnKeyword, sourceFile)
 			if keyword != nil {
 				keywords = append(keywords, keyword)
 			}
@@ -286,7 +286,7 @@ func getReturnOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Nod
 		// Get all throw statements not in a try block
 		throwStatements := aggregateOwnedThrowStatements(body, sourceFile)
 		for _, throw := range throwStatements {
-			keyword := findChildOfKind(throw, ast.KindThrowKeyword, sourceFile)
+			keyword := astnav.FindChildOfKind(throw, ast.KindThrowKeyword, sourceFile)
 			if keyword != nil {
 				keywords = append(keywords, keyword)
 			}
@@ -348,7 +348,7 @@ func getThrowOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 	// Aggregate all throw statements "owned" by this owner.
 	throwStatements := aggregateOwnedThrowStatements(owner, sourceFile)
 	for _, throw := range throwStatements {
-		keyword := findChildOfKind(throw, ast.KindThrowKeyword, sourceFile)
+		keyword := astnav.FindChildOfKind(throw, ast.KindThrowKeyword, sourceFile)
 		if keyword != nil {
 			keywords = append(keywords, keyword)
 		}
@@ -358,7 +358,7 @@ func getThrowOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 	// ability to "jump out" of the function, and include occurrences for both
 	if ast.IsFunctionBlock(owner) {
 		ast.ForEachReturnStatement(owner, func(ret *ast.Node) bool {
-			keyword := findChildOfKind(ret, ast.KindReturnKeyword, sourceFile)
+			keyword := astnav.FindChildOfKind(ret, ast.KindReturnKeyword, sourceFile)
 			if keyword != nil {
 				keywords = append(keywords, keyword)
 			}
@@ -412,7 +412,7 @@ func getTryCatchFinallyOccurrences(node *ast.Node, sourceFile *ast.SourceFile) [
 	}
 
 	if tryStatement.FinallyBlock != nil {
-		finallyKeyword := findChildOfKind(node, ast.KindFinallyKeyword, sourceFile)
+		finallyKeyword := astnav.FindChildOfKind(node, ast.KindFinallyKeyword, sourceFile)
 		if finallyKeyword.Kind == ast.KindFinallyKeyword {
 			keywords = append(keywords, finallyKeyword)
 		}

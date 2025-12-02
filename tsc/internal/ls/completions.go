@@ -682,7 +682,7 @@ func (l *LanguageService) getCompletionData(
 						// Note for `<div someBool f>` we don't want to treat this as a jsx inializer, instead it's the attribute name.
 						if parent != previousToken.Parent &&
 							parent.Initializer() == nil &&
-							findChildOfKind(parent, ast.KindEqualsToken, file) != nil {
+							astnav.FindChildOfKind(parent, ast.KindEqualsToken, file) != nil {
 							jsxInitializer.initializer = previousToken
 						}
 					}
@@ -2080,9 +2080,9 @@ func (l *LanguageService) createCompletionItem(
 			insertText = "?." + insertText
 		}
 
-		dot := findChildOfKind(data.propertyAccessToConvert, ast.KindDotToken, file)
+		dot := astnav.FindChildOfKind(data.propertyAccessToConvert, ast.KindDotToken, file)
 		if dot == nil {
-			dot = findChildOfKind(data.propertyAccessToConvert, ast.KindQuestionDotToken, file)
+			dot = astnav.FindChildOfKind(data.propertyAccessToConvert, ast.KindQuestionDotToken, file)
 		}
 
 		if dot == nil {
@@ -4072,7 +4072,7 @@ func tryGetObjectTypeDeclarationCompletionContainer(
 		stmtList := location.Parent.StatementList()
 		if stmtList != nil && len(stmtList.Nodes) > 0 && ast.IsObjectTypeDeclaration(stmtList.Nodes[len(stmtList.Nodes)-1]) {
 			cls := stmtList.Nodes[len(stmtList.Nodes)-1]
-			if findChildOfKind(cls, ast.KindCloseBraceToken, file) == nil {
+			if astnav.FindChildOfKind(cls, ast.KindCloseBraceToken, file) == nil {
 				return cls
 			}
 		}
@@ -4424,7 +4424,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 	//     var x = <MainComponent.Child> </     MainComponent /*1*/  >
 	//     var y = <MainComponent.Child> </   /*2*/   MainComponent >
 	// the completion list at "1" and "2" will contain "MainComponent.Child" with a replacement span of closing tag name
-	hasClosingAngleBracket := findChildOfKind(jsxClosingElement, ast.KindGreaterThanToken, file) != nil
+	hasClosingAngleBracket := astnav.FindChildOfKind(jsxClosingElement, ast.KindGreaterThanToken, file) != nil
 	tagName := jsxClosingElement.Parent.AsJsxElement().OpeningElement.TagName()
 	closingTag := scanner.GetTextOfNode(tagName)
 	fullClosingTag := closingTag + core.IfElse(hasClosingAngleBracket, "", ">")
