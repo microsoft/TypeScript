@@ -372,6 +372,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	}
 
 	return processedFiles{
+		finishedProcessing:                   true,
 		resolver:                             loader.resolver,
 		files:                                allFiles,
 		filesByPath:                          filesByPath,

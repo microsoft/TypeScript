@@ -69,6 +69,7 @@ type processedFiles struct {
 	// if file was included using source file and its output is actually part of program
 	// this contains mapping from output to source file
 	outputFileToProjectReferenceSource map[tspath.Path]string
+	finishedProcessing                 bool
 }
 
 type jsxRuntimeImportSpecifier struct {

@@ -222,8 +222,8 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 
 func NewProgram(opts ProgramOptions) *Program {
 	p := &Program{opts: opts}
-	p.initCheckerPool()
 	p.processedFiles = processAllProgramFiles(p.opts, p.SingleThreaded())
+	p.initCheckerPool()
 	p.verifyCompilerOptions()
 	return p
 }
@@ -259,16 +259,14 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 }
 
 func (p *Program) initCheckerPool() {
+	if !p.finishedProcessing {
+		panic("Program must finish processing files before initializing checker pool")
+	}
+
 	if p.opts.CreateCheckerPool != nil {
 		p.checkerPool = p.opts.CreateCheckerPool(p)
 	} else {
-		checkers := 4
-		if p.SingleThreaded() {
-			checkers = 1
-		} else if p.Options().Checkers != nil {
-			checkers = min(max(*p.Options().Checkers, 1), 256)
-		}
-		p.checkerPool = newCheckerPool(checkers, p)
+		p.checkerPool = newCheckerPool(p)
 	}
 }
 
