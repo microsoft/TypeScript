@@ -399,14 +399,13 @@ const customLinterPath = "./_tools/custom-gcl";
 const customLinterHashPath = customLinterPath + ".hash";
 
 const golangciLintPackage = memoize(() => {
-    // const golangciLintYml = fs.readFileSync(".custom-gcl.yml", "utf8");
-    // const pattern = /^version:\s*(v\d+\.\d+\.\d+).*$/m;
-    // const match = pattern.exec(golangciLintYml);
-    // if (!match) {
-    //     throw new Error("Expected version in .custom-gcl.yml");
-    // }
-    // const version = match[1];
-    const version = "v2.6.3-0.20251130135459-0212d7c8deac"; // https://github.com/golangci/golangci-lint/issues/6205
+    const golangciLintYml = fs.readFileSync(".custom-gcl.yml", "utf8");
+    const pattern = /^version:\s*(v\d+\.\d+\.\d+).*$/m;
+    const match = pattern.exec(golangciLintYml);
+    if (!match) {
+        throw new Error("Expected version in .custom-gcl.yml");
+    }
+    const version = match[1];
     const major = version.split(".")[0];
     const versionSuffix = ["v0", "v1"].includes(major) ? "" : "/" + major;
 
