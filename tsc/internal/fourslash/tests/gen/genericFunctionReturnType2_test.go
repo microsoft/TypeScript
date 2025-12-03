@@ -20,7 +20,8 @@ func TestGenericFunctionReturnType2(t *testing.T) {
 var x = new C(1);
 var /*2*/r = x.foo(/*1*/3);
 var /*4*/r2 = r(/*3*/4);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "foo(x: number): (a: number) => number"})
 	f.VerifyQuickInfoAt(t, "2", "var r: (a: number) => number", "")

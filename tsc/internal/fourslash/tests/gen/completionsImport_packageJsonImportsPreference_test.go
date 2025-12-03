@@ -30,7 +30,8 @@ export const internalFoo = 0;
 export * from "./internal/foo.ts";
 // @Filename: /project/src/main.ts
 internalFoo/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

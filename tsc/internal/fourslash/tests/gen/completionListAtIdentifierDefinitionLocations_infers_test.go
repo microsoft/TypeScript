@@ -15,6 +15,7 @@ func TestCompletionListAtIdentifierDefinitionLocations_infers(t *testing.T) {
 type Bar<T> = T extends { a: (x: infer /*1*/) => void; b: (x: infer U/*2*/) => void }
    ? U
    : never;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), nil)
 }

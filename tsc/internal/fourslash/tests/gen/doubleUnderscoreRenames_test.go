@@ -19,6 +19,7 @@ func TestDoubleUnderscoreRenames(t *testing.T) {
 [|import { [|{| "contextRangeIndex": 2 |}__foo|] as bar } from "./fileA";|]
 
 bar();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "__foo")
 }

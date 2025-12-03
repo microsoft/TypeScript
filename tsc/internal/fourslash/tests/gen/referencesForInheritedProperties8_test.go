@@ -21,6 +21,7 @@ interface D extends C {
 var d: D;
 d.propD;
 d.propC;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "d", "c")
 }

@@ -33,7 +33,8 @@ type Cb = () => void;
 const cb: Cb = (/*contextualTypeAlias*/)
 
 const cb2: () => void = (/*contextualFunctionType*/)`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "takesObj0")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "m(n: number, s: string): void", ParameterCount: 2, ParameterName: "n", ParameterSpan: "n: number"})
 	f.GoToMarker(t, "takesObj1")

@@ -14,7 +14,8 @@ func TestInsertInterfaceAndCheckTypeLiteralField(t *testing.T) {
 	const content = `/*addC*/
 interface G<T, U> { }
 var v2: G<{ a: /*checkParam*/C }, C>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "addC")
 	f.Insert(t, "interface C { }")
 	f.GoToMarker(t, "checkParam")

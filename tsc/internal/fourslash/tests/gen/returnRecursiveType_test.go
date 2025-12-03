@@ -16,6 +16,7 @@ func TestReturnRecursiveType(t *testing.T) {
 }
 function MyFn() { return <MyInt>MyFn; }
 var My/**/Var = MyFn();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "var MyVar: MyInt", "")
 }

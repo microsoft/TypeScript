@@ -21,7 +21,8 @@ function Bar<T extends {prop: number}>(arg: T) {
     let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
     let a3 = <Component/*2*/Specific {...arg} prop="hello" />;   // U is "hello"
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "function ComponentSpecific<number>(l: {\n    prop: number;\n}): JSX.Element", "")
 	f.VerifyQuickInfoAt(t, "2", "function ComponentSpecific<never>(l: {\n    prop: never;\n}): JSX.Element", "")
 }

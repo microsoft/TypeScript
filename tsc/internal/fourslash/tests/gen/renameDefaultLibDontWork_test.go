@@ -14,6 +14,7 @@ func TestRenameDefaultLibDontWork(t *testing.T) {
 	const content = `// @Filename: file1.ts
 [|var [|{| "contextRangeIndex": 0 |}test|] = "foo";|]
 console.log([|test|]);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1])
 }

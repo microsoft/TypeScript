@@ -13,6 +13,7 @@ func TestFindAllRefsInsideTemplates1(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/var /*2*/x = 10;
 var y = ` + "`" + `${ /*3*/x } ${ /*4*/x }` + "`" + ``
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

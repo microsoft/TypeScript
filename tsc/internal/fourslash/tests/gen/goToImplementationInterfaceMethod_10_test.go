@@ -51,6 +51,7 @@ function someFunction(x: Foo | Bar) {
 function anotherFunction(x: Foo & Bar) {
 	 x.he/*function_call1*/llo();
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "function_call0", "function_call1")
 }

@@ -21,7 +21,8 @@ interface I extends C {
 }
 var i: I;
 i.foo(/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{ParameterSpan: "x: string", OverloadsCount: 2})
 }

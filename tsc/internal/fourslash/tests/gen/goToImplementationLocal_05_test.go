@@ -17,6 +17,7 @@ func TestGoToImplementationLocal_05(t *testing.T) {
 
 var [|someVar|] = new Bar();
 someVa/*reference*/r.hello();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "reference")
 }

@@ -64,6 +64,7 @@ export const h = 1;
 // @filename: /j.ts
 export const j1 = 1;
 export const j2 = 2;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "importEqualsDecl1_importKeyword", "importEqualsDecl1_requireKeyword", "importEqualsDecl2_importKeyword", "importDecl1_importKeyword", "importDecl1_typeKeyword", "importDecl1_fromKeyword", "importDecl2_importKeyword", "importDecl2_typeKeyword", "importDecl2_asKeyword", "importDecl2_fromKeyword", "importDecl3_importKeyword", "importDecl3_typeKeyword", "importDecl3_fromKeyword", "importDecl4_importKeyword", "importDecl4_typeKeyword", "importDecl4_fromKeyword", "importDecl4_asKeyword", "importDecl5_importKeyword", "exportDecl1_exportKeyword", "exportDecl1_typeKeyword", "exportDecl1_fromKeyword", "exportDecl2_exportKeyword", "exportDecl2_typeKeyword", "exportDecl2_asKeyword", "exportDecl2_fromKeyword", "exportDecl3_exportKeyword", "exportDecl3_typeKeyword", "exportDecl3_fromKeyword", "exportDecl4_exportKeyword", "exportDecl4_typeKeyword", "exportDecl4_fromKeyword", "exportDecl4_asKeyword", "exportDecl5_exportKeyword", "exportDecl5_typeKeyword", "exportDecl6_exportKeyword", "exportDecl6_typeKeyword", "exportDecl6_asKeyword", "exportAssignment1_exportKeyword", "exportAssignment2_exportKeyword")
 }

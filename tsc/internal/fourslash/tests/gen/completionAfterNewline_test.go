@@ -16,7 +16,8 @@ func TestCompletionAfterNewline(t *testing.T) {
 	const content = `let foo /*1*/
 /*2*/
 /*3*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", nil)
 	f.VerifyCompletions(t, []string{"2", "3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

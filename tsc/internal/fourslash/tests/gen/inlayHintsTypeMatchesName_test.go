@@ -15,6 +15,7 @@ func TestInlayHintsTypeMatchesName(t *testing.T) {
 	const content = `type Client = {};
 function getClient(): Client { return {}; };
 const client = getClient();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: true, IncludeInlayVariableTypeHintsWhenTypeMatchesName: false}})
 }

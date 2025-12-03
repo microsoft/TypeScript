@@ -15,7 +15,8 @@ func TestCompletionEntryForPropertyConstrainedToString(t *testing.T) {
 	const content = `declare function test<P extends "a" | "b">(p: { type: P }): void;
 
 test({ type: /*ts*/ })`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"ts"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

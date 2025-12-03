@@ -20,7 +20,8 @@ func TestQuickInfoForContextuallyTypedArrowFunctionInSuperCall(t *testing.T) {
 class B extends A<number, string> {
     constructor() { super(va/*1*/lue => String(va/*2*/lue.toExpone/*3*/ntial())); }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) value: number", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) value: number", "")
 	f.VerifyQuickInfoAt(t, "3", "(method) Number.toExponential(fractionDigits?: number): string", "Returns a string containing a number represented in exponential notation.")

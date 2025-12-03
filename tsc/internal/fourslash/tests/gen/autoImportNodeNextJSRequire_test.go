@@ -23,7 +23,8 @@ exports.dedupeLines = data => {
 }
 // @Filename: /totally-irrelevant-no-way-this-changes-things-right.js
 export default 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/main.js")
 	f.VerifyImportFixAtPosition(t, []string{
 		`const { variants } = require("./matrix")

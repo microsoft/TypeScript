@@ -19,7 +19,8 @@ func TestGetOccurrencesIfElseBroken(t *testing.T) {
 [|else if|]
 [|else|]  /*  whar garbl   */   [|if|] (i/**/f (true) { } else { })
 else`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, "")
 }

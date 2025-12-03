@@ -19,7 +19,8 @@ export const abc = 0;
 acb/*1*/;
 // @Filename: /c.ts
 acb/*2*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "abc",

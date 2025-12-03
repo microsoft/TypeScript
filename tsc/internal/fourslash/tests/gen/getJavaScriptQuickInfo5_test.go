@@ -15,6 +15,7 @@ func TestGetJavaScriptQuickInfo5(t *testing.T) {
 // @Filename: Foo.js
 /** @param {{b:number}} [a] */
 function /**/f(a) { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "function f(a?: {\n    b: number;\n}): void", "")
 }

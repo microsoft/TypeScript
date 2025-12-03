@@ -18,7 +18,8 @@ x;
 // @Symlink: /node_modules/a/utils.ts
 import {} from "a/utils";
 export const x = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/packages/a/test.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { x } from "./utils";

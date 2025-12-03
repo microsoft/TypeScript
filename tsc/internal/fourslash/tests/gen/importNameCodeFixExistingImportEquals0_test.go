@@ -18,7 +18,8 @@ declare module "ambient-module" {
    export function f1();
    export var v1;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import ns = require("ambient-module");
 var x = ns.v1 + 5;`,

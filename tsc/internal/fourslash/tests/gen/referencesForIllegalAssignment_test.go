@@ -14,6 +14,7 @@ func TestReferencesForIllegalAssignment(t *testing.T) {
 	const content = `f/*1*/oo = fo/*2*/o;
 var /*bar*/bar = function () { };
 bar = bar + 1;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "bar")
 }

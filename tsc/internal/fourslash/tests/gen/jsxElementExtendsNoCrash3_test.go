@@ -13,6 +13,7 @@ func TestJsxElementExtendsNoCrash3(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: index.tsx
 <T extends /=>`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

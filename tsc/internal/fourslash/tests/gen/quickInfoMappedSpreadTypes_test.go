@@ -27,7 +27,8 @@ f3./*f3*/bar;
 
 const f4 = { ...f2 };
 f4./*f4*/bar;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "f")
 	f.VerifyQuickInfoIs(t, "(property) Foo.bar: number", "Doc")
 	f.GoToMarker(t, "f2")

@@ -24,7 +24,8 @@ export = /**/function () {
 
 function baz() {
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyBaselineCallHierarchy(t)
 }

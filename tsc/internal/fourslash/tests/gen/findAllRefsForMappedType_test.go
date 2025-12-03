@@ -16,6 +16,7 @@ type U = { [K in keyof T]: string };
 type V = { [K in keyof U]: boolean };
 const u: U = { a: "" }
 const v: V = { a: true }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

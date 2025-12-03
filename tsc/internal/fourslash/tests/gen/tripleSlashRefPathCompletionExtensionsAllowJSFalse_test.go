@@ -30,7 +30,8 @@ func TestTripleSlashRefPathCompletionExtensionsAllowJSFalse(t *testing.T) {
 
 // @Filename: f1.cs
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

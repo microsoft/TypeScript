@@ -21,6 +21,7 @@ abstract class A {}
 export class B extends A {
   [|/*1*/override|] readonly [prop] = "B";
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

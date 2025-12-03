@@ -18,6 +18,7 @@ function /*1*/f(x) {
 }
 
 /*2*/f('');`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

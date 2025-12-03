@@ -19,7 +19,8 @@ export var v1 = 5;
 export function f1();
 // @Filename: ../node_modules/fake-module/package.json
 {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "fake-module";
 

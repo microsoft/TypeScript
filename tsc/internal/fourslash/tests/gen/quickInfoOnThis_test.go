@@ -33,7 +33,8 @@ class Foo {
         console.log(th/*6*/is);
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "0", "this", "")
 	f.VerifyQuickInfoAt(t, "1", "this: void", "")
 	f.VerifyQuickInfoAt(t, "2", "this: this", "")

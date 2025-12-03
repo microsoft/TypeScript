@@ -16,7 +16,8 @@ import n = require('./a');
 var x/*1*/ = new n.Foo();
 // @Filename: a.ts
 export class /*2*/Foo {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToTypeDefinition(t, "1")
 }

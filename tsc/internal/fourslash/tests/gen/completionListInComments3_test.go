@@ -18,7 +18,8 @@ func TestCompletionListInComments3(t *testing.T) {
  /*  */{| "name": "4" |}
  {| "name": "5" |}/*  */
 /* {| "name": "6" |}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1", "2", "3", "6"}, nil)
 	f.VerifyCompletions(t, []string{"4", "5"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

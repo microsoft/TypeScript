@@ -22,7 +22,8 @@ let target = {}
 let proxy = new /**/Proxy(target, {
     getPrototypeOf()
 })`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoExists(t)
 }

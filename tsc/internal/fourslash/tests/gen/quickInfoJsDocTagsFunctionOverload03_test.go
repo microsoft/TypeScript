@@ -19,6 +19,7 @@ declare function /*1*/foo(): void;
  * @tag Tag text
  */
 declare function /*2*/foo(x: number): void`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

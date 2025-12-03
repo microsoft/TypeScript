@@ -15,6 +15,7 @@ func TestSmartSelection_functionParams2(t *testing.T) {
   a,
   /**/b
 ) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

@@ -20,6 +20,7 @@ class /*classDefinition*/Class {
 // @Filename: b.js
 const { Class } = require("./a");
  [|/*classAliasDefinition*/Class|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "classAliasDefinition")
 }

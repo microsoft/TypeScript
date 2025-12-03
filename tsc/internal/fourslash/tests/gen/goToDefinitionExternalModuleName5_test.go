@@ -15,6 +15,7 @@ func TestGoToDefinitionExternalModuleName5(t *testing.T) {
 declare module /*2*/[|"external/*1*/"|] {
     class Foo { }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

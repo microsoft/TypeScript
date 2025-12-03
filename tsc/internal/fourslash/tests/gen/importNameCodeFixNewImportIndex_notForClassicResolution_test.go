@@ -20,7 +20,8 @@ export const bar = 0;
 [|foo;|]
 // @Filename: /c.ts
 [|bar;|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/a/index.ts")
 	f.GoToFile(t, "/b.ts")
 	f.VerifyImportFixAtPosition(t, []string{

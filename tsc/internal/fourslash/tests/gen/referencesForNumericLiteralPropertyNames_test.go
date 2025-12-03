@@ -19,6 +19,7 @@ var x: Foo;
 x[12];
 x = { "12": 0 };
 x = { 12: 0 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

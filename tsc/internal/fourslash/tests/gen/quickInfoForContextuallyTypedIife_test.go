@@ -18,7 +18,8 @@ func TestQuickInfoForContextuallyTypedIife(t *testing.T) {
     var v: number = x/*8*/;
     return q; })({ q: 13, qq: 12 }, 1, { p: 14 });
 ((a/*9*/, b/*10*/, c/*11*/) => [a/*12*/,b/*13*/,c/*14*/])("foo", 101, false);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) q: number", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) qq: number", "")
 	f.VerifyQuickInfoAt(t, "3", "(parameter) x: number", "")

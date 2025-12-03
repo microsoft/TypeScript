@@ -15,6 +15,7 @@ func TestQuickInfoOnPrivateConstructorCall(t *testing.T) {
     private constructor() {}
 }
 var x = new A(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyNoSignatureHelpForMarkers(t, "1")
 }

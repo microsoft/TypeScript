@@ -19,6 +19,7 @@ export type app = typeof import("./app")
 import type { app } from "./re-export";
 declare const app: app
 app.hello();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "")
 }

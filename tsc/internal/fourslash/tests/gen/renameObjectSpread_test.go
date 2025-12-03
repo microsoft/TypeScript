@@ -17,6 +17,7 @@ let a1: A1;
 let a2: A2;
 let a12 = { ...a1, ...a2 };
 a12.[|a|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1], f.Ranges()[3], f.Ranges()[4])
 }

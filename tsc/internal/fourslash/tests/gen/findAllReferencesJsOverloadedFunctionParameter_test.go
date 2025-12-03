@@ -29,6 +29,7 @@ func TestFindAllReferencesJsOverloadedFunctionParameter(t *testing.T) {
 function foo(x/*1*/) {
   return x;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

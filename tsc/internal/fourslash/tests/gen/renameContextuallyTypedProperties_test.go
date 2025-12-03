@@ -65,6 +65,7 @@ var o10: I = {
     [|set ["[|{| "contextRangeIndex": 20 |}prop1|]"](v) { }|],
     set ["prop2"](v) { }
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "prop1")
 }

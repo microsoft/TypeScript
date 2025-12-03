@@ -31,6 +31,7 @@ let opt1 = /*5*/</*6*/Opt propx={100} propString />;
 let opt2 = /*7*/</*8*/Opt propx={100} optional/>;
 let opt3 = /*9*/</*10*/Opt wrong />;
 let opt4 = /*11*/</*12*/Opt propx={100} propString="hi" />;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
 }

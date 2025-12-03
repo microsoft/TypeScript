@@ -15,7 +15,8 @@ func TestImportNameCodeFix_shorthandPropertyAssignment1(t *testing.T) {
 export const a = 1;
 // @Filename: /b.ts
 const b = { /**/a };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a } from "./a";

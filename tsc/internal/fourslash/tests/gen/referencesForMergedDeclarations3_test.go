@@ -28,6 +28,7 @@ var c2: [|testClass|].Bar;
 [|testClass|].prototype.method();
 [|testClass|].bind(this);
 new [|testClass|]();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "module", "class")
 }

@@ -17,7 +17,8 @@ func TestMemberCompletionFromFunctionCall(t *testing.T) {
 }
 declare var foo: ifoo;
 foo.text(function() { })/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ".")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

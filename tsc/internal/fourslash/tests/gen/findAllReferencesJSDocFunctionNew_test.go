@@ -15,6 +15,7 @@ func TestFindAllReferencesJSDocFunctionNew(t *testing.T) {
 // @Filename: Foo.js
 /** @type {function (/*1*/new: string, string): string} */
 var f;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

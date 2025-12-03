@@ -29,6 +29,7 @@ declare const k: K;
 k.[|/*usea*/a|];
 k.[|/*useb*/b|];
 k.[|/*useab*/ab|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "useI", "useIJ", "usea", "useb", "useab")
 }

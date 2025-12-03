@@ -15,6 +15,7 @@ func TestQuickInfoOnPropertyAccessInWriteLocation1(t *testing.T) {
 // @exactOptionalPropertyTypes: true
 declare const xx: { prop?: number };
 xx.prop/*1*/ = 1;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(property) prop?: number", "")
 }

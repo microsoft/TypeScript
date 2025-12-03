@@ -20,6 +20,7 @@ export = Foo;
 import a = require('./quickInfoExportAssignmentOfGenericInterface_0');
 export var /*1*/x: a<a<string>>;
 x.a;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var x: a<a<string>>", "")
 }

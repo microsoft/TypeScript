@@ -16,6 +16,7 @@ type Foo = {
   /** comment */
   /*2*/readonly /*1*/status: number;
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

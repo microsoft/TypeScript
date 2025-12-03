@@ -15,7 +15,8 @@ func TestCompletionEntryForArrayElementConstrainedToString2(t *testing.T) {
 	const content = `declare function test<T extends 'a' | 'b'>(a: { foo: T[] }): void
 
 test({ foo: ['a', /*ts*/] })`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"ts"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

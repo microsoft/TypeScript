@@ -36,6 +36,7 @@ declare const a: ThingWithDeprecations<void>
 a.subscribe/**/(() => {
   console.log('something happened');
 });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

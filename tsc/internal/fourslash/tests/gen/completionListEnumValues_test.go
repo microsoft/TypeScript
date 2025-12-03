@@ -24,7 +24,8 @@ x./*variableOfEnumType*/;
 
 function foo(): Colors { return null; }
 foo()./*callOfEnumReturnType*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "enumVariable", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

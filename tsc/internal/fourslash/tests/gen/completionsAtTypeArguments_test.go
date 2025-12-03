@@ -18,7 +18,8 @@ func TestCompletionsAtTypeArguments(t *testing.T) {
 }
 type T1 = Pick<I, "/*1*/">;
 interface T2 extends Pick<I, "/*2*/"> {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1", "2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

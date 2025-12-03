@@ -15,6 +15,7 @@ func TestCompletionListInObjectBindingPattern14(t *testing.T) {
     private ab;
     protected bc;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", nil)
 }

@@ -42,7 +42,8 @@ var my/*7*/var = new m1.m2./*8*/c();
 import ex/*9*/tMod = require("./commentsExternalModules_file0");
 /*10*/extMod./*11*/m1./*12*/fooExp/*13q*/ort(/*13*/);
 var new/*14*/Var = new extMod.m1.m2./*15*/c();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "commentsExternalModules_file0.ts")
 	f.VerifyQuickInfoAt(t, "1", "namespace m1", "Namespace comment")
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{

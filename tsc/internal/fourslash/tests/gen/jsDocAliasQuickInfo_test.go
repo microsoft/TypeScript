@@ -19,6 +19,7 @@ func TestJsDocAliasQuickInfo(t *testing.T) {
 export /*1*/default 10;
 // @Filename: /test.ts
 export { /*2*/default as /*3*/test } from "./jsDocAliasQuickInfo";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

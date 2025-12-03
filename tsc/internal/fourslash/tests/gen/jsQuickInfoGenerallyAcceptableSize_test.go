@@ -218,7 +218,8 @@ var doSome/*1*/thing = function (dataTable) {
   * @type {SomeCallback}
   */
 var anotherThing/*2*/ = function(a, b) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var doSomething: (dataTable: DataTableThing) => void", "Do something")
 	f.VerifyQuickInfoAt(t, "2", "var anotherThing: SomeCallback", "Another thing")
 }

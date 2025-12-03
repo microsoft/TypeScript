@@ -21,6 +21,7 @@ interface D extends C {
 
 var c: C;
 c.[|prop1|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "prop1")
 }

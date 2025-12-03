@@ -14,7 +14,8 @@ func TestDocumentHighlightsTypeParameterInHeritageClause01(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I<[|T|]> extends I<[|T|]>, [|T|] {
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

@@ -27,7 +27,8 @@ const o: I = {
     */*e*/
 };
 1 * /*f*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"a", "b"}, nil)
 	f.VerifyCompletions(t, []string{"c", "d"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

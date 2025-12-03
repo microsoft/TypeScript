@@ -19,7 +19,8 @@ export = A;
 /**/
 var i: I1;
 var n: number = i.p1;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "import I1 = require(\"exportEqualsInterface_A\");")
 }

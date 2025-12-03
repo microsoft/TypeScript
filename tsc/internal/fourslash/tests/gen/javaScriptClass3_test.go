@@ -23,6 +23,7 @@ class Foo {
 var x = new Foo();
 x.[|alpha/*src1*/|];
 x.[|beta/*src2*/|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "src1", "src2")
 }

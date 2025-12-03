@@ -16,7 +16,8 @@ export default function fooBar();
 // @Filename: /b.ts
 [|import * as fb from "./foo-bar";
 foo/**/Bar|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import fooBar, * as fb from "./foo-bar";

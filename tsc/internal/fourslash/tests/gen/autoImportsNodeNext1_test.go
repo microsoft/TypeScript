@@ -29,7 +29,8 @@ export const fromUnreachable = 0;
 // @Filename: /index.mts
 import { fromMain } from "pack";
 fromUnreachable/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{}, nil /*preferences*/)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{

@@ -23,6 +23,7 @@ func TestJsdocReturnsTag(t *testing.T) {
 function find(l, x) {
 }
 find(''/**/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

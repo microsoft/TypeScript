@@ -17,7 +17,8 @@ func TestImportNameCodeFixOptionalImport1(t *testing.T) {
 export function foo() {};
 // @Filename: a/foo.ts
 export { foo } from "bar";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { foo } from "bar";
 

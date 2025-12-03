@@ -26,7 +26,8 @@ declare module "m";
 // line 3
 // line 4|]
 declare module "n";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyOutliningSpans(t, lsproto.FoldingRangeKindComment)
 }

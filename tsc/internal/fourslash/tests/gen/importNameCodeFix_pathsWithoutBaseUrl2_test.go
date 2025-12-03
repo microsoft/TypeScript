@@ -24,7 +24,8 @@ func TestImportNameCodeFix_pathsWithoutBaseUrl2(t *testing.T) {
 export class Logger {};
 // @Filename: /packages/test-package-1/src/something/index.ts
 Logger/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { Logger } from "../common/logging";

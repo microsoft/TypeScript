@@ -28,7 +28,8 @@ let i: I</*interface*/>;
 
 type Ty<T> = T;
 let t: Ty</*typeAlias*/>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "type1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "testClass<T extends IFoo, U, M extends IFoo>", ParameterName: "T", ParameterSpan: "T extends IFoo"})
 	f.GoToMarker(t, "type2")

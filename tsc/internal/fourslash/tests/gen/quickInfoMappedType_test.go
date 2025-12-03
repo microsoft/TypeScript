@@ -22,7 +22,8 @@ p.m/*1*/;
 
 declare const q: Pick<I, "m">;
 q.m/*2*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "0", "(property) m: number", "m documentation")
 	f.VerifyQuickInfoAt(t, "1", "(method) m(): void", "m documentation")
 	f.VerifyQuickInfoAt(t, "2", "(method) m(): void", "m documentation")

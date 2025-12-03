@@ -26,6 +26,7 @@ class MyClass {
 
 [|var [|{| "contextRangeIndex": 0 |}nn|]: string;|]
 var x = <MyClass name={[|nn|]}></MyClass>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "nn")
 }

@@ -16,6 +16,7 @@ func TestQuickInfoLink6(t *testing.T) {
  *  See {@link A |constant A} instead
  */
 const /**/B = 456;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

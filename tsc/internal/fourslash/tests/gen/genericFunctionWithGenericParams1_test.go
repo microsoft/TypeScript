@@ -15,6 +15,7 @@ func TestGenericFunctionWithGenericParams1(t *testing.T) {
     var x/**/x: T;
     return a;
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(local var) xx: T", "")
 }

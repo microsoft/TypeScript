@@ -16,7 +16,8 @@ func TestNavto_emptyPattern(t *testing.T) {
 	const content = `// @filename: foo.ts
 const [|x: number = 1|];
 [|function y(x: string): string { return x; }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "",

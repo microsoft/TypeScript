@@ -18,7 +18,8 @@ func TestCompletionListAtEOF2(t *testing.T) {
     }
 }
 var p = <Shapes.`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToEOF(t)
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

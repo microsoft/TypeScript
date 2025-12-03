@@ -16,6 +16,7 @@ func TestJsdocLink_findAllReferences1(t *testing.T) {
  * {@link A()} is ok
  */
 declare const a: A`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "")
 }

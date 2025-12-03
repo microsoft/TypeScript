@@ -21,7 +21,8 @@ function f3(a) {
 const f5 = (a, b = (c = /*7*/, e) => { }, d = b) => { }
 
 type A1<K = /*T1*/, L> = K`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1", "2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

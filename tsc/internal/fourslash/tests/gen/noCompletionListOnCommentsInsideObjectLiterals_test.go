@@ -21,6 +21,7 @@ func TestNoCompletionListOnCommentsInsideObjectLiterals(t *testing.T) {
 		/* /*1*/ Comment /*2*/ */
 	};
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), nil)
 }

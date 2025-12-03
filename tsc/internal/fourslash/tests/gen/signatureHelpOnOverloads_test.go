@@ -14,7 +14,8 @@ func TestSignatureHelpOnOverloads(t *testing.T) {
 	const content = `declare function fn(x: string);
 declare function fn(x: string, y: number);
 fn(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "fn(x: string): any", ParameterName: "x", ParameterSpan: "x: string", OverloadsCount: 2})
 	f.Insert(t, "'',")

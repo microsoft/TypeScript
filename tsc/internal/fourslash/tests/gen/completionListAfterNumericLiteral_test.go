@@ -26,7 +26,8 @@ func TestCompletionListAfterNumericLiteral(t *testing.T) {
 (0.)./*validDotOnNumberExpressions2*/
 // @Filename: f7.ts
 (0.0)./*validDotOnNumberExpressions3*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"dotOnNumberExpressions1", "dotOnNumberExpressions4"}, nil)
 	f.VerifyCompletions(t, []string{"dotOnNumberExpressions2", "dotOnNumberExpressions3", "validDotOnNumberExpressions1", "validDotOnNumberExpressions2", "validDotOnNumberExpressions3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

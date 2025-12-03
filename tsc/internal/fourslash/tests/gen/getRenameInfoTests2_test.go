@@ -14,7 +14,8 @@ func TestGetRenameInfoTests2(t *testing.T) {
 	const content = `class C /**/extends null {
 
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyRenameFailed(t, nil /*preferences*/)
 }

@@ -57,6 +57,7 @@ function b/*4*/oo() {
 function go/*5*/o() {
     return '2';
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

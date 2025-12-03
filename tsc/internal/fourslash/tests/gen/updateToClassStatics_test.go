@@ -27,7 +27,8 @@ func TestUpdateToClassStatics(t *testing.T) {
 module TypeScript {
     var x : TypeScript.SymbolAndDiagnostics;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "someNewProperty = 0;")
 }

@@ -15,6 +15,7 @@ func TestGetOccurrencesIsDefinitionOfNamespace(t *testing.T) {
     export var n = 12;
 }
 let x = /*3*/Numbers.n + 1;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

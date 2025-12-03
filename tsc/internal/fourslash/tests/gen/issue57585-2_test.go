@@ -81,7 +81,8 @@ gen(function* () {
   const b/*1*/ = yield* succeed(2);
   return a + b;
 });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "const b: number", "")
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 }

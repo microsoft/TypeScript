@@ -36,7 +36,8 @@ declare function createMachine<TEvent extends { type: string }>(config: {
 createMachine<GreetingEvent>({
   [|/*error*/actions|]: raise({ type: "ALOHA/*1*/" }),
 });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, "x")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

@@ -36,7 +36,8 @@ const u2: U = {
     /*u2Kind*/kind: "bogus",
     /*u2Prop*/prop: 1,
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "uKind", "(property) A.kind: \"a\"", "Kind A")
 	f.VerifyQuickInfoAt(t, "uProp", "(property) A.prop: number", "Prop A")
 	f.VerifyQuickInfoAt(t, "u2Kind", "(property) kind: \"bogus\"", "")

@@ -22,7 +22,8 @@ export function func<T extends SomeType>(param: T, other: T): void;
 // @Filename: /usage.ts
 import { func } from "foo";
 func({/*1*/});`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "func(param: {}): void", OverloadsCount: 2})
 }

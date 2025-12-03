@@ -25,6 +25,7 @@ class Extended extends ConstructorOverload {
 }
 var extended1 = new [|/*extendedRef1*/Extended|]();
 var extended2 = new [|/*extendedRef2*/Extended|]("foo");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "constructorOverloadReference1", "constructorOverloadReference2", "constructorOverload1", "extendedRef1", "extendedRef2")
 }

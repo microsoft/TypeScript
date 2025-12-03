@@ -22,7 +22,8 @@ export const db = {};
 export const db = {};
 // @Filename: /src/client/foo.ts
 db/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { db } from "./db";

@@ -19,7 +19,8 @@ func TestCompletionsGenericIndexedAccess1(t *testing.T) {
 
 export declare function testIt<T>(method: T[keyof T]): any
 testIt<Sample>({ /**/ });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

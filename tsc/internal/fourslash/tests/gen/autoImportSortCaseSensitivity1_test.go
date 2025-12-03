@@ -30,7 +30,8 @@ a/*0*/
 import { A, a, B, b } from "./exports1";
 import { E } from "./exports2";
 d/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "0")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a, A, B, C } from "./exports1";

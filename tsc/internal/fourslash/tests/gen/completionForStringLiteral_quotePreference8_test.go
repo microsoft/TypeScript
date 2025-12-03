@@ -20,7 +20,8 @@ import { a } from './a';
 
 const foo = { '"a name\'s all good but it\'s better with more"': null };
 foo[|./**/|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

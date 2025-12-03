@@ -27,7 +27,8 @@ foo("hello");
 // but is really just here to test how it affects how code lens.
 foo(Math.random() ? 1 : "hello");
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		CodeLens: lsutil.CodeLensUserPreferences{
 			ReferencesCodeLensEnabled:            true,

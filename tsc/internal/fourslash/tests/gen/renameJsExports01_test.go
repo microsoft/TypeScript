@@ -17,7 +17,8 @@ func TestRenameJsExports01(t *testing.T) {
 // @Filename: b.js
 var mod = require('./a');
 var t = mod./*1*/[|area|](10);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "area")
 }

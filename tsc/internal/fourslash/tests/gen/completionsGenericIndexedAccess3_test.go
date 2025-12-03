@@ -31,7 +31,8 @@ declare function create<T extends keyof CustomElements>(name: T, options: Option
 
 create('component-one', { props: { /*1*/ } });
 create('component-two', { props: { /*2*/ } });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -24,7 +24,8 @@ func TestPackageJsonImportsFailedLookups(t *testing.T) {
 export function add(a: number, b: number): number;
 // @Filename: /a/b/c/d/e/index.ts
 import { add } from "#utils";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/a/b/c/d/e/index.ts")
 }

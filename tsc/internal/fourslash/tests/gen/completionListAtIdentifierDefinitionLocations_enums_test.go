@@ -15,6 +15,7 @@ func TestCompletionListAtIdentifierDefinitionLocations_enums(t *testing.T) {
 enum /*enumName1*/
 enum a/*enumName2*/
 var x = 0; enum /*enumName4*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), nil)
 }

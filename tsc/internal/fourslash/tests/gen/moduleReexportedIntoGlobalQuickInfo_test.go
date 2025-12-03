@@ -22,6 +22,7 @@ declare global {
 }
 // @Filename: /index.ts
 let v = new /*1*/THREE.Vector3();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "const THREE: typeof import(\"/node_modules/@types/three/index\")", "")
 }

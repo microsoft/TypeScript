@@ -12,6 +12,7 @@ func TestFindAllRefsNoSubstitutionTemplateLiteralNoCrash1(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type Test = ` + "`" + `T/*1*/` + "`" + `;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

@@ -15,7 +15,8 @@ func TestTypeReferenceOnServer(t *testing.T) {
 	const content = `/// <reference types="foo" />
 var x: number;
 x./*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

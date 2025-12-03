@@ -18,6 +18,7 @@ interface Underscore {
 var _: Underscore;
 var a: number[];
 var /**/b = _(a);  // WrappedArray<any>, should be WrappedArray<number>`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "var b: WrappedArray<number>", "")
 }

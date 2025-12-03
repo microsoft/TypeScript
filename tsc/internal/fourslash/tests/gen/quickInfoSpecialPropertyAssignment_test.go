@@ -20,7 +20,8 @@ class C {
       this./*read*/x;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "write", "(property) C.x: any", "Doc")
 	f.VerifyQuickInfoAt(t, "read", "(property) C.x: number", "Doc")
 }

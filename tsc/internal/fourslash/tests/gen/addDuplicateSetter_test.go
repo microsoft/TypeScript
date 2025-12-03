@@ -15,7 +15,8 @@ func TestAddDuplicateSetter(t *testing.T) {
     set foo(value) { }
     /**/
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "set foo(value) { }")
 }

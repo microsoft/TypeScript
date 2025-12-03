@@ -15,7 +15,8 @@ func TestCompletionListInTemplateLiteralParts1(t *testing.T) {
 	const content = `/*0*/` + "`" + `  $ { ${/*1*/ 10/*2*/ + 1.1/*3*/ /*4*/} 12312` + "`" + `/*5*/
 
 /*6*/` + "`" + `asdasd${/*7*/ 2 + 1.1 /*8*/} 12312 {`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1", "7"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

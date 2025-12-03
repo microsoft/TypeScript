@@ -15,6 +15,7 @@ func TestGetJavaScriptSyntacticDiagnostics21(t *testing.T) {
 // @experimentalDecorators: true
 // @Filename: a.js
 @internal class C {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 }

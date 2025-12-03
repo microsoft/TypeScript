@@ -13,6 +13,7 @@ func TestGetOccurrencesIsDefinitionOfStringNamedProperty(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let o = { /*1*/"/*2*/x": 12 };
 let y = o./*3*/x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

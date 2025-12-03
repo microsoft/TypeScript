@@ -16,6 +16,7 @@ func TestReturnTypeOfGenericFunction1(t *testing.T) {
 }
 var x: WrappedArray<string>;
 var /**/y = x.map(s => s.length);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "var y: number[]", "")
 }

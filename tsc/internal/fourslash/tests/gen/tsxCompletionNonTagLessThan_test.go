@@ -18,7 +18,8 @@ func TestTsxCompletionNonTagLessThan(t *testing.T) {
 var x: Array<numb/*a*/;
 [].map<numb/*b*/;
 1 < Infini/*c*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"a", "b"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

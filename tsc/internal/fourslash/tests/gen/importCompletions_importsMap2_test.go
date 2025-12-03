@@ -32,7 +32,8 @@ export function something(name: string) {}
 // @Filename: /home/src/workspaces/project/src/a.ts
 import {} from "/*1*/";
 import {} from "#internal//*2*/";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

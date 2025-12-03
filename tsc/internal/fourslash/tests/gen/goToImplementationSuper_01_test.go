@@ -20,6 +20,7 @@ class Bar extends Foo {
         sup/*super_call*/er.hello();
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "super_call")
 }

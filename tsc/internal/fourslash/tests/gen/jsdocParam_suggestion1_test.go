@@ -24,7 +24,8 @@ declare function bad(options: any): void
 function worse(): void {
     arguments
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "a.ts")
 	f.VerifySuggestionDiagnostics(t, nil)
 }

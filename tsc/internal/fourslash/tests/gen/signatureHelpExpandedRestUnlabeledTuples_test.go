@@ -18,7 +18,8 @@ func TestSignatureHelpExpandedRestUnlabeledTuples(t *testing.T) {
 complex(/*1*/);
 complex("ok", "ok", /*2*/);
 complex("ok", "ok", e => void e, {}, /*3*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "complex(item: string, another: string): void", ParameterCount: 2, ParameterName: "item", ParameterSpan: "item: string", OverloadsCount: 3, IsVariadic: false, IsVariadicSet: true})
 	f.GoToMarker(t, "2")

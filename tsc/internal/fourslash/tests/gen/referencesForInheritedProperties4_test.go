@@ -19,6 +19,7 @@ func TestReferencesForInheritedProperties4(t *testing.T) {
 var c: class1;
 c./*3*/doStuff();
 c./*4*/propName;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

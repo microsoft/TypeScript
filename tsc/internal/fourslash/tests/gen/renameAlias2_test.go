@@ -14,6 +14,7 @@ func TestRenameAlias2(t *testing.T) {
 	const content = `[|module [|{| "contextRangeIndex": 0 |}SomeModule|] { export class SomeClass { } }|]
 import M = [|SomeModule|];
 import C = M.SomeClass;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "SomeModule")
 }

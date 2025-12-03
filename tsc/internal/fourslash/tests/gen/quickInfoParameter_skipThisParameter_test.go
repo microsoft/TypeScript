@@ -13,6 +13,7 @@ func TestQuickInfoParameter_skipThisParameter(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f(cb: (x: number) => void) {}
 f(function(this: any, /**/x) {});`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(parameter) x: number", "")
 }

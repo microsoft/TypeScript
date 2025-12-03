@@ -23,7 +23,8 @@ class B2<T> extends A<T> {
 }
 var /*1*/b: B<number>;
 var /*2*/b2: B<number>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var b: B<number>", "")
 	f.VerifyQuickInfoAt(t, "2", "var b2: B<number>", "")
 }

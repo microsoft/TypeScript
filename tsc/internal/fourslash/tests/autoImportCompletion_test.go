@@ -24,7 +24,8 @@ import {someVar} from "./a.ts";
 someVar;
 a/**/
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		UserPreferences: &lsutil.UserPreferences{
 			IncludeCompletionsForModuleExports:    core.TSTrue,
@@ -69,7 +70,8 @@ import {someVar} from "./a.ts";
 someVar;
 a/**/
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		UserPreferences: &lsutil.UserPreferences{
 			IncludeCompletionsForModuleExports:    core.TSTrue,
@@ -100,7 +102,8 @@ import { aa, someVar } from "./a.ts";
 someVar;
 b/**/
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		UserPreferences: &lsutil.UserPreferences{
 			IncludeCompletionsForModuleExports:    core.TSTrue,
@@ -153,6 +156,7 @@ const m = import("./src//*6*/");
 import {} from "./src//*7*/";
 import mod = require("./src//*8*/");
 const m = import("./src//*9*/");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.BaselineAutoImportsCompletions(t, []string{"1", "3", "6", "9", "2", "4", "5", "7", "8"})
 }

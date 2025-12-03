@@ -19,6 +19,7 @@ let { foo }: Props = null as any;
 foo;
 
 let asd: Props = { "foo"/**/: true }; // rename foo here`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "")
 }

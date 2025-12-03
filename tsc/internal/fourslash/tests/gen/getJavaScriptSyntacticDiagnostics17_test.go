@@ -14,6 +14,7 @@ func TestGetJavaScriptSyntacticDiagnostics17(t *testing.T) {
 	const content = `// @allowJs: true
 // @Filename: a.js
 function F(a: number) { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineNonSuggestionDiagnostics(t)
 }

@@ -16,6 +16,7 @@ func TestRenameExportCrash(t *testing.T) {
 let a;
 module.exports = /**/a;
 exports["foo"] = a;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "")
 }

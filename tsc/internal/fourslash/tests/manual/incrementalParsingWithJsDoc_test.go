@@ -16,7 +16,8 @@ func TestIncrementalParsingWithJsDoc(t *testing.T) {
 import c from 'c';|]
 [|/** @internal */|]
 export class LanguageIdentifier[| { }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyOutliningSpans(t)
 	f.GoToMarker(t, "")
 	f.Backspace(t, 1)

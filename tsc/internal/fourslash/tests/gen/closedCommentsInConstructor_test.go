@@ -14,6 +14,7 @@ func TestClosedCommentsInConstructor(t *testing.T) {
 	const content = `class Foo {
     constructor(/* /**/ */) { }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", nil)
 }

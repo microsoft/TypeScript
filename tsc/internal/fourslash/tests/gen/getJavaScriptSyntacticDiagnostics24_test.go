@@ -22,6 +22,7 @@ function Person(age) {
 }
 let x = new Person(100);
 x.canVote/**/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(property) Person.canVote: number | boolean", "")
 }

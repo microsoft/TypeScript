@@ -14,6 +14,7 @@ func TestGetOccurrencesIsDefinitionOfFunction(t *testing.T) {
 	const content = `/*1*/function /*2*/func(x: number) {
 }
 /*3*/func(x)`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

@@ -68,6 +68,7 @@ module m {
     }
 }
 var myVar = new m.m2.c/*33*/1();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

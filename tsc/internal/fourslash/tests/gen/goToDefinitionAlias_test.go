@@ -31,6 +31,7 @@ export class Foo {
 export interface IFoo {
     x;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "alias1Type", "alias1Value", "alias2Type", "alias2Value")
 }

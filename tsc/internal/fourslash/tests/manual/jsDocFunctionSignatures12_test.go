@@ -26,7 +26,8 @@ func TestJsDocFunctionSignatures12(t *testing.T) {
 function f1(o) {
     o/**/;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "(parameter) o: { stringProp: string; numProp: number; boolProp: boolean; anyProp: any; anotherAnyProp: any; functionProp: (arg0: string, arg1: any) => any; }", "")
 }

@@ -14,6 +14,7 @@ func TestFindAllRefsDeclareClass(t *testing.T) {
 	const content = `/*1*/declare class /*2*/C {
     static m(): void;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

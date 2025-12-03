@@ -17,6 +17,7 @@ function bar() {
 }
 [|bar.[|{| "contextRangeIndex": 0 |}foo|] = "foo";|]
 console.log(bar.[|foo|]);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "foo")
 }

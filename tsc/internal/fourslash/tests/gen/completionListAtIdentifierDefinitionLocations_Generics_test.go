@@ -17,6 +17,7 @@ class B<T, /*genericName3*/
 class A{
      f</*genericName4*/
 function A</*genericName5*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), nil)
 }

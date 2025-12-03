@@ -26,7 +26,8 @@ function c3 () { foo3(/*e*/1, /*f*/2); }
 function c4 () { foo4(/*g*/1, /*h*/2); }
 function c5 () { foo5(/*i*/1, /*j*/2); }
 function c6 () { foo6(/*k*/1, /*l*/2); }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	start := f.MarkerByName(t, "c")
 	end := f.MarkerByName(t, "h")
 	span := &lsproto.Range{Start: start.LSPosition, End: end.LSPosition}

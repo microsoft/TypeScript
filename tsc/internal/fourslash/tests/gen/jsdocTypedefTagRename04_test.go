@@ -26,7 +26,8 @@ function test2() {
    /** @type {NumberLike2} */
    var n/*2*/umberLike2;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "2")
 	f.VerifyQuickInfoExists(t)

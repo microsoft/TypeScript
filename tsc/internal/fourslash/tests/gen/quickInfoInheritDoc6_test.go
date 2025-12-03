@@ -22,6 +22,7 @@ class B extends UNRESOLVED_VALUE_DEFINITELY_DOES_NOT_EXIST {
         return undefined;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

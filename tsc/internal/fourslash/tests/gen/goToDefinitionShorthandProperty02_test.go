@@ -14,6 +14,7 @@ func TestGoToDefinitionShorthandProperty02(t *testing.T) {
 	const content = `let x = {
     [|f/*1*/oo|]
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

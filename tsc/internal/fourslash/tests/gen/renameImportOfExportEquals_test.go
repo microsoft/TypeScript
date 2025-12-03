@@ -25,7 +25,8 @@ declare module "b" {
     [|import { /*b*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}N|] } from "a";|]
     export const y: typeof [|N|].[|x|];
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "N", "a", "b", "x")
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1], f.Ranges()[5])
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[7])

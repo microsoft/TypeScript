@@ -21,7 +21,8 @@ func TestImportNameCodeFixNewImportBaseUrl1(t *testing.T) {
 export function f1() { };
 // @Filename: /a/b/y.ts
 [|f1/*0*/();|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/a/b/y.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "./x";

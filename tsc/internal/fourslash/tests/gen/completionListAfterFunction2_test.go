@@ -16,7 +16,8 @@ func TestCompletionListAfterFunction2(t *testing.T) {
 declare var f1: (a: number) => void; /*1*/
 
 declare var f1: (b: number, b2: /*2*/) => void;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

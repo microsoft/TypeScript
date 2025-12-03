@@ -18,6 +18,7 @@ func TestGetOutliningSpansForUnbalancedRegion(t *testing.T) {
 [|// #region matched
 
 // #endregion matched|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyOutliningSpans(t, lsproto.FoldingRangeKindRegion)
 }

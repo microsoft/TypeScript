@@ -13,6 +13,7 @@ func TestGoToImplementationLocal_07(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function [|someFunction|](): () => void;
 someFun/*reference*/ction();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "reference")
 }

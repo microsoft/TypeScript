@@ -18,6 +18,7 @@ func TestFindAllRefsObjectBindingElementPropertyName10(t *testing.T) {
 
 function f (/*2*/{ /*3*/next: { /*4*/next: x} }: Recursive) {
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

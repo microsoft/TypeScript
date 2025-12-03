@@ -48,7 +48,8 @@ export const blah = 0;
 export const arguments = 0;
 // @Filename: /home/src/workspaces/project/src/m.mts
 import { } from "/**/";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

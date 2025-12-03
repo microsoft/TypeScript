@@ -16,7 +16,8 @@ func TestConstructorQuickInfo(t *testing.T) {
 var x/*1*/1 = new SS<number>();
 var x/*2*/2 = new SS();
 var x/*3*/3 = new SS;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var x1: SS<number>", "")
 	f.VerifyQuickInfoAt(t, "2", "var x2: SS<unknown>", "")
 	f.VerifyQuickInfoAt(t, "3", "var x3: SS<unknown>", "")

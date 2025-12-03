@@ -30,6 +30,7 @@ var c2: /*6*/testClass.Bar;
 /*9*/testClass.bind(this);
 /*10*/testClass.s;
 new /*11*/testClass();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11")
 }

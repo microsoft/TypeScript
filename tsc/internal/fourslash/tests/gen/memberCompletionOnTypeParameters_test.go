@@ -25,7 +25,8 @@ function foo<S, T extends IFoo, U extends Object, V extends IFoo>() {
     u./*U*/;    // IFoo
     v./*V*/;    // IFoo
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "S", nil)
 	f.VerifyCompletions(t, []string{"T", "V"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

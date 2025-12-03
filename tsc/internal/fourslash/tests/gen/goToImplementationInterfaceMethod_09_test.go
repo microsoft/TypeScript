@@ -35,6 +35,7 @@ class SuperBar extends MegaBar {
 class MegaBar implements Foo {
     hello() {}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "function_call", "element_access")
 }

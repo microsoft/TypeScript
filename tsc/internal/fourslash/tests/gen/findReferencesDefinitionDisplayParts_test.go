@@ -20,6 +20,7 @@ let myOption: Options = "option 1";
 
 some/*4*/Label:
 break someLabel;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

@@ -14,7 +14,8 @@ func TestSignatureHelpInCompleteGenericsCall(t *testing.T) {
 	const content = `function foo<T>(x: number, callback: (x: T) => number) {
 }
 foo(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "foo(x: number, callback: (x: unknown) => number): void"})
 }

@@ -15,7 +15,8 @@ func TestImportNameCodeFixDefaultExport(t *testing.T) {
 export default 0;
 // @Filename: /b.ts
 [|foo/**/Bar|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import fooBar from "./foo-bar";

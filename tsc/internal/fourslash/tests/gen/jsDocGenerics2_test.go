@@ -24,7 +24,8 @@ function SortFilter(arr,valuator)
 }
 var a/*1*/ = SortFilter([0, 1, 2], q/*2*/ => q);
 var b/*3*/ = SortFilter([0, 1, 2], undefined);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var a: number[]", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) q: number", "")
 	f.VerifyQuickInfoAt(t, "3", "var b: number[]", "")

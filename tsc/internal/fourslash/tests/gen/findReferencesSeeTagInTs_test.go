@@ -16,6 +16,7 @@ func TestFindReferencesSeeTagInTs(t *testing.T) {
 declare const stuff: { quantity: number };
 /** @see {doStuffWithStuff} */
 if (stuff.quantity) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

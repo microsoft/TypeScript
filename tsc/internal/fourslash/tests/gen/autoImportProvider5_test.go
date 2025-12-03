@@ -21,7 +21,8 @@ export * from "./useForm";
 export declare function useForm(): void;
 // @Filename: /home/src/workspaces/project/index.ts
 useForm/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{

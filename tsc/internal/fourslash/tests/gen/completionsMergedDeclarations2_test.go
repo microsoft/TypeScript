@@ -24,7 +24,8 @@ module point {
 var p1 = new point(0, 0);
 var p2 = point./*1*/origin;
 var b = point./*2*/equals(p1, p2);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -16,6 +16,7 @@ x["/*2*/add"];
 x./*3*/add;
 var y = x;
 y./*4*/add;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

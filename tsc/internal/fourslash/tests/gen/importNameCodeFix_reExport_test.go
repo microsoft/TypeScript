@@ -17,7 +17,8 @@ export default function foo(): void {}
 export { default } from "./a";
 // @Filename: /user.ts
 [|foo;|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/user.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import foo from "./a";

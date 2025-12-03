@@ -17,6 +17,7 @@ func TestGoToImplementationNamespace_06(t *testing.T) {
 
 
 let x: typeof Foo = [|{ hello() {} }|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "declaration")
 }

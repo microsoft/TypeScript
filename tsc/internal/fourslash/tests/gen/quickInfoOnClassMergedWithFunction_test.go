@@ -23,6 +23,7 @@ func TestQuickInfoOnClassMergedWithFunction(t *testing.T) {
         }
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(property) myProp: string", "")
 }

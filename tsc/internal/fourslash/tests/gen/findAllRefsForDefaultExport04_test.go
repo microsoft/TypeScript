@@ -17,6 +17,7 @@ export /*1*/default /*2*/a;
 // @Filename: /b.ts
 import /*3*/a from "./a";
 /*4*/a;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "2", "1", "3", "4")
 }

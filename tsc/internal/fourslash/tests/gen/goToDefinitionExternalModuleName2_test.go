@@ -17,6 +17,7 @@ var x = new n.Foo();
 // @Filename: a.ts
 /*2*/class Foo {}
 export var x = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

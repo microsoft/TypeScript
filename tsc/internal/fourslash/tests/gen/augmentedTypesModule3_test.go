@@ -16,7 +16,8 @@ func TestAugmentedTypesModule3(t *testing.T) {
 module m2g { export class C { foo(x: number) { } } }
 var x: m2g./*1*/;
 var /*2*/r = m2g/*3*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

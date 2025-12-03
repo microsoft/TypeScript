@@ -32,7 +32,8 @@ var x : Module./*TypeReference*/
 class TestClass extends Module./*TypeReferenceInExtendsList*/ { }
 
 interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"ValueReference", "TypeReferenceInExtendsList"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -17,6 +17,7 @@ func TestGoToImplementationEnum_01(t *testing.T) {
 }
 
 Fo/*reference*/o;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "reference")
 }

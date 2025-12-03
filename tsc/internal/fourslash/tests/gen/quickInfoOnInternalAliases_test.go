@@ -29,7 +29,8 @@ var /*6*/anotherAliasVar = /*7*/internalAlias;
 import /*8*/internalFoo = m1./*9*/foo;
 var /*10*/callVar = /*11*/internalFoo();
 var /*12*/anotherAliasFoo = /*13*/internalFoo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "class m1.m2.c", "class comment;")
 	f.VerifyQuickInfoAt(t, "2", "(alias) class internalAlias\nimport internalAlias = m1.m2.c", "This is on import declaration")
 	f.VerifyQuickInfoAt(t, "3", "class m1.m2.c", "class comment;")

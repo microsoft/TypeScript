@@ -15,6 +15,7 @@ func TestSignatureHelpWithInterfaceAsIdentifier(t *testing.T) {
     (): void;
 }
 C(/*1*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyNoSignatureHelpForMarkers(t, "1")
 }

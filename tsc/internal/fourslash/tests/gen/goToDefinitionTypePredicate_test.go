@@ -15,6 +15,7 @@ func TestGoToDefinitionTypePredicate(t *testing.T) {
 function f(/*parameterDeclaration*/parameter: any): [|/*parameterName*/parameter|] is [|/*typeReference*/A|] {
     return typeof parameter === "string";
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "parameterName", "typeReference")
 }

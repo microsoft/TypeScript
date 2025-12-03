@@ -19,7 +19,8 @@ export default function (props: any) {}
 export function Index() {
     return <Component/**/ />;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import Component from "./component";

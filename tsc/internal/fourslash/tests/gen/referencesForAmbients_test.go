@@ -24,6 +24,7 @@ declare module "baz" {
     /*12*/import bar = require("/*13*/bar");
     var f2: typeof bar./*14*/foo;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14")
 }

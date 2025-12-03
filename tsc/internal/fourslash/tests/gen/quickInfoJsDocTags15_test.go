@@ -41,7 +41,8 @@ class C2 { }
  * @augments {_a.Foo/*3*/}
  */
 class C3 { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.js")
 	f.VerifyBaselineHover(t)
 }

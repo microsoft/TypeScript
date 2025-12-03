@@ -33,7 +33,8 @@ export const myFunctionB = () => {};
 export * from './b';
 // @Filename: c:/project/src/reproduction/1.ts
 myFunction/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

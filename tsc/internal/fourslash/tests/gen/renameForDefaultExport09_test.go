@@ -28,7 +28,8 @@ var y = f();
 namespace f {
     var local = 100;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 }

@@ -37,6 +37,7 @@ interface BottomSheetModalProps {
 // @Filename: src/index.ts
 import { useQuery } from "use-query";
 const { /*1*/data } = useQuery();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

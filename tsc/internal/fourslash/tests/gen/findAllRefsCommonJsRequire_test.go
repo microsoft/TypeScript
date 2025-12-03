@@ -18,6 +18,7 @@ export { f }
 // @Filename: /b.js
 const { f } = require('./a')
 /**/f`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "")
 }

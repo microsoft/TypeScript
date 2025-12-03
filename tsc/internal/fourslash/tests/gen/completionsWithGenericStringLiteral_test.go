@@ -15,7 +15,8 @@ func TestCompletionsWithGenericStringLiteral(t *testing.T) {
 	const content = `// @strict: true
 declare function get<T, K extends keyof T>(obj: T, key: K): T[K];
 get({ hello: 123, world: 456 }, "/**/");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

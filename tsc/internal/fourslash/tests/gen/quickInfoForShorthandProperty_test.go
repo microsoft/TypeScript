@@ -16,7 +16,8 @@ var /*obj1*/obj1 = {/*name1*/name1, /*id1*/id1};
 var name2 = "Hello";
 var id2 = 10000;
 var /*obj2*/obj2 = {/*name2*/name2, /*id2*/id2};`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "obj1", "var obj1: {\n    name1: any;\n    id1: any;\n}", "")
 	f.VerifyQuickInfoAt(t, "name1", "(property) name1: any", "")
 	f.VerifyQuickInfoAt(t, "id1", "(property) id1: any", "")

@@ -16,6 +16,7 @@ func TestQuickInfoSignatureOptionalParameterFromUnion1(t *testing.T) {
   | ((b?: { b: true }) => unknown);
 
 /**/optionals();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "const optionals: (arg0?: {\n    a: true;\n} & {\n    b: true;\n}) => unknown", "")
 }

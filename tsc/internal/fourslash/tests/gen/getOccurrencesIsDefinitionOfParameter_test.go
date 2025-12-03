@@ -14,6 +14,7 @@ func TestGetOccurrencesIsDefinitionOfParameter(t *testing.T) {
 	const content = `function f(/*1*/x: number) {
   return /*2*/x + 1
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

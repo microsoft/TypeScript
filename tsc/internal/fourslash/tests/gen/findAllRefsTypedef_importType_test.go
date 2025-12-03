@@ -19,6 +19,7 @@ const dummy = 0;
 // @Filename: /b.js
 /** @type {import('./a')./*3*/Foo} */
 const x = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

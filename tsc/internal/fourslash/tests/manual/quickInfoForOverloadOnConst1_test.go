@@ -27,7 +27,8 @@ var c: C;
 c.x/*7*/1(1, (x/*8*/x: 'hi') => { return 1; } );
 c.x1(1, (x/*9*/x: 'bye') => { return 1; } );
 c.x1(1, (x/*10*/x) => { return 1; } );`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(method) I.x1(a: number, callback: (x: \"hi\") => number): any", "")
 	f.VerifyQuickInfoAt(t, "2", "(method) C.x1(a: number, callback: (x: \"hi\") => number): any", "")
 	f.VerifyQuickInfoAt(t, "3", "(parameter) callback: (x: \"hi\") => number", "")

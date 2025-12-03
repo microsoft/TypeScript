@@ -15,7 +15,8 @@ func TestCompletionListInArrowFunctionInUnclosedCallSite01(t *testing.T) {
 	const content = `declare function foo(...params: any[]): any;
 function getAllFiles(rootFileNames: string[]) {
     var processedFiles = rootFileNames.map(fileName => foo(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

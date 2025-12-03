@@ -37,6 +37,7 @@ import { Component } from './component.js';
  * @extends Component/*1*/
  */
 export class Player extends Component {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

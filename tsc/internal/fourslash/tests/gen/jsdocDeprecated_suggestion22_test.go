@@ -21,6 +21,7 @@ const foo: {
 } = (a: string, b: string | number) => a + b;
 
 [|foo|](1, 1);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

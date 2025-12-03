@@ -15,7 +15,8 @@ func TestCompletionListInStringLiterals2(t *testing.T) {
 	const content = `"/*1*/       /*2*/\/*3*/
  /*4*/   \\\/*5*/
  /*6*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

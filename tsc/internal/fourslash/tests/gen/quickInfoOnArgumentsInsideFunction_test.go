@@ -14,6 +14,7 @@ func TestQuickInfoOnArgumentsInsideFunction(t *testing.T) {
 	const content = `function foo(x: string) {
     return /*1*/arguments;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(local var) arguments: IArguments", "")
 }

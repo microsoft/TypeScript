@@ -29,7 +29,8 @@ var [|point = new Shapes.Point()|];
 [|function distance2(distanceParam1): void {
     var [|distanceLocal1|];
 }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "point",

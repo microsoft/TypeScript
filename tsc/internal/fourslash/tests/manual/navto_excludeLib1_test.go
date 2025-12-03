@@ -23,7 +23,8 @@ const [|weirdName: number = 1|];
 export const [|weirdName: number|];
 // @filename: /node_modules/bar/package.json
 {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "weirdName",

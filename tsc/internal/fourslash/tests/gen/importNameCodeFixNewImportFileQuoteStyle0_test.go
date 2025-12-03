@@ -18,7 +18,8 @@ f1/*0*/();|]
 export function f1() {}
 // @Filename: module2.ts
 export var v2 = 6;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from './module1';
 import { v2 } from './module2';

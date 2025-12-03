@@ -13,7 +13,8 @@ func TestEmptyArrayInference(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x/*1*/x = true ? [1] : [undefined]; 
 var y/*2*/y = true ? [1] : [];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var xx: number[]", "")
 	f.VerifyQuickInfoAt(t, "2", "var yy: number[]", "")
 }

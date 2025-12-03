@@ -30,7 +30,8 @@ function h(cat, canary, canoodle, cantaloupe, zebra) {}
  * @param /*3*/ {string} /*4*/
  */
 function i(foo, bar) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"0", "3", "4"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

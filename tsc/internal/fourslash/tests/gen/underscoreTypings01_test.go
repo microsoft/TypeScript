@@ -38,7 +38,8 @@ var /*9*/cc = _(aa).map(/*10*/x => x.length);
 var /*11*/dd = aa.map(/*12*/x => x.length);
 
 var e = a.map(x => x./*13*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var b: number[]", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) x: string", "")
 	f.VerifyQuickInfoAt(t, "3", "var c: number[]", "")

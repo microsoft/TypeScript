@@ -23,6 +23,7 @@ func TestQuickInfoJsDocTags7(t *testing.T) {
  * @template T
  */
 const /**/foo = t => t.y;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

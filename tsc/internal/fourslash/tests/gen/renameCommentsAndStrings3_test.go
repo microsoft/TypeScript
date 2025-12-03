@@ -16,6 +16,7 @@ func TestRenameCommentsAndStrings3(t *testing.T) {
     // This is a reference to [|Bar|] in a comment.
     "this is a reference to Bar in a string"
 }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1])
 }

@@ -19,7 +19,8 @@ func TestParameterlessSetter(t *testing.T) {
 }
 var obj = new foo();
 obj.setterOnly = obj./**/getterOnly;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoExists(t)
 }

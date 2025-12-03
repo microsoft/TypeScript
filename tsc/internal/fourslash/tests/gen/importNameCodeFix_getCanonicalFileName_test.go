@@ -15,7 +15,8 @@ func TestImportNameCodeFix_getCanonicalFileName(t *testing.T) {
 export const foo: number;
 // @Filename: /howNow/a.ts
 foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/howNow/a.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { foo } from "brownCow";

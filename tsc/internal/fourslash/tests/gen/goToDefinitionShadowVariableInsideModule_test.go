@@ -15,6 +15,7 @@ func TestGoToDefinitionShadowVariableInsideModule(t *testing.T) {
     var /*shadowVariableDefinition*/shdVar;
     /*shadowVariableReference*/shdVar = 1;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, false, "shadowVariableReference")
 }

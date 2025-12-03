@@ -34,6 +34,7 @@ class C {
 // These are *not* real uses of the 'this' keyword, they are identifiers.
 const x = { /*10*/this: 0 }
 x./*11*/this;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11")
 }

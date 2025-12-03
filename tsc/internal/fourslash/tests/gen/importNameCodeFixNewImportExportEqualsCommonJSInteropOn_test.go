@@ -37,7 +37,8 @@ import es from "es";
 import bar = require("bar");
 
 foo`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/a.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import bar = require("bar");

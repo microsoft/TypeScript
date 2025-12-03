@@ -25,7 +25,8 @@ const afterHeader = 1;
 // non-header comment
 import { bar } from "./b";
 foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/c.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`/*--------------------

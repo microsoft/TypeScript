@@ -85,6 +85,7 @@ func TestReferencesForOverrides(t *testing.T) {
         z.method();
 	}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "foo", "ifoo", "icfoo", "field", "method")
 }

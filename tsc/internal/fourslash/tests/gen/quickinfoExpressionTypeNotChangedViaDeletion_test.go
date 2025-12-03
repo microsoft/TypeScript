@@ -19,7 +19,8 @@ declare const foo: [number, ...number[]];
 declare const bar: number[];
 
 const /*1*/test2: TypeEq<typeof foo, typeof bar> = false;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoIs(t, "const test2: false", "")
 	f.GoToMarker(t, "2")

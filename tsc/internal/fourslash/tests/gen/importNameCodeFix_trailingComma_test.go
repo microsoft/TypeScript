@@ -22,7 +22,8 @@ const x: T3/**/
 export type T1 = 0;
 export type T2 = 0;
 export type T3 = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import {
   T2,

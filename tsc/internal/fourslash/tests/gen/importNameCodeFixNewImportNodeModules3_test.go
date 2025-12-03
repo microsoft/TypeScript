@@ -16,7 +16,8 @@ func TestImportNameCodeFixNewImportNodeModules3(t *testing.T) {
 // @Filename: /node_modules/@types/random/index.d.ts
 export var v1 = 5;
 export function f1();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "random";
 

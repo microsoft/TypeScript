@@ -38,6 +38,7 @@ import * as /*4*/c from "./c"
 import /*5*/cDefault from "./c"
 import * as /*6*/d from "./d"
 import /*7*/dDefault from "./d"`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2", "3", "4", "5", "6", "7")
 }

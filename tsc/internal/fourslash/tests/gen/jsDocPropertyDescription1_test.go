@@ -21,7 +21,8 @@ function stringExample(e: StringExample) {
     console.log(e./*property*/property);
     console.log(e./*string*/anything); 
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "property", "(property) StringExample.property: number", "Something specific")
 	f.VerifyQuickInfoAt(t, "string", "(index) StringExample[string]: any", "Something generic")
 }

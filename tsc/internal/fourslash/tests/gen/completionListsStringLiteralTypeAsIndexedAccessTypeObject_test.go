@@ -23,7 +23,8 @@ interface Foo {
 }
 let fifthCase: Foo["b/*case_5*/"]
 let sixthCase: Foo["qu/*case_6*/"]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"case_1", "case_2", "case_3", "case_4"}, nil)
 	f.VerifyCompletions(t, "case_5", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

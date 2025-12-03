@@ -24,7 +24,8 @@ var p/*1*/2 = p1.then(function (x/*2*/x) {
 });
 p2.then(function (x/*3*/x) {
 } );`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var p2: IPromise<string>", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) xx: string", "")
 	f.VerifyQuickInfoAt(t, "3", "(parameter) xx: string", "")

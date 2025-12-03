@@ -15,7 +15,8 @@ func TestCompletionInAugmentedClassModule(t *testing.T) {
 	const content = `declare class m3f { foo(x: number): void }
 module m3f { export interface I { foo(): void } }
 var x: m3f./**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

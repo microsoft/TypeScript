@@ -32,7 +32,8 @@ const test6 = { unrelated: foo/*6*/ }
 const test7: { foo/*7*/: "unrelated" }
 // @Filename: /h.ts
 const test8: { foo: string } = { foo/*8*/ }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

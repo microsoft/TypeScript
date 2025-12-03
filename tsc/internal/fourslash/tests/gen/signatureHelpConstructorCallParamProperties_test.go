@@ -20,6 +20,7 @@ func TestSignatureHelpConstructorCallParamProperties(t *testing.T) {
     }
 }
 var a = new Circle(/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

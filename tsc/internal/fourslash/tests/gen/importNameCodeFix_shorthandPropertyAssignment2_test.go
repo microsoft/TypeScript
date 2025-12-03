@@ -16,7 +16,8 @@ const a = 1;
 export default a;
 // @Filename: /b.ts
 const b = { /**/a };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import a from "./a";

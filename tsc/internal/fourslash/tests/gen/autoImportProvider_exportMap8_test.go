@@ -49,7 +49,8 @@ import { fooFromIndex } from "dependency";
 fooFrom/*cts*/
 // @Filename: /home/src/workspaces/project/src/foo.mts
 fooFrom/*mts*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "cts")
 	f.VerifyCompletions(t, "cts", &fourslash.CompletionsExpectedList{

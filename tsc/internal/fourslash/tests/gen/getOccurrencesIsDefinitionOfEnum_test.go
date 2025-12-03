@@ -16,6 +16,7 @@ func TestGetOccurrencesIsDefinitionOfEnum(t *testing.T) {
     Second
 }
 let first = /*3*/E.First;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

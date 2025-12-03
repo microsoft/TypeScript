@@ -23,7 +23,8 @@ interface MoreProps extends /*a*/ComponentProps {}
 // @Filename: /b.ts
 import someValue from "./exports.js";
 interface MoreProps extends /*b*/ComponentProps {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "a")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { Component, type ComponentProps } from "./exports.js";

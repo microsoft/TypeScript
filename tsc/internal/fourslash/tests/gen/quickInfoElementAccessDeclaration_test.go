@@ -17,7 +17,8 @@ func TestQuickInfoElementAccessDeclaration(t *testing.T) {
 const mod = {};
 mod["@@thing1"] = {};
 mod["/**/@@thing1"]["@@thing2"] = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "module mod[\"@@thing1\"]\n(property) mod[\"@@thing1\"]: typeof mod.@@thing1", "")
 }

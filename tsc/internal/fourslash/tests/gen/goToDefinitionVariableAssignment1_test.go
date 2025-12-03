@@ -17,7 +17,8 @@ func TestGoToDefinitionVariableAssignment1(t *testing.T) {
 const Foo = module./*def*/exports = function () {}
 Foo.prototype.bar = function() {}
 new [|Foo/*ref*/|]();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "foo.js")
 	f.VerifyBaselineGoToDefinition(t, true, "ref")
 }

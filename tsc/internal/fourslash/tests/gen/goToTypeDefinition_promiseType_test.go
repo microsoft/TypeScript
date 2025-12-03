@@ -17,6 +17,7 @@ async function /*reference*/getUser() { return { name: "Bob" } satisfies User as
 const /*reference2*/promisedBob = getUser() 
 
 export {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference", "reference2")
 }

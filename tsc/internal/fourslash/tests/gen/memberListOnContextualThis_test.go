@@ -18,7 +18,8 @@ func TestMemberListOnContextualThis(t *testing.T) {
 }
 declare function ctx(callback: (this: A) => string): string;
 ctx(function () { return th/*1*/is./*2*/a });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "this: A", "")
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

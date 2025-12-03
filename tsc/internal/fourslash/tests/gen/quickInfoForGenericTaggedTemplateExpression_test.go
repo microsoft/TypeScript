@@ -24,7 +24,8 @@ declare function foo<T>(strings: TemplateStringsArray, ...values: T[]): void;
 /*5*/foo<T2>` + "`" + `` + "`" + `;
 /*6*/foo<T3>` + "`" + `` + "`" + `;
 /*7*/foo` + "`" + `` + "`" + `;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "function foo<number>(strings: TemplateStringsArray, ...values: number[]): void", "")
 	f.VerifyQuickInfoAt(t, "2", "function foo<string | number>(strings: TemplateStringsArray, ...values: (string | number)[]): void", "")
 	f.VerifyQuickInfoAt(t, "3", "function foo<{\n    a: number;\n}>(strings: TemplateStringsArray, ...values: {\n    a: number;\n}[]): void", "")

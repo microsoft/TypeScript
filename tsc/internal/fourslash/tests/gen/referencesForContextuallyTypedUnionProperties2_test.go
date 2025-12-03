@@ -44,6 +44,7 @@ var w: A|B = { b:undefined, common: undefined };
 // Untped -- should not be included
 var u1 = { a: 0, b: 0, common: "" };
 var u2 = { b: 0, common: 0 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

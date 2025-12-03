@@ -24,7 +24,8 @@ func TestNgProxy3(t *testing.T) {
 let x = [1, 2];
 x/**/
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "let x: number[]", "")

@@ -83,7 +83,8 @@ export function getMyConst() {
 	],
 }
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "find")
 	// Open temp file and verify all projects alive
 	f.GoToMarker(t, "temp")
@@ -121,7 +122,8 @@ console.log(C)
 // @Filename: /projects/c/fc.ts
 export const /*find*/C = 42;
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "aTs")
 	f.GoToMarker(t, "bTs")
 	findMarker := f.MarkerByName(t, "find")

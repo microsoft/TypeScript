@@ -38,7 +38,8 @@ if (typeof m./*7*/exportedStrOrNum === "number") {
 else {
     strOrNum = m./*9*/exportedStrOrNum;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var nonExportedStrOrNum: string | number", "")
 	f.VerifyQuickInfoAt(t, "2", "var nonExportedStrOrNum: number", "")
 	f.VerifyQuickInfoAt(t, "3", "var nonExportedStrOrNum: string", "")

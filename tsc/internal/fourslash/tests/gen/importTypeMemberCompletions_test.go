@@ -48,7 +48,8 @@ type G = typeof import("./top")./*7*/
 type H = import("./top")./*8*/
 // @Filename: /usage9.ts
 type H = typeof import("./equals")./*9*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

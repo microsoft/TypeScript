@@ -21,7 +21,8 @@ func TestCompletionListStringParenthesizedExpression(t *testing.T) {
 const a = foo["[|/*1*/|]"];
 const b = foo[("[|/*2*/|]")];
 const c = foo[(("[|/*3*/|]"))];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

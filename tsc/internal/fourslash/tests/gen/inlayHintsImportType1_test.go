@@ -18,7 +18,8 @@ func TestInlayHintsImportType1(t *testing.T) {
 module.exports.a = 1
 // @Filename: /b.js
 const a = require('./a');`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.js")
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: true}})
 }

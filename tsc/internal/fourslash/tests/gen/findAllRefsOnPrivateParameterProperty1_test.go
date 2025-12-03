@@ -19,6 +19,7 @@ func TestFindAllRefsOnPrivateParameterProperty1(t *testing.T) {
         return this./*3*/z;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

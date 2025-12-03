@@ -14,6 +14,7 @@ func TestQuickInfoOnGenericClass(t *testing.T) {
 	const content = `class Contai/**/ner<T> {
     x: T;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "class Container<T>", "")
 }

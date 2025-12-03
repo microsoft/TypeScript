@@ -16,7 +16,8 @@ func TestBasicClassMembers(t *testing.T) {
     constructor (public x: number, public y: number, private z: string) { }
 }
 var t = new n(0, 1, '');`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToEOF(t)
 	f.Insert(t, "t.")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

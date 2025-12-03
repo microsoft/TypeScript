@@ -28,7 +28,8 @@ import * as foo1 from "m/*first*/
 import * as foo1 from "module1/pa/*second*/
 // @Filename: some/path/whatever.ts
 export var x = 9;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"first"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

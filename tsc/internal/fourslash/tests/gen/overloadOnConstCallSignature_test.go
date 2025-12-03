@@ -18,7 +18,8 @@ func TestOverloadOnConstCallSignature(t *testing.T) {
     (name: 'done'): string;
 }
 var /*2*/x = foo(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "foo(name: \"order\"): string", OverloadsCount: 4})
 	f.Insert(t, "\"hi\"")

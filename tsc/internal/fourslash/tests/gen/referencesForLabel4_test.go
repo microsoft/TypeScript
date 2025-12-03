@@ -16,6 +16,7 @@ func TestReferencesForLabel4(t *testing.T) {
         /*2*/break /*3*/label;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

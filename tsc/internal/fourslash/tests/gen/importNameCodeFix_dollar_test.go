@@ -18,7 +18,8 @@ export declare const $: any;
 // @Filename: /index.ts
 import {} from "qwik";
 $/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { $ } from "qwik";

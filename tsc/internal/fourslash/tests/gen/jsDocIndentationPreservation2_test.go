@@ -19,7 +19,8 @@ func TestJsDocIndentationPreservation2(t *testing.T) {
 		Third line.
 */
 function foo/**/(){}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "function foo(): void", "Does some stuff.\n    Second line.\n\tThird line.")
 }

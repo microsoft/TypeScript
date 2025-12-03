@@ -23,7 +23,8 @@ module N {
 var n = new N.D1();
 var /*1*/n2 = new N.D2<number>();
 var /*2*/n3 = new N.D2();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var n2: N.D2<number>", "")
 	f.VerifyQuickInfoAt(t, "2", "var n3: N.D2<unknown>", "")
 }

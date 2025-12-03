@@ -15,7 +15,8 @@ func TestSignatureHelpAtEOF(t *testing.T) {
 }
 
 Foo(/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "Foo(arg1: string, arg2: string): void", ParameterCount: 2, ParameterName: "arg1", ParameterSpan: "arg1: string"})
 }

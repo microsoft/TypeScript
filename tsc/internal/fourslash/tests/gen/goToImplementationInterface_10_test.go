@@ -23,6 +23,7 @@ export class [|C|] implements B {
 	bar = true;
 }
 export class [|D|] extends C { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "def")
 }

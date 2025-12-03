@@ -21,7 +21,8 @@ func TestArgumentsAreAvailableAfterEditsAtEndOfFunction(t *testing.T) {
 		}
 	}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "this.children = ch")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

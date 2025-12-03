@@ -17,7 +17,8 @@ var /*1*/r = x[0];
 interface Foo2 extends Array<string> { }
 var x2: Foo2;
 var /*2*/r2 = x2[0];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var r: string", "")
 	f.VerifyQuickInfoAt(t, "2", "var r2: string", "")
 }

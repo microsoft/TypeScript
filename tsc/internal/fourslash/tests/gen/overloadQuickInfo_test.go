@@ -27,6 +27,7 @@ function Foo();
 function Foo(x?: any, y?: any, z?: any) {
 }
 Fo/**/o();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "function Foo(): any (+12 overloads)", "")
 }

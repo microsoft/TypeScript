@@ -21,7 +21,8 @@ export const x = 0;
 // @Filename: /packages/a/index.d.ts
 // @Symlink: /node_modules/a/index.d.ts
 export const a: number;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/packages/b/b0.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { x } from "./b1";

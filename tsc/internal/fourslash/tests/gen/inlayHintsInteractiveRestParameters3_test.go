@@ -17,6 +17,7 @@ func TestInlayHintsInteractiveRestParameters3(t *testing.T) {
 }
 const foo: [x: number, y: number] = [1, 2];
 fn(...foo, 3, 4);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayParameterNameHints: lsutil.IncludeInlayParameterNameHintsAll}})
 }

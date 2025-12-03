@@ -28,7 +28,8 @@ const obj1: OptionProp = {
 let y1 = <O/*1*/pt pro/*2*/px={2} />;
 let y2 = <Opt {...ob/*3*/j1} />;
 let y2 = <Opt {...obj1} pr/*4*/opx />;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "class Opt", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) propx: number", "")
 	f.VerifyQuickInfoAt(t, "3", "const obj1: OptionProp", "")

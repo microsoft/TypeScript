@@ -13,6 +13,7 @@ func TestRenameImportNamespaceAndShorthand(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[|import * as [|{| "contextRangeIndex": 0 |}foo|] from 'bar';|]
 const bar = { [|foo|] };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1], f.Ranges()[2])
 }

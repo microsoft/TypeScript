@@ -15,6 +15,7 @@ func TestQuickInfoFromEmptyBlockComment(t *testing.T) {
 class Foo {
 }
 var f/*A*/ff = new Foo();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "A", "var fff: Foo", "")
 }

@@ -17,6 +17,7 @@ for (let i = 0; i <= 10; i++) {
    if (i === 1) continue /**/loop;
    if (i === 10) break loop;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "")
 }

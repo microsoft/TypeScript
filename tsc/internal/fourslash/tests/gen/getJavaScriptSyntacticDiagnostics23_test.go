@@ -20,7 +20,8 @@ function Person(age) {
         this.canVote = false;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 }

@@ -27,7 +27,8 @@ const oub/*6*/ = foo/*7*/(b);
 oub.b/*8*/
 oub.b.b/*9*/
 oub.b.a.n.a.n.a/*10*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "const out: {\n    a: {\n        a: ...;\n    };\n}", "")
 	f.VerifyQuickInfoAt(t, "2", "function foo<{\n    a: {\n        a: ...;\n    };\n}>(deep: Deep<{\n    a: {\n        a: ...;\n    };\n}>): {\n    a: {\n        a: ...;\n    };\n}", "")
 	f.VerifyQuickInfoAt(t, "3", "(property) a: {\n    a: {\n        a: ...;\n    };\n}", "")

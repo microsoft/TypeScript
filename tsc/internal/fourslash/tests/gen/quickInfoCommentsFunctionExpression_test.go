@@ -37,6 +37,7 @@ var assi/*14*/gned = /**
   return s.length;
 }
 assig/*16*/ned("hey");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

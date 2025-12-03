@@ -15,6 +15,7 @@ func TestQuickInfoDisplayPartsTypeAlias(t *testing.T) {
 }
 type /*2*/t1 = /*3*/c;
 var /*4*/cInstance: /*5*/t1 = new /*6*/c();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

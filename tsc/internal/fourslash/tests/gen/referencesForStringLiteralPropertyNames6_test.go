@@ -14,6 +14,7 @@ func TestReferencesForStringLiteralPropertyNames6(t *testing.T) {
 	const content = `const x = function () { return 111111; }
 x./*1*/someProperty = 5;
 x["/*2*/someProperty"] = 3;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

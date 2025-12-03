@@ -24,7 +24,8 @@ module.exports = {
 };
 // @Filename: ../node_modules/fake-module/package.json
 { "main":"./notindex.js", "typings":"./notindex.d.ts" }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "fake-module";
 

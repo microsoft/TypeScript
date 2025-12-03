@@ -18,6 +18,7 @@ var foo = /*1*/function /*2*/foo(a = /*3*/foo(), b = () => /*4*/foo) {
 // @Filename: file2.ts
 /// <reference path="file1.ts" />
 foo();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7")
 }

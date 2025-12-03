@@ -14,6 +14,7 @@ func TestSignatureHelpNegativeTests(t *testing.T) {
 	const content = `//inside a comment foo(/*insideComment*/
 cl/*invalidContext*/ass InvalidSignatureHelpLocation { }
 InvalidSignatureHelpLocation(/*validContext*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyNoSignatureHelpForMarkers(t, "insideComment", "invalidContext", "validContext")
 }

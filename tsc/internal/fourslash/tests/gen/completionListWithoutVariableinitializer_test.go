@@ -25,7 +25,8 @@ const { a1 } = a/*10*/;
 const { a2 } = fn({a: a/*11*/});
 const [ a3 ] = a/*12*/;
 const [ a4 ] = fn([a/*13*/]);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

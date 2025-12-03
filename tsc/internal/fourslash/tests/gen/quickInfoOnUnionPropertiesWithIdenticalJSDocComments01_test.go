@@ -36,6 +36,7 @@ func TestQuickInfoOnUnionPropertiesWithIdenticalJSDocComments01(t *testing.T) {
 
 declare let x: DocumentFilter;
 x./**/language`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

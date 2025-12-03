@@ -30,7 +30,8 @@ f(new /*b1*/);
 import * as alpha from "./a";
 alpha.f(new a/*c0*/);
 alpha.f(new /*c1*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"a0", "a1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

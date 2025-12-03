@@ -16,6 +16,7 @@ func TestFindAllRefsModuleDotExports(t *testing.T) {
 /*1*/const b = require("/*2*/./b");
 // @Filename: /b.js
 /*3*/module.exports = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

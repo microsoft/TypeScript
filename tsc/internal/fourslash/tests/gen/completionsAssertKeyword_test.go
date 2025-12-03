@@ -28,7 +28,8 @@ func TestCompletionsAssertKeyword(t *testing.T) {
  import * /*5*/ as those from "those"
 // @Filename: b.js
  import * as thing from "thing" /*js*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "0", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

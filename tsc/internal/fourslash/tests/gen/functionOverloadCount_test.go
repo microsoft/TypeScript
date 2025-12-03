@@ -21,7 +21,8 @@ func TestFunctionOverloadCount(t *testing.T) {
 }
 var i = new C1;
 i.attr(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{OverloadsCount: 3})
 }

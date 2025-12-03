@@ -17,7 +17,8 @@ func TestCodeCompletionEscaping(t *testing.T) {
 	const content = `// @Filename: a.js
 // @allowJs: true
 ___foo; __foo;/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

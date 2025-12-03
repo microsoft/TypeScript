@@ -13,7 +13,8 @@ func TestImplementation01(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Fo/*1*/o {}
 class /*2*/Bar implements Foo {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToImplementation(t, "1")
 }

@@ -21,7 +21,8 @@ interface A {
 function foo(x: A) {
     x./*2*/foo
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 	f.GoToMarker(t, "")
 	f.Insert(t, "\n")

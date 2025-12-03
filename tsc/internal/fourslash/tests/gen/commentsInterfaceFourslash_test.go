@@ -80,7 +80,8 @@ i3_i = {
 i3_i./*43q*/l(/*43*/10);
 i3_i.nc_/*44q*/f(/*44*/10);
 i3_i.nc/*45q*/_l(/*45*/10);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "interface i1", "this is interface 1")
 	f.VerifyQuickInfoAt(t, "2", "var i1_i: i1", "")
 	f.VerifyQuickInfoAt(t, "3", "interface nc_i1", "")

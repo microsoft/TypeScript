@@ -13,6 +13,7 @@ func TestGetOccurrencesIsDefinitionOfBindingPattern(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const { /*1*/x, y } = { /*2*/x: 1, y: 2 };
 const z = /*3*/x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

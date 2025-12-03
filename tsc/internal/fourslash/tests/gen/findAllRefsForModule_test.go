@@ -20,7 +20,8 @@ export const x = 0;
 [|const a = require("/*1*/[|{| "contextRangeIndex": 2 |}../a|]");|]
 // @Filename: /d.ts
  /// <reference path="/*2*/[|./a.ts|]" />`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2")
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, f.Ranges()[1], f.Ranges()[3], f.Ranges()[4])
 }

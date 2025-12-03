@@ -12,6 +12,7 @@ func TestAssertContextualType(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `<(aa: number) =>void >(function myFn(b/**/b) { });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(parameter) bb: number", "")
 }

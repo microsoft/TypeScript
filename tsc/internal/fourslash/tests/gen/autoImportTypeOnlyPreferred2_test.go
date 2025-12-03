@@ -29,7 +29,8 @@ import { useState } from "react";
 import type { ComponentType } from "react";
 
 type _ = ComponentProps/*2*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import type { ComponentType } from "react";

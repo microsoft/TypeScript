@@ -32,6 +32,7 @@ interface Two {
 var x : One | Two;
 
 x.common./*x*/a;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "one", "base", "x")
 }

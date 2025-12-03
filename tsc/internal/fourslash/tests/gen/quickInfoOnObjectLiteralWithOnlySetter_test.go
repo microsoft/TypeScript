@@ -21,7 +21,8 @@ func TestQuickInfoOnObjectLiteralWithOnlySetter(t *testing.T) {
 };
 var /*3*/point = makePoint(2);
 point./*2*/x = 30;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

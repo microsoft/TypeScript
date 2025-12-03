@@ -23,6 +23,7 @@ export { [|A|] as [|B|] };
 type [|A|] = 1;
 let [|A|]: [|A|] = 1;
 export type { [|A|] as [|B|] };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

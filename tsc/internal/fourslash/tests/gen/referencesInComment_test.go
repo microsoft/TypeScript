@@ -15,6 +15,7 @@ func TestReferencesInComment(t *testing.T) {
 /* in comments should not find fo/*3*/o or bar/*4*/ */
 class foo { }
 var bar = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

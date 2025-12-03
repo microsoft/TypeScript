@@ -22,7 +22,8 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 /// <reference path="[|./*1*/|]
 /// <reference path=".//*2*/
 /// <reference path=".\/*3*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"0", "2", "3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

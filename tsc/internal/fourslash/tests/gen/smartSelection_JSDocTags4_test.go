@@ -20,6 +20,7 @@ func TestSmartSelection_JSDocTags4(t *testing.T) {
 
 /** @type {Foo} */
 const foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

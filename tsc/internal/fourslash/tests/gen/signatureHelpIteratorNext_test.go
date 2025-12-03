@@ -31,6 +31,7 @@ declare const asyncGenerator: AsyncGenerator<string, void, number>;
 
 asyncGenerator.next(/*7*/);
 asyncGenerator.next(/*8*/ 0);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

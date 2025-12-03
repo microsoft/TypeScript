@@ -15,6 +15,7 @@ func TestCompletionsRecursiveNamespace(t *testing.T) {
     export import M = N;
 }
 type T = N./**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", nil)
 }

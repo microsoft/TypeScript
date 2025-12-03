@@ -16,6 +16,7 @@ func TestGoToImplementationClassMethod_00(t *testing.T) {
 }
 
 new Bar().hel/*reference*/lo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "reference")
 }

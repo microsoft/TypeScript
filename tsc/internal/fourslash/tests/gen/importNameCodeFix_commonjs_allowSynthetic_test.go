@@ -23,7 +23,8 @@ module.exports = MY_EXPORTS;
 const newVar = {
   any: MY_EXPORTS/**/,
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`const MY_EXPORTS = require("./test_module");

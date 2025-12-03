@@ -43,7 +43,8 @@ if (stuff.quantity) {}
 
 /** @type {(a/*8*/: string) => void} */
 function test2(a: string) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "", "")
 	f.VerifyQuickInfoAt(t, "2", "", "")
 	f.VerifyQuickInfoAt(t, "3", "", "")

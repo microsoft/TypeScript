@@ -53,7 +53,8 @@ declare const callableThing5:
 
 callableThing5(/*5*/1)
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "callableThing1(o1: { x: number; } & { y: number; }): void"})
 	f.GoToMarker(t, "2")

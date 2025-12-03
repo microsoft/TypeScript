@@ -18,7 +18,8 @@ export function f1() {}
 export var v1 = 5;
 // @Filename: tripleSlashReference.ts
 var x = 5;/*dummy*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`/// <reference path="./tripleSlashReference.ts" />
 

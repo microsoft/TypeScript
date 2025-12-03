@@ -14,7 +14,8 @@ func TestCompletionListInFunctionDeclaration(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var a = 0;
 function foo(/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", nil)
 	f.Insert(t, "a")
 	f.VerifyCompletions(t, nil, nil)

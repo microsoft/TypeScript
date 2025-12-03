@@ -17,7 +17,8 @@ declare function fn(x: string, y: number);
 declare function fn(x: string);
 // @Filename: signatureHelpInFunctionCallOnFunctionDeclarationInMultipleFiles_file2.ts
 fn(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{OverloadsCount: 2})
 }

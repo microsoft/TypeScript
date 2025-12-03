@@ -44,6 +44,7 @@ let v = new /*3*/THREE.Vector2();
  	},
     "files": ["/src/index.ts", "typings/global.d.ts"]
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2", "3")
 }

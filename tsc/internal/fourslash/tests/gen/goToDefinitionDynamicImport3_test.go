@@ -14,6 +14,7 @@ func TestGoToDefinitionDynamicImport3(t *testing.T) {
 	const content = `// @Filename: foo.ts
 export function /*Destination*/bar() { return "bar"; }
 import('./foo').then(({ [|ba/*1*/r|] }) => undefined);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

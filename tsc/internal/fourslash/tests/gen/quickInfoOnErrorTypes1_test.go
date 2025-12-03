@@ -15,6 +15,7 @@ func TestQuickInfoOnErrorTypes1(t *testing.T) {
     x: number;
     <
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "A", "var f: {\n    (): any;\n    x: number;\n}", "")
 }

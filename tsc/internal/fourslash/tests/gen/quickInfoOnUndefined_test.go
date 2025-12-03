@@ -18,7 +18,8 @@ var x = {
     undefined: 10
 };
 x./*2*/undefined = 30;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var undefined", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) undefined: number", "")
 }

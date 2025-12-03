@@ -37,6 +37,7 @@ class HasConstructor extends Base {
     readonly name: string = '';
 }
 const hasConstructor = new [|/*HasConstructor*/HasConstructor|](cArg)`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "Derived", "SameFile", "HasConstructor", "Base")
 }

@@ -15,6 +15,7 @@ func TestSignatureHelpAfterParameter(t *testing.T) {
 const a: Type = (a/*1*/, b/*2*/) => {}
 const b: Type = function (a/*3*/, b/*4*/) {}
 const c: Type = ({ /*5*/a: { b/*6*/ }}/*7*/ = { }/*8*/, [b/*9*/]/*10*/, .../*11*/c/*12*/) => {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

@@ -15,6 +15,7 @@ func TestInlayHintsQuotePreference2(t *testing.T) {
 	const content = `const a1: "'" = "'";
 const b1: "\\" = "\\";
 export function fn(a = a1, b = b1) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{QuotePreference: lsutil.QuotePreference("single"), InlayHints: lsutil.InlayHintsPreferences{IncludeInlayFunctionParameterTypeHints: true}})
 }

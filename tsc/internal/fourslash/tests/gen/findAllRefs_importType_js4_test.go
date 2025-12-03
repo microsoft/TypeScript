@@ -23,6 +23,7 @@ func TestFindAllRefs_importType_js4(t *testing.T) {
 module.exports = {};
 // @Filename: /b.js
 /** @typedef {import("./a").A} A */`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "")
 }

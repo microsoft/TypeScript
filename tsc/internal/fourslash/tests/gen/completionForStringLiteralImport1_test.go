@@ -25,7 +25,8 @@ import * as foo3 from  "..//*3*/";
 /*someFile2*/
 // @Filename: my_typings/some-module/index.d.ts
 export var x = 9;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "0", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

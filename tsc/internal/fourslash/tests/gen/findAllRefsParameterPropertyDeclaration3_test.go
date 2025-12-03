@@ -17,6 +17,7 @@ func TestFindAllRefsParameterPropertyDeclaration3(t *testing.T) {
         this./*2*/protectedParam += 10;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2")
 }

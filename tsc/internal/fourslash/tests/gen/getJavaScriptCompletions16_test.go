@@ -34,7 +34,8 @@ class Something {
     }
 }
 let x = new Something(/*sig*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "body")
 	f.Insert(t, ".")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

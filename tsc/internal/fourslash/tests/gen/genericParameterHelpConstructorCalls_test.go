@@ -23,7 +23,8 @@ new testClass<IFoo, /*constructor2*/
 new testClass</*constructor3*/>(null, null, null)
 new testClass<,,/*constructor4*/>(null, null, null)
 new testClass<IFoo,/*constructor5*/IFoo,IFoo>(null, null, null)`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "constructor1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>", ParameterName: "T", ParameterSpan: "T extends IFoo"})
 	f.GoToMarker(t, "constructor2")

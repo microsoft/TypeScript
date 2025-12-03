@@ -14,6 +14,7 @@ func TestOutlineSpansBlockCommentsWithoutStatements(t *testing.T) {
 	const content = `[|/*
 / * Some text
   */|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyOutliningSpans(t)
 }

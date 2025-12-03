@@ -25,7 +25,8 @@ export type Fn = () => void
 // repro from #41897
 const /*4*/X = 1;
 export interface X {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "const Unit: number", "")
 	f.VerifyQuickInfoAt(t, "2", "const Unit: number", "")
 	f.VerifyQuickInfoAt(t, "3", "function Fn(): void", "")

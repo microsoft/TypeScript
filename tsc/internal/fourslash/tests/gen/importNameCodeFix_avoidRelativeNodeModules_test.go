@@ -24,7 +24,8 @@ import { a } from "a";
 // @Filename: /c/foo.ts
 [|import { b } from "b";
 a;|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/c/foo.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a } from "a";

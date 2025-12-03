@@ -26,7 +26,8 @@ function f(p1, p2, p3, p4, p5) {
     return p1 + p2 + p3 + p4 + p5 + '.';
 }
 f/*1*/('literal', 'literal', "[|o/*2*/ther1|]", 12);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoExists(t)
 	f.VerifyQuickInfoIs(t, "function f(p1: \"literal\", p2: \"literal\", p3: \"other1\" | \"other2\", p4: \"literal\" | number, p5: 12 | true): string", "I am documentation")

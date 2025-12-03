@@ -29,6 +29,7 @@ func TestGetOccurrencesSwitchCaseDefault2(t *testing.T) {
         break;
     case 16:
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

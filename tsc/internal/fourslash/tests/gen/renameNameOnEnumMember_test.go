@@ -17,7 +17,8 @@ func TestRenameNameOnEnumMember(t *testing.T) {
     thirdMember
 }
 var enumMember = e.[|/**/thirdMember|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 }

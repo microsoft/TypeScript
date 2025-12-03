@@ -18,6 +18,7 @@ class /*definition*/C {
 var c: C;
 // @Filename: goToTypeDefinition_Consumption.ts
 /*reference*/c = undefined;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference")
 }

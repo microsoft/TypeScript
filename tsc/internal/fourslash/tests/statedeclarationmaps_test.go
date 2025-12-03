@@ -47,7 +47,8 @@ new /*1*/A();
 		{ "path": "../a" }
 	]
 }`, disableSourceOfProjectReferenceRedirect)
-			f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
 			f.VerifyBaselineFindAllReferences(t, "1")
 		})
 	}
@@ -129,7 +130,8 @@ export function fnUser() { a./*userFnA*/fnA(); b./*userFnB*/fnB(); a.instanceA; 
 /*dummy*/export const a = 10;
 // @Filename: dummy/tsconfig.json
 {}`
-			f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
 			f.GoToMarker(t, tc.goToMarker)
 			// Ref projects are loaded after as part of this command
 			if strings.HasPrefix(tc.name, "Rename") {
@@ -218,7 +220,8 @@ export function fnUser() {
 /*dummy*/export const a = 10;
 // @Filename: dummy/tsconfig.json
 {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "user")
 	// Ref projects are loaded after as part of this command
 	f.VerifyBaselineWorkspaceSymbol(t, "fn")
@@ -263,7 +266,8 @@ export declare function f(): void;
 	"names":[],
 	"mappings":"AAAA,wBAAgB,CAAC,SAAK"
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }
 
@@ -344,7 +348,8 @@ fn5();
 		t.Run("TestDeclarationMapsRenameWith"+tc.name, func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-			f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
 			f.GoToMarker(t, "dummy")
 			// Ref projects are loaded after as part of this command
 			f.VerifyBaselineRename(t, nil /*preferences*/, "rename")
@@ -359,7 +364,8 @@ fn5();
 		t.Run("TestDeclarationMapsRenameWith"+tc.name+"Edit", func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-			f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
 			// Ref projects are loaded after as part of this command
 			f.VerifyBaselineRename(t, nil /*preferences*/, "rename")
 			f.GoToMarker(t, "firstLine")
@@ -369,7 +375,8 @@ fn5();
 		t.Run("TestDeclarationMapsRenameWith"+tc.name+"EditEnd", func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-			f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
 			// Ref projects are loaded after as part of this command
 			f.VerifyBaselineRename(t, nil /*preferences*/, "rename")
 			f.GoToMarker(t, "lastLine")

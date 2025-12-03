@@ -44,6 +44,7 @@ function /*f8Def*/f8(ij: any): any { return ij; }
 /*f6*/f6();
 /*f7*/f7();
 /*f8*/f8();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8")
 }

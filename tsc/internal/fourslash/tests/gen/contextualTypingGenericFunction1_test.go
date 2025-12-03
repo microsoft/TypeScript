@@ -19,7 +19,8 @@ class C<T> {
 }
 var c = new C();
 c.obj = <S>(/*3*/x) => x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) x: any", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) x: any", "")
 	f.VerifyQuickInfoAt(t, "3", "(parameter) x: any", "")

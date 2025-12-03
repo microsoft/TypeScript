@@ -17,6 +17,7 @@ func TestQuickInfoLink9(t *testing.T) {
      */
     c: (a: number) => void;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

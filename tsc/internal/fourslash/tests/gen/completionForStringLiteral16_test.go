@@ -27,7 +27,8 @@ f1<Foo>("/*3*/",,,);
 f2<Foo>("/*4*/", "/*5*/",);
 f2<Foo>("/*6*/", "/*7*/");
 f2<Foo>("/*8*/", "/*9*/",,,);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

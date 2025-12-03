@@ -20,6 +20,7 @@ declare function getTemplateLiteral3(): ` + "`" + `start${string}\${,$${string}e
 const lit3 = getTemplateLiteral3();
 declare function getTemplateLiteral4(): ` + "`" + `${string}\` + "`" + `,${string}` + "`" + `;
 const lit4 = getTemplateLiteral4();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: true}})
 }

@@ -15,7 +15,8 @@ func TestQuickInfoJSDocFunctionNew(t *testing.T) {
 // @Filename: Foo.js
 /** @type {function (new: string, string): string} */
 var f/**/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "var f: new (arg1: string) => string", "")
 }

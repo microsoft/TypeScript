@@ -23,6 +23,7 @@ export namespace /*8*/m1./*9*/m2 {
 }
 export var /*12*/x = /*13*/m1./*14*/m2;
 export var /*15*/y: typeof /*16*/m1./*17*/m2;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

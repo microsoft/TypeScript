@@ -15,6 +15,7 @@ func TestRenameImportSpecifierPropertyName(t *testing.T) {
 export interface /**/Ginger {}
 // @Filename: dry.ts
 import { Ginger as Ale } from './canada';`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "")
 }

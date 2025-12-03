@@ -18,7 +18,8 @@ func TestRenameInConfiguredProject(t *testing.T) {
 var y = [|globalName|];
 // @Filename: tsconfig.json
 { "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineRename(t, nil /*preferences*/, ToAny(f.Ranges()[1:])...)
 }

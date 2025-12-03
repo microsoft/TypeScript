@@ -22,7 +22,8 @@ class Collection {
 export = Collection as typeof Collection & { default: typeof Collection };
 // @Filename: /index.ts
 Colle/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "Collection",
 		Source:      "./collection",

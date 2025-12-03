@@ -24,7 +24,8 @@ func TestCompletionListFunctionExpression(t *testing.T) {
         }
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "local")
 	f.InsertLine(t, "")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

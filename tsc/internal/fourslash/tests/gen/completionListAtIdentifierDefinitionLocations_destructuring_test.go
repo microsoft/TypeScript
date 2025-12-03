@@ -27,6 +27,7 @@ var {x, y/*variable6*/
 function func1({ a/*parameter1*/
 // @Filename: h.ts
 function func2({ a, b/*parameter2*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, f.Markers(), nil)
 }

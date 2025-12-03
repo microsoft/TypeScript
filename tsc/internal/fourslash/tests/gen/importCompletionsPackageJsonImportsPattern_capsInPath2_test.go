@@ -23,7 +23,8 @@ func TestImportCompletionsPackageJsonImportsPattern_capsInPath2(t *testing.T) {
 export function something(name: string): any;
 // @Filename: /Dev/a.ts
 import {} from "#thing//*2*/";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

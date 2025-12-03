@@ -21,7 +21,8 @@ export function f1() {}
 export var v2 = 6;
 // @Filename: module3.ts
 export var v3 = 6;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "./module1";
 import { v2 } from "./module2";

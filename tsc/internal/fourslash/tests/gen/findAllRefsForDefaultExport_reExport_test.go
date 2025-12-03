@@ -18,6 +18,7 @@ export default /*1*/foo;
 export { /*2*/default } from "./export";
 // @Filename: /re-export-dep.ts
 import /*3*/fooDefault from "./re-export";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2", "3")
 }

@@ -14,6 +14,7 @@ func TestGoToImplementationInterface_03(t *testing.T) {
 	const content = `interface Fo/*interface_definition*/o { hello: () => void }
 
 var x = <Foo> [|{ hello: () => {} }|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "interface_definition")
 }

@@ -19,6 +19,7 @@ var /*4*/y = function () {
 (function /*5*/foo1() {
     /*6*/foo1();
 })();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

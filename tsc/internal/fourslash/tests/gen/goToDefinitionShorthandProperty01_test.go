@@ -17,6 +17,7 @@ declare var /*valueDeclaration3*/id;
 var obj = {[|/*valueDefinition1*/name|], [|/*valueDefinition2*/id|]};
 obj.[|/*valueReference1*/name|];
 obj.[|/*valueReference2*/id|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "valueDefinition1", "valueDefinition2", "valueReference1", "valueReference2")
 }

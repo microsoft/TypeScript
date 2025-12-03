@@ -27,6 +27,7 @@ var x = 0;
 import d from "mod";
 import { a, b, c } from "mod";
 import r = require("mod");|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyOutliningSpans(t, lsproto.FoldingRangeKindImports)
 }

@@ -17,6 +17,7 @@ function foo() {
 }
 class C extends (foo()).[|/*B*/B|] {}
 class C1 extends foo().[|/*B1*/B|] {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "B", "B1")
 }

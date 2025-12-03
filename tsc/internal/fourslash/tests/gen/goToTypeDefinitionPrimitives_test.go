@@ -21,6 +21,7 @@ w./*reference1*/a;
 /*reference2*/x;
 /*reference3*/y;
 /*reference4*/y;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference1", "reference2", "reference3", "reference4")
 }

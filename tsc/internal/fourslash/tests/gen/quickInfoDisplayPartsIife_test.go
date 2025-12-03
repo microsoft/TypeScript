@@ -13,6 +13,7 @@ func TestQuickInfoDisplayPartsIife(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strictNullChecks: true
 var iife = (function foo/*1*/(x, y) { return x })(12);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(local function) foo(x: number, y?: undefined): number", "")
 }

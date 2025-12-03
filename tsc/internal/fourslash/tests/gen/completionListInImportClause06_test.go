@@ -19,7 +19,8 @@ import * as A from "/*1*/";
 export declare let x: number;
 // @Filename: T2/a__b/index.d.ts
 export declare let x: number;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

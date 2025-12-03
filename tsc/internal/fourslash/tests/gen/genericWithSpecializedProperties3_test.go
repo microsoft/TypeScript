@@ -21,7 +21,8 @@ var /*2*/yy = f.y;
 var f2: Foo<string, number>;
 var /*3*/x2 = f2.x;
 var /*4*/y2 = f2.y;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var xx: Foo<number, string>", "")
 	f.VerifyQuickInfoAt(t, "2", "var yy: Foo<string, string>", "")
 	f.VerifyQuickInfoAt(t, "3", "var x2: Foo<string, number>", "")

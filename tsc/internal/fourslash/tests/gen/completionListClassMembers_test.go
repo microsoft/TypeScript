@@ -35,7 +35,8 @@ func TestCompletionListClassMembers(t *testing.T) {
 Class./*staticsOutsideClassScope*/publicStaticMethod();
 var c = new Class();
 c./*instanceMembersOutsideClassScope*/privateProperty;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "staticsInsideClassScope", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

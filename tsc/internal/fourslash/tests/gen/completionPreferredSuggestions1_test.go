@@ -24,7 +24,8 @@ declare let v4: LiteralUnion1<"a" | "b" | "c", string>;
 v4 = "/*4*/";
 declare let v5: LiteralUnion2<"a" | "b" | "c", string>;
 v5 = "/*5*/";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

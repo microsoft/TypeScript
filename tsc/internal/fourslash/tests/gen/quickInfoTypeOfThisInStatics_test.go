@@ -20,7 +20,8 @@ func TestQuickInfoTypeOfThisInStatics(t *testing.T) {
         return 1;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(local var) r: typeof C", "")
 	f.VerifyQuickInfoAt(t, "2", "(local var) r: typeof C", "")
 }

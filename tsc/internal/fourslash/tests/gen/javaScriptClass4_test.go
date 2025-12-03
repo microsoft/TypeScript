@@ -25,7 +25,8 @@ class Foo {
 }
 var x = new Foo();
 x/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ".baz.")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

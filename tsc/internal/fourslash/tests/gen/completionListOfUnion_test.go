@@ -18,7 +18,8 @@ const x: { a: number, b: number } | { a: string, c: string } | { b: boolean } | 
 interface I { a: number; }
 function f(...args: Array<I | I[]>) {}
 f({ /*f*/ });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "x", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

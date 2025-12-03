@@ -24,6 +24,7 @@ export interface A { }
  * @param { [|A/**/|] } a
  */
 function f(a) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "")
 }

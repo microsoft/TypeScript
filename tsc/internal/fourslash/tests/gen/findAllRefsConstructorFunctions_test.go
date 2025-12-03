@@ -20,6 +20,7 @@ f.prototype.setX = function() {
     /*3*/this./*4*/x = 1;
 }
 f.prototype.useX = function() { this./*5*/x; }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5")
 }

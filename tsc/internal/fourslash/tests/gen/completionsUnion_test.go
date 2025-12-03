@@ -16,7 +16,8 @@ func TestCompletionsUnion(t *testing.T) {
 interface Many<T> extends ReadonlyArray<T> { extra: number; }
 class C { private priv: number; }
 const x: I | I[] | Many<string> | C = { /**/ };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -17,7 +17,8 @@ func TestCompletionsDefaultKeywordWhenDefaultExportAvailable(t *testing.T) {
 	const content = `// @filename: index.ts
 export default function () {}
 def/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

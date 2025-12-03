@@ -18,7 +18,8 @@ func TestNavigateToImport(t *testing.T) {
 [|export function bar() {}|]
 // @Filename: user.ts
 import {foo, [|bar as baz|]} from './library';`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "foo",

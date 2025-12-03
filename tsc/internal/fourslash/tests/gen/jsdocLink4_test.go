@@ -25,6 +25,7 @@ function f(x) {
 }
 f/*3*/()
 type Pos = [number, number]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

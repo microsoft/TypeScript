@@ -17,6 +17,7 @@ func TestReferencesForExternalModuleNames(t *testing.T) {
 }
 // @Filename: referencesForGlobals_2.ts
 /*3*/import f = require("/*4*/foo");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

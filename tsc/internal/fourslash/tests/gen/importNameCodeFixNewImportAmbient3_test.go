@@ -29,7 +29,8 @@ declare module "yet-another-ambient-module" {
    export function f3();
    export var v3;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`let a = "I am a non-trivial statement that appears before imports";
 import { v1 } from "ambient-module";

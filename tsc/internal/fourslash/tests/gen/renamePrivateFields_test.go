@@ -18,7 +18,8 @@ func TestRenamePrivateFields(t *testing.T) {
        return this.#foo;
    }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 }

@@ -23,7 +23,8 @@ testFunction<any, /*2*/
 testFunction<any, any, any>(/*3*/
 testFunction<any, any,/*4*/ any>(null, null, null);
 testFunction<, ,/*5*/>(null, null, null);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M", ParameterCount: 3, ParameterName: "T", ParameterSpan: "T extends IFoo"})
 	f.GoToMarker(t, "2")

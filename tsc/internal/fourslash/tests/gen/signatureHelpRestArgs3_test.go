@@ -14,6 +14,7 @@ func TestSignatureHelpRestArgs3(t *testing.T) {
 	const content = `// @target: esnext
 // @lib: esnext
 const layers = Object.assign({}, /*1*/...[]);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

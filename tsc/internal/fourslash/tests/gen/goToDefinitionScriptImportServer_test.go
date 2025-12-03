@@ -21,7 +21,8 @@ func TestGoToDefinitionScriptImportServer(t *testing.T) {
 import [|/*1*/"./scriptThing"|];
 import [|/*2*/"./stylez.css"|];
 import [|/*3*/"./foo.txt"|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToDefinition(t, true, "1", "2", "3")
 }

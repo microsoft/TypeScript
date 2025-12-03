@@ -15,6 +15,7 @@ func TestFindAllReferencesFromLinkTagReference1(t *testing.T) {
     /** {@link /**/A} */
     A
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "")
 }

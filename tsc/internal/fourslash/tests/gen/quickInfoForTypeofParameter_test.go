@@ -15,7 +15,8 @@ func TestQuickInfoForTypeofParameter(t *testing.T) {
     var y/*ref1*/1: string;
     var x: typeof y/*ref2*/1;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "ref1", "(local var) y1: string", "")
 	f.VerifyQuickInfoAt(t, "ref2", "(local var) y1: string", "")
 }

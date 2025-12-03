@@ -20,6 +20,7 @@ new [|/*invokeExpression1*/I|]();
 let /*symbolDeclaration*/I2: {
 };
 new [|/*invokeExpression2*/I2|]();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "invokeExpression1", "invokeExpression2")
 }

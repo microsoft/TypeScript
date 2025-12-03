@@ -25,7 +25,8 @@ interface ContextualInterface2 {
     (this: void, n: number): void;
 }
 let contextualInterface2: ContextualInterface2 = function (th/*2*/is, n) { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "this: ContextualInterface", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) this: void", "")
 }

@@ -36,7 +36,8 @@ convert(1, "")./*3*/
  * @param {number} x
  */
 var test1 = function(x) { return x./*4*/ }, test2 = function(a) { return a./*5*/ };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

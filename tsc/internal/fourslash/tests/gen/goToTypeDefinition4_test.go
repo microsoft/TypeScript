@@ -17,7 +17,8 @@ export const /*def1*/T = "";
 // @Filename: bar.ts
 import { T } from "./foo";
 let x: [|/*reference*/T|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference")
 	f.VerifyBaselineGoToDefinition(t, true, "reference")
 }

@@ -34,7 +34,8 @@ if ("/*6*/" in c1) {}
 class Cls2 { foo = ''; private bar = 0; }
 declare const c2: Cls2;
 if ("/*7*/" in c2) {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1", "2", "3", "4"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

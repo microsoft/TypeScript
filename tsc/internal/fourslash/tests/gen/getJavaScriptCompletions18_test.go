@@ -23,7 +23,8 @@ exports.foo = function(a, b) {
 	a/*a*/;
 	b/*b*/
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "a")
 	f.Insert(t, ".")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{

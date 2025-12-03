@@ -25,7 +25,8 @@ import { /*i*/someExportedVariable } from '../lib/index';
 someExportedVariable;
 // @Filename: /home/src/workspaces/project/tsconfig.json
 {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/home/src/workspaces/project/lib/index.ts")
 	f.GoToFile(t, "/home/src/workspaces/project/src/index.ts")

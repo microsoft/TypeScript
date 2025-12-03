@@ -24,7 +24,8 @@ export default hljs;
 export const h: string;
 // @Filename: /tsconfig.json
 {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "ok")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)

@@ -16,7 +16,8 @@ func TestUpdateSourceFile_jsdocSignature(t *testing.T) {
  * @return {/**/}
  */
 let x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "number")
 }

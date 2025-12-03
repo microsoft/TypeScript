@@ -16,7 +16,8 @@ function functionCall(str: string, num: number) {
 }
 functionCall(/*functionCall1*/);
 functionCall("", /*functionCall2*/1);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "functionCall1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "functionCall(str: string, num: number): void", ParameterName: "str", ParameterSpan: "str: string"})
 	f.GoToMarker(t, "functionCall2")

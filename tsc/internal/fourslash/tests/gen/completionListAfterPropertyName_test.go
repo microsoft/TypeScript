@@ -68,7 +68,8 @@ class Test13 {
 class Test14 {
 	constructor(public a, /*afterConstructorParameterComma*/
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"afterPropertyName", "inMethodParameter", "atMethodParameter", "afterMethodParameter", "afterMethodParameterBeforeComma", "afterMethodParameterComma", "afterConstructorParameter"}, nil)
 	f.VerifyCompletions(t, []string{"inConstructorParameter", "inConstructorParameterAfterModifier", "atConstructorParameter", "atConstructorParameterModifier", "atConstructorParameterAfterModifier", "afterConstructorParameterComma"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

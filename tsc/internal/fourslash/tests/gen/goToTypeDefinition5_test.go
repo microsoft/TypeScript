@@ -15,6 +15,7 @@ func TestGoToTypeDefinition5(t *testing.T) {
 let Foo: /*definition*/unresolved;
 type Foo = { x: string };
 /*reference*/Foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference")
 }

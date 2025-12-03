@@ -26,6 +26,7 @@ function whatever(a: Foo) {
 }
 
 whatever(new Bar());`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "function_call", "declaration")
 }

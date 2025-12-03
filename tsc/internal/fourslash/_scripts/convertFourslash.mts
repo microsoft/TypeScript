@@ -2941,7 +2941,8 @@ func Test${testName}(t *testing.T) {
     ${failingTests.has(testName) ? "t.Skip()" : ""}
     defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = ${content}
-    f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+    f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+    defer done()
     ${isServer ? `f.MarkTestAsStradaServer()\n` : ""}${commands}
 }`;
     return template;

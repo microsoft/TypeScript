@@ -15,7 +15,8 @@ func TestRenameForAliasingExport02(t *testing.T) {
 let x = 1;
 
 export { x as /**/[|y|] };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 }

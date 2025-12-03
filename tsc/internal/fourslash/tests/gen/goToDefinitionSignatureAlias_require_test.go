@@ -20,6 +20,7 @@ const f = require("./a");
 // @Filename: /bar.ts
 import f = require("./a");
 [|/*useTs*/f|]();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "use", "useTs")
 }

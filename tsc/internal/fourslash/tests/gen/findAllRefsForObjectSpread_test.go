@@ -18,6 +18,7 @@ let a2: A2;
 let a12 = { ...a1, ...a2 };
 a12./*2*/a;
 a1./*3*/a;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2", "3")
 }

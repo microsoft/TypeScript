@@ -20,7 +20,8 @@ class SuperCall extends SuperCallBase {
         super(/*superCall*/);
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "superCall")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "SuperCallBase(b: boolean): SuperCallBase", ParameterName: "b", ParameterSpan: "b: boolean"})
 }

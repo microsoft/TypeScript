@@ -35,7 +35,8 @@ var y = x./*14*/getItem(10);
 var x2: IList<IList<number>>;
 var x3: IList<number>;
 var y2 = x./*15*/method(x2, [x3, x3]);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "class Container<T>", "")
 	f.VerifyQuickInfoAt(t, "2", "(type parameter) T in IList<T>", "")
 	f.VerifyQuickInfoAt(t, "3", "(type parameter) T in IList<T>", "")

@@ -20,7 +20,8 @@ func TestRenameDefaultImportDifferentName(t *testing.T) {
 [|import /*2*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] from "./B";|]
 let b = new [|B|]();
 b.test();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1])
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[3], f.Ranges()[4])

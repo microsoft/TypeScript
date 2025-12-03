@@ -15,6 +15,7 @@ func TestCompletionInTypeOf1(t *testing.T) {
     export interface I { foo(): void; }
 }
 var x: typeof m1c./*1*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", nil)
 }

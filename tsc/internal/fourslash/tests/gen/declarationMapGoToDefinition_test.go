@@ -48,7 +48,8 @@ export interface SomeType {
 import * as mod from "./indexdef";
 const instance = new mod.Foo();
 instance.[|/*1*/methodName|]({member: 12});`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

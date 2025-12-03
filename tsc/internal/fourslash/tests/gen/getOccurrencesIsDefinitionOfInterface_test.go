@@ -15,6 +15,7 @@ func TestGetOccurrencesIsDefinitionOfInterface(t *testing.T) {
     p: number;
 }
 let i: /*3*/I = { p: 12 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

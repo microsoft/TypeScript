@@ -17,6 +17,7 @@ func TestQuickInfoDisplayPartsEnum4(t *testing.T) {
 }
 Foo[/*1*/"\t"]
 Foo[/*2*/"\u007f"]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

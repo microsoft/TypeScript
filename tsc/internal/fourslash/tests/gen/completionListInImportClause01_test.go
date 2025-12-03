@@ -24,7 +24,8 @@ import {bar as /*5*/, /*6*/ from "./m1"
 import {foo, bar, baz as b,/*7*/} from "./m1"
 import { type /*8*/ } from "./m1";
 import { type b/*9*/ } from "./m1";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"8", "9"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

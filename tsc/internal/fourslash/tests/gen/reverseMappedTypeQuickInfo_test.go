@@ -38,7 +38,8 @@ type FinalType/*1*/ = ReturnType<typeof test_outer>;
 
 var k: FinalType;
 k.test.test_inner/*2*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "type FinalType = {\n    test: {\n        test_inner: string;\n    };\n}", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) test_inner: string", "")
 }

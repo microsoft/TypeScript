@@ -14,7 +14,8 @@ func TestQuickInfoOnClosingJsx(t *testing.T) {
 	const content = `// @Filename: foo.tsx
 let x = <div>
     /*$*/</div >`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "$")
 	f.VerifyNotQuickInfoExists(t)
 }

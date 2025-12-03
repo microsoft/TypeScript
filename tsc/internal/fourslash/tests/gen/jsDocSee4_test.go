@@ -27,6 +27,7 @@ const t2 = 1
  * @see {@link /*use3*/[|a|].foo()}
  */
 const t3 = 1`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, false, "use1", "use2", "use3")
 }

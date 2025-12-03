@@ -18,6 +18,7 @@ interface Test {
   /*destination*/prop2: number
 }
 bar<Test>(({[|pr/*goto*/op2|]})=>{});`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "goto")
 }

@@ -16,6 +16,7 @@ func TestFindAllRefsDestructureGeneric(t *testing.T) {
 }
 declare const i: I<number>;
 const { /*1*/x } = i;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1")
 }

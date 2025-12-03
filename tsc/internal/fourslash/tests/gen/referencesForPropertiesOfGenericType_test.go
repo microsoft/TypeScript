@@ -20,6 +20,7 @@ x./*2*/doSomething("ss");
 
 var y: IFoo<number>;
 y./*3*/doSomething(12);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

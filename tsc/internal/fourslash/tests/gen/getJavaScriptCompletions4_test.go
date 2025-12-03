@@ -18,7 +18,8 @@ func TestGetJavaScriptCompletions4(t *testing.T) {
 /** @return {number} */
 function foo(a,b) { }
 foo(1,2)./**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

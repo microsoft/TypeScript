@@ -23,7 +23,8 @@ const baz1: Baz = { z: '/*3*/' };
 const baz2: Baz = { x: 0, z: '/*4*/' };
 const baz3: Baz = { x: 0, y: 1, z: '/*5*/' };
 const baz4: Baz = { x: 2, y: 1, z: '/*6*/' };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -21,7 +21,8 @@ export class C { constructor(v: any) {} }
 export interface I {}
 // @Filename: /a.mts
 const x: /**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "I",
 		Source:      "./mod",

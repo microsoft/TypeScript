@@ -25,7 +25,8 @@ func TestHoverOverPrivateName(t *testing.T) {
         return "" + n;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(property) A.#foo: number", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) A.#bar: number", "")
 	f.VerifyQuickInfoAt(t, "3", "(property) A.#baz: () => string", "")

@@ -30,6 +30,7 @@ func TestQuickInfoDisplayPartsClassMethod(t *testing.T) {
 var cInstance = new c();
 /*9*/cInstance./*10*/publicMethod();
 /*11*/c./*12*/staticMethod();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

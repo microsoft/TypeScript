@@ -27,7 +27,8 @@ func TestCompletionListInObjectBindingPattern15(t *testing.T) {
 
 const { /*3*/ } = new Foo();
 const { /*4*/ } = Foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

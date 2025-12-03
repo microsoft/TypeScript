@@ -28,7 +28,8 @@ type Options<T extends keyof CustomElements> = { kind: T } & Required<{ x: Custo
 declare function Component<T extends keyof CustomElements>(props: Options<T>): void;
 
 const c = <Component /**/ kind="component-one" />`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

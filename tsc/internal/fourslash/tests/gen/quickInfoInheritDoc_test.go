@@ -71,6 +71,7 @@ class SubClass extends BaseClass {
      */
     public static readonly /*3*/someProperty: string = 'specific to this class value'
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

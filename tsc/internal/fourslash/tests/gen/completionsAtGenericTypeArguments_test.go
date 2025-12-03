@@ -17,7 +17,8 @@ const foo = new Foo</*1*/, /*2*/,
 
 function foo<T1, T2>() {}
 const f = foo</*3*/, /*4*/,`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

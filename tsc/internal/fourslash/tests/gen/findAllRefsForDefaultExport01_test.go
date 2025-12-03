@@ -17,6 +17,7 @@ func TestFindAllRefsForDefaultExport01(t *testing.T) {
 var x: /*3*/DefaultExportedClass;
 
 var y = new /*4*/DefaultExportedClass;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

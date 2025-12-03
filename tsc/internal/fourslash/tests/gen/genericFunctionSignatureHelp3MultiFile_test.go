@@ -33,7 +33,8 @@ foo4<string>(1,/*4*/     // signature help shows y as string
 foo5<string>(1, (/*5*/   // signature help shows y as T
 foo6(1, </*6*/           // signature help shows y as {}
 foo7(1, <string>(/*7*/   // signature help shows y as T`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "foo1(x: number, callback: (y1: unknown) => number): void"})
 	f.GoToMarker(t, "2")

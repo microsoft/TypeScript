@@ -17,7 +17,8 @@ declare function f(s: string, b: boolean);
 declare function f(n: number, b: boolean);
 
 f(1/**/ var`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "f(n: number): any", ParameterName: "n", ParameterSpan: "n: number", OverloadsCount: 4})
 	f.Insert(t, ", ")

@@ -17,6 +17,7 @@ func TestSmartSelection_simple2(t *testing.T) {
   open(ho/*1*/st: number, data: any): Promise<any>;
   bar(): void/*2*/
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

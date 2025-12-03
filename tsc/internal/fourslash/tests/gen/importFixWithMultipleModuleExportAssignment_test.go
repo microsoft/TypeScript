@@ -22,7 +22,8 @@ module.exports = 42;
 export const foo = 0;
 // @Filename: /c.js
 foo`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/c.js")
 	f.VerifyImportFixAtPosition(t, []string{
 		`const { foo } = require("./b");

@@ -24,7 +24,8 @@ declare var c: C;
 var zz = c();
 
 x/*B*/x = y/*C*/y;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "B", "var xx: B", "")
 	f.VerifyQuickInfoAt(t, "C", "var yy: C", "")
 }

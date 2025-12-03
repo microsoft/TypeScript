@@ -28,6 +28,7 @@ const cc = _k => {}
 const DOOM = { e: 1, m: 1 }
 /** @type {DOOM} */
 const kneeDeep = DOOM.e`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

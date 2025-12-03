@@ -17,7 +17,8 @@ declare const _default: () => void;
 export default _default;
 // @Filename: /test.ts
 [|useFoo|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/test.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import useFoo from "hooks/useFoo";

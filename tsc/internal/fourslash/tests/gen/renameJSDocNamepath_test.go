@@ -17,6 +17,7 @@ func TestRenameJSDocNamepath(t *testing.T) {
  */
 var x = 1
 var /*0*/A = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "0")
 }

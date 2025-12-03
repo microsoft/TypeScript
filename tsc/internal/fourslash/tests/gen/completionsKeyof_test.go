@@ -19,7 +19,8 @@ function f<T extends keyof A>(key: T) {}
 f("[|/*f*/|]");
 function g<T extends keyof B>(key: T) {}
 g("[|/*g*/|]");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "f", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

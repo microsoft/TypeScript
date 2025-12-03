@@ -20,7 +20,8 @@ class /*className*/Sphere {
     constructor() {
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "className", "class Sphere", "")
 	f.GoToMarker(t, "insertHere")
 	f.Insert(t, "ray: Ray;")

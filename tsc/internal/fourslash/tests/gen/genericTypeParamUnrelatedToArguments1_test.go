@@ -20,7 +20,8 @@ var f/*3*/3 = new Foo(3);
 var f/*4*/4: Foo<number> = new Foo(3);
 var f/*5*/5 = new Foo<number>(3);
 var f/*6*/6: Foo<number> = new Foo<number>(3);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var f1: Foo<number>", "")
 	f.VerifyQuickInfoAt(t, "2", "var f2: Foo<number>", "")
 	f.VerifyQuickInfoAt(t, "3", "var f3: any", "")

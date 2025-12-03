@@ -14,7 +14,8 @@ func TestQuickInfoInFunctionTypeReference(t *testing.T) {
 	const content = `function map(fn: (variab/*1*/le1: string) => void) {
 }
 var x = <{ (fn: (va/*2*/riable2: string) => void, a: string): void; }> () => { };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) variable1: string", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) variable2: string", "")
 }

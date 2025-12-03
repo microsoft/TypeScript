@@ -22,6 +22,7 @@ o = {
 o["[|prop|]"];
 o['[|prop|]'];
 o.[|prop|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "prop")
 }

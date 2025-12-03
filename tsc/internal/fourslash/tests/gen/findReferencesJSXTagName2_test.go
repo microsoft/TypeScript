@@ -14,6 +14,7 @@ func TestFindReferencesJSXTagName2(t *testing.T) {
 	const content = `// @Filename: index.tsx
 /*1*/const /*2*/obj = {Component: () => <div/>};
 const element = </*3*/obj.Component/>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

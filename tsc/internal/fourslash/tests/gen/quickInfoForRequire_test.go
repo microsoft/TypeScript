@@ -16,7 +16,8 @@ export class a{}
 //@Filename: quickInfoForRequire_input.ts
 import a = require("./AA/B/*1*/B");
 import b = require(` + "`" + `./AA/B/*2*/B` + "`" + `);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoIs(t, "module a", "")
 	f.GoToMarker(t, "2")

@@ -15,6 +15,7 @@ func TestQuickInfoImportNonunicodePath(t *testing.T) {
 export const foo = 1;
 // @Filename: /test.ts
 import { foo } from "./江南/*1*/今何在/tmp";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "module \"/江南今何在/tmp\"", "")
 }

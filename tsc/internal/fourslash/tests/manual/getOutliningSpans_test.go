@@ -135,6 +135,7 @@ class D<T> extends C<T>[| {
         super<T>(x);
     }|]
 }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyOutliningSpans(t)
 }

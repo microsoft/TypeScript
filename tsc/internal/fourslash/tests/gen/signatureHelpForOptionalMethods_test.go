@@ -21,7 +21,8 @@ const o: Obj = {
     return {};
   }
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "optionalMethod(current: any): any", ParameterName: "current", ParameterSpan: "current: any"})
 }

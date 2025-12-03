@@ -29,6 +29,7 @@ class OtherBar implements Foo {
 
 new Bar().hel/*function_call*/lo();
 new Bar()["hello"]();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "function_call")
 }

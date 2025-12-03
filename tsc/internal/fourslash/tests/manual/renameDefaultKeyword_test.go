@@ -24,7 +24,8 @@ class /*4*/default {}
 const foo = {
     /*5*/[|default|]: 1
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	markers := []string{"1", "2", "3", "4"}
 	for _, marker := range markers {
 		f.GoToMarker(t, marker)

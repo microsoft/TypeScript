@@ -32,7 +32,8 @@ type htm/*inTypeAlias*/
 //  /*inComment5*/
 foo;
 var v10 = /reg/*inRegExp1*/ex/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"openString1", "openString2", "openString3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -16,7 +16,8 @@ func TestDuplicateFunctionImplementation(t *testing.T) {
 }
 function foo<string>(/**/): string { return null; }
 function foo<T>(x: T): T { return null; }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "x: string")
 }

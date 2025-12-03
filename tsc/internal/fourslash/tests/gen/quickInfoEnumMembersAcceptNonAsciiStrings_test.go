@@ -17,7 +17,8 @@ func TestQuickInfoEnumMembersAcceptNonAsciiStrings(t *testing.T) {
     /*Chinese*/Chinese = '苹果',
     /*Japanese*/Japanese = 'りんご',
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "Emoji", "(enum member) Demo.Emoji = \"🍎\"", "")
 	f.VerifyQuickInfoAt(t, "Hebrew", "(enum member) Demo.Hebrew = \"תפוח\"", "")
 	f.VerifyQuickInfoAt(t, "Chinese", "(enum member) Demo.Chinese = \"苹果\"", "")

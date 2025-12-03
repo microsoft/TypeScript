@@ -142,6 +142,7 @@ class cWithConstructorProperty {
         th/*116*/is./*114*/a = /*115*/a + 2 + bb/*117*/bb;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

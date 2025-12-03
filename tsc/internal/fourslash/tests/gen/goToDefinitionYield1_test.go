@@ -18,6 +18,7 @@ func TestGoToDefinitionYield1(t *testing.T) {
 const /*end2*/genFunction = function*() {
     [|/*start2*/yield|] 0;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "start1", "start2")
 }

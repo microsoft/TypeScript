@@ -18,6 +18,7 @@ func TestRenameNamespace(t *testing.T) {
 }
 
 const a: NS.E = NS.E.A;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "")
 }

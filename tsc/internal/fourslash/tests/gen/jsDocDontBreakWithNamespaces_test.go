@@ -28,6 +28,7 @@ bar(''/*bar*/);
 /** @type {function(module:xxxx, module:xxxx): module:xxxxx} */
 function zee() { }
 zee(''/*zee*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

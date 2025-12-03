@@ -28,6 +28,7 @@ o[` + "`" + `num` + "`" + `] = 3;
 
 o['num'];
 o[` + "`" + `num` + "`" + `];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

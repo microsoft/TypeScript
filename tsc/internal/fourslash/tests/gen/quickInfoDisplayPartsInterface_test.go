@@ -14,6 +14,7 @@ func TestQuickInfoDisplayPartsInterface(t *testing.T) {
 	const content = `interface /*1*/i {
 }
 var /*2*/iInstance: /*3*/i;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

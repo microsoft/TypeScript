@@ -32,7 +32,8 @@ export class /*2*/Foo {
 }
 // @Filename: /home/src/workspaces/project/index.ts
 import { Foo/*1*/ } from "a";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/home/src/workspaces/project/index.ts")
 	f.VerifyBaselineGoToDefinition(t, false, "1")

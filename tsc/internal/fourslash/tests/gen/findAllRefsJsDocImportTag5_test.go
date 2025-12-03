@@ -16,6 +16,7 @@ func TestFindAllRefsJsDocImportTag5(t *testing.T) {
 export default function /*0*/a() {}
 // @Filename: /b.js
 /** @import /*1*/a, * as ns from "./a" */`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1")
 }

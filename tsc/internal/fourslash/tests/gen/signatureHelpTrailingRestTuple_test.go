@@ -17,7 +17,8 @@ func TestSignatureHelpTrailingRestTuple(t *testing.T) {
 leading(/*1*/);
 leading(false, /*2*/);
 leading(false, "ok", /*3*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "leading(allCaps: boolean, ...names: string[]): void", ParameterCount: 2, ParameterName: "allCaps", ParameterSpan: "allCaps: boolean", OverloadsCount: 1, IsVariadic: true, IsVariadicSet: true})
 	f.GoToMarker(t, "2")

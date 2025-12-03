@@ -19,7 +19,8 @@ export declare class Dep {}
 Dep/**/
 // @Filename: util.js
 import fs from 'fs';`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { Dep } from "./types/dep";

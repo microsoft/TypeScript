@@ -22,7 +22,8 @@ var o: Foo = {
         // expect xy to have type string, and options to have type FooOptions in here
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) xy: string", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) options: FooOptions", "")
 }

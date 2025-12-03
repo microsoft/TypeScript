@@ -13,6 +13,7 @@ func TestQuickInfoDisplayPartsTypeParameterInTypeAlias(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type /*0*/List</*1*/T> = /*2*/T[]
 type /*3*/List2</*4*/T extends string> = /*5*/T[];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

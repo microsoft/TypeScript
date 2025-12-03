@@ -18,7 +18,8 @@ export as namespace /*0*/myLib;
 // @Filename: 1.ts
 /// <reference path="0.d.ts" />
 /*1*/myLib.doThing();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "0", "export namespace myLib", "")
 	f.VerifyQuickInfoAt(t, "1", "export namespace myLib", "")
 }

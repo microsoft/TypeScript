@@ -20,7 +20,8 @@ func TestCompletionListEnumMembers(t *testing.T) {
 var v = Foo./*valueReference*/ba;
 var t :Foo./*typeReference*/ba;
 Foo.bar./*enumValueReference*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"valueReference", "typeReference"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

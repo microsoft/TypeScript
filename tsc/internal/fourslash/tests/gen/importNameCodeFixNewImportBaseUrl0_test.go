@@ -20,7 +20,8 @@ func TestImportNameCodeFixNewImportBaseUrl0(t *testing.T) {
 }
 // @Filename: a/b.ts
 export function f1() { };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "b";
 

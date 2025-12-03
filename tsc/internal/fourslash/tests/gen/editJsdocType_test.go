@@ -16,7 +16,8 @@ func TestEditJsdocType(t *testing.T) {
 // @Filename: /a.js
 /** @type/**/ */
 const x = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "", "")
 	f.Insert(t, " ")

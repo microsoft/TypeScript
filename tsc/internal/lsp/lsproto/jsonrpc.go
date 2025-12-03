@@ -159,8 +159,12 @@ type RequestMessage struct {
 }
 
 func (r *RequestMessage) Message() *Message {
+	kind := MessageKindRequest
+	if r.ID == nil {
+		kind = MessageKindNotification
+	}
 	return &Message{
-		Kind: MessageKindRequest,
+		Kind: kind,
 		msg:  r,
 	}
 }

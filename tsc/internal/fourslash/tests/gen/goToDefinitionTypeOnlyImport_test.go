@@ -19,6 +19,7 @@ export type { SyntaxKind }
 // @Filename: /c.ts
 import type { SyntaxKind } from './b';
 let kind: [|/*2*/SyntaxKind|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "2")
 }

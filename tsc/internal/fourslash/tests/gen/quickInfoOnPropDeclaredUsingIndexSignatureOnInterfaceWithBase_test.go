@@ -17,6 +17,7 @@ interface B extends P {
 }
 declare const b: B;
 b.t/*1*/est = 10;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(index) B[string]: number", "")
 }

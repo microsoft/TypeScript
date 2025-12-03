@@ -20,7 +20,8 @@ func TestNoQuickInfoInWhitespace(t *testing.T) {
         }
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyNotQuickInfoExists(t)
 	f.GoToMarker(t, "2")

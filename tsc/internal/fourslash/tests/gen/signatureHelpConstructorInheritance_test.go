@@ -23,7 +23,8 @@ class B3 extends B2 {
         super(/*indirectSuperCall*/3);
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "indirectSuperCall")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "B2(n: number): B2", ParameterCount: 1, ParameterName: "n", ParameterSpan: "n: number", OverloadsCount: 2})
 }

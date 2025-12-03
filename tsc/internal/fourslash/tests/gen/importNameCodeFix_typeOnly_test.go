@@ -17,7 +17,8 @@ func TestImportNameCodeFix_typeOnly(t *testing.T) {
 export class A {}
 // @Filename: index.ts
 const a: /**/A`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import type { A } from "./types";

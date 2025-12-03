@@ -18,6 +18,7 @@ func TestJsDocSee3(t *testing.T) {
     function bar ([|/*def2*/a|]: string) {
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, false, "use1")
 }

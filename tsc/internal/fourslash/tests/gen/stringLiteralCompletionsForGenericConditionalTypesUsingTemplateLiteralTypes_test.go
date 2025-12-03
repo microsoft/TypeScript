@@ -20,7 +20,8 @@ func TestStringLiteralCompletionsForGenericConditionalTypesUsingTemplateLiteralT
 declare function consumer<K extends string>(path: PathOf<{a: string, b: {c: string}}, K>) : number;
 
 consumer('b./*ts*/')`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"ts"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

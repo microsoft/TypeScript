@@ -24,7 +24,8 @@ exports.f1 = f1;
   "main": "bin/lib/index.js",
   "types": "bin/lib/index.d.ts"
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { f1 } from "@scope/package-name";
 

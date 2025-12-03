@@ -17,6 +17,7 @@ interface I {
     x: number;
 }
 const i: I = { /**/x: 0 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(property) I.x: number", "Documentation")
 }

@@ -23,7 +23,8 @@ class Q<T> {
   public select<Keys extends keyof T>(...args: Keys[]) {}
 }
 new Q<{ id: string; name: string }>().select("name", "/*ts3*/");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"ts1", "ts2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

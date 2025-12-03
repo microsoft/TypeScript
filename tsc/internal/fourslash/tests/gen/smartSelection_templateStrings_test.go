@@ -14,6 +14,7 @@ func TestSmartSelection_templateStrings(t *testing.T) {
 	const content = `` + "`" + `a /*1*/b ${
   '/*2*/c'
 } d` + "`" + ``
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

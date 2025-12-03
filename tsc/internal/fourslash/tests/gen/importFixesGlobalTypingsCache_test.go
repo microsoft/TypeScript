@@ -23,7 +23,8 @@ export class BrowserRouter {}
  export const BrowserRouter = () => null;
 // @Filename: /project/index.js
 BrowserRouter/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/project/index.js")
 	f.VerifyImportFixAtPosition(t, []string{
 		`const { BrowserRouter } = require("react-router-dom");

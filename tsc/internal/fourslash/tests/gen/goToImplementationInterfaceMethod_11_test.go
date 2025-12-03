@@ -17,6 +17,7 @@ func TestGoToImplementationInterfaceMethod_11(t *testing.T) {
 
 var x = <Foo> { [|hello|]: () => {} };
 var y = <Foo> (((({ [|hello|]: () => {} }))));`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "reference")
 }

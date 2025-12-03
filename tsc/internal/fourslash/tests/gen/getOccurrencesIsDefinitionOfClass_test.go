@@ -18,6 +18,7 @@ func TestGetOccurrencesIsDefinitionOfClass(t *testing.T) {
     }
 }
 let c = new /*3*/C();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

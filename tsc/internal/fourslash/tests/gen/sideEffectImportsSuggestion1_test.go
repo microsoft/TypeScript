@@ -23,6 +23,7 @@ var a = 10;
 // @filename: node_modules/c.js
 exports.a = 10;
 c = 10;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

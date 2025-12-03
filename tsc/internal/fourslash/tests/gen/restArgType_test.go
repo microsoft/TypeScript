@@ -39,7 +39,8 @@ var t7: (...a1: string[]) => void = (/*t71*/f1, /*t72*/f2, /*t73*/f3) => { }; //
 var t8: (...a1: string[]) => void = (/*t8*/f1: number[]) => { };
 // Explicit initialization value
 var t9: (a1: string[], a2: string[]) => void = (/*t91*/f1 = 4, /*t92*/f2 = [false, true]) => { };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) restArgs: any[]", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) restArgs: any[]", "")
 	f.VerifyQuickInfoAt(t, "3", "(parameter) y: string[]", "")

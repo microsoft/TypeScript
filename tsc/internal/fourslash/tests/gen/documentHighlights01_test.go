@@ -16,7 +16,8 @@ func TestDocumentHighlights01(t *testing.T) {
 function [|f|](x: typeof [|f|]) {
     [|f|]([|f|]);
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

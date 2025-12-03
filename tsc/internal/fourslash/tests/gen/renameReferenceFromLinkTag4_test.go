@@ -16,6 +16,7 @@ func TestRenameReferenceFromLinkTag4(t *testing.T) {
     A,
     B
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, "")
 }

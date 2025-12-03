@@ -20,7 +20,8 @@ interface C<T extends A> {
 }
 
 var v2: C<B>; // should not work`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "interface B { b: string; }")
 }

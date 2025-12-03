@@ -21,7 +21,8 @@ declare function isString(v: any): v is string;
 if (isString(someEnv)) {
   someEnv/*1*/.charAt(0);
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "app.ts")
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoIs(t, "(alias) const someEnv: string\nimport someEnv", "")

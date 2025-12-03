@@ -23,6 +23,7 @@ f</*f0*/;
 f<number, /*f1*/;
 f<number, string, /*f2*/;
 f<number, string, boolean, /*f3*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

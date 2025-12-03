@@ -21,6 +21,7 @@ class Bar extends Foo {
     /** [|@override{|"name": "1"|} |]*/
     m() {}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1")
 }

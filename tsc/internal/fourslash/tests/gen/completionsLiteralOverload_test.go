@@ -27,7 +27,8 @@ addListener("/*ts*/");
 (<ListenerComponent type="/*tsx*/" />);
 // @Filename: /b.js
 addListener("/*js*/");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"ts", "tsx", "js"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

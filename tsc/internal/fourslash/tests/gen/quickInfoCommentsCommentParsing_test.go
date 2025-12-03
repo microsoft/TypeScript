@@ -212,6 +212,7 @@ jsDocComme/*47q*/ntAlignmentTest3("hello",1, 2);
 /**/
 class NoQuic/*50q*/kInfoClass {
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

@@ -18,6 +18,7 @@ func TestJsDocPropertyDescription10(t *testing.T) {
 function multipleClass(e: typeof MultipleClass) {
     console.log(e./*multipleClass*/anything);
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "multipleClass", "any", "")
 }

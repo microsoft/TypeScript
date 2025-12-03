@@ -23,7 +23,8 @@ f./*notOk*/bar;
 export interface Foo {
     bar: string;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "okWithAlias")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 	f.VerifyRenameFailed(t, nil /*preferences*/)

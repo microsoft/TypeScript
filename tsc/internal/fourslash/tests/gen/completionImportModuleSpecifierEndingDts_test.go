@@ -17,7 +17,8 @@ func TestCompletionImportModuleSpecifierEndingDts(t *testing.T) {
  export declare class Test {}
 //@Filename:module.ts
 import { Test } from ".//**/"`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

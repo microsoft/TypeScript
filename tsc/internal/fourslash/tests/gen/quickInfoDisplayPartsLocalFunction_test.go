@@ -33,6 +33,7 @@ func TestQuickInfoDisplayPartsLocalFunction(t *testing.T) {
     /*15*/foowith3overload(true);
 }
 /*16*/outerFoo();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

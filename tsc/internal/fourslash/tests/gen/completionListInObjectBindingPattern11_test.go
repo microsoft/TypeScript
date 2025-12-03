@@ -18,7 +18,8 @@ func TestCompletionListInObjectBindingPattern11(t *testing.T) {
 }
 
 var { property1: prop1, /**/ }: I;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

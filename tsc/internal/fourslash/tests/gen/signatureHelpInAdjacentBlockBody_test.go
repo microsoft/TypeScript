@@ -15,7 +15,8 @@ func TestSignatureHelpInAdjacentBlockBody(t *testing.T) {
 	const content = `declare function foo(...args);
 
 foo(() => {/*1*/}/*2*/)`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelpPresent(t, &lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindInvoked})
 	f.GoToMarker(t, "2")

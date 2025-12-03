@@ -16,7 +16,8 @@ func TestNavigateToSymbolIterator(t *testing.T) {
 	const content = `class C {
     [|[Symbol.iterator]() {}|]
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "iterator",

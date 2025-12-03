@@ -35,7 +35,8 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
     return this._buildMainButton(props);
 }
 let e1 = <MainButton/*1*/ /*2*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "MainButton(buttonProps: ButtonProps): JSX.Element", ParameterSpan: "buttonProps: ButtonProps", OverloadsCount: 2})
 	f.GoToMarker(t, "2")

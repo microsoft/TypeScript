@@ -18,6 +18,7 @@ declare const user: Pick<User, "name">
 type PickedUser = Pick<User, "name">
 declare const user2: PickedUser
 /*reference2*/user2`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference", "reference2")
 }

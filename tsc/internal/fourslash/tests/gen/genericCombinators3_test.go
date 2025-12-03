@@ -24,7 +24,8 @@ var c2: Collection<number, string>;
 var _: Combinators;
 
 var /*9*/r1a  = _.ma/*1c*/p(c2, (/*1a*/x,/*1b*/y) => { return x + "" });  // check quick info of map here`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1a", "(parameter) x: number", "")
 	f.VerifyQuickInfoAt(t, "1b", "(parameter) y: string", "")
 	f.VerifyQuickInfoAt(t, "1c", "(method) Combinators.map<number, string, string>(c: Collection<number, string>, f: (x: number, y: string) => string): Collection<number, string> (+1 overload)", "")

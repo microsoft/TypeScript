@@ -34,7 +34,8 @@ func TestImportCompletions_importsMap4(t *testing.T) {
 export const isBrowser = true;
 // @Filename: /home/src/workspaces/project/src/a.ts
 import {} from "/*1*/";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

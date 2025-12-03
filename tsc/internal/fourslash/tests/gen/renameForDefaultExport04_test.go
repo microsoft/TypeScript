@@ -21,7 +21,8 @@ export default class /**/[|DefaultExportedClass|] {
 var x: DefaultExportedClass;
 
 var y = new DefaultExportedClass;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 }

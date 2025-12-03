@@ -23,6 +23,7 @@ module /*remoteModuleDefinition*/remoteModule{ export var foo = 1;}
 var foo = new /*remoteClassReference*/remoteClass();
 class fooCls implements /*remoteInterfaceReference*/remoteInterface { }
 var fooVar = /*remoteModuleReference*/remoteModule.foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, false, "remoteVariableReference", "remoteFunctionReference", "remoteClassReference", "remoteInterfaceReference", "remoteModuleReference")
 }

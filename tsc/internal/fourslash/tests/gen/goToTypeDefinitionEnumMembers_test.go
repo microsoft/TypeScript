@@ -18,6 +18,7 @@ func TestGoToTypeDefinitionEnumMembers(t *testing.T) {
 var x = E.value2;
 
 /*reference*/x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference")
 }

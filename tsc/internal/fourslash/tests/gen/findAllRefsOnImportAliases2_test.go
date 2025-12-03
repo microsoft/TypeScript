@@ -18,7 +18,8 @@ func TestFindAllRefsOnImportAliases2(t *testing.T) {
 var c = new /*c2_1*/[|C2|]();
 //@Filename: c.ts
 [|export { /*class2*/[|{| "contextRangeIndex": 6 |}Class|] as /*c3*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}C3|] } from "./a";|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "class0", "class1", "class2", "c2_0", "c2_1", "c3")
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "Class", "C2", "C3")
 }

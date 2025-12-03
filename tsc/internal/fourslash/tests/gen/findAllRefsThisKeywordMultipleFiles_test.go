@@ -20,6 +20,7 @@ func TestFindAllRefsThisKeywordMultipleFiles(t *testing.T) {
  ((x = /*5*/this, y) => /*6*/this)(/*7*/this, /*8*/this);
  // different 'this'
  function f(this) { return this; }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8")
 }

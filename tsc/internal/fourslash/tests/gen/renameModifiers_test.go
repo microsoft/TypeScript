@@ -22,6 +22,7 @@ func TestRenameModifiers(t *testing.T) {
 }|]
 [|[|async|] function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeDelta": -2 |}fn|]() {}|]
 [|[|export|] [|default|] class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeDelta": -3 |}C2|] {}|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[1], f.Ranges()[2], f.Ranges()[5], f.Ranges()[8], f.Ranges()[11], f.Ranges()[14], f.Ranges()[17], f.Ranges()[20], f.Ranges()[23], f.Ranges()[26], f.Ranges()[27])
 }

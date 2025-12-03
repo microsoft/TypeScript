@@ -124,7 +124,8 @@ function /*l*/l(param1: string) { /*9*/param1 = "hello"; }
  second line text
  */
 function /*m*/m(param1: string) { /*10*/param1 = "hello"; }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "a", "var a: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line")
 	f.VerifyQuickInfoAt(t, "b", "var b: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line")
 	f.VerifyQuickInfoAt(t, "c", "var c: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line")

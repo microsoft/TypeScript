@@ -24,6 +24,7 @@ declare namespace debug {
 { "types": "index.d.ts" }
 // @Filename: /packages/playwright-core/src/index.ts
 export const debug: typeof import('../bundles/utils/node_modules//*1*/@types/debug') = require('./utilsBundleImpl').debug;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1")
 }

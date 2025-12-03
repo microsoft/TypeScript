@@ -16,6 +16,7 @@ export var /*1*/x = 12;
 // @Filename: main.ts
 import { /*2*/x } from "./m";
 const y = x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

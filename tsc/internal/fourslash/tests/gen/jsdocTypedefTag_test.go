@@ -61,7 +61,8 @@ c.catAge./*catAge*/;
 var d;d./*dog*/;
 d.dogName./*dogName*/;
 d.dogAge./*dogAge*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, "numberLike", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

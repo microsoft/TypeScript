@@ -21,7 +21,8 @@ func TestGlobalThisCompletion(t *testing.T) {
 )./**/;
 // @Filename: someLib.d.ts
 declare var foo: typeof globalThis;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

@@ -20,7 +20,8 @@ f({
     xyz: ` + "`" + `` + "`" + `,
 });
 declare function f(options: { abc?: number, xyz?: string }): void;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

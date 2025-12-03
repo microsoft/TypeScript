@@ -23,6 +23,7 @@ func TestFindAllReferencesJsDocTypeLiteral(t *testing.T) {
  * @param {number} o.nested.times - twice? probably!??
  */
  function f(o) { return o.nested./*2*/great; }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

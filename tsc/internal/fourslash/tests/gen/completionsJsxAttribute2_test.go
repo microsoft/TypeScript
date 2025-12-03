@@ -30,7 +30,8 @@ declare namespace JSX {
 <div foo={true} /*2*/></div>;
 <div bar="test" /*3*/></div>;
 <div aria-foo /*4*/></div>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

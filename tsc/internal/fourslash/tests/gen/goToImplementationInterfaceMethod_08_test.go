@@ -26,6 +26,7 @@ class Bar extends SuperBar {
 class SubBar extends Bar {
    [|hello|]() {}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "function_call")
 }

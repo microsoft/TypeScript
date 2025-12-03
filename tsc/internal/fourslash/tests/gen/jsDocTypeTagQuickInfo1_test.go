@@ -39,6 +39,7 @@ var /*11*/AnyType;
 var /*12*/QType;
 /** @type {String|Number} */
 var /*13*/SOrN;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

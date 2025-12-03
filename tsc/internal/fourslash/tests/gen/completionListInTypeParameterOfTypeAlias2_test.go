@@ -16,7 +16,8 @@ func TestCompletionListInTypeParameterOfTypeAlias2(t *testing.T) {
 type Map1<K, /*1*/V> = [];
 type Map1<K,V> = /*2*/[];
 type Map1<K1, V1> = </*3*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"0", "1"}, nil)
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

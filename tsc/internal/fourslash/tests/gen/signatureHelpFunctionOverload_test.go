@@ -16,7 +16,8 @@ function functionOverload(test: string);
 function functionOverload(test?: string) { }
 functionOverload(/*functionOverload1*/);
 functionOverload(""/*functionOverload2*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "functionOverload1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "functionOverload(): any", ParameterCount: 0, OverloadsCount: 2})
 	f.GoToMarker(t, "functionOverload2")

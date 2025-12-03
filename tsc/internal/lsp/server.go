@@ -73,6 +73,7 @@ func NewServer(opts *ServerOptions) *Server {
 		parseCache:            opts.ParseCache,
 		npmInstall:            opts.NpmInstall,
 		client:                opts.Client,
+		initComplete:          make(chan struct{}),
 	}
 }
 
@@ -171,6 +172,10 @@ type Server struct {
 	// Test options for initializing session
 	client project.Client
 
+	// initComplete is closed when handleInitialized completes.
+	// Used by tests to wait for full initialization.
+	initComplete chan struct{}
+
 	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
 	compilerOptionsForInferredProjects *core.CompilerOptions
 	// parseCache can be passed in so separate tests can share ASTs
@@ -180,6 +185,11 @@ type Server struct {
 }
 
 func (s *Server) Session() *project.Session { return s.session }
+
+// InitComplete returns a channel that is closed when the server has finished
+// processing the initialized notification, including the initial configuration
+// exchange with the client.
+func (s *Server) InitComplete() <-chan struct{} { return s.initComplete }
 
 // WatchFiles implements project.Client.
 func (s *Server) WatchFiles(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
@@ -1078,6 +1088,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.session.DidChangeCompilerOptionsForInferredProjects(ctx, s.compilerOptionsForInferredProjects)
 	}
 
+	close(s.initComplete)
 	return nil
 }
 

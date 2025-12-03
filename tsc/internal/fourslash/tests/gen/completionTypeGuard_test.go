@@ -17,7 +17,8 @@ function assert1(condition: any, msg?: string): /*1*/ ;
 function assert2(condition: any, msg?: string): /*2*/ { }
 function assert3(condition: any, msg?: string): /*3*/
 hi`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

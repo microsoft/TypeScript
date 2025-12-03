@@ -22,7 +22,8 @@ enum /*1*/Colors {
 }
 var /*4*/x = /*5*/Colors./*6*/Cornflower;
 x = Colors./*7*/FancyPink;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "enum Colors", "Enum of colors")
 	f.VerifyQuickInfoAt(t, "2", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'")
 	f.VerifyQuickInfoAt(t, "3", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'")

@@ -17,7 +17,8 @@ func TestSignatureHelpJSX(t *testing.T) {
 //@jsx: react
 declare var React: any;
 const z = <div>{[].map(x => </**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyNoSignatureHelpWithContext(t, &lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindTriggerCharacter, TriggerCharacter: PtrTo("<"), IsRetrigger: false})
 }

@@ -16,6 +16,7 @@ class /*2*/c { }
 // @Filename: Consumption.ts
  var n = new [|/*1*/c|]();
  var n = new [|c/*3*/|]();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1", "3")
 }

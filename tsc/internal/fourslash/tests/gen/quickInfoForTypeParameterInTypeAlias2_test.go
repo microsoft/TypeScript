@@ -15,7 +15,8 @@ func TestQuickInfoForTypeParameterInTypeAlias2(t *testing.T) {
 type Index<AA> = {[foo: string]: A/*2*/A};
 type GenericMethod<AA> = { method<BB>(): A/*3*/A & B/*4*/B }
 type Nesting<TT> = { method<UU>(): new <WW>() => T/*5*/T & U/*6*/U & W/*7*/W };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(type parameter) AA in type Call<AA>", "")
 	f.VerifyQuickInfoAt(t, "2", "(type parameter) AA in type Index<AA>", "")
 	f.VerifyQuickInfoAt(t, "3", "(type parameter) AA in type GenericMethod<AA>", "")

@@ -20,7 +20,8 @@ func TestQuickInfoOnObjectLiteralWithOnlyGetter(t *testing.T) {
 };
 var /*4*/point = makePoint(2);
 var /*2*/x = point./*3*/x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "function makePoint(x: number): {\n    readonly x: number;\n}", "")
 	f.VerifyQuickInfoAt(t, "2", "var x: number", "")
 	f.VerifyQuickInfoAt(t, "4", "var point: {\n    readonly x: number;\n}", "")

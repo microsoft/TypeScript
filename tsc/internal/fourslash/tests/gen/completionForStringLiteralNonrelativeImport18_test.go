@@ -24,7 +24,8 @@ func TestCompletionForStringLiteralNonrelativeImport18(t *testing.T) {
 import * as foo1 from "/path/w/*first*/
 // @Filename: path/whatever.ts
 export {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"first"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

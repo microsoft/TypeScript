@@ -25,7 +25,8 @@ export const singleQuoted2: ` + "`" + `'single-quoted'` + "`" + ` = '/*6*/'
 
 export const backtickQuoted1: '` + "`" + `backtick-quoted` + "`" + `' = "/*7*/"
 export const backtickQuoted2: '` + "`" + `backtick-quoted` + "`" + `' = ` + "`" + `/*8*/` + "`" + ``
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

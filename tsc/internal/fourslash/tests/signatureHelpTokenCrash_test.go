@@ -22,7 +22,8 @@ foo((/*1*/
 /** This is a JSDoc comment */
 foo/** More comments*/((/*2*/
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySignatureHelpWithCases(t, &fourslash.SignatureHelpCase{
 		MarkerInput: "1",
 		Expected:    nil,

@@ -18,7 +18,8 @@ export const Foo: () => Thing = null as any;
 import {Foo} from "./exporter"
 function f(p = Foo()): void {}
 f(/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "f(p?: Thing): void"})
 }

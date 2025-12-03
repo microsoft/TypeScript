@@ -15,6 +15,7 @@ func TestGoToTypeDefinition_typeReference(t *testing.T) {
 type Box<T> = { value: T };
 declare const boxedUser: Box<User>
 /*reference*/boxedUser`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToTypeDefinition(t, "reference")
 }

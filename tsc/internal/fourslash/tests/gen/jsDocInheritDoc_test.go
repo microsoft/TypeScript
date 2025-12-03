@@ -67,7 +67,8 @@ b.method2/*2*/();
 Bar.method1/*3*/();
 const p1 = b.property1/*4*/;
 const p2 = b.property2/*5*/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "constructor Bar(value: number): Bar", "")
 	f.VerifyQuickInfoAt(t, "2", "(method) Bar.method2(): void", "Foo#method2 documentation")
 	f.VerifyQuickInfoAt(t, "3", "(method) Bar.method1(): void", "Foo#method1 documentation")

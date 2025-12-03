@@ -30,7 +30,8 @@ const x: OtherType/*c*/
 // @Filename: /d.ts
 import type { OtherType } from "./exports1.js";
 const x: OtherOtherType/*d*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "a")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import type SomeType from "./exports1.js";

@@ -35,6 +35,7 @@ func TestReferencesForStaticsAndMembersWithSameNames(t *testing.T) {
 		MixedStaticsClassTest.Foo./*11*/bar;
 	}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11")
 }

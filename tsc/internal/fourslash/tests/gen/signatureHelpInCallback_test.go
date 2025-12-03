@@ -15,7 +15,8 @@ func TestSignatureHelpInCallback(t *testing.T) {
 forEach(/*1*/() => {
     /*2*/
 });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "forEach(f: () => void): any"})
 	f.VerifyNoSignatureHelpForMarkers(t, "2")

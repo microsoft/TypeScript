@@ -42,6 +42,7 @@ function createBarUsingClassDeclaration(): Bar {
         Fo/*declaredClassRef*/o
     };
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "classExpressionRef", "declaredClassRef")
 }

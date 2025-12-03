@@ -19,6 +19,7 @@ enum E {
 interface [|/*2*/Foo|] {
     foo: E.Foo;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, false, "1")
 }

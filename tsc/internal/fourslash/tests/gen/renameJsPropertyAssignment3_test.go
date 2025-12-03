@@ -17,6 +17,7 @@ var C = class  {
 }
 [|C.[|{| "contextRangeIndex": 0 |}staticProperty|] = "string";|]
 console.log(C.[|staticProperty|]);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "staticProperty")
 }

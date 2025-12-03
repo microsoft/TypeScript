@@ -19,7 +19,8 @@ func TestQuickInfoOnThis2(t *testing.T) {
         console.log(thi/*2*/s);
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "this: this", "")
 	f.VerifyQuickInfoAt(t, "2", "this: Bar<T>", "")
 }

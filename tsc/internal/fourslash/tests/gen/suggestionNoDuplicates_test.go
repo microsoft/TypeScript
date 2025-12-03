@@ -19,7 +19,8 @@ import { f } from [|'m'|]
 f
 // @Filename: node_modules/m/index.js
 module.exports.f = function (x) { return x }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{

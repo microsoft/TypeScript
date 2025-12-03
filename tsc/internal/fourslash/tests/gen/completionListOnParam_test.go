@@ -19,7 +19,8 @@ func TestCompletionListOnParam(t *testing.T) {
 class Point {
     public Foo(x: Bar./**/Blah, y: Bar.Blah) { }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

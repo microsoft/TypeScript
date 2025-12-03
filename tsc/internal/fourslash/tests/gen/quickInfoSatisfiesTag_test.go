@@ -17,6 +17,7 @@ func TestQuickInfoSatisfiesTag(t *testing.T) {
 // @filename: /a.js
 /** @satisfies {number} comment */
 const /*1*/a = 1;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

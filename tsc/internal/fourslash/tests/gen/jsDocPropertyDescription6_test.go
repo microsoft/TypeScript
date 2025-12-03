@@ -21,7 +21,8 @@ function literal1Example(e: Literal1Example) {
     console.log(e./*literal2*/anything);
     console.log(e./*literal3*/prefix0);
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "literal1", "(index) Literal1Example[`prefix${string}`]: string | number", "")
 	f.VerifyQuickInfoAt(t, "literal2", "any", "")
 	f.VerifyQuickInfoAt(t, "literal3", "(index) Literal1Example[`prefix${string}` | `prefix${number}`]: number", "Something else")

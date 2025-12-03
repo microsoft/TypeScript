@@ -22,6 +22,7 @@ function bar(firstarg: boolean, secondarg: PropsBag) {}
 bar(true, {
    [|pr/*p2*/opx|]: 10
 })`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "p1", "p2")
 }

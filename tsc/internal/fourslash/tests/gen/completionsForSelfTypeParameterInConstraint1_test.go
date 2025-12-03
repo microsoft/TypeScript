@@ -19,7 +19,8 @@ func TestCompletionsForSelfTypeParameterInConstraint1(t *testing.T) {
 declare function createMachine<Config extends StateMachine</*1*/>>(
   config: Config,
 ): void;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

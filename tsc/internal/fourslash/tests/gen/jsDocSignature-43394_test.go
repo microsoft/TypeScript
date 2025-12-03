@@ -16,6 +16,7 @@ func TestJsDocSignature_43394(t *testing.T) {
  * @property {number} ...
  * /**/@typedef {number} Bar
  */`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

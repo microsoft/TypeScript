@@ -32,7 +32,8 @@ function PointsFunc(): void {
     [|origin1;|]
     [|public _distance(distanceParam): void;|]
 }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "origin",

@@ -14,6 +14,7 @@ func TestSmartSelection_function1(t *testing.T) {
 	const content = `const f1 = () => {
    /**/
 };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

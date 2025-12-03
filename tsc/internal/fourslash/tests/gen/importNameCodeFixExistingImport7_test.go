@@ -16,7 +16,8 @@ f1/*0*/();
 // @Filename: ../other_dir/module.ts
 export var v1 = 5;
 export function f1();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`{ f1, v1 }`,
 	}, nil /*preferences*/)

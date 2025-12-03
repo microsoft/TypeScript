@@ -32,6 +32,7 @@ y./*5*/foo;
 z./*6*/foo;
 Y./*7*/foo;
 Z./*8*/foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2", "3", "4", "5", "6", "7", "8")
 }

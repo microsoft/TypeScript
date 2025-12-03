@@ -13,6 +13,7 @@ func TestQuickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias(t *testing.
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type MixinCtor<A> = new () => /*0*/A & { constructor: MixinCtor</*1*/A> };
 type MixinCtor<A> = new () => A & { constructor: { constructor: MixinCtor</*2*/A> } };`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

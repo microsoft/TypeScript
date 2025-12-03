@@ -39,7 +39,8 @@ implicitAny(/*4*/12);
 explicitVoid(/*5*/13);
 let o = { n: 14, m: explicitLiteral };
 o.m(/*6*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{ParameterName: "n"})
 	f.GoToMarker(t, "2")

@@ -28,7 +28,8 @@ export function foo() {};
     "extends": "./tsconfig.path",
     "compilerOptions": { }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { foo } from "b";
 

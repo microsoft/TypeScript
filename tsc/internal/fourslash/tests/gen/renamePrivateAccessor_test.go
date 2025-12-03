@@ -19,6 +19,7 @@ func TestRenamePrivateAccessor(t *testing.T) {
        return this.[|#foo|];
    }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, ToAny(f.GetRangesByText().Get("#foo"))...)
 }

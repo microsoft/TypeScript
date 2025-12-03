@@ -21,7 +21,8 @@ var c = new Collection<string>();
 var utils: Utils;
 var /*1*/r = utils.fold(c, (s, t) => t, "");
 var /*2*/r2 = utils.fold(c, (s, t) => t);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var r: string", "")
 	f.VerifyQuickInfoAt(t, "2", "var r2: string", "")
 }

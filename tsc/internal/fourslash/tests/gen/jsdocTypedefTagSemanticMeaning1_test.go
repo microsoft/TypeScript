@@ -17,6 +17,7 @@ func TestJsdocTypedefTagSemanticMeaning1(t *testing.T) {
 /*1*/const /*2*/T = 1;
 /** @type {/*3*/T} */
 const n = /*4*/T;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4")
 }

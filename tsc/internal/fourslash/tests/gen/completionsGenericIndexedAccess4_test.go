@@ -33,7 +33,8 @@ declare function create<T extends keyof CustomElements>(name: T, options: Option
 create('hello', { props: { /*1*/ } })
 create('goodbye', { props: { /*2*/ } })
 create('component-one', { props: { /*3*/ } });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

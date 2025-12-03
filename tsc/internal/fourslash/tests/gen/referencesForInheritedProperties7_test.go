@@ -27,6 +27,7 @@ class class2 extends class1 implements interface1 {
 var v: class2;
 v.doStuff();
 v.propName;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2", "3", "4", "5")
 }

@@ -15,6 +15,7 @@ func TestFindAllReferencesOfConstructor_badOverload(t *testing.T) {
     /*1*/constructor(n: number);
     /*2*/constructor(){}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

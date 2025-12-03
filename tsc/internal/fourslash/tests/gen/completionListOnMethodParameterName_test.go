@@ -15,6 +15,7 @@ func TestCompletionListOnMethodParameterName(t *testing.T) {
     foo(nu/**/: number) {
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", nil)
 }

@@ -17,6 +17,7 @@ func TestRenameInheritedProperties1(t *testing.T) {
 
 var v: class1;
 v.[|propName|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "propName")
 }

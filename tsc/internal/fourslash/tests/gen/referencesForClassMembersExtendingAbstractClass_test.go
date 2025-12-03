@@ -23,6 +23,7 @@ class MyClass extends Base {
 var c: MyClass;
 c./*a3*/a;
 c./*method3*/method();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "a1", "a2", "a3", "method1", "method2", "method3")
 }

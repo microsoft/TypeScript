@@ -17,7 +17,8 @@ func TestCompletionsImport_notFromUnrelatedNodeModules(t *testing.T) {
 export function foo() {}
 // @Filename: /src/b.ts
 fo/**/;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

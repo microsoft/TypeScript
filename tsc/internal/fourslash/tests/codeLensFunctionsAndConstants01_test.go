@@ -38,7 +38,8 @@ import { foo, bar } from "./exports";
 foo(5);
 console.log(bar);
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		CodeLens: lsutil.CodeLensUserPreferences{
 			ReferencesCodeLensEnabled:            true,

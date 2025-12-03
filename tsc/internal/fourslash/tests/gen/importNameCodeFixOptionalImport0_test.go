@@ -18,7 +18,8 @@ foo/*0*/();|]
 export function foo() {};
 // @Filename: a/foo.ts
 export { foo } from "./foo/bar";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import * as ns from "./foo";
 ns.foo();`,

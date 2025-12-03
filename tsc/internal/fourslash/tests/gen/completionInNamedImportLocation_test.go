@@ -27,7 +27,8 @@ import { x, y, /*3*/ } from "./file";
 import { x, y, await as await_, /*4*/ } from "./file";
 import { x, y, await as await_, interface as interface_, /*5*/ } from "./file";
 import { x, y, await as await_, interface as interface_, unique, /*6*/ } from "./file";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "a.ts")
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

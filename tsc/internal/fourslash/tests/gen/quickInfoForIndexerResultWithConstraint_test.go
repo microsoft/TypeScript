@@ -18,6 +18,7 @@ function other2<T extends Date>(arg: T) {
     var b: { [x: string]: T };
     var /*1*/r2 = foo(b); // just shows T
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(local var) r2: {\n    [x: string]: T;\n}", "")
 }

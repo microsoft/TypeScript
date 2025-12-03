@@ -15,6 +15,7 @@ func TestSmartSelection_imports(t *testing.T) {
 import { b } from './';
 
 console.log(1);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

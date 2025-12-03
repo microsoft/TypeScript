@@ -16,6 +16,7 @@ func TestGetQuickInfoForIntersectionTypes(t *testing.T) {
 }
 let x = f();
 x/**/();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "let x: () => any", "")
 }

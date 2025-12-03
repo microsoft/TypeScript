@@ -21,7 +21,8 @@ var x: [|DefaultExportedClass|];
 
 var y = new [|DefaultExportedClass|];`
 
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	ranges := f.GetRangesByText().Get("DefaultExportedClass")
 
 	var markerOrRanges []fourslash.MarkerOrRangeOrName

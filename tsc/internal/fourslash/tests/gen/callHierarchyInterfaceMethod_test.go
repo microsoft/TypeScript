@@ -18,7 +18,8 @@ func TestCallHierarchyInterfaceMethod(t *testing.T) {
 const obj: I = { foo() {} };
 
 obj.foo();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyBaselineCallHierarchy(t)
 }

@@ -17,6 +17,7 @@ func TestGoToDefinitionAwait1(t *testing.T) {
 function notAsync() {
     [|/*start2*/await|] Promise.resolve(0);
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "start1", "start2")
 }

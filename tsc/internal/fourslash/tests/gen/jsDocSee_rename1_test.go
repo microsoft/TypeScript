@@ -17,6 +17,7 @@ func TestJsDocSee_rename1(t *testing.T) {
  * @see {[|A|]}
  */
 declare const a: [|A|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRename(t, nil /*preferences*/, ToAny(f.Ranges()[1:])...)
 }

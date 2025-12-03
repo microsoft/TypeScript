@@ -31,7 +31,8 @@ func TestCompletionsJSDocNoCrash1(t *testing.T) {
   </example>
  */
 var ngShowDirective = ['$animate', function($animate) {}];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

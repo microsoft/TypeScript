@@ -50,7 +50,8 @@ if (obj.isDirectory/*6*/()) {
 if (obj.isNetworked/*8*/()) {
     obj.;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(method) FileSystemObject.isFile(): this is Item", "")
 	f.VerifyQuickInfoAt(t, "2", "(method) FileSystemObject.isDirectory(): this is Directory", "")
 	f.VerifyQuickInfoAt(t, "3", "(method) FileSystemObject.isNetworked(): this is (Networked & this)", "")

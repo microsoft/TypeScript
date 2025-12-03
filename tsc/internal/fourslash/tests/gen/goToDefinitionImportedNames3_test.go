@@ -29,6 +29,7 @@ export class /*classDefinition*/Class {
 export interface Interface {
     x;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "classReference", "classAliasDefinition")
 }

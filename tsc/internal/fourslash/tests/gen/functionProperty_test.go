@@ -33,7 +33,8 @@ c./*completionC*/;
 a./*quickInfoA*/x;
 b./*quickInfoB*/x;
 c./*quickInfoC*/x;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "signatureA")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "x(a: number): void"})
 	f.GoToMarker(t, "signatureB")

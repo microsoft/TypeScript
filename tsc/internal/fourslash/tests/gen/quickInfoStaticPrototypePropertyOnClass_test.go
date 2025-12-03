@@ -29,7 +29,8 @@ c1./*1*/prototype;
 c2./*2*/prototype;
 c3./*3*/prototype;
 c4./*4*/prototype;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(property) c1.prototype: c1", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) c2<T>.prototype: c2<any>", "")
 	f.VerifyQuickInfoAt(t, "3", "(property) c3.prototype: c3", "")

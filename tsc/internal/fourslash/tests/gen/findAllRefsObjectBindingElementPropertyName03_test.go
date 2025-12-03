@@ -18,6 +18,7 @@ func TestFindAllRefsObjectBindingElementPropertyName03(t *testing.T) {
 
 var foo: I;
 var [ { property1: prop1 }, { /*2*/property1, property2 } ] = [foo, foo];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

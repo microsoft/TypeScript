@@ -65,6 +65,7 @@ func TestGetOccurrencesPrivate2(t *testing.T) {
     export var exportedThing = 10;
     declare function foo(): string;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
 }

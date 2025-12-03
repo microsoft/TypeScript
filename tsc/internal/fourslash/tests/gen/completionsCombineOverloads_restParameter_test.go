@@ -20,7 +20,8 @@ declare function f(...bs: B[]): void;
 declare function f(...cs: C[]): void;
 f({ /*1*/ });
 f({ a: 1 }, { /*2*/ });`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

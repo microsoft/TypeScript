@@ -14,6 +14,7 @@ func TestAnnotateWithTypeFromJSDoc2(t *testing.T) {
 	const content = `// @Filename: test123.ts
 /** @type {number} */
 var [|x|]: string;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

@@ -14,6 +14,7 @@ func TestQuickInfoOnCatchVariable(t *testing.T) {
 	const content = `function f() {
    try { } catch (/**/e) { }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(local var) e: any", "")
 }

@@ -27,7 +27,8 @@ import {} from "#a//*2*/";
 import {} from "#a/b//*3*/";
 import {} from "#a/b/c//*4*/";
 import {} from "#a/b/c/something//*5*/";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

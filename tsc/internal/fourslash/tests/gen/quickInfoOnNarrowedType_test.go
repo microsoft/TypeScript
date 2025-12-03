@@ -39,7 +39,8 @@ class Foo {
         this./*7*/#privateProperty;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(parameter) strOrNum: string | number", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) strOrNum: number", "")
 	f.VerifyQuickInfoAt(t, "3", "(parameter) strOrNum: string", "")

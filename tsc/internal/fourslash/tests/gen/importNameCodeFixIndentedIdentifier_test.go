@@ -18,7 +18,8 @@ func TestImportNameCodeFixIndentedIdentifier(t *testing.T) {
 }|]
 // @Filename: /b.ts
 export const x = 0;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyImportFixAtPosition(t, []string{
 		`import * as b from "./b";
 {

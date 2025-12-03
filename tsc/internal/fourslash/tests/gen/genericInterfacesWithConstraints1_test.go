@@ -21,7 +21,8 @@ interface G<T, U extends B> {
 var v/*1*/1: G<A, C>;               // Ok
 var v/*2*/2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
 var v/*3*/3: G<G<A, B>, C>;         // Ok`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var v1: G<A, C>", "")
 	f.VerifyQuickInfoAt(t, "2", "var v2: G<{\n    a: string;\n}, C>", "")
 	f.VerifyQuickInfoAt(t, "3", "var v3: G<G<A, B>, C>", "")

@@ -22,7 +22,8 @@ function foo(x) {
 }
 
 fo/**/o()`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyQuickInfoIs(t, "function foo<any>(x: any): void", "Do some foo things")
 }

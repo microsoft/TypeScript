@@ -21,7 +21,8 @@ export interface Foo {
     /*ok3*/[|bar|]: string;
 }
 // @link: /packages/foo -> /packages/first/node_modules/foo`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "ok")
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)
 	f.VerifyRenameSucceeded(t, nil /*preferences*/)

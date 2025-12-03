@@ -32,6 +32,7 @@ function foo(handler: IFeedbackHandler) {
   handler./*3*/handleAccept?.();
   handler.handleReject?.();
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

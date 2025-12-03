@@ -15,6 +15,7 @@ func TestQuickInfoDisplayPartsFunctionIncomplete(t *testing.T) {
 }\
 /*3*/function /*4*/ {
 }\`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

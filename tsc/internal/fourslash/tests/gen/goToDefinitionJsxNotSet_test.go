@@ -20,6 +20,7 @@ export default Foo;
 // @Filename: /bar.jsx
 import Foo from './foo';
 const a = <[|/*use*/Foo|] />`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "use")
 }

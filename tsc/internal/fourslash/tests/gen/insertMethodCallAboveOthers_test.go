@@ -14,7 +14,8 @@ func TestInsertMethodCallAboveOthers(t *testing.T) {
 	const content = `/**/ 
 paired.reduce();
 paired.map(() => undefined);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "paired.reduce();")
 }

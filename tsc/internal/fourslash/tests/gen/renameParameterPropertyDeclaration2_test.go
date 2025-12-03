@@ -17,6 +17,7 @@ func TestRenameParameterPropertyDeclaration2(t *testing.T) {
         this.[|publicParam|] += 10;
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "publicParam")
 }

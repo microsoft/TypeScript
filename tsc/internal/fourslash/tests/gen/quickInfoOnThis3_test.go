@@ -26,7 +26,8 @@ function explicitInterface(th/*4*/is: Restricted): void {
 function explicitLiteral(th/*6*/is: { n: number }): void {
     console.log(th/*7*/is);
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "any", "")
 	f.VerifyQuickInfoAt(t, "2", "(parameter) this: void", "")
 	f.VerifyQuickInfoAt(t, "3", "this: void", "")

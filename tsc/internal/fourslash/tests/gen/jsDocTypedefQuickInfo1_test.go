@@ -39,6 +39,7 @@ function foo1(/*2*/opts1) {
     opts1.x;
 }
 foo1({x: 'abc'});`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

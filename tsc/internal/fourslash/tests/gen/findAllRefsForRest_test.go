@@ -19,6 +19,7 @@ func TestFindAllRefsForRest(t *testing.T) {
 let t: Gen;
 var { x, ...rest } = t;
 rest./*2*/parent;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

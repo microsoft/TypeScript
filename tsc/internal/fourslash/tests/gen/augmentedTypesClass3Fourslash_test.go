@@ -16,7 +16,8 @@ func TestAugmentedTypesClass3Fourslash(t *testing.T) {
 	const content = `class c/*1*/5b { public foo() { } }
 namespace c/*2*/5b { export var y = 2; } // should be ok
 /*3*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "class c5b\nnamespace c5b", "")
 	f.VerifyQuickInfoAt(t, "2", "class c5b\nnamespace c5b", "")
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{

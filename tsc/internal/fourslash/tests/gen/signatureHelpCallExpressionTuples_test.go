@@ -21,7 +21,8 @@ fnVariadicWrapped/*4*/(/*5*/'', /*6*/5);
 function fnNoParams () { }
 var fnNoParamsWrapped = wrap(fnNoParams);
 fnNoParamsWrapped/*7*/(/*8*/);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "3", "var fnWrapped: (str: string, num: number) => void", "")
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "fnWrapped(str: string, num: number): void", ParameterCount: 2, ParameterName: "str", ParameterSpan: "str: string"})

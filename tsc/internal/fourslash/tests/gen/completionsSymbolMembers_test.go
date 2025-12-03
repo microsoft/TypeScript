@@ -24,7 +24,8 @@ namespace N { export const s2 = Symbol("s2"); }
 interface J { [N.s2]: number; }
 declare const j: J;
 j[|./*j*/|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "i", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

@@ -24,6 +24,7 @@ func TestGetOccurrencesIsDefinitionOfInterfaceClassMerge(t *testing.T) {
 }
 let i: /*7*/Numbers = new /*8*/Numbers();
 let x = i.f(i.p + i.m);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8")
 }

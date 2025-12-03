@@ -24,6 +24,7 @@ if (t./*t3*/type === "a") {
 } else {
     t./*t5*/type;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "t0", "t1", "t3", "t4", "t5", "t2", "p0", "p1", "p2")
 }

@@ -17,7 +17,8 @@ var C1 = class D</*1*/T> {}
 var C2 = class D<T, /*2*/
 var C3 = class D<T, /*3*/U>{}
 var C4 = class D<T extends /*4*/>{}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"0", "1", "2", "3"}, nil)
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

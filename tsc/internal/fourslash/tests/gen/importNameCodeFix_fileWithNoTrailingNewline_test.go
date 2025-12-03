@@ -18,7 +18,8 @@ export const bar = 0;
 // @Filename: /c.ts
 foo;
 import { bar } from "./b";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/c.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`foo;

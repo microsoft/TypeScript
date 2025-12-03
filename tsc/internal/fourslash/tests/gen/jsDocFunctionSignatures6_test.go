@@ -21,6 +21,7 @@ func TestJsDocFunctionSignatures6(t *testing.T) {
  */
 function f1(p1, p2, p3, p4){}
 f1(/*1*/'foo', /*2*/'bar', /*3*/'baz', /*4*/'qux');`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSignatureHelp(t)
 }

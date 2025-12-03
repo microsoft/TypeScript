@@ -31,6 +31,7 @@ let opt1 = [|<[|{| "contextRangeIndex": 4 |}Opt|] propx={100} propString />|];
 let opt2 = [|<[|{| "contextRangeIndex": 6 |}Opt|] propx={100} optional/>|];
 let opt3 = [|<[|{| "contextRangeIndex": 8 |}Opt|] wrong />|];
 let opt4 = [|<[|{| "contextRangeIndex": 10 |}Opt|] propx={100} propString="hi" />|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "Opt")
 }

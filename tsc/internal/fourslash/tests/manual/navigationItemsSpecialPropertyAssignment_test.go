@@ -24,7 +24,8 @@ function Cls() {
 [|Cls.staticMethod = function() {}|];
 [|Cls.staticProperty = 0|];
 [|Cls.prototype.instanceMethod = function() {}|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{
 		{
 			Pattern:     "x",

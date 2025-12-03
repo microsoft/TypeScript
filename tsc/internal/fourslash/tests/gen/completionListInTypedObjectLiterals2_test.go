@@ -17,7 +17,8 @@ func TestCompletionListInTypedObjectLiterals2(t *testing.T) {
 }
 var aaa: Foo;
 aaa = { /*9*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "9", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

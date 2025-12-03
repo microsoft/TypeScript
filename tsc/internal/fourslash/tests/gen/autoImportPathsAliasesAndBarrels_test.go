@@ -38,7 +38,8 @@ func TestAutoImportPathsAliasesAndBarrels(t *testing.T) {
  export class Thing1B {}
 // @Filename: /src/dirB/thing2B.ts
  export class Thing2B {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

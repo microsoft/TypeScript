@@ -26,7 +26,8 @@ declare namespace JSX {
 }
 // @filename: /a.tsx
 <my-el /*1*/prop:foo="bar" /*2*/foo="baz" />`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "(property) 'prop:foo': string", "This also appears")
 	f.VerifyQuickInfoAt(t, "2", "(property) foo: string", "This appears")
 }

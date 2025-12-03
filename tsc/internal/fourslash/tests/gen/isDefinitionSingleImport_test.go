@@ -15,6 +15,7 @@ func TestIsDefinitionSingleImport(t *testing.T) {
 export function /*1*/f() {}
 // @filename: b.ts
 import { /*2*/f } from "./a";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

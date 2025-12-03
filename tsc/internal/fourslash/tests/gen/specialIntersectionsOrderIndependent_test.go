@@ -16,7 +16,8 @@ func TestSpecialIntersectionsOrderIndependent(t *testing.T) {
 a('/*1*/')
 declare function b(arg: 'test' | ({} & string)): void
 b('/*2*/')`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, []string{"1", "2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

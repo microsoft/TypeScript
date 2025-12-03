@@ -23,7 +23,8 @@ var f: IFoo;
 var f2: IFoo2;
 f./*1*/; // completion here shows bar with return type is any
 f2./*2*/ // here bar has return type any, but bar2 is Foo2`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

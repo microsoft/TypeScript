@@ -14,7 +14,8 @@ func TestQualifyModuleTypeNames(t *testing.T) {
 	const content = `module m { export class c { } };
 function x(arg: m.c) { return arg; }
 x(/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "x(arg: m.c): m.c"})
 }

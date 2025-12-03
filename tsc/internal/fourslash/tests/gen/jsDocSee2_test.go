@@ -25,6 +25,7 @@ const e = ""
 const f = ""
 /** @see d@{/*use7*/[|fff|]} partial reference */
 const g = ""`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "use1", "use2", "use3", "use4", "use5", "use6", "use7")
 }

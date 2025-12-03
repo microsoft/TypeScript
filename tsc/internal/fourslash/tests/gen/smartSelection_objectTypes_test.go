@@ -16,6 +16,7 @@ func TestSmartSelection_objectTypes(t *testing.T) {
   /*2*/readonly /*3*/bar: { x: num/*4*/ber };
   /*5*/meh
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineSelectionRanges(t)
 }

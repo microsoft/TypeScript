@@ -17,7 +17,8 @@ func TestSignatureHelpEmptyList(t *testing.T) {
 Foo(/*1*/);
 function Bar<T>(arg1: string, arg2: string) { }
 Bar</*2*/>();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "Foo(arg1: string, arg2: string): void", ParameterCount: 2, ParameterName: "arg1", ParameterSpan: "arg1: string"})
 	f.GoToMarker(t, "2")

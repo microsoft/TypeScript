@@ -14,6 +14,7 @@ func TestCodeFixInferFromUsageBindingElement(t *testing.T) {
 	const content = `function f([car, cdr]) {
     return car + cdr + 1
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

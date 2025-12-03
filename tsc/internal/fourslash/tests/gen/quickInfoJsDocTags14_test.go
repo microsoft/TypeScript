@@ -21,6 +21,7 @@ func TestQuickInfoJsDocTags14(t *testing.T) {
  * @returns {number}
  */
 function /**/fn(options, callback = null) { }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

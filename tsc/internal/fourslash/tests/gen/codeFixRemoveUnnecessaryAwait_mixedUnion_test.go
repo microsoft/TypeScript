@@ -19,6 +19,7 @@ async function fn1(a: Promise<void> | void) {
 async function fn2<T extends Promise<void> | void>(a: T) {
   await a;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifySuggestionDiagnostics(t, nil)
 }

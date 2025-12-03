@@ -16,7 +16,8 @@ func TestQuickInforForSucessiveInferencesIsNotAny(t *testing.T) {
 declare const b: boolean;
 const obj/*1*/ = schema(b);
 const actualTypeOfNested/*2*/ = schema(obj);`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "const obj: {\n    field: boolean;\n}", "")
 	f.VerifyQuickInfoAt(t, "2", "const actualTypeOfNested: {\n    field: {\n        field: boolean;\n    };\n}", "")
 }

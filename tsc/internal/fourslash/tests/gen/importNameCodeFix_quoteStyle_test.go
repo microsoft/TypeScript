@@ -16,7 +16,8 @@ func TestImportNameCodeFix_quoteStyle(t *testing.T) {
 export const foo: number;
 // @Filename: /b.ts
 [|foo;|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { foo } from './a';

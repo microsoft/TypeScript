@@ -26,6 +26,7 @@ function a1(p) {
 }
 
 x - /**/a1()`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "function a1(p: any): number", "This is a very cool function that is very nice.")
 }

@@ -22,6 +22,7 @@ console.log("b.ts");
 // @Filename: /c.js
 require("./b");
 require("globals");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2")
 }

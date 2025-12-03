@@ -24,7 +24,8 @@ interface B extends I {
 type F = A | B
 const f: F = { colour: "green" }
 f.colour/*1*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
 	f.VerifyQuickInfoIs(t, "(property) colour: \"green\" | \"red\" | \"yellow\"", "The colour")

@@ -25,6 +25,7 @@ func TestReferencesForExpressionKeywords(t *testing.T) {
 "x" /*in*/in C;
 undefined /*instanceof*/instanceof C;
 undefined /*as*/as C;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "new", "void", "typeof", "yield", "await", "in", "instanceof", "as", "delete")
 }

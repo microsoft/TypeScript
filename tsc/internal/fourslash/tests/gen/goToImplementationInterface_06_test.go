@@ -19,6 +19,7 @@ interface SomeOtherType {}
 
 let x: Foo = [|class { constructor (a: number) {} }|];
 let y = <Foo> [|class { constructor (a: number) {} }|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "interface_definition")
 }

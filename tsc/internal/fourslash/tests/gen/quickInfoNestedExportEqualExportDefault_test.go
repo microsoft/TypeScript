@@ -15,6 +15,7 @@ func TestQuickInfoNestedExportEqualExportDefault(t *testing.T) {
    export/*1*/ default/*2*/ {
    }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

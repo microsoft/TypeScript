@@ -18,6 +18,7 @@ declare namespace JSX {
 }
 // @filename: /a.tsx
 </**/a:b a="accepted" b="rejected" />;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineHover(t)
 }

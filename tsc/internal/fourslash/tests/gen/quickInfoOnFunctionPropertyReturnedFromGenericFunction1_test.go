@@ -20,6 +20,7 @@ func TestQuickInfoOnFunctionPropertyReturnedFromGenericFunction1(t *testing.T) {
 }
 
 createProps({})./**/createVariants();`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "(property) getProps<{}>.createVariants: () => void", "")
 }

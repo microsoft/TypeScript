@@ -18,6 +18,7 @@ class Foo {
 const d: 'foo' = 'foo'
 declare const ff: Foo
 ff.f = '[|foo|]'`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "foo")
 }

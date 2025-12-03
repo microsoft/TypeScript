@@ -18,6 +18,7 @@ interface FC<P = {}> {
 
 const Thing: FC = (props) => <div></div>;
 const HelloWorld = () => <[|/**/Thing|] />;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "")
 }

@@ -15,7 +15,8 @@ func TestEditTemplateConstraint(t *testing.T) {
  * @template {/**/
  */
 function f() {}`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "n")
 	f.Insert(t, "u")

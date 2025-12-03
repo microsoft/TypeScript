@@ -14,6 +14,7 @@ func TestFindAllRefsWithLeadingUnderscoreNames8(t *testing.T) {
 	const content = `(/*1*/function /*2*/__foo() {
     /*3*/__foo();
 })`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "1", "2", "3")
 }

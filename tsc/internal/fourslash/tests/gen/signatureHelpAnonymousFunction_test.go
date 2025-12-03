@@ -15,7 +15,8 @@ func TestSignatureHelpAnonymousFunction(t *testing.T) {
     return null;
 }
 anonymousFunctionTest(5, "")(/*anonymousFunction1*/1, /*anonymousFunction2*/"");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "anonymousFunction1")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "(a: number, b: string): string", ParameterCount: 2, ParameterName: "a", ParameterSpan: "a: number"})
 	f.GoToMarker(t, "anonymousFunction2")

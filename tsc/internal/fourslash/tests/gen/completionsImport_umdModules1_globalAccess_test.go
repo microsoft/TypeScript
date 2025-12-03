@@ -28,7 +28,8 @@ export as namespace classNames;
 import * as React from 'react';
 
 const el1 = <div className={class/*1*/}>foo</div>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "1")
 	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

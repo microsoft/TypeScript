@@ -20,7 +20,8 @@ func TestStaticGenericOverloads1(t *testing.T) {
 }
 var a = new A<number>();
 A.B(/**/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{OverloadsCount: 2})
 	f.Insert(t, "a")

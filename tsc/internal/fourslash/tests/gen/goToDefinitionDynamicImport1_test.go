@@ -15,6 +15,7 @@ func TestGoToDefinitionDynamicImport1(t *testing.T) {
 /*Destination*/export function foo() { return "foo"; }
 import([|"./f/*1*/oo"|])
 var x = import([|"./fo/*2*/o"|])`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "1", "2")
 }

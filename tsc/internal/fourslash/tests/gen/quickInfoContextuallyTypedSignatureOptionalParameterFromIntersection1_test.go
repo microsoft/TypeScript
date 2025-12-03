@@ -15,6 +15,7 @@ func TestQuickInfoContextuallyTypedSignatureOptionalParameterFromIntersection1(t
 const optionals: ((a?: number) => unknown) & ((b?: string) => unknown) = (
   arg,
 ) =/**/> {};`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "function(arg: string | number | undefined): void", "")
 }

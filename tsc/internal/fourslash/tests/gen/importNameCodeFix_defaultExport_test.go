@@ -19,7 +19,8 @@ class C {}
 export default C;
 // @Filename: /b.js
 [|C;|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/b.js")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import C from "./a";

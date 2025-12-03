@@ -17,6 +17,7 @@ export = SomeModule;
 // @Filename: b.ts
 import M = require("./a");
 import C = M.[|SomeClass|];`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "SomeClass")
 }

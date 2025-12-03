@@ -15,7 +15,8 @@ func TestCompletionListInUnclosedFunction03(t *testing.T) {
 	const content = `function foo(x: string, y: number, z: boolean) {
     function bar(a: number, b: string, c: typeof /*1*/
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

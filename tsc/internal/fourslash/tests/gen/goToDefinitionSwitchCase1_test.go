@@ -14,6 +14,7 @@ func TestGoToDefinitionSwitchCase1(t *testing.T) {
 	const content = `switch (null ) {
   [|/*start*/case|] null: break;
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "start")
 }

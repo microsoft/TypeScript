@@ -37,7 +37,8 @@ const less = 1 </*lessThan*/;
 const closeTag = <div> foo <//*closeTag*/;
 import something from "./foo//*path*/";
 const divide = 1 //*divide*/`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "tag", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

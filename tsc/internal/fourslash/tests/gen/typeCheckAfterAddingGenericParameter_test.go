@@ -23,7 +23,8 @@ interface I<X, X> {
     f2<X>(/*addParam*/a: X): X;
 }
 `
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "addParam")
 	f.Insert(t, ", X")
 	f.GoToMarker(t, "addTypeParam")

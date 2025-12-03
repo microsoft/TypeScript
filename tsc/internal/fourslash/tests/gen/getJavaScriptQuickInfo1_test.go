@@ -15,6 +15,7 @@ func TestGetJavaScriptQuickInfo1(t *testing.T) {
 // @Filename: Foo.js
 /** @type {function(new:string,number)} */
 var /**/v;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "", "var v: new (arg1: number) => string", "")
 }

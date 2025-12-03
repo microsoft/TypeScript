@@ -16,6 +16,7 @@ func TestGetOccurrencesConst04(t *testing.T) {
     constructor(public con/*3*/st foo) {
     }
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, "1", "2", "3")
 }

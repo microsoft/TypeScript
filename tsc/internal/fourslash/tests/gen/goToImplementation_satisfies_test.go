@@ -19,6 +19,7 @@ interface /*def*/I {
 function f() {
     const foo = { foo: '' } satisfies [|I|];
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToImplementation(t, "def")
 }

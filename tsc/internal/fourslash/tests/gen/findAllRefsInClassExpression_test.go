@@ -15,6 +15,7 @@ func TestFindAllRefsInClassExpression(t *testing.T) {
 new class C implements I {
    /*1*/boom(){}
 }`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1")
 }

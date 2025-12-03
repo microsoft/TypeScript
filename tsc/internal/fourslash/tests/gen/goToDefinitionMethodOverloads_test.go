@@ -26,6 +26,7 @@ MethodOverload.[|/*staticMethodReference2*/method|]("123");
 var methodOverload = new MethodOverload();
 methodOverload.[|/*instanceMethodReference1*/method|]();
 methodOverload.[|/*instanceMethodReference2*/method|]("456");`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "staticMethodReference1", "staticMethodReference2", "instanceMethodReference1", "instanceMethodReference2", "staticMethodOverload1", "instanceMethodOverload1")
 }

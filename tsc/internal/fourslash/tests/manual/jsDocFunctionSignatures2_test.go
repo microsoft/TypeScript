@@ -17,7 +17,8 @@ func TestJsDocFunctionSignatures2(t *testing.T) {
 var f6;
 
 f6('', /**/false)`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "f6(arg0: string, arg1?: boolean): number"})
 }

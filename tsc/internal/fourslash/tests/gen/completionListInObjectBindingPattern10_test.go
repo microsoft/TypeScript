@@ -23,7 +23,8 @@ interface J {
 
 var foo: J[];
 var [{ property1: { propertyOfI_1, }, /*1*/ }, { /*2*/ }] = foo;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

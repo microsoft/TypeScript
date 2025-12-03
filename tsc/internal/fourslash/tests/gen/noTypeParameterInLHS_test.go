@@ -15,7 +15,8 @@ func TestNoTypeParameterInLHS(t *testing.T) {
 class C<T> {}
 var /*1*/i: I<any>;
 var /*2*/c: C<I>;`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var i: I<any>", "")
 	f.VerifyQuickInfoAt(t, "2", "var c: C<any>", "")
 }

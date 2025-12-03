@@ -21,7 +21,8 @@ export declare function autorun(): void;
 autorun/**/
 // @Filename: /utils.ts
 import "./mobx.mjs";`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToMarker(t, "")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { autorun } from "./mobx.mjs";

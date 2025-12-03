@@ -18,7 +18,8 @@ func TestImportTypeCompletions9(t *testing.T) {
 export interface Foo {}
 // @filename: /bar.ts
 [|import { type /**/ }|]`
-	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
 	f.GoToFile(t, "/bar.ts")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
