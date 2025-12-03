@@ -251,6 +251,8 @@ const libEntries: [string, string][] = [
     ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
+    // Baseline Widely Available
+    ["baseline", "lib.baseline.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
