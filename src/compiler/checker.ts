@@ -27576,27 +27576,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (inference.priority! & InferencePriority.ReturnType) {
-                    inference.inferredType = (inferredType && filterContextualInferredType(inferredType, instantiatedConstraint)) ?? (fallbackType && filterContextualInferredType(fallbackType, instantiatedConstraint)) ?? instantiatedConstraint;
+                if (inferredType) {
+                    const constraintWithThis = getTypeWithThisArgument(instantiatedConstraint, inferredType);
+                    if (!context.compareTypes(inferredType, constraintWithThis)) {
+                        // If we have a pure return type inference, we may succeed by removing constituents of the inferred type
+                        // that aren't assignable to the constraint type (pure return type inferences are speculation anyway).
+                        const filteredByConstraint = inference.priority === InferencePriority.ReturnType ? filterType(inferredType, t => !!context.compareTypes(t, constraintWithThis)) : neverType;
+                        inferredType = !(filteredByConstraint.flags & TypeFlags.Never) ? filteredByConstraint : undefined;
+                    }
                 }
-                else if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (!inferredType) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
-                    inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                    inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
+                inference.inferredType = inferredType;
             }
             clearActiveMapperCaches();
         }
 
         return inference.inferredType;
-
-        function filterContextualInferredType(inferredType: Type, constraint: Type) {
-            if (inferredType.flags & TypeFlags.Never) {
-                return inferredType;
-            }
-            const constraintWithThisArgument = getTypeWithThisArgument(constraint, inferredType);
-            const applicableByConstraint = filterType(inferredType, t => !!context.compareTypes(t, constraintWithThisArgument));
-            return !(applicableByConstraint.flags & TypeFlags.Never) ? applicableByConstraint : undefined;
-        }
     }
 
     function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
