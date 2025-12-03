@@ -15,7 +15,7 @@ import (
 func (l *LanguageService) ProvideCodeLenses(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.CodeLensResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
 
-	userPrefs := l.UserPreferences()
+	userPrefs := &l.UserPreferences().CodeLens
 	if !userPrefs.ReferencesCodeLensEnabled && !userPrefs.ImplementationsCodeLensEnabled {
 		return lsproto.CodeLensResponse{}, nil
 	}
@@ -172,7 +172,7 @@ func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *
 	}
 }
 
-func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs *lsutil.UserPreferences) bool {
+func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs *lsutil.CodeLensUserPreferences) bool {
 	switch node.Kind {
 	// Always show on interfaces
 	case ast.KindInterfaceDeclaration:
@@ -199,7 +199,7 @@ func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs *lsutil.UserPr
 	return false
 }
 
-func isValidReferenceLensNode(node *ast.Node, userPrefs *lsutil.UserPreferences) bool {
+func isValidReferenceLensNode(node *ast.Node, userPrefs *lsutil.CodeLensUserPreferences) bool {
 	switch node.Kind {
 	case ast.KindFunctionDeclaration:
 		if userPrefs.ReferencesCodeLensShowOnAllFunctions {

@@ -28,5 +28,5 @@ function f10(a = ((((new C()))))) {}
 function f11(a = { a: 1, b: 1 }) {}
 function f12(a = ((({ a: 1, b: 1 })))) {}`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{IncludeInlayFunctionParameterTypeHints: true})
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayFunctionParameterTypeHints: true}})
 }

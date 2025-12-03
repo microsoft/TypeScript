@@ -24,8 +24,14 @@ var _ project.Client = &ClientMock{}
 //			PublishDiagnosticsFunc: func(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
 //				panic("mock out the PublishDiagnostics method")
 //			},
+//			RefreshCodeLensFunc: func(ctx context.Context) error {
+//				panic("mock out the RefreshCodeLens method")
+//			},
 //			RefreshDiagnosticsFunc: func(ctx context.Context) error {
 //				panic("mock out the RefreshDiagnostics method")
+//			},
+//			RefreshInlayHintsFunc: func(ctx context.Context) error {
+//				panic("mock out the RefreshInlayHints method")
 //			},
 //			UnwatchFilesFunc: func(ctx context.Context, id project.WatcherID) error {
 //				panic("mock out the UnwatchFiles method")
@@ -43,8 +49,14 @@ type ClientMock struct {
 	// PublishDiagnosticsFunc mocks the PublishDiagnostics method.
 	PublishDiagnosticsFunc func(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error
 
+	// RefreshCodeLensFunc mocks the RefreshCodeLens method.
+	RefreshCodeLensFunc func(ctx context.Context) error
+
 	// RefreshDiagnosticsFunc mocks the RefreshDiagnostics method.
 	RefreshDiagnosticsFunc func(ctx context.Context) error
+
+	// RefreshInlayHintsFunc mocks the RefreshInlayHints method.
+	RefreshInlayHintsFunc func(ctx context.Context) error
 
 	// UnwatchFilesFunc mocks the UnwatchFiles method.
 	UnwatchFilesFunc func(ctx context.Context, id project.WatcherID) error
@@ -61,8 +73,18 @@ type ClientMock struct {
 			// Params is the params argument value.
 			Params *lsproto.PublishDiagnosticsParams
 		}
+		// RefreshCodeLens holds details about calls to the RefreshCodeLens method.
+		RefreshCodeLens []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
 		// RefreshDiagnostics holds details about calls to the RefreshDiagnostics method.
 		RefreshDiagnostics []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+		}
+		// RefreshInlayHints holds details about calls to the RefreshInlayHints method.
+		RefreshInlayHints []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 		}
@@ -84,7 +106,9 @@ type ClientMock struct {
 		}
 	}
 	lockPublishDiagnostics sync.RWMutex
+	lockRefreshCodeLens    sync.RWMutex
 	lockRefreshDiagnostics sync.RWMutex
+	lockRefreshInlayHints  sync.RWMutex
 	lockUnwatchFiles       sync.RWMutex
 	lockWatchFiles         sync.RWMutex
 }
@@ -126,6 +150,39 @@ func (mock *ClientMock) PublishDiagnosticsCalls() []struct {
 	return calls
 }
 
+// RefreshCodeLens calls RefreshCodeLensFunc.
+func (mock *ClientMock) RefreshCodeLens(ctx context.Context) error {
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockRefreshCodeLens.Lock()
+	mock.calls.RefreshCodeLens = append(mock.calls.RefreshCodeLens, callInfo)
+	mock.lockRefreshCodeLens.Unlock()
+	if mock.RefreshCodeLensFunc == nil {
+		var errOut error
+		return errOut
+	}
+	return mock.RefreshCodeLensFunc(ctx)
+}
+
+// RefreshCodeLensCalls gets all the calls that were made to RefreshCodeLens.
+// Check the length with:
+//
+//	len(mockedClient.RefreshCodeLensCalls())
+func (mock *ClientMock) RefreshCodeLensCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockRefreshCodeLens.RLock()
+	calls = mock.calls.RefreshCodeLens
+	mock.lockRefreshCodeLens.RUnlock()
+	return calls
+}
+
 // RefreshDiagnostics calls RefreshDiagnosticsFunc.
 func (mock *ClientMock) RefreshDiagnostics(ctx context.Context) error {
 	callInfo := struct {
@@ -156,6 +213,39 @@ func (mock *ClientMock) RefreshDiagnosticsCalls() []struct {
 	mock.lockRefreshDiagnostics.RLock()
 	calls = mock.calls.RefreshDiagnostics
 	mock.lockRefreshDiagnostics.RUnlock()
+	return calls
+}
+
+// RefreshInlayHints calls RefreshInlayHintsFunc.
+func (mock *ClientMock) RefreshInlayHints(ctx context.Context) error {
+	callInfo := struct {
+		Ctx context.Context
+	}{
+		Ctx: ctx,
+	}
+	mock.lockRefreshInlayHints.Lock()
+	mock.calls.RefreshInlayHints = append(mock.calls.RefreshInlayHints, callInfo)
+	mock.lockRefreshInlayHints.Unlock()
+	if mock.RefreshInlayHintsFunc == nil {
+		var errOut error
+		return errOut
+	}
+	return mock.RefreshInlayHintsFunc(ctx)
+}
+
+// RefreshInlayHintsCalls gets all the calls that were made to RefreshInlayHints.
+// Check the length with:
+//
+//	len(mockedClient.RefreshInlayHintsCalls())
+func (mock *ClientMock) RefreshInlayHintsCalls() []struct {
+	Ctx context.Context
+} {
+	var calls []struct {
+		Ctx context.Context
+	}
+	mock.lockRefreshInlayHints.RLock()
+	calls = mock.calls.RefreshInlayHints
+	mock.lockRefreshInlayHints.RUnlock()
 	return calls
 }
 

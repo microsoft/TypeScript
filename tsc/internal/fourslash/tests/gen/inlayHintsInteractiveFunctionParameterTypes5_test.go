@@ -15,5 +15,5 @@ func TestInlayHintsInteractiveFunctionParameterTypes5(t *testing.T) {
 	const content = `const foo: 1n = 1n;
 export function fn(b = foo) {}`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{IncludeInlayFunctionParameterTypeHints: true})
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayFunctionParameterTypeHints: true}})
 }

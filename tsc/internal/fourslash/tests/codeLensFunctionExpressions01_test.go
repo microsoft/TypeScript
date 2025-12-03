@@ -43,11 +43,13 @@ const namedFn4 = function namedFn4() {};
 `
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-		ReferencesCodeLensEnabled:            true,
-		ReferencesCodeLensShowOnAllFunctions: true,
+		CodeLens: lsutil.CodeLensUserPreferences{
+			ReferencesCodeLensEnabled:            true,
+			ReferencesCodeLensShowOnAllFunctions: true,
 
-		ImplementationsCodeLensEnabled:                true,
-		ImplementationsCodeLensShowOnInterfaceMethods: true,
-		ImplementationsCodeLensShowOnAllClassMethods:  true,
+			ImplementationsCodeLensEnabled:                true,
+			ImplementationsCodeLensShowOnInterfaceMethods: true,
+			ImplementationsCodeLensShowOnAllClassMethods:  true,
+		},
 	})
 }

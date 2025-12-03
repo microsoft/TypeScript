@@ -270,7 +270,7 @@ export const generate = task({
     description: "Runs go generate on the project.",
     run: async () => {
         assertTypeScriptCloned();
-        await $`go generate ./...`;
+        await $`go generate -v ./...`;
     },
 });
 

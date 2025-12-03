@@ -17,6 +17,8 @@ func TestInlayHintsTupleTypeCrash(t *testing.T) {
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{
-		IncludeInlayFunctionParameterTypeHints: true,
+		InlayHints: lsutil.InlayHintsPreferences{
+			IncludeInlayFunctionParameterTypeHints: true,
+		},
 	})
 }

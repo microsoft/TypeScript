@@ -1399,6 +1399,7 @@ function stringToTristate(s: string): string {
 }
 
 function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefined {
+    const inlayHintPreferences: string[] = [];
     const preferences: string[] = [];
     for (const prop of arg.properties) {
         if (ts.isPropertyAssignment(prop)) {
@@ -1441,28 +1442,28 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
                             paramHint = "lsutil.IncludeInlayParameterNameHintsAll";
                             break;
                     }
-                    preferences.push(`IncludeInlayParameterNameHints: ${paramHint}`);
+                    inlayHintPreferences.push(`IncludeInlayParameterNameHints: ${paramHint}`);
                     break;
                 case "includeInlayParameterNameHintsWhenArgumentMatchesName":
-                    preferences.push(`IncludeInlayParameterNameHintsWhenArgumentMatchesName: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayParameterNameHintsWhenArgumentMatchesName: ${prop.initializer.getText()}`);
                     break;
                 case "includeInlayFunctionParameterTypeHints":
-                    preferences.push(`IncludeInlayFunctionParameterTypeHints: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayFunctionParameterTypeHints: ${prop.initializer.getText()}`);
                     break;
                 case "includeInlayVariableTypeHints":
-                    preferences.push(`IncludeInlayVariableTypeHints: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayVariableTypeHints: ${prop.initializer.getText()}`);
                     break;
                 case "includeInlayVariableTypeHintsWhenTypeMatchesName":
-                    preferences.push(`IncludeInlayVariableTypeHintsWhenTypeMatchesName: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayVariableTypeHintsWhenTypeMatchesName: ${prop.initializer.getText()}`);
                     break;
                 case "includeInlayPropertyDeclarationTypeHints":
-                    preferences.push(`IncludeInlayPropertyDeclarationTypeHints: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayPropertyDeclarationTypeHints: ${prop.initializer.getText()}`);
                     break;
                 case "includeInlayFunctionLikeReturnTypeHints":
-                    preferences.push(`IncludeInlayFunctionLikeReturnTypeHints: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayFunctionLikeReturnTypeHints: ${prop.initializer.getText()}`);
                     break;
                 case "includeInlayEnumMemberValueHints":
-                    preferences.push(`IncludeInlayEnumMemberValueHints: ${prop.initializer.getText()}`);
+                    inlayHintPreferences.push(`IncludeInlayEnumMemberValueHints: ${prop.initializer.getText()}`);
                     break;
                 case "interactiveInlayHints":
                     // Ignore, deprecated
@@ -1472,6 +1473,10 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
         else {
             return undefined;
         }
+    }
+
+    if (inlayHintPreferences.length > 0) {
+        preferences.push(`InlayHints: lsutil.InlayHintsPreferences{${inlayHintPreferences.join(",")}}`);
     }
     if (preferences.length === 0) {
         return "nil /*preferences*/";

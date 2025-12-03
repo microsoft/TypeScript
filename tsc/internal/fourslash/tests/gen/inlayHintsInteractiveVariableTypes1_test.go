@@ -33,5 +33,5 @@ const l = ((({ a: 1, b: 1 })));
  const p = ([a]: Foo[]) => a;
  const q = ({ a }: { a: Foo }) => a;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{IncludeInlayVariableTypeHints: true})
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: true}})
 }
