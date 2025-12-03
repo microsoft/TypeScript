@@ -1,0 +1,399 @@
+//// [tests/cases/compiler/extendPrivateConstructorClass2.ts] ////
+
+=== extendPrivateConstructorClass2.ts ===
+class A1 {
+>A1 : A1
+>   : ^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+}
+class B1 {
+>B1 : B1
+>   : ^^
+
+  constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+}
+
+declare const Cls1: typeof A1 & typeof B1;
+>Cls1 : typeof A1 & typeof B1
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>A1 : typeof A1
+>   : ^^^^^^^^^
+>B1 : typeof B1
+>   : ^^^^^^^^^
+
+new Cls1(42); // error
+>new Cls1(42) : any
+>             : ^^^
+>Cls1 : typeof A1 & typeof B1
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+class Derived1 extends Cls1 {} // error
+>Derived1 : Derived1
+>         : ^^^^^^^^
+>Cls1 : A1
+>     : ^^
+
+class A2 {
+>A2 : A2
+>   : ^^
+
+  constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+}
+class B2 {
+>B2 : B2
+>   : ^^
+
+  private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+}
+
+declare const Cls2: typeof A2 & typeof B2;
+>Cls2 : typeof A2 & typeof B2
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>A2 : typeof A2
+>   : ^^^^^^^^^
+>B2 : typeof B2
+>   : ^^^^^^^^^
+
+new Cls2(42); // error
+>new Cls2(42) : any
+>             : ^^^
+>Cls2 : typeof A2 & typeof B2
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+class Derived2 extends Cls2 {} // error
+>Derived2 : Derived2
+>         : ^^^^^^^^
+>Cls2 : A2
+>     : ^^
+
+// https://github.com/microsoft/TypeScript/issues/62614
+declare abstract class j1 {
+>j1 : j1
+>   : ^^
+
+  private constructor(...args: any[]);
+>args : any[]
+>     : ^^^^^
+}
+declare abstract class j2 {
+>j2 : j2
+>   : ^^
+
+  private constructor(...args: any[]);
+>args : any[]
+>     : ^^^^^
+}
+declare const jS: typeof j1 & typeof j2;
+>jS : typeof j1 & typeof j2
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j1 : typeof j1
+>   : ^^^^^^^^^
+>j2 : typeof j2
+>   : ^^^^^^^^^
+
+declare class j0 extends jS {} // error
+>j0 : j0
+>   : ^^
+>jS : j1 & j2
+>   : ^^^^^^^
+
+abstract class j3 {
+>j3 : j3
+>   : ^^
+
+  private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    abstract class j4 {
+>j4 : j4
+>   : ^^
+
+      private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+      method2() {
+>method2 : () => void
+>        : ^^^^^^^^^^
+
+        const jS: typeof j3 & typeof j4 = null!;
+>jS : typeof j3 & typeof j4
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j3 : typeof j3
+>   : ^^^^^^^^^
+>j4 : typeof j4
+>   : ^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+        // bizarre but ok
+        class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j3 & j4
+>   : ^^^^^^^
+
+          method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+          method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+        }
+      }
+    }
+  }
+}
+
+abstract class j5 {
+>j5 : j5
+>   : ^^
+
+  private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    abstract class j6 {
+>j6 : j6
+>   : ^^
+
+      private constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+    const jS: typeof j5 & typeof j6 = null!;
+>jS : typeof j5 & typeof j6
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j5 : typeof j5
+>   : ^^^^^^^^^
+>j6 : typeof j6
+>   : ^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+    // bizarre but ok too given the base is a result of a mixin
+    class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j5 & j6
+>   : ^^^^^^^
+
+      method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+  }
+}
+
+abstract class j7 {
+>j7 : j7
+>   : ^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    abstract class j8 {
+>j8 : j8
+>   : ^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+      method2() {
+>method2 : () => void
+>        : ^^^^^^^^^^
+
+        const jS: typeof j7 & typeof j8 = null!;
+>jS : typeof j7 & typeof j8
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>j7 : typeof j7
+>   : ^^^^^^^^^
+>j8 : typeof j8
+>   : ^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+        // error
+        class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j7
+>   : ^^
+
+          method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+          method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+        }
+      }
+    }
+  }
+}
+
+abstract class j9 {
+>j9 : j9
+>   : ^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  method1() {
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    abstract class j10 {
+>j10 : j10
+>    : ^^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+    const jS: typeof j9 & typeof j10 = null!;
+>jS : typeof j9 & typeof j10
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+>j9 : typeof j9
+>   : ^^^^^^^^^
+>j10 : typeof j10
+>    : ^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+    // error
+    class j0 extends jS {
+>j0 : j0
+>   : ^^
+>jS : j9
+>   : ^^
+
+      method1() {}
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+      method2() {}
+>method2 : () => void
+>        : ^^^^^^^^^^
+    }
+  }
+}
+
+abstract class j11 {
+>j11 : j11
+>    : ^^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  static {
+    abstract class j12 {
+>j12 : j12
+>    : ^^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+
+      static {
+        const jS: typeof j11 & typeof j12 = null!;
+>jS : typeof j11 & typeof j12
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>j11 : typeof j11
+>    : ^^^^^^^^^^
+>j12 : typeof j12
+>    : ^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+        // ok
+        class j0 extends jS {}
+>j0 : j0
+>   : ^^
+>jS : j11
+>   : ^^^
+      }
+    }
+  }
+}
+
+abstract class j13 {
+>j13 : j13
+>    : ^^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+
+  static {
+    abstract class j14 {
+>j14 : j14
+>    : ^^^
+
+      private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+    }
+    const jS: typeof j13 & typeof j14 = null!;
+>jS : typeof j13 & typeof j14
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>j13 : typeof j13
+>    : ^^^^^^^^^^
+>j14 : typeof j14
+>    : ^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+    // error
+    class j0 extends jS {}
+>j0 : j0
+>   : ^^
+>jS : j13
+>   : ^^^
+  }
+}
+
