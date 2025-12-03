@@ -27576,10 +27576,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
-                    inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                if (inferredType) {
+                    const constraintWithThis = getTypeWithThisArgument(instantiatedConstraint, inferredType);
+                    if (!context.compareTypes(inferredType, constraintWithThis)) {
+                        // If we have a pure return type inference, we may succeed by removing constituents of the inferred type
+                        // that aren't assignable to the constraint type (pure return type inferences are speculation anyway).
+                        const filteredByConstraint = inference.priority === InferencePriority.ReturnType ? filterType(inferredType, t => !!context.compareTypes(t, constraintWithThis)) : neverType;
+                        inferredType = !(filteredByConstraint.flags & TypeFlags.Never) ? filteredByConstraint : undefined;
+                    }
                 }
+                if (!inferredType) {
+                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
+                    inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                }
+                inference.inferredType = inferredType;
             }
             clearActiveMapperCaches();
         }
