@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericClassesRedeclaration.ts] ////
 
 //// [genericClassesRedeclaration.ts]
-declare module TypeScript {
+declare namespace TypeScript {
     interface IIndexable<T> {
         [s: string]: T;
     }
@@ -40,7 +40,7 @@ declare module TypeScript {
     }
 }
 
-declare module TypeScript {
+declare namespace TypeScript {
     interface IIndexable<T> {
         [s: string]: T;
     }

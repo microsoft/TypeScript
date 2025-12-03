@@ -248,6 +248,7 @@ const libEntries: [string, string][] = [
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.float16", "lib.esnext.float16.d.ts"],
+    ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
@@ -607,6 +608,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         nodenext: ModuleKind.NodeNext,
         preserve: ModuleKind.Preserve,
     })),
+    deprecatedKeys: new Set(["none", "amd", "system", "umd"]),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -672,6 +674,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
         defaultValueDescription: false,
     },
+    {
+        name: "ignoreConfig",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: true,
+        description: Diagnostics.Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files,
+        defaultValueDescription: false,
+    },
 
     // Basic
     targetOptionDeclaration,
@@ -697,8 +708,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
-        description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files,
-        defaultValueDescription: false,
+        description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files,
+        defaultValueDescription: Diagnostics.false_unless_checkJs_is_set,
     },
     {
         name: "checkJs",
@@ -873,7 +884,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsProgramStructure: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Enable_lib_replacement,
-        defaultValueDescription: true,
+        defaultValueDescription: false,
     },
 
     // Strict Type Checks
@@ -1070,13 +1081,13 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             nodenext: ModuleResolutionKind.NodeNext,
             bundler: ModuleResolutionKind.Bundler,
         })),
-        deprecatedKeys: new Set(["node"]),
+        deprecatedKeys: new Set(["node", "node10", "classic"]),
         affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
-        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
+        defaultValueDescription: Diagnostics.nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
     },
     {
         name: "baseUrl",
@@ -1149,7 +1160,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export,
-        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop,
+        defaultValueDescription: true,
     },
     {
         name: "esModuleInterop",
@@ -1160,7 +1171,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "preserveSymlinks",
@@ -1243,7 +1254,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Check_side_effect_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
 
     // Source Maps

@@ -9,7 +9,7 @@ function fn() {
 >fn : Symbol(fn, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 0, 0), Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 2, 1))
 >n : Symbol(fn.n, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 4, 14))
 }
-module fn {
+namespace fn {
 >fn : Symbol(fn, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 0, 0), Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 2, 1))
 
     export var n = 1;

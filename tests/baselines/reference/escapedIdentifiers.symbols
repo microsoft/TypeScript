@@ -32,7 +32,7 @@ b ++;
 >\u0062 : Symbol(b, Decl(escapedIdentifiers.ts, 16, 3))
 
 // modules
-module moduleType1 { 
+namespace moduleType1 { 
 >moduleType1 : Symbol(moduleType1, Decl(escapedIdentifiers.ts, 18, 10))
 
     export var baz1: number;

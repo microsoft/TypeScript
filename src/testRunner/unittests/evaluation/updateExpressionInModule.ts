@@ -31,7 +31,7 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
             },
             rootFiles: ["/.src/main.ts"],
             main: "/.src/main.ts",
-        }, { module: ts.ModuleKind.System });
+        }, { module: ts.ModuleKind.System, ignoreDeprecations: "6.0" });
         assert.equal(result.a, 2);
         assert.equal(result.b, 2);
     });
@@ -67,7 +67,7 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 rootFiles: ["/.src/main.ts"],
                 main: "/.src/main.ts",
             },
-            { module: ts.ModuleKind.System },
+            { module: ts.ModuleKind.System, ignoreDeprecations: "6.0" },
             { BigInt },
         );
         assert.equal(result.a, BigInt(2));
@@ -99,7 +99,7 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
             },
             rootFiles: ["/.src/main.ts"],
             main: "/.src/main.ts",
-        }, { module: ts.ModuleKind.System });
+        }, { module: ts.ModuleKind.System, ignoreDeprecations: "6.0" });
         assert.equal(result.a, 2);
         assert.equal(result.b, 1);
     });
@@ -135,7 +135,7 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 rootFiles: ["/.src/main.ts"],
                 main: "/.src/main.ts",
             },
-            { module: ts.ModuleKind.System },
+            { module: ts.ModuleKind.System, ignoreDeprecations: "6.0" },
             { BigInt },
         );
         assert.equal(result.a, BigInt(2));

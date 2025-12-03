@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts] ////
 
 === internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts ===
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export interface I {
             foo();
 >foo : () => any
@@ -11,7 +11,7 @@ export module a {
     }
 }
 
-export module c {
+export namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

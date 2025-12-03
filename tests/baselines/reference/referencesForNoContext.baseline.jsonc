@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForNoContext.ts ===
-// module modTest {
+// namespace modTest {
 //     //Declare
 //     export var modVar:number;
 //     /*FIND ALL REFS*/
@@ -33,7 +33,7 @@
 //         modVar++;
 //     }  /*FIND ALL REFS*/
 // 
-//     module testMod {
+//     namespace testMod {
 //     }
 // }
 
@@ -46,6 +46,6 @@
 //         modVar++;
 //     }  
 // /*FIND ALL REFS*/
-//     module testMod {
+//     namespace testMod {
 //     }
 // }

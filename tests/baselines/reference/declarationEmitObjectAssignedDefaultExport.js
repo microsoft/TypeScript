@@ -42,9 +42,12 @@ export default Object.assign(A, {
 
 //// [index.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-const styled_components_1 = require("styled-components");
+const styled_components_1 = __importDefault(require("styled-components"));
 const A = styled_components_1.default.div ``;
 const B = styled_components_1.default.div ``;
 exports.C = styled_components_1.default.div ``;

@@ -54,8 +54,8 @@ async function f1 () {
 }
 
 function * f2 () {
->f2 : () => {}
->   : ^^^^^^^^
+>f2 : () => Generator<number, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class C {
 >C : C
@@ -69,8 +69,8 @@ function * f2 () {
 >  : ^
 
             function * ff () {
->ff : () => {}
->   : ^^^^^^^^
+>ff : () => Generator<number, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 yield 1;
 >yield 1 : any

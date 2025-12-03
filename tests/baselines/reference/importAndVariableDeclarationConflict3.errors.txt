@@ -3,7 +3,7 @@ importAndVariableDeclarationConflict3.ts(6,8): error TS2300: Duplicate identifie
 
 
 ==== importAndVariableDeclarationConflict3.ts (2 errors) ====
-    module m {
+    namespace m {
       export var m = '';
     }
     

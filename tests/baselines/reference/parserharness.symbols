@@ -110,11 +110,11 @@ if (typeof ActiveXObject === "function") {
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
-declare module process {
+declare namespace process {
 >process : Symbol(process, Decl(parserharness.ts, 47, 1))
 
     export function nextTick(callback: () => any): void;
->nextTick : Symbol(nextTick, Decl(parserharness.ts, 49, 24))
+>nextTick : Symbol(nextTick, Decl(parserharness.ts, 49, 27))
 >callback : Symbol(callback, Decl(parserharness.ts, 50, 29))
 
     export function on(event: string, listener: Function);
@@ -124,7 +124,7 @@ declare module process {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
-module Harness {
+namespace Harness {
 >Harness : Symbol(Harness, Decl(parserharness.ts, 52, 1))
 
     // Settings 
@@ -189,7 +189,7 @@ module Harness {
     }
 
     // Assert functions
-    export module Assert {
+    export namespace Assert {
 >Assert : Symbol(Assert, Decl(parserharness.ts, 77, 5))
 
         export var bugIds: string[] = [];
@@ -1421,11 +1421,11 @@ module Harness {
     }
 
     // Performance test
-    export module Perf {
+    export namespace Perf {
 >Perf : Symbol(Perf, Decl(parserharness.ts, 495, 5))
 
-        export module Clock {
->Clock : Symbol(Clock, Decl(parserharness.ts, 498, 24))
+        export namespace Clock {
+>Clock : Symbol(Clock, Decl(parserharness.ts, 498, 27))
 
             export var now: () => number;
 >now : Symbol(now, Decl(parserharness.ts, 500, 22))
@@ -1433,18 +1433,18 @@ module Harness {
             export var resolution: number;
 >resolution : Symbol(resolution, Decl(parserharness.ts, 501, 22))
 
-            declare module WScript {
+            declare namespace WScript {
 >WScript : Symbol(WScript, Decl(parserharness.ts, 501, 42))
 
                 export function InitializeProjection();
->InitializeProjection : Symbol(InitializeProjection, Decl(parserharness.ts, 503, 36))
+>InitializeProjection : Symbol(InitializeProjection, Decl(parserharness.ts, 503, 39))
             }
 
-            declare module TestUtilities {
+            declare namespace TestUtilities {
 >TestUtilities : Symbol(TestUtilities, Decl(parserharness.ts, 505, 13))
 
                 export function QueryPerformanceCounter(): number;
->QueryPerformanceCounter : Symbol(QueryPerformanceCounter, Decl(parserharness.ts, 507, 42))
+>QueryPerformanceCounter : Symbol(QueryPerformanceCounter, Decl(parserharness.ts, 507, 45))
 
                 export function QueryPerformanceFrequency(): number;
 >QueryPerformanceFrequency : Symbol(QueryPerformanceFrequency, Decl(parserharness.ts, 508, 66))
@@ -1462,9 +1462,9 @@ module Harness {
 >now : Symbol(now, Decl(parserharness.ts, 500, 22))
 
                     return TestUtilities.QueryPerformanceCounter();
->TestUtilities.QueryPerformanceCounter : Symbol(TestUtilities.QueryPerformanceCounter, Decl(parserharness.ts, 507, 42))
+>TestUtilities.QueryPerformanceCounter : Symbol(TestUtilities.QueryPerformanceCounter, Decl(parserharness.ts, 507, 45))
 >TestUtilities : Symbol(TestUtilities, Decl(parserharness.ts, 505, 13))
->QueryPerformanceCounter : Symbol(TestUtilities.QueryPerformanceCounter, Decl(parserharness.ts, 507, 42))
+>QueryPerformanceCounter : Symbol(TestUtilities.QueryPerformanceCounter, Decl(parserharness.ts, 507, 45))
                 }
 
                 resolution = TestUtilities.QueryPerformanceFrequency();
@@ -1510,7 +1510,7 @@ module Harness {
 >this : Symbol(Timer, Decl(parserharness.ts, 528, 9))
 >startTime : Symbol(Timer.startTime, Decl(parserharness.ts, 530, 28))
 >Clock.now : Symbol(Clock.now, Decl(parserharness.ts, 500, 22))
->Clock : Symbol(Clock, Decl(parserharness.ts, 498, 24))
+>Clock : Symbol(Clock, Decl(parserharness.ts, 498, 27))
 >now : Symbol(Clock.now, Decl(parserharness.ts, 500, 22))
             }
 
@@ -1523,13 +1523,13 @@ module Harness {
 >this : Symbol(Timer, Decl(parserharness.ts, 528, 9))
 >time : Symbol(Timer.time, Decl(parserharness.ts, 531, 29))
 >Clock.now : Symbol(Clock.now, Decl(parserharness.ts, 500, 22))
->Clock : Symbol(Clock, Decl(parserharness.ts, 498, 24))
+>Clock : Symbol(Clock, Decl(parserharness.ts, 498, 27))
 >now : Symbol(Clock.now, Decl(parserharness.ts, 500, 22))
 >this.startTime : Symbol(Timer.startTime, Decl(parserharness.ts, 530, 28))
 >this : Symbol(Timer, Decl(parserharness.ts, 528, 9))
 >startTime : Symbol(Timer.startTime, Decl(parserharness.ts, 530, 28))
 >Clock.resolution : Symbol(Clock.resolution, Decl(parserharness.ts, 501, 22))
->Clock : Symbol(Clock, Decl(parserharness.ts, 498, 24))
+>Clock : Symbol(Clock, Decl(parserharness.ts, 498, 27))
 >resolution : Symbol(Clock.resolution, Decl(parserharness.ts, 501, 22))
             }
         }
@@ -2011,14 +2011,14 @@ module Harness {
     }
 
     /** Functionality for compiling TypeScript code */
-    export module Compiler {
+    export namespace Compiler {
 >Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
 
         /** Aggregate various writes into a single array of lines. Useful for passing to the
          *  TypeScript compiler to fill with source code or errors.
          */
         export class WriterAggregator implements ITextWriter {
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
             public lines: string[] = [];
 >lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
@@ -2032,7 +2032,7 @@ module Harness {
 
                 this.currentLine += str;
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
 >str : Symbol(str, Decl(parserharness.ts, 694, 25))
             }
@@ -2044,17 +2044,17 @@ module Harness {
                 this.lines.push(this.currentLine + str);
 >this.lines.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
 >str : Symbol(str, Decl(parserharness.ts, 698, 29))
 
                 this.currentLine = "";
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
             }
 
@@ -2064,21 +2064,21 @@ module Harness {
                 if (this.currentLine.length > 0) { this.lines.push(this.currentLine); }
 >this.currentLine.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >this.lines.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
 
                 this.currentLine = "";
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
             }
 
@@ -2087,12 +2087,12 @@ module Harness {
 
                 this.lines = [];
 >this.lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
 
                 this.currentLine = "";
 >this.currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
->this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>this : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >currentLine : Symbol(WriterAggregator.currentLine, Decl(parserharness.ts, 691, 40))
             }
         }
@@ -2127,11 +2127,11 @@ module Harness {
 
                 var writer = new Harness.Compiler.WriterAggregator();
 >writer : Symbol(writer, Decl(parserharness.ts, 726, 19))
->Harness.Compiler.WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>Harness.Compiler.WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >Harness.Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
 >Harness : Symbol(Harness, Decl(parserharness.ts, 52, 1))
 >Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
                 this.fileCollection[s] = writer;
 >this.fileCollection : Symbol(EmitterIOHost.fileCollection, Decl(parserharness.ts, 715, 72))
@@ -2171,13 +2171,13 @@ module Harness {
 >toArray : Symbol(EmitterIOHost.toArray, Decl(parserharness.ts, 735, 56))
 >filename : Symbol(filename, Decl(parserharness.ts, 737, 31))
 >file : Symbol(file, Decl(parserharness.ts, 737, 49))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
                 var result: { filename: string; file: WriterAggregator; }[] = [];
 >result : Symbol(result, Decl(parserharness.ts, 738, 19))
 >filename : Symbol(filename, Decl(parserharness.ts, 738, 29))
 >file : Symbol(file, Decl(parserharness.ts, 738, 47))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
                 for (var p in this.fileCollection) {
 >p : Symbol(p, Decl(parserharness.ts, 740, 24))
@@ -2197,7 +2197,7 @@ module Harness {
 >current : Symbol(current, Decl(parserharness.ts, 742, 27))
 >Harness : Symbol(Harness, Decl(parserharness.ts, 52, 1))
 >Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >this.fileCollection : Symbol(EmitterIOHost.fileCollection, Decl(parserharness.ts, 715, 72))
 >this : Symbol(EmitterIOHost, Decl(parserharness.ts, 712, 9))
 >fileCollection : Symbol(EmitterIOHost.fileCollection, Decl(parserharness.ts, 715, 72))
@@ -2256,7 +2256,7 @@ module Harness {
 
         var stderr = new WriterAggregator();
 >stderr : Symbol(stderr, Decl(parserharness.ts, 757, 11))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
         export function isDeclareFile(filename: string) {
 >isDeclareFile : Symbol(isDeclareFile, Decl(parserharness.ts, 757, 44))
@@ -2484,13 +2484,13 @@ module Harness {
 
             // TODO: Find an implementation of isIdenticalTo that works.
             //public isIdenticalTo(other: Type) {
-            //    var testCode = 'module __test1__ {\n';
+            //    var testCode = 'namespace __test1__ {\n';
             //    testCode += '    ' + this.code + ';\n';
             //    testCode += '    export var __val__ = ' + this.identifier + ';\n';
             //    testCode += '}\n';
             //    testCode += 'var __test1__val__ = __test1__.__val__;\n';
 
-            //    testCode += 'module __test2__ {\n';
+            //    testCode += 'namespace __test2__ {\n';
             //    testCode += '    ' + other.code + ';\n';
             //    testCode += '    export var __val__ = ' + other.identifier + ';\n';
             //    testCode += '}\n';
@@ -2588,7 +2588,7 @@ module Harness {
 >other : Symbol(other, Decl(parserharness.ts, 890, 46))
 >Type : Symbol(Type, Decl(parserharness.ts, 800, 9))
 
-                var testCode = 'module __test1__ {\n';
+                var testCode = 'namespace __test1__ {\n';
 >testCode : Symbol(testCode, Decl(parserharness.ts, 891, 19))
 
                 testCode += '    ' + this.code + ';\n';
@@ -2609,7 +2609,7 @@ module Harness {
                 testCode += 'var __test1__val__ = __test1__.__val__;\n';
 >testCode : Symbol(testCode, Decl(parserharness.ts, 891, 19))
 
-                testCode += 'module __test2__ {\n';
+                testCode += 'namespace __test2__ {\n';
 >testCode : Symbol(testCode, Decl(parserharness.ts, 891, 19))
 
                 testCode += '    export ' + other.code + ';\n';
@@ -3297,11 +3297,11 @@ module Harness {
                             outputs[fn] = new Harness.Compiler.WriterAggregator();
 >outputs : Symbol(outputs, Decl(parserharness.ts, 1120, 19))
 >fn : Symbol(fn, Decl(parserharness.ts, 1125, 37))
->Harness.Compiler.WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>Harness.Compiler.WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >Harness.Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
 >Harness : Symbol(Harness, Decl(parserharness.ts, 52, 1))
 >Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
                             return outputs[fn];
 >outputs : Symbol(outputs, Decl(parserharness.ts, 1120, 19))
@@ -3341,7 +3341,7 @@ module Harness {
 >writer : Symbol(writer, Decl(parserharness.ts, 1138, 27))
 >Harness : Symbol(Harness, Decl(parserharness.ts, 52, 1))
 >Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >outputs : Symbol(outputs, Decl(parserharness.ts, 1120, 19))
 >fn : Symbol(fn, Decl(parserharness.ts, 1136, 24))
 
@@ -3434,7 +3434,7 @@ module Harness {
 >fileResults : Symbol(CompilerResult.fileResults, Decl(parserharness.ts, 1175, 24))
 >filename : Symbol(filename, Decl(parserharness.ts, 1175, 45))
 >file : Symbol(file, Decl(parserharness.ts, 1175, 63))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 >errorLines : Symbol(errorLines, Decl(parserharness.ts, 1175, 92))
 >scripts : Symbol(CompilerResult.scripts, Decl(parserharness.ts, 1175, 114))
 >TypeScript : Symbol(TypeScript)
@@ -3987,7 +3987,7 @@ module Harness {
         export function emitToOutfile(outfile: WriterAggregator) {
 >emitToOutfile : Symbol(emitToOutfile, Decl(parserharness.ts, 1333, 9))
 >outfile : Symbol(outfile, Decl(parserharness.ts, 1335, 38))
->WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
+>WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 31))
 
             compiler.emitToOutfile(outfile);
 >compiler : Symbol(compiler, Decl(parserharness.ts, 780, 11))
@@ -4220,12 +4220,12 @@ module Harness {
     /** Parses the test cases files 
      *  extracts options and individual files in a multifile test
      */
-    export module TestCaseParser {
+    export namespace TestCaseParser {
 >TestCaseParser : Symbol(TestCaseParser, Decl(parserharness.ts, 1408, 5))
 
         /** all the necesarry information to set the right compiler settings */
         export interface CompilerSetting {
->CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 34))
+>CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 37))
 
             flag: string;
 >flag : Symbol(CompilerSetting.flag, Decl(parserharness.ts, 1415, 42))
@@ -4263,7 +4263,7 @@ module Harness {
         function extractCompilerSettings(content: string): CompilerSetting[] {
 >extractCompilerSettings : Symbol(extractCompilerSettings, Decl(parserharness.ts, 1432, 121))
 >content : Symbol(content, Decl(parserharness.ts, 1434, 41))
->CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 34))
+>CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 37))
 
             var opts = [];
 >opts : Symbol(opts, Decl(parserharness.ts, 1436, 15))
@@ -4295,7 +4295,7 @@ module Harness {
 >code : Symbol(code, Decl(parserharness.ts, 1447, 42))
 >filename : Symbol(filename, Decl(parserharness.ts, 1447, 55))
 >settings : Symbol(settings, Decl(parserharness.ts, 1447, 76))
->CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 34))
+>CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 37))
 >testUnitData : Symbol(testUnitData, Decl(parserharness.ts, 1447, 105))
 >TestUnitData : Symbol(TestUnitData, Decl(parserharness.ts, 1418, 9))
 
@@ -5679,11 +5679,11 @@ module Harness {
     }
 
     /** Runs TypeScript or Javascript code. */
-    export module Runner {
+    export namespace Runner {
 >Runner : Symbol(Runner, Decl(parserharness.ts, 1865, 5))
 
         export function runCollateral(path: string, callback: (error: Error, result: any) => void ) {
->runCollateral : Symbol(runCollateral, Decl(parserharness.ts, 1868, 26))
+>runCollateral : Symbol(runCollateral, Decl(parserharness.ts, 1868, 29))
 >path : Symbol(path, Decl(parserharness.ts, 1869, 38))
 >callback : Symbol(callback, Decl(parserharness.ts, 1869, 51))
 >error : Symbol(error, Decl(parserharness.ts, 1869, 63))
@@ -5811,7 +5811,7 @@ module Harness {
     }
 
     /** Support class for baseline files */
-    export module Baseline {
+    export namespace Baseline {
 >Baseline : Symbol(Baseline, Decl(parserharness.ts, 1906, 5))
 
         var reportFilename = 'baseline-report.html';

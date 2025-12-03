@@ -1,7 +1,9 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 collisionExportsRequireAndEnum_externalmodule.ts(1,13): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== collisionExportsRequireAndEnum_externalmodule.ts (2 errors) ====
     export enum require { // Error
                 ~~~~~~~
@@ -15,7 +17,7 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         _thisVal1,
         _thisVal2,
     }
-    module m1 {
+    namespace m1 {
         enum require {
             _thisVal1,
             _thisVal2,
@@ -25,7 +27,7 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
             _thisVal2,
         }
     }
-    module m2 {
+    namespace m2 {
         export enum require { 
             _thisVal1,
             _thisVal2,
@@ -45,7 +47,7 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         _thisVal1,
         _thisVal2,
     }
-    module m3 {
+    namespace m3 {
         enum require {
             _thisVal1,
             _thisVal2,
@@ -55,7 +57,7 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
             _thisVal2,
         }
     }
-    module m4 {
+    namespace m4 {
         export enum require {
             _thisVal1,
             _thisVal2,

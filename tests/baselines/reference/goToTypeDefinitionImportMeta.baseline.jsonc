@@ -1,16 +1,38 @@
 // === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+//  * If you need to declare that a given property exists on `import.meta`,
+//  * this type may be augmented via interface merging.
+//  */
+// <|interface [|{| defId: 0 |}ImportMeta|] {
+// }|>
+// 
+// /**
+//  * The type for the optional second argument to `import()`.
+// --- (line: --) skipped ---
+
 // === /tests/cases/fourslash/bar.d.ts ===
-// <|interface [|ImportMeta|] {
+// <|interface [|{| defId: 1 |}ImportMeta|] {
 // }|>
 
 // === /tests/cases/fourslash/foo.ts ===
-// /// <reference no-default-lib="true"/>
 // /// <reference path='./bar.d.ts' />
 // import.me/*GOTO TYPE*/ta;
 
   // === Details ===
   [
    {
+    "defId": 0,
+    "kind": "interface",
+    "name": "ImportMeta",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
     "kind": "interface",
     "name": "ImportMeta",
     "containerName": "",

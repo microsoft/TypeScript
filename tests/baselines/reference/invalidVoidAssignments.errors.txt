@@ -45,7 +45,7 @@ invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f(): void; }' is not assi
         ~~
 !!! error TS2322: Type 'number' is not assignable to type '{ 0: number; }'.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     M = x;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

@@ -1,6 +1,6 @@
 // @allowImportingTsExtensions: true,false
 // @noEmit: true
-// @moduleResolution: classic,node10,node16,nodenext
+// @moduleResolution: classic,node16,nodenext
 // @noTypesAndSymbols: true
 
 // @Filename: /types.d.ts

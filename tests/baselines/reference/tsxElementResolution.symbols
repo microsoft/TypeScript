@@ -25,11 +25,11 @@ class foundFirst { }
 class Other {}
 >Other : Symbol(Other, Decl(tsxElementResolution.tsx, 8, 20))
 
-module Dotted {
+namespace Dotted {
 >Dotted : Symbol(Dotted, Decl(tsxElementResolution.tsx, 9, 14))
 
 	export class Name { }
->Name : Symbol(Name, Decl(tsxElementResolution.tsx, 11, 15))
+>Name : Symbol(Name, Decl(tsxElementResolution.tsx, 11, 18))
 }
 
 // Should find the intrinsic element, not the class element
@@ -51,7 +51,7 @@ var d = <Other />;
 
 var e = <Dotted.Name />;
 >e : Symbol(e, Decl(tsxElementResolution.tsx, 22, 3))
->Dotted.Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 11, 15))
+>Dotted.Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 11, 18))
 >Dotted : Symbol(Dotted, Decl(tsxElementResolution.tsx, 9, 14))
->Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 11, 15))
+>Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 11, 18))
 

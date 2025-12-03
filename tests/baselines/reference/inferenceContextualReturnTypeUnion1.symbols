@@ -6,7 +6,7 @@
 declare function useCallback1<T extends Function>(fn: T): T;
 >useCallback1 : Symbol(useCallback1, Decl(inferenceContextualReturnTypeUnion1.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceContextualReturnTypeUnion1.ts, 2, 30))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >fn : Symbol(fn, Decl(inferenceContextualReturnTypeUnion1.ts, 2, 50))
 >T : Symbol(T, Decl(inferenceContextualReturnTypeUnion1.ts, 2, 30))
 >T : Symbol(T, Decl(inferenceContextualReturnTypeUnion1.ts, 2, 30))
