@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -31,6 +32,7 @@ type parseTask struct {
 	typeResolutionsInFile        module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	typeResolutionsTrace         []module.DiagAndArgs
 	resolutionDiagnostics        []*ast.Diagnostic
+	processingDiagnostics        []*processingDiagnostic
 	importHelpersImportSpecifier *ast.Node
 	jsxRuntimeImportSpecifier    *jsxRuntimeImportSpecifier
 
@@ -59,6 +61,34 @@ func (t *parseTask) load(loader *fileLoader) {
 	if redirect != "" {
 		t.redirect(loader, redirect)
 		return
+	}
+
+	if tspath.HasExtension(t.normalizedFilePath) {
+		compilerOptions := loader.opts.Config.CompilerOptions()
+		allowNonTsExtensions := compilerOptions.AllowNonTsExtensions.IsTrue()
+		if !allowNonTsExtensions {
+			canonicalFileName := tspath.GetCanonicalFileName(t.normalizedFilePath, loader.opts.Host.FS().UseCaseSensitiveFileNames())
+			supported := false
+			for _, ext := range loader.supportedExtensions {
+				if tspath.FileExtensionIs(canonicalFileName, ext) {
+					supported = true
+					break
+				}
+			}
+			if !supported {
+				if tspath.HasJSFileExtension(canonicalFileName) {
+					t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
+						kind: processingDiagnosticKindExplainingFileInclude,
+						data: &includeExplainingDiagnostic{
+							diagnosticReason: t.includeReason,
+							message:          diagnostics.File_0_is_a_JavaScript_file_Did_you_mean_to_enable_the_allowJs_option,
+							args:             []any{t.normalizedFilePath},
+						},
+					})
+				}
+				return
+			}
+		}
 	}
 
 	loader.totalFileCount.Add(1)
@@ -319,6 +349,11 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			}
 			file := task.file
 			path := task.path
+
+			if len(task.processingDiagnostics) > 0 {
+				loader.includeProcessor.processingDiagnostics = append(loader.includeProcessor.processingDiagnostics, task.processingDiagnostics...)
+			}
+
 			if file == nil {
 				// !!! sheetal file preprocessing diagnostic explaining getSourceFileFromReferenceWorker
 				missingFiles = append(missingFiles, task.normalizedFilePath)
