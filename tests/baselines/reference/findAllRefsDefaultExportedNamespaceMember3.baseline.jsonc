@@ -1,0 +1,66 @@
+// === findAllReferences ===
+// === /mod.ts ===
+// export default Ns;
+// 
+// namespace Ns {
+//   <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}lazy|]() {}|> // this *isn't* exported from the namespace
+// }
+
+  // === Definitions ===
+  // === /mod.ts ===
+  // export default Ns;
+  // 
+  // namespace Ns {
+  //   <|function /*FIND ALL REFS*/[|lazy|]() {}|> // this *isn't* exported from the namespace
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function lazy(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "lazy",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /index.ts ===
+// import def from "./mod"
+// def.lazy/*FIND ALL REFS*/();
