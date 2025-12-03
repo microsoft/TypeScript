@@ -363,23 +363,15 @@ func (p *Program) BindSourceFiles() {
 	wg.RunAndWait()
 }
 
-func (p *Program) CheckSourceFiles(ctx context.Context, files []*ast.SourceFile) {
-	p.checkerPool.ForEachCheckerParallel(ctx, func(_ int, checker *checker.Checker) {
-		for file := range p.checkerPool.Files(checker) {
-			if files == nil || slices.Contains(files, file) {
-				checker.CheckSourceFile(ctx, file)
-			}
-		}
-	})
-}
-
 // Return the type checker associated with the program.
 func (p *Program) GetTypeChecker(ctx context.Context) (*checker.Checker, func()) {
 	return p.checkerPool.GetChecker(ctx)
 }
 
-func (p *Program) ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker)) {
-	p.checkerPool.ForEachCheckerParallel(ctx, cb)
+func (p *Program) ForEachCheckerParallel(cb func(idx int, c *checker.Checker)) {
+	if pool, ok := p.checkerPool.(*checkerPool); ok {
+		pool.ForEachCheckerParallel(cb)
+	}
 }
 
 // Return a checker for the given file. We may have multiple checkers in concurrent scenarios and this
@@ -417,39 +409,59 @@ func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*mo
 	return p.resolvedModules
 }
 
+// collectDiagnostics collects diagnostics from a single file or all files.
+// If sourceFile is non-nil, returns diagnostics for just that file.
+// If sourceFile is nil, returns diagnostics for all files in the program.
+func (p *Program) collectDiagnostics(ctx context.Context, sourceFile *ast.SourceFile, collect func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
+	var result []*ast.Diagnostic
+	if sourceFile != nil {
+		result = collect(ctx, sourceFile)
+	} else {
+		for _, file := range p.files {
+			result = append(result, collect(ctx, file)...)
+		}
+	}
+	return SortAndDeduplicateDiagnostics(result)
+}
+
 func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(ctx, sourceFile, false /*ensureBound*/, false /*ensureChecked*/, p.getSyntacticDiagnosticsForFile)
+	return p.collectDiagnostics(ctx, sourceFile, func(_ context.Context, file *ast.SourceFile) []*ast.Diagnostic {
+		return core.Concatenate(file.Diagnostics(), file.JSDiagnostics())
+	})
 }
 
 func (p *Program) GetBindDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, false /*ensureChecked*/, p.getBindDiagnosticsForFile)
+	if sourceFile != nil {
+		binder.BindSourceFile(sourceFile)
+	} else {
+		p.BindSourceFiles()
+	}
+	return p.collectDiagnostics(ctx, sourceFile, func(_ context.Context, file *ast.SourceFile) []*ast.Diagnostic {
+		return file.BindDiagnostics()
+	})
 }
 
 func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSemanticDiagnosticsForFile)
+	return p.collectDiagnostics(ctx, sourceFile, p.getSemanticDiagnosticsForFile)
 }
 
-func (p *Program) GetSemanticDiagnosticsNoFilter(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
-	p.BindSourceFiles()
-	p.CheckSourceFiles(ctx, sourceFiles)
-	if ctx.Err() != nil {
-		return nil
-	}
+func (p *Program) GetSemanticDiagnosticsWithoutNoEmitFiltering(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
 	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
 	for _, file := range sourceFiles {
-		result[file] = SortAndDeduplicateDiagnostics(p.getSemanticDiagnosticsForFileNotFilter(ctx, file))
+		result[file] = SortAndDeduplicateDiagnostics(p.getBindAndCheckDiagnosticsForFile(ctx, file))
 	}
 	return result
 }
 
 func (p *Program) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSuggestionDiagnosticsForFile)
+	return p.collectDiagnostics(ctx, sourceFile, p.getSuggestionDiagnosticsForFile)
 }
 
 func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
-	return SortAndDeduplicateDiagnostics(slices.Concat(
+	return SortAndDeduplicateDiagnostics(core.Concatenate(
 		p.programDiagnostics,
-		p.includeProcessor.getDiagnostics(p).GetGlobalDiagnostics()))
+		p.includeProcessor.getDiagnostics(p).GetGlobalDiagnostics(),
+	))
 }
 
 func (p *Program) GetIncludeProcessorDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -978,7 +990,7 @@ func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	}
 
 	globalDiagnostics := make([][]*ast.Diagnostic, p.checkerPool.Count())
-	p.checkerPool.ForEachCheckerParallel(ctx, func(idx int, checker *checker.Checker) {
+	p.ForEachCheckerParallel(func(idx int, checker *checker.Checker) {
 		globalDiagnostics[idx] = checker.GetGlobalDiagnostics()
 	})
 
@@ -986,32 +998,18 @@ func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
 }
 
 func (p *Program) GetDeclarationDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getDeclarationDiagnosticsForFile)
+	return p.collectDiagnostics(ctx, sourceFile, p.getDeclarationDiagnosticsForFile)
 }
 
 func (p *Program) GetOptionsDiagnostics(ctx context.Context) []*ast.Diagnostic {
-	return SortAndDeduplicateDiagnostics(append(p.GetGlobalDiagnostics(ctx), p.getOptionsDiagnosticsOfConfigFile()...))
+	return SortAndDeduplicateDiagnostics(core.Concatenate(p.GetGlobalDiagnostics(ctx), p.getOptionsDiagnosticsOfConfigFile()))
 }
 
 func (p *Program) getOptionsDiagnosticsOfConfigFile() []*ast.Diagnostic {
-	// todo update p.configParsingDiagnostics when updateAndGetProgramDiagnostics is implemented
 	if p.Options() == nil || p.Options().ConfigFilePath == "" {
 		return nil
 	}
-	return p.GetConfigFileParsingDiagnostics() // TODO: actually call getDiagnosticsHelper on config path
-}
-
-func (p *Program) getSyntacticDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return core.Concatenate(sourceFile.Diagnostics(), sourceFile.JSDiagnostics())
-}
-
-func (p *Program) getBindDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	// TODO: restore this; tsgo's main depends on this function binding all files for timing.
-	// if checker.SkipTypeChecking(sourceFile, p.compilerOptions) {
-	// 	return nil
-	// }
-
-	return sourceFile.BindDiagnostics()
+	return p.GetConfigFileParsingDiagnostics()
 }
 
 func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic {
@@ -1024,40 +1022,26 @@ func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *cor
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return slices.Concat(
-		FilterNoEmitSemanticDiagnostics(p.getSemanticDiagnosticsForFileNotFilter(ctx, sourceFile), p.Options()),
+	return core.Concatenate(
+		FilterNoEmitSemanticDiagnostics(p.getBindAndCheckDiagnosticsForFile(ctx, sourceFile), p.Options()),
 		p.GetIncludeProcessorDiagnostics(sourceFile),
 	)
 }
 
-func (p *Program) getSemanticDiagnosticsForFileNotFilter(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+// getBindAndCheckDiagnosticsForFile gets semantic diagnostics for a single file,
+// including bind diagnostics, checker diagnostics, and handling of @ts-ignore/@ts-expect-error directives.
+func (p *Program) getBindAndCheckDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	compilerOptions := p.Options()
 	if checker.SkipTypeChecking(sourceFile, compilerOptions, p, false) {
 		return nil
 	}
 
-	var fileChecker *checker.Checker
-	var done func()
-	if sourceFile != nil {
-		fileChecker, done = p.checkerPool.GetCheckerForFile(ctx, sourceFile)
-		defer done()
-	}
+	fileChecker, done := p.checkerPool.GetCheckerForFile(ctx, sourceFile)
+	defer done()
+
+	// Getting a checker will force a bind, so this will be populated.
 	diags := slices.Clip(sourceFile.BindDiagnostics())
-	// Ask for diags from all checkers; checking one file may add diagnostics to other files.
-	// These are deduplicated later.
-	checkerDiags := make([][]*ast.Diagnostic, p.checkerPool.Count())
-	p.checkerPool.ForEachCheckerParallel(ctx, func(idx int, checker *checker.Checker) {
-		if sourceFile == nil || checker == fileChecker {
-			checkerDiags[idx] = checker.GetDiagnostics(ctx, sourceFile)
-		}
-	})
-	if ctx.Err() != nil {
-		return nil
-	}
-
-	diags = append(diags, slices.Concat(checkerDiags...)...)
-
-	// !!! This should be rewritten to work like getBindAndCheckDiagnosticsForFileNoCache.
+	diags = append(diags, fileChecker.GetDiagnostics(ctx, sourceFile)...)
 
 	isPlainJS := ast.IsPlainJSFile(sourceFile, compilerOptions.CheckJs)
 	if isPlainJS {
@@ -1139,28 +1123,12 @@ func (p *Program) getSuggestionDiagnosticsForFile(ctx context.Context, sourceFil
 		return nil
 	}
 
-	var fileChecker *checker.Checker
-	var done func()
-	if sourceFile != nil {
-		fileChecker, done = p.checkerPool.GetCheckerForFile(ctx, sourceFile)
-		defer done()
-	}
+	fileChecker, done := p.checkerPool.GetCheckerForFile(ctx, sourceFile)
+	defer done()
 
+	// Getting a checker will force a bind, so this will be populated.
 	diags := slices.Clip(sourceFile.BindSuggestionDiagnostics)
-
-	checkerDiags := make([][]*ast.Diagnostic, p.checkerPool.Count())
-	p.checkerPool.ForEachCheckerParallel(ctx, func(idx int, checker *checker.Checker) {
-		if sourceFile == nil || checker == fileChecker {
-			checkerDiags[idx] = checker.GetSuggestionDiagnostics(ctx, sourceFile)
-		} else {
-			// !!! is there any case where suggestion diagnostics are produced in other checkers?
-		}
-	})
-	if ctx.Err() != nil {
-		return nil
-	}
-
-	diags = append(diags, slices.Concat(checkerDiags...)...)
+	diags = append(diags, fileChecker.GetSuggestionDiagnostics(ctx, sourceFile)...)
 
 	return diags
 }
@@ -1213,29 +1181,6 @@ func compactAndMergeRelatedInfos(diagnostics []*ast.Diagnostic) []*ast.Diagnosti
 	return diagnostics[:j]
 }
 
-func (p *Program) getDiagnosticsHelper(ctx context.Context, sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
-	if sourceFile != nil {
-		if ensureBound {
-			binder.BindSourceFile(sourceFile)
-		}
-		return SortAndDeduplicateDiagnostics(getDiagnostics(ctx, sourceFile))
-	}
-	if ensureBound {
-		p.BindSourceFiles()
-	}
-	if ensureChecked {
-		p.CheckSourceFiles(ctx, nil)
-		if ctx.Err() != nil {
-			return nil
-		}
-	}
-	var result []*ast.Diagnostic
-	for _, file := range p.files {
-		result = append(result, getDiagnostics(ctx, file)...)
-	}
-	return SortAndDeduplicateDiagnostics(result)
-}
-
 func (p *Program) LineCount() int {
 	var count int
 	for _, file := range p.files {
@@ -1259,7 +1204,7 @@ func (p *Program) SymbolCount() int {
 	}
 	var val atomic.Uint32
 	val.Store(uint32(count))
-	p.checkerPool.ForEachCheckerParallel(context.Background(), func(idx int, c *checker.Checker) {
+	p.ForEachCheckerParallel(func(_ int, c *checker.Checker) {
 		val.Add(c.SymbolCount)
 	})
 	return int(val.Load())
@@ -1267,7 +1212,7 @@ func (p *Program) SymbolCount() int {
 
 func (p *Program) TypeCount() int {
 	var val atomic.Uint32
-	p.checkerPool.ForEachCheckerParallel(context.Background(), func(idx int, c *checker.Checker) {
+	p.ForEachCheckerParallel(func(_ int, c *checker.Checker) {
 		val.Add(c.TypeCount)
 	})
 	return int(val.Load())
@@ -1275,7 +1220,7 @@ func (p *Program) TypeCount() int {
 
 func (p *Program) InstantiationCount() int {
 	var val atomic.Uint32
-	p.checkerPool.ForEachCheckerParallel(context.Background(), func(idx int, c *checker.Checker) {
+	p.ForEachCheckerParallel(func(_ int, c *checker.Checker) {
 		val.Add(c.TotalInstantiationCount)
 	})
 	return int(val.Load())
@@ -1370,8 +1315,6 @@ type SourceMapEmitResult struct {
 }
 
 func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
-	// !!! performance measurement
-	p.BindSourceFiles()
 	if options.EmitOnly != EmitOnlyForcedDts {
 		result := HandleNoEmitOnError(
 			ctx,

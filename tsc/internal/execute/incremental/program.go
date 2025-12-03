@@ -262,7 +262,7 @@ func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context,
 	}
 
 	// Get their diagnostics and cache them
-	diagnosticsPerFile := p.program.GetSemanticDiagnosticsNoFilter(ctx, affectedFiles)
+	diagnosticsPerFile := p.program.GetSemanticDiagnosticsWithoutNoEmitFiltering(ctx, affectedFiles)
 	// commit changes if no err
 	if ctx.Err() != nil {
 		return
