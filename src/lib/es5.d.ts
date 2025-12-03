@@ -1667,15 +1667,6 @@ type NoInfer<T> = intrinsic;
 interface ThisType<T> {}
 
 /**
- * Type instantiated to perform partial inferences from indexed accesses
- */
-type PartialInference<T, Keys extends PropertyKey> = ({
-    [K in Keys]: {
-        [K1 in K]: T;
-    };
-})[Keys];
-
-/**
  * Stores types to be used with WeakSet, WeakMap, WeakRef, and FinalizationRegistry
  */
 interface WeakKeyTypes {

@@ -27,6 +27,6 @@ type AC<T> = T extends { a: (infer R extends Record<string, any>)["_a"]; c: (inf
 >  : ^^^^^^^
 
 type Result1 = AC<Foo>;
->Result1 : { _a: string; } & { _c: boolean; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Result1 : Record<"_a", string> & Record<"_c", boolean>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

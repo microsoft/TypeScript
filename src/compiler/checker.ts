@@ -2301,7 +2301,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalBigIntType: ObjectType | undefined;
     var deferredGlobalNaNSymbol: Symbol | undefined;
     var deferredGlobalRecordSymbol: Symbol | undefined;
-    var deferredGlobalPartialInferenceSymbol: Symbol | undefined;
     var deferredGlobalClassDecoratorContextType: GenericType | undefined;
     var deferredGlobalClassMethodDecoratorContextType: GenericType | undefined;
     var deferredGlobalClassGetterDecoratorContextType: GenericType | undefined;
@@ -17615,11 +17614,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return deferredGlobalRecordSymbol === unknownSymbol ? undefined : deferredGlobalRecordSymbol;
     }
 
-    function getGlobalPartialInferenceSymbol(): Symbol | undefined {
-        deferredGlobalPartialInferenceSymbol ||= getGlobalTypeAliasSymbol("PartialInference" as __String, /*arity*/ 2, /*reportErrors*/ false) || unknownSymbol;
-        return deferredGlobalPartialInferenceSymbol === unknownSymbol ? undefined : deferredGlobalPartialInferenceSymbol;
-    }
-
     /**
      * Instantiates a global type that is generic with some element type, and returns that instantiation.
      */
@@ -26889,19 +26883,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return;
                     }
                     if (!hasInferenceCandidates(inference)) {
-                        const partialInferenceTypeSymbol = getGlobalPartialInferenceSymbol();
-                        if (partialInferenceTypeSymbol) {
-                            if ((target as IndexedAccessType).indexType.flags & TypeFlags.Instantiable) {
-                                const recordSymbol = getGlobalRecordSymbol();
-                                if (recordSymbol) {
-                                    inference.indexes = append(inference.indexes, getTypeAliasInstantiation(recordSymbol, [(target as IndexedAccessType).indexType, source]));
-                                }
-                            }
-                            else {
-                                // Instantiates instance of `type PartialInference<T, Keys extends PropertyKey> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
-                                // Where `T` is `source` and `Keys` is `target.indexType`
-                                inference.indexes = append(inference.indexes, getTypeAliasInstantiation(partialInferenceTypeSymbol, [source, (target as IndexedAccessType).indexType]));
-                            }
+                        const recordSymbol = getGlobalRecordSymbol();
+                        if (recordSymbol) {
+                            inference.indexes = append(inference.indexes, getTypeAliasInstantiation(recordSymbol, [(target as IndexedAccessType).indexType, source]));
                         }
                     }
                 }

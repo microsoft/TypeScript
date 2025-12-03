@@ -344,14 +344,14 @@ const opt3 = pickOne(either, {x: 12}, {y: ""}, {z: /./});
 >    : ^^^^^^
 
 const pickDelayed = <TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x});
->pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-><TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x}) : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->                                                                                : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => (Record<"Key", TKey> & Record<"A", { j: TKey; }> & Record<"B", { i: TKey; }> & Record<"Merge", { chosen: TKey; }>)[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x}) : <TKey extends Args3["Key"]>(x: TKey) => (Record<"Key", TKey> & Record<"A", { j: TKey; }> & Record<"B", { i: TKey; }> & Record<"Merge", { chosen: TKey; }>)[TKey] & { chosen: TKey; }
+>                                                                                : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : TKey
 >  : ^^^^
->pickOne(x, {j: x}, {i: x}, {chosen: x}) : ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne(x, {j: x}, {i: x}, {chosen: x}) : (Record<"Key", TKey> & Record<"A", { j: TKey; }> & Record<"B", { i: TKey; }> & Record<"Merge", { chosen: TKey; }>)[TKey] & { chosen: TKey; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
 >        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
 >x : TKey
@@ -380,8 +380,8 @@ const opt4 = pickDelayed("A");
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pickDelayed("A") : { j: "A"; } & { chosen: "A"; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => (Record<"Key", TKey> & Record<"A", { j: TKey; }> & Record<"B", { i: TKey; }> & Record<"Merge", { chosen: TKey; }>)[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"A" : "A"
 >    : ^^^
 
@@ -390,8 +390,8 @@ const opt5 = pickDelayed("B");
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pickDelayed("B") : { i: "B"; } & { chosen: "B"; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => (Record<"Key", TKey> & Record<"A", { j: TKey; }> & Record<"B", { i: TKey; }> & Record<"Merge", { chosen: TKey; }>)[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"B" : "B"
 >    : ^^^
 
@@ -400,8 +400,8 @@ const opt6 = pickDelayed(either);
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pickDelayed(either) : ({ j: "A" | "B"; } | { i: "A" | "B"; }) & { chosen: "A" | "B"; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => (Record<"Key", TKey> & Record<"A", { j: TKey; }> & Record<"B", { i: TKey; }> & Record<"Merge", { chosen: TKey; }>)[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >either : "A" | "B"
 >       : ^^^^^^^^^
 
