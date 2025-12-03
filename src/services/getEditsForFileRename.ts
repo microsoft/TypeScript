@@ -1,4 +1,5 @@
 import {
+    CallExpression,
     combinePaths,
     createGetCanonicalFileName,
     createModuleSpecifierResolutionHost,
@@ -11,6 +12,7 @@ import {
     factory,
     FileTextChanges,
     find,
+    forEachChild,
     forEach,
     formatting,
     GetCanonicalFileName,
@@ -24,15 +26,22 @@ import {
     hostUsesCaseSensitiveFileNames,
     isAmbientModule,
     isArrayLiteralExpression,
+    isCallExpression,
+    isIdentifier,
+    isImportCall,
     isObjectLiteralExpression,
+    isPropertyAccessExpression,
     isPropertyAssignment,
+    isRequireCall,
     isSourceFile,
     isStringLiteral,
+    isStringLiteralLike,
     LanguageServiceHost,
     last,
     mapDefined,
     ModuleResolutionHost,
     moduleSpecifiers,
+    Node,
     normalizePath,
     pathIsRelative,
     Program,
@@ -66,7 +75,7 @@ export function getEditsForFileRename(
     const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
     return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
         updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
-        updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
+        updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
     });
 }
 
@@ -99,6 +108,96 @@ export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: strin
 function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, getCanonicalFileName: GetCanonicalFileName): string {
     const rel = getRelativePathFromFile(a0, b0, getCanonicalFileName);
     return combinePathsSafe(getDirectoryPath(a1), rel);
+}
+
+/**
+ * Configuration for test framework function patterns that should be updated during file renames.
+ */
+interface TestFrameworkPattern {
+    /** Object name (e.g., "jest", "vitest") */
+    readonly object: string;
+    /** Method name (e.g., "mock", "requireActual") */
+    readonly method: string;
+    /** 0-based index of the argument that contains the module path */
+    readonly pathArgumentIndex: number;
+}
+
+/**
+ * List of test framework patterns to recognize.
+ * Extensible design - add new patterns here.
+ */
+const testFrameworkPatterns: readonly TestFrameworkPattern[] = [
+    // Jest patterns
+    { object: "jest", method: "mock", pathArgumentIndex: 0 },
+    { object: "jest", method: "unmock", pathArgumentIndex: 0 },
+    { object: "jest", method: "requireActual", pathArgumentIndex: 0 },
+    { object: "jest", method: "requireMock", pathArgumentIndex: 0 },
+    { object: "jest", method: "doMock", pathArgumentIndex: 0 },
+    { object: "jest", method: "dontMock", pathArgumentIndex: 0 },
+
+    // Vitest patterns
+    { object: "vitest", method: "mock", pathArgumentIndex: 0 },
+    { object: "vi", method: "mock", pathArgumentIndex: 0 },
+];
+
+/**
+ * Checks if a call expression is a module loading pattern that should be updated.
+ * Returns the string literal argument if it matches, undefined otherwise.
+ */
+function getModulePathArgument(
+    node: CallExpression,
+    preferences: UserPreferences,
+): StringLiteralLike | undefined {
+    // Check for dynamic import: import("./module")
+    if (isImportCall(node)) {
+        const arg = node.arguments[0];
+        if (arg && isStringLiteralLike(arg)) {
+            return arg;
+        }
+        return undefined;
+    }
+
+    // Check for require: require("./module")
+    if (isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
+        return node.arguments[0];
+    }
+
+    // Check for test framework patterns (opt-in only)
+    if (preferences.updateImportsInTestFrameworkCalls) {
+        // Must have form: object.method(...)
+        if (!isPropertyAccessExpression(node.expression)) {
+            return undefined;
+        }
+
+        const propertyAccess = node.expression;
+
+        // Check if it's a simple identifier (not a nested property access)
+        if (!isIdentifier(propertyAccess.expression)) {
+            return undefined;
+        }
+
+        const objectName = propertyAccess.expression.text;
+        const methodName = propertyAccess.name.text;
+
+        // Find matching pattern
+        const pattern = find(testFrameworkPatterns, p =>
+            p.object === objectName && p.method === methodName
+        );
+
+        if (!pattern) {
+            return undefined;
+        }
+
+        // Get the argument at the specified index
+        const arg = node.arguments[pattern.pathArgumentIndex];
+
+        // Only handle string literals, not template literals with substitutions
+        if (arg && isStringLiteral(arg)) {
+            return arg;
+        }
+    }
+
+    return undefined;
 }
 
 function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
@@ -181,6 +280,7 @@ function updateImports(
     newToOld: PathUpdater,
     host: LanguageServiceHost,
     getCanonicalFileName: GetCanonicalFileName,
+    preferences: UserPreferences,
 ): void {
     const allFiles = program.getSourceFiles();
     for (const sourceFile of allFiles) {
@@ -214,7 +314,7 @@ function updateImports(
             return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
                 ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                 : undefined;
-        });
+        }, preferences);
     }
 }
 
@@ -290,7 +390,7 @@ function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, res
     }
 }
 
-function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
+function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined, preferences: UserPreferences) {
     for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
         const updated = updateRef(ref.fileName);
         if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
@@ -300,6 +400,49 @@ function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.
         const updated = updateImport(importStringLiteral);
         if (updated !== undefined && updated !== importStringLiteral.text) changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
     }
+
+    // Update additional module loading patterns (dynamic import, require, test mocks)
+    // This catches patterns that aren't in sourceFile.imports (like require in .ts files)
+    updateModuleLoadingCalls(sourceFile, changeTracker, updateImport, preferences);
+}
+
+/**
+ * Updates module loading calls (dynamic import, require, test framework mocks) in a source file.
+ * Handles import(), require(), jest.mock(), vitest.mock(), etc.
+ */
+function updateModuleLoadingCalls(
+    sourceFile: SourceFile,
+    changeTracker: textChanges.ChangeTracker,
+    updateImport: (importLiteral: StringLiteralLike) => string | undefined,
+    preferences: UserPreferences,
+): void {
+    // Create a set of string literals already processed from sourceFile.imports to avoid duplicates
+    const processedImports = new Set(sourceFile.imports);
+
+    // Visitor pattern - recursively walk the AST
+    function visitor(node: Node): void {
+        // Check for call expressions
+        if (isCallExpression(node)) {
+            const pathArgument = getModulePathArgument(node, preferences);
+            // Skip if this path argument was already processed from sourceFile.imports
+            if (pathArgument && !processedImports.has(pathArgument)) {
+                const updated = updateImport(pathArgument);
+                if (updated !== undefined && updated !== pathArgument.text) {
+                    changeTracker.replaceRangeWithText(
+                        sourceFile,
+                        createStringRange(pathArgument, sourceFile),
+                        updated
+                    );
+                }
+            }
+        }
+
+        // Continue walking the tree
+        forEachChild(node, visitor);
+    }
+
+    // Start the traversal
+    visitor(sourceFile);
 }
 
 function createStringRange(node: StringLiteralLike, sourceFile: SourceFileLike): TextRange {

@@ -8430,6 +8430,13 @@ declare namespace ts {
          * Default: `500`
          */
         readonly maximumHoverLength?: number;
+        /**
+         * If enabled, file rename operations will update string literals in test framework
+         * mocking functions such as jest.mock(), vitest.mock(), etc.
+         *
+         * Default: `false`
+         */
+        readonly updateImportsInTestFrameworkCalls?: boolean;
     }
     type OrganizeImportsTypeOrder = "last" | "inline" | "first";
     /** Represents a bigint literal value without requiring bigint support */

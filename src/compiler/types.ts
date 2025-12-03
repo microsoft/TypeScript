@@ -10564,6 +10564,13 @@ export interface UserPreferences {
      * Default: `500`
      */
     readonly maximumHoverLength?: number;
+    /**
+     * If enabled, file rename operations will update string literals in test framework
+     * mocking functions such as jest.mock(), vitest.mock(), etc.
+     *
+     * Default: false
+     */
+    readonly updateImportsInTestFrameworkCalls?: boolean;
 }
 
 export type OrganizeImportsTypeOrder = "last" | "inline" | "first";
