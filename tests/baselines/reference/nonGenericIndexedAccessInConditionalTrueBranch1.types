@@ -39,3 +39,7 @@ type E = "k" extends keyof C ? C["k" | "other"] : never;
 >E : boolean | symbol
 >  : ^^^^^^^^^^^^^^^^
 
+type F = keyof C extends "k" ? C[keyof C] : never;
+>F : never
+>  : ^^^^^
+

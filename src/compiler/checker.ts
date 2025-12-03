@@ -19173,7 +19173,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
         if (indexType.flags & TypeFlags.Substitution) {
-            indexType = (indexType as SubstitutionType).baseType;
+            indexType = getSubstitutionIntersection(indexType as SubstitutionType);
         }
         const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
         const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);

@@ -37,3 +37,9 @@ type E = "k" extends keyof C ? C["k" | "other"] : never;
 >C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
 >C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
 
+type F = keyof C extends "k" ? C[keyof C] : never;
+>F : Symbol(F, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 14, 56))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+
