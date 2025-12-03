@@ -261,7 +261,9 @@ import {
     isBinaryExpression,
     isBindingElement,
     isBindingPattern,
+    isBlock,
     isCallExpression,
+    isCaseClause,
     isClassDeclaration,
     isClassElement,
     isClassExpression,
@@ -274,6 +276,7 @@ import {
     isDeclaration,
     isDeclarationFileName,
     isDecorator,
+    isDefaultClause,
     isElementAccessExpression,
     isEnumDeclaration,
     isEnumMember,
@@ -332,6 +335,7 @@ import {
     isMethodDeclaration,
     isMethodOrAccessor,
     isModifierLike,
+    isModuleBlock,
     isModuleDeclaration,
     isModuleOrEnumDeclaration,
     isNamedDeclaration,
@@ -9274,16 +9278,6 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions): boolean {
 }
 
 /** @internal */
-export function unreachableCodeIsError(options: CompilerOptions): boolean {
-    return options.allowUnreachableCode === false;
-}
-
-/** @internal */
-export function unusedLabelIsError(options: CompilerOptions): boolean {
-    return options.allowUnusedLabels === false;
-}
-
-/** @internal */
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
@@ -12371,4 +12365,23 @@ function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node
 
 function getFirstChild(node: Node): Node | undefined {
     return forEachChild(node, child => child);
+}
+
+/** @internal */
+export function canHaveStatements(node: Node): node is Block | ModuleBlock | SourceFile | CaseClause | DefaultClause {
+    return isBlock(node) || isModuleBlock(node) || isSourceFile(node) || isCaseClause(node) || isDefaultClause(node);
+}
+
+/** @internal */
+export function isPotentiallyExecutableNode(node: Node): boolean {
+    if (SyntaxKind.FirstStatement <= node.kind && node.kind <= SyntaxKind.LastStatement) {
+        if (isVariableStatement(node)) {
+            if (getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped) {
+                return true;
+            }
+            return some(node.declarationList.declarations, d => d.initializer !== undefined);
+        }
+        return true;
+    }
+    return isClassDeclaration(node) || isEnumDeclaration(node) || isModuleDeclaration(node);
 }
