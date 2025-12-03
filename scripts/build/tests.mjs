@@ -1,8 +1,8 @@
 import { CancelError } from "@esfx/canceltoken";
-import chalk from "chalk";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import pc from "picocolors";
 
 import {
     findUpFile,
@@ -15,6 +15,9 @@ import {
     rimraf,
 } from "./utils.mjs";
 
+/** @import { CancelToken } from "@esfx/canceltoken" */
+void 0;
+
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
@@ -25,11 +28,11 @@ export const coverageDir = "coverage";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {object} options
- * @param {import("@esfx/canceltoken").CancelToken} [options.token]
+ * @param {CancelToken} [options.token]
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
-    const testTimeout = cmdLineOptions.timeout;
+    let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const skipSysTests = cmdLineOptions.skipSysTests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -42,9 +45,15 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
     const coverage = cmdLineOptions.coverage;
+
+    if (coverage && testTimeout) {
+        testTimeout *= 2;
+        console.log(pc.yellowBright(`[coverage] doubling test timeout to ${testTimeout}ms...`));
+    }
+
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
-            console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
+            console.log(pc.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
         await rimraf(coverageDir);
@@ -72,7 +81,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     }
 
     if (options.watching) {
-        console.log(chalk.yellowBright(`[watch] running tests...`));
+        console.log(pc.yellowBright(`[watch] running tests...`));
     }
 
     if (tests || skipSysTests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
@@ -96,7 +105,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
         if (failed) {
             const grep = fs.readFileSync(".failed-tests", "utf8")
-                .split(/\r?\n/g)
+                .split(/\r?\n/)
                 .map(test => test.trim())
                 .filter(test => test.length > 0)
                 .map(regExpEscape)
@@ -139,9 +148,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             process.env.NODE_V8_COVERAGE = path.resolve(coverageDir, "tmp");
         }
 
-        await exec(process.execPath, args, { token: options.token });
-        if (coverage) {
-            await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report"], { token: options.token });
+        try {
+            await exec(process.execPath, args, { token: options.token });
+        }
+        finally {
+            // Calculate coverage even if tests failed.
+            if (coverage) {
+                await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report", "--experimental-monocart"], { token: options.token });
+            }
         }
     }
     catch (e) {
@@ -164,7 +178,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
 
         if (options.watching) {
-            console.error(`${chalk.redBright(error.name)}: ${error.message}`);
+            console.error(`${pc.redBright(error.name)}: ${error.message}`);
         }
         else {
             process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;

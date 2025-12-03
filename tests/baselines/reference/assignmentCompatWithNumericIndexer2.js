@@ -20,7 +20,7 @@ var b2: { [x: number]: Derived2; }
 a = b2;
 b2 = a; // error
 
-module Generics {
+namespace Generics {
     interface A<T extends Base> {
         [x: number]: T;
     }

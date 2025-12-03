@@ -1,5 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/app/src/index.ts]
 
@@ -92,6 +94,20 @@ export class MyLibClass { }
  "main": "dist/index.js"
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -128,18 +144,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/app/src/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/app/tsconfig.json, currentDirectory: /user/username/projects/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/tsconfig.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/app/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/app/src/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/app/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/app/src/index.ts"
@@ -165,6 +171,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/app/tsconfig.json : {
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/app/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/app/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/src 1 undefined Config: /user/username/projects/app/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/src 1 undefined Config: /user/username/projects/app/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/tsconfig.json
@@ -204,18 +220,21 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	../shared/src/index.ts
 	  Imported via 'shared' from file 'src/index.ts'
 	src/index.ts
@@ -224,6 +243,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 0 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /user/username/projects/app
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/helper.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -263,8 +283,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 59,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -298,57 +318,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/app/src/index.ts",
         "configFile": "/user/username/projects/app/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
@@ -373,14 +347,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
 /user/username/projects/app/package.json: *new*
   {}
 /user/username/projects/app/tsconfig.json: *new*
@@ -412,6 +386,10 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json
 /user/username/projects/app/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -444,19 +422,25 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 1 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -527,6 +511,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -860,33 +850,32 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/user/username/projects/shared/src/index",
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
-          },
-          {
             "name": "MyHelper",
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
+            "source": "shared/helper",
             "hasAction": true,
-            "source": "/user/username/projects/shared/src/helper",
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -931,7 +920,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
@@ -962,19 +952,25 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 2 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -1045,6 +1041,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -1378,29 +1380,23 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/user/username/projects/shared/src/index",
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
-          },
-          {
             "name": "MyHelper",
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
+            "source": "shared/helper",
             "hasAction": true,
-            "source": "/user/username/projects/shared/src/helper",
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
@@ -1410,16 +1406,28 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
+            "source": "shared/other",
             "hasAction": true,
-            "source": "/user/username/projects/shared/src/other",
+            "sourceDisplay": [
+              {
+                "text": "shared/other",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
               "exportMapKey": "10 * OtherClass ",
+              "moduleSpecifier": "shared/other",
               "fileName": "/user/username/projects/shared/src/other.ts",
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1430,14 +1438,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
 /user/username/projects/app/package.json:
   {}
 /user/username/projects/app/tsconfig.json:
@@ -1473,6 +1481,10 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json
 /user/username/projects/app/src/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1529,7 +1541,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
@@ -1545,7 +1558,7 @@ Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new 
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1557,6 +1570,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -1627,6 +1646,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -1960,29 +1985,23 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/user/username/projects/shared/src/index",
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
-          },
-          {
             "name": "MyHelper",
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
+            "source": "shared/helper",
             "hasAction": true,
-            "source": "/user/username/projects/shared/src/helper",
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
@@ -1992,16 +2011,28 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
+            "source": "shared/other",
             "hasAction": true,
-            "source": "/user/username/projects/shared/src/other",
+            "sourceDisplay": [
+              {
+                "text": "shared/other",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
               "exportMapKey": "10 * OtherClass ",
+              "moduleSpecifier": "shared/other",
               "fileName": "/user/username/projects/shared/src/other.ts",
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2083,7 +2114,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -2095,6 +2126,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -2165,6 +2202,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -2496,20 +2539,12 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/user/username/projects/shared/src/index",
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2528,9 +2563,13 @@ Projects::
 /user/username/projects/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3
-    autoImportProviderHost: undefined *changed*
+    autoImportProviderHost: false *changed*
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json
 /user/username/projects/app/src/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1

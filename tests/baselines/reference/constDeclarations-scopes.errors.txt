@@ -105,7 +105,7 @@ constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not sup
     };
     
     // modules
-    module m {
+    namespace m {
         const c = 0;
         n = c;
     

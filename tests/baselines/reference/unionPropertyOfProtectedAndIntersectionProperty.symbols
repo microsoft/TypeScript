@@ -23,7 +23,7 @@ type Nothing<V extends Foo> = void;
 type Broken<V extends Array<Foo | Bar>> = {
 >Broken : Symbol(Broken, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 8, 35))
 >V : Symbol(V, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 10, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
 >Bar : Symbol(Bar, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 2, 1))
 

@@ -200,6 +200,9 @@ registerCodeFix({
                     else if (canDeleteEntireVariableStatement(sourceFile, token)) {
                         deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
                     }
+                    else if (isIdentifier(token) && isFunctionDeclaration(token.parent)) {
+                        deleteFunctionLikeDeclaration(changes, sourceFile, token.parent as FunctionLikeDeclaration);
+                    }
                     else {
                         tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
                     }

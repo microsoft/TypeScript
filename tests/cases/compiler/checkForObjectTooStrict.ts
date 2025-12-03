@@ -1,4 +1,4 @@
-module Foo {
+namespace Foo {
 
     export class Object {
 

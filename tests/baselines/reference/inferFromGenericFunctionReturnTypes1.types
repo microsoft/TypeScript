@@ -333,21 +333,21 @@ testSet.transform(
 >testSet.transform(  compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<string>
 >                                                                                                                                       : ^^^^^^^^^^^^^
 >testSet.transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
->                  : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^      ^ ^^^^^      ^ 
+>                  : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testSet : SetOf<number>
 >        : ^^^^^^^^^^^^^
 >transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
->          : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^      ^ ^^^^^      ^ 
+>          : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   compose(
 >compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => x + '!!!'),    map(x => x.toUpperCase())  ) : (x: SetOf<number>) => SetOf<string>
->                                                                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                                                                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
 >        : ^ ^^ ^^ ^^ ^^ ^^   ^^                         ^^   ^^                         ^^   ^^                         ^^   ^^                         ^^^^^                         
 
     filter(x => x % 1 === 0),
 >filter(x => x % 1 === 0) : (s: SetOf<number>) => SetOf<number>
->                         : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
 >       : ^ ^^         ^^                 ^^^^^                         
 >x => x % 1 === 0 : (x: number) => boolean
@@ -367,7 +367,7 @@ testSet.transform(
 
     map(x => x + x),
 >map(x => x + x) : (s: SetOf<number>) => SetOf<number>
->                : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
 >    : ^ ^^ ^^  ^^           ^^^^^                         
 >x => x + x : (x: number) => number
@@ -383,7 +383,7 @@ testSet.transform(
 
     map(x => x + '!!!'),
 >map(x => x + '!!!') : (s: SetOf<number>) => SetOf<string>
->                    : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
 >    : ^ ^^ ^^  ^^           ^^^^^                         
 >x => x + '!!!' : (x: number) => string
@@ -399,7 +399,7 @@ testSet.transform(
 
     map(x => x.toUpperCase())
 >map(x => x.toUpperCase()) : (s: SetOf<string>) => SetOf<string>
->                          : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
 >    : ^ ^^ ^^  ^^           ^^^^^                         
 >x => x.toUpperCase() : (x: string) => string
@@ -422,21 +422,21 @@ testSet.transform(
 >testSet.transform(  compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => 123),  // Whoops a bug    map(x => x.toUpperCase()) // causes an error!  )) : SetOf<any>
 >                                                                                                                                                                      : ^^^^^^^^^^
 >testSet.transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
->                  : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^      ^ ^^^^^      ^ 
+>                  : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testSet : SetOf<number>
 >        : ^^^^^^^^^^^^^
 >transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
->          : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^      ^ ^^^^^      ^ 
+>          : ^ ^^           ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   compose(
 >compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => 123),  // Whoops a bug    map(x => x.toUpperCase()) // causes an error!  ) : (x: SetOf<number>) => SetOf<any>
->                                                                                                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^ 
+>                                                                                                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
 >        : ^ ^^ ^^ ^^ ^^ ^^   ^^                         ^^   ^^                         ^^   ^^                         ^^   ^^                         ^^^^^                         
 
     filter(x => x % 1 === 0),
 >filter(x => x % 1 === 0) : (s: SetOf<number>) => SetOf<number>
->                         : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
 >       : ^ ^^         ^^                 ^^^^^                         
 >x => x % 1 === 0 : (x: number) => boolean
@@ -456,7 +456,7 @@ testSet.transform(
 
     map(x => x + x),
 >map(x => x + x) : (s: SetOf<number>) => SetOf<number>
->                : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
 >    : ^ ^^ ^^  ^^           ^^^^^                         
 >x => x + x : (x: number) => number
@@ -472,7 +472,7 @@ testSet.transform(
 
     map(x => 123),  // Whoops a bug
 >map(x => 123) : (s: SetOf<number>) => SetOf<number>
->              : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^ 
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
 >    : ^ ^^ ^^  ^^           ^^^^^                         
 >x => 123 : (x: number) => number
@@ -484,7 +484,7 @@ testSet.transform(
 
     map(x => x.toUpperCase()) // causes an error!
 >map(x => x.toUpperCase()) : (s: SetOf<number>) => SetOf<any>
->                          : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^ 
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
 >    : ^ ^^ ^^  ^^           ^^^^^                         
 >x => x.toUpperCase() : (x: number) => any

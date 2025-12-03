@@ -22,7 +22,7 @@ interface Foo {
 
 async function asyncFoo(): Promise<Foo> {
 >asyncFoo : Symbol(asyncFoo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 8, 1))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 0))
 
     return {

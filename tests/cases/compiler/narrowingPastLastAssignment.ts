@@ -155,3 +155,13 @@ function f12() {
     }
     values.forEach(v => foo.push(v));
 }
+
+function f13() {
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
+    var foo: string | undefined;
+    foo = '';
+
+    return () => {
+        foo.toLocaleLowerCase();
+    }
+}

@@ -1,7 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /node_modules/hooks/useFoo.ts
 ////declare const _default: () => void;
 ////export default _default;

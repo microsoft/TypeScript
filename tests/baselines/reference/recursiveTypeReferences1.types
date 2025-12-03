@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === recursiveTypeReferences1.ts ===
 type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 >ValueOrArray : ValueOrArray<T>
@@ -684,11 +687,11 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  }) : any[]
 >                                                                                                                                                                                                                                                                     : ^^^^^
 >node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
->         : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>         : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >node : Tree
 >     : ^^^^
 >map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : ([el, children]: [HTMLHeadingElement, Tree], i: number) => any
 >                                                                                                                                                                                                                                                           : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >el : HTMLHeadingElement
@@ -761,12 +764,12 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >    : ^^^
 >el.textContent! : string
 >                : ^^^^^^
->el.textContent : string | null
->               : ^^^^^^^^^^^^^
+>el.textContent : string
+>               : ^^^^^^
 >el : HTMLHeadingElement
 >   : ^^^^^^^^^^^^^^^^^^
->textContent : string | null
->            : ^^^^^^^^^^^^^
+>textContent : string
+>            : ^^^^^^
 
       children.length > 0 ? parse(children, idx) : frag()
 >children.length > 0 ? parse(children, idx) : frag() : any
@@ -834,11 +837,11 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >hss.pop() : HTMLHeadingElement[] | undefined
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hss.pop : () => HTMLHeadingElement[] | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^            
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hss : HTMLHeadingElement[][]
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >pop : () => HTMLHeadingElement[] | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^            
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       return hs.length === 0 || level(h) > level(hs[0])
 >hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]) : any
@@ -960,11 +963,11 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >hs.shift() : HTMLHeadingElement | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hs.shift : () => HTMLHeadingElement | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^            
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 >shift : () => HTMLHeadingElement | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^            
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cons(hs) : Tree
 >         : ^^^^
 >cons : (hs: HTMLHeadingElement[]) => Tree

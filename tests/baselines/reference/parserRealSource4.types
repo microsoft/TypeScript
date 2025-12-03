@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -666,7 +666,7 @@ module TypeScript {
 >this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys()) : string[]
 >                                                                        : ^^^^^^^^
 >this.primaryTable.getAllKeys().concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
->                                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>                                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.primaryTable.getAllKeys() : string[]
 >                               : ^^^^^^^^
 >this.primaryTable.getAllKeys : () => string[]
@@ -680,7 +680,7 @@ module TypeScript {
 >getAllKeys : () => string[]
 >           : ^^^^^^        
 >concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.secondaryTable.getAllKeys() : string[]
 >                                 : ^^^^^^^^
 >this.secondaryTable.getAllKeys : () => string[]

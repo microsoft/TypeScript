@@ -1,0 +1,30 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== b.ts (0 errors) ====
+    import A = require("a");
+     
+    export class B extends A.A { 
+        constructor () { 
+            super();
+        }
+    }
+==== c.ts (0 errors) ====
+    import B = require("b");
+     
+    export class C extends B.B { 
+        constructor () { 
+            super();
+        }
+    }
+    
+==== a.ts (0 errors) ====
+    import C = require("c");
+     
+    export class A {
+        constructor () { }
+    }
+    

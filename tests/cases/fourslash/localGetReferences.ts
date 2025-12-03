@@ -37,7 +37,7 @@
 ////    return /*20*/x++;
 ////}
 ////
-////module modTest {
+////namespace modTest {
 ////    //Declare
 ////    export var modVar:number;
 ////
@@ -59,7 +59,7 @@
 ////        modVar++;
 ////    }
 ////
-////    module testMod {
+////    namespace testMod {
 ////        var boo = /*27*/foo;
 ////    }
 ////}
@@ -158,7 +158,7 @@
 ////	return remotex++;
 ////}
 ////
-////module remotemodTest {
+////namespace remotemodTest {
 ////	//Declare
 ////	export var remotemodVar: number;
 ////
@@ -180,7 +180,7 @@
 ////		remotemodVar++;
 ////    }
 ////
-////	module remotetestMod {
+////	namespace remotetestMod {
 ////		var remoteboo = remotefoo;
 ////	}
 ////}

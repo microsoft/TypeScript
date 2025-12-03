@@ -1,4 +1,4 @@
-name: Accept Baselines and Fix Lints
+name: Accept Baselines, Fix Lints, and Format
 
 on:
   workflow_dispatch: {}
@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: 'lts/*'
 
@@ -32,8 +32,9 @@ jobs:
           git rm -r --quiet tests/baselines/reference
           npx hereby runtests-parallel --ci --fix || true
           npx hereby baseline-accept
+          npx hereby format
           git add ./src
           git add ./tests/baselines/reference
           git diff --cached
-          git commit -m "Update Baselines and/or Applied Lint Fixes"
+          git commit -m "Update Baselines, Applied Lint Fixes, and/or Formatted"
           git push

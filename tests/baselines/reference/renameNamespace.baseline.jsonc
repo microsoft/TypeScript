@@ -1,0 +1,9 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameNamespace.ts ===
+// <|namespace /*RENAME*/[|NSRENAME|] {
+//     export const enum E {
+//         A = 'a'
+//     }
+// }|>
+// 
+// const a: [|NSRENAME|].E = [|NSRENAME|].E.A;

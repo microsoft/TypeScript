@@ -42,7 +42,7 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
-declare module ts {
+declare namespace ts {
     export const Diagnostics: typeof import("../../../src/compiler/diagnosticInformationMap.generated").Diagnostics;
     export type MapKey = string | number;
     export interface Map<T> {
@@ -361,7 +361,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineCompletions(preferences?: UserPreferences): void;
-        baselineQuickInfo(): void;
+        baselineQuickInfo(verbosityLevels?: VerbosityLevels, maximumLength?: number): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
@@ -458,6 +458,11 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        preparePasteEdits(options: {
+            copiedFromFile: string,
+            copiedTextRange: { pos: number, end: number }[],
+            providePasteEdits: boolean
+        }): void;
         pasteEdits(options: {
             newFileContents: { readonly [fileName: string]: string };
             args: {
@@ -686,6 +691,7 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
+        readonly autoImportSpecifierExcludeRegexes?: readonly string[];
         readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "unicode" | "ordinal";
@@ -694,6 +700,9 @@ declare namespace FourSlashInterface {
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
         readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    }
+    interface VerbosityLevels {
+        [markerName: string]: number | number[] | undefined;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
@@ -719,6 +728,7 @@ declare namespace FourSlashInterface {
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
         readonly triggerCharacter?: string;
+        readonly defaultCommitCharacters?: string[];
     }
     type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
     interface ExpectedCompletionEntryObject {
@@ -735,6 +745,7 @@ declare namespace FourSlashInterface {
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
         readonly isSnippet?: boolean;
+        readonly commitCharacters?: string[];
 
         // details
         readonly text?: string;

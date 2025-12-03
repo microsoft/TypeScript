@@ -131,6 +131,7 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -373,7 +374,6 @@ import {
     SourceMapSource,
     SpreadAssignment,
     SpreadElement,
-    stableSort,
     Statement,
     StringLiteral,
     supportedJSExtensionsFlat,
@@ -393,6 +393,7 @@ import {
     ThrowStatement,
     TokenFlags,
     tokenToString,
+    toSorted,
     tracing,
     TransformationResult,
     transformNodes,
@@ -427,7 +428,7 @@ import * as performance from "./_namespaces/ts.performance.js";
 const brackets = createBracketsMap();
 
 /** @internal */
-export function isBuildInfoFile(file: string) {
+export function isBuildInfoFile(file: string): boolean {
     return fileExtensionIs(file, Extension.TsBuildInfo);
 }
 
@@ -449,7 +450,7 @@ export function forEachEmittedFile<T>(
     forceDtsEmit = false,
     onlyBuildInfo?: boolean,
     includeBuildInfo?: boolean,
-) {
+): T | undefined {
     const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
     if (!onlyBuildInfo) {
@@ -477,7 +478,7 @@ export function forEachEmittedFile<T>(
     }
 }
 
-export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
+export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined {
     const configFile = options.configFilePath;
     if (!canEmitTsBuildInfo(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
@@ -498,13 +499,11 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
 
-/** @internal */
-export function canEmitTsBuildInfo(options: CompilerOptions) {
+function canEmitTsBuildInfo(options: CompilerOptions) {
     return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
-/** @internal */
-export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
+function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
     const outPath = options.outFile!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
@@ -561,12 +560,17 @@ function getOutputPathWithoutChangingExt(
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+export function getOutputDeclarationFileName(
+    inputFileName: string,
+    configFile: ParsedCommandLine,
+    ignoreCase: boolean,
+    getCommonSourceDirectory = (): string => getCommonSourceDirectoryOfConfig(configFile, ignoreCase),
+): string {
     return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
 }
 
 /** @internal */
-export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string) {
+export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string): string {
     return changeExtension(
         getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
         getDeclarationEmitExtensionForPath(inputFileName),
@@ -722,7 +726,7 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 }
 
 /** @internal */
-export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined) {
+export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined): boolean {
     return !!forceDtsEmit && !!emitOnly;
 }
 
@@ -829,6 +833,7 @@ export function emitFiles(
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
             module: getEmitModuleKind(compilerOptions),
+            moduleResolution: getEmitModuleResolutionKind(compilerOptions),
             target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -904,8 +909,9 @@ export function emitFiles(
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
+                moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
@@ -959,6 +965,7 @@ export function emitFiles(
     }
 
     function markLinkedReferences(file: SourceFile) {
+        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as they don't do import ellision, no need to calculate it
         ts.forEachChildRecursively(file, n => {
             if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
             if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them
@@ -1110,7 +1117,7 @@ export function emitFiles(
 }
 
 /** @internal */
-export function getBuildInfoText(buildInfo: BuildInfo) {
+export function getBuildInfoText(buildInfo: BuildInfo): string {
     return JSON.stringify(buildInfo);
 }
 
@@ -1160,6 +1167,8 @@ export const notImplementedResolver: EmitResolver = {
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
     isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
+    createLateBoundIndexSignatures: notImplemented,
+    symbolToDeclarations: notImplemented,
 };
 
 const enum PipelinePhase {
@@ -1171,16 +1180,16 @@ const enum PipelinePhase {
 }
 
 /** @internal */
-export const createPrinterWithDefaults = /* @__PURE__ */ memoize(() => createPrinter({}));
+export const createPrinterWithDefaults: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({}));
 
 /** @internal */
-export const createPrinterWithRemoveComments = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
+export const createPrinterWithRemoveComments: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsNeverAsciiEscape = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+export const createPrinterWithRemoveCommentsNeverAsciiEscape: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -1877,6 +1886,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
+                case SyntaxKind.NotEmittedTypeElement:
                     return;
             }
             if (isExpression(node)) {
@@ -2069,7 +2079,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && stableSort(helpers, compareEmitHelpers);
+        return helpers && toSorted(helpers, compareEmitHelpers);
     }
 
     //
@@ -2089,7 +2099,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     // SyntaxKind.TemplateMiddle
     // SyntaxKind.TemplateTail
     function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
-        const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
+        const text = getLiteralTextOfNode(node, /*sourceFile*/ undefined, printerOptions.neverAsciiEscape, jsxAttributeEscape);
         if (
             (printerOptions.sourceMap || printerOptions.inlineSourceMap)
             && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))
@@ -2642,7 +2652,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         expression = skipPartiallyEmittedExpressions(expression);
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
-            const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
+            const text = getLiteralTextOfNode(expression as LiteralExpression, /*sourceFile*/ undefined, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
@@ -3217,17 +3227,90 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Wraps an expression in parens if we would emit a leading comment that would introduce a line separator
      * between the node and its parent.
      */
-    function parenthesizeExpressionForNoAsi(node: Expression) {
-        if (!commentsDisabled && isPartiallyEmittedExpression(node) && willEmitLeadingNewLine(node)) {
-            const parseNode = getParseTreeNode(node);
-            if (parseNode && isParenthesizedExpression(parseNode)) {
-                // If the original node was a parenthesized expression, restore it to preserve comment and source map emit
-                const parens = factory.createParenthesizedExpression(node.expression);
-                setOriginalNode(parens, node);
-                setTextRange(parens, parseNode);
-                return parens;
+    function parenthesizeExpressionForNoAsi(node: Expression): Expression {
+        if (!commentsDisabled) {
+            switch (node.kind) {
+                case SyntaxKind.PartiallyEmittedExpression:
+                    if (willEmitLeadingNewLine(node)) {
+                        const parseNode = getParseTreeNode(node);
+                        if (parseNode && isParenthesizedExpression(parseNode)) {
+                            // If the original node was a parenthesized expression, restore it to preserve comment and source map emit
+                            const parens = factory.createParenthesizedExpression((node as PartiallyEmittedExpression).expression);
+                            setOriginalNode(parens, node);
+                            setTextRange(parens, parseNode);
+                            return parens;
+                        }
+                        return factory.createParenthesizedExpression(node);
+                    }
+                    return factory.updatePartiallyEmittedExpression(
+                        node as PartiallyEmittedExpression,
+                        parenthesizeExpressionForNoAsi((node as PartiallyEmittedExpression).expression),
+                    );
+                case SyntaxKind.PropertyAccessExpression:
+                    return factory.updatePropertyAccessExpression(
+                        node as PropertyAccessExpression,
+                        parenthesizeExpressionForNoAsi((node as PropertyAccessExpression).expression),
+                        (node as PropertyAccessExpression).name,
+                    );
+                case SyntaxKind.ElementAccessExpression:
+                    return factory.updateElementAccessExpression(
+                        node as ElementAccessExpression,
+                        parenthesizeExpressionForNoAsi((node as ElementAccessExpression).expression),
+                        (node as ElementAccessExpression).argumentExpression,
+                    );
+                case SyntaxKind.CallExpression:
+                    return factory.updateCallExpression(
+                        node as CallExpression,
+                        parenthesizeExpressionForNoAsi((node as CallExpression).expression),
+                        (node as CallExpression).typeArguments,
+                        (node as CallExpression).arguments,
+                    );
+                case SyntaxKind.TaggedTemplateExpression:
+                    return factory.updateTaggedTemplateExpression(
+                        node as TaggedTemplateExpression,
+                        parenthesizeExpressionForNoAsi((node as TaggedTemplateExpression).tag),
+                        (node as TaggedTemplateExpression).typeArguments,
+                        (node as TaggedTemplateExpression).template,
+                    );
+                case SyntaxKind.PostfixUnaryExpression:
+                    return factory.updatePostfixUnaryExpression(
+                        node as PostfixUnaryExpression,
+                        parenthesizeExpressionForNoAsi((node as PostfixUnaryExpression).operand),
+                    );
+                case SyntaxKind.BinaryExpression:
+                    return factory.updateBinaryExpression(
+                        node as BinaryExpression,
+                        parenthesizeExpressionForNoAsi((node as BinaryExpression).left),
+                        (node as BinaryExpression).operatorToken,
+                        (node as BinaryExpression).right,
+                    );
+                case SyntaxKind.ConditionalExpression:
+                    return factory.updateConditionalExpression(
+                        node as ConditionalExpression,
+                        parenthesizeExpressionForNoAsi((node as ConditionalExpression).condition),
+                        (node as ConditionalExpression).questionToken,
+                        (node as ConditionalExpression).whenTrue,
+                        (node as ConditionalExpression).colonToken,
+                        (node as ConditionalExpression).whenFalse,
+                    );
+                case SyntaxKind.AsExpression:
+                    return factory.updateAsExpression(
+                        node as AsExpression,
+                        parenthesizeExpressionForNoAsi((node as AsExpression).expression),
+                        (node as AsExpression).type,
+                    );
+                case SyntaxKind.SatisfiesExpression:
+                    return factory.updateSatisfiesExpression(
+                        node as SatisfiesExpression,
+                        parenthesizeExpressionForNoAsi((node as SatisfiesExpression).expression),
+                        (node as SatisfiesExpression).type,
+                    );
+                case SyntaxKind.NonNullExpression:
+                    return factory.updateNonNullExpression(
+                        node as NonNullExpression,
+                        parenthesizeExpressionForNoAsi((node as NonNullExpression).expression),
+                    );
             }
-            return factory.createParenthesizedExpression(node);
         }
         return node;
     }
@@ -3603,8 +3686,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitImportClause(node: ImportClause) {
-        if (node.isTypeOnly) {
-            emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+        if (node.phaseModifier !== undefined) {
+            emitTokenWithComment(node.phaseModifier, node.pos, writeKeyword, node);
             writeSpace();
         }
         emit(node.name);
@@ -4002,7 +4085,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.comment) {
             const text = getTextOfJSDocComment(node.comment);
             if (text) {
-                const lines = text.split(/\r\n?|\n/g);
+                const lines = text.split(/\r\n?|\n/);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -4203,18 +4286,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-        emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
+        emitTripleSlashDirectives(node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
     }
 
     function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-        if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
+        if (node.isDeclarationFile) emitTripleSlashDirectives(node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
     }
 
-    function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: readonly FileReference[], types: readonly FileReference[], libs: readonly FileReference[]) {
-        if (hasNoDefaultLib) {
-            writeComment(`/// <reference no-default-lib="true"/>`);
-            writeLine();
-        }
+    function emitTripleSlashDirectives(files: readonly FileReference[], types: readonly FileReference[], libs: readonly FileReference[]) {
         if (currentSourceFile && currentSourceFile.moduleName) {
             writeComment(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
             writeLine();
@@ -4505,7 +4584,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
             return emitTypeArguments(parentNode, parentNode.typeArguments);
         }
-        emitList(parentNode, typeParameters, ListFormat.TypeParameters);
+        emitList(parentNode, typeParameters, ListFormat.TypeParameters | (isArrowFunction(parentNode) ? ListFormat.AllowTrailingComma : ListFormat.None));
     }
 
     function emitParameters(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
@@ -4877,7 +4956,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function writeLines(text: string): void {
-        const lines = text.split(/\r\n?|\n/g);
+        const lines = text.split(/\r\n?|\n/);
         const indentation = guessIndentation(lines);
         for (const lineText of lines) {
             const line = indentation ? lineText.slice(indentation) : lineText;
@@ -5170,7 +5249,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return getSourceTextOfNodeFromSourceFile(sourceFile, node, includeTrivia);
     }
 
-    function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
+    function getLiteralTextOfNode(node: LiteralLikeNode, sourceFile = currentSourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
         if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
             const textSourceNode = (node as StringLiteral).textSourceNode!;
             if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
@@ -5180,7 +5259,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     `"${escapeNonAsciiString(text)}"`;
             }
             else {
-                return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
+                return getLiteralTextOfNode(textSourceNode, getSourceFileOfNode(textSourceNode), neverAsciiEscape, jsxAttributeEscape);
             }
         }
 
@@ -5189,7 +5268,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
             | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
-        return getLiteralText(node, currentSourceFile, flags);
+        return getLiteralText(node, sourceFile, flags);
     }
 
     /**

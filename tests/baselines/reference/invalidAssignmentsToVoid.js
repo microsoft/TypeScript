@@ -16,7 +16,7 @@ interface I { foo: string; }
 var i: I;
 x = i;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 function f<T>(a: T) {

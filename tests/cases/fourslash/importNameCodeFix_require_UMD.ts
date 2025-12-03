@@ -2,6 +2,9 @@
 
 // @allowJs: true
 // @checkJs: true
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 
 // @Filename: umd.d.ts
 ////namespace Foo { function f() {} }

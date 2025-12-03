@@ -2,7 +2,7 @@
 
 //// [funduleUsedAcrossFileBoundary_file1.ts]
 declare function Q<T>(value: T): string;
-declare module Q {
+declare namespace Q {
     interface Promise<T> {
         foo: string;
     }

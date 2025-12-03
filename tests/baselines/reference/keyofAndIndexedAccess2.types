@@ -611,11 +611,11 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[IdOf<E>][]
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ids.map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
->        : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>        : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >ids : IdOf<E>[]
 >    : ^^^^^^^^^
 >map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >id => entities[id] : (id: IdOf<E>) => { [key: string]: E; [key: number]: E; }[IdOf<E>]
 >                   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : IdOf<E>

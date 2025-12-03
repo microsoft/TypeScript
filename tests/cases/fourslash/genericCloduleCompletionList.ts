@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////class D<T> { x: number }
-////module D { export function f() { } }
+////namespace D { export function f() { } }
 
 ////var d: D<number>;
 ////d./**/

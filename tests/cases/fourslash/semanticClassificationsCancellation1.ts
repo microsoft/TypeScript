@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-////module M {
+////namespace M {
 ////}
-////module N {
+////namespace N {
 ////}
 
 const c = classification("original");

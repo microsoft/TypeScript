@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "nodenext",
+        "target": "esnext",
+        "moduleResolution": "nodenext",
+        "moduleDetection": "force",
+        "useDefineForClassFields": true
+    }
+}

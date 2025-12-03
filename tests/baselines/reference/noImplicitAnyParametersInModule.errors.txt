@@ -23,7 +23,7 @@ noImplicitAnyParametersInModule.ts(44,21): error TS7019: Rest parameter 'r' impl
 
 
 ==== noImplicitAnyParametersInModule.ts (22 errors) ====
-    module M {
+    namespace M {
         // No implicit-'any' errors.
         function m_f1(): void { }
     

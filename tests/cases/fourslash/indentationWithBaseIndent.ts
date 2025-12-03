@@ -2,7 +2,7 @@
 
 ////
 ////{| "indent": 10 , "baseIndentSize": 10 |}
-////          module classes {
+////          namespace classes {
 ////{| "indent": 14 , "baseIndentSize": 10 |}
 ////              class Bar {
 ////{| "indent": 18 , "baseIndentSize": 10 |}
@@ -28,7 +28,7 @@
 ////          }
 ////
 ////
-////          module interfaces {
+////          namespace interfaces {
 ////{| "indent": 14 , "baseIndentSize": 10 |}
 ////              interface Foo {
 ////{| "indent": 18 , "baseIndentSize": 10 |}
@@ -42,8 +42,8 @@
 ////          }
 ////
 ////
-////          module nestedModules {
-////              module Foo2 {
+////          namespace nestedModules {
+////              namespace Foo2 {
 ////{| "indent": 18 , "baseIndentSize": 10 |}
 ////                  function f() {
 ////                  }
@@ -54,7 +54,7 @@
 ////          }
 ////
 ////
-////          module Enums {
+////          namespace Enums {
 ////              enum Foo3 {
 ////{| "indent": 18 , "baseIndentSize": 10 |}
 ////                  val1,
@@ -183,7 +183,7 @@
 ////{| "indent": 10 , "baseIndentSize": 10 |}
 ////
 ////
-////                 module changeBaseIndentSizeInSameFile {
+////                 namespace changeBaseIndentSizeInSameFile {
 ////{| "indent": 21 , "baseIndentSize": 17 |}
 ////                     interface Foo {
 ////{| "indent": 25 , "baseIndentSize": 17 |}

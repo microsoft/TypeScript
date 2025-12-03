@@ -1,7 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /node_modules/x/foo.d.ts
 ////not read
 

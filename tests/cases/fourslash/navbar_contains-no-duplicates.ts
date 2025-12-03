@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
-//// declare module Windows {
-////     export module Foundation {
+//// declare namespace Windows {
+////     export namespace Foundation {
 ////         export var A;
 ////         export class Test {
 ////             public wow();
@@ -8,10 +8,10 @@
 ////     }
 //// }
 ////
-//// declare module Windows {
-////     export module Foundation {
+//// declare namespace Windows {
+////     export namespace Foundation {
 ////         export var B;
-////         export module Test {
+////         export namespace Test {
 ////             export function Boom(): number;
 ////         }
 ////     }
@@ -23,7 +23,7 @@
 ////     }
 //// }
 ////
-//// module ABC {
+//// namespace ABC {
 ////     export var x = 3;
 //// }
 

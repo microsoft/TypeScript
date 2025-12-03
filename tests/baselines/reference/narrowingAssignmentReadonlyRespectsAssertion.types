@@ -180,17 +180,17 @@ function testFunc() {
 >val1.slice().reverse() : any[]
 >                       : ^^^^^
 >val1.slice().reverse : () => any[]
->                     : ^^^^^^^^^  
+>                     : ^^^^^^^^^^^
 >val1.slice() : any[]
 >             : ^^^^^
 >val1.slice : (start?: number, end?: number) => any[]
->           : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >val1 : any[]
 >     : ^^^^^
 >slice : (start?: number, end?: number) => any[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >reverse : () => any[]
->        : ^^^^^^^^^  
+>        : ^^^^^^^^^^^
 
           console.log(reversedVal1);
 >console.log(reversedVal1) : void

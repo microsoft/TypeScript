@@ -1,5 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/workspaces/somerepo/src/tsconfig.json] Inode:: 4
 {}
@@ -11,8 +13,7 @@ randomSeed();
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 9
 export function randomSeed(): string;
 
-//// [/a/lib/lib.d.ts] Inode:: 12
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 18
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -23,6 +24,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -35,8 +38,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /workspaces/somerepo/src/main.ts ProjectRootPath: undefined:: Result: /workspaces/somerepo/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /workspaces/somerepo/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /workspaces/somerepo/src/tsconfig.json, currentDirectory: /workspaces/somerepo/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/tsconfig.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /workspaces/somerepo/src/tsconfig.json : {
+ "rootNames": [
+  "/workspaces/somerepo/src/main.ts"
+ ],
+ "options": {
+  "configFilePath": "/workspaces/somerepo/src/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -47,14 +58,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /workspaces/somerepo/src/main.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /workspaces/somerepo/src/tsconfig.json : {
- "rootNames": [
-  "/workspaces/somerepo/src/main.ts"
- ],
- "options": {
-  "configFilePath": "/workspaces/somerepo/src/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src 1 undefined Config: /workspaces/somerepo/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src 1 undefined Config: /workspaces/somerepo/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
@@ -64,7 +67,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/random-seed/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
@@ -72,12 +83,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /wo
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts Text-1 "export function randomSeed(): string;"
 	/workspaces/somerepo/src/main.ts SVC-1-0 "import { randomSeed } from \"random-seed\";\nrandomSeed();"
 
 
-	../../../a/lib/lib.d.ts
+	../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../node_modules/@types/random-seed/index.d.ts
 	  Imported via "random-seed" from file 'main.ts'
@@ -114,7 +125,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 2,
-            "dtsSize": 371,
+            "dtsSize": 411,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -168,14 +179,24 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/workspaces/somerepo/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json: *new*
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules: *new*
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":18}
+/workspaces/somerepo: *new*
+  {"inode":2}
 /workspaces/somerepo/node_modules: *new*
   {"inode":6}
 /workspaces/somerepo/node_modules/@types: *new*
@@ -191,9 +212,10 @@ Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
@@ -235,8 +257,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -254,8 +275,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -273,8 +293,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -283,7 +302,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/workspaces/somerepo/src/main.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -317,6 +346,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /worksp
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] deleted
 
@@ -325,14 +357,24 @@ PolledWatches::
   {"pollingInterval":500}
 /workspaces/somerepo/node_modules/@types: *new*
   {"pollingInterval":500}
+/workspaces/somerepo/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules:
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":18}
+/workspaces/somerepo:
+  {"inode":2}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -350,16 +392,17 @@ Timeout callback:: count: 4
 13: /workspaces/somerepo/src/tsconfig.json *new*
 14: *ensureProjectForOpenFiles* *new*
 16: timerToUpdateChildWatches *new*
-17: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
+18: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
@@ -392,26 +435,30 @@ Timeout callback:: count: 5
 13: /workspaces/somerepo/src/tsconfig.json
 14: *ensureProjectForOpenFiles*
 16: timerToUpdateChildWatches
-17: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
-18: checkOne *new*
+18: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+19: checkOne *new*
 
 Before running Timeout callback:: count: 5
 13: /workspaces/somerepo/src/tsconfig.json
 14: *ensureProjectForOpenFiles*
 16: timerToUpdateChildWatches
-17: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
-18: checkOne
+18: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+19: checkOne
 
-Invoking Timeout callback:: timeoutId:: 18:: checkOne
+Invoking Timeout callback:: timeoutId:: 19:: checkOne
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/node_modules/@types/random-seed/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/node_modules/@types/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/node_modules/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/workspaces/somerepo/src/main.ts SVC-1-0 "import { randomSeed } from \"random-seed\";\nrandomSeed();"
 
 
-	../../../a/lib/lib.d.ts
+	../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	main.ts
 	  Matched by default include pattern '**/*'
@@ -424,14 +471,43 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 3
 
+PolledWatches::
+/workspaces/somerepo/node_modules:
+  {"pollingInterval":500}
+/workspaces/somerepo/node_modules/@types:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/node_modules:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/workspaces/somerepo/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":18}
+/workspaces/somerepo:
+  {"inode":2}
+/workspaces/somerepo/src:
+  {"inode":3}
+/workspaces/somerepo/src/tsconfig.json:
+  {"inode":4}
+
 Timeout callback:: count: 3
-17: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
+18: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
 13: /workspaces/somerepo/src/tsconfig.json
 14: *ensureProjectForOpenFiles*
 16: timerToUpdateChildWatches
@@ -444,6 +520,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -469,8 +546,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2307,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -488,8 +564,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -500,7 +575,15 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 3,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "updateGraphDurationMs": *,
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/workspaces/somerepo/src/main.ts"
+            }
+          ]
         }
       }
     }
@@ -572,9 +655,9 @@ Info seq  [hh:mm:ss:mss] sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 
 After running Timeout callback:: count: 3
 
 Timeout callback:: count: 3
-25: /workspaces/somerepo/src/tsconfig.json *new*
-26: *ensureProjectForOpenFiles* *new*
-27: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
+26: /workspaces/somerepo/src/tsconfig.json *new*
+27: *ensureProjectForOpenFiles* *new*
+28: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
@@ -582,8 +665,11 @@ Projects::
     projectProgramVersion: 2
     dirty: true *changed*
 
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Before request
-//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 16
+//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 122
 export function randomSeed(): string;
 
 
@@ -600,22 +686,25 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":18}
+/workspaces/somerepo:
+  {"inode":2}
 /workspaces/somerepo/node_modules: *new*
-  {"inode":13}
+  {"inode":119}
 /workspaces/somerepo/node_modules/@types: *new*
-  {"inode":14}
+  {"inode":120}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
   {"inode":4}
 
 Timeout callback:: count: 4
-25: /workspaces/somerepo/src/tsconfig.json
-26: *ensureProjectForOpenFiles*
-27: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
-33: timerToUpdateChildWatches *new*
+28: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
+26: /workspaces/somerepo/src/tsconfig.json
+27: *ensureProjectForOpenFiles*
+31: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
+35: timerToUpdateChildWatches *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -632,31 +721,35 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 5
-25: /workspaces/somerepo/src/tsconfig.json
-26: *ensureProjectForOpenFiles*
-27: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
-33: timerToUpdateChildWatches
-34: checkOne *new*
+26: /workspaces/somerepo/src/tsconfig.json
+27: *ensureProjectForOpenFiles*
+31: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+35: timerToUpdateChildWatches
+36: checkOne *new*
 
 Before running Timeout callback:: count: 5
-25: /workspaces/somerepo/src/tsconfig.json
-26: *ensureProjectForOpenFiles*
-27: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
-33: timerToUpdateChildWatches
-34: checkOne
+26: /workspaces/somerepo/src/tsconfig.json
+27: *ensureProjectForOpenFiles*
+31: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+35: timerToUpdateChildWatches
+36: checkOne
 
-Invoking Timeout callback:: timeoutId:: 34:: checkOne
+Invoking Timeout callback:: timeoutId:: 36:: checkOne
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/random-seed/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts Text-1 "export function randomSeed(): string;"
 	/workspaces/somerepo/src/main.ts SVC-1-0 "import { randomSeed } from \"random-seed\";\nrandomSeed();"
 
 
-	../../../a/lib/lib.d.ts
+	../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../node_modules/@types/random-seed/index.d.ts
 	  Imported via "random-seed" from file 'main.ts'
@@ -672,18 +765,45 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 3
 
+PolledWatches::
+/workspaces/somerepo/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/src/node_modules:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":18}
+/workspaces/somerepo:
+  {"inode":2}
+/workspaces/somerepo/node_modules:
+  {"inode":119}
+/workspaces/somerepo/node_modules/@types:
+  {"inode":120}
+/workspaces/somerepo/src:
+  {"inode":3}
+/workspaces/somerepo/src/tsconfig.json:
+  {"inode":4}
+
 Timeout callback:: count: 3
-26: *ensureProjectForOpenFiles* *deleted*
-27: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
-25: /workspaces/somerepo/src/tsconfig.json
-33: timerToUpdateChildWatches
-35: *ensureProjectForOpenFiles* *new*
+27: *ensureProjectForOpenFiles* *deleted*
+31: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
+26: /workspaces/somerepo/src/tsconfig.json
+35: timerToUpdateChildWatches
+37: *ensureProjectForOpenFiles* *new*
 
 Immedidate callback:: count: 1
 5: semanticCheck *new*
@@ -695,7 +815,7 @@ Projects::
     dirty: false *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
@@ -720,8 +840,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -739,8 +858,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/workspaces/somerepo/src/main.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -751,16 +869,24 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 4,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "updateGraphDurationMs": *,
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/workspaces/somerepo/src/main.ts"
+            }
+          ]
         }
       }
     }
 After running Immedidate callback:: count: 0
 
 Before running Timeout callback:: count: 3
-25: /workspaces/somerepo/src/tsconfig.json
-33: timerToUpdateChildWatches
-35: *ensureProjectForOpenFiles*
+26: /workspaces/somerepo/src/tsconfig.json
+35: timerToUpdateChildWatches
+37: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /workspaces/somerepo/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] sysLog:: onTimerToUpdateChildWatches:: 2
@@ -779,30 +905,40 @@ Info seq  [hh:mm:ss:mss] sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 
 After running Timeout callback:: count: 3
 
 PolledWatches::
+/workspaces/somerepo/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules:
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":18}
+/workspaces/somerepo:
+  {"inode":2}
 /workspaces/somerepo/node_modules:
-  {"inode":13}
+  {"inode":119}
 /workspaces/somerepo/node_modules/@types:
-  {"inode":14}
+  {"inode":120}
 /workspaces/somerepo/node_modules/@types/random-seed: *new*
-  {"inode":15}
+  {"inode":121}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
   {"inode":4}
 
 Timeout callback:: count: 3
-35: *ensureProjectForOpenFiles* *deleted*
-37: /workspaces/somerepo/src/tsconfig.json *new*
-38: *ensureProjectForOpenFiles* *new*
-39: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
+37: *ensureProjectForOpenFiles* *deleted*
+39: /workspaces/somerepo/src/tsconfig.json *new*
+40: *ensureProjectForOpenFiles* *new*
+41: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*

@@ -13,7 +13,7 @@ aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cannot use namespace 'foo
 ==== aliasOnMergedModuleInterface_0.ts (0 errors) ====
     declare module "foo"
     {
-        module B {
+        namespace B {
             export interface A {
             }
         }

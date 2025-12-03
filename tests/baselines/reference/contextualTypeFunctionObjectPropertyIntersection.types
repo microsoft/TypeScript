@@ -1,0 +1,540 @@
+//// [tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts] ////
+
+=== contextualTypeFunctionObjectPropertyIntersection.ts ===
+// repro from #48812
+
+type Action<TEvent extends { type: string }> = (ev: TEvent) => void;
+>Action : Action<TEvent>
+>       : ^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>ev : TEvent
+>   : ^^^^^^
+
+interface MachineConfig<TEvent extends { type: string }> {
+>type : string
+>     : ^^^^^^
+
+  schema: {
+>schema : { events: TEvent; }
+>       : ^^^^^^^^^^      ^^^
+
+    events: TEvent;
+>events : TEvent
+>       : ^^^^^^
+
+  };
+  on?: {
+>on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
+>   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^
+
+    [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
+>type : K
+>     : ^
+
+  } & {
+    "*"?: Action<TEvent>;
+>"*" : Action<TEvent> | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  };
+}
+
+declare function createMachine<TEvent extends { type: string }>(
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>              : ^      ^^^^^^^^^                 ^^      ^^                     ^^^^^    
+>type : string
+>     : ^^^^^^
+
+  config: MachineConfig<TEvent>
+>config : MachineConfig<TEvent>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+
+): void;
+
+createMachine({
+>createMachine({  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },}) : void
+>                                                                                                                                                         : ^^^^
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>              : ^      ^^^^^^^^^                 ^^      ^^                     ^^^^^    
+>{  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },} : { schema: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { FOO: (ev: { type: "FOO"; }) => void; }; }
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>       : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "BAR" },  } : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : { type: "FOO"; } | { type: "BAR"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "BAR" } : { type: "FOO"; } | { type: "BAR"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "BAR"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { FOO: (ev: { type: "FOO"; }) => void; }
+>   : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>{    FOO: (ev) => {      ev.type; // should be 'FOO'    },  } : { FOO: (ev: { type: "FOO"; }) => void; }
+>                                                              : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^
+
+    FOO: (ev) => {
+>FOO : (ev: { type: "FOO"; }) => void
+>    : ^  ^^^^^^^^^^     ^^^^^^^^^^^^
+>(ev) => {      ev.type; // should be 'FOO'    } : (ev: { type: "FOO"; }) => void
+>                                                : ^  ^^^^^^^^^^     ^^^^^^^^^^^^
+>ev : { type: "FOO"; }
+>   : ^^^^^^^^     ^^^
+
+      ev.type; // should be 'FOO'
+>ev.type : "FOO"
+>        : ^^^^^
+>ev : { type: "FOO"; }
+>   : ^^^^^^^^     ^^^
+>type : "FOO"
+>     : ^^^^^
+
+    },
+  },
+});
+
+createMachine({
+>createMachine({  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    "*": (ev) => {      ev.type; // should be 'FOO' | 'BAR'    },  },}) : void
+>                                                                                                                                                                 : ^^^^
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>              : ^      ^^^^^^^^^                 ^^      ^^                     ^^^^^    
+>{  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    "*": (ev) => {      ev.type; // should be 'FOO' | 'BAR'    },  },} : { schema: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { "*": (ev: { type: "FOO"; } | { type: "BAR"; }) => void; }; }
+>                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>       : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "BAR" },  } : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : { type: "FOO"; } | { type: "BAR"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "BAR" } : { type: "FOO"; } | { type: "BAR"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "BAR"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { "*": (ev: { type: "FOO"; } | { type: "BAR"; }) => void; }
+>   : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>{    "*": (ev) => {      ev.type; // should be 'FOO' | 'BAR'    },  } : { "*": (ev: { type: "FOO"; } | { type: "BAR"; }) => void; }
+>                                                                      : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+
+    "*": (ev) => {
+>"*" : (ev: { type: "FOO"; } | { type: "BAR"; }) => void
+>    : ^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^
+>(ev) => {      ev.type; // should be 'FOO' | 'BAR'    } : (ev: { type: "FOO"; } | { type: "BAR"; }) => void
+>                                                        : ^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^
+>ev : { type: "FOO"; } | { type: "BAR"; }
+>   : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+
+      ev.type; // should be 'FOO' | 'BAR'
+>ev.type : "FOO" | "BAR"
+>        : ^^^^^^^^^^^^^
+>ev : { type: "FOO"; } | { type: "BAR"; }
+>   : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>type : "FOO" | "BAR"
+>     : ^^^^^^^^^^^^^
+
+    },
+  },
+});
+
+interface MachineConfig2<TEvent extends { type: string }> {
+>type : string
+>     : ^^^^^^
+
+  schema: {
+>schema : { events: TEvent; }
+>       : ^^^^^^^^^^      ^^^
+
+    events: TEvent;
+>events : TEvent
+>       : ^^^^^^
+
+  };
+  on?: {
+>on : ({ [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
+>   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^
+
+    [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K } ? TEvent : never>;
+>type : K
+>     : ^
+
+  } & {
+    "*"?: Action<TEvent>;
+>"*" : Action<TEvent> | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  };
+}
+
+declare function createMachine2<TEvent extends { type: string }>(
+>createMachine2 : <TEvent extends { type: string; }>(config: MachineConfig2<TEvent>) => void
+>               : ^      ^^^^^^^^^                 ^^      ^^                      ^^^^^    
+>type : string
+>     : ^^^^^^
+
+  config: MachineConfig2<TEvent>
+>config : MachineConfig2<TEvent>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+
+): void;
+
+createMachine2({
+>createMachine2({  schema: {    events: {} as { type: "FOO" } | { type: "bar" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },}) : void
+>                                                                                                                                                          : ^^^^
+>createMachine2 : <TEvent extends { type: string; }>(config: MachineConfig2<TEvent>) => void
+>               : ^      ^^^^^^^^^                 ^^      ^^                      ^^^^^    
+>{  schema: {    events: {} as { type: "FOO" } | { type: "bar" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },} : { schema: { events: { type: "FOO"; } | { type: "bar"; }; }; on: { FOO: (ev: { type: "FOO"; }) => void; }; }
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "bar"; }; }
+>       : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "bar" },  } : { events: { type: "FOO"; } | { type: "bar"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "bar" },
+>events : { type: "FOO"; } | { type: "bar"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "bar" } : { type: "FOO"; } | { type: "bar"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "bar"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { FOO: (ev: { type: "FOO"; }) => void; }
+>   : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>{    FOO: (ev) => {      ev.type; // should be 'FOO'    },  } : { FOO: (ev: { type: "FOO"; }) => void; }
+>                                                              : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^
+
+    FOO: (ev) => {
+>FOO : (ev: { type: "FOO"; }) => void
+>    : ^  ^^^^^^^^^^     ^^^^^^^^^^^^
+>(ev) => {      ev.type; // should be 'FOO'    } : (ev: { type: "FOO"; }) => void
+>                                                : ^  ^^^^^^^^^^     ^^^^^^^^^^^^
+>ev : { type: "FOO"; }
+>   : ^^^^^^^^     ^^^
+
+      ev.type; // should be 'FOO'
+>ev.type : "FOO"
+>        : ^^^^^
+>ev : { type: "FOO"; }
+>   : ^^^^^^^^     ^^^
+>type : "FOO"
+>     : ^^^^^
+
+    },
+  },
+});
+
+createMachine2({
+>createMachine2({  schema: {    events: {} as { type: "FOO" } | { type: "bar" },  },  on: {    "*": (ev) => {      ev.type; // should be 'FOO' | 'bar'    },  },}) : void
+>                                                                                                                                                                  : ^^^^
+>createMachine2 : <TEvent extends { type: string; }>(config: MachineConfig2<TEvent>) => void
+>               : ^      ^^^^^^^^^                 ^^      ^^                      ^^^^^    
+>{  schema: {    events: {} as { type: "FOO" } | { type: "bar" },  },  on: {    "*": (ev) => {      ev.type; // should be 'FOO' | 'bar'    },  },} : { schema: { events: { type: "FOO"; } | { type: "bar"; }; }; on: { "*": (ev: { type: "FOO"; } | { type: "bar"; }) => void; }; }
+>                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "bar"; }; }
+>       : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "bar" },  } : { events: { type: "FOO"; } | { type: "bar"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "bar" },
+>events : { type: "FOO"; } | { type: "bar"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "bar" } : { type: "FOO"; } | { type: "bar"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "bar"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { "*": (ev: { type: "FOO"; } | { type: "bar"; }) => void; }
+>   : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>{    "*": (ev) => {      ev.type; // should be 'FOO' | 'bar'    },  } : { "*": (ev: { type: "FOO"; } | { type: "bar"; }) => void; }
+>                                                                      : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+
+    "*": (ev) => {
+>"*" : (ev: { type: "FOO"; } | { type: "bar"; }) => void
+>    : ^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^
+>(ev) => {      ev.type; // should be 'FOO' | 'bar'    } : (ev: { type: "FOO"; } | { type: "bar"; }) => void
+>                                                        : ^  ^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^
+>ev : { type: "FOO"; } | { type: "bar"; }
+>   : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+
+      ev.type; // should be 'FOO' | 'bar'
+>ev.type : "FOO" | "bar"
+>        : ^^^^^^^^^^^^^
+>ev : { type: "FOO"; } | { type: "bar"; }
+>   : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>type : "FOO" | "bar"
+>     : ^^^^^^^^^^^^^
+
+    },
+  },
+});
+
+createMachine2({
+>createMachine2({  schema: {    events: {} as { type: "FOO" } | { type: "bar" },  },  on: {    bar: (ev) => {      ev // any    },  },}) : void
+>                                                                                                                                        : ^^^^
+>createMachine2 : <TEvent extends { type: string; }>(config: MachineConfig2<TEvent>) => void
+>               : ^      ^^^^^^^^^                 ^^      ^^                      ^^^^^    
+>{  schema: {    events: {} as { type: "FOO" } | { type: "bar" },  },  on: {    bar: (ev) => {      ev // any    },  },} : { schema: { events: { type: "FOO"; } | { type: "bar"; }; }; on: { bar: (ev: any) => void; }; }
+>                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "bar"; }; }
+>       : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "bar" },  } : { events: { type: "FOO"; } | { type: "bar"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "bar" },
+>events : { type: "FOO"; } | { type: "bar"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "bar" } : { type: "FOO"; } | { type: "bar"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "bar"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { bar: (ev: any) => void; }
+>   : ^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>{    bar: (ev) => {      ev // any    },  } : { bar: (ev: any) => void; }
+>                                            : ^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+    bar: (ev) => {
+>bar : (ev: any) => void
+>    : ^  ^^^^^^^^^^^^^^
+>(ev) => {      ev // any    } : (ev: any) => void
+>                              : ^  ^^^^^^^^^^^^^^
+>ev : any
+>   : ^^^
+
+      ev // any
+>ev : any
+>   : ^^^
+
+    },
+  },
+});
+
+// repro from #49307#issuecomment-1143103607
+
+declare function createSlice<T>(
+>createSlice : { <T>(reducers: { [K: string]: (state: string) => void; } & { [K in keyof T]: object; }): void; <State, CaseReducers extends SliceCaseReducers<State>>(options: { initialState: State | (() => State); reducers: ValidateSliceCaseReducers<State, CaseReducers>; }): void; }
+>            : ^^^ ^^        ^^                                                                       ^^^    ^^^     ^^            ^^^^^^^^^                        ^^       ^^                                                                                                  ^^^    ^^^
+
+  reducers: { [K: string]: (state: string) => void } & {
+>reducers : { [K: string]: (state: string) => void; } & { [K in keyof T]: object; }
+>         : ^^^^^^^^^^^^^^^^     ^^      ^^^^^    ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>K : string
+>  : ^^^^^^
+>state : string
+>      : ^^^^^^
+
+    [K in keyof T]: object;
+  }
+): void;
+
+createSlice({
+>createSlice({  f(a) {},}) : void
+>                          : ^^^^
+>createSlice : { <T>(reducers: { [K: string]: (state: string) => void; } & { [K in keyof T]: object; }): void; <State, CaseReducers extends SliceCaseReducers<State>>(options: { initialState: State | (() => State); reducers: ValidateSliceCaseReducers<State, CaseReducers>; }): void; }
+>            : ^^^ ^^        ^^                                                                       ^^^    ^^^     ^^            ^^^^^^^^^                        ^^       ^^                                                                                                  ^^^    ^^^
+>{  f(a) {},} : { f(a: string): void; }
+>             : ^^^^ ^^^^^^^^^^^^^^^^^^
+
+  f(a) {},
+>f : (a: string) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+});
+
+// repro from #49307#issuecomment-1196014488
+
+type Validate<T> = T & { [K in keyof T]: object }
+>Validate : Validate<T>
+>         : ^^^^^^^^^^^
+
+declare function f<S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>): void;
+>f : <S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>) => void
+>  : ^ ^^ ^^^^^^^^^                                 ^^ ^^ ^^ ^^           ^^^^^    
+>state : S
+>      : ^
+>s : S
+>  : ^
+>x : Validate<T>
+>  : ^^^^^^^^^^^
+
+f(0, {
+>f(0, {  foo: s => s + 1,}) : void
+>                           : ^^^^
+>f : <S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>) => void
+>  : ^ ^^ ^^^^^^^^^                                 ^^ ^^ ^^ ^^           ^^^^^    
+>0 : 0
+>  : ^
+>{  foo: s => s + 1,} : { foo: (s: number) => number; }
+>                     : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+  foo: s => s + 1,
+>foo : (s: number) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
+>s => s + 1 : (s: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
+>s : number
+>  : ^^^^^^
+>s + 1 : number
+>      : ^^^^^^
+>s : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+})
+
+// repro from 49307#issuecomment-1195858950
+
+type SliceCaseReducers<State> = Record<string, (state: State) => State | void>;
+>SliceCaseReducers : SliceCaseReducers<State>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>state : State
+>      : ^^^^^
+
+type ValidateSliceCaseReducers<S, ACR extends SliceCaseReducers<S>> = ACR & {
+>ValidateSliceCaseReducers : ValidateSliceCaseReducers<S, ACR>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [T in keyof ACR]: ACR[T] extends {
+    reducer(s: S, action?: infer A): any;
+>reducer : (s: S, action?: infer A) => any
+>        : ^ ^^ ^^      ^^^       ^^^^^   
+>s : S
+>  : ^
+>action : A | undefined
+>       : ^^^^^^^^^^^^^
+  }
+    ? {
+        prepare(...a: never[]): Omit<A, "type">;
+>prepare : (...a: never[]) => Omit<A, "type">
+>        : ^^^^ ^^       ^^^^^               
+>a : never[]
+>  : ^^^^^^^
+      }
+    : {};
+};
+
+declare function createSlice<
+>createSlice : { <T>(reducers: { [K: string]: (state: string) => void; } & { [K in keyof T]: object; }): void; <State, CaseReducers extends SliceCaseReducers<State>>(options: { initialState: State | (() => State); reducers: ValidateSliceCaseReducers<State, CaseReducers>; }): void; }
+>            : ^^^ ^^        ^^                                                                       ^^^    ^^^     ^^            ^^^^^^^^^                        ^^       ^^                                                                                                  ^^^    ^^^
+
+  State,
+  CaseReducers extends SliceCaseReducers<State>
+>(options: {
+>options : { initialState: State | (() => State); reducers: ValidateSliceCaseReducers<State, CaseReducers>; }
+>        : ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^                                              ^^^
+
+  initialState: State | (() => State);
+>initialState : State | (() => State)
+>             : ^^^^^^^^^^^^^^^     ^
+
+  reducers: ValidateSliceCaseReducers<State, CaseReducers>;
+>reducers : ValidateSliceCaseReducers<State, CaseReducers>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}): void;
+
+export const clientSlice = createSlice({
+>clientSlice : void
+>            : ^^^^
+>createSlice({  initialState: {    username: "",    isLoggedIn: false,    userId: "",    avatar: "",  },  reducers: {    onClientUserChanged(state) {},  },}) : void
+>                                                                                                                                                             : ^^^^
+>createSlice : { <T>(reducers: { [K: string]: (state: string) => void; } & { [K in keyof T]: object; }): void; <State, CaseReducers extends SliceCaseReducers<State>>(options: { initialState: State | (() => State); reducers: ValidateSliceCaseReducers<State, CaseReducers>; }): void; }
+>            : ^^^ ^^        ^^                                                                       ^^^    ^^^     ^^            ^^^^^^^^^                        ^^       ^^                                                                                                  ^^^    ^^^
+>{  initialState: {    username: "",    isLoggedIn: false,    userId: "",    avatar: "",  },  reducers: {    onClientUserChanged(state) {},  },} : { initialState: { username: string; isLoggedIn: false; userId: string; avatar: string; }; reducers: { onClientUserChanged(state: { username: string; isLoggedIn: boolean; userId: string; avatar: string; }): void; }; }
+>                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  initialState: {
+>initialState : { username: string; isLoggedIn: false; userId: string; avatar: string; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    username: "",    isLoggedIn: false,    userId: "",    avatar: "",  } : { username: string; isLoggedIn: false; userId: string; avatar: string; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    username: "",
+>username : string
+>         : ^^^^^^
+>"" : ""
+>   : ^^
+
+    isLoggedIn: false,
+>isLoggedIn : false
+>           : ^^^^^
+>false : false
+>      : ^^^^^
+
+    userId: "",
+>userId : string
+>       : ^^^^^^
+>"" : ""
+>   : ^^
+
+    avatar: "",
+>avatar : string
+>       : ^^^^^^
+>"" : ""
+>   : ^^
+
+  },
+  reducers: {
+>reducers : { onClientUserChanged(state: { username: string; isLoggedIn: boolean; userId: string; avatar: string; }): void; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    onClientUserChanged(state) {},  } : { onClientUserChanged(state: { username: string; isLoggedIn: boolean; userId: string; avatar: string; }): void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    onClientUserChanged(state) {},
+>onClientUserChanged : (state: { username: string; isLoggedIn: boolean; userId: string; avatar: string; }) => void
+>                    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : { username: string; isLoggedIn: boolean; userId: string; avatar: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  },
+});
+
+

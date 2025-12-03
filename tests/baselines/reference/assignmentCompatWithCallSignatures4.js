@@ -3,13 +3,13 @@
 //// [assignmentCompatWithCallSignatures4.ts]
 // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 
-module Errors {
+namespace Errors {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
     class OtherDerived extends Base { bing: string; }
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
         // target type with non-generic call signatures
         var a2: (x: number) => string[];
         var a7: (x: (arg: Base) => Derived) => (r: Base) => Derived2;
@@ -85,7 +85,7 @@ module Errors {
         b17 = a17;
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
         // target type has generic call signature
         var a2: <T>(x: T) => T[];
         var b2: <T>(x: T) => string[];

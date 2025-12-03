@@ -37,7 +37,7 @@ verify.completions({
     marker: ["b", "c", "ccheck", "cts", "d", "dcheck", "dts"],
     includes: [{
         name: "foo",
-        source: "/node_modules/a/index",
+        source: "a",
         text: "const foo: 0",
         kind: "const",
         kindModifiers: "export,declare",

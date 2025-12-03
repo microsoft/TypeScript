@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/lib/app.ts]
 myapp.component("hello");
@@ -13,8 +13,7 @@ myapp.component("hello");
   }
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -25,9 +24,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -36,12 +37,17 @@ Output::
   The file is in the program because:
     Entry point of type library '@myapp/ts-types' specified in compilerOptions
 
-  [96muser/username/projects/myproject/tsconfig.json[0m:[93m5[0m:[93m7[0m
+  [96mtsconfig.json[0m:[93m5[0m:[93m7[0m
     [7m5[0m       "@myapp/ts-types"
     [7m [0m [96m      ~~~~~~~~~~~~~~~~~[0m
     File is entry point of type library specified here.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "module": "none",
+[7m [0m [91m              ~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -57,7 +63,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/lib/app.ts: *new*
   {}
@@ -77,18 +83,17 @@ Program options: {
     "@myapp/ts-types"
   ],
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib/app.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -122,7 +127,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
@@ -159,18 +164,25 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "module": "none",
+[7m [0m [91m              ~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
@@ -197,19 +209,15 @@ Program options: {
     "@myapp/ts-types"
   ],
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib/app.ts
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)

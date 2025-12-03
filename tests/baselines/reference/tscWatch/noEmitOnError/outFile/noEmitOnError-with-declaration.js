@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
 {
@@ -28,8 +28,7 @@ console.log("hi");
 export { }
 
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -44,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -54,7 +53,12 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -66,7 +70,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/noEmitOnError/shared/types/db.ts: *new*
   {}
@@ -96,13 +100,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -128,7 +132,7 @@ After running Timeout callback:: count: 0
 
 exitCode:: ExitStatus.undefined
 
-Change:: Fix Syntax error
+Change:: Fix syntax errors
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
@@ -150,97 +154,10 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-
-
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = {
-        lastName: 'sdsd'
-    };
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts]
-declare module "shared/types/db" {
-    export interface A {
-        name: string;
-    }
-}
-declare module "src/main" { }
-declare module "src/other" {
-    export {};
-}
-
-
-
-
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "declaration": true,
-  "noEmitOnError": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
-
-Change:: Semantic Error
-
-Input::
-//// [/user/username/projects/noEmitOnError/src/main.ts]
-import { A } from "../shared/types/db";
-const a: string = 10;
-
-
-Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
-
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-
-Host is moving to new time
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
-
-[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -263,13 +180,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -284,10 +201,10 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+3: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -295,19 +212,19 @@ After running Timeout callback:: count: 0
 
 exitCode:: ExitStatus.undefined
 
-Change:: Fix Semantic Error
+Change:: semantic errors
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
-const a: string = "hello";
+const a: string = 10;
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+4: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+4: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -315,28 +232,20 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m2[0m const a: string = 10;
+[7m [0m [91m      ~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = "hello";
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts] file written with same contents
 
 
 Program root files: [
@@ -354,13 +263,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -375,10 +284,246 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: Fix semantic errors
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+const a: string = "hello";
+
+
+Timeout callback:: count: 1
 6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "noEmitOnError": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: No change
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+Timeout callback:: count: 1
+7: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+7: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: dts errors
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+export const a = class { private p = 10; };
+
+
+
+Timeout callback:: count: 1
+8: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "noEmitOnError": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: No change
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: Fix dts errors
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+export const a = class { p = 10; };
+
+
+
+Timeout callback:: count: 1
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "noEmitOnError": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: No change
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+Timeout callback:: count: 1
+11: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+11: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0

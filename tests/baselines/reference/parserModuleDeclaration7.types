@@ -2,5 +2,5 @@
 
 === parserModuleDeclaration7.ts ===
 
-module number.a {
+namespace number.a {
 }

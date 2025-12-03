@@ -8,7 +8,7 @@ interface A<T> { // error
     bar: T;
 }
 
-module M {
+namespace M {
     interface A<T> { 
         bar: T;
     }
@@ -18,25 +18,25 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
     interface A {
         foo: string;
     }
 }
 
-module M2 {
+namespace M2 {
     interface A<T> { // ok, different declaration space than other M2
         bar: T;
     }
 }
 
-module M3 {
+namespace M3 {
     export interface A {
         foo: string;
     }
 }
 
-module M3 {
+namespace M3 {
     export interface A<T> { // error
         bar: T;
     }

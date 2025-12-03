@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/discriminantOrderIndependence.ts] ////
+
+=== discriminantOrderIndependence.ts ===
+interface A {
+>A : Symbol(A, Decl(discriminantOrderIndependence.ts, 0, 0))
+
+    subType: "b";
+>subType : Symbol(A.subType, Decl(discriminantOrderIndependence.ts, 0, 13))
+
+    type: "a";
+>type : Symbol(A.type, Decl(discriminantOrderIndependence.ts, 1, 17))
+}
+
+declare let order1:
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+
+    | { type: "1" }
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 6, 7))
+
+    | A
+>A : Symbol(A, Decl(discriminantOrderIndependence.ts, 0, 0))
+
+    | { type: "2" }
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 8, 7))
+
+    | { type: "3" }
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 9, 7))
+
+    | undefined;
+
+// Should NOT error: 'order1' is possibly 'undefined' after the guard
+if (order1 && order1.type === "a") {
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+>order1.type : Symbol(type, Decl(discriminantOrderIndependence.ts, 1, 17), Decl(discriminantOrderIndependence.ts, 6, 7), Decl(discriminantOrderIndependence.ts, 8, 7), Decl(discriminantOrderIndependence.ts, 9, 7))
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 1, 17), Decl(discriminantOrderIndependence.ts, 6, 7), Decl(discriminantOrderIndependence.ts, 8, 7), Decl(discriminantOrderIndependence.ts, 9, 7))
+
+    order1.type; // Should be OK
+>order1.type : Symbol(A.type, Decl(discriminantOrderIndependence.ts, 1, 17))
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+>type : Symbol(A.type, Decl(discriminantOrderIndependence.ts, 1, 17))
+}
+
+interface B {
+>B : Symbol(B, Decl(discriminantOrderIndependence.ts, 15, 1))
+
+    subType: "b";
+>subType : Symbol(B.subType, Decl(discriminantOrderIndependence.ts, 17, 13))
+
+    type: "a";
+>type : Symbol(B.type, Decl(discriminantOrderIndependence.ts, 18, 17))
+}
+
+declare let order2:
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+
+    | { type: "1" }
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 23, 7))
+
+    | { type: "2" }
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 24, 7))
+
+    | { type: "3" }
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 25, 7))
+
+    | B
+>B : Symbol(B, Decl(discriminantOrderIndependence.ts, 15, 1))
+
+    | undefined;
+
+// Should NOT error: 'order2' is possibly 'undefined' after the guard
+if (order2 && order2.type === "a") {
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+>order2.type : Symbol(type, Decl(discriminantOrderIndependence.ts, 18, 17), Decl(discriminantOrderIndependence.ts, 23, 7), Decl(discriminantOrderIndependence.ts, 24, 7), Decl(discriminantOrderIndependence.ts, 25, 7))
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 18, 17), Decl(discriminantOrderIndependence.ts, 23, 7), Decl(discriminantOrderIndependence.ts, 24, 7), Decl(discriminantOrderIndependence.ts, 25, 7))
+
+    order2.type; // Should be OK
+>order2.type : Symbol(B.type, Decl(discriminantOrderIndependence.ts, 18, 17))
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+>type : Symbol(B.type, Decl(discriminantOrderIndependence.ts, 18, 17))
+}
+
+// Also test with !. type assertion
+if (order1 && order1.type === "a") {
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+>order1.type : Symbol(type, Decl(discriminantOrderIndependence.ts, 1, 17), Decl(discriminantOrderIndependence.ts, 6, 7), Decl(discriminantOrderIndependence.ts, 8, 7), Decl(discriminantOrderIndependence.ts, 9, 7))
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 1, 17), Decl(discriminantOrderIndependence.ts, 6, 7), Decl(discriminantOrderIndependence.ts, 8, 7), Decl(discriminantOrderIndependence.ts, 9, 7))
+
+    order1.type; // Should be OK
+>order1.type : Symbol(A.type, Decl(discriminantOrderIndependence.ts, 1, 17))
+>order1 : Symbol(order1, Decl(discriminantOrderIndependence.ts, 5, 11))
+>type : Symbol(A.type, Decl(discriminantOrderIndependence.ts, 1, 17))
+}
+if (order2 && order2.type === "a") {
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+>order2.type : Symbol(type, Decl(discriminantOrderIndependence.ts, 18, 17), Decl(discriminantOrderIndependence.ts, 23, 7), Decl(discriminantOrderIndependence.ts, 24, 7), Decl(discriminantOrderIndependence.ts, 25, 7))
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+>type : Symbol(type, Decl(discriminantOrderIndependence.ts, 18, 17), Decl(discriminantOrderIndependence.ts, 23, 7), Decl(discriminantOrderIndependence.ts, 24, 7), Decl(discriminantOrderIndependence.ts, 25, 7))
+
+    order2.type; // Should be OK
+>order2.type : Symbol(B.type, Decl(discriminantOrderIndependence.ts, 18, 17))
+>order2 : Symbol(order2, Decl(discriminantOrderIndependence.ts, 22, 11))
+>type : Symbol(B.type, Decl(discriminantOrderIndependence.ts, 18, 17))
+}

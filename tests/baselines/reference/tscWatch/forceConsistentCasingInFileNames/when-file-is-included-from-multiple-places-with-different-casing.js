@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/src/struct.d.ts]
 import * as xs1 from "fp-ts/lib/Struct";
@@ -27,8 +27,7 @@ import * as xs4 from "./struct";
 //// [/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts]
 export function foo(): void
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -43,7 +42,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -283,7 +282,7 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
@@ -322,11 +321,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/node_modules/fp-ts/lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/fp-ts/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects: *new*
+  {}
+/home/src/projects/project: *new*
   {}
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts: *new*
   {}
@@ -337,6 +348,8 @@ FsWatches::
 /home/src/projects/project/src/oneMore.ts: *new*
   {}
 /home/src/projects/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -359,21 +372,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts
 /home/src/projects/project/src/oneMore.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts
 /home/src/projects/project/src/oneMore.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts (used version)
 /home/src/projects/project/src/struct.d.ts (used version)
 /home/src/projects/project/src/anotherfile.ts (used version)
@@ -639,7 +652,7 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
@@ -680,7 +693,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts
@@ -906,7 +919,7 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
@@ -946,7 +959,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts

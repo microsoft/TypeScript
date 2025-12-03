@@ -21,16 +21,16 @@ export function foo() {
     use(M.NonTopLevelConstEnum.X);
 >use : Symbol(use, Decl(systemModuleConstEnums.ts, 0, 0))
 >M.NonTopLevelConstEnum.X : Symbol(M.NonTopLevelConstEnum.X, Decl(systemModuleConstEnums.ts, 9, 44))
->M.NonTopLevelConstEnum : Symbol(M.NonTopLevelConstEnum, Decl(systemModuleConstEnums.ts, 8, 10))
+>M.NonTopLevelConstEnum : Symbol(M.NonTopLevelConstEnum, Decl(systemModuleConstEnums.ts, 8, 13))
 >M : Symbol(M, Decl(systemModuleConstEnums.ts, 6, 1))
->NonTopLevelConstEnum : Symbol(M.NonTopLevelConstEnum, Decl(systemModuleConstEnums.ts, 8, 10))
+>NonTopLevelConstEnum : Symbol(M.NonTopLevelConstEnum, Decl(systemModuleConstEnums.ts, 8, 13))
 >X : Symbol(M.NonTopLevelConstEnum.X, Decl(systemModuleConstEnums.ts, 9, 44))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(systemModuleConstEnums.ts, 6, 1))
 
     export const enum NonTopLevelConstEnum { X }
->NonTopLevelConstEnum : Symbol(NonTopLevelConstEnum, Decl(systemModuleConstEnums.ts, 8, 10))
+>NonTopLevelConstEnum : Symbol(NonTopLevelConstEnum, Decl(systemModuleConstEnums.ts, 8, 13))
 >X : Symbol(NonTopLevelConstEnum.X, Decl(systemModuleConstEnums.ts, 9, 44))
 }

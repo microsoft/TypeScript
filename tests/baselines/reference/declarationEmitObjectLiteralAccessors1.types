@@ -4,9 +4,9 @@
 // same type accessors
 export const obj1 = {
 >obj1 : { x: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >{  /** my awesome getter (first in source order) */  get x(): string {    return "";  },  /** my awesome setter (second in source order) */  set x(a: string) {},} : { x: string; }
->                                                                                                                                                                   : ^^^^^^^^^^^^^^
+>                                                                                                                                                                   : ^^^^^      ^^^
 
   /** my awesome getter (first in source order) */
   get x(): string {
@@ -55,9 +55,9 @@ export const obj2 = {
 
 export const obj3 = {
 >obj3 : { readonly x: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^      ^^^
 >{  /** my awesome getter */  get x(): string {    return "";  },} : { readonly x: string; }
->                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^^^^^^^^^^^^^^      ^^^
 
   /** my awesome getter */
   get x(): string {
@@ -73,9 +73,9 @@ export const obj3 = {
 
 export const obj4 = {
 >obj4 : { x: number; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >{  /** my awesome setter */  set x(a: number) {},} : { x: number; }
->                                                   : ^^^^^^^^^^^^^^
+>                                                   : ^^^^^      ^^^
 
   /** my awesome setter */
   set x(a: number) {},

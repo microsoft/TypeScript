@@ -11,9 +11,9 @@ class Foo2 {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -35,9 +35,9 @@ class Foo3 {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -66,9 +66,9 @@ class Foo4 {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -97,9 +97,9 @@ class Foo5 {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this

@@ -38,14 +38,16 @@ class Bar extends Foo {
 >    : ^^^
 
     [symbol]() {
->[symbol] : () => any
->         : ^^^^^^^^^
+>[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : symbol
 >       : ^^^^^^
 
         return super[symbol]();
->super[symbol]() : error
->super[symbol] : error
+>super[symbol]() : number
+>                : ^^^^^^
+>super[symbol] : () => number
+>              : ^^^^^^^^^^^^
 >super : Foo
 >      : ^^^
 >symbol : symbol

@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/erasableSyntaxOnly2.ts] ////
+
+=== index.ts ===
+let a = (<unknown function foo() {});
+>a : Symbol(a, Decl(index.ts, 0, 3))
+>foo : Symbol(foo, Decl(index.ts, 0, 17))
+
+let b = <unknown 123;
+>b : Symbol(b, Decl(index.ts, 1, 3))
+
+let c = <unknown
+>c : Symbol(c, Decl(index.ts, 2, 3))
+

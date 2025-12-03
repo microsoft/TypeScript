@@ -10,7 +10,7 @@ class DerivedBasic extends Object {
 
     constructor() {
         super();
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
     }
 }
 
@@ -34,7 +34,7 @@ class DerivedAfterParameterDefault extends Object {
 >x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 10, 16))
 
         super(x);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 10, 16))
 
         this.x2 = x;
@@ -65,7 +65,7 @@ class DerivedAfterRestParameter extends Object {
 >x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 20, 16))
 
         super(x);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >x : Symbol(x, Decl(derivedClassSuperStatementPosition.ts, 20, 16))
 
         this.x2 = x;
@@ -92,7 +92,7 @@ class DerivedComments extends Object {
 
         // c3
         super(); // c4
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
         // c5
         this.x = null; // c6
@@ -124,7 +124,7 @@ class DerivedCommentsInvalidThis extends Object {
 
         // c3
         super(); // c4
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
         // c5
         this.x = null; // c6
@@ -146,14 +146,14 @@ class DerivedInConditional extends Object {
     constructor() {
         Math.random()
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             ? super(1)
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
             : super(0);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
     }
 }
 
@@ -167,15 +167,15 @@ class DerivedInIf extends Object {
     constructor() {
         if (Math.random()) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             super(1);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
         }
         else {
             super(0);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
         }
     }
 }
@@ -191,7 +191,7 @@ class DerivedInBlockWithProperties extends Object {
 >paramProp : Symbol(DerivedInBlockWithProperties.paramProp, Decl(derivedClassSuperStatementPosition.ts, 78, 16))
         {
             super();
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
         }
     }
 }
@@ -208,15 +208,15 @@ class DerivedInConditionalWithProperties extends Object {
 
         if (Math.random()) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             super(1);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
         } else {
             super(0);
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
         }
     }
 }

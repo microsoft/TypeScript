@@ -2,7 +2,7 @@
 class D { }
 
 // @Filename: cloduleSplitAcrossFiles_module.ts
-module D {
+namespace D {
     export var y = "hi";
 }
 D.y;

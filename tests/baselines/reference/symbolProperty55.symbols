@@ -12,12 +12,12 @@ var obj = {
 
 };
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(symbolProperty55.ts, 2, 2))
 
     var Symbol: SymbolConstructor;
 >Symbol : Symbol(Symbol, Decl(symbolProperty55.ts, 5, 7))
->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.asynciterable.d.ts, --, --))
 
     // The following should be of type 'any'. This is because even though obj has a property keyed by Symbol.iterator,
     // the key passed in here is the *wrong* Symbol.iterator. It is not the iterator property of the global Symbol.

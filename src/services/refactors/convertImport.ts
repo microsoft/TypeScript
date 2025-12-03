@@ -210,7 +210,7 @@ function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: P
 }
 
 /** @internal */
-export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
+export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault: boolean = getShouldUseDefault(program, toConvert.parent)): void {
     const checker = program.getTypeChecker();
     const importDecl = toConvert.parent.parent;
     const { moduleSpecifier } = importDecl;
@@ -290,5 +290,5 @@ function createImport(node: ImportDeclaration, defaultImportName: Identifier | u
 }
 
 function createImportClause(defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined) {
-    return factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined);
+    return factory.createImportClause(/*phaseModifier*/ undefined, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined);
 }
