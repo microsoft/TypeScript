@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /goToDefinitionShorthandProperty04.ts ===
 // interface Foo {
-//     foo(): void
+//     <|[|foo|](): void|>
 // }
 // 
 // let x: Foo = {

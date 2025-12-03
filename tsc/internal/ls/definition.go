@@ -171,7 +171,19 @@ func (l *LanguageService) createLocationFromFileAndRange(file *ast.SourceFile, t
 
 func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node {
 	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent) {
-		return c.GetResolvedSymbol(node).Declarations
+		// Because name in short-hand property assignment has two different meanings: property name and property value,
+		// using go-to-definition at such position should go to the variable declaration of the property value rather than
+		// go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition
+		// is performed at the location of property access, we would like to go to definition of the property in the short-hand
+		// assignment. This case and others are handled by the following code.
+		// and the contextual type's property declarations
+		shorthandSymbol := c.GetResolvedSymbol(node)
+		var declarations []*ast.Node
+		if shorthandSymbol != nil {
+			declarations = shorthandSymbol.Declarations
+		}
+		contextualDeclarations := getDeclarationsFromObjectLiteralElement(c, node)
+		return core.Concatenate(declarations, contextualDeclarations)
 	}
 	node = getDeclarationNameForKeyword(node)
 	if symbol := c.GetSymbolAtLocation(node); symbol != nil {
@@ -198,6 +210,29 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 		return indexInfos
 	}
 	return nil
+}
+
+// getDeclarationsFromObjectLiteralElement returns declarations from the contextual type
+// of an object literal element, if available.
+func getDeclarationsFromObjectLiteralElement(c *checker.Checker, node *ast.Node) []*ast.Node {
+	element := getContainingObjectLiteralElement(node)
+	if element == nil {
+		return nil
+	}
+
+	// Get the contextual type of the object literal
+	objectLiteral := element.Parent
+	if objectLiteral == nil || !ast.IsObjectLiteralExpression(objectLiteral) {
+		return nil
+	}
+
+	// Get the name of the property
+	name := ast.GetTextOfPropertyName(element.Name())
+	if name == "" {
+		return nil
+	}
+
+	return c.GetContextualDeclarationsForObjectLiteralElement(objectLiteral, name)
 }
 
 // Returns a CallLikeExpression where `node` is the target being invoked.
