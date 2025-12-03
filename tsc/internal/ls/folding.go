@@ -430,7 +430,7 @@ func spanForJSXElement(node *ast.Node, sourceFile *ast.SourceFile, l *LanguageSe
 	if node.Kind == ast.KindJsxElement {
 		jsxElement := node.AsJsxElement()
 		textRange := l.createLspRangeFromBounds(astnav.GetStartOfNode(jsxElement.OpeningElement, sourceFile, false /*includeJSDoc*/), jsxElement.ClosingElement.End(), sourceFile)
-		tagName := jsxElement.OpeningElement.TagName().Text()
+		tagName := scanner.GetTextOfNode(jsxElement.OpeningElement.TagName())
 		bannerText := "<" + tagName + ">...</" + tagName + ">"
 		return createFoldingRange(textRange, "", bannerText)
 	}
