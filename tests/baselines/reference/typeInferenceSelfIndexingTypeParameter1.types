@@ -19,3 +19,21 @@ const res1 = fn1(["foo"]);
 >"foo" : "foo"
 >      : ^^^^^
 
+declare function fn2<T>(arg: T[keyof T & "a"]): T
+>fn2 : <T>(arg: T[keyof T & "a"]) => T
+>    : ^ ^^   ^^                ^^^^^ 
+>arg : T[keyof T & "a"]
+>    : ^^^^^^^^^^^^^^^^
+
+const res2 = fn2(["foo"]);
+>res2 : Record<"a", string[]>
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>fn2(["foo"]) : Record<"a", string[]>
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>fn2 : <T>(arg: T[keyof T & "a"]) => T
+>    : ^ ^^   ^^                ^^^^^ 
+>["foo"] : string[]
+>        : ^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+

@@ -39,3 +39,24 @@ const res2 = f2({
     },
   },
 });
+
+
+declare function f3<T>(
+  arg: {
+    [K in keyof T]: {
+      a: T[K][keyof T[K] & "A"];
+      b: T[K][keyof T[K] & "B"];
+    }
+  }
+): T;
+
+const res3 = f3({
+  x: {
+    a: "foo",
+    b: 42,
+  },
+  y: {
+    a: 100,
+    b: "bar",
+  },
+});

@@ -140,3 +140,74 @@ const res2 = f2({
   },
 });
 
+
+declare function f3<T>(
+>f3 : <T>(arg: { [K in keyof T]: { a: T[K][keyof T[K] & "A"]; b: T[K][keyof T[K] & "B"]; }; }) => T
+>   : ^ ^^   ^^                                                                              ^^^^^ 
+
+  arg: {
+>arg : { [K in keyof T]: { a: T[K][keyof T[K] & "A"]; b: T[K][keyof T[K] & "B"]; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^                      ^^^^^                      ^^^^^^
+
+    [K in keyof T]: {
+      a: T[K][keyof T[K] & "A"];
+>a : T[K][keyof T[K] & "A"]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+      b: T[K][keyof T[K] & "B"];
+>b : T[K][keyof T[K] & "B"]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+    }
+  }
+): T;
+
+const res3 = f3({
+>res3 : { x: Record<"A", string> & Record<"B", number>; y: Record<"A", number> & Record<"B", string>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3({  x: {    a: "foo",    b: 42,  },  y: {    a: 100,    b: "bar",  },}) : { x: Record<"A", string> & Record<"B", number>; y: Record<"A", number> & Record<"B", string>; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3 : <T>(arg: { [K in keyof T]: { a: T[K][keyof T[K] & "A"]; b: T[K][keyof T[K] & "B"]; }; }) => T
+>   : ^ ^^   ^^                                                                              ^^^^^ 
+>{  x: {    a: "foo",    b: 42,  },  y: {    a: 100,    b: "bar",  },} : { x: { a: string; b: number; }; y: { a: number; b: string; }; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: {
+>x : { a: string; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: "foo",    b: 42,  } : { a: string; b: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: "foo",
+>a : string
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    b: 42,
+>b : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+  },
+  y: {
+>y : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: 100,    b: "bar",  } : { a: number; b: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: 100,
+>a : number
+>  : ^^^^^^
+>100 : 100
+>    : ^^^
+
+    b: "bar",
+>b : string
+>  : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+  },
+});
+

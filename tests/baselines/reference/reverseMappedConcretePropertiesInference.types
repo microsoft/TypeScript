@@ -1,9 +1,79 @@
 //// [tests/cases/compiler/reverseMappedConcretePropertiesInference.ts] ////
 
 === reverseMappedConcretePropertiesInference.ts ===
-declare function test<T extends Record<string, { foo: unknown; bar: unknown }>>(a: {
->test : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
->     : ^ ^^^^^^^^^                                               ^^ ^^                                                                                                                                        ^^^^^ 
+declare function test1<T extends Record<string, Record<"A" | "B", unknown>>>(
+>test1 : <T extends Record<string, Record<"A" | "B", unknown>>>(arg: { [K in keyof T]: { a: T[K]["A"]; b: T[K]["B"]; }; }) => T
+>      : ^ ^^^^^^^^^                                          ^^   ^^                                                    ^^^^^ 
+
+  arg: {
+>arg : { [K in keyof T]: { a: T[K]["A"]; b: T[K]["B"]; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^         ^^^^^         ^^^^^^
+
+    [K in keyof T]: {
+      a: T[K]["A"];
+>a : T[K]["A"]
+>  : ^^^^^^^^^
+
+      b: T[K]["B"];
+>b : T[K]["B"]
+>  : ^^^^^^^^^
+    }
+  }
+): T;
+
+const res1 = test1({
+>res1 : { x: Record<"A", string> & Record<"B", number>; y: Record<"A", number> & Record<"B", string>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1({  x: {    a: "foo",    b: 42,  },  y: {    a: 100,    b: "bar",  },}) : { x: Record<"A", string> & Record<"B", number>; y: Record<"A", number> & Record<"B", string>; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1 : <T extends Record<string, Record<"A" | "B", unknown>>>(arg: { [K in keyof T]: { a: T[K]["A"]; b: T[K]["B"]; }; }) => T
+>      : ^ ^^^^^^^^^                                          ^^   ^^                                                    ^^^^^ 
+>{  x: {    a: "foo",    b: 42,  },  y: {    a: 100,    b: "bar",  },} : { x: { a: string; b: number; }; y: { a: number; b: string; }; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: {
+>x : { a: string; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: "foo",    b: 42,  } : { a: string; b: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: "foo",
+>a : string
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    b: 42,
+>b : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+  },
+  y: {
+>y : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: 100,    b: "bar",  } : { a: number; b: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: 100,
+>a : number
+>  : ^^^^^^
+>100 : 100
+>    : ^^^
+
+    b: "bar",
+>b : string
+>  : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+  },
+});
+
+declare function test2<T extends Record<string, { foo: unknown; bar: unknown }>>(a: {
+>test2 : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
+>      : ^ ^^^^^^^^^                                               ^^ ^^                                                                                                                                        ^^^^^ 
 >foo : unknown
 >    : ^^^^^^^
 >bar : unknown
@@ -35,13 +105,13 @@ declare function test<T extends Record<string, { foo: unknown; bar: unknown }>>(
   };
 }): T;
 
-const res = test({
->res : { a: Record<"foo", string> & Record<"bar", number>; b: Record<"foo", boolean> & Record<"bar", number[]>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->test({    a: {        foo: 'answer',        onFoo: (arg) => arg.length,        bar: 42,        onBar: (arg) => arg + 10    },    b: {        foo: true,        onFoo: (arg) => !!arg,        bar: [1, 2, 3],        onBar: (arg) => [arg, arg]    },}) : { a: Record<"foo", string> & Record<"bar", number>; b: Record<"foo", boolean> & Record<"bar", number[]>; }
->                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->test : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
->     : ^ ^^^^^^^^^                                               ^^ ^^                                                                                                                                        ^^^^^ 
+const res2 = test2({
+>res2 : { a: Record<"foo", string> & Record<"bar", number>; b: Record<"foo", boolean> & Record<"bar", number[]>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test2({    a: {        foo: 'answer',        onFoo: (arg) => arg.length,        bar: 42,        onBar: (arg) => arg + 10    },    b: {        foo: true,        onFoo: (arg) => !!arg,        bar: [1, 2, 3],        onBar: (arg) => [arg, arg]    },}) : { a: Record<"foo", string> & Record<"bar", number>; b: Record<"foo", boolean> & Record<"bar", number[]>; }
+>                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test2 : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
+>      : ^ ^^^^^^^^^                                               ^^ ^^                                                                                                                                        ^^^^^ 
 >{    a: {        foo: 'answer',        onFoo: (arg) => arg.length,        bar: 42,        onBar: (arg) => arg + 10    },    b: {        foo: true,        onFoo: (arg) => !!arg,        bar: [1, 2, 3],        onBar: (arg) => [arg, arg]    },} : { a: { foo: string; onFoo: (arg: string) => number; bar: number; onBar: (arg: number) => number; }; b: { foo: true; onFoo: (arg: boolean) => boolean; bar: number[]; onBar: (arg: number[]) => number[][]; }; }
 >                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
