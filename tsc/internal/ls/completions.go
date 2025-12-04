@@ -2923,6 +2923,21 @@ func isStaticProperty(symbol *ast.Symbol) bool {
 		ast.IsClassLike(symbol.ValueDeclaration.Parent)
 }
 
+// getContextualTypeForConditionalExpression handles completion within a conditional expression
+// (ternary operator) by using the parent expression to find the contextual type.
+func getContextualTypeForConditionalExpression(conditionalExpr *ast.Node, position int, file *ast.SourceFile, typeChecker *checker.Checker) *checker.Type {
+	argInfo := getArgumentInfoForCompletions(conditionalExpr, position, file, typeChecker)
+	if argInfo != nil {
+		return typeChecker.GetContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex)
+	}
+	// Fall through to regular contextual type logic if not in an argument
+	contextualType := typeChecker.GetContextualType(conditionalExpr, checker.ContextFlagsCompletions)
+	if contextualType != nil {
+		return contextualType
+	}
+	return typeChecker.GetContextualType(conditionalExpr, checker.ContextFlagsNone)
+}
+
 func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFile, typeChecker *checker.Checker) *checker.Type {
 	parent := previousToken.Parent
 	switch previousToken.Kind {
@@ -2952,6 +2967,23 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 			return typeChecker.GetContextualTypeForJsxAttribute(parent.Parent)
 		}
 		return nil
+	case ast.KindQuestionToken:
+		// When completing after `?` in a ternary conditional (e.g., `foo(a ? /*here*/)`),
+		// we need to look at the parent conditional expression to find the contextual type.
+		if ast.IsConditionalExpression(parent) {
+			return getContextualTypeForConditionalExpression(parent, position, file, typeChecker)
+		}
+		return nil
+	case ast.KindColonToken:
+		// When completing after `:` in a ternary conditional (e.g., `foo(a ? b : /*here*/)`),
+		// we need to look at the parent conditional expression to find the contextual type.
+		// Only handle this if parent is ConditionalExpression, otherwise fall through to default
+		// (colons are used in other contexts like object literals, type annotations, etc.)
+		if ast.IsConditionalExpression(parent) {
+			return getContextualTypeForConditionalExpression(parent, position, file, typeChecker)
+		}
+		// Fall through to default for other colon contexts (object literals, etc.)
+		fallthrough
 	default:
 		argInfo := getArgumentInfoForCompletions(previousToken, position, file, typeChecker)
 		if argInfo != nil {
